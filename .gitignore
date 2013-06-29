@@ -1,0 +1,20 @@
+#Ignore Mac OS X DS Store
+.DS_Store
+
+*~
+*.swp
+.project
+.settings
+
+# Ignore all build/dist directories
+target
+
+# Ignore InteliJ Idea project files
+.idea
+.idea/*
+*.iml
+*.iws
+*.ipr
+
+# Ignore all log files
+*.log

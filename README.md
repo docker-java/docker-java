@@ -1,4 +1,4 @@
 docker-java
-===========
+=========
 
-Java Docker Client
+An API client for docker written in Java (based on docker-py)
