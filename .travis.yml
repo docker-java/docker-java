@@ -2,10 +2,15 @@ language: java
 jdk:
   - openjdk6
 
-before_install:
-  - sudo apt-get install linux-image-extra-`uname -r` -qq
-  - sudo apt-get install software-properties-common -qq
-  - sudo add-apt-repository ppa:dotcloud/lxc-docker -y
-  - sudo apt-get update -qq
-  - sudo apt-get install lxc-docker -qq
-  - sudo docker -d &
+#before_install:
+#  - sudo apt-get install linux-image-extra-`uname -r` -qq
+#  - sudo apt-get install software-properties-common -qq
+#  - sudo add-apt-repository ppa:dotcloud/lxc-docker -y
+#  - sudo apt-get update -qq
+#  - sudo apt-get install lxc-docker -qq
+#  - sudo docker -d &
+
+test: true
+install: mvn install -DskipTests=true
+
+
