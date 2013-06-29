@@ -7,6 +7,7 @@ import com.kpelykh.docker.client.model.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang.StringUtils;
+import org.hamcrest.Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
@@ -124,10 +125,11 @@ public class DockerClientTest extends Assert
 
     @Test
     public void testDockerSearch() throws DockerClientException {
-        List dockerSearch = dockerClient.search("busybox");
+        List<SearchItem> dockerSearch = dockerClient.search("busybox");
         LOG.info("Search returned" + dockerSearch.toString());
 
-        assertThat(dockerSearch, hasItem(hasField("name", equalTo("busybox"))));
+        Matcher matcher = hasItem(hasField("name", equalTo("busybox")));
+        assertThat(dockerSearch, matcher);
 
         assertThat(filter(hasField("name", is("busybox")), dockerSearch).size(), equalTo(1));
     }
@@ -176,7 +178,8 @@ public class DockerClientTest extends Assert
 
         List containers2 = dockerClient.listContainers(true);
         assertThat(size + 1, is(equalTo(containers2.size())));
-        assertThat(containers2, hasItem(hasField("id", startsWith(container1.id))));
+        Matcher matcher = hasItem(hasField("id", startsWith(container1.id)));
+        assertThat(containers2, matcher);
 
         List<Container> filteredContainers = filter(hasField("id", startsWith(container1.id)), containers2);
         assertThat(filteredContainers.size(), is(equalTo(1)));
@@ -411,7 +414,8 @@ public class DockerClientTest extends Assert
         dockerClient.removeContainer(container.id);
 
         List containers2 = dockerClient.listContainers(true);
-        assertThat(containers2, not(hasItem(hasField("id", startsWith(container.id)))));
+        Matcher matcher = not(hasItem(hasField("id", startsWith(container.id))));
+        assertThat(containers2, matcher);
 
     }
 
@@ -515,7 +519,8 @@ public class DockerClientTest extends Assert
         dockerClient.removeImage(imageId);
 
         List containers = dockerClient.listContainers(true);
-        assertThat(containers, not(hasItem(hasField("id", startsWith(imageId)))));
+        Matcher matcher = not(hasItem(hasField("id", startsWith(imageId))));
+        assertThat(containers, matcher);
     }
 
 
