@@ -37,14 +37,7 @@ public class DockerClient
     private Client client;
     private String restEndpointUrl;
 
-    public static DockerClient getInstance(String serverUrl) {
-        if (instance == null) {
-            instance = new DockerClient(serverUrl);
-        }
-        return instance;
-    }
-
-    private DockerClient(String serverUrl) {
+    public DockerClient(String serverUrl) {
         restEndpointUrl = serverUrl;
         ClientConfig clientConfig = new DefaultClientConfig();
         clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);

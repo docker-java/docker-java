@@ -44,7 +44,7 @@ public class DockerClientTest extends Assert
     public void beforeTest() throws DockerClientException {
         LOG.info("======================= BEFORETEST =======================");
         LOG.info("Connecting to Docker server at http://localhost:4243");
-        dockerClient = DockerClient.getInstance("http://localhost:4243");
+        dockerClient = new DockerClient("http://localhost:4243");
         LOG.info("Creating image 'busybox'");
 
         InputStream in = null;
