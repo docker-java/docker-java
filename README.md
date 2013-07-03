@@ -1,6 +1,6 @@
 # docker-java
 
-Java API client for Docker (based on docker-py)
+Java API client for [Docker](http://docs.docker.io/ "Docker")
 
 ## Build with Maven
 
