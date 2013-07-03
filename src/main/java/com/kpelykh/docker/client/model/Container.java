@@ -2,6 +2,8 @@ package com.kpelykh.docker.client.model;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import java.util.Arrays;
+
 /**
  *
  * @author Konstantin Pelykh (kpelykh@gmail.com)
@@ -25,13 +27,13 @@ public class Container {
     public String status;
 
     @JsonProperty("Ports")
-    public String ports;
+    public String ports;   //Example value "49164->6900, 49165->7100"
 
     @JsonProperty("SizeRw")
-    public long size;
+    public int size;
 
     @JsonProperty("SizeRootFs")
-    public long sizeRootFs;
+    public int sizeRootFs;
 
     @Override
     public String toString() {
@@ -41,7 +43,7 @@ public class Container {
                 ", image='" + image + '\'' +
                 ", created=" + created +
                 ", status='" + status + '\'' +
-                ", ports='" + ports + '\'' +
+                ", ports=" + ports +
                 ", size=" + size +
                 ", sizeRootFs=" + sizeRootFs +
                 '}';

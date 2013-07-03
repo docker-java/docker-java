@@ -13,14 +13,14 @@ public class Info {
     public boolean debug;
 
     @JsonProperty("Containers")
-    public long    containers;
+    public int    containers;
 
     @JsonProperty("Images")
-    public long    images;
+    public int    images;
 
-    public long    NFd;
+    public int    NFd;
 
-    public long    NGoroutines;
+    public int    NGoroutines;
 
     @JsonProperty("MemoryLimit")
     public boolean memoryLimit;

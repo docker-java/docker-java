@@ -22,10 +22,10 @@ public class Image {
     public long created;
 
     @JsonProperty("Size")
-    public long size;
+    public int size;
 
     @JsonProperty("VirtualSize")
-    public long virtualSize;
+    public int virtualSize;
 
     @Override
     public String toString() {

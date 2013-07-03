@@ -63,10 +63,11 @@ repository, before you can use it in your projects.*
       
 ###### Create new Docker container, wait for its start and stop it:
 
-    ContainerConfig containerConfig =
-                new ContainerConfig.Builder("busybox")
-                        .cmd(new String[]{"echo"}).build();
+    ContainerConfig containerConfig = new ContainerConfig();
+    containerConfig.setImage("busybox");
+    containerConfig.setCmd(new String[] {"touch", "/test"});
     ContainerCreateResponse container = dockerClient.createContainer(containerConfig);
+
     dockerClient.startContainer(container.id);
 
     dockerClient.waitContainer(container.id);
@@ -74,25 +75,31 @@ repository, before you can use it in your projects.*
     dockerClient.stopContainer(container.id);
     
     
-##### Container Builder:
+##### Docker Builder:
 
-    ContainerConfig containerConfig =
-            new ContainerConfig.Builder("busybox")
-                    .cmd(new String[] {"true"})
-                    .hostName(hostname)
-                    .user(user)
-                    .stdinOpen(stdinOpen)
-                    .tty(tty)
-                    .memoryLimit(memLimit)
-                    .portSpecs(ports)
-                    .env(environment)
-                    .dns(dns)
-                    .volumes(volumes)
-                    .volumesFrom(volumesFrom)
-                    .build();
-    ContainerCreateResponse container = dockerClient.createContainer(containerConfig);
-    
-    
+To use Docker Builder, as described on page http://docs.docker.io/en/latest/use/builder/,
+run dockerClient.build(baseDir), where baseDir is a path to folder containing Dockerfile.
+
+
+    File baseDir = new File("~/kpelykh/docker/netcat");
+
+    ClientResponse response = dockerClient.build(baseDir);
+
+    StringWriter logwriter = new StringWriter();
+
+    try {
+        LineIterator itr = IOUtils.lineIterator(response.getEntityInputStream(), "UTF-8");
+        while (itr.hasNext()) {
+            String line = itr.next();
+            logwriter.write(line);
+            LOG.info(line);
+        }
+    } finally {
+        IOUtils.closeQuietly(response.getEntityInputStream());
+    }
+
+
+
 For additional examples, please look at [DockerClientTest.java](https://github.com/kpelykh/docker-java/blob/master/src/test/java/com/kpelykh/docker/client/test/DockerClientTest.java "DockerClientTest.java")
 
 

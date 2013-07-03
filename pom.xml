@@ -20,6 +20,7 @@
         <version.testng>5.12.1</version.testng>
         <version.slf4j>1.6.1</version.slf4j>
         <version.logback>1.0.1</version.logback>
+        <jersey-version>1.17.1</jersey-version>
     </properties>
 
     <contributors>
@@ -33,18 +34,29 @@
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-core</artifactId>
-            <version>1.17.1</version>
+            <version>${jersey-version}</version>
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-client</artifactId>
-            <version>1.17.1</version>
+            <version>${jersey-version}</version>
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-json</artifactId>
-            <version>1.17.1</version>
+            <version>${jersey-version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.sun.jersey.contribs</groupId>
+            <artifactId>jersey-multipart</artifactId>
+            <version>${jersey-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey.contribs</groupId>
+            <artifactId>jersey-apache-client4</artifactId>
+            <version>1.9</version>
+        </dependency>
+
 
         <dependency>
             <groupId>commons-httpclient</groupId>
@@ -53,18 +65,15 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.sun.jersey.contribs</groupId>
-            <artifactId>jersey-apache-client4</artifactId>
-            <version>1.9</version>
-            <scope>compile</scope>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.5</version>
         </dependency>
-
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>2.6</version>
         </dependency>
-
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -116,6 +125,12 @@
             <artifactId>lambdaj</artifactId>
             <version>2.3.3</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-all</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
