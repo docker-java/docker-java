@@ -78,7 +78,7 @@ repository, before you can use it in your projects.*
 ##### Docker Builder:
 
 To use Docker Builder, as described on page http://docs.docker.io/en/latest/use/builder/,
-run dockerClient.build(baseDir), where baseDir is a path to folder containing Dockerfile.
+user dockerClient.build(baseDir), where baseDir is a path to folder containing Dockerfile.
 
 
     File baseDir = new File("~/kpelykh/docker/netcat");

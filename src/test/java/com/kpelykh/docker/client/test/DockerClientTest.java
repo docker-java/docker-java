@@ -49,12 +49,7 @@ public class DockerClientTest extends Assert
         dockerClient = new DockerClient("http://localhost:4243");
         LOG.info("Creating image 'busybox'");
 
-        InputStream in = null;
-        try {
-            in = dockerClient.pull("busybox");
-        } finally {
-            IOUtils.closeQuietly(in);
-        }
+        dockerClient.pull("busybox");
 
         assertNotNull(dockerClient);
         LOG.info("======================= END OF BEFORETEST =======================\n\n");
@@ -117,7 +112,6 @@ public class DockerClientTest extends Assert
         assertTrue(dockerInfo.toString().contains("images"));
         assertTrue(dockerInfo.toString().contains("debug"));
 
-        assertFalse(dockerInfo.debug);
         assertTrue(dockerInfo.containers > 0);
         assertTrue(dockerInfo.images > 0);
         assertTrue(dockerInfo.NFd > 0);
@@ -448,7 +442,7 @@ public class DockerClientTest extends Assert
      * */
 
     @Test
-    public void testPullImage() throws DockerException {
+    public void testPullImage() throws DockerException, IOException {
 
         String testImage = "joffrey/test001";
 
@@ -461,22 +455,10 @@ public class DockerClientTest extends Assert
         int imgCount= info.images;
 
         LOG.info("Pulling image " + testImage);
-        InputStream in = dockerClient.pull(testImage);
 
-        byte[] buffer = new byte[1024];
-        try {
-            BufferedInputStream bis = new BufferedInputStream(in);
-            int bytesRead = 0;
-            while ((bytesRead = bis.read(buffer)) != -1) {
-                Thread.sleep(200);
-                String logChunk = new String(buffer, 0, bytesRead);
-                LOG.info(logChunk);
-            }
-        } catch (IOException ex) {
-        } catch (InterruptedException e) {
-        } finally {
-            IOUtils.closeQuietly(in);
-        }
+        String response = dockerClient.pull(testImage);
+
+        assertThat(response, containsString("Pulling image e9aa60c60128cad1 () from joffrey/test001"));
 
         tmpImgs.add(testImage);
 

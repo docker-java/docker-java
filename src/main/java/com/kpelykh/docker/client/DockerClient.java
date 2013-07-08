@@ -92,15 +92,15 @@ public class DockerClient
      **
      **/
 
-    public InputStream pull(String repository) throws DockerException {
+    public String pull(String repository) throws DockerException {
         return this.pull(repository, null, null);
     }
 
-    public InputStream pull(String repository, String tag) throws DockerException {
+    public String pull(String repository, String tag) throws DockerException {
         return this.pull(repository, tag, null);
     }
 
-    public InputStream pull(String repository, String tag, String registry) throws DockerException {
+    public String pull(String repository, String tag, String registry) throws DockerException {
         Preconditions.checkNotNull(repository, "Repository was not specified");
 
         if (StringUtils.countMatches(repository, ":") == 1) {
@@ -119,7 +119,7 @@ public class DockerClient
 
         try {
             LOGGER.trace("POST: " + webResource.toString());
-            return webResource.accept(MediaType.APPLICATION_JSON).post(InputStream.class);
+            return webResource.accept(MediaType.APPLICATION_JSON).post(String.class);
         } catch (UniformInterfaceException exception) {
             if (exception.getResponse().getStatus() == 500) {
                 throw new DockerException("Server error.", exception);
