@@ -2,7 +2,7 @@
 
 Java API client for [Docker](http://docs.docker.io/ "Docker")
 
-Supports API v1.3
+Supports API v1.3, client version 0.4.8
 
 ## Build with Maven
 
