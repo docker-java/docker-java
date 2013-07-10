@@ -24,11 +24,13 @@ public class ContainerInspectResponse {
     @JsonProperty("SysInitPath") public String sysInitPath;
     @JsonProperty("ResolvConfPath") public String resolvConfPath;
     @JsonProperty("Volumes") public Map<String, String> volumes;
+    @JsonProperty("VolumesRW") public Map<String, String> volumesRW;
 
     @Override
     public String toString() {
         return "ContainerInspectResponse{" +
                 "volumes=" + volumes +
+                ", volumesRW=" + volumesRW + '\'' +
                 ", resolvConfPath='" + resolvConfPath + '\'' +
                 ", sysInitPath='" + sysInitPath + '\'' +
                 ", id='" + id + '\'' +
@@ -48,7 +50,7 @@ public class ContainerInspectResponse {
         @JsonProperty("IPPrefixLen") public int ipPrefixLen;
         @JsonProperty("Gateway") public String gateway;
         @JsonProperty("Bridge") public String bridge;
-        @JsonProperty("PortMapping") public Object portMapping;
+        @JsonProperty("PortMapping") public Map<String,String> portMapping;
     }
 
     public class ContainerState {

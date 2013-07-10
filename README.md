@@ -2,6 +2,8 @@
 
 Java API client for [Docker](http://docs.docker.io/ "Docker")
 
+Supports API v1.3
+
 ## Build with Maven
 
 ###### Prerequisites:
@@ -21,8 +23,8 @@ Run docker:
 Make sure that docker is up:
     
     $ docker version    
-    Client version: 0.4.1
-    Server version: 0.4.1
+    Client version: 0.4.8
+    Server version: 0.4.8
     Go version: go1.1
 
 Run build with tests:

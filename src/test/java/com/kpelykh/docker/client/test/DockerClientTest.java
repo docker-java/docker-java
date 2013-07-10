@@ -297,7 +297,7 @@ public class DockerClientTest extends Assert
             LineIterator itr = IOUtils.lineIterator(response.getEntityInputStream(), "UTF-8");
             while (itr.hasNext()) {
                 String line = itr.next();
-                logwriter.write(line);
+                logwriter.write(line + (itr.hasNext() ? "\n" : ""));
                 LOG.info(line);
             }
         } finally {
@@ -577,7 +577,7 @@ public class DockerClientTest extends Assert
             LineIterator itr = IOUtils.lineIterator(response.getEntityInputStream(), "UTF-8");
             while (itr.hasNext()) {
                 String line = itr.next();
-                logwriter.write(line);
+                logwriter.write(line + "\n");
                 LOG.info(line);
             }
         } finally {
@@ -585,9 +585,9 @@ public class DockerClientTest extends Assert
         }
 
         String fullLog = logwriter.toString();
-        assertThat(fullLog, containsString("Build successful"));
+        assertThat(fullLog, containsString("Successfully built"));
 
-        String imageId = StringUtils.substringAfterLast(fullLog, "===> ");
+        String imageId = StringUtils.substringAfterLast(fullLog, "Successfully built ").trim();
 
         ImageInspectResponse imageInspectResponse = dockerClient.inspectImage(imageId);
         assertThat(imageInspectResponse, not(nullValue()));
@@ -609,7 +609,7 @@ public class DockerClientTest extends Assert
             LineIterator itr = IOUtils.lineIterator(response.getEntityInputStream(), "UTF-8");
             while (itr.hasNext()) {
                 String line = itr.next();
-                logwriter.write(line);
+                logwriter.write(line + "\n");
                 LOG.info(line);
             }
         } finally {
@@ -617,9 +617,9 @@ public class DockerClientTest extends Assert
         }
 
         String fullLog = logwriter.toString();
-        assertThat(fullLog, containsString("Build successful"));
+        assertThat(fullLog, containsString("Successfully built"));
 
-        String imageId = StringUtils.substringAfterLast(fullLog, "===> ");
+        String imageId = StringUtils.substringAfterLast(fullLog, "Successfully built ").trim();
 
         ImageInspectResponse imageInspectResponse = dockerClient.inspectImage(imageId);
         assertThat(imageInspectResponse, not(nullValue()));
@@ -633,22 +633,20 @@ public class DockerClientTest extends Assert
         dockerClient.startContainer(container.id);
         tmpContainers.add(container.id);
 
-        List<Container> runningContainers = dockerClient.listContainers(false);
+        ContainerInspectResponse containerInspectResponse = dockerClient.inspectContainer(container.id);
 
-        List<Container> runningFiltered = filter(hasField("id", startsWith(container.id)), runningContainers);
-        assertThat(runningFiltered.size(), is(equalTo(1)));
-
-        assertThat(runningFiltered.get(0).ports, notNullValue());
-        String port = StringUtils.substringBefore(runningFiltered.get(0).ports, "->");
+        assertThat(containerInspectResponse.id, notNullValue());
+        assertThat(containerInspectResponse.networkSettings.portMapping, notNullValue());
+        int port = Integer.valueOf(containerInspectResponse.networkSettings.portMapping.get("6900"));
 
 
         LOG.info("Checking port {} is open", port);
-        assertThat(available(Integer.valueOf(port)), is(false));
+        assertThat(available(port), is(false));
 
         dockerClient.stopContainer(container.id, 0);
 
         LOG.info("Checking port {} is closed", port);
-        assertThat(available(Integer.valueOf(port)), is(true));
+        assertThat(available(port), is(true));
 
     }
 

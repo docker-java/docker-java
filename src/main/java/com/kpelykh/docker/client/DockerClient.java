@@ -13,6 +13,7 @@ import com.sun.jersey.client.apache4.ApacheHttpClient4;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 import com.sun.jersey.multipart.FormDataMultiPart;
 import com.sun.jersey.multipart.file.FileDataBodyPart;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -22,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
@@ -41,7 +43,7 @@ public class DockerClient
     private String restEndpointUrl;
 
     public DockerClient(String serverUrl) {
-        restEndpointUrl = serverUrl;
+        restEndpointUrl = serverUrl + "/v1.3";
         ClientConfig clientConfig = new DefaultClientConfig();
         clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
         client = ApacheHttpClient4.create(clientConfig);
@@ -327,7 +329,7 @@ public class DockerClient
 
         try {
             LOGGER.trace("POST: " + webResource.toString());
-            webResource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).post(hostConfig);
+            webResource.accept(MediaType.TEXT_PLAIN).type(MediaType.APPLICATION_JSON).post(hostConfig);
         } catch (UniformInterfaceException exception) {
             if (exception.getResponse().getStatus() == 404) {
                 throw new DockerException(String.format("No such container %s", containerId));
@@ -581,17 +583,11 @@ public class DockerClient
         Preconditions.checkArgument(dockerFolder.exists(), "Folder %s doesn't exist", dockerFolder);
 
         MultivaluedMap<String,String> params = new MultivaluedMapImpl();
-        params.add("tag", tag);
+        params.add("t", tag);
 
         // ARCHIVE TAR
         String archiveNameWithOutExtension = UUID.randomUUID().toString();
         File dockerFolderTar = CompressArchiveUtil.archiveTARFiles(dockerFolder, ".", archiveNameWithOutExtension);
-
-        File dockerFile = new File(dockerFolder, "Dockerfile");
-
-        FormDataMultiPart multiPart = new FormDataMultiPart();
-        multiPart.bodyPart(new FileDataBodyPart("Dockerfile", dockerFile, MediaType.APPLICATION_OCTET_STREAM_TYPE));
-        multiPart.bodyPart(new FileDataBodyPart("Context", dockerFolderTar, MediaType.APPLICATION_OCTET_STREAM_TYPE));
 
         WebResource webResource = client.resource(restEndpointUrl + "/build").queryParams(params);
 
@@ -599,15 +595,18 @@ public class DockerClient
 
         try {
             LOGGER.trace("POST: " + webResource.toString());
-            return webResource.type(MediaType.MULTIPART_FORM_DATA_TYPE)
+            return webResource
+                    .type("application/tar")
                     .accept(MediaType.TEXT_PLAIN)
-                    .post(ClientResponse.class, multiPart);
+                    .post(ClientResponse.class, FileUtils.openInputStream(dockerFolderTar));
         } catch (UniformInterfaceException exception) {
             if (exception.getResponse().getStatus() == 500) {
                 throw new DockerException("Server error", exception);
             } else {
                 throw new DockerException(exception);
             }
+        } catch (IOException e) {
+            throw new DockerException(e);
         }
 
     }
