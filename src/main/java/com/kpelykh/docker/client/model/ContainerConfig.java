@@ -13,24 +13,24 @@ import java.util.Map;
  */
 public class ContainerConfig {
 
-    @JsonProperty("Hostname")     private String hostName;
-    @JsonProperty("PortSpecs")    private String[] portSpecs;
-    @JsonProperty("User")         private String user;
-    @JsonProperty("Tty")          private boolean tty;
-    @JsonProperty("OpenStdin")    private boolean stdinOpen;
-    @JsonProperty("StdinOnce")    private boolean stdInOnce;
-    @JsonProperty("Memory")       private int    memoryLimit;
-    @JsonProperty("MemorySwap")   private int    memorySwap;
-    @JsonProperty("CpuShares")    private int    cpuShares;
-    @JsonProperty("AttachStdin")  private boolean attachStdin;
-    @JsonProperty("AttachStdout") private boolean attachStdout;
-    @JsonProperty("AttachStderr") private boolean attachStderr;
+    @JsonProperty("Hostname")     private String    hostName;
+    @JsonProperty("PortSpecs")    private String[]  portSpecs;
+    @JsonProperty("User")         private String    user;
+    @JsonProperty("Tty")          private boolean   tty;
+    @JsonProperty("OpenStdin")    private boolean   stdinOpen;
+    @JsonProperty("StdinOnce")    private boolean   stdInOnce;
+    @JsonProperty("Memory")       private long      memoryLimit;
+    @JsonProperty("MemorySwap")   private long      memorySwap;
+    @JsonProperty("CpuShares")    private int       cpuShares;
+    @JsonProperty("AttachStdin")  private boolean   attachStdin;
+    @JsonProperty("AttachStdout") private boolean   attachStdout;
+    @JsonProperty("AttachStderr") private boolean   attachStderr;
     @JsonProperty("Env")          private Map<String, String> env;
     @JsonProperty("Cmd")          private String[]  cmd;
     @JsonProperty("Dns")          private String[]  dns;
-    @JsonProperty("Image")        private String  image;
-    @JsonProperty("Volumes")      private Object  volumes;
-    @JsonProperty("VolumesFrom")  private String  volumesFrom;
+    @JsonProperty("Image")        private String    image;
+    @JsonProperty("Volumes")      private Object    volumes;
+    @JsonProperty("VolumesFrom")  private String    volumesFrom;
     @JsonProperty("Entrypoint")   private String[]  entrypoint;
 
 
@@ -82,19 +82,19 @@ public class ContainerConfig {
         this.stdInOnce = stdInOnce;
     }
 
-    public int getMemoryLimit() {
+    public long getMemoryLimit() {
         return memoryLimit;
     }
 
-    public void setMemoryLimit(int memoryLimit) {
+    public void setMemoryLimit(long memoryLimit) {
         this.memoryLimit = memoryLimit;
     }
 
-    public int getMemorySwap() {
+    public long getMemorySwap() {
         return memorySwap;
     }
 
-    public void setMemorySwap(int memorySwap) {
+    public void setMemorySwap(long memorySwap) {
         this.memorySwap = memorySwap;
     }
 
