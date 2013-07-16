@@ -7,12 +7,9 @@ import com.kpelykh.docker.client.utils.JsonClientFilter;
 import com.sun.jersey.api.client.*;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.api.client.filter.LoggingFilter;
 import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.client.apache4.ApacheHttpClient4;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
-import com.sun.jersey.multipart.FormDataMultiPart;
-import com.sun.jersey.multipart.file.FileDataBodyPart;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONException;
@@ -427,13 +424,18 @@ public class DockerClient
         params.add("logs", "1");
         params.add("stdout", "1");
         params.add("stderr", "1");
+        //params.add("stream", "1");
+
+        Client client = Client.create();
+        ClientConfig clientConfig = new DefaultClientConfig();
+        clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
 
         WebResource webResource = client.resource(restEndpointUrl + String.format("/containers/%s/attach", containerId))
                 .queryParams(params);
 
         try {
             LOGGER.trace("POST: " + webResource.toString());
-            return webResource.accept("application/vnd.docker.raw-stream").post(ClientResponse.class, params);
+            return webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).post(ClientResponse.class, params);
         } catch (UniformInterfaceException exception) {
             if (exception.getResponse().getStatus() == 400) {
                 throw new DockerException("bad parameter");
@@ -571,6 +573,9 @@ public class DockerClient
     }
 
     public ClientResponse build(File dockerFolder, String tag) throws DockerException {
+        Preconditions.checkNotNull(dockerFolder, "Folder is null");
+        Preconditions.checkArgument(dockerFolder.exists(), "Folder %s doesn't exist", dockerFolder);
+        Preconditions.checkState(new File(dockerFolder, "Dockerfile").exists(), "Dockerfile doesn't exist in " + dockerFolder);
 
         //We need to use Jersey HttpClient here, since ApacheHttpClient4 will not add boundary filed to
         //Content-Type: multipart/form-data; boundary=Boundary_1_372491238_1372806136625
@@ -579,19 +584,60 @@ public class DockerClient
         ClientConfig clientConfig = new DefaultClientConfig();
         clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
 
-        Preconditions.checkNotNull(dockerFolder, "Folder is null");
-        Preconditions.checkArgument(dockerFolder.exists(), "Folder %s doesn't exist", dockerFolder);
-
         MultivaluedMap<String,String> params = new MultivaluedMapImpl();
         params.add("t", tag);
 
         // ARCHIVE TAR
         String archiveNameWithOutExtension = UUID.randomUUID().toString();
-        File dockerFolderTar = CompressArchiveUtil.archiveTARFiles(dockerFolder, ".", archiveNameWithOutExtension);
+
+        File dockerFolderTar = null;
+        File tmpDockerContextFolder = null;
+
+        try {
+            File dockerFile = new File(dockerFolder, "Dockerfile");
+            List<String> dockerFileContent = FileUtils.readLines(dockerFile);
+
+            if (dockerFileContent.size() <= 0) {
+                throw new DockerException(String.format("Dockerfile %s is empty", dockerFile));
+            }
+
+            //Create tmp docker context folder
+            tmpDockerContextFolder = new File(FileUtils.getTempDirectoryPath(), "docker-java-build" + archiveNameWithOutExtension);
+
+            FileUtils.copyFileToDirectory(dockerFile, tmpDockerContextFolder);
+
+            for (String cmd : dockerFileContent) {
+                if (StringUtils.startsWithIgnoreCase(cmd.trim(), "ADD")) {
+                    String addArgs[] = StringUtils.split(cmd, " \t");
+                    if (addArgs.length != 3) {
+                        throw new DockerException(String.format("Wrong format on line [%s]", cmd));
+                    }
+
+                    File src = new File(addArgs[1]);
+                    if (!src.isAbsolute()) {
+                        src = new File(dockerFolder, addArgs[1]).getCanonicalFile();
+                    }
+
+                    if (!src.exists()) {
+                        throw new DockerException(String.format("Sorce file %s doesnt' exist", src));
+                    }
+                    if (src.isDirectory()) {
+                        FileUtils.copyDirectory(src, tmpDockerContextFolder);
+                    } else {
+                        FileUtils.copyFileToDirectory(src, tmpDockerContextFolder);
+                    }
+                }
+            }
+
+            dockerFolderTar = CompressArchiveUtil.archiveTARFiles(tmpDockerContextFolder, archiveNameWithOutExtension);
+
+        } catch (IOException ex) {
+            FileUtils.deleteQuietly(dockerFolderTar);
+            FileUtils.deleteQuietly(tmpDockerContextFolder);
+            throw new DockerException("Error occurred while preparing Docker context folder.", ex);
+        }
 
         WebResource webResource = client.resource(restEndpointUrl + "/build").queryParams(params);
-
-        ClientResponse response;
 
         try {
             LOGGER.trace("POST: " + webResource.toString());
@@ -607,6 +653,9 @@ public class DockerClient
             }
         } catch (IOException e) {
             throw new DockerException(e);
+        } finally {
+            FileUtils.deleteQuietly(dockerFolderTar);
+            FileUtils.deleteQuietly(tmpDockerContextFolder);
         }
 
     }

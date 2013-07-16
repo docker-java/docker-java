@@ -5,51 +5,58 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Collection;
 
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.RegexFileFilter;
+import org.apache.commons.lang.StringUtils;
+
+import static org.apache.commons.io.filefilter.FileFilterUtils.*;
 
 public class CompressArchiveUtil {
 
-	public static File archiveTARFiles(File baseDir, String dirToArchive, String archiveNameWithOutExtension) {
+	public static File archiveTARFiles(File baseDir, String archiveNameWithOutExtension) throws IOException {
 
 		File tarFile = null;
 		
-		try {
-			File[] list = (new File(baseDir, dirToArchive)).listFiles();
-			tarFile = new File(FileUtils.getTempDirectoryPath(), archiveNameWithOutExtension + ".tar");
-            tarFile.deleteOnExit();
+        tarFile = new File(FileUtils.getTempDirectoryPath(), archiveNameWithOutExtension + ".tar");
 
-			byte[] buf = new byte[1024];
-			int len;
-			
-			{
-				TarArchiveOutputStream tos = new TarArchiveOutputStream(new FileOutputStream(tarFile));
-				tos.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU);
-				for (File file : list) {
-					TarArchiveEntry tarEntry = new TarArchiveEntry(file.getName());
-					tarEntry.setSize(file.length());
+        Collection<File> files =
+                FileUtils.listFiles(
+                        baseDir,
+                        new RegexFileFilter("^(.*?)"),
+                        and(directoryFileFilter(), notFileFilter(nameFileFilter(baseDir.getName()))));
 
-					FileInputStream fin = new FileInputStream(file);
-					BufferedInputStream in = new BufferedInputStream(fin);
-					tos.putArchiveEntry(tarEntry);
+        byte[] buf = new byte[1024];
+        int len;
 
-					while ((len = in.read(buf)) != -1) {
-						tos.write(buf, 0, len);
-					}
+        {
+            TarArchiveOutputStream tos = new TarArchiveOutputStream(new FileOutputStream(tarFile));
+            tos.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU);
+            for (File file : files) {
+                TarArchiveEntry tarEntry = new TarArchiveEntry(file);
+                tarEntry.setName(StringUtils.substringAfter(file.toString(), baseDir.getPath()));
 
-					in.close();
+                tos.putArchiveEntry(tarEntry);
 
-					tos.closeArchiveEntry();
+                if (!file.isDirectory()) {
+                    FileInputStream fin = new FileInputStream(file);
+                    BufferedInputStream in = new BufferedInputStream(fin);
 
-				}
-				tos.close();
-			}
+                    while ((len = in.read(buf)) != -1) {
+                        tos.write(buf, 0, len);
+                    }
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+                    in.close();
+                }
+                tos.closeArchiveEntry();
+
+            }
+            tos.close();
+        }
+
 		
 		return tarFile;
 	}

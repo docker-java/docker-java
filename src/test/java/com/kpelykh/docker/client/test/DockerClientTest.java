@@ -598,6 +598,18 @@ public class DockerClientTest extends Assert
     }
 
     @Test
+    public void testDockerBuilderAddFile() throws DockerException, IOException {
+        File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testAddFile").getFile());
+        dockerfileBuild(baseDir, "Successfully executed testrun.sh");
+    }
+
+    @Test
+    public void testDockerBuilderAddFolder() throws DockerException, IOException {
+        File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testAddFolder").getFile());
+        dockerfileBuild(baseDir, "Successfully executed testAddFolder.sh");
+    }
+
+    @Test
     public void testNetCatDockerfileBuilder() throws DockerException, IOException, InterruptedException {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("netcat").getFile());
 
@@ -687,5 +699,59 @@ public class DockerClientTest extends Assert
         }
 
         return false;
+    }
+
+    private void dockerfileBuild(File baseDir, String expectedText) throws DockerException, IOException {
+
+        //Build image
+        ClientResponse response = dockerClient.build(baseDir);
+
+        StringWriter logwriter = new StringWriter();
+
+        try {
+            LineIterator itr = IOUtils.lineIterator(response.getEntityInputStream(), "UTF-8");
+            while (itr.hasNext()) {
+                String line = itr.next();
+                logwriter.write(line + "\n");
+                LOG.info(line);
+            }
+        } finally {
+            IOUtils.closeQuietly(response.getEntityInputStream());
+        }
+
+        String fullLog = logwriter.toString();
+        assertThat(fullLog, containsString("Successfully built"));
+
+        String imageId = StringUtils.substringAfterLast(fullLog, "Successfully built ").trim();
+
+        //Create container based on image
+        ContainerConfig containerConfig = new ContainerConfig();
+        containerConfig.setImage(imageId);
+        ContainerCreateResponse container = dockerClient.createContainer(containerConfig);
+        LOG.info("Created container " + container.toString());
+        assertThat(container.id, not(isEmptyString()));
+
+        dockerClient.startContainer(container.id);
+        dockerClient.waitContainer(container.id);
+
+        tmpContainers.add(container.id);
+
+        //Log container
+        ClientResponse logResponse = dockerClient.logContainer(container.id);
+
+        StringWriter logwriter2 = new StringWriter();
+
+        try {
+            LineIterator itr = IOUtils.lineIterator(logResponse.getEntityInputStream(), "UTF-8");
+            while (itr.hasNext()) {
+                String line = itr.next();
+                logwriter2.write(line + (itr.hasNext() ? "\n" : ""));
+                LOG.info(line);
+            }
+        } finally {
+            IOUtils.closeQuietly(logResponse.getEntityInputStream());
+        }
+
+        assertThat(logwriter2.toString(), equalTo(expectedText));
     }
 }
