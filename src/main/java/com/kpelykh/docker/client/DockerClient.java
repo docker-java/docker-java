@@ -9,9 +9,16 @@ import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.client.apache4.ApacheHttpClient4;
+import com.sun.jersey.client.apache4.ApacheHttpClient4Handler;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.client.HttpClient;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
@@ -43,11 +50,22 @@ public class DockerClient
         restEndpointUrl = serverUrl + "/v1.3";
         ClientConfig clientConfig = new DefaultClientConfig();
         clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
-        client = ApacheHttpClient4.create(clientConfig);
+
+        SchemeRegistry schemeRegistry = new SchemeRegistry();
+        schemeRegistry.register(new Scheme("http", 4243, PlainSocketFactory.getSocketFactory()));
+
+        PoolingClientConnectionManager cm = new PoolingClientConnectionManager(schemeRegistry);
+        // Increase max total connection
+        cm.setMaxTotal(1000);
+        // Increase default max connection per route
+        cm.setDefaultMaxPerRoute(1000);
+
+        HttpClient httpClient = new DefaultHttpClient(cm);
+        client = new ApacheHttpClient4(new ApacheHttpClient4Handler(httpClient, null, false), clientConfig);
+
         client.addFilter(new JsonClientFilter());
         //client.addFilter(new LoggingFilter());
     }
-
 
     /**
      ** MISC API
@@ -91,15 +109,15 @@ public class DockerClient
      **
      **/
 
-    public String pull(String repository) throws DockerException {
+    public ClientResponse pull(String repository) throws DockerException {
         return this.pull(repository, null, null);
     }
 
-    public String pull(String repository, String tag) throws DockerException {
+    public ClientResponse pull(String repository, String tag) throws DockerException {
         return this.pull(repository, tag, null);
     }
 
-    public String pull(String repository, String tag, String registry) throws DockerException {
+    public ClientResponse pull(String repository, String tag, String registry) throws DockerException {
         Preconditions.checkNotNull(repository, "Repository was not specified");
 
         if (StringUtils.countMatches(repository, ":") == 1) {
@@ -118,7 +136,7 @@ public class DockerClient
 
         try {
             LOGGER.trace("POST: " + webResource.toString());
-            return webResource.accept(MediaType.APPLICATION_JSON).post(String.class);
+            return webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).post(ClientResponse.class);
         } catch (UniformInterfaceException exception) {
             if (exception.getResponse().getStatus() == 500) {
                 throw new DockerException("Server error.", exception);
@@ -424,11 +442,7 @@ public class DockerClient
         params.add("logs", "1");
         params.add("stdout", "1");
         params.add("stderr", "1");
-        //params.add("stream", "1");
-
-        Client client = Client.create();
-        ClientConfig clientConfig = new DefaultClientConfig();
-        clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
+        params.add("stream", "1");
 
         WebResource webResource = client.resource(restEndpointUrl + String.format("/containers/%s/attach", containerId))
                 .queryParams(params);
@@ -579,10 +593,6 @@ public class DockerClient
 
         //We need to use Jersey HttpClient here, since ApacheHttpClient4 will not add boundary filed to
         //Content-Type: multipart/form-data; boundary=Boundary_1_372491238_1372806136625
-
-        Client client = Client.create();
-        ClientConfig clientConfig = new DefaultClientConfig();
-        clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
 
         MultivaluedMap<String,String> params = new MultivaluedMapImpl();
         params.add("t", tag);
