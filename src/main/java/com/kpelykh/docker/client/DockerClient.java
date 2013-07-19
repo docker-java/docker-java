@@ -442,7 +442,7 @@ public class DockerClient
         params.add("logs", "1");
         params.add("stdout", "1");
         params.add("stderr", "1");
-        params.add("stream", "1");
+        //params.add("stream", "1"); this parameter keeps stream open indindefinitely
 
         WebResource webResource = client.resource(restEndpointUrl + String.format("/containers/%s/attach", containerId))
                 .queryParams(params);
