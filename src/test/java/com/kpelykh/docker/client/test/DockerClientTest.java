@@ -57,8 +57,16 @@ public class DockerClientTest extends Assert
 
     @AfterTest
     public void afterTest() {
-        LOG.info("======================= AFTERTEST =======================");
+        LOG.info("======================= END OF AFTERTEST =======================");
+    }
 
+    @BeforeMethod
+    public void beforeMethod(Method method) {
+        LOG.info(String.format("################################## STARTING %s ##################################", method.getName()));
+    }
+
+    @AfterMethod
+    public void afterMethod(ITestResult result) {
         for (String image : tmpImgs) {
             LOG.info("Cleaning up temporary image " + image);
             try {
@@ -72,17 +80,7 @@ public class DockerClientTest extends Assert
                 dockerClient.removeContainer(container);
             } catch (DockerException ignore) {}
         }
-        LOG.info("======================= END OF AFTERTEST =======================");
-    }
-
-    @BeforeMethod
-    public void beforeMethod(Method method) {
-        LOG.info(String.format("################################## STARTING %s ##################################", method.getName()));
-    }
-
-    @AfterMethod
-    public void afterMethod(ITestResult result) {
-        LOG.info(String.format("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ END OF %s ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n", result.getName()));
+        LOG.info(String.format("################################## END OF %s ##################################\n", result.getName()));
     }
 
     /*
@@ -456,9 +454,23 @@ public class DockerClientTest extends Assert
 
         LOG.info("Pulling image " + testImage);
 
-        String response = dockerClient.pull(testImage);
+        ClientResponse response = dockerClient.pull(testImage);
 
-        assertThat(response, containsString("Pulling image e9aa60c60128cad1 () from joffrey/test001"));
+        StringWriter logwriter = new StringWriter();
+
+        try {
+            LineIterator itr = IOUtils.lineIterator(response.getEntityInputStream(), "UTF-8");
+            while (itr.hasNext()) {
+                String line = itr.next();
+                logwriter.write(line + "\n");
+                LOG.info(line);
+            }
+        } finally {
+            IOUtils.closeQuietly(response.getEntityInputStream());
+        }
+
+        String fullLog = logwriter.toString();
+        assertThat(fullLog, containsString("Pulling repository joffrey/test001"));
 
         tmpImgs.add(testImage);
 
@@ -649,7 +661,7 @@ public class DockerClientTest extends Assert
 
         assertThat(containerInspectResponse.id, notNullValue());
         assertThat(containerInspectResponse.networkSettings.portMapping, notNullValue());
-        int port = Integer.valueOf(containerInspectResponse.networkSettings.portMapping.get("6900"));
+        int port = Integer.valueOf(containerInspectResponse.networkSettings.portMapping.get("Tcp").get("6900"));
 
 
         LOG.info("Checking port {} is open", port);
