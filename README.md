@@ -23,8 +23,8 @@ Run docker:
 Make sure that docker is up:
     
     $ docker version    
-    Client version: 0.4.8
-    Server version: 0.4.8
+    Client version: 0.5.0
+    Server version: 0.5.0
     Go version: go1.1
 
 Run build with tests:
