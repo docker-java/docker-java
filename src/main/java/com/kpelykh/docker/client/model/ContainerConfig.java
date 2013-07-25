@@ -25,7 +25,7 @@ public class ContainerConfig {
     @JsonProperty("AttachStdin")  private boolean   attachStdin;
     @JsonProperty("AttachStdout") private boolean   attachStdout;
     @JsonProperty("AttachStderr") private boolean   attachStderr;
-    @JsonProperty("Env")          private Map<String, String> env;
+    @JsonProperty("Env")          private String[] env;
     @JsonProperty("Cmd")          private String[]  cmd;
     @JsonProperty("Dns")          private String[]  dns;
     @JsonProperty("Image")        private String    image;
@@ -130,11 +130,11 @@ public class ContainerConfig {
         this.attachStderr = attachStderr;
     }
 
-    public Map<String, String> getEnv() {
+    public String[] getEnv() {
         return env;
     }
 
-    public void setEnv(Map<String, String> env) {
+    public void setEnv(String[] env) {
         this.env = env;
     }
 
