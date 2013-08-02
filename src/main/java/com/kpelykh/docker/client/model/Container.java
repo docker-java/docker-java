@@ -2,8 +2,6 @@ package com.kpelykh.docker.client.model;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import java.util.Arrays;
-
 /**
  *
  * @author Konstantin Pelykh (kpelykh@gmail.com)

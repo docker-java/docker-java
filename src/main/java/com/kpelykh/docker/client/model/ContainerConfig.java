@@ -1,10 +1,8 @@
 package com.kpelykh.docker.client.model;
 
-import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.util.Arrays;
-import java.util.Map;
 
 /**
  *

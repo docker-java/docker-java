@@ -18,7 +18,6 @@ package com.google.common.base;
 
 
 import javax.annotation.Nullable;
-
 import java.util.NoSuchElementException;
 
 /**
