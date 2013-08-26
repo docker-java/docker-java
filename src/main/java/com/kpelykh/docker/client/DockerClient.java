@@ -343,7 +343,7 @@ public class DockerClient
 
         try {
             LOGGER.trace("POST: " + webResource.toString());
-            webResource.accept(MediaType.TEXT_PLAIN).type(MediaType.APPLICATION_JSON).post(hostConfig);
+            webResource.accept(MediaType.TEXT_PLAIN).post(hostConfig);
         } catch (UniformInterfaceException exception) {
             if (exception.getResponse().getStatus() == 404) {
                 throw new DockerException(String.format("No such container %s", containerId));

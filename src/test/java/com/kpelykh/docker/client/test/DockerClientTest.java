@@ -146,8 +146,8 @@ public class DockerClientTest extends Assert
 
         Image img = images.get(0);
         assertThat(img.created, is(greaterThan(0L)) );
-        assertThat(img.size, is(greaterThan(0)) );
-        assertThat(img.virtualSize, is(greaterThan(0)) );
+        assertThat(img.size, is(greaterThan(0L)) );
+        assertThat(img.virtualSize, is(greaterThan(0L)) );
         assertThat(img.id, not(isEmptyString()));
         assertThat(img.tag, not(isEmptyString()));
         assertThat(img.repository, not(isEmptyString()));
@@ -270,11 +270,11 @@ public class DockerClientTest extends Assert
     @Test
     public void testLogs() throws DockerException, IOException {
 
-        String snippet = "'Flowering Nights (Sakuya Iyazoi)";
+        String snippet = "hello world";
 
         ContainerConfig containerConfig = new ContainerConfig();
         containerConfig.setImage("busybox");
-        containerConfig.setCmd(new String[] {"echo", "-n", snippet});
+        containerConfig.setCmd(new String[] {"/bin/echo", snippet});
 
         ContainerCreateResponse container = dockerClient.createContainer(containerConfig);
         LOG.info("Created container " + container.toString());

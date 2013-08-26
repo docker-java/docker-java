@@ -18,13 +18,30 @@ public class Info {
     @JsonProperty("Images")
     public int    images;
 
+    @JsonProperty("NFd")
     public int    NFd;
 
+    @JsonProperty("NGoroutines")
     public int    NGoroutines;
 
     @JsonProperty("MemoryLimit")
     public boolean memoryLimit;
 
+    @JsonProperty("LXCVersion")
+    public String lxcVersion;
+
+
+    @JsonProperty("NEventsListener")
+    public long nEventListener;
+
+    @JsonProperty("KernelVersion")
+    public String kernelVersion;
+
+    @JsonProperty("IPv4Forwarding")
+    public String IPv4Forwarding;
+
+    @JsonProperty("IndexServerAddress")
+    public String IndexServerAddress;
 
     @Override
     public String toString() {
@@ -35,7 +52,11 @@ public class Info {
                 ", NFd=" + NFd +
                 ", NGoroutines=" + NGoroutines +
                 ", memoryLimit=" + memoryLimit +
+                ", lxcVersion='" + lxcVersion + '\'' +
+                ", nEventListener=" + nEventListener +
+                ", kernelVersion='" + kernelVersion + '\'' +
+                ", IPv4Forwarding='" + IPv4Forwarding + '\'' +
+                ", IndexServerAddress='" + IndexServerAddress + '\'' +
                 '}';
     }
-
 }

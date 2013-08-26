@@ -3,6 +3,7 @@ package com.kpelykh.docker.client.model;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.util.Arrays;
+import java.util.Map;
 
 /**
  *
@@ -11,29 +12,56 @@ import java.util.Arrays;
  */
 public class ContainerConfig {
 
-    @JsonProperty("Hostname")     private String    hostName;
+    @JsonProperty("Hostname")     private String    hostName = "";
     @JsonProperty("PortSpecs")    private String[]  portSpecs;
-    @JsonProperty("User")         private String    user;
-    @JsonProperty("Tty")          private boolean   tty;
-    @JsonProperty("OpenStdin")    private boolean   stdinOpen;
-    @JsonProperty("StdinOnce")    private boolean   stdInOnce;
-    @JsonProperty("Memory")       private long      memoryLimit;
-    @JsonProperty("MemorySwap")   private long      memorySwap;
-    @JsonProperty("CpuShares")    private int       cpuShares;
-    @JsonProperty("AttachStdin")  private boolean   attachStdin;
-    @JsonProperty("AttachStdout") private boolean   attachStdout;
-    @JsonProperty("AttachStderr") private boolean   attachStderr;
-    @JsonProperty("Env")          private String[] env;
+    @JsonProperty("User")         private String    user = "";
+    @JsonProperty("Tty")          private boolean   tty = false;
+    @JsonProperty("OpenStdin")    private boolean   stdinOpen = false;
+    @JsonProperty("StdinOnce")    private boolean   stdInOnce = false;
+    @JsonProperty("Memory")       private long      memoryLimit = 0;
+    @JsonProperty("MemorySwap")   private long      memorySwap = 0;
+    @JsonProperty("CpuShares")    private int       cpuShares = 0;
+    @JsonProperty("AttachStdin")  private boolean   attachStdin = false;
+    @JsonProperty("AttachStdout") private boolean   attachStdout = false;
+    @JsonProperty("AttachStderr") private boolean   attachStderr = false;
+    @JsonProperty("Env")          private String[]  env;
     @JsonProperty("Cmd")          private String[]  cmd;
     @JsonProperty("Dns")          private String[]  dns;
     @JsonProperty("Image")        private String    image;
     @JsonProperty("Volumes")      private Object    volumes;
-    @JsonProperty("VolumesFrom")  private String    volumesFrom;
-    @JsonProperty("Entrypoint")   private String[]  entrypoint;
+    @JsonProperty("VolumesFrom")  private String    volumesFrom = "";
+    @JsonProperty("Entrypoint")   private String[]  entrypoint = new String[]{};
+    @JsonProperty("NetworkDisabled") private boolean networkDisabled = false;
+    @JsonProperty("Privileged")   private boolean privileged = false;
+    @JsonProperty("WorkingDir")   private String workingDir = "";
 
+
+    public String getWorkingDir() {
+        return workingDir;
+    }
+
+    public void setWorkingDir(String workingDir) {
+        this.workingDir = workingDir;
+    }
+
+    public boolean isPrivileged() {
+        return privileged;
+    }
+
+    public void setPrivileged(boolean privileged) {
+        this.privileged = privileged;
+    }
 
     public String getHostName() {
         return hostName;
+    }
+
+    public boolean getNetworkDisabled() {
+        return networkDisabled;
+    }
+
+    public void setNetworkDisabled(boolean networkDisabled) {
+        this.networkDisabled = networkDisabled;
     }
 
     public void setHostName(String hostName) {

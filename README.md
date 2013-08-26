@@ -2,7 +2,7 @@
 
 Java API client for [Docker](http://docs.docker.io/ "Docker")
 
-Supports Docker Client API v1.3, Server version 0.5.0
+Supports Docker Client API v1.3, Docker Server version 0.6.1
 
 ## Build with Maven
 
@@ -16,16 +16,21 @@ Supports Docker Client API v1.3, Server version 0.5.0
 By default maven will run tests during build process. Tests are using localhost instance of Docker, make sure that
 you have Docker running, or the tests.
 
+*Since version 0.6, Docker is using unix socket for communication, however java client works over TCP/IP, so you need to
+make sure that your Docker server is listening on TCP/IP port.*
+
 Run docker:
 
-    $ sudo docker -d
+    $ sudo docker -H=tcp://127.0.0.1:4243 -d
 
 Make sure that docker is up:
     
-    $ docker version    
-    Client version: 0.5.0
-    Server version: 0.5.0
-    Go version: go1.1
+    $docker -H=tcp://127.0.0.1:4243 version
+    Client version: 0.6.1
+    Server version: 0.6.1
+    Git commit: 5105263
+    Go version: go1.1.2
+    Last stable version: 0.6.1
 
 Run build with tests:
 
@@ -42,7 +47,7 @@ To use Java Docker client, include dependency into your pom.xml:
     <dependency>
           <groupId>com.kpelykh</groupId>
           <artifactId>docker-java</artifactId>
-          <version>1.0-SNAPSHOT</version>
+          <version>0.6.1-SNAPSHOT</version>
     </dependency>
 
 *Currently Docker Java client is not available in Maven Central, so you will need to install it to a local
@@ -104,9 +109,3 @@ user dockerClient.build(baseDir), where baseDir is a path to folder containing D
 
 For additional examples, please look at [DockerClientTest.java](https://github.com/kpelykh/docker-java/blob/master/src/test/java/com/kpelykh/docker/client/test/DockerClientTest.java "DockerClientTest.java")
 
-
-## TODO
-
-Currently the following APIs are missing: 
-
-export, history, login, push, tag
