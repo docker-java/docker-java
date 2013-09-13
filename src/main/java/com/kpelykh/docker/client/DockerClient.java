@@ -5,6 +5,7 @@ import com.kpelykh.docker.client.model.*;
 import com.kpelykh.docker.client.utils.CompressArchiveUtil;
 import com.kpelykh.docker.client.utils.JsonClientFilter;
 import com.sun.jersey.api.client.*;
+import com.sun.jersey.api.client.WebResource.Builder;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.json.JSONConfiguration;
@@ -343,7 +344,12 @@ public class DockerClient
 
         try {
             LOGGER.trace("POST: " + webResource.toString());
-            webResource.accept(MediaType.TEXT_PLAIN).post(hostConfig);
+            Builder builder = webResource.accept(MediaType.TEXT_PLAIN);
+            if (hostConfig != null) {
+                builder.type(MediaType.APPLICATION_JSON).post(hostConfig);
+            } else {
+                builder.post((HostConfig) null);
+            }
         } catch (UniformInterfaceException exception) {
             if (exception.getResponse().getStatus() == 404) {
                 throw new DockerException(String.format("No such container %s", containerId));
