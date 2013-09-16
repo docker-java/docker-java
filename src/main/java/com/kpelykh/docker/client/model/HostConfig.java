@@ -16,7 +16,7 @@ public class HostConfig {
     public String containerIDFile;
 
     @JsonProperty("LxcConf")
-    public String[] lxcConf = new String[]{};
+    public LxcConf[] lxcConf;
 
     public HostConfig(String[] binds) {
         this.binds = binds;
@@ -38,11 +38,36 @@ public class HostConfig {
         this.containerIDFile = containerIDFile;
     }
 
-    public String[] getLxcConf() {
+    public LxcConf[] getLxcConf() {
         return lxcConf;
     }
 
-    public void setLxcConf(String[] lxcConf) {
+    public void setLxcConf(LxcConf[] lxcConf) {
         this.lxcConf = lxcConf;
+    }
+
+    public class LxcConf {
+        @JsonProperty("Key")
+        public String key;
+
+        @JsonProperty("Value")
+        public String value;
+
+        public String getKey() {
+            return key;
+        }
+
+        public void setKey(String key) {
+            this.key = key;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+
     }
 }
