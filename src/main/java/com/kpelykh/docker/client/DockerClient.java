@@ -15,6 +15,7 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.HttpClient;
+import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -60,8 +61,9 @@ public class DockerClient
         // Increase default max connection per route
         cm.setDefaultMaxPerRoute(1000);
 
-        HttpClient httpClient = new DefaultHttpClient(cm);
-        client = new ApacheHttpClient4(new ApacheHttpClient4Handler(httpClient, null, false), clientConfig);
+        // HttpClient httpClient = new DefaultHttpClient(cm);
+        // client = new ApacheHttpClient4(new ApacheHttpClient4Handler(httpClient, null, false), clientConfig);
+        client = new UnixSocketClient();
 
         client.addFilter(new JsonClientFilter());
         //client.addFilter(new LoggingFilter());
