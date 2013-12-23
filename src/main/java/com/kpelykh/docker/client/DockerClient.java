@@ -48,12 +48,12 @@ public class DockerClient
     private String restEndpointUrl;
 
     public DockerClient(String serverUrl) {
-        restEndpointUrl = serverUrl + "/v1.3";
+        restEndpointUrl = "/v1.3";
         ClientConfig clientConfig = new DefaultClientConfig();
         clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
 
         SchemeRegistry schemeRegistry = new SchemeRegistry();
-        schemeRegistry.register(new Scheme("http", 4243, PlainSocketFactory.getSocketFactory()));
+        //schemeRegistry.register(new Scheme("http", 4243, PlainSocketFactory.getSocketFactory()));
 
         PoolingClientConnectionManager cm = new PoolingClientConnectionManager(schemeRegistry);
         // Increase max total connection
@@ -61,11 +61,11 @@ public class DockerClient
         // Increase default max connection per route
         cm.setDefaultMaxPerRoute(1000);
 
-        // HttpClient httpClient = new DefaultHttpClient(cm);
-        // client = new ApacheHttpClient4(new ApacheHttpClient4Handler(httpClient, null, false), clientConfig);
+        //HttpClient httpClient = new DefaultHttpClient(cm);
+        //client = new ApacheHttpClient4(new ApacheHttpClient4Handler(httpClient, null, false), clientConfig);
         client = new UnixSocketClient();
 
-        client.addFilter(new JsonClientFilter());
+        //client.addFilter(new JsonClientFilter());
         //client.addFilter(new LoggingFilter());
     }
 
