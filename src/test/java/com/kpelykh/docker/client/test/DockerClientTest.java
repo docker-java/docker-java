@@ -46,10 +46,10 @@ public class DockerClientTest extends Assert
     public void beforeTest() throws DockerException {
         LOG.info("======================= BEFORETEST =======================");
         LOG.info("Connecting to Docker server at http://localhost:4243");
-        dockerClient = new DockerClient("http://www.nu.nl");
+        dockerClient = new DockerClient("http://localhost:4243");
         LOG.info("Creating image 'busybox'");
 
-        dockerClient.pull("busybox");
+//        dockerClient.pull("busybox");
 
         assertNotNull(dockerClient);
         LOG.info("======================= END OF BEFORETEST =======================\n\n");
@@ -65,7 +65,7 @@ public class DockerClientTest extends Assert
         LOG.info(String.format("################################## STARTING %s ##################################", method.getName()));
     }
 
-    @AfterMethod
+//    @AfterMethod
     public void afterMethod(ITestResult result) {
         for (String image : tmpImgs) {
             LOG.info("Cleaning up temporary image " + image);

@@ -42,8 +42,6 @@ public class UnixSocketClientHandler extends RequestWriter implements ClientHand
 
   @Override
   public ClientResponse handle(ClientRequest cr) throws ClientHandlerException {
-    LOGGER.info("handle " + cr);
-
     try {
       File path = new File(DOCKER_SOCKET_PATH);
       UnixSocketAddress address = new UnixSocketAddress(path);
@@ -63,20 +61,15 @@ public class UnixSocketClientHandler extends RequestWriter implements ClientHand
       inputBuffer.init(Channels.newInputStream(channel), BUFFERSIZE, params);
 
       HttpResponse response = new DefaultHttpResponseParser(inputBuffer, new BasicLineParser(), new DefaultHttpResponseFactory(), params).parse();
+      LOGGER.trace(response.toString());
 
       ClientResponse clientResponse = new ClientResponse(response.getStatusLine().getStatusCode(),
         getInBoundHeaders(response),
         new HttpClientResponseInputStream(response),
         getMessageBodyWorkers());
-      if (!clientResponse.hasEntity()) {
-        clientResponse.bufferEntity();
-        clientResponse.close();
-      }
 
-      System.out.println(clientResponse.getType());
-      System.out.println(clientResponse.getClientResponseStatus());
-      System.out.println(clientResponse.getStatus());
-      System.out.println(clientResponse.getHeaders());
+      clientResponse.bufferEntity();
+      clientResponse.close();
 
       return clientResponse;
 

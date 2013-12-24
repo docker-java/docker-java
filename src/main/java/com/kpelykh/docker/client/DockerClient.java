@@ -8,6 +8,7 @@ import com.sun.jersey.api.client.*;
 import com.sun.jersey.api.client.WebResource.Builder;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.sun.jersey.api.client.filter.LoggingFilter;
 import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.client.apache4.ApacheHttpClient4;
 import com.sun.jersey.client.apache4.ApacheHttpClient4Handler;
@@ -53,7 +54,7 @@ public class DockerClient
         clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
 
         SchemeRegistry schemeRegistry = new SchemeRegistry();
-        //schemeRegistry.register(new Scheme("http", 4243, PlainSocketFactory.getSocketFactory()));
+        schemeRegistry.register(new Scheme("http", 4243, PlainSocketFactory.getSocketFactory()));
 
         PoolingClientConnectionManager cm = new PoolingClientConnectionManager(schemeRegistry);
         // Increase max total connection
@@ -61,12 +62,12 @@ public class DockerClient
         // Increase default max connection per route
         cm.setDefaultMaxPerRoute(1000);
 
-        //HttpClient httpClient = new DefaultHttpClient(cm);
+        // HttpClient httpClient = new DefaultHttpClient(cm);
         //client = new ApacheHttpClient4(new ApacheHttpClient4Handler(httpClient, null, false), clientConfig);
-        client = new UnixSocketClient();
+        client = new UnixSocketClient(clientConfig);
 
-        //client.addFilter(new JsonClientFilter());
-        //client.addFilter(new LoggingFilter());
+        client.addFilter(new JsonClientFilter());
+        client.addFilter(new LoggingFilter());
     }
 
     /**
