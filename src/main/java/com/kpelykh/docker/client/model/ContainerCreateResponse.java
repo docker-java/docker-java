@@ -12,10 +12,18 @@ import java.util.Arrays;
 public class ContainerCreateResponse {
 
     @JsonProperty("Id")
-    public String id;
+    private String id;
 
     @JsonProperty("Warnings")
-    public String[] warnings;
+    private String[] warnings;
+
+    public String getId() {
+        return id;
+    }
+
+    public String[] getWarnings() {
+        return warnings;
+    }
 
     @Override
     public String toString() {

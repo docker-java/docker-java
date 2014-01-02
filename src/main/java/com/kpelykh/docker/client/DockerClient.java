@@ -8,6 +8,7 @@ import com.sun.jersey.api.client.*;
 import com.sun.jersey.api.client.WebResource.Builder;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.sun.jersey.api.client.filter.LoggingFilter;
 import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.client.apache4.ApacheHttpClient4;
 import com.sun.jersey.client.apache4.ApacheHttpClient4Handler;
@@ -64,7 +65,7 @@ public class DockerClient
         client = new ApacheHttpClient4(new ApacheHttpClient4Handler(httpClient, null, false), clientConfig);
 
         client.addFilter(new JsonClientFilter());
-        //client.addFilter(new LoggingFilter());
+        client.addFilter(new LoggingFilter());
     }
 
     /**
@@ -74,6 +75,8 @@ public class DockerClient
 
     public Info info() throws DockerException {
         WebResource webResource = client.resource(restEndpointUrl + "/info");
+        // Add logging
+//        webResource.addFilter(new com.sun.jersey.api.client.filter.LoggingFilter());
 
         try {
             LOGGER.trace("GET: " + webResource.toString());
@@ -567,15 +570,15 @@ public class DockerClient
     }
 
     public String commit(CommitConfig commitConfig) throws DockerException {
-        Preconditions.checkNotNull(commitConfig.container, "Container ID was not specified");
+        Preconditions.checkNotNull(commitConfig.getContainer(), "Container ID was not specified");
 
         MultivaluedMap<String,String> params = new MultivaluedMapImpl();
-        params.add("container", commitConfig.container);
-        params.add("repo", commitConfig.repo);
-        params.add("tag", commitConfig.tag);
-        params.add("m", commitConfig.message);
-        params.add("author", commitConfig.author);
-        params.add("run", commitConfig.run);
+        params.add("container", commitConfig.getContainer());
+        params.add("repo", commitConfig.getRepo());
+        params.add("tag", commitConfig.getTag());
+        params.add("m", commitConfig.getMessage());
+        params.add("author", commitConfig.getAuthor());
+        params.add("run", commitConfig.getRun());
 
         WebResource webResource = client.resource(restEndpointUrl + "/commit").queryParams(params);
 
@@ -585,7 +588,7 @@ public class DockerClient
             return jsonObject.getString("Id");
         } catch (UniformInterfaceException exception) {
             if (exception.getResponse().getStatus() == 404) {
-                throw new DockerException(String.format("No such container %s", commitConfig.container));
+                throw new DockerException(String.format("No such container %s", commitConfig.getContainer()));
             } else if (exception.getResponse().getStatus() == 500) {
                 throw new DockerException("Server error", exception);
             } else {

@@ -34,11 +34,23 @@ public class ContainerConfig {
     @JsonProperty("NetworkDisabled") private boolean networkDisabled = false;
     @JsonProperty("Privileged")   private boolean privileged = false;
     @JsonProperty("WorkingDir")   private String workingDir = "";
+    @JsonProperty("Domainname")   private String domainName = "";
+    // FIXME Is this the right type? -BJE
+    @JsonProperty("ExposedPorts")   private Map<String, ?> exposedPorts;
 
-
-    public String getWorkingDir() {
-        return workingDir;
+    public Map<String, ?> getExposedPorts() {
+        return exposedPorts;
     }
+
+    public boolean isNetworkDisabled() {
+        return networkDisabled;
+    }
+
+    public String getDomainName() {
+        return domainName;
+    }
+
+    public String getWorkingDir() { return workingDir; }
 
     public void setWorkingDir(String workingDir) {
         this.workingDir = workingDir;
@@ -54,10 +66,6 @@ public class ContainerConfig {
 
     public String getHostName() {
         return hostName;
-    }
-
-    public boolean getNetworkDisabled() {
-        return networkDisabled;
     }
 
     public void setNetworkDisabled(boolean networkDisabled) {
@@ -227,13 +235,17 @@ public class ContainerConfig {
                 ", attachStdin=" + attachStdin +
                 ", attachStdout=" + attachStdout +
                 ", attachStderr=" + attachStderr +
-                ", env=" + env +
+                ", env=" + Arrays.toString(env) +
                 ", cmd=" + Arrays.toString(cmd) +
                 ", dns=" + Arrays.toString(dns) +
                 ", image='" + image + '\'' +
                 ", volumes=" + volumes +
                 ", volumesFrom='" + volumesFrom + '\'' +
-                ", entrypoint='" + Arrays.toString(portSpecs) +
+                ", entrypoint=" + Arrays.toString(entrypoint) +
+                ", networkDisabled=" + networkDisabled +
+                ", privileged=" + privileged +
+                ", workingDir='" + workingDir + '\'' +
+                ", domainName='" + domainName + '\'' +
                 '}';
     }
 }

@@ -9,11 +9,40 @@ import org.codehaus.jackson.annotate.JsonProperty;
  */
 public class SearchItem {
 
-    @JsonProperty("Name")
-    public String name;
+    @JsonProperty("star_count")
+    private int starCount;
 
-    @JsonProperty("Description")
-    public String description;
+    @JsonProperty("is_official")
+    private boolean isOfficial;
+
+    @JsonProperty("is_trusted")
+    private boolean isTrusted;
+
+    @JsonProperty("name")
+    private String name;
+
+    @JsonProperty("description")
+    private String description;
+
+    public int getStarCount() {
+        return starCount;
+    }
+
+    public boolean isOfficial() {
+        return isOfficial;
+    }
+
+    public boolean isTrusted() {
+        return isTrusted;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 
     @Override
     public String toString() {

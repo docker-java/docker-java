@@ -9,30 +9,60 @@ import org.codehaus.jackson.annotate.JsonProperty;
  */
 public class CommitConfig {
 
-    @JsonProperty("container") public String container;
-    @JsonProperty("repo") public String repo;
-    @JsonProperty("tag") public String tag;
-    @JsonProperty("m") public String message;
+    @JsonProperty("container")
+    private String container;
+
+    @JsonProperty("repo")
+    private String repo;
+
+    @JsonProperty("tag")
+    private String tag;
+
+    @JsonProperty("m")
+    private String message;
 
     //author (eg. “John Hannibal Smith <hannibal@a-team.com>”)
-    @JsonProperty("author") public String author;
+    @JsonProperty("author")
+    private String author;
 
     //config automatically applied when the image is run. (ex: {“Cmd”: [“cat”, “/world”], “PortSpecs”:[“22”]})
-    @JsonProperty("run") public String run;
+    @JsonProperty("run")
+    private String run;
 
-
-    public CommitConfig() {}
-
-    public CommitConfig(Builder builder) {
-        this.container = builder.container;
-        this.repo = builder.repo;
-        this.tag = builder.tag;
-        this.message = builder.message;
-        this.author = builder.author;
-        this.run = builder.run;
+    public String getContainer() {
+        return container;
     }
 
-    public static class Builder {
+    public String getRepo() {
+        return repo;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getRun() {
+        return run;
+    }
+
+    private CommitConfig(Builder b) {
+        this.container = b.container;
+        this.repo = b.repo;
+        this.tag = b.tag;
+        this.message = b.message;
+        this.author = b.author;
+        this.run = b.run;
+    }
+
+    public static class Builder implements IBuilder<CommitConfig> {
         private String container;
         private String repo;
         private String tag;

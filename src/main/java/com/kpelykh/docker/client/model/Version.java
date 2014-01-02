@@ -11,14 +11,25 @@ public class Version {
 
 
     @JsonProperty("Version")
-    public String version;
+    private String version;
 
     @JsonProperty("GitCommit")
-    public String  gitCommit;
+    private String  gitCommit;
 
     @JsonProperty("GoVersion")
-    public String  goVersion;
+    private String  goVersion;
 
+    public String getVersion() {
+        return version;
+    }
+
+    public String getGitCommit() {
+        return gitCommit;
+    }
+
+    public String getGoVersion() {
+        return goVersion;
+    }
 
     @Override
     public String toString() {
