@@ -46,7 +46,7 @@ public class DockerClientTest extends Assert
     public void beforeTest() throws DockerException {
         LOG.info("======================= BEFORETEST =======================");
         LOG.info("Connecting to Docker server at http://localhost:4243");
-        dockerClient = new DockerClient("http://localhost:4243");
+        dockerClient = new DockerClient("http://172.16.2.150:7979");
         LOG.info("Creating image 'busybox'");
 
         dockerClient.pull("busybox");
@@ -94,10 +94,10 @@ public class DockerClientTest extends Assert
         Version version = dockerClient.version();
         LOG.info(version.toString());
 
-        assertTrue(version.goVersion.length() > 0);
-        assertTrue(version.version.length() > 0);
+        assertTrue(version.getGoVersion().length() > 0);
+        assertTrue(version.getVersion().length() > 0);
 
-        assertEquals(StringUtils.split(version.version, ".").length, 3);
+        assertEquals(StringUtils.split(version.getVersion(), ".").length, 3);
 
     }
 
@@ -110,11 +110,11 @@ public class DockerClientTest extends Assert
         assertTrue(dockerInfo.toString().contains("images"));
         assertTrue(dockerInfo.toString().contains("debug"));
 
-        assertTrue(dockerInfo.containers > 0);
-        assertTrue(dockerInfo.images > 0);
-        assertTrue(dockerInfo.NFd > 0);
-        assertTrue(dockerInfo.NGoroutines > 0);
-        assertTrue(dockerInfo.memoryLimit);
+        assertTrue(dockerInfo.getContainers() > 0);
+        assertTrue(dockerInfo.getImages() > 0);
+        assertTrue(dockerInfo.getNFd() > 0);
+        assertTrue(dockerInfo.getNGoroutines() > 0);
+        assertTrue(dockerInfo.isMemoryLimit());
     }
 
     @Test
@@ -145,12 +145,12 @@ public class DockerClientTest extends Assert
         //assertThat(images.size(), equalTo(info.images));
 
         Image img = images.get(0);
-        assertThat(img.created, is(greaterThan(0L)) );
-        assertThat(img.size, is(greaterThan(0L)) );
-        assertThat(img.virtualSize, is(greaterThan(0L)) );
-        assertThat(img.id, not(isEmptyString()));
-        assertThat(img.tag, not(isEmptyString()));
-        assertThat(img.repository, not(isEmptyString()));
+        assertThat(img.getCreated(), is(greaterThan(0L)) );
+        assertThat(img.getSize(), is(greaterThan(0L)) );
+        assertThat(img.getVirtualSize(), is(greaterThan(0L)) );
+        assertThat(img.getId(), not(isEmptyString()));
+        assertThat(img.getTag(), not(isEmptyString()));
+        assertThat(img.getRepository(), not(isEmptyString()));
     }
 
 
@@ -167,21 +167,21 @@ public class DockerClientTest extends Assert
         containerConfig.setCmd(new String[]{"echo"});
 
         ContainerCreateResponse container1 = dockerClient.createContainer(containerConfig);
-        assertThat(container1.id, not(isEmptyString()));
-        dockerClient.startContainer(container1.id);
-        tmpContainers.add(container1.id);
+        assertThat(container1.getId(), not(isEmptyString()));
+        dockerClient.startContainer(container1.getId());
+        tmpContainers.add(container1.getId());
 
         List containers2 = dockerClient.listContainers(true);
         assertThat(size + 1, is(equalTo(containers2.size())));
-        Matcher matcher = hasItem(hasField("id", startsWith(container1.id)));
+        Matcher matcher = hasItem(hasField("id", startsWith(container1.getId())));
         assertThat(containers2, matcher);
 
-        List<Container> filteredContainers = filter(hasField("id", startsWith(container1.id)), containers2);
+        List<Container> filteredContainers = filter(hasField("id", startsWith(container1.getId())), containers2);
         assertThat(filteredContainers.size(), is(equalTo(1)));
 
         Container container2 = filteredContainers.get(0);
-        assertThat(container2.command, not(isEmptyString()));
-        assertThat(container2.image, equalTo("busybox:latest"));
+        assertThat(container2.getCommand(), not(isEmptyString()));
+        assertThat(container2.getImage(), equalTo("busybox:latest"));
     }
 
 
@@ -202,9 +202,9 @@ public class DockerClientTest extends Assert
 
         LOG.info("Created container " + container.toString());
 
-        assertThat(container.id, not(isEmptyString()));
+        assertThat(container.getId(), not(isEmptyString()));
 
-        tmpContainers.add(container.id);
+        tmpContainers.add(container.getId());
     }
 
     @Test
@@ -216,26 +216,26 @@ public class DockerClientTest extends Assert
 
         ContainerCreateResponse container = dockerClient.createContainer(containerConfig);
         LOG.info("Created container " + container.toString());
-        assertThat(container.id, not(isEmptyString()));
-        tmpContainers.add(container.id);
+        assertThat(container.getId(), not(isEmptyString()));
+        boolean add = tmpContainers.add(container.getId());
 
-        dockerClient.startContainer(container.id);
+        dockerClient.startContainer(container.getId());
 
-        ContainerInspectResponse containerInspectResponse = dockerClient.inspectContainer(container.id);
+        ContainerInspectResponse containerInspectResponse = dockerClient.inspectContainer(container.getId());
         LOG.info("Container Inspect: " + containerInspectResponse.toString());
 
         assertThat(containerInspectResponse.config, is(notNullValue()));
-        assertThat(containerInspectResponse.id, not(isEmptyString()));
+        assertThat(containerInspectResponse.getId(), not(isEmptyString()));
 
-        assertThat(containerInspectResponse.id, startsWith(container.id));
+        assertThat(containerInspectResponse.getId(), startsWith(container.getId()));
 
-        assertThat(containerInspectResponse.image, not(isEmptyString()));
-        assertThat(containerInspectResponse.state, is(notNullValue()));
+        assertThat(containerInspectResponse.getImage(), not(isEmptyString()));
+        assertThat(containerInspectResponse.getState(), is(notNullValue()));
 
-        assertThat(containerInspectResponse.state.running, is(true));
+        assertThat(containerInspectResponse.getState().running, is(true));
 
-        if (!containerInspectResponse.state.running) {
-            assertThat(containerInspectResponse.state.exitCode, is(equalTo(0)));
+        if (!containerInspectResponse.getState().running) {
+            assertThat(containerInspectResponse.getState().exitCode, is(equalTo(0)));
         }
 
     }
@@ -249,21 +249,21 @@ public class DockerClientTest extends Assert
 
         ContainerCreateResponse container = dockerClient.createContainer(containerConfig);
         LOG.info("Created container " + container.toString());
-        assertThat(container.id, not(isEmptyString()));
-        tmpContainers.add(container.id);
+        assertThat(container.getId(), not(isEmptyString()));
+        tmpContainers.add(container.getId());
 
-        dockerClient.startContainer(container.id);
+        dockerClient.startContainer(container.getId());
 
-        int exitCode = dockerClient.waitContainer(container.id);
+        int exitCode = dockerClient.waitContainer(container.getId());
         LOG.info("Container exit code: " + exitCode);
 
         assertThat(exitCode, equalTo(0));
 
-        ContainerInspectResponse containerInspectResponse = dockerClient.inspectContainer(container.id);
+        ContainerInspectResponse containerInspectResponse = dockerClient.inspectContainer(container.getId());
         LOG.info("Container Inspect: " + containerInspectResponse.toString());
 
-        assertThat(containerInspectResponse.state.running, is(equalTo(false)));
-        assertThat(containerInspectResponse.state.exitCode, is(equalTo(exitCode)));
+        assertThat(containerInspectResponse.getState().running, is(equalTo(false)));
+        assertThat(containerInspectResponse.getState().exitCode, is(equalTo(exitCode)));
 
     }
 
@@ -278,16 +278,16 @@ public class DockerClientTest extends Assert
 
         ContainerCreateResponse container = dockerClient.createContainer(containerConfig);
         LOG.info("Created container " + container.toString());
-        assertThat(container.id, not(isEmptyString()));
+        assertThat(container.getId(), not(isEmptyString()));
 
-        dockerClient.startContainer(container.id);
-        tmpContainers.add(container.id);
+        dockerClient.startContainer(container.getId());
+        tmpContainers.add(container.getId());
 
-        int exitCode = dockerClient.waitContainer(container.id);
+        int exitCode = dockerClient.waitContainer(container.getId());
 
         assertThat(exitCode, equalTo(0));
 
-        ClientResponse response = dockerClient.logContainer(container.id);
+        ClientResponse response = dockerClient.logContainer(container.getId());
 
         StringWriter logwriter = new StringWriter();
 
@@ -316,13 +316,13 @@ public class DockerClientTest extends Assert
 
         ContainerCreateResponse container = dockerClient.createContainer(containerConfig);
         LOG.info("Created container " + container.toString());
-        assertThat(container.id, not(isEmptyString()));
-        dockerClient.startContainer(container.id);
-        tmpContainers.add(container.id);
-        int exitCode = dockerClient.waitContainer(container.id);
+        assertThat(container.getId(), not(isEmptyString()));
+        dockerClient.startContainer(container.getId());
+        boolean add = tmpContainers.add(container.getId());
+        int exitCode = dockerClient.waitContainer(container.getId());
         assertThat(exitCode, equalTo(0));
 
-        List filesystemDiff = dockerClient.containterDiff(container.id);
+        List filesystemDiff = dockerClient.containterDiff(container.getId());
         LOG.info("Container DIFF: " + filesystemDiff.toString());
 
         assertThat(filesystemDiff.size(), equalTo(4));
@@ -341,18 +341,18 @@ public class DockerClientTest extends Assert
 
         ContainerCreateResponse container = dockerClient.createContainer(containerConfig);
         LOG.info("Created container " + container.toString());
-        assertThat(container.id, not(isEmptyString()));
-        dockerClient.startContainer(container.id);
-        tmpContainers.add(container.id);
+        assertThat(container.getId(), not(isEmptyString()));
+        dockerClient.startContainer(container.getId());
+        tmpContainers.add(container.getId());
 
-        LOG.info("Stopping container " + container.id);
-        dockerClient.stopContainer(container.id, 2);
+        LOG.info("Stopping container " + container.getId());
+        dockerClient.stopContainer(container.getId(), 2);
 
-        ContainerInspectResponse containerInspectResponse = dockerClient.inspectContainer(container.id);
+        ContainerInspectResponse containerInspectResponse = dockerClient.inspectContainer(container.getId());
         LOG.info("Container Inspect:" + containerInspectResponse.toString());
 
-        assertThat(containerInspectResponse.state.running, is(equalTo(false)));
-        assertThat(containerInspectResponse.state.exitCode, not(equalTo(0)));
+        assertThat(containerInspectResponse.getState().running, is(equalTo(false)));
+        assertThat(containerInspectResponse.getState().exitCode, not(equalTo(0)));
     }
 
     @Test
@@ -364,18 +364,18 @@ public class DockerClientTest extends Assert
 
         ContainerCreateResponse container = dockerClient.createContainer(containerConfig);
         LOG.info("Created container " + container.toString());
-        assertThat(container.id, not(isEmptyString()));
-        dockerClient.startContainer(container.id);
-        tmpContainers.add(container.id);
+        assertThat(container.getId(), not(isEmptyString()));
+        dockerClient.startContainer(container.getId());
+        tmpContainers.add(container.getId());
 
-        LOG.info("Killing container " + container.id);
-        dockerClient.kill(container.id);
+        LOG.info("Killing container " + container.getId());
+        dockerClient.kill(container.getId());
 
-        ContainerInspectResponse containerInspectResponse = dockerClient.inspectContainer(container.id);
+        ContainerInspectResponse containerInspectResponse = dockerClient.inspectContainer(container.getId());
         LOG.info("Container Inspect:" + containerInspectResponse.toString());
 
-        assertThat(containerInspectResponse.state.running, is(equalTo(false)));
-        assertThat(containerInspectResponse.state.exitCode, not(equalTo(0)));
+        assertThat(containerInspectResponse.getState().running, is(equalTo(false)));
+        assertThat(containerInspectResponse.getState().exitCode, not(equalTo(0)));
 
     }
 
@@ -388,27 +388,27 @@ public class DockerClientTest extends Assert
 
         ContainerCreateResponse container = dockerClient.createContainer(containerConfig);
         LOG.info("Created container " + container.toString());
-        assertThat(container.id, not(isEmptyString()));
-        dockerClient.startContainer(container.id);
-        tmpContainers.add(container.id);
+        assertThat(container.getId(), not(isEmptyString()));
+        dockerClient.startContainer(container.getId());
+        tmpContainers.add(container.getId());
 
-        ContainerInspectResponse containerInspectResponse = dockerClient.inspectContainer(container.id);
+        ContainerInspectResponse containerInspectResponse = dockerClient.inspectContainer(container.getId());
         LOG.info("Container Inspect:" + containerInspectResponse.toString());
 
-        String startTime = containerInspectResponse.state.startedAt;
+        String startTime = containerInspectResponse.getState().startedAt;
 
-        dockerClient.restart(container.id, 2);
+        dockerClient.restart(container.getId(), 2);
 
-        ContainerInspectResponse containerInspectResponse2 = dockerClient.inspectContainer(container.id);
+        ContainerInspectResponse containerInspectResponse2 = dockerClient.inspectContainer(container.getId());
         LOG.info("Container Inspect After Restart:" + containerInspectResponse2.toString());
 
-        String startTime2 = containerInspectResponse2.state.startedAt;
+        String startTime2 = containerInspectResponse2.getState().startedAt;
 
         assertThat(startTime, not(equalTo(startTime2)));
 
-        assertThat(containerInspectResponse.state.running, is(equalTo(true)));
+        assertThat(containerInspectResponse.getState().running, is(equalTo(true)));
 
-        dockerClient.kill(container.id);
+        dockerClient.kill(container.getId());
     }
 
     @Test
@@ -420,15 +420,15 @@ public class DockerClientTest extends Assert
 
         ContainerCreateResponse container = dockerClient.createContainer(containerConfig);
 
-        dockerClient.startContainer(container.id);
-        dockerClient.waitContainer(container.id);
-        tmpContainers.add(container.id);
+        dockerClient.startContainer(container.getId());
+        dockerClient.waitContainer(container.getId());
+        tmpContainers.add(container.getId());
 
-        LOG.info("Removing container " + container.id);
-        dockerClient.removeContainer(container.id);
+        LOG.info("Removing container " + container.getId());
+        dockerClient.removeContainer(container.getId());
 
         List containers2 = dockerClient.listContainers(true);
-        Matcher matcher = not(hasItem(hasField("id", startsWith(container.id))));
+        Matcher matcher = not(hasItem(hasField("id", startsWith(container.getId()))));
         assertThat(containers2, matcher);
 
     }
@@ -450,7 +450,7 @@ public class DockerClientTest extends Assert
         Info info = dockerClient.info();
         LOG.info("Client info " + info.toString());
 
-        int imgCount= info.images;
+        int imgCount= info.getImages();
 
         LOG.info("Pulling image " + testImage);
 
@@ -477,7 +477,7 @@ public class DockerClientTest extends Assert
         info = dockerClient.info();
         LOG.info("Client info after pull " + info.toString());
 
-        assertThat(imgCount + 2, equalTo(info.images));
+        assertThat(imgCount + 2, equalTo(info.getImages()));
 
         ImageInspectResponse imageInspectResponse = dockerClient.inspectImage(testImage);
         LOG.info("Image Inspect: " + imageInspectResponse.toString());
@@ -494,23 +494,23 @@ public class DockerClientTest extends Assert
 
         ContainerCreateResponse container = dockerClient.createContainer(containerConfig);
         LOG.info("Created container " + container.toString());
-        assertThat(container.id, not(isEmptyString()));
-        dockerClient.startContainer(container.id);
-        tmpContainers.add(container.id);
+        assertThat(container.getId(), not(isEmptyString()));
+        dockerClient.startContainer(container.getId());
+        tmpContainers.add(container.getId());
 
         LOG.info("Commiting container " + container.toString());
-        String imageId = dockerClient.commit(new CommitConfig.Builder(container.id).build());
+        String imageId = dockerClient.commit(new CommitConfig.Builder(container.getId()).build());
         tmpImgs.add(imageId);
 
         ImageInspectResponse imageInspectResponse = dockerClient.inspectImage(imageId);
         LOG.info("Image Inspect: " + imageInspectResponse.toString());
 
-        assertThat(imageInspectResponse, hasField("container", startsWith(container.id)));
-        assertThat(imageInspectResponse.containerConfig.getImage(), equalTo("busybox"));
+        assertThat(imageInspectResponse, hasField("container", startsWith(container.getId())));
+        assertThat(imageInspectResponse.getContainerConfig().getImage(), equalTo("busybox"));
 
         ImageInspectResponse busyboxImg = dockerClient.inspectImage("busybox");
 
-        assertThat(imageInspectResponse.parent, equalTo(busyboxImg.id));
+        assertThat(imageInspectResponse.getParent(), equalTo(busyboxImg.getId()));
     }
 
     @Test
@@ -523,13 +523,13 @@ public class DockerClientTest extends Assert
 
         ContainerCreateResponse container = dockerClient.createContainer(containerConfig);
         LOG.info("Created container " + container.toString());
-        assertThat(container.id, not(isEmptyString()));
-        dockerClient.startContainer(container.id);
-        tmpContainers.add(container.id);
+        assertThat(container.getId(), not(isEmptyString()));
+        dockerClient.startContainer(container.getId());
+        tmpContainers.add(container.getId());
 
 
         LOG.info("Commiting container " + container.toString());
-        String imageId = dockerClient.commit(new CommitConfig.Builder(container.id).build());
+        String imageId = dockerClient.commit(new CommitConfig.Builder(container.getId()).build());
         tmpImgs.add(imageId);
 
         LOG.info("Removing image" + imageId);
@@ -569,9 +569,9 @@ public class DockerClientTest extends Assert
             containerConfig.setCmd( commands );
 
             ContainerCreateResponse container = dockerClient.createContainer(containerConfig);
-            dockerClient.startContainer(container.id);
-            tmpContainers.add(container.id);
-            int exitcode = dockerClient.waitContainer(container.id);
+            dockerClient.startContainer(container.getId());
+            tmpContainers.add(container.getId());
+            int exitcode = dockerClient.waitContainer(container.getId());
             assertThat(exitcode, equalTo(0));
         }
     }
@@ -604,9 +604,9 @@ public class DockerClientTest extends Assert
         ImageInspectResponse imageInspectResponse = dockerClient.inspectImage(imageId);
         assertThat(imageInspectResponse, not(nullValue()));
         LOG.info("Image Inspect:" + imageInspectResponse.toString());
-        tmpImgs.add(imageInspectResponse.id);
+        tmpImgs.add(imageInspectResponse.getId());
 
-        assertThat(imageInspectResponse.author, equalTo("Guillaume J. Charmes \"guillaume@dotcloud.com\""));
+        assertThat(imageInspectResponse.getAuthor(), equalTo("Guillaume J. Charmes \"guillaume@dotcloud.com\""));
     }
 
     @Test
@@ -648,26 +648,26 @@ public class DockerClientTest extends Assert
         ImageInspectResponse imageInspectResponse = dockerClient.inspectImage(imageId);
         assertThat(imageInspectResponse, not(nullValue()));
         LOG.info("Image Inspect:" + imageInspectResponse.toString());
-        tmpImgs.add(imageInspectResponse.id);
+        tmpImgs.add(imageInspectResponse.getId());
 
         ContainerConfig containerConfig = new ContainerConfig();
-        containerConfig.setImage(imageInspectResponse.id);
+        containerConfig.setImage(imageInspectResponse.getId());
         ContainerCreateResponse container = dockerClient.createContainer(containerConfig);
-        assertThat(container.id, not(isEmptyString()));
-        dockerClient.startContainer(container.id);
-        tmpContainers.add(container.id);
+        assertThat(container.getId(), not(isEmptyString()));
+        dockerClient.startContainer(container.getId());
+        tmpContainers.add(container.getId());
 
-        ContainerInspectResponse containerInspectResponse = dockerClient.inspectContainer(container.id);
+        ContainerInspectResponse containerInspectResponse = dockerClient.inspectContainer(container.getId());
 
-        assertThat(containerInspectResponse.id, notNullValue());
-        assertThat(containerInspectResponse.networkSettings.portMapping, notNullValue());
-        int port = Integer.valueOf(containerInspectResponse.networkSettings.portMapping.get("Tcp").get("6900"));
+        assertThat(containerInspectResponse.getId(), notNullValue());
+        assertThat(containerInspectResponse.getNetworkSettings().portMapping, notNullValue());
+        int port = Integer.valueOf(containerInspectResponse.getNetworkSettings().portMapping.get("Tcp").get("6900"));
 
 
         LOG.info("Checking port {} is open", port);
         assertThat(available(port), is(false));
 
-        dockerClient.stopContainer(container.id, 0);
+        dockerClient.stopContainer(container.getId(), 0);
 
         LOG.info("Checking port {} is closed", port);
         assertThat(available(port), is(true));
@@ -741,15 +741,15 @@ public class DockerClientTest extends Assert
         containerConfig.setImage(imageId);
         ContainerCreateResponse container = dockerClient.createContainer(containerConfig);
         LOG.info("Created container " + container.toString());
-        assertThat(container.id, not(isEmptyString()));
+        assertThat(container.getId(), not(isEmptyString()));
 
-        dockerClient.startContainer(container.id);
-        dockerClient.waitContainer(container.id);
+        dockerClient.startContainer(container.getId());
+        dockerClient.waitContainer(container.getId());
 
-        tmpContainers.add(container.id);
+        tmpContainers.add(container.getId());
 
         //Log container
-        ClientResponse logResponse = dockerClient.logContainer(container.id);
+        ClientResponse logResponse = dockerClient.logContainer(container.getId());
 
         StringWriter logwriter2 = new StringWriter();
 

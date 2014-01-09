@@ -10,22 +10,46 @@ import org.codehaus.jackson.annotate.JsonProperty;
 public class Image {
 
     @JsonProperty("Repository")
-    public String repository;
+    private String repository;
 
     @JsonProperty("Tag")
-    public String tag;
+    private String tag;
 
     @JsonProperty("Id")
-    public String id;
+    private String id;
 
     @JsonProperty("Created")
-    public long created;
+    private long created;
 
     @JsonProperty("Size")
-    public long size;
+    private long size;
 
     @JsonProperty("VirtualSize")
-    public long virtualSize;
+    private long virtualSize;
+
+    public String getRepository() {
+        return repository;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public long getCreated() {
+        return created;
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    public long getVirtualSize() {
+        return virtualSize;
+    }
 
     @Override
     public String toString() {

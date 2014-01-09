@@ -10,28 +10,60 @@ import org.codehaus.jackson.annotate.JsonProperty;
 public class Container {
 
     @JsonProperty("Id")
-    public String id;
+    private String id;
 
     @JsonProperty("Command")
-    public String command;
+    private String command;
 
     @JsonProperty("Image")
-    public String image;
+    private String image;
 
     @JsonProperty("Created")
-    public long created;
+    private long created;
 
     @JsonProperty("Status")
-    public String status;
+    private String status;
 
     @JsonProperty("Ports")
-    public String ports;   //Example value "49164->6900, 49165->7100"
+    private String ports;   //Example value "49164->6900, 49165->7100"
 
     @JsonProperty("SizeRw")
-    public int size;
+    private int size;
 
     @JsonProperty("SizeRootFs")
-    public int sizeRootFs;
+    private int sizeRootFs;
+
+    public String getId() {
+        return id;
+    }
+
+    public String getCommand() {
+        return command;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public long getCreated() {
+        return created;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getPorts() {
+        return ports;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public int getSizeRootFs() {
+        return sizeRootFs;
+    }
 
     @Override
     public String toString() {

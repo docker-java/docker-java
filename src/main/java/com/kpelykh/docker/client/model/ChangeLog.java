@@ -10,10 +10,18 @@ import org.codehaus.jackson.annotate.JsonProperty;
 public class ChangeLog {
 
     @JsonProperty("Path")
-    public String path;
+    private String path;
 
     @JsonProperty("Kind")
-    public int kind;
+    private int kind;
+
+    public String getPath() {
+        return path;
+    }
+
+    public int getKind() {
+        return kind;
+    }
 
     @Override
     public String toString() {

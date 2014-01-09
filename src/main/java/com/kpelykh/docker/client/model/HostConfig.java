@@ -10,13 +10,13 @@ import org.codehaus.jackson.annotate.JsonProperty;
 public class HostConfig {
 
     @JsonProperty("Binds")
-    public String[] binds;
+    private String[] binds;
 
     @JsonProperty("ContainerIDFile")
-    public String containerIDFile;
+    private String containerIDFile;
 
     @JsonProperty("LxcConf")
-    public LxcConf[] lxcConf;
+    private LxcConf[] lxcConf;
 
     public HostConfig(String[] binds) {
         this.binds = binds;
