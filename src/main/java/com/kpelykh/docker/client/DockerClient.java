@@ -313,10 +313,19 @@ public class DockerClient
         return containers;
     }
 
+    public ContainerCreateResponse createContainer(ContainerConfig config) throws DockerException{
+        return createContainer(config, null);
+    }
 
-    public ContainerCreateResponse createContainer(ContainerConfig config) throws DockerException {
+    public ContainerCreateResponse createContainer(ContainerConfig config, String name) throws DockerException {
 
-        WebResource webResource = client.resource(restEndpointUrl + "/containers/create");
+        String url = restEndpointUrl + "/containers/create";
+
+        if (!StringUtils.isEmpty(name)){
+            url = url + "?name=" + name;
+        }
+
+        WebResource webResource = client.resource(url);
 
         try {
             LOGGER.trace("POST: " + webResource.toString());
