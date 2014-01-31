@@ -154,7 +154,7 @@ public class ContainerInspectResponse {
         @JsonProperty("Gateway") public String gateway;
         @JsonProperty("Bridge") public String bridge;
         // Deprecated - can we remove?
-//        @JsonProperty("PortMapping") public Map<String,Map<String, String>> portMapping;
+        @JsonProperty("PortMapping") public Map<String,Map<String, String>> portMapping;
         // FIXME Is this the right type? -BJE
         @JsonProperty("Ports") public Map<String, String> ports;
 
