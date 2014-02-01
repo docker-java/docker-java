@@ -579,7 +579,7 @@ public class DockerClientTest extends Assert
 
 
     @Test
-    public void testNgixDockerfileBuilder() throws DockerException, IOException {
+    public void testNginxDockerfileBuilder() throws DockerException, IOException {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("nginx").getFile());
 
         ClientResponse response = dockerClient.build(baseDir);
