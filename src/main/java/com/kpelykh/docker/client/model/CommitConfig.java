@@ -53,6 +53,35 @@ public class CommitConfig {
         return run;
     }
 
+    public CommitConfig setRepo(String repo) {
+        this.repo = repo;
+        return this;
+    }
+
+    public CommitConfig setTag(String tag) {
+        this.tag = tag;
+        return this;
+    }
+
+    public CommitConfig setMessage(String message) {
+        this.message = message;
+        return this;
+    }
+
+    public CommitConfig setAuthor(String author) {
+        this.author = author;
+        return this;
+    }
+
+    public CommitConfig setRun(String run) {
+        this.run = run;
+        return this;
+    }
+
+    public CommitConfig(String container) {
+        this.container = container;
+    }
+
     private CommitConfig(Builder b) {
         this.container = b.container;
         this.repo = b.repo;

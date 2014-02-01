@@ -52,172 +52,194 @@ public class ContainerConfig {
 
     public String getWorkingDir() { return workingDir; }
 
-    public void setWorkingDir(String workingDir) {
+    public ContainerConfig setWorkingDir(String workingDir) {
         this.workingDir = workingDir;
+        return this;
     }
 
     public boolean isPrivileged() {
         return privileged;
     }
 
-    public void setPrivileged(boolean privileged) {
+    public ContainerConfig setPrivileged(boolean privileged) {
         this.privileged = privileged;
+        return this;
     }
 
     public String getHostName() {
         return hostName;
     }
 
-    public void setNetworkDisabled(boolean networkDisabled) {
+    public ContainerConfig setNetworkDisabled(boolean networkDisabled) {
         this.networkDisabled = networkDisabled;
+        return this;
     }
 
-    public void setHostName(String hostName) {
+    public ContainerConfig setHostName(String hostName) {
         this.hostName = hostName;
+        return this;
     }
 
     public String[] getPortSpecs() {
         return portSpecs;
     }
 
-    public void setPortSpecs(String[] portSpecs) {
+    public ContainerConfig setPortSpecs(String[] portSpecs) {
         this.portSpecs = portSpecs;
+        return this;
     }
 
     public String getUser() {
         return user;
     }
 
-    public void setUser(String user) {
+    public ContainerConfig setUser(String user) {
         this.user = user;
+        return this;
     }
 
     public boolean isTty() {
         return tty;
     }
 
-    public void setTty(boolean tty) {
+    public ContainerConfig setTty(boolean tty) {
         this.tty = tty;
+        return this;
     }
 
     public boolean isStdinOpen() {
         return stdinOpen;
     }
 
-    public void setStdinOpen(boolean stdinOpen) {
+    public ContainerConfig setStdinOpen(boolean stdinOpen) {
         this.stdinOpen = stdinOpen;
+        return this;
     }
 
     public boolean isStdInOnce() {
         return stdInOnce;
     }
 
-    public void setStdInOnce(boolean stdInOnce) {
+    public ContainerConfig setStdInOnce(boolean stdInOnce) {
         this.stdInOnce = stdInOnce;
+        return this;
     }
 
     public long getMemoryLimit() {
         return memoryLimit;
     }
 
-    public void setMemoryLimit(long memoryLimit) {
+    public ContainerConfig setMemoryLimit(long memoryLimit) {
         this.memoryLimit = memoryLimit;
+        return this;
     }
 
     public long getMemorySwap() {
         return memorySwap;
     }
 
-    public void setMemorySwap(long memorySwap) {
+    public ContainerConfig setMemorySwap(long memorySwap) {
         this.memorySwap = memorySwap;
+        return this;
     }
 
     public int getCpuShares() {
         return cpuShares;
     }
 
-    public void setCpuShares(int cpuShares) {
+    public ContainerConfig setCpuShares(int cpuShares) {
         this.cpuShares = cpuShares;
+        return this;
     }
 
     public boolean isAttachStdin() {
         return attachStdin;
     }
 
-    public void setAttachStdin(boolean attachStdin) {
+    public ContainerConfig setAttachStdin(boolean attachStdin) {
         this.attachStdin = attachStdin;
+        return this;
     }
 
     public boolean isAttachStdout() {
         return attachStdout;
     }
 
-    public void setAttachStdout(boolean attachStdout) {
+    public ContainerConfig setAttachStdout(boolean attachStdout) {
         this.attachStdout = attachStdout;
+        return this;
     }
 
     public boolean isAttachStderr() {
         return attachStderr;
     }
 
-    public void setAttachStderr(boolean attachStderr) {
+    public ContainerConfig setAttachStderr(boolean attachStderr) {
         this.attachStderr = attachStderr;
+        return this;
     }
 
     public String[] getEnv() {
         return env;
     }
 
-    public void setEnv(String[] env) {
+    public ContainerConfig setEnv(String[] env) {
         this.env = env;
+        return this;
     }
 
     public String[] getCmd() {
         return cmd;
     }
 
-    public void setCmd(String[] cmd) {
+    public ContainerConfig setCmd(String[] cmd) {
         this.cmd = cmd;
+        return this;
     }
 
     public String[] getDns() {
         return dns;
     }
 
-    public void setDns(String[] dns) {
+    public ContainerConfig setDns(String[] dns) {
         this.dns = dns;
+        return this;
     }
 
     public String getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public ContainerConfig setImage(String image) {
         this.image = image;
+        return this;
     }
 
     public Object getVolumes() {
         return volumes;
     }
 
-    public void setVolumes(Object volumes) {
+    public ContainerConfig setVolumes(Object volumes) {
         this.volumes = volumes;
+        return this;
     }
 
     public String getVolumesFrom() {
         return volumesFrom;
     }
 
-    public void setVolumesFrom(String volumesFrom) {
+    public ContainerConfig setVolumesFrom(String volumesFrom) {
         this.volumesFrom = volumesFrom;
+        return this;
     }
 
     public String[] getEntrypoint() {
         return entrypoint;
     }
 
-    public void setEntrypoint(String[] entrypoint) {
+    public ContainerConfig setEntrypoint(String[] entrypoint) {
         this.entrypoint = entrypoint;
+        return this;
     }
 
     @Override
