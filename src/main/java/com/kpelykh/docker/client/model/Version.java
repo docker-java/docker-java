@@ -18,6 +18,9 @@ public class Version {
 
     @JsonProperty("GoVersion")
     private String  goVersion;
+    
+    @JsonProperty("KernelVersion")
+    private String kernelVersion;
 
     public String getVersion() {
         return version;
@@ -31,12 +34,17 @@ public class Version {
         return goVersion;
     }
 
+    public String getKernelVersion() {
+    	return kernelVersion;
+    }
+    
     @Override
     public String toString() {
         return "Version{" +
                 "version='" + version + '\'' +
                 ", gitCommit='" + gitCommit + '\'' +
                 ", goVersion='" + goVersion + '\'' +
+                ", kernelVersion='" + kernelVersion + '\'' +
                 '}';
     }
 
