@@ -10,13 +10,13 @@ import org.codehaus.jackson.annotate.JsonProperty;
 public class HostConfig {
 
     @JsonProperty("Binds")
-    public String[] binds;
+    private String[] binds;
 
     @JsonProperty("ContainerIDFile")
-    public String containerIDFile;
+    private String containerIDFile;
 
     @JsonProperty("LxcConf")
-    public LxcConf[] lxcConf;
+    private LxcConf[] lxcConf;
 
     public HostConfig(String[] binds) {
         this.binds = binds;
@@ -26,24 +26,27 @@ public class HostConfig {
         return binds;
     }
 
-    public void setBinds(String[] binds) {
+    public HostConfig setBinds(String[] binds) {
         this.binds = binds;
+        return this;
     }
 
     public String getContainerIDFile() {
         return containerIDFile;
     }
 
-    public void setContainerIDFile(String containerIDFile) {
+    public HostConfig setContainerIDFile(String containerIDFile) {
         this.containerIDFile = containerIDFile;
+        return this;
     }
 
     public LxcConf[] getLxcConf() {
         return lxcConf;
     }
 
-    public void setLxcConf(LxcConf[] lxcConf) {
+    public HostConfig setLxcConf(LxcConf[] lxcConf) {
         this.lxcConf = lxcConf;
+        return this;
     }
 
     public class LxcConf {
@@ -53,20 +56,30 @@ public class HostConfig {
         @JsonProperty("Value")
         public String value;
 
+        public LxcConf(String key, String value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public LxcConf() {
+        }
+
         public String getKey() {
             return key;
         }
 
-        public void setKey(String key) {
+        public LxcConf setKey(String key) {
             this.key = key;
+            return this;
         }
 
         public String getValue() {
             return value;
         }
 
-        public void setValue(String value) {
+        public LxcConf setValue(String value) {
             this.value = value;
+            return this;
         }
 
     }
