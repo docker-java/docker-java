@@ -50,6 +50,9 @@ public class Info {
 
     @JsonProperty("NGoroutines")
     private int    NGoroutines;
+    
+    @JsonProperty("SwapLimit")
+    private int swapLimit;
 
     public boolean isDebug() {
         return debug;
@@ -102,6 +105,10 @@ public class Info {
     public int getNGoroutines() {
         return NGoroutines;
     }
+    
+    public int getSwapLimit() {
+    	return swapLimit;
+    }
 
     @Override
     public String toString() {
@@ -112,6 +119,7 @@ public class Info {
                 ", NFd=" + NFd +
                 ", NGoroutines=" + NGoroutines +
                 ", memoryLimit=" + memoryLimit +
+                ", swapLimit=" + swapLimit +
                 ", lxcVersion='" + lxcVersion + '\'' +
                 ", nEventListener=" + nEventListener +
                 ", kernelVersion='" + kernelVersion + '\'' +
