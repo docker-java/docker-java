@@ -44,9 +44,10 @@ public class DockerClientTest extends Assert
 
     @BeforeTest
     public void beforeTest() throws DockerException {
+        String url = System.getProperty("docker.url", "http://localhost:4243");
         LOG.info("======================= BEFORETEST =======================");
-        LOG.info("Connecting to Docker server at http://localhost:4243");
-        dockerClient = new DockerClient("http://172.16.2.150:7979");
+        LOG.info("Connecting to Docker server at " + url);
+        dockerClient = new DockerClient(url);
         LOG.info("Creating image 'busybox'");
 
         dockerClient.pull("busybox");

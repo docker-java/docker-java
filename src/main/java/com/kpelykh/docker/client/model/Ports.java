@@ -18,7 +18,7 @@ import java.util.Map;
  */
 @JsonDeserialize(using=Ports.Deserializer.class)
 public class Ports {
-    private final Map<String, Port> ports = new HashMap<>();
+    private final Map<String, Port> ports = new HashMap<String, Port>();
     private Port[] mapping;
 
     private Ports() { }
