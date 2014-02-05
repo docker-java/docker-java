@@ -17,7 +17,6 @@
 package com.google.common.base;
 
 
-import javax.annotation.Nullable;
 import java.util.NoSuchElementException;
 
 /**
@@ -83,7 +82,7 @@ public final class Preconditions {
      * @throws IllegalArgumentException if {@code expression} is false
      */
     public static void checkArgument(
-            boolean expression, @Nullable Object errorMessage) {
+            boolean expression, Object errorMessage) {
         if (!expression) {
             throw new IllegalArgumentException(String.valueOf(errorMessage));
         }
@@ -109,8 +108,8 @@ public final class Preconditions {
      *     this happen)
      */
     public static void checkArgument(boolean expression,
-                                     @Nullable String errorMessageTemplate,
-                                     @Nullable Object... errorMessageArgs) {
+                                     String errorMessageTemplate,
+                                     Object... errorMessageArgs) {
         if (!expression) {
             throw new IllegalArgumentException(
                     format(errorMessageTemplate, errorMessageArgs));
@@ -140,7 +139,7 @@ public final class Preconditions {
      * @throws IllegalStateException if {@code expression} is false
      */
     public static void checkState(
-            boolean expression, @Nullable Object errorMessage) {
+            boolean expression, Object errorMessage) {
         if (!expression) {
             throw new IllegalStateException(String.valueOf(errorMessage));
         }
@@ -166,8 +165,8 @@ public final class Preconditions {
      *     this happen)
      */
     public static void checkState(boolean expression,
-                                  @Nullable String errorMessageTemplate,
-                                  @Nullable Object... errorMessageArgs) {
+                                  String errorMessageTemplate,
+                                  Object... errorMessageArgs) {
         if (!expression) {
             throw new IllegalStateException(
                     format(errorMessageTemplate, errorMessageArgs));
@@ -199,7 +198,7 @@ public final class Preconditions {
      * @return the non-null reference that was validated
      * @throws NullPointerException if {@code reference} is null
      */
-    public static <T> T checkNotNull(T reference, @Nullable Object errorMessage) {
+    public static <T> T checkNotNull(T reference, Object errorMessage) {
         if (reference == null) {
             throw new NullPointerException(String.valueOf(errorMessage));
         }
@@ -224,8 +223,8 @@ public final class Preconditions {
      * @throws NullPointerException if {@code reference} is null
      */
     public static <T> T checkNotNull(T reference,
-                                     @Nullable String errorMessageTemplate,
-                                     @Nullable Object... errorMessageArgs) {
+                                     String errorMessageTemplate,
+                                     Object... errorMessageArgs) {
         if (reference == null) {
             // If either of these parameters is null, the right thing happens anyway
             throw new NullPointerException(
@@ -295,7 +294,7 @@ public final class Preconditions {
      * @throws IllegalArgumentException if {@code size} is negative
      */
     public static int checkElementIndex(
-            int index, int size, @Nullable String desc) {
+            int index, int size, String desc) {
         // Carefully optimized for execution by hotspot (explanatory comment above)
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException(badElementIndex(index, size, desc));
@@ -345,7 +344,7 @@ public final class Preconditions {
      * @throws IllegalArgumentException if {@code size} is negative
      */
     public static int checkPositionIndex(
-            int index, int size, @Nullable String desc) {
+            int index, int size, String desc) {
         // Carefully optimized for execution by hotspot (explanatory comment above)
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException(badPositionIndex(index, size, desc));
@@ -409,7 +408,7 @@ public final class Preconditions {
      *     template. Arguments are converted to strings using
      *     {@link String#valueOf(Object)}. Arguments can be null.
      */
-    static String format(String template, @Nullable Object... args) {
+    static String format(String template, Object... args) {
         template = String.valueOf(template); // null -> "null"
 
         // start substituting the arguments into the '%s' placeholders

@@ -48,7 +48,7 @@ public class DockerClient
     private String restEndpointUrl;
 
     public DockerClient(String serverUrl) {
-        restEndpointUrl = serverUrl + "/v1.3";
+        restEndpointUrl = serverUrl + "/v1.8";
         ClientConfig clientConfig = new DefaultClientConfig();
         clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
 
@@ -61,9 +61,11 @@ public class DockerClient
         // Increase default max connection per route
         cm.setDefaultMaxPerRoute(1000);
 
-        // HttpClient httpClient = new DefaultHttpClient(cm);
-        //client = new ApacheHttpClient4(new ApacheHttpClient4Handler(httpClient, null, false), clientConfig);
-        client = new UnixSocketClient(clientConfig);
+        HttpClient httpClient = new DefaultHttpClient(cm);
+        client = new ApacheHttpClient4(new ApacheHttpClient4Handler(httpClient, null, false), clientConfig);
+
+        //Experimental support for unix sockets:
+        //client = new UnixSocketClient(clientConfig);
 
         client.addFilter(new JsonClientFilter());        
         client.addFilter(new LoggingFilter());
@@ -316,21 +318,19 @@ public class DockerClient
         return createContainer(config, null);
     }
 
-    public ContainerCreateResponse createContainer(ContainerConfig config, String name) throws DockerException {
+    public ContainerCreateResponse createContainer(ContainerConfig config,String name) throws DockerException {
 
-        String url = restEndpointUrl + "/containers/create";
-
-        if (!StringUtils.isEmpty(name)){
-            url = url + "?name=" + name;
+        MultivaluedMap<String,String> params = new MultivaluedMapImpl();
+        if(name != null){
+            params.add("name", name);
         }
-
-        WebResource webResource = client.resource(url);
+        WebResource webResource = client.resource(restEndpointUrl + "/containers/create").queryParams(params);
 
         try {
-            LOGGER.trace("POST: {}", webResource);
+            LOGGER.trace("POST: {} ", webResource);
             return webResource.accept(MediaType.APPLICATION_JSON)
-                   .type(MediaType.APPLICATION_JSON)
-                        .post(ContainerCreateResponse.class, config);
+                    .type(MediaType.APPLICATION_JSON)
+                    .post(ContainerCreateResponse.class, config);
         } catch (UniformInterfaceException exception) {
             if (exception.getResponse().getStatus() == 404) {
                 throw new DockerException(String.format("%s is an unrecognized image. Please pull the image first.", config.getImage()));
@@ -643,20 +643,20 @@ public class DockerClient
             FileUtils.copyFileToDirectory(dockerFile, tmpDockerContextFolder);
 
             for (String cmd : dockerFileContent) {
-                if (StringUtils.startsWithIgnoreCase(cmd.trim(), "ADD")) {
+                if (StringUtils.startsWith(cmd.trim(), "ADD")) {
                     String addArgs[] = StringUtils.split(cmd, " \t");
                     if (addArgs.length != 3) {
                         throw new DockerException(String.format("Wrong format on line [%s]", cmd));
                     }
 
                     File src = new File(addArgs[1]);
-                    if (!src.isAbsolute()) {
-                        src = new File(dockerFolder, addArgs[1]).getCanonicalFile();
+                   /* if (!src.isAbsolute()) {
+                    src = new File(dockerFolder, addArgs[1]).getCanonicalFile();
                     }
 
                     if (!src.exists()) {
-                        throw new DockerException(String.format("Sorce file %s doesnt' exist", src));
-                    }
+                    throw new DockerException(String.format("Sorce file %s doesnt' exist", src));
+                    }*/
                     if (src.isDirectory()) {
                         FileUtils.copyDirectory(src, tmpDockerContextFolder);
                     } else {

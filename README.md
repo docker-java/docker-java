@@ -2,7 +2,7 @@
 
 Java API client for [Docker](http://docs.docker.io/ "Docker")
 
-Supports Docker Client API v1.3, Docker Server version 0.6.1
+Supports a subset of the Docker Client API v1.8, Docker Server version 0.7.6
 
 ## Build with Maven
 
@@ -12,51 +12,52 @@ Supports Docker Client API v1.3, Docker Server version 0.6.1
 * Maven 3.0.5
 * Docker daemon running
 
+Maven will run tests during build process. Tests are using localhost instance of Docker, make sure that
+you have Docker running for tests to work or just turn off tests.
 
-By default maven will run tests during build process. Tests are using localhost instance of Docker, make sure that
-you have Docker running, or the tests.
+If you don't have Docker running locally, you can skip tests with -DskipTests flag set to true:
 
-*Since version 0.6, Docker is using unix socket for communication, however java client works over TCP/IP, so you need to
-make sure that your Docker server is listening on TCP/IP port.*
+    $ mvn clean install -DskipTests=true
 
-Run docker:
 
-    $ sudo docker -H=tcp://127.0.0.1:4243 -d
+By default Docker server is using UNIX sockets for communication with the Docker client, however docker-java
+client uses TCP/IP to connect to the Docker server, so you will need to make sure that your Docker server is
+listening on TCP port. To allow Docker server to use TCP add the following line to /etc/default/docker
 
-Make sure that docker is up:
+    DOCKER_OPTS="-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock"
+
+More details setting up docket server can be found in official documentation: http://docs.docker.io/en/latest/use/basics/
+
+Now make sure that docker is up:
     
-    $docker -H=tcp://127.0.0.1:4243 version
-    Client version: 0.6.1
-    Server version: 0.6.1
-    Git commit: 5105263
-    Go version: go1.1.2
-    Last stable version: 0.6.1
+    $ docker -H tcp://127.0.0.1:4243 version
+
+    Client version: 0.7.6
+    Go version (client): go1.2
+    Git commit (client): bc3b2ec
+    Server version: 0.7.6
+    Git commit (server): bc3b2ec
+    Go version (server): go1.2
+    Last stable version: 0.7.6
 
 Run build with tests:
 
     $ mvn clean install
 
-If you don't have Docker running localy, you can skip tests with -DskipTests flag set to true:
-
-    $ mvn clean install -DskipTests=true
-
 ## Docker Java Client usage:
 
-To use Java Docker client, include dependency into your pom.xml:
+docker-java is vailable though Maven Central, so you can include the following dependency into your pom.xml:
 
     <dependency>
           <groupId>com.kpelykh</groupId>
           <artifactId>docker-java</artifactId>
-          <version>0.6.1-SNAPSHOT</version>
+          <version>0.7.6</version>
     </dependency>
 
-*Currently Docker Java client is not available in Maven Central, so you will need to install it to a local
-repository, before you can use it in your projects.*
-    
+
 ## Example code snippets:
 
     DockerClient dockerClient = new DockerClient("http://localhost:4243");
-
 
 ###### Get Docker info:
 
@@ -81,7 +82,11 @@ repository, before you can use it in your projects.*
 
     dockerClient.stopContainer(container.id);
     
-    
+
+##### Support for UNIX sockets:
+
+    Support for UNIX socket should appear in docker-java pretty soon. I'm working on its integration.
+
 ##### Docker Builder:
 
 To use Docker Builder, as described on page http://docs.docker.io/en/latest/use/builder/,

@@ -22,22 +22,61 @@ public class Version {
     @JsonProperty("KernelVersion")
     private String kernelVersion;
 
+    @JsonProperty("Arch")
+    private String  arch;
+
+    @JsonProperty("Os")
+    private String operatingSystem;
+
+
     public String getVersion() {
         return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     public String getGitCommit() {
         return gitCommit;
     }
 
+    public void setGitCommit(String gitCommit) {
+        this.gitCommit = gitCommit;
+    }
+
     public String getGoVersion() {
         return goVersion;
     }
 
-    public String getKernelVersion() {
-    	return kernelVersion;
+    public void setGoVersion(String goVersion) {
+        this.goVersion = goVersion;
     }
-    
+
+    public String getKernelVersion() {
+        return kernelVersion;
+    }
+
+    public void setKernelVersion(String kernelVersion) {
+        this.kernelVersion = kernelVersion;
+    }
+
+    public String getArch() {
+        return arch;
+    }
+
+    public void setArch(String arch) {
+        this.arch = arch;
+    }
+
+    public String getOperatingSystem() {
+        return operatingSystem;
+    }
+
+    public void setOperatingSystem(String operatingSystem) {
+        this.operatingSystem = operatingSystem;
+    }
+
     @Override
     public String toString() {
         return "Version{" +
@@ -45,7 +84,8 @@ public class Version {
                 ", gitCommit='" + gitCommit + '\'' +
                 ", goVersion='" + goVersion + '\'' +
                 ", kernelVersion='" + kernelVersion + '\'' +
+                ", arch='" + arch + '\'' +
+                ", operatingSystem='" + operatingSystem + '\'' +
                 '}';
     }
-
 }

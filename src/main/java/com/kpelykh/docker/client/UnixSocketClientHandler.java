@@ -10,6 +10,7 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
 import org.apache.http.HttpResponse;
+import org.apache.http.annotation.NotThreadSafe;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.AbstractHttpEntity;
 import org.apache.http.entity.BufferedHttpEntity;
@@ -22,7 +23,6 @@ import org.apache.http.params.BasicHttpParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.concurrent.NotThreadSafe;
 import java.io.*;
 import java.net.URI;
 import java.nio.channels.Channels;

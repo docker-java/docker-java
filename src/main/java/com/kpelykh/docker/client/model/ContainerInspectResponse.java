@@ -61,90 +61,143 @@ public class ContainerInspectResponse {
     @JsonProperty("Driver")
     private String driver;
 
-    public String getDriver() {
-        return driver;
-    }
-
-    public String getHostnamePath() {
-        return hostnamePath;
-    }
-
-    public String getHostsPath() {
-        return hostsPath;
-    }
-
-    public String getName() {
-        return name;
-    }
+    @JsonProperty("HostConfig")
+    private HostConfig hostConfig;
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getCreated() {
         return created;
     }
 
+    public void setCreated(String created) {
+        this.created = created;
+    }
+
     public String getPath() {
         return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public String[] getArgs() {
         return args;
     }
 
+    public void setArgs(String[] args) {
+        this.args = args;
+    }
+
     public ContainerConfig getConfig() {
         return config;
+    }
+
+    public void setConfig(ContainerConfig config) {
+        this.config = config;
     }
 
     public ContainerState getState() {
         return state;
     }
 
+    public void setState(ContainerState state) {
+        this.state = state;
+    }
+
     public String getImage() {
         return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public NetworkSettings getNetworkSettings() {
         return networkSettings;
     }
 
+    public void setNetworkSettings(NetworkSettings networkSettings) {
+        this.networkSettings = networkSettings;
+    }
+
     public String getSysInitPath() {
         return sysInitPath;
+    }
+
+    public void setSysInitPath(String sysInitPath) {
+        this.sysInitPath = sysInitPath;
     }
 
     public String getResolvConfPath() {
         return resolvConfPath;
     }
 
+    public void setResolvConfPath(String resolvConfPath) {
+        this.resolvConfPath = resolvConfPath;
+    }
+
     public Map<String, String> getVolumes() {
         return volumes;
+    }
+
+    public void setVolumes(Map<String, String> volumes) {
+        this.volumes = volumes;
     }
 
     public Map<String, String> getVolumesRW() {
         return volumesRW;
     }
 
-    @Override
-    public String toString() {
-        return "ContainerInspectResponse{" +
-                "id='" + id + '\'' +
-                ", created='" + created + '\'' +
-                ", path='" + path + '\'' +
-                ", args=" + Arrays.toString(args) +
-                ", config=" + config +
-                ", state=" + state +
-                ", image='" + image + '\'' +
-                ", networkSettings=" + networkSettings +
-                ", sysInitPath='" + sysInitPath + '\'' +
-                ", resolvConfPath='" + resolvConfPath + '\'' +
-                ", volumes=" + volumes +
-                ", volumesRW=" + volumesRW +
-                ", hostnamePath='" + hostnamePath + '\'' +
-                ", hostsPath='" + hostsPath + '\'' +
-                ", name='" + name + '\'' +
-                ", driver='" + driver + '\'' +
-                '}';
+    public void setVolumesRW(Map<String, String> volumesRW) {
+        this.volumesRW = volumesRW;
+    }
+
+    public String getHostnamePath() {
+        return hostnamePath;
+    }
+
+    public void setHostnamePath(String hostnamePath) {
+        this.hostnamePath = hostnamePath;
+    }
+
+    public String getHostsPath() {
+        return hostsPath;
+    }
+
+    public void setHostsPath(String hostsPath) {
+        this.hostsPath = hostsPath;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDriver() {
+        return driver;
+    }
+
+    public void setDriver(String driver) {
+        this.driver = driver;
+    }
+
+    public HostConfig getHostConfig() {
+        return hostConfig;
+    }
+
+    public void setHostConfig(HostConfig hostConfig) {
+        this.hostConfig = hostConfig;
     }
 
     public class NetworkSettings {
@@ -153,19 +206,18 @@ public class ContainerInspectResponse {
         @JsonProperty("IPPrefixLen") public int ipPrefixLen;
         @JsonProperty("Gateway") public String gateway;
         @JsonProperty("Bridge") public String bridge;
-        // Deprecated - can we remove?
         @JsonProperty("PortMapping") public Map<String,Map<String, String>> portMapping;
-        // FIXME Is this the right type? -BJE
-        @JsonProperty("Ports") public Map<String, String> ports;
+        @JsonProperty("Ports") public Ports ports;
 
         @Override
         public String toString() {
             return "NetworkSettings{" +
-                    "ipAddress='" + ipAddress + '\'' +
-                    ", ipPrefixLen=" + ipPrefixLen +
-                    ", gateway='" + gateway + '\'' +
+                    "ports=" + ports +
+                    ", portMapping=" + portMapping +
                     ", bridge='" + bridge + '\'' +
-                    ", ports=" + ports +
+                    ", gateway='" + gateway + '\'' +
+                    ", ipPrefixLen=" + ipPrefixLen +
+                    ", ipAddress='" + ipAddress + '\'' +
                     '}';
         }
     }
