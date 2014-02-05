@@ -7,6 +7,7 @@ import org.codehaus.jackson.map.JsonSerializer;
 import org.codehaus.jackson.map.SerializerProvider;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.node.NullNode;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -95,10 +96,11 @@ public class Ports {
             for (Iterator<Map.Entry<String, JsonNode>> it = node.getFields(); it.hasNext();) {
 
                 Map.Entry<String, JsonNode> field = it.next();
-                String hostIp = field.getValue().get(0).get("HostIp").getTextValue();
-                String hostPort = field.getValue().get(0).get("HostPort").getTextValue();
-                out.addPort(Port.makePort(field.getKey(), hostIp, hostPort));
-
+                if (!field.getValue().equals(NullNode.getInstance())) {
+                    String hostIp = field.getValue().get(0).get("HostIp").getTextValue();
+                    String hostPort = field.getValue().get(0).get("HostPort").getTextValue();
+                    out.addPort(Port.makePort(field.getKey(), hostIp, hostPort));
+                }
             }
             return out;
         }

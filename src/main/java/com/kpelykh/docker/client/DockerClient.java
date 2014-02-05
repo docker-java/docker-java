@@ -643,20 +643,20 @@ public class DockerClient
             FileUtils.copyFileToDirectory(dockerFile, tmpDockerContextFolder);
 
             for (String cmd : dockerFileContent) {
-                if (StringUtils.startsWith(cmd.trim(), "ADD")) {
+                if (StringUtils.startsWithIgnoreCase(cmd.trim(), "ADD")) {
                     String addArgs[] = StringUtils.split(cmd, " \t");
                     if (addArgs.length != 3) {
                         throw new DockerException(String.format("Wrong format on line [%s]", cmd));
                     }
 
                     File src = new File(addArgs[1]);
-                   /* if (!src.isAbsolute()) {
-                    src = new File(dockerFolder, addArgs[1]).getCanonicalFile();
+                    if (!src.isAbsolute()) {
+                        src = new File(dockerFolder, addArgs[1]).getCanonicalFile();
                     }
 
                     if (!src.exists()) {
-                    throw new DockerException(String.format("Sorce file %s doesnt' exist", src));
-                    }*/
+                        throw new DockerException(String.format("Source file %s doesnt' exist", src));
+                    }
                     if (src.isDirectory()) {
                         FileUtils.copyDirectory(src, tmpDockerContextFolder);
                     } else {

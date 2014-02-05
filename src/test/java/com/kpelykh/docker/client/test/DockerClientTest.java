@@ -244,22 +244,6 @@ public class DockerClientTest extends Assert
 
     }
 
-  /*  @Test
-    public void testStartContainer2() throws DockerException {ContainerConfig appContainerConfig = new ContainerConfig();
-        appContainerConfig.setImage("4096e911ada1");
-        ContainerCreateResponse appContResponse = dockerClient.createContainer(appContainerConfig, "AppContainer");
-        System.out.println("Created an App container successfully: " + appContResponse.getId());
-        String appContId = appContResponse.getId();
-        HostConfig appHostConfig = new HostConfig(null);
-        Port p = new Port("tcp","8080","0.0.0.0","8082");
-        Ports ports = new Ports();
-        ports.addPort(p);
-        appHostConfig.setPortBindings(ports);
-        String[] links = {"mariaDB3:db"};
-        appHostConfig.setLinks(links);
-        dockerClient.startContainer(appContId, appHostConfig);
-    }
-*/
     @Test
     public void testWaitContainer() throws DockerException {
 
@@ -601,7 +585,7 @@ public class DockerClientTest extends Assert
     }
 
 
-    @Test(enabled = false)
+    @Test
     public void testNginxDockerfileBuilder() throws DockerException, IOException {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("nginx").getFile());
 
@@ -623,7 +607,7 @@ public class DockerClientTest extends Assert
         String fullLog = logwriter.toString();
         assertThat(fullLog, containsString("Successfully built"));
 
-        String imageId = StringUtils.substringAfterLast(fullLog, "Successfully built ").trim();
+        String imageId = StringUtils.substringBetween(fullLog, "Successfully built ", "\\n\"}").trim();
 
         ImageInspectResponse imageInspectResponse = dockerClient.inspectImage(imageId);
         assertThat(imageInspectResponse, not(nullValue()));
@@ -633,19 +617,19 @@ public class DockerClientTest extends Assert
         assertThat(imageInspectResponse.getAuthor(), equalTo("Guillaume J. Charmes \"guillaume@dotcloud.com\""));
     }
 
-    @Test(enabled = false)
+    @Test
     public void testDockerBuilderAddFile() throws DockerException, IOException {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testAddFile").getFile());
         dockerfileBuild(baseDir, "Successfully executed testrun.sh");
     }
 
-    @Test(enabled = false)
+    @Test
     public void testDockerBuilderAddFolder() throws DockerException, IOException {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testAddFolder").getFile());
         dockerfileBuild(baseDir, "Successfully executed testAddFolder.sh");
     }
 
-    @Test(enabled = false)
+    @Test
     public void testNetCatDockerfileBuilder() throws DockerException, IOException, InterruptedException {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("netcat").getFile());
 
@@ -667,7 +651,7 @@ public class DockerClientTest extends Assert
         String fullLog = logwriter.toString();
         assertThat(fullLog, containsString("Successfully built"));
 
-        String imageId = StringUtils.substringAfterLast(fullLog, "Successfully built ").trim();
+        String imageId = StringUtils.substringBetween(fullLog, "Successfully built ", "\\n\"}").trim();
 
         ImageInspectResponse imageInspectResponse = dockerClient.inspectImage(imageId);
         assertThat(imageInspectResponse, not(nullValue()));
@@ -758,7 +742,7 @@ public class DockerClientTest extends Assert
         String fullLog = logwriter.toString();
         assertThat(fullLog, containsString("Successfully built"));
 
-        String imageId = StringUtils.substringAfterLast(fullLog, "Successfully built ").trim();
+        String imageId = StringUtils.substringBetween(fullLog, "Successfully built ", "\\n\"}").trim();
 
         //Create container based on image
         ContainerConfig containerConfig = new ContainerConfig();
@@ -788,6 +772,6 @@ public class DockerClientTest extends Assert
             IOUtils.closeQuietly(logResponse.getEntityInputStream());
         }
 
-        assertThat(logwriter2.toString(), equalTo(expectedText));
+        assertThat(logwriter2.toString(), endsWith(expectedText));
     }
 }
