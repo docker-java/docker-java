@@ -44,14 +44,12 @@ Run build with tests:
 
     $ mvn clean install
 
-## Docker Java Client usage:
-
-docker-java is vailable though Maven Central, so you can include the following dependency into your pom.xml:
+## Docker-Java maven dependency:
 
     <dependency>
           <groupId>com.kpelykh</groupId>
           <artifactId>docker-java</artifactId>
-          <version>0.7.6</version>
+          <version>0.7.6-SNAPSHOT</version>
     </dependency>
 
 
