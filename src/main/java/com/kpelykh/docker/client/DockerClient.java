@@ -643,7 +643,7 @@ public class DockerClient
             FileUtils.copyFileToDirectory(dockerFile, tmpDockerContextFolder);
 
             for (String cmd : dockerFileContent) {
-                if (StringUtils.startsWithIgnoreCase(cmd.trim(), "ADD")) {
+                if (StringUtils.startsWithIgnoreCase(cmd.trim(), "ADD ")) {
                     String addArgs[] = StringUtils.split(cmd, " \t");
                     if (addArgs.length != 3) {
                         throw new DockerException(String.format("Wrong format on line [%s]", cmd));
