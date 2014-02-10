@@ -5,6 +5,7 @@
 *.swp
 .project
 .settings
+.classpath
 
 # Ignore all build/dist directories
 target
