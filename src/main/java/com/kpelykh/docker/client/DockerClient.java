@@ -254,7 +254,7 @@ public class DockerClient
 
     }
 
-    public ImageInspectResponse inspectImage(String imageId) throws DockerException {
+    public ImageInspectResponse inspectImage(String imageId) throws DockerException, NotFoundException {
 
         WebResource webResource = client.resource(restEndpointUrl + String.format("/images/%s/json", imageId));
 
@@ -263,7 +263,7 @@ public class DockerClient
             return webResource.accept(MediaType.APPLICATION_JSON).get(ImageInspectResponse.class);
         } catch (UniformInterfaceException exception) {
             if (exception.getResponse().getStatus() == 404) {
-                throw new DockerException(String.format("No such image %s", imageId));
+                throw new NotFoundException(String.format("No such image %s", imageId));
             } else if (exception.getResponse().getStatus() == 500) {
                 throw new DockerException("Server error", exception);
             } else {
@@ -318,7 +318,7 @@ public class DockerClient
         return createContainer(config, null);
     }
 
-    public ContainerCreateResponse createContainer(ContainerConfig config,String name) throws DockerException {
+    public ContainerCreateResponse createContainer(ContainerConfig config,String name) throws DockerException, NotFoundException {
 
         MultivaluedMap<String,String> params = new MultivaluedMapImpl();
         if(name != null){
@@ -333,7 +333,7 @@ public class DockerClient
                     .post(ContainerCreateResponse.class, config);
         } catch (UniformInterfaceException exception) {
             if (exception.getResponse().getStatus() == 404) {
-                throw new DockerException(String.format("%s is an unrecognized image. Please pull the image first.", config.getImage()));
+                throw new NotFoundException(String.format("%s is an unrecognized image. Please pull the image first.", config.getImage()));
             } else if (exception.getResponse().getStatus() == 406) {
                 throw new DockerException("impossible to attach (container not running)");
             } else if (exception.getResponse().getStatus() == 500) {
@@ -349,7 +349,7 @@ public class DockerClient
         this.startContainer(containerId, null);
     }
 
-    public void startContainer(String containerId, HostConfig hostConfig) throws DockerException {
+    public void startContainer(String containerId, HostConfig hostConfig) throws DockerException, NotFoundException {
 
         WebResource webResource = client.resource(restEndpointUrl + String.format("/containers/%s/start", containerId));
 
@@ -363,7 +363,7 @@ public class DockerClient
             }
         } catch (UniformInterfaceException exception) {
             if (exception.getResponse().getStatus() == 404) {
-                throw new DockerException(String.format("No such container %s", containerId));
+                throw new NotFoundException(String.format("No such container %s", containerId));
             } else if (exception.getResponse().getStatus() == 204) {
                 //no error
                 LOGGER.trace("Successfully started container {}", containerId);
@@ -375,7 +375,7 @@ public class DockerClient
         }
     }
 
-    public ContainerInspectResponse inspectContainer(String containerId) throws DockerException {
+    public ContainerInspectResponse inspectContainer(String containerId) throws DockerException, NotFoundException {
 
         WebResource webResource = client.resource(restEndpointUrl + String.format("/containers/%s/json", containerId));
 
@@ -384,7 +384,7 @@ public class DockerClient
             return webResource.accept(MediaType.APPLICATION_JSON).get(ContainerInspectResponse.class);
         } catch (UniformInterfaceException exception) {
             if (exception.getResponse().getStatus() == 404) {
-                throw new DockerException(String.format("No such container %s", containerId));
+                throw new NotFoundException(String.format("No such container %s", containerId));
             } else if (exception.getResponse().getStatus() == 500) {
                 throw new DockerException("Server error", exception);
             } else {
@@ -414,6 +414,7 @@ public class DockerClient
             } else if (exception.getResponse().getStatus() == 400) {
                 throw new DockerException("bad parameter");
             } else if (exception.getResponse().getStatus() == 404) {
+                // should really throw a NotFoundException instead of silently ignoring the problem
                 LOGGER.warn(String.format("%s is an unrecognized container.", containerId));
             } else if (exception.getResponse().getStatus() == 500) {
                 throw new DockerException("Server error", exception);
@@ -432,7 +433,7 @@ public class DockerClient
         }
     }
 
-    public int waitContainer(String containerId) throws DockerException {
+    public int waitContainer(String containerId) throws DockerException, NotFoundException {
         WebResource webResource = client.resource(restEndpointUrl + String.format("/containers/%s/wait", containerId));
 
         try {
@@ -441,7 +442,7 @@ public class DockerClient
             return jsonObject.getInt("StatusCode");
         } catch (UniformInterfaceException exception) {
             if (exception.getResponse().getStatus() == 404) {
-                throw new DockerException(String.format("No such container %s", containerId));
+                throw new NotFoundException(String.format("No such container %s", containerId));
             } else if (exception.getResponse().getStatus() == 500) {
                 throw new DockerException("Server error", exception);
             } else {
@@ -461,7 +462,7 @@ public class DockerClient
         return logContainer(containerId, true);
     }
 
-    private ClientResponse logContainer(String containerId, boolean stream) throws DockerException {
+    private ClientResponse logContainer(String containerId, boolean stream) throws DockerException, NotFoundException {
         MultivaluedMap<String,String> params = new MultivaluedMapImpl();
         params.add("logs", "1");
         params.add("stdout", "1");
@@ -480,7 +481,7 @@ public class DockerClient
             if (exception.getResponse().getStatus() == 400) {
                 throw new DockerException("bad parameter");
             } else if (exception.getResponse().getStatus() == 404) {
-                throw new DockerException(String.format("No such container %s", containerId));
+                throw new NotFoundException(String.format("No such container %s", containerId));
             } else if (exception.getResponse().getStatus() == 500) {
                 throw new DockerException("Server error", exception);
             } else {
@@ -489,7 +490,7 @@ public class DockerClient
         }
     }
 
-    public List<ChangeLog> containterDiff(String containerId) throws DockerException {
+    public List<ChangeLog> containterDiff(String containerId) throws DockerException, NotFoundException {
 
         WebResource webResource = client.resource(restEndpointUrl + String.format("/containers/%s/changes", containerId));
 
@@ -498,7 +499,7 @@ public class DockerClient
             return webResource.accept(MediaType.APPLICATION_JSON).get(new GenericType<List<ChangeLog>>() {});
         } catch (UniformInterfaceException exception) {
             if (exception.getResponse().getStatus() == 404) {
-                throw new DockerException(String.format("No such container %s", containerId));
+                throw new NotFoundException(String.format("No such container %s", containerId));
             } else if (exception.getResponse().getStatus() == 500) {
                 throw new DockerException("Server error", exception);
             } else {
@@ -557,7 +558,7 @@ public class DockerClient
         }
     }
 
-    public void restart(String containerId, int timeout) throws DockerException {
+    public void restart(String containerId, int timeout) throws DockerException, NotFoundException {
         WebResource webResource = client.resource(restEndpointUrl + String.format("/containers/%s/restart", containerId));
 
         try {
@@ -565,7 +566,7 @@ public class DockerClient
             webResource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).post();
         } catch (UniformInterfaceException exception) {
             if (exception.getResponse().getStatus() == 404) {
-                throw new DockerException(String.format("No such container %s", containerId));
+                throw new NotFoundException(String.format("No such container %s", containerId));
             } else if (exception.getResponse().getStatus() == 204) {
                 //no error
                 LOGGER.trace("Successfully restarted container {}", containerId);
@@ -577,7 +578,7 @@ public class DockerClient
         }
     }
 
-    public String commit(CommitConfig commitConfig) throws DockerException {
+    public String commit(CommitConfig commitConfig) throws DockerException, NotFoundException {
         Preconditions.checkNotNull(commitConfig.getContainer(), "Container ID was not specified");
 
         MultivaluedMap<String,String> params = new MultivaluedMapImpl();
@@ -596,7 +597,7 @@ public class DockerClient
             return jsonObject.getString("Id");
         } catch (UniformInterfaceException exception) {
             if (exception.getResponse().getStatus() == 404) {
-                throw new DockerException(String.format("No such container %s", commitConfig.getContainer()));
+                throw new NotFoundException(String.format("No such container %s", commitConfig.getContainer()));
             } else if (exception.getResponse().getStatus() == 500) {
                 throw new DockerException("Server error", exception);
             } else {
