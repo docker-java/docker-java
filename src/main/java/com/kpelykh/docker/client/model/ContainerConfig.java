@@ -37,6 +37,7 @@ public class ContainerConfig {
     @JsonProperty("Domainname")   private String domainName = "";
     // FIXME Is this the right type? -BJE
     @JsonProperty("ExposedPorts")   private Map<String, ?> exposedPorts;
+    @JsonProperty("OnBuild")          private String[]  onBuild;
 
     public Map<String, ?> getExposedPorts() {
         return exposedPorts;
@@ -240,6 +241,14 @@ public class ContainerConfig {
     public ContainerConfig setEntrypoint(String[] entrypoint) {
         this.entrypoint = entrypoint;
         return this;
+    }
+
+    public String[] getOnBuild() {
+	return onBuild;
+    }
+
+    public void setOnBuild(String[] onBuild) {
+	this.onBuild=onBuild;
     }
 
     @Override
