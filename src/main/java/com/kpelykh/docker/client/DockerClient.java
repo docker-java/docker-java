@@ -30,6 +30,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
 
@@ -141,6 +142,39 @@ public class DockerClient
         try {
             LOGGER.trace("POST: {}", webResource);
             return webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).post(ClientResponse.class);
+        } catch (UniformInterfaceException exception) {
+            if (exception.getResponse().getStatus() == 500) {
+                throw new DockerException("Server error.", exception);
+            } else {
+                throw new DockerException(exception);
+            }
+        }
+    }
+
+    /**
+     * Create an image by importing the given stream of a tar file.
+     *
+     * @param repository the repository to import to
+     * @param tag any tag for this image
+     * @param imageStream the InputStream of the tar file
+     * @return an {@link ImageCreateResponse} containing the id of the imported image
+     * @throws DockerException if the import fails for some reason.
+     */
+    public ImageCreateResponse importImage(String repository, String tag, InputStream imageStream) throws DockerException {
+        Preconditions.checkNotNull(repository, "Repository was not specified");
+        Preconditions.checkNotNull(imageStream, "imageStream was not provided");
+
+        MultivaluedMap<String,String> params = new MultivaluedMapImpl();
+        params.add("repo", repository);
+        params.add("tag", tag);
+        params.add("fromSrc","-");
+
+        WebResource webResource = client.resource(restEndpointUrl + "/images/create").queryParams(params);
+
+        try {
+            LOGGER.trace("POST: {}", webResource);
+            return webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).post(ImageCreateResponse.class,imageStream);
+
         } catch (UniformInterfaceException exception) {
             if (exception.getResponse().getStatus() == 500) {
                 throw new DockerException("Server error.", exception);
