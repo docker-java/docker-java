@@ -25,6 +25,14 @@ public class ContainerCreateResponse {
         return warnings;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setWarnings(String[] warnings) {
+        this.warnings = warnings;
+    }
+
     @Override
     public String toString() {
         return "ContainerCreateResponse{" +
