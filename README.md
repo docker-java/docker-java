@@ -2,7 +2,7 @@
 
 Java API client for [Docker](http://docs.docker.io/ "Docker")
 
-Supports a subset of the Docker Client API v1.8, Docker Server version 0.7.6+ and 0.8.1
+Supports a subset of the Docker Client API v1.8, Docker Server version 0.8.1
 
 ## Build with Maven
 
@@ -32,13 +32,13 @@ Now make sure that docker is up:
     
     $ docker -H tcp://127.0.0.1:4243 version
 
-    Client version: 0.7.6
+    Client version: 0.8.1
     Go version (client): go1.2
-    Git commit (client): bc3b2ec
-    Server version: 0.7.6
-    Git commit (server): bc3b2ec
+    Git commit (client): a1598d1
+    Server version: 0.8.1
+    Git commit (server): a1598d1
     Go version (server): go1.2
-    Last stable version: 0.7.6
+    Last stable version: 0.8.1
 
 Run build with tests:
 

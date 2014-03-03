@@ -446,7 +446,7 @@ public class DockerClientTest extends Assert
     @Test
     public void testPullImage() throws DockerException, IOException {
 
-        String testImage = "kpelykh/vimbase";
+        String testImage = "ubuntu";
 
         LOG.info("Removing image: {}", testImage);
         dockerClient.removeImage(testImage);
@@ -474,7 +474,7 @@ public class DockerClientTest extends Assert
         }
 
         String fullLog = logwriter.toString();
-        assertThat(fullLog, containsString("Pulling repository kpelykh/vimbase"));
+        assertThat(fullLog, containsString("Pulling repository ubuntu"));
 
         tmpImgs.add(testImage);
 
