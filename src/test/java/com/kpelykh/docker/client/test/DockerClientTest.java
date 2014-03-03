@@ -630,6 +630,13 @@ public class DockerClientTest extends Assert
     }
 
     @Test
+    public void testImportImageFromTar() throws DockerException, IOException {
+        InputStream tar = Thread.currentThread().getContextClassLoader().getResourceAsStream("testImportImageFromTar/empty.tar");
+        String imageId = dockerClient.importImage("empty", null, tar).getId();
+        assert imageId.contains(dockerClient.inspectImage("empty").getId());
+    }
+
+    @Test
     public void testNetCatDockerfileBuilder() throws DockerException, IOException, InterruptedException {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("netcat").getFile());
 
