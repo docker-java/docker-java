@@ -48,6 +48,9 @@ public class Container {
     @JsonProperty("SizeRootFs")
     private int sizeRootFs;
 
+    @JsonProperty("Names")
+    private String[] names;
+
     public String getId() {
         return id;
     }
@@ -84,6 +87,10 @@ public class Container {
         return sizeRootFs;
     }
 
+    public String[] getNames() {
+        return names;
+    }
+
     @Override
     public String toString() {
         return "Container{" +
@@ -95,6 +102,7 @@ public class Container {
                 ", ports=" + ports +
                 ", size=" + size +
                 ", sizeRootFs=" + sizeRootFs +
+                ", names=" + Arrays.toString(names) +
                 '}';
     }
 }
