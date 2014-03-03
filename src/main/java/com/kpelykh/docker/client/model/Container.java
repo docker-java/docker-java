@@ -48,6 +48,9 @@ public class Container {
     @JsonProperty("SizeRootFs")
     private int sizeRootFs;
 
+    @JsonProperty("Names")
+    private String[] names;
+
     public String getId() {
         return id;
     }
@@ -84,6 +87,42 @@ public class Container {
         return sizeRootFs;
     }
 
+    public String[] getNames() {
+        return names;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setCommand(String command) {
+        this.command = command;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public void setCreated(long created) {
+        this.created = created;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public void setSizeRootFs(int sizeRootFs) {
+        this.sizeRootFs = sizeRootFs;
+    }
+
+    public void setNames(String[] names) {
+        this.names = names;
+    }
+
     @Override
     public String toString() {
         return "Container{" +
@@ -95,6 +134,7 @@ public class Container {
                 ", ports=" + ports +
                 ", size=" + size +
                 ", sizeRootFs=" + sizeRootFs +
+                ", names=" + Arrays.toString(names) +
                 '}';
     }
 }
