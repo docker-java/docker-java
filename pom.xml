@@ -27,7 +27,7 @@
 
     <scm>
         <connection>scm:git:git@github.com:kpelykh/docker-java.git</connection>
-        <url>scm:git:git@github.com:kpelykh/docker-java.git</url>
+        <url>git@github.com:kpelykh/docker-java.git</url>
         <developerConnection>scm:git:git@github.com:kpelykh/docker-java.git</developerConnection>
     </scm>
 
