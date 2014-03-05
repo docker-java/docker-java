@@ -10,7 +10,7 @@
     <groupId>com.kpelykh</groupId>
     <artifactId>docker-java</artifactId>
     <packaging>jar</packaging>
-    <version>0.8.1</version>
+    <version>0.8.2-SNAPSHOT</version>
 
     <name>docker-java</name>
     <url>https://github.com/kpelykh/docker-java</url>
@@ -28,7 +28,7 @@
         <connection>scm:git:git@github.com:kpelykh/docker-java.git</connection>
         <url>git@github.com:kpelykh/docker-java.git</url>
         <developerConnection>scm:git:git@github.com:kpelykh/docker-java.git</developerConnection>
-    <tag>docker-java-0.8.1</tag>
+    <tag>HEAD</tag>
   </scm>
 
     <developers>
