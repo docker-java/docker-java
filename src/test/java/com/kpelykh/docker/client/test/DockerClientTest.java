@@ -312,6 +312,10 @@ public class DockerClientTest extends Assert
         assertThat(fullLog, endsWith(snippet));
     }
 
+    //This test doesn't work in Ubuntu 12.04 due to
+    //Error mounting '/dev/mapper/docker-8:5-...
+    //ref: https://github.com/dotcloud/docker/issues/4036
+
     @Test
     public void testDiff() throws DockerException {
         ContainerConfig containerConfig = new ContainerConfig();
@@ -329,7 +333,7 @@ public class DockerClientTest extends Assert
         List filesystemDiff = dockerClient.containterDiff(container.getId());
         LOG.info("Container DIFF: {}", filesystemDiff.toString());
 
-        assertThat(filesystemDiff.size(), equalTo(3));
+        assertThat(filesystemDiff.size(), equalTo(1));
         ChangeLog testChangeLog = selectUnique(filesystemDiff, hasField("path", equalTo("/test")));
 
         assertThat(testChangeLog, hasField("path", equalTo("/test")));
@@ -446,7 +450,7 @@ public class DockerClientTest extends Assert
     @Test
     public void testPullImage() throws DockerException, IOException {
 
-        String testImage = "ubuntu";
+        String testImage = "centos";
 
         LOG.info("Removing image: {}", testImage);
         dockerClient.removeImage(testImage);
@@ -474,20 +478,23 @@ public class DockerClientTest extends Assert
         }
 
         String fullLog = logwriter.toString();
-        assertThat(fullLog, containsString("Pulling repository ubuntu"));
+        assertThat(fullLog, containsString("Download complete"));
 
         tmpImgs.add(testImage);
 
         info = dockerClient.info();
         LOG.info("Client info after pull, {}", info.toString());
 
-        assertThat(imgCount + 1, equalTo(info.getImages()));
+        assertThat(imgCount, lessThan(info.getImages()));
 
         ImageInspectResponse imageInspectResponse = dockerClient.inspectImage(testImage);
         LOG.info("Image Inspect: {}", imageInspectResponse.toString());
         assertThat(imageInspectResponse, notNullValue());
     }
 
+    //This test doesn't work in Ubuntu 12.04 due to
+    //Error mounting '/dev/mapper/docker-8:5-...
+    //ref: https://github.com/dotcloud/docker/issues/4036
 
     @Test
     public void commitImage() throws DockerException {

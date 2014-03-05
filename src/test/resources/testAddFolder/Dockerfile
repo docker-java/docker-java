@@ -2,7 +2,7 @@ FROM      ubuntu
 
 # Copy testrun.sh files into the container
 
-add	. /src/
+ADD .   /src/
 
 run ls -la /src
 

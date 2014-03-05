@@ -49,7 +49,7 @@ Run build with tests:
     <dependency>
           <groupId>com.kpelykh</groupId>
           <artifactId>docker-java</artifactId>
-          <version>0.8.1-SNAPSHOT</version>
+          <version>0.8.1</version>
     </dependency>
 
 
