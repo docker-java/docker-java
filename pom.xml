@@ -40,6 +40,8 @@
     </developers>
 
     <properties>
+        <skipTests>true</skipTests>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.debug>true</jdk.debug>
         <jdk.optimize>false</jdk.optimize>
@@ -227,6 +229,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <skipTests>${skipTests}</skipTests>
+                </configuration>
             </plugin>
 
 
