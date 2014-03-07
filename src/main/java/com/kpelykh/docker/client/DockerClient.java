@@ -646,8 +646,12 @@ public class DockerClient
     public ClientResponse build(File dockerFolder) throws DockerException {
         return this.build(dockerFolder, null);
     }
-
+    
     public ClientResponse build(File dockerFolder, String tag) throws DockerException {
+    	return this.build(dockerFolder, null, false);
+    }
+
+    public ClientResponse build(File dockerFolder, String tag, boolean noCache) throws DockerException {
         Preconditions.checkNotNull(dockerFolder, "Folder is null");
         Preconditions.checkArgument(dockerFolder.exists(), "Folder %s doesn't exist", dockerFolder);
         Preconditions.checkState(new File(dockerFolder, "Dockerfile").exists(), "Dockerfile doesn't exist in " + dockerFolder);
@@ -657,6 +661,9 @@ public class DockerClient
 
         MultivaluedMap<String,String> params = new MultivaluedMapImpl();
         params.add("t", tag);
+        if(noCache) {
+        	params.add("nocache", "");
+        }
 
         // ARCHIVE TAR
         String archiveNameWithOutExtension = UUID.randomUUID().toString();
