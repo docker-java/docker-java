@@ -28,7 +28,7 @@ public class ContainerConfig {
     @JsonProperty("Cmd")          private String[]  cmd;
     @JsonProperty("Dns")          private String[]  dns;
     @JsonProperty("Image")        private String    image;
-    @JsonProperty("Volumes")      private Object    volumes;
+    @JsonProperty("Volumes")      private BoundHostVolumes   volumes;
     @JsonProperty("VolumesFrom")  private String    volumesFrom = "";
     @JsonProperty("Entrypoint")   private String[]  entrypoint = new String[]{};
     @JsonProperty("NetworkDisabled") private boolean networkDisabled = false;
@@ -216,11 +216,11 @@ public class ContainerConfig {
         return this;
     }
 
-    public Object getVolumes() {
+    public BoundHostVolumes getVolumes() {
         return volumes;
     }
 
-    public ContainerConfig setVolumes(Object volumes) {
+    public ContainerConfig setVolumes(BoundHostVolumes volumes) {
         this.volumes = volumes;
         return this;
     }
