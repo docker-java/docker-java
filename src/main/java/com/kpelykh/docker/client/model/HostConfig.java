@@ -45,6 +45,10 @@ public class HostConfig {
     public void setBinds(String[] binds) {
         this.binds = binds;
     }
+    
+    public void setBinds(final BoundHostVolumes volumes) {
+        setBinds(volumes.asBinds());
+    }
 
     public String getContainerIDFile() {
         return containerIDFile;
