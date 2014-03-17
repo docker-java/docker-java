@@ -524,6 +524,32 @@ public class DockerClient
         }
     }
 
+    public ClientResponse copyFile(String containerId, String resource) throws DockerException {
+        CopyConfig copyConfig = new CopyConfig();
+        copyConfig.setResource(resource);
+
+        WebResource webResource =
+            client.resource(restEndpointUrl + String.format("/containers/%s/copy", containerId));
+
+        try {
+            LOGGER.trace("POST: " + webResource.toString());
+            WebResource.Builder builder =
+                webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).type("application/json");
+
+            return builder.post(ClientResponse.class, copyConfig.toString());
+        } catch (UniformInterfaceException exception) {
+            if (exception.getResponse().getStatus() == 400) {
+                throw new DockerException("bad parameter");
+            } else if (exception.getResponse().getStatus() == 404) {
+                throw new DockerException(String.format("No such container %s", containerId));
+            } else if (exception.getResponse().getStatus() == 500) {
+                throw new DockerException("Server error", exception);
+            } else {
+                throw new DockerException(exception);
+            }
+        }
+    }
+
     public List<ChangeLog> containterDiff(String containerId) throws DockerException, NotFoundException {
 
         WebResource webResource = client.resource(restEndpointUrl + String.format("/containers/%s/changes", containerId));
