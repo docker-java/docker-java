@@ -672,7 +672,7 @@ public class DockerClient
     }
     
     public ClientResponse build(File dockerFolder, String tag) throws DockerException {
-    	return this.build(dockerFolder, null, false);
+    	return this.build(dockerFolder, tag, false);
     }
 
     public ClientResponse build(File dockerFolder, String tag, boolean noCache) throws DockerException {
