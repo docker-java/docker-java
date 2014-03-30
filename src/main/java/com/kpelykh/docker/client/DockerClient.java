@@ -8,7 +8,6 @@ import com.sun.jersey.api.client.*;
 import com.sun.jersey.api.client.WebResource.Builder;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.api.client.filter.LoggingFilter;
 import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.client.apache4.ApacheHttpClient4;
 import com.sun.jersey.client.apache4.ApacheHttpClient4Handler;
@@ -69,7 +68,6 @@ public class DockerClient
         //client = new UnixSocketClient(clientConfig);
 
         client.addFilter(new JsonClientFilter());        
-        client.addFilter(new LoggingFilter());
     }
 
     /**
