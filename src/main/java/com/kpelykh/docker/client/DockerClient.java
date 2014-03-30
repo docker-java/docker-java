@@ -381,9 +381,20 @@ public class DockerClient
         this.startContainer(containerId, null);
     }
 
-    public void startContainer(String containerId, HostConfig hostConfig) throws DockerException, NotFoundException {
+    public void startContainer(String containerId, HostConfig hostConfig) throws DockerException {
+        startContainer(containerId, hostConfig, null);
+    }
 
-        WebResource webResource = client.resource(restEndpointUrl + String.format("/containers/%s/start", containerId));
+    /**
+     * @param name The name to assign to the container, e.g to user for linking.
+     */
+    public void startContainer(String containerId, HostConfig hostConfig, String name) throws DockerException {
+
+        final String path = name == null ?
+                String.format("/containers/%s/start", containerId):
+                String.format("/containers/%s/start?name=%s", containerId, name);
+
+        WebResource webResource = client.resource(restEndpointUrl + path);
 
         try {
             LOGGER.trace("POST: {}", webResource);
