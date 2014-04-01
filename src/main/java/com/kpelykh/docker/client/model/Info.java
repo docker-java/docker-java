@@ -62,6 +62,9 @@ public class Info {
     
     @JsonProperty("SwapLimit")
     private int swapLimit;
+    
+    @JsonProperty("ExecutionDriver")
+    private String executionDriver;
 
     public boolean isDebug() {
         return debug;
@@ -191,6 +194,14 @@ public class Info {
         this.swapLimit = swapLimit;
     }
 
+    public String getExecutionDriver() {
+		return executionDriver;
+	}
+    
+    public void setExecutionDriver(String executionDriver) {
+		this.executionDriver = executionDriver;
+	}
+    
     @Override
     public String toString() {
         return "Info{" +
