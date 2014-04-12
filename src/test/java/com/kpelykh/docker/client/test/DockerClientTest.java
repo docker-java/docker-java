@@ -330,7 +330,7 @@ public class DockerClientTest extends Assert
         int exitCode = dockerClient.waitContainer(container.getId());
         assertThat(exitCode, equalTo(0));
 
-        List filesystemDiff = dockerClient.containterDiff(container.getId());
+        List filesystemDiff = dockerClient.containerDiff(container.getId());
         LOG.info("Container DIFF: {}", filesystemDiff.toString());
 
         assertThat(filesystemDiff.size(), equalTo(1));
@@ -522,6 +522,15 @@ public class DockerClientTest extends Assert
         ImageInspectResponse busyboxImg = dockerClient.inspectImage("busybox");
 
         assertThat(imageInspectResponse.getParent(), equalTo(busyboxImg.getId()));
+    }
+
+    @Test
+    public void testPush() throws Exception {
+
+
+
+        fail();
+
     }
 
     @Test
