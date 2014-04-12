@@ -34,6 +34,9 @@ public class HostConfig {
     @JsonProperty("PublishAllPorts")
     private boolean publishAllPorts;
 
+    @JsonProperty("Dns")
+    private String dns;
+
     public HostConfig() {
         this.binds = null;
     }
@@ -101,6 +104,14 @@ public class HostConfig {
         this.publishAllPorts = publishAllPorts;
     }
 
+    public String getDns() {
+        return dns;
+    }
+
+    public void setDns(String dns) {
+        this.dns = dns;
+    }
+
     @Override
     public String toString() {
         return "HostConfig{" +
@@ -111,6 +122,7 @@ public class HostConfig {
                 ", portBindings=" + portBindings +
                 ", privileged=" + privileged +
                 ", publishAllPorts=" + publishAllPorts +
+                ", dns='" + dns + '\'' +
                 '}';
     }
 
