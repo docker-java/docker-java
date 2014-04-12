@@ -3,7 +3,6 @@ package com.kpelykh.docker.client.model;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -63,6 +62,12 @@ public class ContainerInspectResponse {
 
     @JsonProperty("HostConfig")
     private HostConfig hostConfig;
+
+    /**
+     * http://blog.docker.io/2014/03/docker-0-9-introducing-execution-drivers-and-libcontainer/
+     */
+    @JsonProperty("ExecDriver")
+    private String execDriver;
 
     public String getId() {
         return id;

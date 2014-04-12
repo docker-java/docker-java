@@ -1,5 +1,6 @@
 package com.kpelykh.docker.client.model;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.util.Arrays;
@@ -45,7 +46,9 @@ public class HostConfig {
     public void setBinds(String[] binds) {
         this.binds = binds;
     }
-    
+
+    // TODO - causes jackson conflict with tests
+    @JsonIgnore
     public void setBinds(final BoundHostVolumes volumes) {
         setBinds(volumes.asBinds());
     }
