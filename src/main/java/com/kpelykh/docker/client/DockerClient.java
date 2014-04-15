@@ -1,18 +1,15 @@
 package com.kpelykh.docker.client;
 
-import com.google.common.base.Preconditions;
-import com.kpelykh.docker.client.model.*;
-import com.kpelykh.docker.client.utils.CompressArchiveUtil;
-import com.kpelykh.docker.client.utils.JsonClientFilter;
-import com.sun.jersey.api.client.*;
-import com.sun.jersey.api.client.WebResource.Builder;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.api.client.filter.LoggingFilter;
-import com.sun.jersey.api.json.JSONConfiguration;
-import com.sun.jersey.client.apache4.ApacheHttpClient4;
-import com.sun.jersey.client.apache4.ApacheHttpClient4Handler;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
+
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.HttpClient;
@@ -26,12 +23,34 @@ import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
+import com.google.common.base.Preconditions;
+import com.kpelykh.docker.client.model.ChangeLog;
+import com.kpelykh.docker.client.model.CommitConfig;
+import com.kpelykh.docker.client.model.Container;
+import com.kpelykh.docker.client.model.ContainerConfig;
+import com.kpelykh.docker.client.model.ContainerCreateResponse;
+import com.kpelykh.docker.client.model.ContainerInspectResponse;
+import com.kpelykh.docker.client.model.HostConfig;
+import com.kpelykh.docker.client.model.Image;
+import com.kpelykh.docker.client.model.ImageInspectResponse;
+import com.kpelykh.docker.client.model.Info;
+import com.kpelykh.docker.client.model.SearchItem;
+import com.kpelykh.docker.client.model.Version;
+import com.kpelykh.docker.client.utils.CompressArchiveUtil;
+import com.kpelykh.docker.client.utils.JsonClientFilter;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.GenericType;
+import com.sun.jersey.api.client.UniformInterfaceException;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.WebResource.Builder;
+import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.sun.jersey.api.client.filter.LoggingFilter;
+import com.sun.jersey.api.json.JSONConfiguration;
+import com.sun.jersey.client.apache4.ApacheHttpClient4;
+import com.sun.jersey.client.apache4.ApacheHttpClient4Handler;
+import com.sun.jersey.core.util.MultivaluedMapImpl;
 
 /**
  *
@@ -48,7 +67,7 @@ public class DockerClient
     private String restEndpointUrl;
 
     public DockerClient(String serverUrl) {
-        restEndpointUrl = serverUrl + "/v1.8";
+        restEndpointUrl = serverUrl + "/v1.10";
         ClientConfig clientConfig = new DefaultClientConfig();
         clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
 
@@ -695,5 +714,29 @@ public class DockerClient
         }
 
     }
+
+	public InputStream copyFile(String containerId, String resource) throws DockerException {
+				 
+		HashMap<String,String> params = new HashMap<String,String>();
+		params.put("Resource", resource);
+  
+		WebResource webResource = client.resource(restEndpointUrl + String.format("/containers/%s/copy", containerId));
+
+		try {
+			LOGGER.trace("POST: {}", webResource);
+			return webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).entity(params, MediaType.APPLICATION_JSON).post(InputStream.class);
+		} catch (UniformInterfaceException exception) {
+			if (exception.getResponse().getStatus() == 400) {
+				throw new DockerException("bad parameter");
+			} else if (exception.getResponse().getStatus() == 404) {
+				throw new DockerException(String.format("No such container %s", containerId));
+			} else if (exception.getResponse().getStatus() == 500) {
+				throw new DockerException("Server error", exception);
+			} else {
+				throw new DockerException(exception);
+			}
+		}
+
+	}
 
 }
