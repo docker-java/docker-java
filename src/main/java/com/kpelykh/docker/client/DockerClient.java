@@ -548,7 +548,7 @@ public class DockerClient
         }
     }
 
-    public List<ChangeLog> containterDiff(String containerId) throws DockerException, NotFoundException {
+    public List<ChangeLog> containerDiff(String containerId) throws DockerException, NotFoundException {
 
         WebResource webResource = client.resource(restEndpointUrl + String.format("/containers/%s/changes", containerId));
 
