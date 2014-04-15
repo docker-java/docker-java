@@ -28,7 +28,7 @@ public class Version {
     @JsonProperty("Os")
     private String operatingSystem;
 
-    @JsonProperty
+    @JsonProperty("ApiVersion")
     private String apiVersion;
 
     public String getVersion() {
