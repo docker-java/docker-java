@@ -724,7 +724,7 @@ public class DockerClient
                         throw new DockerException(String.format("Source file %s doesnt' exist", src));
                     }
                     if (src.isDirectory()) {
-                        FileUtils.copyDirectory(src, tmpDockerContextFolder);
+                        FileUtils.copyDirectoryToDirectory(src, tmpDockerContextFolder);
                     } else {
                         FileUtils.copyFileToDirectory(src, tmpDockerContextFolder);
                     }
