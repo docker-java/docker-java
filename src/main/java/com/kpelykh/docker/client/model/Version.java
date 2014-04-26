@@ -78,14 +78,14 @@ public class Version {
     public void setOperatingSystem(String operatingSystem) {
         this.operatingSystem = operatingSystem;
     }
-
-    public String getApiVersion() {
-        return apiVersion;
-    }
-
+    
     public void setApiVersion(String apiVersion) {
-        this.apiVersion = apiVersion;
-    }
+		this.apiVersion = apiVersion;
+	}
+        
+    public String getApiVersion() {
+		return apiVersion;
+	}
 
     @Override
     public String toString() {
