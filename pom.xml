@@ -7,7 +7,7 @@
         <version>7</version>
     </parent>
 
-    <groupId>com.kpelykh</groupId>
+    <groupId>com.alexecollins</groupId>
     <artifactId>docker-java</artifactId>
     <packaging>jar</packaging>
     <version>0.8.2-SNAPSHOT</version>
