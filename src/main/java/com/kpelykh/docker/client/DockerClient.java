@@ -242,13 +242,17 @@ public class DockerClient {
 		}
 		try {
 			final String registryAuth = registryAuth();
-			client.resource(restEndpointUrl + "/images/" + name + "/push")
+			client.resource(restEndpointUrl + "/images/" + name(name) + "/push")
 					.header("X-Registry-Auth", registryAuth)
 					.accept(MediaType.APPLICATION_JSON)
 					.post();
 		} catch (UniformInterfaceException e) {
 			throw new DockerException(e);
 		}
+	}
+
+	private String name(String name) {
+		return name.contains("/") ? name : authConfig.getUsername();
 	}
 
 	/**

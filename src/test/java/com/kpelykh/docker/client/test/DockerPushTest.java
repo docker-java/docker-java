@@ -23,7 +23,7 @@ public class DockerPushTest {
 	@Test
 	public void testPushLatest() throws Exception {
 		setUpCredentials();
-		docker.push("alexec/busybox");
+		docker.push("busybox");
 		assertThat(asString(docker.pull("alexec/busybox")), not(containsString("404")));
 	}
 
