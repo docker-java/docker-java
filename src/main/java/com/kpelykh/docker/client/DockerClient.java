@@ -187,7 +187,7 @@ public class DockerClient {
 		Preconditions.checkNotNull(repository, "Repository was not specified");
 
 		if (StringUtils.countMatches(repository, ":") == 1) {
-			String repositoryTag[] = StringUtils.split(repository);
+			String repositoryTag[] = StringUtils.split(repository, ':');
 			repository = repositoryTag[0];
 			tag = repositoryTag[1];
 
