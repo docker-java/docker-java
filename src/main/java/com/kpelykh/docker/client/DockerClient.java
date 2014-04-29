@@ -37,6 +37,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -805,7 +806,6 @@ public class DockerClient {
 		String archiveNameWithOutExtension = UUID.randomUUID().toString();
 
 		File dockerFolderTar = null;
-		File tmpDockerContextFolder = null;
 
 		try {
 			File dockerFile = new File(dockerFolder, "Dockerfile");
@@ -815,10 +815,8 @@ public class DockerClient {
 				throw new DockerException(String.format("Dockerfile %s is empty", dockerFile));
 			}
 
-			//Create tmp docker context folder
-			tmpDockerContextFolder = new File(FileUtils.getTempDirectoryPath(), "docker-java-build" + archiveNameWithOutExtension);
-
-			FileUtils.copyFileToDirectory(dockerFile, tmpDockerContextFolder);
+			List<File> filesToAdd = new ArrayList<File>();
+			filesToAdd.add(dockerFile);
 
 			for (String cmd : dockerFileContent) {
 				if (StringUtils.startsWithIgnoreCase(cmd.trim(), "ADD")) {
@@ -833,21 +831,20 @@ public class DockerClient {
 					}
 
 					if (!src.exists()) {
-						throw new DockerException(String.format("Source file %s doesnt' exist", src));
+						throw new DockerException(String.format("Source file %s doesn't exist", src));
 					}
 					if (src.isDirectory()) {
-						FileUtils.copyDirectoryToDirectory(src, tmpDockerContextFolder);
+						filesToAdd.addAll(FileUtils.listFiles(src, null, true));
 					} else {
-						FileUtils.copyFileToDirectory(src, tmpDockerContextFolder);
+						filesToAdd.add(src);
 					}
 				}
 			}
 
-			dockerFolderTar = CompressArchiveUtil.archiveTARFiles(tmpDockerContextFolder, archiveNameWithOutExtension);
+			dockerFolderTar = CompressArchiveUtil.archiveTARFiles(dockerFolder, filesToAdd, archiveNameWithOutExtension);
 
 		} catch (IOException ex) {
 			FileUtils.deleteQuietly(dockerFolderTar);
-			FileUtils.deleteQuietly(tmpDockerContextFolder);
 			throw new DockerException("Error occurred while preparing Docker context folder.", ex);
 		}
 
@@ -869,9 +866,6 @@ public class DockerClient {
 			throw new DockerException(e);
 		} finally {
 			FileUtils.deleteQuietly(dockerFolderTar);
-			FileUtils.deleteQuietly(tmpDockerContextFolder);
 		}
-
 	}
-
 }

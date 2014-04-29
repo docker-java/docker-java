@@ -40,8 +40,8 @@ public class DockerClientTest extends Assert {
 
 	private DockerClient dockerClient;
 
-	private List<String> tmpImgs = new ArrayList<String>();
-	private List<String> tmpContainers = new ArrayList<String>();
+	private List<String> tmpImgs;
+	private List<String> tmpContainers;
 
 	@BeforeTest
 	public void beforeTest() throws DockerException {
@@ -64,6 +64,8 @@ public class DockerClientTest extends Assert {
 
 	@BeforeMethod
 	public void beforeMethod(Method method) {
+	        tmpContainers = new ArrayList<String>();
+	        tmpImgs = new ArrayList<String>();
 		LOG.info(String
 				.format("################################## STARTING %s ##################################",
 						method.getName()));
@@ -663,7 +665,14 @@ public class DockerClientTest extends Assert {
 		dockerfileBuild(baseDir, "Successfully executed testrun.sh");
 	}
 
-	@Test
+        @Test
+        public void testDockerBuilderAddFileInSubfolder() throws DockerException, IOException {
+                File baseDir = new File(Thread.currentThread().getContextClassLoader()
+                                .getResource("testAddFileInSubfolder").getFile());
+                dockerfileBuild(baseDir, "Successfully executed testrun.sh");
+        }
+
+        @Test
 	public void testDockerBuilderAddFolder() throws DockerException,
 			IOException {
 		File baseDir = new File(Thread.currentThread().getContextClassLoader()
