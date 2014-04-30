@@ -40,8 +40,8 @@ public class DockerClientTest extends Assert {
 
 	private DockerClient dockerClient;
 
-	private List<String> tmpImgs = new ArrayList<String>();
-	private List<String> tmpContainers = new ArrayList<String>();
+	private List<String> tmpImgs;
+	private List<String> tmpContainers;
 
 	@BeforeTest
 	public void beforeTest() throws DockerException {
@@ -64,6 +64,8 @@ public class DockerClientTest extends Assert {
 
 	@BeforeMethod
 	public void beforeMethod(Method method) {
+	        tmpContainers = new ArrayList<String>();
+	        tmpImgs = new ArrayList<String>();
 		LOG.info(String
 				.format("################################## STARTING %s ##################################",
 						method.getName()));
@@ -474,7 +476,11 @@ public class DockerClientTest extends Assert {
 	@Test
 	public void testPullImage() throws DockerException, IOException {
 
-		String testImage = "kpelykh/vimbase";
+		// This should be an image that is not used by other repositories already
+		// pulled down, preferably small in size. If tag is not used pull will
+		// download all images in that repository but tmpImgs will only
+		// deleted 'latest' image but not images with other tags
+		String testImage = "hackmann/empty";
 
 		LOG.info("Removing image: {}", testImage);
 		dockerClient.removeImage(testImage);
@@ -486,6 +492,7 @@ public class DockerClientTest extends Assert {
 
 		LOG.info("Pulling image: {}", testImage);
 
+		tmpImgs.add(testImage);
 		ClientResponse response = dockerClient.pull(testImage);
 
 		StringWriter logwriter = new StringWriter();
@@ -503,15 +510,12 @@ public class DockerClientTest extends Assert {
 		}
 
 		String fullLog = logwriter.toString();
-		assertThat(fullLog,
-				containsString("Pulling repository kpelykh/vimbase"));
-
-		tmpImgs.add(testImage);
+		assertThat(fullLog, containsString("Download complete"));
 
 		info = dockerClient.info();
 		LOG.info("Client info after pull, {}", info.toString());
 
-		assertThat(imgCount + 1, equalTo(info.getImages()));
+		assertThat(imgCount, lessThan(info.getImages()));
 
 		ImageInspectResponse imageInspectResponse = dockerClient
 				.inspectImage(testImage);
@@ -661,7 +665,14 @@ public class DockerClientTest extends Assert {
 		dockerfileBuild(baseDir, "Successfully executed testrun.sh");
 	}
 
-	@Test
+        @Test
+        public void testDockerBuilderAddFileInSubfolder() throws DockerException, IOException {
+                File baseDir = new File(Thread.currentThread().getContextClassLoader()
+                                .getResource("testAddFileInSubfolder").getFile());
+                dockerfileBuild(baseDir, "Successfully executed testrun.sh");
+        }
+
+        @Test
 	public void testDockerBuilderAddFolder() throws DockerException,
 			IOException {
 		File baseDir = new File(Thread.currentThread().getContextClassLoader()
