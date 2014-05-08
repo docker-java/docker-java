@@ -25,9 +25,9 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:git@github.com:kpelykh/docker-java.git</connection>
-        <url>git@github.com:kpelykh/docker-java.git</url>
-        <developerConnection>scm:git:git@github.com:kpelykh/docker-java.git</developerConnection>
+        <connection>scm:git:git@github.com:alexec/docker-java.git</connection>
+        <url>git@github.com:alexec/docker-java.git</url>
+        <developerConnection>scm:git:git@github.com:alexec/docker-java.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
