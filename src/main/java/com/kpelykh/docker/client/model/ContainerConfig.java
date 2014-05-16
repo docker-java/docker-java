@@ -1,5 +1,6 @@
 package com.kpelykh.docker.client.model;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.util.Arrays;
@@ -10,6 +11,7 @@ import java.util.Map;
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  *
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ContainerConfig {
 
     @JsonProperty("Hostname")     private String    hostName = "";
@@ -37,7 +39,8 @@ public class ContainerConfig {
     @JsonProperty("Domainname")   private String domainName = "";
     // FIXME Is this the right type? -BJE
     @JsonProperty("ExposedPorts")   private Map<String, ?> exposedPorts;
-    @JsonProperty("OnBuild")          private String[]  onBuild;
+    
+    @JsonProperty("OnBuild")   private int[] onBuild;
 
     public Map<String, ?> getExposedPorts() {
         return exposedPorts;
@@ -242,14 +245,19 @@ public class ContainerConfig {
         this.entrypoint = entrypoint;
         return this;
     }
-
-    public String[] getOnBuild() {
-	return onBuild;
-    }
-
-    public void setOnBuild(String[] onBuild) {
-	this.onBuild=onBuild;
-    }
+    
+    public void setOnBuild(int[] onBuild) {
+		this.onBuild = onBuild;
+	}
+    
+    public int[] getOnBuild() {
+		return onBuild;
+	}
+    
+    public void setDomainName(String domainName) {
+		this.domainName = domainName;
+	}
+   
 
     @Override
     public String toString() {
@@ -277,6 +285,7 @@ public class ContainerConfig {
                 ", privileged=" + privileged +
                 ", workingDir='" + workingDir + '\'' +
                 ", domainName='" + domainName + '\'' +
+                ", onBuild='" + onBuild + '\'' +
                 '}';
     }
 }

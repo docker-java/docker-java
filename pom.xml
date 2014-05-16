@@ -28,7 +28,6 @@
         <connection>scm:git:git@github.com:kpelykh/docker-java.git</connection>
         <url>git@github.com:kpelykh/docker-java.git</url>
         <developerConnection>scm:git:git@github.com:kpelykh/docker-java.git</developerConnection>
-    <tag>HEAD</tag>
   </scm>
 
     <developers>
@@ -138,6 +137,12 @@
             <version>${slf4j-api.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jul-to-slf4j</artifactId>
+            <version>${slf4j-api.version}</version>
+        </dependency>
+
         <!-- /// Test /////////////////////////// -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -187,6 +192,21 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.github.jnr</groupId>
+                <artifactId>jffi</artifactId>
+                <version>1.2.7</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.jnr</groupId>
+                <artifactId>jffi</artifactId>
+                <classifier>native</classifier>
+                <version>1.2.7</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 
     <build>

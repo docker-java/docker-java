@@ -1,16 +1,17 @@
 package com.kpelykh.docker.client.model;
 
 
-import org.codehaus.jackson.annotate.JsonProperty;
-
-import java.util.Arrays;
 import java.util.Map;
+
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
  *
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  *
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ContainerInspectResponse {
 
     @JsonProperty("ID")
@@ -64,6 +65,12 @@ public class ContainerInspectResponse {
     @JsonProperty("HostConfig")
     private HostConfig hostConfig;
 
+    @JsonProperty("ExecDriver")
+    private String execDriver;
+    
+    @JsonProperty("MountLabel")
+    private String mountLabel;
+    
     public String getId() {
         return id;
     }
@@ -199,6 +206,22 @@ public class ContainerInspectResponse {
     public void setHostConfig(HostConfig hostConfig) {
         this.hostConfig = hostConfig;
     }
+    
+    public void setExecDriver(String execDriver) {
+		this.execDriver = execDriver;
+	}
+    
+    public String getExecDriver() {
+		return execDriver;
+	}
+    
+    public String getMountLabel() {
+		return mountLabel;
+	}
+    
+    public void setMountLabel(String mountLabel) {
+		this.mountLabel = mountLabel;
+	}
 
     public class NetworkSettings {
 

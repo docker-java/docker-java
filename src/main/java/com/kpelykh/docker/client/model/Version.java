@@ -1,5 +1,6 @@
 package com.kpelykh.docker.client.model;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
@@ -7,8 +8,8 @@ import org.codehaus.jackson.annotate.JsonProperty;
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  *
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Version {
-
 
     @JsonProperty("Version")
     private String version;
@@ -28,6 +29,8 @@ public class Version {
     @JsonProperty("Os")
     private String operatingSystem;
 
+    @JsonProperty("ApiVersion")
+    private String apiVersion;
 
     public String getVersion() {
         return version;
@@ -76,6 +79,14 @@ public class Version {
     public void setOperatingSystem(String operatingSystem) {
         this.operatingSystem = operatingSystem;
     }
+    
+    public void setApiVersion(String apiVersion) {
+		this.apiVersion = apiVersion;
+	}
+        
+    public String getApiVersion() {
+		return apiVersion;
+	}
 
     @Override
     public String toString() {
@@ -86,6 +97,7 @@ public class Version {
                 ", kernelVersion='" + kernelVersion + '\'' +
                 ", arch='" + arch + '\'' +
                 ", operatingSystem='" + operatingSystem + '\'' +
+                ", apiVersion='" + apiVersion + '\'' +
                 '}';
     }
 }

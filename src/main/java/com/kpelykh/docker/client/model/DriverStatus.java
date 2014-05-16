@@ -1,10 +1,12 @@
 package com.kpelykh.docker.client.model;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
  * Created by ben on 12/12/13.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DriverStatus {
 
     @JsonProperty("Root Dir")
