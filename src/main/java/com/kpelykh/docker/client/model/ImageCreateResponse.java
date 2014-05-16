@@ -1,8 +1,7 @@
 package com.kpelykh.docker.client.model;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
-
-import java.util.Arrays;
 
 /**
  * Parse reponses from /images/create
@@ -10,6 +9,7 @@ import java.util.Arrays;
  * @author Ryan Campbell (ryan.campbell@gmail.com)
  *
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ImageCreateResponse {
 
     @JsonProperty("status")

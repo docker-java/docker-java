@@ -7,7 +7,7 @@
         <version>7</version>
     </parent>
 
-    <groupId>com.alexecollins</groupId>
+    <groupId>com.kpelykh</groupId>
     <artifactId>docker-java</artifactId>
     <packaging>jar</packaging>
     <version>0.8.2-SNAPSHOT</version>
@@ -25,10 +25,9 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:git@github.com:alexec/docker-java.git</connection>
-        <url>git@github.com:alexec/docker-java.git</url>
-        <developerConnection>scm:git:git@github.com:alexec/docker-java.git</developerConnection>
-    <tag>HEAD</tag>
+        <connection>scm:git:git@github.com:kpelykh/docker-java.git</connection>
+        <url>git@github.com:kpelykh/docker-java.git</url>
+        <developerConnection>scm:git:git@github.com:kpelykh/docker-java.git</developerConnection>
   </scm>
 
     <developers>

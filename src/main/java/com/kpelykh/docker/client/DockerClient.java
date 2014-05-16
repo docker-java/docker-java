@@ -60,7 +60,7 @@ public class DockerClient {
 	}
 
 	public DockerClient(String serverUrl) {
-		restEndpointUrl = serverUrl + "/v1.10";
+		restEndpointUrl = serverUrl + "/v1.11";
 		ClientConfig clientConfig = new DefaultClientConfig();
 		clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
 
@@ -77,6 +77,7 @@ public class DockerClient {
 		HttpClient httpClient = new DefaultHttpClient(cm);
 		client = new ApacheHttpClient4(new ApacheHttpClient4Handler(httpClient, null, false), clientConfig);
 
+		client.setReadTimeout(10000);
 		//Experimental support for unix sockets:
 		//client = new UnixSocketClient(clientConfig);
 
@@ -224,7 +225,7 @@ public class DockerClient {
 					response.getEntityInputStream(), "UTF-8");
 			while (itr.hasNext()) {
 				String line = itr.next();
-				out.write(line + "\n");
+				out.write(line + (itr.hasNext() ? "\n" : ""));
 			}
 		} finally {
 			closeQuietly(response.getEntityInputStream());
@@ -237,16 +238,16 @@ public class DockerClient {
 	 *
 	 * @param name The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
 	 */
-	public void push(final String name) throws DockerException {
+	public ClientResponse push(final String name) throws DockerException {
 		if (name == null) {
 			throw new IllegalArgumentException("name is null");
 		}
 		try {
 			final String registryAuth = registryAuth();
-			client.resource(restEndpointUrl + "/images/" + name(name) + "/push")
+			return client.resource(restEndpointUrl + "/images/" + name(name) + "/push")
 					.header("X-Registry-Auth", registryAuth)
 					.accept(MediaType.APPLICATION_JSON)
-					.post();
+					.post(ClientResponse.class);
 		} catch (UniformInterfaceException e) {
 			throw new DockerException(e);
 		}

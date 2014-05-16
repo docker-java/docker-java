@@ -1,5 +1,6 @@
 package com.kpelykh.docker.client.model;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
@@ -7,8 +8,8 @@ import org.codehaus.jackson.annotate.JsonProperty;
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  *
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Version {
-
 
     @JsonProperty("Version")
     private String version;
