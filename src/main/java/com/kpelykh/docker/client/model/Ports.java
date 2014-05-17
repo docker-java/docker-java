@@ -1,13 +1,14 @@
 package com.kpelykh.docker.client.model;
 
-import org.codehaus.jackson.*;
-import org.codehaus.jackson.map.DeserializationContext;
-import org.codehaus.jackson.map.JsonDeserializer;
-import org.codehaus.jackson.map.JsonSerializer;
-import org.codehaus.jackson.map.SerializerProvider;
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.node.NullNode;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.ObjectCodec;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.node.NullNode;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -93,12 +94,12 @@ public class Ports {
             Ports out = new Ports();
             ObjectCodec oc = jsonParser.getCodec();
             JsonNode node = oc.readTree(jsonParser);
-            for (Iterator<Map.Entry<String, JsonNode>> it = node.getFields(); it.hasNext();) {
+            for (Iterator<Map.Entry<String, JsonNode>> it = node.fields(); it.hasNext();) {
 
                 Map.Entry<String, JsonNode> field = it.next();
                 if (!field.getValue().equals(NullNode.getInstance())) {
-                    String hostIp = field.getValue().get(0).get("HostIp").getTextValue();
-                    String hostPort = field.getValue().get(0).get("HostPort").getTextValue();
+                    String hostIp = field.getValue().get(0).get("HostIp").textValue();
+                    String hostPort = field.getValue().get(0).get("HostPort").textValue();
                     out.addPort(Port.makePort(field.getKey(), hostIp, hostPort));
                 }
             }

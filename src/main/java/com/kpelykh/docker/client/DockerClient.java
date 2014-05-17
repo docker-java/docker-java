@@ -1,5 +1,7 @@
 package com.kpelykh.docker.client;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Preconditions;
 import com.kpelykh.docker.client.model.*;
 import com.kpelykh.docker.client.utils.CompressArchiveUtil;
@@ -9,10 +11,10 @@ import com.sun.jersey.api.client.WebResource.Builder;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.client.filter.LoggingFilter;
-import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.client.apache4.ApacheHttpClient4;
 import com.sun.jersey.client.apache4.ApacheHttpClient4Handler;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -25,14 +27,12 @@ import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,7 +62,7 @@ public class DockerClient {
 	public DockerClient(String serverUrl) {
 		restEndpointUrl = serverUrl + "/v1.11";
 		ClientConfig clientConfig = new DefaultClientConfig();
-		clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
+		//clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
 
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
 		schemeRegistry.register(new Scheme("http", 4243, PlainSocketFactory.getSocketFactory()));
@@ -585,8 +585,8 @@ public class DockerClient {
 
 		try {
 			LOGGER.trace("POST: {}", webResource);
-			JSONObject jsonObject = webResource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).post(JSONObject.class);
-			return jsonObject.getInt("StatusCode");
+			ObjectNode ObjectNode = webResource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).post(ObjectNode.class);
+            return ObjectNode.get("StatusCode").asInt();
 		} catch (UniformInterfaceException exception) {
 			if (exception.getResponse().getStatus() == 404) {
 				throw new NotFoundException(String.format("No such container %s", containerId));
@@ -595,7 +595,7 @@ public class DockerClient {
 			} else {
 				throw new DockerException(exception);
 			}
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			throw new DockerException(e);
 		}
 	}
@@ -765,8 +765,8 @@ public class DockerClient {
 
 		try {
 			LOGGER.trace("POST: {}", webResource);
-			JSONObject jsonObject = webResource.accept("application/vnd.docker.raw-stream").post(JSONObject.class, params);
-			return jsonObject.getString("Id");
+			ObjectNode ObjectNode = webResource.accept("application/vnd.docker.raw-stream").post(ObjectNode.class, params);
+            return ObjectNode.get("Id").asText();
 		} catch (UniformInterfaceException exception) {
 			if (exception.getResponse().getStatus() == 404) {
 				throw new NotFoundException(String.format("No such container %s", commitConfig.getContainer()));
@@ -775,7 +775,7 @@ public class DockerClient {
 			} else {
 				throw new DockerException(exception);
 			}
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			throw new DockerException(e);
 		}
 	}
