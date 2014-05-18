@@ -13,6 +13,7 @@ import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.client.apache4.ApacheHttpClient4;
 import com.sun.jersey.client.apache4.ApacheHttpClient4Handler;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -33,10 +34,13 @@ import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -788,6 +792,16 @@ public class DockerClient {
 	public ClientResponse build(File dockerFolder, String tag) throws DockerException {
 		return this.build(dockerFolder, tag, false);
 	}
+	
+	private static boolean isFileResource(String resource)  {
+        URI uri;
+		try {
+			uri = new URI(resource);
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+        return uri.getScheme() == null || "file".equals(uri.getScheme());
+    }
 
 	public ClientResponse build(File dockerFolder, String tag, boolean noCache) throws DockerException {
 		Preconditions.checkNotNull(dockerFolder, "Folder is null");
@@ -826,19 +840,25 @@ public class DockerClient {
 						throw new DockerException(String.format("Wrong format on line [%s]", cmd));
 					}
 
-					File src = new File(addArgs[1]);
-					if (!src.isAbsolute()) {
-						src = new File(dockerFolder, addArgs[1]).getCanonicalFile();
-					}
+					String resource = addArgs[1];
+					
+					if(isFileResource(resource)) {
+						File src = new File(resource);
+						if (!src.isAbsolute()) {
+							src = new File(dockerFolder, resource).getCanonicalFile();
+						} else {
+							throw new DockerException(String.format("Source file %s must be relative to %s", src, dockerFolder));
+						}
 
-					if (!src.exists()) {
-						throw new DockerException(String.format("Source file %s doesn't exist", src));
-					}
-					if (src.isDirectory()) {
-						filesToAdd.addAll(FileUtils.listFiles(src, null, true));
-					} else {
-						filesToAdd.add(src);
-					}
+						if (!src.exists()) {
+							throw new DockerException(String.format("Source file %s doesn't exist", src));
+						}
+						if (src.isDirectory()) {
+							filesToAdd.addAll(FileUtils.listFiles(src, null, true));
+						} else {
+							filesToAdd.add(src);
+						}
+					} 
 				}
 			}
 

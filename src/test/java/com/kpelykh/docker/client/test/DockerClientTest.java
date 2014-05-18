@@ -619,18 +619,18 @@ public class DockerClientTest extends AbstractDockerClientTest {
 	}
 
 	@Test
-	public void testDockerBuilderAddFile() throws DockerException, IOException {
+	public void testDockerBuilderAddUrl() throws DockerException, IOException {
 		File baseDir = new File(Thread.currentThread().getContextClassLoader()
-				.getResource("testAddFile").getFile());
-		dockerfileBuild(baseDir, "Successfully executed testrun.sh");
+				.getResource("testAddUrl").getFile());
+		dockerfileBuild(baseDir, "docker.io");
 	}
 
-        @Test
-        public void testDockerBuilderAddFileInSubfolder() throws DockerException, IOException {
-                File baseDir = new File(Thread.currentThread().getContextClassLoader()
-                                .getResource("testAddFileInSubfolder").getFile());
-                dockerfileBuild(baseDir, "Successfully executed testrun.sh");
-        }
+    @Test
+    public void testDockerBuilderAddFileInSubfolder() throws DockerException, IOException {
+            File baseDir = new File(Thread.currentThread().getContextClassLoader()
+                            .getResource("testAddFileInSubfolder").getFile());
+            dockerfileBuild(baseDir, "Successfully executed testrun.sh");
+    }
 
         @Test
 	public void testDockerBuilderAddFolder() throws DockerException,
@@ -785,7 +785,7 @@ public class DockerClientTest extends AbstractDockerClientTest {
 		ClientResponse logResponse = dockerClient.logContainer(container
 				.getId());
 
-		assertThat(logResponseStream(logResponse), endsWith(expectedText));
+		assertThat(logResponseStream(logResponse), containsString(expectedText));
 
 		return container.getId();
 	}
