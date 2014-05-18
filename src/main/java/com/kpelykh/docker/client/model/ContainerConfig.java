@@ -285,7 +285,7 @@ public class ContainerConfig {
                 ", privileged=" + privileged +
                 ", workingDir='" + workingDir + '\'' +
                 ", domainName='" + domainName + '\'' +
-                ", onBuild='" + onBuild + '\'' +
+                ", onBuild='" + Arrays.toString(onBuild) + '\'' +
                 '}';
     }
 }
