@@ -17,7 +17,7 @@ class Config {
         final Properties p = new Properties();
 
         try {
-            p.load(DockerClient.class.getResourceAsStream("/docker.io.properties"));
+            p.load(Config.class.getResourceAsStream("/docker.io.properties"));
         } catch (IOException e) {
             throw new DockerException(e);
         }
