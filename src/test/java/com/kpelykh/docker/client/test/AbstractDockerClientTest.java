@@ -1,18 +1,17 @@
 package com.kpelykh.docker.client.test;
 
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.kpelykh.docker.client.DockerClient;
+import com.kpelykh.docker.client.DockerException;
+import com.sun.jersey.api.client.ClientResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.ITestResult;
 
-import com.kpelykh.docker.client.DockerClient;
-import com.kpelykh.docker.client.DockerException;
-import com.sun.jersey.api.client.ClientResponse;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractDockerClientTest extends Assert {
 	
@@ -32,7 +31,8 @@ public abstract class AbstractDockerClientTest extends Assert {
 		dockerClient = new DockerClient(url);
 
 		LOG.info("Creating image 'busybox'");
-		dockerClient.pull("busybox");
+		// need to block until image is pulled completely
+		logResponseStream(dockerClient.pull("busybox"));
 
 		assertNotNull(dockerClient);
 		LOG.info("======================= END OF BEFORETEST =======================\n\n");
@@ -76,28 +76,15 @@ public abstract class AbstractDockerClientTest extends Assert {
 				result.getName());
 	}
 
-	protected String logResponseStream(ClientResponse response) throws IOException {
-		String responseString = DockerClient.asString(response);
+	protected String logResponseStream(ClientResponse response)  {
+		String responseString;
+		try {
+			responseString = DockerClient.asString(response);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 		LOG.info("Container log: {}", responseString);
 		return responseString;
-	}
-	
-	private String getProperty(String name) {
-		String property = System.getProperty(name);
-		if(property == null || property.isEmpty()) throw new RuntimeException("Need to configure '" + name + "' property to run the test. Use command line option -D"+ name +"=... to do so.");
-		return property;
-	}
-	
-	protected String getUsername() {
-		return getProperty("docker.io.username");
-	}
-	
-	protected String getPassword() {
-		return getProperty("docker.io.password");
-	}
-	
-	protected String getEmail() {
-		return getProperty("docker.io.email");
 	}
 
 }

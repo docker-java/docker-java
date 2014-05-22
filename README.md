@@ -31,7 +31,7 @@ listening on TCP port. To allow Docker server to use TCP add the following line 
 More details setting up docket server can be found in official documentation: http://docs.docker.io/en/latest/use/basics/
 
 Now make sure that docker is up:
-    
+
     $ docker -H tcp://127.0.0.1:4243 version
 
     Client version: 0.8.1
@@ -63,12 +63,12 @@ Run build with tests:
 
     Info info = dockerClient.info();
     System.out.print(info);
-    
+
 ###### Search Docker repository:
 
     List<SearchItem> dockerSearch = dockerClient.search("busybox");
     System.out.println("Search returned" + dockerSearch.toString());
-      
+
 ###### Create new Docker container, wait for its start and stop it:
 
     ContainerConfig containerConfig = new ContainerConfig();
@@ -81,7 +81,7 @@ Run build with tests:
     dockerClient.waitContainer(container.id);
 
     dockerClient.stopContainer(container.id);
-    
+
 
 ##### Support for UNIX sockets:
 
@@ -114,3 +114,36 @@ user dockerClient.build(baseDir), where baseDir is a path to folder containing D
 
 For additional examples, please look at [DockerClientTest.java](https://github.com/kpelykh/docker-java/blob/master/src/test/java/com/kpelykh/docker/client/test/DockerClientTest.java "DockerClientTest.java")
 
+## Configuration
+
+There are a couple of configuration items, all of which have sensible defaults:
+
+* `url` The Docker URL, e.g. `http://localhost:4243`.
+* `version` The API version, e.g. `1.11`.
+* `username` Your repository username (required to push containers).
+* `password` Your repository password.
+* `email` Your repository email.
+
+There are three ways to configure, in descending order of precedence:
+
+##### Programatic:
+In your application, e.g.
+
+    DockerClient docker = new DockerClient("http://localhost:4243");
+    docker.setCredentials("dockeruser", "ilovedocker", "dockeruser@github.com");`
+
+##### System Properties:
+E.g.
+
+    java -Ddocker.io.username=kpelykh pkg.Main
+
+##### File System  
+In `$HOME/.docker.io.properties`, e.g.:
+
+    docker.io.username=dockeruser
+
+##### Class Path
+In the class path at `/docker.io.properties`, e.g.:
+
+    docker.io.url=http://localhost:4243
+    docker.io.version=1.11
