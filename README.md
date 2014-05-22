@@ -14,13 +14,9 @@ Developer forum for [docker-java](https://groups.google.com/forum/?hl=de#!forum/
 * Maven 3.0.5
 * Docker daemon running
 
-Maven will run tests during build process. Tests are using localhost instance of Docker, make sure that
-you have Docker running for tests to work or just turn off tests.
+Maven may run tests during build process but tests are disabled by default. The tests are using a localhost instance of Docker, make sure that you have Docker running for tests to work. To run the tests you have to provide your https://www.docker.io/account/login/ information:
 
-If you don't have Docker running locally, you can skip tests with -DskipTests flag set to true:
-
-    $ mvn clean install -DskipTests=true
-
+    $ mvn clean install -DskipTests=false -Ddocker.io.username=... -Ddocker.io.password=... -Ddocker.io.email=...
 
 By default Docker server is using UNIX sockets for communication with the Docker client, however docker-java
 client uses TCP/IP to connect to the Docker server, so you will need to make sure that your Docker server is
