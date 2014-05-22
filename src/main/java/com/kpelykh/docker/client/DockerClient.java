@@ -54,22 +54,31 @@ public class DockerClient {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DockerClient.class);
 
-	private static DockerClient instance;
-	private Client client;
+    private Client client;
 	private String restEndpointUrl;
 	private AuthConfig authConfig;
 
-	public DockerClient() {
-		this("http://localhost:4243");
+	public DockerClient() throws DockerException {
+		this(Config.createConfig());
 	}
 
-	public DockerClient(String serverUrl) {
-		restEndpointUrl = serverUrl + "/v1.11";
+	public DockerClient(String serverUrl) throws DockerException {
+        this(configWithServerUrl(serverUrl));
+    }
+
+    private static Config configWithServerUrl(String serverUrl) throws DockerException {
+        final Config c = Config.createConfig();
+        c.url = URI.create(serverUrl);
+        return c;
+    }
+
+    private DockerClient(Config config) {
+		restEndpointUrl = config.url + "/v" + config.version;
 		ClientConfig clientConfig = new DefaultClientConfig();
 		clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
 
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
-		schemeRegistry.register(new Scheme("http", 4243, PlainSocketFactory.getSocketFactory()));
+		schemeRegistry.register(new Scheme("http", config.url.getPort(), PlainSocketFactory.getSocketFactory()));
 		schemeRegistry.register(new Scheme("https", 443, SSLSocketFactory.getSocketFactory()));
 
 		PoolingClientConnectionManager cm = new PoolingClientConnectionManager(schemeRegistry);
@@ -109,7 +118,6 @@ public class DockerClient {
 	 * Authenticate with the server, useful for checking authentication.
 	 */
 	public void auth() throws DockerException {
-		checkAuthConfig();
 		try {
 			client.resource(restEndpointUrl + "/auth")
 					.header("Content-Type", MediaType.APPLICATION_JSON)
@@ -128,18 +136,28 @@ public class DockerClient {
 		}
 	}
 
-	private AuthConfig authConfig() throws DockerException {
-		checkAuthConfig();
-		return authConfig;
-	}
+    public AuthConfig authConfig() throws DockerException {
+        return authConfig != null
+                ? authConfig
+                : authConfigFromProperties();
+    }
 
-	private void checkAuthConfig() throws DockerException {
-		if (authConfig == null) {
-			throw new DockerException("authentication credentials required");
-		}
-	}
+    private static AuthConfig authConfigFromProperties() throws DockerException {
+        final AuthConfig a = new AuthConfig();
 
-	/**
+        a.setUsername(Config.createConfig().username);
+        a.setPassword(Config.createConfig().password);
+        a.setEmail(Config.createConfig().email);
+
+        if (a.getUsername() == null) {throw new IllegalStateException("username is null");}
+        if (a.getPassword() == null) {throw new IllegalStateException("password is null");}
+        if (a.getEmail() == null) {throw new IllegalStateException("email is null");}
+
+        return a;
+    }
+
+
+    /**
 	 * * MISC API
 	 * *
 	 */
@@ -217,6 +235,9 @@ public class DockerClient {
 			}
 		}
 	}
+	
+	
+	
 
 	/**
 	 * @return The output slurped into a string.
