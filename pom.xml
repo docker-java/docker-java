@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -52,6 +53,8 @@
         <jersey.version>1.18</jersey.version>
         <jersey-apache-client4.version>1.9</jersey-apache-client4.version>
 
+        <jackson-jaxrs.version>2.3.3</jackson-jaxrs.version>
+
         <httpclient.version>4.2.5</httpclient.version>
         <commons-compress.version>1.5</commons-compress.version>
         <commons-io.version>2.3</commons-io.version>
@@ -78,6 +81,11 @@
 
     <dependencies>
         <dependency>
+          <groupId>com.fasterxml.jackson.jaxrs</groupId>
+          <artifactId>jackson-jaxrs-json-provider</artifactId>
+          <version>${jackson-jaxrs.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-core</artifactId>
             <version>${jersey.version}</version>
@@ -87,11 +95,7 @@
             <artifactId>jersey-client</artifactId>
             <version>${jersey.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-json</artifactId>
-            <version>${jersey.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>com.sun.jersey.contribs</groupId>
             <artifactId>jersey-multipart</artifactId>
@@ -210,93 +214,92 @@
 
 
     <build>
-	  <pluginManagement>
-        <plugins>
+        <pluginManagement>
+            <plugins>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>${maven-release-plugin.version}</version>
-            </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>${maven-release-plugin.version}</version>
+                </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
-                <configuration>
-                    <source>${jdk.source}</source>
-                    <target>${jdk.target}</target>
-                    <encoding>ISO-8859-1</encoding>
-                    <debug>${jdk.debug}</debug>
-                    <optimize>${jdk.optimize}</optimize>
-                </configuration>
-            </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                    <configuration>
+                        <source>${jdk.source}</source>
+                        <target>${jdk.target}</target>
+                        <encoding>ISO-8859-1</encoding>
+                        <debug>${jdk.debug}</debug>
+                        <optimize>${jdk.optimize}</optimize>
+                    </configuration>
+                </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>${maven-jar-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>test-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven-jar-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>test-jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
-                <configuration>
-                    <skipTests>${skipTests}</skipTests>
-                </configuration>
-            </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
+                    <configuration>
+                        <skipTests>${skipTests}</skipTests>
+                    </configuration>
+                </plugin>
 
 
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>${cobertura-maven-plugin.version}</version>
-            </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>cobertura-maven-plugin</artifactId>
+                    <version>${cobertura-maven-plugin.version}</version>
+                </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>${maven-antrun-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <tasks>
-                                <echo>*******************************************************************</echo>
-                                <echo>*******************************************************************</echo>
-                                <echo>[project.name] : ${project.name}</echo>
-                                <echo>[project.basedir] : ${project.basedir}</echo>
-                                <echo>[project.version] : ${project.version}</echo>
-                                <echo>[project.artifactId] ${project.artifactId}</echo>
-                                <echo>[project.build.directory] ${project.build.directory}</echo>
-                                <echo>[jdk.source] : ${jdk.source}</echo>
-                                <echo>[jdk.target] : ${jdk.target}</echo>
-                                <echo>[jdk.debug] : ${jdk.debug}</echo>
-                                <echo>[jdk.optimize] : ${jdk.optimize}</echo>
-                                <echo>[source encoding]: ${project.build.sourceEncoding}</echo>
-                                <echo>[M2_HOME] : ${env.M2_HOME}</echo>
-                                <echo>[LocalRepository] : ${settings.localRepository}</echo>
-                                <echo>*******************************************************************</echo>
-                                <echo>*******************************************************************</echo>
-                            </tasks>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>${maven-antrun-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                            <configuration>
+                                <tasks>
+                                    <echo>*******************************************************************</echo>
+                                    <echo>*******************************************************************</echo>
+                                    <echo>[project.name] : ${project.name}</echo>
+                                    <echo>[project.basedir] : ${project.basedir}</echo>
+                                    <echo>[project.version] : ${project.version}</echo>
+                                    <echo>[project.artifactId] ${project.artifactId}</echo>
+                                    <echo>[project.build.directory] ${project.build.directory}</echo>
+                                    <echo>[jdk.source] : ${jdk.source}</echo>
+                                    <echo>[jdk.target] : ${jdk.target}</echo>
+                                    <echo>[jdk.debug] : ${jdk.debug}</echo>
+                                    <echo>[jdk.optimize] : ${jdk.optimize}</echo>
+                                    <echo>[source encoding]: ${project.build.sourceEncoding}</echo>
+                                    <echo>[LocalRepository] : ${settings.localRepository}</echo>
+                                    <echo>*******************************************************************</echo>
+                                    <echo>*******************************************************************</echo>
+                                </tasks>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
 
-        </plugins>
-      </pluginManagement>
+            </plugins>
+        </pluginManagement>
     </build>
 
 </project>
