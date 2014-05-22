@@ -1,27 +1,20 @@
 package com.kpelykh.docker.client.test;
 
 
-import static com.kpelykh.docker.client.DockerClient.asString;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
-
-import java.lang.reflect.Method;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
 import com.kpelykh.docker.client.DockerException;
 import com.kpelykh.docker.client.model.CommitConfig;
 import com.kpelykh.docker.client.model.ContainerConfig;
 import com.kpelykh.docker.client.model.ContainerCreateResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.testng.ITestResult;
+import org.testng.annotations.*;
+
+import java.lang.reflect.Method;
+
+import static com.kpelykh.docker.client.DockerClient.asString;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 // delete here : https://index.docker.io/u/alexec/busybox/delete/
 public class DockerPushTest extends AbstractDockerClientTest {
@@ -29,9 +22,12 @@ public class DockerPushTest extends AbstractDockerClientTest {
 	public static final Logger LOG = LoggerFactory
 			.getLogger(DockerPushTest.class);
 
+    String username;
+
 	@BeforeTest
 	public void beforeTest() throws DockerException {
 		super.beforeTest();
+        username = dockerClient.authConfig().getUsername();
 	}
 	@AfterTest
 	public void afterTest() {
@@ -47,10 +43,10 @@ public class DockerPushTest extends AbstractDockerClientTest {
 	public void afterMethod(ITestResult result) {
 		super.afterMethod(result);
 	}
-	
+
 	@Test
 	public void testPushLatest() throws Exception {
-		setUpCredentials();
+
 		
 		ContainerConfig containerConfig = new ContainerConfig();
 		containerConfig.setImage("busybox");
@@ -67,26 +63,22 @@ public class DockerPushTest extends AbstractDockerClientTest {
 		
 		LOG.info("Commiting container: {}", container.toString());
 		CommitConfig commitConfig = new CommitConfig(container.getId());
-		commitConfig.setRepo(getUsername() + "/busybox");
+
+        commitConfig.setRepo(username + "/busybox");
 		
-		String imageId = dockerClient
-				.commit(commitConfig);
-		
-		logResponseStream(dockerClient.push(getUsername() + "/busybox"));
+		String imageId = dockerClient.commit(commitConfig);
+
+		logResponseStream(dockerClient.push(username + "/busybox"));
 		
 		dockerClient.removeImage(imageId);
 		
-		assertThat(asString(dockerClient.pull(getUsername() + "/busybox")), not(containsString("404")));
+		assertThat(asString(dockerClient.pull(username + "/busybox")), not(containsString("404")));
 	}
 
 	@Test
 	public void testNotExistentImage() throws Exception {
-		setUpCredentials();
-		assertThat(logResponseStream(dockerClient.push(getUsername() + "/xxx")), containsString("error"));
-	}
 
-	private void setUpCredentials() {
-		dockerClient.setCredentials(getUsername(), getPassword(), getEmail());
+		assertThat(logResponseStream(dockerClient.push(username + "/xxx")), containsString("error"));
 	}
 
 	
