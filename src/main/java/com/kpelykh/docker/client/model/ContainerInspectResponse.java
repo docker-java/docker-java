@@ -33,7 +33,7 @@ public class ContainerInspectResponse {
     private ContainerState state;
 
     @JsonProperty("Image")
-    private String image;
+    private String imageId;
 
     @JsonProperty("NetworkSettings")
     private NetworkSettings networkSettings;
@@ -119,12 +119,12 @@ public class ContainerInspectResponse {
         this.state = state;
     }
 
-    public String getImage() {
-        return image;
+    public String getImageId() {
+        return imageId;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImageId(String image) {
+        this.imageId = image;
     }
 
     public NetworkSettings getNetworkSettings() {

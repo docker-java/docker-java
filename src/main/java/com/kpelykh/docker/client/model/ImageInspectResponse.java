@@ -22,7 +22,7 @@ public class ImageInspectResponse {
 
     @JsonProperty("container_config") private ContainerConfig containerConfig;
 
-    @JsonProperty("Size") private int size;
+    @JsonProperty("Size") private long size;
 
     @JsonProperty("docker_version") private String dockerVersion;
 
@@ -76,11 +76,11 @@ public class ImageInspectResponse {
         this.containerConfig = containerConfig;
     }
 
-    public int getSize() {
+    public long getSize() {
         return size;
     }
 
-    public void setSize(int size) {
+    public void setSize(long size) {
         this.size = size;
     }
 

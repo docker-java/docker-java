@@ -30,9 +30,11 @@ public abstract class AbstractDockerClientTest extends Assert {
 		LOG.info("Connecting to Docker server at " + url);
 		dockerClient = new DockerClient(url);
 
-		LOG.info("Creating image 'busybox'");
+		LOG.info("Pulling image 'busybox'");
 		// need to block until image is pulled completely
 		logResponseStream(dockerClient.pull("busybox"));
+		
+		
 
 		assertNotNull(dockerClient);
 		LOG.info("======================= END OF BEFORETEST =======================\n\n");
