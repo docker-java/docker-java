@@ -108,7 +108,7 @@ public class DockerClient {
 		}
 		authConfig = new AuthConfig();
 		authConfig.setUsername(username);
-		authConfig.setPassword(password);
+		authConfig.setPassword(password); 
 		authConfig.setEmail(email);
 	}
 

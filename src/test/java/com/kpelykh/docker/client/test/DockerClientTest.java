@@ -151,6 +151,14 @@ public class DockerClientTest extends AbstractDockerClientTest {
 
 	@Test
 	public void testListContainers() throws DockerException {
+		
+		String testImage = "hackmann/empty";
+		
+		LOG.info("Pulling image 'hackmann/empty'");
+		// need to block until image is pulled completely
+		logResponseStream(dockerClient.pull(testImage));
+		tmpImgs.add(testImage);
+		
 		List<Container> containers = dockerClient.listContainers(true);
 		assertThat(containers, notNullValue());
 		LOG.info("Container List: {}", containers);
@@ -158,18 +166,30 @@ public class DockerClientTest extends AbstractDockerClientTest {
 		int size = containers.size();
 
 		ContainerConfig containerConfig = new ContainerConfig();
-		containerConfig.setImage("busybox");
+		containerConfig.setImage(testImage);
 		containerConfig.setCmd(new String[] { "echo" });
 
 		ContainerCreateResponse container1 = dockerClient
 				.createContainer(containerConfig);
+		
 		assertThat(container1.getId(), not(isEmptyString()));
+
+		ContainerInspectResponse containerInspectResponse = dockerClient.inspectContainer(container1.getId());
+		
+		assertThat(containerInspectResponse.getConfig().getImage(), is(equalTo(testImage)));
+		
+		
 		dockerClient.startContainer(container1.getId());
 		tmpContainers.add(container1.getId());
 		
 		LOG.info("container id: " + container1.getId());
 
-		List containers2 = dockerClient.listContainers(true);
+		List<Container> containers2 = dockerClient.listContainers(true);
+		
+		for(Container container: containers2) {
+			LOG.info("listContainer: id=" + container.getId() +" image=" + container.getImage());
+		}
+		
 		assertThat(size + 1, is(equalTo(containers2.size())));
 		Matcher matcher = hasItem(hasField("id", startsWith(container1.getId())));
 		assertThat(containers2, matcher);
@@ -179,12 +199,12 @@ public class DockerClientTest extends AbstractDockerClientTest {
 		assertThat(filteredContainers.size(), is(equalTo(1)));
 
 		for(Container container: filteredContainers) {
-			LOG.info("container: " + container);
+			LOG.info("filteredContainer: " + container.getImage());
 		}
 		
 		Container container2 = filteredContainers.get(0);
 		assertThat(container2.getCommand(), not(isEmptyString()));
-		assertThat(container2.getImage(), equalTo("busybox:latest"));
+		assertThat(container2.getImage(), equalTo(testImage + ":latest"));
 	}
 
 	/*
@@ -232,7 +252,7 @@ public class DockerClientTest extends AbstractDockerClientTest {
 		assertThat(containerInspectResponse.getId(),
 				startsWith(container.getId()));
 
-		assertThat(containerInspectResponse.getImage(), not(isEmptyString()));
+		assertThat(containerInspectResponse.getImageId(), not(isEmptyString()));
 		assertThat(containerInspectResponse.getState(), is(notNullValue()));
 
 		assertThat(containerInspectResponse.getState().running, is(true));
