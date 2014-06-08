@@ -190,6 +190,19 @@ public class DockerClient {
 			}
 		}
 	}
+	
+	
+	public int ping() throws DockerException {
+		WebResource webResource = client.resource(restEndpointUrl + "/_ping");
+	    
+		try {
+			LOGGER.trace("GET: {}", webResource);
+			ClientResponse resp = webResource.get(ClientResponse.class);
+			return resp.getStatus();
+		} catch (UniformInterfaceException exception) {
+			throw new DockerException(exception);
+		}
+	}
 
 
 	/**
