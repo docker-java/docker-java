@@ -25,10 +25,12 @@ import java.lang.reflect.Method;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.util.List;
+import java.util.Random;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.RandomUtils;
 import org.hamcrest.Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -567,6 +569,16 @@ public class DockerClientTest extends AbstractDockerClientTest {
 		List containers = dockerClient.listContainers(true);
 		Matcher matcher = not(hasItem(hasField("id", startsWith(imageId))));
 		assertThat(containers, matcher);
+	}
+
+	@Test
+	public void testTagImage() throws DockerException, InterruptedException {
+		String tag = String.valueOf(RandomUtils.nextInt(Integer.MAX_VALUE));
+		
+		Integer result = dockerClient.tag("busybox:latest", "docker-java/busybox", tag, false);
+		assertThat(result, equalTo(Integer.valueOf(201)));
+		
+		dockerClient.removeImage("docker-java/busybox:" + tag);
 	}
 
 	/*
