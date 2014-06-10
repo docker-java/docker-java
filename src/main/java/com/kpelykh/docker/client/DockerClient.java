@@ -294,6 +294,36 @@ public class DockerClient {
 	}
 
 	/**
+	 * Tag an image into a repository
+	 *
+	 * @param image       the local image to tag (either a name or an id)
+	 * @param repository  the repository to tag in
+	 * @param tag         any tag for this image
+	 * @param force       (not documented)
+	 * @return the HTTP status code (201 for success)
+	 */
+	public int tag(String image, String repository, String tag, boolean force) throws DockerException {
+		Preconditions.checkNotNull(image, "image was not specified");
+		Preconditions.checkNotNull(repository, "repository was not specified");
+		Preconditions.checkNotNull(tag, " tag was not provided");
+
+		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
+		params.add("repo", repository);
+		params.add("tag", tag);
+		params.add("force", String.valueOf(force));
+
+		WebResource webResource = client.resource(restEndpointUrl + "/images/" + image + "/tag").queryParams(params);
+	    
+		try {
+			LOGGER.trace("POST: {}", webResource);
+			ClientResponse resp = webResource.post(ClientResponse.class);
+			return resp.getStatus();
+		} catch (UniformInterfaceException exception) {
+			throw new DockerException(exception);
+		}
+	}
+
+	/**
 	 * Create an image by importing the given stream of a tar file.
 	 *
 	 * @param repository  the repository to import to
