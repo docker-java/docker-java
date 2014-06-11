@@ -1,305 +1,392 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>7</version>
-    </parent>
+	<!-- <parent> -->
+	<!-- <groupId>org.sonatype.oss</groupId> -->
+	<!-- <artifactId>oss-parent</artifactId> -->
+	<!-- <version>7</version> -->
+	<!-- </parent> -->
 
-    <groupId>com.kpelykh</groupId>
-    <artifactId>docker-java</artifactId>
-    <packaging>jar</packaging>
-    <version>0.8.2-SNAPSHOT</version>
+	<groupId>com.github.docker-java</groupId>
+	<artifactId>docker-java</artifactId>
+	<packaging>jar</packaging>
+	<version>0.8.2-SNAPSHOT</version>
 
-    <name>docker-java</name>
-    <url>https://github.com/kpelykh/docker-java</url>
-    <description>Java API Client for Docker</description>
+	<name>docker-java</name>
+	<url>https://github.com/docker-java/docker-java</url>
+	<description>Java API Client for Docker</description>
 
-    <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 
-    <scm>
-        <connection>scm:git:git@github.com:kpelykh/docker-java.git</connection>
-        <url>git@github.com:kpelykh/docker-java.git</url>
-        <developerConnection>scm:git:git@github.com:kpelykh/docker-java.git</developerConnection>
-  </scm>
+	<scm>
+		<connection>scm:git:git@github.com:docker-java/docker-java.git</connection>
+		<url>git@github.com:docker-java/docker-java.git</url>
+		<developerConnection>scm:git:git@github.com:docker-java/docker-java.git</developerConnection>
+	</scm>
 
-    <developers>
-        <developer>
-            <id>kpelykh</id>
-            <name>Konstantin Pelykh</name>
-            <email>kpelykh@gmail.com</email>
-        </developer>
-    </developers>
+	<developers>
+		<developer>
+			<id>kpelykh</id>
+			<name>Konstantin Pelykh</name>
+			<email>kpelykh@gmail.com</email>
+		</developer>
+	</developers>
 
-    <properties>
-        <skipTests>true</skipTests>
+	<properties>
+		<skipTests>true</skipTests>
 
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdk.debug>true</jdk.debug>
-        <jdk.optimize>false</jdk.optimize>
-        <jdk.source>1.6</jdk.source>
-        <jdk.target>1.6</jdk.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jdk.debug>true</jdk.debug>
+		<jdk.optimize>false</jdk.optimize>
+		<jdk.source>1.6</jdk.source>
+		<jdk.target>1.6</jdk.target>
 
-        <version.slf4j>1.6.1</version.slf4j>
+		<version.slf4j>1.6.1</version.slf4j>
 
-        <jersey.version>1.18</jersey.version>
-        <jersey-apache-client4.version>1.9</jersey-apache-client4.version>
+		<jersey.version>1.18</jersey.version>
+		<jersey-apache-client4.version>1.9</jersey-apache-client4.version>
 
-        <jackson-jaxrs.version>2.3.3</jackson-jaxrs.version>
+		<jackson-jaxrs.version>2.3.3</jackson-jaxrs.version>
 
-        <httpclient.version>4.2.5</httpclient.version>
-        <commons-compress.version>1.5</commons-compress.version>
-        <commons-io.version>2.3</commons-io.version>
-        <commons-lang.version>2.6</commons-lang.version>
-        <slf4j-api.version>1.7.5</slf4j-api.version>
-        <jsr305.version>1.3.9</jsr305.version>
-        <jnr.unixsocket.version>0.3</jnr.unixsocket.version>
+		<httpclient.version>4.2.5</httpclient.version>
+		<commons-compress.version>1.5</commons-compress.version>
+		<commons-io.version>2.3</commons-io.version>
+		<commons-lang.version>2.6</commons-lang.version>
+		<slf4j-api.version>1.7.5</slf4j-api.version>
+		<jsr305.version>1.3.9</jsr305.version>
+		<jnr.unixsocket.version>0.3</jnr.unixsocket.version>
 
-        <!--test dependencies -->
-        <version.logback>1.0.1</version.logback>
-        <version.testng>5.12.1</version.testng>
-        <hamcrest.library.version>1.3</hamcrest.library.version>
-        <hamcrest.jpa-matchers>1.6</hamcrest.jpa-matchers>
-        <lambdaj.version>2.3.3</lambdaj.version>
-
-
-        <maven-jar-plugin.version>2.2</maven-jar-plugin.version>
-        <maven-compiler-plugin.version>2.3.1</maven-compiler-plugin.version>
-        <maven-release-plugin.version>2.3.1</maven-release-plugin.version>
-        <maven-surefire-plugin.version>2.8.1</maven-surefire-plugin.version>
-        <cobertura-maven-plugin.version>2.5.1</cobertura-maven-plugin.version>
-        <maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
-    </properties>
-
-    <dependencies>
-        <dependency>
-          <groupId>com.fasterxml.jackson.jaxrs</groupId>
-          <artifactId>jackson-jaxrs-json-provider</artifactId>
-          <version>${jackson-jaxrs.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-core</artifactId>
-            <version>${jersey.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-client</artifactId>
-            <version>${jersey.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sun.jersey.contribs</groupId>
-            <artifactId>jersey-multipart</artifactId>
-            <version>${jersey.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jersey.contribs</groupId>
-            <artifactId>jersey-apache-client4</artifactId>
-            <version>${jersey-apache-client4.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>${httpclient.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-compress</artifactId>
-            <version>${commons-compress.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>${commons-lang.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${commons-io.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.jnr</groupId>
-            <artifactId>jnr-unixsocket</artifactId>
-            <version>${jnr.unixsocket.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j-api.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jul-to-slf4j</artifactId>
-            <version>${slf4j-api.version}</version>
-        </dependency>
-
-        <!-- /// Test /////////////////////////// -->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>${version.logback}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${version.logback}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>${version.testng}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-library</artifactId>
-            <version>${hamcrest.library.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.googlecode.lambdaj</groupId>
-            <artifactId>lambdaj</artifactId>
-            <version>${lambdaj.version}</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.hamcrest</groupId>
-                    <artifactId>hamcrest-all</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.testinfected.hamcrest-matchers</groupId>
-            <artifactId>jpa-matchers</artifactId>
-            <version>${hamcrest.jpa-matchers}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.github.jnr</groupId>
-                <artifactId>jffi</artifactId>
-                <version>1.2.7</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.jnr</groupId>
-                <artifactId>jffi</artifactId>
-                <classifier>native</classifier>
-                <version>1.2.7</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+		<!--test dependencies -->
+		<version.logback>1.0.1</version.logback>
+		<version.testng>5.12.1</version.testng>
+		<hamcrest.library.version>1.3</hamcrest.library.version>
+		<hamcrest.jpa-matchers>1.6</hamcrest.jpa-matchers>
+		<lambdaj.version>2.3.3</lambdaj.version>
 
 
-    <build>
-        <pluginManagement>
-            <plugins>
+		<maven-jar-plugin.version>2.2</maven-jar-plugin.version>
+		<maven-compiler-plugin.version>2.3.1</maven-compiler-plugin.version>
+		<maven-release-plugin.version>2.3.1</maven-release-plugin.version>
+		<maven-surefire-plugin.version>2.8.1</maven-surefire-plugin.version>
+		<cobertura-maven-plugin.version>2.5.1</cobertura-maven-plugin.version>
+		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
+	</properties>
 
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-release-plugin</artifactId>
-                    <version>${maven-release-plugin.version}</version>
-                </plugin>
+	<dependencies>
+		<dependency>
+			<groupId>com.fasterxml.jackson.jaxrs</groupId>
+			<artifactId>jackson-jaxrs-json-provider</artifactId>
+			<version>${jackson-jaxrs.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-core</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
 
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven-compiler-plugin.version}</version>
-                    <configuration>
-                        <source>${jdk.source}</source>
-                        <target>${jdk.target}</target>
-                        <encoding>ISO-8859-1</encoding>
-                        <debug>${jdk.debug}</debug>
-                        <optimize>${jdk.optimize}</optimize>
-                    </configuration>
-                </plugin>
+		<dependency>
+			<groupId>com.sun.jersey.contribs</groupId>
+			<artifactId>jersey-multipart</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey.contribs</groupId>
+			<artifactId>jersey-apache-client4</artifactId>
+			<version>${jersey-apache-client4.version}</version>
+		</dependency>
 
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>${maven-jar-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>test-jar</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>${httpclient.version}</version>
+		</dependency>
 
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${maven-surefire-plugin.version}</version>
-                    <configuration>
-                        <skipTests>${skipTests}</skipTests>
-                    </configuration>
-                </plugin>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-compress</artifactId>
+			<version>${commons-compress.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>${commons-lang.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons-io.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.jnr</groupId>
+			<artifactId>jnr-unixsocket</artifactId>
+			<version>${jnr.unixsocket.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j-api.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+			<version>${slf4j-api.version}</version>
+		</dependency>
+
+		<!-- /// Test /////////////////////////// -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>${version.logback}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${version.logback}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>${version.testng}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-library</artifactId>
+			<version>${hamcrest.library.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.googlecode.lambdaj</groupId>
+			<artifactId>lambdaj</artifactId>
+			<version>${lambdaj.version}</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.hamcrest</groupId>
+					<artifactId>hamcrest-all</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.testinfected.hamcrest-matchers</groupId>
+			<artifactId>jpa-matchers</artifactId>
+			<version>${hamcrest.jpa-matchers}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.github.jnr</groupId>
+				<artifactId>jffi</artifactId>
+				<version>1.2.7</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.jnr</groupId>
+				<artifactId>jffi</artifactId>
+				<classifier>native</classifier>
+				<version>1.2.7</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>cobertura-maven-plugin</artifactId>
-                    <version>${cobertura-maven-plugin.version}</version>
-                </plugin>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
 
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-antrun-plugin</artifactId>
-                    <version>${maven-antrun-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <phase>validate</phase>
-                            <goals>
-                                <goal>run</goal>
-                            </goals>
-                            <configuration>
-                                <tasks>
-                                    <echo>*******************************************************************</echo>
-                                    <echo>*******************************************************************</echo>
-                                    <echo>[project.name] : ${project.name}</echo>
-                                    <echo>[project.basedir] : ${project.basedir}</echo>
-                                    <echo>[project.version] : ${project.version}</echo>
-                                    <echo>[project.artifactId] ${project.artifactId}</echo>
-                                    <echo>[project.build.directory] ${project.build.directory}</echo>
-                                    <echo>[jdk.source] : ${jdk.source}</echo>
-                                    <echo>[jdk.target] : ${jdk.target}</echo>
-                                    <echo>[jdk.debug] : ${jdk.debug}</echo>
-                                    <echo>[jdk.optimize] : ${jdk.optimize}</echo>
-                                    <echo>[source encoding]: ${project.build.sourceEncoding}</echo>
-                                    <echo>[LocalRepository] : ${settings.localRepository}</echo>
-                                    <echo>*******************************************************************</echo>
-                                    <echo>*******************************************************************</echo>
-                                </tasks>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
+	<build>
+		<pluginManagement>
+			<plugins>
 
-            </plugins>
-        </pluginManagement>
-    </build>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>${maven-release-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven-compiler-plugin.version}</version>
+					<configuration>
+						<source>${jdk.source}</source>
+						<target>${jdk.target}</target>
+						<encoding>ISO-8859-1</encoding>
+						<debug>${jdk.debug}</debug>
+						<optimize>${jdk.optimize}</optimize>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>${maven-jar-plugin.version}</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>test-jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>${maven-surefire-plugin.version}</version>
+					<configuration>
+						<skipTests>${skipTests}</skipTests>
+					</configuration>
+				</plugin>
+
+
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>cobertura-maven-plugin</artifactId>
+					<version>${cobertura-maven-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>${maven-antrun-plugin.version}</version>
+					<executions>
+						<execution>
+							<phase>validate</phase>
+							<goals>
+								<goal>run</goal>
+							</goals>
+							<configuration>
+								<tasks>
+									<echo>*******************************************************************</echo>
+									<echo>*******************************************************************</echo>
+									<echo>[project.name] : ${project.name}</echo>
+									<echo>[project.basedir] : ${project.basedir}</echo>
+									<echo>[project.version] : ${project.version}</echo>
+									<echo>[project.artifactId] ${project.artifactId}</echo>
+									<echo>[project.build.directory] ${project.build.directory}</echo>
+									<echo>[jdk.source] : ${jdk.source}</echo>
+									<echo>[jdk.target] : ${jdk.target}</echo>
+									<echo>[jdk.debug] : ${jdk.debug}</echo>
+									<echo>[jdk.optimize] : ${jdk.optimize}</echo>
+									<echo>[source encoding]: ${project.build.sourceEncoding}</echo>
+									<echo>[LocalRepository] : ${settings.localRepository}</echo>
+									<echo>*******************************************************************</echo>
+									<echo>*******************************************************************</echo>
+								</tasks>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.sonatype.plugins</groupId>
+					<artifactId>nexus-staging-maven-plugin</artifactId>
+					<version>1.6.2</version>
+					<extensions>true</extensions>
+					<configuration>
+						<serverId>ossrh</serverId>
+						<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+						<autoReleaseAfterClose>true</autoReleaseAfterClose>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.5</version>
+					<configuration>
+						<autoVersionSubmodules>true</autoVersionSubmodules>
+						<useReleaseProfile>false</useReleaseProfile>
+						<releaseProfiles>release</releaseProfiles>
+						<goals>deploy nexus-staging:release</goals>
+					</configuration>
+				</plugin>
+
+
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>2.2.1</version>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>2.9.1</version>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>
