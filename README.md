@@ -45,11 +45,12 @@ Run build with tests:
 ## Docker-Java maven dependency:
 
     <dependency>
-          <groupId>com.kpelykh</groupId>
+          <groupId>com.github.docker-java</groupId>
           <artifactId>docker-java</artifactId>
-          <version>0.8.1</version>
+          <version>0.8.2</version>
     </dependency>
 
+Latest SNAPSHOT is available from maven repo: https://oss.sonatype.org/content/groups/public   
 
 ## Example code snippets:
 
