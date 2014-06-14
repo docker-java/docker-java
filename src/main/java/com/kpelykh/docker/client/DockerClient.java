@@ -375,11 +375,18 @@ public class DockerClient {
 	 * Remove an image, deleting any tags it might have.
 	 */
 	public void removeImage(String imageId) throws DockerException {
+		removeImage(imageId, true);
+	}
+
+	/**
+	 * Remove an image.
+	 */
+	public void removeImage(String imageId, boolean force) throws DockerException {
 		Preconditions.checkState(!StringUtils.isEmpty(imageId), "Image ID can't be empty");
 
 		try {
 			WebResource webResource = client.resource(restEndpointUrl + "/images/" + imageId)
-					.queryParam("force", "true");
+					.queryParam("force", force ? "true" : "false");
 			LOGGER.trace("DELETE: {}", webResource);
 			webResource.delete();
 		} catch (UniformInterfaceException exception) {
@@ -612,9 +619,21 @@ public class DockerClient {
 	}
 
 	public void removeContainer(String containerId, boolean removeVolumes) throws DockerException {
+		this.removeContainer(containerId, removeVolumes, false);
+	}
+
+	/**
+	 * Remove the container id from the file system.
+	 * @param containerId The container id to remove.
+	 * @param removeVolumes Flag indicating whether to remove the volumes associated to the container.
+	 * @param force Flag indicating whether to remove the container even if it was running
+	 * @throws DockerException if an error occurs
+	*/
+	 public void removeContainer(String containerId, boolean removeVolumes, boolean force) throws DockerException {
 		Preconditions.checkState(!StringUtils.isEmpty(containerId), "Container ID can't be empty");
 
-		WebResource webResource = client.resource(restEndpointUrl + "/containers/" + containerId).queryParam("v", removeVolumes ? "1" : "0");
+		WebResource webResource = client.resource(restEndpointUrl + "/containers/" + containerId)
+			.queryParam("v", removeVolumes ? "1" : "0").queryParam("force", force ? "1" : "0");
 
 		try {
 			LOGGER.trace("DELETE: {}", webResource);
@@ -636,7 +655,6 @@ public class DockerClient {
 			}
 		}
 	}
-
 
 	public void removeContainers(List<String> containers, boolean removeVolumes) throws DockerException {
 		Preconditions.checkNotNull(containers, "List of containers can't be null");
