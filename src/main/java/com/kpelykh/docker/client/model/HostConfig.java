@@ -44,6 +44,9 @@ public class HostConfig {
     @JsonProperty("VolumesFrom")
     private String volumesFrom;
     
+    @JsonProperty("NetworkMode")
+    private String networkMode;
+
     public HostConfig() {
         this.binds = null;
     }
@@ -129,6 +132,14 @@ public class HostConfig {
 		return volumesFrom;
 	}
     
+    public void setNetworkMode(String networkMode) {
+		this.networkMode = networkMode;
+	}
+    
+    public String getNetworkMode() {
+		return networkMode;
+	}
+    
     @Override
     public String toString() {
         return "HostConfig{" +
@@ -140,6 +151,7 @@ public class HostConfig {
                 ", privileged=" + privileged +
                 ", publishAllPorts=" + publishAllPorts +
                 ", dns='" + dns + '\'' +
+				", networkMode='" + networkMode + '\'' +
                 '}';
     }
 
