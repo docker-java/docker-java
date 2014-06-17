@@ -73,6 +73,16 @@ public class CreateContainerCmd extends AbstrDockerCmd<CreateContainerCmd, Conta
 		return this;
 	}
 	
+	public CreateContainerCmd withExposedPorts(String... exposedPorts) {
+		Preconditions.checkNotNull(exposedPorts, "exposedPorts was not specified");
+		HashMap<String,String> ports = new HashMap<String,String>();
+		for(String exposedPort: exposedPorts) {
+			ports.put(exposedPort, "");
+		}
+		this.containerCreateConfig.withExposedPorts(ports);
+		return this;
+	}
+	
 	protected ContainerCreateResponse impl() {
 		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
 		if (name != null) {

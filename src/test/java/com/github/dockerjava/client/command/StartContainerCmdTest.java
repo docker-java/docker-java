@@ -10,6 +10,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.startsWith;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
 
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -86,7 +87,7 @@ public class StartContainerCmdTest extends AbstractDockerClientTest {
 		
 		ContainerCreateResponse container = dockerClient
 				.createContainerCmd("busybox")
-				.withCmd(new String[] { "true" }).exec();
+				.withCmd("true").withExposedPorts("22/tcp").exec();
 
 		LOG.info("Created container {}", container.toString());
 
@@ -103,9 +104,12 @@ public class StartContainerCmdTest extends AbstractDockerClientTest {
 
 		containerInspectResponse = dockerClient.inspectContainerCmd(container
 				.getId()).exec();
+		
+		assertThat(containerInspectResponse.getConfig().getExposedPorts().keySet(),
+				contains("22/tcp"));
 
 		assertThat(containerInspectResponse.getHostConfig().getPortBindings().getAllPorts(),
-				contains(new Ports.Port("tcp", "22", "", "11022")));
+				contains(new Ports.Port("tcp", "22", "0.0.0.0", "11022")));
 		
 		tmpContainers.add(container.getId());
 	}

@@ -65,6 +65,12 @@ public class CreateContainerConfig {
     public Map<String, ?> getExposedPorts() {
         return exposedPorts;
     }
+    
+    public CreateContainerConfig withExposedPorts(Map<String, ?> exposedPorts) {
+        this.exposedPorts = exposedPorts;
+        return this;
+    }
+
 
     public boolean isDisableNetwork() {
         return disableNetwork;
