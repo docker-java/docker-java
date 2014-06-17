@@ -93,14 +93,14 @@ public class Ports {
 
             Ports out = new Ports();
             ObjectCodec oc = jsonParser.getCodec();
-            JsonNode node = oc.readTree(jsonParser);
-            for (Iterator<Map.Entry<String, JsonNode>> it = node.fields(); it.hasNext();) {
-
-                Map.Entry<String, JsonNode> field = it.next();
-                if (!field.getValue().equals(NullNode.getInstance())) {
-                    String hostIp = field.getValue().get(0).get("HostIp").textValue();
-                    String hostPort = field.getValue().get(0).get("HostPort").textValue();
-                    out.addPort(Port.makePort(field.getKey(), hostIp, hostPort));
+            JsonNode portNodes = oc.readTree(jsonParser);
+            if (portNodes.isArray()) {
+                for (JsonNode portNode : portNodes) {
+                    String hostIp = portNode.get("IP").textValue();
+                    String hostPort = portNode.get("PublicPort").asText();
+                    String privatePort = portNode.get("PrivatePort").asText();
+                    String scheme = portNode.get("Type").textValue();
+                    out.addPort(new Port(scheme, privatePort, hostIp, hostPort));
                 }
             }
             return out;
@@ -113,18 +113,17 @@ public class Ports {
         public void serialize(Ports ports, JsonGenerator jsonGen,
                               SerializerProvider serProvider) throws IOException, JsonProcessingException {
 
-            jsonGen.writeStartObject();//{
+            jsonGen.writeStartArray();
             for(String portKey : ports.getAllPorts().keySet()){
                 Port p = ports.getAllPorts().get(portKey);
-                jsonGen.writeFieldName(p.getPort() + "/" + p.getScheme());
-                jsonGen.writeStartArray();
                 jsonGen.writeStartObject();
-                jsonGen.writeStringField("HostIp", p.hostIp);
-                jsonGen.writeStringField("HostPort", p.hostPort);
+                jsonGen.writeStringField("IP", p.hostIp);
+                jsonGen.writeNumberField("PrivatePort", Integer.parseInt(p.getPort()));
+                jsonGen.writeNumberField("PublicPort", Integer.parseInt(p.getHostPort()));
+                jsonGen.writeStringField("Type", p.getScheme());
                 jsonGen.writeEndObject();
-                jsonGen.writeEndArray();
             }
-            jsonGen.writeEndObject();//}
+            jsonGen.writeEndArray();
         }
 
     }
