@@ -20,8 +20,9 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
-import com.github.dockerjava.client.model.ContainerCreateResponse;
-import com.github.dockerjava.client.model.ContainerInspectResponse;
+import com.github.dockerjava.client.model.*;
+
+
 
 public class StartContainerCmdTest extends AbstractDockerClientTest {
 
@@ -81,6 +82,35 @@ public class StartContainerCmdTest extends AbstractDockerClientTest {
 	}
 	
 	@Test
+	public void startContainerWithPortBindings() throws DockerException {
+		
+		ContainerCreateResponse container = dockerClient
+				.createContainerCmd("busybox")
+				.withCmd(new String[] { "true" }).exec();
+
+		LOG.info("Created container {}", container.toString());
+
+		assertThat(container.getId(), not(isEmptyString()));
+
+		ContainerInspectResponse containerInspectResponse = dockerClient
+				.inspectContainerCmd(container.getId()).exec();
+
+		Ports portBindings = new Ports();
+		
+		portBindings.addPort("22/tcp", "", "11022");
+
+		dockerClient.startContainerCmd(container.getId()).withPortBindings(portBindings).exec();
+
+		containerInspectResponse = dockerClient.inspectContainerCmd(container
+				.getId()).exec();
+
+		assertThat(containerInspectResponse.getHostConfig().getPortBindings().getAllPorts(),
+				contains(new Ports.Port("tcp", "22", "", "11022")));
+		
+		tmpContainers.add(container.getId());
+	}
+	
+	@Test
 	public void startContainer() throws DockerException {
 
 		ContainerCreateResponse container = dockerClient
@@ -105,10 +135,10 @@ public class StartContainerCmdTest extends AbstractDockerClientTest {
 		assertThat(containerInspectResponse.getImageId(), not(isEmptyString()));
 		assertThat(containerInspectResponse.getState(), is(notNullValue()));
 
-		assertThat(containerInspectResponse.getState().running, is(true));
+		assertThat(containerInspectResponse.getState().isRunning(), is(true));
 
-		if (!containerInspectResponse.getState().running) {
-			assertThat(containerInspectResponse.getState().exitCode,
+		if (!containerInspectResponse.getState().isRunning()) {
+			assertThat(containerInspectResponse.getState().getExitCode(),
 					is(equalTo(0)));
 		}
 

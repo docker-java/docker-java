@@ -1,6 +1,7 @@
 package com.github.dockerjava.client.model;
 
 
+import java.util.Arrays;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -75,141 +76,69 @@ public class ContainerInspectResponse {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getCreated() {
         return created;
-    }
-
-    public void setCreated(String created) {
-        this.created = created;
     }
 
     public String getPath() {
         return path;
     }
 
-    public void setPath(String path) {
-        this.path = path;
-    }
-
     public String[] getArgs() {
         return args;
-    }
-
-    public void setArgs(String[] args) {
-        this.args = args;
     }
 
     public ContainerConfig getConfig() {
         return config;
     }
 
-    public void setConfig(ContainerConfig config) {
-        this.config = config;
-    }
-
     public ContainerState getState() {
         return state;
-    }
-
-    public void setState(ContainerState state) {
-        this.state = state;
     }
 
     public String getImageId() {
         return imageId;
     }
 
-    public void setImageId(String image) {
-        this.imageId = image;
-    }
-
     public NetworkSettings getNetworkSettings() {
         return networkSettings;
-    }
-
-    public void setNetworkSettings(NetworkSettings networkSettings) {
-        this.networkSettings = networkSettings;
     }
 
     public String getSysInitPath() {
         return sysInitPath;
     }
 
-    public void setSysInitPath(String sysInitPath) {
-        this.sysInitPath = sysInitPath;
-    }
-
     public String getResolvConfPath() {
         return resolvConfPath;
-    }
-
-    public void setResolvConfPath(String resolvConfPath) {
-        this.resolvConfPath = resolvConfPath;
     }
 
     public Map<String, String> getVolumes() {
         return volumes;
     }
 
-    public void setVolumes(Map<String, String> volumes) {
-        this.volumes = volumes;
-    }
-
     public Map<String, Boolean> getVolumesRW() {
         return volumesRW;
-    }
-
-    public void setVolumesRW(Map<String, Boolean> volumesRW) {
-        this.volumesRW = volumesRW;
     }
 
     public String getHostnamePath() {
         return hostnamePath;
     }
 
-    public void setHostnamePath(String hostnamePath) {
-        this.hostnamePath = hostnamePath;
-    }
-
     public String getHostsPath() {
         return hostsPath;
-    }
-
-    public void setHostsPath(String hostsPath) {
-        this.hostsPath = hostsPath;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getDriver() {
         return driver;
-    }
-
-    public void setDriver(String driver) {
-        this.driver = driver;
     }
 
     public HostConfig getHostConfig() {
         return hostConfig;
     }
-
-    public void setHostConfig(HostConfig hostConfig) {
-        this.hostConfig = hostConfig;
-    }
-    
-    public void setExecDriver(String execDriver) {
-		this.execDriver = execDriver;
-	}
     
     public String getExecDriver() {
 		return execDriver;
@@ -218,22 +147,43 @@ public class ContainerInspectResponse {
     public String getMountLabel() {
 		return mountLabel;
 	}
-    
-    public void setMountLabel(String mountLabel) {
-		this.mountLabel = mountLabel;
-	}
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public class NetworkSettings {
 
-        @JsonProperty("IPAddress") public String ipAddress;
-        @JsonProperty("IPPrefixLen") public int ipPrefixLen;
-        @JsonProperty("Gateway") public String gateway;
-        @JsonProperty("Bridge") public String bridge;
-        @JsonProperty("PortMapping") public Map<String,Map<String, String>> portMapping;
-        @JsonProperty("Ports") public Ports ports;
+        @JsonProperty("IPAddress") private String ipAddress;
+        @JsonProperty("IPPrefixLen") private int ipPrefixLen;
+        @JsonProperty("Gateway") private String gateway;
+        @JsonProperty("Bridge") private String bridge;
+        @JsonProperty("PortMapping") private Map<String,Map<String, String>> portMapping;
+        @JsonProperty("Ports") private Ports ports;
+        
+        public String getIpAddress() {
+			return ipAddress;
+		}
 
-        @Override
+		public int getIpPrefixLen() {
+			return ipPrefixLen;
+		}
+
+		public String getGateway() {
+			return gateway;
+		}
+
+		public String getBridge() {
+			return bridge;
+		}
+
+		public Map<String, Map<String, String>> getPortMapping() {
+			return portMapping;
+		}
+
+		public Ports getPorts() {
+			return ports;
+		}
+
+
+		@Override
         public String toString() {
             return "NetworkSettings{" +
                     "ports=" + ports +
@@ -249,14 +199,38 @@ public class ContainerInspectResponse {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public class ContainerState {
 
-        @JsonProperty("Running") public boolean running;
-        @JsonProperty("Paused") public boolean paused;
-        @JsonProperty("Pid") public int pid;
-        @JsonProperty("ExitCode") public int exitCode;
-        @JsonProperty("StartedAt") public String startedAt;
+        @JsonProperty("Running") private boolean running;
+        @JsonProperty("Paused") private boolean paused;
+        @JsonProperty("Pid") private int pid;
+        @JsonProperty("ExitCode") private int exitCode;
+        @JsonProperty("StartedAt") private String startedAt;
         @JsonProperty("FinishedAt") private String finishedAt;
+        
+        public boolean isRunning() {
+			return running;
+		}
 
-        @Override
+		public boolean isPaused() {
+			return paused;
+		}
+
+		public int getPid() {
+			return pid;
+		}
+
+		public int getExitCode() {
+			return exitCode;
+		}
+
+		public String getStartedAt() {
+			return startedAt;
+		}
+
+		public String getFinishedAt() {
+			return finishedAt;
+		}
+
+		@Override
         public String toString() {
             return "ContainerState{" +
                     "running=" + running +
@@ -267,6 +241,103 @@ public class ContainerInspectResponse {
                     ", finishedAt='" + finishedAt + '\'' +
                     '}';
         }
+    }
+    
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public class HostConfig {
+
+        @JsonProperty("Binds")
+        private String[] binds;
+        
+        @JsonProperty("LxcConf")
+        private LxcConf[] lxcConf;
+        
+        @JsonProperty("PortBindings")
+        private Ports portBindings;
+        
+        @JsonProperty("PublishAllPorts")
+        private boolean publishAllPorts;
+        
+        @JsonProperty("Privileged")
+        private boolean privileged;
+        
+        @JsonProperty("Dns")
+        private String dns;
+        
+        @JsonProperty("VolumesFrom")
+        private String volumesFrom;
+
+        @JsonProperty("ContainerIDFile")
+        private String containerIDFile;
+        
+        @JsonProperty("DnsSearch")
+        private String dnsSearch;
+        
+        @JsonProperty("Links")
+        private String[] links;
+
+        @JsonProperty("NetworkMode")
+        private String networkMode;
+        
+        public String[] getBinds() {
+			return binds;
+		}
+
+        public LxcConf[] getLxcConf() {
+			return lxcConf;
+		}
+
+		public Ports getPortBindings() {
+			return portBindings;
+		}
+
+		public boolean isPublishAllPorts() {
+			return publishAllPorts;
+		}
+
+		public boolean isPrivileged() {
+			return privileged;
+		}
+
+		public String getDns() {
+			return dns;
+		}
+
+		public String getVolumesFrom() {
+			return volumesFrom;
+		}
+
+		public String getContainerIDFile() {
+			return containerIDFile;
+		}
+
+		public String getDnsSearch() {
+			return dnsSearch;
+		}
+
+		public String[] getLinks() {
+			return links;
+		}
+
+		public String getNetworkMode() {
+			return networkMode;
+		}
+
+		@Override
+        public String toString() {
+            return "HostConfig{" +
+                    "binds=" + Arrays.toString(binds) +
+                    ", containerIDFile='" + containerIDFile + '\'' +
+                    ", lxcConf=" + Arrays.toString(lxcConf) +
+                    ", links=" + Arrays.toString(links) +
+                    ", portBindings=" + portBindings +
+                    ", privileged=" + privileged +
+                    ", publishAllPorts=" + publishAllPorts +
+                    ", networkMode=" + networkMode +
+                    ", dns='" + dns + '\'' +
+                    '}';
+        }
+
     }
 
 }

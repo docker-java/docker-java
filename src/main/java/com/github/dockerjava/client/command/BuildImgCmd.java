@@ -35,7 +35,7 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 	
 	private File dockerFolder;
 	private String tag;
-	private boolean noCache= false;
+	private boolean noCache;
 	
 	
 	public BuildImgCmd(File dockerFolder) {

@@ -211,15 +211,11 @@ public class BuildImageCmdTest extends AbstractDockerClientTest {
 				.inspectContainerCmd(container.getId()).exec();
 
 		assertThat(containerInspectResponse.getId(), notNullValue());
-		assertThat(containerInspectResponse.getNetworkSettings().ports,
+		assertThat(containerInspectResponse.getNetworkSettings().getPorts(),
 				notNullValue());
 
 		// No use as such if not running on the server
-		for (String portstr : containerInspectResponse.getNetworkSettings().ports
-				.getAllPorts().keySet()) {
-
-			Ports.Port p = containerInspectResponse.getNetworkSettings().ports
-					.getAllPorts().get(portstr);
+		for (Ports.Port p : containerInspectResponse.getNetworkSettings().getPorts().getAllPorts()) {
 			int port = Integer.valueOf(p.getHostPort());
 			LOG.info("Checking port {} is open", port);
 			assertThat(available(port), is(false));

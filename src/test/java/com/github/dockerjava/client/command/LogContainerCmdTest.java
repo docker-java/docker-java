@@ -1,14 +1,10 @@
 package com.github.dockerjava.client.command;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.startsWith;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -23,7 +19,6 @@ import org.testng.annotations.Test;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.model.ContainerCreateResponse;
-import com.github.dockerjava.client.model.ContainerInspectResponse;
 import com.sun.jersey.api.client.ClientResponse;
 
 public class LogContainerCmdTest extends AbstractDockerClientTest {
@@ -49,7 +44,7 @@ public class LogContainerCmdTest extends AbstractDockerClientTest {
 	}
 
 	@Test
-	public void logs() throws DockerException, IOException {
+	public void attach() throws DockerException, IOException {
 
 		String snippet = "hello world";
 

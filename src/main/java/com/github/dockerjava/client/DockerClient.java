@@ -17,8 +17,6 @@ import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.client.command.AbstrDockerCmd;
 import com.github.dockerjava.client.command.AuthCmd;
@@ -34,6 +32,7 @@ import com.github.dockerjava.client.command.InspectImageCmd;
 import com.github.dockerjava.client.command.KillContainerCmd;
 import com.github.dockerjava.client.command.ListContainersCmd;
 import com.github.dockerjava.client.command.ListImagesCmd;
+import com.github.dockerjava.client.command.AttachContainerCmd;
 import com.github.dockerjava.client.command.LogContainerCmd;
 import com.github.dockerjava.client.command.PullImageCmd;
 import com.github.dockerjava.client.command.PushImageCmd;
@@ -287,6 +286,11 @@ public class DockerClient {
 		return new WaitContainerCmd(containerId).withBaseResource(baseResource);
 	}
 
+	public AttachContainerCmd attachContainerCmd(String containerId) {
+		return new AttachContainerCmd(containerId).withBaseResource(baseResource);
+	}
+	
+	
 	public LogContainerCmd logContainerCmd(String containerId) {
 		return new LogContainerCmd(containerId).withBaseResource(baseResource);
 	}

@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+
 /**
  *
  * @author Konstantin Pelykh (kpelykh@gmail.com)
@@ -31,9 +32,6 @@ public class StartContainerConfig {
     
     @JsonProperty("VolumesFrom")
     public String volumesFrom;
-
-    
-    
     
     @Override
     public String toString() {
@@ -46,5 +44,7 @@ public class StartContainerConfig {
                 ", dns='" + dns + '\'' +
                 '}';
     }
-
+    
+    
+    
 }

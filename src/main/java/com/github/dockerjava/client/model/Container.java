@@ -28,19 +28,8 @@ public class Container {
     @JsonProperty("Status")
     private String status;
 
-    /* Example:
-    "Ports": {
-        "22/tcp": [
-            {
-                "HostIp": "0.0.0.0",
-                "HostPort": "8022"
-            }
-        ]
-    }
-    */
-
     @JsonProperty("Ports")    
-    public Ports ports;
+    public Port[] ports;
 
     @JsonProperty("SizeRw")
     private int size;
@@ -71,11 +60,11 @@ public class Container {
         return status;
     }
 
-    public Ports getPorts() {
+    public Port[] getPorts() {
         return ports;
     }
 
-    public void setPorts(Ports ports) {
+    public void setPorts(Port[] ports) {
         this.ports = ports;
     }
 
@@ -91,37 +80,6 @@ public class Container {
         return names;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setCommand(String command) {
-        this.command = command;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public void setCreated(long created) {
-        this.created = created;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    public void setSizeRootFs(int sizeRootFs) {
-        this.sizeRootFs = sizeRootFs;
-    }
-
-    public void setNames(String[] names) {
-        this.names = names;
-    }
 
     @Override
     public String toString() {
@@ -131,10 +89,52 @@ public class Container {
                 ", image='" + image + '\'' +
                 ", created=" + created +
                 ", status='" + status + '\'' +
-                ", ports=" + ports +
+                ", ports=" + Arrays.toString(ports) +
                 ", size=" + size +
                 ", sizeRootFs=" + sizeRootFs +
                 ", names=" + Arrays.toString(names) +
                 '}';
+    }
+    
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Port {
+
+        @JsonProperty("IP")
+        private String ip;
+
+        @JsonProperty("PrivatePort")
+        private Integer privatePort;
+
+        @JsonProperty("PublicPort")
+        private Integer publicPort;
+        
+        @JsonProperty("Type")
+        private String type;
+        
+        public String getIp() {
+			return ip;
+		}
+        
+        public Integer getPrivatePort() {
+			return privatePort;
+		}
+        
+        public Integer getPublicPort() {
+			return publicPort;
+		}
+        
+        public String getType() {
+			return type;
+		}
+        
+        @Override
+        public String toString() {
+            return "Port{" +
+                    "IP='" + ip + '\'' +
+                    ", privatePort='" + privatePort + '\'' +
+                    ", publicPort='" + publicPort + '\'' +
+                    ", type='" + type + '\'' +
+                    '}';
+        }
     }
 }

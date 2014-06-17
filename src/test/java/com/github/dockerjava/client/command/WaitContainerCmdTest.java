@@ -63,10 +63,8 @@ public class WaitContainerCmdTest extends AbstractDockerClientTest {
 				.inspectContainerCmd(container.getId()).exec();
 		LOG.info("Container Inspect: {}", containerInspectResponse.toString());
 
-		assertThat(containerInspectResponse.getState().running,
-				is(equalTo(false)));
-		assertThat(containerInspectResponse.getState().exitCode,
-				is(equalTo(exitCode)));
+		assertThat(containerInspectResponse.getState().isRunning(),	is(equalTo(false)));
+		assertThat(containerInspectResponse.getState().getExitCode(), is(equalTo(exitCode)));
 
 	}
 

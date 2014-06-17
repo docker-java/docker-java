@@ -56,7 +56,7 @@ public class RestartContainerCmdTest extends AbstractDockerClientTest {
 				.inspectContainerCmd(container.getId()).exec();
 		LOG.info("Container Inspect: {}", containerInspectResponse.toString());
 
-		String startTime = containerInspectResponse.getState().startedAt;
+		String startTime = containerInspectResponse.getState().getStartedAt();
 
 		dockerClient.restartContainerCmd(container.getId()).withtTimeout(2).exec();
 
@@ -65,11 +65,11 @@ public class RestartContainerCmdTest extends AbstractDockerClientTest {
 		LOG.info("Container Inspect After Restart: {}",
 				containerInspectResponse2.toString());
 
-		String startTime2 = containerInspectResponse2.getState().startedAt;
+		String startTime2 = containerInspectResponse2.getState().getStartedAt();
 
 		assertThat(startTime, not(equalTo(startTime2)));
 
-		assertThat(containerInspectResponse.getState().running,
+		assertThat(containerInspectResponse.getState().isRunning(),
 				is(equalTo(true)));
 
 		dockerClient.killContainerCmd(container.getId()).exec();

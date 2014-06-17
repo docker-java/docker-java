@@ -15,7 +15,9 @@ import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 
 /**
- * Get container logs
+ * Attach to container
+ * 
+ * @param logs - true or false, includes logs. Defaults to false.
  * 
  * @param followStream
  *            - true or false, return stream. Defaults to false.
@@ -27,74 +29,78 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
  *            - true or false, if true, print timestamps for every log line.
  *            Defaults to false.
  */
-public class LogContainerCmd extends AbstrDockerCmd<LogContainerCmd, ClientResponse> {
+public class AttachContainerCmd extends	AbstrDockerCmd<AttachContainerCmd, ClientResponse> {
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(LogContainerCmd.class);
+			.getLogger(AttachContainerCmd.class);
 
 	private String containerId;
 
-	private boolean followStream, timestamps, stdout, stderr;
+	private boolean logs, followStream, timestamps, stdout, stderr;
 
-	public LogContainerCmd(String containerId) {
+	public AttachContainerCmd(String containerId) {
 		withContainerId(containerId);
 	}
 
-	public LogContainerCmd withContainerId(String containerId) {
+	public AttachContainerCmd withContainerId(String containerId) {
 		Preconditions.checkNotNull(containerId, "containerId was not specified");
 		this.containerId = containerId;
 		return this;
 	}
 
-	public LogContainerCmd withFollowStream() {
+	public AttachContainerCmd withFollowStream() {
 		return withFollowStream(true);
 	}
 
-	public LogContainerCmd withFollowStream(boolean followStream) {
+	public AttachContainerCmd withFollowStream(boolean followStream) {
 		this.followStream = followStream;
 		return this;
 	}
 
-	public LogContainerCmd withTimestamps(boolean timestamps) {
+	public AttachContainerCmd withTimestamps(boolean timestamps) {
 		this.timestamps = timestamps;
 		return this;
 	}
 
-	public LogContainerCmd withStdOut() {
+	public AttachContainerCmd withStdOut() {
 		return withStdOut(true);
 	}
 
-	public LogContainerCmd withStdOut(boolean stdout) {
+	public AttachContainerCmd withStdOut(boolean stdout) {
 		this.stdout = stdout;
 		return this;
 	}
 
-	public LogContainerCmd withStdErr() {
+	public AttachContainerCmd withStdErr() {
 		return withStdErr(true);
 	}
 
-	public LogContainerCmd withStdErr(boolean stderr) {
+	public AttachContainerCmd withStdErr(boolean stderr) {
 		this.stderr = stderr;
 		return this;
 	}
 
-	
+	public AttachContainerCmd withLogs(boolean logs) {
+		this.logs = logs;
+		return this;
+	}
 
 	protected ClientResponse impl() throws DockerException {
 		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
+		params.add("logs", logs ? "1" : "0");
 		params.add("timestamps", timestamps ? "1" : "0");
 		params.add("stdout", stdout ? "1" : "0");
 		params.add("stderr", stderr ? "1" : "0");
 		params.add("follow", followStream ? "1" : "0"); 
 
 		WebResource webResource = baseResource.path(
-				String.format("/containers/%s/logs", containerId))
+				String.format("/containers/%s/attach", containerId))
 				.queryParams(params);
 
 		try {
-			LOGGER.trace("GET: {}", webResource);
+			LOGGER.trace("POST: {}", webResource);
 			return webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
-					.get(ClientResponse.class);
+					.post(ClientResponse.class, params);
 		} catch (UniformInterfaceException exception) {
 			if (exception.getResponse().getStatus() == 400) {
 				throw new DockerException("bad parameter");
