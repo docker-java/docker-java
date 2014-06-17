@@ -870,15 +870,6 @@ public class DockerClient {
 		Preconditions.checkArgument(dockerFolder.exists(), "Folder %s doesn't exist", dockerFolder);
 		Preconditions.checkState(new File(dockerFolder, "Dockerfile").exists(), "Dockerfile doesn't exist in " + dockerFolder);
 
-		//We need to use Jersey HttpClient here, since ApacheHttpClient4 will not add boundary filed to
-		//Content-Type: multipart/form-data; boundary=Boundary_1_372491238_1372806136625
-
-		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-		params.add("t", tag);
-		if (noCache) {
-			params.add("nocache", "true");
-		}
-
 		// ARCHIVE TAR
 		String archiveNameWithOutExtension = UUID.randomUUID().toString();
 
@@ -931,6 +922,25 @@ public class DockerClient {
 			throw new DockerException("Error occurred while preparing Docker context folder.", ex);
 		}
 
+		try {
+			return build(FileUtils.openInputStream(dockerFolderTar), tag, noCache);
+		} catch (IOException e) {
+			throw new DockerException(e);
+		} finally {
+			FileUtils.deleteQuietly(dockerFolderTar);
+		}
+	}
+
+	public ClientResponse build(InputStream tarStream, String tag, boolean noCache) throws DockerException {
+		//We need to use Jersey HttpClient here, since ApacheHttpClient4 will not add boundary filed to
+		//Content-Type: multipart/form-data; boundary=Boundary_1_372491238_1372806136625
+
+		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
+		params.add("t", tag);
+		if (noCache) {
+			params.add("nocache", "true");
+		}
+
 		WebResource webResource = client.resource(restEndpointUrl + "/build").queryParams(params);
 
 		try {
@@ -938,17 +948,13 @@ public class DockerClient {
 			return webResource
 					.type("application/tar")
 					.accept(MediaType.TEXT_PLAIN)
-					.post(ClientResponse.class, FileUtils.openInputStream(dockerFolderTar));
+					.post(ClientResponse.class, tarStream);
 		} catch (UniformInterfaceException exception) {
 			if (exception.getResponse().getStatus() == 500) {
 				throw new DockerException("Server error", exception);
 			} else {
 				throw new DockerException(exception);
 			}
-		} catch (IOException e) {
-			throw new DockerException(e);
-		} finally {
-			FileUtils.deleteQuietly(dockerFolderTar);
 		}
 	}
 }
