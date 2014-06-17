@@ -83,7 +83,7 @@ Latest SNAPSHOT is available from maven repo: https://oss.sonatype.org/content/g
 ##### Docker Builder:
 
 To use Docker Builder, as described on page http://docs.docker.io/en/latest/use/builder/,
-user dockerClient.build(baseDir), where baseDir is a path to folder containing Dockerfile.
+user dockerClient.buildImageCmd(baseDir), where baseDir is a path to folder containing Dockerfile.
 
 
     File baseDir = new File("~/kpelykh/docker/netcat");
@@ -139,4 +139,4 @@ In `$HOME/.docker.io.properties`, e.g.:
 In the class path at `/docker.io.properties`, e.g.:
 
     docker.io.url=http://localhost:2375
-    docker.io.version=1.11
+    docker.io.version=1.12
