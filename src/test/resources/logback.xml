@@ -6,8 +6,8 @@
         </encoder>
     </appender>
 
-    <logger name="com.kpelykh.docker.client" level="TRACE"/>
-    <logger name="com.kpelykh.docker.client.test" level="DEBUG"/>
+    <logger name="com.github.dockerjava.client" level="TRACE"/>
+    <logger name="com.github.dockerjava.client.test" level="DEBUG"/>
 
     <root level="info">
         <appender-ref ref="STDOUT" />

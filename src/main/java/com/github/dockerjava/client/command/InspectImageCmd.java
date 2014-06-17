@@ -1,0 +1,53 @@
+package com.github.dockerjava.client.command;
+
+import javax.ws.rs.core.MediaType;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.dockerjava.client.DockerException;
+import com.github.dockerjava.client.NotFoundException;
+import com.github.dockerjava.client.model.ImageInspectResponse;
+import com.google.common.base.Preconditions;
+import com.sun.jersey.api.client.UniformInterfaceException;
+import com.sun.jersey.api.client.WebResource;
+
+
+/**
+ * 
+ * 
+ *
+ */
+public class InspectImageCmd extends AbstrDockerCmd<InspectImageCmd, ImageInspectResponse>  {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(InspectImageCmd.class);
+	
+	private String imageId;
+	
+	public InspectImageCmd(String imageId) {
+		withImageId(imageId);
+	}
+	
+	public InspectImageCmd withImageId(String imageId) {
+		Preconditions.checkNotNull(imageId, "imageId was not specified");
+		this.imageId = imageId;
+		return this;
+	}
+	
+	protected ImageInspectResponse impl() {
+		WebResource webResource = baseResource.path(String.format("/images/%s/json", imageId));
+
+		try {
+			LOGGER.trace("GET: {}", webResource);
+			return webResource.accept(MediaType.APPLICATION_JSON).get(ImageInspectResponse.class);
+		} catch (UniformInterfaceException exception) {
+			if (exception.getResponse().getStatus() == 404) {
+				throw new NotFoundException(String.format("No such image %s", imageId));
+			} else if (exception.getResponse().getStatus() == 500) {
+				throw new DockerException("Server error", exception);
+			} else {
+				throw new DockerException(exception);
+			}
+		}
+	}
+}
