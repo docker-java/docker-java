@@ -105,7 +105,7 @@ user dockerClient.build(baseDir), where baseDir is a path to folder containing D
 
 
 
-For additional examples, please look at [DockerClientTest.java](https://github.com/kpelykh/docker-java/blob/master/src/test/java/com/kpelykh/docker/client/test/DockerClientTest.java "DockerClientTest.java")
+For additional examples, please look at [Test cases](https://github.com/docker-java/docker-java/tree/master/src/test/java/com/github/dockerjava/client/command "Test cases")
 
 ## Configuration
 
