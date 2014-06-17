@@ -249,6 +249,7 @@ public class ContainerInspectResponse {
 
         @JsonProperty("Running") public boolean running;
         @JsonProperty("Pid") public int pid;
+        @JsonProperty("Paused") public boolean paused;
         @JsonProperty("ExitCode") public int exitCode;
         @JsonProperty("StartedAt") public String startedAt;
         @JsonProperty("Ghost") public boolean ghost;
@@ -259,6 +260,7 @@ public class ContainerInspectResponse {
             return "ContainerState{" +
                     "running=" + running +
                     ", pid=" + pid +
+                    ", paused=" + paused +
                     ", exitCode=" + exitCode +
                     ", startedAt='" + startedAt + '\'' +
                     ", ghost=" + ghost +
