@@ -2,6 +2,7 @@ package com.github.dockerjava.client.command;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -33,7 +34,8 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BuildImgCmd.class);
 	
-	private File dockerFolder;
+	private File dockerFolder = null;
+	private InputStream tarInputStream = null;
 	private String tag;
 	private boolean noCache;
 	
@@ -41,6 +43,11 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 	public BuildImgCmd(File dockerFolder) {
 		Preconditions.checkNotNull(dockerFolder, "dockerFolder is null");
 		this.dockerFolder = dockerFolder;
+	}
+	
+	public BuildImgCmd(InputStream tarInputStream) {
+		Preconditions.checkNotNull(tarInputStream, "tarInputStream is null");
+		this.tarInputStream = tarInputStream;
 	}
 	
 	public BuildImgCmd withTag(String tag) {
@@ -55,17 +62,49 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 	}
 	
 	protected ClientResponse impl() {
-		
-		Preconditions.checkArgument(dockerFolder.exists(), "Path %s doesn't exist", dockerFolder);
-		Preconditions.checkArgument(dockerFolder.isDirectory(), "Folder %s doesn't exist", dockerFolder);
-		Preconditions.checkState(new File(dockerFolder, "Dockerfile").exists(), "Dockerfile doesn't exist in " + dockerFolder);
-		
+		if (tarInputStream == null) {
+			File dockerFolderTar = buildDockerFolderTar();
+			try {
+				return callDocker(FileUtils.openInputStream(dockerFolderTar));
+			} catch (IOException e) {
+				throw new DockerException(e);
+			} finally {
+				FileUtils.deleteQuietly(dockerFolderTar);
+			}
+		} else {
+			return callDocker(tarInputStream);
+		}
+	}
+
+	protected ClientResponse callDocker(final InputStream dockerFolderTarInputStream) {
 		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
 		params.add("t", tag);
 		if (noCache) {
 			params.add("nocache", "true");
 		}
 
+		WebResource webResource = baseResource.path("/build").queryParams(params);
+
+		try {
+			LOGGER.trace("POST: {}", webResource);
+			return webResource
+					.type("application/tar")
+					.accept(MediaType.TEXT_PLAIN)
+					.post(ClientResponse.class, dockerFolderTarInputStream);
+		} catch (UniformInterfaceException exception) {
+			if (exception.getResponse().getStatus() == 500) {
+				throw new DockerException("Server error", exception);
+			} else {
+				throw new DockerException(exception);
+			}
+		}
+	}
+	
+	protected File buildDockerFolderTar() {
+		Preconditions.checkArgument(dockerFolder.exists(), "Path %s doesn't exist", dockerFolder);
+		Preconditions.checkArgument(dockerFolder.isDirectory(), "Folder %s doesn't exist", dockerFolder);
+		Preconditions.checkState(new File(dockerFolder, "Dockerfile").exists(), "Dockerfile doesn't exist in " + dockerFolder);
+		
 		// ARCHIVE TAR
 		String archiveNameWithOutExtension = UUID.randomUUID().toString();
 
@@ -112,30 +151,10 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 			}
 
 			dockerFolderTar = CompressArchiveUtil.archiveTARFiles(dockerFolder, filesToAdd, archiveNameWithOutExtension);
-
+			return dockerFolderTar;
 		} catch (IOException ex) {
 			FileUtils.deleteQuietly(dockerFolderTar);
 			throw new DockerException("Error occurred while preparing Docker context folder.", ex);
-		}
-
-		WebResource webResource = baseResource.path("/build").queryParams(params);
-
-		try {
-			LOGGER.trace("POST: {}", webResource);
-			return webResource
-					.type("application/tar")
-					.accept(MediaType.TEXT_PLAIN)
-					.post(ClientResponse.class, FileUtils.openInputStream(dockerFolderTar));
-		} catch (UniformInterfaceException exception) {
-			if (exception.getResponse().getStatus() == 500) {
-				throw new DockerException("Server error", exception);
-			} else {
-				throw new DockerException(exception);
-			}
-		} catch (IOException e) {
-			throw new DockerException(e);
-		} finally {
-			FileUtils.deleteQuietly(dockerFolderTar);
 		}
 	}
 	

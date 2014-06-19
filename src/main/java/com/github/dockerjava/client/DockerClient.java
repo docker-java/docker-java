@@ -19,6 +19,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 
 import com.github.dockerjava.client.command.AbstrDockerCmd;
+import com.github.dockerjava.client.command.AttachContainerCmd;
 import com.github.dockerjava.client.command.AuthCmd;
 import com.github.dockerjava.client.command.BuildImgCmd;
 import com.github.dockerjava.client.command.CommitCmd;
@@ -32,7 +33,6 @@ import com.github.dockerjava.client.command.InspectImageCmd;
 import com.github.dockerjava.client.command.KillContainerCmd;
 import com.github.dockerjava.client.command.ListContainersCmd;
 import com.github.dockerjava.client.command.ListImagesCmd;
-import com.github.dockerjava.client.command.AttachContainerCmd;
 import com.github.dockerjava.client.command.LogContainerCmd;
 import com.github.dockerjava.client.command.PullImageCmd;
 import com.github.dockerjava.client.command.PushImageCmd;
@@ -324,6 +324,10 @@ public class DockerClient {
 
 	public BuildImgCmd buildImageCmd(File dockerFolder) {
 		return new BuildImgCmd(dockerFolder).withBaseResource(baseResource);
+	}
+
+	public BuildImgCmd buildImageCmd(InputStream tarInputStream) {
+		return new BuildImgCmd(tarInputStream).withBaseResource(baseResource);
 	}
 
 	public TopContainerCmd topContainerCmd(String containerId) {
