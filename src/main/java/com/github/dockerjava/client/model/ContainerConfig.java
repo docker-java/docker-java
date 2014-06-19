@@ -1,7 +1,10 @@
 package com.github.dockerjava.client.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 
 import java.util.Arrays;
 import java.util.Map;
@@ -37,14 +40,19 @@ public class ContainerConfig {
     @JsonProperty("Privileged")   private boolean privileged = false;
     @JsonProperty("WorkingDir")   private String workingDir = "";
     @JsonProperty("Domainname")   private String domainName = "";
-    // FIXME Is this the right type? -BJE
-    @JsonProperty("ExposedPorts")   private Map<String, ?> exposedPorts;
+    @JsonProperty("ExposedPorts")  private ExposedPorts exposedPorts;
     
     @JsonProperty("OnBuild")   private int[] onBuild;
 
-    public Map<String, ?> getExposedPorts() {
-        return exposedPorts;
+    @JsonIgnore 
+    public ExposedPort[] getExposedPorts() {
+        return exposedPorts.getExposedPorts();
     }
+    
+    @JsonIgnore
+    public void setExposedPorts(ExposedPort[] exposedPorts) {
+		this.exposedPorts = new ExposedPorts(exposedPorts);
+	}
 
     public boolean isNetworkDisabled() {
         return networkDisabled;

@@ -13,6 +13,7 @@ import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.NotFoundException;
 import com.github.dockerjava.client.model.ContainerCreateResponse;
 import com.github.dockerjava.client.model.CreateContainerConfig;
+import com.github.dockerjava.client.model.ExposedPort;
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
@@ -73,13 +74,10 @@ public class CreateContainerCmd extends AbstrDockerCmd<CreateContainerCmd, Conta
 		return this;
 	}
 	
-	public CreateContainerCmd withExposedPorts(String... exposedPorts) {
+	public CreateContainerCmd withExposedPorts(ExposedPort... exposedPorts) {
 		Preconditions.checkNotNull(exposedPorts, "exposedPorts was not specified");
-		HashMap<String,String> ports = new HashMap<String,String>();
-		for(String exposedPort: exposedPorts) {
-			ports.put(exposedPort, "");
-		}
-		this.containerCreateConfig.withExposedPorts(ports);
+		
+		this.containerCreateConfig.withExposedPorts(exposedPorts);
 		return this;
 	}
 	

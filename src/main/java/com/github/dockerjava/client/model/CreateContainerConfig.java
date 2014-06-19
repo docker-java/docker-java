@@ -1,10 +1,11 @@
 package com.github.dockerjava.client.model;
 
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Arrays;
 import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  *
@@ -60,23 +61,22 @@ public class CreateContainerConfig {
     @JsonProperty("VolumesFrom")  private String    volumesFrom = "";
     @JsonProperty("WorkingDir")   private String workingDir = "";
     @JsonProperty("DisableNetwork") private boolean disableNetwork = false;
-    @JsonProperty("ExposedPorts")   private Map<String, ?> exposedPorts;
+    @JsonProperty("ExposedPorts")   private ExposedPorts exposedPorts;
     
-    public Map<String, ?> getExposedPorts() {
-        return exposedPorts;
+    public CreateContainerConfig withExposedPorts(ExposedPort[] exposedPorts) {
+        this.exposedPorts = new ExposedPorts(exposedPorts);
+        return this;
     }
     
-    public CreateContainerConfig withExposedPorts(Map<String, ?> exposedPorts) {
-        this.exposedPorts = exposedPorts;
-        return this;
+    @JsonIgnore
+    public ExposedPort[] getExposedPorts() {
+        return exposedPorts.getExposedPorts();
     }
 
 
     public boolean isDisableNetwork() {
         return disableNetwork;
     }
-
-    
 
     public String getWorkingDir() { return workingDir; }
 
@@ -245,11 +245,6 @@ public class CreateContainerConfig {
         return this;
     }
 
-    
-    
-    
-   
-
     @Override
     public String toString() {
         return "CreateContainerConfig{" +
@@ -274,4 +269,6 @@ public class CreateContainerConfig {
                 ", workingDir='" + workingDir + '\'' +
                 '}';
     }
+    
+    
 }

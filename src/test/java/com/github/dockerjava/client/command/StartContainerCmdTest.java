@@ -10,7 +10,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.startsWith;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
+import java.util.Arrays;
 
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -21,7 +21,10 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
-import com.github.dockerjava.client.model.*;
+import com.github.dockerjava.client.model.ContainerCreateResponse;
+import com.github.dockerjava.client.model.ContainerInspectResponse;
+import com.github.dockerjava.client.model.ExposedPort;
+import com.github.dockerjava.client.model.Ports;
 
 
 
@@ -85,9 +88,12 @@ public class StartContainerCmdTest extends AbstractDockerClientTest {
 	@Test
 	public void startContainerWithPortBindings() throws DockerException {
 		
+		ExposedPort tcp22 = ExposedPort.tcp(22);
+		ExposedPort tcp23 = ExposedPort.tcp(23);
+		
 		ContainerCreateResponse container = dockerClient
 				.createContainerCmd("busybox")
-				.withCmd("true").withExposedPorts("22/tcp").exec();
+				.withCmd("true").withExposedPorts(tcp22, tcp23).exec();
 
 		LOG.info("Created container {}", container.toString());
 
@@ -98,18 +104,25 @@ public class StartContainerCmdTest extends AbstractDockerClientTest {
 
 		Ports portBindings = new Ports();
 		
-		portBindings.addPort("22/tcp", "", "11022");
+		Ports.Host host11022 = new Ports.Host("", 11022);
+		Ports.Host host11023 = new Ports.Host("", 11023);
+		
+		portBindings.addMapping(tcp22, host11022);
+		portBindings.addMapping(tcp23, host11023);
 
 		dockerClient.startContainerCmd(container.getId()).withPortBindings(portBindings).exec();
 
 		containerInspectResponse = dockerClient.inspectContainerCmd(container
 				.getId()).exec();
 		
-		assertThat(containerInspectResponse.getConfig().getExposedPorts().keySet(),
-				contains("22/tcp"));
+		assertThat(Arrays.asList(containerInspectResponse.getConfig().getExposedPorts()),
+				contains(tcp22, tcp23));
 
-		assertThat(containerInspectResponse.getHostConfig().getPortBindings().getAllPorts(),
-				contains(new Ports.Port("tcp", "22", "0.0.0.0", "11022")));
+		assertThat(containerInspectResponse.getHostConfig().getPortBindings().getMappings().get(tcp22),
+				is(equalTo(new Ports.Host("0.0.0.0", 11022))));
+		
+		assertThat(containerInspectResponse.getHostConfig().getPortBindings().getMappings().get(tcp23),
+				is(equalTo(new Ports.Host("0.0.0.0", 11023))));
 		
 		tmpContainers.add(container.getId());
 	}
