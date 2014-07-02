@@ -8,6 +8,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -33,6 +35,8 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BuildImgCmd.class);
+	
+	private static final Pattern ADD_PATTERN = Pattern.compile("^ADD\\s+(.*)\\s+(.*)$");
 	
 	private File dockerFolder = null;
 	private InputStream tarInputStream = null;
@@ -122,13 +126,13 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 			filesToAdd.add(dockerFile);
 
 			for (String cmd : dockerFileContent) {
-				if (StringUtils.startsWithIgnoreCase(cmd.trim(), "ADD")) {
-					String addArgs[] = StringUtils.split(cmd, " \t");
-					if (addArgs.length != 3) {
+				final Matcher matcher = ADD_PATTERN.matcher(cmd);
+				if (matcher.find()) {
+					if (matcher.groupCount() != 2) {
 						throw new DockerException(String.format("Wrong format on line [%s]", cmd));
 					}
 
-					String resource = addArgs[1];
+					String resource = matcher.group(1);
 					
 					if(isFileResource(resource)) {
 						File src = new File(resource);
