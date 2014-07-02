@@ -126,7 +126,7 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 			filesToAdd.add(dockerFile);
 
 			for (String cmd : dockerFileContent) {
-				final Matcher matcher = ADD_PATTERN.matcher(cmd);
+				final Matcher matcher = ADD_PATTERN.matcher(cmd.trim());
 				if (matcher.find()) {
 					if (matcher.groupCount() != 2) {
 						throw new DockerException(String.format("Wrong format on line [%s]", cmd));
