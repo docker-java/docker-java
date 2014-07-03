@@ -3,7 +3,6 @@ package com.github.dockerjava.client.command;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
@@ -29,7 +28,6 @@ import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.model.ContainerCreateResponse;
 import com.github.dockerjava.client.model.ContainerInspectResponse;
 import com.github.dockerjava.client.model.ImageInspectResponse;
-import com.github.dockerjava.client.model.Ports;
 import com.sun.jersey.api.client.ClientResponse;
 
 public class BuildImageCmdTest extends AbstractDockerClientTest {

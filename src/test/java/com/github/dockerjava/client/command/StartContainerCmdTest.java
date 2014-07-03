@@ -21,10 +21,12 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
+import com.github.dockerjava.client.model.Bind;
 import com.github.dockerjava.client.model.ContainerCreateResponse;
 import com.github.dockerjava.client.model.ContainerInspectResponse;
 import com.github.dockerjava.client.model.ExposedPort;
 import com.github.dockerjava.client.model.Ports;
+import com.github.dockerjava.client.model.Volume;
 
 
 
@@ -54,10 +56,13 @@ public class StartContainerCmdTest extends AbstractDockerClientTest {
 	public void startContainerWithVolumes() throws DockerException {
 
 		// see http://docs.docker.io/use/working_with_volumes/
+		Volume volume1 = new Volume("/opt/webapp1");
+		
+		Volume volume2 = new Volume("/opt/webapp2");
 		
 		ContainerCreateResponse container = dockerClient
-				.createContainerCmd("busybox").withVolumes("/logs_from_host")
-				.withCmd(new String[] { "true" }).exec();
+				.createContainerCmd("busybox").withVolumes(volume1, volume2)
+				.withCmd("true").exec();
 
 		LOG.info("Created container {}", container.toString());
 
@@ -67,20 +72,21 @@ public class StartContainerCmdTest extends AbstractDockerClientTest {
 				.inspectContainerCmd(container.getId()).exec();
 
 		assertThat(containerInspectResponse.getConfig().getVolumes().keySet(),
-				contains("/logs_from_host"));
+				contains("/opt/webapp1", "/opt/webapp2"));
 
-		dockerClient.startContainerCmd(container.getId()).withBinds("/var/log:/logs_from_host:ro").exec();
+		
+		dockerClient.startContainerCmd(container.getId()).withBinds(new Bind("/src/webapp1", volume1, true), new Bind("/src/webapp2", volume2)).exec();
 
 		dockerClient.waitContainerCmd(container.getId()).exec();
 
 		containerInspectResponse = dockerClient.inspectContainerCmd(container
 				.getId()).exec();
 		
-		assertThat(containerInspectResponse.getVolumes().get("/logs_from_host"),
-				equalTo("/var/log"));
+		assertThat(Arrays.asList(containerInspectResponse.getVolumes()),
+				contains(volume1, volume2));
 
-		assertThat(containerInspectResponse.getVolumesRW().get("/logs_from_host"),
-				equalTo(false));
+		assertThat(Arrays.asList(containerInspectResponse.getVolumesRW()),
+				contains(volume1, volume2));
 		
 		tmpContainers.add(container.getId());
 	}
@@ -103,12 +109,8 @@ public class StartContainerCmdTest extends AbstractDockerClientTest {
 				.inspectContainerCmd(container.getId()).exec();
 
 		Ports portBindings = new Ports();
-		
-		Ports.Host host11022 = new Ports.Host("", 11022);
-		Ports.Host host11023 = new Ports.Host("", 11023);
-		
-		portBindings.addMapping(tcp22, host11022);
-		portBindings.addMapping(tcp23, host11023);
+		portBindings.bind(tcp22, Ports.Binding(11022));
+		portBindings.bind(tcp23, Ports.Binding(11023));
 
 		dockerClient.startContainerCmd(container.getId()).withPortBindings(portBindings).exec();
 
@@ -118,11 +120,11 @@ public class StartContainerCmdTest extends AbstractDockerClientTest {
 		assertThat(Arrays.asList(containerInspectResponse.getConfig().getExposedPorts()),
 				contains(tcp22, tcp23));
 
-		assertThat(containerInspectResponse.getHostConfig().getPortBindings().getMappings().get(tcp22),
-				is(equalTo(new Ports.Host("0.0.0.0", 11022))));
+		assertThat(containerInspectResponse.getHostConfig().getPortBindings().getBindings().get(tcp22),
+				is(equalTo(Ports.Binding("0.0.0.0", 11022))));
 		
-		assertThat(containerInspectResponse.getHostConfig().getPortBindings().getMappings().get(tcp23),
-				is(equalTo(new Ports.Host("0.0.0.0", 11023))));
+		assertThat(containerInspectResponse.getHostConfig().getPortBindings().getBindings().get(tcp23),
+				is(equalTo(Ports.Binding("0.0.0.0", 11023))));
 		
 		tmpContainers.add(container.getId());
 	}

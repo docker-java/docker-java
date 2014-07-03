@@ -1,6 +1,5 @@
 package com.github.dockerjava.client.command;
 
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;

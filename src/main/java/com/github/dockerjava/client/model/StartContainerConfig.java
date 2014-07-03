@@ -2,6 +2,7 @@ package com.github.dockerjava.client.model;
 
 import java.util.Arrays;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
@@ -13,30 +14,88 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class StartContainerConfig {
 
     @JsonProperty("Binds")
-    public String[] binds;
+    private Binds binds = new Binds();
     
     @JsonProperty("LxcConf")
-    public LxcConf[] lxcConf;
+    private LxcConf[] lxcConf;
     
     @JsonProperty("PortBindings")
-    public Ports portBindings;
+    private Ports portBindings;
     
     @JsonProperty("PublishAllPorts")
-    public boolean publishAllPorts;
+    private boolean publishAllPorts;
     
     @JsonProperty("Privileged")
-    public boolean privileged;
+    private boolean privileged;
     
     @JsonProperty("Dns")
-    public String dns;
+    private String dns;
     
     @JsonProperty("VolumesFrom")
-    public String volumesFrom;
+    private String volumesFrom;
     
-    @Override
+    @JsonIgnore
+    public Bind[] getBinds() {
+		return binds.getBinds();
+	}
+
+    @JsonIgnore
+	public void setBinds(Bind[] binds) {
+		this.binds = new Binds(binds);
+	}
+
+	public LxcConf[] getLxcConf() {
+		return lxcConf;
+	}
+
+	public void setLxcConf(LxcConf[] lxcConf) {
+		this.lxcConf = lxcConf;
+	}
+
+	public Ports getPortBindings() {
+		return portBindings;
+	}
+
+	public void setPortBindings(Ports portBindings) {
+		this.portBindings = portBindings;
+	}
+
+	public boolean isPublishAllPorts() {
+		return publishAllPorts;
+	}
+
+	public void setPublishAllPorts(boolean publishAllPorts) {
+		this.publishAllPorts = publishAllPorts;
+	}
+
+	public boolean isPrivileged() {
+		return privileged;
+	}
+
+	public void setPrivileged(boolean privileged) {
+		this.privileged = privileged;
+	}
+
+	public String getDns() {
+		return dns;
+	}
+
+	public void setDns(String dns) {
+		this.dns = dns;
+	}
+
+	public String getVolumesFrom() {
+		return volumesFrom;
+	}
+
+	public void setVolumesFrom(String volumesFrom) {
+		this.volumesFrom = volumesFrom;
+	}
+
+	@Override
     public String toString() {
         return "StartContainerConfig{" +
-                "binds=" + Arrays.toString(binds) +
+                "binds=" + binds +
                 ", lxcConf=" + Arrays.toString(lxcConf) +
                 ", portBindings=" + portBindings +
                 ", privileged=" + privileged +

@@ -4,6 +4,7 @@ package com.github.dockerjava.client.model;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -46,10 +47,10 @@ public class ContainerInspectResponse {
     private String resolvConfPath;
 
     @JsonProperty("Volumes")
-    private Map<String, String> volumes;
+    private Volumes volumes;
 
     @JsonProperty("VolumesRW")
-    private Map<String, Boolean> volumesRW;
+    private Volumes volumesRW;
 
     @JsonProperty("HostnamePath")
     private String hostnamePath;
@@ -112,12 +113,14 @@ public class ContainerInspectResponse {
         return resolvConfPath;
     }
 
-    public Map<String, String> getVolumes() {
-        return volumes;
+    @JsonIgnore
+    public Volume[] getVolumes() {
+        return volumes.getVolumes();
     }
 
-    public Map<String, Boolean> getVolumesRW() {
-        return volumesRW;
+    @JsonIgnore
+    public Volume[] getVolumesRW() {
+        return volumesRW.getVolumes();
     }
 
     public String getHostnamePath() {
