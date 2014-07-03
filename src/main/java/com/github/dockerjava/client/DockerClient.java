@@ -1,6 +1,6 @@
 package com.github.dockerjava.client;
 
-import static org.apache.commons.io.IOUtils.closeQuietly;
+import static org.apache.commons.io.IOUtils.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,7 +54,6 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.api.client.filter.LoggingFilter;
 import com.sun.jersey.client.apache4.ApacheHttpClient4;
 import com.sun.jersey.client.apache4.ApacheHttpClient4Handler;
 
@@ -63,7 +62,7 @@ import com.sun.jersey.client.apache4.ApacheHttpClient4Handler;
  */
 public class DockerClient {
 
-	private Client client;
+    private Client client;
 	private WebResource baseResource;
 	private AuthConfig authConfig;
 
@@ -110,7 +109,7 @@ public class DockerClient {
 		// client = new UnixSocketClient(clientConfig);
 
 		client.addFilter(new JsonClientFilter());
-		client.addFilter(new LoggingFilter());
+		client.addFilter(new SelectiveLoggingFilter());
 
 		baseResource = client.resource(config.url + "/v" + config.version);
 	}

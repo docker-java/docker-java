@@ -48,6 +48,14 @@ public class PullImageCmd extends AbstrDockerCmd<PullImageCmd, ClientResponse>  
 		return this;
 	}
 	
+    @Override
+    public String toString() {
+        return new StringBuilder("pull ")
+            .append(repository)
+            .append(tag != null ? ":" + tag : "")
+            .toString();
+    }   
+
 	protected ClientResponse impl() {
 		Preconditions.checkNotNull(repository, "Repository was not specified");
 

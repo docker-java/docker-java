@@ -16,9 +16,7 @@ import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.WebResource.Builder;
 
 /**
- * 
- * 
- * 
+ * Run a container
  */
 public class StartContainerCmd extends AbstrDockerCmd<StartContainerCmd, Void> {
 
@@ -75,6 +73,15 @@ public class StartContainerCmd extends AbstrDockerCmd<StartContainerCmd, Void> {
 		return this;
 	}
 	
+    @Override
+    public String toString() {
+        return new StringBuilder("run ")
+            .append(containerId)
+            .append(" using ")
+            .append(startContainerConfig)
+            .toString();
+    }   
+
 	protected Void impl() throws DockerException {
 		WebResource webResource = baseResource.path(String.format("/containers/%s/start", containerId));
 

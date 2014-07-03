@@ -43,6 +43,15 @@ public class RemoveImageCmd extends AbstrDockerCmd<RemoveImageCmd, Void> {
 		return this;
 	}
 	
+    @Override
+    public String toString() {
+        return new StringBuilder("rmi ")
+            .append(noPrune ? "--no-prune=true" : "")
+            .append(force ? "--force=true" : "")
+            .append(imageId)
+            .toString();
+    }   
+
 	protected Void impl() throws DockerException {
 		Preconditions.checkState(!StringUtils.isEmpty(imageId), "Image ID can't be empty");
 

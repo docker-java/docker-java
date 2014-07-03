@@ -78,7 +78,14 @@ public class LogContainerCmd extends AbstrDockerCmd<LogContainerCmd, ClientRespo
 		return this;
 	}
 
-	
+    @Override
+    public String toString() {
+        return new StringBuilder("logs ")
+            .append(followStream ? "--follow=true" : "")
+            .append(timestamps ? "--timestamps=true" : "")
+            .append(containerId)
+            .toString();
+    }	
 
 	protected ClientResponse impl() throws DockerException {
 		MultivaluedMap<String, String> params = new MultivaluedMapImpl();

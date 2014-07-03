@@ -41,6 +41,14 @@ public class ListImagesCmd extends AbstrDockerCmd<ListImagesCmd, List<Image>>  {
 		return this;
 	}
 	
+    @Override
+    public String toString() {
+        return new StringBuilder("images ")
+            .append(showAll ? "--all=true" : "")
+            .append(filter != null ? "--filter " + filter : "")
+            .toString();
+    }
+
 	protected List<Image> impl() {
 		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
 		params.add("filter", filter);

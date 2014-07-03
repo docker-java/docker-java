@@ -61,6 +61,15 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 		return this;
 	}
 	
+	@Override
+	public String toString() {
+		return new StringBuilder("build ")
+			.append(tag != null ? "-t " + tag + " " : "")
+			.append(noCache ? "--nocache=true " : "")
+			.append(dockerFolder != null ? dockerFolder.getPath() : "-")
+			.toString();
+	}
+	
 	protected ClientResponse impl() {
 		if (tarInputStream == null) {
 			File dockerFolderTar = buildDockerFolderTar();

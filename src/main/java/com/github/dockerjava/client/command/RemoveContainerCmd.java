@@ -49,6 +49,15 @@ public class RemoveContainerCmd extends AbstrDockerCmd<RemoveContainerCmd, Void>
 		return this;
 	}
 	
+    @Override
+    public String toString() {
+        return new StringBuilder("rm ")
+            .append(removeVolumes ? "--volumes=true" : "")
+            .append(force ? "--force=true" : "")
+            .append(containerId)
+            .toString();
+    }   
+
 	protected Void impl() throws DockerException {
 		Preconditions.checkState(!StringUtils.isEmpty(containerId), "Container ID can't be empty");
 
