@@ -54,7 +54,6 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.api.client.filter.LoggingFilter;
 import com.sun.jersey.client.apache4.ApacheHttpClient4;
 import com.sun.jersey.client.apache4.ApacheHttpClient4Handler;
 
@@ -63,7 +62,7 @@ import com.sun.jersey.client.apache4.ApacheHttpClient4Handler;
  */
 public class DockerClient {
 
-	private Client client;
+    private Client client;
 	private WebResource baseResource;
 	private AuthConfig authConfig;
 
@@ -83,11 +82,8 @@ public class DockerClient {
 	}
 
 	private DockerClient(Config config) {
-		// restEndpointUrl = config.url + "/v" + config.version;
 		ClientConfig clientConfig = new DefaultClientConfig();
-		// clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING,
-		// Boolean.TRUE);
-
+		
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
 		schemeRegistry.register(new Scheme("http", config.url.getPort(),
 				PlainSocketFactory.getSocketFactory()));
@@ -106,11 +102,9 @@ public class DockerClient {
 				null, false), clientConfig);
 
 		client.setReadTimeout(10000);
-		// Experimental support for unix sockets:
-		// client = new UnixSocketClient(clientConfig);
-
+	
 		client.addFilter(new JsonClientFilter());
-		client.addFilter(new LoggingFilter());
+		client.addFilter(new SelectiveLoggingFilter());
 
 		baseResource = client.resource(config.url + "/v" + config.version);
 	}
@@ -202,53 +196,21 @@ public class DockerClient {
 				.withBaseResource(baseResource);
 	}
 
-//	public ImageCreateResponse importImage(String repository,
-//			InputStream imageStream) {
-//		return execute(importImageCmd(repository, imageStream));
-//	}
-
 	public SearchImagesCmd searchImagesCmd(String term) {
 		return new SearchImagesCmd(term).withBaseResource(baseResource);
 	}
-
-//	public List<SearchItem> searchImages(String term) {
-//		return execute(searchImagesCmd(term));
-//	}
 
 	public RemoveImageCmd removeImageCmd(String imageId) {
 		return new RemoveImageCmd(imageId).withBaseResource(baseResource);
 	}
 
-//	/**
-//	 * Remove an image, deleting any tags it might have.
-//	 */
-//	public void removeImage(String imageId) {
-//		execute(removeImageCmd(imageId));
-//	}
-//
-//	public void removeImages(List<String> images) {
-//		Preconditions.checkNotNull(images, "List of images can't be null");
-//
-//		for (String imageId : images) {
-//			removeImage(imageId);
-//		}
-//	}
-
 	public ListImagesCmd listImagesCmd() {
 		return new ListImagesCmd().withBaseResource(baseResource);
 	}
 
-//	public List<Image> listImages() {
-//		return execute(listImagesCmd());
-//	}
-
 	public InspectImageCmd inspectImageCmd(String imageId) {
 		return new InspectImageCmd(imageId).withBaseResource(baseResource);
 	}
-
-//	public ImageInspectResponse inspectImage(String imageId) {
-//		return execute(inspectImageCmd(imageId));
-//	}
 
 	/**
 	 * * CONTAINER API *
@@ -257,10 +219,6 @@ public class DockerClient {
 	public ListContainersCmd listContainersCmd() {
 		return new ListContainersCmd().withBaseResource(baseResource);
 	}
-
-//	public List<Container> listContainers() {
-//		return execute(listContainersCmd());
-//	}
 
 	public CreateContainerCmd createContainerCmd(String image) {
 		return new CreateContainerCmd(new CreateContainerConfig()).withImage(

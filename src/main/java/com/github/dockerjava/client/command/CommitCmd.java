@@ -67,7 +67,17 @@ public class CommitCmd extends AbstrDockerCmd<CommitCmd, String>  {
 		return this;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return new StringBuilder("commit ")
+			.append(commitConfig.getAuthor() != null ? "--author " + commitConfig.getAuthor() + " " : "")
+			.append(commitConfig.getMessage() != null ? "--message " + commitConfig.getMessage() + " " : "")
+			.append(commitConfig.getContainerId())
+			.append(commitConfig.getRepo() != null ?  " " + commitConfig.getRepo() + ":" : " ")
+			.append(commitConfig.getTag() != null ?  commitConfig.getTag() : "")
+			.toString();
+	}
+		
 	private void checkCommitConfig(CommitConfig commitConfig) {
 		Preconditions.checkNotNull(commitConfig, "CommitConfig was not specified");
 	}

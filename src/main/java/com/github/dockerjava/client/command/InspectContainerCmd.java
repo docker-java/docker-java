@@ -13,9 +13,7 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 
 /**
- * 
- * 
- * 
+ * Inspect the details of a container.
  */
 public class InspectContainerCmd extends AbstrDockerCmd<InspectContainerCmd, ContainerInspectResponse> {
 
@@ -33,6 +31,11 @@ public class InspectContainerCmd extends AbstrDockerCmd<InspectContainerCmd, Con
 		return this;
 	}
 	
+    @Override
+    public String toString() {
+        return "inspect " + containerId;
+    }
+
 	protected ContainerInspectResponse impl() throws DockerException {
 		WebResource webResource = baseResource.path(String.format("/containers/%s/json", containerId));
 

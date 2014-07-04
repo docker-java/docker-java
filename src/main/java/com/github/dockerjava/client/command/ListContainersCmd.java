@@ -61,6 +61,17 @@ public class ListContainersCmd extends AbstrDockerCmd<ListContainersCmd, List<Co
 		return this;
 	}
 	
+    @Override
+    public String toString() {
+        return new StringBuilder("ps ")
+            .append(showAll ? "--all=true" : "")
+            .append(showSize ? "--size=true" : "")
+            .append(sinceId != null ? "--since " + sinceId : "")
+            .append(beforeId != null ? "--before " + beforeId : "")
+            .append(limit != -1 ? "-n " + limit : "")
+            .toString();
+    }
+
 	protected List<Container> impl() {
 		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
 		if(limit >= 0) {

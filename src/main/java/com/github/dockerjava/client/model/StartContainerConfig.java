@@ -5,7 +5,6 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-
 /**
  *
  * @author Konstantin Pelykh (kpelykh@gmail.com)
@@ -103,7 +102,5 @@ public class StartContainerConfig {
                 ", dns='" + dns + '\'' +
                 '}';
     }
-    
-    
-    
 }
+

@@ -76,6 +76,14 @@ public class CreateContainerCmd extends AbstrDockerCmd<CreateContainerCmd, Conta
 		return this;
 	}
 	
+    @Override
+    public String toString() {
+        return new StringBuilder("create container ")
+            .append(name != null ? "name=" + name + " " : "")
+            .append(containerCreateConfig)
+            .toString();
+    }
+
 	protected ContainerCreateResponse impl() {
 		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
 		if (name != null) {

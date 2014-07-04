@@ -13,9 +13,7 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 
 /**
- * 
- * 
- * 
+ * Wait for a container to exit and print its exit code
  */
 public class WaitContainerCmd extends AbstrDockerCmd<WaitContainerCmd, Integer> {
 
@@ -33,6 +31,11 @@ public class WaitContainerCmd extends AbstrDockerCmd<WaitContainerCmd, Integer> 
 		return this;
 	}
 	
+    @Override
+    public String toString() {
+        return "wait " + containerId;
+    }   
+
 	protected Integer impl() throws DockerException {
 		WebResource webResource = baseResource.path(String.format("/containers/%s/wait", containerId));
 

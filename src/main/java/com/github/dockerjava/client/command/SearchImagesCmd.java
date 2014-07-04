@@ -36,6 +36,13 @@ public class SearchImagesCmd extends AbstrDockerCmd<SearchImagesCmd, List<Search
 		return this;
 	}
 	
+    @Override
+    public String toString() {
+        return new StringBuilder("search ")
+            .append(term)
+            .toString();
+    }   
+
 	protected List<SearchItem> impl() {
 		WebResource webResource = baseResource.path("/images/search").queryParam("term", term);
 		try {

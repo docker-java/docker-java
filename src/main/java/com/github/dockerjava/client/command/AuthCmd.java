@@ -34,4 +34,9 @@ public class AuthCmd extends AbstrAuthCfgDockerCmd<AuthCmd, Void> {
 			throw new DockerException(e);
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return "authenticate using " + this.authConfig;
+	}
 }

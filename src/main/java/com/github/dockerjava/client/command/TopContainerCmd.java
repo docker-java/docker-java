@@ -43,6 +43,14 @@ public class TopContainerCmd extends AbstrDockerCmd<TopContainerCmd, ContainerTo
 		return this;
 	}
 	
+    @Override
+    public String toString() {
+        return new StringBuilder("top ")
+            .append(containerId)
+            .append(psArgs != null ? " " + psArgs : "")
+            .toString();
+    }   
+
 	protected ContainerTopResponse impl() throws DockerException {
 		WebResource webResource = baseResource.path(String.format("/containers/%s/top", containerId));
 				

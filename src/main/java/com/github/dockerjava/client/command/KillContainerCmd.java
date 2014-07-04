@@ -11,9 +11,7 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 
 /**
- * 
- * 
- * 
+ * Kill a running container.
  */
 public class KillContainerCmd extends AbstrDockerCmd<KillContainerCmd, Void> {
 
@@ -31,6 +29,11 @@ public class KillContainerCmd extends AbstrDockerCmd<KillContainerCmd, Void> {
 		return this;
 	}
 	
+    @Override
+    public String toString() {
+        return "kill " + containerId;
+    }
+
 	protected Void impl() throws DockerException {
 		WebResource webResource = baseResource.path(String.format("/containers/%s/kill", containerId));
 

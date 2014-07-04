@@ -36,6 +36,13 @@ public class PushImageCmd extends AbstrAuthCfgDockerCmd<PushImageCmd, ClientResp
 		return this;
 	}
 	
+    @Override
+    public String toString() {
+        return new StringBuilder("push ")
+            .append(name)
+            .toString();
+    }   
+
 	protected ClientResponse impl() {
 		WebResource webResource = baseResource.path("/images/" + name(name) + "/push");
 		try {

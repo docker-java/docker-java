@@ -41,6 +41,14 @@ public class RestartContainerCmd extends AbstrDockerCmd<RestartContainerCmd, Voi
 		return this;
 	}
 	
+    @Override
+    public String toString() {
+        return new StringBuilder("restart ")
+            .append("--time=" + timeout + " ")
+            .append(containerId)
+            .toString();
+    }   
+
 	protected Void impl() throws DockerException {
 		WebResource webResource = baseResource.path(String.format("/containers/%s/restart", containerId))
 				.queryParam("t", String.valueOf(timeout));;

@@ -15,7 +15,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,6 +62,15 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 	public BuildImgCmd withNoCache(boolean noCache) {
 		this.noCache = noCache;
 		return this;
+	}
+	
+	@Override
+	public String toString() {
+		return new StringBuilder("build ")
+			.append(tag != null ? "-t " + tag + " " : "")
+			.append(noCache ? "--nocache=true " : "")
+			.append(dockerFolder != null ? dockerFolder.getPath() : "-")
+			.toString();
 	}
 	
 	protected ClientResponse impl() {
@@ -132,7 +140,7 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 						throw new DockerException(String.format("Wrong format on line [%s]", cmd));
 					}
 
-					String resource = matcher.group(1);
+					String resource = matcher.group(1).trim();
 					
 					if(isFileResource(resource)) {
 						File src = new File(resource);
