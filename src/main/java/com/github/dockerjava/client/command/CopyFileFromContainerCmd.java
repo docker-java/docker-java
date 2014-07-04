@@ -40,6 +40,15 @@ public class CopyFileFromContainerCmd extends AbstrDockerCmd<CopyFileFromContain
 		return this;
 	}
 	
+    @Override
+    public String toString() {
+        return new StringBuilder("cp ")
+            .append(containerId)
+            .append(":")
+            .append(resource)
+            .toString();
+    }
+
 	protected ClientResponse impl() throws DockerException {
 		CopyConfig copyConfig = new CopyConfig();
 		copyConfig.setResource(resource);

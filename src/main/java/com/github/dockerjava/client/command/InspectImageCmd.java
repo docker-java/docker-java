@@ -14,9 +14,7 @@ import com.sun.jersey.api.client.WebResource;
 
 
 /**
- * 
- * 
- *
+ * Inspect the details of an image.
  */
 public class InspectImageCmd extends AbstrDockerCmd<InspectImageCmd, ImageInspectResponse>  {
 
@@ -34,6 +32,11 @@ public class InspectImageCmd extends AbstrDockerCmd<InspectImageCmd, ImageInspec
 		return this;
 	}
 	
+    @Override
+    public String toString() {
+        return "inspect " + imageId;
+    }
+
 	protected ImageInspectResponse impl() {
 		WebResource webResource = baseResource.path(String.format("/images/%s/json", imageId));
 

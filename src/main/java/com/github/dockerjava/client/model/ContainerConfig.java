@@ -39,7 +39,6 @@ public class ContainerConfig {
     @JsonProperty("WorkingDir")   private String workingDir = "";
     @JsonProperty("Domainname")   private String domainName = "";
     @JsonProperty("ExposedPorts")  private ExposedPorts exposedPorts;
-    
     @JsonProperty("OnBuild")   private int[] onBuild;
 
     @JsonIgnore 

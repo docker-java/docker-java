@@ -37,7 +37,14 @@ public class ContainerDiffCmd extends AbstrDockerCmd<ContainerDiffCmd, List<Chan
 		return this;
 	}
 	
-	protected List<ChangeLog> impl() throws DockerException {
+    @Override
+    public String toString() {
+        return new StringBuilder("diff ")
+            .append(containerId)
+            .toString();
+    }
+
+    protected List<ChangeLog> impl() throws DockerException {
 		WebResource webResource = baseResource.path(String.format("/containers/%s/changes", containerId));
 
 		try {

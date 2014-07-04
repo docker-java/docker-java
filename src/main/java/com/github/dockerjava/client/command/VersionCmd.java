@@ -12,15 +12,18 @@ import com.sun.jersey.api.client.WebResource;
 
 
 /**
- * 
- * 
- *
+ * Return the Docker version info.
  */
 public class VersionCmd extends AbstrDockerCmd<VersionCmd, Version>  {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(VersionCmd.class);
 	
 	
+    @Override
+    public String toString() {
+        return "version";
+    }   
+
 	protected Version impl() throws DockerException {
 		WebResource webResource = baseResource.path("/version");
 

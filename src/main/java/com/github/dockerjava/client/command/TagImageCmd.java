@@ -65,6 +65,16 @@ public class TagImageCmd extends AbstrDockerCmd<TagImageCmd, Integer>  {
 		return this;
 	}
 	
+    @Override
+    public String toString() {
+        return new StringBuilder("tag ")
+            .append(force ? "--force=true " : "")
+            .append(repository != null ? repository + "/" : "")
+            .append(imageId)
+            .append(tag != null ? ":" + tag : "")
+            .toString();
+    }   
+
 	protected Integer impl() {
 
 		MultivaluedMap<String, String> params = new MultivaluedMapImpl();

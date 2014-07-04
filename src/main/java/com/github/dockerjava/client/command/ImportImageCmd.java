@@ -62,6 +62,14 @@ public class ImportImageCmd extends	AbstrDockerCmd<ImportImageCmd, ImageCreateRe
 		return this;
 	}
 
+    @Override
+    public String toString() {
+        return new StringBuilder("import - ")
+            .append(repository != null ? repository + ":" : "")
+            .append(tag != null ? tag : "")
+            .toString();
+    }
+
 	protected ImageCreateResponse impl() {
 		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
 		params.add("repo", repository);
