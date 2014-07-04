@@ -29,8 +29,8 @@ public class SelectiveLoggingFilter extends LoggingFilter {
     public ClientResponse handle(ClientRequest request) throws ClientHandlerException {
         // Unless the content type is in the list of those we want to ellide, then just have
         // our super-class handle things.
-        MediaType contentType = (MediaType) request.getHeaders().getFirst(HttpHeaders.CONTENT_TYPE);
-        if (SKIPPED_CONTENT.contains(contentType.toString())) {
+        Object contentType = request.getHeaders().getFirst(HttpHeaders.CONTENT_TYPE);
+        if (contentType != null && SKIPPED_CONTENT.contains(contentType.toString())) {
             // Skip logging this.
             //
             // N.B. -- I'd actually love to reproduce (or better yet just use) the logging code from

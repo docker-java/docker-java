@@ -198,6 +198,7 @@ public class BuildImageCmdTest extends AbstractDockerClientTest {
 		ImageInspectResponse imageInspectResponse = dockerClient
 				.inspectImageCmd(imageId).exec();
 		assertThat(imageInspectResponse, not(nullValue()));
+		assertThat(imageInspectResponse.getId(), not(nullValue()));
 		LOG.info("Image Inspect: {}", imageInspectResponse.toString());
 		tmpImgs.add(imageInspectResponse.getId());
 
