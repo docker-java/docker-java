@@ -46,66 +46,14 @@ Run build with tests:
     <dependency>
           <groupId>com.github.docker-java</groupId>
           <artifactId>docker-java</artifactId>
-          <version>0.9.0-SNAPSHOT</version>
+          <version>0.9.0</version>
     </dependency>
 
 Latest SNAPSHOT is available from maven repo: https://oss.sonatype.org/content/groups/public   
 
-## Example code snippets:
+## Documentation
 
-    DockerClient dockerClient = new DockerClient("http://localhost:2375");
-
-###### Get Docker info:
-
-    Info info = dockerClient.infoCmd().exec();
-    System.out.print(info);
-
-###### Search Docker repository:
-
-    List<SearchItem> dockerSearch = dockerClient.searchImagesCmd("busybox").exec();
-    System.out.println("Search returned" + dockerSearch.toString());
-
-###### Create new Docker container, wait for its start and stop it:
-
-    ContainerCreateResponse container = dockerClient.createContainerCmd("busybox").withCmd("touch", "/test").exec();
-
-    dockerClient.startContainerCmd(container.id).exec();
-
-    dockerClient.waitContainerCmd(container.id).exec();
-
-    dockerClient.stopContainerCmd(container.id).exec();
-
-
-##### Support for UNIX sockets:
-
-    Support for UNIX socket should appear in docker-java pretty soon. I'm working on its integration.
-
-##### Docker Builder:
-
-To use Docker Builder, as described on page http://docs.docker.io/en/latest/use/builder/,
-user dockerClient.buildImageCmd(baseDir), where baseDir is a path to folder containing Dockerfile.
-
-
-    File baseDir = new File("~/kpelykh/docker/netcat");
-
-    ClientResponse response = dockerClient.buildImageCmd(baseDir).exec();
-
-    StringWriter logwriter = new StringWriter();
-
-    try {
-        LineIterator itr = IOUtils.lineIterator(response.getEntityInputStream(), "UTF-8");
-        while (itr.hasNext()) {
-            String line = itr.next();
-            logwriter.write(line);
-            LOG.info(line);
-        }
-    } finally {
-        IOUtils.closeQuietly(response.getEntityInputStream());
-    }
-
-
-
-For additional examples, please look at [Test cases](https://github.com/docker-java/docker-java/tree/master/src/test/java/com/github/dockerjava/client/command "Test cases")
+For code examples, please look at the [Wiki](https://github.com/docker-java/docker-java/wiki) or [Test cases](https://github.com/docker-java/docker-java/tree/master/src/test/java/com/github/dockerjava/client/command "Test cases")
 
 ## Configuration
 
