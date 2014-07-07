@@ -67,13 +67,20 @@ public class DockerClient {
 	private AuthConfig authConfig;
 
 	public DockerClient() throws DockerException {
-		this(Config.createConfig());
+		this(10000, true);
+	}
+	public DockerClient(Integer readTimeout, boolean enableLoggingFilter) throws DockerException {
+		this(Config.createConfig(), readTimeout, enableLoggingFilter);
 	}
 
 	public DockerClient(String serverUrl) throws DockerException {
-		this(configWithServerUrl(serverUrl));
+		this(serverUrl, 10000, true);
 	}
 
+	public DockerClient(String serverUrl, Integer readTimeout, boolean enableLoggingFilter) throws DockerException {
+		this(configWithServerUrl(serverUrl), readTimeout, enableLoggingFilter);
+	}
+	
 	private static Config configWithServerUrl(String serverUrl)
 			throws DockerException {
 		final Config c = Config.createConfig();
@@ -81,7 +88,7 @@ public class DockerClient {
 		return c;
 	}
 
-	private DockerClient(Config config) {
+	public DockerClient(Config config, Integer readTimeout, boolean enableLoggingFilter) {
 		ClientConfig clientConfig = new DefaultClientConfig();
 		
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
@@ -101,13 +108,18 @@ public class DockerClient {
 		client = new ApacheHttpClient4(new ApacheHttpClient4Handler(httpClient,
 				null, false), clientConfig);
 
-		client.setReadTimeout(10000);
+		// 1 hour
+		client.setReadTimeout(readTimeout);
 	
 		client.addFilter(new JsonClientFilter());
-		client.addFilter(new SelectiveLoggingFilter());
+		
+		if (enableLoggingFilter)
+			client.addFilter(new SelectiveLoggingFilter());
 
 		baseResource = client.resource(config.url + "/v" + config.version);
 	}
+
+	
 
 	public void setCredentials(String username, String password, String email) {
 		if (username == null) {
