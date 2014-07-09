@@ -1,3 +1,4 @@
+
 package com.github.dockerjava.client.command;
 
 import javax.ws.rs.core.MediaType;
@@ -8,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.NotFoundException;
 import com.github.dockerjava.client.model.Bind;
+import com.github.dockerjava.client.model.Link;
 import com.github.dockerjava.client.model.LxcConf;
 import com.github.dockerjava.client.model.Ports;
 import com.github.dockerjava.client.model.StartContainerConfig;
@@ -37,7 +39,14 @@ public class StartContainerCmd extends AbstrDockerCmd<StartContainerCmd, Void> {
 		return this;
 	}
 
-	public StartContainerCmd withLxcConf(LxcConf[] lxcConf) {
+	public StartContainerCmd withLinks(final Link... links)
+	{
+		startContainerConfig.setLinks(links);
+		return this;
+	}
+
+	public StartContainerCmd withLxcConf(final LxcConf[] lxcConf)
+	{
 		startContainerConfig.setLxcConf(lxcConf);
 		return this;
 	}

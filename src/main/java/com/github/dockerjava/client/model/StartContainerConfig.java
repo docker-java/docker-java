@@ -15,6 +15,9 @@ public class StartContainerConfig {
     @JsonProperty("Binds")
     private Binds binds = new Binds();
     
+    @JsonProperty("Links")
+    private Links links = new Links();
+
     @JsonProperty("LxcConf")
     private LxcConf[] lxcConf;
     
@@ -41,6 +44,16 @@ public class StartContainerConfig {
     @JsonIgnore
 	public void setBinds(Bind[] binds) {
 		this.binds = new Binds(binds);
+	}
+
+    @JsonIgnore
+    public Link[] getLinks() {
+		return links.getLinks();
+	}
+
+    @JsonIgnore
+	public void setLinks(Link[] links) {
+		this.links = new Links(links);
 	}
 
 	public LxcConf[] getLxcConf() {
