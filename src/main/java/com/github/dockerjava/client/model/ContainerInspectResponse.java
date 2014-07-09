@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ContainerInspectResponse {
 
-    @JsonProperty("ID")
+    @JsonProperty("Id")
     private String id;
 
     @JsonProperty("Created")
@@ -29,7 +29,7 @@ public class ContainerInspectResponse {
     private String[] args;
 
     @JsonProperty("Config")
-    public ContainerConfig config;
+    private ContainerConfig config;
 
     @JsonProperty("State")
     private ContainerState state;
@@ -276,6 +276,7 @@ public class ContainerInspectResponse {
         @JsonProperty("DnsSearch")
         private String dnsSearch;
         
+        // TODO: use Links class here?
         @JsonProperty("Links")
         private String[] links;
 

@@ -108,6 +108,9 @@ public class StartContainerCmd extends AbstrDockerCmd<StartContainerCmd, Void> {
 		} catch (UniformInterfaceException exception) {
 			if (exception.getResponse().getStatus() == 404) {
 				throw new NotFoundException(String.format("No such container %s", containerId));
+			} else if(exception.getResponse().getStatus() == 304) {
+				//no error
+				LOGGER.warn("Container already started {}", containerId);
 			} else if (exception.getResponse().getStatus() == 204) {
 				//no error
 				LOGGER.trace("Successfully started container {}", containerId);

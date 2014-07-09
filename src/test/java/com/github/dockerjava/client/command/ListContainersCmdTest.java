@@ -53,12 +53,10 @@ public class ListContainersCmdTest extends AbstractDockerClientTest {
 	@Test
 	public void testListContainers() throws DockerException {
 		
-		String testImage = "hackmann/empty";
+		String testImage = "busybox";
 		
-		LOG.info("Pulling image 'hackmann/empty'");
 		// need to block until image is pulled completely
 		logResponseStream(dockerClient.pullImageCmd(testImage).exec());
-		tmpImgs.add(testImage);
 		
 		List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
 		assertThat(containers, notNullValue());
@@ -67,7 +65,7 @@ public class ListContainersCmdTest extends AbstractDockerClientTest {
 		int size = containers.size();
 
 		ContainerCreateResponse container1 = dockerClient
-				.createContainerCmd(testImage).withCmd(new String[] { "echo" }).exec();
+				.createContainerCmd(testImage).withCmd("echo").exec();
 		
 		assertThat(container1.getId(), not(isEmptyString()));
 
@@ -96,12 +94,12 @@ public class ListContainersCmdTest extends AbstractDockerClientTest {
 		assertThat(filteredContainers.size(), is(equalTo(1)));
 
 		for(Container container: filteredContainers) {
-			LOG.info("filteredContainer: " + container.getImage());
+			LOG.info("filteredContainer: " + container);
 		}
 		
 		Container container2 = filteredContainers.get(0);
 		assertThat(container2.getCommand(), not(isEmptyString()));
-		assertThat(container2.getImage(), equalTo(testImage + ":latest"));
+		assertThat(container2.getImage(), startsWith(testImage + ":"));
 	}
 
 

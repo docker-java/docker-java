@@ -31,6 +31,8 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 /**
  * 
  * Build an image from Dockerfile.
+ * 
+ * TODO: http://docs.docker.com/reference/builder/#dockerignore
  *
  */
 public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
@@ -61,6 +63,10 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 		Preconditions.checkNotNull(tag, "Tag is null");
 		this.tag = tag;
 		return this;
+	}
+	
+	public BuildImgCmd withNoCache() {
+		return withNoCache(true);
 	}
 	
 	public BuildImgCmd withNoCache(boolean noCache) {
@@ -170,7 +176,7 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 
 					String extractedResource = matcher.group(2);
 					
-					String resource = filterForEnvironmentVars(extractedResource, environmentMap);
+					String resource = filterForEnvironmentVars(extractedResource, environmentMap).trim();
 					
 					if(isFileResource(resource)) {
 						File src = new File(resource);

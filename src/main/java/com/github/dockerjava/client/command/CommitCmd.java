@@ -24,11 +24,15 @@ public class CommitCmd extends AbstrDockerCmd<CommitCmd, String>  {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommitCmd.class);
 	
-	private CommitConfig commitConfig;
+	private String containerId, repository, tag, message, author;
+	
+	private boolean pause = true;
+	
+	private CommitConfig commitConfig = new CommitConfig();
 	
 	public CommitCmd(String containerId) {
 		Preconditions.checkNotNull(containerId, "containerId was not specified");
-		this.commitConfig = new CommitConfig(containerId);
+		this.containerId = containerId;
 	}
 	
 	public CommitCmd withCommitConfig(CommitConfig commitConfig) {
@@ -37,44 +41,81 @@ public class CommitCmd extends AbstrDockerCmd<CommitCmd, String>  {
 		return this;
 	}
 	
-	public CommitCmd withRepo(String repo) {
-		Preconditions.checkNotNull(repo, "repo was not specified");
-		this.commitConfig.setRepo(repo);
+	public CommitCmd withAttachStderr(boolean attachStderr) {
+		this.commitConfig.setAttachStderr(attachStderr);
 		return this;
 	}
 	
-	public CommitCmd withTag(String tag) {
-		Preconditions.checkNotNull(tag, "tag was not specified");
-		this.commitConfig.setTag(tag);
+	public CommitCmd withAttachStderr() {
+		return withAttachStderr(true);
+	}
+	
+	public CommitCmd withAttachStdin(boolean attachStdin) {
+		this.commitConfig.setAttachStdin(attachStdin);
 		return this;
 	}
+	
+	public CommitCmd withAttachStdin() {
+		return withAttachStdin(true);
+	}
 
-	public CommitCmd withMessage(String message) {
-		Preconditions.checkNotNull(message, "message was not specified");
-		this.commitConfig.setMessage(message);
+	public CommitCmd withAttachStdout(boolean attachStdout) {
+		this.commitConfig.setAttachStdout(attachStdout);
+		return this;
+	}
+	
+	public CommitCmd withAttachStdout() {
+		return withAttachStdout(true);
+	}
+	
+	public CommitCmd withCmd(String... cmd) {
+		Preconditions.checkNotNull(cmd, "cmd was not specified");
+		this.commitConfig.setCmd(cmd);
+		return this;
+	}
+	
+	public CommitCmd withDisableNetwork(boolean disableNetwork) {
+		this.commitConfig.setDisableNetwork(disableNetwork);
 		return this;
 	}
 	
 	public CommitCmd withAuthor(String author) {
 		Preconditions.checkNotNull(author, "author was not specified");
-		this.commitConfig.setAuthor(author);
+		this.author = author;
 		return this;
 	}
 	
-	public CommitCmd withRun(String run) {
-		Preconditions.checkNotNull(run, "run was not specified");
-		this.commitConfig.setRun(run);
+	public CommitCmd withMessage(String message) {
+		Preconditions.checkNotNull(message, "message was not specified");
+		this.message = message;
+		return this;
+	}
+	
+	public CommitCmd withTag(String tag) {
+		Preconditions.checkNotNull(tag, "tag was not specified");
+		this.tag = tag;
+		return this;
+	}
+	
+	public CommitCmd withRepository(String repository) {
+		Preconditions.checkNotNull(repository, "repository was not specified");
+		this.repository = repository;
+		return this;
+	}
+	
+	public CommitCmd withPause(boolean pause) {
+		this.pause = pause;
 		return this;
 	}
 	
 	@Override
 	public String toString() {
 		return new StringBuilder("commit ")
-			.append(commitConfig.getAuthor() != null ? "--author " + commitConfig.getAuthor() + " " : "")
-			.append(commitConfig.getMessage() != null ? "--message " + commitConfig.getMessage() + " " : "")
-			.append(commitConfig.getContainerId())
-			.append(commitConfig.getRepo() != null ?  " " + commitConfig.getRepo() + ":" : " ")
-			.append(commitConfig.getTag() != null ?  commitConfig.getTag() : "")
+			.append(author != null ? "--author " + author + " " : "")
+			.append(message != null ? "--message " + message + " " : "")
+			.append(containerId)
+			.append(repository != null ?  " " + repository + ":" : " ")
+			.append(tag != null ?  tag : "")
 			.toString();
 	}
 		
@@ -86,12 +127,12 @@ public class CommitCmd extends AbstrDockerCmd<CommitCmd, String>  {
 		checkCommitConfig(commitConfig);
 		
 		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-		params.add("container", commitConfig.getContainerId());
-		params.add("repo", commitConfig.getRepo());
-		params.add("tag", commitConfig.getTag());
-		params.add("m", commitConfig.getMessage());
-		params.add("author", commitConfig.getAuthor());
-		params.add("run", commitConfig.getRun());
+		params.add("container", containerId);
+		params.add("repo", repository);
+		params.add("tag", tag);
+		params.add("m", message);
+		params.add("author", author);
+		params.add("pause", pause ? "1" : "0");
 
 		WebResource webResource = baseResource.path("/commit").queryParams(params);
 
@@ -101,7 +142,7 @@ public class CommitCmd extends AbstrDockerCmd<CommitCmd, String>  {
             return ObjectNode.get("Id").asText();
 		} catch (UniformInterfaceException exception) {
 			if (exception.getResponse().getStatus() == 404) {
-				throw new NotFoundException(String.format("No such container %s", commitConfig.getContainerId()));
+				throw new NotFoundException(String.format("No such container %s", containerId));
 			} else if (exception.getResponse().getStatus() == 500) {
 				throw new DockerException("Server error", exception);
 			} else {

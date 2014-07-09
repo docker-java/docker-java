@@ -62,7 +62,7 @@ public class PushImageCmdTest extends AbstractDockerClientTest {
 		tmpContainers.add(container.getId());
 		
 		LOG.info("Commiting container: {}", container.toString());
-		String imageId = dockerClient.commitCmd(container.getId()).withRepo(username + "/busybox").exec();
+		String imageId = dockerClient.commitCmd(container.getId()).withRepository(username + "/busybox").exec();
 
 		logResponseStream(dockerClient.pushImageCmd(username + "/busybox").exec());
 		

@@ -174,7 +174,7 @@ public class BuildImageCmdTest extends AbstractDockerClientTest {
 		File baseDir = new File(Thread.currentThread().getContextClassLoader()
 				.getResource("netcat").getFile());
 
-		ClientResponse response = dockerClient.buildImageCmd(baseDir).exec();
+		ClientResponse response = dockerClient.buildImageCmd(baseDir).withNoCache().exec();
 
 		StringWriter logwriter = new StringWriter();
 
@@ -230,7 +230,7 @@ public class BuildImageCmdTest extends AbstractDockerClientTest {
 	public void testAddAndCopySubstitution () throws DockerException, IOException {
 			File baseDir = new File(Thread.currentThread().getContextClassLoader()
 					.getResource("testENVSubstitution").getFile());
-			dockerfileBuild(baseDir, "Successfully executed testAddFolder.sh");
+			dockerfileBuild(baseDir, "testENVSubstitution successfully completed");
 
 	}
 }

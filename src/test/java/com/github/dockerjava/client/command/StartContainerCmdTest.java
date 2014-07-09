@@ -25,6 +25,7 @@ import com.github.dockerjava.client.model.Bind;
 import com.github.dockerjava.client.model.ContainerCreateResponse;
 import com.github.dockerjava.client.model.ContainerInspectResponse;
 import com.github.dockerjava.client.model.ExposedPort;
+import com.github.dockerjava.client.model.Link;
 import com.github.dockerjava.client.model.Ports;
 import com.github.dockerjava.client.model.Volume;
 
@@ -130,10 +131,66 @@ public class StartContainerCmdTest extends AbstractDockerClientTest {
 	}
 	
 	@Test
+	public void startContainerWithLinking() throws DockerException {
+
+		ContainerCreateResponse container1 = dockerClient
+				.createContainerCmd("busybox").withCmd("sleep", "9999").withName("container1").exec();
+		
+		LOG.info("Created container1 {}", container1.toString());
+		assertThat(container1.getId(), not(isEmptyString()));
+		tmpContainers.add(container1.getId());
+
+		dockerClient.startContainerCmd(container1.getId()).exec();
+
+		ContainerInspectResponse containerInspectResponse1 = dockerClient
+				.inspectContainerCmd(container1.getId()).exec();
+		LOG.info("Container1 Inspect: {}", containerInspectResponse1.toString());
+
+		assertThat(containerInspectResponse1.getConfig(), is(notNullValue()));
+		assertThat(containerInspectResponse1.getId(), not(isEmptyString()));
+		assertThat(containerInspectResponse1.getId(), startsWith(container1.getId()));
+		assertThat(containerInspectResponse1.getName(), equalTo("/container1"));
+		assertThat(containerInspectResponse1.getImageId(), not(isEmptyString()));
+		assertThat(containerInspectResponse1.getState(), is(notNullValue()));
+		assertThat(containerInspectResponse1.getState().isRunning(), is(true));
+
+		if (!containerInspectResponse1.getState().isRunning()) {
+			assertThat(containerInspectResponse1.getState().getExitCode(),
+					is(equalTo(0)));
+		}
+		
+		ContainerCreateResponse container2 = dockerClient
+				.createContainerCmd("busybox").withCmd("true").withName("container2").exec();
+		
+		LOG.info("Created container2 {}", container2.toString());
+		assertThat(container2.getId(), not(isEmptyString()));
+		tmpContainers.add(container2.getId());
+
+		dockerClient.startContainerCmd(container2.getId()).withLinks(new Link("container1", "container1Link")).exec();
+
+		ContainerInspectResponse containerInspectResponse2 = dockerClient
+				.inspectContainerCmd(container2.getId()).exec();
+		LOG.info("Container2 Inspect: {}", containerInspectResponse2.toString());
+		
+		assertThat(containerInspectResponse2.getConfig(), is(notNullValue()));
+		assertThat(containerInspectResponse2.getId(), not(isEmptyString()));
+		assertThat(containerInspectResponse2.getHostConfig(), is(notNullValue()));
+		assertThat(containerInspectResponse2.getHostConfig().getLinks(), is(notNullValue()));
+		assertThat(containerInspectResponse2.getHostConfig().getLinks(), equalTo(new String[] {"/container1:/container2/container1Link"}));
+		assertThat(containerInspectResponse2.getId(), startsWith(container2.getId()));
+		assertThat(containerInspectResponse2.getName(), equalTo("/container2"));
+		assertThat(containerInspectResponse2.getImageId(), not(isEmptyString()));
+		assertThat(containerInspectResponse2.getState(), is(notNullValue()));
+		assertThat(containerInspectResponse2.getState().isRunning(), is(true));
+
+	}
+
+	
+	@Test
 	public void startContainer() throws DockerException {
 
 		ContainerCreateResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd(new String[] { "true" }).exec();
+				.createContainerCmd("busybox").withCmd("true").exec();
 		
 		LOG.info("Created container {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));
@@ -145,7 +202,7 @@ public class StartContainerCmdTest extends AbstractDockerClientTest {
 				.inspectContainerCmd(container.getId()).exec();
 		LOG.info("Container Inspect: {}", containerInspectResponse.toString());
 
-		assertThat(containerInspectResponse.config, is(notNullValue()));
+		assertThat(containerInspectResponse.getConfig(), is(notNullValue()));
 		assertThat(containerInspectResponse.getId(), not(isEmptyString()));
 
 		assertThat(containerInspectResponse.getId(),

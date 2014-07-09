@@ -59,6 +59,9 @@ public class StopContainerCmd extends AbstrDockerCmd<StopContainerCmd, Void> {
 		} catch (UniformInterfaceException exception) {
 			if (exception.getResponse().getStatus() == 404) {
 				LOGGER.warn("No such container {}", containerId);
+			} else if(exception.getResponse().getStatus() == 304) {
+				//no error
+				LOGGER.warn("Container already stopped {}", containerId);
 			} else if (exception.getResponse().getStatus() == 204) {
 				//no error
 				LOGGER.trace("Successfully stopped container {}", containerId);

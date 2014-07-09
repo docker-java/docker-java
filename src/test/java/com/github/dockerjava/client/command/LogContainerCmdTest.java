@@ -44,7 +44,7 @@ public class LogContainerCmdTest extends AbstractDockerClientTest {
 	}
 
 	@Test
-	public void attach() throws DockerException, IOException {
+	public void logContainer() throws DockerException, IOException {
 
 		String snippet = "hello world";
 

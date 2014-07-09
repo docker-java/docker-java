@@ -34,7 +34,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 
 		LOG.info("Pulling image 'busybox'");
 		// need to block until image is pulled completely
-		logResponseStream(dockerClient.pullImageCmd("busybox").exec());
+		logResponseStream(dockerClient.pullImageCmd("busybox:latest").exec());
 		
 		
 
@@ -64,6 +64,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 				dockerClient.killContainerCmd(container).exec();
 				dockerClient.removeContainerCmd(container).exec();
 			} catch (DockerException ignore) {
+				ignore.printStackTrace();
 			}
 		}
 
@@ -72,6 +73,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 			try {
 				dockerClient.removeImageCmd(image).exec();
 			} catch (DockerException ignore) {
+				ignore.printStackTrace();
 			}
 		}
 

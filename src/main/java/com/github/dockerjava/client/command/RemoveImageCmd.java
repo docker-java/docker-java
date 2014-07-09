@@ -33,6 +33,10 @@ public class RemoveImageCmd extends AbstrDockerCmd<RemoveImageCmd, Void> {
 		return this;
 	}
 	
+	public RemoveImageCmd withForce() {
+		return withForce(true);
+	}
+	
 	public RemoveImageCmd withForce(boolean force) {
 		this.force = force;
 		return this;

@@ -11,6 +11,7 @@ then
 
 	if test -f $TEST_FILE_2
 	then
+		echo "testENVSubstitution successfully completed"
   		exit 0
 	else
 		echo "$TEST_FILE_2 does not exist"
