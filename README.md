@@ -2,7 +2,7 @@
 
 Java API client for [Docker](http://docs.docker.io/ "Docker")
 
-Supports a subset of the Docker Client API v1.12, Docker Server version 1.0
+Supports a subset of the Docker Client API v1.13, Docker Server version 1.1
 
 Developer forum for [docker-java](https://groups.google.com/forum/?hl=de#!forum/docker-java-dev "docker-java")
 
