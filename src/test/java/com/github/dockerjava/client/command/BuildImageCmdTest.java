@@ -12,6 +12,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
@@ -113,6 +115,7 @@ public class BuildImageCmdTest extends AbstractDockerClientTest {
 		dockerfileBuild(baseDir, "Successfully executed testAddFolder.sh");
 	}
 
+	
 	private String dockerfileBuild(File baseDir, String expectedText)
 			throws DockerException, IOException {
 
@@ -220,6 +223,14 @@ public class BuildImageCmdTest extends AbstractDockerClientTest {
 //			assertThat(available(port), is(false));
 //		}
 		dockerClient.stopContainerCmd(container.getId()).withTimeout(0).exec();
+
+	}
+	
+	@Test
+	public void testAddAndCopySubstitution () throws DockerException, IOException {
+			File baseDir = new File(Thread.currentThread().getContextClassLoader()
+					.getResource("testENVSubstitution").getFile());
+			dockerfileBuild(baseDir, "Successfully executed testAddFolder.sh");
 
 	}
 }
