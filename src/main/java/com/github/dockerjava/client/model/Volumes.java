@@ -20,54 +20,53 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.node.NullNode;
 
 
-@JsonSerialize(using = ExposedPorts.Serializer.class)
-@JsonDeserialize(using = ExposedPorts.Deserializer.class)
-public class ExposedPorts {
+@JsonSerialize(using = Volumes.Serializer.class)
+@JsonDeserialize(using = Volumes.Deserializer.class)
+public class Volumes {
 
-	private ExposedPort[] exposedPorts;
+	private Volume[] volumes;
 
-	public ExposedPorts(ExposedPort... exposedPorts) {
-		this.exposedPorts = exposedPorts;
+	public Volumes(Volume... volumes) {
+		this.volumes = volumes;
 	}
 
-	public ExposedPort[] getExposedPorts() {
-		return exposedPorts;
+	public Volume[] getVolumes() {
+		return volumes;
 	}
 
-	public static class Serializer extends JsonSerializer<ExposedPorts> {
+	public static class Serializer extends JsonSerializer<Volumes> {
 
 		@Override
-		public void serialize(ExposedPorts exposedPorts, JsonGenerator jsonGen,
+		public void serialize(Volumes volumes, JsonGenerator jsonGen,
 				SerializerProvider serProvider) throws IOException,
 				JsonProcessingException {
 			
 			jsonGen.writeStartObject();
-			for (ExposedPort exposedPort : exposedPorts.getExposedPorts()) {
-				jsonGen.writeFieldName(exposedPort.getPort() + "/"
-						+ exposedPort.getScheme());
-				jsonGen.writeStartObject();
-				jsonGen.writeEndObject();
+			for (Volume volume : volumes.getVolumes()) {
+				jsonGen.writeFieldName(volume.getPath());
+				jsonGen.writeString(Boolean.toString(volume.isReadWrite()));
 			}
 			jsonGen.writeEndObject();
 		}
 
 	}
 	
-	public static class Deserializer extends JsonDeserializer<ExposedPorts> {
+	public static class Deserializer extends JsonDeserializer<Volumes> {
         @Override
-        public ExposedPorts deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+        public Volumes deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
 
-        	List<ExposedPort> exposedPorts = new ArrayList<ExposedPort>();
+        	List<Volume> volumes = new ArrayList<Volume>();
             ObjectCodec oc = jsonParser.getCodec();
             JsonNode node = oc.readTree(jsonParser);
             for (Iterator<Map.Entry<String, JsonNode>> it = node.fields(); it.hasNext();) {
 
                 Map.Entry<String, JsonNode> field = it.next();
                 if (!field.getValue().equals(NullNode.getInstance())) {
-                	exposedPorts.add(ExposedPort.parse(field.getKey()));
+                	Volume volume = Volume.parse(field.getKey());
+                	volumes.add(volume);
                 }
             }
-            return new ExposedPorts(exposedPorts.toArray(new ExposedPort[0]));
+            return new Volumes(volumes.toArray(new Volume[0]));
         }
     }
 

@@ -14,6 +14,7 @@ import com.github.dockerjava.client.NotFoundException;
 import com.github.dockerjava.client.model.ContainerCreateResponse;
 import com.github.dockerjava.client.model.CreateContainerConfig;
 import com.github.dockerjava.client.model.ExposedPort;
+import com.github.dockerjava.client.model.Volume;
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
@@ -55,15 +56,9 @@ public class CreateContainerCmd extends AbstrDockerCmd<CreateContainerCmd, Conta
 		return this;
 	}
 	
-	public CreateContainerCmd withVolumes(String... volumes) {
+	public CreateContainerCmd withVolumes(Volume... volumes) {
 		Preconditions.checkNotNull(volumes, "volumes was not specified");
-		
-		Map<String,String> _volumes = new HashMap<String, String>();
-		for(String volume:volumes) {
-			_volumes.put(volume, "");
-		}
-		
-		this.containerCreateConfig.withVolumes(_volumes);
+		this.containerCreateConfig.withVolumes(volumes);
 		return this;
 	}
 	

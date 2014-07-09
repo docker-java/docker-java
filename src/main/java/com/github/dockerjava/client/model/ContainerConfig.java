@@ -1,13 +1,11 @@
 package com.github.dockerjava.client.model;
 
+import java.util.Arrays;
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
-
-import java.util.Arrays;
-import java.util.Map;
 
 /**
  *
@@ -41,7 +39,6 @@ public class ContainerConfig {
     @JsonProperty("WorkingDir")   private String workingDir = "";
     @JsonProperty("Domainname")   private String domainName = "";
     @JsonProperty("ExposedPorts")  private ExposedPorts exposedPorts;
-    
     @JsonProperty("OnBuild")   private int[] onBuild;
 
     @JsonIgnore 

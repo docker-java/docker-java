@@ -3,7 +3,6 @@ package com.github.dockerjava.client.command;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
@@ -13,6 +12,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
@@ -29,7 +30,6 @@ import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.model.ContainerCreateResponse;
 import com.github.dockerjava.client.model.ContainerInspectResponse;
 import com.github.dockerjava.client.model.ImageInspectResponse;
-import com.github.dockerjava.client.model.Ports;
 import com.sun.jersey.api.client.ClientResponse;
 
 public class BuildImageCmdTest extends AbstractDockerClientTest {
@@ -115,6 +115,7 @@ public class BuildImageCmdTest extends AbstractDockerClientTest {
 		dockerfileBuild(baseDir, "Successfully executed testAddFolder.sh");
 	}
 
+	
 	private String dockerfileBuild(File baseDir, String expectedText)
 			throws DockerException, IOException {
 
@@ -222,6 +223,14 @@ public class BuildImageCmdTest extends AbstractDockerClientTest {
 //			assertThat(available(port), is(false));
 //		}
 		dockerClient.stopContainerCmd(container.getId()).withTimeout(0).exec();
+
+	}
+	
+	@Test
+	public void testAddAndCopySubstitution () throws DockerException, IOException {
+			File baseDir = new File(Thread.currentThread().getContextClassLoader()
+					.getResource("testENVSubstitution").getFile());
+			dockerfileBuild(baseDir, "Successfully executed testAddFolder.sh");
 
 	}
 }

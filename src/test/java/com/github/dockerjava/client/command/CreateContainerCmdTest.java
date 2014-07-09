@@ -18,6 +18,7 @@ import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.model.ContainerCreateResponse;
 import com.github.dockerjava.client.model.ContainerInspectResponse;
+import com.github.dockerjava.client.model.Volume;
 
 public class CreateContainerCmdTest extends AbstractDockerClientTest {
 
@@ -45,7 +46,7 @@ public class CreateContainerCmdTest extends AbstractDockerClientTest {
 	public void createContainer() throws DockerException {
 		
 		ContainerCreateResponse container = dockerClient
-				.createContainerCmd("busybox").withVolumes("/var/log").withCmd(new String[] { "true" }).exec();
+				.createContainerCmd("busybox").withVolumes(new Volume("/var/log")).withCmd("true").exec();
 
 		LOG.info("Created container {}", container.toString());
 

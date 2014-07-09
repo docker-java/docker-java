@@ -8,9 +8,6 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -19,7 +16,6 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -29,15 +25,15 @@ import com.fasterxml.jackson.databind.node.NullNode;
 @JsonSerialize(using = Ports.Serializer.class)
 public class Ports {
 
-    private final Map<ExposedPort, Host> ports = new HashMap<ExposedPort, Host>();
+    private final Map<ExposedPort, Binding> ports = new HashMap<ExposedPort, Binding>();
 
     public Ports() { }
     
-    public Ports(ExposedPort exposedPort, Host host) { 
-    	addMapping(exposedPort, host);
+    public Ports(ExposedPort exposedPort, Binding host) { 
+    	bind(exposedPort, host);
     }
 
-    public void addMapping(ExposedPort exposedPort, Host host) {
+    public void bind(ExposedPort exposedPort, Binding host) {
     	ports.put(exposedPort, host);
     }
 
@@ -46,21 +42,32 @@ public class Ports {
         return ports.toString();
     }
 
-    public Map<ExposedPort, Host> getMappings(){
+    public Map<ExposedPort, Binding> getBindings(){
         return ports;
+    }
+    
+    public static Binding Binding(String hostIp, int hostPort) {
+    	return new Binding(hostIp, hostPort);
+    }
+    public static Binding Binding(int hostPort) {
+    	return new Binding(hostPort);
     }
 
 
-    public static class Host {
+    public static class Binding {
 
 
         private final String hostIp;
 
         private final int hostPort;
 
-        public Host(String hostIp, int hostPort) {
+        public Binding(String hostIp, int hostPort) {
             this.hostIp = hostIp;
             this.hostPort = hostPort;
+        }
+        
+        public Binding(int hostPort) {
+            this("", hostPort);
         }
         
         public String getHostIp() {
@@ -74,7 +81,7 @@ public class Ports {
         
         @Override
         public String toString() {
-            return "Host{" +
+            return "PortBinding{" +
                     "hostIp='" + hostIp + '\'' +
                     ", hostPort='" + hostPort + '\'' +
                     '}';
@@ -82,8 +89,8 @@ public class Ports {
         
         @Override
         public boolean equals(Object obj) {
-        	if(obj instanceof Host) {
-        		Host other = (Host) obj;
+        	if(obj instanceof Binding) {
+        		Binding other = (Binding) obj;
         		return new EqualsBuilder()
         			.append(hostIp, other.getHostIp())
         			.append(hostPort, other.getHostPort()).isEquals();
@@ -106,7 +113,7 @@ public class Ports {
                 if (!field.getValue().equals(NullNode.getInstance())) {                	
                     String hostIp = field.getValue().get(0).get("HostIp").textValue();
                     int hostPort = field.getValue().get(0).get("HostPort").asInt();
-                    out.addMapping(ExposedPort.parse(field.getKey()), new Host(hostIp, hostPort));
+                    out.bind(ExposedPort.parse(field.getKey()), new Binding(hostIp, hostPort));
                 }
             }
             return out;
@@ -120,7 +127,7 @@ public class Ports {
                               SerializerProvider serProvider) throws IOException, JsonProcessingException {
 
             jsonGen.writeStartObject();
-            for(Entry<ExposedPort, Host> entry : portBindings.getMappings().entrySet()){
+            for(Entry<ExposedPort, Binding> entry : portBindings.getBindings().entrySet()){
                 jsonGen.writeFieldName(entry.getKey().getPort() + "/" + entry.getKey().getScheme());
                 jsonGen.writeStartArray();
                 jsonGen.writeStartObject();

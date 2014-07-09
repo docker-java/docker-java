@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.NotFoundException;
+import com.github.dockerjava.client.model.Bind;
 import com.github.dockerjava.client.model.LxcConf;
 import com.github.dockerjava.client.model.Ports;
 import com.github.dockerjava.client.model.StartContainerConfig;
@@ -31,39 +32,39 @@ public class StartContainerCmd extends AbstrDockerCmd<StartContainerCmd, Void> {
 		withContainerId(containerId);
 	}
 	
-	public StartContainerCmd withBinds(String... binds) {
-		startContainerConfig.binds = binds;
+	public StartContainerCmd withBinds(Bind... binds) {
+		startContainerConfig.setBinds(binds);
 		return this;
 	}
 
 	public StartContainerCmd withLxcConf(LxcConf[] lxcConf) {
-		startContainerConfig.lxcConf = lxcConf;
+		startContainerConfig.setLxcConf(lxcConf);
 		return this;
 	}
 
 	public StartContainerCmd withPortBindings(Ports portBindings) {
-		startContainerConfig.portBindings = portBindings;
+		startContainerConfig.setPortBindings(portBindings);
 		return this;
 	}
 
 	public StartContainerCmd withPrivileged(boolean privileged) {
-		startContainerConfig.privileged = privileged; 
+		startContainerConfig.setPrivileged(privileged);
 		return this;
 	}
 
 	public StartContainerCmd withPublishAllPorts(boolean publishAllPorts) {
-		startContainerConfig.publishAllPorts = publishAllPorts;
+		startContainerConfig.setPublishAllPorts(publishAllPorts);
 		return this;
 	}
 
 	public StartContainerCmd withDns(String dns) {
-		startContainerConfig.dns = dns;
+		startContainerConfig.setDns(dns);
 		return this;
 	}
 
 
 	public StartContainerCmd withVolumesFrom(String volumesFrom) {
-		startContainerConfig.volumesFrom = volumesFrom;
+		startContainerConfig.setVolumesFrom(volumesFrom);
 		return this;
 	}
 	
