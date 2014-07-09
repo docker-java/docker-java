@@ -47,6 +47,8 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 	private InputStream tarInputStream = null;
 	private String tag;
 	private boolean noCache;
+	private boolean remove = true;
+	private boolean quiet;
 	
 	
 	public BuildImgCmd(File dockerFolder) {
@@ -74,11 +76,23 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 		return this;
 	}
 	
+    public BuildImgCmd withRemove(boolean rm) {
+        this.remove = rm;
+        return this;
+    }
+    
+    public BuildImgCmd withQuiet(boolean quiet) {
+        this.quiet = quiet;
+        return this;
+    }
+    
 	@Override
 	public String toString() {
 		return new StringBuilder("build ")
 			.append(tag != null ? "-t " + tag + " " : "")
 			.append(noCache ? "--nocache=true " : "")
+			.append(quiet ? "--quiet=true " : "")
+			.append(!remove ? "--rm=false " : "")
 			.append(dockerFolder != null ? dockerFolder.getPath() : "-")
 			.toString();
 	}
@@ -104,6 +118,12 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 		if (noCache) {
 			params.add("nocache", "true");
 		}
+		if (remove) {
+            params.add("rm", "true");		    
+		}
+        if (quiet) {
+            params.add("q", "true");           
+        }
 
 		WebResource webResource = baseResource.path("/build").queryParams(params);
 
