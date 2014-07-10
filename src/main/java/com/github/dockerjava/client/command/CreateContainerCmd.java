@@ -61,7 +61,18 @@ public class CreateContainerCmd extends AbstrDockerCmd<CreateContainerCmd, Conta
 		this.containerCreateConfig.withVolumes(volumes);
 		return this;
 	}
-	
+    
+        public CreateContainerCmd withEnv(String... env) {
+                Preconditions.checkNotNull(env, "env was not specified");
+                this.containerCreateConfig.withEnv(env);
+                return this;
+        }
+
+        public CreateContainerCmd withHostName(String hostName) {
+                Preconditions.checkNotNull(hostName, "hostName was not specified");
+                this.containerCreateConfig.withHostName(hostName);
+                return this;
+        }	
 	
 	public CreateContainerCmd withName(String name) {
 		Preconditions.checkNotNull(name, "name was not specified");
