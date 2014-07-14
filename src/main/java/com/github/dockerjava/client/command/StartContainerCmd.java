@@ -97,7 +97,7 @@ public class StartContainerCmd extends AbstrDockerCmd<StartContainerCmd, Void> {
 
 		try {
 			LOGGER.trace("POST: {}", webResource);
-			Builder builder = webResource.accept(MediaType.TEXT_PLAIN);
+			Builder builder = webResource.accept(MediaType.APPLICATION_JSON);
 			if (startContainerConfig != null) {
 				builder.type(MediaType.APPLICATION_JSON).post(startContainerConfig);
 			} else {
