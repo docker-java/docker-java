@@ -16,7 +16,7 @@ public class JsonClientFilter extends ClientFilter {
         // Call the next filter
         ClientResponse resp = getNext().handle(cr);
         String respContentType = resp.getHeaders().getFirst("Content-Type");
-        if (respContentType.startsWith("text/plain")) {
+        if (respContentType != null && respContentType.startsWith("text/plain")) {
             String newContentType = "application/json" + respContentType.substring(10);
             resp.getHeaders().putSingle("Content-Type", newContentType);
         }
