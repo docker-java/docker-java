@@ -27,12 +27,9 @@ public class StopContainerCmdTest extends AbstractDockerClientTest {
 	public static final Logger LOG = LoggerFactory
 			.getLogger(StopContainerCmdTest.class);
 
-	String username;
-
 	@BeforeTest
 	public void beforeTest() throws DockerException {
 		super.beforeTest();
-		username = dockerClient.authConfig().getUsername();
 	}
 
 	@AfterTest

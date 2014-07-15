@@ -24,16 +24,13 @@ import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.model.ContainerCreateResponse;
 
 public class RemoveContainerCmdTest extends AbstractDockerClientTest {
-	
+
 	public static final Logger LOG = LoggerFactory
 			.getLogger(RemoveContainerCmdTest.class);
-
-    String username;
 
 	@BeforeTest
 	public void beforeTest() throws DockerException {
 		super.beforeTest();
-        username = dockerClient.authConfig().getUsername();
 	}
 	@AfterTest
 	public void afterTest() {
@@ -70,6 +67,6 @@ public class RemoveContainerCmdTest extends AbstractDockerClientTest {
 
 	}
 
-	
+
 }
 
