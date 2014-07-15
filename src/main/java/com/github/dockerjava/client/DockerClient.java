@@ -66,19 +66,13 @@ public class DockerClient {
 	private WebResource baseResource;
 	private AuthConfig authConfig;
 
+	
 	public DockerClient() throws DockerException {
-		this(10000, true);
-	}
-	public DockerClient(Integer readTimeout, boolean enableLoggingFilter) throws DockerException {
-		this(Config.createConfig(), readTimeout, enableLoggingFilter);
+		this(Config.createConfig());
 	}
 
 	public DockerClient(String serverUrl) throws DockerException {
-		this(serverUrl, 10000, true);
-	}
-
-	public DockerClient(String serverUrl, Integer readTimeout, boolean enableLoggingFilter) throws DockerException {
-		this(configWithServerUrl(serverUrl), readTimeout, enableLoggingFilter);
+		this(configWithServerUrl(serverUrl));
 	}
 	
 	private static Config configWithServerUrl(String serverUrl)
@@ -88,7 +82,7 @@ public class DockerClient {
 		return c;
 	}
 
-	public DockerClient(Config config, Integer readTimeout, boolean enableLoggingFilter) {
+	public DockerClient(Config config) {
 		ClientConfig clientConfig = new DefaultClientConfig();
 		
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
@@ -109,11 +103,11 @@ public class DockerClient {
 				null, false), clientConfig);
 
 		// 1 hour
-		client.setReadTimeout(readTimeout);
+		client.setReadTimeout(config.readTimeout);
 	
 		client.addFilter(new JsonClientFilter());
 		
-		if (enableLoggingFilter)
+		if (config.enableLoggingFilter)
 			client.addFilter(new SelectiveLoggingFilter());
 
 		baseResource = client.resource(config.url + "/v" + config.version);
