@@ -83,6 +83,7 @@ public class StartContainerCmdTest extends AbstractDockerClientTest {
 		containerInspectResponse = dockerClient.inspectContainerCmd(container
 				.getId()).exec();
 		
+
 		assertThat(Arrays.asList(containerInspectResponse.getVolumes()),
 				contains(volume1, volume2));
 
@@ -117,7 +118,7 @@ public class StartContainerCmdTest extends AbstractDockerClientTest {
 
 		containerInspectResponse = dockerClient.inspectContainerCmd(container
 				.getId()).exec();
-		
+
 		assertThat(Arrays.asList(containerInspectResponse.getConfig().getExposedPorts()),
 				contains(tcp22, tcp23));
 
@@ -190,7 +191,7 @@ public class StartContainerCmdTest extends AbstractDockerClientTest {
 	public void startContainer() throws DockerException {
 
 		ContainerCreateResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd("true").exec();
+			.createContainerCmd("busybox").withCmd(new String[] { "top" }).exec();
 		
 		LOG.info("Created container {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));
