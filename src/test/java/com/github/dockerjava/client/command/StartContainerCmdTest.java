@@ -101,7 +101,7 @@ public class StartContainerCmdTest extends AbstractDockerClientTest {
 		
 		ContainerCreateResponse container = dockerClient
 				.createContainerCmd("busybox")
-				.withCmd("top").withExposedPorts(tcp22, tcp23).exec();
+				.withCmd("true").withExposedPorts(tcp22, tcp23).exec();
 
 		LOG.info("Created container {}", container.toString());
 
@@ -119,8 +119,6 @@ public class StartContainerCmdTest extends AbstractDockerClientTest {
 		containerInspectResponse = dockerClient.inspectContainerCmd(container
 				.getId()).exec();
 
-		assertThat(containerInspectResponse.getState().isRunning(), is(true));
-		
 		assertThat(Arrays.asList(containerInspectResponse.getConfig().getExposedPorts()),
 				contains(tcp22, tcp23));
 
