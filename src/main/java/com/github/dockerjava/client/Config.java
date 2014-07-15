@@ -9,6 +9,8 @@ import java.util.Properties;
 class Config {
     URI url;
     String version, username, password, email;
+    Integer readTimeout;
+    boolean enableLoggingFilter;
 
     private Config() {
     }
@@ -51,6 +53,8 @@ class Config {
         c.username = p.getProperty("docker.io.username");
         c.password = p.getProperty("docker.io.password");
         c.email = p.getProperty("docker.io.email");
+        c.readTimeout = Integer.valueOf(p.getProperty("docker.io.readTimeout", "1000"));
+        c.enableLoggingFilter = Boolean.valueOf(p.getProperty("docker.io.enableLoggingFilter", "true"));
 
         return c;
     }

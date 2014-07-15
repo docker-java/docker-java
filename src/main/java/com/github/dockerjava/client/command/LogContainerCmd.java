@@ -26,6 +26,8 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
  * @param timestamps
  *            - true or false, if true, print timestamps for every log line.
  *            Defaults to false.
+ * @param tail
+ * 			  - `all` or `<number>`, Output specified number of lines at the end of logs
  */
 public class LogContainerCmd extends AbstrDockerCmd<LogContainerCmd, ClientResponse> {
 
@@ -33,6 +35,8 @@ public class LogContainerCmd extends AbstrDockerCmd<LogContainerCmd, ClientRespo
 			.getLogger(LogContainerCmd.class);
 
 	private String containerId;
+	
+	private int tail = -1;
 
 	private boolean followStream, timestamps, stdout, stderr;
 
@@ -77,6 +81,17 @@ public class LogContainerCmd extends AbstrDockerCmd<LogContainerCmd, ClientRespo
 		this.stderr = stderr;
 		return this;
 	}
+	
+	public LogContainerCmd withTailAll() {
+		this.tail = -1;
+		return this;
+	}
+	
+	
+	public LogContainerCmd withTail(int tail) {
+		this.tail = tail;
+		return this;
+	}
 
     @Override
     public String toString() {
@@ -93,6 +108,7 @@ public class LogContainerCmd extends AbstrDockerCmd<LogContainerCmd, ClientRespo
 		params.add("stdout", stdout ? "1" : "0");
 		params.add("stderr", stderr ? "1" : "0");
 		params.add("follow", followStream ? "1" : "0"); 
+		params.add("tail", tail < 0 ? "all" : ""+ tail); 
 
 		WebResource webResource = baseResource.path(
 				String.format("/containers/%s/logs", containerId))

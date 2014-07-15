@@ -13,32 +13,26 @@ import java.util.Arrays;
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class Container {
 
-    @JsonProperty("Id")
-    private String id;
+	@JsonProperty("Command")
+	private String command;
 
-    @JsonProperty("Command")
-    private String command;
+	@JsonProperty("Created")
+	private long created;
+
+	@JsonProperty("Id")
+    private String id;
 
     @JsonProperty("Image")
     private String image;
 
-    @JsonProperty("Created")
-    private long created;
-
-    @JsonProperty("Status")
-    private String status;
+    @JsonProperty("Names")
+    private String[] names;
 
     @JsonProperty("Ports")    
     public Port[] ports;
 
-    @JsonProperty("SizeRw")
-    private int size;
-
-    @JsonProperty("SizeRootFs")
-    private int sizeRootFs;
-
-    @JsonProperty("Names")
-    private String[] names;
+    @JsonProperty("Status")
+    private String status;
 
     public String getId() {
         return id;
@@ -64,18 +58,6 @@ public class Container {
         return ports;
     }
 
-    public void setPorts(Port[] ports) {
-        this.ports = ports;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public int getSizeRootFs() {
-        return sizeRootFs;
-    }
-
     public String[] getNames() {
         return names;
     }
@@ -90,8 +72,6 @@ public class Container {
                 ", created=" + created +
                 ", status='" + status + '\'' +
                 ", ports=" + Arrays.toString(ports) +
-                ", size=" + size +
-                ", sizeRootFs=" + sizeRootFs +
                 ", names=" + Arrays.toString(names) +
                 '}';
     }

@@ -74,10 +74,6 @@ public class Info {
 		return debug;
 	}
 
-	public void setDebug(boolean debug) {
-		this.debug = debug;
-	}
-
 	public int getContainers() {
 		return containers;
 	}

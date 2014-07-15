@@ -16,35 +16,56 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ContainerInspectResponse {
 
-    @JsonProperty("Id")
+	@JsonProperty("Args")
+	private String[] args;
+
+	@JsonProperty("Config")
+	private ContainerConfig config;
+
+	@JsonProperty("Created")
+	private String created;
+
+	@JsonProperty("Driver")
+	private String driver;
+
+	@JsonProperty("ExecDriver")
+	private String execDriver;
+	
+	@JsonProperty("HostConfig")
+	private HostConfig hostConfig;
+
+	@JsonProperty("HostnamePath")
+	private String hostnamePath;
+	
+	@JsonProperty("HostsPath")
+	private String hostsPath;
+	
+	@JsonProperty("Id")
     private String id;
 
-    @JsonProperty("Created")
-    private String created;
+	@JsonProperty("Image")
+	private String imageId;
 
-    @JsonProperty("Path")
+	@JsonProperty("MountLabel")
+	private String mountLabel;
+	
+	@JsonProperty("Name")
+	private String name;
+
+	@JsonProperty("NetworkSettings")
+	private NetworkSettings networkSettings;
+
+	@JsonProperty("Path")
     private String path;
 
-    @JsonProperty("Args")
-    private String[] args;
+	@JsonProperty("ProcessLabel")
+    private String processLabel;
+	
+	@JsonProperty("ResolvConfPath")
+	private String resolvConfPath;
 
-    @JsonProperty("Config")
-    private ContainerConfig config;
-
-    @JsonProperty("State")
+	@JsonProperty("State")
     private ContainerState state;
-
-    @JsonProperty("Image")
-    private String imageId;
-
-    @JsonProperty("NetworkSettings")
-    private NetworkSettings networkSettings;
-
-    @JsonProperty("SysInitPath")
-    private String sysInitPath;
-
-    @JsonProperty("ResolvConfPath")
-    private String resolvConfPath;
 
     @JsonProperty("Volumes")
     private Volumes volumes;
@@ -52,27 +73,6 @@ public class ContainerInspectResponse {
     @JsonProperty("VolumesRW")
     private Volumes volumesRW;
 
-    @JsonProperty("HostnamePath")
-    private String hostnamePath;
-
-    @JsonProperty("HostsPath")
-    private String hostsPath;
-
-    @JsonProperty("Name")
-    private String name;
-
-    @JsonProperty("Driver")
-    private String driver;
-
-    @JsonProperty("HostConfig")
-    private HostConfig hostConfig;
-
-    @JsonProperty("ExecDriver")
-    private String execDriver;
-    
-    @JsonProperty("MountLabel")
-    private String mountLabel;
-    
     public String getId() {
         return id;
     }
@@ -84,6 +84,10 @@ public class ContainerInspectResponse {
     public String getPath() {
         return path;
     }
+    
+    public String getProcessLabel() {
+		return processLabel;
+	}
 
     public String[] getArgs() {
         return args;
@@ -103,10 +107,6 @@ public class ContainerInspectResponse {
 
     public NetworkSettings getNetworkSettings() {
         return networkSettings;
-    }
-
-    public String getSysInitPath() {
-        return sysInitPath;
     }
 
     public String getResolvConfPath() {

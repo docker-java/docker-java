@@ -1,12 +1,7 @@
 package com.github.dockerjava.client.command;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -58,8 +53,7 @@ public class ListImagesCmdTest extends AbstractDockerClientTest {
 		assertThat(img.getCreated(), is(greaterThan(0L)));
 		assertThat(img.getVirtualSize(), is(greaterThan(0L)));
 		assertThat(img.getId(), not(isEmptyString()));
-		assertThat(img.getTag(), not(isEmptyString()));
-		assertThat(img.getRepository(), not(isEmptyString()));
+		assertThat(img.getRepoTags(), not(emptyArray()));
 	}
 
 

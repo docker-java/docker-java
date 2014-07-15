@@ -1,8 +1,5 @@
 package com.github.dockerjava.client.command;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
