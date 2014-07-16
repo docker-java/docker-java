@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URI;
 
+import com.github.dockerjava.client.command.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 import org.apache.http.client.HttpClient;
@@ -18,34 +19,6 @@ import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 
-import com.github.dockerjava.client.command.AbstrDockerCmd;
-import com.github.dockerjava.client.command.AttachContainerCmd;
-import com.github.dockerjava.client.command.AuthCmd;
-import com.github.dockerjava.client.command.BuildImgCmd;
-import com.github.dockerjava.client.command.CommitCmd;
-import com.github.dockerjava.client.command.ContainerDiffCmd;
-import com.github.dockerjava.client.command.CopyFileFromContainerCmd;
-import com.github.dockerjava.client.command.CreateContainerCmd;
-import com.github.dockerjava.client.command.ImportImageCmd;
-import com.github.dockerjava.client.command.InfoCmd;
-import com.github.dockerjava.client.command.InspectContainerCmd;
-import com.github.dockerjava.client.command.InspectImageCmd;
-import com.github.dockerjava.client.command.KillContainerCmd;
-import com.github.dockerjava.client.command.ListContainersCmd;
-import com.github.dockerjava.client.command.ListImagesCmd;
-import com.github.dockerjava.client.command.LogContainerCmd;
-import com.github.dockerjava.client.command.PullImageCmd;
-import com.github.dockerjava.client.command.PushImageCmd;
-import com.github.dockerjava.client.command.RemoveContainerCmd;
-import com.github.dockerjava.client.command.RemoveImageCmd;
-import com.github.dockerjava.client.command.RestartContainerCmd;
-import com.github.dockerjava.client.command.SearchImagesCmd;
-import com.github.dockerjava.client.command.StartContainerCmd;
-import com.github.dockerjava.client.command.StopContainerCmd;
-import com.github.dockerjava.client.command.TagImageCmd;
-import com.github.dockerjava.client.command.TopContainerCmd;
-import com.github.dockerjava.client.command.VersionCmd;
-import com.github.dockerjava.client.command.WaitContainerCmd;
 import com.github.dockerjava.client.model.AuthConfig;
 import com.github.dockerjava.client.model.CreateContainerConfig;
 import com.github.dockerjava.client.utils.JsonClientFilter;
@@ -62,11 +35,10 @@ import com.sun.jersey.client.apache4.ApacheHttpClient4Handler;
  */
 public class DockerClient {
 
-    private Client client;
-	private WebResource baseResource;
+	private final WebResource baseResource;
 	private AuthConfig authConfig;
 
-	
+
 	public DockerClient() throws DockerException {
 		this(Config.createConfig());
 	}
@@ -74,7 +46,7 @@ public class DockerClient {
 	public DockerClient(String serverUrl) throws DockerException {
 		this(configWithServerUrl(serverUrl));
 	}
-	
+
 	private static Config configWithServerUrl(String serverUrl)
 			throws DockerException {
 		final Config c = Config.createConfig();
@@ -82,40 +54,41 @@ public class DockerClient {
 		return c;
 	}
 
-	public DockerClient(Config config) {
-		ClientConfig clientConfig = new DefaultClientConfig();
-		
-		SchemeRegistry schemeRegistry = new SchemeRegistry();
-		schemeRegistry.register(new Scheme("http", config.url.getPort(),
-				PlainSocketFactory.getSocketFactory()));
-		schemeRegistry.register(new Scheme("https", 443, SSLSocketFactory
-				.getSocketFactory()));
-
-		PoolingClientConnectionManager cm = new PoolingClientConnectionManager(
-				schemeRegistry);
-		// Increase max total connection
-		cm.setMaxTotal(1000);
-		// Increase default max connection per route
-		cm.setDefaultMaxPerRoute(1000);
-
-		HttpClient httpClient = new DefaultHttpClient(cm);
-		client = new ApacheHttpClient4(new ApacheHttpClient4Handler(httpClient,
+    public DockerClient(Config config) {
+        HttpClient httpClient = getPoolingHttpClient(config);
+        ClientConfig clientConfig = new DefaultClientConfig();
+		Client client = new ApacheHttpClient4(new ApacheHttpClient4Handler(httpClient,
 				null, false), clientConfig);
 
 		// 1 hour
 		client.setReadTimeout(config.readTimeout);
-	
+
 		client.addFilter(new JsonClientFilter());
-		
+
 		if (config.enableLoggingFilter)
 			client.addFilter(new SelectiveLoggingFilter());
 
 		baseResource = client.resource(config.url + "/v" + config.version);
 	}
 
-	
+    private HttpClient getPoolingHttpClient(Config config) {
+        SchemeRegistry schemeRegistry = new SchemeRegistry();
+        schemeRegistry.register(new Scheme("http", config.url.getPort(),
+                PlainSocketFactory.getSocketFactory()));
+        schemeRegistry.register(new Scheme("https", 443, SSLSocketFactory
+                .getSocketFactory()));
 
-	public void setCredentials(String username, String password, String email) {
+        PoolingClientConnectionManager cm = new PoolingClientConnectionManager(schemeRegistry);
+        // Increase max total connection
+        cm.setMaxTotal(1000);
+        // Increase default max connection per route
+        cm.setDefaultMaxPerRoute(1000);
+
+        return new DefaultHttpClient(cm);
+    }
+
+
+    public void setCredentials(String username, String password, String email) {
 		if (username == null) {
 			throw new IllegalArgumentException("username is null");
 		}
@@ -253,8 +226,8 @@ public class DockerClient {
 	public AttachContainerCmd attachContainerCmd(String containerId) {
 		return new AttachContainerCmd(containerId).withBaseResource(baseResource);
 	}
-	
-	
+
+
 	public LogContainerCmd logContainerCmd(String containerId) {
 		return new LogContainerCmd(containerId).withBaseResource(baseResource);
 	}
@@ -297,11 +270,11 @@ public class DockerClient {
 	public TopContainerCmd topContainerCmd(String containerId) {
 		return new TopContainerCmd(containerId).withBaseResource(baseResource);
 	}
-	
+
 	public TagImageCmd tagImageCmd(String imageId, String repository, String tag) {
 		return new TagImageCmd(imageId, repository, tag).withBaseResource(baseResource);
 	}
-	
+
 
 	/**
 	 * @return The output slurped into a string.
