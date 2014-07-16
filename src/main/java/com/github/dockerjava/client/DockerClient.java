@@ -35,6 +35,7 @@ import com.sun.jersey.client.apache4.ApacheHttpClient4Handler;
  */
 public class DockerClient {
 
+    private final CommandFactory cmdFactory;
 	private final WebResource baseResource;
 	private AuthConfig authConfig;
 
@@ -55,6 +56,12 @@ public class DockerClient {
 	}
 
     public DockerClient(Config config) {
+        this(config, null);
+    }
+
+	public DockerClient(Config config, CommandFactory cmdFactory) {
+        this.cmdFactory = cmdFactory;
+
         HttpClient httpClient = getPoolingHttpClient(config);
         ClientConfig clientConfig = new DefaultClientConfig();
 		Client client = new ApacheHttpClient4(new ApacheHttpClient4Handler(httpClient,
@@ -141,15 +148,15 @@ public class DockerClient {
 	 * Authenticate with the server, useful for checking authentication.
 	 */
 	public AuthCmd authCmd() {
-		return new AuthCmd(authConfig()).withBaseResource(baseResource);
+		return cmdFactory.authCmd(authConfig()).withBaseResource(baseResource);
 	}
 
 	public InfoCmd infoCmd() throws DockerException {
-		return new InfoCmd().withBaseResource(baseResource);
+		return cmdFactory.infoCmd().withBaseResource(baseResource);
 	}
 
 	public VersionCmd versionCmd() throws DockerException {
-		return new VersionCmd().withBaseResource(baseResource);
+		return cmdFactory.versionCmd().withBaseResource(baseResource);
 	}
 
 	/**
@@ -157,11 +164,11 @@ public class DockerClient {
 	 */
 
 	public PullImageCmd pullImageCmd(String repository) {
-		return new PullImageCmd(repository).withBaseResource(baseResource);
+		return cmdFactory.pullImageCmd(repository).withBaseResource(baseResource);
 	}
 
 	public PushImageCmd pushImageCmd(String name) {
-		return new PushImageCmd(name).withAuthConfig(authConfig())
+		return cmdFactory.pushImageCmd(name).withAuthConfig(authConfig())
 				.withBaseResource(baseResource);
 	}
 
@@ -171,24 +178,24 @@ public class DockerClient {
 
 	public ImportImageCmd importImageCmd(String repository,
 			InputStream imageStream) {
-		return new ImportImageCmd(repository, imageStream)
+		return cmdFactory.importImageCmd(repository, imageStream)
 				.withBaseResource(baseResource);
 	}
 
 	public SearchImagesCmd searchImagesCmd(String term) {
-		return new SearchImagesCmd(term).withBaseResource(baseResource);
+		return cmdFactory.searchImagesCmd(term).withBaseResource(baseResource);
 	}
 
 	public RemoveImageCmd removeImageCmd(String imageId) {
-		return new RemoveImageCmd(imageId).withBaseResource(baseResource);
+		return cmdFactory.removeImageCmd(imageId).withBaseResource(baseResource);
 	}
 
 	public ListImagesCmd listImagesCmd() {
-		return new ListImagesCmd().withBaseResource(baseResource);
+		return cmdFactory.listImagesCmd().withBaseResource(baseResource);
 	}
 
 	public InspectImageCmd inspectImageCmd(String imageId) {
-		return new InspectImageCmd(imageId).withBaseResource(baseResource);
+		return cmdFactory.inspectImageCmd(imageId).withBaseResource(baseResource);
 	}
 
 	/**
@@ -196,83 +203,82 @@ public class DockerClient {
 	 */
 
 	public ListContainersCmd listContainersCmd() {
-		return new ListContainersCmd().withBaseResource(baseResource);
+		return cmdFactory.listContainersCmd().withBaseResource(baseResource);
 	}
 
 	public CreateContainerCmd createContainerCmd(String image) {
-		return new CreateContainerCmd(new CreateContainerConfig()).withImage(
-				image).withBaseResource(baseResource);
+		return cmdFactory.createContainerCmd(image).withBaseResource(baseResource);
 	}
 
 	public StartContainerCmd startContainerCmd(String containerId) {
-		return new StartContainerCmd(containerId)
+		return cmdFactory.startContainerCmd(containerId)
 				.withBaseResource(baseResource);
 	}
 
 	public InspectContainerCmd inspectContainerCmd(String containerId) {
-		return new InspectContainerCmd(containerId)
+		return cmdFactory.inspectContainerCmd(containerId)
 				.withBaseResource(baseResource);
 	}
 
 	public RemoveContainerCmd removeContainerCmd(String containerId) {
-		return new RemoveContainerCmd(containerId)
+		return cmdFactory.removeContainerCmd(containerId)
 				.withBaseResource(baseResource);
 	}
 
 	public WaitContainerCmd waitContainerCmd(String containerId) {
-		return new WaitContainerCmd(containerId).withBaseResource(baseResource);
+		return cmdFactory.waitContainerCmd(containerId).withBaseResource(baseResource);
 	}
 
 	public AttachContainerCmd attachContainerCmd(String containerId) {
-		return new AttachContainerCmd(containerId).withBaseResource(baseResource);
+		return cmdFactory.attachContainerCmd(containerId).withBaseResource(baseResource);
 	}
 
 
 	public LogContainerCmd logContainerCmd(String containerId) {
-		return new LogContainerCmd(containerId).withBaseResource(baseResource);
+		return cmdFactory.logContainerCmd(containerId).withBaseResource(baseResource);
 	}
 
 	public CopyFileFromContainerCmd copyFileFromContainerCmd(
 			String containerId, String resource) {
-		return new CopyFileFromContainerCmd(containerId, resource)
+		return cmdFactory.copyFileFromContainerCmd(containerId, resource)
 				.withBaseResource(baseResource);
 	}
 
 	public ContainerDiffCmd containerDiffCmd(String containerId) {
-		return new ContainerDiffCmd(containerId).withBaseResource(baseResource);
+		return cmdFactory.containerDiffCmd(containerId).withBaseResource(baseResource);
 	}
 
 	public StopContainerCmd stopContainerCmd(String containerId) {
-		return new StopContainerCmd(containerId).withBaseResource(baseResource);
+		return cmdFactory.stopContainerCmd(containerId).withBaseResource(baseResource);
 	}
 
 	public KillContainerCmd killContainerCmd(String containerId) {
-		return new KillContainerCmd(containerId).withBaseResource(baseResource);
+		return cmdFactory.killContainerCmd(containerId).withBaseResource(baseResource);
 	}
 
 	public RestartContainerCmd restartContainerCmd(String containerId) {
-		return new RestartContainerCmd(containerId)
+		return cmdFactory.restartContainerCmd(containerId)
 				.withBaseResource(baseResource);
 	}
 
 	public CommitCmd commitCmd(String containerId) {
-		return new CommitCmd(containerId).withBaseResource(baseResource);
+		return cmdFactory.commitCmd(containerId).withBaseResource(baseResource);
 	}
 
 	public BuildImgCmd buildImageCmd(File dockerFolder) {
-		return new BuildImgCmd(dockerFolder).withBaseResource(baseResource);
+		return cmdFactory.buildImgCmd(dockerFolder).withBaseResource(baseResource);
 	}
 
 	public BuildImgCmd buildImageCmd(InputStream tarInputStream) {
-		return new BuildImgCmd(tarInputStream).withBaseResource(baseResource);
+		return cmdFactory.buildImgCmd(tarInputStream).withBaseResource(baseResource);
 	}
 
 	public TopContainerCmd topContainerCmd(String containerId) {
-		return new TopContainerCmd(containerId).withBaseResource(baseResource);
+		return cmdFactory.topContainerCmd(containerId).withBaseResource(baseResource);
 	}
 
 	public TagImageCmd tagImageCmd(String imageId, String repository, String tag) {
-		return new TagImageCmd(imageId, repository, tag).withBaseResource(baseResource);
+		return cmdFactory.tagImageCmd(imageId, repository, tag).withBaseResource(baseResource);
 	}
 
 
