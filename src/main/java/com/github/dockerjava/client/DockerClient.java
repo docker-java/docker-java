@@ -2,10 +2,7 @@ package com.github.dockerjava.client;
 
 import static org.apache.commons.io.IOUtils.closeQuietly;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
+import java.io.*;
 import java.net.URI;
 
 import org.apache.commons.io.IOUtils;
@@ -60,7 +57,7 @@ import com.sun.jersey.client.apache4.ApacheHttpClient4Handler;
 /**
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  */
-public class DockerClient {
+public class DockerClient implements Closeable {
 
     private Client client;
 	private WebResource baseResource;
@@ -321,4 +318,10 @@ public class DockerClient {
 		}
 		return out.toString();
 	}
+
+    @Override
+    public void close() throws IOException {
+        client.destroy();
+    }
+
 }
