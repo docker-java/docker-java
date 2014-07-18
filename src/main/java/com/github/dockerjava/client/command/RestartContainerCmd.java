@@ -13,41 +13,49 @@ import com.sun.jersey.api.client.WebResource;
 
 /**
  * Restart a running container.
- * 
+ *
  * @param timeout - Timeout in seconds before killing the container. Defaults to 10 seconds.
- * 
+ *
  */
 public class RestartContainerCmd extends AbstrDockerCmd<RestartContainerCmd, Void> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RestartContainerCmd.class);
 
 	private String containerId;
-	
+
 	private int timeout = 10;
-	
+
 	public RestartContainerCmd(String containerId) {
 		withContainerId(containerId);
 	}
-	
-	public RestartContainerCmd withContainerId(String containerId) {
+
+    public String getContainerId() {
+        return containerId;
+    }
+
+    public int getTimeout() {
+        return timeout;
+    }
+
+    public RestartContainerCmd withContainerId(String containerId) {
 		Preconditions.checkNotNull(containerId, "containerId was not specified");
 		this.containerId = containerId;
 		return this;
 	}
-	
+
 	public RestartContainerCmd withtTimeout(int timeout) {
 		Preconditions.checkArgument(timeout >= 0, "timeout must be greater or equal 0");
 		this.timeout = timeout;
 		return this;
 	}
-	
+
     @Override
     public String toString() {
         return new StringBuilder("restart ")
             .append("--time=" + timeout + " ")
             .append(containerId)
             .toString();
-    }   
+    }
 
 	protected Void impl() throws DockerException {
 		WebResource webResource = baseResource.path(String.format("/containers/%s/restart", containerId))
@@ -68,7 +76,7 @@ public class RestartContainerCmd extends AbstrDockerCmd<RestartContainerCmd, Voi
 				throw new DockerException(exception);
 			}
 		}
-		
+
 		return null;
 	}
 }

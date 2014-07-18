@@ -17,7 +17,7 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 
 /**
  * List containers
- * 
+ *
  * @param showAll - true or false, Show all containers. Only running containers are shown by default.
  * @param showSize - true or false, Show the containers sizes. This is false by default.
  * @param limit - Show `limit` last created containers, include non-running ones. There is no limit by default.
@@ -28,39 +28,59 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 public class ListContainersCmd extends AbstrDockerCmd<ListContainersCmd, List<Container>>  {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ListContainersCmd.class);
-	
+
 	private int limit = -1;
 	private boolean showSize, showAll = false;
 	String sinceId, beforeId;
-	
-	public ListContainersCmd withShowAll(boolean showAll) {
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public boolean hasShowSizeEnabled() {
+        return showSize;
+    }
+
+    public boolean hasShowAllEnabled() {
+        return showAll;
+    }
+
+    public String getSinceId() {
+        return sinceId;
+    }
+
+    public String getBeforeId() {
+        return beforeId;
+    }
+
+    public ListContainersCmd withShowAll(boolean showAll) {
 		this.showAll = showAll;
 		return this;
 	}
-	
+
 	public ListContainersCmd withShowSize(boolean showSize) {
 		this.showSize = showSize;
 		return this;
 	}
-	
+
 	public ListContainersCmd withLimit(int limit) {
 		Preconditions.checkArgument(limit > 0, "limit must be greater 0");
 		this.limit = limit;
 		return this;
 	}
-	
+
 	public ListContainersCmd withSince(String since) {
 		Preconditions.checkNotNull(since, "since was not specified");
 		this.sinceId = since;
 		return this;
 	}
-	
+
 	public ListContainersCmd withBefore(String before) {
 		Preconditions.checkNotNull(before, "before was not specified");
 		this.beforeId = before;
 		return this;
 	}
-	
+
     @Override
     public String toString() {
         return new StringBuilder("ps ")
@@ -76,7 +96,7 @@ public class ListContainersCmd extends AbstrDockerCmd<ListContainersCmd, List<Co
 		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
 		if(limit >= 0) {
 			params.add("limit", String.valueOf(limit));
-		}	
+		}
 		params.add("all", showAll ? "1" : "0");
 		params.add("since", sinceId);
 		params.add("before", beforeId);

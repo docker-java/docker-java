@@ -16,45 +16,69 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 
 
 /**
- * 
+ *
  * Create a new image from a container's changes. Returns the new image ID.
  *
  */
 public class CommitCmd extends AbstrDockerCmd<CommitCmd, String>  {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommitCmd.class);
-	
+
 	private String containerId, repository, tag, message, author;
-	
+
 	private boolean pause = true;
-	
+
 	private CommitConfig commitConfig = new CommitConfig();
-	
+
 	public CommitCmd(String containerId) {
 		Preconditions.checkNotNull(containerId, "containerId was not specified");
 		this.containerId = containerId;
 	}
-	
-	public CommitCmd withCommitConfig(CommitConfig commitConfig) {
+
+    public String getContainerId() {
+        return containerId;
+    }
+
+    public String getRepository() {
+        return repository;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public boolean hasPauseEnabled() {
+        return pause;
+    }
+
+    public CommitCmd withCommitConfig(CommitConfig commitConfig) {
 		checkCommitConfig(commitConfig);
 		this.commitConfig = commitConfig;
 		return this;
 	}
-	
+
 	public CommitCmd withAttachStderr(boolean attachStderr) {
 		this.commitConfig.setAttachStderr(attachStderr);
 		return this;
 	}
-	
+
 	public CommitCmd withAttachStderr() {
 		return withAttachStderr(true);
 	}
-	
+
 	public CommitCmd withAttachStdin(boolean attachStdin) {
 		this.commitConfig.setAttachStdin(attachStdin);
 		return this;
 	}
-	
+
 	public CommitCmd withAttachStdin() {
 		return withAttachStdin(true);
 	}
@@ -63,51 +87,51 @@ public class CommitCmd extends AbstrDockerCmd<CommitCmd, String>  {
 		this.commitConfig.setAttachStdout(attachStdout);
 		return this;
 	}
-	
+
 	public CommitCmd withAttachStdout() {
 		return withAttachStdout(true);
 	}
-	
+
 	public CommitCmd withCmd(String... cmd) {
 		Preconditions.checkNotNull(cmd, "cmd was not specified");
 		this.commitConfig.setCmd(cmd);
 		return this;
 	}
-	
+
 	public CommitCmd withDisableNetwork(boolean disableNetwork) {
 		this.commitConfig.setDisableNetwork(disableNetwork);
 		return this;
 	}
-	
+
 	public CommitCmd withAuthor(String author) {
 		Preconditions.checkNotNull(author, "author was not specified");
 		this.author = author;
 		return this;
 	}
-	
+
 	public CommitCmd withMessage(String message) {
 		Preconditions.checkNotNull(message, "message was not specified");
 		this.message = message;
 		return this;
 	}
-	
+
 	public CommitCmd withTag(String tag) {
 		Preconditions.checkNotNull(tag, "tag was not specified");
 		this.tag = tag;
 		return this;
 	}
-	
+
 	public CommitCmd withRepository(String repository) {
 		Preconditions.checkNotNull(repository, "repository was not specified");
 		this.repository = repository;
 		return this;
 	}
-	
+
 	public CommitCmd withPause(boolean pause) {
 		this.pause = pause;
 		return this;
 	}
-	
+
 	@Override
 	public String toString() {
 		return new StringBuilder("commit ")
@@ -118,14 +142,14 @@ public class CommitCmd extends AbstrDockerCmd<CommitCmd, String>  {
 			.append(tag != null ?  tag : "")
 			.toString();
 	}
-		
+
 	private void checkCommitConfig(CommitConfig commitConfig) {
 		Preconditions.checkNotNull(commitConfig, "CommitConfig was not specified");
 	}
-	
+
 	protected String impl() throws DockerException {
 		checkCommitConfig(commitConfig);
-		
+
 		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
 		params.add("container", containerId);
 		params.add("repo", repository);

@@ -13,7 +13,7 @@ import com.sun.jersey.api.client.WebResource;
 
 /**
  * Remove a container.
- * 
+ *
  * @param removeVolumes - true or false, Remove the volumes associated to the container. Defaults to false
  * @param force - true or false, Removes the container even if it was running. Defaults to false
  */
@@ -22,33 +22,45 @@ public class RemoveContainerCmd extends AbstrDockerCmd<RemoveContainerCmd, Void>
 	private static final Logger LOGGER = LoggerFactory.getLogger(RemoveContainerCmd.class);
 
 	private String containerId;
-	
+
 	private boolean removeVolumes, force;
-	
+
 	public RemoveContainerCmd(String containerId) {
 		withContainerId(containerId);
 	}
-	
-	public RemoveContainerCmd withContainerId(String containerId) {
+
+    public String getContainerId() {
+        return containerId;
+    }
+
+    public boolean hasRemoveVolumesEnabled() {
+        return removeVolumes;
+    }
+
+    public boolean hasForceEnabled() {
+        return force;
+    }
+
+    public RemoveContainerCmd withContainerId(String containerId) {
 		Preconditions.checkNotNull(containerId, "containerId was not specified");
 		this.containerId = containerId;
 		return this;
 	}
-	
+
 	public RemoveContainerCmd withRemoveVolumes(boolean removeVolumes) {
 		this.removeVolumes = removeVolumes;
 		return this;
 	}
-	
+
 	public RemoveContainerCmd withForce() {
 		return withForce(true);
 	}
-	
+
 	public RemoveContainerCmd withForce(boolean force) {
 		this.force = force;
 		return this;
 	}
-	
+
     @Override
     public String toString() {
         return new StringBuilder("rm ")
@@ -56,7 +68,7 @@ public class RemoveContainerCmd extends AbstrDockerCmd<RemoveContainerCmd, Void>
             .append(force ? "--force=true" : "")
             .append(containerId)
             .toString();
-    }   
+    }
 
 	protected Void impl() throws DockerException {
 		Preconditions.checkState(!StringUtils.isEmpty(containerId), "Container ID can't be empty");
@@ -82,7 +94,7 @@ public class RemoveContainerCmd extends AbstrDockerCmd<RemoveContainerCmd, Void>
 				throw new DockerException(exception);
 			}
 		}
-		
+
 		return null;
 	}
 }

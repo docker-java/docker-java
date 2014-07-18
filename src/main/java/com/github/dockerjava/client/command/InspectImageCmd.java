@@ -19,19 +19,23 @@ import com.sun.jersey.api.client.WebResource;
 public class InspectImageCmd extends AbstrDockerCmd<InspectImageCmd, ImageInspectResponse>  {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(InspectImageCmd.class);
-	
+
 	private String imageId;
-	
+
 	public InspectImageCmd(String imageId) {
 		withImageId(imageId);
 	}
-	
-	public InspectImageCmd withImageId(String imageId) {
+
+    public String getImageId() {
+        return imageId;
+    }
+
+    public InspectImageCmd withImageId(String imageId) {
 		Preconditions.checkNotNull(imageId, "imageId was not specified");
 		this.imageId = imageId;
 		return this;
 	}
-	
+
     @Override
     public String toString() {
         return "inspect " + imageId;

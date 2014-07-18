@@ -13,38 +13,42 @@ import com.sun.jersey.api.client.WebResource;
 
 /**
  * Pause a container.
- * 
+ *
  * @param containerId - Id of the container
- * 
+ *
  */
 public class PauseContainerCmd extends AbstrDockerCmd<PauseContainerCmd, Integer> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PauseContainerCmd.class);
 
 	private String containerId;
-	
+
 	public PauseContainerCmd(String containerId) {
 		withContainerId(containerId);
 	}
-	
-	public PauseContainerCmd withContainerId(String containerId) {
+
+    public String getContainerId() {
+        return containerId;
+    }
+
+    public PauseContainerCmd withContainerId(String containerId) {
 		Preconditions.checkNotNull(containerId, "containerId was not specified");
 		this.containerId = containerId;
 		return this;
 	}
-	
+
 	@Override
     public String toString() {
         return new StringBuilder("pause ")
             .append(containerId)
             .toString();
-    }   
+    }
 
 	protected Integer impl() throws DockerException {
 		WebResource webResource = baseResource.path(String.format("/containers/%s/pause", containerId));
 
 		ClientResponse response = null;
-		
+
 		try {
 			LOGGER.trace("POST: {}", webResource);
 			response = webResource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).post(ClientResponse.class);
@@ -60,7 +64,7 @@ public class PauseContainerCmd extends AbstrDockerCmd<PauseContainerCmd, Integer
 				throw new DockerException(exception);
 			}
 		}
-		
+
 		return response.getStatus();
 	}
 }
