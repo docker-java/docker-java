@@ -34,6 +34,7 @@ import com.github.dockerjava.client.command.KillContainerCmd;
 import com.github.dockerjava.client.command.ListContainersCmd;
 import com.github.dockerjava.client.command.ListImagesCmd;
 import com.github.dockerjava.client.command.LogContainerCmd;
+import com.github.dockerjava.client.command.PingCmd;
 import com.github.dockerjava.client.command.PullImageCmd;
 import com.github.dockerjava.client.command.PushImageCmd;
 import com.github.dockerjava.client.command.RemoveContainerCmd;
@@ -173,6 +174,10 @@ public class DockerClient {
 
 	public InfoCmd infoCmd() throws DockerException {
 		return new InfoCmd().withBaseResource(baseResource);
+	}
+	
+	public PingCmd pingCmd() {
+	    return new PingCmd().withBaseResource(baseResource);
 	}
 
 	public VersionCmd versionCmd() throws DockerException {
