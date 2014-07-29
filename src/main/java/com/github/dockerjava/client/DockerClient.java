@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.net.URI;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
@@ -66,27 +65,25 @@ public class DockerClient {
 	private WebResource baseResource;
 	private AuthConfig authConfig;
 
-	
-	public DockerClient() throws DockerException {
-		this(Config.createConfig());
+	public DockerClient() {
+		this(Config.createDefaultConfigBuilder().build());
 	}
 
-	public DockerClient(String serverUrl) throws DockerException {
+	public DockerClient(String serverUrl) {
 		this(configWithServerUrl(serverUrl));
 	}
-	
-	private static Config configWithServerUrl(String serverUrl)
-			throws DockerException {
-		final Config c = Config.createConfig();
-		c.url = URI.create(serverUrl);
-		return c;
+
+	private static Config configWithServerUrl(String serverUrl) {
+		return Config.createDefaultConfigBuilder()
+                .withUri(serverUrl)
+                .build();
 	}
 
 	public DockerClient(Config config) {
 		ClientConfig clientConfig = new DefaultClientConfig();
-		
+
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
-		schemeRegistry.register(new Scheme("http", config.url.getPort(),
+		schemeRegistry.register(new Scheme("http", config.getUri().getPort(),
 				PlainSocketFactory.getSocketFactory()));
 		schemeRegistry.register(new Scheme("https", 443, SSLSocketFactory
 				.getSocketFactory()));
@@ -103,17 +100,17 @@ public class DockerClient {
 				null, false), clientConfig);
 
 		// 1 hour
-		client.setReadTimeout(config.readTimeout);
-	
+		client.setReadTimeout(config.getReadTimeout());
+
 		client.addFilter(new JsonClientFilter());
-		
-		if (config.enableLoggingFilter)
+
+		if (config.isLoggingFilterEnabled())
 			client.addFilter(new SelectiveLoggingFilter());
 
-		baseResource = client.resource(config.url + "/v" + config.version);
+		baseResource = client.resource(config.getUri() + "/v" + config.getVersion());
 	}
 
-	
+
 
 	public void setCredentials(String username, String password, String email) {
 		if (username == null) {
@@ -143,9 +140,11 @@ public class DockerClient {
 	private static AuthConfig authConfigFromProperties() throws DockerException {
 		final AuthConfig a = new AuthConfig();
 
-		a.setUsername(Config.createConfig().username);
-		a.setPassword(Config.createConfig().password);
-		a.setEmail(Config.createConfig().email);
+        // TODO This should probably come from the Config used to create the DockerClient.
+        Config defaultConfig = Config.createDefaultConfigBuilder().build();
+		a.setUsername(defaultConfig.getUsername());
+		a.setPassword(defaultConfig.getPassword());
+		a.setEmail(defaultConfig.getEmail());
 
 		if (a.getUsername() == null) {
 			throw new IllegalStateException("username is null");
@@ -228,7 +227,7 @@ public class DockerClient {
 
 	public CreateContainerCmd createContainerCmd(String image) {
 		return new CreateContainerCmd(new CreateContainerConfig()).withImage(
-				image).withBaseResource(baseResource);
+                image).withBaseResource(baseResource);
 	}
 
 	public StartContainerCmd startContainerCmd(String containerId) {
@@ -253,8 +252,8 @@ public class DockerClient {
 	public AttachContainerCmd attachContainerCmd(String containerId) {
 		return new AttachContainerCmd(containerId).withBaseResource(baseResource);
 	}
-	
-	
+
+
 	public LogContainerCmd logContainerCmd(String containerId) {
 		return new LogContainerCmd(containerId).withBaseResource(baseResource);
 	}
@@ -297,11 +296,11 @@ public class DockerClient {
 	public TopContainerCmd topContainerCmd(String containerId) {
 		return new TopContainerCmd(containerId).withBaseResource(baseResource);
 	}
-	
+
 	public TagImageCmd tagImageCmd(String imageId, String repository, String tag) {
 		return new TagImageCmd(imageId, repository, tag).withBaseResource(baseResource);
 	}
-	
+
 
 	/**
 	 * @return The output slurped into a string.
