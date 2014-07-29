@@ -13,33 +13,41 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 
 /**
- * 
+ *
  * Copy files or folders from a container.
- * 
+ *
  */
 public class CopyFileFromContainerCmd extends AbstrDockerCmd<CopyFileFromContainerCmd, ClientResponse> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CopyFileFromContainerCmd.class);
 
 	private String containerId, resource;
-	
+
 	public CopyFileFromContainerCmd(String containerId, String resource) {
 		withContainerId(containerId);
 		withResource(resource);
 	}
-	
-	public CopyFileFromContainerCmd withContainerId(String containerId) {
+
+    public String getContainerId() {
+        return containerId;
+    }
+
+    public String getResource() {
+        return resource;
+    }
+
+    public CopyFileFromContainerCmd withContainerId(String containerId) {
 		Preconditions.checkNotNull(containerId, "containerId was not specified");
 		this.containerId = containerId;
 		return this;
 	}
-	
+
 	public CopyFileFromContainerCmd withResource(String resource) {
 		Preconditions.checkNotNull(resource, "resource was not specified");
 		this.resource = resource;
 		return this;
 	}
-	
+
     @Override
     public String toString() {
         return new StringBuilder("cp ")

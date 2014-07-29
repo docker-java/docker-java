@@ -19,28 +19,36 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 
 /**
  * List images
- * 
+ *
  * @param showAll - Show all images (by default filter out the intermediate images used to build)
  * @param filter - TODO: undocumented in docker remote api reference
  */
 public class ListImagesCmd extends AbstrDockerCmd<ListImagesCmd, List<Image>>  {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ListImagesCmd.class);
-	
+
 	private String filter;
 	private boolean showAll = false;
-	
-	public ListImagesCmd withShowAll(boolean showAll) {
+
+    public String getFilter() {
+        return filter;
+    }
+
+    public boolean hasShowAllEnabled() {
+        return showAll;
+    }
+
+    public ListImagesCmd withShowAll(boolean showAll) {
 		this.showAll = showAll;
 		return this;
 	}
-	
+
 	public ListImagesCmd withFilter(String filter) {
 		Preconditions.checkNotNull(filter, "filter was not specified");
 		this.filter = filter;
 		return this;
 	}
-	
+
     @Override
     public String toString() {
         return new StringBuilder("images ")

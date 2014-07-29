@@ -19,46 +19,50 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 
 
 /**
- * 
+ *
  * Creates a new container.
  *
  */
 public class CreateContainerCmd extends AbstrDockerCmd<CreateContainerCmd, ContainerCreateResponse>  {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CreateContainerCmd.class);
-	
+
 	private CreateContainerConfig containerCreateConfig;
 	private String name;
-	
+
 	public CreateContainerCmd(String image) {
 		this(new CreateContainerConfig());
 		Preconditions.checkNotNull(image, "image was not specified");
 		this.containerCreateConfig.withImage(image);
 	}
-	
+
 	public CreateContainerCmd(CreateContainerConfig config) {
 		Preconditions.checkNotNull(config, "config was not specified");
 		this.containerCreateConfig = config;
 	}
-	
-	public CreateContainerCmd withImage(String image) {
+
+    public String getName() {
+        return name;
+    }
+
+    public CreateContainerCmd withImage(String image) {
 		Preconditions.checkNotNull(image, "image was not specified");
 		this.containerCreateConfig.withImage(image);
 		return this;
 	}
-	
+
 	public CreateContainerCmd withCmd(String... cmd) {
 		Preconditions.checkNotNull(cmd, "cmd was not specified");
 		this.containerCreateConfig.withCmd(cmd);
 		return this;
 	}
-	
+
 	public CreateContainerCmd withVolumes(Volume... volumes) {
 		Preconditions.checkNotNull(volumes, "volumes was not specified");
 		this.containerCreateConfig.withVolumes(volumes);
 		return this;
 	}
-    
+
         public CreateContainerCmd withEnv(String... env) {
                 Preconditions.checkNotNull(env, "env was not specified");
                 this.containerCreateConfig.withEnv(env);
@@ -69,21 +73,21 @@ public class CreateContainerCmd extends AbstrDockerCmd<CreateContainerCmd, Conta
                 Preconditions.checkNotNull(hostName, "hostName was not specified");
                 this.containerCreateConfig.withHostName(hostName);
                 return this;
-        }	
-	
+        }
+
 	public CreateContainerCmd withName(String name) {
 		Preconditions.checkNotNull(name, "name was not specified");
 		this.name = name;
 		return this;
 	}
-	
+
 	public CreateContainerCmd withExposedPorts(ExposedPort... exposedPorts) {
 		Preconditions.checkNotNull(exposedPorts, "exposedPorts was not specified");
-		
+
 		this.containerCreateConfig.withExposedPorts(exposedPorts);
 		return this;
 	}
-	
+
     @Override
     public String toString() {
         return new StringBuilder("create container ")

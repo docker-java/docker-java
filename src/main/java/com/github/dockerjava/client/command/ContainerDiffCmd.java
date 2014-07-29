@@ -17,26 +17,30 @@ import com.sun.jersey.api.client.WebResource;
 
 /**
  * Inspect changes on a container's filesystem
- * 
+ *
  * @param containerId - Id of the container
- * 
+ *
  */
 public class ContainerDiffCmd extends AbstrDockerCmd<ContainerDiffCmd, List<ChangeLog>> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ContainerDiffCmd.class);
 
 	private String containerId;
-	
+
 	public ContainerDiffCmd(String containerId) {
 		withContainerId(containerId);
 	}
-	
-	public ContainerDiffCmd withContainerId(String containerId) {
+
+    public String getContainerId() {
+        return containerId;
+    }
+
+    public ContainerDiffCmd withContainerId(String containerId) {
 		Preconditions.checkNotNull(containerId, "containerId was not specified");
 		this.containerId = containerId;
 		return this;
 	}
-	
+
     @Override
     public String toString() {
         return new StringBuilder("diff ")

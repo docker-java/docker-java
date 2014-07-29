@@ -15,7 +15,7 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 
 /**
  * Tag an image into a repository
- * 
+ *
  * @param image
  *            the local image to tag (either a name or an id)
  * @param repository
@@ -27,44 +27,60 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 public class TagImageCmd extends AbstrDockerCmd<TagImageCmd, Integer>  {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TagImageCmd.class);
-	
+
 	private String imageId, repository, tag;
-	
+
 	private boolean force;
-	
+
 	public TagImageCmd(String imageId, String repository, String tag) {
 		withImageId(imageId);
 		withRepository(repository);
 		withTag(tag);
 	}
-	
-	public TagImageCmd withImageId(String imageId) {
+
+    public String getImageId() {
+        return imageId;
+    }
+
+    public String getRepository() {
+        return repository;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public boolean hasForceEnabled() {
+        return force;
+    }
+
+    public TagImageCmd withImageId(String imageId) {
 		Preconditions.checkNotNull(imageId, "imageId was not specified");
 		this.imageId = imageId;
 		return this;
 	}
-	
+
 	public TagImageCmd withRepository(String repository) {
 		Preconditions.checkNotNull(repository, "repository was not specified");
 		this.repository = repository;
 		return this;
 	}
-	
+
 	public TagImageCmd withTag(String tag) {
 		Preconditions.checkNotNull(tag, "tag was not specified");
 		this.tag = tag;
 		return this;
 	}
-	
+
 	public TagImageCmd withForce() {
 		return withForce(true);
 	}
-	
+
 	public TagImageCmd withForce(boolean force) {
 		this.force = force;
 		return this;
 	}
-	
+
     @Override
     public String toString() {
         return new StringBuilder("tag ")
@@ -73,7 +89,7 @@ public class TagImageCmd extends AbstrDockerCmd<TagImageCmd, Integer>  {
             .append(imageId)
             .append(tag != null ? ":" + tag : "")
             .toString();
-    }   
+    }
 
 	protected Integer impl() {
 

@@ -26,15 +26,19 @@ public class StartContainerCmd extends AbstrDockerCmd<StartContainerCmd, Void> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(StartContainerCmd.class);
 
 	private String containerId;
-	
+
 	private StartContainerConfig startContainerConfig;
-	
+
 	public StartContainerCmd(String containerId) {
 		startContainerConfig = new StartContainerConfig();
 		withContainerId(containerId);
 	}
-	
-	public StartContainerCmd withBinds(Bind... binds) {
+
+    public String getContainerId() {
+        return containerId;
+    }
+
+    public StartContainerCmd withBinds(Bind... binds) {
 		startContainerConfig.setBinds(binds);
 		return this;
 	}
@@ -76,13 +80,13 @@ public class StartContainerCmd extends AbstrDockerCmd<StartContainerCmd, Void> {
 		startContainerConfig.setVolumesFrom(volumesFrom);
 		return this;
 	}
-	
+
 	public StartContainerCmd withContainerId(String containerId) {
 		Preconditions.checkNotNull(containerId, "containerId was not specified");
 		this.containerId = containerId;
 		return this;
 	}
-	
+
     @Override
     public String toString() {
         return new StringBuilder("run ")
@@ -90,7 +94,7 @@ public class StartContainerCmd extends AbstrDockerCmd<StartContainerCmd, Void> {
             .append(" using ")
             .append(startContainerConfig)
             .toString();
-    }   
+    }
 
 	protected Void impl() throws DockerException {
 		WebResource webResource = baseResource.path(String.format("/containers/%s/start", containerId));
@@ -103,8 +107,8 @@ public class StartContainerCmd extends AbstrDockerCmd<StartContainerCmd, Void> {
 			} else {
 				builder.post((StartContainerConfig) null);
 			}
-			
-			
+
+
 		} catch (UniformInterfaceException exception) {
 			if (exception.getResponse().getStatus() == 404) {
 				throw new NotFoundException(String.format("No such container %s", containerId));
@@ -121,7 +125,7 @@ public class StartContainerCmd extends AbstrDockerCmd<StartContainerCmd, Void> {
 				throw new DockerException(exception);
 			}
 		}
-		
+
 		return null;
 	}
 }
