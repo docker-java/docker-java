@@ -36,4 +36,5 @@ public interface CommandFactory {
     public UnpauseContainerCmd unpauseContainerCmd(String containerId);
     public VersionCmd versionCmd();
     public WaitContainerCmd waitContainerCmd(String containerId);
+    public PingCmd pingCmd();
 }

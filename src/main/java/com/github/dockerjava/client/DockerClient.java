@@ -16,8 +16,38 @@ import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 
+import com.github.dockerjava.client.command.AbstrDockerCmd;
+import com.github.dockerjava.client.command.AttachContainerCmd;
+import com.github.dockerjava.client.command.AuthCmd;
+import com.github.dockerjava.client.command.BuildImgCmd;
+import com.github.dockerjava.client.command.CommitCmd;
+import com.github.dockerjava.client.command.ContainerDiffCmd;
+import com.github.dockerjava.client.command.CopyFileFromContainerCmd;
+import com.github.dockerjava.client.command.CreateContainerCmd;
+import com.github.dockerjava.client.command.ImportImageCmd;
+import com.github.dockerjava.client.command.InfoCmd;
+import com.github.dockerjava.client.command.InspectContainerCmd;
+import com.github.dockerjava.client.command.InspectImageCmd;
+import com.github.dockerjava.client.command.KillContainerCmd;
+import com.github.dockerjava.client.command.ListContainersCmd;
+import com.github.dockerjava.client.command.ListImagesCmd;
+import com.github.dockerjava.client.command.LogContainerCmd;
+import com.github.dockerjava.client.command.PingCmd;
+import com.github.dockerjava.client.command.PullImageCmd;
+import com.github.dockerjava.client.command.PushImageCmd;
+import com.github.dockerjava.client.command.RemoveContainerCmd;
+import com.github.dockerjava.client.command.RemoveImageCmd;
+import com.github.dockerjava.client.command.RestartContainerCmd;
+import com.github.dockerjava.client.command.SearchImagesCmd;
+import com.github.dockerjava.client.command.StartContainerCmd;
+import com.github.dockerjava.client.command.StopContainerCmd;
+import com.github.dockerjava.client.command.TagImageCmd;
+import com.github.dockerjava.client.command.TopContainerCmd;
+import com.github.dockerjava.client.command.VersionCmd;
+import com.github.dockerjava.client.command.WaitContainerCmd;
+
 import com.github.dockerjava.client.model.AuthConfig;
-import com.github.dockerjava.client.model.CreateContainerConfig;
+
 import com.github.dockerjava.client.utils.JsonClientFilter;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -157,6 +187,10 @@ public class DockerClient implements Closeable {
 
 	public InfoCmd infoCmd() throws DockerException {
 		return cmdFactory.infoCmd().withBaseResource(baseResource);
+	}
+	
+	public PingCmd pingCmd() {
+	    return cmdFactory.pingCmd().withBaseResource(baseResource);
 	}
 
 	public VersionCmd versionCmd() throws DockerException {
