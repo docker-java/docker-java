@@ -155,4 +155,9 @@ public class DefaultCommandFactory implements CommandFactory {
     public WaitContainerCmd waitContainerCmd(String containerId) {
         return new WaitContainerCmd(containerId);
     }
+    
+    @Override
+    public PingCmd pingCmd() {
+    	return new PingCmd();
+    }
 }
