@@ -16,7 +16,7 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 
 /**
  * Get container logs
- * 
+ *
  * @param followStream
  *            - true or false, return stream. Defaults to false.
  * @param stdout
@@ -35,7 +35,7 @@ public class LogContainerCmd extends AbstrDockerCmd<LogContainerCmd, ClientRespo
 			.getLogger(LogContainerCmd.class);
 
 	private String containerId;
-	
+
 	private int tail = -1;
 
 	private boolean followStream, timestamps, stdout, stderr;
@@ -44,7 +44,31 @@ public class LogContainerCmd extends AbstrDockerCmd<LogContainerCmd, ClientRespo
 		withContainerId(containerId);
 	}
 
-	public LogContainerCmd withContainerId(String containerId) {
+    public String getContainerId() {
+        return containerId;
+    }
+
+    public int getTail() {
+        return tail;
+    }
+
+    public boolean hasFollowStreamEnabled() {
+        return followStream;
+    }
+
+    public boolean hasTimestampsEnabled() {
+        return timestamps;
+    }
+
+    public boolean hasStdoutEnabled() {
+        return stdout;
+    }
+
+    public boolean hasStderrEnabled() {
+        return stderr;
+    }
+
+    public LogContainerCmd withContainerId(String containerId) {
 		Preconditions.checkNotNull(containerId, "containerId was not specified");
 		this.containerId = containerId;
 		return this;
@@ -81,13 +105,13 @@ public class LogContainerCmd extends AbstrDockerCmd<LogContainerCmd, ClientRespo
 		this.stderr = stderr;
 		return this;
 	}
-	
+
 	public LogContainerCmd withTailAll() {
 		this.tail = -1;
 		return this;
 	}
-	
-	
+
+
 	public LogContainerCmd withTail(int tail) {
 		this.tail = tail;
 		return this;
@@ -100,15 +124,15 @@ public class LogContainerCmd extends AbstrDockerCmd<LogContainerCmd, ClientRespo
             .append(timestamps ? "--timestamps=true" : "")
             .append(containerId)
             .toString();
-    }	
+    }
 
 	protected ClientResponse impl() throws DockerException {
 		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
 		params.add("timestamps", timestamps ? "1" : "0");
 		params.add("stdout", stdout ? "1" : "0");
 		params.add("stderr", stderr ? "1" : "0");
-		params.add("follow", followStream ? "1" : "0"); 
-		params.add("tail", tail < 0 ? "all" : ""+ tail); 
+		params.add("follow", followStream ? "1" : "0");
+		params.add("tail", tail < 0 ? "all" : ""+ tail);
 
 		WebResource webResource = baseResource.path(
 				String.format("/containers/%s/logs", containerId))

@@ -16,9 +16,9 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 
 /**
  * Attach to container
- * 
+ *
  * @param logs - true or false, includes logs. Defaults to false.
- * 
+ *
  * @param followStream
  *            - true or false, return stream. Defaults to false.
  * @param stdout
@@ -42,7 +42,31 @@ public class AttachContainerCmd extends	AbstrDockerCmd<AttachContainerCmd, Clien
 		withContainerId(containerId);
 	}
 
-	public AttachContainerCmd withContainerId(String containerId) {
+    public String getContainerId() {
+        return containerId;
+    }
+
+    public boolean hasLogsEnabled() {
+        return logs;
+    }
+
+    public boolean hasFollowStreamEnabled() {
+        return followStream;
+    }
+
+    public boolean hasTimestampsEnabled() {
+        return timestamps;
+    }
+
+    public boolean hasStdoutEnabled() {
+        return stdout;
+    }
+
+    public boolean hasStderrEnabled() {
+        return stderr;
+    }
+
+    public AttachContainerCmd withContainerId(String containerId) {
 		Preconditions.checkNotNull(containerId, "containerId was not specified");
 		this.containerId = containerId;
 		return this;
@@ -91,7 +115,7 @@ public class AttachContainerCmd extends	AbstrDockerCmd<AttachContainerCmd, Clien
 		params.add("timestamps", timestamps ? "1" : "0");
 		params.add("stdout", stdout ? "1" : "0");
 		params.add("stderr", stderr ? "1" : "0");
-		params.add("follow", followStream ? "1" : "0"); 
+		params.add("follow", followStream ? "1" : "0");
 
 		WebResource webResource = baseResource.path(
 				String.format("/containers/%s/attach", containerId))

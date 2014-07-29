@@ -20,21 +20,25 @@ public class WaitContainerCmd extends AbstrDockerCmd<WaitContainerCmd, Integer> 
 	private static final Logger LOGGER = LoggerFactory.getLogger(WaitContainerCmd.class);
 
 	private String containerId;
-	
+
 	public WaitContainerCmd(String containerId) {
 		withContainerId(containerId);
 	}
-	
-	public WaitContainerCmd withContainerId(String containerId) {
+
+    public String getContainerId() {
+        return containerId;
+    }
+
+    public WaitContainerCmd withContainerId(String containerId) {
 		Preconditions.checkNotNull(containerId, "containerId was not specified");
 		this.containerId = containerId;
 		return this;
 	}
-	
+
     @Override
     public String toString() {
         return "wait " + containerId;
-    }   
+    }
 
 	protected Integer impl() throws DockerException {
 		WebResource webResource = baseResource.path(String.format("/containers/%s/wait", containerId));

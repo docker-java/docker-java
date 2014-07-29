@@ -20,17 +20,21 @@ public class InspectContainerCmd extends AbstrDockerCmd<InspectContainerCmd, Con
 	private static final Logger LOGGER = LoggerFactory.getLogger(InspectContainerCmd.class);
 
 	private String containerId;
-	
+
 	public InspectContainerCmd(String containerId) {
 		withContainerId(containerId);
 	}
-	
-	public InspectContainerCmd withContainerId(String containerId) {
+
+    public String getContainerId() {
+        return containerId;
+    }
+
+    public InspectContainerCmd withContainerId(String containerId) {
 		Preconditions.checkNotNull(containerId, "containerId was not specified");
 		this.containerId = containerId;
 		return this;
 	}
-	
+
     @Override
     public String toString() {
         return "inspect " + containerId;

@@ -34,7 +34,15 @@ public class ImportImageCmd extends	AbstrDockerCmd<ImportImageCmd, ImageCreateRe
 		withImageStream(imageStream);
 	}
 
-	/**
+    public String getRepository() {
+        return repository;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    /**
 	 * @param repository        the repository to import to
 	 */
 	public ImportImageCmd withRepository(String repository) {

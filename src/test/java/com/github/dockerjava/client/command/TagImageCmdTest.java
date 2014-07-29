@@ -20,16 +20,13 @@ import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
 
 public class TagImageCmdTest extends AbstractDockerClientTest {
-	
+
 	public static final Logger LOG = LoggerFactory
 			.getLogger(TagImageCmdTest.class);
-
-    String username;
 
 	@BeforeTest
 	public void beforeTest() throws DockerException {
 		super.beforeTest();
-        username = dockerClient.authConfig().getUsername();
 	}
 	@AfterTest
 	public void afterTest() {
@@ -49,12 +46,12 @@ public class TagImageCmdTest extends AbstractDockerClientTest {
 	@Test
 	public void testTagImage() throws DockerException, InterruptedException {
 		String tag = String.valueOf(RandomUtils.nextInt(Integer.MAX_VALUE));
-		
+
 		Integer result = dockerClient.tagImageCmd("busybox:latest", "docker-java/busybox", tag).exec();
 		assertThat(result, equalTo(Integer.valueOf(201)));
-		
+
 		dockerClient.removeImageCmd("docker-java/busybox:" + tag).exec();
 	}
-	
+
 }
 
