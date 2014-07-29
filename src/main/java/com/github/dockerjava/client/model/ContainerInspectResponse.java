@@ -268,7 +268,7 @@ public class ContainerInspectResponse {
         private String dns;
         
         @JsonProperty("VolumesFrom")
-        private String volumesFrom;
+        private String[] volumesFrom;
 
         @JsonProperty("ContainerIDFile")
         private String containerIDFile;
@@ -307,7 +307,7 @@ public class ContainerInspectResponse {
 			return dns;
 		}
 
-		public String getVolumesFrom() {
+		public String[] getVolumesFrom() {
 			return volumesFrom;
 		}
 

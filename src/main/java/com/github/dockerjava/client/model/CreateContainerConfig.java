@@ -58,7 +58,7 @@ public class CreateContainerConfig {
     @JsonProperty("Dns")          private String[]  dns;
     @JsonProperty("Image")        private String    image;
     @JsonProperty("Volumes")      private Volumes   volumes = new Volumes();
-    @JsonProperty("VolumesFrom")  private String    volumesFrom = "";
+    @JsonProperty("VolumesFrom")  private String[]    volumesFrom = new String[]{};
     @JsonProperty("WorkingDir")   private String workingDir = "";
     @JsonProperty("DisableNetwork") private boolean disableNetwork = false;
     @JsonProperty("ExposedPorts")   private ExposedPorts exposedPorts = new ExposedPorts();
@@ -237,11 +237,11 @@ public class CreateContainerConfig {
         return this;
     }
 
-    public String getVolumesFrom() {
+    public String[] getVolumesFrom() {
         return volumesFrom;
     }
 
-    public CreateContainerConfig withVolumesFrom(String volumesFrom) {
+    public CreateContainerConfig withVolumesFrom(String[] volumesFrom) {
         this.volumesFrom = volumesFrom;
         return this;
     }
