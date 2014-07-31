@@ -2,6 +2,7 @@ package com.github.dockerjava.client.command;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.Arrays;
 
@@ -37,9 +38,6 @@ public class CreateContainerResponse {
 
     @Override
     public String toString() {
-        return "CreateContainerResponse{" +
-                "id='" + id + '\'' +
-                ", warnings=" + Arrays.toString(warnings) +
-                '}';
+        return ToStringBuilder.reflectionToString(this);
     }
 }

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.client.model.*;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  *
@@ -187,16 +188,9 @@ public class InspectContainerResponse {
 		}
 
 
-		@Override
+        @Override
         public String toString() {
-            return "NetworkSettings{" +
-                    "ports=" + ports +
-                    ", portMapping=" + portMapping +
-                    ", bridge='" + bridge + '\'' +
-                    ", gateway='" + gateway + '\'' +
-                    ", ipPrefixLen=" + ipPrefixLen +
-                    ", ipAddress='" + ipAddress + '\'' +
-                    '}';
+            return ToStringBuilder.reflectionToString(this);
         }
     }
 
@@ -234,16 +228,9 @@ public class InspectContainerResponse {
 			return finishedAt;
 		}
 
-		@Override
+        @Override
         public String toString() {
-            return "ContainerState{" +
-                    "running=" + running +
-                    ", paused=" + paused +
-                    ", pid=" + pid +
-                    ", exitCode=" + exitCode +
-                    ", startedAt='" + startedAt + '\'' +
-                    ", finishedAt='" + finishedAt + '\'' +
-                    '}';
+            return ToStringBuilder.reflectionToString(this);
         }
     }
 
@@ -328,19 +315,9 @@ public class InspectContainerResponse {
 			return networkMode;
 		}
 
-		@Override
+        @Override
         public String toString() {
-            return "HostConfig{" +
-                    "binds=" + Arrays.toString(binds) +
-                    ", containerIDFile='" + containerIDFile + '\'' +
-                    ", lxcConf=" + Arrays.toString(lxcConf) +
-                    ", links=" + Arrays.toString(links) +
-                    ", portBindings=" + portBindings +
-                    ", privileged=" + privileged +
-                    ", publishAllPorts=" + publishAllPorts +
-                    ", networkMode=" + networkMode +
-                    ", dns='" + dns + '\'' +
-                    '}';
+            return ToStringBuilder.reflectionToString(this);
         }
 
     }

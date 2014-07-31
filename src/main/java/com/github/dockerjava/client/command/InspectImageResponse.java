@@ -3,6 +3,7 @@ package com.github.dockerjava.client.command;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.client.model.ContainerConfig;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  *
@@ -96,21 +97,8 @@ public class InspectImageResponse {
         return os;
     }
 
-   @Override
+    @Override
     public String toString() {
-        return "InspectImageResponse{" +
-                "id='" + id + '\'' +
-                ", parent='" + parent + '\'' +
-                ", created='" + created + '\'' +
-                ", container='" + container + '\'' +
-                ", containerConfig=" + containerConfig +
-                ", size=" + size +
-                ", dockerVersion='" + dockerVersion + '\'' +
-                ", config=" + config +
-                ", arch='" + arch + '\'' +
-                ", comment='" + comment + '\'' +
-                ", author='" + author + '\'' +
-                ", os='" + os + '\'' +
-                '}';
+        return ToStringBuilder.reflectionToString(this);
     }
 }
