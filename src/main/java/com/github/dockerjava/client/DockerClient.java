@@ -24,7 +24,7 @@ import com.github.dockerjava.client.command.CommitCmd;
 import com.github.dockerjava.client.command.ContainerDiffCmd;
 import com.github.dockerjava.client.command.CopyFileFromContainerCmd;
 import com.github.dockerjava.client.command.CreateContainerCmd;
-import com.github.dockerjava.client.command.ImportImageCmd;
+import com.github.dockerjava.client.command.CreateImageCmd;
 import com.github.dockerjava.client.command.InfoCmd;
 import com.github.dockerjava.client.command.InspectContainerCmd;
 import com.github.dockerjava.client.command.InspectImageCmd;
@@ -63,7 +63,7 @@ import com.sun.jersey.client.apache4.ApacheHttpClient4Handler;
 public class DockerClient implements Closeable {
 
 	private Client client;
-	
+
     private final CommandFactory cmdFactory;
 	private final WebResource baseResource;
 	private AuthConfig authConfig;
@@ -96,7 +96,7 @@ public class DockerClient implements Closeable {
         ClientConfig clientConfig = new DefaultClientConfig();
 		client = new ApacheHttpClient4(new ApacheHttpClient4Handler(httpClient,
 				null, false), clientConfig);
-		
+
 		if(config.getReadTimeout() != null) {
 			client.setReadTimeout(config.getReadTimeout());
 		}
@@ -195,7 +195,7 @@ public class DockerClient implements Closeable {
 	public InfoCmd infoCmd() throws DockerException {
 		return cmdFactory.infoCmd().withBaseResource(baseResource);
 	}
-	
+
 	public PingCmd pingCmd() {
 	    return cmdFactory.pingCmd().withBaseResource(baseResource);
 	}
@@ -221,9 +221,8 @@ public class DockerClient implements Closeable {
 //		return execute(pushImageCmd(name));
 //	}
 
-	public ImportImageCmd importImageCmd(String repository,
-			InputStream imageStream) {
-		return cmdFactory.importImageCmd(repository, imageStream)
+	public CreateImageCmd createImageCmd(String repository, InputStream imageStream) {
+		return cmdFactory.createImageCmd(repository, imageStream)
 				.withBaseResource(baseResource);
 	}
 

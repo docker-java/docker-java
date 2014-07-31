@@ -17,9 +17,9 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 /**
  * Create an image by importing the given stream of a tar file.
  */
-public class ImportImageCmd extends	AbstrDockerCmd<ImportImageCmd, CreateImageResponse> {
+public class CreateImageCmd extends	AbstrDockerCmd<CreateImageCmd, CreateImageResponse> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ImportImageCmd.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CreateImageCmd.class);
 
 	private String repository, tag;
 	private InputStream imageStream;
@@ -28,7 +28,7 @@ public class ImportImageCmd extends	AbstrDockerCmd<ImportImageCmd, CreateImageRe
 	 * @param repository        the repository to import to
 	 * @param imageStream       the InputStream of the tar file
 	 */
-	public ImportImageCmd(String repository, InputStream imageStream) {
+	public CreateImageCmd(String repository, InputStream imageStream) {
 		withRepository(repository);
 		withImageStream(imageStream);
 	}
@@ -44,7 +44,7 @@ public class ImportImageCmd extends	AbstrDockerCmd<ImportImageCmd, CreateImageRe
     /**
 	 * @param repository        the repository to import to
 	 */
-	public ImportImageCmd withRepository(String repository) {
+	public CreateImageCmd withRepository(String repository) {
 		Preconditions.checkNotNull(repository, "repository was not specified");
 		this.repository = repository;
 		return this;
@@ -53,7 +53,7 @@ public class ImportImageCmd extends	AbstrDockerCmd<ImportImageCmd, CreateImageRe
 	/**
 	 * @param imageStream       the InputStream of the tar file
 	 */
-	public ImportImageCmd withImageStream(InputStream imageStream) {
+	public CreateImageCmd withImageStream(InputStream imageStream) {
 		Preconditions
 				.checkNotNull(imageStream, "imageStream was not specified");
 		this.imageStream = imageStream;
@@ -63,7 +63,7 @@ public class ImportImageCmd extends	AbstrDockerCmd<ImportImageCmd, CreateImageRe
 	/**
 	 * @param tag               any tag for this image
 	 */
-	public ImportImageCmd withTag(String tag) {
+	public CreateImageCmd withTag(String tag) {
 		Preconditions.checkNotNull(tag, "tag was not specified");
 		this.tag = tag;
 		return this;
