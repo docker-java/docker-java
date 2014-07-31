@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Properties;
 
+import com.google.common.base.Preconditions;
+
 public class Config {
     private final URI uri;
     private final String version, username, password, email;
@@ -95,7 +97,7 @@ public class Config {
         overriddenProperties.putAll(p);
 
         // TODO Add all values from system properties that begin with docker.io.*
-        for (String s : new String[]{ "url", "version", "username", "password", "email"}) {
+        for (String s : new String[]{ "url", "version", "username", "password", "email", "readTimeout", "enableLoggingFilter"}) {
 		    final String key = "docker.io." + s;
 		    if (System.getProperties().containsKey(key)) {
 			    overriddenProperties.setProperty(key, System.getProperty(key));
@@ -140,27 +142,28 @@ public class Config {
         }
 
         public final DockerClientConfigBuilder withUri(String uri) {
+        	Preconditions.checkNotNull(uri, "uri was not specified");
             this.uri = URI.create(uri);
             return this;
         }
         public final DockerClientConfigBuilder withVersion(String version) {
-            this.version = version;
+        	this.version = version;
             return this;
         }
         public final DockerClientConfigBuilder withUsername(String username) {
-            this.username = username;
+        	this.username = username;
             return this;
         }
         public final DockerClientConfigBuilder withPassword(String password) {
-            this.password = password;
+        	this.password = password;
             return this;
         }
         public final DockerClientConfigBuilder withEmail(String email) {
-            this.email = email;
+        	this.email = email;
             return this;
         }
-        public final DockerClientConfigBuilder withReadTimeout(int readTimeout) {
-            this.readTimeout = readTimeout;
+        public final DockerClientConfigBuilder withReadTimeout(Integer readTimeout) {
+        	this.readTimeout = readTimeout;
             return this;
         }
         public final DockerClientConfigBuilder withLoggingFilter(boolean loggingFilterEnabled) {
