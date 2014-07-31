@@ -46,7 +46,7 @@ Run build with tests:
     <dependency>
           <groupId>com.github.docker-java</groupId>
           <artifactId>docker-java</artifactId>
-          <version>0.9.0</version>
+          <version>0.9.1</version>
     </dependency>
 
 Latest SNAPSHOT is available from maven repo: https://oss.sonatype.org/content/groups/public   
@@ -60,7 +60,7 @@ For code examples, please look at the [Wiki](https://github.com/docker-java/dock
 There are a couple of configuration items, all of which have sensible defaults:
 
 * `url` The Docker URL, e.g. `http://localhost:2375`.
-* `version` The API version, e.g. `1.12`.
+* `version` The API version, e.g. `1.13`.
 * `username` Your repository username (required to push containers).
 * `password` Your repository password.
 * `email` Your repository email.
@@ -87,4 +87,4 @@ In `$HOME/.docker.io.properties`, e.g.:
 In the class path at `/docker.io.properties`, e.g.:
 
     docker.io.url=http://localhost:2375
-    docker.io.version=1.12
+    docker.io.version=1.13
