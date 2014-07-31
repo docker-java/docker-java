@@ -2,6 +2,7 @@ package com.github.dockerjava.client.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  * Created by ben on 12/12/13.
@@ -25,9 +26,6 @@ public class DriverStatus {
 
     @Override
     public String toString() {
-        return "DriverStatus{" +
-                "rootDir='" + rootDir + '\'' +
-                ", dirs=" + dirs +
-                '}';
+        return ToStringBuilder.reflectionToString(this);
     }
 }

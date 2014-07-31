@@ -2,6 +2,7 @@ package com.github.dockerjava.client.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  * Configuration object for copy command.
@@ -57,7 +58,7 @@ public class CopyConfig {
 
     @Override
     public String toString() {
-        return "{\"HostPath\":\"" + hostPath + "\", \"Resource\":\"" + resource + "\"}";
+        return ToStringBuilder.reflectionToString(this);
     }
 
 }

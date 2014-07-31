@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.node.NullNode;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 @JsonDeserialize(using = Ports.Deserializer.class)
 @JsonSerialize(using = Ports.Serializer.class)
@@ -28,8 +29,8 @@ public class Ports {
     private final Map<ExposedPort, Binding> ports = new HashMap<ExposedPort, Binding>();
 
     public Ports() { }
-    
-    public Ports(ExposedPort exposedPort, Binding host) { 
+
+    public Ports(ExposedPort exposedPort, Binding host) {
     	bind(exposedPort, host);
     }
 
@@ -45,7 +46,7 @@ public class Ports {
     public Map<ExposedPort, Binding> getBindings(){
         return ports;
     }
-    
+
     public static Binding Binding(String hostIp, int hostPort) {
     	return new Binding(hostIp, hostPort);
     }
@@ -65,11 +66,11 @@ public class Ports {
             this.hostIp = hostIp;
             this.hostPort = hostPort;
         }
-        
+
         public Binding(int hostPort) {
             this("", hostPort);
         }
-        
+
         public String getHostIp() {
             return hostIp;
         }
@@ -78,15 +79,11 @@ public class Ports {
             return hostPort;
         }
 
-        
         @Override
         public String toString() {
-            return "PortBinding{" +
-                    "hostIp='" + hostIp + '\'' +
-                    ", hostPort='" + hostPort + '\'' +
-                    '}';
+            return ToStringBuilder.reflectionToString(this);
         }
-        
+
         @Override
         public boolean equals(Object obj) {
         	if(obj instanceof Binding) {
@@ -98,7 +95,7 @@ public class Ports {
         		return super.equals(obj);
         }
     }
-    
+
 
     public static class Deserializer extends JsonDeserializer<Ports> {
         @Override
@@ -110,7 +107,7 @@ public class Ports {
             for (Iterator<Map.Entry<String, JsonNode>> it = node.fields(); it.hasNext();) {
 
                 Map.Entry<String, JsonNode> field = it.next();
-                if (!field.getValue().equals(NullNode.getInstance())) {                	
+                if (!field.getValue().equals(NullNode.getInstance())) {
                     String hostIp = field.getValue().get(0).get("HostIp").textValue();
                     int hostPort = field.getValue().get(0).get("HostPort").asInt();
                     out.bind(ExposedPort.parse(field.getKey()), new Binding(hostIp, hostPort));

@@ -2,6 +2,7 @@ package com.github.dockerjava.client.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  *
@@ -22,7 +23,7 @@ public class Version {
 
 	@JsonProperty("GoVersion")
 	private String  goVersion;
-	
+
 	@JsonProperty("KernelVersion")
 	private String kernelVersion;
 
@@ -62,14 +63,6 @@ public class Version {
 
     @Override
     public String toString() {
-        return "Version{" +
-                "version='" + version + '\'' +
-                ", gitCommit='" + gitCommit + '\'' +
-                ", goVersion='" + goVersion + '\'' +
-                ", kernelVersion='" + kernelVersion + '\'' +
-                ", arch='" + arch + '\'' +
-                ", operatingSystem='" + operatingSystem + '\'' +
-                ", apiVersion='" + apiVersion + '\'' +
-                '}';
+        return ToStringBuilder.reflectionToString(this);
     }
 }

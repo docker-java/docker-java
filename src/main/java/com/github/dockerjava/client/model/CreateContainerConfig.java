@@ -6,11 +6,12 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  *
  * @author Konstantin Pelykh (kpelykh@gmail.com)
- * 
+ *
  * 		"Hostname":"",
          "User":"",
          "Memory":0,
@@ -37,7 +38,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
          "ExposedPorts":{
                  "22/tcp": {}
          }
- * 
+ *
  *
  */
 public class CreateContainerConfig {
@@ -62,12 +63,12 @@ public class CreateContainerConfig {
     @JsonProperty("WorkingDir")   private String workingDir = "";
     @JsonProperty("DisableNetwork") private boolean disableNetwork = false;
     @JsonProperty("ExposedPorts")   private ExposedPorts exposedPorts = new ExposedPorts();
-    
+
     public CreateContainerConfig withExposedPorts(ExposedPort[] exposedPorts) {
         this.exposedPorts = new ExposedPorts(exposedPorts);
         return this;
     }
-    
+
     @JsonIgnore
     public ExposedPort[] getExposedPorts() {
         return exposedPorts.getExposedPorts();
@@ -85,7 +86,7 @@ public class CreateContainerConfig {
         return this;
     }
 
-    
+
     public String getHostName() {
         return hostName;
     }
@@ -248,28 +249,8 @@ public class CreateContainerConfig {
 
     @Override
     public String toString() {
-        return "CreateContainerConfig{" +
-                "hostName='" + hostName + '\'' +
-                ", portSpecs=" + Arrays.toString(portSpecs) +
-                ", user='" + user + '\'' +
-                ", tty=" + tty +
-                ", stdinOpen=" + stdinOpen +
-                ", stdInOnce=" + stdInOnce +
-                ", memoryLimit=" + memoryLimit +
-                ", memorySwap=" + memorySwap +
-                ", attachStdin=" + attachStdin +
-                ", attachStdout=" + attachStdout +
-                ", attachStderr=" + attachStderr +
-                ", env=" + Arrays.toString(env) +
-                ", cmd=" + Arrays.toString(cmd) +
-                ", dns=" + Arrays.toString(dns) +
-                ", image='" + image + '\'' +
-                ", volumes=" + volumes +
-                ", volumesFrom='" + volumesFrom + '\'' +
-                ", disableNetwork=" + disableNetwork +
-                ", workingDir='" + workingDir + '\'' +
-                '}';
+        return ToStringBuilder.reflectionToString(this);
     }
-    
-    
+
+
 }

@@ -2,6 +2,7 @@ package com.github.dockerjava.client.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.Arrays;
 
@@ -28,7 +29,7 @@ public class Container {
     @JsonProperty("Names")
     private String[] names;
 
-    @JsonProperty("Ports")    
+    @JsonProperty("Ports")
     public Port[] ports;
 
     @JsonProperty("Status")
@@ -65,17 +66,9 @@ public class Container {
 
     @Override
     public String toString() {
-        return "Container{" +
-                "id='" + id + '\'' +
-                ", command='" + command + '\'' +
-                ", image='" + image + '\'' +
-                ", created=" + created +
-                ", status='" + status + '\'' +
-                ", ports=" + Arrays.toString(ports) +
-                ", names=" + Arrays.toString(names) +
-                '}';
+        return ToStringBuilder.reflectionToString(this);
     }
-    
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Port {
 
@@ -87,34 +80,29 @@ public class Container {
 
         @JsonProperty("PublicPort")
         private Integer publicPort;
-        
+
         @JsonProperty("Type")
         private String type;
-        
+
         public String getIp() {
 			return ip;
 		}
-        
+
         public Integer getPrivatePort() {
 			return privatePort;
 		}
-        
+
         public Integer getPublicPort() {
 			return publicPort;
 		}
-        
+
         public String getType() {
 			return type;
 		}
-        
+
         @Override
         public String toString() {
-            return "Port{" +
-                    "IP='" + ip + '\'' +
-                    ", privatePort='" + privatePort + '\'' +
-                    ", publicPort='" + publicPort + '\'' +
-                    ", type='" + type + '\'' +
-                    '}';
+            return ToStringBuilder.reflectionToString(this);
         }
     }
 }
