@@ -13,8 +13,6 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
 
-import com.github.dockerjava.client.model.CreateContainerResponse;
-import com.github.dockerjava.client.model.InspectImageResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang.StringUtils;
@@ -27,7 +25,6 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
-import com.github.dockerjava.client.model.InspectContainerResponse;
 import com.sun.jersey.api.client.ClientResponse;
 
 public class BuildImageCmdTest extends AbstractDockerClientTest {

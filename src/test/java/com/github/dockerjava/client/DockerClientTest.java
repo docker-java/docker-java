@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 import java.lang.reflect.Method;
 
-import com.github.dockerjava.client.model.CreateContainerResponse;
+import com.github.dockerjava.client.command.CreateContainerResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;

@@ -5,7 +5,6 @@ import java.io.InputStream;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
-import com.github.dockerjava.client.model.CreateImageResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

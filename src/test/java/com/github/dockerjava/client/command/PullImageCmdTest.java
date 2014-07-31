@@ -8,7 +8,6 @@ import static org.hamcrest.Matchers.notNullValue;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
-import com.github.dockerjava.client.model.InspectImageResponse;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;

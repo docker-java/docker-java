@@ -9,7 +9,6 @@ import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import com.github.dockerjava.client.model.CreateContainerResponse;
 import org.hamcrest.Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

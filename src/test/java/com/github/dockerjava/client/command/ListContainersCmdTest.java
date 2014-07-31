@@ -14,7 +14,6 @@ import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import com.github.dockerjava.client.model.InspectContainerResponse;
 import org.hamcrest.Matcher;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -26,7 +25,6 @@ import org.testng.annotations.Test;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.model.Container;
-import com.github.dockerjava.client.model.CreateContainerResponse;
 
 public class ListContainersCmdTest extends AbstractDockerClientTest {
 

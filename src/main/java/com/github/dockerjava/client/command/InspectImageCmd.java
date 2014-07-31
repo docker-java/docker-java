@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.NotFoundException;
-import com.github.dockerjava.client.model.InspectImageResponse;
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;

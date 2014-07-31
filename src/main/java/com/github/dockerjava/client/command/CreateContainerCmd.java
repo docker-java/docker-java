@@ -3,7 +3,6 @@ package com.github.dockerjava.client.command;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
-import com.github.dockerjava.client.model.CreateContainerResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

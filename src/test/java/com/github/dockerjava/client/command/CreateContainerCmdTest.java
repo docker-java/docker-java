@@ -7,7 +7,6 @@ import static org.hamcrest.Matchers.*;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-import com.github.dockerjava.client.model.CreateContainerResponse;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -17,7 +16,6 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
-import com.github.dockerjava.client.model.InspectContainerResponse;
 import com.github.dockerjava.client.model.Volume;
 
 public class CreateContainerCmdTest extends AbstractDockerClientTest {

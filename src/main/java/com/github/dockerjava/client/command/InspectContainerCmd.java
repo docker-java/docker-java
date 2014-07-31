@@ -2,7 +2,6 @@ package com.github.dockerjava.client.command;
 
 import javax.ws.rs.core.MediaType;
 
-import com.github.dockerjava.client.model.InspectContainerResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

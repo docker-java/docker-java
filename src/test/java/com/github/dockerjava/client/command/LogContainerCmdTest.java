@@ -18,7 +18,6 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
-import com.github.dockerjava.client.model.CreateContainerResponse;
 import com.sun.jersey.api.client.ClientResponse;
 
 public class LogContainerCmdTest extends AbstractDockerClientTest {

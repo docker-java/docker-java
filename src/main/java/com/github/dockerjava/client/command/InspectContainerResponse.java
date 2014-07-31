@@ -1,4 +1,4 @@
-package com.github.dockerjava.client.model;
+package com.github.dockerjava.client.command;
 
 
 import java.util.Arrays;
@@ -7,6 +7,7 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.client.model.*;
 
 /**
  *
