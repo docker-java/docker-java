@@ -11,7 +11,7 @@ import java.util.Arrays;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ContainerCreateResponse {
+public class CreateContainerResponse {
 
     @JsonProperty("Id")
     private String id;
@@ -37,7 +37,7 @@ public class ContainerCreateResponse {
 
     @Override
     public String toString() {
-        return "ContainerCreateResponse{" +
+        return "CreateContainerResponse{" +
                 "id='" + id + '\'' +
                 ", warnings=" + Arrays.toString(warnings) +
                 '}';

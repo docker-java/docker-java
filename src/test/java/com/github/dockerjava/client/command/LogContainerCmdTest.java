@@ -18,7 +18,7 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
-import com.github.dockerjava.client.model.ContainerCreateResponse;
+import com.github.dockerjava.client.model.CreateContainerResponse;
 import com.sun.jersey.api.client.ClientResponse;
 
 public class LogContainerCmdTest extends AbstractDockerClientTest {
@@ -48,9 +48,9 @@ public class LogContainerCmdTest extends AbstractDockerClientTest {
 
 		String snippet = "hello world";
 
-		ContainerCreateResponse container = dockerClient
+		CreateContainerResponse container = dockerClient
 				.createContainerCmd("busybox").withCmd("/bin/echo", snippet).exec();
-		
+
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));
 

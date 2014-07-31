@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ImageCreateResponse {
+public class CreateImageResponse {
 
     @JsonProperty("status")
     private String id;
@@ -23,7 +23,7 @@ public class ImageCreateResponse {
 
     @Override
     public String toString() {
-        return "ContainerCreateResponse{" +
+        return "CreateImageResponse{" +
                 "id='" + id + '\'' +
                 '}';
     }

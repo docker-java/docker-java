@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ContainerInspectResponse {
+public class InspectContainerResponse {
 
 	@JsonProperty("Args")
 	private String[] args;
@@ -30,16 +30,16 @@ public class ContainerInspectResponse {
 
 	@JsonProperty("ExecDriver")
 	private String execDriver;
-	
+
 	@JsonProperty("HostConfig")
 	private HostConfig hostConfig;
 
 	@JsonProperty("HostnamePath")
 	private String hostnamePath;
-	
+
 	@JsonProperty("HostsPath")
 	private String hostsPath;
-	
+
 	@JsonProperty("Id")
     private String id;
 
@@ -48,7 +48,7 @@ public class ContainerInspectResponse {
 
 	@JsonProperty("MountLabel")
 	private String mountLabel;
-	
+
 	@JsonProperty("Name")
 	private String name;
 
@@ -60,7 +60,7 @@ public class ContainerInspectResponse {
 
 	@JsonProperty("ProcessLabel")
     private String processLabel;
-	
+
 	@JsonProperty("ResolvConfPath")
 	private String resolvConfPath;
 
@@ -84,7 +84,7 @@ public class ContainerInspectResponse {
     public String getPath() {
         return path;
     }
-    
+
     public String getProcessLabel() {
 		return processLabel;
 	}
@@ -142,11 +142,11 @@ public class ContainerInspectResponse {
     public HostConfig getHostConfig() {
         return hostConfig;
     }
-    
+
     public String getExecDriver() {
 		return execDriver;
 	}
-    
+
     public String getMountLabel() {
 		return mountLabel;
 	}
@@ -160,7 +160,7 @@ public class ContainerInspectResponse {
         @JsonProperty("Bridge") private String bridge;
         @JsonProperty("PortMapping") private Map<String,Map<String, String>> portMapping;
         @JsonProperty("Ports") private Ports ports;
-        
+
         public String getIpAddress() {
 			return ipAddress;
 		}
@@ -208,7 +208,7 @@ public class ContainerInspectResponse {
         @JsonProperty("ExitCode") private int exitCode;
         @JsonProperty("StartedAt") private String startedAt;
         @JsonProperty("FinishedAt") private String finishedAt;
-        
+
         public boolean isRunning() {
 			return running;
 		}
@@ -245,44 +245,44 @@ public class ContainerInspectResponse {
                     '}';
         }
     }
-    
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public class HostConfig {
 
         @JsonProperty("Binds")
         private String[] binds;
-        
+
         @JsonProperty("LxcConf")
         private LxcConf[] lxcConf;
-        
+
         @JsonProperty("PortBindings")
         private Ports portBindings;
-        
+
         @JsonProperty("PublishAllPorts")
         private boolean publishAllPorts;
-        
+
         @JsonProperty("Privileged")
         private boolean privileged;
-        
+
         @JsonProperty("Dns")
         private String dns;
-        
+
         @JsonProperty("VolumesFrom")
         private String[] volumesFrom;
 
         @JsonProperty("ContainerIDFile")
         private String containerIDFile;
-        
+
         @JsonProperty("DnsSearch")
         private String dnsSearch;
-        
+
         // TODO: use Links class here?
         @JsonProperty("Links")
         private String[] links;
 
         @JsonProperty("NetworkMode")
         private String networkMode;
-        
+
         public String[] getBinds() {
 			return binds;
 		}

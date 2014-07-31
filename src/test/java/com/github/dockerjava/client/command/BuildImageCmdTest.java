@@ -12,9 +12,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
-import java.net.URI;
-import java.net.URISyntaxException;
 
+import com.github.dockerjava.client.model.CreateContainerResponse;
+import com.github.dockerjava.client.model.InspectImageResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang.StringUtils;
@@ -27,9 +27,7 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
-import com.github.dockerjava.client.model.ContainerCreateResponse;
-import com.github.dockerjava.client.model.ContainerInspectResponse;
-import com.github.dockerjava.client.model.ImageInspectResponse;
+import com.github.dockerjava.client.model.InspectContainerResponse;
 import com.sun.jersey.api.client.ClientResponse;
 
 public class BuildImageCmdTest extends AbstractDockerClientTest {
@@ -82,13 +80,13 @@ public class BuildImageCmdTest extends AbstractDockerClientTest {
 		String imageId = StringUtils.substringBetween(fullLog,
 				"Successfully built ", "\\n\"}").trim();
 
-		ImageInspectResponse imageInspectResponse = dockerClient
+		InspectImageResponse inspectImageResponse = dockerClient
 				.inspectImageCmd(imageId).exec();
-		assertThat(imageInspectResponse, not(nullValue()));
-		LOG.info("Image Inspect: {}", imageInspectResponse.toString());
-		tmpImgs.add(imageInspectResponse.getId());
+		assertThat(inspectImageResponse, not(nullValue()));
+		LOG.info("Image Inspect: {}", inspectImageResponse.toString());
+		tmpImgs.add(inspectImageResponse.getId());
 
-		assertThat(imageInspectResponse.getAuthor(),
+		assertThat(inspectImageResponse.getAuthor(),
 				equalTo("Guillaume J. Charmes \"guillaume@dotcloud.com\""));
 	}
 
@@ -115,7 +113,7 @@ public class BuildImageCmdTest extends AbstractDockerClientTest {
 		dockerfileBuild(baseDir, "Successfully executed testAddFolder.sh");
 	}
 
-	
+
 	private String dockerfileBuild(File baseDir, String expectedText)
 			throws DockerException, IOException {
 
@@ -143,7 +141,7 @@ public class BuildImageCmdTest extends AbstractDockerClientTest {
 				"Successfully built ", "\\n\"}").trim();
 
 		// Create container based on image
-		ContainerCreateResponse container = dockerClient.createContainerCmd(
+		CreateContainerResponse container = dockerClient.createContainerCmd(
 				imageId).exec();
 
 		LOG.info("Created container: {}", container.toString());
@@ -162,8 +160,8 @@ public class BuildImageCmdTest extends AbstractDockerClientTest {
 
 		return container.getId();
 	}
-	
-	
+
+
 	private ClientResponse logContainer(String containerId) {
 		return dockerClient.logContainerCmd(containerId).withStdErr().withStdOut().exec();
 	}
@@ -196,28 +194,28 @@ public class BuildImageCmdTest extends AbstractDockerClientTest {
 		String imageId = StringUtils.substringBetween(fullLog,
 				"Successfully built ", "\\n\"}").trim();
 
-		ImageInspectResponse imageInspectResponse = dockerClient
+		InspectImageResponse inspectImageResponse = dockerClient
 				.inspectImageCmd(imageId).exec();
-		assertThat(imageInspectResponse, not(nullValue()));
-		assertThat(imageInspectResponse.getId(), not(nullValue()));
-		LOG.info("Image Inspect: {}", imageInspectResponse.toString());
-		tmpImgs.add(imageInspectResponse.getId());
+		assertThat(inspectImageResponse, not(nullValue()));
+		assertThat(inspectImageResponse.getId(), not(nullValue()));
+		LOG.info("Image Inspect: {}", inspectImageResponse.toString());
+		tmpImgs.add(inspectImageResponse.getId());
 
-		ContainerCreateResponse container = dockerClient.createContainerCmd(
-				imageInspectResponse.getId()).exec();
+		CreateContainerResponse container = dockerClient.createContainerCmd(
+				inspectImageResponse.getId()).exec();
 		assertThat(container.getId(), not(isEmptyString()));
 		dockerClient.startContainerCmd(container.getId()).exec();
 		tmpContainers.add(container.getId());
 
-		ContainerInspectResponse containerInspectResponse = dockerClient
+		InspectContainerResponse inspectContainerResponse = dockerClient
 				.inspectContainerCmd(container.getId()).exec();
 
-		assertThat(containerInspectResponse.getId(), notNullValue());
-		assertThat(containerInspectResponse.getNetworkSettings().getPorts(),
+		assertThat(inspectContainerResponse.getId(), notNullValue());
+		assertThat(inspectContainerResponse.getNetworkSettings().getPorts(),
 				notNullValue());
 
 		// No use as such if not running on the server
-//		for (Ports.Port p : containerInspectResponse.getNetworkSettings().getPorts().getAllPorts()) {
+//		for (Ports.Port p : inspectContainerResponse.getNetworkSettings().getPorts().getAllPorts()) {
 //			int port = Integer.valueOf(p.getHostPort());
 //			LOG.info("Checking port {} is open", port);
 //			assertThat(available(port), is(false));
@@ -225,7 +223,7 @@ public class BuildImageCmdTest extends AbstractDockerClientTest {
 		dockerClient.stopContainerCmd(container.getId()).withTimeout(0).exec();
 
 	}
-	
+
 	@Test
 	public void testAddAndCopySubstitution () throws DockerException, IOException {
 			File baseDir = new File(Thread.currentThread().getContextClassLoader()

@@ -3,12 +3,12 @@ package com.github.dockerjava.client.command;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
+import com.github.dockerjava.client.model.CreateContainerResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.NotFoundException;
-import com.github.dockerjava.client.model.ContainerCreateResponse;
 import com.github.dockerjava.client.model.CreateContainerConfig;
 import com.github.dockerjava.client.model.ExposedPort;
 import com.github.dockerjava.client.model.Volume;
@@ -23,7 +23,7 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
  * Creates a new container.
  *
  */
-public class CreateContainerCmd extends AbstrDockerCmd<CreateContainerCmd, ContainerCreateResponse>  {
+public class CreateContainerCmd extends AbstrDockerCmd<CreateContainerCmd, CreateContainerResponse>  {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CreateContainerCmd.class);
 
@@ -68,7 +68,7 @@ public class CreateContainerCmd extends AbstrDockerCmd<CreateContainerCmd, Conta
 		this.containerCreateConfig.withVolumesFrom(volumesFrom);
 		return this;
 	}
-	
+
     public CreateContainerCmd withEnv(String... env) {
             Preconditions.checkNotNull(env, "env was not specified");
             this.containerCreateConfig.withEnv(env);
@@ -102,7 +102,7 @@ public class CreateContainerCmd extends AbstrDockerCmd<CreateContainerCmd, Conta
             .toString();
     }
 
-	protected ContainerCreateResponse impl() {
+	protected CreateContainerResponse impl() {
 		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
 		if (name != null) {
 			params.add("name", name);
@@ -113,7 +113,7 @@ public class CreateContainerCmd extends AbstrDockerCmd<CreateContainerCmd, Conta
 			LOGGER.trace("POST: {} ", webResource);
 			return webResource.accept(MediaType.APPLICATION_JSON)
 					.type(MediaType.APPLICATION_JSON)
-					.post(ContainerCreateResponse.class, containerCreateConfig);
+					.post(CreateContainerResponse.class, containerCreateConfig);
 		} catch (UniformInterfaceException exception) {
 			if (exception.getResponse().getStatus() == 404) {
 				throw new NotFoundException(String.format("%s is an unrecognized image. Please pull the image first.", containerCreateConfig.getImage()));

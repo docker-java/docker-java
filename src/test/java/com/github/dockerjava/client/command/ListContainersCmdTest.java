@@ -14,6 +14,7 @@ import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import com.github.dockerjava.client.model.InspectContainerResponse;
 import org.hamcrest.Matcher;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -25,8 +26,7 @@ import org.testng.annotations.Test;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.model.Container;
-import com.github.dockerjava.client.model.ContainerCreateResponse;
-import com.github.dockerjava.client.model.ContainerInspectResponse;
+import com.github.dockerjava.client.model.CreateContainerResponse;
 
 public class ListContainersCmdTest extends AbstractDockerClientTest {
 
@@ -34,7 +34,7 @@ public class ListContainersCmdTest extends AbstractDockerClientTest {
 	public void beforeTest() throws DockerException {
 		super.beforeTest();
 	}
-	
+
 	@AfterTest
 	public void afterTest() {
 		super.afterTest();
@@ -49,42 +49,42 @@ public class ListContainersCmdTest extends AbstractDockerClientTest {
 	public void afterMethod(ITestResult result) {
 		super.afterMethod(result);
 	}
-	
+
 	@Test
 	public void testListContainers() throws DockerException {
-		
+
 		String testImage = "busybox";
-		
+
 		// need to block until image is pulled completely
 		logResponseStream(dockerClient.pullImageCmd(testImage).exec());
-		
+
 		List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
 		assertThat(containers, notNullValue());
 		LOG.info("Container List: {}", containers);
 
 		int size = containers.size();
 
-		ContainerCreateResponse container1 = dockerClient
+		CreateContainerResponse container1 = dockerClient
 				.createContainerCmd(testImage).withCmd("echo").exec();
-		
+
 		assertThat(container1.getId(), not(isEmptyString()));
 
-		ContainerInspectResponse containerInspectResponse = dockerClient.inspectContainerCmd(container1.getId()).exec();
-		
-		assertThat(containerInspectResponse.getConfig().getImage(), is(equalTo(testImage)));
-		
-		
+		InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container1.getId()).exec();
+
+		assertThat(inspectContainerResponse.getConfig().getImage(), is(equalTo(testImage)));
+
+
 		dockerClient.startContainerCmd(container1.getId()).exec();
 		tmpContainers.add(container1.getId());
-		
+
 		LOG.info("container id: " + container1.getId());
 
 		List<Container> containers2 = dockerClient.listContainersCmd().withShowAll(true).exec();
-		
+
 		for(Container container: containers2) {
 			LOG.info("listContainer: id=" + container.getId() +" image=" + container.getImage());
 		}
-		
+
 		assertThat(size + 1, is(equalTo(containers2.size())));
 		Matcher matcher = hasItem(hasField("id", startsWith(container1.getId())));
 		assertThat(containers2, matcher);
@@ -96,7 +96,7 @@ public class ListContainersCmdTest extends AbstractDockerClientTest {
 		for(Container container: filteredContainers) {
 			LOG.info("filteredContainer: " + container);
 		}
-		
+
 		Container container2 = filteredContainers.get(0);
 		assertThat(container2.getCommand(), not(isEmptyString()));
 		assertThat(container2.getImage(), startsWith(testImage + ":"));

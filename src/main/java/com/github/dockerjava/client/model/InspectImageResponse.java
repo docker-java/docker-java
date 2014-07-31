@@ -9,35 +9,35 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ImageInspectResponse {
-	
+public class InspectImageResponse {
+
 	@JsonProperty("Architecture")
     private String arch;
-	
+
 	@JsonProperty("Author")
     private String author;
-	
+
 	@JsonProperty("Comment")
     private String comment;
-	
+
 	@JsonProperty("Config")
     private ContainerConfig config;
-	
+
 	@JsonProperty("Container")
     private String container;
-	
+
 	@JsonProperty("ContainerConfig")
     private ContainerConfig containerConfig;
-	
+
 	@JsonProperty("Created")
 	private String created;
-	
+
 	@JsonProperty("DockerVersion")
     private String dockerVersion;
 
     @JsonProperty("Id")
     private String id;
-    
+
     @JsonProperty("Os")
     private String os;
 
@@ -45,7 +45,7 @@ public class ImageInspectResponse {
     private String parent;
 
     @JsonProperty("Size")
-    private long size;    
+    private long size;
 
     public String getId() {
         return id;
@@ -97,7 +97,7 @@ public class ImageInspectResponse {
 
    @Override
     public String toString() {
-        return "ImageInspectResponse{" +
+        return "InspectImageResponse{" +
                 "id='" + id + '\'' +
                 ", parent='" + parent + '\'' +
                 ", created='" + created + '\'' +

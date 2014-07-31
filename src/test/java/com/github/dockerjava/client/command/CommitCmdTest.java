@@ -9,6 +9,8 @@ import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
 
 import java.lang.reflect.Method;
 
+import com.github.dockerjava.client.model.CreateContainerResponse;
+import com.github.dockerjava.client.model.InspectImageResponse;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -18,8 +20,6 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
-import com.github.dockerjava.client.model.ContainerCreateResponse;
-import com.github.dockerjava.client.model.ImageInspectResponse;
 
 public class CommitCmdTest extends AbstractDockerClientTest {
 
@@ -27,7 +27,7 @@ public class CommitCmdTest extends AbstractDockerClientTest {
 	public void beforeTest() throws DockerException {
 		super.beforeTest();
 	}
-	
+
 	@AfterTest
 	public void afterTest() {
 		super.afterTest();
@@ -42,11 +42,11 @@ public class CommitCmdTest extends AbstractDockerClientTest {
 	public void afterMethod(ITestResult result) {
 		super.afterMethod(result);
 	}
-	
+
 	@Test
 	public void commit() throws DockerException {
 
-		ContainerCreateResponse container = dockerClient
+		CreateContainerResponse container = dockerClient
 				.createContainerCmd("busybox").withCmd("touch", "/test").exec();
 		
 		LOG.info("Created container: {}", container.toString());
@@ -59,18 +59,18 @@ public class CommitCmdTest extends AbstractDockerClientTest {
 				.commitCmd(container.getId()).exec();
 		tmpImgs.add(imageId);
 
-		ImageInspectResponse imageInspectResponse = dockerClient
+		InspectImageResponse inspectImageResponse = dockerClient
 				.inspectImageCmd(imageId).exec();
-		LOG.info("Image Inspect: {}", imageInspectResponse.toString());
+		LOG.info("Image Inspect: {}", inspectImageResponse.toString());
 
-		assertThat(imageInspectResponse,
+		assertThat(inspectImageResponse,
 				hasField("container", startsWith(container.getId())));
-		assertThat(imageInspectResponse.getContainerConfig().getImage(),
+		assertThat(inspectImageResponse.getContainerConfig().getImage(),
 				equalTo("busybox"));
 
-		ImageInspectResponse busyboxImg = dockerClient.inspectImageCmd("busybox").exec();
+		InspectImageResponse busyboxImg = dockerClient.inspectImageCmd("busybox").exec();
 
-		assertThat(imageInspectResponse.getParent(),
+		assertThat(inspectImageResponse.getParent(),
 				equalTo(busyboxImg.getId()));
 	}
 

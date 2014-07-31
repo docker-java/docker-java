@@ -10,6 +10,7 @@ import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import com.github.dockerjava.client.model.CreateContainerResponse;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -20,7 +21,6 @@ import org.testng.annotations.Test;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.model.ChangeLog;
-import com.github.dockerjava.client.model.ContainerCreateResponse;
 
 public class ContainerDiffCmdTest extends AbstractDockerClientTest {
 
@@ -46,7 +46,7 @@ public class ContainerDiffCmdTest extends AbstractDockerClientTest {
 
 	@Test
 	public void testDiff() throws DockerException {
-		ContainerCreateResponse container = dockerClient
+		CreateContainerResponse container = dockerClient
 				.createContainerCmd("busybox").withCmd("touch", "/test" ).exec();
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));

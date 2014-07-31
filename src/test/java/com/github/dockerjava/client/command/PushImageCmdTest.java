@@ -20,10 +20,10 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
-import com.github.dockerjava.client.model.ContainerCreateResponse;
+import com.github.dockerjava.client.model.CreateContainerResponse;
 
 public class PushImageCmdTest extends AbstractDockerClientTest {
-	
+
 	public static final Logger LOG = LoggerFactory
 			.getLogger(PushImageCmdTest.class);
 
@@ -52,7 +52,7 @@ public class PushImageCmdTest extends AbstractDockerClientTest {
 	@Test
 	public void testPushLatest() throws Exception {
 
-		ContainerCreateResponse container = dockerClient
+		CreateContainerResponse container = dockerClient
 				.createContainerCmd("busybox").withCmd("true").exec();
 
 		LOG.info("Created container {}", container.toString());
@@ -60,16 +60,16 @@ public class PushImageCmdTest extends AbstractDockerClientTest {
 		assertThat(container.getId(), not(isEmptyString()));
 
 		tmpContainers.add(container.getId());
-		
+
 		LOG.info("Commiting container: {}", container.toString());
 		String imageId = dockerClient.commitCmd(container.getId()).withRepository(username + "/busybox").exec();
 
 		logResponseStream(dockerClient.pushImageCmd(username + "/busybox").exec());
-		
+
 		dockerClient.removeImageCmd(imageId).exec();
-		
+
 		assertThat(asString(dockerClient.pullImageCmd(username + "/busybox").exec()), not(containsString("404")));
-		
+
 		tmpImgs.add(username + "/busybox");
 	}
 
@@ -79,6 +79,6 @@ public class PushImageCmdTest extends AbstractDockerClientTest {
 		assertThat(logResponseStream(dockerClient.pushImageCmd(username + "/xxx").exec()), containsString("error"));
 	}
 
-	
+
 }
 

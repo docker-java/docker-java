@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
+import com.github.dockerjava.client.model.InspectImageResponse;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -17,7 +18,6 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
-import com.github.dockerjava.client.model.ImageInspectResponse;
 import com.github.dockerjava.client.model.Info;
 import com.sun.jersey.api.client.ClientResponse;
 
@@ -47,7 +47,7 @@ public class PullImageCmdTest extends AbstractDockerClientTest {
 	public void testPullImage() throws DockerException, IOException {
 		Info info = dockerClient.infoCmd().exec();
 		LOG.info("Client info: {}", info.toString());
-		
+
 		int imgCount = info.getImages();
 		LOG.info("imgCount1: {}", imgCount);
 
@@ -63,10 +63,10 @@ public class PullImageCmdTest extends AbstractDockerClientTest {
 
 		info = dockerClient.infoCmd().exec();
 		LOG.info("Client info: {}", info.toString());
-		
+
 		imgCount = info.getImages();
 		LOG.info("imgCount2: {}", imgCount);
-		
+
 
 		LOG.info("Pulling image: {}", testImage);
 
@@ -81,10 +81,10 @@ public class PullImageCmdTest extends AbstractDockerClientTest {
 
 		assertThat(imgCount, lessThanOrEqualTo(info.getImages()));
 
-		ImageInspectResponse imageInspectResponse = dockerClient
+		InspectImageResponse inspectImageResponse = dockerClient
 				.inspectImageCmd(testImage).exec();
-		LOG.info("Image Inspect: {}", imageInspectResponse.toString());
-		assertThat(imageInspectResponse, notNullValue());
+		LOG.info("Image Inspect: {}", inspectImageResponse.toString());
+		assertThat(inspectImageResponse, notNullValue());
 	}
 
 }

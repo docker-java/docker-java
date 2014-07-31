@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.not;
 
 import java.lang.reflect.Method;
 
+import com.github.dockerjava.client.model.InspectContainerResponse;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -17,8 +18,7 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
-import com.github.dockerjava.client.model.ContainerCreateResponse;
-import com.github.dockerjava.client.model.ContainerInspectResponse;
+import com.github.dockerjava.client.model.CreateContainerResponse;
 
 public class RestartContainerCmdTest extends AbstractDockerClientTest {
 
@@ -45,31 +45,31 @@ public class RestartContainerCmdTest extends AbstractDockerClientTest {
 	@Test
 	public void restartContainer() throws DockerException {
 
-		ContainerCreateResponse container = dockerClient
+		CreateContainerResponse container = dockerClient
 				.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));
 		dockerClient.startContainerCmd(container.getId()).exec();
 		tmpContainers.add(container.getId());
 
-		ContainerInspectResponse containerInspectResponse = dockerClient
+		InspectContainerResponse inspectContainerResponse = dockerClient
 				.inspectContainerCmd(container.getId()).exec();
-		LOG.info("Container Inspect: {}", containerInspectResponse.toString());
+		LOG.info("Container Inspect: {}", inspectContainerResponse.toString());
 
-		String startTime = containerInspectResponse.getState().getStartedAt();
+		String startTime = inspectContainerResponse.getState().getStartedAt();
 
 		dockerClient.restartContainerCmd(container.getId()).withtTimeout(2).exec();
 
-		ContainerInspectResponse containerInspectResponse2 = dockerClient
+		InspectContainerResponse inspectContainerResponse2 = dockerClient
 				.inspectContainerCmd(container.getId()).exec();
 		LOG.info("Container Inspect After Restart: {}",
-				containerInspectResponse2.toString());
+				inspectContainerResponse2.toString());
 
-		String startTime2 = containerInspectResponse2.getState().getStartedAt();
+		String startTime2 = inspectContainerResponse2.getState().getStartedAt();
 
 		assertThat(startTime, not(equalTo(startTime2)));
 
-		assertThat(containerInspectResponse.getState().isRunning(),
+		assertThat(inspectContainerResponse.getState().isRunning(),
 				is(equalTo(true)));
 
 		dockerClient.killContainerCmd(container.getId()).exec();
