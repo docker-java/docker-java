@@ -95,7 +95,7 @@ public class Config {
         overriddenProperties.putAll(p);
 
         // TODO Add all values from system properties that begin with docker.io.*
-        for (String s : new String[]{"url", "version", "username", "password", "email"}) {
+        for (String s : new String[]{ "url", "version", "username", "password", "email"}) {
 		    final String key = "docker.io." + s;
 		    if (System.getProperties().containsKey(key)) {
 			    overriddenProperties.setProperty(key, System.getProperty(key));

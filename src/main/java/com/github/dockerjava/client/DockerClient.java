@@ -97,15 +97,22 @@ public class DockerClient implements Closeable {
 		client = new ApacheHttpClient4(new ApacheHttpClient4Handler(httpClient,
 				null, false), clientConfig);
 		
-		// 1 hour
-		client.setReadTimeout(config.getReadTimeout());
+		if(config.getReadTimeout() != null) {
+			client.setReadTimeout(config.getReadTimeout());
+		}
 
 		client.addFilter(new JsonClientFilter());
 
 		if (config.isLoggingFilterEnabled())
 			client.addFilter(new SelectiveLoggingFilter());
-
-		baseResource = client.resource(config.getUri() + "/v" + config.getVersion());
+		
+		WebResource webResource = client.resource(config.getUri());
+		
+		if(config.getVersion() != null) {
+			baseResource = webResource.path("v" + config.getVersion());
+		} else {
+			baseResource = webResource;
+		}
 	}
 
 
