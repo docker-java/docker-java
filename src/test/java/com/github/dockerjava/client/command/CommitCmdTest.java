@@ -47,7 +47,7 @@ public class CommitCmdTest extends AbstractDockerClientTest {
 	public void commit() throws DockerException {
 
 		ContainerCreateResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd(new String[] { "touch", "/test" }).exec();
+				.createContainerCmd("busybox").withCmd("touch", "/test").exec();
 		
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));

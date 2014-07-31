@@ -1,5 +1,6 @@
 package com.github.dockerjava.client.command;
 
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.slf4j.Logger;
@@ -162,8 +163,8 @@ public class CommitCmd extends AbstrDockerCmd<CommitCmd, String>  {
 
 		try {
 			LOGGER.trace("POST: {}", webResource);
-			ObjectNode ObjectNode = webResource.accept("application/vnd.docker.raw-stream").post(ObjectNode.class, params);
-            return ObjectNode.get("Id").asText();
+			ObjectNode objectNode = webResource.queryParams(params).accept("application/vnd.docker.raw-stream").type(MediaType.APPLICATION_JSON).post(ObjectNode.class, commitConfig);
+            return objectNode.get("Id").asText();
 		} catch (UniformInterfaceException exception) {
 			if (exception.getResponse().getStatus() == 404) {
 				throw new NotFoundException(String.format("No such container %s", containerId));
