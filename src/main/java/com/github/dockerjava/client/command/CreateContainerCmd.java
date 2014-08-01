@@ -1,11 +1,5 @@
 package com.github.dockerjava.client.command;
 
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.NotFoundException;
 import com.github.dockerjava.client.model.ContainerCreateResponse;
@@ -16,6 +10,11 @@ import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 
 
 /**
@@ -68,6 +67,11 @@ public class CreateContainerCmd extends AbstrDockerCmd<CreateContainerCmd, Conta
 		this.containerCreateConfig.withVolumesFrom(volumesFrom);
 		return this;
 	}
+
+  public CreateContainerCmd withTTY(boolean tty) {
+    this.containerCreateConfig.withTty(tty);
+    return this;
+  }
 	
     public CreateContainerCmd withEnv(String... env) {
             Preconditions.checkNotNull(env, "env was not specified");
