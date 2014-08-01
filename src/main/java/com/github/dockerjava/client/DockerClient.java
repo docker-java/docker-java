@@ -70,7 +70,7 @@ public class DockerClient implements Closeable {
 
 
 	public DockerClient() {
-		this(Config.createDefaultConfigBuilder().build());
+		this(DockerClientConfig.createDefaultConfigBuilder().build());
 	}
 
 	public DockerClient(String serverUrl) {
@@ -78,47 +78,47 @@ public class DockerClient implements Closeable {
 	}
 
 
-	private static Config configWithServerUrl(String serverUrl) {
-		return Config.createDefaultConfigBuilder()
+	private static DockerClientConfig configWithServerUrl(String serverUrl) {
+		return DockerClientConfig.createDefaultConfigBuilder()
                 .withUri(serverUrl)
                 .build();
 	}
 
 
-    public DockerClient(Config config) {
-        this(config, new DefaultCommandFactory());
+    public DockerClient(DockerClientConfig dockerClientConfig) {
+        this(dockerClientConfig, new DefaultCommandFactory());
     }
 
-	public DockerClient(Config config, CommandFactory cmdFactory) {
+	public DockerClient(DockerClientConfig dockerClientConfig, CommandFactory cmdFactory) {
         this.cmdFactory = cmdFactory;
 
-        HttpClient httpClient = getPoolingHttpClient(config);
+        HttpClient httpClient = getPoolingHttpClient(dockerClientConfig);
         ClientConfig clientConfig = new DefaultClientConfig();
 		client = new ApacheHttpClient4(new ApacheHttpClient4Handler(httpClient,
 				null, false), clientConfig);
 
-		if(config.getReadTimeout() != null) {
-			client.setReadTimeout(config.getReadTimeout());
+		if(dockerClientConfig.getReadTimeout() != null) {
+			client.setReadTimeout(dockerClientConfig.getReadTimeout());
 		}
 
 		client.addFilter(new JsonClientFilter());
 
-		if (config.isLoggingFilterEnabled())
+		if (dockerClientConfig.isLoggingFilterEnabled())
 			client.addFilter(new SelectiveLoggingFilter());
 
-		WebResource webResource = client.resource(config.getUri());
+		WebResource webResource = client.resource(dockerClientConfig.getUri());
 
-		if(config.getVersion() != null) {
-			baseResource = webResource.path("v" + config.getVersion());
+		if(dockerClientConfig.getVersion() != null) {
+			baseResource = webResource.path("v" + dockerClientConfig.getVersion());
 		} else {
 			baseResource = webResource;
 		}
 	}
 
 
-    private HttpClient getPoolingHttpClient(Config config) {
+    private HttpClient getPoolingHttpClient(DockerClientConfig dockerClientConfig) {
         SchemeRegistry schemeRegistry = new SchemeRegistry();
-        schemeRegistry.register(new Scheme("http", config.getUri().getPort(),
+        schemeRegistry.register(new Scheme("http", dockerClientConfig.getUri().getPort(),
                 PlainSocketFactory.getSocketFactory()));
         schemeRegistry.register(new Scheme("https", 443, SSLSocketFactory
                 .getSocketFactory()));
@@ -162,11 +162,11 @@ public class DockerClient implements Closeable {
 	private static AuthConfig authConfigFromProperties() throws DockerException {
 		final AuthConfig a = new AuthConfig();
 
-        // TODO This should probably come from the Config used to create the DockerClient.
-        Config defaultConfig = Config.createDefaultConfigBuilder().build();
-		a.setUsername(defaultConfig.getUsername());
-		a.setPassword(defaultConfig.getPassword());
-		a.setEmail(defaultConfig.getEmail());
+        // TODO This should probably come from the DockerClientConfig used to create the DockerClient.
+        DockerClientConfig defaultDockerClientConfig = DockerClientConfig.createDefaultConfigBuilder().build();
+		a.setUsername(defaultDockerClientConfig.getUsername());
+		a.setPassword(defaultDockerClientConfig.getPassword());
+		a.setEmail(defaultDockerClientConfig.getEmail());
 
 		if (a.getUsername() == null) {
 			throw new IllegalStateException("username is null");
