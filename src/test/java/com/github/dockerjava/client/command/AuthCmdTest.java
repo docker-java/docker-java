@@ -1,6 +1,7 @@
 package com.github.dockerjava.client.command;
 
 import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.client.DockerClient;
 import com.github.dockerjava.client.DockerException;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
@@ -42,8 +43,8 @@ public class AuthCmdTest extends AbstractDockerClientTest {
 	public void testAuthInvalid() throws Exception {
         System.setProperty("docker.io.password", "garbage");
 		try {
-			dockerClient.authCmd().exec();
-            fail();
+			new DockerClient().authCmd().exec();
+            fail("Expected a DockerException caused by a bad password.");
 		} catch (DockerException e) {
 			assertThat(e.getCause(), Matchers.instanceOf(UniformInterfaceException.class));
 			assertEquals(((UniformInterfaceException) e.getCause()).getResponse().getStatus(), 401);
