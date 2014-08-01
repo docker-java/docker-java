@@ -105,9 +105,9 @@ public class DockerClient implements Closeable {
 
 		if (config.isLoggingFilterEnabled())
 			client.addFilter(new SelectiveLoggingFilter());
-		
+
 		WebResource webResource = client.resource(config.getUri());
-		
+
 		if(config.getVersion() != null) {
 			baseResource = webResource.path("v" + config.getVersion());
 		} else {
@@ -326,6 +326,7 @@ public class DockerClient implements Closeable {
 	}
 
 
+    // TODO This is only being used by the test code for logging. Is it really necessary?
 	/**
 	 * @return The output slurped into a string.
 	 */

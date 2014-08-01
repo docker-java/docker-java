@@ -67,6 +67,7 @@ public class PushImageCmdTest extends AbstractDockerClientTest {
 
 		dockerClient.removeImageCmd(imageId).exec();
 
+        // TODO This can fail intermittently if run with other tests.
 		assertThat(asString(dockerClient.pullImageCmd(username + "/busybox").exec()), not(containsString("404")));
 
 		tmpImgs.add(username + "/busybox");
