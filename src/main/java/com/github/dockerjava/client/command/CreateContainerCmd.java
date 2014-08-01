@@ -69,6 +69,11 @@ public class CreateContainerCmd extends AbstrDockerCmd<CreateContainerCmd, Creat
 		return this;
 	}
 
+  public CreateContainerCmd withTTY(boolean tty) {
+    this.containerCreateConfig.withTty(tty);
+    return this;
+  }
+	
     public CreateContainerCmd withEnv(String... env) {
             Preconditions.checkNotNull(env, "env was not specified");
             this.containerCreateConfig.withEnv(env);
