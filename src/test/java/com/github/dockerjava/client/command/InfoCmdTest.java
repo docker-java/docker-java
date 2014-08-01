@@ -13,13 +13,17 @@ import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.model.Info;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.not;
+
 public class InfoCmdTest extends AbstractDockerClientTest {
 
 	@BeforeTest
 	public void beforeTest() throws DockerException {
 		super.beforeTest();
 	}
-	
+
 	@AfterTest
 	public void afterTest() {
 		super.afterTest();
@@ -34,10 +38,23 @@ public class InfoCmdTest extends AbstractDockerClientTest {
 	public void afterMethod(ITestResult result) {
 		super.afterMethod(result);
 	}
-	
+
 	@Test
 	public void info() throws DockerException {
-		Info dockerInfo = dockerClient.infoCmd().exec();
+        // Make sure that there is at least one container for the assertion
+        // TODO extract this into a shared method
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+                .withName("docker-java-itest-info")
+                .withCmd("touch", "/test")
+                .exec();
+
+        LOG.info("Created container: {}", container);
+        assertThat(container.getId(), not(isEmptyOrNullString()));
+
+        dockerClient.startContainerCmd(container.getId()).exec();
+        tmpContainers.add(container.getId());
+
+        Info dockerInfo = dockerClient.infoCmd().exec();
 		LOG.info(dockerInfo.toString());
 
 		assertTrue(dockerInfo.toString().contains("containers"));
