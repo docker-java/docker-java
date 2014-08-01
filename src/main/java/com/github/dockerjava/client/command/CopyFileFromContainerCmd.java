@@ -69,7 +69,7 @@ public class CopyFileFromContainerCmd extends AbstrDockerCmd<CopyFileFromContain
 			WebResource.Builder builder =
 					webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).type("application/json");
 
-			return builder.post(ClientResponse.class, copyConfig.toString());
+			return builder.post(ClientResponse.class, copyConfig);
 		} catch (UniformInterfaceException exception) {
 			if (exception.getResponse().getStatus() == 400) {
 				throw new DockerException("bad parameter");
