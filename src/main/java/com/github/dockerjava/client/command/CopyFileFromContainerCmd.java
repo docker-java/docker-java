@@ -2,7 +2,6 @@ package com.github.dockerjava.client.command;
 
 import javax.ws.rs.core.MediaType;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.slf4j.Logger;
@@ -23,7 +22,13 @@ public class CopyFileFromContainerCmd extends AbstrDockerCmd<CopyFileFromContain
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CopyFileFromContainerCmd.class);
 
-	private String containerId, resource;
+	private String containerId;
+	
+	@JsonProperty("HostPath")
+    private String hostPath = ".";
+
+    @JsonProperty("Resource")
+    private String resource;
 
 	public CopyFileFromContainerCmd(String containerId, String resource) {
 		withContainerId(containerId);
@@ -49,10 +54,20 @@ public class CopyFileFromContainerCmd extends AbstrDockerCmd<CopyFileFromContain
 		this.resource = resource;
 		return this;
 	}
+	
+	public String getHostPath() {
+		return hostPath;
+	}
+	
+	public CopyFileFromContainerCmd withHostPath(String hostPath) {
+		Preconditions.checkNotNull(hostPath, "hostPath was not specified");
+		this.hostPath = hostPath;
+		return this;
+	}
 
     @Override
     public String toString() {
-        return new StringBuilder("cp ")
+        return new ToStringBuilder(this).append("cp ")
             .append(containerId)
             .append(":")
             .append(resource)
@@ -60,8 +75,6 @@ public class CopyFileFromContainerCmd extends AbstrDockerCmd<CopyFileFromContain
     }
 
 	protected ClientResponse impl() throws DockerException {
-		CopyConfig copyConfig = new CopyConfig();
-		copyConfig.setResource(resource);
 
 		WebResource webResource =
 				baseResource.path(String.format("/containers/%s/copy", containerId));
@@ -71,7 +84,7 @@ public class CopyFileFromContainerCmd extends AbstrDockerCmd<CopyFileFromContain
 			WebResource.Builder builder =
 					webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).type("application/json");
 
-			return builder.post(ClientResponse.class, copyConfig);
+			return builder.post(ClientResponse.class, this);
 		} catch (UniformInterfaceException exception) {
 			if (exception.getResponse().getStatus() == 400) {
 				throw new DockerException("bad parameter");
@@ -85,62 +98,5 @@ public class CopyFileFromContainerCmd extends AbstrDockerCmd<CopyFileFromContain
 		}
 	}
 
-    /**
-     * Configuration object for copy command.
-     * @author Victor Lyuboslavsky
-     */
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    private static class CopyConfig {
 
-        @JsonProperty("HostPath")
-        private String hostPath;
-
-        @JsonProperty("Resource")
-        private String resource;
-
-        /**
-         * Constructor.
-         */
-        public CopyConfig() {
-            hostPath = ".";
-        }
-
-        /**
-         * Retrieves the 'resource' variable.
-         * @return the 'resource' variable value
-         */
-        public String getResource() {
-            return resource;
-        }
-
-        /**
-         * Sets the 'resource' variable.
-         * @param resource the new 'resource' variable value to set
-         */
-        public void setResource(String resource) {
-            this.resource = resource;
-        }
-
-        /**
-         * Retrieves the 'hostPath' variable.
-         * @return the 'hostPath' variable value
-         */
-        public String getHostPath() {
-            return hostPath;
-        }
-
-        /**
-         * Sets the 'hostPath' variable.
-         * @param hostPath the new 'hostPath' variable value to set
-         */
-        public void setHostPath(String hostPath) {
-            this.hostPath = hostPath;
-        }
-
-        @Override
-        public String toString() {
-            return ToStringBuilder.reflectionToString(this);
-        }
-
-    }
 }

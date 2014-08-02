@@ -5,6 +5,7 @@ import java.io.InputStream;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,7 +72,7 @@ public class CreateImageCmd extends	AbstrDockerCmd<CreateImageCmd, CreateImageRe
 
     @Override
     public String toString() {
-        return new StringBuilder("import - ")
+        return new ToStringBuilder(this).append("import - ")
             .append(repository != null ? repository + ":" : "")
             .append(tag != null ? tag : "")
             .toString();
