@@ -1,7 +1,9 @@
-package com.github.dockerjava.client.model;
+package com.github.dockerjava.client.command;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.client.model.ContainerConfig;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  *
@@ -9,35 +11,35 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ImageInspectResponse {
-	
+public class InspectImageResponse {
+
 	@JsonProperty("Architecture")
     private String arch;
-	
+
 	@JsonProperty("Author")
     private String author;
-	
+
 	@JsonProperty("Comment")
     private String comment;
-	
+
 	@JsonProperty("Config")
     private ContainerConfig config;
-	
+
 	@JsonProperty("Container")
     private String container;
-	
+
 	@JsonProperty("ContainerConfig")
     private ContainerConfig containerConfig;
-	
+
 	@JsonProperty("Created")
 	private String created;
-	
+
 	@JsonProperty("DockerVersion")
     private String dockerVersion;
 
     @JsonProperty("Id")
     private String id;
-    
+
     @JsonProperty("Os")
     private String os;
 
@@ -45,7 +47,7 @@ public class ImageInspectResponse {
     private String parent;
 
     @JsonProperty("Size")
-    private long size;    
+    private long size;
 
     public String getId() {
         return id;
@@ -95,21 +97,8 @@ public class ImageInspectResponse {
         return os;
     }
 
-   @Override
+    @Override
     public String toString() {
-        return "ImageInspectResponse{" +
-                "id='" + id + '\'' +
-                ", parent='" + parent + '\'' +
-                ", created='" + created + '\'' +
-                ", container='" + container + '\'' +
-                ", containerConfig=" + containerConfig +
-                ", size=" + size +
-                ", dockerVersion='" + dockerVersion + '\'' +
-                ", config=" + config +
-                ", arch='" + arch + '\'' +
-                ", comment='" + comment + '\'' +
-                ", author='" + author + '\'' +
-                ", os='" + os + '\'' +
-                '}';
+        return ToStringBuilder.reflectionToString(this);
     }
 }

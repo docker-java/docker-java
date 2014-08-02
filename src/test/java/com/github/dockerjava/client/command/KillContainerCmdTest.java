@@ -19,8 +19,6 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
-import com.github.dockerjava.client.model.ContainerCreateResponse;
-import com.github.dockerjava.client.model.ContainerInspectResponse;
 
 public class KillContainerCmdTest extends AbstractDockerClientTest {
 
@@ -50,7 +48,7 @@ public class KillContainerCmdTest extends AbstractDockerClientTest {
 	@Test
 	public void testKillContainer() throws DockerException {
 
-		ContainerCreateResponse container = dockerClient
+		CreateContainerResponse container = dockerClient
 				.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));
@@ -60,13 +58,13 @@ public class KillContainerCmdTest extends AbstractDockerClientTest {
 		LOG.info("Killing container: {}", container.getId());
 		dockerClient.killContainerCmd(container.getId()).exec();
 
-		ContainerInspectResponse containerInspectResponse = dockerClient
+		InspectContainerResponse inspectContainerResponse = dockerClient
 				.inspectContainerCmd(container.getId()).exec();
-		LOG.info("Container Inspect: {}", containerInspectResponse.toString());
+		LOG.info("Container Inspect: {}", inspectContainerResponse.toString());
 
-		assertThat(containerInspectResponse.getState().isRunning(),
+		assertThat(inspectContainerResponse.getState().isRunning(),
 				is(equalTo(false)));
-		assertThat(containerInspectResponse.getState().getExitCode(),
+		assertThat(inspectContainerResponse.getState().getExitCode(),
 				not(equalTo(0)));
 
 	}

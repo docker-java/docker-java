@@ -20,7 +20,6 @@ import org.testng.annotations.Test;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.model.ChangeLog;
-import com.github.dockerjava.client.model.ContainerCreateResponse;
 
 public class ContainerDiffCmdTest extends AbstractDockerClientTest {
 
@@ -46,7 +45,7 @@ public class ContainerDiffCmdTest extends AbstractDockerClientTest {
 
 	@Test
 	public void testDiff() throws DockerException {
-		ContainerCreateResponse container = dockerClient
+		CreateContainerResponse container = dockerClient
 				.createContainerCmd("busybox").withCmd("touch", "/test" ).exec();
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));

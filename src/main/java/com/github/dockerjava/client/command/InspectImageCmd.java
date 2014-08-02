@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.NotFoundException;
-import com.github.dockerjava.client.model.ImageInspectResponse;
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
@@ -16,7 +15,7 @@ import com.sun.jersey.api.client.WebResource;
 /**
  * Inspect the details of an image.
  */
-public class InspectImageCmd extends AbstrDockerCmd<InspectImageCmd, ImageInspectResponse>  {
+public class InspectImageCmd extends AbstrDockerCmd<InspectImageCmd, InspectImageResponse>  {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(InspectImageCmd.class);
 
@@ -41,12 +40,12 @@ public class InspectImageCmd extends AbstrDockerCmd<InspectImageCmd, ImageInspec
         return "inspect " + imageId;
     }
 
-	protected ImageInspectResponse impl() {
+	protected InspectImageResponse impl() {
 		WebResource webResource = baseResource.path(String.format("/images/%s/json", imageId));
 
 		try {
 			LOGGER.trace("GET: {}", webResource);
-			return webResource.accept(MediaType.APPLICATION_JSON).get(ImageInspectResponse.class);
+			return webResource.accept(MediaType.APPLICATION_JSON).get(InspectImageResponse.class);
 		} catch (UniformInterfaceException exception) {
 			if (exception.getResponse().getStatus() == 404) {
 				throw new NotFoundException(String.format("No such image %s", imageId));

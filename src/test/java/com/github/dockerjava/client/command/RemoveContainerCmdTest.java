@@ -21,7 +21,6 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
-import com.github.dockerjava.client.model.ContainerCreateResponse;
 
 public class RemoveContainerCmdTest extends AbstractDockerClientTest {
 
@@ -50,7 +49,7 @@ public class RemoveContainerCmdTest extends AbstractDockerClientTest {
 	@Test
 	public void removeContainer() throws DockerException {
 
-		ContainerCreateResponse container = dockerClient
+		CreateContainerResponse container = dockerClient
 				.createContainerCmd("busybox").withCmd("true").exec();
 
 		dockerClient.startContainerCmd(container.getId()).exec();

@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.NotFoundException;
-import com.github.dockerjava.client.model.ContainerTopResponse;
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
@@ -18,7 +17,7 @@ import com.sun.jersey.api.client.WebResource;
  * @author marcus
  *
  */
-public class TopContainerCmd extends AbstrDockerCmd<TopContainerCmd, ContainerTopResponse> {
+public class TopContainerCmd extends AbstrDockerCmd<TopContainerCmd, TopContainerResponse> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TopContainerCmd.class);
 
@@ -59,7 +58,7 @@ public class TopContainerCmd extends AbstrDockerCmd<TopContainerCmd, ContainerTo
             .toString();
     }
 
-	protected ContainerTopResponse impl() throws DockerException {
+	protected TopContainerResponse impl() throws DockerException {
 		WebResource webResource = baseResource.path(String.format("/containers/%s/top", containerId));
 
 		if(!StringUtils.isEmpty(psArgs))
@@ -67,7 +66,7 @@ public class TopContainerCmd extends AbstrDockerCmd<TopContainerCmd, ContainerTo
 
 		try {
 			LOGGER.trace("GET: {}", webResource);
-			return webResource.accept(MediaType.APPLICATION_JSON).get(ContainerTopResponse.class);
+			return webResource.accept(MediaType.APPLICATION_JSON).get(TopContainerResponse.class);
 		} catch (UniformInterfaceException exception) {
 			if (exception.getResponse().getStatus() == 404) {
 				throw new NotFoundException(String.format("No such container %s", containerId));

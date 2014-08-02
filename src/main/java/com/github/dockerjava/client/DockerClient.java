@@ -1,5 +1,6 @@
 package com.github.dockerjava.client;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.apache.commons.io.IOUtils.closeQuietly;
 
 import java.io.*;
@@ -15,36 +16,6 @@ import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
-
-import com.github.dockerjava.client.command.AbstrDockerCmd;
-import com.github.dockerjava.client.command.AttachContainerCmd;
-import com.github.dockerjava.client.command.AuthCmd;
-import com.github.dockerjava.client.command.BuildImgCmd;
-import com.github.dockerjava.client.command.CommitCmd;
-import com.github.dockerjava.client.command.ContainerDiffCmd;
-import com.github.dockerjava.client.command.CopyFileFromContainerCmd;
-import com.github.dockerjava.client.command.CreateContainerCmd;
-import com.github.dockerjava.client.command.ImportImageCmd;
-import com.github.dockerjava.client.command.InfoCmd;
-import com.github.dockerjava.client.command.InspectContainerCmd;
-import com.github.dockerjava.client.command.InspectImageCmd;
-import com.github.dockerjava.client.command.KillContainerCmd;
-import com.github.dockerjava.client.command.ListContainersCmd;
-import com.github.dockerjava.client.command.ListImagesCmd;
-import com.github.dockerjava.client.command.LogContainerCmd;
-import com.github.dockerjava.client.command.PingCmd;
-import com.github.dockerjava.client.command.PullImageCmd;
-import com.github.dockerjava.client.command.PushImageCmd;
-import com.github.dockerjava.client.command.RemoveContainerCmd;
-import com.github.dockerjava.client.command.RemoveImageCmd;
-import com.github.dockerjava.client.command.RestartContainerCmd;
-import com.github.dockerjava.client.command.SearchImagesCmd;
-import com.github.dockerjava.client.command.StartContainerCmd;
-import com.github.dockerjava.client.command.StopContainerCmd;
-import com.github.dockerjava.client.command.TagImageCmd;
-import com.github.dockerjava.client.command.TopContainerCmd;
-import com.github.dockerjava.client.command.VersionCmd;
-import com.github.dockerjava.client.command.WaitContainerCmd;
 
 import com.github.dockerjava.client.model.AuthConfig;
 
@@ -62,63 +33,60 @@ import com.sun.jersey.client.apache4.ApacheHttpClient4Handler;
  */
 public class DockerClient implements Closeable {
 
-	private Client client;
-	
+	private final Client client;
+
     private final CommandFactory cmdFactory;
 	private final WebResource baseResource;
-	private AuthConfig authConfig;
-
+    private final DockerClientConfig dockerClientConfig;
 
 	public DockerClient() {
-		this(Config.createDefaultConfigBuilder().build());
+		this(DockerClientConfig.createDefaultConfigBuilder().build());
 	}
 
 	public DockerClient(String serverUrl) {
 		this(configWithServerUrl(serverUrl));
 	}
 
-
-	private static Config configWithServerUrl(String serverUrl) {
-		return Config.createDefaultConfigBuilder()
+	private static DockerClientConfig configWithServerUrl(String serverUrl) {
+		return DockerClientConfig.createDefaultConfigBuilder()
                 .withUri(serverUrl)
                 .build();
 	}
 
-
-    public DockerClient(Config config) {
-        this(config, new DefaultCommandFactory());
+    public DockerClient(DockerClientConfig dockerClientConfig) {
+        this(dockerClientConfig, new DefaultCommandFactory());
     }
 
-	public DockerClient(Config config, CommandFactory cmdFactory) {
+	public DockerClient(DockerClientConfig dockerClientConfig, CommandFactory cmdFactory) {
         this.cmdFactory = cmdFactory;
+        this.dockerClientConfig = dockerClientConfig;
 
-        HttpClient httpClient = getPoolingHttpClient(config);
+        HttpClient httpClient = getPoolingHttpClient(dockerClientConfig);
         ClientConfig clientConfig = new DefaultClientConfig();
 		client = new ApacheHttpClient4(new ApacheHttpClient4Handler(httpClient,
 				null, false), clientConfig);
-		
-		if(config.getReadTimeout() != null) {
-			client.setReadTimeout(config.getReadTimeout());
+
+		if(dockerClientConfig.getReadTimeout() != null) {
+			client.setReadTimeout(dockerClientConfig.getReadTimeout());
 		}
 
 		client.addFilter(new JsonClientFilter());
 
-		if (config.isLoggingFilterEnabled())
+		if (dockerClientConfig.isLoggingFilterEnabled())
 			client.addFilter(new SelectiveLoggingFilter());
-		
-		WebResource webResource = client.resource(config.getUri());
-		
-		if(config.getVersion() != null) {
-			baseResource = webResource.path("v" + config.getVersion());
+
+		WebResource webResource = client.resource(dockerClientConfig.getUri());
+
+		if(dockerClientConfig.getVersion() != null) {
+			baseResource = webResource.path("v" + dockerClientConfig.getVersion());
 		} else {
 			baseResource = webResource;
 		}
 	}
 
-
-    private HttpClient getPoolingHttpClient(Config config) {
+    private HttpClient getPoolingHttpClient(DockerClientConfig dockerClientConfig) {
         SchemeRegistry schemeRegistry = new SchemeRegistry();
-        schemeRegistry.register(new Scheme("http", config.getUri().getPort(),
+        schemeRegistry.register(new Scheme("http", dockerClientConfig.getUri().getPort(),
                 PlainSocketFactory.getSocketFactory()));
         schemeRegistry.register(new Scheme("https", 443, SSLSocketFactory
                 .getSocketFactory()));
@@ -129,26 +97,8 @@ public class DockerClient implements Closeable {
         // Increase default max connection per route
         cm.setDefaultMaxPerRoute(1000);
 
-
         return new DefaultHttpClient(cm);
     }
-
-
-    public void setCredentials(String username, String password, String email) {
-		if (username == null) {
-			throw new IllegalArgumentException("username is null");
-		}
-		if (password == null) {
-			throw new IllegalArgumentException("password is null");
-		}
-		if (email == null) {
-			throw new IllegalArgumentException("email is null");
-		}
-		authConfig = new AuthConfig();
-		authConfig.setUsername(username);
-		authConfig.setPassword(password);
-		authConfig.setEmail(email);
-	}
 
 	public <RES_T> RES_T execute(AbstrDockerCmd<?, RES_T> command)
 			throws DockerException {
@@ -156,29 +106,16 @@ public class DockerClient implements Closeable {
 	}
 
 	public AuthConfig authConfig() throws DockerException {
-		return authConfig != null ? authConfig : authConfigFromProperties();
-	}
+        checkNotNull(dockerClientConfig.getUsername(), "Configured username is null.");
+        checkNotNull(dockerClientConfig.getPassword(), "Configured password is null.");
+        checkNotNull(dockerClientConfig.getEmail(), "Configured email is null.");
 
-	private static AuthConfig authConfigFromProperties() throws DockerException {
-		final AuthConfig a = new AuthConfig();
-
-        // TODO This should probably come from the Config used to create the DockerClient.
-        Config defaultConfig = Config.createDefaultConfigBuilder().build();
-		a.setUsername(defaultConfig.getUsername());
-		a.setPassword(defaultConfig.getPassword());
-		a.setEmail(defaultConfig.getEmail());
-
-		if (a.getUsername() == null) {
-			throw new IllegalStateException("username is null");
-		}
-		if (a.getPassword() == null) {
-			throw new IllegalStateException("password is null");
-		}
-		if (a.getEmail() == null) {
-			throw new IllegalStateException("email is null");
-		}
-
-		return a;
+        AuthConfig authConfig = new AuthConfig();
+        authConfig.setUsername(dockerClientConfig.getUsername());
+        authConfig.setPassword(dockerClientConfig.getPassword());
+        authConfig.setEmail(dockerClientConfig.getEmail());
+        // TODO Make the registry address configurable
+		return authConfig;
 	}
 
 	/**
@@ -195,7 +132,7 @@ public class DockerClient implements Closeable {
 	public InfoCmd infoCmd() throws DockerException {
 		return cmdFactory.infoCmd().withBaseResource(baseResource);
 	}
-	
+
 	public PingCmd pingCmd() {
 	    return cmdFactory.pingCmd().withBaseResource(baseResource);
 	}
@@ -221,9 +158,8 @@ public class DockerClient implements Closeable {
 //		return execute(pushImageCmd(name));
 //	}
 
-	public ImportImageCmd importImageCmd(String repository,
-			InputStream imageStream) {
-		return cmdFactory.importImageCmd(repository, imageStream)
+	public CreateImageCmd createImageCmd(String repository, InputStream imageStream) {
+		return cmdFactory.createImageCmd(repository, imageStream)
 				.withBaseResource(baseResource);
 	}
 
@@ -326,7 +262,7 @@ public class DockerClient implements Closeable {
 		return cmdFactory.tagImageCmd(imageId, repository, tag).withBaseResource(baseResource);
 	}
 
-
+    // TODO This is only being used by the test code for logging. Is it really necessary?
 	/**
 	 * @return The output slurped into a string.
 	 */

@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.NotFoundException;
-import com.github.dockerjava.client.model.ContainerInspectResponse;
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
@@ -15,7 +14,7 @@ import com.sun.jersey.api.client.WebResource;
 /**
  * Inspect the details of a container.
  */
-public class InspectContainerCmd extends AbstrDockerCmd<InspectContainerCmd, ContainerInspectResponse> {
+public class InspectContainerCmd extends AbstrDockerCmd<InspectContainerCmd, InspectContainerResponse> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(InspectContainerCmd.class);
 
@@ -40,12 +39,12 @@ public class InspectContainerCmd extends AbstrDockerCmd<InspectContainerCmd, Con
         return "inspect " + containerId;
     }
 
-	protected ContainerInspectResponse impl() throws DockerException {
+	protected InspectContainerResponse impl() throws DockerException {
 		WebResource webResource = baseResource.path(String.format("/containers/%s/json", containerId));
 
 		try {
 			LOGGER.trace("GET: {}", webResource);
-			return webResource.accept(MediaType.APPLICATION_JSON).get(ContainerInspectResponse.class);
+			return webResource.accept(MediaType.APPLICATION_JSON).get(InspectContainerResponse.class);
 		} catch (UniformInterfaceException exception) {
 			if (exception.getResponse().getStatus() == 404) {
 				throw new NotFoundException(String.format("No such container %s", containerId));

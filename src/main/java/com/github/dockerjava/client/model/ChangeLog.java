@@ -2,6 +2,7 @@ package com.github.dockerjava.client.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  *
@@ -27,9 +28,6 @@ public class ChangeLog {
 
     @Override
     public String toString() {
-        return "ChangeLog{" +
-                "path='" + path + '\'' +
-                ", kind=" + kind +
-                '}';
+        return ToStringBuilder.reflectionToString(this);
     }
 }

@@ -14,7 +14,7 @@ public interface CommandFactory {
     public ContainerDiffCmd containerDiffCmd(String containerId);
     public CopyFileFromContainerCmd copyFileFromContainerCmd(String containerId, String resource);
     public CreateContainerCmd createContainerCmd(String image);
-    public ImportImageCmd importImageCmd(String repository, InputStream imageStream);
+    public CreateImageCmd createImageCmd(String repository, InputStream imageStream);
     public InfoCmd infoCmd();
     public InspectContainerCmd inspectContainerCmd(String containerId);
     public InspectImageCmd inspectImageCmd(String imageId);

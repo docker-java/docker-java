@@ -2,6 +2,7 @@ package com.github.dockerjava.client.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.Arrays;
 
@@ -57,13 +58,6 @@ public class Image {
 
     @Override
     public String toString() {
-        return "Image{" +
-                "virtualSize=" + virtualSize +
-                ", id='" + id + '\'' +
-                ", repoTags=" + Arrays.toString(repoTags) +
-                ", parentId='" + parentId + '\'' +
-                ", created=" + created +
-                ", size=" + size +
-                '}';
+        return ToStringBuilder.reflectionToString(this);
     }
 }

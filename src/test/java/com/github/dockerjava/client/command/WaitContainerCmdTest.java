@@ -17,8 +17,6 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
-import com.github.dockerjava.client.model.ContainerCreateResponse;
-import com.github.dockerjava.client.model.ContainerInspectResponse;
 
 public class WaitContainerCmdTest extends AbstractDockerClientTest {
 
@@ -45,9 +43,9 @@ public class WaitContainerCmdTest extends AbstractDockerClientTest {
 	@Test
 	public void testWaitContainer() throws DockerException {
 
-		ContainerCreateResponse container = dockerClient
+		CreateContainerResponse container = dockerClient
 				.createContainerCmd("busybox").withCmd("true").exec();
-		
+
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));
 		tmpContainers.add(container.getId());
@@ -59,12 +57,12 @@ public class WaitContainerCmdTest extends AbstractDockerClientTest {
 
 		assertThat(exitCode, equalTo(0));
 
-		ContainerInspectResponse containerInspectResponse = dockerClient
+		InspectContainerResponse inspectContainerResponse = dockerClient
 				.inspectContainerCmd(container.getId()).exec();
-		LOG.info("Container Inspect: {}", containerInspectResponse.toString());
+		LOG.info("Container Inspect: {}", inspectContainerResponse.toString());
 
-		assertThat(containerInspectResponse.getState().isRunning(),	is(equalTo(false)));
-		assertThat(containerInspectResponse.getState().getExitCode(), is(equalTo(exitCode)));
+		assertThat(inspectContainerResponse.getState().isRunning(),	is(equalTo(false)));
+		assertThat(inspectContainerResponse.getState().getExitCode(), is(equalTo(exitCode)));
 
 	}
 

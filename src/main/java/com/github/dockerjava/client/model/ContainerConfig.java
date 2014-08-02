@@ -6,11 +6,12 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
- * 
+ *
  * @author Konstantin Pelykh (kpelykh@gmail.com)
- * 
+ *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ContainerConfig {
@@ -179,19 +180,6 @@ public class ContainerConfig {
 
 	@Override
 	public String toString() {
-		return "ContainerConfig{" + "hostName='" + hostName + '\''
-				+ ", portSpecs=" + Arrays.toString(portSpecs) + ", user='"
-				+ user + '\'' + ", tty=" + tty + ", stdinOpen=" + stdinOpen
-				+ ", stdInOnce=" + stdInOnce + ", memoryLimit=" + memoryLimit
-				+ ", memorySwap=" + memorySwap + ", cpuShares=" + cpuShares
-				+ ", attachStdin=" + attachStdin + ", attachStdout="
-				+ attachStdout + ", attachStderr=" + attachStderr + ", env="
-				+ Arrays.toString(env) + ", cmd=" + Arrays.toString(cmd)
-				+ ", image='" + image + '\''
-				+ ", volumes=" + volumes 
-				+ '\'' + ", entrypoint=" + Arrays.toString(entrypoint)
-				+ ", networkDisabled=" + networkDisabled + ", workingDir='" + workingDir + '\''
-				+ ", domainName='" + domainName + '\'' + ", onBuild='"
-				+ Arrays.toString(onBuild) + '\'' + '}';
+		return ToStringBuilder.reflectionToString(this);
 	}
 }

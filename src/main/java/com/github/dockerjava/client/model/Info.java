@@ -5,14 +5,15 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * 
+ *
  * @author Konstantin Pelykh (kpelykh@gmail.com)
- * 
+ *
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @JsonInclude(Include.NON_NULL)
@@ -77,7 +78,7 @@ public class Info {
 	public int getContainers() {
 		return containers;
 	}
-	
+
 	public String getDriver() {
 		return driver;
 	}
@@ -138,17 +139,8 @@ public class Info {
 		return executionDriver;
 	}
 
-	@Override
-	public String toString() {
-		return "Info{" + "debug=" + debug + ", containers=" + containers
-				+ ", driver='" + driver + '\'' + ", driverStatuses="
-				+ driverStatuses + ", images=" + images + ", IPv4Forwarding='"
-				+ IPv4Forwarding + '\'' + ", IndexServerAddress='"
-				+ IndexServerAddress + '\'' + ", initPath='" + initPath + '\''
-				+ ", initSha1='" + initSha1 + '\'' + ", kernelVersion='"
-				+ kernelVersion + '\'' + ", sockets='" + Arrays.asList(sockets) + '\''
-				+ ", memoryLimit=" + memoryLimit + ", nEventListener="
-				+ nEventListener + ", NFd=" + NFd + ", NGoroutines="
-				+ NGoroutines + ", swapLimit=" + swapLimit + '}';
-	}
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
 }
