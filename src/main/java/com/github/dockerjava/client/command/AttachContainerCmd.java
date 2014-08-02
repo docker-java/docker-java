@@ -124,7 +124,7 @@ public class AttachContainerCmd extends	AbstrDockerCmd<AttachContainerCmd, Clien
 		try {
 			LOGGER.trace("POST: {}", webResource);
 			return webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
-					.post(ClientResponse.class, params);
+					.post(ClientResponse.class);
 		} catch (UniformInterfaceException exception) {
 			if (exception.getResponse().getStatus() == 400) {
 				throw new DockerException("bad parameter");
