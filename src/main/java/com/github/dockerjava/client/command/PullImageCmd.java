@@ -71,13 +71,6 @@ public class PullImageCmd extends AbstrDockerCmd<PullImageCmd, ClientResponse>  
 	protected ClientResponse impl() {
 		Preconditions.checkNotNull(repository, "Repository was not specified");
 
-		if (StringUtils.countMatches(repository, ":") == 1) {
-			String repositoryTag[] = StringUtils.split(repository, ':');
-			repository = repositoryTag[0];
-			tag = repositoryTag[1];
-
-		}
-
 		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
 		params.add("tag", tag);
 		params.add("fromImage", repository);
