@@ -1,14 +1,18 @@
 package com.github.dockerjava.client.command;
 
 
-import java.util.Arrays;
 import java.util.Map;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.dockerjava.client.model.*;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import com.github.dockerjava.client.model.ContainerConfig;
+import com.github.dockerjava.client.model.LxcConf;
+import com.github.dockerjava.client.model.Ports;
+import com.github.dockerjava.client.model.Volume;
+import com.github.dockerjava.client.model.Volumes;
 
 /**
  *

@@ -1,5 +1,8 @@
 package com.github.dockerjava.client;
 
+
+
+
 /**
  *
  * @author Konstantin Pelykh (kpelykh@gmail.com)
@@ -8,18 +11,20 @@ package com.github.dockerjava.client;
 
 public class DockerException extends RuntimeException {
 
-    public DockerException() {
-    }
+private static final long serialVersionUID = 7667768099261650608L;
+	
+	private int httpStatus = 0;
 
-    public DockerException(String message) {
+    public DockerException(String message, int httpStatus) {
         super(message);
+        this.httpStatus = httpStatus;
     }
 
-    public DockerException(String message, Throwable cause) {
+    public DockerException(String message, int httpStatus, Throwable cause) {
         super(message, cause);
     }
-
-    public DockerException(Throwable cause) {
-        super(cause);
-    }
+    
+    public int getHttpStatus() {
+		return httpStatus;
+	}
 }

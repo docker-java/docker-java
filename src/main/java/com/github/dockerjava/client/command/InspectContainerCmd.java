@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.NotFoundException;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 
 /**
@@ -38,21 +37,19 @@ public class InspectContainerCmd extends AbstrDockerCmd<InspectContainerCmd, Ins
     public String toString() {
         return "inspect " + containerId;
     }
+    
+    /**
+     * @throws NotFoundException No such container
+     */
+    @Override
+    public InspectContainerResponse exec() throws NotFoundException {
+    	return super.exec();
+    }
 
 	protected InspectContainerResponse impl() throws DockerException {
 		WebResource webResource = baseResource.path(String.format("/containers/%s/json", containerId));
-
-		try {
-			LOGGER.trace("GET: {}", webResource);
-			return webResource.accept(MediaType.APPLICATION_JSON).get(InspectContainerResponse.class);
-		} catch (UniformInterfaceException exception) {
-			if (exception.getResponse().getStatus() == 404) {
-				throw new NotFoundException(String.format("No such container %s", containerId));
-			} else if (exception.getResponse().getStatus() == 500) {
-				throw new DockerException("Server error", exception);
-			} else {
-				throw new DockerException(exception);
-			}
-		}
+		
+		LOGGER.trace("GET: {}", webResource);
+		return webResource.accept(MediaType.APPLICATION_JSON).get(InspectContainerResponse.class);
 	}
 }

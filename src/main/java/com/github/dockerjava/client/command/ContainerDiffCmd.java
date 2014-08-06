@@ -8,11 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.client.DockerException;
+import com.github.dockerjava.client.InternalServerErrorException;
 import com.github.dockerjava.client.NotFoundException;
 import com.github.dockerjava.client.model.ChangeLog;
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.GenericType;
-import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 
 /**
@@ -43,26 +43,24 @@ public class ContainerDiffCmd extends AbstrDockerCmd<ContainerDiffCmd, List<Chan
 
     @Override
     public String toString() {
-        return new StringBuilder("diff ")
-            .append(containerId)
-            .toString();
+        return new StringBuilder("diff ").append(containerId).toString();
+    }
+    
+    /**
+     * @throws NotFoundException No such container
+     * @throws InternalServerErrorException server error
+     * @throws DockerException unexpected http status code
+     */
+    @Override
+    public List<ChangeLog> exec() throws NotFoundException {
+    	return super.exec();
     }
 
     protected List<ChangeLog> impl() throws DockerException {
 		WebResource webResource = baseResource.path(String.format("/containers/%s/changes", containerId));
-
-		try {
-			LOGGER.trace("GET: {}", webResource);
-			return webResource.accept(MediaType.APPLICATION_JSON).get(new GenericType<List<ChangeLog>>() {
-			});
-		} catch (UniformInterfaceException exception) {
-			if (exception.getResponse().getStatus() == 404) {
-				throw new NotFoundException(String.format("No such container %s", containerId));
-			} else if (exception.getResponse().getStatus() == 500) {
-				throw new DockerException("Server error", exception);
-			} else {
-				throw new DockerException(exception);
-			}
-		}
+		
+		LOGGER.trace("GET: {}", webResource);
+		return webResource.accept(MediaType.APPLICATION_JSON).get(new GenericType<List<ChangeLog>>() {
+		});
 	}
 }

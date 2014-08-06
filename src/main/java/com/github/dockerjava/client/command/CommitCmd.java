@@ -15,7 +15,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.NotFoundException;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 
@@ -317,6 +316,14 @@ public class CommitCmd extends AbstrDockerCmd<CommitCmd, String>  {
 			.append(tag != null ?  tag : "")
 			.toString();
 	}
+	
+	/**
+     * @throws NotFoundException No such container
+     */
+	@Override
+	public String exec() throws NotFoundException {
+		return super.exec();
+	}
 
 	protected String impl() throws DockerException {
 		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
@@ -328,21 +335,12 @@ public class CommitCmd extends AbstrDockerCmd<CommitCmd, String>  {
 		params.add("pause", pause ? "1" : "0");
 
 		WebResource webResource = baseResource.path("/commit").queryParams(params);
+		
+		LOGGER.trace("POST: {}", webResource);
+		ObjectNode objectNode = webResource.queryParams(params).accept("application/vnd.docker.raw-stream").type(MediaType.APPLICATION_JSON).post(ObjectNode.class, this);
 
-		try {
-			LOGGER.trace("POST: {}", webResource);
-			ObjectNode objectNode = webResource.queryParams(params).accept("application/vnd.docker.raw-stream").type(MediaType.APPLICATION_JSON).post(ObjectNode.class, this);
-            return objectNode.get("Id").asText();
-		} catch (UniformInterfaceException exception) {
-			if (exception.getResponse().getStatus() == 404) {
-				throw new NotFoundException(String.format("No such container %s", containerId));
-			} else if (exception.getResponse().getStatus() == 500) {
-				throw new DockerException("Server error", exception);
-			} else {
-				throw new DockerException(exception);
-			}
-		} catch (Exception e) {
-			throw new DockerException(e);
-		}
-	}    
+		return objectNode.get("Id").asText();
+	}
+
+	   
 }
