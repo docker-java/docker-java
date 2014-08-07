@@ -20,8 +20,8 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.client.DockerClientException;
-import com.github.dockerjava.client.DockerException;
+import com.github.dockerjava.api.DockerClientException;
+import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.client.utils.CompressArchiveUtil;
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.ClientResponse;

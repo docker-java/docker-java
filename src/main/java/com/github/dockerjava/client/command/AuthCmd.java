@@ -5,7 +5,7 @@ import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.client.DockerException;
+import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.client.model.AuthConfig;
 import com.sun.jersey.api.client.WebResource;
 

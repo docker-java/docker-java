@@ -1,4 +1,4 @@
-package com.github.dockerjava.client;
+package com.github.dockerjava.api;
 
 /**
  * Indicates that the given entity does not exist.

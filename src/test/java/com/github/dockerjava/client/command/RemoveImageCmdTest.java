@@ -20,8 +20,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.github.dockerjava.client.DockerException;
+import com.github.dockerjava.client.model.Container;
 
 public class RemoveImageCmdTest extends AbstractDockerClientTest {
 
@@ -51,7 +52,7 @@ public class RemoveImageCmdTest extends AbstractDockerClientTest {
 	public void testRemoveImage() throws DockerException, InterruptedException {
 
 		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd("touch", "/test").exec();
+				.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));
 		dockerClient.startContainerCmd(container.getId()).exec();
@@ -70,7 +71,8 @@ public class RemoveImageCmdTest extends AbstractDockerClientTest {
 		LOG.info("Removing image: {}", imageId);
 		dockerClient.removeImageCmd(imageId).exec();
 
-		List containers = dockerClient.listContainersCmd().withShowAll(true).exec();
+		List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
+		
 		Matcher matcher = not(hasItem(hasField("id", startsWith(imageId))));
 		assertThat(containers, matcher);
 	}

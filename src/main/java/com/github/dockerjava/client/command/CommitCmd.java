@@ -4,6 +4,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.client.model.ExposedPorts;
 import com.github.dockerjava.client.model.Volumes;
 
@@ -12,8 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.github.dockerjava.client.DockerException;
-import com.github.dockerjava.client.NotFoundException;
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.core.util.MultivaluedMapImpl;

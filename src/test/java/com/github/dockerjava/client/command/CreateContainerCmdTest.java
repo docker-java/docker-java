@@ -3,7 +3,6 @@ package com.github.dockerjava.client.command;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
@@ -14,8 +13,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import com.github.dockerjava.api.ConflictException;
+import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.model.Volume;
 
 public class CreateContainerCmdTest extends AbstractDockerClientTest {
@@ -101,6 +101,31 @@ public class CreateContainerCmdTest extends AbstractDockerClientTest {
 		dockerClient.startContainerCmd(container.getId()).exec();
 
 		assertThat(logResponseStream(dockerClient.logContainerCmd(container.getId()).withStdOut().exec()), containsString("HOSTNAME=docker-java"));
+	}
+	
+	@Test
+	public void createContainerWithName() throws DockerException {
+
+		CreateContainerResponse container = dockerClient
+				.createContainerCmd("busybox").withName("container").withCmd("env").exec();
+
+		tmpContainers.add(container.getId());
+
+		LOG.info("Created container {}", container.toString());
+
+		assertThat(container.getId(), not(isEmptyString()));
+
+		InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+
+		assertThat(inspectContainerResponse.getName(), equalTo("/container"));
+		
+		
+		try {
+			dockerClient.createContainerCmd("busybox").withName("container").withCmd("env").exec();
+			fail("Expected ConflictException");
+		} catch (ConflictException e) {
+		}
+
 	}
 
 

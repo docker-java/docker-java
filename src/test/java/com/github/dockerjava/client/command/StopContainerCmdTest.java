@@ -17,8 +17,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.github.dockerjava.client.DockerException;
 
 public class StopContainerCmdTest extends AbstractDockerClientTest {
 

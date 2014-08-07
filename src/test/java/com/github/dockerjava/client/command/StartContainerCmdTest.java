@@ -12,7 +12,9 @@ import static org.hamcrest.Matchers.startsWith;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
+import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.client.model.*;
+
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -21,7 +23,6 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.github.dockerjava.client.DockerException;
 
 
 public class StartContainerCmdTest extends AbstractDockerClientTest {
@@ -67,7 +68,6 @@ public class StartContainerCmdTest extends AbstractDockerClientTest {
 
 		assertThat(inspectContainerResponse.getConfig().getVolumes().keySet(),
 				contains("/opt/webapp1", "/opt/webapp2"));
-
 
 		dockerClient.startContainerCmd(container.getId()).withBinds(new Bind("/src/webapp1", volume1, true), new Bind("/src/webapp2", volume2)).exec();
 
@@ -116,10 +116,10 @@ public class StartContainerCmdTest extends AbstractDockerClientTest {
 				contains(tcp22, tcp23));
 
 		assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp22),
-				is(equalTo(Ports.Binding("0.0.0.0", 11022))));
+				is(equalTo(Ports.Binding(11022))));
 
 		assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23),
-				is(equalTo(Ports.Binding("0.0.0.0", 11023))));
+				is(equalTo(Ports.Binding(11023))));
 
 		tmpContainers.add(container.getId());
 	}

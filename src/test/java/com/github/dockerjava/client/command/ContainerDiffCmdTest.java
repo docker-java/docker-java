@@ -17,8 +17,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.model.ChangeLog;
 
 public class ContainerDiffCmdTest extends AbstractDockerClientTest {
@@ -50,11 +50,11 @@ public class ContainerDiffCmdTest extends AbstractDockerClientTest {
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));
 		dockerClient.startContainerCmd(container.getId()).exec();
-		boolean add = tmpContainers.add(container.getId());
+		tmpContainers.add(container.getId());
 		int exitCode = dockerClient.waitContainerCmd(container.getId()).exec();
 		assertThat(exitCode, equalTo(0));
 
-		List filesystemDiff = dockerClient.containerDiffCmd(container.getId()).exec();
+		List<ChangeLog> filesystemDiff = dockerClient.containerDiffCmd(container.getId()).exec();
 		LOG.info("Container DIFF: {}", filesystemDiff.toString());
 
 		assertThat(filesystemDiff.size(), equalTo(1));

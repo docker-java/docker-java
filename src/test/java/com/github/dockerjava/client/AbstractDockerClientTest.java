@@ -1,7 +1,7 @@
 package com.github.dockerjava.client;
 
+import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.client.DockerClient;
-import com.github.dockerjava.client.DockerException;
 import com.sun.jersey.api.client.ClientResponse;
 
 import org.slf4j.Logger;
@@ -10,6 +10,7 @@ import org.testng.Assert;
 import org.testng.ITestResult;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
@@ -34,7 +35,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 
 		LOG.info("Pulling image 'busybox'");
 		// need to block until image is pulled completely
-		logResponseStream(dockerClient.pullImageCmd("busybox:latest").exec());
+		logResponseStream(dockerClient.pullImageCmd("busybox").withTag("latest").exec());
 		
 		
 
@@ -62,6 +63,11 @@ public abstract class AbstractDockerClientTest extends Assert {
 			try {
 				dockerClient.stopContainerCmd(container).exec();
 				dockerClient.killContainerCmd(container).exec();
+			} catch (DockerException ignore) {
+				//ignore.printStackTrace();
+			}
+			
+			try {
 				dockerClient.removeContainerCmd(container).exec();
 			} catch (DockerException ignore) {
 				ignore.printStackTrace();
@@ -82,7 +88,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 				result.getName());
 	}
 
-	protected String logResponseStream(ClientResponse response)  {
+	protected String logResponseStream(InputStream response)  {
 		String responseString;
 		try {
 			responseString = DockerClient.asString(response);

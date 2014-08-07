@@ -1,16 +1,15 @@
 package com.github.dockerjava.client.command;
 
+import java.io.InputStream;
+
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.client.DockerException;
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 
@@ -20,7 +19,7 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
  * Pull image from repository.
  *
  */
-public class PullImageCmd extends AbstrDockerCmd<PullImageCmd, ClientResponse>  {
+public class PullImageCmd extends AbstrDockerCmd<PullImageCmd, InputStream>  {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PullImageCmd.class);
 
@@ -68,15 +67,8 @@ public class PullImageCmd extends AbstrDockerCmd<PullImageCmd, ClientResponse>  
             .toString();
     }
 
-	protected ClientResponse impl() {
-		Preconditions.checkNotNull(repository, "Repository was not specified");
 
-		if (StringUtils.countMatches(repository, ":") == 1) {
-			String repositoryTag[] = StringUtils.split(repository, ':');
-			repository = repositoryTag[0];
-			tag = repositoryTag[1];
-
-		}
+	protected InputStream impl() {
 
 		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
 		params.add("tag", tag);
@@ -85,15 +77,7 @@ public class PullImageCmd extends AbstrDockerCmd<PullImageCmd, ClientResponse>  
 
 		WebResource webResource = baseResource.path("/images/create").queryParams(params);
 
-		try {
-			LOGGER.trace("POST: {}", webResource);
-			return webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).post(ClientResponse.class);
-		} catch (UniformInterfaceException exception) {
-			if (exception.getResponse().getStatus() == 500) {
-				throw new DockerException("Server error.", exception);
-			} else {
-				throw new DockerException(exception);
-			}
-		}
+		LOGGER.trace("POST: {}", webResource);
+		return webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).post(ClientResponse.class).getEntityInputStream();
 	}
 }

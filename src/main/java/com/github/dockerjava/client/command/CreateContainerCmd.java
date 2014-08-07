@@ -3,16 +3,18 @@ package com.github.dockerjava.client.command;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.dockerjava.client.model.*;
-
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.client.NotAcceptableException;
-import com.github.dockerjava.client.NotFoundException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.ConflictException;
+import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.client.model.ExposedPort;
+import com.github.dockerjava.client.model.ExposedPorts;
+import com.github.dockerjava.client.model.Volume;
+import com.github.dockerjava.client.model.Volumes;
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
@@ -259,10 +261,10 @@ public class CreateContainerCmd extends AbstrDockerCmd<CreateContainerCmd, Creat
     
     /**
      * @throws NotFoundException No such container
-     * @throws NotAcceptableException Impossible to attach (container not running)
+     * @throws ConflictException Named container already exists
      */
     @Override
-    public CreateContainerResponse exec() throws NotFoundException, NotAcceptableException {
+    public CreateContainerResponse exec() throws NotFoundException, ConflictException {
     	return super.exec();
     }
 

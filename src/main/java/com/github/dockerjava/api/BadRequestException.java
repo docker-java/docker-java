@@ -1,4 +1,5 @@
-package com.github.dockerjava.client;
+package com.github.dockerjava.api;
+
 
 /**
  *

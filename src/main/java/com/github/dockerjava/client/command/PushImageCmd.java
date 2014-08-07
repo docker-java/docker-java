@@ -1,14 +1,15 @@
 package com.github.dockerjava.client.command;
 
+import java.io.InputStream;
+
 import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.client.DockerException;
+import com.github.dockerjava.api.NotFoundException;
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 
 
@@ -17,7 +18,7 @@ import com.sun.jersey.api.client.WebResource;
  *
  * @param name The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
  */
-public class PushImageCmd extends AbstrAuthCfgDockerCmd<PushImageCmd, ClientResponse>  {
+public class PushImageCmd extends AbstrAuthCfgDockerCmd<PushImageCmd, InputStream>  {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PushImageCmd.class);
 
@@ -46,19 +47,24 @@ public class PushImageCmd extends AbstrAuthCfgDockerCmd<PushImageCmd, ClientResp
             .append(name)
             .toString();
     }
+   
+    /**
+     * @throws NotFoundException No such image
+     */
+    @Override
+    public InputStream exec() throws NotFoundException {
+    	return super.exec();
+    }
 
-	protected ClientResponse impl() {
+	protected InputStream impl() {
 		WebResource webResource = baseResource.path("/images/" + name(name) + "/push");
-		try {
-			final String registryAuth = registryAuth();
-			LOGGER.trace("POST: {}", webResource);
-			return webResource
-					.header("X-Registry-Auth", registryAuth)
-					.accept(MediaType.APPLICATION_JSON)
-					.post(ClientResponse.class);
-		} catch (UniformInterfaceException e) {
-			throw new DockerException(e);
-		}
+		
+		final String registryAuth = registryAuth();
+		LOGGER.trace("POST: {}", webResource);
+		return webResource
+				.header("X-Registry-Auth", registryAuth)
+				.accept(MediaType.APPLICATION_JSON)
+				.post(ClientResponse.class).getEntityInputStream();
 	}
 
 	private String name(String name) {

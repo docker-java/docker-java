@@ -5,6 +5,7 @@ import static org.apache.commons.io.IOUtils.closeQuietly;
 
 import java.io.*;
 
+import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.client.command.*;
 
 import org.apache.commons.io.IOUtils;
@@ -18,7 +19,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 
 import com.github.dockerjava.client.model.AuthConfig;
-
 import com.github.dockerjava.client.utils.JsonClientFilter;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -266,18 +266,18 @@ public class DockerClient implements Closeable {
 	/**
 	 * @return The output slurped into a string.
 	 */
-	public static String asString(ClientResponse response) throws IOException {
+	public static String asString(InputStream response) throws IOException {
 
 		StringWriter out = new StringWriter();
 		try {
 			LineIterator itr = IOUtils.lineIterator(
-					response.getEntityInputStream(), "UTF-8");
+					response, "UTF-8");
 			while (itr.hasNext()) {
 				String line = itr.next();
 				out.write(line + (itr.hasNext() ? "\n" : ""));
 			}
 		} finally {
-			closeQuietly(response.getEntityInputStream());
+			closeQuietly(response);
 		}
 		return out.toString();
 	}

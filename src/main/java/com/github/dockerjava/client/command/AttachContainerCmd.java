@@ -8,7 +8,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.client.NotFoundException;
+import com.github.dockerjava.api.NotFoundException;
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -30,8 +30,7 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
  *            - true or false, if true, print timestamps for every log line.
  *            Defaults to false.
  */
-public class AttachContainerCmd extends
-		AbstrDockerCmd<AttachContainerCmd, InputStream> {
+public class AttachContainerCmd extends	AbstrDockerCmd<AttachContainerCmd, InputStream> {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AttachContainerCmd.class);

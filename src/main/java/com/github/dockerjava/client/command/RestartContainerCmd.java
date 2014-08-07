@@ -5,10 +5,9 @@ import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.client.DockerException;
-import com.github.dockerjava.client.NotFoundException;
+import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.NotFoundException;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 
 /**
@@ -56,27 +55,23 @@ public class RestartContainerCmd extends AbstrDockerCmd<RestartContainerCmd, Voi
             .append(containerId)
             .toString();
     }
+    
+    /**
+     * @throws NotFoundException No such container
+     */
+    @Override
+    public Void exec() throws NotFoundException {
+    	return super.exec();
+    }
 
 	protected Void impl() throws DockerException {
-		WebResource webResource = baseResource.path(String.format("/containers/%s/restart", containerId))
-				.queryParam("t", String.valueOf(timeout));;
-
-		try {
-			LOGGER.trace("POST: {}", webResource);
-			webResource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).post();
-		} catch (UniformInterfaceException exception) {
-			if (exception.getResponse().getStatus() == 404) {
-				throw new NotFoundException(String.format("No such container %s", containerId));
-			} else if (exception.getResponse().getStatus() == 204) {
-				//no error
-				LOGGER.trace("Successfully restarted container {}", containerId);
-			} else if (exception.getResponse().getStatus() == 500) {
-				throw new DockerException("Server error", exception);
-			} else {
-				throw new DockerException(exception);
-			}
-		}
-
+		WebResource webResource = baseResource.path(
+				String.format("/containers/%s/restart", containerId))
+				.queryParam("t", String.valueOf(timeout));
+		
+		LOGGER.trace("POST: {}", webResource);
+		webResource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).post();
+	
 		return null;
 	}
 }

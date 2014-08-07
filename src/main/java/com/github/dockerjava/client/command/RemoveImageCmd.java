@@ -4,10 +4,10 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.client.DockerException;
+import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.NotFoundException;
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 
 /**
@@ -67,32 +67,24 @@ public class RemoveImageCmd extends AbstrDockerCmd<RemoveImageCmd, Void> {
             .append(imageId)
             .toString();
     }
+    
+    /**
+     * @throws NotFoundException No such image
+     */
+    @Override
+    public Void exec() throws NotFoundException {
+    	return super.exec();
+    }
 
 	protected Void impl() throws DockerException {
 		Preconditions.checkState(!StringUtils.isEmpty(imageId), "Image ID can't be empty");
+		
+		WebResource webResource = baseResource.path("/images/" + imageId)
+				.queryParam("force", force ? "1" : "0")
+				.queryParam("noprune", noPrune ? "1" : "0");
 
-		try {
-			WebResource webResource = baseResource.path("/images/" + imageId)
-					.queryParam("force", force ? "1" : "0").queryParam("noprune", noPrune ? "1" : "0");
-
-			LOGGER.trace("DELETE: {}", webResource);
-			webResource.delete(ClientResponse.class);
-
-
-		} catch (UniformInterfaceException exception) {
-			if (exception.getResponse().getStatus() == 204) {
-				//no error
-				LOGGER.trace("Successfully removed image " + imageId);
-			} else if (exception.getResponse().getStatus() == 404) {
-				LOGGER.warn("{} no such image", imageId);
-			} else if (exception.getResponse().getStatus() == 409) {
-				throw new DockerException("Conflict");
-			} else if (exception.getResponse().getStatus() == 500) {
-				throw new DockerException("Server error.", exception);
-			} else {
-				throw new DockerException(exception);
-			}
-		}
+		LOGGER.trace("DELETE: {}", webResource);
+		webResource.delete(ClientResponse.class);
 
 		return null;
 	}

@@ -6,15 +6,13 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.client.DockerException;
-import com.github.dockerjava.client.NotFoundException;
+import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.NotFoundException;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 
 /**
- *
- * @author marcus
+ * List processes running inside a container
  *
  */
 public class TopContainerCmd extends AbstrDockerCmd<TopContainerCmd, TopContainerResponse> {
@@ -58,23 +56,21 @@ public class TopContainerCmd extends AbstrDockerCmd<TopContainerCmd, TopContaine
             .toString();
     }
 
+    /**
+     * @throws NotFoundException No such container
+     */
+    @Override
+    public TopContainerResponse exec() throws NotFoundException {
+    	return super.exec();
+    }
+    
 	protected TopContainerResponse impl() throws DockerException {
 		WebResource webResource = baseResource.path(String.format("/containers/%s/top", containerId));
 
 		if(!StringUtils.isEmpty(psArgs))
 			webResource = webResource.queryParam("ps_args", psArgs);
-
-		try {
-			LOGGER.trace("GET: {}", webResource);
-			return webResource.accept(MediaType.APPLICATION_JSON).get(TopContainerResponse.class);
-		} catch (UniformInterfaceException exception) {
-			if (exception.getResponse().getStatus() == 404) {
-				throw new NotFoundException(String.format("No such container %s", containerId));
-			} else if (exception.getResponse().getStatus() == 500) {
-				throw new DockerException("Server error", exception);
-			} else {
-				throw new DockerException(exception);
-			}
-		}
+		
+		LOGGER.trace("GET: {}", webResource);
+		return webResource.accept(MediaType.APPLICATION_JSON).get(TopContainerResponse.class);
 	}
 }
