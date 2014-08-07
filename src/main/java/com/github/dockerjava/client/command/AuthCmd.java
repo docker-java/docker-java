@@ -1,5 +1,6 @@
 package com.github.dockerjava.client.command;
 
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
@@ -7,8 +8,9 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.model.AuthConfig;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
+import javax.ws.rs.client.WebTarget;
+
+import static javax.ws.rs.client.Entity.entity;
 
 /**
  * 
@@ -25,12 +27,11 @@ public class AuthCmd extends AbstrAuthCfgDockerCmd<AuthCmd, Void> {
 	
 	protected Void impl() throws DockerException {
 		try {
-			WebResource webResource = baseResource.path("/auth");
+			WebTarget webResource = baseResource.path("/auth");
 			LOGGER.trace("POST: {}", webResource);
-			webResource.header("Content-Type", MediaType.APPLICATION_JSON)
-					.accept(MediaType.APPLICATION_JSON).post(authConfig);
+			webResource.request().accept(MediaType.APPLICATION_JSON).post(entity(authConfig, MediaType.APPLICATION_JSON));
 			return null;
-		} catch (UniformInterfaceException e) {
+		} catch (ClientErrorException e) {
 			throw new DockerException(e);
 		}
 	}

@@ -4,16 +4,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.WebResource;
+
+import javax.ws.rs.client.WebTarget;
 
 public abstract class AbstrDockerCmd<T extends AbstrDockerCmd<T, RES_T>, RES_T> implements DockerCmd<RES_T> {
     
     private final static Logger LOGGER = LoggerFactory.getLogger(AbstrDockerCmd.class);
 
-	protected WebResource baseResource;
+	protected WebTarget baseResource;
 
 	@SuppressWarnings("unchecked")
-	public T withBaseResource(WebResource baseResource) {
+	public T withBaseResource(WebTarget baseResource) {
 		this.baseResource = baseResource;
 		return (T)this;
 	}

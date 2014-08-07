@@ -1,5 +1,6 @@
 package com.github.dockerjava.client.command;
 
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
@@ -9,8 +10,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.NotFoundException;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
+import javax.ws.rs.client.WebTarget;
+
+import static javax.ws.rs.client.Entity.entity;
 
 /**
  * Wait for a container to exit and print its exit code
@@ -41,13 +43,13 @@ public class WaitContainerCmd extends AbstrDockerCmd<WaitContainerCmd, Integer> 
     }
 
 	protected Integer impl() throws DockerException {
-		WebResource webResource = baseResource.path(String.format("/containers/%s/wait", containerId));
+		WebTarget webResource = baseResource.path("/containers/{id}/wait").resolveTemplate("id", containerId);
 
 		try {
 			LOGGER.trace("POST: {}", webResource);
-			ObjectNode ObjectNode = webResource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).post(ObjectNode.class);
+			ObjectNode ObjectNode = webResource.request().accept(MediaType.APPLICATION_JSON).post(entity(null, MediaType.APPLICATION_JSON), ObjectNode.class);
             return ObjectNode.get("StatusCode").asInt();
-		} catch (UniformInterfaceException exception) {
+		} catch (ClientErrorException exception) {
 			if (exception.getResponse().getStatus() == 404) {
 				throw new NotFoundException(String.format("No such container %s", containerId));
 			} else if (exception.getResponse().getStatus() == 500) {

@@ -2,6 +2,8 @@ package com.github.dockerjava.client.command;
 
 import java.util.List;
 
+import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
@@ -10,9 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.model.SearchItem;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.GenericType;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
+import javax.ws.rs.client.WebTarget;
 
 
 /**
@@ -48,12 +48,12 @@ public class SearchImagesCmd extends AbstrDockerCmd<SearchImagesCmd, List<Search
     }
 
 	protected List<SearchItem> impl() {
-		WebResource webResource = baseResource.path("/images/search").queryParam("term", term);
+		WebTarget webResource = baseResource.path("/images/search").queryParam("term", term);
 		try {
 			LOGGER.trace("GET: {}", webResource);
-			return webResource.accept(MediaType.APPLICATION_JSON).get(new GenericType<List<SearchItem>>() {
-			});
-		} catch (UniformInterfaceException exception) {
+			return webResource.request().accept(MediaType.APPLICATION_JSON).get(new GenericType<List<SearchItem>>() {
+            });
+		} catch (ClientErrorException exception) {
 			if (exception.getResponse().getStatus() == 500) {
 				throw new DockerException("Server error.", exception);
 			} else {

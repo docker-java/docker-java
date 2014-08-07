@@ -1,5 +1,6 @@
 package com.github.dockerjava.client.command;
 
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
@@ -7,9 +8,10 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.client.DockerException;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
+
+import static javax.ws.rs.client.Entity.entity;
 
 /**
  * Pause a container.
@@ -45,14 +47,14 @@ public class PauseContainerCmd extends AbstrDockerCmd<PauseContainerCmd, Integer
     }
 
 	protected Integer impl() throws DockerException {
-		WebResource webResource = baseResource.path(String.format("/containers/%s/pause", containerId));
+		WebTarget webResource = baseResource.path("/containers/{id}/pause").resolveTemplate("id", containerId);
 
-		ClientResponse response = null;
+		Response response = null;
 
 		try {
 			LOGGER.trace("POST: {}", webResource);
-			response = webResource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).post(ClientResponse.class);
-		} catch (UniformInterfaceException exception) {
+			response = webResource.request().accept(MediaType.APPLICATION_JSON).post(entity(null, MediaType.APPLICATION_JSON), Response.class);
+		} catch (ClientErrorException exception) {
 			if (exception.getResponse().getStatus() == 404) {
 				LOGGER.warn("No such container {}", containerId);
 			} else if (exception.getResponse().getStatus() == 204) {

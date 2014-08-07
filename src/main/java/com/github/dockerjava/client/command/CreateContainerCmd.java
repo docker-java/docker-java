@@ -1,5 +1,6 @@
 package com.github.dockerjava.client.command;
 
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
@@ -13,9 +14,9 @@ import org.slf4j.LoggerFactory;
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.NotFoundException;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
+import javax.ws.rs.client.WebTarget;
+
+import static javax.ws.rs.client.Entity.entity;
 
 
 /**
@@ -259,18 +260,17 @@ public class CreateContainerCmd extends AbstrDockerCmd<CreateContainerCmd, Creat
     }
 
 	protected CreateContainerResponse impl() {
-		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-		if (name != null) {
-			params.add("name", name);
-		}
-		WebResource webResource = baseResource.path("/containers/create").queryParams(params);
+		WebTarget webResource = baseResource.path("/containers/create");
+
+        if (name != null) {
+            webResource = webResource.queryParam("name", name);
+        }
 
 		try {
 			LOGGER.trace("POST: {} ", webResource);
-			return webResource.accept(MediaType.APPLICATION_JSON)
-					.type(MediaType.APPLICATION_JSON)
-					.post(CreateContainerResponse.class, this);
-		} catch (UniformInterfaceException exception) {
+			return webResource.request().accept(MediaType.APPLICATION_JSON)
+					.post(entity(this, MediaType.APPLICATION_JSON), CreateContainerResponse.class);
+		} catch (ClientErrorException exception) {
 			if (exception.getResponse().getStatus() == 404) {
 				throw new NotFoundException(String.format("%s is an unrecognized image. Please pull the image first.", getImage()));
 			} else if (exception.getResponse().getStatus() == 406) {

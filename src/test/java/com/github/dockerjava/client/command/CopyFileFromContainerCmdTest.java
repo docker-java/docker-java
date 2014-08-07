@@ -1,10 +1,10 @@
 package com.github.dockerjava.client.command;
 
 import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.sun.jersey.api.client.ClientResponse;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
+import javax.ws.rs.core.Response;
 import java.lang.reflect.Method;
 
 import static org.hamcrest.Matchers.*;
@@ -46,7 +46,7 @@ public class CopyFileFromContainerCmdTest extends AbstractDockerClientTest {
         dockerClient.startContainerCmd(container.getId()).exec();
         tmpContainers.add(container.getId());
 
-        ClientResponse response = dockerClient.copyFileFromContainerCmd(container.getId(), "/test").exec();
+        Response response = dockerClient.copyFileFromContainerCmd(container.getId(), "/test").exec();
         assertTrue(response.getStatus() == 200 && response.hasEntity(), "The file was not copied from the container.");
     }
 }

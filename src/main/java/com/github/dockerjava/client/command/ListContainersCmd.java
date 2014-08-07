@@ -2,6 +2,7 @@ package com.github.dockerjava.client.command;
 
 import java.util.List;
 
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
@@ -10,9 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.client.model.Container;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.GenericType;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
+import javax.ws.rs.client.WebTarget;
 
 
 /**
@@ -93,19 +92,19 @@ public class ListContainersCmd extends AbstrDockerCmd<ListContainersCmd, List<Co
     }
 
 	protected List<Container> impl() {
-		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-		if(limit >= 0) {
-			params.add("limit", String.valueOf(limit));
-		}
-		params.add("all", showAll ? "1" : "0");
-		params.add("since", sinceId);
-		params.add("before", beforeId);
-		params.add("size", showSize ? "1" : "0");
+		WebTarget webResource = baseResource.path("/containers/json")
+                .queryParam("all", showAll ? "1" : "0")
+                .queryParam("since", sinceId)
+                .queryParam("before", beforeId)
+                .queryParam("size", showSize ? "1" : "0");
 
-		WebResource webResource = baseResource.path("/containers/json").queryParams(params);
+        if (limit >= 0) {
+            webResource = webResource.queryParam("limit", String.valueOf(limit));
+        }
+
 		LOGGER.trace("GET: {}", webResource);
-		List<Container> containers = webResource.accept(MediaType.APPLICATION_JSON).get(new GenericType<List<Container>>() {
-		});
+		List<Container> containers = webResource.request().accept(MediaType.APPLICATION_JSON).get(new GenericType<List<Container>>() {
+        });
 		LOGGER.trace("Response: {}", containers);
 
 		return containers;

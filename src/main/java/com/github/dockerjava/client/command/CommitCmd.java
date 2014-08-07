@@ -1,5 +1,6 @@
 package com.github.dockerjava.client.command;
 
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
@@ -15,9 +16,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.NotFoundException;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
+import javax.ws.rs.client.WebTarget;
+
+import static javax.ws.rs.client.Entity.entity;
 
 /**
  *
@@ -319,21 +320,20 @@ public class CommitCmd extends AbstrDockerCmd<CommitCmd, String>  {
 	}
 
 	protected String impl() throws DockerException {
-		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-		params.add("container", containerId);
-		params.add("repo", repository);
-		params.add("tag", tag);
-		params.add("m", message);
-		params.add("author", author);
-		params.add("pause", pause ? "1" : "0");
 
-		WebResource webResource = baseResource.path("/commit").queryParams(params);
+        WebTarget webResource = baseResource.path("/commit")
+                .queryParam("container", containerId)
+                .queryParam("repo", repository)
+                .queryParam("tag", tag)
+                .queryParam("m", message)
+                .queryParam("author", author)
+                .queryParam("pause", pause ? "1" : "0");
 
 		try {
 			LOGGER.trace("POST: {}", webResource);
-			ObjectNode objectNode = webResource.queryParams(params).accept("application/vnd.docker.raw-stream").type(MediaType.APPLICATION_JSON).post(ObjectNode.class, this);
+			ObjectNode objectNode = webResource.request().accept("application/vnd.docker.raw-stream").post(entity(this, MediaType.APPLICATION_JSON), ObjectNode.class);
             return objectNode.get("Id").asText();
-		} catch (UniformInterfaceException exception) {
+		} catch (ClientErrorException exception) {
 			if (exception.getResponse().getStatus() == 404) {
 				throw new NotFoundException(String.format("No such container %s", containerId));
 			} else if (exception.getResponse().getStatus() == 500) {

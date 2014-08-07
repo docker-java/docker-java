@@ -3,12 +3,12 @@ package com.github.dockerjava.client.command;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerClient;
 import com.github.dockerjava.client.DockerException;
-import com.sun.jersey.api.client.UniformInterfaceException;
 
 import org.hamcrest.Matchers;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
+import javax.ws.rs.ClientErrorException;
 import java.lang.reflect.Method;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -46,8 +46,8 @@ public class AuthCmdTest extends AbstractDockerClientTest {
 			new DockerClient().authCmd().exec();
             fail("Expected a DockerException caused by a bad password.");
 		} catch (DockerException e) {
-			assertThat(e.getCause(), Matchers.instanceOf(UniformInterfaceException.class));
-			assertEquals(((UniformInterfaceException) e.getCause()).getResponse().getStatus(), 401);
+			assertThat(e.getCause(), Matchers.instanceOf(ClientErrorException.class));
+			assertEquals(((ClientErrorException) e.getCause()).getResponse().getStatus(), 401);
 		}
 	}
 }

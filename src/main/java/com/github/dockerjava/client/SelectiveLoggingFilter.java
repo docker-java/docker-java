@@ -1,15 +1,15 @@
 package com.github.dockerjava.client;
 
+import java.io.IOException;
 import java.util.Set;
 
+import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import com.google.common.collect.ImmutableSet;
-import com.sun.jersey.api.client.ClientHandlerException;
-import com.sun.jersey.api.client.ClientRequest;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.filter.LoggingFilter;
+
+import org.glassfish.jersey.filter.LoggingFilter;
 
 /**
  * A version of the logging filter that will avoid trying to log entities which can cause
@@ -26,22 +26,13 @@ public class SelectiveLoggingFilter extends LoggingFilter {
             .build();
 
     @Override
-    public ClientResponse handle(ClientRequest request) throws ClientHandlerException {
+    public void filter(ClientRequestContext context) throws IOException {
         // Unless the content type is in the list of those we want to ellide, then just have
         // our super-class handle things.
-        Object contentType = request.getHeaders().getFirst(HttpHeaders.CONTENT_TYPE);
-        if (contentType != null && SKIPPED_CONTENT.contains(contentType.toString())) {
-            // Skip logging this.
-            //
-            // N.B. -- I'd actually love to reproduce (or better yet just use) the logging code from
-            // our super-class.  However, everything is private (so we can't use it) and the code
-            // is under a modified GPL which means we can't pull it into an ASL project.  Right now
-            // I don't have the energy to do a clean implementation.
-            return getNext().handle(request);
+        Object contentType = context.getHeaders().getFirst(HttpHeaders.CONTENT_TYPE);
+        if (contentType == null || !SKIPPED_CONTENT.contains(contentType.toString())) {
+            super.filter(context);
         }
-
-        // Do what we normally would
-        return super.handle(request);
     }
     
 }
