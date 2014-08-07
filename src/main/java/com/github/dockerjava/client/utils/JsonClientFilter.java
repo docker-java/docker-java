@@ -1,26 +1,25 @@
 package com.github.dockerjava.client.utils;
 
 
-import com.sun.jersey.api.client.ClientRequest;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.filter.ClientFilter;
+import javax.ws.rs.client.ClientRequestContext;
+import javax.ws.rs.client.ClientResponseContext;
+import javax.ws.rs.client.ClientResponseFilter;
+import javax.ws.rs.core.MediaType;
+import java.io.IOException;
 
 /**
  *
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  *
  */
-public class JsonClientFilter extends ClientFilter {
+public class JsonClientFilter implements ClientResponseFilter {
 
-    public ClientResponse handle(ClientRequest cr) {
-        // Call the next filter
-        ClientResponse resp = getNext().handle(cr);
-        String respContentType = resp.getHeaders().getFirst("Content-Type");
-        if (respContentType != null && respContentType.startsWith("text/plain")) {
-            String newContentType = "application/json" + respContentType.substring(10);
-            resp.getHeaders().putSingle("Content-Type", newContentType);
+
+    @Override
+    public void filter(ClientRequestContext requestContext, ClientResponseContext responseContext) throws IOException {
+        if (responseContext.getMediaType() != null && responseContext.getMediaType().isCompatible(MediaType.TEXT_PLAIN_TYPE)) {
+            String newContentType = "application/json" + responseContext.getMediaType().toString().substring(10);
+            responseContext.getHeaders().putSingle("Content-Type", newContentType);
         }
-        return resp;
     }
-
 }

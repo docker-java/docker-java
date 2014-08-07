@@ -2,12 +2,11 @@ package com.github.dockerjava.client.command;
 
 import java.io.IOException;
 
-import org.apache.commons.codec.binary.Base64;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.model.AuthConfig;
 import com.google.common.base.Preconditions;
+import org.apache.commons.codec.binary.Base64;
 
 public abstract class AbstrAuthCfgDockerCmd<T extends AbstrDockerCmd<T, RES_T>, RES_T> extends
 		AbstrDockerCmd<T, RES_T> {

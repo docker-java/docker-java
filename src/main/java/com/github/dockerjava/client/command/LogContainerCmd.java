@@ -1,18 +1,18 @@
 package com.github.dockerjava.client.command;
 
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
+import org.omg.PortableInterceptor.ClientRequestInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.NotFoundException;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
 
 /**
  * Get container logs
@@ -29,7 +29,7 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
  * @param tail
  * 			  - `all` or `<number>`, Output specified number of lines at the end of logs
  */
-public class LogContainerCmd extends AbstrDockerCmd<LogContainerCmd, ClientResponse> {
+public class LogContainerCmd extends AbstrDockerCmd<LogContainerCmd, Response> {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(LogContainerCmd.class);
@@ -126,23 +126,22 @@ public class LogContainerCmd extends AbstrDockerCmd<LogContainerCmd, ClientRespo
             .toString();
     }
 
-	protected ClientResponse impl() throws DockerException {
-		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-		params.add("timestamps", timestamps ? "1" : "0");
-		params.add("stdout", stdout ? "1" : "0");
-		params.add("stderr", stderr ? "1" : "0");
-		params.add("follow", followStream ? "1" : "0");
-		params.add("tail", tail < 0 ? "all" : ""+ tail);
+	protected Response impl() throws DockerException {
 
-		WebResource webResource = baseResource.path(
-				String.format("/containers/%s/logs", containerId))
-				.queryParams(params);
+        WebTarget webResource =
+                baseResource.path("/containers/{id}/logs")
+                        .resolveTemplate("id", containerId)
+                        .queryParam("timestamps", timestamps ? "1" : "0")
+                        .queryParam("stdout", stdout ? "1" : "0")
+                        .queryParam("stderr", stderr ? "1" : "0")
+                        .queryParam("follow", followStream ? "1" : "0")
+                        .queryParam("tail", tail < 0 ? "all" : "" + tail);
 
 		try {
 			LOGGER.trace("GET: {}", webResource);
-			return webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
-					.get(ClientResponse.class);
-		} catch (UniformInterfaceException exception) {
+			return webResource.request().accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
+					.get(Response.class);
+		} catch (ClientErrorException exception) {
 			if (exception.getResponse().getStatus() == 400) {
 				throw new DockerException("bad parameter");
 			} else if (exception.getResponse().getStatus() == 404) {

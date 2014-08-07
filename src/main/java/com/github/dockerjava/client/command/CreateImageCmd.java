@@ -2,6 +2,7 @@ package com.github.dockerjava.client.command;
 
 import java.io.InputStream;
 
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
@@ -11,9 +12,9 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.client.DockerException;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
+import javax.ws.rs.client.WebTarget;
+
+import static javax.ws.rs.client.Entity.entity;
 
 /**
  * Create an image by importing the given stream of a tar file.
@@ -79,19 +80,19 @@ public class CreateImageCmd extends	AbstrDockerCmd<CreateImageCmd, CreateImageRe
     }
 
 	protected CreateImageResponse impl() {
-		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-		params.add("repo", repository);
-		params.add("tag", tag);
-		params.add("fromSrc", "-");
 
-		WebResource webResource = baseResource.path("/images/create").queryParams(params);
+		WebTarget webResource = baseResource
+                .path("/images/create")
+                .queryParam("repo", repository)
+                .queryParam("tag", tag)
+                .queryParam("fromSrc", "-");
 
 		try {
 			LOGGER.trace("POST: {}", webResource);
-			return webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
-					.post(CreateImageResponse.class, imageStream);
+			return webResource.request().accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
+					.post(entity(imageStream, MediaType.APPLICATION_OCTET_STREAM), CreateImageResponse.class);
 
-		} catch (UniformInterfaceException exception) {
+		} catch (ClientErrorException exception) {
 			if (exception.getResponse().getStatus() == 500) {
 				throw new DockerException("Server error.", exception);
 			} else {

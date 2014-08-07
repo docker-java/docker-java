@@ -1,5 +1,6 @@
 package com.github.dockerjava.client.command;
 
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
@@ -8,8 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.client.DockerException;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
+import javax.ws.rs.client.WebTarget;
 
 /**
  * Remove a container.
@@ -73,13 +73,13 @@ public class RemoveContainerCmd extends AbstrDockerCmd<RemoveContainerCmd, Void>
 	protected Void impl() throws DockerException {
 		Preconditions.checkState(!StringUtils.isEmpty(containerId), "Container ID can't be empty");
 
-		WebResource webResource = baseResource.path("/containers/" + containerId).queryParam("v", removeVolumes ? "1" : "0").queryParam("force", force ? "1" : "0");
+		WebTarget webResource = baseResource.path("/containers/" + containerId).queryParam("v", removeVolumes ? "1" : "0").queryParam("force", force ? "1" : "0");
 
 		try {
 			LOGGER.trace("DELETE: {}", webResource);
-			String response = webResource.accept(MediaType.APPLICATION_JSON).delete(String.class);
+			String response = webResource.request().accept(MediaType.APPLICATION_JSON).delete(String.class);
 			LOGGER.trace("Response: {}", response);
-		} catch (UniformInterfaceException exception) {
+		} catch (ClientErrorException exception) {
 			if (exception.getResponse().getStatus() == 204) {
 				//no error
 				LOGGER.trace("Successfully removed container " + containerId);

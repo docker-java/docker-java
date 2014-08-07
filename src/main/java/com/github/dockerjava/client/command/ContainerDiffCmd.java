@@ -2,6 +2,9 @@ package com.github.dockerjava.client.command;
 
 import java.util.List;
 
+import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
@@ -11,9 +14,6 @@ import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.NotFoundException;
 import com.github.dockerjava.client.model.ChangeLog;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.GenericType;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
 
 /**
  * Inspect changes on a container's filesystem
@@ -49,13 +49,13 @@ public class ContainerDiffCmd extends AbstrDockerCmd<ContainerDiffCmd, List<Chan
     }
 
     protected List<ChangeLog> impl() throws DockerException {
-		WebResource webResource = baseResource.path(String.format("/containers/%s/changes", containerId));
+		WebTarget webResource = baseResource.path("/containers/{id}/changes").resolveTemplate("id", containerId);
 
 		try {
 			LOGGER.trace("GET: {}", webResource);
-			return webResource.accept(MediaType.APPLICATION_JSON).get(new GenericType<List<ChangeLog>>() {
-			});
-		} catch (UniformInterfaceException exception) {
+			return webResource.request().accept(MediaType.APPLICATION_JSON).get(new GenericType<List<ChangeLog>>() {
+            });
+		} catch (ClientErrorException exception) {
 			if (exception.getResponse().getStatus() == 404) {
 				throw new NotFoundException(String.format("No such container %s", containerId));
 			} else if (exception.getResponse().getStatus() == 500) {

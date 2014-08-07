@@ -2,13 +2,13 @@ package com.github.dockerjava.client;
 
 import com.github.dockerjava.client.DockerClient;
 import com.github.dockerjava.client.DockerException;
-import com.sun.jersey.api.client.ClientResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.ITestResult;
 
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.DatagramSocket;
@@ -82,7 +82,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 				result.getName());
 	}
 
-	protected String logResponseStream(ClientResponse response)  {
+	protected String logResponseStream(Response response)  {
 		String responseString;
 		try {
 			responseString = DockerClient.asString(response);

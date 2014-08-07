@@ -1,5 +1,6 @@
 package com.github.dockerjava.client.command;
 
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
@@ -9,10 +10,10 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.client.DockerException;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
+
+import static javax.ws.rs.client.Entity.entity;
 
 
 /**
@@ -20,7 +21,7 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
  * Pull image from repository.
  *
  */
-public class PullImageCmd extends AbstrDockerCmd<PullImageCmd, ClientResponse>  {
+public class PullImageCmd extends AbstrDockerCmd<PullImageCmd, Response>  {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PullImageCmd.class);
 
@@ -68,7 +69,7 @@ public class PullImageCmd extends AbstrDockerCmd<PullImageCmd, ClientResponse>  
             .toString();
     }
 
-	protected ClientResponse impl() {
+	protected Response impl() {
 		Preconditions.checkNotNull(repository, "Repository was not specified");
 
 		if (StringUtils.countMatches(repository, ":") == 1) {
@@ -78,17 +79,16 @@ public class PullImageCmd extends AbstrDockerCmd<PullImageCmd, ClientResponse>  
 
 		}
 
-		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-		params.add("tag", tag);
-		params.add("fromImage", repository);
-		params.add("registry", registry);
-
-		WebResource webResource = baseResource.path("/images/create").queryParams(params);
+		WebTarget webResource = baseResource
+                .path("/images/create")
+                .queryParam("tag", tag)
+                .queryParam("fromImage", repository)
+                .queryParam("registry", registry);
 
 		try {
 			LOGGER.trace("POST: {}", webResource);
-			return webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).post(ClientResponse.class);
-		} catch (UniformInterfaceException exception) {
+			return webResource.request().accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).post(entity(Response.class, MediaType.APPLICATION_JSON));
+		} catch (ClientErrorException exception) {
 			if (exception.getResponse().getStatus() == 500) {
 				throw new DockerException("Server error.", exception);
 			} else {

@@ -1,5 +1,7 @@
 package com.github.dockerjava.client.command;
 
+import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.MediaType;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,16 +11,17 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.client.DockerException;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
+
+import static javax.ws.rs.client.Entity.entity;
 
 /**
  *
  * Copy files or folders from a container.
  *
  */
-public class CopyFileFromContainerCmd extends AbstrDockerCmd<CopyFileFromContainerCmd, ClientResponse> {
+public class CopyFileFromContainerCmd extends AbstrDockerCmd<CopyFileFromContainerCmd, Response> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CopyFileFromContainerCmd.class);
 
@@ -74,18 +77,18 @@ public class CopyFileFromContainerCmd extends AbstrDockerCmd<CopyFileFromContain
             .toString();
     }
 
-	protected ClientResponse impl() throws DockerException {
+	protected Response impl() throws DockerException {
 
-		WebResource webResource =
-				baseResource.path(String.format("/containers/%s/copy", containerId));
+		WebTarget webResource =
+				baseResource.path("/containers/{id}/copy").resolveTemplate("id", containerId);
 
 		try {
 			LOGGER.trace("POST: " + webResource.toString());
-			WebResource.Builder builder =
-					webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).type("application/json");
+			Invocation.Builder builder =
+					webResource.request().accept(MediaType.APPLICATION_OCTET_STREAM_TYPE);
 
-			return builder.post(ClientResponse.class, this);
-		} catch (UniformInterfaceException exception) {
+			return builder.post(entity(this, MediaType.APPLICATION_JSON), Response.class);
+		} catch (ClientErrorException exception) {
 			if (exception.getResponse().getStatus() == 400) {
 				throw new DockerException("bad parameter");
 			} else if (exception.getResponse().getStatus() == 404) {

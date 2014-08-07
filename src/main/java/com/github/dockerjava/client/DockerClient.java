@@ -1,32 +1,21 @@
 package com.github.dockerjava.client;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static org.apache.commons.io.IOUtils.closeQuietly;
-
-import java.io.*;
-
+import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.github.dockerjava.client.command.*;
-
+import com.github.dockerjava.client.model.AuthConfig;
+import com.github.dockerjava.client.utils.JsonClientFilter;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
-import org.apache.http.client.HttpClient;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.ClientProperties;
 
-import com.github.dockerjava.client.model.AuthConfig;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
+import java.io.*;
 
-import com.github.dockerjava.client.utils.JsonClientFilter;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.client.apache4.ApacheHttpClient4;
-import com.sun.jersey.client.apache4.ApacheHttpClient4Handler;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * @author Konstantin Pelykh (kpelykh@gmail.com)
@@ -36,7 +25,7 @@ public class DockerClient implements Closeable {
 	private final Client client;
 
     private final CommandFactory cmdFactory;
-	private final WebResource baseResource;
+    private final WebTarget baseResource;
     private final DockerClientConfig dockerClientConfig;
 
 	public DockerClient() {
@@ -61,43 +50,27 @@ public class DockerClient implements Closeable {
         this.cmdFactory = cmdFactory;
         this.dockerClientConfig = dockerClientConfig;
 
-        HttpClient httpClient = getPoolingHttpClient(dockerClientConfig);
-        ClientConfig clientConfig = new DefaultClientConfig();
-		client = new ApacheHttpClient4(new ApacheHttpClient4Handler(httpClient,
-				null, false), clientConfig);
+        ClientConfig clientConfig = new ClientConfig();
 
-		if(dockerClientConfig.getReadTimeout() != null) {
-			client.setReadTimeout(dockerClientConfig.getReadTimeout());
-		}
+        if (dockerClientConfig.getReadTimeout() != null) {
+            clientConfig.property(ClientProperties.READ_TIMEOUT, dockerClientConfig.getReadTimeout());
+        }
 
-		client.addFilter(new JsonClientFilter());
+        clientConfig.register(JsonClientFilter.class);
+        clientConfig.register(JacksonJsonProvider.class);
 
-		if (dockerClientConfig.isLoggingFilterEnabled())
-			client.addFilter(new SelectiveLoggingFilter());
+        if (dockerClientConfig.isLoggingFilterEnabled()) {
+            clientConfig.register(SelectiveLoggingFilter.class);
+        }
 
-		WebResource webResource = client.resource(dockerClientConfig.getUri());
+        client = ClientBuilder.newBuilder().withConfig(clientConfig).build();
+        WebTarget webResource = client.target(dockerClientConfig.getUri());
 
-		if(dockerClientConfig.getVersion() != null) {
-			baseResource = webResource.path("v" + dockerClientConfig.getVersion());
-		} else {
-			baseResource = webResource;
-		}
-	}
-
-    private HttpClient getPoolingHttpClient(DockerClientConfig dockerClientConfig) {
-        SchemeRegistry schemeRegistry = new SchemeRegistry();
-        schemeRegistry.register(new Scheme("http", dockerClientConfig.getUri().getPort(),
-                PlainSocketFactory.getSocketFactory()));
-        schemeRegistry.register(new Scheme("https", 443, SSLSocketFactory
-                .getSocketFactory()));
-
-        PoolingClientConnectionManager cm = new PoolingClientConnectionManager(schemeRegistry);
-        // Increase max total connection
-        cm.setMaxTotal(1000);
-        // Increase default max connection per route
-        cm.setDefaultMaxPerRoute(1000);
-
-        return new DefaultHttpClient(cm);
+        if (dockerClientConfig.getVersion() != null) {
+            baseResource = webResource.path("v" + dockerClientConfig.getVersion());
+        } else {
+            baseResource = webResource;
+        }
     }
 
 	public <RES_T> RES_T execute(AbstrDockerCmd<?, RES_T> command)
@@ -105,7 +78,7 @@ public class DockerClient implements Closeable {
 		return command.withBaseResource(baseResource).exec();
 	}
 
-	public AuthConfig authConfig() throws DockerException {
+    public AuthConfig authConfig() throws DockerException {
         checkNotNull(dockerClientConfig.getUsername(), "Configured username is null.");
         checkNotNull(dockerClientConfig.getPassword(), "Configured password is null.");
         checkNotNull(dockerClientConfig.getEmail(), "Configured email is null.");
@@ -263,28 +236,29 @@ public class DockerClient implements Closeable {
 	}
 
     // TODO This is only being used by the test code for logging. Is it really necessary?
-	/**
-	 * @return The output slurped into a string.
-	 */
-	public static String asString(ClientResponse response) throws IOException {
 
-		StringWriter out = new StringWriter();
-		try {
-			LineIterator itr = IOUtils.lineIterator(
-					response.getEntityInputStream(), "UTF-8");
-			while (itr.hasNext()) {
-				String line = itr.next();
-				out.write(line + (itr.hasNext() ? "\n" : ""));
-			}
-		} finally {
-			closeQuietly(response.getEntityInputStream());
-		}
-		return out.toString();
-	}
+    /**
+     * @return The output slurped into a string.
+     */
+    public static String asString(Response response) throws IOException {
+
+        StringWriter out = new StringWriter();
+        InputStream is = response.readEntity(InputStream.class);
+        try {
+            LineIterator itr = IOUtils.lineIterator(is, "UTF-8");
+            while (itr.hasNext()) {
+                String line = itr.next();
+                out.write(line + (itr.hasNext() ? "\n" : ""));
+            }
+        } finally {
+            IOUtils.closeQuietly(is);
+        }
+        return out.toString();
+    }
 
     @Override
     public void close() throws IOException {
-        client.destroy();
+        client.close();
     }
 
 }

@@ -1,5 +1,6 @@
 package com.github.dockerjava.client.command;
 
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
@@ -9,8 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.NotFoundException;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
+import javax.ws.rs.client.WebTarget;
 
 /**
  *
@@ -59,15 +59,15 @@ public class TopContainerCmd extends AbstrDockerCmd<TopContainerCmd, TopContaine
     }
 
 	protected TopContainerResponse impl() throws DockerException {
-		WebResource webResource = baseResource.path(String.format("/containers/%s/top", containerId));
+		WebTarget webResource = baseResource.path("/containers/{id}/top").resolveTemplate("id", containerId);
 
 		if(!StringUtils.isEmpty(psArgs))
 			webResource = webResource.queryParam("ps_args", psArgs);
 
 		try {
 			LOGGER.trace("GET: {}", webResource);
-			return webResource.accept(MediaType.APPLICATION_JSON).get(TopContainerResponse.class);
-		} catch (UniformInterfaceException exception) {
+			return webResource.request().accept(MediaType.APPLICATION_JSON).get(TopContainerResponse.class);
+		} catch (ClientErrorException exception) {
 			if (exception.getResponse().getStatus() == 404) {
 				throw new NotFoundException(String.format("No such container %s", containerId));
 			} else if (exception.getResponse().getStatus() == 500) {

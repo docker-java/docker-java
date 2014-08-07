@@ -1,5 +1,6 @@
 package com.github.dockerjava.client.command;
 
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
@@ -7,9 +8,10 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.client.DockerException;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
+
+import static javax.ws.rs.client.Entity.entity;
 
 
 /**
@@ -17,7 +19,7 @@ import com.sun.jersey.api.client.WebResource;
  *
  * @param name The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
  */
-public class PushImageCmd extends AbstrAuthCfgDockerCmd<PushImageCmd, ClientResponse>  {
+public class PushImageCmd extends AbstrAuthCfgDockerCmd<PushImageCmd, Response>  {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PushImageCmd.class);
 
@@ -47,16 +49,17 @@ public class PushImageCmd extends AbstrAuthCfgDockerCmd<PushImageCmd, ClientResp
             .toString();
     }
 
-	protected ClientResponse impl() {
-		WebResource webResource = baseResource.path("/images/" + name(name) + "/push");
+	protected Response impl() {
+		WebTarget webResource = baseResource.path("/images/" + name(name) + "/push");
 		try {
 			final String registryAuth = registryAuth();
 			LOGGER.trace("POST: {}", webResource);
 			return webResource
+                    .request()
 					.header("X-Registry-Auth", registryAuth)
 					.accept(MediaType.APPLICATION_JSON)
-					.post(ClientResponse.class);
-		} catch (UniformInterfaceException e) {
+					.post(entity(Response.class, MediaType.APPLICATION_JSON));
+		} catch (ClientErrorException e) {
 			throw new DockerException(e);
 		}
 	}

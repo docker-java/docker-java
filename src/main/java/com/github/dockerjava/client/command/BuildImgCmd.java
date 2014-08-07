@@ -13,6 +13,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
@@ -23,10 +24,10 @@ import org.slf4j.LoggerFactory;
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.utils.CompressArchiveUtil;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
+
+import static javax.ws.rs.client.Entity.entity;
 
 /**
  *
@@ -35,7 +36,7 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
  * TODO: http://docs.docker.com/reference/builder/#dockerignore
  *
  */
-public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
+public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, Response>  {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BuildImgCmd.class);
 
@@ -117,7 +118,7 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 			.toString();
 	}
 
-	protected ClientResponse impl() {
+	protected Response impl() {
 		if (tarInputStream == null) {
 			File dockerFolderTar = buildDockerFolderTar();
 			try {
@@ -132,28 +133,27 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 		}
 	}
 
-	protected ClientResponse callDocker(final InputStream dockerFolderTarInputStream) {
-		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-		params.add("t", tag);
-		if (noCache) {
-			params.add("nocache", "true");
-		}
-		if (remove) {
-            params.add("rm", "true");
-		}
-        if (quiet) {
-            params.add("q", "true");
-        }
+	protected Response callDocker(final InputStream dockerFolderTarInputStream) {
 
-		WebResource webResource = baseResource.path("/build").queryParams(params);
+		WebTarget webResource = baseResource.path("/build")
+                .queryParam("t", tag);
+        if (noCache) {
+            webResource = webResource.queryParam("nocache", "true");
+        }
+        if (remove) {
+            webResource = webResource.queryParam("rm", "true");
+        }
+        if (quiet) {
+            webResource = webResource.queryParam("q", "true");
+        }
 
 		try {
 			LOGGER.trace("POST: {}", webResource);
 			return webResource
-					.type("application/tar")
+                    .request()
 					.accept(MediaType.TEXT_PLAIN)
-					.post(ClientResponse.class, dockerFolderTarInputStream);
-		} catch (UniformInterfaceException exception) {
+					.post(entity(dockerFolderTarInputStream, "application/tar"), Response.class);
+		} catch (ClientErrorException exception) {
 			if (exception.getResponse().getStatus() == 500) {
 				throw new DockerException("Server error", exception);
 			} else {
