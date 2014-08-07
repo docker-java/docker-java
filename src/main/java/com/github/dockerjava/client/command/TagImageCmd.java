@@ -5,13 +5,10 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.client.DockerException;
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
-
 
 /**
  * Tag an image into a repository
@@ -24,7 +21,7 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
  *            (not documented)
  * @return the HTTP status code (201 for success)
  */
-public class TagImageCmd extends AbstrDockerCmd<TagImageCmd, Integer>  {
+public class TagImageCmd extends AbstrDockerCmd<TagImageCmd, Void>  {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TagImageCmd.class);
 
@@ -91,22 +88,19 @@ public class TagImageCmd extends AbstrDockerCmd<TagImageCmd, Integer>  {
             .toString();
     }
 
-	protected Integer impl() {
+	protected Void impl() {
 
 		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
 		params.add("repo", repository);
 		params.add("tag", tag);
 		params.add("force", force ? "1" : "0");
 
-		WebResource webResource = baseResource.path("/images/" + imageId + "/tag").queryParams(
-				params);
-
-		try {
-			LOGGER.trace("POST: {}", webResource);
-			ClientResponse resp = webResource.post(ClientResponse.class);
-			return resp.getStatus();
-		} catch (UniformInterfaceException exception) {
-			throw new DockerException(exception);
-		}
+		WebResource webResource = baseResource
+				.path("/images/" + imageId + "/tag")
+				.queryParams(params);
+		
+		LOGGER.trace("POST: {}", webResource);
+		webResource.post(ClientResponse.class);
+		return null;
 	}
 }

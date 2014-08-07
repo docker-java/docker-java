@@ -2,19 +2,23 @@ package com.github.dockerjava.client.command;
 
 import javax.ws.rs.core.MediaType;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.dockerjava.client.model.*;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.client.DockerException;
-import com.github.dockerjava.client.NotFoundException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.NotModifiedException;
+import com.github.dockerjava.client.model.Bind;
+import com.github.dockerjava.client.model.Binds;
+import com.github.dockerjava.client.model.Link;
+import com.github.dockerjava.client.model.Links;
+import com.github.dockerjava.client.model.LxcConf;
+import com.github.dockerjava.client.model.Ports;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.WebResource.Builder;
 
 /**
  * Run a container
@@ -154,35 +158,23 @@ public class StartContainerCmd extends AbstrDockerCmd<StartContainerCmd, Void> {
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this).toString();
 	}
+	
+	/**
+	 * @throws NotFoundException No such container
+	 * @throws NotModifiedException Container already started
+	 */
+	@Override
+	public Void exec() throws NotFoundException, NotModifiedException {
+		return super.exec();
+	}
 
 	protected Void impl() throws DockerException {
 		WebResource webResource = baseResource.path(String.format(
 				"/containers/%s/start", containerId));
-
-		try {
-			LOGGER.trace("POST: {}", webResource);
-			Builder builder = webResource.accept(MediaType.APPLICATION_JSON);
-
-			builder.type(MediaType.APPLICATION_JSON).post(this);
-
-		} catch (UniformInterfaceException exception) {
-			if (exception.getResponse().getStatus() == 404) {
-				throw new NotFoundException(String.format(
-						"No such container %s", containerId));
-			} else if (exception.getResponse().getStatus() == 304) {
-				// no error
-				LOGGER.warn("Container already started {}", containerId);
-			} else if (exception.getResponse().getStatus() == 204) {
-				// no error
-				LOGGER.trace("Successfully started container {}", containerId);
-			} else if (exception.getResponse().getStatus() == 500) {
-				LOGGER.error("", exception);
-				throw new DockerException("Server error", exception);
-			} else {
-				throw new DockerException(exception);
-			}
-		}
-
+		
+		LOGGER.trace("POST: {}", webResource);
+		webResource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).post(this);
+		
 		return null;
 	}
 

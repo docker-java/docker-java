@@ -5,9 +5,9 @@ import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.client.DockerException;
+import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.NotFoundException;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 
 /**
@@ -47,6 +47,14 @@ public class KillContainerCmd extends AbstrDockerCmd<KillContainerCmd, Void> {
     public String toString() {
         return "kill " + containerId;
     }
+    
+    /**
+     * @throws NotFoundException No such container
+     */
+    @Override
+    public Void exec() throws NotFoundException {
+    	return super.exec();
+    }
 
 	protected Void impl() throws DockerException {
 		WebResource webResource = baseResource.path(String.format("/containers/%s/kill", containerId));
@@ -54,22 +62,9 @@ public class KillContainerCmd extends AbstrDockerCmd<KillContainerCmd, Void> {
 		if(signal != null) {
 			webResource = webResource.queryParam("signal", signal);
 		}
-
-		try {
-			LOGGER.trace("POST: {}", webResource);
-			webResource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).post();
-		} catch (UniformInterfaceException exception) {
-			if (exception.getResponse().getStatus() == 404) {
-				LOGGER.warn("No such container {}", containerId);
-			} else if (exception.getResponse().getStatus() == 204) {
-				//no error
-				LOGGER.trace("Successfully killed container {}", containerId);
-			} else if (exception.getResponse().getStatus() == 500) {
-				throw new DockerException("Server error", exception);
-			} else {
-				throw new DockerException(exception);
-			}
-		}
+		
+		LOGGER.trace("POST: {}", webResource);
+		webResource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).post();
 
 		return null;
 	}

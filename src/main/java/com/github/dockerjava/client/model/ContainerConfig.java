@@ -1,6 +1,5 @@
 package com.github.dockerjava.client.model;
 
-import java.util.Arrays;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

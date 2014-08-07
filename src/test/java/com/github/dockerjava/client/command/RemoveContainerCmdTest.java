@@ -19,8 +19,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.github.dockerjava.client.DockerException;
 
 public class RemoveContainerCmdTest extends AbstractDockerClientTest {
 
@@ -54,7 +54,6 @@ public class RemoveContainerCmdTest extends AbstractDockerClientTest {
 
 		dockerClient.startContainerCmd(container.getId()).exec();
 		dockerClient.waitContainerCmd(container.getId()).exec();
-		tmpContainers.add(container.getId());
 
 		LOG.info("Removing container: {}", container.getId());
 		dockerClient.removeContainerCmd(container.getId()).exec();

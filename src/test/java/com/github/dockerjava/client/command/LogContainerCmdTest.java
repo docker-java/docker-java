@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 
 import org.testng.ITestResult;
@@ -16,9 +17,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.github.dockerjava.client.DockerException;
-import com.sun.jersey.api.client.ClientResponse;
 
 public class LogContainerCmdTest extends AbstractDockerClientTest {
 
@@ -60,7 +60,7 @@ public class LogContainerCmdTest extends AbstractDockerClientTest {
 
 		assertThat(exitCode, equalTo(0));
 
-		ClientResponse response = dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec();
+		InputStream response = dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec();
 
 		assertThat(logResponseStream(response), endsWith(snippet));
 	}

@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 
 import org.testng.ITestResult;
@@ -15,10 +16,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.model.Info;
-import com.sun.jersey.api.client.ClientResponse;
 
 public class PullImageCmdTest extends AbstractDockerClientTest {
 
@@ -70,7 +70,7 @@ public class PullImageCmdTest extends AbstractDockerClientTest {
 		LOG.info("Pulling image: {}", testImage);
 
 		tmpImgs.add(testImage);
-		ClientResponse response = dockerClient.pullImageCmd(testImage).exec();
+		InputStream response = dockerClient.pullImageCmd(testImage).exec();
 
 		assertThat(logResponseStream(response),
 				containsString("Download complete"));

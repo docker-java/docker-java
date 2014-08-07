@@ -9,9 +9,8 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.client.DockerException;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.UniformInterfaceException;
+
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 
@@ -77,7 +76,7 @@ public class CreateImageCmd extends	AbstrDockerCmd<CreateImageCmd, CreateImageRe
             .append(tag != null ? tag : "")
             .toString();
     }
-
+    
 	protected CreateImageResponse impl() {
 		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
 		params.add("repo", repository);
@@ -85,18 +84,10 @@ public class CreateImageCmd extends	AbstrDockerCmd<CreateImageCmd, CreateImageRe
 		params.add("fromSrc", "-");
 
 		WebResource webResource = baseResource.path("/images/create").queryParams(params);
-
-		try {
-			LOGGER.trace("POST: {}", webResource);
-			return webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
-					.post(CreateImageResponse.class, imageStream);
-
-		} catch (UniformInterfaceException exception) {
-			if (exception.getResponse().getStatus() == 500) {
-				throw new DockerException("Server error.", exception);
-			} else {
-				throw new DockerException(exception);
-			}
-		}
+		
+		LOGGER.trace("POST: {}", webResource);
+		
+		return webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
+				.post(CreateImageResponse.class, imageStream);
 	}
 }

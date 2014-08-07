@@ -1,10 +1,11 @@
 package com.github.dockerjava.client.command;
 
 import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.sun.jersey.api.client.ClientResponse;
+
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
+import java.io.InputStream;
 import java.lang.reflect.Method;
 
 import static org.hamcrest.Matchers.*;
@@ -33,7 +34,7 @@ public class CopyFileFromContainerCmdTest extends AbstractDockerClientTest {
     }
 
     @Test
-    public void copyFromContainer() {
+    public void copyFromContainer() throws Exception {
         // TODO extract this into a shared method
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
                 .withName("docker-java-itest-copyFromContainer")
@@ -46,7 +47,7 @@ public class CopyFileFromContainerCmdTest extends AbstractDockerClientTest {
         dockerClient.startContainerCmd(container.getId()).exec();
         tmpContainers.add(container.getId());
 
-        ClientResponse response = dockerClient.copyFileFromContainerCmd(container.getId(), "/test").exec();
-        assertTrue(response.getStatus() == 200 && response.hasEntity(), "The file was not copied from the container.");
+        InputStream response = dockerClient.copyFileFromContainerCmd(container.getId(), "/test").exec();
+        assertTrue(response.available() > 0, "The file was not copied from the container.");
     }
 }

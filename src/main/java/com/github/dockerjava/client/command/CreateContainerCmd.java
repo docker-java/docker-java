@@ -3,20 +3,21 @@ package com.github.dockerjava.client.command;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.dockerjava.client.model.*;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.client.DockerException;
-import com.github.dockerjava.client.NotFoundException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.ConflictException;
+import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.client.model.ExposedPort;
+import com.github.dockerjava.client.model.ExposedPorts;
+import com.github.dockerjava.client.model.Volume;
+import com.github.dockerjava.client.model.Volumes;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
-
 
 /**
  *
@@ -257,6 +258,15 @@ public class CreateContainerCmd extends AbstrDockerCmd<CreateContainerCmd, Creat
             .append(this)
             .toString();
     }
+    
+    /**
+     * @throws NotFoundException No such container
+     * @throws ConflictException Named container already exists
+     */
+    @Override
+    public CreateContainerResponse exec() throws NotFoundException, ConflictException {
+    	return super.exec();
+    }
 
 	protected CreateContainerResponse impl() {
 		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
@@ -264,23 +274,11 @@ public class CreateContainerCmd extends AbstrDockerCmd<CreateContainerCmd, Creat
 			params.add("name", name);
 		}
 		WebResource webResource = baseResource.path("/containers/create").queryParams(params);
-
-		try {
-			LOGGER.trace("POST: {} ", webResource);
-			return webResource.accept(MediaType.APPLICATION_JSON)
-					.type(MediaType.APPLICATION_JSON)
-					.post(CreateContainerResponse.class, this);
-		} catch (UniformInterfaceException exception) {
-			if (exception.getResponse().getStatus() == 404) {
-				throw new NotFoundException(String.format("%s is an unrecognized image. Please pull the image first.", getImage()));
-			} else if (exception.getResponse().getStatus() == 406) {
-				throw new DockerException("impossible to attach (container not running)");
-			} else if (exception.getResponse().getStatus() == 500) {
-				throw new DockerException("Server error", exception);
-			} else {
-				throw new DockerException(exception);
-			}
-		}
+		
+		LOGGER.trace("POST: {} ", webResource);
+		return webResource.accept(MediaType.APPLICATION_JSON)
+				.type(MediaType.APPLICATION_JSON)
+				.post(CreateContainerResponse.class, this);
 	}
 
 }    

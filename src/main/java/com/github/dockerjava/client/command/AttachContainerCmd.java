@@ -1,24 +1,25 @@
 package com.github.dockerjava.client.command;
 
+import java.io.InputStream;
+
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.client.DockerException;
-import com.github.dockerjava.client.NotFoundException;
+import com.github.dockerjava.api.NotFoundException;
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 
 /**
  * Attach to container
- *
- * @param logs - true or false, includes logs. Defaults to false.
- *
+ * 
+ * @param logs
+ *            - true or false, includes logs. Defaults to false.
+ * 
  * @param followStream
  *            - true or false, return stream. Defaults to false.
  * @param stdout
@@ -29,7 +30,7 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
  *            - true or false, if true, print timestamps for every log line.
  *            Defaults to false.
  */
-public class AttachContainerCmd extends	AbstrDockerCmd<AttachContainerCmd, ClientResponse> {
+public class AttachContainerCmd extends	AbstrDockerCmd<AttachContainerCmd, InputStream> {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AttachContainerCmd.class);
@@ -42,32 +43,33 @@ public class AttachContainerCmd extends	AbstrDockerCmd<AttachContainerCmd, Clien
 		withContainerId(containerId);
 	}
 
-    public String getContainerId() {
-        return containerId;
-    }
+	public String getContainerId() {
+		return containerId;
+	}
 
-    public boolean hasLogsEnabled() {
-        return logs;
-    }
+	public boolean hasLogsEnabled() {
+		return logs;
+	}
 
-    public boolean hasFollowStreamEnabled() {
-        return followStream;
-    }
+	public boolean hasFollowStreamEnabled() {
+		return followStream;
+	}
 
-    public boolean hasTimestampsEnabled() {
-        return timestamps;
-    }
+	public boolean hasTimestampsEnabled() {
+		return timestamps;
+	}
 
-    public boolean hasStdoutEnabled() {
-        return stdout;
-    }
+	public boolean hasStdoutEnabled() {
+		return stdout;
+	}
 
-    public boolean hasStderrEnabled() {
-        return stderr;
-    }
+	public boolean hasStderrEnabled() {
+		return stderr;
+	}
 
-    public AttachContainerCmd withContainerId(String containerId) {
-		Preconditions.checkNotNull(containerId, "containerId was not specified");
+	public AttachContainerCmd withContainerId(String containerId) {
+		Preconditions
+				.checkNotNull(containerId, "containerId was not specified");
 		this.containerId = containerId;
 		return this;
 	}
@@ -108,8 +110,16 @@ public class AttachContainerCmd extends	AbstrDockerCmd<AttachContainerCmd, Clien
 		this.logs = logs;
 		return this;
 	}
+	
+	/**
+	 * @throws NotFoundException No such container 
+	 */
+	@Override
+	public InputStream exec() throws NotFoundException {
+		return super.exec();
+	}
 
-	protected ClientResponse impl() throws DockerException {
+	protected InputStream impl() {
 		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
 		params.add("logs", logs ? "1" : "0");
 		params.add("timestamps", timestamps ? "1" : "0");
@@ -121,21 +131,9 @@ public class AttachContainerCmd extends	AbstrDockerCmd<AttachContainerCmd, Clien
 				String.format("/containers/%s/attach", containerId))
 				.queryParams(params);
 
-		try {
-			LOGGER.trace("POST: {}", webResource);
-			return webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
-					.post(ClientResponse.class);
-		} catch (UniformInterfaceException exception) {
-			if (exception.getResponse().getStatus() == 400) {
-				throw new DockerException("bad parameter");
-			} else if (exception.getResponse().getStatus() == 404) {
-				throw new NotFoundException(String.format(
-						"No such container %s", containerId));
-			} else if (exception.getResponse().getStatus() == 500) {
-				throw new DockerException("Server error", exception);
-			} else {
-				throw new DockerException(exception);
-			}
-		}
+		LOGGER.trace("POST: {}", webResource);
+		return webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
+				.post(ClientResponse.class).getEntityInputStream();
+
 	}
 }

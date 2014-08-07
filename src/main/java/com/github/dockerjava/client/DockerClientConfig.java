@@ -58,7 +58,7 @@ public class DockerClientConfig {
             p.load(DockerClientConfig.class.getResourceAsStream("/docker.io.properties"));
             return p;
         } catch (IOException e) {
-            throw new DockerException(e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -81,7 +81,7 @@ public class DockerClientConfig {
                     in.close();
                 }
             } catch (IOException e) {
-                throw new DockerException(e);
+                throw new RuntimeException(e);
             }
         }
         return overriddenProperties;

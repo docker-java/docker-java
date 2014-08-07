@@ -1,9 +1,5 @@
 package com.github.dockerjava.client.command;
 
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-
 import java.lang.reflect.Method;
 
 import org.apache.commons.lang.math.RandomUtils;
@@ -16,8 +12,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.github.dockerjava.client.DockerException;
 
 public class TagImageCmdTest extends AbstractDockerClientTest {
 
@@ -44,11 +40,10 @@ public class TagImageCmdTest extends AbstractDockerClientTest {
 	}
 
 	@Test
-	public void testTagImage() throws DockerException, InterruptedException {
+	public void testTagImage() throws Exception {
 		String tag = String.valueOf(RandomUtils.nextInt(Integer.MAX_VALUE));
 
-		Integer result = dockerClient.tagImageCmd("busybox:latest", "docker-java/busybox", tag).exec();
-		assertThat(result, equalTo(Integer.valueOf(201)));
+		dockerClient.tagImageCmd("busybox:latest", "docker-java/busybox", tag).exec();
 
 		dockerClient.removeImageCmd("docker-java/busybox:" + tag).exec();
 	}

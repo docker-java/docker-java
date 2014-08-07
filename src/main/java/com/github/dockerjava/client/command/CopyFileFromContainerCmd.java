@@ -1,16 +1,19 @@
 package com.github.dockerjava.client.command;
 
+import java.io.InputStream;
+
 import javax.ws.rs.core.MediaType;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.client.DockerException;
+import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.NotFoundException;
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 
 /**
@@ -18,7 +21,7 @@ import com.sun.jersey.api.client.WebResource;
  * Copy files or folders from a container.
  *
  */
-public class CopyFileFromContainerCmd extends AbstrDockerCmd<CopyFileFromContainerCmd, ClientResponse> {
+public class CopyFileFromContainerCmd extends AbstrDockerCmd<CopyFileFromContainerCmd, InputStream> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CopyFileFromContainerCmd.class);
 
@@ -73,29 +76,23 @@ public class CopyFileFromContainerCmd extends AbstrDockerCmd<CopyFileFromContain
             .append(resource)
             .toString();
     }
+    
+    /**
+     * @throws NotFoundException No such container
+     */
+    @Override
+    public InputStream exec() throws NotFoundException {
+    	return super.exec();
+    }
 
-	protected ClientResponse impl() throws DockerException {
+	protected InputStream impl() throws DockerException {
 
-		WebResource webResource =
-				baseResource.path(String.format("/containers/%s/copy", containerId));
+		WebResource webResource = baseResource.path(String.format("/containers/%s/copy", containerId));
+		
+		LOGGER.trace("POST: " + webResource.toString());
+		WebResource.Builder builder = webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).type("application/json");
 
-		try {
-			LOGGER.trace("POST: " + webResource.toString());
-			WebResource.Builder builder =
-					webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).type("application/json");
-
-			return builder.post(ClientResponse.class, this);
-		} catch (UniformInterfaceException exception) {
-			if (exception.getResponse().getStatus() == 400) {
-				throw new DockerException("bad parameter");
-			} else if (exception.getResponse().getStatus() == 404) {
-				throw new DockerException(String.format("No such container %s", containerId));
-			} else if (exception.getResponse().getStatus() == 500) {
-				throw new DockerException("Server error", exception);
-			} else {
-				throw new DockerException(exception);
-			}
-		}
+		return builder.post(ClientResponse.class, this).getEntityInputStream();
 	}
 
 

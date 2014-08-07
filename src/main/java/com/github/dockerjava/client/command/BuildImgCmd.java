@@ -20,28 +20,31 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.client.DockerException;
+import com.github.dockerjava.api.DockerClientException;
+import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.client.utils.CompressArchiveUtil;
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 
 /**
- *
+ * 
  * Build an image from Dockerfile.
- *
+ * 
  * TODO: http://docs.docker.com/reference/builder/#dockerignore
- *
+ * 
  */
-public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
+public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, InputStream> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(BuildImgCmd.class);
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(BuildImgCmd.class);
 
-	private static final Pattern ADD_OR_COPY_PATTERN = Pattern.compile("^(ADD|COPY)\\s+(.*)\\s+(.*)$");
+	private static final Pattern ADD_OR_COPY_PATTERN = Pattern
+			.compile("^(ADD|COPY)\\s+(.*)\\s+(.*)$");
 
-	private static final Pattern ENV_PATTERN = Pattern.compile("^ENV\\s+(.*)\\s+(.*)$");
+	private static final Pattern ENV_PATTERN = Pattern
+			.compile("^ENV\\s+(.*)\\s+(.*)$");
 
 	private File dockerFolder = null;
 	private InputStream tarInputStream = null;
@@ -49,7 +52,6 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 	private boolean noCache;
 	private boolean remove = true;
 	private boolean quiet;
-
 
 	public BuildImgCmd(File dockerFolder) {
 		Preconditions.checkNotNull(dockerFolder, "dockerFolder is null");
@@ -67,27 +69,27 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 		return this;
 	}
 
-    public File getDockerFolder() {
-        return dockerFolder;
-    }
+	public File getDockerFolder() {
+		return dockerFolder;
+	}
 
-    public String getTag() {
-        return tag;
-    }
+	public String getTag() {
+		return tag;
+	}
 
-    public boolean hasNoCacheEnabled() {
-        return noCache;
-    }
+	public boolean hasNoCacheEnabled() {
+		return noCache;
+	}
 
-    public boolean hasRemoveEnabled() {
-        return remove;
-    }
+	public boolean hasRemoveEnabled() {
+		return remove;
+	}
 
-    public boolean isQuiet() {
-        return quiet;
-    }
+	public boolean isQuiet() {
+		return quiet;
+	}
 
-    public BuildImgCmd withNoCache() {
+	public BuildImgCmd withNoCache() {
 		return withNoCache(true);
 	}
 
@@ -96,34 +98,34 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 		return this;
 	}
 
-    public BuildImgCmd withRemove(boolean rm) {
-        this.remove = rm;
-        return this;
-    }
+	public BuildImgCmd withRemove(boolean rm) {
+		this.remove = rm;
+		return this;
+	}
 
-    public BuildImgCmd withQuiet(boolean quiet) {
-        this.quiet = quiet;
-        return this;
-    }
+	public BuildImgCmd withQuiet(boolean quiet) {
+		this.quiet = quiet;
+		return this;
+	}
 
 	@Override
 	public String toString() {
 		return new StringBuilder("build ")
-			.append(tag != null ? "-t " + tag + " " : "")
-			.append(noCache ? "--nocache=true " : "")
-			.append(quiet ? "--quiet=true " : "")
-			.append(!remove ? "--rm=false " : "")
-			.append(dockerFolder != null ? dockerFolder.getPath() : "-")
-			.toString();
+				.append(tag != null ? "-t " + tag + " " : "")
+				.append(noCache ? "--nocache=true " : "")
+				.append(quiet ? "--quiet=true " : "")
+				.append(!remove ? "--rm=false " : "")
+				.append(dockerFolder != null ? dockerFolder.getPath() : "-")
+				.toString();
 	}
-
-	protected ClientResponse impl() {
+	
+	protected InputStream impl() throws DockerException {
 		if (tarInputStream == null) {
 			File dockerFolderTar = buildDockerFolderTar();
 			try {
 				return callDocker(FileUtils.openInputStream(dockerFolderTar));
 			} catch (IOException e) {
-				throw new DockerException(e);
+				throw new RuntimeException(e);
 			} finally {
 				FileUtils.deleteQuietly(dockerFolderTar);
 			}
@@ -132,40 +134,35 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 		}
 	}
 
-	protected ClientResponse callDocker(final InputStream dockerFolderTarInputStream) {
+	protected InputStream callDocker(final InputStream dockerFolderTarInputStream) throws DockerException {
 		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
 		params.add("t", tag);
 		if (noCache) {
 			params.add("nocache", "true");
 		}
 		if (remove) {
-            params.add("rm", "true");
+			params.add("rm", "true");
 		}
-        if (quiet) {
-            params.add("q", "true");
-        }
+		if (quiet) {
+			params.add("q", "true");
+		}
 
 		WebResource webResource = baseResource.path("/build").queryParams(params);
 
-		try {
-			LOGGER.trace("POST: {}", webResource);
-			return webResource
-					.type("application/tar")
-					.accept(MediaType.TEXT_PLAIN)
-					.post(ClientResponse.class, dockerFolderTarInputStream);
-		} catch (UniformInterfaceException exception) {
-			if (exception.getResponse().getStatus() == 500) {
-				throw new DockerException("Server error", exception);
-			} else {
-				throw new DockerException(exception);
-			}
-		}
+		LOGGER.trace("POST: {}", webResource);
+		
+		return webResource.type("application/tar").accept(MediaType.TEXT_PLAIN)
+				.post(ClientResponse.class, dockerFolderTarInputStream).getEntityInputStream();
+
 	}
 
 	protected File buildDockerFolderTar() {
-		Preconditions.checkArgument(dockerFolder.exists(), "Path %s doesn't exist", dockerFolder);
-		Preconditions.checkArgument(dockerFolder.isDirectory(), "Folder %s doesn't exist", dockerFolder);
-		Preconditions.checkState(new File(dockerFolder, "Dockerfile").exists(), "Dockerfile doesn't exist in " + dockerFolder);
+		Preconditions.checkArgument(dockerFolder.exists(),
+				"Path %s doesn't exist", dockerFolder);
+		Preconditions.checkArgument(dockerFolder.isDirectory(),
+				"Folder %s doesn't exist", dockerFolder);
+		Preconditions.checkState(new File(dockerFolder, "Dockerfile").exists(),
+				"Dockerfile doesn't exist in " + dockerFolder);
 
 		// ARCHIVE TAR
 		String archiveNameWithOutExtension = UUID.randomUUID().toString();
@@ -177,13 +174,14 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 			List<String> dockerFileContent = FileUtils.readLines(dockerFile);
 
 			if (dockerFileContent.size() <= 0) {
-				throw new DockerException(String.format("Dockerfile %s is empty", dockerFile));
+				throw new DockerClientException(String.format(
+						"Dockerfile %s is empty", dockerFile));
 			}
 
 			List<File> filesToAdd = new ArrayList<File>();
 			filesToAdd.add(dockerFile);
 
-			Map<String, String>environmentMap = new HashMap<String, String>();
+			Map<String, String> environmentMap = new HashMap<String, String>();
 
 			int lineNumber = 0;
 
@@ -198,7 +196,8 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 
 				if (envMatcher.find()) {
 					if (envMatcher.groupCount() != 2)
-						throw new DockerException(String.format("Wrong ENV format on line [%d]", lineNumber));
+						throw new DockerClientException(String.format(
+								"Wrong ENV format on line [%d]", lineNumber));
 
 					String variable = envMatcher.group(1).trim();
 
@@ -207,30 +206,37 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 					environmentMap.put(variable, value);
 				}
 
-
 				final Matcher matcher = ADD_OR_COPY_PATTERN.matcher(cmd.trim());
 				if (matcher.find()) {
 					if (matcher.groupCount() != 3) {
-						throw new DockerException(String.format("Wrong ADD or COPY format on line [%d]", lineNumber));
+						throw new DockerClientException(String.format(
+								"Wrong ADD or COPY format on line [%d]",
+								lineNumber));
 					}
 
 					String extractedResource = matcher.group(2);
 
-					String resource = filterForEnvironmentVars(extractedResource, environmentMap).trim();
+					String resource = filterForEnvironmentVars(
+							extractedResource, environmentMap).trim();
 
-					if(isFileResource(resource)) {
+					if (isFileResource(resource)) {
 						File src = new File(resource);
 						if (!src.isAbsolute()) {
-							src = new File(dockerFolder, resource).getCanonicalFile();
+							src = new File(dockerFolder, resource)
+									.getCanonicalFile();
 						} else {
-							throw new DockerException(String.format("Source file %s must be relative to %s", src, dockerFolder));
+							throw new DockerClientException(String.format(
+									"Source file %s must be relative to %s",
+									src, dockerFolder));
 						}
 
 						if (!src.exists()) {
-							throw new DockerException(String.format("Source file %s doesn't exist", src));
+							throw new DockerClientException(String.format(
+									"Source file %s doesn't exist", src));
 						}
 						if (src.isDirectory()) {
-							filesToAdd.addAll(FileUtils.listFiles(src, null, true));
+							filesToAdd.addAll(FileUtils.listFiles(src, null,
+									true));
 						} else {
 							filesToAdd.add(src);
 						}
@@ -238,11 +244,13 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 				}
 			}
 
-			dockerFolderTar = CompressArchiveUtil.archiveTARFiles(dockerFolder, filesToAdd, archiveNameWithOutExtension);
+			dockerFolderTar = CompressArchiveUtil.archiveTARFiles(dockerFolder,
+					filesToAdd, archiveNameWithOutExtension);
 			return dockerFolderTar;
 		} catch (IOException ex) {
 			FileUtils.deleteQuietly(dockerFolderTar);
-			throw new DockerException("Error occurred while preparing Docker context folder.", ex);
+			throw new DockerClientException(
+					"Error occurred while preparing Docker context folder.", ex);
 		}
 	}
 
@@ -260,26 +268,27 @@ public class BuildImgCmd extends AbstrDockerCmd<BuildImgCmd, ClientResponse>  {
 				String replacementValue = entry.getValue();
 
 				// handle: $VARIABLE case
-				currentResourceContent = currentResourceContent.replaceAll("\\$" + variable, replacementValue);
+				currentResourceContent = currentResourceContent.replaceAll(
+						"\\$" + variable, replacementValue);
 
 				// handle ${VARIABLE} case
-				currentResourceContent = currentResourceContent.replaceAll("\\$\\{" + variable + "\\}", replacementValue);
+				currentResourceContent = currentResourceContent.replaceAll(
+						"\\$\\{" + variable + "\\}", replacementValue);
 
 			}
 
 			return currentResourceContent;
-		}
-		else
+		} else
 			return extractedResource;
 	}
 
-	private static boolean isFileResource(String resource)  {
-        URI uri;
+	private static boolean isFileResource(String resource) {
+		URI uri;
 		try {
 			uri = new URI(resource);
 		} catch (URISyntaxException e) {
 			throw new RuntimeException(e);
 		}
-        return uri.getScheme() == null || "file".equals(uri.getScheme());
-    }
+		return uri.getScheme() == null || "file".equals(uri.getScheme());
+	}
 }

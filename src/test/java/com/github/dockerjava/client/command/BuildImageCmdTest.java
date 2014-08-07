@@ -10,6 +10,7 @@ import static org.hamcrest.Matchers.nullValue;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
 
@@ -23,9 +24,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.github.dockerjava.client.DockerException;
-import com.sun.jersey.api.client.ClientResponse;
 
 public class BuildImageCmdTest extends AbstractDockerClientTest {
 
@@ -55,20 +55,20 @@ public class BuildImageCmdTest extends AbstractDockerClientTest {
 		File baseDir = new File(Thread.currentThread().getContextClassLoader()
 				.getResource("nginx").getFile());
 
-		ClientResponse response = dockerClient.buildImageCmd(baseDir).exec();
+		InputStream response = dockerClient.buildImageCmd(baseDir).exec();
 
 		StringWriter logwriter = new StringWriter();
 
 		try {
 			LineIterator itr = IOUtils.lineIterator(
-					response.getEntityInputStream(), "UTF-8");
+					response, "UTF-8");
 			while (itr.hasNext()) {
 				String line = itr.next();
 				logwriter.write(line + "\n");
 				LOG.info(line);
 			}
 		} finally {
-			IOUtils.closeQuietly(response.getEntityInputStream());
+			IOUtils.closeQuietly(response);
 		}
 
 		String fullLog = logwriter.toString();
@@ -115,20 +115,20 @@ public class BuildImageCmdTest extends AbstractDockerClientTest {
 			throws DockerException, IOException {
 
 		// Build image
-		ClientResponse response = dockerClient.buildImageCmd(baseDir).exec();
+		InputStream response = dockerClient.buildImageCmd(baseDir).exec();
 
 		StringWriter logwriter = new StringWriter();
 
 		try {
 			LineIterator itr = IOUtils.lineIterator(
-					response.getEntityInputStream(), "UTF-8");
+					response, "UTF-8");
 			while (itr.hasNext()) {
 				String line = itr.next();
 				logwriter.write(line + "\n");
 				LOG.info(line);
 			}
 		} finally {
-			IOUtils.closeQuietly(response.getEntityInputStream());
+			IOUtils.closeQuietly(response);
 		}
 
 		String fullLog = logwriter.toString();
@@ -150,7 +150,7 @@ public class BuildImageCmdTest extends AbstractDockerClientTest {
 		tmpContainers.add(container.getId());
 
 		// Log container
-		ClientResponse logResponse = logContainer(container
+		InputStream logResponse = logContainer(container
 				.getId());
 
 		assertThat(logResponseStream(logResponse), containsString(expectedText));
@@ -159,7 +159,7 @@ public class BuildImageCmdTest extends AbstractDockerClientTest {
 	}
 
 
-	private ClientResponse logContainer(String containerId) {
+	private InputStream logContainer(String containerId) {
 		return dockerClient.logContainerCmd(containerId).withStdErr().withStdOut().exec();
 	}
 
@@ -169,20 +169,20 @@ public class BuildImageCmdTest extends AbstractDockerClientTest {
 		File baseDir = new File(Thread.currentThread().getContextClassLoader()
 				.getResource("netcat").getFile());
 
-		ClientResponse response = dockerClient.buildImageCmd(baseDir).withNoCache().exec();
+		InputStream response = dockerClient.buildImageCmd(baseDir).withNoCache().exec();
 
 		StringWriter logwriter = new StringWriter();
 
 		try {
 			LineIterator itr = IOUtils.lineIterator(
-					response.getEntityInputStream(), "UTF-8");
+					response, "UTF-8");
 			while (itr.hasNext()) {
 				String line = itr.next();
 				logwriter.write(line + "\n");
 				LOG.info(line);
 			}
 		} finally {
-			IOUtils.closeQuietly(response.getEntityInputStream());
+			IOUtils.closeQuietly(response);
 		}
 
 		String fullLog = logwriter.toString();

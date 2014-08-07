@@ -5,10 +5,8 @@ import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.client.DockerException;
-import com.github.dockerjava.client.NotFoundException;
+import com.github.dockerjava.api.NotFoundException;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 
 
@@ -39,21 +37,19 @@ public class InspectImageCmd extends AbstrDockerCmd<InspectImageCmd, InspectImag
     public String toString() {
         return "inspect " + imageId;
     }
+    
+    /**
+     * @throws NotFoundException No such image
+     */
+    @Override
+    public InspectImageResponse exec() throws NotFoundException {
+    	return super.exec();
+    }
 
 	protected InspectImageResponse impl() {
 		WebResource webResource = baseResource.path(String.format("/images/%s/json", imageId));
 
-		try {
-			LOGGER.trace("GET: {}", webResource);
-			return webResource.accept(MediaType.APPLICATION_JSON).get(InspectImageResponse.class);
-		} catch (UniformInterfaceException exception) {
-			if (exception.getResponse().getStatus() == 404) {
-				throw new NotFoundException(String.format("No such image %s", imageId));
-			} else if (exception.getResponse().getStatus() == 500) {
-				throw new DockerException("Server error", exception);
-			} else {
-				throw new DockerException(exception);
-			}
-		}
+		LOGGER.trace("GET: {}", webResource);
+		return webResource.accept(MediaType.APPLICATION_JSON).get(InspectImageResponse.class);
 	}
 }

@@ -1,16 +1,17 @@
 package com.github.dockerjava.client.command;
 
+import java.io.InputStream;
+
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.client.DockerException;
-import com.github.dockerjava.client.NotFoundException;
+import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.NotFoundException;
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 
@@ -29,7 +30,7 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
  * @param tail
  * 			  - `all` or `<number>`, Output specified number of lines at the end of logs
  */
-public class LogContainerCmd extends AbstrDockerCmd<LogContainerCmd, ClientResponse> {
+public class LogContainerCmd extends AbstrDockerCmd<LogContainerCmd, InputStream> {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(LogContainerCmd.class);
@@ -125,8 +126,16 @@ public class LogContainerCmd extends AbstrDockerCmd<LogContainerCmd, ClientRespo
             .append(containerId)
             .toString();
     }
+    
+    /**
+     * @throws NotFoundException No such container
+     */
+    @Override
+    public InputStream exec() throws NotFoundException {
+    	return super.exec();
+    }
 
-	protected ClientResponse impl() throws DockerException {
+	protected InputStream impl() throws DockerException {
 		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
 		params.add("timestamps", timestamps ? "1" : "0");
 		params.add("stdout", stdout ? "1" : "0");
@@ -137,22 +146,9 @@ public class LogContainerCmd extends AbstrDockerCmd<LogContainerCmd, ClientRespo
 		WebResource webResource = baseResource.path(
 				String.format("/containers/%s/logs", containerId))
 				.queryParams(params);
-
-		try {
-			LOGGER.trace("GET: {}", webResource);
-			return webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
-					.get(ClientResponse.class);
-		} catch (UniformInterfaceException exception) {
-			if (exception.getResponse().getStatus() == 400) {
-				throw new DockerException("bad parameter");
-			} else if (exception.getResponse().getStatus() == 404) {
-				throw new NotFoundException(String.format(
-						"No such container %s", containerId));
-			} else if (exception.getResponse().getStatus() == 500) {
-				throw new DockerException("Server error", exception);
-			} else {
-				throw new DockerException(exception);
-			}
-		}
+		
+		LOGGER.trace("GET: {}", webResource);
+		return webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
+				.get(ClientResponse.class).getEntityInputStream();
 	}
 }
