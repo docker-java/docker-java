@@ -10,6 +10,7 @@ import com.github.dockerjava.api.InternalServerErrorException;
 import com.github.dockerjava.api.NotAcceptableException;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.NotModifiedException;
+import com.github.dockerjava.api.command.DockerCmd;
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;

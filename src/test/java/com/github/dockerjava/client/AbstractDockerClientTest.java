@@ -1,7 +1,8 @@
 package com.github.dockerjava.client;
 
+import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.client.DockerClient;
+import com.github.dockerjava.jaxrs1.JaxRs1Client;
 import com.sun.jersey.api.client.ClientResponse;
 
 import org.slf4j.Logger;
@@ -31,7 +32,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 	public void beforeTest() throws DockerException {
 		LOG.info("======================= BEFORETEST =======================");
 		LOG.info("Connecting to Docker server");
-		dockerClient = new DockerClient();
+		dockerClient = new JaxRs1Client();
 
 		LOG.info("Pulling image 'busybox'");
 		// need to block until image is pulled completely
@@ -91,7 +92,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 	protected String logResponseStream(InputStream response)  {
 		String responseString;
 		try {
-			responseString = DockerClient.asString(response);
+			responseString = JaxRs1Client.asString(response);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
