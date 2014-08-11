@@ -2,7 +2,7 @@ package com.github.dockerjava.api.command;
 
 import java.util.List;
 
-import com.github.dockerjava.client.model.SearchItem;
+import com.github.dockerjava.api.model.SearchItem;
 
 /**
  * Search images

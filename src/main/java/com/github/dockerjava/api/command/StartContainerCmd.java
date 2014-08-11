@@ -2,10 +2,10 @@ package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.NotModifiedException;
-import com.github.dockerjava.client.model.Bind;
-import com.github.dockerjava.client.model.Link;
-import com.github.dockerjava.client.model.LxcConf;
-import com.github.dockerjava.client.model.Ports;
+import com.github.dockerjava.api.model.Bind;
+import com.github.dockerjava.api.model.Link;
+import com.github.dockerjava.api.model.LxcConf;
+import com.github.dockerjava.api.model.Ports;
 
 /**
  * Start a container

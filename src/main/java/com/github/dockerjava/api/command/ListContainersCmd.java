@@ -2,7 +2,7 @@ package com.github.dockerjava.api.command;
 
 import java.util.List;
 
-import com.github.dockerjava.client.model.Container;
+import com.github.dockerjava.api.model.Container;
 
 /**
  * List containers

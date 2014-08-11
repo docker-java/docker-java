@@ -2,9 +2,9 @@ package com.github.dockerjava.client;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.jaxrs1.JaxRs1Client;
-import com.sun.jersey.api.client.ClientResponse;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.LineIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
@@ -12,6 +12,7 @@ import org.testng.ITestResult;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
@@ -29,14 +30,14 @@ public abstract class AbstractDockerClientTest extends Assert {
 	protected List<String> tmpContainers;
 
 
-	public void beforeTest() throws DockerException {
+	public void beforeTest()  {
 		LOG.info("======================= BEFORETEST =======================");
 		LOG.info("Connecting to Docker server");
-		dockerClient = new JaxRs1Client();
+		dockerClient = new DockerClientImpl();
 
 		LOG.info("Pulling image 'busybox'");
 		// need to block until image is pulled completely
-		logResponseStream(dockerClient.pullImageCmd("busybox").withTag("latest").exec());
+		asString(dockerClient.pullImageCmd("busybox").withTag("latest").exec());
 		
 		
 
@@ -89,15 +90,26 @@ public abstract class AbstractDockerClientTest extends Assert {
 				result.getName());
 	}
 
-	protected String logResponseStream(InputStream response)  {
-		String responseString;
+	protected String asString(InputStream response)  {
+	
+		StringWriter logwriter = new StringWriter();
+        
 		try {
-			responseString = JaxRs1Client.asString(response);
+			LineIterator itr = IOUtils.lineIterator(
+					response, "UTF-8");
+
+			while (itr.hasNext()) {
+				String line = itr.next();
+				logwriter.write(line + (itr.hasNext() ? "\n" : ""));
+				//LOG.info("line: "+line);
+			}
+			
+			return logwriter.toString();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
+		} finally {
+			IOUtils.closeQuietly(response);
 		}
-		LOG.info("Container log: {}", responseString);
-		return responseString;
 	}
 	
 	// UTIL

@@ -5,7 +5,7 @@ import java.util.List;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.InternalServerErrorException;
 import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.client.model.ChangeLog;
+import com.github.dockerjava.api.model.ChangeLog;
 
 public interface ContainerDiffCmd extends DockerCmd<List<ChangeLog>> {
 

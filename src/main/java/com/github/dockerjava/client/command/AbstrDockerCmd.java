@@ -12,17 +12,19 @@ import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.NotModifiedException;
 import com.github.dockerjava.api.command.DockerCmd;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
+
+import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.client.WebTarget;
+
 
 public abstract class AbstrDockerCmd<T extends AbstrDockerCmd<T, RES_T>, RES_T> implements DockerCmd<RES_T> {
     
     private final static Logger LOGGER = LoggerFactory.getLogger(AbstrDockerCmd.class);
 
-	protected WebResource baseResource;
+	protected WebTarget baseResource;
 
 	@SuppressWarnings("unchecked")
-	public T withBaseResource(WebResource baseResource) {
+	public T withBaseResource(WebTarget baseResource) {
 		this.baseResource = baseResource;
 		return (T) this;
 	}
@@ -39,7 +41,7 @@ public abstract class AbstrDockerCmd<T extends AbstrDockerCmd<T, RES_T>, RES_T> 
 		
 		try {
 			return impl();
-		} catch (UniformInterfaceException exception) {
+		} catch (ClientErrorException exception) {
 			int status = exception.getResponse().getStatus();
 			switch(status) {
 				case 204: return null;
@@ -54,7 +56,8 @@ public abstract class AbstrDockerCmd<T extends AbstrDockerCmd<T, RES_T>, RES_T> 
 		}		
 	}
 	
-	protected DockerException toDockerException(UniformInterfaceException exception) {
+	protected DockerException toDockerException(ClientErrorException exception) {
+		LOGGER.info("toDockerException");
 		return new DockerException(exception.getMessage(), exception.getResponse().getStatus(), exception);
 	} 
 }

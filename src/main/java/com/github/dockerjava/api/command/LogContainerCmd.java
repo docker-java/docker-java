@@ -39,6 +39,8 @@ public interface LogContainerCmd extends DockerCmd<InputStream>{
 
 	public LogContainerCmd withFollowStream(boolean followStream);
 
+	public LogContainerCmd withTimestamps();
+	
 	public LogContainerCmd withTimestamps(boolean timestamps);
 
 	public LogContainerCmd withStdOut();

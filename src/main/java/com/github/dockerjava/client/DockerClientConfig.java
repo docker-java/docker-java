@@ -137,7 +137,7 @@ public class DockerClientConfig {
                     .withUsername(p.getProperty("docker.io.username"))
                     .withPassword(p.getProperty("docker.io.password"))
                     .withEmail(p.getProperty("docker.io.email"))
-                    .withReadTimeout(Integer.valueOf(p.getProperty("docker.io.readTimeout", "1000")))
+                    .withReadTimeout(Integer.valueOf(p.getProperty("docker.io.readTimeout", "0")))
                     .withLoggingFilter(Boolean.valueOf(p.getProperty("docker.io.enableLoggingFilter", "true")));
         }
 

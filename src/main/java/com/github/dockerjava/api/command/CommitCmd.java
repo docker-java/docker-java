@@ -1,9 +1,8 @@
 package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.client.model.ExposedPorts;
-import com.github.dockerjava.client.model.Volumes;
-import com.github.dockerjava.jaxrs1.command.CommitCommand;
+import com.github.dockerjava.api.model.ExposedPorts;
+import com.github.dockerjava.api.model.Volumes;
 
 /**
 *
@@ -14,7 +13,7 @@ public interface CommitCmd extends DockerCmd<String>{
 
 	public String getContainerId();
 	
-	public CommitCommand withContainerId(String containerId);
+	public CommitCmd withContainerId(String containerId);
 
 	public String getRepository();
 

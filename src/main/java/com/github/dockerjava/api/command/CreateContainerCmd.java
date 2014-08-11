@@ -2,8 +2,8 @@ package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.ConflictException;
 import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.client.model.ExposedPort;
-import com.github.dockerjava.client.model.Volume;
+import com.github.dockerjava.api.model.ExposedPort;
+import com.github.dockerjava.api.model.Volume;
 
 public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 
