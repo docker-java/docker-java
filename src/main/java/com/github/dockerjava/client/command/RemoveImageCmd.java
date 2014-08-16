@@ -6,9 +6,10 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.client.DockerException;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
+
+import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
 
 /**
  *
@@ -72,14 +73,14 @@ public class RemoveImageCmd extends AbstrDockerCmd<RemoveImageCmd, Void> {
 		Preconditions.checkState(!StringUtils.isEmpty(imageId), "Image ID can't be empty");
 
 		try {
-			WebResource webResource = baseResource.path("/images/" + imageId)
+			WebTarget webResource = baseResource.path("/images/" + imageId)
 					.queryParam("force", force ? "1" : "0").queryParam("noprune", noPrune ? "1" : "0");
 
 			LOGGER.trace("DELETE: {}", webResource);
-			webResource.delete(ClientResponse.class);
+			webResource.request().delete(Response.class);
 
 
-		} catch (UniformInterfaceException exception) {
+		} catch (ClientErrorException exception) {
 			if (exception.getResponse().getStatus() == 204) {
 				//no error
 				LOGGER.trace("Successfully removed image " + imageId);

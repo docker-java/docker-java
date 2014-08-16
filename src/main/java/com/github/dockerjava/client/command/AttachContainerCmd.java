@@ -1,5 +1,6 @@
 package com.github.dockerjava.client.command;
 
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
@@ -9,10 +10,10 @@ import org.slf4j.LoggerFactory;
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.NotFoundException;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
+
+import static javax.ws.rs.client.Entity.entity;
 
 /**
  * Attach to container
@@ -29,7 +30,7 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
  *            - true or false, if true, print timestamps for every log line.
  *            Defaults to false.
  */
-public class AttachContainerCmd extends	AbstrDockerCmd<AttachContainerCmd, ClientResponse> {
+public class AttachContainerCmd extends	AbstrDockerCmd<AttachContainerCmd, Response> {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AttachContainerCmd.class);
@@ -109,23 +110,20 @@ public class AttachContainerCmd extends	AbstrDockerCmd<AttachContainerCmd, Clien
 		return this;
 	}
 
-	protected ClientResponse impl() throws DockerException {
-		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-		params.add("logs", logs ? "1" : "0");
-		params.add("timestamps", timestamps ? "1" : "0");
-		params.add("stdout", stdout ? "1" : "0");
-		params.add("stderr", stderr ? "1" : "0");
-		params.add("follow", followStream ? "1" : "0");
-
-		WebResource webResource = baseResource.path(
-				String.format("/containers/%s/attach", containerId))
-				.queryParams(params);
+	protected Response impl() throws DockerException {
+		WebTarget webResource = baseResource.path("/containers/{id}/attach")
+                .resolveTemplate("{id}", containerId)
+                .queryParam("logs", logs ? "1" : "0")
+                .queryParam("timestamps", timestamps ? "1" : "0")
+                .queryParam("stdout", stdout ? "1" : "0")
+                .queryParam("stderr", stderr ? "1" : "0")
+                .queryParam("follow", followStream ? "1" : "0");
 
 		try {
 			LOGGER.trace("POST: {}", webResource);
-			return webResource.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
-					.post(ClientResponse.class);
-		} catch (UniformInterfaceException exception) {
+			return webResource.request().accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
+					.post(entity(null, MediaType.APPLICATION_JSON), Response.class);
+		} catch (ClientErrorException exception) {
 			if (exception.getResponse().getStatus() == 400) {
 				throw new DockerException("bad parameter");
 			} else if (exception.getResponse().getStatus() == 404) {

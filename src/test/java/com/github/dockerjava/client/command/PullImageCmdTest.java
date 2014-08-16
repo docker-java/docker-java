@@ -18,7 +18,8 @@ import org.testng.annotations.Test;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
 import com.github.dockerjava.client.model.Info;
-import com.sun.jersey.api.client.ClientResponse;
+
+import javax.ws.rs.core.Response;
 
 public class PullImageCmdTest extends AbstractDockerClientTest {
 
@@ -70,7 +71,7 @@ public class PullImageCmdTest extends AbstractDockerClientTest {
 		LOG.info("Pulling image: {}", testImage);
 
 		tmpImgs.add(testImage);
-		ClientResponse response = dockerClient.pullImageCmd(testImage).exec();
+		Response response = dockerClient.pullImageCmd(testImage).exec();
 
 		assertThat(logResponseStream(response),
 				containsString("Download complete"));

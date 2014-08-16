@@ -1,5 +1,7 @@
 package com.github.dockerjava.client.command;
 
+import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.slf4j.Logger;
@@ -7,10 +9,10 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.client.DockerException;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
+
+import static javax.ws.rs.client.Entity.entity;
 
 
 /**
@@ -92,20 +94,16 @@ public class TagImageCmd extends AbstrDockerCmd<TagImageCmd, Integer>  {
     }
 
 	protected Integer impl() {
-
-		MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-		params.add("repo", repository);
-		params.add("tag", tag);
-		params.add("force", force ? "1" : "0");
-
-		WebResource webResource = baseResource.path("/images/" + imageId + "/tag").queryParams(
-				params);
+		WebTarget webResource = baseResource.path("/images/" + imageId + "/tag")
+                .queryParam("repo", repository)
+                .queryParam("tag", tag)
+                .queryParam("force", force ? "1" : "0");
 
 		try {
 			LOGGER.trace("POST: {}", webResource);
-			ClientResponse resp = webResource.post(ClientResponse.class);
+			Response resp = webResource.request().post(entity(null, MediaType.APPLICATION_JSON), Response.class);
 			return resp.getStatus();
-		} catch (UniformInterfaceException exception) {
+		} catch (ClientErrorException exception) {
 			throw new DockerException(exception);
 		}
 	}

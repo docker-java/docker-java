@@ -18,7 +18,8 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.client.DockerException;
-import com.sun.jersey.api.client.ClientResponse;
+
+import javax.ws.rs.core.Response;
 
 public class LogContainerCmdTest extends AbstractDockerClientTest {
 
@@ -60,7 +61,7 @@ public class LogContainerCmdTest extends AbstractDockerClientTest {
 
 		assertThat(exitCode, equalTo(0));
 
-		ClientResponse response = dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec();
+		Response response = dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec();
 
 		assertThat(logResponseStream(response), endsWith(snippet));
 	}

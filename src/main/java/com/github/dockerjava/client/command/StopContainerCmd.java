@@ -1,5 +1,7 @@
 package com.github.dockerjava.client.command;
 
+import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
@@ -7,8 +9,9 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.client.DockerException;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
+import javax.ws.rs.client.WebTarget;
+
+import static javax.ws.rs.client.Entity.entity;
 
 /**
  * Stop a running container.
@@ -58,13 +61,13 @@ public class StopContainerCmd extends AbstrDockerCmd<StopContainerCmd, Void> {
     }
 
 	protected Void impl() throws DockerException {
-		WebResource webResource = baseResource.path(String.format("/containers/%s/stop", containerId))
+		WebTarget webResource = baseResource.path("/containers/{id}/stop").resolveTemplate("id", containerId)
 				.queryParam("t", String.valueOf(timeout));
 
 		try {
 			LOGGER.trace("POST: {}", webResource);
-			webResource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).post();
-		} catch (UniformInterfaceException exception) {
+			webResource.request().accept(MediaType.APPLICATION_JSON).post(entity(null, MediaType.APPLICATION_JSON));
+		} catch (ClientErrorException exception) {
 			if (exception.getResponse().getStatus() == 404) {
 				LOGGER.warn("No such container {}", containerId);
 			} else if(exception.getResponse().getStatus() == 304) {
