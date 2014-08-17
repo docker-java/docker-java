@@ -214,5 +214,29 @@ public class StartContainerCmdTest extends AbstractDockerClientTest {
 
 	}
 
+	@Test
+    public void startContainerWithNetworkMode() throws DockerException {
+
+        CreateContainerResponse container = dockerClient
+                .createContainerCmd("busybox")
+                .withCmd("true").exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainerResponse = dockerClient
+                .inspectContainerCmd(container.getId()).exec();
+
+        dockerClient.startContainerCmd(container.getId()).withNetworkMode("host").exec();
+
+        inspectContainerResponse = dockerClient.inspectContainerCmd(container
+                .getId()).exec();
+
+        assertThat(inspectContainerResponse.getHostConfig().getNetworkMode(),
+                is(equalTo("host")));
+
+        tmpContainers.add(container.getId());
+    }
 
 }

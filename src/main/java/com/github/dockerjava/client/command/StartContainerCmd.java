@@ -5,6 +5,7 @@ import javax.ws.rs.core.MediaType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.client.model.*;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +51,10 @@ public class StartContainerCmd extends AbstrDockerCmd<StartContainerCmd, Void> {
 	@JsonProperty("VolumesFrom")
 	private String volumesFrom;
 	
+    @JsonProperty("NetworkMode")          
+    private String  networkMode = "bridge";
+
+	
 	public StartContainerCmd(String containerId) {
 		withContainerId(containerId);
 	}
@@ -88,10 +93,13 @@ public class StartContainerCmd extends AbstrDockerCmd<StartContainerCmd, Void> {
 		return volumesFrom;
 	}
 
-	
 	public String getContainerId() {
 		return containerId;
 	}
+	   
+    public String getNetworkMode() {        
+        return networkMode;
+    }
 
 	@JsonIgnore
 	public StartContainerCmd withBinds(Bind... binds) {
@@ -148,7 +156,13 @@ public class StartContainerCmd extends AbstrDockerCmd<StartContainerCmd, Void> {
 				.checkNotNull(containerId, "containerId was not specified");
 		this.containerId = containerId;
 		return this;
-	}
+    }
+
+    public StartContainerCmd withNetworkMode(String networkMode) {
+        Preconditions.checkNotNull(networkMode, "networkMode was not specified");
+        this.networkMode = networkMode;
+        return this;
+    }
 
 	@Override
 	public String toString() {
