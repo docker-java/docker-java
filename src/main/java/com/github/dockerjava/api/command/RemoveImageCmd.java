@@ -27,5 +27,8 @@ public interface RemoveImageCmd extends DockerCmd<Void>{
 	 * @throws NotFoundException No such image
 	 */
 	public Void exec() throws NotFoundException;
+	
+	public static interface Exec extends DockerCmdExec<RemoveImageCmd, Void> {
+	}
 
 }

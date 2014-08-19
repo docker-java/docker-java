@@ -19,5 +19,8 @@ public interface KillContainerCmd extends DockerCmd<Void> {
 	 * @throws NotFoundException No such container
 	 */
 	public Void exec() throws NotFoundException;
+	
+	public static interface Exec extends DockerCmdExec<KillContainerCmd, Void> {
+	}
 
 }

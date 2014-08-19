@@ -98,5 +98,8 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 	 */
 	public CreateContainerResponse exec() throws NotFoundException,
 			ConflictException;
+	
+	public static interface Exec extends DockerCmdExec<CreateContainerCmd, CreateContainerResponse> {
+	}
 
 }

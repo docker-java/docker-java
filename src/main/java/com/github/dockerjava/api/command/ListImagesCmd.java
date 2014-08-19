@@ -19,5 +19,8 @@ public interface ListImagesCmd extends DockerCmd<List<Image>> {
 	public ListImagesCmd withShowAll(boolean showAll);
 
 	public ListImagesCmd withFilter(String filter);
+	
+	public static interface Exec extends DockerCmdExec<ListImagesCmd, List<Image>> {
+	}
 
 }

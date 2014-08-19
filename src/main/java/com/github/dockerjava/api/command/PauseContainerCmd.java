@@ -18,5 +18,8 @@ public interface PauseContainerCmd extends DockerCmd<Void>{
 	 * @throws NotFoundException No such container
 	 */
 	public Void exec() throws NotFoundException;
+	
+	public static interface Exec extends DockerCmdExec<PauseContainerCmd, Void> {
+	}
 
 }

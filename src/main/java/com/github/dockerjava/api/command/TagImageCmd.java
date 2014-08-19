@@ -28,5 +28,8 @@ public interface TagImageCmd extends DockerCmd<Void> {
 	public TagImageCmd withForce();
 
 	public TagImageCmd withForce(boolean force);
+	
+	public static interface Exec extends DockerCmdExec<TagImageCmd, Void> {
+	}
 
 }

@@ -1,5 +1,7 @@
 package com.github.dockerjava.api.command;
 
+import java.io.InputStream;
+
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.model.ExposedPorts;
 import com.github.dockerjava.api.model.Volumes;
@@ -107,5 +109,8 @@ public interface CommitCmd extends DockerCmd<String>{
 	 * @throws NotFoundException No such container
 	 */
 	public String exec() throws NotFoundException;
+	
+	public static interface Exec extends DockerCmdExec<CommitCmd, String> {
+	}
 
 }

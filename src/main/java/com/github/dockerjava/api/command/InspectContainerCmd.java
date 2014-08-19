@@ -12,5 +12,8 @@ public interface InspectContainerCmd extends DockerCmd<InspectContainerResponse>
 	 * @throws NotFoundException No such container
 	 */
 	public InspectContainerResponse exec() throws NotFoundException;
+	
+	public static interface Exec extends DockerCmdExec<InspectContainerCmd, InspectContainerResponse> {
+	}
 
 }

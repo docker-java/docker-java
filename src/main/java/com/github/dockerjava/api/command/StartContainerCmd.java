@@ -1,11 +1,14 @@
 package com.github.dockerjava.api.command;
 
+import java.util.List;
+
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.NotModifiedException;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.LxcConf;
 import com.github.dockerjava.api.model.Ports;
+import com.github.dockerjava.api.model.SearchItem;
 
 /**
  * Start a container
@@ -53,5 +56,8 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 	 * @throws NotModifiedException Container already started
 	 */
 	public Void exec() throws NotFoundException, NotModifiedException;
+	
+	public static interface Exec extends DockerCmdExec<StartContainerCmd, Void> {
+	}
 
 }

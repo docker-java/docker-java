@@ -35,5 +35,8 @@ public interface ListContainersCmd extends DockerCmd<List<Container>>{
 	public ListContainersCmd withSince(String since);
 
 	public ListContainersCmd withBefore(String before);
+	
+	public static interface Exec extends DockerCmdExec<ListContainersCmd, List<Container>> {
+	}
 
 }

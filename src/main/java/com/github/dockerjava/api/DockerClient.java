@@ -43,11 +43,11 @@ public interface DockerClient extends Closeable {
 	 */
 	public AuthCmd authCmd();
 
-	public InfoCmd infoCmd() throws DockerException;
+	public InfoCmd infoCmd();
 
 	public PingCmd pingCmd();
 
-	public VersionCmd versionCmd() throws DockerException;
+	public VersionCmd versionCmd();
 
 	/**
 	 * * IMAGE API *

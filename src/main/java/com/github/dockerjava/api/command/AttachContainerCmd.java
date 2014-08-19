@@ -57,5 +57,8 @@ public interface AttachContainerCmd extends DockerCmd<InputStream>{
 	 */
 	@Override
 	public InputStream exec() throws NotFoundException;
+	
+	public static interface Exec extends DockerCmdExec<AttachContainerCmd, InputStream> {
+	}
 
 }

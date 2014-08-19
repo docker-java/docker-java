@@ -1,0 +1,100 @@
+package com.github.dockerjava.core.command;
+
+import java.io.InputStream;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
+import com.github.dockerjava.api.command.DockerCmdExec;
+import com.google.common.base.Preconditions;
+
+/**
+ *
+ * Copy files or folders from a container.
+ *
+ */
+public class CopyFileFromContainerCmdImpl extends AbstrDockerCmd<CopyFileFromContainerCmd, InputStream> implements CopyFileFromContainerCmd {
+
+	private String containerId;
+	
+	@JsonProperty("HostPath")
+    private String hostPath = ".";
+
+    @JsonProperty("Resource")
+    private String resource;
+
+	public CopyFileFromContainerCmdImpl(DockerCmdExec<CopyFileFromContainerCmd, InputStream> exec, String containerId, String resource) {
+		super(exec);
+		withContainerId(containerId);
+		withResource(resource);
+	}
+
+    @Override
+	public String getContainerId() {
+        return containerId;
+    }
+
+    @Override
+	public String getResource() {
+        return resource;
+    }
+
+    @Override
+	public CopyFileFromContainerCmdImpl withContainerId(String containerId) {
+		Preconditions.checkNotNull(containerId, "containerId was not specified");
+		this.containerId = containerId;
+		return this;
+	}
+
+	@Override
+	public CopyFileFromContainerCmdImpl withResource(String resource) {
+		Preconditions.checkNotNull(resource, "resource was not specified");
+		this.resource = resource;
+		return this;
+	}
+	
+	@Override
+	public String getHostPath() {
+		return hostPath;
+	}
+	
+	@Override
+	public CopyFileFromContainerCmdImpl withHostPath(String hostPath) {
+		Preconditions.checkNotNull(hostPath, "hostPath was not specified");
+		this.hostPath = hostPath;
+		return this;
+	}
+
+	@Override
+    public String toString() {
+        return new ToStringBuilder(this).append("cp ")
+            .append(containerId)
+            .append(":")
+            .append(resource)
+            .toString();
+    }
+    
+    /**
+     * @throws NotFoundException No such container
+     */
+	@Override
+    public InputStream exec() throws NotFoundException {
+    	return super.exec();
+    }
+
+//	protected InputStream impl() throws DockerException {
+//
+//		CopyFileFromContainerCmd command = this;
+//		
+//		WebTarget webResource =
+//				baseResource.path("/containers/{id}/copy").resolveTemplate("id", command.getContainerId());
+//
+//		LOGGER.trace("POST: " + webResource.toString());
+//		
+//		return webResource.request().accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).post(entity(command, MediaType.APPLICATION_JSON), Response.class).readEntity(InputStream.class);		
+//	}
+
+
+}

@@ -25,5 +25,8 @@ public interface StopContainerCmd extends DockerCmd<Void> {
 	 * @throws NotModifiedException Container already stopped
 	 */
 	public Void exec() throws NotFoundException, NotModifiedException;
+	
+	public static interface Exec extends DockerCmdExec<StopContainerCmd, Void> {
+	}
 
 }

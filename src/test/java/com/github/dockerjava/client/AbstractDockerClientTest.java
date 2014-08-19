@@ -2,6 +2,7 @@ package com.github.dockerjava.client;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.core.DockerClientImpl;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;

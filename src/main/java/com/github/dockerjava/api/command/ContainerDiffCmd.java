@@ -21,5 +21,8 @@ public interface ContainerDiffCmd extends DockerCmd<List<ChangeLog>> {
 	 * @throws DockerException unexpected http status code
 	 */
 	public List<ChangeLog> exec() throws NotFoundException;
+	
+	public static interface Exec extends DockerCmdExec<ContainerDiffCmd, List<ChangeLog>> {
+	}
 
 }

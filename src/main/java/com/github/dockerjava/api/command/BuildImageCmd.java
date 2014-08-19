@@ -1,6 +1,5 @@
 package com.github.dockerjava.api.command;
 
-import java.io.File;
 import java.io.InputStream;
 
 /**
@@ -14,7 +13,7 @@ public interface BuildImageCmd extends DockerCmd<InputStream>{
 
 	public BuildImageCmd withTag(String tag);
 
-	public File getDockerFolder();
+	public InputStream getTarInputStream();
 
 	public String getTag();
 
@@ -23,6 +22,8 @@ public interface BuildImageCmd extends DockerCmd<InputStream>{
 	public boolean hasRemoveEnabled();
 
 	public boolean isQuiet();
+	
+	public BuildImageCmd withTarInputStream(InputStream tarInputStream);
 
 	public BuildImageCmd withNoCache();
 
@@ -31,5 +32,8 @@ public interface BuildImageCmd extends DockerCmd<InputStream>{
 	public BuildImageCmd withRemove(boolean rm);
 
 	public BuildImageCmd withQuiet(boolean quiet);
+	
+	public static interface Exec extends DockerCmdExec<BuildImageCmd, InputStream> {
+	}
 
 }

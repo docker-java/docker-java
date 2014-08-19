@@ -7,6 +7,8 @@ public interface CreateImageCmd extends DockerCmd<CreateImageResponse> {
 	public String getRepository();
 
 	public String getTag();
+	
+	public InputStream getImageStream();
 
 	/**
 	 * @param repository        the repository to import to
@@ -22,6 +24,9 @@ public interface CreateImageCmd extends DockerCmd<CreateImageResponse> {
 	 * @param tag               any tag for this image
 	 */
 	public CreateImageCmd withTag(String tag);
+	
+	public static interface Exec extends DockerCmdExec<CreateImageCmd, CreateImageResponse> {
+	}
 
 
 }

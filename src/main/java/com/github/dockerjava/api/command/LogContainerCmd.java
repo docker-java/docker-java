@@ -59,5 +59,9 @@ public interface LogContainerCmd extends DockerCmd<InputStream>{
 	 * @throws NotFoundException No such container
 	 */
 	public InputStream exec() throws NotFoundException;
+	
+	public static interface Exec extends DockerCmdExec<LogContainerCmd, InputStream> {
+	}
+
 
 }
