@@ -53,7 +53,7 @@ Latest SNAPSHOT is available from maven repo: https://oss.sonatype.org/content/g
 
 ## Documentation
 
-For code examples, please look at the [Wiki](https://github.com/docker-java/docker-java/wiki) or [Test cases](https://github.com/docker-java/docker-java/tree/master/src/test/java/com/github/dockerjava/client/command "Test cases")
+For code examples, please look at the [Wiki](https://github.com/docker-java/docker-java/wiki) or [Test cases](https://github.com/docker-java/docker-java/tree/master/src/test/java/com/github/dockerjava/core/command "Test cases")
 
 ## Configuration
 
@@ -70,7 +70,7 @@ There are three ways to configure, in descending order of precedence:
 ##### Programatic:
 In your application, e.g.
 
-    DockerClient docker = new DockerClient("http://localhost:2375");
+    DockerClient docker = new DockerClientImpl("http://localhost:2375");
     docker.setCredentials("dockeruser", "ilovedocker", "dockeruser@github.com");`
 
 ##### System Properties:
