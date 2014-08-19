@@ -4,6 +4,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.NotModifiedException;
 import com.github.dockerjava.api.command.DockerCmdExec;
@@ -14,6 +15,7 @@ import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.Links;
 import com.github.dockerjava.api.model.LxcConf;
 import com.github.dockerjava.api.model.Ports;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -46,6 +48,9 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 
 	@JsonProperty("VolumesFrom")
 	private String volumesFrom;
+	
+	@JsonProperty("NetworkMode")          
+    private String networkMode = "bridge";
 	
 	public StartContainerCmdImpl(DockerCmdExec<StartContainerCmd, Void> exec, String containerId) {
 		super(exec);
@@ -94,11 +99,15 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 		return volumesFrom;
 	}
 
-	
 	@Override
 	public String getContainerId() {
 		return containerId;
 	}
+	   
+    @Override
+	public String getNetworkMode() {        
+        return networkMode;
+    }
 
 	@Override
 	@JsonIgnore
@@ -164,7 +173,14 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 				.checkNotNull(containerId, "containerId was not specified");
 		this.containerId = containerId;
 		return this;
-	}
+    }
+
+    @Override
+	public StartContainerCmd withNetworkMode(String networkMode) {
+        Preconditions.checkNotNull(networkMode, "networkMode was not specified");
+        this.networkMode = networkMode;
+        return this;
+    }
 
 	@Override
 	public String toString() {

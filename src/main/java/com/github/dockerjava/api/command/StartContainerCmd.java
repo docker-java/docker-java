@@ -57,6 +57,10 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 	 */
 	public Void exec() throws NotFoundException, NotModifiedException;
 	
+	public abstract String getNetworkMode();
+
+	public abstract StartContainerCmd withNetworkMode(String networkMode);
+
 	public static interface Exec extends DockerCmdExec<StartContainerCmd, Void> {
 	}
 
