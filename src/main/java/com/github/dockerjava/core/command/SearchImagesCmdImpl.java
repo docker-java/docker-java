@@ -2,9 +2,9 @@ package com.github.dockerjava.core.command;
 
 import java.util.List;
 
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.command.SearchImagesCmd;
 import com.github.dockerjava.api.model.SearchItem;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -17,7 +17,7 @@ public class SearchImagesCmdImpl extends AbstrDockerCmd<SearchImagesCmd, List<Se
 
 	private String term;
 
-	public SearchImagesCmdImpl(DockerCmdExec<SearchImagesCmd, List<SearchItem>> exec, String term) {
+	public SearchImagesCmdImpl(SearchImagesCmd.Exec exec, String term) {
 		super(exec);
 		withTerm(term);
 	}
@@ -40,13 +40,4 @@ public class SearchImagesCmdImpl extends AbstrDockerCmd<SearchImagesCmd, List<Se
             .append(term)
             .toString();
     }
-
-//	protected List<SearchItem> impl() {
-//
-//		WebTarget webResource = baseResource.path("/images/search").queryParam("term", term);
-//		
-//		LOGGER.trace("GET: {}", webResource);
-//		return webResource.request().accept(MediaType.APPLICATION_JSON).get(new GenericType<List<SearchItem>>() {
-//        });
-//	}
 }

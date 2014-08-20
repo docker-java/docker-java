@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.NotModifiedException;
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.command.StartContainerCmd;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Binds;
@@ -52,7 +51,7 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	@JsonProperty("NetworkMode")          
     private String networkMode = "bridge";
 	
-	public StartContainerCmdImpl(DockerCmdExec<StartContainerCmd, Void> exec, String containerId) {
+	public StartContainerCmdImpl(StartContainerCmd.Exec exec, String containerId) {
 		super(exec);
 		withContainerId(containerId);
 	}
@@ -195,15 +194,4 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	public Void exec() throws NotFoundException, NotModifiedException {
 		return super.exec();
 	}
-
-//	protected Void impl() throws DockerException {
-//
-//		WebTarget webResource = baseResource.path("/containers/{id}/start")
-//				.resolveTemplate("id", containerId);
-//
-//		LOGGER.trace("POST: {}", webResource);
-//		webResource.request().accept(MediaType.APPLICATION_JSON).post(entity(this, MediaType.APPLICATION_JSON));
-//
-//		return null;
-//	}
 }

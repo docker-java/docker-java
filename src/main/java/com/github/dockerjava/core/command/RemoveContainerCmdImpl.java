@@ -1,8 +1,8 @@
 package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.command.RemoveContainerCmd;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -17,7 +17,7 @@ public class RemoveContainerCmdImpl extends	AbstrDockerCmd<RemoveContainerCmd, V
 
 	private boolean removeVolumes, force;
 
-	public RemoveContainerCmdImpl(DockerCmdExec<RemoveContainerCmd, Void> exec, String containerId) {
+	public RemoveContainerCmdImpl(RemoveContainerCmd.Exec exec, String containerId) {
 		super(exec);
 		withContainerId(containerId);
 	}
@@ -76,18 +76,4 @@ public class RemoveContainerCmdImpl extends	AbstrDockerCmd<RemoveContainerCmd, V
 	public Void exec() throws NotFoundException {
 		return super.exec();
 	}
-
-//	protected Void impl() throws DockerException {
-//		Preconditions.checkState(!StringUtils.isEmpty(containerId), "Container ID can't be empty");
-//
-//		WebTarget webResource = baseResource.path("/containers/" + containerId)
-//				.queryParam("v", removeVolumes ? "1" : "0")
-//				.queryParam("force", force ? "1" : "0");
-//		
-//		LOGGER.trace("DELETE: {}", webResource);
-//		String response = webResource.request().accept(MediaType.APPLICATION_JSON).delete(String.class);
-//		LOGGER.trace("Response: {}", response);
-//
-//		return null;
-//	}
 }

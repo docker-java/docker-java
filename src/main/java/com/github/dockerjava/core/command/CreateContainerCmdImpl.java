@@ -4,15 +4,16 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import com.github.dockerjava.api.ConflictException;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.ExposedPorts;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.Volumes;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -45,7 +46,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @JsonProperty("DisableNetwork") private boolean disableNetwork = false;
     @JsonProperty("ExposedPorts")   private ExposedPorts exposedPorts = new ExposedPorts();
 	
-	public CreateContainerCmdImpl(DockerCmdExec<CreateContainerCmd, CreateContainerResponse> exec, String image) {
+	public CreateContainerCmdImpl(CreateContainerCmd.Exec exec, String image) {
 		super(exec);
 		Preconditions.checkNotNull(image, "image was not specified");
 		withImage(image);
@@ -304,16 +305,4 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public CreateContainerResponse exec() throws NotFoundException, ConflictException {
     	return super.exec();
     }
-
-//	protected CreateContainerResponse impl() {
-//		WebTarget webResource = baseResource.path("/containers/create");
-//
-//        if (name != null) {
-//            webResource = webResource.queryParam("name", name);
-//        }
-//
-//		LOGGER.trace("POST: {} ", webResource);
-//		return webResource.request().accept(MediaType.APPLICATION_JSON)
-//				.post(entity(this, MediaType.APPLICATION_JSON), CreateContainerResponse.class);
-
 }    

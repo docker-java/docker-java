@@ -17,8 +17,8 @@ import org.apache.commons.io.FileUtils;
 
 import com.github.dockerjava.api.DockerClientException;
 import com.github.dockerjava.api.command.BuildImageCmd;
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.core.CompressArchiveUtil;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -42,13 +42,13 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, InputStream
 	private boolean remove = true;
 	private boolean quiet;
 
-	public BuildImageCmdImpl(DockerCmdExec<BuildImageCmd, InputStream> exec, File dockerFolder) {
+	public BuildImageCmdImpl(BuildImageCmd.Exec exec, File dockerFolder) {
 		super(exec);
 		Preconditions.checkNotNull(dockerFolder, "dockerFolder is null");
 		withTarInputStream(buildDockerFolderTar(dockerFolder));
 	}
 
-	public BuildImageCmdImpl(DockerCmdExec<BuildImageCmd, InputStream> exec, InputStream tarInputStream) {
+	public BuildImageCmdImpl(BuildImageCmd.Exec exec, InputStream tarInputStream) {
 		super(exec);
 		Preconditions.checkNotNull(tarInputStream, "tarInputStream is null");
 		withTarInputStream(tarInputStream);
@@ -125,32 +125,6 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, InputStream
 				.append(!remove ? "--rm=false " : "")
 				.toString();
 	}
-	
-
-
-//	protected InputStream impl() {
-//
-//		BuildImageCmd command = this;
-//		
-//		WebTarget webResource = baseResource.path("/build")
-//                .queryParam("t", tag);
-//        if (command.hasNoCacheEnabled()) {
-//            webResource = webResource.queryParam("nocache", "true");
-//        }
-//        if (command.hasRemoveEnabled()) {
-//            webResource = webResource.queryParam("rm", "true");
-//        }
-//        if (command.isQuiet()) {
-//            webResource = webResource.queryParam("q", "true");
-//        }
-//		
-//		LOGGER.trace("POST: {}", webResource);
-//		return webResource
-//                .request()
-//				.accept(MediaType.TEXT_PLAIN)
-//				.post(entity(command.getTarInputStream(), "application/tar"), Response.class).readEntity(InputStream.class);
-//		
-//	}
 
 	protected InputStream buildDockerFolderTar(File dockerFolder) {
 		Preconditions.checkArgument(dockerFolder.exists(),

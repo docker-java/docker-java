@@ -2,7 +2,6 @@ package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.UnauthorizedException;
 import com.github.dockerjava.api.command.AuthCmd;
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.model.AuthConfig;
 
 /**
@@ -12,7 +11,7 @@ import com.github.dockerjava.api.model.AuthConfig;
  */
 public class AuthCmdImpl extends AbstrAuthCfgDockerCmd<AuthCmd, Void> implements AuthCmd {
 
-	public AuthCmdImpl(DockerCmdExec<AuthCmd, Void> exec, AuthConfig authConfig) {
+	public AuthCmdImpl(AuthCmd.Exec exec, AuthConfig authConfig) {
 		super(exec);
 		withAuthConfig(authConfig);
 	}

@@ -1,8 +1,8 @@
 package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.command.PauseContainerCmd;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -15,7 +15,7 @@ public class PauseContainerCmdImpl extends AbstrDockerCmd<PauseContainerCmd, Voi
 
 	private String containerId;
 
-	public PauseContainerCmdImpl(DockerCmdExec<PauseContainerCmd, Void> exec, String containerId) {
+	public PauseContainerCmdImpl(PauseContainerCmd.Exec exec, String containerId) {
 		super(exec);
 		withContainerId(containerId);
 	}
@@ -46,16 +46,4 @@ public class PauseContainerCmdImpl extends AbstrDockerCmd<PauseContainerCmd, Voi
 	public Void exec() throws NotFoundException {
 		return super.exec();
 	}
-
-//	protected Void impl() throws DockerException {
-//		WebTarget webResource = baseResource.path("/containers/{id}/pause")
-//				.resolveTemplate("id", containerId);
-//		
-//		LOGGER.trace("POST: {}", webResource);
-//		webResource.request()
-//				.accept(MediaType.APPLICATION_JSON)
-//				.post(entity(null, MediaType.APPLICATION_JSON), Response.class);
-//
-//		return null;
-//	}
 }

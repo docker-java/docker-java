@@ -1,7 +1,7 @@
 package com.github.dockerjava.core.command;
 
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.command.TagImageCmd;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -18,7 +18,7 @@ public class TagImageCmdImpl extends AbstrDockerCmd<TagImageCmd, Void> implement
 
 	private boolean force;
 
-	public TagImageCmdImpl(DockerCmdExec<TagImageCmd, Void> exec, String imageId, String repository, String tag) {
+	public TagImageCmdImpl(TagImageCmd.Exec exec, String imageId, String repository, String tag) {
 		super(exec);
 		withImageId(imageId);
 		withRepository(repository);
@@ -86,16 +86,4 @@ public class TagImageCmdImpl extends AbstrDockerCmd<TagImageCmd, Void> implement
             .append(tag != null ? ":" + tag : "")
             .toString();
     }
-
-
-//	protected Void impl() {
-//		WebTarget webResource = baseResource.path("/images/" + imageId + "/tag")
-//                .queryParam("repo", repository)
-//                .queryParam("tag", tag)
-//                .queryParam("force", force ? "1" : "0");
-//
-//		LOGGER.trace("POST: {}", webResource);
-//		webResource.request().post(entity(null, MediaType.APPLICATION_JSON), Response.class);
-//		return null;
-//	}
 }

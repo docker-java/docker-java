@@ -2,9 +2,9 @@ package com.github.dockerjava.core.command;
 
 import java.util.List;
 
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.model.Container;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -25,7 +25,7 @@ public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, Lis
 	
 	private String sinceId, beforeId;
 	
-	public ListContainersCmdImpl(DockerCmdExec<ListContainersCmd, List<Container>> exec) {
+	public ListContainersCmdImpl(ListContainersCmd.Exec exec) {
 		super(exec);
 	}
 
@@ -97,23 +97,4 @@ public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, Lis
             .append(limit != -1 ? "-n " + limit : "")
             .toString();
     }
-
-//	protected List<Container> impl() {
-//		WebTarget webResource = baseResource.path("/containers/json")
-//                .queryParam("all", showAll ? "1" : "0")
-//                .queryParam("since", sinceId)
-//                .queryParam("before", beforeId)
-//                .queryParam("size", showSize ? "1" : "0");
-//
-//        if (limit >= 0) {
-//            webResource = webResource.queryParam("limit", String.valueOf(limit));
-//        }
-//
-//		LOGGER.trace("GET: {}", webResource);
-//		List<Container> containers = webResource.request().accept(MediaType.APPLICATION_JSON).get(new GenericType<List<Container>>() {
-//        });
-//		LOGGER.trace("Response: {}", containers);
-//
-//		return containers;
-//	}
 }

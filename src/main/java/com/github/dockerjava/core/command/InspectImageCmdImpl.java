@@ -1,9 +1,9 @@
 package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.command.InspectImageCmd;
 import com.github.dockerjava.api.command.InspectImageResponse;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -13,7 +13,7 @@ public class InspectImageCmdImpl extends AbstrDockerCmd<InspectImageCmd, Inspect
 
 	private String imageId;
 
-	public InspectImageCmdImpl(DockerCmdExec<InspectImageCmd, InspectImageResponse> exec,String imageId) {
+	public InspectImageCmdImpl(InspectImageCmd.Exec exec, String imageId) {
 		super(exec);
 		withImageId(imageId);
 	}
@@ -42,11 +42,4 @@ public class InspectImageCmdImpl extends AbstrDockerCmd<InspectImageCmd, Inspect
     public InspectImageResponse exec() throws NotFoundException {
     	return super.exec();
     }
-
-//	protected InspectImageResponse impl() {
-//		WebTarget webResource = baseResource.path("/images/{id}/json").resolveTemplate("id", imageId);
-//
-//		LOGGER.trace("GET: {}", webResource);
-//		return webResource.request().accept(MediaType.APPLICATION_JSON).get(InspectImageResponse.class);
-//	}
 }

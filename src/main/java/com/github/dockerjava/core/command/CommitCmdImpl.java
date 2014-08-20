@@ -3,11 +3,12 @@ package com.github.dockerjava.core.command;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CommitCmd;
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.model.ExposedPorts;
 import com.github.dockerjava.api.model.Volumes;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -73,7 +74,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
     private String workingDir;
 
 
-	public CommitCmdImpl(DockerCmdExec<CommitCmd, String> exec, String containerId) {
+	public CommitCmdImpl(CommitCmd.Exec exec, String containerId) {
 		super(exec);
 		withContainerId(containerId);
 	}
@@ -115,8 +116,6 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 	public boolean hasPauseEnabled() {
         return pause;
     }
-    
-    
 
 	@Override
 	public CommitCmdImpl withAttachStderr(boolean attachStderr) {
@@ -369,22 +368,4 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 	public String exec() throws NotFoundException {
 		return super.exec();
 	}
-
-//	protected String impl() throws DockerException {
-//
-//		CommitCmd command = this;
-//		
-//        WebTarget webResource = baseResource.path("/commit")
-//                .queryParam("container", command.getContainerId())
-//                .queryParam("repo", command.getRepository())
-//                .queryParam("tag", command.getTag())
-//                .queryParam("m", command.getMessage())
-//                .queryParam("author", command.getAuthor())
-//                .queryParam("pause",  command.hasPauseEnabled() ? "1" : "0");
-//		
-//		LOGGER.trace("POST: {}", webResource);
-//		ObjectNode objectNode = webResource.request().accept("application/vnd.docker.raw-stream").post(entity(this, MediaType.APPLICATION_JSON), ObjectNode.class);
-//        return objectNode.get("Id").asText();
-//	
-//	}
 }

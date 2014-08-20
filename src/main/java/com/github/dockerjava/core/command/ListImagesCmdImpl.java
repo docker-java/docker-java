@@ -2,9 +2,9 @@ package com.github.dockerjava.core.command;
 
 import java.util.List;
 
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.model.Image;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -19,7 +19,7 @@ public class ListImagesCmdImpl extends AbstrDockerCmd<ListImagesCmd, List<Image>
 	
 	private boolean showAll = false;
 	
-	public ListImagesCmdImpl(DockerCmdExec<ListImagesCmd, List<Image>> exec) {
+	public ListImagesCmdImpl(ListImagesCmd.Exec exec) {
 		super(exec);
 	}
 
@@ -53,18 +53,4 @@ public class ListImagesCmdImpl extends AbstrDockerCmd<ListImagesCmd, List<Image>
             .append(filter != null ? "--filter " + filter : "")
             .toString();
     }
-    
-//	protected List<Image> impl() {
-//
-//		WebTarget webResource = baseResource
-//                .path("/images/json")
-//                .queryParam("filter", filter)
-//                .queryParam("all", showAll ? "1" : "0");
-//
-//		LOGGER.trace("GET: {}", webResource);
-//		List<Image> images = webResource.request().accept(MediaType.APPLICATION_JSON).get(new GenericType<List<Image>>() {
-//		});
-//		LOGGER.trace("Response: {}", images);
-//		return images;
-//	}
 }

@@ -1,9 +1,9 @@
 package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.command.TopContainerCmd;
 import com.github.dockerjava.api.command.TopContainerResponse;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -15,7 +15,7 @@ public class TopContainerCmdImpl extends AbstrDockerCmd<TopContainerCmd, TopCont
 
 	private String psArgs;
 
-	public TopContainerCmdImpl(DockerCmdExec<TopContainerCmd, TopContainerResponse> exec, String containerId) {
+	public TopContainerCmdImpl(TopContainerCmd.Exec exec, String containerId) {
 		super(exec);
 		withContainerId(containerId);
 	}
@@ -60,15 +60,4 @@ public class TopContainerCmdImpl extends AbstrDockerCmd<TopContainerCmd, TopCont
     public TopContainerResponse exec() throws NotFoundException {
     	return super.exec();
     }
-    
-//	protected TopContainerResponse impl() throws DockerException {
-//		WebTarget webResource = baseResource.path("/containers/{id}/top")
-//				.resolveTemplate("id", containerId);
-//
-//		if(!StringUtils.isEmpty(psArgs))
-//			webResource = webResource.queryParam("ps_args", psArgs);
-//		
-//		LOGGER.trace("GET: {}", webResource);
-//		return webResource.request().accept(MediaType.APPLICATION_JSON).get(TopContainerResponse.class);
-//	}		
 }

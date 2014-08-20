@@ -2,8 +2,8 @@ package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.NotModifiedException;
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.command.StopContainerCmd;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -19,7 +19,7 @@ public class StopContainerCmdImpl extends AbstrDockerCmd<StopContainerCmd, Void>
 
 	private int timeout = 10;
 
-	public StopContainerCmdImpl(DockerCmdExec<StopContainerCmd, Void> exec, String containerId) {
+	public StopContainerCmdImpl(StopContainerCmd.Exec exec, String containerId) {
 		super(exec);
 		withContainerId(containerId);
 	}
@@ -64,15 +64,4 @@ public class StopContainerCmdImpl extends AbstrDockerCmd<StopContainerCmd, Void>
 	public Void exec() throws NotFoundException, NotModifiedException {
 		return super.exec();
 	}
-
-//	protected Void impl() throws DockerException {
-//		WebTarget webResource = baseResource.path("/containers/{id}/stop")
-//				.resolveTemplate("id", containerId)
-//				.queryParam("t", String.valueOf(timeout));
-//		
-//		LOGGER.trace("POST: {}", webResource);
-//		webResource.request().accept(MediaType.APPLICATION_JSON).post(entity(null, MediaType.APPLICATION_JSON));
-//
-//		return null;
-//	}
 }

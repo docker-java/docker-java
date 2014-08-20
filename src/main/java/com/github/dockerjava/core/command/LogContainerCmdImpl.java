@@ -3,8 +3,8 @@ package com.github.dockerjava.core.command;
 import java.io.InputStream;
 
 import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.command.LogContainerCmd;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -30,7 +30,7 @@ public class LogContainerCmdImpl extends AbstrDockerCmd<LogContainerCmd, InputSt
 
 	private boolean followStream, timestamps, stdout, stderr;
 
-	public LogContainerCmdImpl(DockerCmdExec<LogContainerCmd, InputStream> exec, String containerId) {
+	public LogContainerCmdImpl(LogContainerCmd.Exec exec, String containerId) {
 		super(exec);
 		withContainerId(containerId);
 	}
@@ -145,19 +145,4 @@ public class LogContainerCmdImpl extends AbstrDockerCmd<LogContainerCmd, InputSt
     public InputStream exec() throws NotFoundException {
     	return super.exec();
     }
-
-
-//	protected InputStream impl() throws DockerException {
-//
-//        WebTarget webResource = baseResource.path("/containers/{id}/logs")
-//                        .resolveTemplate("id", containerId)
-//                        .queryParam("timestamps", timestamps ? "1" : "0")
-//                        .queryParam("stdout", stdout ? "1" : "0")
-//                        .queryParam("stderr", stderr ? "1" : "0")
-//                        .queryParam("follow", followStream ? "1" : "0")
-//                        .queryParam("tail", tail < 0 ? "all" : "" + tail);
-//
-//		LOGGER.trace("GET: {}", webResource);
-//		return webResource.request().get(Response.class).readEntity(InputStream.class);
-//	}
 }

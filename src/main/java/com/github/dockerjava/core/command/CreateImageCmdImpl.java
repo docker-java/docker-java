@@ -6,7 +6,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.github.dockerjava.api.command.CreateImageCmd;
 import com.github.dockerjava.api.command.CreateImageResponse;
-import com.github.dockerjava.api.command.DockerCmdExec;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -22,7 +22,7 @@ public class CreateImageCmdImpl extends	AbstrDockerCmd<CreateImageCmd, CreateIma
 	 * @param repository        the repository to import to
 	 * @param imageStream       the InputStream of the tar file
 	 */
-	public CreateImageCmdImpl(DockerCmdExec<CreateImageCmd, CreateImageResponse> exec, String repository, InputStream imageStream) {
+	public CreateImageCmdImpl(CreateImageCmd.Exec exec, String repository, InputStream imageStream) {
 		super(exec);
 		withRepository(repository);
 		withImageStream(imageStream);
@@ -81,18 +81,4 @@ public class CreateImageCmdImpl extends	AbstrDockerCmd<CreateImageCmd, CreateIma
             .append(tag != null ? tag : "")
             .toString();
     }
-    
-//	protected CreateImageResponse impl() {
-//
-//		WebTarget webResource = baseResource
-//                .path("/images/create")
-//                .queryParam("repo", repository)
-//                .queryParam("tag", tag)
-//                .queryParam("fromSrc", "-");
-//		
-//		LOGGER.trace("POST: {}", webResource);
-//		return webResource.request().accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
-//				.post(entity(imageStream, MediaType.APPLICATION_OCTET_STREAM), CreateImageResponse.class);
-//
-//	}
 }

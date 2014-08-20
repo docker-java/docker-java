@@ -1,8 +1,8 @@
 package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.command.RemoveImageCmd;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -16,7 +16,7 @@ public class RemoveImageCmdImpl extends AbstrDockerCmd<RemoveImageCmd, Void> imp
 
 	private boolean force, noPrune;
 
-	public RemoveImageCmdImpl(DockerCmdExec<RemoveImageCmd, Void> exec, String imageId) {
+	public RemoveImageCmdImpl(RemoveImageCmd.Exec exec, String imageId) {
 		super(exec);
 		withImageId(imageId);
 	}
@@ -76,17 +76,4 @@ public class RemoveImageCmdImpl extends AbstrDockerCmd<RemoveImageCmd, Void> imp
     public Void exec() throws NotFoundException {
     	return super.exec();
     }
-
-//	protected Void impl() throws DockerException {
-//		Preconditions.checkState(!StringUtils.isEmpty(imageId), "Image ID can't be empty");
-//		
-//		WebTarget webResource = baseResource.path("/images/" + imageId)
-//				.queryParam("force", force ? "1" : "0")
-//				.queryParam("noprune", noPrune ? "1" : "0");
-//
-//		LOGGER.trace("DELETE: {}", webResource);
-//		webResource.request().delete(Response.class);
-//		
-//		return null;
-//	}
 }

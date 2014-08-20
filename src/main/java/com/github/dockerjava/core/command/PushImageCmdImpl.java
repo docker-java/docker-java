@@ -3,8 +3,8 @@ package com.github.dockerjava.core.command;
 import java.io.InputStream;
 
 import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.command.PushImageCmd;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -16,7 +16,7 @@ public class PushImageCmdImpl extends AbstrAuthCfgDockerCmd<PushImageCmd, InputS
 
 	private String name;
 
-	public PushImageCmdImpl(DockerCmdExec<PushImageCmd, InputStream> exec, String name) {
+	public PushImageCmdImpl(PushImageCmd.Exec exec, String name) {
 		super(exec);
 		withName(name);
 	}
@@ -50,20 +50,4 @@ public class PushImageCmdImpl extends AbstrAuthCfgDockerCmd<PushImageCmd, InputS
     public InputStream exec() throws NotFoundException {
     	return super.exec();
     }
-
-//	protected InputStream impl() {
-//		WebTarget webResource = baseResource.path("/images/" + name(name) + "/push");
-//
-//		final String registryAuth = registryAuth();
-//		LOGGER.trace("POST: {}", webResource);
-//		return webResource
-//                .request()
-//				.header("X-Registry-Auth", registryAuth)
-//				.accept(MediaType.APPLICATION_JSON)
-//				.post(entity(Response.class, MediaType.APPLICATION_JSON)).readEntity(InputStream.class);
-//	}
-//
-//	private String name(String name) {
-//		return name.contains("/") ? name : authConfig.getUsername();
-//	}
 }

@@ -1,9 +1,9 @@
 package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectContainerResponse;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -13,7 +13,7 @@ public class InspectContainerCmdImpl extends AbstrDockerCmd<InspectContainerCmd,
 
 	private String containerId;
 
-	public InspectContainerCmdImpl(DockerCmdExec<InspectContainerCmd, InspectContainerResponse> exec, String containerId) {
+	public InspectContainerCmdImpl(InspectContainerCmd.Exec exec, String containerId) {
 		super(exec);
 		withContainerId(containerId);
 	}
@@ -42,11 +42,4 @@ public class InspectContainerCmdImpl extends AbstrDockerCmd<InspectContainerCmd,
     public InspectContainerResponse exec() throws NotFoundException {
     	return super.exec();
     }
-
-//	protected InspectContainerResponse impl() throws DockerException {
-//		WebTarget webResource = baseResource.path(String.format("/containers/%s/json", containerId));
-//		
-//		LOGGER.trace("GET: {}", webResource);
-//		return webResource.request().accept(MediaType.APPLICATION_JSON).get(InspectContainerResponse.class);
-//	}
 }

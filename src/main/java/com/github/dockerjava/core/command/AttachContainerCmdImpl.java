@@ -4,7 +4,7 @@ import java.io.InputStream;
 
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.AttachContainerCmd;
-import com.github.dockerjava.api.command.DockerCmdExec;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -29,7 +29,7 @@ public class AttachContainerCmdImpl extends	AbstrDockerCmd<AttachContainerCmd, I
 
 	private boolean logs, followStream, timestamps, stdout, stderr;
 
-	public AttachContainerCmdImpl(DockerCmdExec<AttachContainerCmd, InputStream> exec, String containerId) {
+	public AttachContainerCmdImpl(AttachContainerCmd.Exec exec, String containerId) {
 		super(exec);
 		withContainerId(containerId);
 	}
@@ -123,28 +123,4 @@ public class AttachContainerCmdImpl extends	AbstrDockerCmd<AttachContainerCmd, I
 	public InputStream exec() throws NotFoundException {
 		return super.exec();
 	}
-	
-	public static interface Exec extends DockerCmdExec<AttachContainerCmd, InputStream> {
-		
-	}
-
-//	protected InputStream impl() throws DockerException {
-//		
-//		AttachContainerCmd command = this;
-//	
-//		WebTarget webResource = baseResource.path("/containers/{id}/attach")
-//                .resolveTemplate("{id}", command.getContainerId())
-//                .queryParam("logs", command.hasLogsEnabled() ? "1" : "0")
-//                .queryParam("timestamps",command.hasTimestampsEnabled() ? "1" : "0")
-//                .queryParam("stdout", command.hasStdoutEnabled() ? "1" : "0")
-//                .queryParam("stderr", command.hasStderrEnabled() ? "1" : "0")
-//                .queryParam("follow", command.hasFollowStreamEnabled() ? "1" : "0");
-//
-//		LOGGER.trace("POST: {}", webResource);
-//		
-//		return webResource.request().accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
-//				.post(entity(null, MediaType.APPLICATION_JSON), Response.class).readEntity(InputStream.class);
-//	}
-	
-	
 }

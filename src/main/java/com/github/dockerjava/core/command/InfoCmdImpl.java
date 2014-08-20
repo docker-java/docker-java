@@ -1,6 +1,5 @@
 package com.github.dockerjava.core.command;
 
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.model.Info;
 
@@ -9,7 +8,7 @@ import com.github.dockerjava.api.model.Info;
  */
 public class InfoCmdImpl extends AbstrDockerCmd<InfoCmd, Info> implements InfoCmd  {
 
-	public InfoCmdImpl(DockerCmdExec<InfoCmd, Info> exec) {
+	public InfoCmdImpl(InfoCmd.Exec exec) {
 		super(exec);
 	}
 	
@@ -17,11 +16,4 @@ public class InfoCmdImpl extends AbstrDockerCmd<InfoCmd, Info> implements InfoCm
     public String toString() {
         return "info";
     }
-    
-//	protected Info impl() throws DockerException {
-//		WebTarget webResource = baseResource.path("/info");
-//
-//		LOGGER.trace("GET: {}", webResource);
-//		return webResource.request().accept(MediaType.APPLICATION_JSON).get(Info.class);
-//	}
 }

@@ -1,8 +1,8 @@
 package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.command.UnpauseContainerCmd;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -15,7 +15,7 @@ public class UnpauseContainerCmdImpl extends AbstrDockerCmd<UnpauseContainerCmd,
 
 	private String containerId;
 
-	public UnpauseContainerCmdImpl(DockerCmdExec<UnpauseContainerCmd, Void> exec, String containerId) {
+	public UnpauseContainerCmdImpl(UnpauseContainerCmd.Exec exec, String containerId) {
 		super(exec);
 		withContainerId(containerId);
 	}
@@ -46,15 +46,4 @@ public class UnpauseContainerCmdImpl extends AbstrDockerCmd<UnpauseContainerCmd,
 	public Void exec() throws NotFoundException {
 		return super.exec();
 	}
-
-//	protected Void impl() throws DockerException {
-//		WebTarget webResource = baseResource.path("/containers/{id}/unpause")
-//				.resolveTemplate("id", containerId);
-//		
-//		LOGGER.trace("POST: {}", webResource);
-//		webResource.request().accept(MediaType.APPLICATION_JSON)
-//				.post(Entity.entity(Response.class, MediaType.APPLICATION_JSON));
-//
-//		return null;
-//	}
 }

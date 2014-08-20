@@ -1,8 +1,8 @@
 package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.command.KillContainerCmd;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -12,7 +12,7 @@ public class KillContainerCmdImpl extends AbstrDockerCmd<KillContainerCmd, Void>
 
 	private String containerId, signal;
 
-	public KillContainerCmdImpl(DockerCmdExec<KillContainerCmd, Void> exec, String containerId) {
+	public KillContainerCmdImpl(KillContainerCmd.Exec exec, String containerId) {
 		super(exec);
 		withContainerId(containerId);
 	}
@@ -53,17 +53,4 @@ public class KillContainerCmdImpl extends AbstrDockerCmd<KillContainerCmd, Void>
     public Void exec() throws NotFoundException {
     	return super.exec();
     }
-
-//	protected Void impl() throws DockerException {
-//		WebTarget webResource = baseResource.path("/containers/{id}/kill").resolveTemplate("id", containerId);
-//
-//		if(signal != null) {
-//			webResource = webResource.queryParam("signal", signal);
-//		}
-//	
-//		LOGGER.trace("POST: {}", webResource);
-//		webResource.request().accept(MediaType.APPLICATION_JSON).post(entity(null, MediaType.APPLICATION_JSON));	
-//
-//		return null;
-//	}
 }

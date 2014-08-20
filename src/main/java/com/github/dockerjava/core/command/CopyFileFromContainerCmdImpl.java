@@ -5,9 +5,10 @@ import java.io.InputStream;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
-import com.github.dockerjava.api.command.DockerCmdExec;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -25,7 +26,7 @@ public class CopyFileFromContainerCmdImpl extends AbstrDockerCmd<CopyFileFromCon
     @JsonProperty("Resource")
     private String resource;
 
-	public CopyFileFromContainerCmdImpl(DockerCmdExec<CopyFileFromContainerCmd, InputStream> exec, String containerId, String resource) {
+	public CopyFileFromContainerCmdImpl(CopyFileFromContainerCmd.Exec exec, String containerId, String resource) {
 		super(exec);
 		withContainerId(containerId);
 		withResource(resource);

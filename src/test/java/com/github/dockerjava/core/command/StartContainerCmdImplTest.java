@@ -220,6 +220,16 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
 	}
 
+	
+	/**
+	 * This tests support for --net option for the docker run command:
+	 * --net="bridge" Set the Network mode for the container
+	 * 'bridge': creates a new network stack for the container on the docker bridge
+	 * 'none': no networking for this container
+	 * 'container:': reuses another container network stack
+	 * 'host': use the host network stack inside the container.
+	 *  Note: the host mode gives the container full access to local system services such as D-bus and is therefore considered insecure.
+	 */
 	@Test
     public void startContainerWithNetworkMode() throws DockerException {
 

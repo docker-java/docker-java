@@ -2,8 +2,8 @@ package com.github.dockerjava.core.command;
 
 import java.io.InputStream;
 
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.command.PullImageCmd;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -15,7 +15,7 @@ public class PullImageCmdImpl extends AbstrDockerCmd<PullImageCmd, InputStream> 
 
 	private String repository, tag, registry;
 
-	public PullImageCmdImpl(DockerCmdExec<PullImageCmd, InputStream> exec, String repository) {
+	public PullImageCmdImpl(PullImageCmd.Exec exec, String repository) {
 		super(exec);
 		withRepository(repository);
 	}
@@ -63,17 +63,4 @@ public class PullImageCmdImpl extends AbstrDockerCmd<PullImageCmd, InputStream> 
             .append(tag != null ? ":" + tag : "")
             .toString();
     }
-
-//	protected InputStream impl() {
-//
-//		WebTarget webResource = baseResource.path("/images/create")
-//                .queryParam("tag", tag)
-//                .queryParam("fromImage", repository)
-//                .queryParam("registry", registry);
-//		
-//		LOGGER.trace("POST: {}", webResource);
-//		return webResource.request()
-//				.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
-//				.post(entity(Response.class, MediaType.APPLICATION_JSON)).readEntity(InputStream.class);
-//	}
 }

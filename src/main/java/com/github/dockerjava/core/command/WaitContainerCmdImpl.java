@@ -1,6 +1,5 @@
 package com.github.dockerjava.core.command;
 
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.google.common.base.Preconditions;
 
@@ -13,7 +12,7 @@ public class WaitContainerCmdImpl extends AbstrDockerCmd<WaitContainerCmd, Integ
 
 	private String containerId;
 
-	public WaitContainerCmdImpl(DockerCmdExec<WaitContainerCmd, Integer> exec, String containerId) {
+	public WaitContainerCmdImpl(WaitContainerCmd.Exec exec, String containerId) {
 		super(exec);
 		withContainerId(containerId);
 	}
@@ -34,15 +33,4 @@ public class WaitContainerCmdImpl extends AbstrDockerCmd<WaitContainerCmd, Integ
     public String toString() {
         return "wait " + containerId;
     }
-
-//	protected Integer impl() {
-//		WebTarget webResource = baseResource.path("/containers/{id}/wait")
-//				.resolveTemplate("id", containerId);
-//
-//		LOGGER.trace("POST: {}", webResource);
-//		ObjectNode ObjectNode = webResource.request().accept(MediaType.APPLICATION_JSON)
-//				.post(entity(null, MediaType.APPLICATION_JSON), ObjectNode.class);
-//		
-//        return ObjectNode.get("StatusCode").asInt();
-//	}
 }

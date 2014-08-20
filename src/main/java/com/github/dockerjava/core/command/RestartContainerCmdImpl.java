@@ -1,8 +1,8 @@
 package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.command.RestartContainerCmd;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -17,7 +17,7 @@ public class RestartContainerCmdImpl extends AbstrDockerCmd<RestartContainerCmd,
 
 	private int timeout = 10;
 
-	public RestartContainerCmdImpl(DockerCmdExec<RestartContainerCmd, Void> exec, String containerId) {
+	public RestartContainerCmdImpl(RestartContainerCmd.Exec exec, String containerId) {
 		super(exec);
 		withContainerId(containerId);
 	}
@@ -61,15 +61,4 @@ public class RestartContainerCmdImpl extends AbstrDockerCmd<RestartContainerCmd,
     public Void exec() throws NotFoundException {
     	return super.exec();
     }
-
-//	protected Void impl() throws DockerException {
-//		WebTarget webResource = baseResource.path("/containers/{id}/restart")
-//				.resolveTemplate("id", containerId)
-//				.queryParam("t", String.valueOf(timeout));
-//		
-//		LOGGER.trace("POST: {}", webResource);
-//		webResource.request().accept(MediaType.APPLICATION_JSON).post(entity(null, MediaType.APPLICATION_JSON_TYPE));
-//
-//		return null;
-//	}
 }

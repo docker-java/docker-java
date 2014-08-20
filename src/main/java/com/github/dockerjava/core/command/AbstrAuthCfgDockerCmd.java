@@ -3,9 +3,11 @@ package com.github.dockerjava.core.command;
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.github.dockerjava.api.command.DockerCmd;
 import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.model.AuthConfig;
+
 import com.google.common.base.Preconditions;
 
 import org.apache.commons.codec.binary.Base64;
