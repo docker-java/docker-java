@@ -70,8 +70,12 @@ There are three ways to configure, in descending order of precedence:
 ##### Programatic:
 In your application, e.g.
 
-    DockerClient docker = new DockerClientImpl("http://localhost:2375");
-    docker.setCredentials("dockeruser", "ilovedocker", "dockeruser@github.com");`
+    DockerClientConfig config = DockerClientConfig.createDefaultConfigBuilder();
+    config.withVersion("1.12");
+    config.withUsername("dockeruser");
+    config.withPassword("ilovedocker");
+    config.withEmail("dockeruser@github.com);
+    DockerClient docker = new DockerClientImpl(config);
 
 ##### System Properties:
 E.g.
