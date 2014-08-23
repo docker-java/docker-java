@@ -46,7 +46,7 @@ Run build with tests:
     <dependency>
           <groupId>com.github.docker-java</groupId>
           <artifactId>docker-java</artifactId>
-          <version>0.9.1</version>
+          <version>0.10.0</version>
     </dependency>
 
 Latest SNAPSHOT is available from maven repo: https://oss.sonatype.org/content/groups/public   
