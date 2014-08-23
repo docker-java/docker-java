@@ -1,14 +1,11 @@
 package com.github.dockerjava.api.command;
 
-import java.util.List;
-
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.NotModifiedException;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.LxcConf;
 import com.github.dockerjava.api.model.Ports;
-import com.github.dockerjava.api.model.SearchItem;
 
 /**
  * Start a container
@@ -27,7 +24,7 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 
 	public boolean isPrivileged();
 
-	public String getDns();
+	public String[] getDns();
 
 	public String getVolumesFrom();
 
@@ -45,7 +42,7 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 
 	public StartContainerCmd withPublishAllPorts(boolean publishAllPorts);
 
-	public StartContainerCmd withDns(String dns);
+	public StartContainerCmd withDns(String... dns);
 
 	public StartContainerCmd withVolumesFrom(String volumesFrom);
 
