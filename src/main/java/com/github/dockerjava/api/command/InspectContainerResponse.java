@@ -257,7 +257,7 @@ public class InspectContainerResponse {
         private boolean privileged;
 
         @JsonProperty("Dns")
-        private String dns;
+        private String[] dns;
 
         @JsonProperty("VolumesFrom")
         private String[] volumesFrom;
@@ -295,7 +295,7 @@ public class InspectContainerResponse {
 			return privileged;
 		}
 
-		public String getDns() {
+		public String[] getDns() {
 			return dns;
 		}
 
