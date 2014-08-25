@@ -29,6 +29,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @JsonProperty("User")         private String    user = "";
     @JsonProperty("Memory")       private long      memoryLimit = 0;
     @JsonProperty("MemorySwap")   private long      memorySwap = 0;
+    @JsonProperty("CpuShares")    private int       cpuShares = 0;
     @JsonProperty("AttachStdin")  private boolean   attachStdin = false;
     @JsonProperty("AttachStdout") private boolean   attachStdout = false;
     @JsonProperty("AttachStderr") private boolean   attachStderr = false;
@@ -188,6 +189,16 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         return this;
     }
 
+    @Override
+	public int getCpuShares() {
+        return cpuShares;
+    }
+
+    @Override
+	public CreateContainerCmdImpl withCpuShares(int cpuShares) {
+        this.cpuShares = cpuShares;
+        return this;
+    }
 
     @Override
 	public boolean isAttachStdin() {

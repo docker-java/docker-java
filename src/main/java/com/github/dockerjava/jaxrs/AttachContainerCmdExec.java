@@ -25,12 +25,12 @@ public class AttachContainerCmdExec extends AbstrDockerCmdExec<AttachContainerCm
 	@Override
 	public InputStream exec(AttachContainerCmd command) {
 		WebTarget webResource = getBaseResource().path("/containers/{id}/attach")
-                .resolveTemplate("{id}", command.getContainerId())
+                .resolveTemplate("id", command.getContainerId())
                 .queryParam("logs", command.hasLogsEnabled() ? "1" : "0")
-                .queryParam("timestamps",command.hasTimestampsEnabled() ? "1" : "0")
+             // .queryParam("stdin", command.hasStdinEnabled() ? "1" : "0")
                 .queryParam("stdout", command.hasStdoutEnabled() ? "1" : "0")
                 .queryParam("stderr", command.hasStderrEnabled() ? "1" : "0")
-                .queryParam("follow", command.hasFollowStreamEnabled() ? "1" : "0");
+                .queryParam("stream", command.hasFollowStreamEnabled() ? "1" : "0");
 
 		LOGGER.trace("POST: {}", webResource);
 		

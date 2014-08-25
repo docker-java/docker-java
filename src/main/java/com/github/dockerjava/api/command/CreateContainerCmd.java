@@ -55,6 +55,10 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 
 	public CreateContainerCmd withMemorySwap(long memorySwap);
 
+	public int getCpuShares();
+
+	public CreateContainerCmd withCpuShares(int cpuShares);
+
 	public boolean isAttachStdin();
 
 	public CreateContainerCmd withAttachStdin(boolean attachStdin);
@@ -96,6 +100,7 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 	 * @throws NotFoundException No such container
 	 * @throws ConflictException Named container already exists
 	 */
+        @Override
 	public CreateContainerResponse exec() throws NotFoundException,
 			ConflictException;
 	
