@@ -57,8 +57,7 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
 		File baseDir = new File(Thread.currentThread().getContextClassLoader()
 				.getResource("nginx").getFile());
 
-
-		InputStream response = dockerClient.buildImageCmd(baseDir).exec();
+		InputStream response = dockerClient.buildImageCmd(baseDir).withNoCache().exec();
 
 		String fullLog = asString(response);
 		assertThat(fullLog, containsString("Successfully built"));
