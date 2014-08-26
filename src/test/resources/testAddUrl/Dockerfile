@@ -5,6 +5,6 @@ FROM      ubuntu
 ADD	http://www.docker.io       /tmp/docker_home.html
 ADD	./testrun.sh       /tmp/
 
-RUN cp /tmp/testrun.sh /usr/local/bin/ && chmod +x /usr/local/bin/testrun.sh
+RUN cp /tmp/testrun.sh /usr/local/bin/
 
 CMD ["testrun.sh"]
