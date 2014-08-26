@@ -2,7 +2,7 @@
 #
 # VERSION               0.0.1
 
-FROM      ubuntu
+FROM      ubuntu:latest
 MAINTAINER Guillaume J. Charmes "guillaume@dotcloud.com"
 
 # make sure the package repository is up to date
