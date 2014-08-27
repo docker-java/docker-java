@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.core.command.*;
@@ -16,11 +17,11 @@ import com.google.common.base.Preconditions;
 /**
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  */
-public class DockerClientImpl implements Closeable, com.github.dockerjava.api.DockerClient {
+public class DockerClientImpl implements Closeable, DockerClient {
 
     private final DockerClientConfig dockerClientConfig;
     
-    private DockerCmdExecFactoryImpl dockerCmdExecFactory; 
+    private DockerCmdExecFactory dockerCmdExecFactory; 
 
 	public DockerClientImpl() {
 		this(DockerClientConfig.createDefaultConfigBuilder().build());
@@ -43,13 +44,13 @@ public class DockerClientImpl implements Closeable, com.github.dockerjava.api.Do
     }
     
     public void setDockerCmdExecFactory(
-			DockerCmdExecFactoryImpl dockerCmdExecFactory) {
+    		DockerCmdExecFactory dockerCmdExecFactory) {
     	Preconditions.checkNotNull(dockerCmdExecFactory, "dockerCmdExecFactory was not specified");
 		this.dockerCmdExecFactory = dockerCmdExecFactory;
 		this.dockerCmdExecFactory.init(dockerClientConfig);
 	}
     
-	public DockerCmdExecFactoryImpl getDockerCmdExecFactory() {
+	public DockerCmdExecFactory getDockerCmdExecFactory() {
 		return dockerCmdExecFactory;
 	}
     
