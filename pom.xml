@@ -297,6 +297,18 @@
 								</tasks>
 							</configuration>
 						</execution>
+						<execution>
+							<id>process-test-resources</id>
+							<phase>process-test-resources</phase>
+							<configuration>
+								<target>
+									<chmod dir="target/test-classes" includes="**/*.sh" perm="ugo+rx"/>
+								</target>
+							</configuration>
+							<goals>
+								<goal>run</goal>
+							</goals>
+						</execution>
 					</executions>
 				</plugin>
 			</plugins>
@@ -325,6 +337,11 @@
 					<goals>deploy nexus-staging:release</goals>
 				</configuration>
 			</plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+      </plugin>
 		</plugins>
 	</build>
 

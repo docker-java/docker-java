@@ -2,7 +2,7 @@
 #
 # VERSION               0.3
 
-FROM ubuntu
+FROM ubuntu:latest
 
 #install netcat
 RUN apt-get install -y netcat
