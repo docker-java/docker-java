@@ -1,9 +1,8 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jdk.nashorn.internal.parser.JSONParser;
+
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -26,7 +25,7 @@ public class VolumeBindsTest {
     public void t1() throws IOException {
         String s = "{\"/data\": {} }";
         ObjectMapper objectMapper = new ObjectMapper();
-        VolumeBinds volumeBinds = objectMapper.readValue(s, VolumeBinds.class);
+        objectMapper.readValue(s, VolumeBinds.class);
     }
 
 
