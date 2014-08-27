@@ -10,16 +10,12 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.startsWith;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.util.*;
 
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
-import com.github.dockerjava.api.model.Bind;
-import com.github.dockerjava.api.model.ExposedPort;
-import com.github.dockerjava.api.model.Link;
-import com.github.dockerjava.api.model.Ports;
-import com.github.dockerjava.api.model.Volume;
+import com.github.dockerjava.api.model.*;
 
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -82,9 +78,12 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 		inspectContainerResponse = dockerClient.inspectContainerCmd(container
 				.getId()).exec();
 
-
-		assertThat(Arrays.asList(inspectContainerResponse.getVolumes()),
-				contains(volume1, volume2));
+        VolumeBind[] volumeBinds = inspectContainerResponse.getVolumes();
+        List<String> volumes = new ArrayList<String>();
+        for(VolumeBind bind :volumeBinds){
+            volumes.add(bind.getContainerPath());
+        }
+        assertThat(volumes,	contains(volume1.getPath(), volume2.getPath()));
 
 		assertThat(Arrays.asList(inspectContainerResponse.getVolumesRW()),
 				contains(volume1, volume2));

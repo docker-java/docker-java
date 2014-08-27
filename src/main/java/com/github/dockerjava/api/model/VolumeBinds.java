@@ -15,61 +15,38 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-@JsonSerialize(using = VolumeBinds.Serializer.class)
+// This is not going to be serialized
 @JsonDeserialize(using = VolumeBinds.Deserializer.class)
 public class VolumeBinds {
-    private final Bind[] binds;
-    private final Volume[] volumes;
+    private final VolumeBind[] binds;
 
-    public VolumeBinds(Bind... binds) {
+    public VolumeBinds(VolumeBind... binds) {
         this.binds = binds;
-        this.volumes = new Volume[binds.length];
-        for(int i=0; i<volumes.length;i++){
-            volumes[i] = binds[i].getVolume();
-        }
     }
 
-    public Bind[] getBinds() {
+    public VolumeBind[] getBinds() {
         return binds;
     }
 
-    public Volume[] getVolumes() {
-        return volumes;
-    }
-
-    public static class Serializer extends JsonSerializer<VolumeBinds> {
-
-        @Override
-        public void serialize(VolumeBinds binds, JsonGenerator jsonGen,
-                              SerializerProvider serProvider) throws IOException,
-                JsonProcessingException {
-
-            jsonGen.writeStartObject();
-            for (Bind bind : binds.getBinds()) {
-                jsonGen.writeFieldName(bind.getPath());
-                jsonGen.writeString(Boolean.toString(!bind.isReadOnly()));
-            }
-            jsonGen.writeEndObject();
-        }
-
-    }
-
-    public static class Deserializer extends JsonDeserializer<VolumeBinds> {
+    public static final class Deserializer extends JsonDeserializer<VolumeBinds> {
         @Override
         public VolumeBinds deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
 
-            List<Bind> binds = new ArrayList<Bind>();
+            List<VolumeBind> binds = new ArrayList<VolumeBind>();
             ObjectCodec oc = jsonParser.getCodec();
             JsonNode node = oc.readTree(jsonParser);
             for (Iterator<Map.Entry<String, JsonNode>> it = node.fields(); it.hasNext();) {
-
                 Map.Entry<String, JsonNode> field = it.next();
-                if (!field.getValue().equals(NullNode.getInstance())) {
-                    Bind bind = new Bind(field.getValue().toString(),Volume.parse(field.getKey()));
+                JsonNode value = field.getValue();
+                if (!value.equals(NullNode.getInstance())) {
+                    if (!value.isTextual()){
+                        throw deserializationContext.mappingException("Expected path for '"+field.getKey()+"'in host but got '"+ value+"'.");
+                    }
+                    VolumeBind bind = new VolumeBind(value.asText(),field.getKey());
                     binds.add(bind);
                 }
             }
-            return new VolumeBinds(binds.toArray(new Bind[binds.size()]));
+            return new VolumeBinds(binds.toArray(new VolumeBind[binds.size()]));
         }
     }
 

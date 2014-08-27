@@ -116,13 +116,9 @@ public class InspectContainerResponse {
     }
 
     @JsonIgnore
-    public Bind[] getBinds() {
+    public VolumeBind[] getVolumes() {
         return volumes.getBinds();
     }
-
-    @JsonIgnore
-    public Volume[] getVolumes() { return volumes.getVolumes(); }
-
 
     @JsonIgnore
     public Volume[] getVolumesRW() {
