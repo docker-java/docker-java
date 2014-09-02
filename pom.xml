@@ -87,9 +87,14 @@
 			<artifactId>jackson-jaxrs-json-provider</artifactId>
 			<version>${jackson-jaxrs.version}</version>
 		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.glassfish.jersey.connectors</groupId> -->
+<!-- 			<artifactId>jersey-jetty-connector</artifactId> -->
+<!-- 			<version>${jersey.version}</version> -->
+<!-- 		</dependency> -->
 		<dependency>
-			<groupId>org.glassfish.jersey.connectors</groupId>
-			<artifactId>jersey-jetty-connector</artifactId>
+			<groupId>org.glassfish.jersey.core</groupId>
+			<artifactId>jersey-client</artifactId>
 			<version>${jersey.version}</version>
 		</dependency>
 
