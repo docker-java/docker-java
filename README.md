@@ -1,6 +1,4 @@
-
-
-# docker-java ![Build on CloudBees](http://cloudbees.prod.acquia-sites.com/sites/default/files/styles/large/public/Button-Powered-by-CB.png?itok=uMDWINfY)
+# docker-java 
 
 Java API client for [Docker](http://docs.docker.io/ "Docker")
 
@@ -51,7 +49,7 @@ Run build with tests:
           <version>0.10.0</version>
     </dependency>
 
-Latest SNAPSHOT is available from maven repo: https://oss.sonatype.org/content/groups/public   
+Latest SNAPSHOT is published to maven repo: https://oss.sonatype.org/content/groups/public via ![Build on CloudBees](http://cloudbees.prod.acquia-sites.com/sites/default/files/styles/large/public/Button-Powered-by-CB.png?itok=uMDWINfY)
 
 ## Documentation
 
