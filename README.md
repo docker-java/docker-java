@@ -1,4 +1,6 @@
-# docker-java
+
+
+# docker-java ![Build on CloudBees](http://cloudbees.prod.acquia-sites.com/sites/default/files/styles/large/public/Button-Powered-by-CB.png?itok=uMDWINfY)
 
 Java API client for [Docker](http://docs.docker.io/ "Docker")
 
