@@ -2,6 +2,7 @@ package com.github.dockerjava.core;
 
 import java.io.IOException;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.core.HttpHeaders;
@@ -25,7 +26,11 @@ public class SelectiveLoggingFilter extends LoggingFilter {
             .add("application/tar")
             .build();
 
-    @Override
+    public SelectiveLoggingFilter(Logger logger, boolean b) {
+		super(logger, b);
+	}
+
+	@Override
     public void filter(ClientRequestContext context) throws IOException {
         // Unless the content type is in the list of those we want to ellide, then just have
         // our super-class handle things.

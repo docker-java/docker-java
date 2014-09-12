@@ -1,6 +1,7 @@
 package com.github.dockerjava.jaxrs;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -52,6 +53,9 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
 	private WebTarget baseResource;
 	
+	private static final Logger LOGGER = Logger.getLogger(DockerCmdExecFactoryImpl.class.getName());
+    
+	
 	@Override
 	public void init(DockerClientConfig dockerClientConfig) {
 		Preconditions.checkNotNull(dockerClientConfig, "config was not specified");
@@ -62,9 +66,11 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         clientConfig.register(JacksonJsonProvider.class);
 
         if (dockerClientConfig.isLoggingFilterEnabled()) {
-            clientConfig.register(SelectiveLoggingFilter.class);
+            clientConfig.register(new SelectiveLoggingFilter(LOGGER, true));
         }
 
+        //clientConfig.register(new LoggingFilter(LOGGER, true));
+        
         if (dockerClientConfig.getReadTimeout() != null) {
         	int readTimeout = dockerClientConfig.getReadTimeout();
         	clientConfig.property(ClientProperties.READ_TIMEOUT, readTimeout);
