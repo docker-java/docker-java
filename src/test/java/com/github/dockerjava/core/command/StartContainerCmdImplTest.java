@@ -288,7 +288,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         CreateContainerResponse container = dockerClient
                 .createContainerCmd("busybox")
-                .withCmd("true").exec();
+                .withCmd("sleep", "9999").exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -302,14 +302,40 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         InspectContainerResponse inspectContainerResponse  = dockerClient.inspectContainerCmd(container
                 .getId()).exec();
+        
+        assertThat(inspectContainerResponse.getState().isRunning(), is(true));
 
         assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getCapAdd()),
                 contains("NET_ADMIN"));
         
         assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getCapDrop()),
-                contains("MKNOD"));
+                contains("MKNOD"));  
+    }
+	
+	@Test
+    public void startContainerWithDevices() throws DockerException {
 
+        CreateContainerResponse container = dockerClient
+                .createContainerCmd("busybox")
+                .withCmd("sleep", "9999").exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        tmpContainers.add(container.getId());
+
+        dockerClient.startContainerCmd(container.getId())
+        	.withDevices(new Device("rwm", "/dev/nulo", "/dev/zero"))
+        	.exec();
+
+        InspectContainerResponse inspectContainerResponse  = dockerClient.inspectContainerCmd(container
+                .getId()).exec();
         
+        assertThat(inspectContainerResponse.getState().isRunning(), is(true));
+
+        assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getDevices()),
+                contains(new Device("rwm", "/dev/nulo", "/dev/zero")));
     }
 
 }

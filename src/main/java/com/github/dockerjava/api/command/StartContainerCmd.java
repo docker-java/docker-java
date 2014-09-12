@@ -3,6 +3,7 @@ package com.github.dockerjava.api.command;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.NotModifiedException;
 import com.github.dockerjava.api.model.Bind;
+import com.github.dockerjava.api.model.Device;
 import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.LxcConf;
 import com.github.dockerjava.api.model.Ports;
@@ -32,6 +33,8 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 	
 	public String getNetworkMode();
 	
+	public Device[] getDevices();
+	
 	public String[] getCapAdd();
 	
 	public String[] getCapDrop();
@@ -55,6 +58,8 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 	public StartContainerCmd withContainerId(String containerId);
 	
 	public StartContainerCmd withNetworkMode(String networkMode);
+	
+	public StartContainerCmd withDevices(Device... devices);
 	
 	public StartContainerCmd withCapAdd(String... capAdd);
 	

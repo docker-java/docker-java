@@ -271,6 +271,9 @@ public class InspectContainerResponse {
         @JsonProperty("NetworkMode")
         private String networkMode;
         
+        @JsonProperty("Devices")
+        private Device[] devices;
+        
         @JsonProperty("CapAdd")
         private String[] capAdd;
         
@@ -319,6 +322,10 @@ public class InspectContainerResponse {
 
 		public String getNetworkMode() {
 			return networkMode;
+		}
+		
+		public Device[] getDevices() {
+			return devices;
 		}
 		
 		public String[] getCapAdd() {

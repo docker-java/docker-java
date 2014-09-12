@@ -9,6 +9,7 @@ import com.github.dockerjava.api.NotModifiedException;
 import com.github.dockerjava.api.command.StartContainerCmd;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Binds;
+import com.github.dockerjava.api.model.Device;
 import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.Links;
 import com.github.dockerjava.api.model.LxcConf;
@@ -48,6 +49,9 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	
 	@JsonProperty("NetworkMode")          
     private String networkMode = "bridge";
+	
+	@JsonProperty("Devices")
+	private Device[] devices;
 	
 	@JsonProperty("CapAdd")
 	private String[] capAdd;
@@ -111,6 +115,11 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	public String getNetworkMode() {        
         return networkMode;
     }
+    
+    @Override
+    public Device[] getDevices() {
+		return devices;
+	}
     
     @Override
     public String[] getCapAdd() {
@@ -196,6 +205,13 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
     }
     
     @Override
+	public StartContainerCmd withDevices(Device... devices) {
+		Preconditions.checkNotNull(devices, "devices was not specified");
+		this.devices = devices;
+		return this;
+	}
+    
+    @Override
 	public StartContainerCmd withCapAdd(String... capAdd) {
 		Preconditions.checkNotNull(capAdd, "capAdd was not specified");
 		this.capAdd = capAdd;
@@ -208,6 +224,13 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 		this.capDrop = capDrop;
 		return this;
 	}
+    
+//    "RestartPolicy": {
+//
+//	    "MaximumRetryCount": 0,
+//	    "Name": ""
+//
+//	}
 
 	@Override
 	public String toString() {
