@@ -70,7 +70,7 @@ For code examples, please look at the [Wiki](https://github.com/docker-java/dock
 There are a couple of configuration items, all of which have sensible defaults:
 
 * `url` The Docker URL, e.g. `http://localhost:2375`.
-* `version` The API version, e.g. `1.13`.
+* `version` The API version, e.g. `1.14`.
 * `username` Your repository username (required to push containers).
 * `password` Your repository password.
 * `email` Your repository email.
@@ -81,7 +81,7 @@ There are three ways to configure, in descending order of precedence:
 In your application, e.g.
 
     DockerClientConfig config = DockerClientConfig.createDefaultConfigBuilder();
-    config.withVersion("1.12");
+    config.withVersion("1.14");
     config.withUsername("dockeruser");
     config.withPassword("ilovedocker");
     config.withEmail("dockeruser@github.com);
