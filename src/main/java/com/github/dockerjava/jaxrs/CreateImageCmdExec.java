@@ -32,5 +32,4 @@ public class CreateImageCmdExec extends AbstrDockerCmdExec<CreateImageCmd, Creat
 		return webResource.request().accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
 				.post(entity(command.getImageStream(), MediaType.APPLICATION_OCTET_STREAM), CreateImageResponse.class);
 	}
-
 }

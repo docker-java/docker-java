@@ -267,6 +267,8 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         LOG.info("Created container {}", container.toString());
 
         assertThat(container.getId(), not(isEmptyString()));
+        
+        tmpContainers.add(container.getId());
 
         InspectContainerResponse inspectContainerResponse = dockerClient
                 .inspectContainerCmd(container.getId()).exec();
@@ -278,8 +280,36 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         assertThat(inspectContainerResponse.getHostConfig().getNetworkMode(),
                 is(equalTo("host")));
+    
+    }
+	
+	@Test
+    public void startContainerWithCapAddAndCapDrop() throws DockerException {
+
+        CreateContainerResponse container = dockerClient
+                .createContainerCmd("busybox")
+                .withCmd("true").exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
 
         tmpContainers.add(container.getId());
+
+        dockerClient.startContainerCmd(container.getId())
+        	.withCapAdd("NET_ADMIN")
+        	.withCapDrop("MKNOD").exec();
+
+        InspectContainerResponse inspectContainerResponse  = dockerClient.inspectContainerCmd(container
+                .getId()).exec();
+
+        assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getCapAdd()),
+                contains("NET_ADMIN"));
+        
+        assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getCapDrop()),
+                contains("MKNOD"));
+
+        
     }
 
 }

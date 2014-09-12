@@ -270,6 +270,12 @@ public class InspectContainerResponse {
 
         @JsonProperty("NetworkMode")
         private String networkMode;
+        
+        @JsonProperty("CapAdd")
+        private String[] capAdd;
+        
+        @JsonProperty("CapDrop")
+        private String[] capDrop;
 
         public String[] getBinds() {
 			return binds;
@@ -313,6 +319,14 @@ public class InspectContainerResponse {
 
 		public String getNetworkMode() {
 			return networkMode;
+		}
+		
+		public String[] getCapAdd() {
+			return capAdd;
+		}
+		
+		public String[] getCapDrop() {
+			return capDrop;
 		}
 
         @Override

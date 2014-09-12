@@ -4,7 +4,6 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.NotModifiedException;
 import com.github.dockerjava.api.command.StartContainerCmd;
@@ -14,7 +13,6 @@ import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.Links;
 import com.github.dockerjava.api.model.LxcConf;
 import com.github.dockerjava.api.model.Ports;
-
 import com.google.common.base.Preconditions;
 
 /**
@@ -50,6 +48,12 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	
 	@JsonProperty("NetworkMode")          
     private String networkMode = "bridge";
+	
+	@JsonProperty("CapAdd")
+	private String[] capAdd;
+	
+	@JsonProperty("CapDrop")
+	private String[] capDrop;
 	
 	public StartContainerCmdImpl(StartContainerCmd.Exec exec, String containerId) {
 		super(exec);
@@ -106,6 +110,16 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
     @Override
 	public String getNetworkMode() {        
         return networkMode;
+    }
+    
+    @Override
+    public String[] getCapAdd() {
+    	return capAdd;
+    }
+    
+    @Override
+    public String[] getCapDrop() {
+    	return capDrop;
     }
 
 	@Override
@@ -180,6 +194,20 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
         this.networkMode = networkMode;
         return this;
     }
+    
+    @Override
+	public StartContainerCmd withCapAdd(String... capAdd) {
+		Preconditions.checkNotNull(capAdd, "capAdd was not specified");
+		this.capAdd = capAdd;
+		return this;
+	}
+    
+    @Override
+	public StartContainerCmd withCapDrop(String... capDrop) {
+		Preconditions.checkNotNull(capDrop, "capDrop was not specified");
+		this.capDrop = capDrop;
+		return this;
+	}
 
 	@Override
 	public String toString() {

@@ -2,7 +2,7 @@
 
 Java API client for [Docker](http://docs.docker.io/ "Docker")
 
-Supports a subset of the Docker Client API v1.13, Docker Server version 1.1
+Supports a subset of the Docker Client API v1.14, Docker Server version 1.2.0
 
 Developer forum for [docker-java](https://groups.google.com/forum/?hl=de#!forum/docker-java-dev "docker-java")
 
@@ -31,22 +31,32 @@ Now make sure that docker is up:
     $ docker -H tcp://127.0.0.1:2375 version
 
     Client version: 0.8.0
-    Go version (client): go1.2
-    Git commit (client): cc3a8c8
-    Server version: 1.0.0
-    Git commit (server): 63fe64c
-    Go version (server): go1.2.1
+	Go version (client): go1.2
+	Git commit (client): cc3a8c8
+	Server version: 1.2.0
+	Git commit (server): fa7b24f
+	Go version (server): go1.3.1
 
 Run build with tests:
 
     $ mvn clean install -DskipTests=false
 
-## Docker-Java maven dependency:
+## Docker-Java maven dependencies
+
+### Latest release version
 
     <dependency>
           <groupId>com.github.docker-java</groupId>
           <artifactId>docker-java</artifactId>
           <version>0.10.0</version>
+    </dependency>
+
+### Latest SNAPSHOT version
+
+    <dependency>
+          <groupId>com.github.docker-java</groupId>
+          <artifactId>docker-java</artifactId>
+          <version>0.10.1-SNAPSHOT</version>
     </dependency>
 
 Latest SNAPSHOT is published to maven repo: https://oss.sonatype.org/content/groups/public via ![Build on CloudBees](http://cloudbees.prod.acquia-sites.com/sites/default/files/styles/large/public/Button-Powered-by-CB.png?itok=uMDWINfY)

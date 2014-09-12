@@ -29,6 +29,12 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 	public String getVolumesFrom();
 
 	public String getContainerId();
+	
+	public String getNetworkMode();
+	
+	public String[] getCapAdd();
+	
+	public String[] getCapDrop();
 
 	public StartContainerCmd withBinds(Bind... binds);
 
@@ -47,6 +53,12 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 	public StartContainerCmd withVolumesFrom(String volumesFrom);
 
 	public StartContainerCmd withContainerId(String containerId);
+	
+	public StartContainerCmd withNetworkMode(String networkMode);
+	
+	public StartContainerCmd withCapAdd(String... capAdd);
+	
+	public StartContainerCmd withCapDrop(String... capDrop);
 
 	/**
 	 * @throws NotFoundException No such container
@@ -54,9 +66,9 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 	 */
 	public Void exec() throws NotFoundException, NotModifiedException;
 	
-	public abstract String getNetworkMode();
+	
 
-	public abstract StartContainerCmd withNetworkMode(String networkMode);
+	
 
 	public static interface Exec extends DockerCmdExec<StartContainerCmd, Void> {
 	}

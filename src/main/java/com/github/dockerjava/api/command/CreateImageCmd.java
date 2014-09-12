@@ -6,6 +6,7 @@ public interface CreateImageCmd extends DockerCmd<CreateImageResponse> {
 
 	public String getRepository();
 
+	// TODO remove method
 	public String getTag();
 	
 	public InputStream getImageStream();
@@ -22,6 +23,7 @@ public interface CreateImageCmd extends DockerCmd<CreateImageResponse> {
 
 	/**
 	 * @param tag               any tag for this image
+	 * @deprecated 				use repo:tag format for repository
 	 */
 	public CreateImageCmd withTag(String tag);
 	
