@@ -1,15 +1,18 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AuthConfig {
+	
 	@JsonProperty
 	private String username;
+	
 	@JsonProperty
 	private String password;
+	
 	@JsonProperty
 	private String email;
+	
 	@JsonProperty("serveraddress")
 	private String serverAddress = "https://index.docker.io/v1/";
 
