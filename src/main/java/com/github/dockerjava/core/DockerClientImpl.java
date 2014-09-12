@@ -16,6 +16,8 @@ import com.google.common.base.Preconditions;
 
 /**
  * @author Konstantin Pelykh (kpelykh@gmail.com)
+ * 
+ * @see https://github.com/docker/docker/blob/master/api/client/commands.go
  */
 public class DockerClientImpl implements Closeable, DockerClient {
 
@@ -23,34 +25,47 @@ public class DockerClientImpl implements Closeable, DockerClient {
     
     private DockerCmdExecFactory dockerCmdExecFactory; 
 
-	public DockerClientImpl() {
+	private DockerClientImpl() {
 		this(DockerClientConfig.createDefaultConfigBuilder().build());
 	}
 
-	public DockerClientImpl(String serverUrl) {
+	private DockerClientImpl(String serverUrl) {
 		this(configWithServerUrl(serverUrl));
 	}
 
-	private static DockerClientConfig configWithServerUrl(String serverUrl) {
+    private  DockerClientImpl(DockerClientConfig dockerClientConfig) {
+    	Preconditions.checkNotNull(dockerClientConfig, "config was not specified");
+        this.dockerClientConfig = dockerClientConfig;
+    }
+    
+    private static DockerClientConfig configWithServerUrl(String serverUrl) {
 		return DockerClientConfig.createDefaultConfigBuilder()
                 .withUri(serverUrl)
                 .build();
 	}
-
-    public DockerClientImpl(DockerClientConfig dockerClientConfig) {
-    	Preconditions.checkNotNull(dockerClientConfig, "config was not specified");
-        this.dockerClientConfig = dockerClientConfig;
-        setDockerCmdExecFactory(new DockerCmdExecFactoryImpl());
+    
+    public static DockerClientImpl getInstance() {
+    	return new DockerClientImpl();
     }
     
-    public void setDockerCmdExecFactory(
+    public static DockerClientImpl getInstance(DockerClientConfig dockerClientConfig) {
+    	return new DockerClientImpl(dockerClientConfig);
+    }
+    
+    public static DockerClientImpl getInstance(String serverUrl) {
+    	return new DockerClientImpl(serverUrl);
+    }
+    
+    public DockerClient withDockerCmdExecFactory(
     		DockerCmdExecFactory dockerCmdExecFactory) {
     	Preconditions.checkNotNull(dockerCmdExecFactory, "dockerCmdExecFactory was not specified");
 		this.dockerCmdExecFactory = dockerCmdExecFactory;
 		this.dockerCmdExecFactory.init(dockerClientConfig);
+		return this;
 	}
     
-	public DockerCmdExecFactory getDockerCmdExecFactory() {
+	private DockerCmdExecFactory getDockerCmdExecFactory() {
+		Preconditions.checkNotNull(dockerCmdExecFactory, "dockerCmdExecFactory was not specified");
 		return dockerCmdExecFactory;
 	}
     
