@@ -14,6 +14,7 @@ import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.Links;
 import com.github.dockerjava.api.model.LxcConf;
 import com.github.dockerjava.api.model.Ports;
+import com.github.dockerjava.api.model.RestartPolicy;
 import com.google.common.base.Preconditions;
 
 /**
@@ -52,6 +53,9 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	
 	@JsonProperty("Devices")
 	private Device[] devices;
+	
+	@JsonProperty("RestartPolicy")
+	private RestartPolicy restartPolicy;
 	
 	@JsonProperty("CapAdd")
 	private String[] capAdd;
@@ -120,6 +124,11 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
     public Device[] getDevices() {
 		return devices;
 	}
+    
+    @Override
+    public RestartPolicy getRestartPolicy() {
+    	return restartPolicy;
+    }
     
     @Override
     public String[] getCapAdd() {
@@ -212,6 +221,13 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	}
     
     @Override
+   	public StartContainerCmd withRestartPolicy(RestartPolicy restartPolicy) {
+   		Preconditions.checkNotNull(restartPolicy, "restartPolicy was not specified");
+   		this.restartPolicy = restartPolicy;
+   		return this;
+   	}
+    
+    @Override
 	public StartContainerCmd withCapAdd(String... capAdd) {
 		Preconditions.checkNotNull(capAdd, "capAdd was not specified");
 		this.capAdd = capAdd;
@@ -224,13 +240,6 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 		this.capDrop = capDrop;
 		return this;
 	}
-    
-//    "RestartPolicy": {
-//
-//	    "MaximumRetryCount": 0,
-//	    "Name": ""
-//
-//	}
 
 	@Override
 	public String toString() {

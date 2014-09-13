@@ -7,6 +7,7 @@ import com.github.dockerjava.api.model.Device;
 import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.LxcConf;
 import com.github.dockerjava.api.model.Ports;
+import com.github.dockerjava.api.model.RestartPolicy;
 
 /**
  * Start a container
@@ -35,6 +36,8 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 	
 	public Device[] getDevices();
 	
+	public RestartPolicy getRestartPolicy();
+	
 	public String[] getCapAdd();
 	
 	public String[] getCapDrop();
@@ -60,6 +63,8 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 	public StartContainerCmd withNetworkMode(String networkMode);
 	
 	public StartContainerCmd withDevices(Device... devices);
+	
+	public StartContainerCmd withRestartPolicy(RestartPolicy restartPolicy);
 	
 	public StartContainerCmd withCapAdd(String... capAdd);
 	

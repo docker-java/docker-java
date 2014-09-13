@@ -337,5 +337,33 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getDevices()),
                 contains(new Device("rwm", "/dev/nulo", "/dev/zero")));
     }
+	
+	@Test
+    public void startContainerWithRestartPolicy() throws DockerException {
+
+        CreateContainerResponse container = dockerClient
+                .createContainerCmd("busybox")
+                .withCmd("sleep", "9999").exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        tmpContainers.add(container.getId());
+
+        RestartPolicy restartPolicy = RestartPolicy.onFailureRestart(5);
+        
+        dockerClient.startContainerCmd(container.getId())
+        	.withRestartPolicy(restartPolicy)
+        	.exec();
+
+        InspectContainerResponse inspectContainerResponse  = dockerClient.inspectContainerCmd(container
+                .getId()).exec();
+        
+        assertThat(inspectContainerResponse.getState().isRunning(), is(true));
+
+        assertThat(inspectContainerResponse.getHostConfig().getRestartPolicy(),
+                is(equalTo(restartPolicy)));
+    }
 
 }

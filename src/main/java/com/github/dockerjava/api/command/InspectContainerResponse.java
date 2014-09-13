@@ -274,6 +274,9 @@ public class InspectContainerResponse {
         @JsonProperty("Devices")
         private Device[] devices;
         
+        @JsonProperty("RestartPolicy")
+        private RestartPolicy restartPolicy;
+        
         @JsonProperty("CapAdd")
         private String[] capAdd;
         
@@ -326,6 +329,10 @@ public class InspectContainerResponse {
 		
 		public Device[] getDevices() {
 			return devices;
+		}
+		
+		public RestartPolicy getRestartPolicy() {
+			return restartPolicy;
 		}
 		
 		public String[] getCapAdd() {
