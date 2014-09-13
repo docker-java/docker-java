@@ -56,7 +56,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
     	return new DockerClientImpl(serverUrl);
     }
     
-    public DockerClient withDockerCmdExecFactory(
+    public DockerClientImpl withDockerCmdExecFactory(
     		DockerCmdExecFactory dockerCmdExecFactory) {
     	Preconditions.checkNotNull(dockerCmdExecFactory, "dockerCmdExecFactory was not specified");
 		this.dockerCmdExecFactory = dockerCmdExecFactory;

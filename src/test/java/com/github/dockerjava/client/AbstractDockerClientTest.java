@@ -3,7 +3,7 @@ package com.github.dockerjava.client;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.core.DockerClientImpl;
-import com.github.dockerjava.jaxrs.DockerClientFactory;
+import com.github.dockerjava.jaxrs.DockerClientBuilder;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
@@ -35,7 +35,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 	public void beforeTest()  {
 		LOG.info("======================= BEFORETEST =======================");
 		LOG.info("Connecting to Docker server");
-		dockerClient = DockerClientFactory.getInstance();
+		dockerClient = DockerClientBuilder.getInstance().build();
 
 		LOG.info("Pulling image 'busybox'");
 		// need to block until image is pulled completely
