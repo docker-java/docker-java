@@ -46,7 +46,6 @@ public class CopyFileFromContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(container.getId(), not(isEmptyOrNullString()));
 
         dockerClient.startContainerCmd(container.getId()).exec();
-        tmpContainers.add(container.getId());
 
         InputStream response = dockerClient.copyFileFromContainerCmd(container.getId(), "/test").exec();
         assertTrue(response.available() > 0, "The file was not copied from the container.");

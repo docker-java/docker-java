@@ -48,8 +48,6 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 		CreateContainerResponse container = dockerClient
 				.createContainerCmd("busybox").withVolumes(new Volume("/var/log")).withCmd("true").exec();
 
-		tmpContainers.add(container.getId());
-
 		LOG.info("Created container {}", container.toString());
 
 		assertThat(container.getId(), not(isEmptyString()));
@@ -59,8 +57,6 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 		LOG.info("Inspect container {}", inspectContainerResponse.getConfig().getVolumes());
 
 		assertThat(inspectContainerResponse.getConfig().getVolumes().keySet(), contains("/var/log"));
-
-
 	}
 
 	@Test
@@ -68,8 +64,6 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
 		CreateContainerResponse container = dockerClient
 				.createContainerCmd("busybox").withEnv("VARIABLE=success").withCmd("env").exec();
-
-		tmpContainers.add(container.getId());
 
 		LOG.info("Created container {}", container.toString());
 
@@ -90,8 +84,6 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 		CreateContainerResponse container = dockerClient
 				.createContainerCmd("busybox").withHostName("docker-java").withCmd("env").exec();
 
-		tmpContainers.add(container.getId());
-
 		LOG.info("Created container {}", container.toString());
 
 		assertThat(container.getId(), not(isEmptyString()));
@@ -110,8 +102,6 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
 		CreateContainerResponse container = dockerClient
 				.createContainerCmd("busybox").withName("container").withCmd("env").exec();
-
-		tmpContainers.add(container.getId());
 
 		LOG.info("Created container {}", container.toString());
 

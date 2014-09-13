@@ -50,8 +50,7 @@ public class WaitContainerCmdImplTest extends AbstractDockerClientTest {
 
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));
-		tmpContainers.add(container.getId());
-
+		
 		dockerClient.startContainerCmd(container.getId()).exec();
 
 		int exitCode = dockerClient.waitContainerCmd(container.getId()).exec();

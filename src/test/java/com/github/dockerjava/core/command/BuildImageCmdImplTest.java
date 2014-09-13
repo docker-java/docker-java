@@ -69,7 +69,7 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
 				.inspectImageCmd(imageId).exec();
 		assertThat(inspectImageResponse, not(nullValue()));
 		LOG.info("Image Inspect: {}", inspectImageResponse.toString());
-		tmpImgs.add(inspectImageResponse.getId());
+		//tmpImgs.add(inspectImageResponse.getId());
 
 		assertThat(inspectImageResponse.getAuthor(),
 				equalTo("Guillaume J. Charmes \"guillaume@dotcloud.com\""));
@@ -120,7 +120,7 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
 		dockerClient.startContainerCmd(container.getId()).exec();
 		dockerClient.waitContainerCmd(container.getId()).exec();
 
-		tmpContainers.add(container.getId());
+		//tmpContainers.add(container.getId());
 
 		// Log container
 		InputStream logResponse = logContainer(container
@@ -155,13 +155,13 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
 		assertThat(inspectImageResponse, not(nullValue()));
 		assertThat(inspectImageResponse.getId(), not(nullValue()));
 		LOG.info("Image Inspect: {}", inspectImageResponse.toString());
-		tmpImgs.add(inspectImageResponse.getId());
+		//tmpImgs.add(inspectImageResponse.getId());
 
 		CreateContainerResponse container = dockerClient.createContainerCmd(
 				inspectImageResponse.getId()).exec();
 		assertThat(container.getId(), not(isEmptyString()));
 		dockerClient.startContainerCmd(container.getId()).exec();
-		tmpContainers.add(container.getId());
+		//tmpContainers.add(container.getId());
 
 		InspectContainerResponse inspectContainerResponse = dockerClient
 				.inspectContainerCmd(container.getId()).exec();

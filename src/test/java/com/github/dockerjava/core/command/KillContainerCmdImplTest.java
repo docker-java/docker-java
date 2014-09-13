@@ -55,7 +55,6 @@ public class KillContainerCmdImplTest extends AbstractDockerClientTest {
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));
 		dockerClient.startContainerCmd(container.getId()).exec();
-		tmpContainers.add(container.getId());
 
 		LOG.info("Killing container: {}", container.getId());
 		dockerClient.killContainerCmd(container.getId()).exec();

@@ -52,12 +52,10 @@ public class CommitCmdImplTest extends AbstractDockerClientTest {
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));
 		dockerClient.startContainerCmd(container.getId()).exec();
-		tmpContainers.add(container.getId());
 
 		LOG.info("Commiting container: {}", container.toString());
 		String imageId = dockerClient
 				.commitCmd(container.getId()).exec();
-		tmpImgs.add(imageId);
 
 		InspectImageResponse inspectImageResponse = dockerClient
 				.inspectImageCmd(imageId).exec();

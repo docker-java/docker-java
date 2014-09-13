@@ -56,8 +56,6 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
 		dockerClient.startContainerCmd(container.getId()).exec();
 		
-		tmpContainers.add(container.getId());
-
 		int exitCode = dockerClient.waitContainerCmd(container.getId()).exec();
 
 		assertThat(exitCode, equalTo(0));

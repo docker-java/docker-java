@@ -57,18 +57,15 @@ public class RemoveImageCmdImplTest extends AbstractDockerClientTest {
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));
 		dockerClient.startContainerCmd(container.getId()).exec();
-		tmpContainers.add(container.getId());
-
+		
 		LOG.info("Commiting container {}", container.toString());
 		String imageId = dockerClient
 				.commitCmd(container.getId()).exec();
-		tmpImgs.add(imageId);
-
+	
 		dockerClient.stopContainerCmd(container.getId()).exec();
 		dockerClient.killContainerCmd(container.getId()).exec();
 		dockerClient.removeContainerCmd(container.getId()).exec();
 
-		tmpContainers.remove(container.getId());
 		LOG.info("Removing image: {}", imageId);
 		dockerClient.removeImageCmd(imageId).exec();
 

@@ -88,7 +88,6 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 		assertThat(Arrays.asList(inspectContainerResponse.getVolumesRW()),
 				contains(volume1, volume2));
 
-		tmpContainers.add(container.getId());
 	}
 
 	@Test
@@ -116,7 +115,6 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 		assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getDns()),
 				contains(aDnsServer, anotherDnsServer));
 
-		tmpContainers.add(container.getId());
 	}
 	
 	@Test
@@ -154,7 +152,6 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 		assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23),
 				is(equalTo(Ports.Binding(11023))));
 
-		tmpContainers.add(container.getId());
 	}
 
 	@Test
@@ -165,8 +162,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
 		LOG.info("Created container1 {}", container1.toString());
 		assertThat(container1.getId(), not(isEmptyString()));
-		tmpContainers.add(container1.getId());
-
+		
 		dockerClient.startContainerCmd(container1.getId()).exec();
 
 		InspectContainerResponse inspectContainerResponse1 = dockerClient
@@ -191,8 +187,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
 		LOG.info("Created container2 {}", container2.toString());
 		assertThat(container2.getId(), not(isEmptyString()));
-		tmpContainers.add(container2.getId());
-
+		
 		dockerClient.startContainerCmd(container2.getId()).withLinks(new Link("container1", "container1Link")).exec();
 
 		InspectContainerResponse inspectContainerResponse2 = dockerClient
@@ -221,8 +216,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
 		LOG.info("Created container {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));
-		tmpContainers.add(container.getId());
-
+		
 		dockerClient.startContainerCmd(container.getId()).exec();
 
 		InspectContainerResponse inspectContainerResponse = dockerClient
@@ -268,8 +262,6 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         assertThat(container.getId(), not(isEmptyString()));
         
-        tmpContainers.add(container.getId());
-
         InspectContainerResponse inspectContainerResponse = dockerClient
                 .inspectContainerCmd(container.getId()).exec();
 
@@ -293,8 +285,6 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         LOG.info("Created container {}", container.toString());
 
         assertThat(container.getId(), not(isEmptyString()));
-
-        tmpContainers.add(container.getId());
 
         dockerClient.startContainerCmd(container.getId())
         	.withCapAdd("NET_ADMIN")
@@ -323,8 +313,6 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         assertThat(container.getId(), not(isEmptyString()));
 
-        tmpContainers.add(container.getId());
-
         dockerClient.startContainerCmd(container.getId())
         	.withDevices(new Device("rwm", "/dev/nulo", "/dev/zero"))
         	.exec();
@@ -348,8 +336,6 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         LOG.info("Created container {}", container.toString());
 
         assertThat(container.getId(), not(isEmptyString()));
-
-        tmpContainers.add(container.getId());
 
         RestartPolicy restartPolicy = RestartPolicy.onFailureRestart(5);
         

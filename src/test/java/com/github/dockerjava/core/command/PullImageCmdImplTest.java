@@ -70,9 +70,7 @@ public class PullImageCmdImplTest extends AbstractDockerClientTest {
 
 		LOG.info("Pulling image: {}", testImage);
 
-		tmpImgs.add(testImage);
 		InputStream response = dockerClient.pullImageCmd(testImage).exec();
-
 
 		assertThat(asString(response),
 				containsString("Download complete"));

@@ -53,7 +53,6 @@ public class InfoCmdImplTest extends AbstractDockerClientTest {
         assertThat(container.getId(), not(isEmptyOrNullString()));
 
         dockerClient.startContainerCmd(container.getId()).exec();
-        tmpContainers.add(container.getId());
 
         Info dockerInfo = dockerClient.infoCmd().exec();
 		LOG.info(dockerInfo.toString());

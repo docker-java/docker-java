@@ -50,8 +50,7 @@ public class RestartContainerCmdImplTest extends AbstractDockerClientTest {
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));
 		dockerClient.startContainerCmd(container.getId()).exec();
-		tmpContainers.add(container.getId());
-
+		
 		InspectContainerResponse inspectContainerResponse = dockerClient
 				.inspectContainerCmd(container.getId()).exec();
 		LOG.info("Container Inspect: {}", inspectContainerResponse.toString());

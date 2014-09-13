@@ -73,9 +73,7 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
 
 		assertThat(inspectContainerResponse.getConfig().getImage(), is(equalTo(testImage)));
 
-
 		dockerClient.startContainerCmd(container1.getId()).exec();
-		tmpContainers.add(container1.getId());
 
 		LOG.info("container id: " + container1.getId());
 

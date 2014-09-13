@@ -87,7 +87,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 		
 	}
 	
-	private WebTarget getBaseResource() {
+	protected WebTarget getBaseResource() {
 		Preconditions.checkNotNull(baseResource, "Factory not initialized. You probably forgot to call init()!");
 		return baseResource;
 	}

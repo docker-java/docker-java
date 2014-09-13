@@ -55,8 +55,7 @@ public class StopContainerCmdImplTest extends AbstractDockerClientTest {
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));
 		dockerClient.startContainerCmd(container.getId()).exec();
-		tmpContainers.add(container.getId());
-
+		
 		LOG.info("Stopping container: {}", container.getId());
 		dockerClient.stopContainerCmd(container.getId()).withTimeout(2).exec();
 

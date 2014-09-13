@@ -4,6 +4,7 @@ import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.jaxrs.DockerClientBuilder;
+import com.github.dockerjava.jaxrs.TestDockerCmdExecFactory;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
@@ -28,14 +29,17 @@ public abstract class AbstractDockerClientTest extends Assert {
 	
 	protected DockerClient dockerClient;
 
-	protected List<String> tmpImgs;
-	protected List<String> tmpContainers;
+//	protected List<String> tmpImgs;
+//	protected List<String> tmpContainers;
 
+	private TestDockerCmdExecFactory dockerCmdExecFactory = new TestDockerCmdExecFactory();
 
 	public void beforeTest()  {
 		LOG.info("======================= BEFORETEST =======================");
 		LOG.info("Connecting to Docker server");
-		dockerClient = DockerClientBuilder.getInstance().build();
+		dockerClient = DockerClientBuilder.getInstance()
+				.withDockerCmdExecFactory(dockerCmdExecFactory)
+				.build();
 
 		LOG.info("Pulling image 'busybox'");
 		// need to block until image is pulled completely
@@ -53,8 +57,8 @@ public abstract class AbstractDockerClientTest extends Assert {
 
 
 	public void beforeMethod(Method method) {
-	        tmpContainers = new ArrayList<String>();
-	        tmpImgs = new ArrayList<String>();
+//	        tmpContainers = new ArrayList<String>();
+//	        tmpImgs = new ArrayList<String>();
 		LOG.info(String
 				.format("################################## STARTING %s ##################################",
 						method.getName()));
@@ -62,7 +66,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 
 	public void afterMethod(ITestResult result) {
 
-		for (String container : tmpContainers) {
+		for (String container : dockerCmdExecFactory.getContainerIds()) {
 			LOG.info("Cleaning up temporary container {}", container);
 			try {
 				dockerClient.stopContainerCmd(container).exec();
@@ -78,7 +82,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 			}
 		}
 
-		for (String image : tmpImgs) {
+		for (String image : dockerCmdExecFactory.getImagesIds()) {
 			LOG.info("Cleaning up temporary image {}", image);
 			try {
 				dockerClient.removeImageCmd(image).exec();

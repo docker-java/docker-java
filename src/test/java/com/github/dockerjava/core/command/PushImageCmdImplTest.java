@@ -57,8 +57,6 @@ public class PushImageCmdImplTest extends AbstractDockerClientTest {
 
 		assertThat(container.getId(), not(isEmptyString()));
 
-		tmpContainers.add(container.getId());
-
 		LOG.info("Commiting container: {}", container.toString());
 		String imageId = dockerClient.commitCmd(container.getId()).withRepository(username + "/busybox").exec();
 
@@ -70,8 +68,6 @@ public class PushImageCmdImplTest extends AbstractDockerClientTest {
 		String response = asString(dockerClient.pullImageCmd(username + "/busybox").exec());
 
 		assertThat(response, not(containsString("HTTP code: 404")));
-
-		tmpImgs.add(username + "/busybox");
 	}
 
 	@Test

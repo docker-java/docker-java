@@ -51,7 +51,7 @@ public class ContainerDiffCmdImplTest extends AbstractDockerClientTest {
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));
 		dockerClient.startContainerCmd(container.getId()).exec();
-		tmpContainers.add(container.getId());
+		
 		int exitCode = dockerClient.waitContainerCmd(container.getId()).exec();
 		assertThat(exitCode, equalTo(0));
 
