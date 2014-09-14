@@ -39,7 +39,7 @@ public class BuildImageCmdExec extends AbstrDockerCmdExec<BuildImageCmd, InputSt
             webResource = webResource.queryParam("q", "true");
         }
 		
-		LOGGER.trace("POST: {}", webResource);
+		LOGGER.debug("POST: {}", webResource);
 		return webResource
                 .request()
 				.accept(MediaType.TEXT_PLAIN)

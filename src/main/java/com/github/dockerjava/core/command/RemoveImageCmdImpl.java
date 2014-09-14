@@ -53,6 +53,11 @@ public class RemoveImageCmdImpl extends AbstrDockerCmd<RemoveImageCmd, Void> imp
 		this.force = force;
 		return this;
 	}
+	
+	@Override
+	public RemoveImageCmd withNoPrune() {
+		return withNoPrune(true);
+	}
 
 	@Override
 	public RemoveImageCmd withNoPrune(boolean noPrune) {

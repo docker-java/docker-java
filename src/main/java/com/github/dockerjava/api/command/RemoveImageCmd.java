@@ -16,11 +16,26 @@ public interface RemoveImageCmd extends DockerCmd<Void>{
 	public boolean hasNoPruneEnabled();
 
 	public RemoveImageCmd withImageId(String imageId);
-
+	
+	/**
+	 * force delete of an image, even if it's tagged in multiple repositories
+	 */
 	public RemoveImageCmd withForce();
 
+	/**
+	 * force parameter to force delete of an image, even if it's tagged in multiple repositories
+	 */
 	public RemoveImageCmd withForce(boolean force);
 
+	/**
+	 * prevent the deletion of parent images
+	 */
+	public RemoveImageCmd withNoPrune();
+	
+	/**
+	 * noprune parameter to prevent the deletion of parent images
+	 * 
+	 */
 	public RemoveImageCmd withNoPrune(boolean noPrune);
 
 	/**

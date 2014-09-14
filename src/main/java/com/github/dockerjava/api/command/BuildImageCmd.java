@@ -28,8 +28,12 @@ public interface BuildImageCmd extends DockerCmd<InputStream>{
 	public BuildImageCmd withNoCache();
 
 	public BuildImageCmd withNoCache(boolean noCache);
+	
+	public BuildImageCmd withRemove();
 
 	public BuildImageCmd withRemove(boolean rm);
+	
+	public BuildImageCmd withQuiet();
 
 	public BuildImageCmd withQuiet(boolean quiet);
 	

@@ -103,11 +103,21 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, InputStream
 		this.noCache = noCache;
 		return this;
 	}
+	
+	@Override
+	public BuildImageCmdImpl withRemove() {
+		return withRemove(true);
+	}
 
 	@Override
 	public BuildImageCmdImpl withRemove(boolean rm) {
 		this.remove = rm;
 		return this;
+	}
+	
+	@Override
+	public BuildImageCmdImpl withQuiet() {
+		return withQuiet(true);
 	}
 
 	@Override
