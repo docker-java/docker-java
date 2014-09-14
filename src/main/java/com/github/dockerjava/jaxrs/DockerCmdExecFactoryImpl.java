@@ -68,8 +68,6 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         if (dockerClientConfig.isLoggingFilterEnabled()) {
             clientConfig.register(new SelectiveLoggingFilter(LOGGER, true));
         }
-
-        //clientConfig.register(new LoggingFilter(LOGGER, true));
         
         if (dockerClientConfig.getReadTimeout() != null) {
         	int readTimeout = dockerClientConfig.getReadTimeout();
