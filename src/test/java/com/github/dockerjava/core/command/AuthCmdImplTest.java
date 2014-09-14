@@ -14,7 +14,6 @@ import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.UnauthorizedException;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.jaxrs.DockerClientBuilder;
 
 public class AuthCmdImplTest extends AbstractDockerClientTest {
@@ -47,7 +46,7 @@ public class AuthCmdImplTest extends AbstractDockerClientTest {
 	@Test
 	public void testAuthInvalid() throws Exception {
 		DockerClientConfig config = DockerClientConfig.createDefaultConfigBuilder().withPassword("garbage").build();
-		DockerClient client = DockerClientBuilder.getInstance(config).build();
+		DockerClient client = DockerClientBuilder.getInstance(config).withDockerCmdExecFactory(dockerCmdExecFactory).build();
         
 		try {
 			client.authCmd().exec();

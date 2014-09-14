@@ -1,8 +1,11 @@
 package com.github.dockerjava.jaxrs;
 
+import java.io.InputStream;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.CreateImageCmd;
@@ -20,9 +23,9 @@ import com.github.dockerjava.api.command.RemoveImageCmd;
  */
 public class TestDockerCmdExecFactory extends DockerCmdExecFactoryImpl {
 	
-	private List<String> containerIds = new ArrayList<String>();
+	private List<String> containerNames = new ArrayList<String>();
 	
-	private List<String> imagesIds = new ArrayList<String>();
+	private List<String> imageNames = new ArrayList<String>();
 	
 	@Override
 	public CreateContainerCmd.Exec createCreateContainerCmdExec() {
@@ -30,7 +33,7 @@ public class TestDockerCmdExecFactory extends DockerCmdExecFactoryImpl {
 			@Override
 			public CreateContainerResponse exec(CreateContainerCmd command) {
 				CreateContainerResponse createContainerResponse = super.exec(command);
-				containerIds.add(createContainerResponse.getId());
+				containerNames.add(createContainerResponse.getId());
 				return createContainerResponse;
 			}
 		};
@@ -42,7 +45,7 @@ public class TestDockerCmdExecFactory extends DockerCmdExecFactoryImpl {
 			@Override
 			public Void exec(RemoveContainerCmd command) {
 				super.exec(command);
-				containerIds.remove(command.getContainerId());
+				containerNames.remove(command.getContainerId());
 				return null;
 			}
 		};
@@ -54,11 +57,13 @@ public class TestDockerCmdExecFactory extends DockerCmdExecFactoryImpl {
 			@Override
 			public CreateImageResponse exec(CreateImageCmd command) {
 				CreateImageResponse createImageResponse = super.exec(command);
-				imagesIds.add(createImageResponse.getId());
+				imageNames.add(createImageResponse.getId());
 				return createImageResponse;
 			}
 		};
 	}
+	
+	
 	
 	@Override
 	public RemoveImageCmd.Exec createRemoveImageCmdExec() {
@@ -66,19 +71,36 @@ public class TestDockerCmdExecFactory extends DockerCmdExecFactoryImpl {
 			@Override
 			public Void exec(RemoveImageCmd command) {
 				super.exec(command);
-				imagesIds.remove(command.getImageId());
+				imageNames.remove(command.getImageId());
 				return null;
 			}
 		};
 	}
 	
-	public List<String> getContainerIds() {
-		return new ArrayList<String>(containerIds);
+	@Override
+	public BuildImageCmd.Exec createBuildImageCmdExec() {
+		return new BuildImageCmdExec(getBaseResource()) {
+			@Override
+			public InputStream exec(BuildImageCmd command) {
+				// can't detect image id here so tagging it
+				String tag = command.getTag();
+				if(tag == null || "".equals(tag.trim())) {
+					tag = "" + new SecureRandom().nextInt(Integer.MAX_VALUE);
+					command.withTag(tag);
+				}
+				InputStream inputStream = super.exec(command); 
+				imageNames.add(tag);
+				return inputStream;
+			}
+		};
 	}
 	
-	public List<String> getImagesIds() {
-		return new ArrayList<String>(imagesIds);
+	public List<String> getContainerNames() {
+		return new ArrayList<String>(containerNames);
 	}
 	
+	public List<String> getImageNames() {
+		return new ArrayList<String>(imageNames);
+	}
 	
 }

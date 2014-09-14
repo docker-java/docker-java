@@ -1,10 +1,11 @@
 package com.github.dockerjava.client;
 
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.core.DockerClientImpl;
-import com.github.dockerjava.jaxrs.DockerClientBuilder;
-import com.github.dockerjava.jaxrs.TestDockerCmdExecFactory;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.lang.reflect.Method;
+import java.net.DatagramSocket;
+import java.net.ServerSocket;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
@@ -13,14 +14,10 @@ import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.ITestResult;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.lang.reflect.Method;
-import java.net.DatagramSocket;
-import java.net.ServerSocket;
-import java.util.ArrayList;
-import java.util.List;
+import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.jaxrs.DockerClientBuilder;
+import com.github.dockerjava.jaxrs.TestDockerCmdExecFactory;
 
 public abstract class AbstractDockerClientTest extends Assert {
 	
@@ -29,10 +26,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 	
 	protected DockerClient dockerClient;
 
-//	protected List<String> tmpImgs;
-//	protected List<String> tmpContainers;
-
-	private TestDockerCmdExecFactory dockerCmdExecFactory = new TestDockerCmdExecFactory();
+	protected TestDockerCmdExecFactory dockerCmdExecFactory = new TestDockerCmdExecFactory();
 
 	public void beforeTest()  {
 		LOG.info("======================= BEFORETEST =======================");
@@ -57,8 +51,6 @@ public abstract class AbstractDockerClientTest extends Assert {
 
 
 	public void beforeMethod(Method method) {
-//	        tmpContainers = new ArrayList<String>();
-//	        tmpImgs = new ArrayList<String>();
 		LOG.info(String
 				.format("################################## STARTING %s ##################################",
 						method.getName()));
@@ -66,31 +58,25 @@ public abstract class AbstractDockerClientTest extends Assert {
 
 	public void afterMethod(ITestResult result) {
 
-		for (String container : dockerCmdExecFactory.getContainerIds()) {
+		for (String container : dockerCmdExecFactory.getContainerNames()) {
 			LOG.info("Cleaning up temporary container {}", container);
-			try {
-				dockerClient.stopContainerCmd(container).exec();
-				dockerClient.killContainerCmd(container).exec();
-			} catch (DockerException ignore) {
-				//ignore.printStackTrace();
-			}
 			
 			try {
-				dockerClient.removeContainerCmd(container).exec();
+				dockerClient.removeContainerCmd(container).withForce().exec();
 			} catch (DockerException ignore) {
 				ignore.printStackTrace();
 			}
 		}
 
-		for (String image : dockerCmdExecFactory.getImagesIds()) {
-			LOG.info("Cleaning up temporary image {}", image);
+		for (String image : dockerCmdExecFactory.getImageNames()) {
+			LOG.info("Cleaning up temporary image with {}", image);
 			try {
-				dockerClient.removeImageCmd(image).exec();
+				dockerClient.removeImageCmd(image).withForce().exec();
 			} catch (DockerException ignore) {
 				ignore.printStackTrace();
 			}
-		}
-
+		}	
+		
 		LOG.info(
 				"################################## END OF {} ##################################\n",
 				result.getName());
