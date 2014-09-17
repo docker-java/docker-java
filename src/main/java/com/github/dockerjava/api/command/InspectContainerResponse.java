@@ -254,15 +254,15 @@ public class InspectContainerResponse {
 
         @JsonProperty("Dns")
         private String[] dns;
+        
+        @JsonProperty("DnsSearch")
+        private String[] dnsSearch;
 
         @JsonProperty("VolumesFrom")
         private String[] volumesFrom;
 
         @JsonProperty("ContainerIDFile")
         private String containerIDFile;
-
-        @JsonProperty("DnsSearch")
-        private String dnsSearch;
 
         // TODO: use Links class here?
         @JsonProperty("Links")
@@ -315,7 +315,7 @@ public class InspectContainerResponse {
 			return containerIDFile;
 		}
 
-		public String getDnsSearch() {
+		public String[] getDnsSearch() {
 			return dnsSearch;
 		}
 

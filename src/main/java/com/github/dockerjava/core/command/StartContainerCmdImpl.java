@@ -44,6 +44,9 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 
 	@JsonProperty("Dns")
 	private String[] dns;
+	
+	@JsonProperty("DnsSearch")
+	private String[] dnsSearch;
 
 	@JsonProperty("VolumesFrom")
 	private String volumesFrom;
@@ -103,6 +106,11 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	@Override
 	public String[] getDns() {
 		return dns;
+	}
+	
+	@Override
+	public String[] getDnsSearch() {
+		return dnsSearch;
 	}
 
 	@Override
@@ -187,6 +195,13 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	public StartContainerCmd withDns(String... dns) {
 		Preconditions.checkNotNull(dns, "dns was not specified");
 		this.dns = dns;
+		return this;
+	}
+	
+	@Override
+	public StartContainerCmd withDnsSearch(String... dnsSearch) {
+		Preconditions.checkNotNull(dnsSearch, "dnsSearch was not specified");
+		this.dnsSearch = dnsSearch;
 		return this;
 	}
 

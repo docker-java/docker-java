@@ -27,6 +27,8 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 	public boolean isPrivileged();
 
 	public String[] getDns();
+	
+	public String[] getDnsSearch();
 
 	public String getVolumesFrom();
 
@@ -54,7 +56,11 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 
 	public StartContainerCmd withPublishAllPorts(boolean publishAllPorts);
 
+	// Set custom DNS servers
 	public StartContainerCmd withDns(String... dns);
+	
+	// Set custom DNS search domains
+	public StartContainerCmd withDnsSearch(String... dnsSearch);
 
 	public StartContainerCmd withVolumesFrom(String volumesFrom);
 

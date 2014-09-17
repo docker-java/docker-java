@@ -1,7 +1,5 @@
 package com.github.dockerjava.api.command;
 
-import java.io.InputStream;
-
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.model.ExposedPorts;
 import com.github.dockerjava.api.model.Volumes;

@@ -114,7 +114,31 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
 		assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getDns()),
 				contains(aDnsServer, anotherDnsServer));
+	}
+	
+	@Test
+	public void startContainerWithDnsSearch() throws DockerException {
 
+		String dnsSearch = "example.com";
+		
+		CreateContainerResponse container = dockerClient
+				.createContainerCmd("busybox")
+				.withCmd("true").exec();
+
+		LOG.info("Created container {}", container.toString());
+
+		assertThat(container.getId(), not(isEmptyString()));
+
+		InspectContainerResponse inspectContainerResponse = dockerClient
+				.inspectContainerCmd(container.getId()).exec();
+
+		dockerClient.startContainerCmd(container.getId()).withDnsSearch(dnsSearch).exec();
+
+		inspectContainerResponse = dockerClient.inspectContainerCmd(container
+				.getId()).exec();
+
+		assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getDnsSearch()),
+				contains(dnsSearch));
 	}
 	
 	@Test

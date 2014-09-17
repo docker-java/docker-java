@@ -34,6 +34,7 @@ import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.model.AuthConfig;
 
+// https://godoc.org/github.com/fsouza/go-dockerclient
 public interface DockerClient extends Closeable {
 
 	public AuthConfig authConfig() throws DockerException;
