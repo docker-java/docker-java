@@ -85,10 +85,7 @@ In your application, e.g.
     config.withUsername("dockeruser");
     config.withPassword("ilovedocker");
     config.withEmail("dockeruser@github.com);
-    DockerClient docker = DockerClientBuilder
-    				.getInstance( config )
-    				.withDockerCmdExecFactory( new DockerCmdExecFactoryImpl())
-    				.build();
+    DockerClient docker = DockerClientBuilder.getInstance( config ).build();
 
 ##### System Properties:
 E.g.
