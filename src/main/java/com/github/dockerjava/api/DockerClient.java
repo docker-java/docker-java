@@ -10,6 +10,7 @@ import com.github.dockerjava.api.command.ContainerDiffCmd;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateImageCmd;
+import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
@@ -113,6 +114,8 @@ public interface DockerClient extends Closeable {
 	public PauseContainerCmd pauseContainerCmd(String containerId);
 	
 	public UnpauseContainerCmd unpauseContainerCmd(String containerId);
+
+	public EventsCmd eventsCmd();
 
 	public void close() throws IOException;
 
