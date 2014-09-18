@@ -2,10 +2,10 @@ package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.EventCallback;
 import com.github.dockerjava.api.model.Event;
-import com.github.dockerjava.api.model.EventStream;
+import com.github.dockerjava.api.model.EventNotifier;
 import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.google.common.collect.Lists;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -15,7 +15,8 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 public class EventsCmdImplTest extends AbstractDockerClientTest {
@@ -50,52 +51,60 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
     public void testEventStreamTimeBound() throws InterruptedException, IOException {
         // Don't include other tests events
         TimeUnit.SECONDS.sleep(1);
+
         String startTime = getEpochTime();
-        generateEvents();
+        int expectedEvents = generateEvents();
         String endTime = getEpochTime();
 
-        EventStream eventStream = dockerClient.eventsCmd().withSince(startTime).withUntil(endTime).exec();
-        List<Event> eventList = pollEvents(eventStream);
-        eventStream.close();
-        LOG.info("Events: {}", eventList);
-        assertEquals(eventList.size(), KNOWN_NUM_EVENTS, "Expected 4 events, [create, start, die, stop]");
+        CountDownLatch countDownLatch = new CountDownLatch(expectedEvents);
+        EventCallback eventCallback = new EventCallbackTest(countDownLatch);
+
+        EventNotifier eventNotifier = dockerClient.eventsCmd(eventCallback).withSince(startTime).withUntil(endTime).exec();
+        boolean zeroCount = countDownLatch.await(30, TimeUnit.SECONDS);
+        eventNotifier.close();
+        assertTrue(zeroCount, "Expected 4 events, [create, start, die, stop]");
     }
 
     @Test
-    public void testEventStream() throws InterruptedException, IOException {
+    public void testEventStreaming() throws InterruptedException, IOException {
         // Don't include other tests events
         TimeUnit.SECONDS.sleep(1);
-        String startTime = getEpochTime();
+
+        CountDownLatch countDownLatch = new CountDownLatch(KNOWN_NUM_EVENTS);
+        EventCallback eventCallback = new EventCallbackTest(countDownLatch);
+        EventNotifier eventNotifier = dockerClient.eventsCmd(eventCallback).withSince(getEpochTime()).exec();
+
         generateEvents();
 
-        EventStream eventStream = dockerClient.eventsCmd().withSince(startTime).exec();
-        List<Event> eventList = pollEvents(eventStream);
-        eventStream.close();
-        LOG.info("Events: {}", eventList);
-        assertEquals(eventList.size(), KNOWN_NUM_EVENTS, "Expected 4 events, [create, start, die, stop]");
+        boolean zeroCount = countDownLatch.await(30, TimeUnit.SECONDS);
+        eventNotifier.close();
+        assertTrue(zeroCount, "Expected 4 events, [create, start, die, stop]");
     }
 
     /**
      * This method generates {#link KNOWN_NUM_EVENTS} events
      */
-    private void generateEvents() {
+    private int generateEvents() {
         String testImage = "busybox";
         asString(dockerClient.pullImageCmd(testImage).exec());
-        CreateContainerResponse container1 = dockerClient
+        CreateContainerResponse container = dockerClient
                 .createContainerCmd(testImage).withCmd("echo").exec();
-        dockerClient.startContainerCmd(container1.getId()).exec();
-        dockerClient.stopContainerCmd(container1.getId()).exec();
+        dockerClient.startContainerCmd(container.getId()).exec();
+        dockerClient.stopContainerCmd(container.getId()).exec();
+        return KNOWN_NUM_EVENTS;
     }
 
-    private List<Event> pollEvents(EventStream eventStream) throws InterruptedException {
-        List<Event> eventList = Lists.newArrayList();
-        Event event = null;
-        do {
-            event = eventStream.pollEvent(1, TimeUnit.SECONDS);
-            if (event != null) {
-                eventList.add(event);
-            }
-        } while (event != null);
-        return eventList;
+    private class EventCallbackTest implements EventCallback {
+        private final CountDownLatch countDownLatch;
+
+        public EventCallbackTest(CountDownLatch countDownLatch) {
+            this.countDownLatch = countDownLatch;
+        }
+
+        @Override
+        public void onEvent(Event event) {
+            LOG.info("Received event #{}: {}", countDownLatch.getCount(), event);
+            countDownLatch.countDown();
+        }
     }
 }

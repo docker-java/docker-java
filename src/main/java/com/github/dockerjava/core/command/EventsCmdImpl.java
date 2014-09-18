@@ -1,20 +1,22 @@
 package com.github.dockerjava.core.command;
 
+import com.github.dockerjava.api.command.EventCallback;
 import com.github.dockerjava.api.command.EventsCmd;
-import com.github.dockerjava.api.model.EventStream;
-
-import java.io.InputStream;
+import com.github.dockerjava.api.model.EventNotifier;
 
 /**
  * Stream docker events
  */
-public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, EventStream> implements EventsCmd {
+public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, EventNotifier> implements EventsCmd {
+
+    private final EventCallback eventCallback;
 
     private String since;
     private String until;
 
-    public EventsCmdImpl(EventsCmd.Exec exec) {
+    public EventsCmdImpl(EventsCmd.Exec exec, EventCallback eventCallback) {
         super(exec);
+        this.eventCallback = eventCallback;
     }
 
     @Override
@@ -29,16 +31,23 @@ public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, EventStream> implem
         return this;
     }
 
+    @Override
     public String getSince() {
         return since;
     }
 
+    @Override
     public String getUntil() {
         return until;
     }
 
     @Override
-    public EventStream exec() {
+    public EventCallback getEventCallback() {
+        return eventCallback;
+    }
+
+    @Override
+    public EventNotifier exec() {
         return super.exec();
     }
 
