@@ -1,4 +1,4 @@
-package com.github.dockerjava.core;
+package com.github.dockerjava.jaxrs.util;
 
 
 import javax.ws.rs.client.ClientRequestContext;

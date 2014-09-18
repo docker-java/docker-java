@@ -17,6 +17,8 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.InternalServerErrorException;
+import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.client.AbstractDockerClientTest;
@@ -67,13 +69,11 @@ public class PullImageCmdImplTest extends AbstractDockerClientTest {
 		imgCount = info.getImages();
 		LOG.info("imgCount2: {}", imgCount);
 
-
 		LOG.info("Pulling image: {}", testImage);
 
 		InputStream response = dockerClient.pullImageCmd(testImage).exec();
 
-		assertThat(asString(response),
-				containsString("Download complete"));
+		assertThat(asString(response), containsString("Download complete"));
 
 		info = dockerClient.infoCmd().exec();
 		LOG.info("Client info after pull, {}", info.toString());
@@ -84,6 +84,20 @@ public class PullImageCmdImplTest extends AbstractDockerClientTest {
 				.inspectImageCmd(testImage).exec();
 		LOG.info("Image Inspect: {}", inspectImageResponse.toString());
 		assertThat(inspectImageResponse, notNullValue());
+	}
+
+	@Test
+	public void testPullNonExistingImage() throws DockerException, IOException {
+		
+		// does not throw an exception
+		dockerClient.pullImageCmd("nonexisting/foo").exec();
+		
+		try {
+			dockerClient.pullImageCmd("non-existing/foo").exec();
+			fail("expected InternalServerErrorException");
+		} catch (InternalServerErrorException e) {
+		}
+		
 	}
 
 }

@@ -19,7 +19,7 @@ public class InspectImageCmdExec extends AbstrDockerCmdExec<InspectImageCmd, Ins
 	}
 
 	@Override
-	public InspectImageResponse exec(InspectImageCmd command) {
+	protected InspectImageResponse execute(InspectImageCmd command) {
 		WebTarget webResource = getBaseResource().path("/images/{id}/json").resolveTemplate("id", command.getImageId());
 
 		LOGGER.trace("GET: {}", webResource);

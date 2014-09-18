@@ -17,7 +17,7 @@ public class PingCmdExec extends AbstrDockerCmdExec<PingCmd, Void> implements Pi
 	}
 
 	@Override
-	public Void exec(PingCmd command) {
+	protected Void execute(PingCmd command) {
 		WebTarget webResource = getBaseResource().path("/_ping");
 	       
         LOGGER.trace("GET: {}", webResource);

@@ -21,7 +21,7 @@ public class TagImageCmdExec extends AbstrDockerCmdExec<TagImageCmd, Void> imple
 	}
 
 	@Override
-	public Void exec(TagImageCmd command) {
+	protected Void execute(TagImageCmd command) {
 		WebTarget webResource = getBaseResource().path("/images/" + command.getImageId() + "/tag")
                 .queryParam("repo", command.getRepository())
                 .queryParam("tag", command.getTag())

@@ -21,6 +21,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.client.AbstractDockerClientTest;
@@ -50,7 +51,7 @@ public class RemoveImageCmdImplTest extends AbstractDockerClientTest {
 	}
 
 	@Test
-	public void testRemoveImage() throws DockerException, InterruptedException {
+	public void removeImage() throws DockerException, InterruptedException {
 
 		CreateContainerResponse container = dockerClient
 				.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
@@ -73,6 +74,16 @@ public class RemoveImageCmdImplTest extends AbstractDockerClientTest {
 		
 		Matcher matcher = not(hasItem(hasField("id", startsWith(imageId))));
 		assertThat(containers, matcher);
+	}
+
+	@Test
+	public void removeNonExistingImage() throws DockerException, InterruptedException {
+		try {
+			dockerClient.removeImageCmd("non-existing").exec();
+			fail("expected NotFoundException");
+		} catch (NotFoundException e) {
+		}
+
 	}
 
 

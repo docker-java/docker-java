@@ -18,6 +18,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
@@ -65,6 +66,16 @@ public class StopContainerCmdImplTest extends AbstractDockerClientTest {
 
 		assertThat(inspectContainerResponse.getState().isRunning(),	is(equalTo(false)));
 		assertThat(inspectContainerResponse.getState().getExitCode(), not(equalTo(0)));
+	}
+	
+	@Test
+	public void testStopNonExistingContainer() throws DockerException {
+		try {
+			dockerClient.stopContainerCmd("non-existing").withTimeout(2).exec();
+			fail("expected NotFoundException");
+		} catch (NotFoundException e) {
+			
+		}
 	}
 
 }

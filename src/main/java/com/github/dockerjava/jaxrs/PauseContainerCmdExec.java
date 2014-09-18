@@ -20,7 +20,7 @@ public class PauseContainerCmdExec extends AbstrDockerCmdExec<PauseContainerCmd,
 	}
 
 	@Override
-	public Void exec(PauseContainerCmd command) {
+	protected Void execute(PauseContainerCmd command) {
 		WebTarget webResource = getBaseResource().path("/containers/{id}/pause")
 				.resolveTemplate("id", command.getContainerId());
 		

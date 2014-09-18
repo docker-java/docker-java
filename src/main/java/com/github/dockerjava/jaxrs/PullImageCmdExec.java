@@ -22,7 +22,7 @@ public class PullImageCmdExec extends AbstrDockerCmdExec<PullImageCmd, InputStre
 	}
 
 	@Override
-	public InputStream exec(PullImageCmd command) {
+	protected InputStream execute(PullImageCmd command) {
 		WebTarget webResource = getBaseResource().path("/images/create")
                 .queryParam("tag", command.getTag())
                 .queryParam("fromImage", command.getRepository())

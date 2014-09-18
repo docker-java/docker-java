@@ -22,7 +22,7 @@ public class AuthCmdExec extends AbstrDockerCmdExec<AuthCmd, Void> implements Au
 	}
 
 	@Override
-	public Void exec(AuthCmd command) {
+	protected Void execute(AuthCmd command) {
 		WebTarget webResource = getBaseResource().path("/auth");
 		LOGGER.trace("POST: {}", webResource);
 		Response response = webResource.request().accept(MediaType.APPLICATION_JSON).post(entity(command.getAuthConfig(), MediaType.APPLICATION_JSON));

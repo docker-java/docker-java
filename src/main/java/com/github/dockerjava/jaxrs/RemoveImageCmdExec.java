@@ -17,7 +17,7 @@ public class RemoveImageCmdExec extends AbstrDockerCmdExec<RemoveImageCmd, Void>
 	}
 
 	@Override
-	public Void exec(RemoveImageCmd command) {
+	protected Void execute(RemoveImageCmd command) {
 		WebTarget webResource = getBaseResource().path("/images/" + command.getImageId())
 				.queryParam("force", command.hasForceEnabled() ? "1" : "0")
 				.queryParam("noprune", command.hasNoPruneEnabled() ? "1" : "0");

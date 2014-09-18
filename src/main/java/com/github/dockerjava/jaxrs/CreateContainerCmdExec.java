@@ -20,7 +20,7 @@ public class CreateContainerCmdExec extends AbstrDockerCmdExec<CreateContainerCm
 	}
 
 	@Override
-	public CreateContainerResponse exec(CreateContainerCmd command) {
+	protected CreateContainerResponse execute(CreateContainerCmd command) {
 		WebTarget webResource = getBaseResource().path("/containers/create");
 
         if (command.getName() != null) {

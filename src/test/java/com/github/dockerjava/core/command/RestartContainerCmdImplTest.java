@@ -16,6 +16,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
@@ -72,6 +73,16 @@ public class RestartContainerCmdImplTest extends AbstractDockerClientTest {
 				is(equalTo(true)));
 
 		dockerClient.killContainerCmd(container.getId()).exec();
+	}
+	
+	@Test
+	public void restartNonExistingContainer() throws DockerException, InterruptedException {
+		try {
+			dockerClient.restartContainerCmd("non-existing").exec();
+			fail("expected NotFoundException");
+		} catch (NotFoundException e) {
+		}
+
 	}
 
 

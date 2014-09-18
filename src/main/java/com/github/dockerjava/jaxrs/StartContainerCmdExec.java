@@ -19,7 +19,7 @@ public class StartContainerCmdExec extends AbstrDockerCmdExec<StartContainerCmd,
 	}
 
 	@Override
-	public Void exec(StartContainerCmd command) {
+	protected Void execute(StartContainerCmd command) {
 		WebTarget webResource = getBaseResource().path("/containers/{id}/start")
 				.resolveTemplate("id", command.getContainerId());
 

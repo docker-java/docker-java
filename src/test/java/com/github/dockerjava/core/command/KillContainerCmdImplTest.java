@@ -18,6 +18,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
@@ -48,7 +49,7 @@ public class KillContainerCmdImplTest extends AbstractDockerClientTest {
 	}
 
 	@Test
-	public void testKillContainer() throws DockerException {
+	public void killContainer() throws DockerException {
 
 		CreateContainerResponse container = dockerClient
 				.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
@@ -68,6 +69,16 @@ public class KillContainerCmdImplTest extends AbstractDockerClientTest {
 		assertThat(inspectContainerResponse.getState().getExitCode(),
 				not(equalTo(0)));
 
+	}
+	
+	@Test
+	public void killNonExistingContainer() throws DockerException {
+
+		try {
+			dockerClient.killContainerCmd("non-existing").exec();
+			fail("expected NotFoundException");
+		} catch (NotFoundException e) {
+		}
 	}
 
 }

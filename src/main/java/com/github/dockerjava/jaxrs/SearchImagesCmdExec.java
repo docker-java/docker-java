@@ -21,7 +21,7 @@ public class SearchImagesCmdExec extends AbstrDockerCmdExec<SearchImagesCmd, Lis
 	}
 
 	@Override
-	public List<SearchItem> exec(SearchImagesCmd command) {
+	protected List<SearchItem> execute(SearchImagesCmd command) {
 		WebTarget webResource = getBaseResource().path("/images/search").queryParam("term", command.getTerm());
 		
 		LOGGER.trace("GET: {}", webResource);

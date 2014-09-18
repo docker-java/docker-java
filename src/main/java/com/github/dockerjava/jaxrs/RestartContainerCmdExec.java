@@ -19,7 +19,7 @@ public class RestartContainerCmdExec extends AbstrDockerCmdExec<RestartContainer
 	}
 
 	@Override
-	public Void exec(RestartContainerCmd command) {
+	protected Void execute(RestartContainerCmd command) {
 		WebTarget webResource = getBaseResource().path("/containers/{id}/restart")
 				.resolveTemplate("id", command.getContainerId())
 				.queryParam("t", String.valueOf(command.getTimeout()));

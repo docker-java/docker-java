@@ -23,7 +23,7 @@ public class AttachContainerCmdExec extends AbstrDockerCmdExec<AttachContainerCm
 	}
 
 	@Override
-	public InputStream exec(AttachContainerCmd command) {
+	protected InputStream execute(AttachContainerCmd command) {
 		WebTarget webResource = getBaseResource().path("/containers/{id}/attach")
                 .resolveTemplate("id", command.getContainerId())
                 .queryParam("logs", command.hasLogsEnabled() ? "1" : "0")

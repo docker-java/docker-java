@@ -20,7 +20,7 @@ public class TopContainerCmdExec extends AbstrDockerCmdExec<TopContainerCmd, Top
 	}
 
 	@Override
-	public TopContainerResponse exec(TopContainerCmd command) {
+	protected TopContainerResponse execute(TopContainerCmd command) {
 		WebTarget webResource = getBaseResource().path("/containers/{id}/top")
 				.resolveTemplate("id", command.getContainerId());
 

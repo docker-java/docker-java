@@ -18,6 +18,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.ChangeLog;
 import com.github.dockerjava.client.AbstractDockerClientTest;
@@ -45,7 +46,7 @@ public class ContainerDiffCmdImplTest extends AbstractDockerClientTest {
 	}
 
 	@Test
-	public void testDiff() throws DockerException {
+	public void testContainerDiff() throws DockerException {
 		CreateContainerResponse container = dockerClient
 				.createContainerCmd("busybox").withCmd("touch", "/test" ).exec();
 		LOG.info("Created container: {}", container.toString());
@@ -64,6 +65,15 @@ public class ContainerDiffCmdImplTest extends AbstractDockerClientTest {
 
 		assertThat(testChangeLog, hasField("path", equalTo("/test")));
 		assertThat(testChangeLog, hasField("kind", equalTo(1)));
+	}
+	
+	@Test
+	public void testContainerDiffWithNonExistingContainer() throws DockerException {
+		try {
+			dockerClient.containerDiffCmd("non-existing").exec();
+			fail("expected NotFoundException");
+		} catch (NotFoundException e) {
+		}
 	}
 
 

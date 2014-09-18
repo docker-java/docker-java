@@ -23,7 +23,7 @@ public class BuildImageCmdExec extends AbstrDockerCmdExec<BuildImageCmd, InputSt
 	}
 
 	@Override
-	public InputStream exec(BuildImageCmd command) {
+	protected InputStream execute(BuildImageCmd command) {
 		WebTarget webResource = getBaseResource().path("/build");
 		
 		if(command.getTag() != null) {

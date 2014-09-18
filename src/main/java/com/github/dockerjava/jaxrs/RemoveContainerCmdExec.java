@@ -17,7 +17,7 @@ public class RemoveContainerCmdExec extends AbstrDockerCmdExec<RemoveContainerCm
 	}
 
 	@Override
-	public Void exec(RemoveContainerCmd command) {
+	protected Void execute(RemoveContainerCmd command) {
 		WebTarget webResource = getBaseResource().path("/containers/" + command.getContainerId())
 				.queryParam("v", command.hasRemoveVolumesEnabled() ? "1" : "0")
 				.queryParam("force", command.hasForceEnabled() ? "1" : "0");

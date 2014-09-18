@@ -21,7 +21,7 @@ public class ListImagesCmdExec extends AbstrDockerCmdExec<ListImagesCmd, List<Im
 	}
 
 	@Override
-	public List<Image> exec(ListImagesCmd command) {
+	protected List<Image> execute(ListImagesCmd command) {
 		WebTarget webResource = getBaseResource()
                 .path("/images/json")
                 .queryParam("filter", command.getFilter())

@@ -19,7 +19,7 @@ public class LogContainerCmdExec extends AbstrDockerCmdExec<LogContainerCmd, Inp
 	}
 
 	@Override
-	public InputStream exec(LogContainerCmd command) {
+	protected InputStream execute(LogContainerCmd command) {
 		WebTarget webResource = getBaseResource().path("/containers/{id}/logs")
 				.resolveTemplate("id", command.getContainerId())
 				.queryParam("timestamps", command.hasTimestampsEnabled() ? "1" : "0")

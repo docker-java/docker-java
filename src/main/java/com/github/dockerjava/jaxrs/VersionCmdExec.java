@@ -19,7 +19,7 @@ public class VersionCmdExec extends AbstrDockerCmdExec<VersionCmd, Version> impl
 	}
 
 	@Override
-	public Version exec(VersionCmd command) {
+	protected Version execute(VersionCmd command) {
 		WebTarget webResource = getBaseResource().path("/version");
 
 		LOGGER.trace("GET: {}", webResource);

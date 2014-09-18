@@ -20,7 +20,7 @@ public class KillContainerCmdExec extends AbstrDockerCmdExec<KillContainerCmd, V
 	}
 
 	@Override
-	public Void exec(KillContainerCmd command) {
+	protected Void execute(KillContainerCmd command) {
 		WebTarget webResource = getBaseResource().path("/containers/{id}/kill").resolveTemplate("id", command.getContainerId());
 
 		if(command.getSignal() != null) {

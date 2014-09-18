@@ -21,13 +21,13 @@ public class WaitContainerCmdExec extends AbstrDockerCmdExec<WaitContainerCmd, I
 	}
 
 	@Override
-	public Integer exec(WaitContainerCmd command) {
+	protected Integer execute(WaitContainerCmd command) {
 		WebTarget webResource = getBaseResource().path("/containers/{id}/wait")
 				.resolveTemplate("id", command.getContainerId());
 
 		LOGGER.trace("POST: {}", webResource);
 		ObjectNode ObjectNode = webResource.request().accept(MediaType.APPLICATION_JSON)
-				.post(entity(null, MediaType.APPLICATION_JSON), ObjectNode.class);
+				.post(entity(null, MediaType.TEXT_PLAIN), ObjectNode.class);
 		
         return ObjectNode.get("StatusCode").asInt();
 	}

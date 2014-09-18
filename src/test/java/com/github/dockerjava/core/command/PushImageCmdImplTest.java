@@ -48,7 +48,7 @@ public class PushImageCmdImplTest extends AbstractDockerClientTest {
 	}
 
 	@Test
-	public void testPushLatest() throws Exception {
+	public void pushLatest() throws Exception {
 
 		CreateContainerResponse container = dockerClient
 				.createContainerCmd("busybox").withCmd("true").exec();
@@ -71,7 +71,7 @@ public class PushImageCmdImplTest extends AbstractDockerClientTest {
 	}
 
 	@Test
-	public void testNotExistentImage() throws Exception {
+	public void pushExistentImage() throws Exception {
 
 		assertThat(asString(dockerClient.pushImageCmd(username + "/xxx").exec()), containsString("error"));
 	}

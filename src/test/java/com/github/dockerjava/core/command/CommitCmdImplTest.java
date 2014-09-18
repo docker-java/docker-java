@@ -17,6 +17,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
@@ -70,6 +71,16 @@ public class CommitCmdImplTest extends AbstractDockerClientTest {
 
 		assertThat(inspectImageResponse.getParent(),
 				equalTo(busyboxImg.getId()));
+	}
+	
+	
+	@Test
+	public void commitNonExistingContainer() throws DockerException {
+		try {
+			dockerClient.commitCmd("non-existent").exec();
+			fail("expected NotFoundException");
+		} catch (NotFoundException e) {
+		}
 	}
 
 }

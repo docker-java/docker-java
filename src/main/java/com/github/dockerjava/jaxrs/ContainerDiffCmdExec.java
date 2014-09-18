@@ -22,7 +22,7 @@ public class ContainerDiffCmdExec extends AbstrDockerCmdExec<ContainerDiffCmd, L
 	}
 
 	@Override
-	public List<ChangeLog> exec(ContainerDiffCmd command) {
+	protected List<ChangeLog> execute(ContainerDiffCmd command) {
 		WebTarget webResource = getBaseResource().path("/containers/{id}/changes").resolveTemplate("id", command.getContainerId());
 		
 		LOGGER.trace("GET: {}", webResource);

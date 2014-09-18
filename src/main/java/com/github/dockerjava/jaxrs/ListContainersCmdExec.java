@@ -21,7 +21,7 @@ public class ListContainersCmdExec extends AbstrDockerCmdExec<ListContainersCmd,
 	}
 
 	@Override
-	public List<Container> exec(ListContainersCmd command) {
+	protected List<Container> execute(ListContainersCmd command) {
 		WebTarget webResource = getBaseResource().path("/containers/json")
                 .queryParam("all", command.hasShowAllEnabled() ? "1" : "0")
                 .queryParam("since", command.getSinceId())

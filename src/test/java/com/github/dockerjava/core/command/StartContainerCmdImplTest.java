@@ -13,6 +13,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.*;
@@ -262,9 +263,16 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 			assertThat(inspectContainerResponse.getState().getExitCode(),
 					is(equalTo(0)));
 		}
-
 	}
-
+	
+	@Test
+	public void testStartNonExistingContainer() throws DockerException {
+		try {
+			dockerClient.startContainerCmd("non-existing").exec();
+			fail("expected NotFoundException");
+		} catch (NotFoundException e) {
+		}
+	}
 	
 	/**
 	 * This tests support for --net option for the docker run command:
@@ -296,7 +304,6 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         assertThat(inspectContainerResponse.getHostConfig().getNetworkMode(),
                 is(equalTo("host")));
-    
     }
 	
 	@Test

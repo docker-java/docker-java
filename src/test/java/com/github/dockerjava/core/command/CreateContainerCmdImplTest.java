@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 import java.lang.reflect.Method;
+import java.security.SecureRandom;
 import java.util.Arrays;
 
 import org.testng.ITestResult;
@@ -34,7 +35,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
 	@BeforeMethod
 	public void beforeMethod(Method method) {
-	    super.beforeMethod(method);
+		super.beforeMethod(method);
 	}
 
 	@AfterMethod
@@ -43,82 +44,118 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 	}
 
 	@Test
-	public void createContainerWithVolume() throws DockerException {
+	public void createContainerWithExistingName() throws DockerException {
+
+		String containerName = "generated_" + new SecureRandom().nextInt();
 
 		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withVolumes(new Volume("/var/log")).withCmd("true").exec();
+				.createContainerCmd("busybox").withCmd("env")
+				.withName(containerName).exec();
 
 		LOG.info("Created container {}", container.toString());
 
 		assertThat(container.getId(), not(isEmptyString()));
 
-		InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+		try {
+			dockerClient.createContainerCmd("busybox").withCmd("env")
+					.withName(containerName).exec();
+			fail("expected ConflictException");
+		} catch (ConflictException e) {
+		}
+	}
 
-		LOG.info("Inspect container {}", inspectContainerResponse.getConfig().getVolumes());
+	@Test
+	public void createContainerWithVolume() throws DockerException {
 
-		assertThat(inspectContainerResponse.getConfig().getVolumes().keySet(), contains("/var/log"));
+		CreateContainerResponse container = dockerClient
+				.createContainerCmd("busybox")
+				.withVolumes(new Volume("/var/log")).withCmd("true").exec();
+
+		LOG.info("Created container {}", container.toString());
+
+		assertThat(container.getId(), not(isEmptyString()));
+
+		InspectContainerResponse inspectContainerResponse = dockerClient
+				.inspectContainerCmd(container.getId()).exec();
+
+		LOG.info("Inspect container {}", inspectContainerResponse.getConfig()
+				.getVolumes());
+
+		assertThat(inspectContainerResponse.getConfig().getVolumes().keySet(),
+				contains("/var/log"));
 	}
 
 	@Test
 	public void createContainerWithEnv() throws DockerException {
 
 		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withEnv("VARIABLE=success").withCmd("env").exec();
+				.createContainerCmd("busybox").withEnv("VARIABLE=success")
+				.withCmd("env").exec();
 
 		LOG.info("Created container {}", container.toString());
 
 		assertThat(container.getId(), not(isEmptyString()));
 
-		InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+		InspectContainerResponse inspectContainerResponse = dockerClient
+				.inspectContainerCmd(container.getId()).exec();
 
-		assertThat(Arrays.asList(inspectContainerResponse.getConfig().getEnv()), contains("VARIABLE=success","HOME=/","PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"));
+		assertThat(
+				Arrays.asList(inspectContainerResponse.getConfig().getEnv()),
+				contains("VARIABLE=success", "HOME=/",
+						"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"));
 
 		dockerClient.startContainerCmd(container.getId()).exec();
 
-		assertThat(asString(dockerClient.logContainerCmd(container.getId()).withStdOut().exec()), containsString("VARIABLE=success"));
+		assertThat(asString(dockerClient.logContainerCmd(container.getId())
+				.withStdOut().exec()), containsString("VARIABLE=success"));
 	}
 
 	@Test
 	public void createContainerWithHostname() throws DockerException {
 
 		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withHostName("docker-java").withCmd("env").exec();
+				.createContainerCmd("busybox").withHostName("docker-java")
+				.withCmd("env").exec();
 
 		LOG.info("Created container {}", container.toString());
 
 		assertThat(container.getId(), not(isEmptyString()));
 
-		InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+		InspectContainerResponse inspectContainerResponse = dockerClient
+				.inspectContainerCmd(container.getId()).exec();
 
-		assertThat(inspectContainerResponse.getConfig().getHostName(), equalTo("docker-java"));
+		assertThat(inspectContainerResponse.getConfig().getHostName(),
+				equalTo("docker-java"));
 
 		dockerClient.startContainerCmd(container.getId()).exec();
 
-		assertThat(asString(dockerClient.logContainerCmd(container.getId()).withStdOut().exec()), containsString("HOSTNAME=docker-java"));
+		assertThat(asString(dockerClient.logContainerCmd(container.getId())
+				.withStdOut().exec()), containsString("HOSTNAME=docker-java"));
 	}
-	
+
 	@Test
 	public void createContainerWithName() throws DockerException {
 
 		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withName("container").withCmd("env").exec();
+				.createContainerCmd("busybox").withName("container")
+				.withCmd("env").exec();
 
 		LOG.info("Created container {}", container.toString());
 
 		assertThat(container.getId(), not(isEmptyString()));
 
-		InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+		InspectContainerResponse inspectContainerResponse = dockerClient
+				.inspectContainerCmd(container.getId()).exec();
 
 		assertThat(inspectContainerResponse.getName(), equalTo("/container"));
-		
-		
+
 		try {
-			dockerClient.createContainerCmd("busybox").withName("container").withCmd("env").exec();
+			dockerClient.createContainerCmd("busybox").withName("container")
+					.withCmd("env").exec();
 			fail("Expected ConflictException");
 		} catch (ConflictException e) {
 		}
 
 	}
-
 
 }

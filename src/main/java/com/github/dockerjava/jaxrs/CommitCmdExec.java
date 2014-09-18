@@ -21,7 +21,7 @@ public class CommitCmdExec extends AbstrDockerCmdExec<CommitCmd, String> impleme
 	}
 
 	@Override
-	public String exec(CommitCmd command) {
+	protected String execute(CommitCmd command) {
 		WebTarget webResource = getBaseResource().path("/commit")
                 .queryParam("container", command.getContainerId())
                 .queryParam("repo", command.getRepository())

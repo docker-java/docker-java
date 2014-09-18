@@ -28,31 +28,10 @@ public abstract class AbstrDockerCmd<CMD_T extends DockerCmd<RES_T>, RES_T> impl
 		this.execution = execution;
 	}
 
-	//protected abstract RES_T impl();
-	
-	/**
-	 * @throws DockerException If something gets wrong
-	 */
 	@Override
 	public RES_T exec() throws DockerException {
-		
 		LOGGER.debug("Cmd: {}", this);
-		
-		try {
-			return execution.exec((CMD_T)this);
-		} catch (ClientErrorException exception) {
-			int status = exception.getResponse().getStatus();
-			switch(status) {
-				case 204: return null;
-				case 304: throw new NotModifiedException(exception);
-				case 400: throw new BadRequestException(exception);
-				case 404: throw new NotFoundException(exception);
-				case 406: throw new NotAcceptableException(exception);
-				case 409: throw new ConflictException(exception);
-				case 500: throw new InternalServerErrorException(exception);
-				default: throw toDockerException(exception);
-			}
-		}		
+		return execution.exec((CMD_T)this);
 	}
 	
 	protected DockerException toDockerException(ClientErrorException exception) {

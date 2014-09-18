@@ -43,8 +43,9 @@ import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.JsonClientFilter;
-import com.github.dockerjava.core.SelectiveLoggingFilter;
+import com.github.dockerjava.jaxrs.util.JsonClientFilter;
+import com.github.dockerjava.jaxrs.util.ResponseStatusExceptionFilter;
+import com.github.dockerjava.jaxrs.util.SelectiveLoggingFilter;
 import com.google.common.base.Preconditions;
 
 public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
@@ -62,6 +63,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
         ClientConfig clientConfig = new ClientConfig();
 
+        clientConfig.register(ResponseStatusExceptionFilter.class);
         clientConfig.register(JsonClientFilter.class);
         clientConfig.register(JacksonJsonProvider.class);
 

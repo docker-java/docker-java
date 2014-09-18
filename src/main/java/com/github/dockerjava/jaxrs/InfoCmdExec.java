@@ -19,7 +19,7 @@ public class InfoCmdExec extends AbstrDockerCmdExec<InfoCmd, Info> implements In
 	}
 
 	@Override
-	public Info exec(InfoCmd command) {
+	protected Info execute(InfoCmd command) {
 		WebTarget webResource = getBaseResource().path("/info");
 
 		LOGGER.trace("GET: {}", webResource);

@@ -19,7 +19,7 @@ public class StopContainerCmdExec extends AbstrDockerCmdExec<StopContainerCmd, V
 	}
 
 	@Override
-	public Void exec(StopContainerCmd command) {
+	protected Void execute(StopContainerCmd command) {
 		WebTarget webResource = getBaseResource().path("/containers/{id}/stop")
 				.resolveTemplate("id", command.getContainerId())
 				.queryParam("t", String.valueOf(command.getTimeout()));
@@ -29,5 +29,4 @@ public class StopContainerCmdExec extends AbstrDockerCmdExec<StopContainerCmd, V
 
 		return null;
 	}
-
 }

@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 
@@ -18,6 +17,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
@@ -67,6 +67,16 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 		//LOG.info("resonse: " + log);
 		
 		assertThat(log, endsWith(snippet));
+	}
+	
+	@Test
+	public void logNonExistingContainer() throws Exception {
+
+		try {
+			dockerClient.logContainerCmd("non-existing").withStdErr().withStdOut().exec();
+			fail("expected NotFoundException");
+		} catch (NotFoundException e) {
+		}
 	}
 
 

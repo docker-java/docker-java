@@ -23,7 +23,7 @@ public class CopyFileFromContainerCmdExec extends AbstrDockerCmdExec<CopyFileFro
 	}
 
 	@Override
-	public InputStream exec(CopyFileFromContainerCmd command) {
+	protected InputStream execute(CopyFileFromContainerCmd command) {
 		WebTarget webResource = getBaseResource()
 				.path("/containers/{id}/copy")
 				.resolveTemplate("id", command.getContainerId());

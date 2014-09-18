@@ -21,7 +21,7 @@ public class CreateImageCmdExec extends AbstrDockerCmdExec<CreateImageCmd, Creat
 	}
 
 	@Override
-	public CreateImageResponse exec(CreateImageCmd command) {
+	protected CreateImageResponse execute(CreateImageCmd command) {
 		WebTarget webResource = getBaseResource()
                 .path("/images/create")
                 .queryParam("repo", command.getRepository())
