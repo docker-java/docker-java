@@ -46,10 +46,8 @@ public class ResponseStatusExceptionFilter implements ClientResponseFilter {
 			throw new NotAcceptableException(getBodyAsMessage(responseContext));
 		case 409:
 			throw new ConflictException(getBodyAsMessage(responseContext));
-		case 500: {
-			
+		case 500:
 			throw new InternalServerErrorException(getBodyAsMessage(responseContext));
-		}	
 		default:
 			throw new DockerException(getBodyAsMessage(responseContext), status);
 		}
