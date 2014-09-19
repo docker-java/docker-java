@@ -1,10 +1,13 @@
 package com.github.dockerjava.jaxrs.util;
 
+import java.io.EOFException;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientResponseContext;
 import javax.ws.rs.client.ClientResponseFilter;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.io.IOUtils;
 
@@ -55,9 +58,36 @@ public class ResponseStatusExceptionFilter implements ClientResponseFilter {
 
 	public String getBodyAsMessage(ClientResponseContext responseContext)
 			throws IOException {
-		byte[] buffer = new byte[1000];
-		IOUtils.read(responseContext.getEntityStream(), buffer);
-		String message = new String(buffer);
-		return message;
+	    if (responseContext.hasEntity()) {
+	        int contentLength = responseContext.getLength();
+	        if (contentLength != -1) {
+	            byte[] buffer = new byte[contentLength];
+	            try {
+	                IOUtils.readFully(responseContext.getEntityStream(), buffer);
+	            }
+	            catch (EOFException e) {
+	                return null;
+	            }
+	            Charset charset = null;
+	            MediaType mediaType = responseContext.getMediaType();
+	            if (mediaType != null) {
+	                String charsetName = mediaType.getParameters().get("charset");
+	                if (charsetName != null) {
+	                    try {
+	                        charset = Charset.forName(charsetName);
+                        }
+                        catch (Exception e) {
+                            //Do noting...
+                        }
+	                }
+	            }
+	            if (charset == null) {
+                    charset = Charset.defaultCharset();
+	            }
+	            String message = new String(buffer, charset);
+	            return message;
+	        }
+	    }
+	    return null;
 	}
 }
