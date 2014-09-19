@@ -11,7 +11,6 @@ import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.core.command.*;
-import com.github.dockerjava.jaxrs.DockerCmdExecFactoryImpl;
 import com.google.common.base.Preconditions;
 
 /**
