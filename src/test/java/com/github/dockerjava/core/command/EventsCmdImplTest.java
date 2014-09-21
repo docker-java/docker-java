@@ -3,8 +3,8 @@ package com.github.dockerjava.core.command;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.EventCallback;
+import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.model.Event;
-import com.github.dockerjava.api.model.EventNotifier;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -15,7 +15,6 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -59,9 +58,12 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         CountDownLatch countDownLatch = new CountDownLatch(expectedEvents);
         EventCallback eventCallback = new EventCallbackTest(countDownLatch);
 
-        EventNotifier eventNotifier = dockerClient.eventsCmd(eventCallback).withSince(startTime).withUntil(endTime).exec();
-        boolean zeroCount = countDownLatch.await(30, TimeUnit.SECONDS);
-        eventNotifier.close();
+        EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withSince(startTime).withUntil(endTime);
+        eventsCmd.exec();
+
+        boolean zeroCount = countDownLatch.await(5, TimeUnit.SECONDS);
+
+        eventsCmd.stop();
         assertTrue(zeroCount, "Expected 4 events, [create, start, die, stop]");
     }
 
@@ -72,12 +74,14 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 
         CountDownLatch countDownLatch = new CountDownLatch(KNOWN_NUM_EVENTS);
         EventCallback eventCallback = new EventCallbackTest(countDownLatch);
-        EventNotifier eventNotifier = dockerClient.eventsCmd(eventCallback).withSince(getEpochTime()).exec();
+
+        EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withSince(getEpochTime());
+        eventsCmd.exec();
 
         generateEvents();
 
-        boolean zeroCount = countDownLatch.await(30, TimeUnit.SECONDS);
-        eventNotifier.close();
+        boolean zeroCount = countDownLatch.await(5, TimeUnit.SECONDS);
+        eventsCmd.stop();
         assertTrue(zeroCount, "Expected 4 events, [create, start, die, stop]");
     }
 

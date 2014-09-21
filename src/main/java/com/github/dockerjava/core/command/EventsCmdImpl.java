@@ -2,15 +2,18 @@ package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.command.EventCallback;
 import com.github.dockerjava.api.command.EventsCmd;
-import com.github.dockerjava.api.model.EventNotifier;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Stream docker events
  */
-public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, EventNotifier> implements EventsCmd {
+public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, Void> implements EventsCmd {
 
     private final EventCallback eventCallback;
 
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
     private String since;
     private String until;
 
@@ -47,7 +50,17 @@ public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, EventNotifier> impl
     }
 
     @Override
-    public EventNotifier exec() {
+    public ExecutorService getExecutorService() {
+        return executorService;
+    }
+
+    @Override
+    public void stop() {
+        executorService.shutdown();
+    }
+
+    @Override
+    public Void exec() {
         return super.exec();
     }
 

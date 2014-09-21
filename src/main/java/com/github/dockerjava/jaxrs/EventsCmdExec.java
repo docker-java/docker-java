@@ -6,10 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Response;
-import java.io.InputStream;
 
-public class EventsCmdExec extends AbstrDockerCmdExec<EventsCmd, EventNotifier> implements EventsCmd.Exec {
+public class EventsCmdExec extends AbstrDockerCmdExec<EventsCmd, Void> implements EventsCmd.Exec {
     private static final Logger LOGGER = LoggerFactory.getLogger(EventsCmdExec.class);
 
     public EventsCmdExec(WebTarget baseResource) {
@@ -17,13 +15,14 @@ public class EventsCmdExec extends AbstrDockerCmdExec<EventsCmd, EventNotifier> 
     }
 
     @Override
-    protected EventNotifier execute(EventsCmd command) {
+    protected Void execute(EventsCmd command) {
         WebTarget webResource = getBaseResource().path("/events")
                 .queryParam("since", command.getSince())
                 .queryParam("until", command.getUntil());
 
         LOGGER.trace("GET: {}", webResource);
-        InputStream inputStream = webResource.request().get(Response.class).readEntity(InputStream.class);
-        return EventNotifier.create(command.getEventCallback(), inputStream);
+        EventNotifier eventNotifier = EventNotifier.create(command.getEventCallback(), webResource);
+        command.getExecutorService().submit(eventNotifier);
+        return null;
     }
 }
