@@ -6,6 +6,7 @@ import com.github.dockerjava.api.command.EventCallback;
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.model.Event;
 import com.github.dockerjava.client.AbstractDockerClientTest;
+
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -16,6 +17,7 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class EventsCmdImplTest extends AbstractDockerClientTest {
@@ -59,11 +61,11 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         EventCallback eventCallback = new EventCallbackTest(countDownLatch);
 
         EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withSince(startTime).withUntil(endTime);
-        eventsCmd.exec();
+        ExecutorService executorService = eventsCmd.exec();
 
         boolean zeroCount = countDownLatch.await(5, TimeUnit.SECONDS);
 
-        eventsCmd.stop();
+        executorService.shutdown();
         assertTrue(zeroCount, "Expected 4 events, [create, start, die, stop]");
     }
 
@@ -76,12 +78,12 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         EventCallback eventCallback = new EventCallbackTest(countDownLatch);
 
         EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withSince(getEpochTime());
-        eventsCmd.exec();
+        ExecutorService executorService = eventsCmd.exec();
 
         generateEvents();
 
         boolean zeroCount = countDownLatch.await(5, TimeUnit.SECONDS);
-        eventsCmd.stop();
+        executorService.shutdown();
         assertTrue(zeroCount, "Expected 4 events, [create, start, die, stop]");
     }
 
