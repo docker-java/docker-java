@@ -84,7 +84,7 @@ In your application, e.g.
     config.withVersion("1.14");
     config.withUsername("dockeruser");
     config.withPassword("ilovedocker");
-    config.withEmail("dockeruser@github.com);
+    config.withEmail("dockeruser@github.com");
     DockerClient docker = DockerClientBuilder.getInstance( config ).build();
 
 ##### System Properties:
