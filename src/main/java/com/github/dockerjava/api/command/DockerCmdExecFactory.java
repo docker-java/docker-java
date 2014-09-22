@@ -69,6 +69,8 @@ public interface DockerCmdExecFactory extends Closeable {
 
 	public UnpauseContainerCmd.Exec createUnpauseContainerCmdExec();
 
+	public EventsCmd.Exec createEventsCmdExec();
+
 	public void close() throws IOException;
 
 }

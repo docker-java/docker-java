@@ -7,6 +7,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
+import com.github.dockerjava.api.command.EventsCmd;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 
@@ -241,7 +242,12 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 	public UnpauseContainerCmd.Exec createUnpauseContainerCmdExec() {
 		return new UnpauseContainerCmdExec(baseResource);
 	}
-	
+
+	@Override
+	public EventsCmd.Exec createEventsCmdExec() {
+		return new EventsCmdExec(getBaseResource());
+	}
+
 	@Override
 	public void close() throws IOException {
 		Preconditions.checkNotNull(client, "Factory not initialized. You probably forgot to call init()!");
