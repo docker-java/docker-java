@@ -35,18 +35,26 @@ public class EventNotifier implements Callable<Void> {
 
     @Override
     public Void call() throws Exception {
-        Response response = webTarget.request().get(Response.class);
-        InputStream inputStream = response.readEntity(InputStream.class);
+        int numEvents=0;
+        Response response = null;
         try {
+            response = webTarget.request().get(Response.class);
+            InputStream inputStream = response.readEntity(InputStream.class);
             JsonParser jp = JSON_FACTORY.createParser(inputStream);
             while (jp.nextToken() != JsonToken.END_OBJECT && !jp.isClosed()) {
                 eventCallback.onEvent(OBJECT_MAPPER.readValue(jp, Event.class));
+                numEvents++;
             }
-        } finally {
+        }
+        catch(Exception e) {
+            eventCallback.onException(e);
+        }
+        finally {
             if (response != null) {
                 response.close();
             }
         }
+        eventCallback.onCompletion(numEvents);
         return null;
     }
 }
