@@ -80,12 +80,14 @@ There are three ways to configure, in descending order of precedence:
 ##### Programatic:
 In your application, e.g.
 
-    DockerClientConfig config = DockerClientConfig.createDefaultConfigBuilder();
-    config.withVersion("1.14");
-    config.withUsername("dockeruser");
-    config.withPassword("ilovedocker");
-    config.withEmail("dockeruser@github.com");
-    DockerClient docker = DockerClientBuilder.getInstance( config ).build();
+    DockerClientConfigBuilder configBuilder = DockerClientConfig.createDefaultConfigBuilder();
+    configBuilder.withVersion("1.14");
+    configBuilder.withUri("http://my-docker-host.tld:2375");
+    configBuilder.withUsername("dockeruser");
+    configBuilder.withPassword("ilovedocker");
+    configBuilder.withEmail("dockeruser@github.com");
+    DockerClientConfig config = configBuilder.build();
+    DockerClient docker = DockerClientBuilder.getInstance(config).build();
 
 ##### System Properties:
 E.g.
