@@ -112,5 +112,15 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
             LOG.info("Received event #{}: {}", countDownLatch.getCount(), event);
             countDownLatch.countDown();
         }
+
+        @Override
+        public void onException(Throwable throwable) {
+           LOG.error("Error occurred: {}", throwable.getMessage());
+        }
+
+        @Override
+        public void onCompletion(int numEvents) {
+            LOG.info("Number of events received: {}", numEvents);
+        }
     }
 }
