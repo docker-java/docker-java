@@ -12,7 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.command.EventCallback;
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.model.Event;
-import com.github.dockerjava.api.model.EventNotifier;
 import com.google.common.base.Preconditions;
 
 import org.slf4j.Logger;
