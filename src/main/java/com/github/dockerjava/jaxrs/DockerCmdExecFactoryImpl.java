@@ -80,10 +80,10 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
            
         WebTarget webResource = client.target(dockerClientConfig.getUri());
 
-        if (dockerClientConfig.getVersion() != null) {
-            baseResource = webResource.path("v" + dockerClientConfig.getVersion());
+        if (dockerClientConfig.getVersion() == null || dockerClientConfig.getVersion().isEmpty()) {
+        	baseResource = webResource; 
         } else {
-            baseResource = webResource;
+        	baseResource = webResource.path("v" + dockerClientConfig.getVersion());
         }
 		
 	}
