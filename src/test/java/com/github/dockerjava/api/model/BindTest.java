@@ -30,9 +30,22 @@ public class BindTest {
 		assertEquals(bind.isReadOnly(), true);
 	}
 
-	@Test(expectedExceptions = RuntimeException.class)
+	@Test(expectedExceptions = IllegalArgumentException.class,
+			expectedExceptionsMessageRegExp = "Error parsing Bind.*")
 	public void parseInvalidAccessMode() {
 		Bind.parse("/host:/container:xx");
 	}
-	
+
+	@Test(expectedExceptions = IllegalArgumentException.class, 
+			expectedExceptionsMessageRegExp = "Error parsing Bind 'nonsense'")
+	public void parseInvalidInput() {
+		Bind.parse("nonsense");
+	}
+
+	@Test(expectedExceptions = IllegalArgumentException.class, 
+			expectedExceptionsMessageRegExp = "Error parsing Bind 'null'")
+	public void parseNull() {
+		Bind.parse(null);
+	}
+
 }

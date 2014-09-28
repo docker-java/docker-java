@@ -38,6 +38,7 @@ public class Bind {
 	 * 
 	 * @param serialized the specification, e.g. <code>/host:/container:ro</code>
 	 * @return a {@link Bind} matching the specification
+	 * @throws IllegalArgumentException if the specification cannot be parsed
 	 */
 	public static Bind parse(String serialized) {
 		try {
@@ -52,16 +53,14 @@ public class Bind {
 				else if ("ro".equals(parts[2].toLowerCase()))
 					return new Bind(parts[0], Volume.parse(parts[1]), true);
 				else
-					throw new RuntimeException("Error parsing Bind '"
-							+ serialized + "'");
+					throw new IllegalArgumentException();
 			}
 			default: {
-				throw new RuntimeException("Error parsing Bind '" + serialized
-						+ "'");
+				throw new IllegalArgumentException();
 			}
 			}
 		} catch (Exception e) {
-			throw new RuntimeException("Error parsing Bind '" + serialized
+			throw new IllegalArgumentException("Error parsing Bind '" + serialized
 					+ "'");
 		}
 	}
