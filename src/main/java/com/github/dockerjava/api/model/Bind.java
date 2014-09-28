@@ -33,6 +33,13 @@ public class Bind {
 		return readOnly;
 	}
 
+	/**
+	 * Parses a bind mount specification to a {@link Bind}.
+	 * 
+	 * @param serialized the specification, e.g. <code>/host:/container:ro</code>
+	 * @return a {@link Bind} matching the specification
+	 * @throws IllegalArgumentException if the specification cannot be parsed
+	 */
 	public static Bind parse(String serialized) {
 		try {
 			String[] parts = serialized.split(":");
@@ -41,19 +48,19 @@ public class Bind {
 				return new Bind(parts[0], Volume.parse(parts[1]));
 			}
 			case 3: {
-				if ("rw".equals(parts[3].toLowerCase()))
+				if ("rw".equals(parts[2].toLowerCase()))
+					return new Bind(parts[0], Volume.parse(parts[1]), false);
+				else if ("ro".equals(parts[2].toLowerCase()))
 					return new Bind(parts[0], Volume.parse(parts[1]), true);
 				else
-					throw new RuntimeException("Error parsing Bind '"
-							+ serialized + "'");
+					throw new IllegalArgumentException();
 			}
 			default: {
-				throw new RuntimeException("Error parsing Bind '" + serialized
-						+ "'");
+				throw new IllegalArgumentException();
 			}
 			}
 		} catch (Exception e) {
-			throw new RuntimeException("Error parsing Bind '" + serialized
+			throw new IllegalArgumentException("Error parsing Bind '" + serialized
 					+ "'");
 		}
 	}
