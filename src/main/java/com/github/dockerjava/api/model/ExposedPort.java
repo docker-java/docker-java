@@ -44,6 +44,10 @@ public class ExposedPort {
 		return new ExposedPort("tcp", port);
 	}
 
+	public static ExposedPort udp(int port) {
+		return new ExposedPort("udp", port);
+	}
+
 	public static ExposedPort parse(String serialized) {
 		try {
 			String[] parts = serialized.split("/");
