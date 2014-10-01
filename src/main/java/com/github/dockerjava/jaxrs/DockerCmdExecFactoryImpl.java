@@ -10,6 +10,7 @@ import javax.ws.rs.client.WebTarget;
 import com.github.dockerjava.api.command.EventsCmd;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.CommonProperties;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.github.dockerjava.api.command.AttachContainerCmd;
@@ -63,6 +64,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 		Preconditions.checkNotNull(dockerClientConfig, "config was not specified");
 
         ClientConfig clientConfig = new ClientConfig();
+        clientConfig.property(CommonProperties.FEATURE_AUTO_DISCOVERY_DISABLE, true);
 
         clientConfig.register(ResponseStatusExceptionFilter.class);
         clientConfig.register(JsonClientFilter.class);
