@@ -18,7 +18,6 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.InternalServerErrorException;
-import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.client.AbstractDockerClientTest;
