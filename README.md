@@ -26,7 +26,7 @@ listening on TCP port. To allow Docker server to use TCP add the following line 
 
     DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock"
 
-More details setting up docket server can be found in official documentation: http://docs.docker.io/en/latest/use/basics/
+More details setting up Docker server can be found in official documentation: http://docs.docker.io/en/latest/use/basics/
 
 Now make sure that docker is up:
 
