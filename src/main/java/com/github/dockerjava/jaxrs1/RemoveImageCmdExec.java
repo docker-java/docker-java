@@ -1,0 +1,33 @@
+package com.github.dockerjava.jaxrs1;
+
+import javax.ws.rs.core.Response;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.dockerjava.api.command.RemoveImageCmd;
+import com.sun.jersey.api.client.WebResource;
+
+public class RemoveImageCmdExec extends AbstrDockerCmdExec<RemoveImageCmd, Void> implements RemoveImageCmd.Exec {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(RemoveImageCmdExec.class);
+
+	public RemoveImageCmdExec(WebResource baseResource) {
+		super(baseResource);
+	}
+
+	@Override
+	protected Void execute(RemoveImageCmd command) {
+		WebResource webResource = getBaseResource()
+		        .path("/images/" + command.getImageId())
+				.queryParam("force", command.hasForceEnabled() ? "1" : "0")
+				.queryParam("noprune", command.hasNoPruneEnabled() ? "1" : "0")
+				.build();
+
+		LOGGER.trace("DELETE: {}", webResource);
+		webResource.delete(Response.class);
+		
+		return null;
+	}
+
+}
