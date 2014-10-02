@@ -1,11 +1,13 @@
-package com.github.dockerjava.jaxrs;
+package com.github.dockerjava.core;
+
+import java.util.ServiceLoader;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
-import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.DockerClientImpl;
 
 public class DockerClientBuilder {
+	
+	private static ServiceLoader<DockerCmdExecFactory> serviceLoader = ServiceLoader.load(DockerCmdExecFactory.class);
 
 	private DockerClientImpl dockerClient = null;
 
@@ -29,8 +31,19 @@ public class DockerClientBuilder {
 
 	private static DockerClientImpl withDefaultDockerCmdExecFactory(
 			DockerClientImpl dockerClient) {
+		
+		DockerCmdExecFactory dockerCmdExecFactory = getDefaultDockerCmdExecFactory();
+		
 		return dockerClient
-				.withDockerCmdExecFactory(new DockerCmdExecFactoryImpl());
+				.withDockerCmdExecFactory(dockerCmdExecFactory);
+	}
+
+	public static DockerCmdExecFactory getDefaultDockerCmdExecFactory() {
+		if(!serviceLoader.iterator().hasNext()) {
+			throw new RuntimeException("Fatal: Can't find any implementation of '" + DockerCmdExecFactory.class.getName() +  "' in the current classpath.");
+		}
+		
+		return serviceLoader.iterator().next();
 	}
 
 	public DockerClientBuilder withDockerCmdExecFactory(

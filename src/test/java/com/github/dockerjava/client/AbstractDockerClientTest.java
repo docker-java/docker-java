@@ -16,9 +16,8 @@ import org.testng.ITestResult;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.TestDockerCmdExecFactory;
-import com.github.dockerjava.jaxrs.DockerClientBuilder;
-import com.github.dockerjava.jaxrs.DockerCmdExecFactoryImpl;
 
 public abstract class AbstractDockerClientTest extends Assert {
 	
@@ -27,7 +26,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 	
 	protected DockerClient dockerClient;
 
-	protected TestDockerCmdExecFactory dockerCmdExecFactory = new TestDockerCmdExecFactory(new DockerCmdExecFactoryImpl());
+	protected TestDockerCmdExecFactory dockerCmdExecFactory = new TestDockerCmdExecFactory(DockerClientBuilder.getDefaultDockerCmdExecFactory());
 
 	public void beforeTest()  {
 		LOG.info("======================= BEFORETEST =======================");

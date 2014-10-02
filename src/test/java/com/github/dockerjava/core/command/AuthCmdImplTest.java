@@ -13,8 +13,8 @@ import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.UnauthorizedException;
 import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.jaxrs.DockerClientBuilder;
 
 public class AuthCmdImplTest extends AbstractDockerClientTest {
 
@@ -53,8 +53,6 @@ public class AuthCmdImplTest extends AbstractDockerClientTest {
             fail("Expected a UnauthorizedException caused by a bad password.");
 		} catch (UnauthorizedException e) {
 			
-		} finally {
-			client.close();
-		}
+		} 
 	}
 }
