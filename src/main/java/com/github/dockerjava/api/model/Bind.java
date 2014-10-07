@@ -1,24 +1,40 @@
 package com.github.dockerjava.api.model;
 
+import static com.github.dockerjava.api.model.AccessMode.ro;
+import static com.github.dockerjava.api.model.AccessMode.rw;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+/**
+ * Represents a host path being bind mounted as a {@link Volume}
+ * in a Docker container.
+ * The Bind can be in read only or read write access mode.
+ */
 public class Bind {
 
 	private String path;
 
 	private Volume volume;
 
-	private boolean readOnly = false;
+	private AccessMode accessMode;
 
 	public Bind(String path, Volume volume) {
-		this(path, volume, false);
+		this(path, volume, AccessMode.DEFAULT);
 	}
 
-	public Bind(String path, Volume volume, boolean readOnly) {
+	public Bind(String path, Volume volume, AccessMode accessMode) {
 		this.path = path;
 		this.volume = volume;
-		this.readOnly = readOnly;
+		this.accessMode = accessMode;
+	}
+
+	/**
+	 * @deprecated use {@link #Bind(String, Volume, AccessMode)}
+	 */
+	@Deprecated
+	public Bind(String path, Volume volume, boolean readOnly) {
+		this(path, volume, readOnly ? ro : rw);
 	}
 
 	public String getPath() {
@@ -28,9 +44,17 @@ public class Bind {
 	public Volume getVolume() {
 		return volume;
 	}
+	
+	public AccessMode getAccessMode() {
+		return accessMode;
+	}
 
+	/**
+	 * @deprecated use {@link #getAccessMode()}
+	 */
+	@Deprecated
 	public boolean isReadOnly() {
-		return readOnly;
+		return ro.equals(accessMode);
 	}
 
 	/**
@@ -48,12 +72,8 @@ public class Bind {
 				return new Bind(parts[0], Volume.parse(parts[1]));
 			}
 			case 3: {
-				if ("rw".equals(parts[2].toLowerCase()))
-					return new Bind(parts[0], Volume.parse(parts[1]), false);
-				else if ("ro".equals(parts[2].toLowerCase()))
-					return new Bind(parts[0], Volume.parse(parts[1]), true);
-				else
-					throw new IllegalArgumentException();
+				AccessMode accessMode = AccessMode.valueOf(parts[2].toLowerCase());
+				return new Bind(parts[0], Volume.parse(parts[1]), accessMode);
 			}
 			default: {
 				throw new IllegalArgumentException();
@@ -71,7 +91,7 @@ public class Bind {
 			Bind other = (Bind) obj;
 			return new EqualsBuilder().append(path, other.getPath())
 					.append(volume, other.getVolume())
-					.append(readOnly, other.isReadOnly()).isEquals();
+					.append(accessMode, other.getAccessMode()).isEquals();
 		} else
 			return super.equals(obj);
 	}
@@ -79,6 +99,20 @@ public class Bind {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder().append(path).append(volume)
-				.append(readOnly).toHashCode();
+				.append(accessMode).toHashCode();
 	}
+
+	/**
+	 * Returns a string representation of this {@link Bind} suitable
+	 * for inclusion in a JSON message.
+	 * The format is <code>&lt;host path&gt;:&lt;container path&gt;:&lt;access mode&gt;</code>,
+	 * like the argument in {@link #parse(String)}.
+	 * 
+	 * @return a string representation of this {@link Bind}
+	 */
+	@Override
+	public String toString() {
+		return path + ":" + volume.toString() + ":" + accessMode.toString();
+	}
+
 }

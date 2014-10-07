@@ -19,6 +19,11 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.node.NullNode;
 
+/**
+ * Represents a bind mounted volume in a Docker container.
+ * 
+ * @see Bind
+ */
 @JsonDeserialize(using = Volume.Deserializer.class)
 @JsonSerialize(using = Volume.Serializer.class)
 public class Volume {
@@ -43,6 +48,13 @@ public class Volume {
 		return new Volume(serialized);
 	}
 	
+	/**
+	 * Returns a string representation of this {@link Volume} suitable
+	 * for inclusion in a JSON message.
+	 * The returned String is simply the container path, {@link #getPath()}. 
+	 * 
+	 * @return a string representation of this {@link Volume}
+	 */
 	@Override
 	public String toString() {
 		return getPath();

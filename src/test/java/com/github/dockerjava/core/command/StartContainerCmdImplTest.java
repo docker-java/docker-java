@@ -1,5 +1,6 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.api.model.AccessMode.ro;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
@@ -72,7 +73,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 		assertThat(inspectContainerResponse.getConfig().getVolumes().keySet(),
 				contains("/opt/webapp1", "/opt/webapp2"));
 
-		dockerClient.startContainerCmd(container.getId()).withBinds(new Bind("/src/webapp1", volume1, true), new Bind("/src/webapp2", volume2)).exec();
+		dockerClient.startContainerCmd(container.getId()).withBinds(new Bind("/src/webapp1", volume1, ro), new Bind("/src/webapp2", volume2)).exec();
 
 		dockerClient.waitContainerCmd(container.getId()).exec();
 
