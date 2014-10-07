@@ -48,4 +48,19 @@ public class BindTest {
 		Bind.parse(null);
 	}
 
+	@Test
+	public void toStringReadOnly() {
+		assertEquals(Bind.parse("/host:/container:ro").toString(), "/host:/container:ro");
+	}
+
+	@Test
+	public void toStringReadWrite() {
+		assertEquals(Bind.parse("/host:/container:rw").toString(), "/host:/container:rw");
+	}
+
+	@Test
+	public void toStringDefaultAccessMode() {
+		assertEquals(Bind.parse("/host:/container").toString(), "/host:/container:rw");
+	}
+
 }

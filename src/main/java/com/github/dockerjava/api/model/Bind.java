@@ -3,6 +3,11 @@ package com.github.dockerjava.api.model;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+/**
+ * Represents a host path being bind mounted as a {@link Volume}
+ * in a Docker container.
+ * The Bind can be in read only or read write access mode.
+ */
 public class Bind {
 
 	private String path;
@@ -81,4 +86,18 @@ public class Bind {
 		return new HashCodeBuilder().append(path).append(volume)
 				.append(readOnly).toHashCode();
 	}
+
+	/**
+	 * Returns a string representation of this {@link Bind} suitable
+	 * for inclusion in a JSON message.
+	 * The format is <code>&lt;host path&gt;:&lt;container path&gt;:&lt;access mode&gt;</code>,
+	 * like the argument in {@link #parse(String)}.
+	 * 
+	 * @return a string representation of this {@link Bind}
+	 */
+	@Override
+	public String toString() {
+		return path + ":" + volume.toString() + (readOnly ? ":ro" : ":rw");
+	}
+
 }
