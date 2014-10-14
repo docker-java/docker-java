@@ -25,4 +25,9 @@ public class LinkTest {
 		Link.parse(null);
 	}
 
+	@Test
+	public void stringify() {
+		assertEquals(Link.parse("name:alias").toString(), "name:alias");
+	}
+
 }

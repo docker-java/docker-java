@@ -90,4 +90,16 @@ public class Link
 		return new HashCodeBuilder().append(name).append(alias).toHashCode();
 	}
 
+	/**
+	 * Returns a string representation of this {@link Link} suitable
+	 * for inclusion in a JSON message.
+	 * The format is <code>name:alias</code>, like the argument in {@link #parse(String)}.
+	 * 
+	 * @return a string representation of this {@link Link}
+	 */
+	@Override
+	public String toString() {
+		return name + ":" + alias;
+	}
+
 }
