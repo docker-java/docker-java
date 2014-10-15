@@ -20,8 +20,18 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.node.NullNode;
+import com.github.dockerjava.api.command.InspectContainerResponse.HostConfig;
+import com.github.dockerjava.api.command.InspectContainerResponse.NetworkSettings;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+/**
+ * A container for port bindings, made available as a {@link Map} via its
+ * {@link #getBindings()} method.
+ * 
+ * @see HostConfig#getPortBindings()
+ * @see NetworkSettings#getPorts()
+ */
 @JsonDeserialize(using = Ports.Deserializer.class)
 @JsonSerialize(using = Ports.Serializer.class)
 public class Ports {
@@ -43,6 +53,10 @@ public class Ports {
         return ports.toString();
     }
 
+    /**
+     * @return the port bindings as a {@link Map} that contains one
+     *         {@link Binding} per {@link ExposedPort}.
+     */
     public Map<ExposedPort, Binding> getBindings(){
         return ports;
     }
@@ -55,13 +69,25 @@ public class Ports {
     }
 
 
+    /**
+     * The host part of a port binding.
+     * In a port binding a container port, expressed as an {@link ExposedPort},
+     * is published as a port of the Docker host.
+     * 
+     * @see ExposedPort
+     */
     public static class Binding {
-
 
         private final String hostIp;
 
         private final int hostPort;
 
+        /**
+         * Creates the host part of a port binding.
+         * 
+         * @see Ports#bind(ExposedPort, Binding)
+         * @see ExposedPort
+         */
         public Binding(String hostIp, int hostPort) {
             this.hostIp = hostIp;
             this.hostPort = hostPort;
@@ -125,7 +151,7 @@ public class Ports {
 
             jsonGen.writeStartObject();
             for(Entry<ExposedPort, Binding> entry : portBindings.getBindings().entrySet()){
-                jsonGen.writeFieldName(entry.getKey().getPort() + "/" + entry.getKey().getScheme());
+                jsonGen.writeFieldName(entry.getKey().toString());
                 jsonGen.writeStartArray();
                 jsonGen.writeStartObject();
                 jsonGen.writeStringField("HostIp", entry.getValue().getHostIp());
