@@ -237,7 +237,6 @@
 					<configuration>
 						<source>${jdk.source}</source>
 						<target>${jdk.target}</target>
-						<encoding>ISO-8859-1</encoding>
 						<debug>${jdk.debug}</debug>
 						<optimize>${jdk.optimize}</optimize>
 					</configuration>
