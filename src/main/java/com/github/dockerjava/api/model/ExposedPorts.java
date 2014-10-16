@@ -43,8 +43,7 @@ public class ExposedPorts {
 			
 			jsonGen.writeStartObject();
 			for (ExposedPort exposedPort : exposedPorts.getExposedPorts()) {
-				jsonGen.writeFieldName(exposedPort.getPort() + "/"
-						+ exposedPort.getScheme());
+				jsonGen.writeFieldName(exposedPort.toString());
 				jsonGen.writeStartObject();
 				jsonGen.writeEndObject();
 			}
