@@ -1,17 +1,5 @@
 package com.github.dockerjava.jaxrs;
 
-import java.io.IOException;
-import java.util.logging.Logger;
-
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-
-import com.github.dockerjava.api.command.EventsCmd;
-import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.client.ClientProperties;
-import org.glassfish.jersey.CommonProperties;
-
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
@@ -22,6 +10,7 @@ import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateImageCmd;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
+import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
@@ -49,6 +38,19 @@ import com.github.dockerjava.jaxrs.util.JsonClientFilter;
 import com.github.dockerjava.jaxrs.util.ResponseStatusExceptionFilter;
 import com.github.dockerjava.jaxrs.util.SelectiveLoggingFilter;
 import com.google.common.base.Preconditions;
+
+import java.io.IOException;
+import java.util.logging.Logger;
+
+import javax.net.ssl.SSLContext;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+
+import org.glassfish.jersey.CommonProperties;
+import org.glassfish.jersey.SslConfigurator;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.ClientProperties;
 
 public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 	
@@ -78,7 +80,28 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         	int readTimeout = dockerClientConfig.getReadTimeout();
         	clientConfig.property(ClientProperties.READ_TIMEOUT, readTimeout);
         }
-        client = ClientBuilder.newClient(clientConfig);
+        
+        ClientBuilder clientBuilder = ClientBuilder.newBuilder().withConfig(clientConfig);
+        
+        
+        if((dockerClientConfig.getKeystore() != null && dockerClientConfig.getKeystorePassword() != null) || (dockerClientConfig.getTruststore() != null && dockerClientConfig.getTruststorePassword() != null)) {
+            SslConfigurator sslConfig = SslConfigurator.newInstance();
+            
+            if(dockerClientConfig.getKeystore() != null && dockerClientConfig.getKeystorePassword() != null) {
+                sslConfig.keyStoreFile(dockerClientConfig.getKeystore());
+                sslConfig.keyStorePassword(dockerClientConfig.getKeystorePassword());
+            }
+            
+            if(dockerClientConfig.getTruststore() != null && dockerClientConfig.getTruststorePassword() != null) {
+                sslConfig.trustStoreFile(dockerClientConfig.getTruststore());
+                sslConfig.trustStorePassword(dockerClientConfig.getTruststorePassword());
+            }
+            
+            SSLContext sslContext = sslConfig.createSSLContext();
+            clientBuilder.sslContext(sslContext);   
+        }
+        
+        client = clientBuilder.build();
            
         WebTarget webResource = client.target(dockerClientConfig.getUri());
 
