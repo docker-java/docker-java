@@ -163,6 +163,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 		Ports portBindings = new Ports();
 		portBindings.bind(tcp22, Ports.Binding(11022));
 		portBindings.bind(tcp23, Ports.Binding(11023));
+		portBindings.bind(tcp23, Ports.Binding(11024));
 
 		dockerClient.startContainerCmd(container.getId()).withPortBindings(portBindings).exec();
 
@@ -172,11 +173,14 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 		assertThat(Arrays.asList(inspectContainerResponse.getConfig().getExposedPorts()),
 				contains(tcp22, tcp23));
 
-		assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp22),
+		assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp22)[0],
 				is(equalTo(Ports.Binding(11022))));
 
-		assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23),
+		assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23)[0],
 				is(equalTo(Ports.Binding(11023))));
+
+		assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23)[1],
+				is(equalTo(Ports.Binding(11024))));
 
 	}
 

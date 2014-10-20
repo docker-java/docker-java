@@ -6,7 +6,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -23,8 +25,6 @@ import com.fasterxml.jackson.databind.node.NullNode;
 import com.github.dockerjava.api.command.InspectContainerResponse.HostConfig;
 import com.github.dockerjava.api.command.InspectContainerResponse.NetworkSettings;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 /**
  * A container for port bindings, made available as a {@link Map} via its
  * {@link #getBindings()} method.
@@ -36,7 +36,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 @JsonSerialize(using = Ports.Serializer.class)
 public class Ports {
 
-    private final Map<ExposedPort, Binding> ports = new HashMap<ExposedPort, Binding>();
+    private final Map<ExposedPort, Binding[]> ports = new HashMap<ExposedPort, Binding[]>();
 
     public Ports() { }
 
@@ -45,7 +45,12 @@ public class Ports {
     }
 
     public void bind(ExposedPort exposedPort, Binding host) {
-    	ports.put(exposedPort, host);
+        if (ports.containsKey(exposedPort)) {
+            Binding[] bindings = ports.get(exposedPort);
+            ports.put(exposedPort, (Binding[]) ArrayUtils.add(bindings, host));
+        } else {
+            ports.put(exposedPort, new Binding[]{host});
+        }
     }
 
     @Override
@@ -54,10 +59,10 @@ public class Ports {
     }
 
     /**
-     * @return the port bindings as a {@link Map} that contains one
-     *         {@link Binding} per {@link ExposedPort}.
+     * @return the port bindings as a {@link Map} that contains one or more
+     *         {@link Binding}s per {@link ExposedPort}.
      */
-    public Map<ExposedPort, Binding> getBindings(){
+    public Map<ExposedPort, Binding[]> getBindings(){
         return ports;
     }
 
@@ -132,11 +137,15 @@ public class Ports {
             JsonNode node = oc.readTree(jsonParser);
             for (Iterator<Map.Entry<String, JsonNode>> it = node.fields(); it.hasNext();) {
 
-                Map.Entry<String, JsonNode> field = it.next();
-                if (!field.getValue().equals(NullNode.getInstance())) {
-                    String hostIp = field.getValue().get(0).get("HostIp").textValue();
-                    int hostPort = field.getValue().get(0).get("HostPort").asInt();
-                    out.bind(ExposedPort.parse(field.getKey()), new Binding(hostIp, hostPort));
+                Map.Entry<String, JsonNode> portNode = it.next();
+                JsonNode bindingsArray = portNode.getValue();
+                for (int i = 0; i < bindingsArray.size(); i++) {
+                    JsonNode bindingNode = bindingsArray.get(i);
+                    if (!bindingNode.equals(NullNode.getInstance())) {
+                        String hostIp = bindingNode.get("HostIp").textValue();
+                        int hostPort = bindingNode.get("HostPort").asInt();
+                        out.bind(ExposedPort.parse(portNode.getKey()), new Binding(hostIp, hostPort));
+                    }
                 }
             }
             return out;
@@ -150,13 +159,15 @@ public class Ports {
                               SerializerProvider serProvider) throws IOException, JsonProcessingException {
 
             jsonGen.writeStartObject();
-            for(Entry<ExposedPort, Binding> entry : portBindings.getBindings().entrySet()){
+            for(Entry<ExposedPort, Binding[]> entry : portBindings.getBindings().entrySet()){
                 jsonGen.writeFieldName(entry.getKey().toString());
                 jsonGen.writeStartArray();
-                jsonGen.writeStartObject();
-                jsonGen.writeStringField("HostIp", entry.getValue().getHostIp());
-                jsonGen.writeStringField("HostPort", "" + entry.getValue().getHostPort());
-                jsonGen.writeEndObject();
+                for (Binding binding : entry.getValue()) {
+                    jsonGen.writeStartObject();
+                    jsonGen.writeStringField("HostIp", binding.getHostIp());
+                    jsonGen.writeStringField("HostPort", "" + binding.getHostPort());
+                    jsonGen.writeEndObject();
+                }
                 jsonGen.writeEndArray();
             }
             jsonGen.writeEndObject();
