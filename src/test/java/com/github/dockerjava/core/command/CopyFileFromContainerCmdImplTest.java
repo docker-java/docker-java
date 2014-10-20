@@ -13,6 +13,7 @@ import java.lang.reflect.Method;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+@Test(groups = "integration")
 public class CopyFileFromContainerCmdImplTest extends AbstractDockerClientTest {
 
     @BeforeTest

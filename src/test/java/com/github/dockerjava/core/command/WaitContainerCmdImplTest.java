@@ -21,6 +21,7 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
+@Test(groups = "integration")
 public class WaitContainerCmdImplTest extends AbstractDockerClientTest {
 
 	@BeforeTest

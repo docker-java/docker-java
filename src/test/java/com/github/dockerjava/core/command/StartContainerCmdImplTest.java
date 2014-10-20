@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
-
+@Test(groups = "integration")
 public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
 	@BeforeTest

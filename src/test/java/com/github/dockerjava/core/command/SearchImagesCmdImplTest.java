@@ -22,6 +22,7 @@ import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.model.SearchItem;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
+@Test(groups = "integration")
 public class SearchImagesCmdImplTest extends AbstractDockerClientTest {
 
 	@BeforeTest

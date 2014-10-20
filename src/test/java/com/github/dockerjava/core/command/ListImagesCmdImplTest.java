@@ -18,6 +18,7 @@ import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
+@Test(groups = "integration")
 public class ListImagesCmdImplTest extends AbstractDockerClientTest {
 
 	@BeforeTest

@@ -28,6 +28,7 @@ import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
+@Test(groups = "integration")
 public class ListContainersCmdImplTest extends AbstractDockerClientTest {
 
 	@BeforeTest

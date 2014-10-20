@@ -18,6 +18,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
 
+@Test(groups = "integration")
 public class InfoCmdImplTest extends AbstractDockerClientTest {
 
 	@BeforeTest

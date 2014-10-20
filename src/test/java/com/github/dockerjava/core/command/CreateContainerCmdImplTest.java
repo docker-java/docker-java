@@ -21,6 +21,7 @@ import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
+@Test(groups = "integration")
 public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
 	@BeforeTest
