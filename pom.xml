@@ -40,8 +40,6 @@
 	</developers>
 
 	<properties>
-		<skipITs>true</skipITs>
-
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<jdk.debug>true</jdk.debug>
@@ -342,7 +340,6 @@
 							<goal>verify</goal>
 						</goals>
 						<configuration>
-							<skipITs>${skipITs}</skipITs>
 							<groups>integration</groups>
 							<includes>
  								<include>**/*Test.java</include>
