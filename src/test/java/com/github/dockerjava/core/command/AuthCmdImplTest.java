@@ -16,6 +16,7 @@ import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
 
+@Test(groups = "integration")
 public class AuthCmdImplTest extends AbstractDockerClientTest {
 
 	@BeforeTest

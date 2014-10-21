@@ -14,6 +14,7 @@ import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.model.Version;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
+@Test(groups = "integration")
 public class VersionCmdImplTest extends AbstractDockerClientTest {
 
 	@BeforeTest

@@ -22,6 +22,7 @@ import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
+@Test(groups = "integration")
 public class PullImageCmdImplTest extends AbstractDockerClientTest {
 
 	@BeforeTest

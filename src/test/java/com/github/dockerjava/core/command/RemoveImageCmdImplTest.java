@@ -26,6 +26,7 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
+@Test(groups = "integration")
 public class RemoveImageCmdImplTest extends AbstractDockerClientTest {
 
 	public static final Logger LOG = LoggerFactory

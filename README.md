@@ -16,9 +16,15 @@ Developer forum for [docker-java](https://groups.google.com/forum/?hl=de#!forum/
 * Maven 3.0.5
 * Docker daemon running
 
-Maven may run tests during build process but tests are disabled by default. The tests are using a localhost instance of Docker, make sure that you have Docker running for tests to work. To run the tests you have to provide your https://www.docker.io/account/login/ information:
+The Maven build includes integration tests which are using a localhost instance of Docker and require manual setup. Make sure you have a local Docker daemon running and then provide your https://registry.hub.docker.com/account/login/ information via system properties:
 
-    $ mvn clean install -DskipTests=false -Ddocker.io.username=... -Ddocker.io.password=... -Ddocker.io.email=...
+    $ mvn clean install -Ddocker.io.username=... -Ddocker.io.password=... -Ddocker.io.email=...
+
+_If your Docker server is remote, add its URL like this: `-Ddocker.io.url=http://...:2375`._
+
+If you do not have access to a Docker server or just want to execute the build quickly, you can run the build without the integration tests:
+
+    $ mvn clean install -DskipITs
 
 By default Docker server is using UNIX sockets for communication with the Docker client, however docker-java
 client uses TCP/IP to connect to the Docker server, so you will need to make sure that your Docker server is

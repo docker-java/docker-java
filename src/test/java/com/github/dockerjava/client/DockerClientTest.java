@@ -22,6 +22,7 @@ import org.testng.annotations.Test;
  *
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  */
+@Test(groups = "integration")
 public class DockerClientTest extends AbstractDockerClientTest {
 	public static final Logger LOG = LoggerFactory
 			.getLogger(DockerClientTest.class);

@@ -22,6 +22,7 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
+@Test(groups = "integration")
 public class CommitCmdImplTest extends AbstractDockerClientTest {
 
 	@BeforeTest
