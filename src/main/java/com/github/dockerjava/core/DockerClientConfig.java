@@ -129,7 +129,7 @@ public class DockerClientConfig {
 
         /**
          * This will set all fields in the builder to those contained in the Properties object. The Properties object
-         * should contain the following docker.io.* keys: url, version, username, password, and email. If
+         * should contain the following docker.io.* keys: url, version, username, password, email, and dockerCertPath. If
          * docker.io.readTimeout or docker.io.enableLoggingFilter are not contained, they will be set to 1000 and true,
          * respectively.
          *
