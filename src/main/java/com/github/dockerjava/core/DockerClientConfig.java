@@ -10,7 +10,7 @@ import com.google.common.base.Preconditions;
 
 public class DockerClientConfig {
     private final URI uri;
-    private final String version, username, password, email, keystore, keystorePassword, truststore, truststorePassword;
+    private final String version, username, password, email, dockerCertPath;
     private final Integer readTimeout;
     private final boolean loggingFilterEnabled;
 
@@ -22,10 +22,7 @@ public class DockerClientConfig {
         this.email = builder.email;
         this.readTimeout = builder.readTimeout;
         this.loggingFilterEnabled = builder.loggingFilterEnabled;
-        this.keystore = builder.keystore;
-        this.keystorePassword = builder.keystorePassword;
-        this.truststore = builder.truststore;
-        this.truststorePassword = builder.truststorePassword;
+        this.dockerCertPath = builder.dockerCertPath;
     }
 
     public URI getUri() {
@@ -56,20 +53,8 @@ public class DockerClientConfig {
         return loggingFilterEnabled;
     }
     
-    public String getKeystore() {
-        return keystore;
-    }
-    
-    public String getKeystorePassword() {
-        return keystorePassword;
-    }
-    
-    public String getTruststore() {
-        return truststore;
-    }
-    
-    public String getTruststorePassword() {
-        return truststorePassword;
+    public String getDockerCertPath() {
+        return dockerCertPath;
     }
 
     public static Properties loadIncludedDockerProperties() {
@@ -117,7 +102,7 @@ public class DockerClientConfig {
         overriddenProperties.putAll(p);
 
         // TODO Add all values from system properties that begin with docker.io.*
-        for (String s : new String[]{ "url", "version", "username", "password", "email", "readTimeout", "enableLoggingFilter", "keystore", "keystorePassword", "truststore", "truststorePassword"}) {
+        for (String s : new String[]{ "url", "version", "username", "password", "email", "readTimeout", "enableLoggingFilter", "dockerCertPath"}) {
 		    final String key = "docker.io." + s;
 		    if (System.getProperties().containsKey(key)) {
 			    overriddenProperties.setProperty(key, System.getProperty(key));
@@ -135,7 +120,7 @@ public class DockerClientConfig {
 
     public static class DockerClientConfigBuilder {
         private URI uri;
-        private String version, username, password, email, keystore, keystorePassword, truststore, truststorePassword;
+        private String version, username, password, email, dockerCertPath;
         private Integer readTimeout;
         private boolean loggingFilterEnabled;
 
@@ -159,10 +144,7 @@ public class DockerClientConfig {
                     .withEmail(p.getProperty("docker.io.email"))
                     .withReadTimeout(Integer.valueOf(p.getProperty("docker.io.readTimeout", "0")))
                     .withLoggingFilter(Boolean.valueOf(p.getProperty("docker.io.enableLoggingFilter", "true")))
-                    .withKeystore(p.getProperty("docker.io.keystore"))
-                    .withKeystorePassword(p.getProperty("docker.io.keystorePassword"))
-                    .withTruststore(p.getProperty("docker.io.truststore"))
-                    .withTruststorePassword(p.getProperty("docker.io.truststorePassword"));
+                    .withDockerCertPath(p.getProperty("docker.io.dockerCertPath"));
         }
 
         public final DockerClientConfigBuilder withUri(String uri) {
@@ -194,20 +176,8 @@ public class DockerClientConfig {
             this.loggingFilterEnabled = loggingFilterEnabled;
             return this;
         }
-        public final DockerClientConfigBuilder withKeystore(String keystore) {
-            this.keystore = keystore;
-            return this;
-        }
-        public final DockerClientConfigBuilder withKeystorePassword(String keystorePassword) {
-            this.keystorePassword = keystorePassword;
-            return this;
-        }
-        public final DockerClientConfigBuilder withTruststore(String truststore) {
-            this.truststore = truststore;
-            return this;
-        }
-        public final DockerClientConfigBuilder withTruststorePassword(String truststorePassword) {
-            this.truststorePassword = truststorePassword;
+        public final DockerClientConfigBuilder withDockerCertPath(String dockerCertPath) {
+            this.dockerCertPath = dockerCertPath;
             return this;
         }
         public DockerClientConfig build() {
