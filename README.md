@@ -77,38 +77,47 @@ For code examples, please look at the [Wiki](https://github.com/docker-java/dock
 
 There are a couple of configuration items, all of which have sensible defaults:
 
-* `url` The Docker URL, e.g. `http://localhost:2375`.
+* `url` The Docker URL, e.g. `https://localhost:2376`.
 * `version` The API version, e.g. `1.14`.
 * `username` Your repository username (required to push containers).
 * `password` Your repository password.
 * `email` Your repository email.
+* `dockerCertPath` Path to the docker certs.
 
 There are three ways to configure, in descending order of precedence:
 
-##### Programatic:
+#### Programatic:
 In your application, e.g.
 
     DockerClientConfigBuilder configBuilder = DockerClientConfig.createDefaultConfigBuilder();
-    configBuilder.withVersion("1.14");
-    configBuilder.withUri("http://my-docker-host.tld:2375");
+    configBuilder.withVersion("1.15");
+    configBuilder.withUri("https://my-docker-host.tld:2376");
     configBuilder.withUsername("dockeruser");
     configBuilder.withPassword("ilovedocker");
     configBuilder.withEmail("dockeruser@github.com");
+    configBuilder.withDockerCertPath("/home/user/.docker");
     DockerClientConfig config = configBuilder.build();
     DockerClient docker = DockerClientBuilder.getInstance(config).build();
 
-##### System Properties:
-E.g.
+#### Properties
 
-    java -Ddocker.io.username=kpelykh pkg.Main
+    docker.io.url=https://localhost:2376
+    docker.io.version=1.15
+    docker.io.username=dockeruser
+    docker.io.password=ilovedocker
+    docker.io.email=dockeruser@github.com
+    docker.io.dockerCertPath=/home/user/.docker
+
+
+##### System Properties:
+
+    java -Ddocker.io.username=dockeruser pkg.Main
 
 ##### File System  
-In `$HOME/.docker.io.properties`, e.g.:
 
-    docker.io.username=dockeruser
+In `$HOME/.docker.io.properties`
 
 ##### Class Path
-In the class path at `/docker.io.properties`, e.g.:
 
-    docker.io.url=http://localhost:2375
-    docker.io.version=1.13
+In the class path at `/docker.io.properties`
+    
