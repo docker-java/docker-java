@@ -112,17 +112,22 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
                     
                     Security.addProvider(new BouncyCastleProvider());
                     
-                    SslConfigurator sslConfig = SslConfigurator.newInstance();
-
                     KeyStore keyStore = CertificateUtils.createKeyStore(dockerCertPath);
                     KeyStore trustStore = CertificateUtils.createTrustStore(dockerCertPath);
-                                   
+                    
+                    // properties acrobatics not needed for java > 1.6
+                    String httpProtocols = System.getProperty("https.protocols");
+                    System.setProperty("https.protocols", "TLSv1");
+                    SslConfigurator sslConfig = SslConfigurator.newInstance(true);
+                    if(httpProtocols != null ) System.setProperty("https.protocols", httpProtocols);
+              
                     sslConfig.keyStore(keyStore);
                     sslConfig.keyStorePassword("docker");
-                    
                     sslConfig.trustStore(trustStore);
                     
                     SSLContext sslContext = sslConfig.createSSLContext();
+                    
+                    
                     clientBuilder.sslContext(sslContext);   
 
                 }

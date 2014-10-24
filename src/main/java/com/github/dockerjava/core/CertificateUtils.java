@@ -1,11 +1,10 @@
 package com.github.dockerjava.core;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyStore;
@@ -30,8 +29,8 @@ public class CertificateUtils {
     public static boolean verifyCertificatesExist(String dockerCertPath) {
         String[] files = {"ca.pem", "cert.pem", "key.pem"};
         for (String file : files) {
-            Path path = Paths.get(dockerCertPath, file);
-            boolean exists = Files.exists(path);
+            File path = new File(dockerCertPath, file);
+            boolean exists = path.exists();
             if(!exists) {
                 return false;
             }
@@ -52,8 +51,8 @@ public class CertificateUtils {
     }
     
     public static KeyStore createTrustStore(final String dockerCertPath) throws IOException, CertificateException, KeyStoreException, NoSuchAlgorithmException {
-        Path caPath = Paths.get(dockerCertPath, "ca.pem");
-        BufferedReader reader = Files.newBufferedReader(caPath, Charset.defaultCharset());
+        File caPath = new File(dockerCertPath, "ca.pem");
+        BufferedReader reader = new BufferedReader(new FileReader(caPath));
         PEMParser pemParser = null;
         
         try {
@@ -80,8 +79,8 @@ public class CertificateUtils {
     }
     
     private static Certificate loadCertificate(final String dockerCertPath) throws IOException, CertificateException {
-        Path certificate = Paths.get(dockerCertPath, "cert.pem");
-        BufferedReader reader = Files.newBufferedReader(certificate, Charset.defaultCharset());
+        File certificate = new File(dockerCertPath, "cert.pem");
+        BufferedReader reader = new BufferedReader(new FileReader(certificate));
         PEMParser pemParser = null;
         
         try {
@@ -102,8 +101,8 @@ public class CertificateUtils {
     }
     
     private static KeyPair loadPrivateKey(final String dockerCertPath) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
-        Path certificate = Paths.get(dockerCertPath, "key.pem");
-        BufferedReader reader = Files.newBufferedReader(certificate, Charset.defaultCharset());
+        File certificate = new File(dockerCertPath, "key.pem");
+        BufferedReader reader = new BufferedReader(new FileReader(certificate));
 
         PEMParser pemParser = null;
         

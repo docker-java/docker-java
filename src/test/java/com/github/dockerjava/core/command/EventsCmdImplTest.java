@@ -67,6 +67,8 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         boolean zeroCount = countDownLatch.await(5, TimeUnit.SECONDS);
 
         executorService.shutdown();
+        
+        
         assertTrue(zeroCount, "Expected 4 events, [create, start, die, stop]");
     }
 
