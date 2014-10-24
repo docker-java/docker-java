@@ -45,9 +45,9 @@ Now make sure that docker is up:
 	Git commit (server): fa7b24f
 	Go version (server): go1.3.1
 
-Run build with tests:
+Run build without integration tests:
 
-    $ mvn clean install -DskipTests=false
+    $ mvn clean install -DskipITs
 
 ## Docker-Java maven dependencies
 
@@ -78,7 +78,7 @@ For code examples, please look at the [Wiki](https://github.com/docker-java/dock
 There are a couple of configuration items, all of which have sensible defaults:
 
 * `url` The Docker URL, e.g. `https://localhost:2376`.
-* `version` The API version, e.g. `1.14`.
+* `version` The API version, e.g. `1.15`.
 * `username` Your repository username (required to push containers).
 * `password` Your repository password.
 * `email` Your repository email.
