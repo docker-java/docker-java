@@ -23,7 +23,7 @@ public class AccessModeTest {
 	}
 	
 	@Test(expectedExceptions = IllegalArgumentException.class, 
-			expectedExceptionsMessageRegExp = "No enum constant.*")
+			expectedExceptionsMessageRegExp = "No enum const.*")
 	public void fromIllegalString() {
 		AccessMode.valueOf("xx");
 	}

@@ -1,18 +1,7 @@
 package com.github.dockerjava.jaxrs;
 
-import java.io.IOException;
-import java.util.logging.Logger;
-
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-
-import com.github.dockerjava.api.command.EventsCmd;
-import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.client.ClientProperties;
-import org.glassfish.jersey.CommonProperties;
-
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+import com.github.dockerjava.api.DockerClientException;
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
 import com.github.dockerjava.api.command.BuildImageCmd;
@@ -22,6 +11,7 @@ import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateImageCmd;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
+import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
@@ -44,11 +34,29 @@ import com.github.dockerjava.api.command.TopContainerCmd;
 import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
+import com.github.dockerjava.core.CertificateUtils;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.jaxrs.util.JsonClientFilter;
 import com.github.dockerjava.jaxrs.util.ResponseStatusExceptionFilter;
 import com.github.dockerjava.jaxrs.util.SelectiveLoggingFilter;
 import com.google.common.base.Preconditions;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.KeyStore;
+import java.security.Security;
+import java.util.logging.Logger;
+
+import javax.net.ssl.SSLContext;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.glassfish.jersey.CommonProperties;
+import org.glassfish.jersey.SslConfigurator;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.ClientProperties;
 
 public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 	
@@ -78,7 +86,60 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         	int readTimeout = dockerClientConfig.getReadTimeout();
         	clientConfig.property(ClientProperties.READ_TIMEOUT, readTimeout);
         }
-        client = ClientBuilder.newClient(clientConfig);
+        
+        ClientBuilder clientBuilder = ClientBuilder.newBuilder().withConfig(clientConfig);
+        
+        // Attempt to load Docker SSL certificates from location in following order:
+        //   1. User Defined
+        //   2. Environment Variable
+        //   3. User Home Directory
+        String dockerCertPath = dockerClientConfig.getDockerCertPath();
+            
+        if(dockerCertPath == null) {
+            dockerCertPath = System.getenv("DOCKER_CERT_PATH");
+        }
+            
+        if(dockerCertPath == null) {
+            dockerCertPath = System.getProperty("USER_HOME") + File.separator + ".docker";
+        }
+        
+        if(dockerCertPath != null) {
+            boolean certificatesExist = CertificateUtils.verifyCertificatesExist(dockerCertPath);
+            
+            if(certificatesExist) {
+                               
+                try {
+                    
+                    Security.addProvider(new BouncyCastleProvider());
+                    
+                    KeyStore keyStore = CertificateUtils.createKeyStore(dockerCertPath);
+                    KeyStore trustStore = CertificateUtils.createTrustStore(dockerCertPath);
+                    
+                    // properties acrobatics not needed for java > 1.6
+                    String httpProtocols = System.getProperty("https.protocols");
+                    System.setProperty("https.protocols", "TLSv1");
+                    SslConfigurator sslConfig = SslConfigurator.newInstance(true);
+                    if(httpProtocols != null ) System.setProperty("https.protocols", httpProtocols);
+              
+                    sslConfig.keyStore(keyStore);
+                    sslConfig.keyStorePassword("docker");
+                    sslConfig.trustStore(trustStore);
+                    
+                    SSLContext sslContext = sslConfig.createSSLContext();
+                    
+                    
+                    clientBuilder.sslContext(sslContext);   
+
+                }
+                catch(Exception e) {
+                    throw new DockerClientException(e.getMessage(), e);
+                }
+               
+            }
+
+        }
+        
+        client = clientBuilder.build();
            
         WebTarget webResource = client.target(dockerClientConfig.getUri());
 

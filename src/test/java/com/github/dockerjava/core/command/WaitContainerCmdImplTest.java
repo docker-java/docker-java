@@ -17,6 +17,7 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.InternalServerErrorException;
+import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
@@ -70,12 +71,10 @@ public class WaitContainerCmdImplTest extends AbstractDockerClientTest {
 	
 	@Test
 	public void testWaitNonExistingContainer() throws DockerException {
-		// docker returns InternalServerError instead of NotFound
-		// see https://github.com/docker/docker/issues/8107
 		try {
 			dockerClient.waitContainerCmd("non-existing").exec();
-			fail("expected InternalServerErrorException");
-		} catch (InternalServerErrorException e) {
+			fail("expected NotFoundException");
+		} catch (NotFoundException e) {
 		}
 	}
 }

@@ -18,6 +18,7 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.InternalServerErrorException;
+import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.client.AbstractDockerClientTest;
@@ -61,7 +62,13 @@ public class PullImageCmdImplTest extends AbstractDockerClientTest {
 		String testImage = "hackmann/empty";
 
 		LOG.info("Removing image: {}", testImage);
-		dockerClient.removeImageCmd(testImage).exec();
+		
+		try {
+			dockerClient.removeImageCmd(testImage).exec();
+		} catch (NotFoundException e) {
+			// just ignore if not exist
+		}
+		
 
 		info = dockerClient.infoCmd().exec();
 		LOG.info("Client info: {}", info.toString());
