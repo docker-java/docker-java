@@ -20,7 +20,7 @@ The Maven build includes integration tests which are using a localhost instance 
 
     $ mvn clean install -Ddocker.io.username=... -Ddocker.io.password=... -Ddocker.io.email=...
 
-_If your Docker server is remote, add its URL like this: `-Ddocker.io.url=http://...:2375`._
+_If your Docker server is remote, add its URL like this: `-Ddocker.io.url=https://...:2376`._
 
 If you do not have access to a Docker server or just want to execute the build quickly, you can run the build without the integration tests:
 
