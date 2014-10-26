@@ -1,14 +1,14 @@
-   package com.github.dockerjava.core;
+package com.github.dockerjava.core;
 
-   import com.google.common.base.Preconditions;
-   import com.google.common.collect.ImmutableMap;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
 
-   import java.io.File;
-   import java.io.FileInputStream;
-   import java.io.IOException;
-   import java.net.URI;
-   import java.util.Map;
-   import java.util.Properties;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.URI;
+import java.util.Map;
+import java.util.Properties;
 
 public class DockerClientConfig {
     private static final String DOCKER_HOST_PROPERTY = "DOCKER_HOST";
@@ -257,9 +257,6 @@ public class DockerClientConfig {
         private Integer readTimeout;
         private boolean loggingFilterEnabled;
 
-        private DockerClientConfigBuilder() {
-        }
-
         /**
          * This will set all fields in the builder to those contained in the Properties object. The Properties object
          * should contain the following docker.io.* keys: url, version, username, password, email, and dockerCertPath. If
@@ -278,38 +275,46 @@ public class DockerClientConfig {
         }
 
         public final DockerClientConfigBuilder withUri(String uri) {
-        	Preconditions.checkNotNull(uri, "uri was not specified");
+            Preconditions.checkNotNull(uri, "uri was not specified");
             this.uri = URI.create(uri);
             return this;
         }
+
         public final DockerClientConfigBuilder withVersion(String version) {
-        	this.version = version;
+            this.version = version;
             return this;
         }
+
         public final DockerClientConfigBuilder withUsername(String username) {
-        	this.username = username;
+            this.username = username;
             return this;
         }
+
         public final DockerClientConfigBuilder withPassword(String password) {
-        	this.password = password;
+            this.password = password;
             return this;
         }
+
         public final DockerClientConfigBuilder withEmail(String email) {
-        	this.email = email;
+            this.email = email;
             return this;
         }
+
         public final DockerClientConfigBuilder withReadTimeout(Integer readTimeout) {
-        	this.readTimeout = readTimeout;
+            this.readTimeout = readTimeout;
             return this;
         }
+
         public final DockerClientConfigBuilder withLoggingFilter(boolean loggingFilterEnabled) {
             this.loggingFilterEnabled = loggingFilterEnabled;
             return this;
         }
+
         public final DockerClientConfigBuilder withDockerCertPath(String dockerCertPath) {
             this.dockerCertPath = dockerCertPath;
             return this;
         }
+
         public DockerClientConfig build() {
             return new DockerClientConfig(
                     uri,
