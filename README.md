@@ -86,17 +86,17 @@ There are a couple of configuration items, all of which have sensible defaults:
 
 There are three ways to configure, in descending order of precedence:
 
-#### Programatic:
+#### Programmatic:
 In your application, e.g.
 
-    DockerClientConfigBuilder configBuilder = DockerClientConfig.createDefaultConfigBuilder();
-    configBuilder.withVersion("1.15");
-    configBuilder.withUri("https://my-docker-host.tld:2376");
-    configBuilder.withUsername("dockeruser");
-    configBuilder.withPassword("ilovedocker");
-    configBuilder.withEmail("dockeruser@github.com");
-    configBuilder.withDockerCertPath("/home/user/.docker");
-    DockerClientConfig config = configBuilder.build();
+    DockerClientConfig config = DockerClientConfig.createDefaultConfigBuilder()
+        .withVersion("1.15")
+        .withUri("https://my-docker-host.tld:2376")
+        .withUsername("dockeruser")
+        .withPassword("ilovedocker")
+        .withEmail("dockeruser@github.com")
+        .withDockerCertPath("/home/user/.docker")
+        .build();
     DockerClient docker = DockerClientBuilder.getInstance(config).build();
 
 #### Properties
@@ -112,6 +112,12 @@ In your application, e.g.
 ##### System Properties:
 
     java -Ddocker.io.username=dockeruser pkg.Main
+
+##### System Environment
+
+    export DOCKER_URL=http://localhost:2376
+    
+Note: we also auto-detect defaults. If you use `DOCKER_HOST` we use that value, and if `DOCKER_CERT_PATH` is set, we switch to SSL.
 
 ##### File System  
 
