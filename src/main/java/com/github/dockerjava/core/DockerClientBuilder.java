@@ -4,6 +4,7 @@ import java.util.ServiceLoader;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
+import com.github.dockerjava.core.DockerClientConfig.DockerClientConfigBuilder;
 
 public class DockerClientBuilder {
 	
@@ -17,6 +18,10 @@ public class DockerClientBuilder {
 
 	public static DockerClientBuilder getInstance() {
 		return new DockerClientBuilder(withDefaultDockerCmdExecFactory(DockerClientImpl.getInstance()));
+	}
+	
+	public static DockerClientBuilder getInstance(DockerClientConfigBuilder dockerClientConfigBuilder) {
+		return getInstance(dockerClientConfigBuilder.build());
 	}
 
 	public static DockerClientBuilder getInstance(DockerClientConfig dockerClientConfig) {
