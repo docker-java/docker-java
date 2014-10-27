@@ -28,6 +28,11 @@ import com.github.dockerjava.api.command.InspectContainerResponse.NetworkSetting
 /**
  * A container for port bindings, made available as a {@link Map} via its
  * {@link #getBindings()} method.
+ * <p> 
+ * <i>Note: This is an abstraction used for querying existing port bindings from 
+ * a container configuration.
+ * It is not to be confused with the {@link PortBinding} abstraction used for
+ * adding new port bindings to a container.</i>
  * 
  * @see HostConfig#getPortBindings()
  * @see NetworkSettings#getPorts()
@@ -38,18 +43,42 @@ public class Ports {
 
     private final Map<ExposedPort, Binding[]> ports = new HashMap<ExposedPort, Binding[]>();
 
+    /**
+     * Creates a {@link Ports} object with no {@link PortBinding}s.
+     * Use {@link #bind(ExposedPort, Binding)} or {@link #add(PortBinding...)}
+     * to add {@link PortBinding}s.
+     */
     public Ports() { }
 
+    /**
+     * Creates a {@link Ports} object with an initial {@link PortBinding} for 
+     * the specified {@link ExposedPort} and {@link Binding}.
+     * Use {@link #bind(ExposedPort, Binding)} or {@link #add(PortBinding...)}
+     * to add more {@link PortBinding}s.
+     */
     public Ports(ExposedPort exposedPort, Binding host) {
     	bind(exposedPort, host);
     }
 
-    public void bind(ExposedPort exposedPort, Binding host) {
+    /**
+     * Adds a new {@link PortBinding} for the specified {@link ExposedPort} and
+     * {@link Binding} to the current bindings.
+     */
+    public void bind(ExposedPort exposedPort, Binding binding) {
         if (ports.containsKey(exposedPort)) {
             Binding[] bindings = ports.get(exposedPort);
-            ports.put(exposedPort, (Binding[]) ArrayUtils.add(bindings, host));
+            ports.put(exposedPort, (Binding[]) ArrayUtils.add(bindings, binding));
         } else {
-            ports.put(exposedPort, new Binding[]{host});
+            ports.put(exposedPort, new Binding[]{binding});
+        }
+    }
+
+    /**
+     * Adds the specified {@link PortBinding}(s) to the list of {@link PortBinding}s. 
+     */
+    public void add(PortBinding... portBindings) {
+        for (PortBinding binding : portBindings) {
+            bind(binding.getExposedPort(), binding.getBinding());
         }
     }
 
@@ -59,6 +88,9 @@ public class Ports {
     }
 
     /**
+     * Returns the port bindings in the format used by the Docker remote API,
+     * i.e. the {@link Binding}s grouped by {@link ExposedPort}.
+     * 
      * @return the port bindings as a {@link Map} that contains one or more
      *         {@link Binding}s per {@link ExposedPort}.
      */
@@ -75,10 +107,12 @@ public class Ports {
 
 
     /**
-     * The host part of a port binding.
-     * In a port binding a container port, expressed as an {@link ExposedPort},
-     * is published as a port of the Docker host.
+     * A {@link Binding} represents a socket on the Docker host that is
+     * used in a {@link PortBinding}.
+     * It is characterized by an {@link #getHostIp() IP address} and a
+     * {@link #getHostPort() port number}.
      * 
+     * @see Ports#bind(ExposedPort, Binding)
      * @see ExposedPort
      */
     public static class Binding {
@@ -88,7 +122,8 @@ public class Ports {
         private final int hostPort;
 
         /**
-         * Creates the host part of a port binding.
+         * Creates a {@link Binding} for the given {@link #getHostIp() IP address}
+         * and {@link #getHostPort() port number}.
          * 
          * @see Ports#bind(ExposedPort, Binding)
          * @see ExposedPort
@@ -98,6 +133,13 @@ public class Ports {
             this.hostPort = hostPort;
         }
 
+        /**
+         * Creates a {@link Binding} for the given {@link #getHostPort() port number},
+         * leaving the {@link #getHostIp() IP address} undefined.
+         * 
+         * @see Ports#bind(ExposedPort, Binding)
+         * @see ExposedPort
+         */
         public Binding(int hostPort) {
             this("", hostPort);
         }
