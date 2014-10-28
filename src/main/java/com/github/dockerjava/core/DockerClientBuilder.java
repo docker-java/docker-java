@@ -11,13 +11,14 @@ public class DockerClientBuilder {
 	private static ServiceLoader<DockerCmdExecFactory> serviceLoader = ServiceLoader.load(DockerCmdExecFactory.class);
 
 	private DockerClientImpl dockerClient = null;
+	private DockerCmdExecFactory dockerCmdExecFactory = null;
 
 	private DockerClientBuilder(DockerClientImpl dockerClient) {
 		this.dockerClient = dockerClient;
 	}
 
 	public static DockerClientBuilder getInstance() {
-		return new DockerClientBuilder(withDefaultDockerCmdExecFactory(DockerClientImpl.getInstance()));
+		return new DockerClientBuilder(DockerClientImpl.getInstance());
 	}
 	
 	public static DockerClientBuilder getInstance(DockerClientConfigBuilder dockerClientConfigBuilder) {
@@ -25,22 +26,13 @@ public class DockerClientBuilder {
 	}
 
 	public static DockerClientBuilder getInstance(DockerClientConfig dockerClientConfig) {
-		return new DockerClientBuilder(withDefaultDockerCmdExecFactory(DockerClientImpl
-				.getInstance(dockerClientConfig)));
+		return new DockerClientBuilder(DockerClientImpl
+				.getInstance(dockerClientConfig));
 	}
 
 	public static DockerClientBuilder getInstance(String serverUrl) {
-		return new DockerClientBuilder(withDefaultDockerCmdExecFactory(DockerClientImpl
-				.getInstance(serverUrl)));
-	}
-
-	private static DockerClientImpl withDefaultDockerCmdExecFactory(
-			DockerClientImpl dockerClient) {
-		
-		DockerCmdExecFactory dockerCmdExecFactory = getDefaultDockerCmdExecFactory();
-		
-		return dockerClient
-				.withDockerCmdExecFactory(dockerCmdExecFactory);
+		return new DockerClientBuilder(DockerClientImpl
+				.getInstance(serverUrl));
 	}
 
 	public static DockerCmdExecFactory getDefaultDockerCmdExecFactory() {
@@ -53,12 +45,18 @@ public class DockerClientBuilder {
 
 	public DockerClientBuilder withDockerCmdExecFactory(
 			DockerCmdExecFactory dockerCmdExecFactory) {
-		dockerClient = dockerClient
-				.withDockerCmdExecFactory(dockerCmdExecFactory);
+		this.dockerCmdExecFactory = dockerCmdExecFactory;
 		return this;
 	}
 
 	public DockerClient build() {
+	        if(dockerCmdExecFactory != null) {
+	            dockerClient.withDockerCmdExecFactory(dockerCmdExecFactory);
+	        }
+	        else {
+	            dockerClient.withDockerCmdExecFactory(getDefaultDockerCmdExecFactory());
+	        }
+	        
 		return dockerClient;
 	}
 }
