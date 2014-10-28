@@ -2,7 +2,6 @@ package com.github.dockerjava.jaxrs;
 
 import java.io.IOException;
 import java.net.URI;
-import java.rmi.registry.Registry;
 import java.security.KeyStore;
 import java.security.Security;
 import java.util.logging.Logger;
@@ -21,6 +20,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.glassfish.jersey.CommonProperties;
 import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
+import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 
@@ -76,6 +76,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         Preconditions.checkNotNull(dockerClientConfig, "config was not specified");
 
         ClientConfig clientConfig = new ClientConfig();
+        clientConfig.connectorProvider(new ApacheConnectorProvider());
         clientConfig.property(CommonProperties.FEATURE_AUTO_DISCOVERY_DISABLE, true);
 
         clientConfig.register(ResponseStatusExceptionFilter.class);
@@ -91,8 +92,9 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
             clientConfig.property(ClientProperties.READ_TIMEOUT, readTimeout);
         }
 
-        clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER,
-                new PoolingHttpClientConnectionManager(getSchemeRegistry(dockerClientConfig.getUri())));
+        URI originalUri = dockerClientConfig.getUri();
+		clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER,
+                new PoolingHttpClientConnectionManager(getSchemeRegistry(originalUri)));
         
         ClientBuilder clientBuilder = ClientBuilder.newBuilder().withConfig(clientConfig);
 
@@ -135,6 +137,10 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
         client = clientBuilder.build();
 
+        if (originalUri.getScheme().equals("unix")) {
+            dockerClientConfig.setUri(UnixConnectionSocketFactory.sanitizeUri(originalUri));
+          }
+        
         WebTarget webResource = client.target(dockerClientConfig.getUri());
 
         if (dockerClientConfig.getVersion() == null || dockerClientConfig.getVersion().isEmpty()) {
