@@ -1,28 +1,69 @@
 package com.github.dockerjava.jaxrs;
 
+import java.io.IOException;
+import java.net.URI;
+import java.rmi.registry.Registry;
+import java.security.KeyStore;
+import java.security.Security;
+import java.util.logging.Logger;
+
+import javax.net.ssl.SSLContext;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.glassfish.jersey.CommonProperties;
+import org.glassfish.jersey.SslConfigurator;
+import org.glassfish.jersey.apache.connector.ApacheClientProperties;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.ClientProperties;
+
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.github.dockerjava.api.DockerClientException;
-import com.github.dockerjava.api.command.*;
+import com.github.dockerjava.api.command.AttachContainerCmd;
+import com.github.dockerjava.api.command.AuthCmd;
+import com.github.dockerjava.api.command.BuildImageCmd;
+import com.github.dockerjava.api.command.CommitCmd;
+import com.github.dockerjava.api.command.ContainerDiffCmd;
+import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
+import com.github.dockerjava.api.command.CreateContainerCmd;
+import com.github.dockerjava.api.command.CreateImageCmd;
+import com.github.dockerjava.api.command.DockerCmdExecFactory;
+import com.github.dockerjava.api.command.EventsCmd;
+import com.github.dockerjava.api.command.InfoCmd;
+import com.github.dockerjava.api.command.InspectContainerCmd;
+import com.github.dockerjava.api.command.InspectImageCmd;
+import com.github.dockerjava.api.command.KillContainerCmd;
+import com.github.dockerjava.api.command.ListContainersCmd;
+import com.github.dockerjava.api.command.ListImagesCmd;
+import com.github.dockerjava.api.command.LogContainerCmd;
+import com.github.dockerjava.api.command.PauseContainerCmd;
+import com.github.dockerjava.api.command.PingCmd;
+import com.github.dockerjava.api.command.PullImageCmd;
+import com.github.dockerjava.api.command.PushImageCmd;
+import com.github.dockerjava.api.command.RemoveContainerCmd;
+import com.github.dockerjava.api.command.RemoveImageCmd;
+import com.github.dockerjava.api.command.RestartContainerCmd;
+import com.github.dockerjava.api.command.SearchImagesCmd;
+import com.github.dockerjava.api.command.StartContainerCmd;
+import com.github.dockerjava.api.command.StopContainerCmd;
+import com.github.dockerjava.api.command.TagImageCmd;
+import com.github.dockerjava.api.command.TopContainerCmd;
+import com.github.dockerjava.api.command.UnpauseContainerCmd;
+import com.github.dockerjava.api.command.VersionCmd;
+import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.core.CertificateUtils;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.jaxrs.util.JsonClientFilter;
 import com.github.dockerjava.jaxrs.util.ResponseStatusExceptionFilter;
 import com.github.dockerjava.jaxrs.util.SelectiveLoggingFilter;
 import com.google.common.base.Preconditions;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.glassfish.jersey.CommonProperties;
-import org.glassfish.jersey.SslConfigurator;
-import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.client.ClientProperties;
-
-import javax.net.ssl.SSLContext;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-import java.io.IOException;
-import java.security.KeyStore;
-import java.security.Security;
-import java.util.logging.Logger;
 
 public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
@@ -50,6 +91,9 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
             clientConfig.property(ClientProperties.READ_TIMEOUT, readTimeout);
         }
 
+        clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER,
+                new PoolingHttpClientConnectionManager(getSchemeRegistry(dockerClientConfig.getUri())));
+        
         ClientBuilder clientBuilder = ClientBuilder.newBuilder().withConfig(clientConfig);
 
         String dockerCertPath = dockerClientConfig.getDockerCertPath();
@@ -101,6 +145,15 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
     }
 
+    private org.apache.http.config.Registry<ConnectionSocketFactory> getSchemeRegistry(final URI originalUri) {
+        return RegistryBuilder
+            .<ConnectionSocketFactory>create()
+            .register("http", PlainConnectionSocketFactory.getSocketFactory())
+            .register("https", SSLConnectionSocketFactory.getSocketFactory())
+            .register("unix", new UnixConnectionSocketFactory(originalUri))
+            .build();
+      }
+    
     protected WebTarget getBaseResource() {
         Preconditions.checkNotNull(baseResource, "Factory not initialized. You probably forgot to call init()!");
         return baseResource;
