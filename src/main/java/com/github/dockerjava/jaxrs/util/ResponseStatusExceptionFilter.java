@@ -2,6 +2,7 @@ package com.github.dockerjava.jaxrs.util;
 
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 
 import javax.ws.rs.client.ClientRequestContext;
@@ -63,7 +64,9 @@ public class ResponseStatusExceptionFilter implements ClientResponseFilter {
 	        if (contentLength != -1) {
 	            byte[] buffer = new byte[contentLength];
 	            try {
-	                IOUtils.readFully(responseContext.getEntityStream(), buffer);
+	                InputStream entityStream = responseContext.getEntityStream();
+					IOUtils.readFully(entityStream, buffer);
+					entityStream.close();
 	            }
 	            catch (EOFException e) {
 	                return null;

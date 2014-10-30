@@ -4,6 +4,7 @@ import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
+import org.apache.commons.io.IOUtils;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
@@ -49,8 +50,21 @@ public class CopyFileFromContainerCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        InputStream response = dockerClient.copyFileFromContainerCmd(container.getId(), "/test").exec();
-        assertTrue(response.available() > 0, "The file was not copied from the container.");
+        InputStream response = null;
+        try {
+        	response = dockerClient.copyFileFromContainerCmd(container.getId(), "/test").exec();
+        	boolean condition = response.available() > 0;
+			
+        	// read the stream fully. Otherwise, the underlying stream will not be closed.
+        	for(String line:IOUtils.readLines(response)) {
+        		assertThat("", null != line);
+        	}
+        	
+        	assertTrue(condition, "The file was not copied from the container.");        	
+        } finally {
+        	System.out.println("Close copyFromContainer stream.");
+        	response.close();        	
+        }
     }
     
     @Test

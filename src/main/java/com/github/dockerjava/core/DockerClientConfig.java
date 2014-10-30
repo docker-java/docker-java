@@ -36,7 +36,7 @@ public class DockerClientConfig {
             .put(DOCKER_CERT_PATH_PROPERTY, DOCKER_IO_DOCKER_CERT_PATH_PROPERTY)
             .build();
     private static final String DOCKER_IO_PROPERTIES_PROPERTY = "docker.io.properties";
-    private final URI uri;
+    private URI uri;
     private final String version, username, password, email, dockerCertPath;
     private final Integer readTimeout;
     private final boolean loggingFilterEnabled;
@@ -176,7 +176,11 @@ public class DockerClientConfig {
         return uri;
     }
 
-    public String getVersion() {
+    public void setUri(URI uri) {
+		this.uri = uri;
+	}
+
+	public String getVersion() {
         return version;
     }
 
