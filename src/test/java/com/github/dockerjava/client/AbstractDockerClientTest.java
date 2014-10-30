@@ -95,6 +95,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 				logwriter.write(line + (itr.hasNext() ? "\n" : ""));
 				//LOG.info("line: "+line);
 			}
+			response.close();
 			
 			return logwriter.toString();
 		} catch (IOException e) {

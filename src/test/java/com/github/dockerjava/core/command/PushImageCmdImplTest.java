@@ -77,6 +77,5 @@ public class PushImageCmdImplTest extends AbstractDockerClientTest {
 		assertThat(asString(dockerClient.pushImageCmd(username + "/xxx").exec()), containsString("error"));
 	}
 
-
 }
 
