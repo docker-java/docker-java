@@ -99,10 +99,18 @@ public class Ports {
         return ports;
     }
 
-    public static Binding Binding(String hostIp, int hostPort) {
+    /**
+     * Creates a {@link Binding} for the given IP address and port number.
+     */
+    public static Binding Binding(String hostIp, Integer hostPort) {
     	return new Binding(hostIp, hostPort);
     }
-    public static Binding Binding(int hostPort) {
+
+    /**
+     * Creates a {@link Binding} for the given port number, leaving the
+     * IP address undefined.
+     */
+    public static Binding Binding(Integer hostPort) {
     	return new Binding(hostPort);
     }
 
@@ -112,6 +120,8 @@ public class Ports {
      * used in a {@link PortBinding}.
      * It is characterized by an {@link #getHostIp() IP address} and a
      * {@link #getHostPort() port number}.
+     * Both properties may be <code>null</code> in order to let Docker assign
+     * them dynamically/using defaults.
      * 
      * @see Ports#bind(ExposedPort, Binding)
      * @see ExposedPort
@@ -120,7 +130,7 @@ public class Ports {
 
         private final String hostIp;
 
-        private final int hostPort;
+        private final Integer hostPort;
 
         /**
          * Creates a {@link Binding} for the given {@link #getHostIp() IP address}
@@ -129,8 +139,8 @@ public class Ports {
          * @see Ports#bind(ExposedPort, Binding)
          * @see ExposedPort
          */
-        public Binding(String hostIp, int hostPort) {
-            this.hostIp = hostIp;
+        public Binding(String hostIp, Integer hostPort) {
+            this.hostIp = isEmpty(hostIp) ? null : hostIp;
             this.hostPort = hostPort;
         }
 
@@ -141,15 +151,41 @@ public class Ports {
          * @see Ports#bind(ExposedPort, Binding)
          * @see ExposedPort
          */
-        public Binding(int hostPort) {
-            this("", hostPort);
+        public Binding(Integer hostPort) {
+            this(null, hostPort);
         }
 
+        /**
+         * Creates a {@link Binding} for the given {@link #getHostIp() IP address},
+         * leaving the {@link #getHostPort() port number} undefined.
+         */
+        public Binding(String hostIp) {
+            this(hostIp, null);
+        }
+
+        /**
+         * Creates a {@link Binding} with both {@link #getHostIp() IP address} and
+         * {@link #getHostPort() port number} undefined.
+         */
+        public Binding() {
+            this(null, null);
+        }
+
+        /**
+         * @return the IP address on the Docker host. 
+         *         May be <code>null</code>, in which case Docker will bind the
+         *         port to all interfaces (<code>0.0.0.0</code>).
+         */
         public String getHostIp() {
             return hostIp;
         }
 
-        public int getHostPort() {
+        /**
+         * @return the port number on the Docker host.
+         *         May be <code>null</code>, in which case Docker will dynamically
+         *         assign a port.
+         */
+        public Integer getHostPort() {
             return hostPort;
         }
 
@@ -157,7 +193,7 @@ public class Ports {
          * Parses a textual host and port specification (as used by the Docker CLI) 
          * to a {@link Binding}.
          * <p>
-         * Legal syntax: <code>[IP:]Port</code>
+         * Legal syntax: <code>IP|IP:port|port</code>
          * 
          * @param serialized serialized the specification, e.g. 
          *        <code>127.0.0.1:80</code>
@@ -166,13 +202,18 @@ public class Ports {
          */
         public static Binding parse(String serialized) throws IllegalArgumentException {
             try {
+                if (serialized.isEmpty()) {
+                    return new Binding();
+                }
+
                 String[] parts = serialized.split(":");
                 switch (parts.length) {
                 case 2: {
                     return new Binding(parts[0], Integer.valueOf(parts[1]));
                 }
                 case 1: {
-                    return new Binding(Integer.valueOf(parts[0]));
+                    return parts[0].contains(".") ? new Binding(parts[0]) 
+                        : new Binding(Integer.valueOf(parts[0]));
                 }
                 default: {
                     throw new IllegalArgumentException();
@@ -195,6 +236,8 @@ public class Ports {
         public String toString() {
             if (isEmpty(hostIp)) {
                 return Integer.toString(hostPort);
+            } else if (hostPort == null) {
+            	return hostIp;
             } else {
                 return hostIp + ":" + hostPort;
             }
@@ -249,8 +292,8 @@ public class Ports {
                 jsonGen.writeStartArray();
                 for (Binding binding : entry.getValue()) {
                     jsonGen.writeStartObject();
-                    jsonGen.writeStringField("HostIp", binding.getHostIp());
-                    jsonGen.writeStringField("HostPort", "" + binding.getHostPort());
+                    jsonGen.writeStringField("HostIp", binding.getHostIp() == null ? "" : binding.getHostIp());
+                    jsonGen.writeStringField("HostPort", binding.getHostPort() == null ? "" : binding.getHostPort().toString());
                     jsonGen.writeEndObject();
                 }
                 jsonGen.writeEndArray();

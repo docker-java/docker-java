@@ -34,6 +34,18 @@ public class PortBindingTest {
 				new PortBinding(new Binding(80), TCP_8080));
 	}
 
+	@Test
+	public void exposedPortOnly() {
+		assertEquals(PortBinding.parse("8080"),
+				new PortBinding(new Binding(), TCP_8080));
+	}
+
+	@Test
+	public void dynamicHostPort() {
+		assertEquals(PortBinding.parse("127.0.0.1::8080"),
+				new PortBinding(new Binding("127.0.0.1"), TCP_8080));
+	}
+
 	@Test(expectedExceptions = IllegalArgumentException.class,
 			expectedExceptionsMessageRegExp = "Error parsing PortBinding 'nonsense'")
 	public void parseInvalidInput() {
