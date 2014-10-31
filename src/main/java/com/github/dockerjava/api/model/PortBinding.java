@@ -1,5 +1,9 @@
 package com.github.dockerjava.api.model;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import com.github.dockerjava.api.command.InspectContainerResponse.HostConfig;
 import com.github.dockerjava.api.command.InspectContainerResponse.NetworkSettings;
 import com.github.dockerjava.api.model.Ports.Binding;
@@ -33,4 +37,47 @@ public class PortBinding {
 	public ExposedPort getExposedPort() {
 		return exposedPort;
 	}
+
+	public static PortBinding parse(String serialized) throws IllegalArgumentException {
+		try {
+			String[] parts = StringUtils.splitByWholeSeparator(serialized, ":");
+			switch (parts.length) {
+			case 3:
+				// 127.0.0.1:80:8080/tcp
+				return createFromSubstrings(parts[0] + ":" + parts[1], parts[2]);
+			case 2:
+				// 80:8080 // 127.0.0.1::8080
+				return createFromSubstrings(parts[0], parts[1]);
+			case 1:
+				// 8080
+				return createFromSubstrings("", parts[0]);
+			default:
+				throw new IllegalArgumentException();
+			}
+		} catch (Exception e) {
+			throw new IllegalArgumentException("Error parsing PortBinding '" 
+					+ serialized + "'", e);
+		}
+	}
+
+	private static PortBinding createFromSubstrings(String binding, String exposedPort)
+			throws IllegalArgumentException {
+		return new PortBinding(Binding.parse(binding), ExposedPort.parse(exposedPort));
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof PortBinding) {
+			PortBinding other = (PortBinding) obj;
+			return new EqualsBuilder().append(binding, other.getBinding())
+					.append(exposedPort, other.getExposedPort()).isEquals();
+		} else
+			return super.equals(obj);
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder().append(binding).append(exposedPort).toHashCode();
+	}
+
 }

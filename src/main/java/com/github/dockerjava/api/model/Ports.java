@@ -1,5 +1,7 @@
 package com.github.dockerjava.api.model;
 
+import static org.apache.commons.lang.StringUtils.isEmpty;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -8,7 +10,6 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -152,9 +153,51 @@ public class Ports {
             return hostPort;
         }
 
+        /**
+         * Parses a textual host and port specification (as used by the Docker CLI) 
+         * to a {@link Binding}.
+         * <p>
+         * Legal syntax: <code>[IP:]Port</code>
+         * 
+         * @param serialized serialized the specification, e.g. 
+         *        <code>127.0.0.1:80</code>
+         * @return a {@link Binding} matching the specification
+         * @throws IllegalArgumentException if the specification cannot be parsed
+         */
+        public static Binding parse(String serialized) throws IllegalArgumentException {
+            try {
+                String[] parts = serialized.split(":");
+                switch (parts.length) {
+                case 2: {
+                    return new Binding(parts[0], Integer.valueOf(parts[1]));
+                }
+                case 1: {
+                    return new Binding(Integer.valueOf(parts[0]));
+                }
+                default: {
+                    throw new IllegalArgumentException();
+                }
+                }
+            } catch (Exception e) {
+                throw new IllegalArgumentException("Error parsing Binding '"
+                        + serialized + "'");
+            }
+        }
+
+        /**
+         * Returns a string representation of this {@link Binding} suitable
+         * for inclusion in a JSON message.
+         * The format is <code>[IP:]Port</code>, like the argument in {@link #parse(String)}.
+         * 
+         * @return a string representation of this {@link Binding}
+         */
         @Override
         public String toString() {
-            return ToStringBuilder.reflectionToString(this);
+            if (isEmpty(hostIp)) {
+                return Integer.toString(hostPort);
+            } else {
+                return hostIp + ":" + hostPort;
+            }
         }
 
         @Override
