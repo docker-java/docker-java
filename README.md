@@ -17,17 +17,7 @@ Developer forum for [docker-java](https://groups.google.com/forum/?hl=de#!forum/
 * Docker daemon running
 * Docker private repository running (see below).
 
-You'll need to be running a local private registry, as per [the quick start instructions](https://github.com/docker/docker-registry):
-
-    $ docker run -p 5000:5000 registry
-    
- If you're using boot2docker, set-up a port forward:
- 
-     $ VBoxManage controlvm boot2docker-vm natpf1 "5000,tcp,127.0.0.1,5000,,5000"
- 
-You can remove this forward later using:
- 
-     $ VBoxManage controlvm boot2docker-vm natpf1 delete 5000
+You'll need to be running a local private registry, as per [these instructions](docker-auth-registry/README.md):    
 
 The Maven build includes integration tests which are using a localhost instance of Docker and require manual setup. Make sure you have a local Docker daemon running and then provide your https://registry.hub.docker.com/account/login/ information via system properties:
 

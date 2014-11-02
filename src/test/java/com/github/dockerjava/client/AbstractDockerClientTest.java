@@ -31,14 +31,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 	public void beforeTest()  {
 		LOG.info("======================= BEFORETEST =======================");
 		LOG.info("Connecting to Docker server");
-		dockerClient = DockerClientBuilder.getInstance(
-                DockerClientConfig.createDefaultConfigBuilder()
-                        .withServerAddress("http://localhost:5000")
-                        .withUsername("docker-java")
-                        .withPassword("docker-java")
-                        .withEmail("docker-java@github.com")
-                        .build()
-                )
+		dockerClient = DockerClientBuilder.getInstance(config())
 				.withDockerCmdExecFactory(dockerCmdExecFactory)
 				.build();
 
@@ -52,7 +45,20 @@ public abstract class AbstractDockerClientTest extends Assert {
 		LOG.info("======================= END OF BEFORETEST =======================\n\n");
 	}
 
-	public void afterTest() {
+    private DockerClientConfig config() {
+        return config("docker-java");
+    }
+
+    protected DockerClientConfig config(String password) {
+        return DockerClientConfig.createDefaultConfigBuilder()
+                .withServerAddress("http://localhost:5001")
+                .withUsername("docker-java")
+                .withPassword(password)
+                .withEmail("docker-java@github.com")
+                .build();
+    }
+
+    public void afterTest() {
 		LOG.info("======================= END OF AFTERTEST =======================");
 	}
 
