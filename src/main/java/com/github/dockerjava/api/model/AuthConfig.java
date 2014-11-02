@@ -3,8 +3,15 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AuthConfig {
-	
-	@JsonProperty
+
+    /**
+     * For backwards compatibility. Make sure you update the properties if you change this.
+     *
+     * @see /docker.io.properties
+     */
+    public static final String DEFAULT_SERVER_ADDRESS = "https://index.docker.io/v1/";
+
+    @JsonProperty
 	private String username;
 	
 	@JsonProperty
@@ -14,7 +21,7 @@ public class AuthConfig {
 	private String email;
 	
 	@JsonProperty("serveraddress")
-	private String serverAddress = "https://index.docker.io/v1/";
+	private String serverAddress = DEFAULT_SERVER_ADDRESS;
 
 	public String getUsername() {
 		return username;

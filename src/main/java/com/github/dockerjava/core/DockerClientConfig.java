@@ -18,6 +18,7 @@ public class DockerClientConfig {
     private static final String DOCKER_IO_USERNAME_PROPERTY = "docker.io.username";
     private static final String DOCKER_IO_PASSWORD_PROPERTY = "docker.io.password";
     private static final String DOCKER_IO_EMAIL_PROPERTY = "docker.io.email";
+    private static final String DOCKER_IO_SERVER_ADDRESS_PROPERTY = "docker.io.serverAddress";
     private static final String DOCKER_IO_READ_TIMEOUT_PROPERTY = "docker.io.readTimeout";
     // this is really confusing, as there are two ways to spell it
     private static final String DOCKER_IO_ENABLE_LOGGING_FILTER_PROPERTY = "docker.io.enableLoggingFilter";
@@ -31,22 +32,24 @@ public class DockerClientConfig {
             .put("DOCKER_USERNAME", DOCKER_IO_USERNAME_PROPERTY)
             .put("DOCKER_PASSWORD", DOCKER_IO_PASSWORD_PROPERTY)
             .put("DOCKER_EMAIL", DOCKER_IO_EMAIL_PROPERTY)
+            .put("DOCKER_SERVER_ADDRESS", DOCKER_IO_SERVER_ADDRESS_PROPERTY)
             .put("DOCKER_READ_TIMEOUT", DOCKER_IO_READ_TIMEOUT_PROPERTY)
             .put("DOCKER_LOGGING_FILTER_ENABLED", DOCKER_IO_ENABLE_LOGGING_FILTER_PROPERTY)
             .put(DOCKER_CERT_PATH_PROPERTY, DOCKER_IO_DOCKER_CERT_PATH_PROPERTY)
             .build();
     private static final String DOCKER_IO_PROPERTIES_PROPERTY = "docker.io.properties";
     private final URI uri;
-    private final String version, username, password, email, dockerCertPath;
+    private final String version, username, password, email, serverAddress, dockerCertPath;
     private final Integer readTimeout;
     private final boolean loggingFilterEnabled;
 
-    DockerClientConfig(URI uri, String version, String username, String password, String email, String dockerCertPath, Integer readTimeout, boolean loggingFilterEnabled) {
+    DockerClientConfig(URI uri, String version, String username, String password, String email, String serverAddress, String dockerCertPath, Integer readTimeout, boolean loggingFilterEnabled) {
         this.uri = uri;
         this.version = version;
         this.username = username;
         this.password = password;
         this.email = email;
+        this.serverAddress = serverAddress;
         this.dockerCertPath = dockerCertPath;
         this.readTimeout = readTimeout;
         this.loggingFilterEnabled = loggingFilterEnabled;
@@ -146,6 +149,7 @@ public class DockerClientConfig {
                 DOCKER_IO_USERNAME_PROPERTY,
                 DOCKER_IO_PASSWORD_PROPERTY,
                 DOCKER_IO_EMAIL_PROPERTY,
+                DOCKER_IO_SERVER_ADDRESS_PROPERTY,
                 DOCKER_IO_READ_TIMEOUT_PROPERTY,
                 DOCKER_IO_ENABLE_LOGGING_FILTER_PROPERTY,
                 DOCKER_IO_DOCKER_CERT_PATH_PROPERTY,
@@ -192,6 +196,10 @@ public class DockerClientConfig {
         return email;
     }
 
+    public String getServerAddress() {
+        return serverAddress;
+    }
+
     public Integer getReadTimeout() {
         return readTimeout;
     }
@@ -217,6 +225,8 @@ public class DockerClientConfig {
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
         if (readTimeout != null ? !readTimeout.equals(that.readTimeout) : that.readTimeout != null) return false;
+        if (serverAddress != null ? !serverAddress.equals(that.serverAddress) : that.serverAddress != null)
+            return false;
         if (uri != null ? !uri.equals(that.uri) : that.uri != null) return false;
         if (username != null ? !username.equals(that.username) : that.username != null) return false;
         if (version != null ? !version.equals(that.version) : that.version != null) return false;
@@ -231,6 +241,7 @@ public class DockerClientConfig {
         result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (serverAddress != null ? serverAddress.hashCode() : 0);
         result = 31 * result + (dockerCertPath != null ? dockerCertPath.hashCode() : 0);
         result = 31 * result + (readTimeout != null ? readTimeout.hashCode() : 0);
         result = 31 * result + (loggingFilterEnabled ? 1 : 0);
@@ -245,6 +256,7 @@ public class DockerClientConfig {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
+                ", serverAddress='" + serverAddress + '\'' +
                 ", dockerCertPath='" + dockerCertPath + '\'' +
                 ", readTimeout=" + readTimeout +
                 ", loggingFilterEnabled=" + loggingFilterEnabled +
@@ -253,7 +265,7 @@ public class DockerClientConfig {
 
     public static class DockerClientConfigBuilder {
         private URI uri;
-        private String version, username, password, email, dockerCertPath;
+        private String version, username, password, email, serverAddress, dockerCertPath;
         private Integer readTimeout;
         private boolean loggingFilterEnabled;
 
@@ -269,6 +281,7 @@ public class DockerClientConfig {
                     .withUsername(p.getProperty(DOCKER_IO_USERNAME_PROPERTY))
                     .withPassword(p.getProperty(DOCKER_IO_PASSWORD_PROPERTY))
                     .withEmail(p.getProperty(DOCKER_IO_EMAIL_PROPERTY))
+                    .withServerAddress(p.getProperty(DOCKER_IO_SERVER_ADDRESS_PROPERTY))
                     .withReadTimeout(Integer.valueOf(p.getProperty(DOCKER_IO_READ_TIMEOUT_PROPERTY, "0")))
                     .withLoggingFilter(Boolean.valueOf(p.getProperty(DOCKER_IO_ENABLE_LOGGING_FILTER_PROPERTY, "true")))
                     .withDockerCertPath(p.getProperty(DOCKER_IO_DOCKER_CERT_PATH_PROPERTY));
@@ -300,6 +313,11 @@ public class DockerClientConfig {
             return this;
         }
 
+        public DockerClientConfigBuilder withServerAddress(String serverAddress) {
+            this.serverAddress = serverAddress;
+            return this;
+        }
+
         public final DockerClientConfigBuilder withReadTimeout(Integer readTimeout) {
             this.readTimeout = readTimeout;
             return this;
@@ -322,6 +340,7 @@ public class DockerClientConfig {
                     username,
                     password,
                     email,
+                    serverAddress,
                     dockerCertPath,
                     readTimeout,
                     loggingFilterEnabled

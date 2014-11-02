@@ -15,6 +15,11 @@ Developer forum for [docker-java](https://groups.google.com/forum/?hl=de#!forum/
 * Java 1.6
 * Maven 3.0.5
 * Docker daemon running
+* Docker private repository running (see below).
+
+You'll need to be running a local private registry, as per [the quick start instructions](https://github.com/docker/docker-registry):
+
+    docker run -p 5000:5000 registry
 
 The Maven build includes integration tests which are using a localhost instance of Docker and require manual setup. Make sure you have a local Docker daemon running and then provide your https://registry.hub.docker.com/account/login/ information via system properties:
 
@@ -56,7 +61,7 @@ Run build without integration tests:
     <dependency>
           <groupId>com.github.docker-java</groupId>
           <artifactId>docker-java</artifactId>
-          <version>0.10.2</version>
+          <version>RELEASE</version>
     </dependency>
 
 ### Latest SNAPSHOT version
@@ -64,7 +69,7 @@ Run build without integration tests:
     <dependency>
           <groupId>com.github.docker-java</groupId>
           <artifactId>docker-java</artifactId>
-          <version>0.10.3-SNAPSHOT</version>
+          <version>LATEST</version>
     </dependency>
 
 Latest SNAPSHOT is published to maven repo: https://oss.sonatype.org/content/groups/public via ![Build on CloudBees](http://cloudbees.prod.acquia-sites.com/sites/default/files/styles/large/public/Button-Powered-by-CB.png?itok=uMDWINfY)
@@ -82,6 +87,7 @@ There are a couple of configuration items, all of which have sensible defaults:
 * `username` Your repository username (required to push containers).
 * `password` Your repository password.
 * `email` Your repository email.
+* `serverAddress` Your repository's address.
 * `dockerCertPath` Path to the docker certs.
 
 There are three ways to configure, in descending order of precedence:
@@ -95,6 +101,7 @@ In your application, e.g.
         .withUsername("dockeruser")
         .withPassword("ilovedocker")
         .withEmail("dockeruser@github.com")
+        .withServerAddress("https://index.docker.io/v1/")
         .withDockerCertPath("/home/user/.docker")
         .build();
     DockerClient docker = DockerClientBuilder.getInstance(config).build();
@@ -106,6 +113,7 @@ In your application, e.g.
     docker.io.username=dockeruser
     docker.io.password=ilovedocker
     docker.io.email=dockeruser@github.com
+    docker.io.serverAddress=https://index.docker.io/v1/
     docker.io.dockerCertPath=/home/user/.docker
 
 

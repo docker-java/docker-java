@@ -1,13 +1,12 @@
 package com.github.dockerjava.api.model;
 
-import static org.testng.Assert.assertEquals;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dockerjava.api.model.Ports.Binding;
+import org.testng.annotations.Test;
 
 import java.util.Map;
 
-import org.testng.annotations.Test;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.api.model.Ports.Binding;
+import static org.testng.Assert.assertEquals;
 
 public class PortsTest {
 	private final ObjectMapper objectMapper = new ObjectMapper();
