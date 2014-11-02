@@ -1,20 +1,20 @@
 package com.github.dockerjava.core.command;
 
-import java.lang.reflect.Method;
-
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.UnauthorizedException;
+import com.github.dockerjava.api.model.AuthResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
+import org.testng.ITestResult;
+import org.testng.annotations.*;
+
+import java.lang.reflect.Method;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.core.StringContains.containsString;
 
 @Test(groups = "integration")
 public class AuthCmdImplTest extends AbstractDockerClientTest {
@@ -41,8 +41,10 @@ public class AuthCmdImplTest extends AbstractDockerClientTest {
 
 	@Test
 	public void testAuth() throws Exception {
-		dockerClient.authCmd().exec();
-	}
+        AuthResponse response = dockerClient.authCmd().exec();
+
+        assertThat(response.getStatus(), not(containsString("Account created")));
+    }
 
 	@Test
 	public void testAuthInvalid() throws Exception {

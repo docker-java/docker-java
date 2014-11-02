@@ -1,12 +1,10 @@
 package com.github.dockerjava.client;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.lang.reflect.Method;
-import java.net.DatagramSocket;
-import java.net.ServerSocket;
-
+import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.core.DockerClientBuilder;
+import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.TestDockerCmdExecFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 import org.slf4j.Logger;
@@ -14,10 +12,12 @@ import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.ITestResult;
 
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.core.DockerClientBuilder;
-import com.github.dockerjava.core.TestDockerCmdExecFactory;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.lang.reflect.Method;
+import java.net.DatagramSocket;
+import java.net.ServerSocket;
 
 public abstract class AbstractDockerClientTest extends Assert {
 	
@@ -31,7 +31,14 @@ public abstract class AbstractDockerClientTest extends Assert {
 	public void beforeTest()  {
 		LOG.info("======================= BEFORETEST =======================");
 		LOG.info("Connecting to Docker server");
-		dockerClient = DockerClientBuilder.getInstance()
+		dockerClient = DockerClientBuilder.getInstance(
+                DockerClientConfig.createDefaultConfigBuilder()
+                        .withServerAddress("http://localhost:5000")
+                        .withUsername("docker-java")
+                        .withPassword("docker-java")
+                        .withEmail("docker-java@github.com")
+                        .build()
+                )
 				.withDockerCmdExecFactory(dockerCmdExecFactory)
 				.build();
 
