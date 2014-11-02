@@ -23,8 +23,9 @@ public abstract class AbstractDockerClientTest extends Assert {
 	
 	public static final Logger LOG = LoggerFactory
 			.getLogger(AbstractDockerClientTest.class);
-	
-	protected DockerClient dockerClient;
+    public static final String DOCKER_JAVA = "dockerjava";
+
+    protected DockerClient dockerClient;
 
 	protected TestDockerCmdExecFactory dockerCmdExecFactory = new TestDockerCmdExecFactory(DockerClientBuilder.getDefaultDockerCmdExecFactory());
 
@@ -46,15 +47,15 @@ public abstract class AbstractDockerClientTest extends Assert {
 	}
 
     private DockerClientConfig config() {
-        return config("docker-java");
+        return config(DOCKER_JAVA);
     }
 
     protected DockerClientConfig config(String password) {
         return DockerClientConfig.createDefaultConfigBuilder()
                 .withServerAddress("http://localhost:5001")
-                .withUsername("docker-java")
+                .withUsername(DOCKER_JAVA)
                 .withPassword(password)
-                .withEmail("docker-java@github.com")
+                .withEmail(DOCKER_JAVA + "@github.com")
                 .build();
     }
 

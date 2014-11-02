@@ -1,5 +1,3 @@
-# https://medium.com/@deeeet/building-private-docker-registry-with-basic-authentication-with-self-signed-certificate-using-it-e6329085e612
-
 FROM registry
 
 RUN apt-get update
