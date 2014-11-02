@@ -51,12 +51,13 @@ public class PushImageCmdImplTest extends AbstractDockerClientTest {
 
 		assertThat(container.getId(), not(isEmptyString()));
 
-		LOG.info("Commiting container: {}", container.toString());
+		LOG.info("Committing container: {}", container.toString());
 		String imageId = dockerClient.commitCmd(container.getId()).withRepository(username + "/busybox").exec();
 
 		// we have to block until image is pushed
 		asString(dockerClient.pushImageCmd(username + "/busybox").exec());
 
+        LOG.info("Removing image: {}", imageId);
 		dockerClient.removeImageCmd(imageId).exec();
 		
 		String response = asString(dockerClient.pullImageCmd(username + "/busybox").exec());
