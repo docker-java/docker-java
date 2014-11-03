@@ -34,7 +34,7 @@ public class DockerClientConfigTest {
     public void environmentDockerHost() throws Exception {
 
         // given docker host in env
-        Map<String, String> env = new HashMap<String, String>(System.getenv());
+        Map<String, String> env = new HashMap<String, String>();
         env.put("DOCKER_HOST", "tcp://baz:8768");
 
         // when you build a config

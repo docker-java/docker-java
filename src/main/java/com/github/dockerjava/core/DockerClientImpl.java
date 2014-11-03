@@ -71,8 +71,6 @@ public class DockerClientImpl implements Closeable, DockerClient {
 
     public AuthConfig authConfig() {
         checkNotNull(dockerClientConfig.getUsername(), "Configured username is null.");
-        checkNotNull(dockerClientConfig.getPassword(), "Configured password is null.");
-        checkNotNull(dockerClientConfig.getEmail(), "Configured email is null.");
         checkNotNull(dockerClientConfig.getServerAddress(), "Configured serverAddress is null.");
 
         AuthConfig authConfig = new AuthConfig();
