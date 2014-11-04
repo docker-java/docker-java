@@ -1,7 +1,7 @@
 Set-up a Docker Registry with Plain Text Authentication
 --
 
-This creates a registry that runs locally with SSL andt authentication set-up.
+This creates a registry that runs locally with SSL and authentication set-up.
 
 	./registry.sh
 
