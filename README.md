@@ -17,9 +17,13 @@ Developer forum for [docker-java](https://groups.google.com/forum/?hl=de#!forum/
 * Docker daemon running
 * Docker private repository running (see below).
 
-You'll need to be running a local private registry, as per [these instructions](docker-auth-registry/README.md):    
+You'll need to be running a local private registry, as per [these instructions](docker-auth-registry/README.md):   
 
-The Maven build includes integration tests which are using a localhost instance of Docker and require manual setup. Make sure you have a local Docker daemon running and then provide your https://registry.hub.docker.com/account/login/ information via system properties:
+If you need SSL, then you'll need to put your `*.pem` file into `~/.docker/`, if you're using boot2docker, do this: 
+ 
+    $ ln -s /Users/alex.collins/.boot2docker/certs/boot2docker-vm .docker
+
+Build and run integration tests as follows:
 
     $ mvn clean install
 
@@ -80,10 +84,10 @@ There are a couple of configuration items, all of which have sensible defaults:
 
 * `url` The Docker URL, e.g. `https://localhost:2376`.
 * `version` The API version, e.g. `1.15`.
-* `username` Your repository username (required to push containers).
-* `password` Your repository password.
-* `email` Your repository email.
-* `serverAddress` Your repository's address.
+* `username` Your register username (required to push containers).
+* `password` Your register password.
+* `email` Your register email.
+* `serverAddress` Your register's address.
 * `dockerCertPath` Path to the docker certs.
 
 There are three ways to configure, in descending order of precedence:

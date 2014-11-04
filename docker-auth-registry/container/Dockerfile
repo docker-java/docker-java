@@ -11,7 +11,7 @@ ADD docker-registry.conf /etc/nginx/
 
 ADD docker-registry.htpasswd /etc/nginx/
 
-EXPOSE 5001
+EXPOSE 5443
 
 ADD start.sh .
 
