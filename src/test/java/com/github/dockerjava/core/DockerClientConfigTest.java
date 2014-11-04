@@ -101,7 +101,7 @@ public class DockerClientConfigTest {
         assertEquals(config.getUri(), URI.create("https://localhost:2376"));
         assertEquals(config.getUsername(), "someUserName");
         assertEquals(config.getServerAddress(), AuthConfig.DEFAULT_SERVER_ADDRESS);
-        assertEquals(config.getVersion(), "1.15");
+        assertEquals(config.getVersion(), null);
         assertEquals(config.isLoggingFilterEnabled(), true);
         assertEquals(config.getDockerCertPath(), "someHomeDir/.docker");
     }
