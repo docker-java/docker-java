@@ -49,6 +49,16 @@ public class ExposedPort {
 	}
 
 	/**
+	 * Creates an {@link ExposedPort} for the given 
+	 * {@link #getPort() port number} and {@link InternetProtocol#DEFAULT}.
+	 * 
+	 * @param port the {@link #getPort() port number}
+	 */
+	public ExposedPort(int port) {
+		this(port, InternetProtocol.DEFAULT);
+	}
+
+	/**
 	 * Creates an {@link ExposedPort} for the given parameters.
 	 * 
 	 * @param scheme the {@link #getScheme() scheme}, <code>tcp</code> or 
@@ -61,7 +71,8 @@ public class ExposedPort {
 		this(port, InternetProtocol.valueOf(scheme));
 	}
 
-	/** @return the {@link InternetProtocol} */
+	/** @return the {@link InternetProtocol} of the {@link #getPort() port}
+	 *          that the container exposes */
 	public InternetProtocol getProtocol() {
 		return protocol;
 	}
@@ -75,7 +86,7 @@ public class ExposedPort {
 		return protocol.toString();
 	}
 
-	/** @return the port number */
+	/** @return the port number that the container exposes */
 	public int getPort() {
 		return port;
 	}
@@ -107,7 +118,14 @@ public class ExposedPort {
 	public static ExposedPort parse(String serialized) throws IllegalArgumentException {
 		try {
 			String[] parts = serialized.split("/");
-			return new ExposedPort(Integer.valueOf(parts[0]), InternetProtocol.parse(parts[1]));
+			switch (parts.length) {
+			case 1:
+				return new ExposedPort(Integer.valueOf(parts[0]));
+			case 2:
+				return new ExposedPort(Integer.valueOf(parts[0]), InternetProtocol.parse(parts[1]));
+			default:
+				throw new IllegalArgumentException();
+			}
 		} catch (Exception e) {
 			throw new IllegalArgumentException("Error parsing ExposedPort '" + serialized + "'");
 		}
