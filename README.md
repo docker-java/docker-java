@@ -56,7 +56,7 @@ Run build without integration tests:
     <dependency>
           <groupId>com.github.docker-java</groupId>
           <artifactId>docker-java</artifactId>
-          <version>0.10.2</version>
+          <version>0.10.3</version>
     </dependency>
 
 ### Latest SNAPSHOT version
@@ -64,7 +64,7 @@ Run build without integration tests:
     <dependency>
           <groupId>com.github.docker-java</groupId>
           <artifactId>docker-java</artifactId>
-          <version>0.10.3-SNAPSHOT</version>
+          <version>0.10.4-SNAPSHOT</version>
     </dependency>
 
 Latest SNAPSHOT is published to maven repo: https://oss.sonatype.org/content/groups/public via ![Build on CloudBees](http://cloudbees.prod.acquia-sites.com/sites/default/files/styles/large/public/Button-Powered-by-CB.png?itok=uMDWINfY)
