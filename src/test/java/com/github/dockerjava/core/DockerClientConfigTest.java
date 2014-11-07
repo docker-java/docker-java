@@ -15,7 +15,7 @@ public class DockerClientConfigTest {
     public static final DockerClientConfig EXAMPLE_CONFIG = newExampleConfig();
 
     private static DockerClientConfig newExampleConfig() {
-        return new DockerClientConfig(URI.create("http://foo"), "bar", "baz", "qux", "blam", "flim", 877, false);
+        return new DockerClientConfig(URI.create("http://foo"), "bar", "baz", "qux", "blam", "flim", 877, false, 20, 2);
     }
 
     @Test

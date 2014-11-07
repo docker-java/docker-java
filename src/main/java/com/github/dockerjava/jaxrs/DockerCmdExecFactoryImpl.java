@@ -93,8 +93,11 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         }
 
         URI originalUri = dockerClientConfig.getUri();
+		PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(getSchemeRegistry(originalUri));
+		connManager.setMaxTotal(dockerClientConfig.getMaxTotalConnections());
+		connManager.setDefaultMaxPerRoute(dockerClientConfig.getMaxPerRoutConnections());
 		clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER,
-                new PoolingHttpClientConnectionManager(getSchemeRegistry(originalUri)));
+                connManager);
         
         ClientBuilder clientBuilder = ClientBuilder.newBuilder().withConfig(clientConfig);
 

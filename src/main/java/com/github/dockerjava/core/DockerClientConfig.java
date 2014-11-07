@@ -22,6 +22,10 @@ public class DockerClientConfig {
     // this is really confusing, as there are two ways to spell it
     private static final String DOCKER_IO_ENABLE_LOGGING_FILTER_PROPERTY = "docker.io.enableLoggingFilter";
     private static final String DOCKER_IO_DOCKER_CERT_PATH_PROPERTY = "docker.io.dockerCertPath";
+    // connection pooling properties
+    private static final String DOCKER_IO_MAX_PER_ROUTE_PROPERTY = "docker.io.perRouteConnections";
+    private static final String DOCKER_IO_MAX_TOTAL_PROPERTY = "docker.io.totalConnections";
+    
     /**
      * A map from the environment name to the interval name.
      */
@@ -40,8 +44,13 @@ public class DockerClientConfig {
     private final String version, username, password, email, dockerCertPath;
     private final Integer readTimeout;
     private final boolean loggingFilterEnabled;
+    
+    private final int maxTotalConnections;
+    private final int maxPerRouteConnections;
 
-    DockerClientConfig(URI uri, String version, String username, String password, String email, String dockerCertPath, Integer readTimeout, boolean loggingFilterEnabled) {
+    DockerClientConfig(URI uri, String version, String username, String password, String email,
+    		String dockerCertPath, Integer readTimeout, boolean loggingFilterEnabled,
+    		int maxTotalConns, int maxPerRouteConns) {
         this.uri = uri;
         this.version = version;
         this.username = username;
@@ -50,6 +59,9 @@ public class DockerClientConfig {
         this.dockerCertPath = dockerCertPath;
         this.readTimeout = readTimeout;
         this.loggingFilterEnabled = loggingFilterEnabled;
+        
+        this.maxTotalConnections = maxTotalConns;
+        this.maxPerRouteConnections = maxPerRouteConns;
     }
 
     private static Properties loadIncludedDockerProperties(Properties systemProperties) {
@@ -258,7 +270,7 @@ public class DockerClientConfig {
     public static class DockerClientConfigBuilder {
         private URI uri;
         private String version, username, password, email, dockerCertPath;
-        private Integer readTimeout;
+        private Integer readTimeout, maxTotalConnections, maxPerRouteConnections;
         private boolean loggingFilterEnabled;
 
         /**
@@ -275,7 +287,10 @@ public class DockerClientConfig {
                     .withEmail(p.getProperty(DOCKER_IO_EMAIL_PROPERTY))
                     .withReadTimeout(Integer.valueOf(p.getProperty(DOCKER_IO_READ_TIMEOUT_PROPERTY, "0")))
                     .withLoggingFilter(Boolean.valueOf(p.getProperty(DOCKER_IO_ENABLE_LOGGING_FILTER_PROPERTY, "true")))
-                    .withDockerCertPath(p.getProperty(DOCKER_IO_DOCKER_CERT_PATH_PROPERTY));
+                    .withDockerCertPath(p.getProperty(DOCKER_IO_DOCKER_CERT_PATH_PROPERTY))
+                    .withMaxPerRouteConnections(Integer.valueOf(p.getProperty(DOCKER_IO_MAX_PER_ROUTE_PROPERTY, "2")))
+                    .withMaxTotalConnections(Integer.valueOf(p.getProperty(DOCKER_IO_MAX_TOTAL_PROPERTY, "20")))
+                    ;
         }
 
         public final DockerClientConfigBuilder withUri(String uri) {
@@ -308,6 +323,16 @@ public class DockerClientConfig {
             this.readTimeout = readTimeout;
             return this;
         }
+        
+        public final DockerClientConfigBuilder withMaxTotalConnections(Integer maxTotalConnections) {
+            this.maxTotalConnections = maxTotalConnections;
+            return this;
+        }
+        
+        public final DockerClientConfigBuilder withMaxPerRouteConnections(Integer maxPerRouteConnections) {
+            this.maxPerRouteConnections = maxPerRouteConnections;
+            return this;
+        }
 
         public final DockerClientConfigBuilder withLoggingFilter(boolean loggingFilterEnabled) {
             this.loggingFilterEnabled = loggingFilterEnabled;
@@ -328,8 +353,18 @@ public class DockerClientConfig {
                     email,
                     dockerCertPath,
                     readTimeout,
-                    loggingFilterEnabled
+                    loggingFilterEnabled,
+                    maxTotalConnections,
+                    maxPerRouteConnections
             );
         }
     }
+
+	public int getMaxTotalConnections() {
+		return maxTotalConnections;
+	}
+
+	public int getMaxPerRoutConnections() {
+		return maxPerRouteConnections;
+	}
 }
