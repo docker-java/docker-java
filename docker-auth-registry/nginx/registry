@@ -1,10 +1,9 @@
-http {
 # FYI: Chunking requires nginx-extras package on Debian Wheezy and some Ubuntu versions
 # See chunking http://wiki.nginx.org/HttpChunkinModule
 # Replace with appropriate values where necessary
 
 upstream docker-registry {
-  server localhost:5000;
+  server registry:5000;
 }
 
 # uncomment if you want a 301 redirect for users attempting to connect
@@ -18,11 +17,11 @@ upstream docker-registry {
 
 server {
   listen 5443;
-  server_name localhost;
+  server_name nginx;
 
   ssl on;
-  ssl_certificate /etc/ssl/certs/docker-registry;
-  ssl_certificate_key /etc/ssl/private/docker-registry;
+  ssl_certificate /etc/ssl/certs/nginx;
+  ssl_certificate_key /etc/ssl/private/nginx;
 
   client_max_body_size 0; # disable any limits to avoid HTTP 413 for large image uploads
 
@@ -31,21 +30,12 @@ server {
 
   location / {
     auth_basic            "Restricted";
-    auth_basic_user_file  docker-registry.htpasswd;
-    include               docker-registry.conf;
+    auth_basic_user_file  nginx.htpasswd;
+    include               nginx.conf;
   }
 
   location /_ping {
     auth_basic off;
-    include               docker-registry.conf;
+    include               nginx.conf;
   }
-
-  location /v1/_ping {
-    auth_basic off;
-    include               docker-registry.conf;
-  }
-}
-}
-events {
-    worker_connections  1024;
 }

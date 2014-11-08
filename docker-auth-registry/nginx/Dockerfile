@@ -1,12 +1,12 @@
 FROM dockerfile/nginx
 
-ADD server-cert.pem /etc/ssl/certs/docker-registry
-ADD server-key.pem /etc/ssl/private/docker-registry
+ADD server-cert.pem /etc/ssl/certs/nginx
+ADD server-key.pem /etc/ssl/private/nginx
 
-ADD nginx.conf /etc/nginx/
-ADD docker-registry.conf /etc/nginx/
+ADD registry touch /etc/nginx/sites-available/registry
+RUN ln -s ln -s /etc/nginx/sites-available/registry /etc/nginx/sites-enabled
 
-ADD docker-registry.htpasswd /etc/nginx/
+ADD nginx.htpasswd /etc/nginx/
 
 EXPOSE 443
 
