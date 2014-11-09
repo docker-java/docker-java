@@ -16,11 +16,13 @@ Developer forum for [docker-java](https://groups.google.com/forum/?hl=de#!forum/
 * Maven 3.0.5
 * Docker daemon running
 
-The Maven build includes integration tests which are using a localhost instance of Docker and require manual setup. Make sure you have a local Docker daemon running and then provide your https://registry.hub.docker.com/account/login/ information via system properties:
+If you need SSL, then you'll need to put your `*.pem` file into `~/.docker/`, if you're using boot2docker, do this: 
+ 
+    $ ln -s /Users/alex.collins/.boot2docker/certs/boot2docker-vm .docker
 
-    $ mvn clean install -Ddocker.io.username=... -Ddocker.io.password=... -Ddocker.io.email=...
+Build and run integration tests as follows:
 
-_If your Docker server is remote, add its URL like this: `-Ddocker.io.url=https://...:2376`._
+    $ mvn clean install
 
 If you do not have access to a Docker server or just want to execute the build quickly, you can run the build without the integration tests:
 
@@ -79,9 +81,10 @@ There are a couple of configuration items, all of which have sensible defaults:
 
 * `url` The Docker URL, e.g. `https://localhost:2376`.
 * `version` The API version, e.g. `1.15`.
-* `username` Your repository username (required to push containers).
-* `password` Your repository password.
-* `email` Your repository email.
+* `username` Your registry username (required to push containers).
+* `password` Your registry password.
+* `email` Your registry email.
+* `serverAddress` Your registry's address.
 * `dockerCertPath` Path to the docker certs.
 
 There are three ways to configure, in descending order of precedence:
@@ -95,6 +98,7 @@ In your application, e.g.
         .withUsername("dockeruser")
         .withPassword("ilovedocker")
         .withEmail("dockeruser@github.com")
+        .withServerAddress("https://index.docker.io/v1/")
         .withDockerCertPath("/home/user/.docker")
         .build();
     DockerClient docker = DockerClientBuilder.getInstance(config).build();
@@ -106,6 +110,7 @@ In your application, e.g.
     docker.io.username=dockeruser
     docker.io.password=ilovedocker
     docker.io.email=dockeruser@github.com
+    docker.io.serverAddress=https://index.docker.io/v1/
     docker.io.dockerCertPath=/home/user/.docker
 
 

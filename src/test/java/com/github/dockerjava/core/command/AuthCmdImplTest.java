@@ -1,20 +1,14 @@
 package com.github.dockerjava.core.command;
 
-import java.lang.reflect.Method;
-
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
-import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.UnauthorizedException;
+import com.github.dockerjava.api.model.AuthResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.core.DockerClientBuilder;
-import com.github.dockerjava.core.DockerClientConfig;
+import org.testng.ITestResult;
+import org.testng.annotations.*;
+
+import java.lang.reflect.Method;
 
 @Test(groups = "integration")
 public class AuthCmdImplTest extends AbstractDockerClientTest {
@@ -41,19 +35,19 @@ public class AuthCmdImplTest extends AbstractDockerClientTest {
 
 	@Test
 	public void testAuth() throws Exception {
-		dockerClient.authCmd().exec();
-	}
+        AuthResponse response = dockerClient.authCmd().exec();
+
+        assertEquals(response.getStatus(), "Login Succeeded");
+    }
 
 	@Test
 	public void testAuthInvalid() throws Exception {
-		DockerClientConfig config = DockerClientConfig.createDefaultConfigBuilder().withPassword("garbage").build();
-		DockerClient client = DockerClientBuilder.getInstance(config).withDockerCmdExecFactory(dockerCmdExecFactory).build();
-        
-		try {
-			client.authCmd().exec();
+
+        try {
+			DockerClientBuilder.getInstance(config("garbage")).build().authCmd().exec();
             fail("Expected a UnauthorizedException caused by a bad password.");
 		} catch (UnauthorizedException e) {
-			
+			assertEquals(e.getMessage(), "Wrong login/password, please try again\n");
 		} 
 	}
 }

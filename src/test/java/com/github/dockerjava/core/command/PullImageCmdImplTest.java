@@ -1,32 +1,33 @@
 package com.github.dockerjava.core.command;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.lessThanOrEqualTo;
-import static org.hamcrest.Matchers.notNullValue;
+import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.InternalServerErrorException;
+import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.command.InspectImageResponse;
+import com.github.dockerjava.api.command.PullImageCmd;
+import com.github.dockerjava.api.model.Info;
+import com.github.dockerjava.client.AbstractDockerClientTest;
+import org.testng.ITestResult;
+import org.testng.annotations.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
-import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.api.InternalServerErrorException;
-import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.command.InspectImageResponse;
-import com.github.dockerjava.api.model.Info;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 @Test(groups = "integration")
 public class PullImageCmdImplTest extends AbstractDockerClientTest {
 
-	@BeforeTest
+    private static final PullImageCmd.Exec NOP_EXEC = new PullImageCmd.Exec() {
+        @Override
+        public InputStream exec(PullImageCmd command) {
+            return null;
+        }
+    };
+
+    @BeforeTest
 	public void beforeTest() throws DockerException {
 		super.beforeTest();
 	}
@@ -46,7 +47,18 @@ public class PullImageCmdImplTest extends AbstractDockerClientTest {
 		super.afterMethod(result);
 	}
 
-	@Test
+    @Test
+    public void nullAuthConfig() throws Exception {
+        PullImageCmdImpl pullImageCmd = new PullImageCmdImpl(NOP_EXEC, "");
+        try {
+            pullImageCmd.withAuthConfig(null);
+            fail();
+        } catch (Exception e) {
+            assertEquals(e.getMessage(), "authConfig was not specified");
+        }
+    }
+
+    @Test
 	public void testPullImage() throws DockerException, IOException {
 		Info info = dockerClient.infoCmd().exec();
 		LOG.info("Client info: {}", info.toString());
