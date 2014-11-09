@@ -81,10 +81,10 @@ There are a couple of configuration items, all of which have sensible defaults:
 
 * `url` The Docker URL, e.g. `https://localhost:2376`.
 * `version` The API version, e.g. `1.15`.
-* `username` Your register username (required to push containers).
-* `password` Your register password.
-* `email` Your register email.
-* `serverAddress` Your register's address.
+* `username` Your registry username (required to push containers).
+* `password` Your registry password.
+* `email` Your registry email.
+* `serverAddress` Your registry's address.
 * `dockerCertPath` Path to the docker certs.
 
 There are three ways to configure, in descending order of precedence:
