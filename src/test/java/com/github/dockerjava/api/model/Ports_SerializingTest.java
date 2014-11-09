@@ -1,14 +1,15 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.api.model.Ports.Binding;
-import org.testng.annotations.Test;
+import static org.testng.Assert.assertEquals;
 
 import java.util.Map;
 
-import static org.testng.Assert.assertEquals;
+import org.testng.annotations.Test;
 
-public class PortsTest {
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dockerjava.api.model.Ports.Binding;
+
+public class Ports_SerializingTest {
 	private final ObjectMapper objectMapper = new ObjectMapper();
 	private final String jsonWithDoubleBindingForOnePort = 
 			"{\"80/tcp\":[{\"HostIp\":\"10.0.0.1\",\"HostPort\":\"80\"},{\"HostIp\":\"10.0.0.2\",\"HostPort\":\"80\"}]}";
@@ -33,4 +34,9 @@ public class PortsTest {
 		assertEquals(objectMapper.writeValueAsString(ports), jsonWithDoubleBindingForOnePort);
 	}
 	
+	@Test
+	public void serializingEmptyBinding() throws Exception {
+		Ports ports = new Ports(ExposedPort.tcp(80), new Binding(null, null));
+		assertEquals(objectMapper.writeValueAsString(ports), "{\"80/tcp\":[{\"HostIp\":\"\",\"HostPort\":\"\"}]}");
+	}
 }
