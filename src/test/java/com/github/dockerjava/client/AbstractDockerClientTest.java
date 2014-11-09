@@ -47,15 +47,16 @@ public abstract class AbstractDockerClientTest extends Assert {
 	}
 
     private DockerClientConfig config() {
-        return config(DOCKER_JAVA);
+        return config(null);
     }
 
     protected DockerClientConfig config(String password) {
-        return DockerClientConfig.createDefaultConfigBuilder()
-                .withServerAddress("http://localhost:5001")
-                .withUsername(DOCKER_JAVA)
-                .withPassword(password)
-                .withEmail(DOCKER_JAVA + "@github.com")
+        DockerClientConfig.DockerClientConfigBuilder builder = DockerClientConfig.createDefaultConfigBuilder()
+                .withServerAddress("https://index.docker.io/v1/");
+        if (password!=null) {
+            builder = builder.withPassword(password);
+        }
+        return builder
                 .build();
     }
 

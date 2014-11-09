@@ -15,9 +15,6 @@ Developer forum for [docker-java](https://groups.google.com/forum/?hl=de#!forum/
 * Java 1.6
 * Maven 3.0.5
 * Docker daemon running
-* Docker private repository running (see below).
-
-You'll need to be running a local private registry, as per [these instructions](docker-auth-registry/README.md):   
 
 If you need SSL, then you'll need to put your `*.pem` file into `~/.docker/`, if you're using boot2docker, do this: 
  
