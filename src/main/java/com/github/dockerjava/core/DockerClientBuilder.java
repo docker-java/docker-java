@@ -48,6 +48,12 @@ public class DockerClientBuilder {
 		this.dockerCmdExecFactory = dockerCmdExecFactory;
 		return this;
 	}
+		
+	public DockerClientBuilder withServiceLoaderClassPath(ClassPath classPath)
+	{
+		 serviceLoader = ServiceLoader.load(DockerCmdExecFactory.class, classPath);
+		 return this;
+	}
 
 	public DockerClient build() {
 	        if(dockerCmdExecFactory != null) {
