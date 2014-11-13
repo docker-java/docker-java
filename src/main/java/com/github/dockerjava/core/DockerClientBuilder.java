@@ -49,9 +49,9 @@ public class DockerClientBuilder {
 		return this;
 	}
 		
-	public DockerClientBuilder withServiceLoaderClassPath(ClassPath classPath)
+	public DockerClientBuilder withServiceLoaderClassLoader(ClassLoader classLoader)
 	{
-		 serviceLoader = ServiceLoader.load(DockerCmdExecFactory.class, classPath);
+		 serviceLoader = ServiceLoader.load(DockerCmdExecFactory.class, classLoader);
 		 return this;
 	}
 
