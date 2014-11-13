@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/docker-java/docker-java.svg?branch=master)](https://travis-ci.org/docker-java/docker-java)
 # docker-java 
 
 Java API client for [Docker](http://docs.docker.io/ "Docker")
@@ -68,8 +69,6 @@ Run build without integration tests:
           <artifactId>docker-java</artifactId>
           <version>0.10.4-SNAPSHOT</version>
     </dependency>
-   
-TODO
 
 ## Documentation
 
