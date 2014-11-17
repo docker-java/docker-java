@@ -37,7 +37,7 @@ public class CompressArchiveUtil {
         return tarFile;
     }
 
-    private static String relativize(File base, File absolute) {
+    public static String relativize(File base, File absolute) {
         String relative = base.toURI().relativize(absolute.toURI()).getPath();
         return relative;
     }

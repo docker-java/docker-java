@@ -14,11 +14,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 
 import com.github.dockerjava.api.DockerClientException;
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.core.CompressArchiveUtil;
-
+import com.github.dockerjava.core.GoLangFileMatch;
+import com.github.dockerjava.core.GoLangFileMatchException;
+import com.github.dockerjava.core.GoLangMatchFileFilter;
 import com.google.common.base.Preconditions;
 
 /**
@@ -158,6 +162,30 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, InputStream
 						"Dockerfile %s is empty", dockerFile));
 			}
 
+			List<String> ignores = new ArrayList<String>();
+			File dockerIgnoreFile = new File(dockerFolder, ".dockerignore");
+			if (dockerIgnoreFile.exists()) {
+				int lineNumber = 0;
+				List<String> dockerIgnoreFileContent = FileUtils.readLines(dockerIgnoreFile);
+				for (String pattern: dockerIgnoreFileContent) {
+					lineNumber++;
+					pattern = pattern.trim();
+					if (pattern.isEmpty()) {
+						continue; // skip empty lines
+					}
+					pattern = FilenameUtils.normalize(pattern);
+					try {
+						// validate pattern and make sure we aren't excluding Dockerfile
+						if (GoLangFileMatch.match(pattern, "Dockerfile")) {
+							throw new DockerClientException(
+									String.format("Dockerfile is excluded by pattern '%s' on line %s in .dockerignore file", pattern, lineNumber));
+						}
+						ignores.add(pattern);
+					} catch (GoLangFileMatchException e) {
+						throw new DockerClientException(String.format("Invalid pattern '%s' on line %s in .dockerignore file", pattern, lineNumber));
+					}
+				}
+			}
 			List<File> filesToAdd = new ArrayList<File>();
 			filesToAdd.add(dockerFile);
 
@@ -215,10 +243,13 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, InputStream
 									"Source file %s doesn't exist", src));
 						}
 						if (src.isDirectory()) {
-							filesToAdd.addAll(FileUtils.listFiles(src, null,
-									true));
-						} else {
+							filesToAdd.addAll(FileUtils.listFiles(src,
+									new GoLangMatchFileFilter(ignores), TrueFileFilter.INSTANCE));
+						} else if (!GoLangFileMatch.match(ignores, CompressArchiveUtil.relativize(dockerFolder, src))){
 							filesToAdd.add(src);
+						} else {
+							throw new DockerClientException(String.format(
+									"Source file %s is excluded by .dockerignore file", src));
 						}
 					}
 				}
