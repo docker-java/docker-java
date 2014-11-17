@@ -10,17 +10,23 @@ import org.apache.commons.io.filefilter.AbstractFileFilter;
 
 public class GoLangMatchFileFilter extends AbstractFileFilter {
 
+	private final File base;
+	
     private final List<String> patterns;
 
 
-    public GoLangMatchFileFilter(List<String> patterns) {
+    public GoLangMatchFileFilter(File base, List<String> patterns) {
         super();
+        this.base = base;
         this.patterns = patterns;
     }
 
     @Override
     public boolean accept(File file) {
-        return !GoLangFileMatch.match(patterns, file);
+    	String relativePath = file.getAbsolutePath().replaceFirst(base.getAbsolutePath() + File.separatorChar, "");
+    	
+    	boolean match = GoLangFileMatch.match(patterns, relativePath);
+        return !match;
     }
 
 

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,8 +29,6 @@ import com.google.common.base.Preconditions;
 /**
  * 
  * Build an image from Dockerfile.
- * 
- * TODO: http://docs.docker.com/reference/builder/#dockerignore
  * 
  */
 public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, InputStream> implements BuildImageCmd {
@@ -243,8 +242,9 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, InputStream
 									"Source file %s doesn't exist", src));
 						}
 						if (src.isDirectory()) {
-							filesToAdd.addAll(FileUtils.listFiles(src,
-									new GoLangMatchFileFilter(ignores), TrueFileFilter.INSTANCE));
+							Collection<File> files = FileUtils.listFiles(src,
+									new GoLangMatchFileFilter(src, ignores), TrueFileFilter.INSTANCE);
+							filesToAdd.addAll(files);
 						} else if (!GoLangFileMatch.match(ignores, CompressArchiveUtil.relativize(dockerFolder, src))){
 							filesToAdd.add(src);
 						} else {
