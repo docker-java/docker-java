@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.BadRequestException;
 import com.github.dockerjava.api.command.StartContainerCmd;
 import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.WebResource.Builder;
 
 public class StartContainerCmdExec extends AbstrDockerCmdExec<StartContainerCmd, Void> implements StartContainerCmd.Exec {
 
@@ -27,19 +28,20 @@ public class StartContainerCmdExec extends AbstrDockerCmdExec<StartContainerCmd,
 		        .resolveTemplate("/containers/{id}/start", command.getContainerId())
 		        .build();
 
-		// Workaround for Docker issue 6231.  This avoids the use of chunked encoding.
-		ObjectMapper mapper = new ObjectMapper();
-		ByteArrayInputStream bais;
-        try {
-            bais = new ByteArrayInputStream(mapper.writeValueAsBytes(command));
-        } catch (JsonProcessingException jpe) {
-            throw new BadRequestException("Unable to serialize start command", jpe);
-        }
+		Builder builder = webResource.accept(MediaType.APPLICATION_JSON);
+		if (!command.useExistingConfig()) {
+	        // Workaround for Docker issue 6231.  This avoids the use of chunked encoding.
+	        ObjectMapper mapper = new ObjectMapper();
+	        ByteArrayInputStream bais;
+	        try {
+	            bais = new ByteArrayInputStream(mapper.writeValueAsBytes(command));
+	        } catch (JsonProcessingException jpe) {
+	            throw new BadRequestException("Unable to serialize start command", jpe);
+	        }
+		    builder = builder.entity(bais, MediaType.APPLICATION_JSON);
+		}
 		LOGGER.trace("POST: {}", webResource);
-		webResource.accept(MediaType.APPLICATION_JSON)
-		    .entity(bais, MediaType.APPLICATION_JSON)
-		    .post();
-
+		builder.post();
 		return null;
 	}
 
