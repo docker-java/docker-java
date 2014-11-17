@@ -113,6 +113,20 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 	 * "CHOWN" prevents the container from changing the owner of any files.
 	 */
 	public StartContainerCmd withCapDrop(String... capDrop);
+	
+	/**
+	 * Perform the start using the existing host configuration for the container.
+	 * 
+	 * @param withExisting <code>true</code> if the container's existing configuration should be used.
+	 * 
+	 * @return
+	 */
+	public StartContainerCmd withExistingConfig(boolean withExisting);
+	
+	/**
+	 * @return <code>true</code> if the container should use its existing configuration.
+	 */
+	public boolean useExistingConfig();
 
 	/**
 	 * @throws NotFoundException
