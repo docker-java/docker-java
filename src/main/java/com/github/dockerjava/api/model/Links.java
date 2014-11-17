@@ -45,8 +45,7 @@ public class Links
 		{
 			jsonGen.writeStartArray();
 			for (final Link link : links.getLinks()) {
-				final String s = link.getName() + ":" + link.getAlias();
-				jsonGen.writeString(s);
+				jsonGen.writeString(link.toString());
 			}
 			jsonGen.writeEndArray();
 		}

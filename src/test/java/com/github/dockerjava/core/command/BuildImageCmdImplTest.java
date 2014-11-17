@@ -21,12 +21,14 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import com.github.dockerjava.api.DockerClientException;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
+@Test(groups = "integration")
 public class BuildImageCmdImplTest extends AbstractDockerClientTest {
 
 	@BeforeTest
@@ -128,6 +130,28 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
 
 	private InputStream logContainer(String containerId) {
 		return dockerClient.logContainerCmd(containerId).withStdErr().withStdOut().exec();
+	}
+
+	@Test(expectedExceptions={DockerClientException.class})
+	public void testDockerfileIgnored() {
+		File baseDir = new File(Thread.currentThread().getContextClassLoader()
+				.getResource("testDockerfileIgnored").getFile());
+		dockerClient.buildImageCmd(baseDir).withNoCache().exec();
+	}
+
+	@Test(expectedExceptions={DockerClientException.class})
+		public void testInvalidDockerIgnorePattern() {
+			File baseDir = new File(Thread.currentThread().getContextClassLoader()
+					.getResource("testInvalidDockerignorePattern").getFile());
+			dockerClient.buildImageCmd(baseDir).withNoCache().exec();
+		}
+
+	@Test
+	public void testDockerIgnore() throws DockerException,
+			IOException {
+		File baseDir = new File(Thread.currentThread().getContextClassLoader()
+				.getResource("testDockerignore").getFile());
+		dockerfileBuild(baseDir, "/tmp/a/a /tmp/a/c /tmp/a/d");
 	}
 
 	@Test

@@ -1,5 +1,7 @@
 package com.github.dockerjava.api.model;
 
+import static com.github.dockerjava.api.model.AccessMode.ro;
+import static com.github.dockerjava.api.model.AccessMode.rw;
 import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
@@ -11,7 +13,7 @@ public class BindTest {
 		Bind bind = Bind.parse("/host:/container");
 		assertEquals(bind.getPath(), "/host");
 		assertEquals(bind.getVolume().getPath(), "/container");
-		assertEquals(bind.isReadOnly(), false);
+		assertEquals(bind.getAccessMode(), AccessMode.DEFAULT);
 	}
 
 	@Test
@@ -19,7 +21,7 @@ public class BindTest {
 		Bind bind = Bind.parse("/host:/container:rw");
 		assertEquals(bind.getPath(), "/host");
 		assertEquals(bind.getVolume().getPath(), "/container");
-		assertEquals(bind.isReadOnly(), false);
+		assertEquals(bind.getAccessMode(), rw);
 	}
 	
 	@Test
@@ -27,7 +29,7 @@ public class BindTest {
 		Bind bind = Bind.parse("/host:/container:ro");
 		assertEquals(bind.getPath(), "/host");
 		assertEquals(bind.getVolume().getPath(), "/container");
-		assertEquals(bind.isReadOnly(), true);
+		assertEquals(bind.getAccessMode(), ro);
 	}
 
 	@Test(expectedExceptions = IllegalArgumentException.class,
@@ -46,6 +48,21 @@ public class BindTest {
 			expectedExceptionsMessageRegExp = "Error parsing Bind 'null'")
 	public void parseNull() {
 		Bind.parse(null);
+	}
+
+	@Test
+	public void toStringReadOnly() {
+		assertEquals(Bind.parse("/host:/container:ro").toString(), "/host:/container:ro");
+	}
+
+	@Test
+	public void toStringReadWrite() {
+		assertEquals(Bind.parse("/host:/container:rw").toString(), "/host:/container:rw");
+	}
+
+	@Test
+	public void toStringDefaultAccessMode() {
+		assertEquals(Bind.parse("/host:/container").toString(), "/host:/container:rw");
 	}
 
 }

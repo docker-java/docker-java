@@ -23,6 +23,7 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.ChangeLog;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
+@Test(groups = "integration")
 public class ContainerDiffCmdImplTest extends AbstractDockerClientTest {
 
 	@BeforeTest

@@ -44,10 +44,7 @@ public class Binds {
 			//
 			jsonGen.writeStartArray();
 			for (Bind bind : binds.getBinds()) {
-				String s = bind.getPath() + ":" + bind.getVolume().toString();
-				if(bind.isReadOnly()) s += ":ro";
-				jsonGen.writeString(s);
-				
+				jsonGen.writeString(bind.toString());
 			}
 			jsonGen.writeEndArray();
 			//

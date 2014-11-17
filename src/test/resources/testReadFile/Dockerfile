@@ -1,4 +1,4 @@
-FROM      ubuntu
+FROM      ubuntu:latest
 
 # Copy testrun.sh files into the container
 

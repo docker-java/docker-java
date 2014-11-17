@@ -1,12 +1,10 @@
 package com.github.dockerjava.client;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.lang.reflect.Method;
-import java.net.DatagramSocket;
-import java.net.ServerSocket;
-
+import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.core.DockerClientBuilder;
+import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.TestDockerCmdExecFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 import org.slf4j.Logger;
@@ -14,24 +12,27 @@ import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.ITestResult;
 
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.jaxrs1.DockerClientBuilder;
-import com.github.dockerjava.jaxrs1.TestDockerCmdExecFactory;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.lang.reflect.Method;
+import java.net.DatagramSocket;
+import java.net.ServerSocket;
 
 public abstract class AbstractDockerClientTest extends Assert {
 	
 	public static final Logger LOG = LoggerFactory
 			.getLogger(AbstractDockerClientTest.class);
-	
-	protected DockerClient dockerClient;
+    public static final String DOCKER_JAVA = "dockerjava";
 
-	protected TestDockerCmdExecFactory dockerCmdExecFactory = new TestDockerCmdExecFactory();
+    protected DockerClient dockerClient;
+
+	protected TestDockerCmdExecFactory dockerCmdExecFactory = new TestDockerCmdExecFactory(DockerClientBuilder.getDefaultDockerCmdExecFactory());
 
 	public void beforeTest()  {
 		LOG.info("======================= BEFORETEST =======================");
 		LOG.info("Connecting to Docker server");
-		dockerClient = DockerClientBuilder.getInstance()
+		dockerClient = DockerClientBuilder.getInstance(config())
 				.withDockerCmdExecFactory(dockerCmdExecFactory)
 				.build();
 
@@ -45,7 +46,21 @@ public abstract class AbstractDockerClientTest extends Assert {
 		LOG.info("======================= END OF BEFORETEST =======================\n\n");
 	}
 
-	public void afterTest() {
+    private DockerClientConfig config() {
+        return config(null);
+    }
+
+    protected DockerClientConfig config(String password) {
+        DockerClientConfig.DockerClientConfigBuilder builder = DockerClientConfig.createDefaultConfigBuilder()
+                .withServerAddress("https://index.docker.io/v1/");
+        if (password!=null) {
+            builder = builder.withPassword(password);
+        }
+        return builder
+                .build();
+    }
+
+    public void afterTest() {
 		LOG.info("======================= END OF AFTERTEST =======================");
 	}
 

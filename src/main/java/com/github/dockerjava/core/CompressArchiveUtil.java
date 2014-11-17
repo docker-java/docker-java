@@ -15,7 +15,7 @@ public class CompressArchiveUtil {
             tos.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU);
             for (File file : files) {
                 TarArchiveEntry tarEntry = new TarArchiveEntry(file);
-                tarEntry.setName(relativize(base, file));
+                tarEntry.setName(relativize(base.getCanonicalFile(), file.getCanonicalFile()));
 
                 if (!file.isDirectory()) {
                     if (file.canExecute()) {
@@ -37,7 +37,7 @@ public class CompressArchiveUtil {
         return tarFile;
     }
 
-    private static String relativize(File base, File absolute) {
+    public static String relativize(File base, File absolute) {
         String relative = base.toURI().relativize(absolute.toURI()).getPath();
         return relative;
     }

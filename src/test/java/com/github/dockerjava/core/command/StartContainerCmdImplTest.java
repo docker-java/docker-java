@@ -1,5 +1,6 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.api.model.AccessMode.ro;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
@@ -26,7 +27,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import com.github.dockerjava.client.AbstractDockerClientTest;
 
+@Test(groups = "integration")
 public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
 	@BeforeTest
@@ -71,7 +74,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 		assertThat(inspectContainerResponse.getConfig().getVolumes().keySet(),
 				contains("/opt/webapp1", "/opt/webapp2"));
 
-		dockerClient.startContainerCmd(container.getId()).withBinds(new Bind("/src/webapp1", volume1, true), new Bind("/src/webapp2", volume2)).exec();
+		dockerClient.startContainerCmd(container.getId()).withBinds(new Bind("/src/webapp1", volume1, ro), new Bind("/src/webapp2", volume2)).exec();
 
 		dockerClient.waitContainerCmd(container.getId()).exec();
 
@@ -161,6 +164,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 		Ports portBindings = new Ports();
 		portBindings.bind(tcp22, Ports.Binding(11022));
 		portBindings.bind(tcp23, Ports.Binding(11023));
+		portBindings.bind(tcp23, Ports.Binding(11024));
 
 		dockerClient.startContainerCmd(container.getId()).withPortBindings(portBindings).exec();
 
@@ -170,11 +174,14 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 		assertThat(Arrays.asList(inspectContainerResponse.getConfig().getExposedPorts()),
 				contains(tcp22, tcp23));
 
-		assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp22),
+		assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp22)[0],
 				is(equalTo(Ports.Binding(11022))));
 
-		assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23),
+		assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23)[0],
 				is(equalTo(Ports.Binding(11023))));
+
+		assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23)[1],
+				is(equalTo(Ports.Binding(11024))));
 
 	}
 

@@ -13,6 +13,7 @@ import com.github.dockerjava.api.model.Device;
 import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.Links;
 import com.github.dockerjava.api.model.LxcConf;
+import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.RestartPolicy;
 import com.google.common.base.Preconditions;
@@ -179,6 +180,16 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 		Preconditions.checkNotNull(portBindings,
 				"portBindings was not specified");
 		this.portBindings = portBindings;
+		return this;
+	}
+
+	@Override
+	public StartContainerCmd withPortBindings(PortBinding... portBindings) {
+		Preconditions.checkNotNull(portBindings, "portBindings was not specified");
+		if (this.portBindings == null) {
+			this.portBindings = new Ports();
+		}
+		this.portBindings.add(portBindings);
 		return this;
 	}
 

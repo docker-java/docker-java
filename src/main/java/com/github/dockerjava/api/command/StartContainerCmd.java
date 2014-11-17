@@ -6,6 +6,7 @@ import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Device;
 import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.LxcConf;
+import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.RestartPolicy;
 
@@ -53,7 +54,20 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 
 	public StartContainerCmd withLxcConf(LxcConf... lxcConf);
 
+	/**
+	 * Add the port bindings that are contained in the given {@link Ports}
+	 * object.
+	 * 
+	 * @see #withPortBindings(PortBinding...)
+	 */
 	public StartContainerCmd withPortBindings(Ports portBindings);
+
+	/**
+	 * Add one or more {@link PortBinding}s.
+	 * This corresponds to the <code>--publish</code> (<code>-p</code>)
+	 * option of the <code>docker run</code> CLI command.
+	 */
+	public StartContainerCmd withPortBindings(PortBinding... portBindings);
 
 	public StartContainerCmd withPrivileged(boolean privileged);
 

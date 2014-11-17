@@ -1,25 +1,19 @@
 package com.github.dockerjava.core.command;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
-
-import java.lang.reflect.Method;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.testng.ITestResult;
+import org.testng.annotations.*;
 
+import java.lang.reflect.Method;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+
+@Test(groups = "integration")
 public class PushImageCmdImplTest extends AbstractDockerClientTest {
 
 	public static final Logger LOG = LoggerFactory
@@ -57,12 +51,13 @@ public class PushImageCmdImplTest extends AbstractDockerClientTest {
 
 		assertThat(container.getId(), not(isEmptyString()));
 
-		LOG.info("Commiting container: {}", container.toString());
+		LOG.info("Committing container: {}", container.toString());
 		String imageId = dockerClient.commitCmd(container.getId()).withRepository(username + "/busybox").exec();
 
 		// we have to block until image is pushed
 		asString(dockerClient.pushImageCmd(username + "/busybox").exec());
 
+        LOG.info("Removing image: {}", imageId);
 		dockerClient.removeImageCmd(imageId).exec();
 		
 		String response = asString(dockerClient.pullImageCmd(username + "/busybox").exec());

@@ -20,6 +20,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
+@Test(groups = "integration")
 public class EventsCmdImplTest extends AbstractDockerClientTest {
 
     private static int KNOWN_NUM_EVENTS = 4;
@@ -66,6 +67,8 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         boolean zeroCount = countDownLatch.await(5, TimeUnit.SECONDS);
 
         executorService.shutdown();
+        
+        
         assertTrue(zeroCount, "Expected 4 events, [create, start, die, stop]");
     }
 
