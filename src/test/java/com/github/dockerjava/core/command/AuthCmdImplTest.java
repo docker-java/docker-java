@@ -15,7 +15,6 @@ import com.github.dockerjava.api.UnauthorizedException;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.jaxrs1.DockerClientBuilder;
 
 public class AuthCmdImplTest extends AbstractDockerClientTest {
 

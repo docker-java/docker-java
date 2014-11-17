@@ -16,8 +16,8 @@ import org.testng.ITestResult;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.jaxrs1.DockerClientBuilder;
-import com.github.dockerjava.jaxrs1.TestDockerCmdExecFactory;
+import com.github.dockerjava.core.DockerClientBuilder;
+import com.github.dockerjava.core.TestDockerCmdExecFactory;
 
 public abstract class AbstractDockerClientTest extends Assert {
 	
