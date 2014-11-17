@@ -67,6 +67,9 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	@JsonProperty("CapDrop")
 	private String[] capDrop;
 	
+	@JsonIgnore
+	private boolean useExistingConfig = false;
+	
 	public StartContainerCmdImpl(StartContainerCmd.Exec exec, String containerId) {
 		super(exec);
 		withContainerId(containerId);
@@ -266,6 +269,17 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 		this.capDrop = capDrop;
 		return this;
 	}
+    
+    @Override
+    public StartContainerCmd withExistingConfig(boolean useExisting) {
+        this.useExistingConfig = useExisting;
+        return this;
+    }
+
+    @Override
+    public boolean useExistingConfig() {
+        return this.useExistingConfig;
+    }
 
 	@Override
 	public String toString() {

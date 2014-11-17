@@ -18,6 +18,7 @@ import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.*;
+import com.github.dockerjava.client.AbstractDockerClientTest;
 
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
