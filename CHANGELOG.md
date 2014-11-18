@@ -1,6 +1,6 @@
 Change Log
 ===
-
+ * [#95](https://github.com/docker-java/docker-java/pull/95) Add support for .dockerignore files 
  * [#92](https://github.com/docker-java/docker-java/pull/92) Add travis-ci support
  * [#90](https://github.com/docker-java/docker-java/pull/90) Update DockerClientBuilder.java
  * [#88](https://github.com/docker-java/docker-java/pull/88) Add support for private repositories and pull/push authentication
