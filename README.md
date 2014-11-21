@@ -63,6 +63,8 @@ Run build without integration tests:
     </dependency>
 
 ### Latest SNAPSHOT version
+You can find the latest SNAPSHOT version including javadoc and source files on [Sonatypes OSS repository](https://oss.sonatype.org/content/groups/public/com/github/docker-java/docker-java/).
+
 
     <dependency>
           <groupId>com.github.docker-java</groupId>
