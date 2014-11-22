@@ -16,12 +16,12 @@ public class DockerClientConfigTest {
     public static final DockerClientConfig EXAMPLE_CONFIG = newExampleConfig();
 
     private static DockerClientConfig newExampleConfig() {
-        return new DockerClientConfig(URI.create("http://foo"), "bar", "baz", "qux", "blam", "wham", "flim", 877, false);
+        return new DockerClientConfig(URI.create("http://foo"), "bar", "baz", "qux", "blam", "wham", "flim", "flam", 877, false);
     }
 
     @Test
     public void string() throws Exception {
-        assertEquals("DockerClientConfig{uri=http://foo, version='bar', username='baz', password='qux', email='blam', serverAddress='wham', dockerCertPath='flim', readTimeout=877, loggingFilterEnabled=false}",
+        assertEquals("DockerClientConfig{uri=http://foo, version='bar', username='baz', password='qux', email='blam', serverAddress='wham', dockerCertPath='flim', dockerCfgPath='flam', readTimeout=877, loggingFilterEnabled=false}",
                 EXAMPLE_CONFIG.toString());
     }
 
@@ -72,6 +72,7 @@ public class DockerClientConfigTest {
         env.put("DOCKER_EMAIL", "blam");
         env.put("DOCKER_SERVER_ADDRESS", "wham");
         env.put("DOCKER_CERT_PATH", "flim");
+        env.put("DOCKER_CFG_PATH", "flam");
         env.put("DOCKER_READ_TIMEOUT", "877");
         env.put("DOCKER_LOGGING_FILTER_ENABLED", "false");
 
@@ -104,6 +105,7 @@ public class DockerClientConfigTest {
         assertEquals(config.getVersion(), null);
         assertEquals(config.isLoggingFilterEnabled(), true);
         assertEquals(config.getDockerCertPath(), "someHomeDir/.docker");
+        assertEquals(config.getDockerCfgPath(), "someHomeDir/.dockercfg");
     }
 
     @Test
@@ -118,6 +120,7 @@ public class DockerClientConfigTest {
         systemProperties.setProperty("docker.io.email", "blam");
         systemProperties.setProperty("docker.io.serverAddress", "wham");
         systemProperties.setProperty("docker.io.dockerCertPath", "flim");
+        systemProperties.setProperty("docker.io.dockerCfgPath", "flam");
         systemProperties.setProperty("docker.io.readTimeout", "877");
         systemProperties.setProperty("docker.io.enableLoggingFilter", "false");
 

@@ -8,21 +8,24 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.DockerClientException;
 import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.core.NameParser.HostnameReposName;
+import com.github.dockerjava.core.NameParser.ReposTag;
 import com.github.dockerjava.core.command.*;
 import com.google.common.base.Preconditions;
 
 /**
  * @author Konstantin Pelykh (kpelykh@gmail.com)
- * 
+ *
  * @see https://github.com/docker/docker/blob/master/api/client/commands.go
  */
 public class DockerClientImpl implements Closeable, DockerClient {
 
     private final DockerClientConfig dockerClientConfig;
-    
-    private DockerCmdExecFactory dockerCmdExecFactory; 
+
+    private DockerCmdExecFactory dockerCmdExecFactory;
 
 	private DockerClientImpl() {
 		this(DockerClientConfig.createDefaultConfigBuilder().build());
@@ -36,25 +39,25 @@ public class DockerClientImpl implements Closeable, DockerClient {
     	Preconditions.checkNotNull(dockerClientConfig, "config was not specified");
         this.dockerClientConfig = dockerClientConfig;
     }
-    
+
     private static DockerClientConfig configWithServerUrl(String serverUrl) {
 		return DockerClientConfig.createDefaultConfigBuilder()
                 .withUri(serverUrl)
                 .build();
 	}
-    
+
     public static DockerClientImpl getInstance() {
     	return new DockerClientImpl();
     }
-    
+
     public static DockerClientImpl getInstance(DockerClientConfig dockerClientConfig) {
     	return new DockerClientImpl(dockerClientConfig);
     }
-    
+
     public static DockerClientImpl getInstance(String serverUrl) {
     	return new DockerClientImpl(serverUrl);
     }
-    
+
     public DockerClientImpl withDockerCmdExecFactory(
     		DockerCmdExecFactory dockerCmdExecFactory) {
     	Preconditions.checkNotNull(dockerCmdExecFactory, "dockerCmdExecFactory was not specified");
@@ -62,13 +65,14 @@ public class DockerClientImpl implements Closeable, DockerClient {
 		this.dockerCmdExecFactory.init(dockerClientConfig);
 		return this;
 	}
-    
+
 	private DockerCmdExecFactory getDockerCmdExecFactory() {
 		Preconditions.checkNotNull(dockerCmdExecFactory, "dockerCmdExecFactory was not specified");
 		return dockerCmdExecFactory;
 	}
-    
 
+
+    @Override
     public AuthConfig authConfig() {
         checkNotNull(dockerClientConfig.getUsername(), "Configured username is null.");
         checkNotNull(dockerClientConfig.getServerAddress(), "Configured serverAddress is null.");
@@ -92,7 +96,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
 	@Override
 	public AuthCmd authCmd() {
 		return new AuthCmdImpl(getDockerCmdExecFactory().createAuthCmdExec(), authConfig());
-	}	
+	}
 
 	@Override
 	public InfoCmd infoCmd() {
@@ -102,7 +106,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
 	@Override
 	public PingCmd pingCmd() {
 	    return new PingCmdImpl(getDockerCmdExecFactory().createPingCmdExec());
-	}	
+	}
 
 	@Override
 	public VersionCmd versionCmd() {
@@ -120,7 +124,24 @@ public class DockerClientImpl implements Closeable, DockerClient {
 
 	@Override
 	public PushImageCmd pushImageCmd(String name) {
-		return new PushImageCmdImpl(getDockerCmdExecFactory().createPushImageCmdExec(), name);
+		PushImageCmd cmd = new PushImageCmdImpl(getDockerCmdExecFactory().createPushImageCmdExec(),
+				name);
+		String dockerCfgFile = dockerClientConfig.getDockerCfgPath();
+		if (dockerCfgFile != null) {
+			AuthConfigFile authConfigFile;
+			try {
+				authConfigFile = AuthConfigFile.loadConfig(new File(dockerCfgFile));
+			} catch (IOException e) {
+				throw new DockerClientException("Failed to parse dockerCfgFile", e);
+			}
+			ReposTag reposTag = NameParser.parseRepositoryTag(name);
+			HostnameReposName hostnameReposName = NameParser.resolveRepositoryName(reposTag.repos);
+			AuthConfig authConfig = authConfigFile.resolveAuthConfig(hostnameReposName.hostname);
+			if (authConfig != null) {
+				cmd.withAuthConfig(authConfig);
+			}
+		}
+		return cmd;
 	}
 
 	@Override
@@ -132,7 +153,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
 	public SearchImagesCmd searchImagesCmd(String term) {
 		return new SearchImagesCmdImpl(getDockerCmdExecFactory().createSearchImagesCmdExec(), term);
 	}
-	
+
 	@Override
 	public RemoveImageCmd removeImageCmd(String imageId) {
 		return new RemoveImageCmdImpl(getDockerCmdExecFactory().createRemoveImageCmdExec(), imageId);
@@ -171,7 +192,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
 	public InspectContainerCmd inspectContainerCmd(String containerId) {
 		return new InspectContainerCmdImpl(getDockerCmdExecFactory().createInspectContainerCmdExec(), containerId);
 	}
-	
+
 	@Override
 	public RemoveContainerCmd removeContainerCmd(String containerId) {
 		return new RemoveContainerCmdImpl(getDockerCmdExecFactory().createRemoveContainerCmdExec(), containerId);
@@ -196,7 +217,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
 	public CopyFileFromContainerCmd copyFileFromContainerCmd(String containerId, String resource) {
 		return new CopyFileFromContainerCmdImpl(getDockerCmdExecFactory().createCopyFileFromContainerCmdExec(),  containerId, resource);
 	}
-	
+
 	@Override
 	public ContainerDiffCmd containerDiffCmd(String containerId) {
 		return new ContainerDiffCmdImpl(getDockerCmdExecFactory().createContainerDiffCmdExec(), containerId);
@@ -206,7 +227,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
 	public StopContainerCmd stopContainerCmd(String containerId) {
 		return new StopContainerCmdImpl(getDockerCmdExecFactory().createStopContainerCmdExec(), containerId);
 	}
-	
+
 	@Override
 	public KillContainerCmd killContainerCmd(String containerId) {
 		return new KillContainerCmdImpl(getDockerCmdExecFactory().createKillContainerCmdExec(), containerId);
@@ -246,7 +267,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
 	public PauseContainerCmd pauseContainerCmd(String containerId) {
 		return new PauseContainerCmdImpl(getDockerCmdExecFactory().createPauseContainerCmdExec(), containerId);
 	}
-	
+
 	@Override
 	public UnpauseContainerCmd unpauseContainerCmd(String containerId) {
 		return new UnpauseContainerCmdImpl(getDockerCmdExecFactory().createUnpauseContainerCmdExec(), containerId);
