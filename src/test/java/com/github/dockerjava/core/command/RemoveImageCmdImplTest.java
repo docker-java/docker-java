@@ -59,11 +59,11 @@ public class RemoveImageCmdImplTest extends AbstractDockerClientTest {
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));
 		dockerClient.startContainerCmd(container.getId()).exec();
-		
-		LOG.info("Commiting container {}", container.toString());
+
+		LOG.info("Committing container {}", container.toString());
 		String imageId = dockerClient
 				.commitCmd(container.getId()).exec();
-	
+
 		dockerClient.stopContainerCmd(container.getId()).exec();
 		dockerClient.killContainerCmd(container.getId()).exec();
 		dockerClient.removeContainerCmd(container.getId()).exec();
@@ -72,7 +72,7 @@ public class RemoveImageCmdImplTest extends AbstractDockerClientTest {
 		dockerClient.removeImageCmd(imageId).exec();
 
 		List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
-		
+
 		Matcher matcher = not(hasItem(hasField("id", startsWith(imageId))));
 		assertThat(containers, matcher);
 	}
