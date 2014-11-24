@@ -39,10 +39,10 @@ public class HostConfig {
 	private String containerIDFile;
 
 	@JsonProperty("CapAdd")
-	private String[] capAdd;
+	private Capability[] capAdd;
 
 	@JsonProperty("CapDrop")
-	private String[] capDrop;
+	private Capability[] capDrop;
 
 	@JsonProperty("RestartPolicy")
 	private RestartPolicy restartPolicy;
@@ -58,7 +58,7 @@ public class HostConfig {
 
 	public HostConfig(String[] binds, Links links, LxcConf[] lxcConf, Ports portBindings, boolean publishAllPorts,
 			boolean privileged, String[] dns, String[] dnsSearch, String[] volumesFrom, String containerIDFile,
-			String[] capAdd, String[] capDrop, RestartPolicy restartPolicy, String networkMode, Device[] devices) {
+			Capability[] capAdd, Capability[] capDrop, RestartPolicy restartPolicy, String networkMode, Device[] devices) {
 		this.binds = binds;
 		this.links = links;
 		this.lxcConf = lxcConf;
@@ -128,11 +128,11 @@ public class HostConfig {
 		return restartPolicy;
 	}
 
-	public String[] getCapAdd() {
+	public Capability[] getCapAdd() {
 		return capAdd;
 	}
 
-	public String[] getCapDrop() {
+	public Capability[] getCapDrop() {
 		return capDrop;
 	}
 
@@ -176,11 +176,11 @@ public class HostConfig {
 		this.containerIDFile = containerIDFile;
 	}
 
-	public void setCapAdd(String[] capAdd) {
+	public void setCapAdd(Capability[] capAdd) {
 		this.capAdd = capAdd;
 	}
 
-	public void setCapDrop(String[] capDrop) {
+	public void setCapDrop(Capability[] capDrop) {
 		this.capDrop = capDrop;
 	}
 
