@@ -20,7 +20,7 @@ import java.net.DatagramSocket;
 import java.net.ServerSocket;
 
 public abstract class AbstractDockerClientTest extends Assert {
-	
+
 	public static final Logger LOG = LoggerFactory
 			.getLogger(AbstractDockerClientTest.class);
     public static final String DOCKER_JAVA = "dockerjava";
@@ -39,8 +39,8 @@ public abstract class AbstractDockerClientTest extends Assert {
 		LOG.info("Pulling image 'busybox'");
 		// need to block until image is pulled completely
 		asString(dockerClient.pullImageCmd("busybox").withTag("latest").exec());
-		
-		
+
+
 
 		assertNotNull(dockerClient);
 		LOG.info("======================= END OF BEFORETEST =======================\n\n");
@@ -75,7 +75,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 
 		for (String container : dockerCmdExecFactory.getContainerNames()) {
 			LOG.info("Cleaning up temporary container {}", container);
-			
+
 			try {
 				dockerClient.removeContainerCmd(container).withForce().exec();
 			} catch (DockerException ignore) {
@@ -90,17 +90,17 @@ public abstract class AbstractDockerClientTest extends Assert {
 			} catch (DockerException ignore) {
 				ignore.printStackTrace();
 			}
-		}	
-		
+		}
+
 		LOG.info(
 				"################################## END OF {} ##################################\n",
 				result.getName());
 	}
 
 	protected String asString(InputStream response)  {
-	
+
 		StringWriter logwriter = new StringWriter();
-        
+
 		try {
 			LineIterator itr = IOUtils.lineIterator(
 					response, "UTF-8");
@@ -110,7 +110,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 				logwriter.write(line + (itr.hasNext() ? "\n" : ""));
 				//LOG.info("line: "+line);
 			}
-			
+
 			return logwriter.toString();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -118,12 +118,12 @@ public abstract class AbstractDockerClientTest extends Assert {
 			IOUtils.closeQuietly(response);
 		}
 	}
-	
+
 	// UTIL
 
 	/**
 	 * Checks to see if a specific port is available.
-	 * 
+	 *
 	 * @param port
 	 *            the port to check for availability
 	 */

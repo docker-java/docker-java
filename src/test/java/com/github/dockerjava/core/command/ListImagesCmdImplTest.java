@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.*;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import com.github.dockerjava.api.command.CreateContainerResponse;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -25,7 +26,7 @@ public class ListImagesCmdImplTest extends AbstractDockerClientTest {
 	public void beforeTest() throws DockerException {
 		super.beforeTest();
 	}
-	
+
 	@AfterTest
 	public void afterTest() {
 		super.afterTest();
@@ -40,7 +41,7 @@ public class ListImagesCmdImplTest extends AbstractDockerClientTest {
 	public void afterMethod(ITestResult result) {
 		super.afterMethod(result);
 	}
-	
+
 	@Test
 	public void listImages() throws DockerException {
 		List<Image> images = dockerClient.listImagesCmd().withShowAll(true).exec();
@@ -57,5 +58,42 @@ public class ListImagesCmdImplTest extends AbstractDockerClientTest {
 		assertThat(img.getRepoTags(), not(emptyArray()));
 	}
 
+	@Test
+	public void listDanglingImages() throws DockerException {
+		String imageId = createDanglingImage();
+		List<Image> images = dockerClient.listImagesCmd()
+				.withFilters("{\"dangling\":[\"true\"]}")
+				.withShowAll(true).exec();
+		assertThat(images, notNullValue());
+		LOG.info("Images List: {}", images);
+		assertThat(images.size(), is(greaterThan(0)));
+		boolean imageInFilteredList = isImageInFilteredList(images, imageId);
+		assertTrue(imageInFilteredList);
+	}
 
+	private boolean isImageInFilteredList(List<Image> images, String expectedImageId) {
+		for (Image image : images) {
+			if (expectedImageId.equals(image.getId())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private String createDanglingImage() {
+		CreateContainerResponse container = dockerClient
+				.createContainerCmd("busybox").withCmd("sleep", "5").exec();
+		LOG.info("Created container: {}", container.toString());
+		assertThat(container.getId(), not(isEmptyString()));
+		dockerClient.startContainerCmd(container.getId()).exec();
+
+		LOG.info("Committing container {}", container.toString());
+		String imageId = dockerClient
+				.commitCmd(container.getId()).exec();
+
+		dockerClient.stopContainerCmd(container.getId()).exec();
+		dockerClient.killContainerCmd(container.getId()).exec();
+		dockerClient.removeContainerCmd(container.getId()).exec();
+		return imageId;
+	}
 }

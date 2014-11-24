@@ -11,21 +11,21 @@ import com.google.common.base.Preconditions;
  * List images
  *
  * @param showAll - Show all images (by default filter out the intermediate images used to build)
- * @param filter - TODO: undocumented in docker remote api reference
+ * @param filters - a json encoded value of the filters (a map[string][]string) to process on the images list.
  */
 public class ListImagesCmdImpl extends AbstrDockerCmd<ListImagesCmd, List<Image>> implements ListImagesCmd  {
 
-	private String filter;
-	
+	private String filters;
+
 	private boolean showAll = false;
-	
+
 	public ListImagesCmdImpl(ListImagesCmd.Exec exec) {
 		super(exec);
 	}
 
     @Override
-	public String getFilter() {
-        return filter;
+	public String getFilters() {
+        return filters;
     }
 
     @Override
@@ -40,9 +40,9 @@ public class ListImagesCmdImpl extends AbstrDockerCmd<ListImagesCmd, List<Image>
 	}
 
 	@Override
-	public ListImagesCmd withFilter(String filter) {
-		Preconditions.checkNotNull(filter, "filter was not specified");
-		this.filter = filter;
+	public ListImagesCmd withFilters(String filter) {
+		Preconditions.checkNotNull(filter, "filters have not been specified");
+		this.filters = filter;
 		return this;
 	}
 
@@ -50,7 +50,7 @@ public class ListImagesCmdImpl extends AbstrDockerCmd<ListImagesCmd, List<Image>
     public String toString() {
         return new StringBuilder("images ")
             .append(showAll ? "--all=true" : "")
-            .append(filter != null ? "--filter " + filter : "")
+            .append(filters != null ? "--filter " + filters : "")
             .toString();
     }
 }
