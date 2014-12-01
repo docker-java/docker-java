@@ -3,6 +3,8 @@ package com.github.dockerjava.api.command;
 import com.github.dockerjava.api.ConflictException;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.model.ExposedPort;
+import com.github.dockerjava.api.model.HostConfig;
+import com.github.dockerjava.api.model.Links;
 import com.github.dockerjava.api.model.Volume;
 
 public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
@@ -94,6 +96,10 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 	public String[] getVolumesFrom();
 
 	public CreateContainerCmd withVolumesFrom(String... volumesFrom);
+	
+	public HostConfig getHostConfig();
+	
+	public CreateContainerCmd withHostConfig(HostConfig hostConfig);
 
 
 	/**
