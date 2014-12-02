@@ -4,7 +4,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import com.github.dockerjava.api.command.InspectContainerResponse.HostConfig;
 import com.github.dockerjava.api.command.InspectContainerResponse.NetworkSettings;
 import com.github.dockerjava.api.model.Ports.Binding;
 

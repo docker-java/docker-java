@@ -53,7 +53,7 @@ public class Link
 	/**
 	 * Parses a textual link specification (as used by the Docker CLI) to a {@link Link}.
 	 * 
-	 * @param serialized the specification, e.g. <code>name:alias</code>
+	 * @param serialized the specification, e.g. <code>name:alias</code> or <code>/name1:/name2/alias</code>
 	 * @return a {@link Link} matching the specification
 	 * @throws IllegalArgumentException if the specification cannot be parsed
 	 */
@@ -63,7 +63,9 @@ public class Link
 			final String[] parts = serialized.split(":");
 			switch (parts.length) {
 			case 2: {
-				return new Link(parts[0], parts[1]);
+				String[] nameSplit = parts[0].split("/");
+				String[] aliasSplit = parts[1].split("/");
+				return new Link(nameSplit[nameSplit.length - 1], aliasSplit[aliasSplit.length - 1]);
 			}
 			default: {
 				throw new IllegalArgumentException();

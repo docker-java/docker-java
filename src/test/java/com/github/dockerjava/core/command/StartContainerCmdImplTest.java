@@ -228,7 +228,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 		assertThat(inspectContainerResponse2.getId(), not(isEmptyString()));
 		assertThat(inspectContainerResponse2.getHostConfig(), is(notNullValue()));
 		assertThat(inspectContainerResponse2.getHostConfig().getLinks(), is(notNullValue()));
-		assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new String[] {"/container1:/container2/container1Link"}));
+		assertThat(inspectContainerResponse2.getHostConfig().getLinks().getLinks(), equalTo(new Link[] {new Link("container1","container1Link")}));
 		assertThat(inspectContainerResponse2.getId(), startsWith(container2.getId()));
 		assertThat(inspectContainerResponse2.getName(), equalTo("/container2"));
 		assertThat(inspectContainerResponse2.getImageId(), not(isEmptyString()));

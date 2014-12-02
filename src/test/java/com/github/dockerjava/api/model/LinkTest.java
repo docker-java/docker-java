@@ -12,6 +12,13 @@ public class LinkTest {
 		assertEquals(link.getName(), "name");
 		assertEquals(link.getAlias(), "alias");
 	}
+	
+	@Test
+	public void parseWithContainerNames() {
+		Link link = Link.parse("/name:/conatiner/alias");
+		assertEquals(link.getName(), "name");
+		assertEquals(link.getAlias(), "alias");
+	}
 
 	@Test(expectedExceptions = IllegalArgumentException.class,
 			expectedExceptionsMessageRegExp = "Error parsing Link 'nonsense'")

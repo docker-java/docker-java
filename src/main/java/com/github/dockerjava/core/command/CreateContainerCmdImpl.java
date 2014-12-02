@@ -4,16 +4,15 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import com.github.dockerjava.api.ConflictException;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.ExposedPorts;
+import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.Volumes;
-
 import com.google.common.base.Preconditions;
 
 /**
@@ -46,6 +45,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @JsonProperty("WorkingDir")   private String workingDir = "";
     @JsonProperty("DisableNetwork") private boolean disableNetwork = false;
     @JsonProperty("ExposedPorts")   private ExposedPorts exposedPorts = new ExposedPorts();
+    @JsonProperty("HostConfig")   private HostConfig hostConfig = new HostConfig();
 	
 	public CreateContainerCmdImpl(CreateContainerCmd.Exec exec, String image) {
 		super(exec);
@@ -300,6 +300,18 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         return this;
     }
 
+    @Override
+    public HostConfig getHostConfig() {
+    	return hostConfig;
+    }
+    
+    @Override
+    public CreateContainerCmd withHostConfig(HostConfig hostConfig) {
+    	Preconditions.checkNotNull(hostConfig, "no host config was specified");
+    	this.hostConfig = hostConfig;
+    	return this;
+    }
+    
 	@Override
     public String toString() {
         return new ToStringBuilder(this).append("create container ")
