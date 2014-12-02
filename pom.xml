@@ -53,7 +53,7 @@
 		<jersey.version>2.11</jersey.version>
 		<jersey-apache-client4.version>1.9</jersey-apache-client4.version>
 
-		<jackson-jaxrs.version>2.3.3</jackson-jaxrs.version>
+		<jackson-jaxrs.version>2.1.2</jackson-jaxrs.version>
 
 		<httpclient.version>4.2.5</httpclient.version>
 		<commons-compress.version>1.5</commons-compress.version>
