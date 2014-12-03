@@ -3,6 +3,7 @@ package com.github.dockerjava.api.command;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.NotModifiedException;
 import com.github.dockerjava.api.model.Bind;
+import com.github.dockerjava.api.model.Capability;
 import com.github.dockerjava.api.model.Device;
 import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.LxcConf;
@@ -41,9 +42,9 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 
 	public RestartPolicy getRestartPolicy();
 
-	public String[] getCapAdd();
+	public Capability[] getCapAdd();
 
-	public String[] getCapDrop();
+	public Capability[] getCapDrop();
 
 	public StartContainerCmd withBinds(Bind... binds);
 
@@ -115,18 +116,18 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 	/**
 	 * Add linux <a
 	 * href="http://man7.org/linux/man-pages/man7/capabilities.7.html">kernel
-	 * capability</a> to the container. For example: adding capability "MKNOD"
+	 * capability</a> to the container. For example: adding {@link Capability#MKNOD}
 	 * allows the container to create special files using the 'mknod' command.
 	 */
-	public StartContainerCmd withCapAdd(String... capAdd);
+	public StartContainerCmd withCapAdd(Capability... capAdd);
 
 	/**
 	 * Drop linux <a
 	 * href="http://man7.org/linux/man-pages/man7/capabilities.7.html">kernel
-	 * capability</a> from the container. For example: dropping capability
-	 * "CHOWN" prevents the container from changing the owner of any files.
+	 * capability</a> from the container. For example: dropping {@link Capability#CHOWN}
+	 * prevents the container from changing the owner of any files.
 	 */
-	public StartContainerCmd withCapDrop(String... capDrop);
+	public StartContainerCmd withCapDrop(Capability... capDrop);
 
 	/**
 	 * @throws NotFoundException

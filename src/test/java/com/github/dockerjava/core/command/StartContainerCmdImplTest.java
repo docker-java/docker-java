@@ -1,6 +1,7 @@
 package com.github.dockerjava.core.command;
 
 import static com.github.dockerjava.api.model.AccessMode.ro;
+import static com.github.dockerjava.api.model.Capability.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
@@ -323,8 +324,8 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(container.getId(), not(isEmptyString()));
 
         dockerClient.startContainerCmd(container.getId())
-        	.withCapAdd("NET_ADMIN")
-        	.withCapDrop("MKNOD").exec();
+        	.withCapAdd(NET_ADMIN)
+        	.withCapDrop(MKNOD).exec();
 
         InspectContainerResponse inspectContainerResponse  = dockerClient.inspectContainerCmd(container
                 .getId()).exec();
@@ -332,10 +333,10 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(inspectContainerResponse.getState().isRunning(), is(true));
 
         assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getCapAdd()),
-                contains("NET_ADMIN"));
+                contains(NET_ADMIN));
         
         assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getCapDrop()),
-                contains("MKNOD"));  
+                contains(MKNOD));  
     }
 	
 	@Test
