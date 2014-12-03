@@ -2,9 +2,9 @@ package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.ConflictException;
 import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.model.Capability;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
-import com.github.dockerjava.api.model.Links;
 import com.github.dockerjava.api.model.Volume;
 
 public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
@@ -101,6 +101,25 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 	
 	public CreateContainerCmd withHostConfig(HostConfig hostConfig);
 
+	public Capability[] getCapAdd();
+
+	/**
+	 * Add linux <a
+	 * href="http://man7.org/linux/man-pages/man7/capabilities.7.html">kernel
+	 * capability</a> to the container. For example: adding {@link Capability#MKNOD}
+	 * allows the container to create special files using the 'mknod' command.
+	 */
+	public CreateContainerCmd withCapAdd(Capability... capAdd);
+
+	public Capability[] getCapDrop();
+
+	/**
+	 * Drop linux <a
+	 * href="http://man7.org/linux/man-pages/man7/capabilities.7.html">kernel
+	 * capability</a> from the container. For example: dropping {@link Capability#CHOWN}
+	 * prevents the container from changing the owner of any files.
+	 */
+	public CreateContainerCmd withCapDrop(Capability... capDrop);
 
 	/**
 	 * @throws NotFoundException No such container

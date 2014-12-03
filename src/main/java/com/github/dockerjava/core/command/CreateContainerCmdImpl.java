@@ -8,6 +8,7 @@ import com.github.dockerjava.api.ConflictException;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.model.Capability;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.ExposedPorts;
 import com.github.dockerjava.api.model.HostConfig;
@@ -312,6 +313,28 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     	return this;
     }
     
+    @Override
+    public Capability[] getCapAdd() {
+        return hostConfig.getCapAdd();
+    }
+
+    @Override
+    public CreateContainerCmd withCapAdd(Capability... capAdd) {
+        hostConfig.setCapAdd(capAdd);
+        return this;
+    }
+
+    @Override
+    public Capability[] getCapDrop() {
+        return hostConfig.getCapDrop();
+    }
+
+    @Override
+    public CreateContainerCmd withCapDrop(Capability... capDrop) {
+        hostConfig.setCapDrop(capDrop);
+        return this;
+    }
+
 	@Override
     public String toString() {
         return new ToStringBuilder(this).append("create container ")
@@ -328,4 +351,5 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public CreateContainerResponse exec() throws NotFoundException, ConflictException {
     	return super.exec();
     }
+
 }    

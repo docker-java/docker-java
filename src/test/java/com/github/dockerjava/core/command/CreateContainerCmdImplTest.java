@@ -1,5 +1,6 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.api.model.Capability.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -8,8 +9,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.startsWith;
 
 import java.lang.reflect.Method;
 import java.security.SecureRandom;
@@ -196,6 +195,28 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 		InspectContainerResponse inspectContainerResponse2 = dockerClient
 				.inspectContainerCmd(container2.getId()).exec();
 		assertThat(inspectContainerResponse2.getHostConfig().getLinks().getLinks(), equalTo(new Link[] {new Link("container1","container1Link")}));
+	}
+
+	@Test
+	public void createContainerWithCapAddAndCapDrop() throws DockerException {
+
+		CreateContainerResponse container = dockerClient
+				.createContainerCmd("busybox")
+				.withCapAdd(NET_ADMIN)
+				.withCapDrop(MKNOD).exec();
+
+		LOG.info("Created container {}", container.toString());
+
+		assertThat(container.getId(), not(isEmptyString()));
+
+		InspectContainerResponse inspectContainerResponse = dockerClient
+				.inspectContainerCmd(container.getId()).exec();
+
+		assertThat(Arrays.asList(inspectContainerResponse.getHostConfig()
+				.getCapAdd()), contains(NET_ADMIN));
+
+		assertThat(Arrays.asList(inspectContainerResponse.getHostConfig()
+				.getCapDrop()), contains(MKNOD));
 	}
 
 }
