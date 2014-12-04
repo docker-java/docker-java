@@ -39,7 +39,6 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @JsonProperty("StdinOnce")    private boolean   stdInOnce = false;
     @JsonProperty("Env")          private String[]  env;
     @JsonProperty("Cmd")          private String[]  cmd;
-    @JsonProperty("Dns")          private String[]  dns;
     @JsonProperty("Image")        private String    image;
     @JsonProperty("Volumes")      private Volumes volumes = new Volumes();
     @JsonProperty("VolumesFrom")  private String[]    volumesFrom = new String[]{};
@@ -257,13 +256,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
-	public String[] getDns() {
-        return dns;
+    public String[] getDns() {
+        return hostConfig.getDns();
     }
 
     @Override
-	public CreateContainerCmdImpl withDns(String... dns) {
-        this.dns = dns;
+    public CreateContainerCmdImpl withDns(String... dns) {
+        hostConfig.setDns(dns);
         return this;
     }
 

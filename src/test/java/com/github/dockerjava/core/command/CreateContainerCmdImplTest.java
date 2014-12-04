@@ -219,4 +219,25 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 				.getCapDrop()), contains(MKNOD));
 	}
 
+	@Test
+	public void createContainerWithDns() throws DockerException {
+
+		String aDnsServer = "8.8.8.8";
+		String anotherDnsServer = "8.8.4.4";
+
+		CreateContainerResponse container = dockerClient
+				.createContainerCmd("busybox")
+				.withCmd("true").withDns(aDnsServer, anotherDnsServer).exec();
+
+		LOG.info("Created container {}", container.toString());
+
+		assertThat(container.getId(), not(isEmptyString()));
+
+		InspectContainerResponse inspectContainerResponse = dockerClient
+				.inspectContainerCmd(container.getId()).exec();
+
+		assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getDns()),
+				contains(aDnsServer, anotherDnsServer));
+	}
+
 }

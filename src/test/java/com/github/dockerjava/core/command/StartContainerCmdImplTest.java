@@ -101,18 +101,15 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
 		CreateContainerResponse container = dockerClient
 				.createContainerCmd("busybox")
-				.withCmd("true").withDns(aDnsServer, anotherDnsServer).exec();
+				.withCmd("true").exec();
 
 		LOG.info("Created container {}", container.toString());
 
 		assertThat(container.getId(), not(isEmptyString()));
 
-		InspectContainerResponse inspectContainerResponse = dockerClient
-				.inspectContainerCmd(container.getId()).exec();
-
 		dockerClient.startContainerCmd(container.getId()).withDns(aDnsServer, anotherDnsServer).exec();
 
-		inspectContainerResponse = dockerClient.inspectContainerCmd(container
+		InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container
 				.getId()).exec();
 
 		assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getDns()),
