@@ -14,12 +14,19 @@ public interface PushImageCmd extends DockerCmd<InputStream>{
 
 	public String getName();
 
+	public String getTag();
+
 	/**
 	 * @param name The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
 	 */
 	public PushImageCmd withName(String name);
 	
-	public AuthConfig getAuthConfig();
+    /**
+     * @param tag The image's tag. Not null.
+     */
+    public PushImageCmd withTag(String tag);
+
+    public AuthConfig getAuthConfig();
 	
 	public PushImageCmd withAuthConfig(AuthConfig authConfig);
 

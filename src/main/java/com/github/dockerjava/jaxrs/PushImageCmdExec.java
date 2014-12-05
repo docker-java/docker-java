@@ -24,7 +24,8 @@ public class PushImageCmdExec extends AbstrDockerCmdExec<PushImageCmd, InputStre
 
 	@Override
 	protected InputStream execute(PushImageCmd command) {
-		WebTarget webResource = getBaseResource().path("/images/" + name(command) + "/push");
+		WebTarget webResource = getBaseResource().path("/images/" + name(command) + "/push")
+		    .queryParam("tag", command.getTag());
 
 		final String registryAuth = registryAuth(command.getAuthConfig());
 		LOGGER.trace("POST: {}", webResource);
