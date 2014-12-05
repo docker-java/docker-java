@@ -14,16 +14,22 @@ import com.google.common.base.Preconditions;
  */
 public class PushImageCmdImpl extends AbstrAuthCfgDockerCmd<PushImageCmd, InputStream> implements PushImageCmd  {
 
-	private String name;
+    private String name;
+    private String tag;
 
-	public PushImageCmdImpl(PushImageCmd.Exec exec, String name) {
-		super(exec);
-		withName(name);
-	}
+    public PushImageCmdImpl(PushImageCmd.Exec exec, String name) {
+    	super(exec);
+    	withName(name);
+    }
 
     @Override
 	public String getName() {
         return name;
+    }
+
+    @Override
+    public String getTag() {
+        return tag;
     }
 
     /**
@@ -36,6 +42,16 @@ public class PushImageCmdImpl extends AbstrAuthCfgDockerCmd<PushImageCmd, InputS
 		return this;
 	}
 
+    /**
+     * @param tag The image's tag. Can be null or empty.
+     */
+    @Override
+    public PushImageCmd withTag(String tag) {
+        Preconditions.checkNotNull(tag, "tag was not specified");
+        this.tag = tag;
+        return this;
+    }
+
     @Override
     public String toString() {
         return new StringBuilder("push ")
@@ -46,7 +62,7 @@ public class PushImageCmdImpl extends AbstrAuthCfgDockerCmd<PushImageCmd, InputS
     /**
      * @throws NotFoundException No such image
      */
-	@Override
+    @Override
     public InputStream exec() throws NotFoundException {
     	return super.exec();
     }
