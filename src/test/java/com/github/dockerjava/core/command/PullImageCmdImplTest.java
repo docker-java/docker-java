@@ -76,7 +76,7 @@ public class PullImageCmdImplTest extends AbstractDockerClientTest {
 		LOG.info("Removing image: {}", testImage);
 		
 		try {
-			dockerClient.removeImageCmd(testImage).exec();
+			dockerClient.removeImageCmd(testImage).withForce().exec();
 		} catch (NotFoundException e) {
 			// just ignore if not exist
 		}
