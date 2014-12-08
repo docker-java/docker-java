@@ -1,5 +1,16 @@
 Change Log
 ===
+
+docker-java-0.10.4
+---
+
+ * [#108](https://github.com/docker-java/docker-java/pull/108) Support tag in push image command  
+ * [#106](https://github.com/docker-java/docker-java/pull/106) Allow to manage Linux capabilities in CreateContainerCmd  
+ * [#105](https://github.com/docker-java/docker-java/pull/105) Allow to pass HostConfig when creating a container 
+ * [#103](https://github.com/docker-java/docker-java/pull/103) Make GoLangMatchFileFilter work on Windows 
+ * [#102](https://github.com/docker-java/docker-java/pull/102) Downgraded jackson-jaxrs dependency version  
+ * [#101](https://github.com/docker-java/docker-java/pull/101) list filtered images as described in the remote api docs 
+ * [#100](https://github.com/docker-java/docker-java/pull/100) Add support for .dockercfg files to handle auth for push command
  * [#95](https://github.com/docker-java/docker-java/pull/95) Add support for .dockerignore files 
  * [#92](https://github.com/docker-java/docker-java/pull/92) Add travis-ci support
  * [#90](https://github.com/docker-java/docker-java/pull/90) Update DockerClientBuilder.java
