@@ -2,6 +2,7 @@ package com.github.dockerjava.core.command;
 
 import static com.github.dockerjava.api.model.AccessMode.ro;
 import static com.github.dockerjava.api.model.Capability.*;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
@@ -386,4 +387,55 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
                 is(equalTo(restartPolicy)));
     }
 
+	@Test
+	public void existingHostConfigIsPreservedByBlankStartCmd() throws DockerException {
+	
+		String dnsServer = "8.8.8.8";
+	
+		// prepare a container with custom DNS 
+		CreateContainerResponse container = dockerClient
+				.createContainerCmd("busybox")
+				.withDns(dnsServer)
+				.withCmd("true").exec();
+	
+		LOG.info("Created container {}", container.toString());
+	
+		assertThat(container.getId(), not(isEmptyString()));
+	
+		// start container _without_any_customization_ (important!) 
+		dockerClient.startContainerCmd(container.getId()).exec();
+	
+		InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container
+				.getId()).exec();
+	
+		// The DNS setting survived.
+		assertThat(inspectContainerResponse.getHostConfig().getDns(), is(notNullValue()));
+		assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getDns()),
+				contains(dnsServer));
+	}
+
+	@Test
+	public void existingHostConfigIsResetByConfiguredStartCmd() throws DockerException {
+	
+		String dnsServer = "8.8.8.8";
+	
+		// prepare a container with custom DNS 
+		CreateContainerResponse container = dockerClient
+				.createContainerCmd("busybox")
+				.withDns(dnsServer)
+				.withCmd("true").exec();
+	
+		LOG.info("Created container {}", container.toString());
+	
+		assertThat(container.getId(), not(isEmptyString()));
+	
+		// modify another setting in start command. Leave DNS unchanged. 
+		dockerClient.startContainerCmd(container.getId()).withPublishAllPorts(true).exec();
+	
+		InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container
+				.getId()).exec();
+		
+		// although start did not modify DNS Settings, they were reset to their default.
+		assertThat(inspectContainerResponse.getHostConfig().getDns(), is(nullValue(String[].class)));
+	}
 }
