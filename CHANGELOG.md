@@ -9,7 +9,7 @@ docker-java-0.10.5-SNAPSHOT
 docker-java-0.10.4
 ---
 
- * [#108](https://github.com/docker-java/docker-java/pull/109) Support tag in push image command  
+ * [#109](https://github.com/docker-java/docker-java/pull/109) Support tag in push image command  
  * [#106](https://github.com/docker-java/docker-java/pull/106) Allow to manage Linux capabilities in CreateContainerCmd  
  * [#105](https://github.com/docker-java/docker-java/pull/105) Allow to pass HostConfig when creating a container 
  * [#103](https://github.com/docker-java/docker-java/pull/103) Make GoLangMatchFileFilter work on Windows 
