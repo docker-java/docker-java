@@ -24,9 +24,9 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 
 	public Ports getPortBindings();
 
-	public boolean isPublishAllPorts();
+	public Boolean isPublishAllPorts();
 
-	public boolean isPrivileged();
+	public Boolean isPrivileged();
 
 	public String[] getDns();
 
@@ -70,9 +70,9 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 	 */
 	public StartContainerCmd withPortBindings(PortBinding... portBindings);
 
-	public StartContainerCmd withPrivileged(boolean privileged);
+	public StartContainerCmd withPrivileged(Boolean privileged);
 
-	public StartContainerCmd withPublishAllPorts(boolean publishAllPorts);
+	public StartContainerCmd withPublishAllPorts(Boolean publishAllPorts);
 
 	/**
 	 * Set custom DNS servers

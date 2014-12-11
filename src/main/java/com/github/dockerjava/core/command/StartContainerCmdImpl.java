@@ -1,8 +1,11 @@
 package com.github.dockerjava.core.command;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.NotModifiedException;
@@ -22,15 +25,17 @@ import com.google.common.base.Preconditions;
 /**
  * Start a container
  */
+@JsonInclude(NON_EMPTY)
 public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Void> implements StartContainerCmd {
 
+	@JsonIgnore
 	private String containerId;
 
 	@JsonProperty("Binds")
-	private Binds binds = new Binds();
+	private Binds binds;
 
 	@JsonProperty("Links")
-	private Links links = new Links();
+	private Links links;
 
 	@JsonProperty("LxcConf")
 	private LxcConf[] lxcConf;
@@ -39,10 +44,10 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	private Ports portBindings;
 
 	@JsonProperty("PublishAllPorts")
-	private boolean publishAllPorts;
+	private Boolean publishAllPorts;
 
 	@JsonProperty("Privileged")
-	private boolean privileged;
+	private Boolean privileged;
 
 	@JsonProperty("Dns")
 	private String[] dns;
@@ -54,7 +59,7 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	private String volumesFrom;
 	
 	@JsonProperty("NetworkMode")          
-    private String networkMode = "bridge";
+    private String networkMode;
 	
 	@JsonProperty("Devices")
 	private Device[] devices;
@@ -76,13 +81,13 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	@Override
 	@JsonIgnore
 	public Bind[] getBinds() {
-		return binds.getBinds();
+		return (binds == null) ? new Bind[0] : binds.getBinds();
 	}
 
 	@Override
 	@JsonIgnore
 	public Link[] getLinks() {
-		return links.getLinks();
+		return (links == null) ? new Link[0] : links.getLinks();
 	}
 
 	@Override
@@ -96,12 +101,12 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	}
 
 	@Override
-	public boolean isPublishAllPorts() {
+	public Boolean isPublishAllPorts() {
 		return publishAllPorts;
 	}
 
 	@Override
-	public boolean isPrivileged() {
+	public Boolean isPrivileged() {
 		return privileged;
 	}
 
@@ -192,13 +197,13 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	}
 
 	@Override
-	public StartContainerCmd withPrivileged(boolean privileged) {
+	public StartContainerCmd withPrivileged(Boolean privileged) {
 		this.privileged = privileged;
 		return this;
 	}
 
 	@Override
-	public StartContainerCmd withPublishAllPorts(boolean publishAllPorts) {
+	public StartContainerCmd withPublishAllPorts(Boolean publishAllPorts) {
 		this.publishAllPorts = publishAllPorts;
 		return this;
 	}
