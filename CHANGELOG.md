@@ -1,6 +1,11 @@
 Change Log
 ===
 
+docker-java-0.10.5-SNAPSHOT
+---
+
+ * [#111](https://github.com/docker-java/docker-java/pull/111) Allow to send empty messages in StartContainerCmd  
+
 docker-java-0.10.4
 ---
 
