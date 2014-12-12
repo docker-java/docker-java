@@ -79,6 +79,20 @@ public interface DockerClient extends Closeable {
 
 	public CreateContainerCmd createContainerCmd(String image);
 
+	/**
+	 * Creates a new {@link StartContainerCmd} for the container with the
+	 * given ID.
+	 * The command can then be further customized by using builder
+	 * methods on it like {@link StartContainerCmd#withDns(String...)}.
+	 * <p>
+	 * <b>If you customize the command, any existing configuration of the
+	 * target container will get reset to its default before applying the
+	 * new configuration. To preserve the existing configuration, use an 
+	 * unconfigured {@link StartContainerCmd}.</b> 
+	 * <p>
+	 * This command corresponds to the <code>/containers/{id}/start</code>
+	 * endpoint of the Docker Remote API.
+	 */
 	public StartContainerCmd startContainerCmd(String containerId);
 
 	public InspectContainerCmd inspectContainerCmd(String containerId);

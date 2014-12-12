@@ -15,10 +15,12 @@ import static org.hamcrest.Matchers.startsWith;
 import java.lang.reflect.Method;
 import java.util.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.command.StartContainerCmd;
 import com.github.dockerjava.api.model.*;
 
 import org.testng.ITestResult;
@@ -416,6 +418,11 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
 	@Test
 	public void existingHostConfigIsResetByConfiguredStartCmd() throws DockerException {
+		// As of version 1.3.2, Docker assumes that you either configure a container
+		// when creating it or when starting it, but not mixing both. 
+		// See https://github.com/docker-java/docker-java/pull/111
+		// If this test starts to fail, this behavior changed and a review of implementation
+		// and documentation might be needed.
 	
 		String dnsServer = "8.8.8.8";
 	
@@ -437,5 +444,12 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 		
 		// although start did not modify DNS Settings, they were reset to their default.
 		assertThat(inspectContainerResponse.getHostConfig().getDns(), is(nullValue(String[].class)));
+	}
+
+	@Test
+	public void anUnconfiguredCommandSerializesToEmptyJson() throws Exception {
+		ObjectMapper objectMapper = new ObjectMapper();
+		StartContainerCmd command = dockerClient.startContainerCmd("");
+		assertThat(objectMapper.writeValueAsString(command), is("{}"));
 	}
 }
