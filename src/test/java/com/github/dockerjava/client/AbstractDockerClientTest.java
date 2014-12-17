@@ -1,10 +1,18 @@
 package com.github.dockerjava.client;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.model.Volume;
+import com.github.dockerjava.api.model.VolumeBind;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.TestDockerCmdExecFactory;
+import com.google.common.base.Joiner;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 import org.slf4j.Logger;
@@ -18,6 +26,8 @@ import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractDockerClientTest extends Assert {
 
@@ -156,6 +166,22 @@ public abstract class AbstractDockerClientTest extends Assert {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Asserts that {@link InspectContainerResponse#getVolumes()} (<code>.Volumes</code>)
+	 * has {@link VolumeBind}s for the given {@link Volume}s
+	 */
+	public static void assertContainerHasVolumes(InspectContainerResponse inspectContainerResponse, 
+			Volume ... expectedVolumes) {
+		VolumeBind[] volumeBinds = inspectContainerResponse.getVolumes();
+		LOG.info("Inspect .Volumes = [{}]", Joiner.on(", ").join(volumeBinds));
+	
+		List<Volume> volumes = new ArrayList<Volume>();
+		for (VolumeBind bind : volumeBinds) {
+			volumes.add(new Volume(bind.getContainerPath()));
+		}
+		assertThat(volumes, contains(expectedVolumes));
 	}
 
 }

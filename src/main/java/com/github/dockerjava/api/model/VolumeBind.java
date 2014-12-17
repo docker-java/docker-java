@@ -16,4 +16,9 @@ public class VolumeBind {
     public String getHostPath() {
         return hostPath;
     }
+
+    @Override
+    public String toString() {
+        return hostPath + ":" + containerPath;
+    }
 }

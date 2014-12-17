@@ -84,16 +84,47 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 		inspectContainerResponse = dockerClient.inspectContainerCmd(container
 				.getId()).exec();
 
-        VolumeBind[] volumeBinds = inspectContainerResponse.getVolumes();
-        List<String> volumes = new ArrayList<String>();
-        for(VolumeBind bind :volumeBinds){
-            volumes.add(bind.getContainerPath());
-        }
-        assertThat(volumes,	contains(volume1.getPath(), volume2.getPath()));
+		assertContainerHasVolumes(inspectContainerResponse, volume1, volume2);
 
 		assertThat(Arrays.asList(inspectContainerResponse.getVolumesRW()),
 				contains(volume1, volume2));
 
+	}
+
+	@Test
+	public void startContainerWithVolumesFrom() throws DockerException {
+
+		Volume volume1 = new Volume("/opt/webapp1");
+		Volume volume2 = new Volume("/opt/webapp2");
+
+		String container1Name = UUID.randomUUID().toString();
+		
+		CreateContainerResponse container1 = dockerClient
+				.createContainerCmd("busybox").withCmd("sleep", "9999")
+				.withName(container1Name).exec();
+		LOG.info("Created container1 {}", container1.toString());
+
+		dockerClient.startContainerCmd(container1.getId()).withBinds(
+				new Bind("/src/webapp1", volume1), new Bind("/src/webapp2", volume2)).exec();
+		LOG.info("Started container1 {}", container1.toString());
+
+		InspectContainerResponse inspectContainerResponse1 = dockerClient.inspectContainerCmd(
+				container1.getId()).exec();
+
+		assertContainerHasVolumes(inspectContainerResponse1, volume1, volume2);
+
+
+		CreateContainerResponse container2 = dockerClient
+				.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
+		LOG.info("Created container2 {}", container2.toString());
+
+		dockerClient.startContainerCmd(container2.getId()).withVolumesFrom(container1Name).exec();
+		LOG.info("Started container2 {}", container2.toString());
+
+		InspectContainerResponse inspectContainerResponse2 = dockerClient
+				.inspectContainerCmd(container2.getId()).exec();
+
+		assertContainerHasVolumes(inspectContainerResponse2, volume1, volume2);
 	}
 
 	@Test
