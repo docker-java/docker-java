@@ -41,7 +41,6 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @JsonProperty("Cmd")          private String[]  cmd;
     @JsonProperty("Image")        private String    image;
     @JsonProperty("Volumes")      private Volumes volumes = new Volumes();
-    @JsonProperty("VolumesFrom")  private String[]    volumesFrom = new String[]{};
     @JsonProperty("WorkingDir")   private String workingDir = "";
     @JsonProperty("DisableNetwork") private boolean disableNetwork = false;
     @JsonProperty("ExposedPorts")   private ExposedPorts exposedPorts = new ExposedPorts();
@@ -291,12 +290,12 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
 	public String[] getVolumesFrom() {
-        return volumesFrom;
+        return hostConfig.getVolumesFrom();
     }
 
     @Override
 	public CreateContainerCmdImpl withVolumesFrom(String... volumesFrom) {
-        this.volumesFrom = volumesFrom;
+        this.hostConfig.setVolumesFrom(volumesFrom);
         return this;
     }
 

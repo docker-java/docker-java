@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItemInArray;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
@@ -13,6 +14,7 @@ import static org.hamcrest.Matchers.not;
 import java.lang.reflect.Method;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.UUID;
 
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -25,6 +27,7 @@ import com.github.dockerjava.api.ConflictException;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.Links;
@@ -94,6 +97,55 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
 		assertThat(inspectContainerResponse.getConfig().getVolumes().keySet(),
 				contains("/var/log"));
+	}
+
+	@Test
+	public void createContainerWithVolumesFrom() throws DockerException {
+
+		Volume volume1 = new Volume("/opt/webapp1");
+		Volume volume2 = new Volume("/opt/webapp2");
+
+		String container1Name = UUID.randomUUID().toString();
+		
+		// create a running container with bind mounts
+		CreateContainerResponse container1 = dockerClient
+				.createContainerCmd("busybox").withCmd("sleep", "9999")
+				.withName(container1Name).exec();
+		LOG.info("Created container1 {}", container1.toString());
+
+		dockerClient.startContainerCmd(container1.getId()).withBinds(
+				new Bind("/src/webapp1", volume1), new Bind("/src/webapp2", volume2)).exec();
+		LOG.info("Started container1 {}", container1.toString());
+
+		InspectContainerResponse inspectContainerResponse1 = dockerClient.inspectContainerCmd(
+				container1.getId()).exec();
+
+		assertContainerHasVolumes(inspectContainerResponse1, volume1, volume2);
+
+		// create a second container with volumes from first container
+		CreateContainerResponse container2 = dockerClient
+				.createContainerCmd("busybox").withCmd("sleep", "9999")
+				.withVolumesFrom(container1Name).exec();
+		LOG.info("Created container2 {}", container2.toString());
+
+		InspectContainerResponse inspectContainerResponse2 = dockerClient
+				.inspectContainerCmd(container2.getId()).exec();
+
+		// No volumes are created, the information is just stored in .HostConfig.VolumesFrom
+		assertThat(inspectContainerResponse2.getHostConfig().getVolumesFrom(), hasItemInArray(container1Name));
+
+		// To ensure that the information stored in VolumesFrom really is considered
+		// when starting the container, we start it and verify that it has the same 
+		// bind mounts as the first container.
+		// This is somehow out of scope here, but it helped me to understand how the
+		// VolumesFrom feature really works.
+		dockerClient.startContainerCmd(container2.getId()).exec();
+		LOG.info("Started container2 {}", container2.toString());
+		
+		inspectContainerResponse2 = dockerClient.inspectContainerCmd(container2.getId()).exec();
+
+		assertThat(inspectContainerResponse2.getHostConfig().getVolumesFrom(), hasItemInArray(container1Name));
+		assertContainerHasVolumes(inspectContainerResponse2, volume1, volume2);
 	}
 
 	@Test
