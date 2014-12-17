@@ -23,7 +23,7 @@ public class RestartPolicy {
 	private int maximumRetryCount = 0;
 
 	@JsonProperty("Name")
-	private String name = "no";
+	private String name = "";
 
 	public RestartPolicy() {
 	}
