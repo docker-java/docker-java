@@ -3,7 +3,8 @@ Change Log
 
 docker-java-0.10.5-SNAPSHOT
 ---
- 
+  
+ * [#118](https://github.com/docker-java/docker-java/pull/118) Use chunked encoding when passing the docker image 
  * [#115](https://github.com/docker-java/docker-java/pull/115) Polish RestartPolicy
  * [#114](https://github.com/docker-java/docker-java/pull/114) Fix CreateContainerCmdImpl.withVolumesFrom()
  * [#111](https://github.com/docker-java/docker-java/pull/111) Allow to send empty messages in StartContainerCmd  
