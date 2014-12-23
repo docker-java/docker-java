@@ -8,6 +8,8 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.client.RequestEntityProcessing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +41,10 @@ public class BuildImageCmdExec extends AbstrDockerCmdExec<BuildImageCmd, InputSt
             webResource = webResource.queryParam("q", "true");
         }
 		
+
+	  webResource.property(ClientProperties.REQUEST_ENTITY_PROCESSING, RequestEntityProcessing.CHUNKED);
+	  webResource.property(ClientProperties.CHUNKED_ENCODING_SIZE, 1024*1024);
+
 		LOGGER.debug("POST: {}", webResource);
 		return webResource
                 .request()
