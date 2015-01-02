@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.command.AuthCmd.Exec;
+import com.github.dockerjava.jaxrs.BuildImageCmdExec;
 
 /**
  * Special {@link DockerCmdExecFactory} implementation that collects container and image creations
@@ -92,18 +93,18 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 	public BuildImageCmd.Exec createBuildImageCmdExec() {
 		return new BuildImageCmd.Exec() {
 			@Override
-			public InputStream exec(BuildImageCmd command) {
+			public  BuildImageCmd.Response exec(BuildImageCmd command) {
 				// can't detect image id here so tagging it
 				String tag = command.getTag();
 				if(tag == null || "".equals(tag.trim())) {
 					tag = "" + new SecureRandom().nextInt(Integer.MAX_VALUE);
 					command.withTag(tag);
 				}
-				InputStream inputStream = delegate.createBuildImageCmdExec().exec(command); 
+				InputStream inputStream = delegate.createBuildImageCmdExec().exec(command);
 				imageNames.add(tag);
-				return inputStream;
+				return new BuildImageCmdExec.ResponseImpl(inputStream);
 			}
-		};
+                };
 	}
 	
 	@Override
