@@ -52,42 +52,15 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
         ClientBuilder clientBuilder = ClientBuilder.newBuilder().withConfig(clientConfig);
 
-        String dockerCertPath = dockerClientConfig.getDockerCertPath();
+        try {
+            SSLContext ssl = dockerClientConfig.getSslConfig().getSSLContext();
 
-        if (dockerCertPath != null) {
-            boolean certificatesExist = CertificateUtils.verifyCertificatesExist(dockerCertPath);
-
-            if (certificatesExist) {
-
-                try {
-
-                    Security.addProvider(new BouncyCastleProvider());
-
-                    KeyStore keyStore = CertificateUtils.createKeyStore(dockerCertPath);
-                    KeyStore trustStore = CertificateUtils.createTrustStore(dockerCertPath);
-
-                    // properties acrobatics not needed for java > 1.6
-                    String httpProtocols = System.getProperty("https.protocols");
-                    System.setProperty("https.protocols", "TLSv1");
-                    SslConfigurator sslConfig = SslConfigurator.newInstance(true);
-                    if (httpProtocols != null) System.setProperty("https.protocols", httpProtocols);
-
-                    sslConfig.keyStore(keyStore);
-                    sslConfig.keyStorePassword("docker");
-                    sslConfig.trustStore(trustStore);
-
-                    SSLContext sslContext = sslConfig.createSSLContext();
-
-
-                    clientBuilder.sslContext(sslContext);
-
-                } catch (Exception e) {
-                    throw new DockerClientException(e.getMessage(), e);
-                }
-
-            }
-
+            if (ssl != null)
+                clientBuilder.sslContext(ssl);
+        } catch(Exception ex) {
+            throw new DockerClientException("Error in SSL Configuration", ex);
         }
+
 
         client = clientBuilder.build();
 
