@@ -3,7 +3,7 @@ Change Log
 
 docker-java-0.10.5-SNAPSHOT
 ---
-  
+ * [#120](https://github.com/docker-java/docker-java/pull/120) Command resource cleanup after command execution
  * [#118](https://github.com/docker-java/docker-java/pull/118) Use chunked encoding when passing the docker image 
  * [#115](https://github.com/docker-java/docker-java/pull/115) Polish RestartPolicy
  * [#114](https://github.com/docker-java/docker-java/pull/114) Fix CreateContainerCmdImpl.withVolumesFrom()
