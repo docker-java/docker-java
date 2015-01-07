@@ -1,6 +1,8 @@
 package com.github.dockerjava.api.command;
 
-public interface DockerCmd<RES_T> {
+import java.io.Closeable;
+
+public interface DockerCmd<RES_T> extends Closeable {
 
 	public RES_T exec();
 

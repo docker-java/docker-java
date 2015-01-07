@@ -1,5 +1,7 @@
 package com.github.dockerjava.core.command;
 
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,4 +27,7 @@ public abstract class AbstrDockerCmd<CMD_T extends DockerCmd<RES_T>, RES_T> impl
 		LOGGER.debug("Cmd: {}", this);
 		return execution.exec((CMD_T)this);
 	}
+
+    @Override
+	public void close() throws IOException {}
 }
