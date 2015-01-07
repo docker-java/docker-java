@@ -40,6 +40,7 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, InputStream
 			.compile("^ENV\\s+(.*)\\s+(.*)$");
 
 	private InputStream tarInputStream = null;
+	private File tarFile = null;
 	private String tag;
 	private boolean noCache;
 	private boolean remove = true;
@@ -48,7 +49,13 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, InputStream
 	public BuildImageCmdImpl(BuildImageCmd.Exec exec, File dockerFolder) {
 		super(exec);
 		Preconditions.checkNotNull(dockerFolder, "dockerFolder is null");
-		withTarInputStream(buildDockerFolderTar(dockerFolder));
+		tarFile = buildDockerFolderTar(dockerFolder);
+		try {
+			withTarInputStream(FileUtils.openInputStream(tarFile));
+		} catch (IOException e) {
+			// we just created the file this should never happen.
+			throw new RuntimeException(e);
+		}
 	}
 
 	public BuildImageCmdImpl(BuildImageCmd.Exec exec, InputStream tarInputStream) {
@@ -130,6 +137,16 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, InputStream
 	}
 
 	@Override
+	public void close() throws IOException {
+		super.close();
+		if (tarFile != null) {
+			FileUtils.deleteQuietly(tarFile);
+		}
+		
+		tarInputStream.close();
+	}
+
+	@Override
 	public String toString() {
 		return new StringBuilder("build ")
 				.append(tag != null ? "-t " + tag + " " : "")
@@ -139,7 +156,7 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, InputStream
 				.toString();
 	}
 
-	protected InputStream buildDockerFolderTar(File dockerFolder) {
+	protected File buildDockerFolderTar(File dockerFolder) {
 		Preconditions.checkArgument(dockerFolder.exists(),
 				"Path %s doesn't exist", dockerFolder);
 		Preconditions.checkArgument(dockerFolder.isDirectory(),
@@ -255,9 +272,8 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, InputStream
 				}
 			}
 
-			dockerFolderTar = CompressArchiveUtil.archiveTARFiles(dockerFolder,
+			return CompressArchiveUtil.archiveTARFiles(dockerFolder,
 					filesToAdd, archiveNameWithOutExtension);
-			return FileUtils.openInputStream(dockerFolderTar);
 		} catch (IOException ex) {
 			FileUtils.deleteQuietly(dockerFolderTar);
 			throw new DockerClientException(

@@ -45,13 +45,21 @@ public abstract class AbstrDockerCmdExec<CMD_T extends DockerCmd<RES_T>, RES_T>
 		RES_T result;
 		try {
 			result = execute(command);
+			
 		} catch (ProcessingException e) {
 			if(e.getCause() instanceof DockerException) {
 				throw (DockerException)e.getCause();
 			} else {
 				throw e;
 			}
+		} finally {
+			try {
+				command.close();
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
 		}
+		
 		return result;
 	}
 
