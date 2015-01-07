@@ -142,6 +142,8 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, InputStream
 		if (tarFile != null) {
 			FileUtils.deleteQuietly(tarFile);
 		}
+		
+		tarInputStream.close();
 	}
 
 	@Override
