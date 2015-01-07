@@ -16,12 +16,12 @@ public class DockerClientConfigTest {
     public static final DockerClientConfig EXAMPLE_CONFIG = newExampleConfig();
 
     private static DockerClientConfig newExampleConfig() {
-        return new DockerClientConfig(URI.create("http://foo"), "bar", "baz", "qux", "blam", "wham", "flim", "flam", 877, false);
+        return new DockerClientConfig(URI.create("http://foo"), "bar", "baz", "qux", "blam", "wham", "flam", 877, false, new LocalDirectorySSLConfig("flim"));
     }
 
     @Test
     public void string() throws Exception {
-        assertEquals("DockerClientConfig{uri=http://foo, version='bar', username='baz', password='qux', email='blam', serverAddress='wham', dockerCertPath='flim', dockerCfgPath='flam', readTimeout=877, loggingFilterEnabled=false}",
+        assertEquals("DockerClientConfig{uri=http://foo, version='bar', username='baz', password='qux', email='blam', serverAddress='wham', dockerCfgPath='flam', sslConfig='LocalDirectorySSLConfig{dockerCertPath=flim}', readTimeout=877, loggingFilterEnabled=false}",
                 EXAMPLE_CONFIG.toString());
     }
 
@@ -104,8 +104,8 @@ public class DockerClientConfigTest {
         assertEquals(config.getServerAddress(), AuthConfig.DEFAULT_SERVER_ADDRESS);
         assertEquals(config.getVersion(), null);
         assertEquals(config.isLoggingFilterEnabled(), true);
-        assertEquals(config.getDockerCertPath(), "someHomeDir/.docker");
         assertEquals(config.getDockerCfgPath(), "someHomeDir/.dockercfg");
+        assertEquals( ((LocalDirectorySSLConfig)config.getSslConfig()).getDockerCertPath(), "someHomeDir/.docker");
     }
 
     @Test
