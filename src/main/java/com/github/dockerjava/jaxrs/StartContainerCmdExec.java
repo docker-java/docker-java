@@ -20,8 +20,7 @@ public class StartContainerCmdExec extends AbstrDockerCmdExec<StartContainerCmd,
 
 	@Override
 	protected Void execute(StartContainerCmd command) {
-		WebTarget webResource = getBaseResource().path("/containers/{id}/start")
-				.resolveTemplate("id", command.getContainerId());
+		WebTarget webResource = getBaseResource().path("/containers/{id}/start").resolveTemplate("id", command.getContainerId());
 
 		LOGGER.trace("POST: {}", webResource);
 		webResource.request().accept(MediaType.APPLICATION_JSON).post(entity(command, MediaType.APPLICATION_JSON));

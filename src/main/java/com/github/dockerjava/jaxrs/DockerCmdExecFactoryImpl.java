@@ -3,15 +3,12 @@ package com.github.dockerjava.jaxrs;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.github.dockerjava.api.DockerClientException;
 import com.github.dockerjava.api.command.*;
-import com.github.dockerjava.core.CertificateUtils;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.jaxrs.util.JsonClientFilter;
 import com.github.dockerjava.jaxrs.util.ResponseStatusExceptionFilter;
 import com.github.dockerjava.jaxrs.util.SelectiveLoggingFilter;
 import com.google.common.base.Preconditions;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.glassfish.jersey.CommonProperties;
-import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 
@@ -20,8 +17,6 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import java.io.IOException;
-import java.security.KeyStore;
-import java.security.Security;
 import java.util.logging.Logger;
 
 public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
@@ -155,6 +150,11 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     }
 
     @Override
+    public ExecCreateCmd.Exec createExecCmdExec() {
+        return new ExecCreateCmdExec(getBaseResource());
+    }
+
+    @Override
     public RemoveContainerCmd.Exec createRemoveContainerCmdExec() {
         return new RemoveContainerCmdExec(getBaseResource());
     }
@@ -167,6 +167,11 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     @Override
     public AttachContainerCmd.Exec createAttachContainerCmdExec() {
         return new AttachContainerCmdExec(getBaseResource());
+    }
+
+    @Override
+    public ExecStartCmd.Exec createExecStartCmdExec() {
+        return new ExecStartCmdExec(getBaseResource());
     }
 
     @Override

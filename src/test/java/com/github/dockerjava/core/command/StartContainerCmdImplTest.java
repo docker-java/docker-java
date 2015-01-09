@@ -200,7 +200,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 		dockerClient.startContainerCmd(container.getId()).withPortBindings(portBindings).exec();
 
 		inspectContainerResponse = dockerClient.inspectContainerCmd(container
-				.getId()).exec();
+                .getId()).exec();
 
 		assertThat(Arrays.asList(inspectContainerResponse.getConfig().getExposedPorts()),
 				contains(tcp22, tcp23));
