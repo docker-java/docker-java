@@ -39,6 +39,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @JsonProperty("StdinOnce")    private boolean   stdInOnce = false;
     @JsonProperty("Env")          private String[]  env;
     @JsonProperty("Cmd")          private String[]  cmd;
+    @JsonProperty("Entrypoint")   private String[]  entrypoint;
     @JsonProperty("Image")        private String    image;
     @JsonProperty("Volumes")      private Volumes volumes = new Volumes();
     @JsonProperty("WorkingDir")   private String workingDir = "";
@@ -251,6 +252,17 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
 	public CreateContainerCmdImpl withCmd(String... cmd) {
         this.cmd = cmd;
+        return this;
+    }
+    
+    @Override
+    public String[] getEntrypoint() {
+    	return entrypoint;
+    }
+    
+    @Override
+	public CreateContainerCmdImpl withEntrypoint(String... entrypoint) {
+        this.entrypoint = entrypoint;
         return this;
     }
 

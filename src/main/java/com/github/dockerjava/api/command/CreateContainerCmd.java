@@ -120,7 +120,12 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 	 * prevents the container from changing the owner of any files.
 	 */
 	public CreateContainerCmd withCapDrop(Capability... capDrop);
-
+	
+	
+	public String[] getEntrypoint();
+	
+	public CreateContainerCmd withEntrypoint(String... entrypoint);
+	
 	/**
 	 * @throws NotFoundException No such container
 	 * @throws ConflictException Named container already exists

@@ -291,5 +291,23 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 		assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getDns()),
 				contains(aDnsServer, anotherDnsServer));
 	}
+	
+	@Test
+	public void createContainerWithEntrypoint() throws DockerException {
+
+		CreateContainerResponse container = dockerClient
+				.createContainerCmd("busybox").withName("container")
+				.withEntrypoint("sleep", "9999").exec();
+
+		LOG.info("Created container {}", container.toString());
+
+		assertThat(container.getId(), not(isEmptyString()));
+
+		InspectContainerResponse inspectContainerResponse = dockerClient
+				.inspectContainerCmd(container.getId()).exec();
+
+		assertThat(Arrays.asList(inspectContainerResponse.getConfig().getEntrypoint()), contains("sleep", "9999"));
+
+	}
 
 }
