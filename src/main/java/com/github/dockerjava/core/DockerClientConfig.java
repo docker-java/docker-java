@@ -1,5 +1,9 @@
 package com.github.dockerjava.core;
 
+import com.github.dockerjava.api.DockerClientException;
+import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.core.NameParser.HostnameReposName;
+import com.github.dockerjava.core.NameParser.ReposTag;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 
@@ -12,7 +16,10 @@ import java.util.Map;
 import java.util.Properties;
 
 public class DockerClientConfig implements Serializable {
-    private static final String DOCKER_HOST_PROPERTY = "DOCKER_HOST";
+
+	private static final long serialVersionUID = -4307357472441531489L;
+	
+	private static final String DOCKER_HOST_PROPERTY = "DOCKER_HOST";
     private static final String DOCKER_CERT_PATH_PROPERTY = "DOCKER_CERT_PATH";
     private static final String DOCKER_IO_URL_PROPERTY = "docker.io.url";
     private static final String DOCKER_IO_VERSION_PROPERTY = "docker.io.version";
@@ -221,6 +228,47 @@ public class DockerClientConfig implements Serializable {
     public String getDockerCfgPath() {
         return dockerCfgPath;
     }
+    
+    private AuthConfig getAuthConfig() {
+    	AuthConfig authConfig = null;
+    	if(getUsername() != null) {
+    		authConfig = new AuthConfig();
+    		authConfig.setUsername(getUsername());
+    		authConfig.setPassword(getPassword());
+    		authConfig.setEmail(getEmail());
+    		authConfig.setServerAddress(getServerAddress());
+    	} 
+    	return authConfig;
+    }
+    
+    public AuthConfig effectiveAuthConfig(String imageName) {
+		AuthConfig authConfig = null;
+
+		String dockerCfgFile = getDockerCfgPath();
+
+		if (dockerCfgFile != null && imageName != null) {
+			AuthConfigFile authConfigFile;
+			try {
+				authConfigFile = AuthConfigFile.loadConfig(new File(
+						dockerCfgFile));
+			} catch (IOException e) {
+				throw new DockerClientException(
+						"Failed to parse dockerCfgFile", e);
+			}
+			ReposTag reposTag = NameParser.parseRepositoryTag(imageName);
+			HostnameReposName hostnameReposName = NameParser
+					.resolveRepositoryName(reposTag.repos);
+			
+			authConfig = authConfigFile
+					.resolveAuthConfig(hostnameReposName.hostname);	
+		}
+		
+		AuthConfig _authConfig = getAuthConfig();
+		
+		if(_authConfig != null) authConfig = _authConfig;
+		
+		return authConfig;
+	}
 
   @Override
     public boolean equals(Object o) {

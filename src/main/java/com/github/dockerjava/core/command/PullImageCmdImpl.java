@@ -1,7 +1,6 @@
 package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.command.PullImageCmd;
-import com.github.dockerjava.api.model.AuthConfig;
 import com.google.common.base.Preconditions;
 
 import java.io.InputStream;
@@ -11,10 +10,9 @@ import java.io.InputStream;
  * Pull image from repository.
  *
  */
-public class PullImageCmdImpl extends AbstrDockerCmd<PullImageCmd, InputStream> implements PullImageCmd {
+public class PullImageCmdImpl extends AbstrAuthCfgDockerCmd<PullImageCmd, InputStream> implements PullImageCmd {
 
     private String repository, tag, registry;
-    private AuthConfig authConfig;
 
 	public PullImageCmdImpl(PullImageCmd.Exec exec, String repository) {
 		super(exec);
@@ -34,10 +32,6 @@ public class PullImageCmdImpl extends AbstrDockerCmd<PullImageCmd, InputStream> 
     @Override
 	public String getRegistry() {
         return registry;
-    }
-
-    public AuthConfig getAuthConfig() {
-        return authConfig;
     }
 
     @Override
@@ -60,13 +54,6 @@ public class PullImageCmdImpl extends AbstrDockerCmd<PullImageCmd, InputStream> 
 		this.registry = registry;
 		return this;
 	}
-
-    @Override
-    public PullImageCmd withAuthConfig(AuthConfig authConfig) {
-		Preconditions.checkNotNull(authConfig, "authConfig was not specified");
-        this.authConfig = authConfig;
-        return this;
-    }
 
     @Override
     public String toString() {
