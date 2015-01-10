@@ -15,6 +15,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 
+@Test(groups = "integration")
 public class ExecStartCmdImplTest extends AbstractDockerClientTest {
     @BeforeTest
     public void beforeTest() throws DockerException {
@@ -41,7 +42,7 @@ public class ExecStartCmdImplTest extends AbstractDockerClientTest {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
         CreateContainerResponse container = dockerClient
-                .createContainerCmd("busybox").withCmd("env")
+                .createContainerCmd("busybox").withCmd("top")
                 .withName(containerName).exec();
 
         LOG.info("Created container {}", container.toString());
@@ -50,13 +51,10 @@ public class ExecStartCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        dockerClient.waitContainerCmd(container.getId()).exec();
-
-        ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId()).withCmd("touch","file.log").exec();
-
+        ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId()).attachStdout(true).withCmd("touch","file.log").exec();
         dockerClient.execStartCmd(execCreateCmdResponse.getId()).exec();
 
-        InputStream response = dockerClient.copyFileFromContainerCmd(container.getId(), "file.log").exec();
+        InputStream response = dockerClient.copyFileFromContainerCmd(container.getId(), "/file.log").exec();
         assertTrue(response.available() > 0, "The file was not copied from the container.");
     }
 }
