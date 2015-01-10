@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ExecCreateCmdResponce {
+public class ExecCreateCmdResponse {
 
     @JsonProperty("Id")
     private String id;

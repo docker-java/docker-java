@@ -3,9 +3,9 @@ package com.github.dockerjava.core.command;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.ExecCreateCmd;
-import com.github.dockerjava.api.command.ExecCreateCmdResponce;
+import com.github.dockerjava.api.command.ExecCreateCmdResponse;
 
-public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateCmdResponce> implements ExecCreateCmd {
+public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateCmdResponse> implements ExecCreateCmd {
 
     private String containerId;
 
@@ -63,7 +63,7 @@ public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateC
      * @throws NotFoundException No such container
      */
     @Override
-    public ExecCreateCmdResponce exec() throws NotFoundException {
+    public ExecCreateCmdResponse exec() throws NotFoundException {
         return super.exec();
     }
 }

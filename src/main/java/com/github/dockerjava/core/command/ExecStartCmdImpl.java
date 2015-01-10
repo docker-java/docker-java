@@ -6,7 +6,7 @@ import com.google.common.base.Preconditions;
 
 import java.io.InputStream;
 
-public class ExecStartCmdImpl extends	AbstrDockerCmd<ExecStartCmd, InputStream> implements ExecStartCmd {
+public class ExecStartCmdImpl extends AbstrDockerCmd<ExecStartCmd, InputStream> implements ExecStartCmd {
 
     private String containerId;
 
@@ -14,7 +14,8 @@ public class ExecStartCmdImpl extends	AbstrDockerCmd<ExecStartCmd, InputStream> 
 
     public ExecStartCmdImpl(ExecStartCmd.Exec exec, String containerId) {
         super(exec);
-        withContainerId(containerId);
+        Preconditions.checkNotNull(containerId, "containerId was not specified");
+        this.containerId = containerId;
     }
 
     @Override
@@ -30,13 +31,6 @@ public class ExecStartCmdImpl extends	AbstrDockerCmd<ExecStartCmd, InputStream> 
     @Override
     public boolean isTty() {
         return tty;
-    }
-
-    @Override
-    public ExecStartCmdImpl withContainerId(String containerId) {
-        Preconditions.checkNotNull(containerId, "containerId was not specified");
-        this.containerId = containerId;
-        return this;
     }
 
     /**

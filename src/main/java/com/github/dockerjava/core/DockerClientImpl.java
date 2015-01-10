@@ -194,7 +194,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
 	}
 
     @Override
-    public ExecCreateCmd execCmd(String containerId) {
+    public ExecCreateCmd execCreateCmd(String containerId) {
         return new ExecCreateCmdImpl(getDockerCmdExecFactory().createExecCmdExec(), containerId);
     }
 

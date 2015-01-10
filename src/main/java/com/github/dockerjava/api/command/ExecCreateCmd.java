@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.command;
 
-public interface ExecCreateCmd extends DockerCmd<ExecCreateCmdResponce> {
+public interface ExecCreateCmd extends DockerCmd<ExecCreateCmdResponse> {
 
     public String getContainerId();
 
@@ -14,6 +14,6 @@ public interface ExecCreateCmd extends DockerCmd<ExecCreateCmdResponce> {
 
     public ExecCreateCmd tty(boolean tty);
 
-    public static interface Exec extends DockerCmdExec<ExecCreateCmd, ExecCreateCmdResponce> {
+    public static interface Exec extends DockerCmdExec<ExecCreateCmd, ExecCreateCmdResponse> {
     }
 }

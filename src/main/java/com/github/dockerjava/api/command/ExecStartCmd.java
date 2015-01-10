@@ -12,8 +12,6 @@ public interface ExecStartCmd extends DockerCmd<InputStream>{
 
     public boolean isTty();
 
-    public ExecStartCmd withContainerId(String containerId);
-
     /**
      * @throws com.github.dockerjava.api.NotFoundException No such container
      */
