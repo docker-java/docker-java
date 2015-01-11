@@ -21,6 +21,7 @@ public class DockerClientConfig implements Serializable {
 	
 	private static final String DOCKER_HOST_PROPERTY = "DOCKER_HOST";
     private static final String DOCKER_CERT_PATH_PROPERTY = "DOCKER_CERT_PATH";
+    private static final String DOCKER_VERIFY_TLS_PROPERTY = "DOCKER_TLS_VERIFY";
     private static final String DOCKER_IO_URL_PROPERTY = "docker.io.url";
     private static final String DOCKER_IO_VERSION_PROPERTY = "docker.io.version";
     private static final String DOCKER_IO_USERNAME_PROPERTY = "docker.io.username";
@@ -142,7 +143,7 @@ public class DockerClientConfig implements Serializable {
 
     private static String protocol(Map<String, String> env) {
         // if this is set, we assume we need SSL
-        return env.containsKey(DOCKER_CERT_PATH_PROPERTY) ? "https" : "http";
+        return env.containsKey(DOCKER_CERT_PATH_PROPERTY) || "1".equals(env.get(DOCKER_VERIFY_TLS_PROPERTY)) ? "https" : "http";
     }
 
     /**
