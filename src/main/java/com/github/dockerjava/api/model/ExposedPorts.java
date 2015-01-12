@@ -29,6 +29,10 @@ public class ExposedPorts {
 	public ExposedPorts(ExposedPort... exposedPorts) {
 		this.exposedPorts = exposedPorts;
 	}
+	
+	public ExposedPorts(List<ExposedPort> exposedPorts) {
+		this.exposedPorts = exposedPorts.toArray(new ExposedPort[exposedPorts.size()]);
+	}
 
 	public ExposedPort[] getExposedPorts() {
 		return exposedPorts;

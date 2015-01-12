@@ -29,6 +29,10 @@ public class Volumes {
 	public Volumes(Volume... volumes) {
 		this.volumes = volumes;
 	}
+	
+	public Volumes(List<Volume> volumes) {
+		this.volumes = volumes.toArray(new Volume[volumes.size()]);
+	}
 
 	public Volume[] getVolumes() {
 		return volumes;
