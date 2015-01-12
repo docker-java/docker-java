@@ -22,7 +22,7 @@ public class ExecStartCmdExec extends AbstrDockerCmdExec<ExecStartCmd, InputStre
 
     @Override
     protected InputStream execute(ExecStartCmd command) {
-        WebTarget webResource = getBaseResource().path("/exec/{id}/start").resolveTemplate("id", command.getContainerId());
+        WebTarget webResource = getBaseResource().path("/exec/{id}/start").resolveTemplate("id", command.getExecId());
 
         LOGGER.trace("POST: {}", webResource);
 

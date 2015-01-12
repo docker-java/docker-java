@@ -116,6 +116,11 @@ public class AttachContainerCmdImpl extends	AbstrDockerCmd<AttachContainerCmd, I
 		return this;
 	}
 	
+	@Override
+	public AttachContainerCmd withLogs() {
+		return withLogs(true);
+	}
+	
 	/**
 	 * @throws NotFoundException No such container 
 	 */

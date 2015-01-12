@@ -4,19 +4,32 @@ import com.github.dockerjava.api.NotFoundException;
 
 import java.io.InputStream;
 
-public interface ExecStartCmd extends DockerCmd<InputStream>{
+public interface ExecStartCmd extends DockerCmd<InputStream> {
 
-    public String getContainerId();
+	public String getExecId();
 
-    public boolean isDetach();
+	public ExecStartCmd withExecId(String execId);
 
-    public boolean isTty();
+	public boolean hasDetachEnabled();
 
-    /**
-     * @throws com.github.dockerjava.api.NotFoundException No such container
-     */
-    @Override
-    public InputStream exec() throws NotFoundException;
+	public ExecStartCmd withDetach(boolean detach);
+	
+	public ExecStartCmd withDetach();
 
-    public static interface Exec extends DockerCmdExec<ExecStartCmd, InputStream> {}
+	public boolean hasTtyEnabled();
+
+	public ExecStartCmd withTty(boolean tty);
+	
+	public ExecStartCmd withTty();
+
+	/**
+	 * @throws com.github.dockerjava.api.NotFoundException
+	 *             No such exec instance
+	 */
+	@Override
+	public InputStream exec() throws NotFoundException;
+
+	public static interface Exec extends
+			DockerCmdExec<ExecStartCmd, InputStream> {
+	}
 }
