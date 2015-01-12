@@ -6,41 +6,8 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.dockerjava.api.command.AttachContainerCmd;
+import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.command.AuthCmd.Exec;
-import com.github.dockerjava.api.command.BuildImageCmd;
-import com.github.dockerjava.api.command.CommitCmd;
-import com.github.dockerjava.api.command.ContainerDiffCmd;
-import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
-import com.github.dockerjava.api.command.CreateContainerCmd;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.CreateImageCmd;
-import com.github.dockerjava.api.command.CreateImageResponse;
-import com.github.dockerjava.api.command.DockerCmdExecFactory;
-import com.github.dockerjava.api.command.EventsCmd;
-import com.github.dockerjava.api.command.InfoCmd;
-import com.github.dockerjava.api.command.InspectContainerCmd;
-import com.github.dockerjava.api.command.InspectImageCmd;
-import com.github.dockerjava.api.command.KillContainerCmd;
-import com.github.dockerjava.api.command.ListContainersCmd;
-import com.github.dockerjava.api.command.ListImagesCmd;
-import com.github.dockerjava.api.command.LogContainerCmd;
-import com.github.dockerjava.api.command.PauseContainerCmd;
-import com.github.dockerjava.api.command.PingCmd;
-import com.github.dockerjava.api.command.PullImageCmd;
-import com.github.dockerjava.api.command.PushImageCmd;
-import com.github.dockerjava.api.command.RemoveContainerCmd;
-import com.github.dockerjava.api.command.RemoveImageCmd;
-import com.github.dockerjava.api.command.RestartContainerCmd;
-import com.github.dockerjava.api.command.SearchImagesCmd;
-import com.github.dockerjava.api.command.StartContainerCmd;
-import com.github.dockerjava.api.command.StopContainerCmd;
-import com.github.dockerjava.api.command.TagImageCmd;
-import com.github.dockerjava.api.command.TopContainerCmd;
-import com.github.dockerjava.api.command.UnpauseContainerCmd;
-import com.github.dockerjava.api.command.VersionCmd;
-import com.github.dockerjava.api.command.WaitContainerCmd;
-import com.github.dockerjava.core.DockerClientConfig;
 
 /**
  * Special {@link DockerCmdExecFactory} implementation that collects container and image creations
@@ -154,7 +121,12 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 		return delegate.createPingCmdExec();
 	}
 
-	@Override
+    @Override
+    public ExecCreateCmd.Exec createExecCmdExec() {
+        return delegate.createExecCmdExec();
+    }
+
+    @Override
 	public VersionCmd.Exec createVersionCmdExec() {
 		return delegate.createVersionCmdExec();
 	}
@@ -209,7 +181,12 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 		return delegate.createAttachContainerCmdExec();
 	}
 
-	@Override
+    @Override
+    public ExecStartCmd.Exec createExecStartCmdExec() {
+        return delegate.createExecStartCmdExec();
+    }
+
+    @Override
 	public LogContainerCmd.Exec createLogContainerCmdExec() {
 		return delegate.createLogContainerCmdExec();
 	}
