@@ -51,6 +51,8 @@ public interface AttachContainerCmd extends DockerCmd<InputStream>{
 	public AttachContainerCmd withStdErr(boolean stderr);
 
 	public AttachContainerCmd withLogs(boolean logs);
+	
+	public AttachContainerCmd withLogs();
 
 	/**
 	 * @throws NotFoundException No such container 
