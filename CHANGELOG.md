@@ -4,6 +4,7 @@ Change Log
 docker-java-0.10.5-SNAPSHOT
 ---
  
+ * [#121](https://github.com/docker-java/docker-java/pull/121) Implemented support for commands: Exec-start, Exec-create 
  * [#120](https://github.com/docker-java/docker-java/pull/120) Command resource cleanup after command execution
  * [#118](https://github.com/docker-java/docker-java/pull/118) Use chunked encoding when passing the docker image 
  * [#116](https://github.com/docker-java/docker-java/pull/116) Allow SSL configuration from pre-existing keystore to be used
