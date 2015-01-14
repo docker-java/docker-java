@@ -3,7 +3,7 @@ Change Log
 
 docker-java-0.10.5-SNAPSHOT
 ---
- 
+ * [#123](https://github.com/docker-java/docker-java/pull/123) support DOCKER_TLS_VERIFY to detect ssl
  * [#121](https://github.com/docker-java/docker-java/pull/121) Implemented support for commands: Exec-start, Exec-create 
  * [#120](https://github.com/docker-java/docker-java/pull/120) Command resource cleanup after command execution
  * [#118](https://github.com/docker-java/docker-java/pull/118) Use chunked encoding when passing the docker image 
