@@ -122,10 +122,10 @@ In your application, e.g.
 ##### System Environment
 
     export DOCKER_URL=http://localhost:2376
-    
-Note: we also auto-detect defaults. If you use `DOCKER_HOST` we use that value, and if `DOCKER_CERT_PATH` is set, we switch to SSL.
 
-##### File System  
+Note: we also auto-detect defaults. If you use `DOCKER_HOST` we use that value, and if `DOCKER_CERT_PATH` or `DOCKER_TLS_VERIFY=1` is set, we switch to SSL.
+
+##### File System
 
 In `$HOME/.docker.io.properties`
 
