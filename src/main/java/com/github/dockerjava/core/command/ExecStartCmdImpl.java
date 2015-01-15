@@ -49,7 +49,7 @@ public class ExecStartCmdImpl extends AbstrDockerCmd<ExecStartCmd, InputStream> 
 	@Override
 	public ExecStartCmd withTty(boolean tty) {
 		this.tty = tty;
-		return null;
+		return this;
 	}
 	
 	@Override
