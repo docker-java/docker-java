@@ -19,6 +19,7 @@ import java.lang.reflect.Method;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Test(groups = "integration")
 public class EventsCmdImplTest extends AbstractDockerClientTest {
@@ -67,8 +68,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         boolean zeroCount = countDownLatch.await(5, TimeUnit.SECONDS);
 
         executorService.shutdown();
-        
-        
+
         assertTrue(zeroCount, "Expected 4 events, [create, start, die, stop]");
     }
 
@@ -78,7 +78,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         TimeUnit.SECONDS.sleep(1);
 
         CountDownLatch countDownLatch = new CountDownLatch(KNOWN_NUM_EVENTS);
-        EventCallback eventCallback = new EventCallbackTest(countDownLatch);
+        EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
 
         EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withSince(getEpochTime());
         ExecutorService executorService = eventsCmd.exec();
@@ -87,6 +87,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 
         boolean zeroCount = countDownLatch.await(5, TimeUnit.SECONDS);
         executorService.shutdown();
+        eventCallback.close();
         assertTrue(zeroCount, "Expected 4 events, [create, start, die, stop]");
     }
 
@@ -105,9 +106,14 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 
     private class EventCallbackTest implements EventCallback {
         private final CountDownLatch countDownLatch;
+        private final AtomicBoolean isReceiving = new AtomicBoolean(true);
 
         public EventCallbackTest(CountDownLatch countDownLatch) {
             this.countDownLatch = countDownLatch;
+        }
+
+        public void close() {
+            isReceiving.set(false);
         }
 
         @Override
@@ -124,6 +130,11 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         @Override
         public void onCompletion(int numEvents) {
             LOG.info("Number of events received: {}", numEvents);
+        }
+
+        @Override
+        public boolean isReceiving() {
+            return isReceiving.get();
         }
     }
 }

@@ -33,6 +33,9 @@ public class DockerClientConfig implements Serializable {
     private static final String DOCKER_IO_ENABLE_LOGGING_FILTER_PROPERTY = "docker.io.enableLoggingFilter";
     private static final String DOCKER_IO_DOCKER_CERT_PATH_PROPERTY = "docker.io.dockerCertPath";
     private static final String DOCKER_IO_DOCKER_CFG_PATH_PROPERTY = "docker.io.dockerCfgPath";
+    // connection pooling properties
+    private static final String DOCKER_IO_MAX_PER_ROUTE_PROPERTY = "docker.io.perRouteConnections";
+    private static final String DOCKER_IO_MAX_TOTAL_PROPERTY = "docker.io.totalConnections";
     /**
      * A map from the environment name to the interval name.
      */
@@ -49,13 +52,18 @@ public class DockerClientConfig implements Serializable {
             .put("DOCKER_CFG_PATH", DOCKER_IO_DOCKER_CFG_PATH_PROPERTY)
             .build();
     private static final String DOCKER_IO_PROPERTIES_PROPERTY = "docker.io.properties";
-    private final URI uri;
+    private URI uri;
     private final String version, username, password, email, serverAddress, dockerCfgPath;
     private final Integer readTimeout;
     private final boolean loggingFilterEnabled;
     private final SSLConfig sslConfig;
+    
+    private final int maxTotalConnections;
+    private final int maxPerRouteConnections;
 
-    DockerClientConfig(URI uri, String version, String username, String password, String email, String serverAddress, String dockerCfgPath, Integer readTimeout, boolean loggingFilterEnabled, SSLConfig sslConfig) {
+    DockerClientConfig(URI uri, String version, String username, String password, String email, String serverAddress,
+                       String dockerCfgPath, Integer readTimeout, boolean loggingFilterEnabled, SSLConfig sslConfig,
+                       int maxTotalConns, int maxPerRouteConns) {
         this.uri = uri;
         this.version = version;
         this.username = username;
@@ -66,6 +74,8 @@ public class DockerClientConfig implements Serializable {
         this.readTimeout = readTimeout;
         this.loggingFilterEnabled = loggingFilterEnabled;
         this.sslConfig = sslConfig;
+        this.maxTotalConnections = maxTotalConns;
+        this.maxPerRouteConnections = maxPerRouteConns;
     }
 
     private static Properties loadIncludedDockerProperties(Properties systemProperties) {
@@ -193,6 +203,10 @@ public class DockerClientConfig implements Serializable {
     public URI getUri() {
         return uri;
     }
+
+    public void setUri(URI uri) {
+		this.uri = uri;
+	}
 
     public String getVersion() {
         return version;
@@ -329,7 +343,7 @@ public class DockerClientConfig implements Serializable {
     public static class DockerClientConfigBuilder {
         private URI uri;
         private String version, username, password, email, serverAddress, dockerCfgPath;
-        private Integer readTimeout;
+        private Integer readTimeout, maxTotalConnections, maxPerRouteConnections;
         private boolean loggingFilterEnabled;
         private SSLConfig sslConfig;
 
@@ -349,7 +363,10 @@ public class DockerClientConfig implements Serializable {
                     .withReadTimeout(Integer.valueOf(p.getProperty(DOCKER_IO_READ_TIMEOUT_PROPERTY, "0")))
                     .withLoggingFilter(Boolean.valueOf(p.getProperty(DOCKER_IO_ENABLE_LOGGING_FILTER_PROPERTY, "true")))
                     .withDockerCertPath(p.getProperty(DOCKER_IO_DOCKER_CERT_PATH_PROPERTY))
-                    .withDockerCfgPath(p.getProperty(DOCKER_IO_DOCKER_CFG_PATH_PROPERTY));
+                    .withDockerCfgPath(p.getProperty(DOCKER_IO_DOCKER_CFG_PATH_PROPERTY))
+                    .withMaxPerRouteConnections(Integer.valueOf(p.getProperty(DOCKER_IO_MAX_PER_ROUTE_PROPERTY, "2")))
+                    .withMaxTotalConnections(Integer.valueOf(p.getProperty(DOCKER_IO_MAX_TOTAL_PROPERTY, "20")))
+                    ;
         }
 
         public final DockerClientConfigBuilder withUri(String uri) {
@@ -387,6 +404,16 @@ public class DockerClientConfig implements Serializable {
             this.readTimeout = readTimeout;
             return this;
         }
+        
+        public final DockerClientConfigBuilder withMaxTotalConnections(Integer maxTotalConnections) {
+            this.maxTotalConnections = maxTotalConnections;
+            return this;
+        }
+        
+        public final DockerClientConfigBuilder withMaxPerRouteConnections(Integer maxPerRouteConnections) {
+            this.maxPerRouteConnections = maxPerRouteConnections;
+            return this;
+        }
 
         public final DockerClientConfigBuilder withLoggingFilter(boolean loggingFilterEnabled) {
             this.loggingFilterEnabled = loggingFilterEnabled;
@@ -420,8 +447,18 @@ public class DockerClientConfig implements Serializable {
                     dockerCfgPath,
                     readTimeout,
                     loggingFilterEnabled,
-                    sslConfig
+                    sslConfig,
+                    maxTotalConnections,
+                    maxPerRouteConnections
             );
         }
+    }
+
+    public int getMaxTotalConnections() {
+      return maxTotalConnections;
+    }
+
+    public int getMaxPerRoutConnections() {
+      return maxPerRouteConnections;
     }
 }

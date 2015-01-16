@@ -8,7 +8,14 @@ import com.github.dockerjava.jaxrs.util.JsonClientFilter;
 import com.github.dockerjava.jaxrs.util.ResponseStatusExceptionFilter;
 import com.github.dockerjava.jaxrs.util.SelectiveLoggingFilter;
 import com.google.common.base.Preconditions;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.glassfish.jersey.CommonProperties;
+import org.glassfish.jersey.apache.connector.ApacheClientProperties;
+import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 
@@ -17,6 +24,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import java.io.IOException;
+import java.net.URI;
 import java.util.logging.Logger;
 
 public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
@@ -30,6 +38,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         Preconditions.checkNotNull(dockerClientConfig, "config was not specified");
 
         ClientConfig clientConfig = new ClientConfig();
+        clientConfig.connectorProvider(new ApacheConnectorProvider());
         clientConfig.property(CommonProperties.FEATURE_AUTO_DISCOVERY_DISABLE, true);
 
         clientConfig.register(ResponseStatusExceptionFilter.class);
@@ -45,20 +54,31 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
             clientConfig.property(ClientProperties.READ_TIMEOUT, readTimeout);
         }
 
-        ClientBuilder clientBuilder = ClientBuilder.newBuilder().withConfig(clientConfig);
+        URI originalUri = dockerClientConfig.getUri();
 
+        SSLContext sslContext;
         try {
-            SSLContext ssl = dockerClientConfig.getSslConfig().getSSLContext();
-
-            if (ssl != null)
-                clientBuilder.sslContext(ssl);
+            sslContext = dockerClientConfig.getSslConfig().getSSLContext();
         } catch(Exception ex) {
             throw new DockerClientException("Error in SSL Configuration", ex);
         }
 
+        PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(getSchemeRegistry(originalUri, sslContext));
+        connManager.setMaxTotal(dockerClientConfig.getMaxTotalConnections());
+        connManager.setDefaultMaxPerRoute(dockerClientConfig.getMaxPerRoutConnections());
+        clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER, connManager);
+
+        ClientBuilder clientBuilder = ClientBuilder.newBuilder().withConfig(clientConfig);
+
+        if (sslContext != null) {
+            clientBuilder.sslContext(sslContext);
+        }
 
         client = clientBuilder.build();
 
+        if (originalUri.getScheme().equals("unix")) {
+            dockerClientConfig.setUri(UnixConnectionSocketFactory.sanitizeUri(originalUri));
+        }
         WebTarget webResource = client.target(dockerClientConfig.getUri());
 
         if (dockerClientConfig.getVersion() == null || dockerClientConfig.getVersion().isEmpty()) {
@@ -66,8 +86,17 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         } else {
             baseResource = webResource.path("v" + dockerClientConfig.getVersion());
         }
-
     }
+
+    private org.apache.http.config.Registry<ConnectionSocketFactory> getSchemeRegistry(final URI originalUri, SSLContext sslContext) {
+      RegistryBuilder<ConnectionSocketFactory> registryBuilder = RegistryBuilder.create();
+      registryBuilder.register("http", PlainConnectionSocketFactory.getSocketFactory());
+      if (sslContext != null) {
+        registryBuilder.register("https", new SSLConnectionSocketFactory(sslContext));
+      }
+      registryBuilder.register("unix", new UnixConnectionSocketFactory(originalUri));
+      return registryBuilder.build();
+      }
 
     protected WebTarget getBaseResource() {
         Preconditions.checkNotNull(baseResource, "Factory not initialized. You probably forgot to call init()!");

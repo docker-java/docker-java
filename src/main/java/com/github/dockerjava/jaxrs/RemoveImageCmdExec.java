@@ -23,7 +23,7 @@ public class RemoveImageCmdExec extends AbstrDockerCmdExec<RemoveImageCmd, Void>
 				.queryParam("noprune", command.hasNoPruneEnabled() ? "1" : "0");
 
 		LOGGER.trace("DELETE: {}", webResource);
-		webResource.request().delete(Response.class);
+		webResource.request().delete().close();
 		
 		return null;
 	}

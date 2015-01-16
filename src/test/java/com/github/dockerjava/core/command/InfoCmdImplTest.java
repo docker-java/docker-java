@@ -45,6 +45,7 @@ public class InfoCmdImplTest extends AbstractDockerClientTest {
 	public void info() throws DockerException {
         // Make sure that there is at least one container for the assertion
         // TODO extract this into a shared method
+    if (dockerClient.listContainersCmd().withShowAll(true).exec().size() == 0) {
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
                 .withName("docker-java-itest-info")
                 .withCmd("touch", "/test")
@@ -54,8 +55,9 @@ public class InfoCmdImplTest extends AbstractDockerClientTest {
         assertThat(container.getId(), not(isEmptyOrNullString()));
 
         dockerClient.startContainerCmd(container.getId()).exec();
+    }
 
-        Info dockerInfo = dockerClient.infoCmd().exec();
+		Info dockerInfo = dockerClient.infoCmd().exec();
 		LOG.info(dockerInfo.toString());
 
 		assertTrue(dockerInfo.toString().contains("containers"));
@@ -68,6 +70,4 @@ public class InfoCmdImplTest extends AbstractDockerClientTest {
 		assertTrue(dockerInfo.getNGoroutines() > 0);
 		assertTrue(dockerInfo.isMemoryLimit());
 	}
-
-
 }

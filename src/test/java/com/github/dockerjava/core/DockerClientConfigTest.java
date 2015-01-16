@@ -16,7 +16,7 @@ public class DockerClientConfigTest {
     public static final DockerClientConfig EXAMPLE_CONFIG = newExampleConfig();
 
     private static DockerClientConfig newExampleConfig() {
-        return new DockerClientConfig(URI.create("http://foo"), "bar", "baz", "qux", "blam", "wham", "flam", 877, false, new LocalDirectorySSLConfig("flim"));
+        return new DockerClientConfig(URI.create("http://foo"), "bar", "baz", "qux", "blam", "wham", "flam", 877, false, new LocalDirectorySSLConfig("flim"), 20, 2);
     }
 
     @Test
@@ -36,6 +36,8 @@ public class DockerClientConfigTest {
         // given docker host in env
         Map<String, String> env = new HashMap<String, String>();
         env.put("DOCKER_HOST", "tcp://baz:8768");
+        // and it looks to be SSL disabled
+        env.remove("DOCKER_CERT_PATH");
 
         // when you build a config
         DockerClientConfig config = buildConfig(env, new Properties());

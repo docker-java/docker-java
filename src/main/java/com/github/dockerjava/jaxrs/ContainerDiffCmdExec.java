@@ -26,7 +26,8 @@ public class ContainerDiffCmdExec extends AbstrDockerCmdExec<ContainerDiffCmd, L
 		WebTarget webResource = getBaseResource().path("/containers/{id}/changes").resolveTemplate("id", command.getContainerId());
 		
 		LOGGER.trace("GET: {}", webResource);
-		return webResource.request().accept(MediaType.APPLICATION_JSON).get(new GenericType<List<ChangeLog>>() {
+		return webResource.request().accept(MediaType.APPLICATION_JSON)
+				.get(new GenericType<List<ChangeLog>>() {
         });
 	}
 

@@ -1,9 +1,6 @@
 package com.github.dockerjava.core;
 
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
+import java.security.*;
 
 import javax.net.ssl.SSLContext;
 
