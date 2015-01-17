@@ -60,7 +60,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         String endTime = getEpochTime();
 
         CountDownLatch countDownLatch = new CountDownLatch(expectedEvents);
-        EventCallback eventCallback = new EventCallbackTest(countDownLatch);
+        EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
 
         EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withSince(startTime).withUntil(endTime);
         ExecutorService executorService = eventsCmd.exec();
@@ -68,6 +68,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         boolean zeroCount = countDownLatch.await(5, TimeUnit.SECONDS);
 
         executorService.shutdown();
+        eventCallback.close();
 
         assertTrue(zeroCount, "Expected 4 events, [create, start, die, stop]");
     }
