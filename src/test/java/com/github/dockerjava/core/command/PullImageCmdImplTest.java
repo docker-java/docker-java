@@ -116,7 +116,7 @@ public class PullImageCmdImplTest extends AbstractDockerClientTest {
 		try {
 			dockerClient.pullImageCmd("non-existing/foo").exec();
 			fail("expected InternalServerErrorException");
-		} catch (InternalServerErrorException e) {
+		} catch (InternalServerErrorException ignored) {
 		}
 		
 	}
