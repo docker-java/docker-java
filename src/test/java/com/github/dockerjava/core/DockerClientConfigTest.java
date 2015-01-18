@@ -84,7 +84,9 @@ public class DockerClientConfigTest {
         // given docker host in env
         Map<String, String> env = new HashMap<String, String>(System.getenv());
         env.put("DOCKER_HOST", "tcp://bar:8768");
-        // and it looks to be SSL enabled
+        // and it looks to be SSL disabled
+        env.remove("DOCKER_CERT_PATH");
+        // and it has an invalid TLS_VERIFY value
         env.put("DOCKER_TLS_VERIFY", "any value different from '1'");
 
         // when you build a config
@@ -92,6 +94,24 @@ public class DockerClientConfigTest {
 
         // then the URL is that value with "tcp" changed to "https"
         assertEquals(config.getUri(), URI.create("http://bar:8768"));
+    }
+
+    @Test
+    public void environmentDockerHostWithInvalidTlsVerifyButWithCertPath() throws Exception {
+
+        // given docker host in env
+        Map<String, String> env = new HashMap<String, String>(System.getenv());
+        env.put("DOCKER_HOST", "tcp://bar:8768");
+        // and it looks to be SSL enabled
+        env.put("DOCKER_CERT_PATH", "any value");
+        // and it has an invalid TLS_VERIFY value
+        env.put("DOCKER_TLS_VERIFY", "any value different from '1'");
+
+        // when you build a config
+        DockerClientConfig config = buildConfig(env, new Properties());
+
+        // then the URL is that value with "tcp" changed to "https"
+        assertEquals(config.getUri(), URI.create("https://bar:8768"));
     }
 
     @Test
