@@ -125,7 +125,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
 	@Override
 	public PullImageCmd pullImageCmd(String repository) {
 		return new PullImageCmdImpl(getDockerCmdExecFactory()
-				.createPullImageCmdExec(), repository).withAuthConfig(dockerClientConfig.effectiveAuthConfig(repository));
+				.createPullImageCmdExec(), dockerClientConfig.effectiveAuthConfig(repository), repository);
 	}
 
 	@Override

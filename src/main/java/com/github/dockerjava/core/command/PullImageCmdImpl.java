@@ -1,6 +1,7 @@
 package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.command.PullImageCmd;
+import com.github.dockerjava.api.model.AuthConfig;
 import com.google.common.base.Preconditions;
 
 import java.io.InputStream;
@@ -14,8 +15,8 @@ public class PullImageCmdImpl extends AbstrAuthCfgDockerCmd<PullImageCmd, InputS
 
     private String repository, tag, registry;
 
-	public PullImageCmdImpl(PullImageCmd.Exec exec, String repository) {
-		super(exec);
+	public PullImageCmdImpl(PullImageCmd.Exec exec, AuthConfig authConfig, String repository) {
+		super(exec, authConfig);
 		withRepository(repository);
 	}
 
