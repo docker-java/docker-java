@@ -12,10 +12,9 @@ public class ExecStartCmdImpl extends AbstrDockerCmd<ExecStartCmd, InputStream> 
 
     private boolean detach, tty;
 
-    public ExecStartCmdImpl(ExecStartCmd.Exec exec, String containerId) {
+    public ExecStartCmdImpl(ExecStartCmd.Exec exec, String execId) {
         super(exec);
-        Preconditions.checkNotNull(containerId, "containerId was not specified");
-        this.execId = containerId;
+        withExecId(execId);
     }
 
     @Override
