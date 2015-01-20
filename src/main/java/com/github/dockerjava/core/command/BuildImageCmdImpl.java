@@ -31,7 +31,8 @@ import com.google.common.base.Preconditions;
  * Build an image from Dockerfile.
  * 
  */
-public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, InputStream> implements BuildImageCmd {
+public class BuildImageCmdImpl extends
+		AbstrDockerCmd<BuildImageCmd, InputStream> implements BuildImageCmd {
 
 	private static final Pattern ADD_OR_COPY_PATTERN = Pattern
 			.compile("^(ADD|COPY)\\s+(.*)\\s+(.*)$");
@@ -62,8 +63,8 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, InputStream
 		super(exec);
 		Preconditions.checkNotNull(tarInputStream, "tarInputStream is null");
 		withTarInputStream(tarInputStream);
-	}	
-	
+	}
+
 	@Override
 	public InputStream getTarInputStream() {
 		return tarInputStream;
@@ -75,7 +76,7 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, InputStream
 		this.tarInputStream = tarInputStream;
 		return this;
 	}
-	
+
 	@Override
 	public BuildImageCmdImpl withTag(String tag) {
 		Preconditions.checkNotNull(tag, "Tag is null");
@@ -113,7 +114,7 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, InputStream
 		this.noCache = noCache;
 		return this;
 	}
-	
+
 	@Override
 	public BuildImageCmdImpl withRemove() {
 		return withRemove(true);
@@ -124,7 +125,7 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, InputStream
 		this.remove = rm;
 		return this;
 	}
-	
+
 	@Override
 	public BuildImageCmdImpl withQuiet() {
 		return withQuiet(true);
@@ -142,7 +143,7 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, InputStream
 		if (tarFile != null) {
 			FileUtils.deleteQuietly(tarFile);
 		}
-		
+
 		tarInputStream.close();
 	}
 
@@ -152,8 +153,7 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, InputStream
 				.append(tag != null ? "-t " + tag + " " : "")
 				.append(noCache ? "--nocache=true " : "")
 				.append(quiet ? "--quiet=true " : "")
-				.append(!remove ? "--rm=false " : "")
-				.toString();
+				.append(!remove ? "--rm=false " : "").toString();
 	}
 
 	protected File buildDockerFolderTar(File dockerFolder) {
@@ -182,8 +182,9 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, InputStream
 			File dockerIgnoreFile = new File(dockerFolder, ".dockerignore");
 			if (dockerIgnoreFile.exists()) {
 				int lineNumber = 0;
-				List<String> dockerIgnoreFileContent = FileUtils.readLines(dockerIgnoreFile);
-				for (String pattern: dockerIgnoreFileContent) {
+				List<String> dockerIgnoreFileContent = FileUtils
+						.readLines(dockerIgnoreFile);
+				for (String pattern : dockerIgnoreFileContent) {
 					lineNumber++;
 					pattern = pattern.trim();
 					if (pattern.isEmpty()) {
@@ -191,14 +192,20 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, InputStream
 					}
 					pattern = FilenameUtils.normalize(pattern);
 					try {
-						// validate pattern and make sure we aren't excluding Dockerfile
+						// validate pattern and make sure we aren't excluding
+						// Dockerfile
 						if (GoLangFileMatch.match(pattern, "Dockerfile")) {
 							throw new DockerClientException(
-									String.format("Dockerfile is excluded by pattern '%s' on line %s in .dockerignore file", pattern, lineNumber));
+									String.format(
+											"Dockerfile is excluded by pattern '%s' on line %s in .dockerignore file",
+											pattern, lineNumber));
 						}
 						ignores.add(pattern);
 					} catch (GoLangFileMatchException e) {
-						throw new DockerClientException(String.format("Invalid pattern '%s' on line %s in .dockerignore file", pattern, lineNumber));
+						throw new DockerClientException(
+								String.format(
+										"Invalid pattern '%s' on line %s in .dockerignore file",
+										pattern, lineNumber));
 					}
 				}
 			}
@@ -254,19 +261,26 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, InputStream
 									src, dockerFolder));
 						}
 
-						if (!src.exists()) {
-							throw new DockerClientException(String.format(
-									"Source file %s doesn't exist", src));
-						}
+						// if (!src.exists()) {
+						// throw new DockerClientException(String.format(
+						// "Source file %s doesn't exist", src));
+						// }
 						if (src.isDirectory()) {
 							Collection<File> files = FileUtils.listFiles(src,
-									new GoLangMatchFileFilter(src, ignores), TrueFileFilter.INSTANCE);
+									new GoLangMatchFileFilter(src, ignores),
+									TrueFileFilter.INSTANCE);
 							filesToAdd.addAll(files);
-						} else if (!GoLangFileMatch.match(ignores, CompressArchiveUtil.relativize(dockerFolder, src))){
+						} else if (!src.exists()) {
+							filesToAdd.addAll(resolveWildcards(src, ignores));
+						} else if (!GoLangFileMatch.match(ignores,
+								CompressArchiveUtil.relativize(dockerFolder,
+										src))) {
 							filesToAdd.add(src);
 						} else {
-							throw new DockerClientException(String.format(
-									"Source file %s is excluded by .dockerignore file", src));
+							throw new DockerClientException(
+									String.format(
+											"Source file %s is excluded by .dockerignore file",
+											src));
 						}
 					}
 				}
@@ -279,6 +293,27 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, InputStream
 			throw new DockerClientException(
 					"Error occurred while preparing Docker context folder.", ex);
 		}
+	}
+
+	private Collection<File> resolveWildcards(File file, List<String> ignores) {
+		List<File> filesToAdd = new ArrayList<File>();
+
+		File parent = file.getParentFile();
+		if (parent != null) {
+			if (parent.isDirectory()) {
+				Collection<File> files = FileUtils.listFiles(parent,
+						new GoLangMatchFileFilter(parent, ignores),
+						TrueFileFilter.INSTANCE);
+				filesToAdd.addAll(files);
+			} else {
+				filesToAdd.addAll(resolveWildcards(parent, ignores));
+			}
+		} else {
+			throw new DockerClientException(String.format(
+					"Source file %s doesn't exist", file));
+		}
+
+		return filesToAdd;
 	}
 
 	private String filterForEnvironmentVars(String extractedResource,
