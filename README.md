@@ -59,7 +59,7 @@ Run build without integration tests:
     <dependency>
           <groupId>com.github.docker-java</groupId>
           <artifactId>docker-java</artifactId>
-          <version>0.10.4</version>
+          <version>0.10.5</version>
     </dependency>
 
 ### Latest SNAPSHOT version
@@ -69,7 +69,7 @@ You can find the latest SNAPSHOT version including javadoc and source files on [
     <dependency>
           <groupId>com.github.docker-java</groupId>
           <artifactId>docker-java</artifactId>
-          <version>0.10.5-SNAPSHOT</version>
+          <version>0.10.6-SNAPSHOT</version>
     </dependency>
 
 ## Documentation
