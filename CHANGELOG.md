@@ -3,6 +3,7 @@ Change Log
 
 docker-java-0.10.6-SNAPSHOT
 ---
+ * [#128](https://github.com/docker-java/docker-java/pull/128) Allow unauthorized pullImageCmd
 
 docker-java-0.10.5
 ---
