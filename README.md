@@ -3,7 +3,7 @@
 
 Java API client for [Docker](http://docs.docker.io/ "Docker")
 
-Supports a subset of the Docker Client API v1.15, Docker Server version 1.3.2
+Supports a subset of the Docker Client API v1.16, Docker Server version 1.4.1
 
 <b>The current implementation is based on Jersey 2.x and therefore classpath incompatible with older Jersey 1.x dependent libraries!</b>
 
@@ -13,7 +13,7 @@ Developer forum for [docker-java](https://groups.google.com/forum/?hl=de#!forum/
 
 ###### Prerequisites:
 
-* Java 1.6
+* Java 1.7
 * Maven 3.0.5
 * Docker daemon running
 
@@ -81,7 +81,7 @@ For code examples, please look at the [Wiki](https://github.com/docker-java/dock
 There are a couple of configuration items, all of which have sensible defaults:
 
 * `url` The Docker URL, e.g. `https://localhost:2376`.
-* `version` The API version, e.g. `1.15`.
+* `version` The API version, e.g. `1.16`.
 * `username` Your registry username (required to push containers).
 * `password` Your registry password.
 * `email` Your registry email.
@@ -94,7 +94,7 @@ There are three ways to configure, in descending order of precedence:
 In your application, e.g.
 
     DockerClientConfig config = DockerClientConfig.createDefaultConfigBuilder()
-        .withVersion("1.15")
+        .withVersion("1.16")
         .withUri("https://my-docker-host.tld:2376")
         .withUsername("dockeruser")
         .withPassword("ilovedocker")
@@ -107,7 +107,7 @@ In your application, e.g.
 #### Properties
 
     docker.io.url=https://localhost:2376
-    docker.io.version=1.15
+    docker.io.version=1.16
     docker.io.username=dockeruser
     docker.io.password=ilovedocker
     docker.io.email=dockeruser@github.com
