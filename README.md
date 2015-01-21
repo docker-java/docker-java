@@ -13,7 +13,7 @@ Developer forum for [docker-java](https://groups.google.com/forum/?hl=de#!forum/
 
 ###### Prerequisites:
 
-* Java 1.6
+* Java 1.7
 * Maven 3.0.5
 * Docker daemon running
 
@@ -59,7 +59,7 @@ Run build without integration tests:
     <dependency>
           <groupId>com.github.docker-java</groupId>
           <artifactId>docker-java</artifactId>
-          <version>0.10.5</version>
+          <version>0.10.4</version>
     </dependency>
 
 ### Latest SNAPSHOT version
@@ -69,7 +69,7 @@ You can find the latest SNAPSHOT version including javadoc and source files on [
     <dependency>
           <groupId>com.github.docker-java</groupId>
           <artifactId>docker-java</artifactId>
-          <version>0.10.6-SNAPSHOT</version>
+          <version>0.10.5-SNAPSHOT</version>
     </dependency>
 
 ## Documentation
