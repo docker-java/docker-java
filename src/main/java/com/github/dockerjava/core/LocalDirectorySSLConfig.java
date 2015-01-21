@@ -1,18 +1,15 @@
 package com.github.dockerjava.core;
 
+import com.github.dockerjava.api.DockerClientException;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
-
-import com.github.dockerjava.api.DockerClientException;
-
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.glassfish.jersey.SslConfigurator;
 
+import javax.net.ssl.SSLContext;
 import java.io.Serializable;
 import java.security.KeyStore;
 import java.security.Security;
-
-import javax.net.ssl.SSLContext;
 
 /**
  * SSL Config from local files.
@@ -41,9 +38,6 @@ public class LocalDirectorySSLConfig implements SSLConfig, Serializable {
 
         Security.addProvider(new BouncyCastleProvider());
 
-        KeyStore keyStore = CertificateUtils.createKeyStore(dockerCertPath);
-        KeyStore trustStore = CertificateUtils.createTrustStore(dockerCertPath);
-
         // properties acrobatics not needed for java > 1.6
         String httpProtocols = System.getProperty("https.protocols");
         System.setProperty("https.protocols", "TLSv1");
@@ -52,9 +46,9 @@ public class LocalDirectorySSLConfig implements SSLConfig, Serializable {
           System.setProperty("https.protocols", httpProtocols);
         }
 
-        sslConfig.keyStore(keyStore);
+        sslConfig.keyStore(CertificateUtils.createKeyStore(dockerCertPath));
         sslConfig.keyStorePassword("docker");
-        sslConfig.trustStore(trustStore);
+        sslConfig.trustStore(CertificateUtils.createTrustStore(dockerCertPath));
 
         return sslConfig.createSSLContext();
 

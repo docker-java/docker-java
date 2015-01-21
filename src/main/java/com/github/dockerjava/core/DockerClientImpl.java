@@ -8,18 +8,15 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.DockerClientException;
 import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.model.AuthConfig;
-import com.github.dockerjava.core.NameParser.HostnameReposName;
-import com.github.dockerjava.core.NameParser.ReposTag;
 import com.github.dockerjava.core.command.*;
 import com.google.common.base.Preconditions;
 
 /**
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  * 
- * @see https://github.com/docker/docker/blob/master/api/client/commands.go
+ * @see "https://github.com/docker/docker/blob/master/api/client/commands.go"
  */
 public class DockerClientImpl implements Closeable, DockerClient {
 

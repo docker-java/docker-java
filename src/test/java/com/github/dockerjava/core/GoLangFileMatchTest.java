@@ -3,7 +3,6 @@
  */
 package com.github.dockerjava.core;
 
-import java.io.File;
 import java.io.IOException;
 
 import junit.framework.Assert;
@@ -19,7 +18,7 @@ public class GoLangFileMatchTest {
         String pattern = testCase.pattern;
         String s = testCase.s;
         if (GoLangFileMatch.IS_WINDOWS) {
-            if (pattern.indexOf('\\') > 0) {
+            if (pattern.indexOf('\\') >= 0) {
                 // no escape allowed on windows.
                 return;
             }

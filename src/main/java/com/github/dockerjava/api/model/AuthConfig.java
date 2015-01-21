@@ -8,7 +8,7 @@ public class AuthConfig {
     /**
      * For backwards compatibility. Make sure you update the properties if you change this.
      *
-     * @see /docker.io.properties
+     * @see "/docker.io.properties"
      */
     public static final String DEFAULT_SERVER_ADDRESS = "https://index.docker.io/v1/";
 

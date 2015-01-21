@@ -33,7 +33,6 @@ public abstract class AbstractDockerClientTest extends Assert {
 
 	public static final Logger LOG = LoggerFactory
 			.getLogger(AbstractDockerClientTest.class);
-    public static final String DOCKER_JAVA = "dockerjava";
 
     protected DockerClient dockerClient;
 
@@ -120,7 +119,8 @@ public abstract class AbstractDockerClientTest extends Assert {
 				logwriter.write(line + (itr.hasNext() ? "\n" : ""));
 				//LOG.info("line: "+line);
 			}
-
+			response.close();
+			
 			return logwriter.toString();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -150,7 +150,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 			ds = new DatagramSocket(port);
 			ds.setReuseAddress(true);
 			return true;
-		} catch (IOException e) {
+		} catch (IOException ignored) {
 		} finally {
 			if (ds != null) {
 				ds.close();

@@ -41,7 +41,7 @@ public class CopyFileFromContainerCmdImplTest extends AbstractDockerClientTest {
         // TODO extract this into a shared method
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
                 .withName("docker-java-itest-copyFromContainer")
-                .withCmd("touch", "/test")
+                .withCmd("touch", "/copyFromContainer")
                 .exec();
 
         LOG.info("Created container: {}", container);
@@ -49,16 +49,22 @@ public class CopyFileFromContainerCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        InputStream response = dockerClient.copyFileFromContainerCmd(container.getId(), "/test").exec();
-        assertTrue(response.available() > 0, "The file was not copied from the container.");
+        InputStream response = dockerClient.copyFileFromContainerCmd(container.getId(), "/copyFromContainer").exec();
+        boolean bytesAvailable = response.available() > 0;
+        assertTrue(bytesAvailable, "The file was not copied from the container.");
+
+        // read the stream fully. Otherwise, the underlying stream will not be closed.
+        String responseAsString = asString(response);
+        assertNotNull(responseAsString);
+        assertTrue(responseAsString.length() > 0);
     }
     
     @Test
     public void copyFromNonExistingContainer() throws Exception {
-    	try {
-    		dockerClient.copyFileFromContainerCmd("non-existing", "/test").exec();
-    		fail("expected NotFoundException");
-		} catch (NotFoundException e) {
-		}
+        try {
+            dockerClient.copyFileFromContainerCmd("non-existing", "/test").exec();
+            fail("expected NotFoundException");
+        } catch (NotFoundException ignored) {
+        }
     }
 }

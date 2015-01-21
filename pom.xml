@@ -44,8 +44,8 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<jdk.debug>true</jdk.debug>
 		<jdk.optimize>false</jdk.optimize>
-		<jdk.source>1.6</jdk.source>
-		<jdk.target>1.6</jdk.target>
+		<jdk.source>1.7</jdk.source>
+		<jdk.target>1.7</jdk.target>
 
 		<version.slf4j>1.6.1</version.slf4j>
 
@@ -64,6 +64,7 @@
 		<jnr.unixsocket.version>0.3</jnr.unixsocket.version>
 		<guava.version>18.0</guava.version>
 		<bouncycastle.version>1.51</bouncycastle.version>
+		<unix-socket-factory.version>2014-11-16T14-41-27</unix-socket-factory.version>
 
 		<!--test dependencies -->
 		<version.logback>1.0.1</version.logback>
@@ -94,9 +95,20 @@
 		<!-- <version>${jersey.version}</version> -->
 		<!-- </dependency> -->
 		<dependency>
+	 		<groupId>org.glassfish.jersey.connectors</groupId>
+			<artifactId>jersey-apache-connector</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.glassfish.jersey.core</groupId>
 			<artifactId>jersey-client</artifactId>
 			<version>${jersey.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>de.gesellix</groupId>
+			 <artifactId>unix-socket-factory</artifactId>
+		 	<version>${unix-socket-factory.version}</version>
 		</dependency>
 
 		<dependency>
