@@ -1,7 +1,10 @@
 Change Log
 ===
 
-docker-java-0.10.5-SNAPSHOT
+docker-java-0.10.6-SNAPSHOT
+---
+
+docker-java-0.10.5
 ---
  * [#125](https://github.com/docker-java/docker-java/pull/125) Unixsocket support
  * [#123](https://github.com/docker-java/docker-java/pull/123) support DOCKER_TLS_VERIFY to detect ssl
