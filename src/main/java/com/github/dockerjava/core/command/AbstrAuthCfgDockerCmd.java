@@ -15,6 +15,11 @@ import org.apache.commons.codec.binary.Base64;
 public abstract class AbstrAuthCfgDockerCmd<T extends DockerCmd<RES_T>, RES_T> extends
 		AbstrDockerCmd<T, RES_T> {
 
+	public AbstrAuthCfgDockerCmd(DockerCmdExec<T, RES_T> execution, AuthConfig authConfig) {
+		super(execution);
+		withOptionalAuthConfig(authConfig);
+	}
+
 	public AbstrAuthCfgDockerCmd(DockerCmdExec<T, RES_T> execution) {
 		super(execution);
 	}
@@ -25,9 +30,13 @@ public abstract class AbstrAuthCfgDockerCmd<T extends DockerCmd<RES_T>, RES_T> e
 		return authConfig;
 	}
 
-	@SuppressWarnings("unchecked")
 	public T withAuthConfig(AuthConfig authConfig) {
 		Preconditions.checkNotNull(authConfig, "authConfig was not specified");
+		return withOptionalAuthConfig(authConfig);
+	}
+
+	@SuppressWarnings("unchecked")
+	private T withOptionalAuthConfig(AuthConfig authConfig) {
 		this.authConfig = authConfig;
 		return (T)this;
 	}
