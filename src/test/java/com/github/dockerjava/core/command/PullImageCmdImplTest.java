@@ -49,7 +49,7 @@ public class PullImageCmdImplTest extends AbstractDockerClientTest {
 
     @Test
     public void nullAuthConfig() throws Exception {
-        PullImageCmdImpl pullImageCmd = new PullImageCmdImpl(NOP_EXEC, "");
+        PullImageCmdImpl pullImageCmd = new PullImageCmdImpl(NOP_EXEC, null, "");
         try {
             pullImageCmd.withAuthConfig(null);
             fail();
