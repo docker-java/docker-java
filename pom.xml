@@ -64,7 +64,7 @@
 		<jnr.unixsocket.version>0.3</jnr.unixsocket.version>
 		<guava.version>18.0</guava.version>
 		<bouncycastle.version>1.51</bouncycastle.version>
-		<unix-socket-factory.version>2014-11-16T14-41-27</unix-socket-factory.version>
+		<unix-socket-factory.version>2015-01-27T15-02-14</unix-socket-factory.version>
 
 		<!--test dependencies -->
 		<version.logback>1.0.1</version.logback>
