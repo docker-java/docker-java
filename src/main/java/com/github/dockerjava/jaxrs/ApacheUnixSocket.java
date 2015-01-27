@@ -22,10 +22,6 @@ package com.github.dockerjava.jaxrs;
 
 
 
-import com.google.common.collect.Queues;
-
-import org.newsclub.net.unix.AFUNIXSocket;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -34,7 +30,10 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import java.nio.channels.SocketChannel;
+import java.util.ArrayDeque;
 import java.util.Queue;
+
+import org.newsclub.net.unix.AFUNIXSocket;
 
 /**
  * Provides a socket that wraps an org.newsclub.net.unix.AFUNIXSocket and delays setting options
@@ -50,7 +49,7 @@ public class ApacheUnixSocket extends Socket {
 
   private final AFUNIXSocket inner;
 
-  private final Queue<SocketOptionSetter> optionsToSet = Queues.newArrayDeque();
+  private final Queue<SocketOptionSetter> optionsToSet = new ArrayDeque<SocketOptionSetter>();
 
   public ApacheUnixSocket() throws IOException {
     this.inner = AFUNIXSocket.newInstance();

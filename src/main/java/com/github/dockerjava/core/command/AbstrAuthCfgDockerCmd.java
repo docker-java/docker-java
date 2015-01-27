@@ -1,16 +1,15 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.Preconditions.checkNotNull;
+
 import java.io.IOException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.codec.binary.Base64;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.command.DockerCmd;
 import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.model.AuthConfig;
-
-import com.google.common.base.Preconditions;
-
-import org.apache.commons.codec.binary.Base64;
 
 public abstract class AbstrAuthCfgDockerCmd<T extends DockerCmd<RES_T>, RES_T> extends
 		AbstrDockerCmd<T, RES_T> {
@@ -31,7 +30,7 @@ public abstract class AbstrAuthCfgDockerCmd<T extends DockerCmd<RES_T>, RES_T> e
 	}
 
 	public T withAuthConfig(AuthConfig authConfig) {
-		Preconditions.checkNotNull(authConfig, "authConfig was not specified");
+		checkNotNull(authConfig, "authConfig was not specified");
 		return withOptionalAuthConfig(authConfig);
 	}
 

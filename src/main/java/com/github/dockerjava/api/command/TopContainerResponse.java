@@ -1,8 +1,9 @@
 package com.github.dockerjava.api.command;
 
+import static com.github.dockerjava.jaxrs.util.guava.Guava.join;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.Joiner;
 
 /**
  *
@@ -28,17 +29,15 @@ public class TopContainerResponse {
 
 	@Override
     public String toString() {
-		Joiner joiner = Joiner.on("; ").skipNulls();
-
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("[");
 		for(String[] fields: processes) {
-			buffer.append("[" + joiner.join(fields) + "]");
+			buffer.append("[" + join(fields, "; ", true) + "]");
 		}
 		buffer.append("]");
 
         return "TopContainerResponse{" +
-                "titles=" + joiner.join(titles) +
+                "titles=" + join(titles, "; ", true) +
                 ", processes=" + buffer.toString() +
                 '}';
     }

@@ -1,11 +1,13 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.Preconditions.checkArgument;
+import static com.github.dockerjava.Preconditions.checkNotNull;
+
 import java.util.List;
 
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.model.Container;
 
-import com.google.common.base.Preconditions;
 
 /**
  * List containers
@@ -68,21 +70,21 @@ public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, Lis
 
 	@Override
 	public ListContainersCmd withLimit(int limit) {
-		Preconditions.checkArgument(limit > 0, "limit must be greater 0");
+		checkArgument(limit > 0, "limit must be greater 0");
 		this.limit = limit;
 		return this;
 	}
 
 	@Override
 	public ListContainersCmd withSince(String since) {
-		Preconditions.checkNotNull(since, "since was not specified");
+		checkNotNull(since, "since was not specified");
 		this.sinceId = since;
 		return this;
 	}
 
 	@Override
 	public ListContainersCmd withBefore(String before) {
-		Preconditions.checkNotNull(before, "before was not specified");
+		checkNotNull(before, "before was not specified");
 		this.beforeId = before;
 		return this;
 	}

@@ -1,9 +1,9 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.Preconditions.checkNotNull;
+
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.RemoveImageCmd;
-
-import com.google.common.base.Preconditions;
 
 /**
  *
@@ -38,7 +38,7 @@ public class RemoveImageCmdImpl extends AbstrDockerCmd<RemoveImageCmd, Void> imp
 
     @Override
 	public RemoveImageCmd withImageId(String imageId) {
-		Preconditions.checkNotNull(imageId, "imageId was not specified");
+		checkNotNull(imageId, "imageId was not specified");
 		this.imageId = imageId;
 		return this;
 	}

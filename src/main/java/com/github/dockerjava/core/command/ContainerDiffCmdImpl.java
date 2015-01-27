@@ -1,5 +1,7 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.Preconditions.checkNotNull;
+
 import java.util.List;
 
 import com.github.dockerjava.api.DockerException;
@@ -7,8 +9,6 @@ import com.github.dockerjava.api.InternalServerErrorException;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.ContainerDiffCmd;
 import com.github.dockerjava.api.model.ChangeLog;
-
-import com.google.common.base.Preconditions;
 
 /**
  * Inspect changes on a container's filesystem
@@ -32,7 +32,7 @@ public class ContainerDiffCmdImpl extends AbstrDockerCmd<ContainerDiffCmd, List<
 
     @Override
 	public ContainerDiffCmdImpl withContainerId(String containerId) {
-		Preconditions.checkNotNull(containerId, "containerId was not specified");
+		checkNotNull(containerId, "containerId was not specified");
 		this.containerId = containerId;
 		return this;
 	}

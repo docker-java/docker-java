@@ -1,10 +1,11 @@
 package com.github.dockerjava.core.command;
 
-import com.github.dockerjava.api.command.PullImageCmd;
-import com.github.dockerjava.api.model.AuthConfig;
-import com.google.common.base.Preconditions;
+import static com.github.dockerjava.Preconditions.checkNotNull;
 
 import java.io.InputStream;
+
+import com.github.dockerjava.api.command.PullImageCmd;
+import com.github.dockerjava.api.model.AuthConfig;
 
 /**
  *
@@ -37,21 +38,21 @@ public class PullImageCmdImpl extends AbstrAuthCfgDockerCmd<PullImageCmd, InputS
 
     @Override
 	public PullImageCmd withRepository(String repository) {
-		Preconditions.checkNotNull(repository, "repository was not specified");
+		checkNotNull(repository, "repository was not specified");
 		this.repository = repository;
 		return this;
 	}
 
 	@Override
 	public PullImageCmd withTag(String tag) {
-		Preconditions.checkNotNull(tag, "tag was not specified");
+		checkNotNull(tag, "tag was not specified");
 		this.tag = tag;
 		return this;
 	}
 
 	@Override
 	public PullImageCmd withRegistry(String registry) {
-		Preconditions.checkNotNull(registry, "registry was not specified");
+		checkNotNull(registry, "registry was not specified");
 		this.registry = registry;
 		return this;
 	}

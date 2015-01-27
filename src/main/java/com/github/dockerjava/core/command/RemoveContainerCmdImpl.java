@@ -1,9 +1,9 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.Preconditions.checkNotNull;
+
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.RemoveContainerCmd;
-
-import com.google.common.base.Preconditions;
 
 /**
  * Remove a container.
@@ -39,7 +39,7 @@ public class RemoveContainerCmdImpl extends	AbstrDockerCmd<RemoveContainerCmd, V
 
 	@Override
 	public RemoveContainerCmd withContainerId(String containerId) {
-		Preconditions.checkNotNull(containerId, "containerId was not specified");
+		checkNotNull(containerId, "containerId was not specified");
 		this.containerId = containerId;
 		return this;
 	}

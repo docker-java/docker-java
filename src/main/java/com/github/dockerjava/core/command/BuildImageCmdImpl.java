@@ -1,5 +1,9 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.Preconditions.checkArgument;
+import static com.github.dockerjava.Preconditions.checkNotNull;
+import static com.github.dockerjava.Preconditions.checkState;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,7 +28,6 @@ import com.github.dockerjava.core.CompressArchiveUtil;
 import com.github.dockerjava.core.GoLangFileMatch;
 import com.github.dockerjava.core.GoLangFileMatchException;
 import com.github.dockerjava.core.GoLangMatchFileFilter;
-import com.google.common.base.Preconditions;
 
 /**
  * 
@@ -49,7 +52,7 @@ public class BuildImageCmdImpl extends
 
 	public BuildImageCmdImpl(BuildImageCmd.Exec exec, File dockerFolder) {
 		super(exec);
-		Preconditions.checkNotNull(dockerFolder, "dockerFolder is null");
+		checkNotNull(dockerFolder, "dockerFolder is null");
 		tarFile = buildDockerFolderTar(dockerFolder);
 		try {
 			withTarInputStream(FileUtils.openInputStream(tarFile));
@@ -61,7 +64,7 @@ public class BuildImageCmdImpl extends
 
 	public BuildImageCmdImpl(BuildImageCmd.Exec exec, InputStream tarInputStream) {
 		super(exec);
-		Preconditions.checkNotNull(tarInputStream, "tarInputStream is null");
+		checkNotNull(tarInputStream, "tarInputStream is null");
 		withTarInputStream(tarInputStream);
 	}
 
@@ -72,14 +75,14 @@ public class BuildImageCmdImpl extends
 
 	@Override
 	public BuildImageCmdImpl withTarInputStream(InputStream tarInputStream) {
-		Preconditions.checkNotNull(tarInputStream, "tarInputStream is null");
+		checkNotNull(tarInputStream, "tarInputStream is null");
 		this.tarInputStream = tarInputStream;
 		return this;
 	}
 
 	@Override
 	public BuildImageCmdImpl withTag(String tag) {
-		Preconditions.checkNotNull(tag, "Tag is null");
+		checkNotNull(tag, "Tag is null");
 		this.tag = tag;
 		return this;
 	}
@@ -157,11 +160,11 @@ public class BuildImageCmdImpl extends
 	}
 
 	protected File buildDockerFolderTar(File dockerFolder) {
-		Preconditions.checkArgument(dockerFolder.exists(),
+		checkArgument(dockerFolder.exists(),
 				"Path %s doesn't exist", dockerFolder);
-		Preconditions.checkArgument(dockerFolder.isDirectory(),
+		checkArgument(dockerFolder.isDirectory(),
 				"Folder %s doesn't exist", dockerFolder);
-		Preconditions.checkState(new File(dockerFolder, "Dockerfile").exists(),
+		checkState(new File(dockerFolder, "Dockerfile").exists(),
 				"Dockerfile doesn't exist in " + dockerFolder);
 
 		// ARCHIVE TAR

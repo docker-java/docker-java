@@ -1,10 +1,11 @@
 package com.github.dockerjava.api.model;
 
+import static com.github.dockerjava.Preconditions.checkNotNull;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.Preconditions;
 
 public class Device {
 
@@ -22,10 +23,10 @@ public class Device {
 
 	public Device(String cGroupPermissions, String pathInContainer,
 			String pathOnHost) {
-		Preconditions.checkNotNull(cGroupPermissions,
+		checkNotNull(cGroupPermissions,
 				"cGroupPermissions is null");
-		Preconditions.checkNotNull(pathInContainer, "pathInContainer is null");
-		Preconditions.checkNotNull(pathOnHost, "pathOnHost is null");
+		checkNotNull(pathInContainer, "pathInContainer is null");
+		checkNotNull(pathOnHost, "pathOnHost is null");
 		this.cGroupPermissions = cGroupPermissions;
 		this.pathInContainer = pathInContainer;
 		this.pathOnHost = pathOnHost;

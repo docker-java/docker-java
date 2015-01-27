@@ -1,10 +1,11 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.Preconditions.checkArgument;
+import static com.github.dockerjava.Preconditions.checkNotNull;
+
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.NotModifiedException;
 import com.github.dockerjava.api.command.StopContainerCmd;
-
-import com.google.common.base.Preconditions;
 
 /**
  * Stop a running container.
@@ -36,14 +37,14 @@ public class StopContainerCmdImpl extends AbstrDockerCmd<StopContainerCmd, Void>
 
     @Override
 	public StopContainerCmd withContainerId(String containerId) {
-		Preconditions.checkNotNull(containerId, "containerId was not specified");
+		checkNotNull(containerId, "containerId was not specified");
 		this.containerId = containerId;
 		return this;
 	}
 
 	@Override
 	public StopContainerCmd withTimeout(int timeout) {
-		Preconditions.checkArgument(timeout >= 0, "timeout must be greater or equal 0");
+		checkArgument(timeout >= 0, "timeout must be greater or equal 0");
 		this.timeout = timeout;
 		return this;
 	}

@@ -1,10 +1,10 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.Preconditions.checkNotNull;
+
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectContainerResponse;
-
-import com.google.common.base.Preconditions;
 
 /**
  * Inspect the details of a container.
@@ -25,7 +25,7 @@ public class InspectContainerCmdImpl extends AbstrDockerCmd<InspectContainerCmd,
 
     @Override
 	public InspectContainerCmd withContainerId(String containerId) {
-		Preconditions.checkNotNull(containerId, "containerId was not specified");
+		checkNotNull(containerId, "containerId was not specified");
 		this.containerId = containerId;
 		return this;
 	}

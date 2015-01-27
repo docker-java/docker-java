@@ -1,19 +1,21 @@
 package com.github.dockerjava.core;
 
-import com.github.dockerjava.api.DockerClientException;
-import com.github.dockerjava.api.model.AuthConfig;
-import com.github.dockerjava.core.NameParser.HostnameReposName;
-import com.github.dockerjava.core.NameParser.ReposTag;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
+import static com.github.dockerjava.Preconditions.checkNotNull;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+
+import com.github.dockerjava.api.DockerClientException;
+import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.core.NameParser.HostnameReposName;
+import com.github.dockerjava.core.NameParser.ReposTag;
 
 public class DockerClientConfig implements Serializable {
 
@@ -39,18 +41,23 @@ public class DockerClientConfig implements Serializable {
     /**
      * A map from the environment name to the interval name.
      */
-    private static final Map<String, String> ENV_NAME_TO_IO_NAME = ImmutableMap.<String, String>builder()
-            .put("DOCKER_URL", DOCKER_IO_URL_PROPERTY)
-            .put("DOCKER_VERSION", DOCKER_IO_VERSION_PROPERTY)
-            .put("DOCKER_USERNAME", DOCKER_IO_USERNAME_PROPERTY)
-            .put("DOCKER_PASSWORD", DOCKER_IO_PASSWORD_PROPERTY)
-            .put("DOCKER_EMAIL", DOCKER_IO_EMAIL_PROPERTY)
-            .put("DOCKER_SERVER_ADDRESS", DOCKER_IO_SERVER_ADDRESS_PROPERTY)
-            .put("DOCKER_READ_TIMEOUT", DOCKER_IO_READ_TIMEOUT_PROPERTY)
-            .put("DOCKER_LOGGING_FILTER_ENABLED", DOCKER_IO_ENABLE_LOGGING_FILTER_PROPERTY)
-            .put(DOCKER_CERT_PATH_PROPERTY, DOCKER_IO_DOCKER_CERT_PATH_PROPERTY)
-            .put("DOCKER_CFG_PATH", DOCKER_IO_DOCKER_CFG_PATH_PROPERTY)
-            .build();
+    // Immutable ish
+    private static final Map<String, String> ENV_NAME_TO_IO_NAME;
+    static {
+        Map<String, String> m = new HashMap<String, String>();
+        m.put("DOCKER_URL", DOCKER_IO_URL_PROPERTY);
+        m.put("DOCKER_VERSION", DOCKER_IO_VERSION_PROPERTY);
+        m.put("DOCKER_USERNAME", DOCKER_IO_USERNAME_PROPERTY);
+        m.put("DOCKER_PASSWORD", DOCKER_IO_PASSWORD_PROPERTY);
+        m.put("DOCKER_EMAIL", DOCKER_IO_EMAIL_PROPERTY);
+        m.put("DOCKER_SERVER_ADDRESS", DOCKER_IO_SERVER_ADDRESS_PROPERTY);
+        m.put("DOCKER_READ_TIMEOUT", DOCKER_IO_READ_TIMEOUT_PROPERTY);
+        m.put("DOCKER_LOGGING_FILTER_ENABLED", DOCKER_IO_ENABLE_LOGGING_FILTER_PROPERTY);
+        m.put(DOCKER_CERT_PATH_PROPERTY, DOCKER_IO_DOCKER_CERT_PATH_PROPERTY);
+        m.put("DOCKER_CFG_PATH", DOCKER_IO_DOCKER_CFG_PATH_PROPERTY);
+        ENV_NAME_TO_IO_NAME = Collections.unmodifiableMap(m);
+    }
+
     private static final String DOCKER_IO_PROPERTIES_PROPERTY = "docker.io.properties";
     private URI uri;
     private final String version, username, password, email, serverAddress, dockerCfgPath;
@@ -370,7 +377,7 @@ public class DockerClientConfig implements Serializable {
         }
 
         public final DockerClientConfigBuilder withUri(String uri) {
-            Preconditions.checkNotNull(uri, "uri was not specified");
+            checkNotNull(uri, "uri was not specified");
             this.uri = URI.create(uri);
             return this;
         }
