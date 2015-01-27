@@ -1,7 +1,5 @@
 package com.github.dockerjava.jaxrs;
 
-import static javax.ws.rs.client.Entity.entity;
-
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
@@ -27,7 +25,7 @@ public class WaitContainerCmdExec extends AbstrDockerCmdExec<WaitContainerCmd, I
 
 		LOGGER.trace("POST: {}", webResource);
 		ObjectNode ObjectNode = webResource.request().accept(MediaType.APPLICATION_JSON)
-				.post(entity(null, MediaType.TEXT_PLAIN), ObjectNode.class);
+				.post(null, ObjectNode.class);
 		
         return ObjectNode.get("StatusCode").asInt();
 	}

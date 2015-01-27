@@ -10,7 +10,6 @@ import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
-import org.glassfish.jersey.filter.LoggingFilter;
 
 /**
  * A version of the logging filter that will avoid trying to log entities which can cause

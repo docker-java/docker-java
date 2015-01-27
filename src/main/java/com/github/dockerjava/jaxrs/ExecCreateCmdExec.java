@@ -25,6 +25,9 @@ public class ExecCreateCmdExec extends AbstrDockerCmdExec<ExecCreateCmd, ExecCre
 
         LOGGER.trace("POST: {}", webResource);
 
-        return webResource.request().accept(MediaType.APPLICATION_JSON).post(entity(command, MediaType.APPLICATION_JSON), ExecCreateCmdResponse.class);
+		return webResource
+				.request()
+				.accept(MediaType.APPLICATION_JSON)
+				.post(entity(command, MediaType.APPLICATION_JSON), ExecCreateCmdResponse.class);
     }
 }
