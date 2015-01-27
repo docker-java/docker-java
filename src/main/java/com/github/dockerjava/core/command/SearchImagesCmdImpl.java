@@ -1,11 +1,11 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.Preconditions.checkNotNull;
+
 import java.util.List;
 
 import com.github.dockerjava.api.command.SearchImagesCmd;
 import com.github.dockerjava.api.model.SearchItem;
-
-import com.google.common.base.Preconditions;
 
 /**
  * Search images
@@ -29,7 +29,7 @@ public class SearchImagesCmdImpl extends AbstrDockerCmd<SearchImagesCmd, List<Se
 
     @Override
 	public SearchImagesCmd withTerm(String term) {
-		Preconditions.checkNotNull(term, "term was not specified");
+		checkNotNull(term, "term was not specified");
 		this.term = term;
 		return this;
 	}

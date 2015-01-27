@@ -1,11 +1,11 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.Preconditions.checkNotNull;
+
 import java.io.InputStream;
 
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.PushImageCmd;
-
-import com.google.common.base.Preconditions;
 
 /**
  * Push the latest image to the repository.
@@ -37,7 +37,7 @@ public class PushImageCmdImpl extends AbstrAuthCfgDockerCmd<PushImageCmd, InputS
 	 */
 	@Override
 	public PushImageCmd withName(String name) {
-		Preconditions.checkNotNull(name, "name was not specified");
+		checkNotNull(name, "name was not specified");
 		this.name = name;
 		return this;
 	}
@@ -47,7 +47,7 @@ public class PushImageCmdImpl extends AbstrAuthCfgDockerCmd<PushImageCmd, InputS
      */
     @Override
     public PushImageCmd withTag(String tag) {
-        Preconditions.checkNotNull(tag, "tag was not specified");
+        checkNotNull(tag, "tag was not specified");
         this.tag = tag;
         return this;
     }

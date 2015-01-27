@@ -1,11 +1,11 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.Preconditions.checkNotNull;
+
 import java.util.List;
 
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.model.Image;
-
-import com.google.common.base.Preconditions;
 
 /**
  * List images
@@ -41,7 +41,7 @@ public class ListImagesCmdImpl extends AbstrDockerCmd<ListImagesCmd, List<Image>
 
 	@Override
 	public ListImagesCmd withFilters(String filter) {
-		Preconditions.checkNotNull(filter, "filters have not been specified");
+		checkNotNull(filter, "filters have not been specified");
 		this.filters = filter;
 		return this;
 	}

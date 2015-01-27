@@ -1,10 +1,11 @@
 package com.github.dockerjava.api.model;
 
+import static com.github.dockerjava.Preconditions.checkNotNull;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.Preconditions;
 
 /**
  * Container restart policy
@@ -36,7 +37,7 @@ public class RestartPolicy {
 	}
 
 	private RestartPolicy(int maximumRetryCount, String name) {
-		Preconditions.checkNotNull(name, "name is null");
+		checkNotNull(name, "name is null");
 		this.maximumRetryCount = maximumRetryCount;
 		this.name = name;
 	}

@@ -1,10 +1,11 @@
 package com.github.dockerjava.core.command;
 
-import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.command.ExecStartCmd;
-import com.google.common.base.Preconditions;
+import static com.github.dockerjava.Preconditions.checkNotNull;
 
 import java.io.InputStream;
+
+import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.command.ExecStartCmd;
 
 public class ExecStartCmdImpl extends AbstrDockerCmd<ExecStartCmd, InputStream> implements ExecStartCmd {
 
@@ -24,7 +25,7 @@ public class ExecStartCmdImpl extends AbstrDockerCmd<ExecStartCmd, InputStream> 
     
     @Override
 	public ExecStartCmd withExecId(String execId) {
-    	Preconditions.checkNotNull(execId, "execId was not specified");
+    	checkNotNull(execId, "execId was not specified");
 		this.execId = execId;
 		return this;
 	}

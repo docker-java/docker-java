@@ -1,15 +1,15 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.Preconditions.checkNotNull;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CommitCmd;
 import com.github.dockerjava.api.model.ExposedPorts;
 import com.github.dockerjava.api.model.Volumes;
 
-import com.google.common.base.Preconditions;
 
 /**
  *
@@ -86,7 +86,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     @Override
 	public CommitCmdImpl withContainerId(String containerId) {
-    	Preconditions.checkNotNull(containerId, "containerId was not specified");
+        checkNotNull(containerId, "containerId was not specified");
 		this.containerId = containerId;
 		return this;
 	}
@@ -152,7 +152,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
 	@Override
 	public CommitCmdImpl withCmd(String... cmd) {
-		Preconditions.checkNotNull(cmd, "cmd was not specified");
+        checkNotNull(cmd, "cmd was not specified");
 		this.cmd = cmd;
 		return this;
 	}
@@ -165,28 +165,28 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
 	@Override
 	public CommitCmdImpl withAuthor(String author) {
-		Preconditions.checkNotNull(author, "author was not specified");
+        checkNotNull(author, "author was not specified");
 		this.author = author;
 		return this;
 	}
 
 	@Override
 	public CommitCmdImpl withMessage(String message) {
-		Preconditions.checkNotNull(message, "message was not specified");
+        checkNotNull(message, "message was not specified");
 		this.message = message;
 		return this;
 	}
 
 	@Override
 	public CommitCmdImpl withTag(String tag) {
-		Preconditions.checkNotNull(tag, "tag was not specified");
+        checkNotNull(tag, "tag was not specified");
 		this.tag = tag;
 		return this;
 	}
 
 	@Override
 	public CommitCmdImpl withRepository(String repository) {
-		Preconditions.checkNotNull(repository, "repository was not specified");
+        checkNotNull(repository, "repository was not specified");
 		this.repository = repository;
 		return this;
 	}
@@ -204,7 +204,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     @Override
 	public CommitCmdImpl withEnv(String... env) {
-    	Preconditions.checkNotNull(env, "env was not specified");
+        checkNotNull(env, "env was not specified");
         this.env = env;
         return this;
     }
@@ -216,7 +216,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     @Override
 	public CommitCmdImpl withExposedPorts(ExposedPorts exposedPorts) {
-    	Preconditions.checkNotNull(exposedPorts, "exposedPorts was not specified");
+        checkNotNull(exposedPorts, "exposedPorts was not specified");
         this.exposedPorts = exposedPorts;
         return this;
     }
@@ -228,7 +228,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     @Override
 	public CommitCmdImpl withHostname(String hostname) {
-    	Preconditions.checkNotNull(hostname, "hostname was not specified");
+        checkNotNull(hostname, "hostname was not specified");
         this.hostname = hostname;
         return this;
     }
@@ -240,7 +240,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     @Override
 	public CommitCmdImpl withMemory(Integer memory) {
-    	Preconditions.checkNotNull(memory, "memory was not specified");
+        checkNotNull(memory, "memory was not specified");
         this.memory = memory;
         return this;
     }
@@ -252,7 +252,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     @Override
 	public CommitCmdImpl withMemorySwap(Integer memorySwap) {
-    	Preconditions.checkNotNull(memorySwap, "memorySwap was not specified");
+        checkNotNull(memorySwap, "memorySwap was not specified");
         this.memorySwap = memorySwap;
         return this;
     }
@@ -264,7 +264,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     @Override
 	public CommitCmdImpl withOpenStdin(boolean openStdin) {
-    	Preconditions.checkNotNull(openStdin, "openStdin was not specified");
+    	checkNotNull(openStdin, "openStdin was not specified");
         this.openStdin = openStdin;
         return this;
     }
@@ -276,7 +276,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     @Override
 	public CommitCmdImpl withPortSpecs(String... portSpecs) {
-    	Preconditions.checkNotNull(portSpecs, "portSpecs was not specified");
+    	checkNotNull(portSpecs, "portSpecs was not specified");
         this.portSpecs = portSpecs;
         return this;
     }
@@ -320,7 +320,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     @Override
 	public CommitCmdImpl withUser(String user) {
-    	Preconditions.checkNotNull(user, "user was not specified");
+    	checkNotNull(user, "user was not specified");
         this.user = user;
         return this;
     }
@@ -332,7 +332,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     @Override
 	public CommitCmdImpl withVolumes(Volumes volumes) {
-    	Preconditions.checkNotNull(volumes, "volumes was not specified");
+    	checkNotNull(volumes, "volumes was not specified");
         this.volumes = volumes;
         return this;
     }
@@ -344,7 +344,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     @Override
 	public CommitCmdImpl withWorkingDir(String workingDir) {
-    	Preconditions.checkNotNull(workingDir, "workingDir was not specified");
+    	checkNotNull(workingDir, "workingDir was not specified");
         this.workingDir = workingDir;
         return this;
     }

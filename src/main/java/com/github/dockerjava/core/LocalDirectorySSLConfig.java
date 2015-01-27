@@ -1,15 +1,17 @@
 package com.github.dockerjava.core;
 
-import com.github.dockerjava.api.DockerClientException;
-import com.google.common.base.Objects;
-import com.google.common.base.Preconditions;
+import static com.github.dockerjava.Preconditions.checkNotNull;
+
+import java.io.Serializable;
+import java.security.Security;
+
+import javax.net.ssl.SSLContext;
+
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.glassfish.jersey.SslConfigurator;
 
-import javax.net.ssl.SSLContext;
-import java.io.Serializable;
-import java.security.KeyStore;
-import java.security.Security;
+import com.github.dockerjava.api.DockerClientException;
+
 
 /**
  * SSL Config from local files.
@@ -19,7 +21,7 @@ public class LocalDirectorySSLConfig implements SSLConfig, Serializable {
   private final String dockerCertPath;
 
   public LocalDirectorySSLConfig(String dockerCertPath) {
-    Preconditions.checkNotNull(dockerCertPath);
+    checkNotNull(dockerCertPath);
     this.dockerCertPath = dockerCertPath;
   }
 
@@ -88,8 +90,10 @@ public class LocalDirectorySSLConfig implements SSLConfig, Serializable {
 
   @Override
   public String toString() {
-    return Objects.toStringHelper(this)
-        .add("dockerCertPath", dockerCertPath)
+    return new StringBuilder()
+        .append(this.getClass().getSimpleName()).append("{")
+            .append("dockerCertPath=").append(dockerCertPath)
+        .append("}")
         .toString();
   }
 }

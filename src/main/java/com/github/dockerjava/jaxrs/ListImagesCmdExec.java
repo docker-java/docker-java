@@ -1,19 +1,18 @@
 package com.github.dockerjava.jaxrs;
 
+import static com.github.dockerjava.jaxrs.util.guava.Guava.urlPathSegmentEscaper;
+
 import java.util.List;
 
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 
-import com.google.common.net.UrlEscapers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.model.Image;
-
-import static com.google.common.net.UrlEscapers.urlPathSegmentEscaper;
 
 public class ListImagesCmdExec extends
 		AbstrDockerCmdExec<ListImagesCmd, List<Image>> implements

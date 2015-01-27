@@ -1,6 +1,7 @@
 package com.github.dockerjava.core.command;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static com.github.dockerjava.Preconditions.checkNotNull;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
@@ -20,7 +21,7 @@ import com.github.dockerjava.api.model.LxcConf;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.RestartPolicy;
-import com.google.common.base.Preconditions;
+
 
 /**
  * Start a container
@@ -158,7 +159,7 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	@Override
 	@JsonIgnore
 	public StartContainerCmd withBinds(Bind... binds) {
-		Preconditions.checkNotNull(binds, "binds was not specified");
+		checkNotNull(binds, "binds was not specified");
 		this.binds = new Binds(binds);
 		return this;
 	}
@@ -166,21 +167,21 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	@Override
 	@JsonIgnore
 	public StartContainerCmd withLinks(Link... links) {
-		Preconditions.checkNotNull(links, "links was not specified");
+		checkNotNull(links, "links was not specified");
 		this.links = new Links(links);
 		return this;
 	}
 
 	@Override
 	public StartContainerCmd withLxcConf(LxcConf... lxcConf) {
-		Preconditions.checkNotNull(lxcConf, "lxcConf was not specified");
+		checkNotNull(lxcConf, "lxcConf was not specified");
 		this.lxcConf = lxcConf;
 		return this;
 	}
 
 	@Override
 	public StartContainerCmd withPortBindings(Ports portBindings) {
-		Preconditions.checkNotNull(portBindings,
+		checkNotNull(portBindings,
 				"portBindings was not specified");
 		this.portBindings = portBindings;
 		return this;
@@ -188,7 +189,7 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 
 	@Override
 	public StartContainerCmd withPortBindings(PortBinding... portBindings) {
-		Preconditions.checkNotNull(portBindings, "portBindings was not specified");
+		checkNotNull(portBindings, "portBindings was not specified");
 		if (this.portBindings == null) {
 			this.portBindings = new Ports();
 		}
@@ -210,65 +211,63 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 
 	@Override
 	public StartContainerCmd withDns(String... dns) {
-		Preconditions.checkNotNull(dns, "dns was not specified");
+		checkNotNull(dns, "dns was not specified");
 		this.dns = dns;
 		return this;
 	}
 	
 	@Override
 	public StartContainerCmd withDnsSearch(String... dnsSearch) {
-		Preconditions.checkNotNull(dnsSearch, "dnsSearch was not specified");
+		checkNotNull(dnsSearch, "dnsSearch was not specified");
 		this.dnsSearch = dnsSearch;
 		return this;
 	}
 
 	@Override
 	public StartContainerCmd withVolumesFrom(String volumesFrom) {
-		Preconditions
-				.checkNotNull(volumesFrom, "volumesFrom was not specified");
+		checkNotNull(volumesFrom, "volumesFrom was not specified");
 		this.volumesFrom = volumesFrom;
 		return this;
 	}
 
 	@Override
 	public StartContainerCmd withContainerId(String containerId) {
-		Preconditions
-				.checkNotNull(containerId, "containerId was not specified");
+	    checkNotNull(containerId, "containerId was not specified");
 		this.containerId = containerId;
 		return this;
     }
 
     @Override
 	public StartContainerCmd withNetworkMode(String networkMode) {
-        Preconditions.checkNotNull(networkMode, "networkMode was not specified");
+        checkNotNull(networkMode, "networkMode was not specified");
         this.networkMode = networkMode;
         return this;
     }
     
     @Override
 	public StartContainerCmd withDevices(Device... devices) {
-		Preconditions.checkNotNull(devices, "devices was not specified");
+		checkNotNull(devices, "devices was not specified");
 		this.devices = devices;
 		return this;
 	}
     
     @Override
    	public StartContainerCmd withRestartPolicy(RestartPolicy restartPolicy) {
-   		Preconditions.checkNotNull(restartPolicy, "restartPolicy was not specified");
+   		checkNotNull(restartPolicy, "restartPolicy was not specified");
    		this.restartPolicy = restartPolicy;
    		return this;
    	}
     
     @Override
 	public StartContainerCmd withCapAdd(Capability... capAdd) {
-		Preconditions.checkNotNull(capAdd, "capAdd was not specified");
+		checkNotNull(capAdd, "capAdd was not specified");
 		this.capAdd = capAdd;
 		return this;
 	}
     
     @Override
 	public StartContainerCmd withCapDrop(Capability... capDrop) {
-		Preconditions.checkNotNull(capDrop, "capDrop was not specified");
+		checkNotNull(capDrop, "capDrop was not specified");
 		this.capDrop = capDrop;
 		return this;
 	}

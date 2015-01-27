@@ -1,11 +1,11 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.Preconditions.checkNotNull;
+
 import java.io.InputStream;
 
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.LogContainerCmd;
-
-import com.google.common.base.Preconditions;
 
 /**
  * Get container logs
@@ -67,7 +67,7 @@ public class LogContainerCmdImpl extends AbstrDockerCmd<LogContainerCmd, InputSt
 
     @Override
 	public LogContainerCmd withContainerId(String containerId) {
-		Preconditions.checkNotNull(containerId, "containerId was not specified");
+		checkNotNull(containerId, "containerId was not specified");
 		this.containerId = containerId;
 		return this;
 	}

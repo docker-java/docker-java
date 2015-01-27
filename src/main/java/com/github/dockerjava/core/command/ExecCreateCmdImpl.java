@@ -1,10 +1,11 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.Preconditions.checkNotNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.ExecCreateCmd;
 import com.github.dockerjava.api.command.ExecCreateCmdResponse;
-import com.google.common.base.Preconditions;
 
 public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateCmdResponse> implements ExecCreateCmd {
 
@@ -31,7 +32,7 @@ public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateC
     }
     
     public ExecCreateCmd withContainerId(String containerId) {
-    	Preconditions.checkNotNull(containerId, "containerId was not specified");
+    	checkNotNull(containerId, "containerId was not specified");
         this.containerId = containerId;
         return this;
     }

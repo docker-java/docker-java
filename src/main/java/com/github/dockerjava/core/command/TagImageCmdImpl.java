@@ -1,8 +1,9 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.Preconditions.checkNotNull;
+
 import com.github.dockerjava.api.command.TagImageCmd;
 
-import com.google.common.base.Preconditions;
 
 /**
  * Tag an image into a repository
@@ -47,21 +48,21 @@ public class TagImageCmdImpl extends AbstrDockerCmd<TagImageCmd, Void> implement
 
     @Override
 	public TagImageCmd withImageId(String imageId) {
-		Preconditions.checkNotNull(imageId, "imageId was not specified");
+		checkNotNull(imageId, "imageId was not specified");
 		this.imageId = imageId;
 		return this;
 	}
 
 	@Override
 	public TagImageCmd withRepository(String repository) {
-		Preconditions.checkNotNull(repository, "repository was not specified");
+		checkNotNull(repository, "repository was not specified");
 		this.repository = repository;
 		return this;
 	}
 
 	@Override
 	public TagImageCmd withTag(String tag) {
-		Preconditions.checkNotNull(tag, "tag was not specified");
+		checkNotNull(tag, "tag was not specified");
 		this.tag = tag;
 		return this;
 	}

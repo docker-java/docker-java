@@ -1,9 +1,9 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.Preconditions.checkNotNull;
+
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.UnpauseContainerCmd;
-
-import com.google.common.base.Preconditions;
 
 /**
  * Unpause a container.
@@ -27,7 +27,7 @@ public class UnpauseContainerCmdImpl extends AbstrDockerCmd<UnpauseContainerCmd,
 
     @Override
 	public UnpauseContainerCmd withContainerId(String containerId) {
-		Preconditions.checkNotNull(containerId, "containerId was not specified");
+		checkNotNull(containerId, "containerId was not specified");
 		this.containerId = containerId;
 		return this;
 	}

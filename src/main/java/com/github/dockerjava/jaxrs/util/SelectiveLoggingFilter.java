@@ -1,14 +1,14 @@
 package com.github.dockerjava.jaxrs.util;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-
-import com.google.common.collect.ImmutableSet;
 
 import org.glassfish.jersey.filter.LoggingFilter;
 
@@ -21,10 +21,15 @@ import org.glassfish.jersey.filter.LoggingFilter;
  */
 public class SelectiveLoggingFilter extends LoggingFilter {
     
-    private static final Set<String> SKIPPED_CONTENT = ImmutableSet.<String>builder()
-            .add(MediaType.APPLICATION_OCTET_STREAM)
-            .add("application/tar")
-            .build();
+    // Immutable'ish
+    private static final Set<String> SKIPPED_CONTENT; 
+    static {
+        Set<String> s = new HashSet<String>();
+        s.add(MediaType.APPLICATION_OCTET_STREAM);
+        s.add("application/tar");
+        SKIPPED_CONTENT = Collections.unmodifiableSet(s);
+    }
+
 
     public SelectiveLoggingFilter(Logger logger, boolean b) {
 		super(logger, b);

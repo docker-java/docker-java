@@ -1,5 +1,7 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.Preconditions.checkNotNull;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,7 +16,7 @@ import com.github.dockerjava.api.model.ExposedPorts;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.Volumes;
-import com.google.common.base.Preconditions;
+
 
 /**
  *
@@ -49,13 +51,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 	
 	public CreateContainerCmdImpl(CreateContainerCmd.Exec exec, String image) {
 		super(exec);
-		Preconditions.checkNotNull(image, "image was not specified");
+		checkNotNull(image, "image was not specified");
 		withImage(image);
 	}
 
 	@Override
 	public CreateContainerCmdImpl withName(String name) {
-		Preconditions.checkNotNull(name, "name was not specified");
+		checkNotNull(name, "name was not specified");
         this.name = name;
         return this;
     }
@@ -318,7 +320,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     
     @Override
     public CreateContainerCmd withHostConfig(HostConfig hostConfig) {
-    	Preconditions.checkNotNull(hostConfig, "no host config was specified");
+    	checkNotNull(hostConfig, "no host config was specified");
     	this.hostConfig = hostConfig;
     	return this;
     }
