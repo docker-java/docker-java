@@ -3,6 +3,7 @@ Change Log
 
 docker-java-0.10.6-SNAPSHOT
 ---
+ * [#137](https://github.com/docker-java/docker-java/pull/137) Multiple volumesFrom option when creating a container 
  * [#135](https://github.com/docker-java/docker-java/pull/135) Update to latest unix-socket-factory 
  * [#134](https://github.com/docker-java/docker-java/pull/134) Remove Google Guava as dependency 
  * [#128](https://github.com/docker-java/docker-java/pull/128) Allow unauthorized pullImageCmd
