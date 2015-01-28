@@ -135,6 +135,7 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 	 * @throws NotModifiedException
 	 *             Container already started
 	 */
+	@Override
 	public Void exec() throws NotFoundException, NotModifiedException;
 
 	public static interface Exec extends DockerCmdExec<StartContainerCmd, Void> {

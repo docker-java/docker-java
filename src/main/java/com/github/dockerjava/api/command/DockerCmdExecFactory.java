@@ -75,6 +75,7 @@ public interface DockerCmdExecFactory extends Closeable {
 
 	public EventsCmd.Exec createEventsCmdExec();
 
+	@Override
 	public void close() throws IOException;
 
 }

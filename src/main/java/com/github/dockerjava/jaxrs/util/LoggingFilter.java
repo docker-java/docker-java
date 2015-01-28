@@ -211,7 +211,7 @@ public class LoggingFilter implements ContainerRequestFilter, ClientRequestFilte
         }
         stream.mark(maxEntitySize + 1);
         final byte[] entity = new byte[maxEntitySize + 1];
-        final int entitySize = stream.read(entity);
+        final int entitySize = Math.max(0, stream.read(entity));
         b.append(new String(entity, 0, Math.min(entitySize, maxEntitySize)));
         if (entitySize > maxEntitySize) {
             b.append("...more...");

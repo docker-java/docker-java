@@ -31,48 +31,58 @@ public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateC
         withContainerId(containerId);
     }
     
+    @Override
     public ExecCreateCmd withContainerId(String containerId) {
     	checkNotNull(containerId, "containerId was not specified");
         this.containerId = containerId;
         return this;
     }
 
+    @Override
     public ExecCreateCmd withAttachStdin(boolean attachStdin) {
         this.attachStdin = attachStdin;
         return this;
     }
     
+    @Override
     public ExecCreateCmd withAttachStdin() {
         return withAttachStdin(true);
     }
 
+    @Override
     public ExecCreateCmd withAttachStdout(boolean attachStdout) {
         this.attachStdout = attachStdout;
         return this;
     }
     
+    @Override
     public ExecCreateCmd withAttachStdout() {
         return withAttachStdout(true);
     }
 
+    @Override
     public ExecCreateCmd withAttachStderr(boolean attachStderr) {
         this.attachStderr = attachStderr;
         return this;
     }
     
+    @Override
     public ExecCreateCmd withAttachStderr() {
         return withAttachStderr(true);
     }
     
+    @Override
     public ExecCreateCmd withTty(boolean tty) {
         this.tty = tty;
         return this;
     }
     
+    @Override
     public ExecCreateCmd withTty() {
         return withTty(true);
     }
 
+    @Override
     public ExecCreateCmd withCmd(String... cmd) {
         this.cmd = cmd;
         return this;

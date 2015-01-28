@@ -13,6 +13,7 @@ public interface ContainerDiffCmd extends DockerCmd<List<ChangeLog>> {
 
 	public ContainerDiffCmd withContainerId(String containerId);
 
+	@Override
 	public String toString();
 
 	/**
@@ -20,6 +21,7 @@ public interface ContainerDiffCmd extends DockerCmd<List<ChangeLog>> {
 	 * @throws InternalServerErrorException server error
 	 * @throws DockerException unexpected http status code
 	 */
+	@Override
 	public List<ChangeLog> exec() throws NotFoundException;
 	
 	public static interface Exec extends DockerCmdExec<ContainerDiffCmd, List<ChangeLog>> {
