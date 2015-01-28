@@ -14,6 +14,7 @@ public interface InspectImageCmd extends DockerCmd<InspectImageResponse>{
 	/**
 	 * @throws NotFoundException No such image
 	 */
+	@Override
 	public InspectImageResponse exec() throws NotFoundException;
 	
 	public static interface Exec extends DockerCmdExec<InspectImageCmd, InspectImageResponse> {

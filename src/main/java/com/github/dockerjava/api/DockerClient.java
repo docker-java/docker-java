@@ -105,6 +105,7 @@ public interface DockerClient extends Closeable {
 
 	public EventsCmd eventsCmd(EventCallback eventCallback);
 
+	@Override
 	public void close() throws IOException;
 
 }
