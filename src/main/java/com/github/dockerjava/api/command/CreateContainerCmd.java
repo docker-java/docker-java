@@ -6,6 +6,7 @@ import com.github.dockerjava.api.model.Capability;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Volume;
+import com.github.dockerjava.api.model.VolumeFrom;
 
 public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 
@@ -93,9 +94,9 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 
 	public CreateContainerCmd withVolumes(Volume... volumes);
 
-	public String[] getVolumesFrom();
+	public VolumeFrom[] getVolumesFrom();
 
-	public CreateContainerCmd withVolumesFrom(String... volumesFrom);
+	public CreateContainerCmd withVolumesFrom(VolumeFrom... volumesFrom);
 	
 	public HostConfig getHostConfig();
 	

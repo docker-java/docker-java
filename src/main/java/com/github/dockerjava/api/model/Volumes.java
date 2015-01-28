@@ -48,7 +48,7 @@ public class Volumes {
 			jsonGen.writeStartObject();
 			for (Volume volume : volumes.getVolumes()) {
 				jsonGen.writeFieldName(volume.getPath());
-				jsonGen.writeString(Boolean.toString(volume.isReadWrite()));
+				jsonGen.writeString(Boolean.toString(volume.getAccessMode().equals(AccessMode.rw) ? true: false));
 			}
 			jsonGen.writeEndObject();
 		}

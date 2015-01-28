@@ -32,6 +32,7 @@ import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.Links;
 import com.github.dockerjava.api.model.Volume;
+import com.github.dockerjava.api.model.VolumeFrom;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
 @Test(groups = "integration")
@@ -125,14 +126,14 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 		// create a second container with volumes from first container
 		CreateContainerResponse container2 = dockerClient
 				.createContainerCmd("busybox").withCmd("sleep", "9999")
-				.withVolumesFrom(container1Name).exec();
+				.withVolumesFrom(new VolumeFrom(container1Name)).exec();
 		LOG.info("Created container2 {}", container2.toString());
 
 		InspectContainerResponse inspectContainerResponse2 = dockerClient
 				.inspectContainerCmd(container2.getId()).exec();
 
 		// No volumes are created, the information is just stored in .HostConfig.VolumesFrom
-		assertThat(inspectContainerResponse2.getHostConfig().getVolumesFrom(), hasItemInArray(container1Name));
+		assertThat(inspectContainerResponse2.getHostConfig().getVolumesFrom().getVolumesFrom(), hasItemInArray(new VolumeFrom(container1Name)));
 
 		// To ensure that the information stored in VolumesFrom really is considered
 		// when starting the container, we start it and verify that it has the same 
@@ -144,7 +145,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 		
 		inspectContainerResponse2 = dockerClient.inspectContainerCmd(container2.getId()).exec();
 
-		assertThat(inspectContainerResponse2.getHostConfig().getVolumesFrom(), hasItemInArray(container1Name));
+		assertThat(inspectContainerResponse2.getHostConfig().getVolumesFrom().getVolumesFrom(), hasItemInArray(new VolumeFrom(container1Name)));
 		assertContainerHasVolumes(inspectContainerResponse2, volume1, volume2);
 	}
 
