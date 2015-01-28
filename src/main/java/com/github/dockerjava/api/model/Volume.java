@@ -30,18 +30,23 @@ public class Volume {
 
 	private String path;
 	
-	private boolean readWrite = true;
+	private AccessMode accessMode = AccessMode.rw;
 
 	public Volume(String path) {
 		this.path = path;
+	}
+	
+	public Volume(String path, AccessMode accessMode) {
+		this.path = path;
+		this.accessMode = accessMode;
 	}
 
 	public String getPath() {
 		return path;
 	}
 	
-	public boolean isReadWrite() {
-		return readWrite;
+	public AccessMode getAccessMode() {
+		return accessMode;
 	}
 
 	public static Volume parse(String serialized) {
@@ -64,7 +69,7 @@ public class Volume {
 	public boolean equals(Object obj) {
 		if (obj instanceof Volume) {
 			Volume other = (Volume) obj;
-			return new EqualsBuilder().append(path, other.getPath()).append(readWrite, other.isReadWrite())
+			return new EqualsBuilder().append(path, other.getPath()).append(accessMode, other.getAccessMode())
 					.isEquals();
 		} else
 			return super.equals(obj);
@@ -72,7 +77,7 @@ public class Volume {
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder().append(path).append(readWrite).toHashCode();
+		return new HashCodeBuilder().append(path).append(accessMode).toHashCode();
 	}
 	
 	public static class Serializer extends JsonSerializer<Volume> {
@@ -84,7 +89,7 @@ public class Volume {
 
 			jsonGen.writeStartObject();
 			jsonGen.writeFieldName(volume.getPath());
-			jsonGen.writeString(Boolean.toString(volume.isReadWrite()));
+			jsonGen.writeString(Boolean.toString(volume.getAccessMode().equals(AccessMode.rw) ? true: false));
 			jsonGen.writeEndObject();
 		}
 

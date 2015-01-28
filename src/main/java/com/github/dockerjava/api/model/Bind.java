@@ -1,7 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import static com.github.dockerjava.api.model.AccessMode.ro;
-import static com.github.dockerjava.api.model.AccessMode.rw;
+
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -29,14 +28,6 @@ public class Bind {
 		this.accessMode = accessMode;
 	}
 
-	/**
-	 * @deprecated use {@link #Bind(String, Volume, AccessMode)}
-	 */
-	@Deprecated
-	public Bind(String path, Volume volume, boolean readOnly) {
-		this(path, volume, readOnly ? ro : rw);
-	}
-
 	public String getPath() {
 		return path;
 	}
@@ -49,13 +40,6 @@ public class Bind {
 		return accessMode;
 	}
 
-	/**
-	 * @deprecated use {@link #getAccessMode()}
-	 */
-	@Deprecated
-	public boolean isReadOnly() {
-		return ro.equals(accessMode);
-	}
 
 	/**
 	 * Parses a bind mount specification to a {@link Bind}.
