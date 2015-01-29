@@ -21,6 +21,7 @@ public interface CopyFileFromContainerCmd extends DockerCmd<InputStream> {
 	/**
 	 * @throws NotFoundException No such container
 	 */
+	@Override
 	public InputStream exec() throws NotFoundException;
 	
 	public static interface Exec extends DockerCmdExec<CopyFileFromContainerCmd, InputStream> {

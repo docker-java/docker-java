@@ -39,6 +39,7 @@ public abstract class AbstrDockerCmdExec<CMD_T extends DockerCmd<RES_T>, RES_T>
 		}
 	}
 	
+	@Override
 	public RES_T exec(CMD_T command) {
 		// this hack works because of ResponseStatusExceptionFilter
 		RES_T result;

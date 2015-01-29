@@ -27,6 +27,7 @@ public interface RemoveContainerCmd extends DockerCmd<Void> {
 	/**
 	 * @throws NotFoundException No such container
 	 */
+	@Override
 	public Void exec() throws NotFoundException;
 	
 	public static interface Exec extends DockerCmdExec<RemoveContainerCmd, Void> {

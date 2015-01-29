@@ -33,6 +33,7 @@ public interface PushImageCmd extends DockerCmd<InputStream>{
 	/**
 	 * @throws NotFoundException No such image
 	 */
+	@Override
 	public InputStream exec() throws NotFoundException;
 	
 	public static interface Exec extends DockerCmdExec<PushImageCmd, InputStream> {

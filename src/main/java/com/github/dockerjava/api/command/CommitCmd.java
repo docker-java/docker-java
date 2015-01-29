@@ -106,6 +106,7 @@ public interface CommitCmd extends DockerCmd<String>{
 	/**
 	 * @throws NotFoundException No such container
 	 */
+	@Override
 	public String exec() throws NotFoundException;
 	
 	public static interface Exec extends DockerCmdExec<CommitCmd, String> {

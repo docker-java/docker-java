@@ -84,18 +84,4 @@ public class CopyFileFromContainerCmdImpl extends AbstrDockerCmd<CopyFileFromCon
     public InputStream exec() throws NotFoundException {
     	return super.exec();
     }
-
-//	protected InputStream impl() throws DockerException {
-//
-//		CopyFileFromContainerCmd command = this;
-//		
-//		WebTarget webResource =
-//				baseResource.path("/containers/{id}/copy").resolveTemplate("id", command.getContainerId());
-//
-//		LOGGER.trace("POST: " + webResource.toString());
-//		
-//		return webResource.request().accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).post(entity(command, MediaType.APPLICATION_JSON), Response.class).readEntity(InputStream.class);		
-//	}
-
-
 }
