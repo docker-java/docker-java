@@ -15,10 +15,8 @@ import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.ExposedPorts;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Volume;
-import com.github.dockerjava.api.model.VolumeFrom;
-import com.github.dockerjava.api.model.Volumes;
 import com.github.dockerjava.api.model.VolumesFrom;
-
+import com.github.dockerjava.api.model.Volumes;
 
 /**
  *
@@ -305,13 +303,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
-	public VolumeFrom[] getVolumesFrom() {
-        return hostConfig.getVolumesFrom() == null ? new VolumeFrom[0] : hostConfig.getVolumesFrom().getVolumesFrom();
+	public VolumesFrom[] getVolumesFrom() {
+        return hostConfig.getVolumesFrom();
     }
 
     @Override
-	public CreateContainerCmdImpl withVolumesFrom(VolumeFrom... volumesFrom) {
-        this.hostConfig.setVolumesFrom(new VolumesFrom(volumesFrom));
+	public CreateContainerCmdImpl withVolumesFrom(VolumesFrom... volumesFrom) {
+        this.hostConfig.setVolumesFrom(volumesFrom);
         return this;
     }
 

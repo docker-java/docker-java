@@ -33,7 +33,7 @@ public class HostConfig {
 	private String[] dnsSearch;
 
 	@JsonProperty("VolumesFrom")
-	private VolumesFrom volumesFrom;
+	private VolumesFrom[] volumesFrom;
 
 	@JsonProperty("ContainerIDFile")
 	private String containerIDFile;
@@ -57,7 +57,7 @@ public class HostConfig {
 	}
 
 	public HostConfig(String[] binds, Links links, LxcConf[] lxcConf, Ports portBindings, boolean publishAllPorts,
-			boolean privileged, String[] dns, String[] dnsSearch, VolumesFrom volumesFrom, String containerIDFile,
+			boolean privileged, String[] dns, String[] dnsSearch, VolumesFrom[] volumesFrom, String containerIDFile,
 			Capability[] capAdd, Capability[] capDrop, RestartPolicy restartPolicy, String networkMode, Device[] devices) {
 		this.binds = binds;
 		this.links = links;
@@ -100,7 +100,7 @@ public class HostConfig {
 		return dns;
 	}
 
-	public VolumesFrom getVolumesFrom() {
+	public VolumesFrom[] getVolumesFrom() {
 		return volumesFrom;
 	}
 
@@ -168,7 +168,7 @@ public class HostConfig {
 		this.dnsSearch = dnsSearch;
 	}
 
-	public void setVolumesFrom(VolumesFrom volumesFrom) {
+	public void setVolumesFrom(VolumesFrom[] volumesFrom) {
 		this.volumesFrom = volumesFrom;
 	}
 

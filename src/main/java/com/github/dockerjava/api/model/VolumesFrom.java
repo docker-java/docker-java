@@ -1,9 +1,9 @@
 package com.github.dockerjava.api.model;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -21,30 +21,94 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @JsonDeserialize(using = VolumesFrom.Deserializer.class)
 public class VolumesFrom {
 
-	private VolumeFrom[] volumesFrom;
+	private String container;
 
-	public VolumesFrom(VolumeFrom... volumesFrom) {
-		this.volumesFrom = volumesFrom;
+	private AccessMode accessMode;
+
+	public VolumesFrom(String container) {
+		this(container, AccessMode.DEFAULT);
 	}
 
-	public VolumeFrom[] getVolumesFrom() {
-		return volumesFrom;
+	public VolumesFrom(String container, AccessMode accessMode) {
+		this.container = container;
+		this.accessMode = accessMode;
+	}
+	
+	public String getContainer() {
+		return container;
+	}
+	
+	public AccessMode getAccessMode() {
+		return accessMode;
 	}
 
+
+	/**
+	 * Parses a volume from specification to a {@link VolumesFrom}.
+	 * 
+	 * @param serialized the specification, e.g. <code>container:ro</code>
+	 * @return a {@link VolumesFrom} matching the specification
+	 * @throws IllegalArgumentException if the specification cannot be parsed
+	 */
+	public static VolumesFrom parse(String serialized) {
+		try {
+			String[] parts = serialized.split(":");
+			switch (parts.length) {
+			case 1: {
+				return new VolumesFrom(parts[0]);
+			}
+			case 2: {
+				return new VolumesFrom(parts[0], AccessMode.valueOf(parts[1]));
+			}
+			
+			default: {
+				throw new IllegalArgumentException();
+			}
+			}
+		} catch (Exception e) {
+			throw new IllegalArgumentException("Error parsing Bind '" + serialized
+					+ "'");
+		}
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof VolumesFrom) {
+			VolumesFrom other = (VolumesFrom) obj;
+			return new EqualsBuilder().append(container, other.getContainer())
+					.append(accessMode, other.getAccessMode()).isEquals();
+		} else
+			return super.equals(obj);
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder().append(container)
+				.append(accessMode).toHashCode();
+	}
+
+	/**
+	 * Returns a string representation of this {@link VolumesFrom} suitable
+	 * for inclusion in a JSON message.
+	 * The format is <code>&lt;container&gt;:&lt;access mode&gt;</code>,
+	 * like the argument in {@link #parse(String)}.
+	 * 
+	 * @return a string representation of this {@link VolumesFrom}
+	 */
+	@Override
+	public String toString() {
+		return container + ":" + accessMode.toString();
+	}
+	
 	public static class Serializer extends JsonSerializer<VolumesFrom> {
 
 		@Override
-		public void serialize(VolumesFrom volumesFrom, JsonGenerator jsonGen,
+		public void serialize(VolumesFrom volumeFrom, JsonGenerator jsonGen,
 				SerializerProvider serProvider) throws IOException,
 				JsonProcessingException {
 
-			//
-			jsonGen.writeStartArray();
-			for (VolumeFrom bind : volumesFrom.getVolumesFrom()) {
-				jsonGen.writeString(bind.toString());
-			}
-			jsonGen.writeEndArray();
-			//
+			jsonGen.writeString(volumeFrom.toString());
+			
 		}
 
 	}
@@ -55,14 +119,10 @@ public class VolumesFrom {
 				DeserializationContext deserializationContext)
 				throws IOException, JsonProcessingException {
 
-			List<VolumeFrom> volumesFrom = new ArrayList<VolumeFrom>();
 			ObjectCodec oc = jsonParser.getCodec();
 			JsonNode node = oc.readTree(jsonParser);
-			for (Iterator<JsonNode> it = node.iterator(); it.hasNext();) {
-				JsonNode field = it.next();
-				volumesFrom.add(VolumeFrom.parse(field.asText()));
-			}
-			return new VolumesFrom(volumesFrom.toArray(new VolumeFrom[0]));
+			return VolumesFrom.parse(node.asText());
+			
 		}
 	}
 
