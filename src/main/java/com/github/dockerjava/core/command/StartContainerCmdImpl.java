@@ -1,7 +1,7 @@
 package com.github.dockerjava.core.command;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static com.github.dockerjava.Preconditions.checkNotNull;
+import static jersey.repackaged.com.google.common.base.Preconditions.checkNotNull;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 

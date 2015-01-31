@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import static com.github.dockerjava.Preconditions.checkNotNull;
+import static jersey.repackaged.com.google.common.base.Preconditions.checkNotNull;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;

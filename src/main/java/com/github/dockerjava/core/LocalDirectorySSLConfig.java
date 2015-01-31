@@ -1,6 +1,6 @@
 package com.github.dockerjava.core;
 
-import static com.github.dockerjava.Preconditions.checkNotNull;
+import static jersey.repackaged.com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.Serializable;
 import java.security.Security;

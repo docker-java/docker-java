@@ -16,8 +16,8 @@
 
 package com.github.dockerjava.jaxrs.util.guava;
 
+import jersey.repackaged.com.google.common.base.Preconditions;
 
-import com.github.dockerjava.Preconditions;
 
 /**
  * An Escaper that converts literal text into a format safe for

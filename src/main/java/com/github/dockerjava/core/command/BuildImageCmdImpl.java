@@ -1,9 +1,5 @@
 package com.github.dockerjava.core.command;
 
-import static com.github.dockerjava.Preconditions.checkArgument;
-import static com.github.dockerjava.Preconditions.checkNotNull;
-import static com.github.dockerjava.Preconditions.checkState;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,6 +24,8 @@ import com.github.dockerjava.core.CompressArchiveUtil;
 import com.github.dockerjava.core.GoLangFileMatch;
 import com.github.dockerjava.core.GoLangFileMatchException;
 import com.github.dockerjava.core.GoLangMatchFileFilter;
+
+import static jersey.repackaged.com.google.common.base.Preconditions.*;
 
 /**
  * 
