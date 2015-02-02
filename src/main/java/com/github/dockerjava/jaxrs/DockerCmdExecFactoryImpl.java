@@ -4,7 +4,9 @@ import static jersey.repackaged.com.google.common.base.Preconditions.checkNotNul
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
 import javax.ws.rs.client.Client;
@@ -65,7 +67,7 @@ import com.github.dockerjava.jaxrs.util.SelectiveLoggingFilter;
 
 public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
-    private static final Logger LOGGER = Logger.getLogger(DockerCmdExecFactoryImpl.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(DockerCmdExecFactoryImpl.class.getName());
     private Client client;
     private WebTarget baseResource;
 

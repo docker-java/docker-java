@@ -53,7 +53,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.ClientRequestContext;
@@ -68,7 +70,6 @@ import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.WriterInterceptor;
 import javax.ws.rs.ext.WriterInterceptorContext;
-
 import javax.annotation.Priority;
 
 
@@ -86,7 +87,7 @@ import javax.annotation.Priority;
 public class LoggingFilter implements ContainerRequestFilter, ClientRequestFilter, ContainerResponseFilter,
         ClientResponseFilter, WriterInterceptor {
 
-    private static final Logger LOGGER = Logger.getLogger(LoggingFilter.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoggingFilter.class.getName());
     private static final String NOTIFICATION_PREFIX = "* ";
     private static final String REQUEST_PREFIX = "> ";
     private static final String RESPONSE_PREFIX = "< ";
@@ -150,7 +151,7 @@ public class LoggingFilter implements ContainerRequestFilter, ClientRequestFilte
 
     private void log(final StringBuilder b) {
         if (logger != null) {
-            logger.info(b.toString());
+            logger.debug(b.toString());
         }
     }
 

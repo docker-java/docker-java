@@ -6,10 +6,10 @@
         </encoder>
     </appender>
 
-    <logger name="com.github.dockerjava.client" level="TRACE"/>
-    <logger name="com.github.dockerjava.client.test" level="DEBUG"/>
+    <logger name="com.github.dockerjava" level="INFO"/>
+    <logger name="com.github.dockerjava.jaxrs" level="DEBUG"/>
 
-    <root level="info">
+    <root level="INFO">
         <appender-ref ref="STDOUT" />
     </root>
 
