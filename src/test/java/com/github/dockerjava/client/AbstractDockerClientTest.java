@@ -39,6 +39,8 @@ public abstract class AbstractDockerClientTest extends Assert {
 	protected TestDockerCmdExecFactory dockerCmdExecFactory = new TestDockerCmdExecFactory(DockerClientBuilder.getDefaultDockerCmdExecFactory());
 
 	public void beforeTest()  {
+		
+		
 		LOG.info("======================= BEFORETEST =======================");
 		LOG.info("Connecting to Docker server");
 		dockerClient = DockerClientBuilder.getInstance(config())
