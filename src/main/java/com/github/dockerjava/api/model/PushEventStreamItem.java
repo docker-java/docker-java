@@ -1,11 +1,11 @@
 package com.github.dockerjava.api.model;
 
-import com.google.common.base.Objects;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
+
+import jersey.repackaged.com.google.common.base.Objects;
 
 /**
  * Represents an item returned from push

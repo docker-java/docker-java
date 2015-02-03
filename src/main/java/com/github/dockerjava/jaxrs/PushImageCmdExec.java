@@ -1,6 +1,6 @@
 package com.github.dockerjava.jaxrs;
 
-import com.google.common.collect.ImmutableList;
+
 
 import static javax.ws.rs.client.Entity.entity;
 
@@ -21,6 +21,8 @@ import com.github.dockerjava.api.command.PushImageCmd.Response;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.PushEventStreamItem;
 
+// Shaded, but imported
+import jersey.repackaged.com.google.common.collect.ImmutableList;
 
 public class PushImageCmdExec extends AbstrDockerCmdExec<PushImageCmd, Response> implements PushImageCmd.Exec {
 	

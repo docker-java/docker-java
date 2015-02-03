@@ -1,6 +1,6 @@
 package com.github.dockerjava.jaxrs;
 
-import com.google.common.collect.ImmutableList;
+
 
 import static javax.ws.rs.client.Entity.entity;
 
@@ -23,6 +23,8 @@ import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.model.EventStreamItem;
 import com.github.dockerjava.api.model.PushEventStreamItem;
+
+import jersey.repackaged.com.google.common.collect.ImmutableList;
 
 public class BuildImageCmdExec extends AbstrDockerCmdExec<BuildImageCmd, BuildImageCmd.Response> implements BuildImageCmd.Exec {
 	
