@@ -57,7 +57,7 @@ public class ResponseStatusExceptionFilter implements ClientResponseFilter {
 		}
     }
 
-	public String getBodyAsMessage(ClientResponseContext responseContext)
+	private String getBodyAsMessage(ClientResponseContext responseContext)
 			throws IOException {
 	    if (responseContext.hasEntity()) {
 	        int contentLength = responseContext.getLength();
