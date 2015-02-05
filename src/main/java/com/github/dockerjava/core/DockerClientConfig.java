@@ -253,7 +253,8 @@ public class DockerClientConfig implements Serializable {
     
     private AuthConfig getAuthConfig() {
     	AuthConfig authConfig = null;
-    	if(getUsername() != null) {
+    	if (getUsername() != null && getPassword() != null && getEmail() != null
+    			&& getServerAddress() != null) {
     		authConfig = new AuthConfig();
     		authConfig.setUsername(getUsername());
     		authConfig.setPassword(getPassword());
