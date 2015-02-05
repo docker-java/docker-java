@@ -99,7 +99,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         String testImage = "busybox";
         asString(dockerClient.pullImageCmd(testImage).exec());
         CreateContainerResponse container = dockerClient
-                .createContainerCmd(testImage).withCmd("echo").exec();
+                .createContainerCmd(testImage).withCmd("sleep", "9999").exec();
         dockerClient.startContainerCmd(container.getId()).exec();
         dockerClient.stopContainerCmd(container.getId()).exec();
         return KNOWN_NUM_EVENTS;
