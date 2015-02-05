@@ -27,7 +27,9 @@ import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.InspectImageResponse;
+import com.github.dockerjava.api.model.EventStreamItem;
 import com.github.dockerjava.client.AbstractDockerClientTest;
+
 
 @Test(groups = "integration")
 public class BuildImageCmdImplTest extends AbstractDockerClientTest {
@@ -170,18 +172,24 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
 	}
 
 	@Test
-	public void testNetCatDockerfileBuilder() throws InterruptedException {
+	public void testNetCatDockerfileBuilder() throws InterruptedException, IOException {
 		File baseDir = new File(Thread.currentThread().getContextClassLoader()
 				.getResource("netcat").getFile());
 
-		InputStream response = dockerClient.buildImageCmd(baseDir).withNoCache().exec();
+		Iterable<EventStreamItem> response = dockerClient.buildImageCmd(baseDir).withNoCache().exec().getItems();
 
-		String fullLog = asString(response);
+                String imageId = null;
+
+		for(EventStreamItem item : response) {
+                  String text = item.getStream();
+                  if( text.startsWith("Successfully built ")) {
+                    imageId = StringUtils.substringBetween(text,
+				"Successfully built ", "\n").trim();
+                  }
+                }
 		
-		assertThat(fullLog, containsString("Successfully built"));
+		assertNotNull(imageId, "Not successful in build");
 
-		String imageId = StringUtils.substringBetween(fullLog,
-				"Successfully built ", "\\n\"}").trim();
 
 		InspectImageResponse inspectImageResponse = dockerClient
 				.inspectImageCmd(imageId).exec();

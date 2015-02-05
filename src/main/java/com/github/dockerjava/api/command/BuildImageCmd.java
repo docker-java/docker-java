@@ -1,5 +1,9 @@
 package com.github.dockerjava.api.command;
 
+import com.github.dockerjava.api.model.EventStreamItem;
+import com.github.dockerjava.api.model.PushEventStreamItem;
+
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -9,7 +13,7 @@ import java.io.InputStream;
  * TODO: http://docs.docker.com/reference/builder/#dockerignore
  * 
  */
-public interface BuildImageCmd extends DockerCmd<InputStream>{
+public interface BuildImageCmd extends DockerCmd<BuildImageCmd.Response>{
 
 	public BuildImageCmd withTag(String tag);
 
@@ -37,7 +41,10 @@ public interface BuildImageCmd extends DockerCmd<InputStream>{
 
 	public BuildImageCmd withQuiet(boolean quiet);
 	
-	public static interface Exec extends DockerCmdExec<BuildImageCmd, InputStream> {
+	public static interface Exec extends DockerCmdExec<BuildImageCmd, BuildImageCmd.Response> {
 	}
 
+  public static abstract class Response extends InputStream {
+    public abstract Iterable<EventStreamItem> getItems() throws IOException;
+  }
 }

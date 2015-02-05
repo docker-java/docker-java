@@ -32,8 +32,7 @@ import static jersey.repackaged.com.google.common.base.Preconditions.*;
  * Build an image from Dockerfile.
  * 
  */
-public class BuildImageCmdImpl extends
-		AbstrDockerCmd<BuildImageCmd, InputStream> implements BuildImageCmd {
+public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageCmd.Response> implements BuildImageCmd {
 
 	private static final Pattern ADD_OR_COPY_PATTERN = Pattern
 			.compile("^(ADD|COPY)\\s+(.*)\\s+(.*)$");

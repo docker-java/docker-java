@@ -2,8 +2,6 @@ package com.github.dockerjava.core.command;
 
 import static jersey.repackaged.com.google.common.base.Preconditions.checkNotNull;
 
-import java.io.InputStream;
-
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.PushImageCmd;
 
@@ -12,7 +10,7 @@ import com.github.dockerjava.api.command.PushImageCmd;
  *
  * @param name The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
  */
-public class PushImageCmdImpl extends AbstrAuthCfgDockerCmd<PushImageCmd, InputStream> implements PushImageCmd  {
+public class PushImageCmdImpl extends AbstrAuthCfgDockerCmd<PushImageCmd, PushImageCmd.Response> implements PushImageCmd  {
 
     private String name;
     private String tag;
@@ -63,7 +61,7 @@ public class PushImageCmdImpl extends AbstrAuthCfgDockerCmd<PushImageCmd, InputS
      * @throws NotFoundException No such image
      */
     @Override
-    public InputStream exec() throws NotFoundException {
+    public Response exec() throws NotFoundException {
     	return super.exec();
     }
 }
