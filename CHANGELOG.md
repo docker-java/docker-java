@@ -1,12 +1,14 @@
 Change Log
 ===
 
-docker-java-0.10.6-SNAPSHOT
+docker-java-1.0.0-SNAPSHOT
 ---
+ * [#142](https://github.com/docker-java/docker-java/pull/142) Reduce Logging Level 
  * [#138](https://github.com/docker-java/docker-java/pull/138) Apache CXF interopabilty
  * [#137](https://github.com/docker-java/docker-java/pull/137) Multiple volumesFrom option when creating a container 
  * [#135](https://github.com/docker-java/docker-java/pull/135) Update to latest unix-socket-factory 
  * [#134](https://github.com/docker-java/docker-java/pull/134) Remove Google Guava as dependency 
+ * [#131](https://github.com/docker-java/docker-java/pull/128) Utility classes and streamed JSON representations
  * [#128](https://github.com/docker-java/docker-java/pull/128) Allow unauthorized pullImageCmd
 
 docker-java-0.10.5

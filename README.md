@@ -69,7 +69,7 @@ You can find the latest SNAPSHOT version including javadoc and source files on [
     <dependency>
           <groupId>com.github.docker-java</groupId>
           <artifactId>docker-java</artifactId>
-          <version>0.10.6-SNAPSHOT</version>
+          <version>1.0.0-SNAPSHOT</version>
     </dependency>
 
 ## Documentation
