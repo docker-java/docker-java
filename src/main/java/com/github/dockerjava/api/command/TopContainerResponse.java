@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.command;
 
-import static com.github.dockerjava.jaxrs.util.guava.Guava.join;
+import static com.github.dockerjava.core.util.guava.Guava.join;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,6 +1,6 @@
 package com.github.dockerjava.jaxrs;
 
-import static com.github.dockerjava.jaxrs.util.guava.Guava.urlPathSegmentEscaper;
+import static com.github.dockerjava.core.util.guava.Guava.urlPathSegmentEscaper;
 
 import java.util.List;
 

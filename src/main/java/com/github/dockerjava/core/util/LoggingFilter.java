@@ -1,4 +1,4 @@
-package com.github.dockerjava.jaxrs.util;
+package com.github.dockerjava.core.util;
 
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.

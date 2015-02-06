@@ -61,9 +61,9 @@ import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.jaxrs.util.JsonClientFilter;
-import com.github.dockerjava.jaxrs.util.ResponseStatusExceptionFilter;
-import com.github.dockerjava.jaxrs.util.SelectiveLoggingFilter;
+import com.github.dockerjava.core.util.JsonClientFilter;
+import com.github.dockerjava.core.util.ResponseStatusExceptionFilter;
+import com.github.dockerjava.core.util.SelectiveLoggingFilter;
 
 public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
