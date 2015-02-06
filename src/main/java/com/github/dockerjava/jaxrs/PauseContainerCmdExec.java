@@ -26,7 +26,7 @@ public class PauseContainerCmdExec extends
 						command.getContainerId());
 
 		LOGGER.trace("POST: {}", webResource);
-		webResource.request().accept(MediaType.APPLICATION_JSON).post(null);
+		webResource.request().accept(MediaType.APPLICATION_JSON).post(null).close();
 
 		return null;
 	}

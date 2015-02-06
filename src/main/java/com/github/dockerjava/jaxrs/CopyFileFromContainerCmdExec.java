@@ -30,7 +30,7 @@ public class CopyFileFromContainerCmdExec extends AbstrDockerCmdExec<CopyFileFro
 
 		LOGGER.trace("POST: " + webResource.toString());
 		
-		return webResource.request().accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).post(entity(command, MediaType.APPLICATION_JSON), Response.class).readEntity(InputStream.class);		
+		return webResource.request().accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).post(entity(command, MediaType.APPLICATION_JSON)).readEntity(InputStream.class);		
 	}
 
 }

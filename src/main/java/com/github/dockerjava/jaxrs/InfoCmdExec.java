@@ -23,6 +23,7 @@ public class InfoCmdExec extends AbstrDockerCmdExec<InfoCmd, Info> implements In
 		WebTarget webResource = getBaseResource().path("/info");
 
 		LOGGER.trace("GET: {}", webResource);
-		return webResource.request().accept(MediaType.APPLICATION_JSON).get(Info.class);	}
+		return webResource.request().accept(MediaType.APPLICATION_JSON).get(Info.class);
+	}
 
 }

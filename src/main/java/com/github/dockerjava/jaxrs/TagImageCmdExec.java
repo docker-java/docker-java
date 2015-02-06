@@ -24,7 +24,7 @@ public class TagImageCmdExec extends AbstrDockerCmdExec<TagImageCmd, Void> imple
                 .queryParam("force", command.hasForceEnabled() ? "1" : "0");
 
 		LOGGER.trace("POST: {}", webResource);
-		webResource.request().post(null);
+		webResource.request().post(null).close();
 		return null;
 	}
 	

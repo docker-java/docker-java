@@ -1,9 +1,7 @@
 package com.github.dockerjava.jaxrs;
 
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +23,7 @@ public class UnpauseContainerCmdExec extends AbstrDockerCmdExec<UnpauseContainer
 		
 		LOGGER.trace("POST: {}", webResource);
 		webResource.request().accept(MediaType.APPLICATION_JSON)
-				.post(Entity.entity(Response.class, MediaType.APPLICATION_JSON));
+				.post(null).close();
 
 		return null;
 	}

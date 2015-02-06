@@ -23,8 +23,7 @@ public class RemoveContainerCmdExec extends AbstrDockerCmdExec<RemoveContainerCm
 				.queryParam("force", command.hasForceEnabled() ? "1" : "0");
 		
 		LOGGER.trace("DELETE: {}", webResource);
-		/*String response = */webResource.request().accept(MediaType.APPLICATION_JSON).delete().close();
-//		LOGGER.trace("Response: {}", response);
+		webResource.request().accept(MediaType.APPLICATION_JSON).delete().close();
 
 		return null;
 	}

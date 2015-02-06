@@ -29,7 +29,7 @@ public class LogContainerCmdExec extends AbstrDockerCmdExec<LogContainerCmd, Inp
 				.queryParam("tail", command.getTail() < 0 ? "all" : "" + command.getTail());
 
 		LOGGER.trace("GET: {}", webResource);
-		return webResource.request().get(Response.class).readEntity(InputStream.class);
+		return webResource.request().get().readEntity(InputStream.class);
 	}
 
 }

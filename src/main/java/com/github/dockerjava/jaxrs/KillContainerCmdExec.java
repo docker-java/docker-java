@@ -29,7 +29,7 @@ public class KillContainerCmdExec extends
 		}
 
 		LOGGER.trace("POST: {}", webResource);
-		webResource.request().accept(MediaType.APPLICATION_JSON).post(null);
+		webResource.request().accept(MediaType.APPLICATION_JSON).post(null).close();
 
 		return null;
 	}

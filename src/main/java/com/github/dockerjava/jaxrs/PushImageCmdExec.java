@@ -74,6 +74,8 @@ public class PushImageCmdExec extends AbstrDockerCmdExec<PushImageCmd, Response>
       // and then do other configuration, if any, and read:
       Iterator<PushEventStreamItem> items = reader.readValues(proxy);
 
+      proxy.close();
+      
       return ImmutableList.copyOf(items);
     }
 

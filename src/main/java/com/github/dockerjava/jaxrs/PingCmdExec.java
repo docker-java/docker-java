@@ -21,7 +21,7 @@ public class PingCmdExec extends AbstrDockerCmdExec<PingCmd, Void> implements Pi
 		WebTarget webResource = getBaseResource().path("/_ping");
 	       
         LOGGER.trace("GET: {}", webResource);
-        webResource.request().get(Response.class);
+        webResource.request().get().close();
         
         return null;
 	}

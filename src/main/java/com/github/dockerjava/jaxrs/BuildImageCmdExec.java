@@ -81,6 +81,8 @@ public class BuildImageCmdExec extends AbstrDockerCmdExec<BuildImageCmd, BuildIm
       ObjectReader reader = mapper.reader(EventStreamItem.class);
       // and then do other configuration, if any, and read:
       Iterator<EventStreamItem> items = reader.readValues(proxy);
+      
+      proxy.close();
 
       return ImmutableList.copyOf(items);
     }
