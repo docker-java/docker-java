@@ -141,6 +141,9 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 	public PushImageCmd.Exec createPushImageCmdExec() {
 		return delegate.createPushImageCmdExec();
 	}
+    
+    @Override
+    public SaveImageCmd.Exec createSaveImageCmdExec() { return delegate.createSaveImageCmdExec(); }
 
 	@Override
 	public SearchImagesCmd.Exec createSearchImagesCmdExec() {
