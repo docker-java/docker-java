@@ -39,6 +39,8 @@ public interface DockerClient extends Closeable {
 	public ListImagesCmd listImagesCmd();
 
 	public InspectImageCmd inspectImageCmd(String imageId);
+    
+    public SaveImageCmd saveImageCmd(String name);
 
 	/**
 	 * * CONTAINER API *
