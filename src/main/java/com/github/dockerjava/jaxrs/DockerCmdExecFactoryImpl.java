@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.URI;
 
 import com.github.dockerjava.api.command.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +29,7 @@ import org.glassfish.jersey.client.ClientProperties;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.github.dockerjava.api.DockerClientException;
 import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.util.FollowRedirectsFilter;
 import com.github.dockerjava.core.util.JsonClientFilter;
 import com.github.dockerjava.core.util.ResponseStatusExceptionFilter;
 import com.github.dockerjava.core.util.SelectiveLoggingFilter;
@@ -49,6 +51,9 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         clientConfig.register(ResponseStatusExceptionFilter.class);
         clientConfig.register(JsonClientFilter.class);
         clientConfig.register(JacksonJsonProvider.class);
+        if (dockerClientConfig.followRedirectsFilterEnabled()) {
+            clientConfig.register(FollowRedirectsFilter.class);
+        }
 
         if (dockerClientConfig.isLoggingFilterEnabled()) {
             clientConfig.register(new SelectiveLoggingFilter(LOGGER, true));

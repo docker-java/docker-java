@@ -37,7 +37,6 @@ public class ResponseStatusExceptionFilter implements ClientResponseFilter {
 		case 200:
 		case 201:	
 		case 204:
-		case 301:	
 			return;
 		case 304:
 			throw new NotModifiedException(getBodyAsMessage(responseContext));
