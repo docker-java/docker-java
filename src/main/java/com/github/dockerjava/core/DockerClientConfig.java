@@ -33,7 +33,7 @@ public class DockerClientConfig implements Serializable {
     private static final String DOCKER_IO_READ_TIMEOUT_PROPERTY = "docker.io.readTimeout";
     // this is really confusing, as there are two ways to spell it
     private static final String DOCKER_IO_ENABLE_LOGGING_FILTER_PROPERTY = "docker.io.enableLoggingFilter";
-    private static final String DOCKER_IO_FOLLOW_REDIRECTS_FILTER_PROPERTY = "docker.io.followRedirectsFilterEnabled";
+    private static final String DOCKER_IO_FOLLOW_REDIRECTS_FILTER_PROPERTY = "docker.io.followRedirectsFilter";
     private static final String DOCKER_IO_DOCKER_CERT_PATH_PROPERTY = "docker.io.dockerCertPath";
     private static final String DOCKER_IO_DOCKER_CFG_PATH_PROPERTY = "docker.io.dockerCfgPath";
     // connection pooling properties
@@ -54,7 +54,7 @@ public class DockerClientConfig implements Serializable {
         m.put("DOCKER_SERVER_ADDRESS", DOCKER_IO_SERVER_ADDRESS_PROPERTY);
         m.put("DOCKER_READ_TIMEOUT", DOCKER_IO_READ_TIMEOUT_PROPERTY);
         m.put("DOCKER_LOGGING_FILTER_ENABLED", DOCKER_IO_ENABLE_LOGGING_FILTER_PROPERTY);
-        m.put("DOCKER_IO_FOLLOW_REDIRECTS_FILTER_PROPERTY", DOCKER_IO_FOLLOW_REDIRECTS_FILTER_PROPERTY);
+        m.put("DOCKER_FOLLOW_REDIRECTS_FILTER_ENABLED", DOCKER_IO_FOLLOW_REDIRECTS_FILTER_PROPERTY);
         m.put(DOCKER_CERT_PATH_PROPERTY, DOCKER_IO_DOCKER_CERT_PATH_PROPERTY);
         m.put("DOCKER_CFG_PATH", DOCKER_IO_DOCKER_CFG_PATH_PROPERTY);
         ENV_NAME_TO_IO_NAME = Collections.unmodifiableMap(m);
@@ -186,6 +186,7 @@ public class DockerClientConfig implements Serializable {
                 DOCKER_IO_SERVER_ADDRESS_PROPERTY,
                 DOCKER_IO_READ_TIMEOUT_PROPERTY,
                 DOCKER_IO_ENABLE_LOGGING_FILTER_PROPERTY,
+                DOCKER_IO_FOLLOW_REDIRECTS_FILTER_PROPERTY,
                 DOCKER_IO_DOCKER_CERT_PATH_PROPERTY,
                 DOCKER_IO_DOCKER_CFG_PATH_PROPERTY,
         }) {
@@ -379,7 +380,7 @@ public class DockerClientConfig implements Serializable {
                     .withServerAddress(p.getProperty(DOCKER_IO_SERVER_ADDRESS_PROPERTY))
                     .withReadTimeout(Integer.valueOf(p.getProperty(DOCKER_IO_READ_TIMEOUT_PROPERTY, "0")))
                     .withLoggingFilter(Boolean.valueOf(p.getProperty(DOCKER_IO_ENABLE_LOGGING_FILTER_PROPERTY, "true")))
-                    .withFollowRedirectsFilter(Boolean.valueOf(p.getProperty(DOCKER_IO_FOLLOW_REDIRECTS_FILTER_PROPERTY, "true")))
+                    .withFollowRedirectsFilter(Boolean.valueOf(p.getProperty(DOCKER_IO_FOLLOW_REDIRECTS_FILTER_PROPERTY, "false")))
                     .withDockerCertPath(p.getProperty(DOCKER_IO_DOCKER_CERT_PATH_PROPERTY))
                     .withDockerCfgPath(p.getProperty(DOCKER_IO_DOCKER_CFG_PATH_PROPERTY))
                     .withMaxPerRouteConnections(Integer.valueOf(p.getProperty(DOCKER_IO_MAX_PER_ROUTE_PROPERTY, "2")))

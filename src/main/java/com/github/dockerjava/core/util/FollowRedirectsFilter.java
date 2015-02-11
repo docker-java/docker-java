@@ -21,17 +21,17 @@ import javax.ws.rs.core.Response;
  */
 public class FollowRedirectsFilter implements ClientResponseFilter {
 
-	@Override
+    @Override
     public void filter(ClientRequestContext requestContext,
             ClientResponseContext responseContext) throws IOException {
-	      if (!responseContext.getStatusInfo().getFamily().equals(Response.Status.Family.REDIRECTION)) {
-	          return;	    	  
-	      }
+        if (!responseContext.getStatusInfo().getFamily().equals(Response.Status.Family.REDIRECTION)) {
+            return;
+        }
 
-	      Response resp = requestContext.getClient().target(responseContext.getLocation())
-	    		  .request().method(requestContext.getMethod());
-	      responseContext.setEntityStream((InputStream) resp.getEntity());
-	      responseContext.setStatusInfo(resp.getStatusInfo());
-	      responseContext.setStatus(resp.getStatus());
+        Response resp = requestContext.getClient().target(responseContext.getLocation())
+                .request().method(requestContext.getMethod());
+        responseContext.setEntityStream((InputStream) resp.getEntity());
+        responseContext.setStatusInfo(resp.getStatusInfo());
+        responseContext.setStatus(resp.getStatus());
     }
 }

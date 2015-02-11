@@ -48,12 +48,12 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         clientConfig.connectorProvider(new ApacheConnectorProvider());
         clientConfig.property(CommonProperties.FEATURE_AUTO_DISCOVERY_DISABLE, true);
 
-        clientConfig.register(ResponseStatusExceptionFilter.class);
-        clientConfig.register(JsonClientFilter.class);
-        clientConfig.register(JacksonJsonProvider.class);
         if (dockerClientConfig.followRedirectsFilterEnabled()) {
             clientConfig.register(FollowRedirectsFilter.class);
         }
+        clientConfig.register(ResponseStatusExceptionFilter.class);
+        clientConfig.register(JsonClientFilter.class);
+        clientConfig.register(JacksonJsonProvider.class);
 
         if (dockerClientConfig.isLoggingFilterEnabled()) {
             clientConfig.register(new SelectiveLoggingFilter(LOGGER, true));
