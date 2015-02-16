@@ -26,7 +26,7 @@ import com.github.dockerjava.core.GoLangFileMatchException;
 import com.github.dockerjava.core.GoLangMatchFileFilter;
 import com.github.dockerjava.core.dockerfile.Dockerfile;
 
-import static jersey.repackaged.com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * 

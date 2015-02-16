@@ -22,7 +22,7 @@ import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.PushEventStreamItem;
 
 // Shaded, but imported
-import jersey.repackaged.com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList;
 
 public class PushImageCmdExec extends AbstrDockerCmdExec<PushImageCmd, Response> implements PushImageCmd.Exec {
 	

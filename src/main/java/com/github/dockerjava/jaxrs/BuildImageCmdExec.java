@@ -24,7 +24,7 @@ import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.model.EventStreamItem;
 import com.github.dockerjava.api.model.PushEventStreamItem;
 
-import jersey.repackaged.com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList;
 
 public class BuildImageCmdExec extends AbstrDockerCmdExec<BuildImageCmd, BuildImageCmd.Response> implements BuildImageCmd.Exec {
 	

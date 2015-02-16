@@ -16,7 +16,7 @@
 
 package com.github.dockerjava.core.util.guava;
 
-import jersey.repackaged.com.google.common.base.Preconditions;
+import com.google.common.base.Preconditions;
 
 /**
  * A {@code UnicodeEscaper} that escapes some set of Java characters using a

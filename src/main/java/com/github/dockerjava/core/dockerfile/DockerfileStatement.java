@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import jersey.repackaged.com.google.common.base.Objects;
-import jersey.repackaged.com.google.common.base.Optional;
+import com.google.common.base.Objects;
+import com.google.common.base.Optional;
 
 /**
  * A statement present in a dockerfile.
