@@ -16,12 +16,12 @@ public class DockerClientConfigTest {
     public static final DockerClientConfig EXAMPLE_CONFIG = newExampleConfig();
 
     private static DockerClientConfig newExampleConfig() {
-        return new DockerClientConfig(URI.create("http://foo"), "bar", "baz", "qux", "blam", "wham", "flam", 877, false, new LocalDirectorySSLConfig("flim"), 20, 2);
+        return new DockerClientConfig(URI.create("http://foo"), "bar", "baz", "qux", "blam", "wham", "flam", 877, false, false, new LocalDirectorySSLConfig("flim"), 20, 2);
     }
 
     @Test
     public void string() throws Exception {
-        assertEquals("DockerClientConfig{uri=http://foo, version='bar', username='baz', password='qux', email='blam', serverAddress='wham', dockerCfgPath='flam', sslConfig='LocalDirectorySSLConfig{dockerCertPath=flim}', readTimeout=877, loggingFilterEnabled=false}",
+        assertEquals("DockerClientConfig{uri=http://foo, version='bar', username='baz', password='qux', email='blam', serverAddress='wham', dockerCfgPath='flam', sslConfig='LocalDirectorySSLConfig{dockerCertPath=flim}', readTimeout=877, loggingFilterEnabled=false, followRedirectsFilterEnabled=false}",
                 EXAMPLE_CONFIG.toString());
     }
 
