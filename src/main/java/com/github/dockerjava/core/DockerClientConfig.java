@@ -65,12 +65,12 @@ public class DockerClientConfig implements Serializable {
     private final boolean loggingFilterEnabled;
     private final SSLConfig sslConfig;
     
-    private final int maxTotalConnections;
-    private final int maxPerRouteConnections;
+    private final Integer maxTotalConnections;
+    private final Integer maxPerRouteConnections;
 
     DockerClientConfig(URI uri, String version, String username, String password, String email, String serverAddress,
                        String dockerCfgPath, Integer readTimeout, boolean loggingFilterEnabled, SSLConfig sslConfig,
-                       int maxTotalConns, int maxPerRouteConns) {
+                       Integer maxTotalConns, Integer maxPerRouteConns) {
         this.uri = uri;
         this.version = version;
         this.username = username;
@@ -251,6 +251,14 @@ public class DockerClientConfig implements Serializable {
         return dockerCfgPath;
     }
     
+    public Integer getMaxTotalConnections() {
+      return maxTotalConnections;
+    }
+
+    public Integer getMaxPerRoutConnections() {
+      return maxPerRouteConnections;
+    }
+    
     private AuthConfig getAuthConfig() {
     	AuthConfig authConfig = null;
     	if (getUsername() != null && getPassword() != null && getEmail() != null
@@ -372,9 +380,15 @@ public class DockerClientConfig implements Serializable {
                     .withLoggingFilter(Boolean.valueOf(p.getProperty(DOCKER_IO_ENABLE_LOGGING_FILTER_PROPERTY, "true")))
                     .withDockerCertPath(p.getProperty(DOCKER_IO_DOCKER_CERT_PATH_PROPERTY))
                     .withDockerCfgPath(p.getProperty(DOCKER_IO_DOCKER_CFG_PATH_PROPERTY))
-                    .withMaxPerRouteConnections(Integer.valueOf(p.getProperty(DOCKER_IO_MAX_PER_ROUTE_PROPERTY, "2")))
-                    .withMaxTotalConnections(Integer.valueOf(p.getProperty(DOCKER_IO_MAX_TOTAL_PROPERTY, "20")))
-                    ;
+                    .withMaxPerRouteConnections(integerValue(p.getProperty(DOCKER_IO_MAX_PER_ROUTE_PROPERTY)))
+                    .withMaxTotalConnections(integerValue(p.getProperty(DOCKER_IO_MAX_TOTAL_PROPERTY)));
+        }
+        
+        private Integer integerValue(String value) {
+        	if(value != null)
+        		return Integer.valueOf(value);
+        	else 
+        		return null;
         }
 
         public final DockerClientConfigBuilder withUri(String uri) {
@@ -462,11 +476,5 @@ public class DockerClientConfig implements Serializable {
         }
     }
 
-    public int getMaxTotalConnections() {
-      return maxTotalConnections;
-    }
-
-    public int getMaxPerRoutConnections() {
-      return maxPerRouteConnections;
-    }
+//   
 }
