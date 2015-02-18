@@ -4,7 +4,7 @@ Change Log
 docker-java-1.0.0-SNAPSHOT
 ---
  * [#152](https://github.com/docker-java/docker-java/pull/152) Restore guava as a dependency
- * [#149](https://github.com/docker-java/docker-java/pull/149) Handle HTTP-Redirects #149 
+ * [#149](https://github.com/docker-java/docker-java/pull/149) Handle HTTP-Redirects 
  * [#148](https://github.com/docker-java/docker-java/pull/148) Save image functionality
  * [#142](https://github.com/docker-java/docker-java/pull/142) Reduce Logging Level 
  * [#138](https://github.com/docker-java/docker-java/pull/138) Apache CXF interopabilty
