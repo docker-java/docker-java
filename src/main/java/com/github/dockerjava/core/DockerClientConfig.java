@@ -1,6 +1,6 @@
 package com.github.dockerjava.core;
 
-import static jersey.repackaged.com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.File;
 import java.io.FileInputStream;

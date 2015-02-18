@@ -64,6 +64,7 @@
 		<jnr.unixsocket.version>0.3</jnr.unixsocket.version>
 		<bouncycastle.version>1.51</bouncycastle.version>
 		<unix-socket-factory.version>2015-01-27T15-02-14</unix-socket-factory.version>
+		<guava.version>18.0</guava.version>
 
 		<!--test dependencies -->
 		<version.logback>1.1.0</version.logback>
@@ -141,6 +142,12 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j-api.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${guava.version}</version>
 		</dependency>
 
 <!-- 		<dependency> -->

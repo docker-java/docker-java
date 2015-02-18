@@ -1,6 +1,6 @@
 package com.github.dockerjava.jaxrs;
 
-import static jersey.repackaged.com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
 import java.net.URI;

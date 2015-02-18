@@ -1,6 +1,6 @@
 package com.github.dockerjava.core.command;
 
-import static jersey.repackaged.com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
 

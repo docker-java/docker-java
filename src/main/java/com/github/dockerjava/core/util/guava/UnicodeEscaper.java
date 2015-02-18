@@ -16,7 +16,7 @@
 
 package com.github.dockerjava.core.util.guava;
 
-import jersey.repackaged.com.google.common.base.Preconditions;
+import com.google.common.base.Preconditions;
 
 
 /**

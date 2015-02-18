@@ -20,11 +20,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import jersey.repackaged.com.google.common.base.Function;
-import jersey.repackaged.com.google.common.base.Objects;
-import jersey.repackaged.com.google.common.base.Optional;
-import jersey.repackaged.com.google.common.base.Predicate;
-import jersey.repackaged.com.google.common.collect.Collections2;
+import com.google.common.base.Function;
+import com.google.common.base.Objects;
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 
 /**
  * Parse a Dockerfile.

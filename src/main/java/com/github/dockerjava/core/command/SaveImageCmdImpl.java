@@ -5,7 +5,7 @@ import com.github.dockerjava.api.command.SaveImageCmd;
 
 import java.io.InputStream;
 
-import static jersey.repackaged.com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class SaveImageCmdImpl extends AbstrAuthCfgDockerCmd<SaveImageCmd, InputStream> implements SaveImageCmd {
     private String name;
