@@ -40,6 +40,8 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 
 	public Device[] getDevices();
 
+	public String[] getExtraHosts();
+
 	public RestartPolicy getRestartPolicy();
 
 	public Capability[] getCapAdd();
@@ -106,6 +108,11 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 	 * Add host devices to the container
 	 */
 	public StartContainerCmd withDevices(Device... devices);
+
+	/**
+	 * Add hostnames to /etc/hosts in the container
+	 */
+	public StartContainerCmd withExtraHosts(String... extraHosts);
 
 	/**
 	 * Set custom {@link RestartPolicy} for the container. Defaults to
