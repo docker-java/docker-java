@@ -49,7 +49,7 @@ public class KillContainerCmdImplTest extends AbstractDockerClientTest {
 		super.afterMethod(result);
 	}
 
-	@Test
+	@Test(groups = "ignoreInCircleCi")
 	public void killContainer() throws DockerException {
 
 		CreateContainerResponse container = dockerClient

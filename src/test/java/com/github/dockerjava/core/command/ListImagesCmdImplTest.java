@@ -58,7 +58,7 @@ public class ListImagesCmdImplTest extends AbstractDockerClientTest {
 		assertThat(img.getRepoTags(), not(emptyArray()));
 	}
 
-	@Test
+	@Test(groups = "ignoreInCircleCi")
 	public void listDanglingImages() throws DockerException {
 		String imageId = createDanglingImage();
 		List<Image> images = dockerClient.listImagesCmd()

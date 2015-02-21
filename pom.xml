@@ -386,6 +386,7 @@
 						</goals>
 						<configuration>
 							<groups>integration</groups>
+							<excludedGroups>ignoreInCircleCi</excludedGroups>
 							<includes>
 								<include>**/*Test.java</include>
 							</includes>
