@@ -1,7 +1,7 @@
 Change Log
 ===
 
-docker-java-1.0.0-SNAPSHOT
+docker-java-1.0.0
 ---
  * [#152](https://github.com/docker-java/docker-java/pull/152) Restore guava as a dependency
  * [#149](https://github.com/docker-java/docker-java/pull/149) Handle HTTP-Redirects 
