@@ -4,6 +4,7 @@ import java.io.*;
 
 import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.api.model.Identifier;
 
 // https://godoc.org/github.com/fsouza/go-dockerclient
 public interface DockerClient extends Closeable {
@@ -28,6 +29,8 @@ public interface DockerClient extends Closeable {
 	public PullImageCmd pullImageCmd(String repository);
 
 	public PushImageCmd pushImageCmd(String name);
+
+        public PushImageCmd pushImageCmd(Identifier identifier);
 
 	public CreateImageCmd createImageCmd(String repository,
 			InputStream imageStream);
