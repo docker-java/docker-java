@@ -438,6 +438,29 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 	}
 
 	@Test
+	public void startContainerWithExtraHosts() throws DockerException {
+
+		CreateContainerResponse container = dockerClient
+				.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
+
+		LOG.info("Created container {}", container.toString());
+
+		assertThat(container.getId(), not(isEmptyString()));
+
+		dockerClient.startContainerCmd(container.getId())
+				.withExtraHosts("dockerhost:127.0.0.1")
+				.exec();
+
+		InspectContainerResponse inspectContainerResponse = dockerClient
+				.inspectContainerCmd(container.getId()).exec();
+
+		assertThat(inspectContainerResponse.getState().isRunning(), is(true));
+
+		assertThat(Arrays.asList(inspectContainerResponse.getHostConfig()
+				.getExtraHosts()), contains("dockerhost:127.0.0.1"));
+	}
+
+	@Test
 	public void startContainerWithRestartPolicy() throws DockerException {
 
 		CreateContainerResponse container = dockerClient

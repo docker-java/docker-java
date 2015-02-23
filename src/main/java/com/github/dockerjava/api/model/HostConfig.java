@@ -53,12 +53,16 @@ public class HostConfig {
 	@JsonProperty("Devices")
 	private Device[] devices;
 
+	@JsonProperty("ExtraHosts")
+	private String[] extraHosts;
+
 	public HostConfig() {
 	}
 
 	public HostConfig(String[] binds, Links links, LxcConf[] lxcConf, Ports portBindings, boolean publishAllPorts,
 			boolean privileged, String[] dns, String[] dnsSearch, VolumesFrom[] volumesFrom, String containerIDFile,
-			Capability[] capAdd, Capability[] capDrop, RestartPolicy restartPolicy, String networkMode, Device[] devices) {
+			Capability[] capAdd, Capability[] capDrop, RestartPolicy restartPolicy, String networkMode, Device[] devices,
+            String[] extraHosts) {
 		this.binds = binds;
 		this.links = links;
 		this.lxcConf = lxcConf;
@@ -74,6 +78,7 @@ public class HostConfig {
 		this.restartPolicy = restartPolicy;
 		this.networkMode = networkMode;
 		this.devices = devices;
+		this.extraHosts = extraHosts;
 	}
 
 	public String[] getBinds() {
@@ -122,6 +127,10 @@ public class HostConfig {
 
 	public Device[] getDevices() {
 		return devices;
+	}
+
+	public String[] getExtraHosts() {
+		return extraHosts;
 	}
 
 	public RestartPolicy getRestartPolicy() {
@@ -194,6 +203,10 @@ public class HostConfig {
 
 	public void setDevices(Device[] devices) {
 		this.devices = devices;
+	}
+
+	public void setExtraHosts(String[] extraHosts) {
+		this.extraHosts = extraHosts;
 	}
 
 	@Override

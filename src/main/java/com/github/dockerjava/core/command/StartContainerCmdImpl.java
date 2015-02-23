@@ -65,6 +65,9 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	@JsonProperty("Devices")
 	private Device[] devices;
 	
+	@JsonProperty("ExtraHosts")
+	private String[] extraHosts;
+	
 	@JsonProperty("RestartPolicy")
 	private RestartPolicy restartPolicy;
 	
@@ -139,6 +142,11 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
     @Override
     public Device[] getDevices() {
 		return devices;
+	}
+    
+    @Override
+    public String[] getExtraHosts() {
+		return extraHosts;
 	}
     
     @Override
@@ -250,6 +258,14 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 		this.devices = devices;
 		return this;
 	}
+
+    @Override
+	public StartContainerCmd withExtraHosts(String... extraHosts) {
+		checkNotNull(extraHosts, "extraHosts was not specified");
+		this.extraHosts = extraHosts;
+		return this;
+	}
+    
     
     @Override
    	public StartContainerCmd withRestartPolicy(RestartPolicy restartPolicy) {

@@ -311,4 +311,27 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
 	}
 
+	@Test
+	public void createContainerWithExtraHosts() throws DockerException {
+
+		String[] extraHosts = {"dockerhost:127.0.0.1", "otherhost:10.0.0.1"};
+
+		HostConfig hostConfig = new HostConfig();
+		hostConfig.setExtraHosts(extraHosts);
+
+		CreateContainerResponse container = dockerClient
+				.createContainerCmd("busybox").withName("container")
+				.withHostConfig(hostConfig).exec();
+
+		LOG.info("Created container {}", container.toString());
+
+		assertThat(container.getId(), not(isEmptyString()));
+
+		InspectContainerResponse inspectContainerResponse = dockerClient
+				.inspectContainerCmd(container.getId()).exec();
+
+		assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getExtraHosts()),
+				containsInAnyOrder("dockerhost:127.0.0.1", "otherhost:10.0.0.1"));
+	}
+
 }
