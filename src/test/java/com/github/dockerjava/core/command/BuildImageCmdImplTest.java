@@ -162,7 +162,7 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
 			dockerClient.buildImageCmd(baseDir).withNoCache().exec();
 		}
 
-	@Test
+	@Test(groups = "ignoreInCircleCi")
 	public void testDockerIgnore() throws DockerException,
 			IOException {
 		File baseDir = new File(Thread.currentThread().getContextClassLoader()

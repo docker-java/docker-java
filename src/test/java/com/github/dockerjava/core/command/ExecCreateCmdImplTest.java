@@ -36,7 +36,7 @@ public class ExecCreateCmdImplTest extends AbstractDockerClientTest {
         super.afterMethod(result);
     }
 
-    @Test
+    @Test(groups = "ignoreInCircleCi")
     public void execCreateTest() {
         String containerName = "generated_" + new SecureRandom().nextInt();
 

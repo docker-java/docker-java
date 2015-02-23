@@ -51,7 +51,7 @@ public class RemoveImageCmdImplTest extends AbstractDockerClientTest {
 		super.afterMethod(result);
 	}
 
-	@Test
+	@Test(groups = "ignoreInCircleCi")
 	public void removeImage() throws DockerException, InterruptedException {
 
 		CreateContainerResponse container = dockerClient

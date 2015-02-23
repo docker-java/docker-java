@@ -46,7 +46,7 @@ public class ContainerDiffCmdImplTest extends AbstractDockerClientTest {
 		super.afterMethod(result);
 	}
 
-	@Test
+	@Test(groups = "ignoreInCircleCi")
 	public void testContainerDiff() throws DockerException {
 		CreateContainerResponse container = dockerClient
 				.createContainerCmd("busybox").withCmd("touch", "/test" ).exec();

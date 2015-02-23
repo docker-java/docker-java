@@ -153,6 +153,11 @@ public class InspectContainerResponse {
 		return mountLabel;
 	}
 
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public class NetworkSettings {
 

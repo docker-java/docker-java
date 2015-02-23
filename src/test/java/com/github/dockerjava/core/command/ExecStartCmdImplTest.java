@@ -37,7 +37,7 @@ public class ExecStartCmdImplTest extends AbstractDockerClientTest {
         super.afterMethod(result);
     }
 
-    @Test
+    @Test(groups = "ignoreInCircleCi")
     public void execStartTest() throws Exception {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
