@@ -1,11 +1,11 @@
 Change Log
 ===
-docker-java-SNAPSHOT
+SNAPSHOT
 ---
  * [#156](https://github.com/docker-java/docker-java/pull/156) Add support for configuring ExtraHosts 
 
 
-docker-java-1.0.0
+v1.0.0
 ---
  * [#152](https://github.com/docker-java/docker-java/pull/152) Restore guava as a dependency
  * [#149](https://github.com/docker-java/docker-java/pull/149) Handle HTTP-Redirects 
@@ -18,7 +18,7 @@ docker-java-1.0.0
  * [#131](https://github.com/docker-java/docker-java/pull/128) Utility classes and streamed JSON representations
  * [#128](https://github.com/docker-java/docker-java/pull/128) Allow unauthorized pullImageCmd
 
-docker-java-0.10.5
+v0.10.5
 ---
  * [#125](https://github.com/docker-java/docker-java/pull/125) Unixsocket support
  * [#123](https://github.com/docker-java/docker-java/pull/123) support DOCKER_TLS_VERIFY to detect ssl
@@ -30,7 +30,7 @@ docker-java-0.10.5
  * [#114](https://github.com/docker-java/docker-java/pull/114) Fix CreateContainerCmdImpl.withVolumesFrom()
  * [#111](https://github.com/docker-java/docker-java/pull/111) Allow to send empty messages in StartContainerCmd  
 
-docker-java-0.10.4
+v0.10.4
 ---
 
  * [#109](https://github.com/docker-java/docker-java/pull/109) Support tag in push image command  
@@ -45,7 +45,7 @@ docker-java-0.10.4
  * [#90](https://github.com/docker-java/docker-java/pull/90) Update DockerClientBuilder.java
  * [#88](https://github.com/docker-java/docker-java/pull/88) Add support for private repositories and pull/push authentication
 
-docker-java-0.10.3
+v0.10.3
 ---
 
  * [#87](https://github.com/docker-java/docker-java/pull/87) Improve adding of port bindings
@@ -60,7 +60,7 @@ docker-java-0.10.3
  * [#73](https://github.com/docker-java/docker-java/pull/73) Improve parsing and serialization of Link
  * [#70](https://github.com/docker-java/docker-java/pull/70) Improve instantiation and serialization of Bind
 
-docker-java-0.10.2
+v0.10.2
 ---
 
  * [#69](https://github.com/docker-java/docker-java/pull/69) Use canonical form of Docker folder when building TAR files
@@ -74,14 +74,14 @@ docker-java-0.10.2
  * [#56](https://github.com/docker-java/docker-java/pull/56) Update README.md
  * [#58](https://github.com/docker-java/docker-java/pull/58) Code clear and bug fix
 
-docker-java-0.10.1
+v0.10.1
 ---
 
  * [#49](https://github.com/docker-java/docker-java/pull/49) Allow user to check where volume is binded on host
  * [#47](https://github.com/docker-java/docker-java/pull/47) let CompressArchiveUtil preserve executable flags
  * [#46](https://github.com/docker-java/docker-java/pull/46) Fixes to AttachContainerCmd and CreateContainerCmd.
 
-docker-java-0.10.0
+v0.10.0
 ---
 
  * [#45](https://github.com/docker-java/docker-java/pull/45) Fix Issue #44 Adjusting DNS property type to be a String array as specified by the Doc...
@@ -89,7 +89,7 @@ docker-java-0.10.0
  * [#37](https://github.com/docker-java/docker-java/pull/37) Starts v0.10.0
  * [#35](https://github.com/docker-java/docker-java/pull/35) Exposing the withTTY method for container creation.
 
-docker-java-0.9.1
+v0.9.1
 ---
 
  * [#31](https://github.com/docker-java/docker-java/pull/31) Change VolumesFrom to handle array
@@ -98,13 +98,13 @@ docker-java-0.9.1
  * [#19](https://github.com/docker-java/docker-java/pull/19) Add missing options to BuildCmd and set them to match Docker client.
  * [#16](https://github.com/docker-java/docker-java/pull/16) Build image improvements
 
-docker-java-0.9.0
+v0.9.0
 ---
 
  * [#14](https://github.com/docker-java/docker-java/pull/14) Use RegEx to match ADD command from Dockerfile.
  * [#9](https://github.com/docker-java/docker-java/pull/9) Add a build command accepting a tar as a InputStream, so we can build the Dockerfile TAR on the fly without a temporary folder.
 
-docker-java-0.8.2
+v0.8.2
 ---
 
  * [#2](https://github.com/docker-java/docker-java/pull/2) Move to new maven coordinate com.github.docker-java:docker-java
@@ -126,11 +126,11 @@ docker-java-0.8.2
  * [#37](https://github.com/docker-java/docker-java/pull/37) Starts v0.10.0
  * [#32](https://github.com/docker-java/docker-java/pull/32) 
 
-docker-java-0.8.1
+v0.8.1
 ---
 
 
-docker-java-0.8.1
+v0.8.1
 ---
 
  * [#28](https://github.com/docker-java/docker-java/pull/28) Improves use of docker-java in unit tests
