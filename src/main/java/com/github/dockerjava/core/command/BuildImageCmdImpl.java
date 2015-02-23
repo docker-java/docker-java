@@ -1,32 +1,13 @@
 package com.github.dockerjava.core.command;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
-
-import com.github.dockerjava.api.DockerClientException;
 import com.github.dockerjava.api.command.BuildImageCmd;
-import com.github.dockerjava.core.CompressArchiveUtil;
-import com.github.dockerjava.core.GoLangFileMatch;
-import com.github.dockerjava.core.GoLangFileMatchException;
-import com.github.dockerjava.core.GoLangMatchFileFilter;
 import com.github.dockerjava.core.dockerfile.Dockerfile;
-
-import static com.google.common.base.Preconditions.*;
 
 /**
  * 

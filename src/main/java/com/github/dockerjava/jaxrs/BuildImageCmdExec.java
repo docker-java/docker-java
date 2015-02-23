@@ -1,7 +1,5 @@
 package com.github.dockerjava.jaxrs;
 
-
-
 import static javax.ws.rs.client.Entity.entity;
 
 import java.io.IOException;
@@ -20,9 +18,8 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.github.dockerjava.api.command.BuildImageCmd;
-import com.github.dockerjava.api.command.PushImageCmd;
+
 import com.github.dockerjava.api.model.EventStreamItem;
-import com.github.dockerjava.api.model.PushEventStreamItem;
 
 import com.google.common.collect.ImmutableList;
 

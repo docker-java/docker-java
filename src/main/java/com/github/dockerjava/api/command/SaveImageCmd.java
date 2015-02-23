@@ -2,9 +2,7 @@ package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.model.AuthConfig;
-import com.github.dockerjava.api.model.PushEventStreamItem;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 public interface SaveImageCmd extends DockerCmd<InputStream>{

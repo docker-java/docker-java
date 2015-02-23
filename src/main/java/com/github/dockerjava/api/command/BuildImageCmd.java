@@ -1,7 +1,6 @@
 package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.model.EventStreamItem;
-import com.github.dockerjava.api.model.PushEventStreamItem;
 
 import java.io.IOException;
 import java.io.InputStream;
