@@ -6,7 +6,7 @@ The build including tests and integration tests can be automatically run on [cir
 1. create an account on circle CI using your github account.
 2. select docker-java from the github projects listed in your profile.
 3. go to the project settings for docker-java (click on the gear-wheel icon beside the docker-java title).
-4. open the *Environemnt variable* page.
+4. open the *Environment variable* page.
 5. add the following environment variables:
  - DOCKER_EMAIL
  - DOCKER_PASSWORD
