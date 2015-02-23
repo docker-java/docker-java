@@ -1,5 +1,9 @@
 Change Log
 ===
+docker-java-SNAPSHOT
+---
+ * [#156](https://github.com/docker-java/docker-java/pull/156) Add support for configuring ExtraHosts 
+
 
 docker-java-1.0.0
 ---
