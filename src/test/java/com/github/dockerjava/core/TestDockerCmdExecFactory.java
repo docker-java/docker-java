@@ -11,24 +11,25 @@ import com.github.dockerjava.api.command.AuthCmd.Exec;
 import com.github.dockerjava.jaxrs.BuildImageCmdExec;
 
 /**
- * Special {@link DockerCmdExecFactory} implementation that collects container and image creations
- * while test execution for the purpose of automatically cleanup.
+ * Special {@link DockerCmdExecFactory} implementation that collects container
+ * and image creations while test execution for the purpose of automatically
+ * cleanup.
  * 
  * @author marcus
- *
+ * 
  */
 public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
-	
+
 	private List<String> containerNames = new ArrayList<String>();
-	
+
 	private List<String> imageNames = new ArrayList<String>();
-	
+
 	private DockerCmdExecFactory delegate;
-	
+
 	public TestDockerCmdExecFactory(DockerCmdExecFactory delegate) {
 		this.delegate = delegate;
 	}
-	
+
 	@Override
 	public void init(DockerClientConfig dockerClientConfig) {
 		delegate.init(dockerClientConfig);
@@ -38,19 +39,20 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 	public void close() throws IOException {
 		delegate.close();
 	}
-	
+
 	@Override
 	public CreateContainerCmd.Exec createCreateContainerCmdExec() {
 		return new CreateContainerCmd.Exec() {
 			@Override
 			public CreateContainerResponse exec(CreateContainerCmd command) {
-				CreateContainerResponse createContainerResponse = delegate.createCreateContainerCmdExec().exec(command);
+				CreateContainerResponse createContainerResponse = delegate
+						.createCreateContainerCmdExec().exec(command);
 				containerNames.add(createContainerResponse.getId());
 				return createContainerResponse;
 			}
 		};
 	}
-	
+
 	@Override
 	public RemoveContainerCmd.Exec createRemoveContainerCmdExec() {
 		return new RemoveContainerCmd.Exec() {
@@ -62,21 +64,20 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 			}
 		};
 	}
-	
+
 	@Override
 	public CreateImageCmd.Exec createCreateImageCmdExec() {
 		return new CreateImageCmd.Exec() {
 			@Override
 			public CreateImageResponse exec(CreateImageCmd command) {
-				CreateImageResponse createImageResponse = delegate.createCreateImageCmdExec().exec(command);
+				CreateImageResponse createImageResponse = delegate
+						.createCreateImageCmdExec().exec(command);
 				imageNames.add(createImageResponse.getId());
 				return createImageResponse;
 			}
 		};
 	}
-	
-	
-	
+
 	@Override
 	public RemoveImageCmd.Exec createRemoveImageCmdExec() {
 		return new RemoveImageCmd.Exec() {
@@ -88,25 +89,26 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 			}
 		};
 	}
-	
+
 	@Override
 	public BuildImageCmd.Exec createBuildImageCmdExec() {
 		return new BuildImageCmd.Exec() {
 			@Override
-			public  BuildImageCmd.Response exec(BuildImageCmd command) {
+			public BuildImageCmd.Response exec(BuildImageCmd command) {
 				// can't detect image id here so tagging it
 				String tag = command.getTag();
-				if(tag == null || "".equals(tag.trim())) {
+				if (tag == null || "".equals(tag.trim())) {
 					tag = "" + new SecureRandom().nextInt(Integer.MAX_VALUE);
 					command.withTag(tag);
 				}
-				InputStream inputStream = delegate.createBuildImageCmdExec().exec(command);
+				InputStream inputStream = delegate.createBuildImageCmdExec()
+						.exec(command);
 				imageNames.add(tag);
 				return new BuildImageCmdExec.ResponseImpl(inputStream);
 			}
-                };
+		};
 	}
-	
+
 	@Override
 	public Exec createAuthCmdExec() {
 		return delegate.createAuthCmdExec();
@@ -122,12 +124,12 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 		return delegate.createPingCmdExec();
 	}
 
-    @Override
-    public ExecCreateCmd.Exec createExecCmdExec() {
-        return delegate.createExecCmdExec();
-    }
+	@Override
+	public ExecCreateCmd.Exec createExecCmdExec() {
+		return delegate.createExecCmdExec();
+	}
 
-    @Override
+	@Override
 	public VersionCmd.Exec createVersionCmdExec() {
 		return delegate.createVersionCmdExec();
 	}
@@ -141,9 +143,11 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 	public PushImageCmd.Exec createPushImageCmdExec() {
 		return delegate.createPushImageCmdExec();
 	}
-    
-    @Override
-    public SaveImageCmd.Exec createSaveImageCmdExec() { return delegate.createSaveImageCmdExec(); }
+
+	@Override
+	public SaveImageCmd.Exec createSaveImageCmdExec() {
+		return delegate.createSaveImageCmdExec();
+	}
 
 	@Override
 	public SearchImagesCmd.Exec createSearchImagesCmdExec() {
@@ -185,12 +189,12 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 		return delegate.createAttachContainerCmdExec();
 	}
 
-    @Override
-    public ExecStartCmd.Exec createExecStartCmdExec() {
-        return delegate.createExecStartCmdExec();
-    }
+	@Override
+	public ExecStartCmd.Exec createExecStartCmdExec() {
+		return delegate.createExecStartCmdExec();
+	}
 
-    @Override
+	@Override
 	public LogContainerCmd.Exec createLogContainerCmdExec() {
 		return delegate.createLogContainerCmdExec();
 	}
@@ -253,11 +257,9 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 	public List<String> getContainerNames() {
 		return new ArrayList<String>(containerNames);
 	}
-	
+
 	public List<String> getImageNames() {
 		return new ArrayList<String>(imageNames);
 	}
 
-	
-	
 }

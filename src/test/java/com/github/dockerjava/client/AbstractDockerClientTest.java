@@ -39,8 +39,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 	protected TestDockerCmdExecFactory dockerCmdExecFactory = new TestDockerCmdExecFactory(DockerClientBuilder.getDefaultDockerCmdExecFactory());
 
 	public void beforeTest()  {
-		
-		
+				
 		LOG.info("======================= BEFORETEST =======================");
 		LOG.info("Connecting to Docker server");
 		dockerClient = DockerClientBuilder.getInstance(config())
@@ -50,8 +49,6 @@ public abstract class AbstractDockerClientTest extends Assert {
 		LOG.info("Pulling image 'busybox'");
 		// need to block until image is pulled completely
 		asString(dockerClient.pullImageCmd("busybox").withTag("latest").exec());
-
-
 
 		assertNotNull(dockerClient);
 		LOG.info("======================= END OF BEFORETEST =======================\n\n");
@@ -90,7 +87,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 			try {
 				dockerClient.removeContainerCmd(container).withForce().exec();
 			} catch (DockerException ignore) {
-				ignore.printStackTrace();
+				//ignore.printStackTrace();
 			}
 		}
 
@@ -99,7 +96,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 			try {
 				dockerClient.removeImageCmd(image).withForce().exec();
 			} catch (DockerException ignore) {
-				ignore.printStackTrace();
+				//ignore.printStackTrace();
 			}
 		}
 
