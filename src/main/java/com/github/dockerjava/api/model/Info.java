@@ -25,6 +25,9 @@ public class Info {
 
 	@JsonProperty("Debug")
 	private boolean debug;
+	
+	@JsonProperty("DockerRootDir")
+	private String DockerRootDir;
 
 	@JsonProperty("Driver")
 	private String driver;
@@ -34,9 +37,12 @@ public class Info {
 
 	@JsonProperty("ExecutionDriver")
 	private String executionDriver;
+	
+	@JsonProperty("ID")
+	private String ID;
 
 	@JsonProperty("IPv4Forwarding")
-	private String IPv4Forwarding;
+	private boolean IPv4Forwarding;
 
 	@JsonProperty("Images")
 	private int images;
@@ -52,9 +58,21 @@ public class Info {
 
 	@JsonProperty("KernelVersion")
 	private String kernelVersion;
+	
+	@JsonProperty("Labels")
+	private String Labels;
 
 	@JsonProperty("MemoryLimit")
 	private boolean memoryLimit;
+	
+	@JsonProperty("MemTotal")
+	private long memTotal;
+		
+	@JsonProperty("Name")
+	private String name;
+	
+	@JsonProperty("NCPU")
+	private int NCPU;
 
 	@JsonProperty("NEventsListener")
 	private long nEventListener;
@@ -64,12 +82,15 @@ public class Info {
 
 	@JsonProperty("NGoroutines")
 	private int NGoroutines;
+	
+	@JsonProperty("OperatingSystem")
+	private String OperatingSystem;
 
 	@JsonProperty("Sockets")
 	private String[] sockets;
 
 	@JsonProperty("SwapLimit")
-	private int swapLimit;
+	private boolean swapLimit;
 
 	public boolean isDebug() {
 		return debug;
@@ -77,6 +98,10 @@ public class Info {
 
 	public int getContainers() {
 		return containers;
+	}
+	
+	public String getDockerRootDir() {
+		return DockerRootDir;
 	}
 
 	public String getDriver() {
@@ -90,8 +115,12 @@ public class Info {
 	public int getImages() {
 		return images;
 	}
+	
+	public String getID() {
+		return ID;
+	}
 
-	public String getIPv4Forwarding() {
+	public boolean getIPv4Forwarding() {
 		return IPv4Forwarding;
 	}
 
@@ -110,6 +139,10 @@ public class Info {
 	public String getKernelVersion() {
 		return kernelVersion;
 	}
+	
+	public String getLabels() {
+		return Labels;
+	}
 
 	public String[] getSockets() {
 		return sockets;
@@ -122,6 +155,18 @@ public class Info {
 	public long getnEventListener() {
 		return nEventListener;
 	}
+	
+	public long getMemTotal() {
+		return memTotal;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public int getNCPU() {
+		return NCPU;
+	}
 
 	public int getNFd() {
 		return NFd;
@@ -130,8 +175,12 @@ public class Info {
 	public int getNGoroutines() {
 		return NGoroutines;
 	}
+	
+	public String getOperatingSystem() {
+		return OperatingSystem;
+	}
 
-	public int getSwapLimit() {
+	public boolean getSwapLimit() {
 		return swapLimit;
 	}
 
