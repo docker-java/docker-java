@@ -23,6 +23,9 @@ public class InspectExecResponse {
     @JsonProperty("Running")
     private boolean running;
 
+    @JsonProperty("ExitCode")
+    private int exitCode;
+
     public String getId() {
         return id;
     }
@@ -41,6 +44,10 @@ public class InspectExecResponse {
 
     public boolean isRunning() {
         return running;
+    }
+
+    public int getExitCode() {
+        return exitCode;
     }
 
     @Override
