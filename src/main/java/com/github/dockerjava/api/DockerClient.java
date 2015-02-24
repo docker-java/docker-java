@@ -78,6 +78,8 @@ public interface DockerClient extends Closeable {
 
     public ExecStartCmd execStartCmd(String containerId);
 
+    public InspectExecCmd inspectExecCmd(String execId);
+
 	public LogContainerCmd logContainerCmd(String containerId);
 
 	public CopyFileFromContainerCmd copyFileFromContainerCmd(

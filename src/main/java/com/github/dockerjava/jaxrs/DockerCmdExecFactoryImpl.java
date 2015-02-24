@@ -222,6 +222,11 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     }
 
     @Override
+    public InspectExecCmd.Exec createInspectExecCmdExec() {
+        return new InspectExecCmdExec(getBaseResource());
+    }
+
+    @Override
     public LogContainerCmd.Exec createLogContainerCmdExec() {
         return new LogContainerCmdExec(getBaseResource());
     }
