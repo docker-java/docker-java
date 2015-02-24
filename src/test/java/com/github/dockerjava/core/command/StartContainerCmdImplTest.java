@@ -283,7 +283,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 		}
 
 		CreateContainerResponse container2 = dockerClient
-				.createContainerCmd("busybox").withCmd("true")
+				.createContainerCmd("busybox").withCmd("sleep", "9999")
 				.withName("container2").exec();
 
 		LOG.info("Created container2 {}", container2.toString());
