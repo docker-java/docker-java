@@ -15,7 +15,9 @@ import com.google.common.base.Objects;
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class EventStreamItem implements Serializable {
 
-    @JsonProperty("stream")
+	private static final long serialVersionUID = 638778515773898651L;
+
+	@JsonProperty("stream")
     private String stream;
 
     // {"error":"Error...", "errorDetail":{"code": 123, "message": "Error..."}}

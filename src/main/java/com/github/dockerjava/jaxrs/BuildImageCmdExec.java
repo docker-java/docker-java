@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 
+import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -18,9 +19,8 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.github.dockerjava.api.command.BuildImageCmd;
-
+import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.EventStreamItem;
-
 import com.google.common.collect.ImmutableList;
 
 public class BuildImageCmdExec extends AbstrDockerCmdExec<BuildImageCmd, BuildImageCmd.Response> implements BuildImageCmd.Exec {
@@ -55,14 +55,22 @@ public class BuildImageCmdExec extends AbstrDockerCmdExec<BuildImageCmd, BuildIm
 
 
           LOGGER.debug("POST: {}", webResource);
-          InputStream is = webResource
-              .request()
+          InputStream is = resourceWithOptionalAuthConfig(command, webResource.request())
               .accept(MediaType.TEXT_PLAIN)
               .post(entity(command.getTarInputStream(), "application/tar"), Response.class).readEntity(InputStream.class);
 
 	  return new ResponseImpl(is);
 		
 	}
+
+	private Invocation.Builder resourceWithOptionalAuthConfig(BuildImageCmd command, Invocation.Builder request) {
+		AuthConfigurations authConfigs = command.getBuildAuthConfigs();
+		if (authConfigs != null) {
+			request = request.header("X-Registry-Config", registryConfigs(authConfigs));
+		}
+		return request;
+	}
+	
   public static class ResponseImpl extends BuildImageCmd.Response {
 
     private final InputStream proxy;
