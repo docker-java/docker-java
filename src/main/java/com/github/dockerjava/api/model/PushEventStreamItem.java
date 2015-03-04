@@ -13,7 +13,9 @@ import com.google.common.base.Objects;
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class PushEventStreamItem implements Serializable {
 
-    @JsonProperty("status")
+	private static final long serialVersionUID = -5187169652557467828L;
+
+	@JsonProperty("status")
     private String status;
 
     @JsonProperty("progress")
