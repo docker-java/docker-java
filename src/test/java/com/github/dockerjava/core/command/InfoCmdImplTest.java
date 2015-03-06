@@ -68,5 +68,6 @@ public class InfoCmdImplTest extends AbstractDockerClientTest {
 		assertTrue(dockerInfo.getImages() > 0);
 		assertTrue(dockerInfo.getNFd() > 0);
 		assertTrue(dockerInfo.getNGoroutines() > 0);
+		assertTrue(dockerInfo.getNCPU() > 0);
 	}
 }
