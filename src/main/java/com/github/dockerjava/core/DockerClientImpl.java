@@ -10,6 +10,7 @@ import java.io.InputStream;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.api.model.Identifier;
 import com.github.dockerjava.core.command.*;
 
 /**
@@ -134,8 +135,21 @@ public class DockerClientImpl implements Closeable, DockerClient {
             cmd.withAuthConfig(cfg);
           return cmd;
 	}
-    
-    @Override
+
+        @Override
+        public PushImageCmd pushImageCmd(Identifier identifier) {
+          PushImageCmd cmd = pushImageCmd(identifier.repository.name);
+          if( identifier.tag.isPresent() )
+            cmd.withTag(identifier.tag.get());
+
+          AuthConfig cfg = dockerClientConfig.effectiveAuthConfig(identifier.repository.name);
+          if( cfg != null )
+            cmd.withAuthConfig(cfg);
+
+          return cmd;
+        }
+
+        @Override
     public SaveImageCmd saveImageCmd(String name) {
         return new SaveImageCmdImpl(getDockerCmdExecFactory()
             .createSaveImageCmdExec(), name).withAuthConfig(dockerClientConfig.effectiveAuthConfig(name));
