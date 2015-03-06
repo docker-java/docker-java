@@ -194,7 +194,12 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 		return delegate.createExecStartCmdExec();
 	}
 
-	@Override
+    @Override
+    public InspectExecCmd.Exec createInspectExecCmdExec() {
+        return delegate.createInspectExecCmdExec();
+    }
+
+    @Override
 	public LogContainerCmd.Exec createLogContainerCmdExec() {
 		return delegate.createLogContainerCmdExec();
 	}

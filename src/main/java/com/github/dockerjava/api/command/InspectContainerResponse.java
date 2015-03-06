@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.command;
 
 
+import java.util.List;
 import java.util.Map;
 
 import com.github.dockerjava.api.model.*;
@@ -65,6 +66,9 @@ public class InspectContainerResponse {
 
 	@JsonProperty("ResolvConfPath")
 	private String resolvConfPath;
+
+    @JsonProperty("ExecIDs")
+    private List<String> execIds;
 
 	@JsonProperty("State")
     private ContainerState state;
@@ -152,6 +156,10 @@ public class InspectContainerResponse {
     public String getMountLabel() {
 		return mountLabel;
 	}
+
+    public List<String> getExecIds() {
+        return execIds;
+    }
 
     @Override
     public String toString() {
