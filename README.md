@@ -31,10 +31,12 @@ If you do not have access to a Docker server or just want to execute the build q
     $ mvn clean install -DskipITs
 
 By default Docker server is using UNIX sockets for communication with the Docker client, however docker-java
-client uses TCP/IP to connect to the Docker server, so you will need to make sure that your Docker server is
+client uses TCP/IP to connect to the Docker server by default, so you will need to make sure that your Docker server is
 listening on TCP port. To allow Docker server to use TCP add the following line to /etc/default/docker
 
     DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock"
+
+However you can force docker-java to use UNIX socket communication by configure the following url: ```unix:///var/run/docker.sock```
 
 More details setting up Docker server can be found in official documentation: http://docs.docker.io/en/latest/use/basics/
 
