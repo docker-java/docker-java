@@ -81,7 +81,7 @@ For code examples, please look at the [Wiki](https://github.com/docker-java/dock
 
 There are a couple of configuration items, all of which have sensible defaults:
 
-* `url` The Docker URL, e.g. `https://localhost:2376`.
+* `url` The Docker URL, e.g. `https://localhost:2376` or `unix:///var/run/docker.sock`
 * `version` The API version, e.g. `1.16`.
 * `username` Your registry username (required to push containers).
 * `password` Your registry password.
