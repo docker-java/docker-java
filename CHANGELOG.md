@@ -2,6 +2,7 @@ Change Log
 ===
 Latest SNAPSHOT
 ---
+ * [#161](https://github.com/docker-java/docker-java/pull/161) Inspect exec command
  * [#159](https://github.com/docker-java/docker-java/pull/159) Add missing Info fields 
  * [#156](https://github.com/docker-java/docker-java/pull/156) Add support for configuring ExtraHosts 
 
