@@ -5,6 +5,7 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.ExecCreateCmdResponse;
 import com.github.dockerjava.api.command.InspectExecResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
+
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
@@ -39,7 +40,7 @@ public class InspectExecCmdImplTest extends AbstractDockerClientTest {
         super.afterMethod(result);
     }
 
-    @Test
+    @Test(groups = "ignoreInCircleCi")
     public void inspectExecTest() {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
