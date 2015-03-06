@@ -39,6 +39,7 @@ public class DockerClientConfig implements Serializable {
     // connection pooling properties
     private static final String DOCKER_IO_MAX_PER_ROUTE_PROPERTY = "docker.io.perRouteConnections";
     private static final String DOCKER_IO_MAX_TOTAL_PROPERTY = "docker.io.totalConnections";
+    
     /**
      * A map from the environment name to the interval name.
      */
@@ -62,7 +63,7 @@ public class DockerClientConfig implements Serializable {
 
     private static final String DOCKER_IO_PROPERTIES_PROPERTY = "docker.io.properties";
     private URI uri;
-    private final String version, username, password, email, serverAddress, dockerCfgPath;
+    private final String version, username, password, email, serverAddress, dockerCfgPath, basicAuthUsername, basicAuthPassword;
     private final Integer readTimeout;
     private final boolean loggingFilterEnabled;
     private final boolean followRedirectsFilterEnabled;
@@ -73,7 +74,7 @@ public class DockerClientConfig implements Serializable {
 
     DockerClientConfig(URI uri, String version, String username, String password, String email, String serverAddress,
                        String dockerCfgPath, Integer readTimeout, boolean loggingFilterEnabled, boolean followRedirectsFilterEnabled, 
-                       SSLConfig sslConfig, Integer maxTotalConns, Integer maxPerRouteConns) {
+                       SSLConfig sslConfig, Integer maxTotalConns, Integer maxPerRouteConns, String basicAuthUsername, String basicAuthPassword) {
         this.uri = uri;
         this.version = version;
         this.username = username;
@@ -87,6 +88,8 @@ public class DockerClientConfig implements Serializable {
         this.sslConfig = sslConfig;
         this.maxTotalConnections = maxTotalConns;
         this.maxPerRouteConnections = maxPerRouteConns;
+        this.basicAuthUsername = basicAuthUsername;
+        this.basicAuthPassword = basicAuthPassword;
     }
 
     private static Properties loadIncludedDockerProperties(Properties systemProperties) {
@@ -267,6 +270,14 @@ public class DockerClientConfig implements Serializable {
     public Integer getMaxPerRoutConnections() {
       return maxPerRouteConnections;
     }
+
+    public String getBasicAuthUsername(){
+    	return this.basicAuthUsername;
+    }
+
+    public String getBasicAuthPassword(){
+    	return this.basicAuthPassword;
+    }
     
     private AuthConfig getAuthConfig() {
     	AuthConfig authConfig = null;
@@ -330,7 +341,8 @@ public class DockerClientConfig implements Serializable {
         if (uri != null ? !uri.equals(that.uri) : that.uri != null) return false;
         if (username != null ? !username.equals(that.username) : that.username != null) return false;
         if (version != null ? !version.equals(that.version) : that.version != null) return false;
-
+        if (basicAuthUsername != null ? !basicAuthUsername.equals(that.basicAuthUsername) : that.basicAuthUsername != null) return false;
+        if (basicAuthPassword != null ? !basicAuthPassword.equals(that.version) : that.basicAuthPassword != null) return false;
         return true;
     }
 
@@ -345,6 +357,8 @@ public class DockerClientConfig implements Serializable {
         result = 31 * result + (dockerCfgPath != null ? dockerCfgPath.hashCode() : 0);
         result = 31 * result + (sslConfig != null ? sslConfig.hashCode() : 0);
         result = 31 * result + (readTimeout != null ? readTimeout.hashCode() : 0);
+        result = 31 * result + (basicAuthUsername != null ? basicAuthUsername.hashCode() : 0);
+        result = 31 * result + (basicAuthPassword != null ? basicAuthPassword.hashCode() : 0);
         result = 31 * result + (loggingFilterEnabled ? 1 : 0);
         return result;
     }
@@ -363,12 +377,14 @@ public class DockerClientConfig implements Serializable {
                 ", readTimeout=" + readTimeout +
                 ", loggingFilterEnabled=" + loggingFilterEnabled +
                 ", followRedirectsFilterEnabled=" + followRedirectsFilterEnabled +
+                ", basicAuthUsername=" + basicAuthUsername +
+                ", basicAuthPassword=" + basicAuthPassword +
                 '}';
     }
 
     public static class DockerClientConfigBuilder {
         private URI uri;
-        private String version, username, password, email, serverAddress, dockerCfgPath;
+        private String version, username, password, email, serverAddress, dockerCfgPath, basicAuthUsername, basicAuthPassword;
         private Integer readTimeout, maxTotalConnections, maxPerRouteConnections;
         private boolean loggingFilterEnabled, followRedirectsFilterEnabled;
         private SSLConfig sslConfig;
@@ -391,6 +407,7 @@ public class DockerClientConfig implements Serializable {
                     .withFollowRedirectsFilter(Boolean.valueOf(p.getProperty(DOCKER_IO_FOLLOW_REDIRECTS_FILTER_PROPERTY, "false")))
                     .withDockerCertPath(p.getProperty(DOCKER_IO_DOCKER_CERT_PATH_PROPERTY))
                     .withDockerCfgPath(p.getProperty(DOCKER_IO_DOCKER_CFG_PATH_PROPERTY))
+                    .withMaxPerRouteConnections(integerValue(p.getProperty(DOCKER_IO_MAX_PER_ROUTE_PROPERTY)))
                     .withMaxPerRouteConnections(integerValue(p.getProperty(DOCKER_IO_MAX_PER_ROUTE_PROPERTY)))
                     .withMaxTotalConnections(integerValue(p.getProperty(DOCKER_IO_MAX_TOTAL_PROPERTY)));
         }
@@ -474,6 +491,17 @@ public class DockerClientConfig implements Serializable {
             return this;
         }
 
+
+        public final DockerClientConfigBuilder withBasicAuthUsername(String username) {
+            this.basicAuthUsername = username;
+            return this;
+        }
+
+        public final DockerClientConfigBuilder withBasicAuthPassword(String password) {
+            this.basicAuthPassword = password;
+            return this;
+        }
+
         public DockerClientConfig build() {
             return new DockerClientConfig(
                     uri,
@@ -488,7 +516,9 @@ public class DockerClientConfig implements Serializable {
                     followRedirectsFilterEnabled,
                     sslConfig,
                     maxTotalConnections,
-                    maxPerRouteConnections
+                    maxPerRouteConnections,
+                    basicAuthUsername,
+                    basicAuthPassword
             );
         }
     }

@@ -5,11 +5,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.IOException;
 import java.net.URI;
 
-import com.github.dockerjava.api.command.*;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.net.ssl.SSLContext;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -25,10 +20,50 @@ import org.glassfish.jersey.apache.connector.ApacheClientProperties;
 import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.client.RequestEntityProcessing;
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.github.dockerjava.api.DockerClientException;
+import com.github.dockerjava.api.command.AttachContainerCmd;
+import com.github.dockerjava.api.command.AuthCmd;
+import com.github.dockerjava.api.command.BuildImageCmd;
+import com.github.dockerjava.api.command.CommitCmd;
+import com.github.dockerjava.api.command.ContainerDiffCmd;
+import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
+import com.github.dockerjava.api.command.CreateContainerCmd;
+import com.github.dockerjava.api.command.CreateImageCmd;
+import com.github.dockerjava.api.command.DockerCmdExecFactory;
+import com.github.dockerjava.api.command.EventsCmd;
+import com.github.dockerjava.api.command.ExecCreateCmd;
+import com.github.dockerjava.api.command.ExecStartCmd;
+import com.github.dockerjava.api.command.InfoCmd;
+import com.github.dockerjava.api.command.InspectContainerCmd;
+import com.github.dockerjava.api.command.InspectImageCmd;
+import com.github.dockerjava.api.command.KillContainerCmd;
+import com.github.dockerjava.api.command.ListContainersCmd;
+import com.github.dockerjava.api.command.ListImagesCmd;
+import com.github.dockerjava.api.command.LogContainerCmd;
+import com.github.dockerjava.api.command.PauseContainerCmd;
+import com.github.dockerjava.api.command.PingCmd;
+import com.github.dockerjava.api.command.PullImageCmd;
+import com.github.dockerjava.api.command.PushImageCmd;
+import com.github.dockerjava.api.command.RemoveContainerCmd;
+import com.github.dockerjava.api.command.RemoveImageCmd;
+import com.github.dockerjava.api.command.RestartContainerCmd;
+import com.github.dockerjava.api.command.SaveImageCmd;
+import com.github.dockerjava.api.command.SearchImagesCmd;
+import com.github.dockerjava.api.command.StartContainerCmd;
+import com.github.dockerjava.api.command.StopContainerCmd;
+import com.github.dockerjava.api.command.TagImageCmd;
+import com.github.dockerjava.api.command.TopContainerCmd;
+import com.github.dockerjava.api.command.UnpauseContainerCmd;
+import com.github.dockerjava.api.command.VersionCmd;
+import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.util.BasicAuthenticationFilter;
 import com.github.dockerjava.core.util.FollowRedirectsFilter;
 import com.github.dockerjava.core.util.JsonClientFilter;
 import com.github.dockerjava.core.util.ResponseStatusExceptionFilter;
@@ -39,10 +74,15 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(DockerCmdExecFactoryImpl.class.getName());
     private Client client;
     private WebTarget baseResource;
+    protected HttpAuthenticationFeature basicAuthFeature;
 
     @Override
     public void init(DockerClientConfig dockerClientConfig) {
         checkNotNull(dockerClientConfig, "config was not specified");
+        
+        
+//        	basicAuthFeature = HttpAuthenticationFeature.universal(dockerClientConfig.getBasicAuthUsername(), dockerClientConfig.getBasicAuthPassword());
+//        }
 
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.connectorProvider(new ApacheConnectorProvider());
@@ -64,7 +104,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
             int readTimeout = dockerClientConfig.getReadTimeout();
             clientConfig.property(ClientProperties.READ_TIMEOUT, readTimeout);
         }
-
+        
         URI originalUri = dockerClientConfig.getUri();
 
         SSLContext sslContext;
@@ -83,6 +123,8 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         
         clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER, connManager);
 
+        clientConfig.property(ClientProperties.REQUEST_ENTITY_PROCESSING, RequestEntityProcessing.BUFFERED);
+
         ClientBuilder clientBuilder = ClientBuilder.newBuilder().withConfig(clientConfig);
 
         if (sslContext != null) {
@@ -91,11 +133,16 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
         client = clientBuilder.build();
 
+        if(dockerClientConfig.getBasicAuthUsername() != null && dockerClientConfig.getBasicAuthPassword() != null){
+        	client.register(new BasicAuthenticationFilter(dockerClientConfig.getBasicAuthUsername(), dockerClientConfig.getBasicAuthPassword()));
+        }
+
         if (originalUri.getScheme().equals("unix")) {
             dockerClientConfig.setUri(UnixConnectionSocketFactory.sanitizeUri(originalUri));
         }
+        
         WebTarget webResource = client.target(dockerClientConfig.getUri());
-
+        
         if (dockerClientConfig.getVersion() == null || dockerClientConfig.getVersion().isEmpty()) {
             baseResource = webResource;
         } else {

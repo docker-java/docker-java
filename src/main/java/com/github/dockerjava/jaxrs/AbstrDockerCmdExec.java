@@ -14,6 +14,7 @@ import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.DockerCmd;
 import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.api.model.AuthConfigurations;
 
 public abstract class AbstrDockerCmdExec<CMD_T extends DockerCmd<RES_T>, RES_T>
 		implements DockerCmdExec<CMD_T, RES_T> {
@@ -34,6 +35,15 @@ public abstract class AbstrDockerCmdExec<CMD_T extends DockerCmd<RES_T>, RES_T>
 		try {
 			return Base64.encodeBase64String(new ObjectMapper()
 					.writeValueAsString(authConfig).getBytes());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected String registryConfigs(AuthConfigurations authConfigs) {
+		try {
+			return Base64.encodeBase64String(new ObjectMapper()
+					.writeValueAsString(authConfigs).getBytes());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

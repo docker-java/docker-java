@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.github.dockerjava.api.command.BuildImageCmd;
+import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.core.dockerfile.Dockerfile;
 
 /**
@@ -22,6 +23,7 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageC
 	private boolean noCache;
 	private boolean remove = true;
 	private boolean quiet;
+	private AuthConfigurations buildAuthConfigs;
 
 	public BuildImageCmdImpl(BuildImageCmd.Exec exec, File dockerFolder) {
 		super(exec);
@@ -84,6 +86,11 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageC
 	}
 
 	@Override
+	public AuthConfigurations getBuildAuthConfigs() {
+		return buildAuthConfigs;
+	}
+
+	@Override
 	public BuildImageCmdImpl withNoCache() {
 		return withNoCache(true);
 	}
@@ -113,6 +120,13 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageC
 	@Override
 	public BuildImageCmdImpl withQuiet(boolean quiet) {
 		this.quiet = quiet;
+		return this;
+	}
+
+	@Override
+	public BuildImageCmd withBuildAuthConfigs(AuthConfigurations authConfigs) {
+		checkNotNull(authConfigs, "authConfig is null");
+		this.buildAuthConfigs = authConfigs;
 		return this;
 	}
 
