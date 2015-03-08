@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.command.AuthCmd.Exec;
+import com.github.dockerjava.core.http.AbstractHttpFeature;
 import com.github.dockerjava.jaxrs.BuildImageCmdExec;
 
 /**
@@ -31,8 +32,8 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 	}
 
 	@Override
-	public void init(DockerClientConfig dockerClientConfig) {
-		delegate.init(dockerClientConfig);
+	public void init(DockerClientConfig dockerClientConfig, List<AbstractHttpFeature> httpFeatures) {
+		delegate.init(dockerClientConfig, httpFeatures);
 	}
 
 	@Override

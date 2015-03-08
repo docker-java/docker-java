@@ -1,10 +1,12 @@
 package com.github.dockerjava.core;
 
+import java.util.List;
 import java.util.ServiceLoader;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.core.DockerClientConfig.DockerClientConfigBuilder;
+import com.github.dockerjava.core.http.AbstractHttpFeature;
 
 public class DockerClientBuilder {
 	
@@ -28,6 +30,11 @@ public class DockerClientBuilder {
 	public static DockerClientBuilder getInstance(DockerClientConfig dockerClientConfig) {
 		return new DockerClientBuilder(DockerClientImpl
 				.getInstance(dockerClientConfig));
+	}
+
+	public static DockerClientBuilder getInstance(DockerClientConfig dockerClientConfig, List<AbstractHttpFeature> httpFeatures) {
+		return new DockerClientBuilder(DockerClientImpl
+				.getInstance(dockerClientConfig, httpFeatures));
 	}
 
 	public static DockerClientBuilder getInstance(String serverUrl) {

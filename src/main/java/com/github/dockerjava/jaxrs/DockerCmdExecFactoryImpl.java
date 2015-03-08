@@ -4,6 +4,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
+import java.util.Map;
 
 import javax.net.ssl.SSLContext;
 import javax.ws.rs.client.Client;
@@ -20,8 +22,6 @@ import org.glassfish.jersey.apache.connector.ApacheClientProperties;
 import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
-import org.glassfish.jersey.client.RequestEntityProcessing;
-import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,7 +63,7 @@ import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.util.BasicAuthenticationFilter;
+import com.github.dockerjava.core.http.AbstractHttpFeature;
 import com.github.dockerjava.core.util.FollowRedirectsFilter;
 import com.github.dockerjava.core.util.JsonClientFilter;
 import com.github.dockerjava.core.util.ResponseStatusExceptionFilter;
@@ -74,10 +74,9 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(DockerCmdExecFactoryImpl.class.getName());
     private Client client;
     private WebTarget baseResource;
-    protected HttpAuthenticationFeature basicAuthFeature;
 
     @Override
-    public void init(DockerClientConfig dockerClientConfig) {
+    public void init(DockerClientConfig dockerClientConfig, List<AbstractHttpFeature> httpFeatures) {
         checkNotNull(dockerClientConfig, "config was not specified");
         
         
@@ -122,8 +121,12 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         	connManager.setDefaultMaxPerRoute(dockerClientConfig.getMaxPerRoutConnections());
         
         clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER, connManager);
-
-        clientConfig.property(ClientProperties.REQUEST_ENTITY_PROCESSING, RequestEntityProcessing.BUFFERED);
+        for(AbstractHttpFeature feature : httpFeatures){
+        	Map<String, Object> properties = feature.getClientConfigurationProperties();
+        	for(String propertyName : properties.keySet()){
+        		clientConfig.property(propertyName, properties.get(propertyName));
+        	}
+		}
 
         ClientBuilder clientBuilder = ClientBuilder.newBuilder().withConfig(clientConfig);
 
@@ -132,10 +135,9 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         }
 
         client = clientBuilder.build();
-
-        if(dockerClientConfig.getBasicAuthUsername() != null && dockerClientConfig.getBasicAuthPassword() != null){
-        	client.register(new BasicAuthenticationFilter(dockerClientConfig.getBasicAuthUsername(), dockerClientConfig.getBasicAuthPassword()));
-        }
+        for(AbstractHttpFeature feature : httpFeatures){
+			client.register(feature);
+		}
 
         if (originalUri.getScheme().equals("unix")) {
             dockerClientConfig.setUri(UnixConnectionSocketFactory.sanitizeUri(originalUri));
