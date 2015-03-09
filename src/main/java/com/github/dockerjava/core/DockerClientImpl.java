@@ -292,9 +292,9 @@ public class DockerClientImpl implements Closeable, DockerClient {
 	}
 
 	@Override
-	public BuildImageCmd buildImageCmd(File dockerFolder) {
+	public BuildImageCmd buildImageCmd(File dockerFileOrFolder) {
 		return new BuildImageCmdImpl(getDockerCmdExecFactory()
-				.createBuildImageCmdExec(), dockerFolder);
+				.createBuildImageCmdExec(), dockerFileOrFolder);
 	}
 
 	@Override

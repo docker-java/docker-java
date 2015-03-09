@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.command;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -26,8 +27,10 @@ public interface BuildImageCmd extends DockerCmd<BuildImageCmd.Response>{
 	public boolean hasRemoveEnabled();
 
 	public boolean isQuiet();
-	
+
 	public AuthConfigurations getBuildAuthConfigs();
+	
+    public BuildImageCmd withDockerfile(File dockerfile);
 	
 	public BuildImageCmd withTarInputStream(InputStream tarInputStream);
 
