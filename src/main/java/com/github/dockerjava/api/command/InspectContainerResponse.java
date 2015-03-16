@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.github.dockerjava.api.model.*;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,65 +13,66 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- *
  * @author Konstantin Pelykh (kpelykh@gmail.com)
- *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InspectContainerResponse {
 
-	@JsonProperty("Args")
-	private String[] args;
+    @JsonProperty("Args")
+    private String[] args;
 
-	@JsonProperty("Config")
-	private ContainerConfig config;
+    @JsonProperty("Config")
+    private ContainerConfig config;
 
-	@JsonProperty("Created")
-	private String created;
+    @JsonProperty("Created")
+    private String created;
 
-	@JsonProperty("Driver")
-	private String driver;
+    @JsonProperty("Driver")
+    private String driver;
 
-	@JsonProperty("ExecDriver")
-	private String execDriver;
+    @JsonProperty("ExecDriver")
+    private String execDriver;
 
-	@JsonProperty("HostConfig")
-	private HostConfig hostConfig;
+    @JsonProperty("HostConfig")
+    private HostConfig hostConfig;
 
-	@JsonProperty("HostnamePath")
-	private String hostnamePath;
+    @JsonProperty("HostnamePath")
+    private String hostnamePath;
 
-	@JsonProperty("HostsPath")
-	private String hostsPath;
+    @JsonProperty("HostsPath")
+    private String hostsPath;
 
-	@JsonProperty("Id")
+    @JsonProperty("Id")
     private String id;
 
-	@JsonProperty("Image")
-	private String imageId;
+    @JsonProperty("Image")
+    private String imageId;
 
-	@JsonProperty("MountLabel")
-	private String mountLabel;
+    @JsonProperty("MountLabel")
+    private String mountLabel;
 
-	@JsonProperty("Name")
-	private String name;
+    @JsonProperty("Name")
+    private String name;
 
-	@JsonProperty("NetworkSettings")
-	private NetworkSettings networkSettings;
+    @JsonProperty("NetworkSettings")
+    private NetworkSettings networkSettings;
 
-	@JsonProperty("Path")
+    @JsonProperty("Node")
+    private Node node;
+
+    @JsonProperty("Path")
     private String path;
 
-	@JsonProperty("ProcessLabel")
+    @JsonProperty("ProcessLabel")
     private String processLabel;
 
-	@JsonProperty("ResolvConfPath")
-	private String resolvConfPath;
+    @JsonProperty("ResolvConfPath")
+    private String resolvConfPath;
 
     @JsonProperty("ExecIDs")
     private List<String> execIds;
 
-	@JsonProperty("State")
+    @JsonProperty("State")
     private ContainerState state;
 
     @JsonProperty("Volumes")
@@ -92,8 +94,8 @@ public class InspectContainerResponse {
     }
 
     public String getProcessLabel() {
-		return processLabel;
-	}
+        return processLabel;
+    }
 
     public String[] getArgs() {
         return args;
@@ -113,6 +115,10 @@ public class InspectContainerResponse {
 
     public NetworkSettings getNetworkSettings() {
         return networkSettings;
+    }
+
+    public Node getNode() {
+        return node;
     }
 
     public String getResolvConfPath() {
@@ -150,12 +156,12 @@ public class InspectContainerResponse {
     }
 
     public String getExecDriver() {
-		return execDriver;
-	}
+        return execDriver;
+    }
 
     public String getMountLabel() {
-		return mountLabel;
-	}
+        return mountLabel;
+    }
 
     public List<String> getExecIds() {
         return execIds;
@@ -173,32 +179,32 @@ public class InspectContainerResponse {
         @JsonProperty("IPPrefixLen") private int ipPrefixLen;
         @JsonProperty("Gateway") private String gateway;
         @JsonProperty("Bridge") private String bridge;
-        @JsonProperty("PortMapping") private Map<String,Map<String, String>> portMapping;
+        @JsonProperty("PortMapping") private Map<String, Map<String, String>> portMapping;
         @JsonProperty("Ports") private Ports ports;
 
         public String getIpAddress() {
-			return ipAddress;
-		}
+            return ipAddress;
+        }
 
-		public int getIpPrefixLen() {
-			return ipPrefixLen;
-		}
+        public int getIpPrefixLen() {
+            return ipPrefixLen;
+        }
 
-		public String getGateway() {
-			return gateway;
-		}
+        public String getGateway() {
+            return gateway;
+        }
 
-		public String getBridge() {
-			return bridge;
-		}
+        public String getBridge() {
+            return bridge;
+        }
 
-		public Map<String, Map<String, String>> getPortMapping() {
-			return portMapping;
-		}
+        public Map<String, Map<String, String>> getPortMapping() {
+            return portMapping;
+        }
 
-		public Ports getPorts() {
-			return ports;
-		}
+        public Ports getPorts() {
+            return ports;
+        }
 
 
         @Override
@@ -206,6 +212,52 @@ public class InspectContainerResponse {
             return ToStringBuilder.reflectionToString(this);
         }
     }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public class Node {
+
+        @JsonProperty("ID") private String id;
+        @JsonProperty("IP") private String ip;
+        @JsonProperty("Addr") private String addr;
+        @JsonProperty("Name") private String name;
+        @JsonProperty("Cpus") private int cpus;
+        @JsonProperty("Memory") private Long memory;
+        @JsonProperty("Labels") private Map<String, String> labels;
+
+        public String getId() {
+            return id;
+        }
+
+        public String getIp() {
+            return ip;
+        }
+
+        public String getAddr() {
+            return addr;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getCpus() {
+            return cpus;
+        }
+
+        public Long getMemory() {
+            return memory;
+        }
+
+        public Map<String, String> getLabels() {
+            return labels;
+        }
+
+        @Override
+        public String toString() {
+            return ToStringBuilder.reflectionToString(this);
+        }
+    }
+
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public class ContainerState {
@@ -218,28 +270,28 @@ public class InspectContainerResponse {
         @JsonProperty("FinishedAt") private String finishedAt;
 
         public boolean isRunning() {
-			return running;
-		}
+            return running;
+        }
 
-		public boolean isPaused() {
-			return paused;
-		}
+        public boolean isPaused() {
+            return paused;
+        }
 
-		public int getPid() {
-			return pid;
-		}
+        public int getPid() {
+            return pid;
+        }
 
-		public int getExitCode() {
-			return exitCode;
-		}
+        public int getExitCode() {
+            return exitCode;
+        }
 
-		public String getStartedAt() {
-			return startedAt;
-		}
+        public String getStartedAt() {
+            return startedAt;
+        }
 
-		public String getFinishedAt() {
-			return finishedAt;
-		}
+        public String getFinishedAt() {
+            return finishedAt;
+        }
 
         @Override
         public String toString() {
@@ -248,4 +300,3 @@ public class InspectContainerResponse {
     }
 
 }
-
