@@ -25,19 +25,18 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageC
 	private boolean quiet;
 	private AuthConfigurations buildAuthConfigs;
 
-	public BuildImageCmdImpl(BuildImageCmd.Exec exec, File dockerFolder) {
-		super(exec);
-		checkNotNull(dockerFolder, "dockerFolder is null");
+    public BuildImageCmdImpl(BuildImageCmd.Exec exec) {
+        super(exec);
+    }
 
-		try {
-			withTarInputStream(
-                            new Dockerfile(new File(dockerFolder, "Dockerfile"))
-                                          .parse()
-                                          .buildDockerFolderTar() );
-		} catch (IOException e) {
-			// we just created the file this should never happen.
-			throw new RuntimeException(e);
-		}
+    public BuildImageCmdImpl(BuildImageCmd.Exec exec, File dockerFileOrFolder) {
+		super(exec);
+		checkNotNull(dockerFileOrFolder, "dockerFolder is null");
+
+        if( dockerFileOrFolder.isDirectory() )
+            withDockerfile( new File(dockerFileOrFolder, "Dockerfile"));
+        else
+            withDockerfile( dockerFileOrFolder);
 	}
 
 	public BuildImageCmdImpl(BuildImageCmd.Exec exec, InputStream tarInputStream) {
@@ -50,6 +49,24 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageC
 	public InputStream getTarInputStream() {
 		return tarInputStream;
 	}
+
+    @Override
+    public BuildImageCmdImpl withDockerfile(File dockerfile) {
+        checkNotNull(dockerfile);
+        if( !dockerfile.exists() )
+            throw new IllegalArgumentException("Dockerfile does not exist");
+
+        try {
+            withTarInputStream(
+                    new Dockerfile(dockerfile)
+                            .parse()
+                            .buildDockerFolderTar() );
+        } catch (IOException e) {
+            // we just created the file this should never happen.
+            throw new RuntimeException(e);
+        }
+        return this;
+    }
 
 	@Override
 	public BuildImageCmdImpl withTarInputStream(InputStream tarInputStream) {
