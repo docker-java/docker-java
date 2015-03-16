@@ -2,6 +2,7 @@ Change Log
 ===
 Latest SNAPSHOT
 ---
+ * [#170](https://github.com/docker-java/docker-java/pull/170) Allow to specify alternative files other than 'Dockerfile' for building images
  * [#165](https://github.com/docker-java/docker-java/pull/165) PushImageCmd assumes that you have an auth config setup 
  * [#161](https://github.com/docker-java/docker-java/pull/161) Inspect exec command
  * [#159](https://github.com/docker-java/docker-java/pull/159) Add missing Info fields 
