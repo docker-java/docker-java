@@ -151,13 +151,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
 
         @Override
     public SaveImageCmd saveImageCmd(String name) {
-        SaveImageCmdImpl cmd = new SaveImageCmdImpl(getDockerCmdExecFactory().createSaveImageCmdExec(), name);
-
-        AuthConfig cfg = dockerClientConfig.effectiveAuthConfig(name);
-        if (cfg != null)
-            cmd.withAuthConfig(cfg);
-
-        return cmd;
+        return new SaveImageCmdImpl(getDockerCmdExecFactory().createSaveImageCmdExec(), name);
     }
 
 	@Override

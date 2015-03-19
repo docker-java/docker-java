@@ -23,11 +23,9 @@ public class SaveImageCmdExec extends AbstrDockerCmdExec<SaveImageCmd, InputStre
         WebTarget webResource = getBaseResource().path("/images/" + command.getName() + "/get")
                 .queryParam("tag", command.getTag());
 
-        final String registryAuth = registryAuth(command.getAuthConfig());
         LOGGER.trace("GET: {}", webResource);
         InputStream is =  webResource
                 .request()
-                .header("X-Registry-Auth", registryAuth)
                 .accept(MediaType.APPLICATION_JSON)
                 .get().readEntity(InputStream.class);
 

@@ -1,7 +1,6 @@
 package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.model.AuthConfig;
 
 import java.io.InputStream;
 
@@ -20,10 +19,6 @@ public interface SaveImageCmd extends DockerCmd<InputStream>{
      * @param tag The image's tag. Not null.
      */
     public SaveImageCmd withTag(String tag);
-
-    public AuthConfig getAuthConfig();
-
-    public SaveImageCmd withAuthConfig(AuthConfig authConfig);
 
     /**
      * @throws com.github.dockerjava.api.NotFoundException No such image
