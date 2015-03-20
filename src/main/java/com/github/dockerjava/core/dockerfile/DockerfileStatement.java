@@ -38,11 +38,11 @@ public abstract class DockerfileStatement<T extends DockerfileStatement> {
 
         // handle: $VARIABLE case
         currentResourceContent = currentResourceContent.replaceAll(
-            "\\$" + variable, replacementValue);
+            "\\$" + variable, Matcher.quoteReplacement(replacementValue));
 
         // handle ${VARIABLE} case
         currentResourceContent = currentResourceContent.replaceAll(
-            "\\$\\{" + variable + "\\}", replacementValue);
+            "\\$\\{" + variable + "\\}", Matcher.quoteReplacement(replacementValue));
 
       }
 

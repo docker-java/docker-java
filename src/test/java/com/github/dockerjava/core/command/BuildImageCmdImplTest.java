@@ -111,6 +111,15 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
 		String response = dockerfileBuild(baseDir);
 		assertThat(response, containsString("Successfully executed testAddFolder.sh"));
 	}
+	
+	@Test
+	public void testDockerBuilderEnv() throws DockerException,
+			IOException {
+		File baseDir = new File(Thread.currentThread().getContextClassLoader()
+				.getResource("testEnv").getFile());
+		String response = dockerfileBuild(baseDir);
+		assertThat(response, containsString("Successfully executed testrun.sh"));
+	}
 
 
 	private String dockerfileBuild(File baseDir) {
