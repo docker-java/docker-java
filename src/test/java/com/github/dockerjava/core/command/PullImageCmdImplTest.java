@@ -109,16 +109,9 @@ public class PullImageCmdImplTest extends AbstractDockerClientTest {
 	public void testPullNonExistingImage() throws DockerException, IOException {
 		
 		// does not throw an exception
-		InputStream is = dockerClient.pullImageCmd("nonexisting/foo").exec();
+		InputStream is = dockerClient.pullImageCmd("xvxcv/foo").exec();
 		// stream needs to be fully read in order to close the underlying connection
-		this.asString(is);
-		
-		try {
-			dockerClient.pullImageCmd("non-existing/foo").exec();
-			fail("expected InternalServerErrorException");
-		} catch (InternalServerErrorException ignored) {
-		}
-		
+		asString(is);
 	}
 
 }
