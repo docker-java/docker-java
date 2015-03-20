@@ -459,7 +459,9 @@ public class DockerClientConfig implements Serializable {
         }
 
         public final DockerClientConfigBuilder withDockerCertPath(String dockerCertPath) {
-            this.sslConfig = new LocalDirectorySSLConfig(dockerCertPath);
+        	if(dockerCertPath != null) {
+        		this.sslConfig = new LocalDirectorySSLConfig(dockerCertPath);
+        	}
             return this;
         }
 
