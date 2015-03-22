@@ -54,7 +54,7 @@
 
 		<jackson-jaxrs.version>2.1.2</jackson-jaxrs.version>
 
-		<httpclient.version>4.2.5</httpclient.version>
+		<httpclient.version>4.3.6</httpclient.version>
 		<commons-compress.version>1.5</commons-compress.version>
 		<commons-codec.version>1.8</commons-codec.version>
 		<commons-io.version>2.3</commons-io.version>
