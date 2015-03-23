@@ -47,28 +47,22 @@
 		<jdk.source>1.7</jdk.source>
 		<jdk.target>1.7</jdk.target>
 
-		<version.slf4j>1.6.1</version.slf4j>
-
 		<jersey.version>2.11</jersey.version>
-		<jersey-apache-client4.version>1.9</jersey-apache-client4.version>
-
 		<jackson-jaxrs.version>2.1.2</jackson-jaxrs.version>
-
-		<httpclient.version>4.3.6</httpclient.version>
+		<httpclient.version>4.3.1</httpclient.version>
 		<commons-compress.version>1.5</commons-compress.version>
 		<commons-codec.version>1.8</commons-codec.version>
 		<commons-io.version>2.3</commons-io.version>
 		<commons-lang.version>2.6</commons-lang.version>
 		<slf4j-api.version>1.7.5</slf4j-api.version>
-		<jsr305.version>1.3.9</jsr305.version>
-		<jnr.unixsocket.version>0.3</jnr.unixsocket.version>
+
 		<bouncycastle.version>1.51</bouncycastle.version>
 		<unix-socket-factory.version>2015-01-27T15-02-14</unix-socket-factory.version>
 		<guava.version>18.0</guava.version>
 
-		<!--test dependencies -->
-		<version.logback>1.1.0</version.logback>
-		<version.testng>5.12.1</version.testng>
+		<!-- test dependencies -->
+		<logback.version>1.1.0</logback.version>
+		<testng.version>5.12.1</testng.version>
 		<hamcrest.library.version>1.3</hamcrest.library.version>
 		<hamcrest.jpa-matchers>1.6</hamcrest.jpa-matchers>
 		<lambdaj.version>2.3.3</lambdaj.version>
@@ -89,22 +83,21 @@
 			<artifactId>jackson-jaxrs-json-provider</artifactId>
 			<version>${jackson-jaxrs.version}</version>
 		</dependency>
-		<!-- <dependency> -->
-		<!-- <groupId>org.glassfish.jersey.connectors</groupId> -->
-		<!-- <artifactId>jersey-jetty-connector</artifactId> -->
-		<!-- <version>${jersey.version}</version> -->
-		<!-- </dependency> -->
 		<dependency>
 	 		<groupId>org.glassfish.jersey.connectors</groupId>
 			<artifactId>jersey-apache-connector</artifactId>
 			<version>${jersey.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>${httpclient.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.glassfish.jersey.core</groupId>
 			<artifactId>jersey-client</artifactId>
 			<version>${jersey.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>de.gesellix</groupId>
 			 <artifactId>unix-socket-factory</artifactId>
@@ -131,31 +124,16 @@
 			<artifactId>commons-io</artifactId>
 			<version>${commons-io.version}</version>
 		</dependency>
-
-		<dependency>
-			<groupId>com.github.jnr</groupId>
-			<artifactId>jnr-unixsocket</artifactId>
-			<version>${jnr.unixsocket.version}</version>
-		</dependency>
-
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j-api.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>${guava.version}</version>
 		</dependency>
-
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.slf4j</groupId> -->
-<!-- 			<artifactId>jul-to-slf4j</artifactId> -->
-<!-- 			<version>${slf4j-api.version}</version> -->
-<!-- 		</dependency> -->
-
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcpkix-jdk15on</artifactId>
@@ -166,21 +144,21 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-core</artifactId>
-			<version>${version.logback}</version>
+			<version>${logback.version}</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>${version.logback}</version>
+			<version>${logback.version}</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
-			<version>${version.testng}</version>
+			<version>${testng.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -211,23 +189,7 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>com.github.jnr</groupId>
-				<artifactId>jffi</artifactId>
-				<version>1.2.7</version>
-			</dependency>
-			<dependency>
-				<groupId>com.github.jnr</groupId>
-				<artifactId>jffi</artifactId>
-				<classifier>native</classifier>
-				<version>1.2.7</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
-
+	
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
