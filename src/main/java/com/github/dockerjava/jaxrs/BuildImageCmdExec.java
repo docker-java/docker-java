@@ -35,6 +35,7 @@ public class BuildImageCmdExec extends AbstrDockerCmdExec<BuildImageCmd, BuildIm
 	@Override
 	protected ResponseImpl execute(BuildImageCmd command) {
 		WebTarget webResource = getBaseResource().path("/build");
+        String dockerFilePath = command.getPathToDockerfile();
 		
 		if(command.getTag() != null) {
 			webResource = webResource.queryParam("t", command.getTag());
@@ -47,6 +48,9 @@ public class BuildImageCmdExec extends AbstrDockerCmdExec<BuildImageCmd, BuildIm
         }
         if (command.isQuiet()) {
             webResource = webResource.queryParam("q", "true");
+        }
+        if( dockerFilePath != null && !"Dockerfile".equals(dockerFilePath)) {
+            webResource = webResource.queryParam("dockerfile", dockerFilePath);
         }
 		
 

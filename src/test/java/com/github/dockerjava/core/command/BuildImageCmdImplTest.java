@@ -76,6 +76,34 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
 				equalTo("Guillaume J. Charmes \"guillaume@dotcloud.com\""));
 	}
 
+    @Test
+    public void testNonstandard1() {
+        File baseDir = new File(Thread.currentThread().getContextClassLoader()
+                .getResource("nonstandard/subdirectory/Dockerfile-nonstandard").getFile());
+
+        InputStream response = dockerClient.buildImageCmd(baseDir).withNoCache().exec();
+
+        String fullLog = asString(response);
+        assertThat(fullLog, containsString("Successfully built"));
+    }
+
+    @Test
+    public void testNonstandard2() {
+        File baseDir = new File(Thread.currentThread().getContextClassLoader()
+                .getResource("nonstandard").getFile());
+        File dockerFile = new File(Thread.currentThread().getContextClassLoader()
+                .getResource("nonstandard/subdirectory/Dockerfile-nonstandard").getFile());
+
+
+            InputStream response = dockerClient.buildImageCmd()
+                    .withBaseDirectory(baseDir)
+                    .withDockerfile(dockerFile)
+                    .withNoCache().exec();
+
+        String fullLog = asString(response);
+        assertThat(fullLog, containsString("Successfully built"));
+    }
+
 	@Test
 	public void testDockerBuilderAddUrl()  {
 		File baseDir = new File(Thread.currentThread().getContextClassLoader()

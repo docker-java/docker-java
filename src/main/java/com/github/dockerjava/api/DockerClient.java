@@ -98,7 +98,9 @@ public interface DockerClient extends Closeable {
 
 	public CommitCmd commitCmd(String containerId);
 
-	public BuildImageCmd buildImageCmd(File dockerFolder);
+    public BuildImageCmd buildImageCmd();
+
+	public BuildImageCmd buildImageCmd(File dockerFileOrFolder);
 
 	public BuildImageCmd buildImageCmd(InputStream tarInputStream);
 
