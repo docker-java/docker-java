@@ -62,6 +62,10 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 
 	public CreateContainerCmd withCpuShares(int cpuShares);
 
+	public String getCpuset();
+
+	public CreateContainerCmd withCpuset(String cpuset);
+
 	public boolean isAttachStdin();
 
 	public CreateContainerCmd withAttachStdin(boolean attachStdin);
