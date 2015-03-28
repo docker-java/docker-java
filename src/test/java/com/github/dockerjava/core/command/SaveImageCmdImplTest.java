@@ -27,7 +27,7 @@ import static org.hamcrest.Matchers.not;
 @Test(groups = "integration")
 public class SaveImageCmdImplTest extends AbstractDockerClientTest {
     public static final Logger LOG = LoggerFactory
-            .getLogger(PushImageCmdImplTest.class);
+            .getLogger(SaveImageCmdImplTest.class);
 
     String username;
 

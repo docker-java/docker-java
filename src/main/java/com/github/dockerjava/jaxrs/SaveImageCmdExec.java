@@ -12,7 +12,7 @@ import com.github.dockerjava.api.command.SaveImageCmd;
 
 public class SaveImageCmdExec extends AbstrDockerCmdExec<SaveImageCmd, InputStream> implements SaveImageCmd.Exec {
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(PushImageCmdExec.class);
+            .getLogger(SaveImageCmdExec.class);
 
     public SaveImageCmdExec(WebTarget baseResource) {
         super(baseResource);
