@@ -7,7 +7,7 @@ import java.io.InputStream;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class SaveImageCmdImpl extends AbstrAuthCfgDockerCmd<SaveImageCmd, InputStream> implements SaveImageCmd {
+public class SaveImageCmdImpl extends AbstrDockerCmd<SaveImageCmd, InputStream> implements SaveImageCmd {
     private String name;
     private String tag;
 
