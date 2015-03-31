@@ -66,31 +66,7 @@ public class Dockerfile {
     }
   }
 
-  /**
-   * Not needed in modern guava
-   */
-  private static class MissingOptionalFilter
-      implements Predicate<Optional<? extends DockerfileStatement>> {
-
-    @Override
-    public boolean apply(Optional<? extends DockerfileStatement> optional) {
-      return (optional.orNull() != null);
-    }
-  }
-
-  /**
-   * Not needed in modern guava
-   */
-  private static class OptionalItemTransformer
-      implements Function<Optional<? extends DockerfileStatement>, DockerfileStatement> {
-
-    @Override
-    public DockerfileStatement apply(Optional<? extends DockerfileStatement> optional) {
-      return optional.orNull();
-    }
-  }
-
-  public Collection<DockerfileStatement> getStatements() throws IOException {
+  public Iterable<DockerfileStatement> getStatements() throws IOException {
     Collection<String> dockerFileContent = FileUtils.readLines(dockerFile);
 
     if (dockerFileContent.size() <= 0) {
@@ -101,17 +77,7 @@ public class Dockerfile {
     Collection<Optional<? extends DockerfileStatement>> optionals = Collections2
         .transform(dockerFileContent, new LineTransformer());
 
-    // Modern guava would be done here,
-    // With simply return Optional.presentInstances( optionals );
-    //
-    // So this entire function could simply be
-    // return Optional.presentInstances( Collections2.transform( FileUtils.readLines(dockerFile), new LineTransformer() ) );
-    //
-    // Until the dawn of that day, do it manually
-
-    return Collections2.transform(Collections2.filter(optionals, new MissingOptionalFilter()),
-                                  new OptionalItemTransformer());
-
+    return Optional.presentInstances(optionals);
   }
 
   public List<String> getIgnores() throws IOException {
