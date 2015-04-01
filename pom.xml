@@ -10,7 +10,7 @@
 	<groupId>com.github.docker-java</groupId>
 	<artifactId>docker-java</artifactId>
 	<packaging>jar</packaging>
-	<version>0.10.0-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 
 	<name>docker-java</name>
 	<url>https://github.com/docker-java/docker-java</url>
@@ -40,33 +40,29 @@
 	</developers>
 
 	<properties>
-		<skipTests>true</skipTests>
-
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<jdk.debug>true</jdk.debug>
 		<jdk.optimize>false</jdk.optimize>
-		<jdk.source>1.6</jdk.source>
-		<jdk.target>1.6</jdk.target>
+		<jdk.source>1.7</jdk.source>
+		<jdk.target>1.7</jdk.target>
 
-		<version.slf4j>1.6.1</version.slf4j>
-
-		<jersey.version>1.18</jersey.version>
-		<jersey-apache-client4.version>1.9</jersey-apache-client4.version>
-
-		<jackson-jaxrs.version>2.3.3</jackson-jaxrs.version>
-
-		<httpclient.version>4.2.5</httpclient.version>
+		<jersey.version>2.11</jersey.version>
+		<jackson-jaxrs.version>2.1.2</jackson-jaxrs.version>
+		<httpclient.version>4.3.1</httpclient.version>
 		<commons-compress.version>1.5</commons-compress.version>
+		<commons-codec.version>1.8</commons-codec.version>
 		<commons-io.version>2.3</commons-io.version>
 		<commons-lang.version>2.6</commons-lang.version>
 		<slf4j-api.version>1.7.5</slf4j-api.version>
-		<jsr305.version>1.3.9</jsr305.version>
-		<jnr.unixsocket.version>0.3</jnr.unixsocket.version>
-		<guava.version>11.0.1</guava.version>
 
-		<!--test dependencies -->
-		<version.logback>1.0.1</version.logback>
-		<version.testng>5.12.1</version.testng>
+		<bouncycastle.version>1.51</bouncycastle.version>
+		<unix-socket-factory.version>2015-01-27T15-02-14</unix-socket-factory.version>
+		<guava.version>18.0</guava.version>
+
+		<!-- test dependencies -->
+		<logback.version>1.1.0</logback.version>
+		<testng.version>5.12.1</testng.version>
 		<hamcrest.library.version>1.3</hamcrest.library.version>
 		<hamcrest.jpa-matchers>1.6</hamcrest.jpa-matchers>
 		<lambdaj.version>2.3.3</lambdaj.version>
@@ -75,7 +71,8 @@
 		<maven-jar-plugin.version>2.2</maven-jar-plugin.version>
 		<maven-compiler-plugin.version>2.3.1</maven-compiler-plugin.version>
 		<maven-release-plugin.version>2.3.1</maven-release-plugin.version>
-		<maven-surefire-plugin.version>2.8.1</maven-surefire-plugin.version>
+		<maven-surefire-plugin.version>2.17</maven-surefire-plugin.version>
+		<maven-failsafe-plugin.version>2.17</maven-failsafe-plugin.version>
 		<cobertura-maven-plugin.version>2.5.1</cobertura-maven-plugin.version>
 		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
 	</properties>
@@ -87,37 +84,35 @@
 			<version>${jackson-jaxrs.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-core</artifactId>
+	 		<groupId>org.glassfish.jersey.connectors</groupId>
+			<artifactId>jersey-apache-connector</artifactId>
 			<version>${jersey.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-client</artifactId>
-			<version>${jersey.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.sun.jersey.contribs</groupId>
-			<artifactId>jersey-multipart</artifactId>
-			<version>${jersey.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey.contribs</groupId>
-			<artifactId>jersey-apache-client4</artifactId>
-			<version>${jersey-apache-client4.version}</version>
-		</dependency>
-
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>${httpclient.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.core</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>de.gesellix</groupId>
+			 <artifactId>unix-socket-factory</artifactId>
+		 	<version>${unix-socket-factory.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-compress</artifactId>
 			<version>${commons-compress.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>${commons-codec.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>
@@ -129,50 +124,41 @@
 			<artifactId>commons-io</artifactId>
 			<version>${commons-io.version}</version>
 		</dependency>
-
-		<dependency>
-			<groupId>com.github.jnr</groupId>
-			<artifactId>jnr-unixsocket</artifactId>
-			<version>${jnr.unixsocket.version}</version>
-		</dependency>
-
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j-api.version}</version>
 		</dependency>
-
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jul-to-slf4j</artifactId>
-			<version>${slf4j-api.version}</version>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${guava.version}</version>
 		</dependency>
-
 		<dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcpkix-jdk15on</artifactId>
+			<version>${bouncycastle.version}</version>
+		</dependency>
 
 		<!-- /// Test /////////////////////////// -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-core</artifactId>
-			<version>${version.logback}</version>
+			<version>${logback.version}</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>${version.logback}</version>
+			<version>${logback.version}</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
-			<version>${version.testng}</version>
+			<version>${testng.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -203,23 +189,7 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>com.github.jnr</groupId>
-				<artifactId>jffi</artifactId>
-				<version>1.2.7</version>
-			</dependency>
-			<dependency>
-				<groupId>com.github.jnr</groupId>
-				<artifactId>jffi</artifactId>
-				<classifier>native</classifier>
-				<version>1.2.7</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
-
+	
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
@@ -248,7 +218,6 @@
 					<configuration>
 						<source>${jdk.source}</source>
 						<target>${jdk.target}</target>
-						<encoding>ISO-8859-1</encoding>
 						<debug>${jdk.debug}</debug>
 						<optimize>${jdk.optimize}</optimize>
 					</configuration>
@@ -266,16 +235,6 @@
 						</execution>
 					</executions>
 				</plugin>
-
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>${maven-surefire-plugin.version}</version>
-					<configuration>
-						<skipTests>${skipTests}</skipTests>
-					</configuration>
-				</plugin>
-
 
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -315,6 +274,32 @@
 						</execution>
 					</executions>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>2.2.1</version>
+					<executions>
+						<execution>
+							<id>attach-sources</id>
+							<goals>
+								<goal>jar-no-fork</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>2.9.1</version>
+					<executions>
+						<execution>
+							<id>attach-javadocs</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -341,6 +326,40 @@
 					<goals>deploy nexus-staging:release</goals>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven-surefire-plugin.version}</version>
+				<configuration>
+					<excludedGroups>integration</excludedGroups>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>${maven-failsafe-plugin.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+						<configuration>
+							<groups>integration</groups>
+							<excludedGroups>ignoreInCircleCi</excludedGroups>
+							<includes>
+								<include>**/*Test.java</include>
+							</includes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -362,33 +381,9 @@
 							</execution>
 						</executions>
 					</plugin>
-
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-source-plugin</artifactId>
-						<version>2.2.1</version>
-						<executions>
-							<execution>
-								<id>attach-sources</id>
-								<goals>
-									<goal>jar-no-fork</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-javadoc-plugin</artifactId>
-						<version>2.9.1</version>
-						<executions>
-							<execution>
-								<id>attach-javadocs</id>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-							</execution>
-						</executions>
 					</plugin>
 				</plugins>
 			</build>
