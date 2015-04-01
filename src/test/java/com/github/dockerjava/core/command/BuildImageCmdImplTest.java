@@ -76,7 +76,8 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
 				equalTo("Guillaume J. Charmes \"guillaume@dotcloud.com\""));
 	}
 
-    @Test
+
+    @Test(groups = "ignoreInCircleCi")
     public void testNonstandard1() {
         File baseDir = new File(Thread.currentThread().getContextClassLoader()
                 .getResource("nonstandard/subdirectory/Dockerfile-nonstandard").getFile());
@@ -87,7 +88,7 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
         assertThat(fullLog, containsString("Successfully built"));
     }
 
-    @Test
+    @Test(groups = "ignoreInCircleCi")
     public void testNonstandard2() {
         File baseDir = new File(Thread.currentThread().getContextClassLoader()
                 .getResource("nonstandard").getFile());
