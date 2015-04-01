@@ -52,6 +52,9 @@ public class BuildImageCmdExec extends
 		if (command.isQuiet()) {
 			webResource = webResource.queryParam("q", "true");
 		}
+		if (command.hasPullEnabled()) {
+			webResource = webResource.queryParam("pull", "true");
+		}
 		if (dockerFilePath != null && !"Dockerfile".equals(dockerFilePath)) {
 			webResource = webResource.queryParam("dockerfile", dockerFilePath);
 		}

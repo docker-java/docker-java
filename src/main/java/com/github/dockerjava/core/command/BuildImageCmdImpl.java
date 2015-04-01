@@ -24,6 +24,8 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageC
 	private boolean noCache;
 	private boolean remove = true;
 	private boolean quiet;
+	private boolean pull;
+	
 	private AuthConfigurations buildAuthConfigs;
     private File dockerFile;
     private File baseDirectory;
@@ -115,6 +117,11 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageC
 	public boolean isQuiet() {
 		return quiet;
 	}
+	
+	@Override
+	public boolean hasPullEnabled() {
+		return pull;
+	}
 
     @Override
     public String getPathToDockerfile() {
@@ -163,6 +170,17 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageC
 	@Override
 	public BuildImageCmdImpl withQuiet(boolean quiet) {
 		this.quiet = quiet;
+		return this;
+	}
+	
+	@Override
+	public BuildImageCmdImpl withPull() {
+		return withPull(true);
+	}
+
+	@Override
+	public BuildImageCmdImpl withPull(boolean pull) {
+		this.pull = pull;
 		return this;
 	}
 
