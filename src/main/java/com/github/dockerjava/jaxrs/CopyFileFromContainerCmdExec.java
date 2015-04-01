@@ -6,11 +6,13 @@ import java.io.InputStream;
 
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
+import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
 
 public class CopyFileFromContainerCmdExec extends AbstrDockerCmdExec<CopyFileFromContainerCmd, InputStream> implements CopyFileFromContainerCmd.Exec {
 	
@@ -29,7 +31,9 @@ public class CopyFileFromContainerCmdExec extends AbstrDockerCmdExec<CopyFileFro
 
 		LOGGER.trace("POST: " + webResource.toString());
 		
-		return webResource.request().accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).post(entity(command, MediaType.APPLICATION_JSON)).readEntity(InputStream.class);		
+		Response response = webResource.request().accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).post(entity(command, MediaType.APPLICATION_JSON));
+		
+		return new WrappedResponseInputStream(response);
 	}
 
 }

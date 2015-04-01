@@ -4,11 +4,13 @@ import java.io.InputStream;
 
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.api.command.SaveImageCmd;
+import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
 
 public class SaveImageCmdExec extends AbstrDockerCmdExec<SaveImageCmd, InputStream> implements SaveImageCmd.Exec {
     private static final Logger LOGGER = LoggerFactory
@@ -24,11 +26,11 @@ public class SaveImageCmdExec extends AbstrDockerCmdExec<SaveImageCmd, InputStre
                 .queryParam("tag", command.getTag());
 
         LOGGER.trace("GET: {}", webResource);
-        InputStream is =  webResource
+        Response response =  webResource
                 .request()
                 .accept(MediaType.APPLICATION_JSON)
-                .get().readEntity(InputStream.class);
+                .get();
 
-        return is;
+        return new WrappedResponseInputStream(response);
     }
 }

@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.command.EventCallback;
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.model.Event;
+import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
 
 public class EventsCmdExec extends AbstrDockerCmdExec<EventsCmd, ExecutorService> implements EventsCmd.Exec {
     private static final Logger LOGGER = LoggerFactory.getLogger(EventsCmdExec.class);
@@ -66,7 +67,7 @@ public class EventsCmdExec extends AbstrDockerCmdExec<EventsCmd, ExecutorService
             Response response = null;
             try {
                 response = webTarget.request().get(Response.class);
-                InputStream inputStream = response.readEntity(InputStream.class);
+                InputStream inputStream = new WrappedResponseInputStream(response);
                 JsonParser jp = JSON_FACTORY.createParser(inputStream);
                 while (jp.nextToken() != JsonToken.END_OBJECT && !jp.isClosed() && eventCallback.isReceiving()) {
                     eventCallback.onEvent(OBJECT_MAPPER.readValue(jp, Event.class));

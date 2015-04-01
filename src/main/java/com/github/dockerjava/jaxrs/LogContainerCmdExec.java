@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.api.command.LogContainerCmd;
+import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
 
 public class LogContainerCmdExec extends AbstrDockerCmdExec<LogContainerCmd, InputStream> implements LogContainerCmd.Exec {
 
@@ -28,7 +29,8 @@ public class LogContainerCmdExec extends AbstrDockerCmdExec<LogContainerCmd, Inp
 				.queryParam("tail", command.getTail() < 0 ? "all" : "" + command.getTail());
 
 		LOGGER.trace("GET: {}", webResource);
-		return webResource.request().get().readEntity(InputStream.class);
+		
+		return new WrappedResponseInputStream(webResource.request().get());
 	}
 
 }
