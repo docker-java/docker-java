@@ -188,15 +188,13 @@ public abstract class DockerfileStatement<T extends DockerfileStatement> {
 
     line = Add.create(cmd);
 
-    // if (line.isPresent()) { : Newer guava
-    if (line.orNull() != null) {
+    if (line.isPresent()) {
       return line;
     }
 
     line = Env.create(cmd);
 
-    // if (line.isPresent()) { : Newer guava
-    if (line.orNull() != null) {
+    if (line.isPresent()) {
       return line;
     }
 
