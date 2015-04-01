@@ -79,6 +79,41 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 		} catch (NotFoundException e) {
 		}
 	}
+	
+	@Test
+	public void multipleLogContainer() throws Exception {
+
+		String snippet = "hello world";
+
+		CreateContainerResponse container = dockerClient
+				.createContainerCmd("busybox").withCmd("/bin/echo", snippet).exec();
+
+		LOG.info("Created container: {}", container.toString());
+		assertThat(container.getId(), not(isEmptyString()));
+
+		dockerClient.startContainerCmd(container.getId()).exec();
+		
+		int exitCode = dockerClient.waitContainerCmd(container.getId()).exec();
+
+		assertThat(exitCode, equalTo(0));
+
+		InputStream response = dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec();
+
+		response.close();
+		
+		//String log = asString(response);
+		
+		response = dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec();
+
+		//log = asString(response);
+		response.close();
+		
+		response = dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec();
+
+		String log = asString(response);
+		
+		assertThat(log, endsWith(snippet));
+	}
 
 
 }

@@ -29,5 +29,12 @@ public interface PullImageCmd extends DockerCmd<InputStream>{
 
     public static interface Exec extends DockerCmdExec<PullImageCmd, InputStream> {
 	}
+    
+    /**
+     * Its the responsibility of the caller to consume and/or close the {@link InputStream} to prevent
+	 * connection leaks.
+     */
+    @Override
+    public InputStream exec();
 
 }

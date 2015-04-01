@@ -5,12 +5,14 @@ import java.io.InputStream;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
 
 public class PullImageCmdExec extends
 		AbstrDockerCmdExec<PullImageCmd, InputStream> implements
@@ -31,9 +33,10 @@ public class PullImageCmdExec extends
 				.queryParam("registry", command.getRegistry());
 
 		LOGGER.trace("POST: {}", webResource);
-		return resourceWithOptionalAuthConfig(command, webResource.request())
-				.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).post(null)
-				.readEntity(InputStream.class);
+		Response response =  resourceWithOptionalAuthConfig(command, webResource.request())
+				.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).post(null);
+		
+		return new WrappedResponseInputStream(response);
 	}
 
 	private Invocation.Builder resourceWithOptionalAuthConfig(
