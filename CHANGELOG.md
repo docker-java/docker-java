@@ -3,6 +3,7 @@ Change Log
 Latest SNAPSHOT
 ---
  
+ * [#186](https://github.com/docker-java/docker-java/pull/186) Added withPull method to BuilImageCmd 
  * [#185](https://github.com/docker-java/docker-java/pull/185) Introduce WrappedResponseInputStream to close underlying Response
  * [#180](https://github.com/docker-java/docker-java/pull/180) Dockerfiles not called 'dockerfile'
  * [#179](https://github.com/docker-java/docker-java/pull/179) Add support for cpuset in CreateContainerCmd
