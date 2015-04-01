@@ -9,6 +9,7 @@ import java.io.InputStream;
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.core.dockerfile.Dockerfile;
+import com.google.common.base.Optional;
 
 /**
  * 
@@ -24,6 +25,8 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageC
 	private boolean remove = true;
 	private boolean quiet;
 	private AuthConfigurations buildAuthConfigs;
+    private File dockerFile;
+    private File baseDirectory;
 
     public BuildImageCmdImpl(BuildImageCmd.Exec exec) {
         super(exec);
@@ -33,10 +36,13 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageC
 		super(exec);
 		checkNotNull(dockerFileOrFolder, "dockerFolder is null");
 
-        if( dockerFileOrFolder.isDirectory() )
-            withDockerfile( new File(dockerFileOrFolder, "Dockerfile"));
-        else
-            withDockerfile( dockerFileOrFolder);
+        if( dockerFileOrFolder.isDirectory() ) {
+            withBaseDirectory(dockerFileOrFolder);
+            withDockerfile(new File(dockerFileOrFolder, "Dockerfile"));
+        }
+        else {
+            withDockerfile(dockerFileOrFolder);
+        }
 	}
 
 	public BuildImageCmdImpl(BuildImageCmd.Exec exec, InputStream tarInputStream) {
@@ -55,12 +61,20 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageC
         checkNotNull(dockerfile);
         if( !dockerfile.exists() )
             throw new IllegalArgumentException("Dockerfile does not exist");
+        if( !dockerfile.isFile() )
+            throw new IllegalArgumentException("Not a directory");
+
+        if( baseDirectory == null )
+            withBaseDirectory(dockerfile.getParentFile());
+
+
+        this.dockerFile = dockerfile;
 
         try {
             withTarInputStream(
                     new Dockerfile(dockerfile)
                             .parse()
-                            .buildDockerFolderTar() );
+                            .buildDockerFolderTar(baseDirectory) );
         } catch (IOException e) {
             // we just created the file this should never happen.
             throw new RuntimeException(e);
@@ -102,12 +116,24 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageC
 		return quiet;
 	}
 
-	@Override
+    @Override
+    public String getPathToDockerfile() {
+        int baseLen = baseDirectory.getAbsolutePath().length();
+        return dockerFile.getAbsolutePath().substring(baseLen+1);
+    }
+
+    @Override
 	public AuthConfigurations getBuildAuthConfigs() {
 		return buildAuthConfigs;
 	}
 
-	@Override
+    @Override
+    public BuildImageCmd withBaseDirectory(File baseDirectory) {
+        this.baseDirectory = baseDirectory;
+        return this;
+    }
+
+    @Override
 	public BuildImageCmdImpl withNoCache() {
 		return withNoCache(true);
 	}

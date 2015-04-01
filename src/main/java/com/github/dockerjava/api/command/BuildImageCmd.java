@@ -28,8 +28,12 @@ public interface BuildImageCmd extends DockerCmd<BuildImageCmd.Response>{
 
 	public boolean isQuiet();
 
+    public String getPathToDockerfile();
+
 	public AuthConfigurations getBuildAuthConfigs();
-	
+
+    public BuildImageCmd withBaseDirectory(File baseDirectory);
+
     public BuildImageCmd withDockerfile(File dockerfile);
 	
 	public BuildImageCmd withTarInputStream(InputStream tarInputStream);

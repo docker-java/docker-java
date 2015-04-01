@@ -166,6 +166,10 @@ public class Dockerfile {
     final List<File> filesToAdd = new ArrayList<File>();
 
     public InputStream buildDockerFolderTar() {
+        return buildDockerFolderTar(getDockerFolder());
+    }
+
+    public InputStream buildDockerFolderTar(File directory) {
 
       // ARCHIVE TAR
       File dockerFolderTar = null;
@@ -173,7 +177,7 @@ public class Dockerfile {
       try {
         String archiveNameWithOutExtension = UUID.randomUUID().toString();
 
-        dockerFolderTar = CompressArchiveUtil.archiveTARFiles(getDockerFolder(),
+        dockerFolderTar = CompressArchiveUtil.archiveTARFiles(directory,
                                                               filesToAdd,
                                                               archiveNameWithOutExtension);
         return FileUtils.openInputStream(dockerFolderTar);
