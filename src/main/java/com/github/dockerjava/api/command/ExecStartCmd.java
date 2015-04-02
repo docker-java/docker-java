@@ -23,6 +23,9 @@ public interface ExecStartCmd extends DockerCmd<InputStream> {
 	public ExecStartCmd withTty();
 
 	/**
+	 * Its the responsibility of the caller to consume and/or close the {@link InputStream} to prevent
+	 * connection leaks.
+	 * 
 	 * @throws com.github.dockerjava.api.NotFoundException
 	 *             No such exec instance
 	 */

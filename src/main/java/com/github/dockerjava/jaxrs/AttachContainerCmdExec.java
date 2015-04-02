@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.api.command.AttachContainerCmd;
+import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
 
 public class AttachContainerCmdExec extends
 		AbstrDockerCmdExec<AttachContainerCmd, InputStream> implements
@@ -36,9 +37,11 @@ public class AttachContainerCmdExec extends
 
 		LOGGER.trace("POST: {}", webResource);
 
-		return webResource.request()
+		Response response = webResource.request()
 				.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
-				.post(null, Response.class).readEntity(InputStream.class);
+				.post(null, Response.class);
+		
+		return new WrappedResponseInputStream(response);
 	}
 
 }

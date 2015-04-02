@@ -25,8 +25,10 @@ public interface BuildImageCmd extends DockerCmd<BuildImageCmd.Response>{
 	public boolean hasNoCacheEnabled();
 
 	public boolean hasRemoveEnabled();
-
+	
 	public boolean isQuiet();
+	
+	public boolean hasPullEnabled();
 
     public String getPathToDockerfile();
 
@@ -49,6 +51,10 @@ public interface BuildImageCmd extends DockerCmd<BuildImageCmd.Response>{
 	public BuildImageCmd withQuiet();
 
 	public BuildImageCmd withQuiet(boolean quiet);
+	
+	public BuildImageCmd withPull();
+
+	public BuildImageCmd withPull(boolean pull);
 	
   	public BuildImageCmd withBuildAuthConfigs(AuthConfigurations authConfig);
 	

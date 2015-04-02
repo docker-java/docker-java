@@ -1,12 +1,15 @@
 package com.github.dockerjava.jaxrs;
 
 import com.github.dockerjava.api.command.ExecStartCmd;
+import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import java.io.InputStream;
 
 import static javax.ws.rs.client.Entity.entity;
@@ -26,9 +29,11 @@ public class ExecStartCmdExec extends AbstrDockerCmdExec<ExecStartCmd, InputStre
 
         LOGGER.trace("POST: {}", webResource);
 
-		return webResource
+		Response response = webResource
 				.request()
 				.accept(MediaType.APPLICATION_JSON)
-				.post(entity(command, MediaType.APPLICATION_JSON), Response.class).readEntity(InputStream.class);
+				.post(entity(command, MediaType.APPLICATION_JSON), Response.class);
+		
+		return new WrappedResponseInputStream(response);
     }
 }

@@ -21,6 +21,7 @@ import com.github.dockerjava.api.command.PushImageCmd.Response;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.PushEventStreamItem;
 
+import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
 // Shaded, but imported
 import com.google.common.collect.ImmutableList;
 
@@ -40,15 +41,14 @@ public class PushImageCmdExec extends AbstrDockerCmdExec<PushImageCmd, Response>
 
 		final String registryAuth = registryAuth(command.getAuthConfig());
 		LOGGER.trace("POST: {}", webResource);
-		InputStream is =  webResource
+		javax.ws.rs.core.Response response =  webResource
                 .request()
 				.header("X-Registry-Auth", registryAuth)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(
-				    entity(Response.class, MediaType.APPLICATION_JSON)).readEntity(
-			InputStream.class);
+				    entity(Response.class, MediaType.APPLICATION_JSON));
 
-	  return new ResponseImpl(is);
+	  return new ResponseImpl(new WrappedResponseInputStream(response));
 	}
 	
 	private String name(PushImageCmd command) {

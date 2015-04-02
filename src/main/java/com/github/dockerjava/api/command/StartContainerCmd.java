@@ -12,7 +12,9 @@ import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.RestartPolicy;
 
 /**
- * Start a container
+ * Start a container.
+ * 
+ * TODO: Almost all methods are deprecated as they have corresponding siblings in {@link CreateContainerCmd} now.
  */
 public interface StartContainerCmd extends DockerCmd<Void> {
 
@@ -48,13 +50,16 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 
 	public Capability[] getCapDrop();
 
+	@Deprecated
 	public StartContainerCmd withBinds(Bind... binds);
 
 	/**
 	 * Add link to another container.
 	 */
+	@Deprecated
 	public StartContainerCmd withLinks(Link... links);
 
+	@Deprecated
 	public StartContainerCmd withLxcConf(LxcConf... lxcConf);
 
 	/**
@@ -63,6 +68,7 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 	 * 
 	 * @see #withPortBindings(PortBinding...)
 	 */
+	@Deprecated
 	public StartContainerCmd withPortBindings(Ports portBindings);
 
 	/**
@@ -70,24 +76,31 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 	 * This corresponds to the <code>--publish</code> (<code>-p</code>)
 	 * option of the <code>docker run</code> CLI command.
 	 */
+	@Deprecated
 	public StartContainerCmd withPortBindings(PortBinding... portBindings);
 
+	@Deprecated
 	public StartContainerCmd withPrivileged(Boolean privileged);
 
+	@Deprecated
 	public StartContainerCmd withPublishAllPorts(Boolean publishAllPorts);
 
 	/**
 	 * Set custom DNS servers
 	 */
+	@Deprecated
 	public StartContainerCmd withDns(String... dns);
 
 	/**
 	 * Set custom DNS search domains
 	 */
+	@Deprecated
 	public StartContainerCmd withDnsSearch(String... dnsSearch);
 
+	@Deprecated
 	public StartContainerCmd withVolumesFrom(String volumesFrom);
 
+	@Deprecated
 	public StartContainerCmd withContainerId(String containerId);
 
 	/**
@@ -102,22 +115,26 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 	 * as D-bus and is therefore considered insecure.</li>
 	 * </ul>
 	 */
+	@Deprecated
 	public StartContainerCmd withNetworkMode(String networkMode);
 
 	/**
 	 * Add host devices to the container
 	 */
+	@Deprecated
 	public StartContainerCmd withDevices(Device... devices);
 
 	/**
 	 * Add hostnames to /etc/hosts in the container
 	 */
+	@Deprecated
 	public StartContainerCmd withExtraHosts(String... extraHosts);
 
 	/**
 	 * Set custom {@link RestartPolicy} for the container. Defaults to
 	 * {@link RestartPolicy#noRestart()}
 	 */
+	@Deprecated
 	public StartContainerCmd withRestartPolicy(RestartPolicy restartPolicy);
 
 	/**
@@ -126,6 +143,7 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 	 * capability</a> to the container. For example: adding {@link Capability#MKNOD}
 	 * allows the container to create special files using the 'mknod' command.
 	 */
+	@Deprecated
 	public StartContainerCmd withCapAdd(Capability... capAdd);
 
 	/**
@@ -134,6 +152,7 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 	 * capability</a> from the container. For example: dropping {@link Capability#CHOWN}
 	 * prevents the container from changing the owner of any files.
 	 */
+	@Deprecated
 	public StartContainerCmd withCapDrop(Capability... capDrop);
 
 	/**

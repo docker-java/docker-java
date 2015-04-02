@@ -21,6 +21,9 @@ public interface SaveImageCmd extends DockerCmd<InputStream>{
     public SaveImageCmd withTag(String tag);
 
     /**
+     * Its the responsibility of the caller to consume and/or close the {@link InputStream} to prevent
+	 * connection leaks.
+	 * 
      * @throws com.github.dockerjava.api.NotFoundException No such image
      */
     public InputStream exec() throws NotFoundException;

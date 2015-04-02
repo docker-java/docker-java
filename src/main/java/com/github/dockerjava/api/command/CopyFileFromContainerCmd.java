@@ -19,6 +19,9 @@ public interface CopyFileFromContainerCmd extends DockerCmd<InputStream> {
 	public CopyFileFromContainerCmd withHostPath(String hostPath);
 
 	/**
+	 * Its the responsibility of the caller to consume and/or close the {@link InputStream} to prevent
+	 * connection leaks.
+	 * 
 	 * @throws NotFoundException No such container
 	 */
 	@Override
