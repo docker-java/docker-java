@@ -258,6 +258,11 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 	public EventsCmd.Exec createEventsCmdExec() {
 		return delegate.createEventsCmdExec();
 	}
+	
+	@Override
+    public StatsCmd.Exec createStatsCmdExec() {
+	    return delegate.createStatsCmdExec();
+	}
 
 	public List<String> getContainerNames() {
 		return new ArrayList<String>(containerNames);

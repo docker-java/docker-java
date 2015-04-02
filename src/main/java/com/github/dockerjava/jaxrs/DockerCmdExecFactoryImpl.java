@@ -312,6 +312,11 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 	public EventsCmd.Exec createEventsCmdExec() {
 		return new EventsCmdExec(getBaseResource());
 	}
+	
+	@Override
+    public StatsCmd.Exec createStatsCmdExec() {
+	    return new StatsCmdExec(getBaseResource());
+	}
 
 	@Override
 	public void close() throws IOException {
