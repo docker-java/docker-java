@@ -31,6 +31,10 @@ public class Links
 		this.links = links;
 	}
 
+	public Links(final List<Link> links) {
+		this.links = links.toArray(new Link[links.size()]);
+	}
+
 	public Link[] getLinks()
 	{
 		return links;
