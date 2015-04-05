@@ -3,6 +3,8 @@ Change Log
 Latest SNAPSHOT
 ---
 
+* [#192](https://github.com/docker-java/docker-java/pull/192) Added withPull method to BuilImageCmd Added a Links constructor accepting a List object
+
 v1.1.0
 ---
  
