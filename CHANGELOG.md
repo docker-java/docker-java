@@ -2,6 +2,9 @@ Change Log
 ===
 Latest SNAPSHOT
 ---
+
+v1.1.0
+---
  
  * [#186](https://github.com/docker-java/docker-java/pull/186) Added withPull method to BuilImageCmd 
  * [#185](https://github.com/docker-java/docker-java/pull/185) Introduce WrappedResponseInputStream to close underlying Response
