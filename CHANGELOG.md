@@ -2,7 +2,7 @@ Change Log
 ===
 Latest SNAPSHOT
 ---
-
+* [#193](https://github.com/docker-java/docker-java/pull/193) Add HostConfig related methods from start command to create command
 * [#192](https://github.com/docker-java/docker-java/pull/192) Added a Links constructor accepting a List object
 
 v1.1.0
