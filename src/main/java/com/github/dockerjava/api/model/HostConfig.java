@@ -1,7 +1,10 @@
 package com.github.dockerjava.api.model;
 
+import java.util.Map;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -9,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class HostConfig {
 
 	@JsonProperty("Binds")
-	private String[] binds;
+	private Binds binds;
 
 	@JsonProperty("Links")
 	private Links links;
@@ -59,12 +62,12 @@ public class HostConfig {
 	public HostConfig() {
 	}
 
-	public HostConfig(String[] binds, Links links, LxcConf[] lxcConf, Ports portBindings, boolean publishAllPorts,
+	public HostConfig(Bind[] binds, Link[] links, LxcConf[] lxcConf, Ports portBindings, boolean publishAllPorts,
 			boolean privileged, String[] dns, String[] dnsSearch, VolumesFrom[] volumesFrom, String containerIDFile,
 			Capability[] capAdd, Capability[] capDrop, RestartPolicy restartPolicy, String networkMode, Device[] devices,
             String[] extraHosts) {
-		this.binds = binds;
-		this.links = links;
+		this.binds = new Binds(binds);
+		this.links = new Links(links);
 		this.lxcConf = lxcConf;
 		this.portBindings = portBindings;
 		this.publishAllPorts = publishAllPorts;
@@ -81,14 +84,16 @@ public class HostConfig {
 		this.extraHosts = extraHosts;
 	}
 
-	public String[] getBinds() {
-		return binds;
+
+	@JsonIgnore
+	public Bind[] getBinds() {
+		return (binds == null) ? new Bind[0] : binds.getBinds();
 	}
 
 	public LxcConf[] getLxcConf() {
 		return lxcConf;
 	}
-
+	
 	public Ports getPortBindings() {
 		return portBindings;
 	}
@@ -117,8 +122,9 @@ public class HostConfig {
 		return dnsSearch;
 	}
 
-	public Links getLinks() {
-		return links;
+	@JsonIgnore
+	public Link[] getLinks() {
+		return (links == null) ? new Link[0] : links.getLinks();
 	}
 
 	public String getNetworkMode() {
@@ -145,12 +151,14 @@ public class HostConfig {
 		return capDrop;
 	}
 
-	public void setBinds(String[] binds) {
-		this.binds = binds;
+	@JsonIgnore
+	public void setBinds(Bind... binds) {
+		this.binds = new Binds(binds);
 	}
 
-	public void setLinks(Links links) {
-		this.links = links;
+	@JsonIgnore
+	public void setLinks(Link... links) {
+		this.links = new Links(links);
 	}
 
 	public void setLxcConf(LxcConf[] lxcConf) {

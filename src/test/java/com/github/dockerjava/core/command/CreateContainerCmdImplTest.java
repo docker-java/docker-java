@@ -1,6 +1,7 @@
 package com.github.dockerjava.core.command;
 
-import static com.github.dockerjava.api.model.Capability.*;
+import static com.github.dockerjava.api.model.Capability.MKNOD;
+import static com.github.dockerjava.api.model.Capability.NET_ADMIN;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -10,6 +11,8 @@ import static org.hamcrest.Matchers.hasItemInArray;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.startsWith;
 
 import java.lang.reflect.Method;
 import java.security.SecureRandom;
@@ -28,9 +31,12 @@ import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Bind;
+import com.github.dockerjava.api.model.Device;
+import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Link;
-import com.github.dockerjava.api.model.Links;
+import com.github.dockerjava.api.model.Ports;
+import com.github.dockerjava.api.model.RestartPolicy;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
 import com.github.dockerjava.client.AbstractDockerClientTest;
@@ -99,7 +105,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 		assertThat(inspectContainerResponse.getConfig().getVolumes().keySet(),
 				contains("/var/log"));
 	}
-
+	
 	@Test
 	public void createContainerWithVolumesFrom() throws DockerException {
 
@@ -111,11 +117,12 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 		// create a running container with bind mounts
 		CreateContainerResponse container1 = dockerClient
 				.createContainerCmd("busybox").withCmd("sleep", "9999")
-				.withName(container1Name).exec();
+				.withName(container1Name)
+				.withBinds(new Bind("/src/webapp1", volume1), new Bind("/src/webapp2", volume2))
+				.exec();
 		LOG.info("Created container1 {}", container1.toString());
 
-		dockerClient.startContainerCmd(container1.getId()).withBinds(
-				new Bind("/src/webapp1", volume1), new Bind("/src/webapp2", volume2)).exec();
+		dockerClient.startContainerCmd(container1.getId()).exec();
 		LOG.info("Started container1 {}", container1.toString());
 
 		InspectContainerResponse inspectContainerResponse1 = dockerClient.inspectContainerCmd(
@@ -238,7 +245,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 		assertThat(inspectContainerResponse1.getState().isRunning(), is(true));
 
 		HostConfig hostConfig = new HostConfig();
-		hostConfig.setLinks(new Links(new Link("container1", "container1Link")));
+		hostConfig.setLinks(new Link("container1", "container1Link"));
 		CreateContainerResponse container2 = dockerClient
 				.createContainerCmd("busybox").withName("container2").withHostConfig(hostConfig)
 				.withCmd("env").exec();
@@ -247,7 +254,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
 		InspectContainerResponse inspectContainerResponse2 = dockerClient
 				.inspectContainerCmd(container2.getId()).exec();
-		assertThat(inspectContainerResponse2.getHostConfig().getLinks().getLinks(), equalTo(new Link[] {new Link("container1","container1Link")}));
+		assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] {new Link("container1","container1Link")}));
 	}
 
 	@Test
@@ -333,5 +340,174 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 		assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getExtraHosts()),
 				containsInAnyOrder("dockerhost:127.0.0.1", "otherhost:10.0.0.1"));
 	}
+	
+	@Test
+	public void createContainerWithDevices() throws DockerException {
 
+		CreateContainerResponse container = dockerClient
+				.createContainerCmd("busybox").withCmd("sleep", "9999")
+				.withDevices(new Device("rwm", "/dev/nulo", "/dev/zero"))
+				.exec();
+
+		LOG.info("Created container {}", container.toString());
+
+		assertThat(container.getId(), not(isEmptyString()));
+
+		InspectContainerResponse inspectContainerResponse = dockerClient
+				.inspectContainerCmd(container.getId()).exec();
+
+		assertThat(Arrays.asList(inspectContainerResponse.getHostConfig()
+				.getDevices()), contains(new Device("rwm", "/dev/nulo",
+				"/dev/zero")));
+	}
+	
+	@Test
+	public void createContainerWithPortBindings() throws DockerException {
+
+		ExposedPort tcp22 = ExposedPort.tcp(22);
+		ExposedPort tcp23 = ExposedPort.tcp(23);
+		
+		Ports portBindings = new Ports();
+		portBindings.bind(tcp22, Ports.Binding(11022));
+		portBindings.bind(tcp23, Ports.Binding(11023));
+		portBindings.bind(tcp23, Ports.Binding(11024));
+
+		CreateContainerResponse container = dockerClient
+				.createContainerCmd("busybox").withCmd("true")
+				.withExposedPorts(tcp22, tcp23)
+				.withPortBindings(portBindings)
+				.exec();
+
+		LOG.info("Created container {}", container.toString());
+
+		assertThat(container.getId(), not(isEmptyString()));
+
+		InspectContainerResponse inspectContainerResponse = dockerClient
+				.inspectContainerCmd(container.getId()).exec();
+
+		assertThat(Arrays.asList(inspectContainerResponse.getConfig()
+				.getExposedPorts()), contains(tcp22, tcp23));
+
+		assertThat(inspectContainerResponse.getHostConfig().getPortBindings()
+				.getBindings().get(tcp22)[0], is(equalTo(Ports.Binding(11022))));
+
+		assertThat(inspectContainerResponse.getHostConfig().getPortBindings()
+				.getBindings().get(tcp23)[0], is(equalTo(Ports.Binding(11023))));
+
+		assertThat(inspectContainerResponse.getHostConfig().getPortBindings()
+				.getBindings().get(tcp23)[1], is(equalTo(Ports.Binding(11024))));
+
+	}
+	
+	@Test
+	public void createContainerWithLinking() throws DockerException {
+
+		CreateContainerResponse container1 = dockerClient
+				.createContainerCmd("busybox")
+				.withCmd("sleep", "9999")
+				.withName("container1").exec();
+
+		LOG.info("Created container1 {}", container1.toString());
+		assertThat(container1.getId(), not(isEmptyString()));
+
+		dockerClient.startContainerCmd(container1.getId()).exec();
+
+		InspectContainerResponse inspectContainerResponse1 = dockerClient
+				.inspectContainerCmd(container1.getId()).exec();
+		LOG.info("Container1 Inspect: {}", inspectContainerResponse1.toString());
+
+		assertThat(inspectContainerResponse1.getConfig(), is(notNullValue()));
+		assertThat(inspectContainerResponse1.getId(), not(isEmptyString()));
+		assertThat(inspectContainerResponse1.getId(),
+				startsWith(container1.getId()));
+		assertThat(inspectContainerResponse1.getName(), equalTo("/container1"));
+		assertThat(inspectContainerResponse1.getImageId(), not(isEmptyString()));
+		assertThat(inspectContainerResponse1.getState(), is(notNullValue()));
+		assertThat(inspectContainerResponse1.getState().isRunning(), is(true));
+
+		if (!inspectContainerResponse1.getState().isRunning()) {
+			assertThat(inspectContainerResponse1.getState().getExitCode(),
+					is(equalTo(0)));
+		}
+
+		CreateContainerResponse container2 = dockerClient
+				.createContainerCmd("busybox").withCmd("sleep", "9999")
+				.withName("container2")
+				.withLinks(new Link("container1", "container1Link"))
+				.exec();
+
+		LOG.info("Created container2 {}", container2.toString());
+		assertThat(container2.getId(), not(isEmptyString()));
+		
+		InspectContainerResponse inspectContainerResponse2 = dockerClient
+				.inspectContainerCmd(container2.getId()).exec();
+		LOG.info("Container2 Inspect: {}", inspectContainerResponse2.toString());
+
+		assertThat(inspectContainerResponse2.getConfig(), is(notNullValue()));
+		assertThat(inspectContainerResponse2.getId(), not(isEmptyString()));
+		assertThat(inspectContainerResponse2.getHostConfig(),
+				is(notNullValue()));
+		assertThat(inspectContainerResponse2.getHostConfig().getLinks(),
+				is(notNullValue()));
+		assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] { new Link("container1",
+				"container1Link") }));
+		assertThat(inspectContainerResponse2.getId(),
+				startsWith(container2.getId()));
+		assertThat(inspectContainerResponse2.getName(), equalTo("/container2"));
+		assertThat(inspectContainerResponse2.getImageId(), not(isEmptyString()));
+		
+
+	}
+	
+	@Test
+	public void createContainerWithRestartPolicy() throws DockerException {
+
+		RestartPolicy restartPolicy = RestartPolicy.onFailureRestart(5);
+		
+		CreateContainerResponse container = dockerClient
+				.createContainerCmd("busybox")
+				.withCmd("sleep", "9999")
+				.withRestartPolicy(restartPolicy)
+				.exec();
+
+		LOG.info("Created container {}", container.toString());
+
+		assertThat(container.getId(), not(isEmptyString()));
+
+		InspectContainerResponse inspectContainerResponse = dockerClient
+				.inspectContainerCmd(container.getId()).exec();
+
+		assertThat(inspectContainerResponse.getHostConfig().getRestartPolicy(),
+				is(equalTo(restartPolicy)));
+	}
+
+	/**
+	 * This tests support for --net option for the docker run command:
+	 * --net="bridge" Set the Network mode for the container 'bridge': creates a
+	 * new network stack for the container on the docker bridge 'none': no
+	 * networking for this container 'container:': reuses another container
+	 * network stack 'host': use the host network stack inside the container.
+	 * Note: the host mode gives the container full access to local system
+	 * services such as D-bus and is therefore considered insecure.
+	 */
+	@Test
+	public void createContainerWithNetworkMode() throws DockerException {
+
+		CreateContainerResponse container = dockerClient
+				.createContainerCmd("busybox")
+				.withCmd("true")
+				.withNetworkMode("host")
+				.exec();
+
+		LOG.info("Created container {}", container.toString());
+
+		assertThat(container.getId(), not(isEmptyString()));
+
+		InspectContainerResponse inspectContainerResponse = dockerClient
+				.inspectContainerCmd(container.getId()).exec();
+
+		assertThat(inspectContainerResponse.getHostConfig().getNetworkMode(),
+				is(equalTo("host")));
+	}
+	
 }
