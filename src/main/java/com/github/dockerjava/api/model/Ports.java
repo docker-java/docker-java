@@ -3,8 +3,10 @@ package com.github.dockerjava.api.model;
 import static org.apache.commons.lang.StringUtils.isEmpty;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -59,6 +61,10 @@ public class Ports {
     public Ports(ExposedPort exposedPort, Binding host) {
     	bind(exposedPort, host);
     }
+    
+    public Ports(PortBinding... portBindings) {
+    	add(portBindings);
+    }
 
     /**
      * Adds a new {@link PortBinding} for the specified {@link ExposedPort} and
@@ -97,6 +103,16 @@ public class Ports {
     public Map<ExposedPort, Binding[]> getBindings(){
         return ports;
     }
+    
+//    public PortBinding[] getBindingsAsArray() {
+//    	List<PortBinding> bindings = new ArrayList<>();
+//    	for(Map.Entry<ExposedPort, Ports.Binding[]> entry: ports.entrySet()) {
+//    		for(Ports.Binding binding : entry.getValue()) {
+//    			bindings.add(new PortBinding(binding, entry.getKey()));
+//    		}
+//    	}
+//    	return bindings.toArray(new PortBinding[bindings.size()]);
+//    }
 
     /**
      * Creates a {@link Binding} for the given IP address and port number.
