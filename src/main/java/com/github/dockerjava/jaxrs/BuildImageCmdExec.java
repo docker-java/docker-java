@@ -46,8 +46,8 @@ public class BuildImageCmdExec extends
 		if (command.hasNoCacheEnabled()) {
 			webResource = webResource.queryParam("nocache", "true");
 		}
-		if (command.hasRemoveEnabled()) {
-			webResource = webResource.queryParam("rm", "true");
+		if (!command.hasRemoveEnabled()) {
+			webResource = webResource.queryParam("rm", "false");
 		}
 		if (command.isQuiet()) {
 			webResource = webResource.queryParam("q", "true");
