@@ -2,6 +2,7 @@ Change Log
 ===
 Latest SNAPSHOT
 ---
+* [#194](https://github.com/docker-java/docker-java/pull/194) Fixed remove intermediate containers bug on build goal
 * [#193](https://github.com/docker-java/docker-java/pull/193) Add HostConfig related methods from start command to create command
 * [#192](https://github.com/docker-java/docker-java/pull/192) Added a Links constructor accepting a List object
 
