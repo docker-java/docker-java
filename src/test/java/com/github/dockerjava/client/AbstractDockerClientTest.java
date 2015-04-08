@@ -59,7 +59,8 @@ public abstract class AbstractDockerClientTest extends Assert {
     }
 
     protected DockerClientConfig config(String password) {
-        DockerClientConfig.DockerClientConfigBuilder builder = DockerClientConfig.createDefaultConfigBuilder();
+        DockerClientConfig.DockerClientConfigBuilder builder = DockerClientConfig.createDefaultConfigBuilder()
+                .withServerAddress("https://index.docker.io/v1/");
         if (password!=null) {
             builder = builder.withPassword(password);
         }
