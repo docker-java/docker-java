@@ -171,7 +171,7 @@ public class DockerImageName {
     /**
      * Abstract class for each image name part to extend
      */
-    private abstract class AbstractDockerImageNamePart {
+    private static abstract class AbstractDockerImageNamePart {
         
         protected String imageNamePart;
         protected String imageNamePartRegexp; // For matching
@@ -214,7 +214,7 @@ public class DockerImageName {
         }
     }
     
-    public class RegistryNamePart extends AbstractDockerImageNamePart {
+    public static class RegistryNamePart extends AbstractDockerImageNamePart {
         
         /**
          * Calls constructor on abstract to set namePart
@@ -251,7 +251,7 @@ public class DockerImageName {
         }
     }
     
-    public class NamespaceNamePart extends AbstractDockerImageNamePart {
+    public static class NamespaceNamePart extends AbstractDockerImageNamePart {
         
         /**
          * Calls constructor on abstract to set namePart
@@ -306,7 +306,7 @@ public class DockerImageName {
         }        
     }
     
-    public class RepositoryNamePart extends AbstractDockerImageNamePart {
+    public static class RepositoryNamePart extends AbstractDockerImageNamePart {
         
         /**
          * Calls constructor on abstract to set namePart
@@ -340,7 +340,7 @@ public class DockerImageName {
         }
     }
     
-    public class TagNamePart extends AbstractDockerImageNamePart {
+    public static class TagNamePart extends AbstractDockerImageNamePart {
         
         /**
          * Calls constructor on abstract to set namePart

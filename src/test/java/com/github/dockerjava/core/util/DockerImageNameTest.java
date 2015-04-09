@@ -119,4 +119,32 @@ public class DockerImageNameTest {
             assertTrue(imageName.isValid());
         }
     }
+    
+    public String[] tooManySlashes = {
+        "sdfasd/asdfasdf/asdfasdfas/asdfasdfas:8789",
+        "pool.docker/name£/$%^&PACE/ubuntu:_--500",
+        "JgRif/£$%^&s/ubunt/u:dl8__.-",
+        "-jgrif_f/--iths-/rePO:l/333cKA-",
+        "pool./docker/ubUNtu/ubuN2:t444g."
+    };
+    
+    @Test
+    public void testTooManySlashesException() {
+        for( String name : tooManySlashes ) {
+            try {
+                DockerImageName imageName = new DockerImageName(name);
+            } catch (DockerImageNameException ex) {
+                assertEquals(ex.getMessage().toLowerCase(), "too many name parts in image name");
+            }
+        }
+    }
+    
+    @Test
+    public void testOne() {
+        String tag = "MySuperTag";
+        DockerImageName.TagNamePart ix = new DockerImageName.TagNamePart(tag);
+        assertTrue(ix.isValid());
+        ix.makeValid();
+        assertEquals(ix.toString(), tag);
+    }
 }
