@@ -48,8 +48,7 @@ public class FrameReader implements AutoCloseable {
             throw new IOException(String.format("header must be %d bytes long, but was %d", HEADER_SIZE, headerSize));
         }
 
-        int frameSize = (header[4] << 24) + (header[5] << 16) + (header[6] << 8) + header[7];
-        int payloadSize = frameSize - header.length;
+        int payloadSize = ((header[4] & 0xff) << 24) + ((header[5] & 0xff) << 16) + ((header[6] & 0xff) << 8) + (header[7] & 0xff);
 
         byte[] payload = new byte[payloadSize];
         int actualPayloadSize = inputStream.read(payload);
