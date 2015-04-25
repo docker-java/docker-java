@@ -24,7 +24,7 @@ public class Frame {
 
     @Override
     public String toString() {
-        return String.format("%s %s", streamType, new String(payload));
+        return String.format("%s: %s", streamType, new String(payload).trim());
     }
 
     @Override
