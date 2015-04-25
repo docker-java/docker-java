@@ -61,7 +61,7 @@ public class FrameReader implements AutoCloseable {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() throws IOException {
         inputStream.close();
     }
 }
