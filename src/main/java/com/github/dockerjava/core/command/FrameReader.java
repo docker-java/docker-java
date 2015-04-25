@@ -11,7 +11,7 @@ import java.io.InputStream;
  * <p/>
  * See:  {@link }http://docs.docker.com/v1.6/reference/api/docker_remote_api_v1.13/#attach-to-a-container}
  */
-public class FrameReader {
+public class FrameReader implements AutoCloseable {
 
     private static final int HEADER_SIZE = 8;
     private final InputStream inputStream;
@@ -48,7 +48,7 @@ public class FrameReader {
             throw new IOException(String.format("header must be %d bytes long, but was %d", HEADER_SIZE, headerSize));
         }
 
-        int frameSize = (header[4] << 24) + (header[5] << 16) + (header[6] << HEADER_SIZE) + header[7];
+        int frameSize = (header[4] << 24) + (header[5] << 16) + (header[6] << 8) + header[7];
         int payloadSize = frameSize - header.length;
 
         byte[] payload = new byte[payloadSize];
@@ -58,5 +58,10 @@ public class FrameReader {
         }
 
         return new Frame(streamType(header[0]), payload);
+    }
+
+    @Override
+    public void close() throws Exception {
+        inputStream.close();
     }
 }
