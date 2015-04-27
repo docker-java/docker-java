@@ -14,6 +14,7 @@ import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.RestartPolicy;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
+import com.github.dockerjava.core.command.CreateContainerCmdImpl;
 
 public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 
@@ -63,6 +64,8 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 	public Link[] getLinks();
 	
 	public LxcConf[] getLxcConf();
+	
+	public String getMacAddress();
 
 	public long getMemoryLimit();
 
@@ -92,7 +95,7 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 
 	public boolean isAttachStdout();
 
-	public boolean isDisableNetwork();
+	public boolean isNetworkDisabled();
 	
 	public Boolean isPrivileged();
 	
@@ -139,7 +142,7 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 	 */
 	public CreateContainerCmd withDevices(Device... devices);
 
-	public CreateContainerCmd withDisableNetwork(boolean disableNetwork);
+	public CreateContainerCmd withNetworkDisabled(boolean disableNetwork);
 
 	/**
 	 * Set custom DNS servers
@@ -236,5 +239,7 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 	public CreateContainerCmd withVolumesFrom(VolumesFrom... volumesFrom);
 	
 	public CreateContainerCmd withWorkingDir(String workingDir);
+
+	public CreateContainerCmd withMacAddress(String macAddress);
 
 }

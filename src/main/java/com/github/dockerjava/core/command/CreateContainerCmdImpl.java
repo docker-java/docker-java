@@ -74,8 +74,10 @@ public class CreateContainerCmdImpl extends
 	private Volumes volumes = new Volumes();
 	@JsonProperty("WorkingDir")
 	private String workingDir = "";
-	@JsonProperty("DisableNetwork")
-	private boolean disableNetwork = false;
+	@JsonProperty("MacAddress")
+	private String macAddress;
+	@JsonProperty("NetworkDisabled")
+	private boolean networkDisabled = false;
 	@JsonProperty("ExposedPorts")
 	private ExposedPorts exposedPorts = new ExposedPorts();
 	@JsonProperty("HostConfig")
@@ -196,6 +198,10 @@ public class CreateContainerCmdImpl extends
 	public LxcConf[] getLxcConf() {
 		return hostConfig.getLxcConf();
 	}
+	
+	public String getMacAddress() {
+		return macAddress;
+	}
 
 	@Override
 	public long getMemoryLimit() {
@@ -273,8 +279,8 @@ public class CreateContainerCmdImpl extends
 	}
 
 	@Override
-	public boolean isDisableNetwork() {
-		return disableNetwork;
+	public boolean isNetworkDisabled() {
+		return networkDisabled;
 	}
 
 	@Override
@@ -372,8 +378,8 @@ public class CreateContainerCmdImpl extends
 	}
 
 	@Override
-	public CreateContainerCmdImpl withDisableNetwork(boolean disableNetwork) {
-		this.disableNetwork = disableNetwork;
+	public CreateContainerCmdImpl withNetworkDisabled(boolean disableNetwork) {
+		this.networkDisabled = disableNetwork;
 		return this;
 	}
 
@@ -443,6 +449,12 @@ public class CreateContainerCmdImpl extends
 	public CreateContainerCmd withLxcConf(LxcConf... lxcConf) {
 		checkNotNull(lxcConf, "lxcConf was not specified");
 		this.hostConfig.setLxcConf(lxcConf);
+		return this;
+	}
+	
+	@Override
+	public CreateContainerCmdImpl withMacAddress(String macAddress) {
+		this.macAddress = macAddress;
 		return this;
 	}
 
