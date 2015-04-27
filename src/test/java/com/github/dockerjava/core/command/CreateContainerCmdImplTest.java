@@ -510,4 +510,24 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 				is(equalTo("host")));
 	}
 	
+	@Test
+	public void createContainerWithMacAddress() throws DockerException {
+
+		CreateContainerResponse container = dockerClient
+				.createContainerCmd("busybox")
+				.withMacAddress("00:80:41:ae:fd:7e")
+				.withCmd("true")
+				.exec();
+
+		LOG.info("Created container {}", container.toString());
+
+		assertThat(container.getId(), not(isEmptyString()));
+
+		InspectContainerResponse inspectContainerResponse = dockerClient
+				.inspectContainerCmd(container.getId()).exec();
+
+		assertEquals(inspectContainerResponse.getConfig().getMacAddress(),
+				"00:80:41:ae:fd:7e");
+	}
+	
 }

@@ -51,6 +51,9 @@ public class ContainerConfig {
 	@JsonProperty("Image")
 	private String image;
 
+	@JsonProperty("MacAddress")
+	private String macAddress;
+	
 	@JsonProperty("Memory")
 	private long memoryLimit = 0;
 
@@ -123,6 +126,10 @@ public class ContainerConfig {
 
 	public boolean isStdInOnce() {
 		return stdInOnce;
+	}
+	
+	public String getMacAddress() {
+		return macAddress;
 	}
 
 	public long getMemoryLimit() {
