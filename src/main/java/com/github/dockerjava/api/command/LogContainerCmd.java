@@ -1,8 +1,8 @@
 package com.github.dockerjava.api.command;
 
-import java.io.InputStream;
-
 import com.github.dockerjava.api.NotFoundException;
+
+import java.io.InputStream;
 
 /**
  * Get container logs
@@ -18,6 +18,10 @@ import com.github.dockerjava.api.NotFoundException;
  *            Defaults to false.
  * @param tail
  * 			  - `all` or `<number>`, Output specified number of lines at the end of logs
+ *
+ * Consider wrapping any input stream you get with a frame reader to make reading frame easier.
+ *
+ * @see com.github.dockerjava.core.command.FrameReader
  */
 public interface LogContainerCmd extends DockerCmd<InputStream>{
 
