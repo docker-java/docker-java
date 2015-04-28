@@ -172,8 +172,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
 		assertThat(
 				Arrays.asList(inspectContainerResponse.getConfig().getEnv()),
-				containsInAnyOrder("VARIABLE=success",
-						"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"));
+				containsInAnyOrder("VARIABLE=success"));
 
 		dockerClient.startContainerCmd(container.getId()).exec();
 
