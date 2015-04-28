@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.github.dockerjava.api.model.AuthConfigurations;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
@@ -48,6 +49,15 @@ public class AuthConfigFile {
             }
         }
         return null;
+    }
+
+    public AuthConfigurations getAuthConfigurations() {
+        final AuthConfigurations authConfigurations = new AuthConfigurations();
+        for(Map.Entry<String, AuthConfig> authConfigEntry : authConfigMap.entrySet()) {
+            authConfigurations.addConfig(authConfigEntry.getValue());
+        }
+
+        return authConfigurations;
     }
 
     @Override
