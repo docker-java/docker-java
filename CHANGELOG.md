@@ -2,6 +2,8 @@ Change Log
 ===
 Latest SNAPSHOT
 ---
+* [#203](https://github.com/docker-java/docker-java/issues/203) Missing 'MacAddress' option in create container command
+* [#197](https://github.com/docker-java/docker-java/pull/197) Allow for null bindings
 
 v1.2.0
 ---
