@@ -10,12 +10,13 @@ import java.io.InputStream;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.Identifier;
 import com.github.dockerjava.core.command.*;
 
 /**
  * @author Konstantin Pelykh (kpelykh@gmail.com)
- * 
+ *
  * @see "https://github.com/docker/docker/blob/master/api/client/commands.go"
  */
 public class DockerClientImpl implements Closeable, DockerClient {
@@ -291,20 +292,29 @@ public class DockerClientImpl implements Closeable, DockerClient {
 
     @Override
     public BuildImageCmd buildImageCmd() {
-        return new BuildImageCmdImpl(getDockerCmdExecFactory()
-                .createBuildImageCmdExec());
+        return augmentBuildImageCmd(new BuildImageCmdImpl(getDockerCmdExecFactory()
+                .createBuildImageCmdExec()));
     }
 
 	@Override
 	public BuildImageCmd buildImageCmd(File dockerFileOrFolder) {
-		return new BuildImageCmdImpl(getDockerCmdExecFactory()
-				.createBuildImageCmdExec(), dockerFileOrFolder);
+		return augmentBuildImageCmd(new BuildImageCmdImpl(getDockerCmdExecFactory()
+				.createBuildImageCmdExec(), dockerFileOrFolder));
 	}
 
-	@Override
-	public BuildImageCmd buildImageCmd(InputStream tarInputStream) {
-		return new BuildImageCmdImpl(getDockerCmdExecFactory()
-				.createBuildImageCmdExec(), tarInputStream);
+    @Override
+    public BuildImageCmd buildImageCmd(InputStream tarInputStream) {
+        return augmentBuildImageCmd(new BuildImageCmdImpl(getDockerCmdExecFactory()
+				.createBuildImageCmdExec(), tarInputStream));
+    }
+
+	private BuildImageCmd augmentBuildImageCmd(BuildImageCmd buildImageCmd) {
+		final AuthConfigurations authConfigurations = dockerClientConfig.getAuthConfigurations();
+		if (!authConfigurations.getConfigs().isEmpty()) {
+			buildImageCmd.withBuildAuthConfigs(authConfigurations);
+		}
+
+		return buildImageCmd;
 	}
 
 	@Override

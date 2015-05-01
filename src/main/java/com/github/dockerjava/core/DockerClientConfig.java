@@ -14,6 +14,7 @@ import java.util.Properties;
 
 import com.github.dockerjava.api.DockerClientException;
 import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.core.NameParser.HostnameReposName;
 import com.github.dockerjava.core.NameParser.ReposTag;
 
@@ -309,6 +310,24 @@ public class DockerClientConfig implements Serializable {
 		
 		return authConfig;
 	}
+
+    public AuthConfigurations getAuthConfigurations() {
+        String dockerCfgFile = getDockerCfgPath();
+        if (dockerCfgFile != null) {
+            AuthConfigFile authConfigFile;
+            try {
+                authConfigFile = AuthConfigFile.loadConfig(new File(
+                        dockerCfgFile));
+            } catch (IOException e) {
+                throw new DockerClientException(
+                        "Failed to parse dockerCfgFile", e);
+            }
+
+            return authConfigFile.getAuthConfigurations();
+        }
+
+        return new AuthConfigurations();
+    }
 
   @Override
     public boolean equals(Object o) {
