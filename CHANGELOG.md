@@ -2,7 +2,9 @@ Change Log
 ===
 Latest SNAPSHOT
 ---
+
 * [#205](https://github.com/docker-java/docker-java/issues/205) Access mode of VolumesRW incorrectly deserialized
+* [#204] (https://github.com/docker-java/docker-java/pull/204) Added support to use the credentials from .dockercfg during build
 * [#203](https://github.com/docker-java/docker-java/issues/203) Missing 'MacAddress' option in create container command
 * [#197](https://github.com/docker-java/docker-java/pull/197) Allow for null bindings
 
