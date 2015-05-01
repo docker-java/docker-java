@@ -6,7 +6,7 @@ import org.testng.annotations.Test;
 
 public class VolumeTest {
 	@Test
-	public void stringify() {
-		assertEquals(Volume.parse("/path").toString(), "/path");
+	public void getPath() {
+		assertEquals(new Volume("/path").getPath(), "/path");
 	}
 }

@@ -15,6 +15,14 @@ public enum AccessMode {
 	 * The default {@link AccessMode}: {@link #rw}
 	 */
 	public static final AccessMode DEFAULT = rw;
+	
+	public static final AccessMode fromBoolean(boolean accessMode) {
+		return accessMode ? rw : ro;
+	}
+	
+	public final boolean toBoolean() {
+		return this.equals(AccessMode.rw) ? true: false;
+	}
 
 	
 }

@@ -30,6 +30,7 @@ import com.github.dockerjava.api.ConflictException;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.model.AccessMode;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Device;
 import com.github.dockerjava.api.model.ExposedPort;
@@ -38,6 +39,8 @@ import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.RestartPolicy;
 import com.github.dockerjava.api.model.Volume;
+import com.github.dockerjava.api.model.VolumeRW;
+import com.github.dockerjava.api.model.Volumes;
 import com.github.dockerjava.api.model.VolumesFrom;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
@@ -88,9 +91,11 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 	@Test
 	public void createContainerWithVolume() throws DockerException {
 
+		Volume volume = new Volume("/var/log");
+		
 		CreateContainerResponse container = dockerClient
 				.createContainerCmd("busybox")
-				.withVolumes(new Volume("/var/log")).withCmd("true").exec();
+				.withVolumes(volume).withCmd("true").exec();
 
 		LOG.info("Created container {}", container.toString());
 
@@ -104,6 +109,37 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
 		assertThat(inspectContainerResponse.getConfig().getVolumes().keySet(),
 				contains("/var/log"));
+		
+		assertThat(inspectContainerResponse.getVolumesRW(),
+				hasItemInArray(new VolumeRW(volume, AccessMode.rw)));
+	}
+	
+	@Test
+	public void createContainerWithReadOnlyVolume() throws DockerException {
+
+		Volume volume = new Volume("/srv/test");
+		
+		CreateContainerResponse container = dockerClient
+				.createContainerCmd("busybox")
+				.withVolumes(volume)
+				.withCmd("true")
+				.exec();
+
+		LOG.info("Created container {}", container.toString());
+
+		assertThat(container.getId(), not(isEmptyString()));
+
+		InspectContainerResponse inspectContainerResponse = dockerClient
+				.inspectContainerCmd(container.getId()).exec();
+
+		LOG.info("Inspect container {}", inspectContainerResponse.getConfig()
+				.getVolumes());
+
+		assertThat(inspectContainerResponse.getConfig().getVolumes().keySet(),
+				contains("/srv/test"));
+		
+		assertThat(Arrays.asList(inspectContainerResponse.getVolumesRW()),
+				contains(new VolumeRW(volume)));
 	}
 	
 	@Test

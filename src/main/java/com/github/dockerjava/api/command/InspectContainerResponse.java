@@ -77,7 +77,7 @@ public class InspectContainerResponse {
     private VolumeBinds volumes;
 
     @JsonProperty("VolumesRW")
-    private Volumes volumesRW;
+    private VolumesRW volumesRW;
 
     public String getId() {
         return id;
@@ -125,8 +125,8 @@ public class InspectContainerResponse {
     }
 
     @JsonIgnore
-    public Volume[] getVolumesRW() {
-        return volumesRW.getVolumes();
+    public VolumeRW[] getVolumesRW() {
+        return volumesRW.getVolumesRW();
     }
 
     public String getHostnamePath() {

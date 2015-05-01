@@ -65,7 +65,8 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 		Volume volume2 = new Volume("/opt/webapp2");
 
 		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withVolumes(volume1, volume2)
+				.createContainerCmd("busybox")
+				.withVolumes(volume1, volume2)
 				.withCmd("true").exec();
 
 		LOG.info("Created container {}", container.toString());
@@ -91,7 +92,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 		assertContainerHasVolumes(inspectContainerResponse, volume1, volume2);
 
 		assertThat(Arrays.asList(inspectContainerResponse.getVolumesRW()),
-				contains(volume1, volume2));
+				contains(new VolumeRW(volume1, AccessMode.ro), new VolumeRW(volume2)));
 
 	}
 

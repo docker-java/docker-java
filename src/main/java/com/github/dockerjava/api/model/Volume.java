@@ -24,42 +24,18 @@ import com.fasterxml.jackson.databind.node.NullNode;
  * 
  * @see Bind
  */
-@JsonDeserialize(using = Volume.Deserializer.class)
-@JsonSerialize(using = Volume.Serializer.class)
 public class Volume {
 
 	private String path;
 	
-	private AccessMode accessMode = AccessMode.rw;
-
 	public Volume(String path) {
 		this.path = path;
-	}
-	
-	public Volume(String path, AccessMode accessMode) {
-		this.path = path;
-		this.accessMode = accessMode;
 	}
 
 	public String getPath() {
 		return path;
 	}
-	
-	public AccessMode getAccessMode() {
-		return accessMode;
-	}
 
-	public static Volume parse(String serialized) {
-		return new Volume(serialized);
-	}
-	
-	/**
-	 * Returns a string representation of this {@link Volume} suitable
-	 * for inclusion in a JSON message.
-	 * The returned String is simply the container path, {@link #getPath()}. 
-	 * 
-	 * @return a string representation of this {@link Volume}
-	 */
 	@Override
 	public String toString() {
 		return getPath();
@@ -69,48 +45,14 @@ public class Volume {
 	public boolean equals(Object obj) {
 		if (obj instanceof Volume) {
 			Volume other = (Volume) obj;
-			return new EqualsBuilder().append(path, other.getPath()).append(accessMode, other.getAccessMode())
-					.isEquals();
+			return new EqualsBuilder().append(path, other.getPath()).isEquals();
 		} else
 			return super.equals(obj);
 	}
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder().append(path).append(accessMode).toHashCode();
+		return new HashCodeBuilder().append(path).toHashCode();
 	}
-	
-	public static class Serializer extends JsonSerializer<Volume> {
-
-		@Override
-		public void serialize(Volume volume, JsonGenerator jsonGen,
-				SerializerProvider serProvider) throws IOException,
-				JsonProcessingException {
-
-			jsonGen.writeStartObject();
-			jsonGen.writeFieldName(volume.getPath());
-			jsonGen.writeString(Boolean.toString(volume.getAccessMode().equals(AccessMode.rw) ? true: false));
-			jsonGen.writeEndObject();
-		}
-
-	}
-
-	public static class Deserializer extends JsonDeserializer<Volume> {
-		@Override
-		public Volume deserialize(JsonParser jsonParser,
-				DeserializationContext deserializationContext)
-				throws IOException, JsonProcessingException {
-			ObjectCodec oc = jsonParser.getCodec();
-			JsonNode node = oc.readTree(jsonParser);
-			if (!node.equals(NullNode.getInstance())) {
-				Entry<String, JsonNode> field = node.fields().next();
-				return Volume.parse(field.getKey());
-			} else {
-				return null;
-			}
-		}
-	}
-
-	
 
 }
