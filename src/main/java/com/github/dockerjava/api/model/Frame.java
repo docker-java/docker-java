@@ -34,7 +34,7 @@ public class Frame {
 
         Frame frame = (Frame) o;
 
-        return Arrays.equals(payload, frame.payload) && streamType == frame.streamType;
+        return streamType == frame.streamType && Arrays.equals(payload, frame.payload);
 
     }
 
