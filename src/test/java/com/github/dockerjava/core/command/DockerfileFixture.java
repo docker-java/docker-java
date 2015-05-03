@@ -66,7 +66,7 @@ public class DockerfileFixture implements AutoCloseable {
                         .removeContainerCmd(containerId)
                         .withForce() // stop too
                         .exec();
-            } catch (NotFoundException ignored) {
+            } catch (NotFoundException | InternalServerErrorException ignored) {
                 LOGGER.info("ignoring {}", ignored.getMessage());
             }
             containerId = null;
