@@ -1,6 +1,7 @@
 package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,15 +57,19 @@ public class DockerfileFixture implements AutoCloseable {
 
         if (containerId != null) {
             LOGGER.info("removing container {}", containerId);
-            dockerClient
-                    .removeContainerCmd(containerId)
-                    .withForce() // stop too
-                    .exec();
+            try {
+                dockerClient
+                        .removeContainerCmd(containerId)
+                        .withForce() // stop too
+                        .exec();
+            } catch (NotFoundException ignored) {
+                LOGGER.info("ignoring {}", ignored.getMessage());
+            }
             containerId = null;
         }
 
         if (repository != null) {
-            LOGGER.info("removing repostiory {}", repository);
+            LOGGER.info("removing repository {}", repository);
             dockerClient
                     .removeImageCmd(repository)
                     .withForce()
