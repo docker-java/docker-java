@@ -22,7 +22,7 @@ public class FrameReaderITest  {
     private DockerfileFixture dockerfileFixture;
 
     @BeforeTest
-    public void beforeTest() {
+    public void beforeTest() throws Exception {
         dockerClient = DockerClientBuilder.getInstance().build();
         dockerfileFixture = new DockerfileFixture(dockerClient, "frameReaderDockerfile");
         dockerfileFixture.open();

@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Start and stop a single container for testing.
@@ -25,7 +26,7 @@ public class DockerfileFixture implements AutoCloseable {
         this.directory = directory;
     }
 
-    public void open() throws Exception {
+    public void open() throws IOException {
 
         LOGGER.info("building {}", directory);
         dockerClient
@@ -79,7 +80,7 @@ public class DockerfileFixture implements AutoCloseable {
                         .removeImageCmd(repository)
                         .withForce()
                         .exec();
-            } catch (InternalServerErrorException e) {
+            } catch (NotFoundException | InternalServerErrorException e) {
                 LOGGER.info("ignoring {}", e.getMessage());
             }
             repository = null;
