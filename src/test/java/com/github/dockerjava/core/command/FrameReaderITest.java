@@ -5,7 +5,9 @@ import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.StreamType;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.io.InputStream;
@@ -15,7 +17,7 @@ public class FrameReaderITest extends AbstractDockerClientTest {
 
     private DockerfileFixture dockerfileFixture;
 
-    @BeforeMethod
+    @BeforeTest
     @Override
     public void beforeTest() {
         super.beforeTest();
@@ -32,7 +34,7 @@ public class FrameReaderITest extends AbstractDockerClientTest {
         dockerfileFixture.close();
     }
 
-    @AfterMethod
+    @AfterTest
     @Override
     public void afterTest() {
         super.afterTest();
