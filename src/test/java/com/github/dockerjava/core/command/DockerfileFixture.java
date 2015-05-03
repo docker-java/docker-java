@@ -1,6 +1,8 @@
 package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.DockerClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
@@ -9,6 +11,7 @@ import java.io.File;
  */
 public class DockerfileFixture implements AutoCloseable {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(DockerfileFixture.class);
     private final DockerClient dockerClient;
     private String directory;
     private String repository;
@@ -21,6 +24,7 @@ public class DockerfileFixture implements AutoCloseable {
 
     public void open() throws Exception {
 
+        LOGGER.info("building {}", directory);
         dockerClient
                 .buildImageCmd(new File("src/test/resources", directory))
                 .withNoCache() // remove alternatives, cause problems
@@ -33,10 +37,14 @@ public class DockerfileFixture implements AutoCloseable {
                 .get(0)
                 .getRepoTags()[0];
 
+        LOGGER.info("created {}", repository);
+
         containerId = dockerClient
                 .createContainerCmd(repository)
                 .exec()
                 .getId();
+
+        LOGGER.info("starting {}", containerId);
 
         dockerClient
                 .startContainerCmd(containerId)
@@ -46,15 +54,23 @@ public class DockerfileFixture implements AutoCloseable {
     @Override
     public void close() throws Exception {
 
-        dockerClient
-                .removeContainerCmd(containerId)
-                .withForce() // stop too
-                .exec();
+        if (containerId != null) {
+            LOGGER.info("removing container {}", containerId);
+            dockerClient
+                    .removeContainerCmd(containerId)
+                    .withForce() // stop too
+                    .exec();
+            containerId = null;
+        }
 
-        dockerClient
-                .removeImageCmd(repository)
-                .withForce()
-                .exec();
+        if (repository != null) {
+            LOGGER.info("removing repostiory {}", repository);
+            dockerClient
+                    .removeImageCmd(repository)
+                    .withForce()
+                    .exec();
+            repository = null;
+        }
     }
 
     public String getContainerId() {
