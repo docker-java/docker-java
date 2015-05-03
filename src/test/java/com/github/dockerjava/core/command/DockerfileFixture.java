@@ -2,6 +2,7 @@ package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.model.Image;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,16 +33,18 @@ public class DockerfileFixture implements AutoCloseable {
                 .exec()
                 .close();
 
-        repository = dockerClient
+        Image lastCreatedImage = dockerClient
                 .listImagesCmd()
                 .exec()
-                .get(0)
+                .get(0);
+
+        repository = lastCreatedImage
                 .getRepoTags()[0];
 
-        LOGGER.info("created {}", repository);
+        LOGGER.info("created {} {}", lastCreatedImage.getId(), repository);
 
         containerId = dockerClient
-                .createContainerCmd(repository)
+                .createContainerCmd(lastCreatedImage.getId())
                 .exec()
                 .getId();
 

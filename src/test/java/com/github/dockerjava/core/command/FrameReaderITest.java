@@ -10,6 +10,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 @Test(groups = "integration")
@@ -41,20 +42,52 @@ public class FrameReaderITest extends AbstractDockerClientTest {
     }
 
     @Test
-    public void canCloseFrameReaderAndReadExpectedLinens() throws Exception {
+    public void canCloseFrameReaderAndReadExpectedLines() throws Exception {
 
-        InputStream log = dockerClient
-                .logContainerCmd(dockerfileFixture.getContainerId())
-                .withStdOut()
-                .withStdErr()
-                .withFollowStream()
-                .withTailAll()
-                .exec();
-
-        try (FrameReader reader = new FrameReader(log)) {
+        try (FrameReader reader = new FrameReader(getLoggerStream())) {
             assertEquals(reader.readFrame(), new Frame(StreamType.STDOUT, String.format("to stdout%n").getBytes()));
             assertEquals(reader.readFrame(), new Frame(StreamType.STDERR, String.format("to stderr%n").getBytes()));
             assertNull(reader.readFrame());
         }
+    }
+
+    private InputStream getLoggerStream() {
+        return dockerClient
+                .logContainerCmd(dockerfileFixture.getContainerId())
+                .withStdOut()
+                .withStdErr()
+                .withTailAll()
+                .withTail(10)
+                .withFollowStream()
+                .exec();
+    }
+
+    @Test
+    public void canLogInOneThreadAndExecuteCommandsInAnother() throws Exception {
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    try (FrameReader reader = new FrameReader(getLoggerStream())) {
+                        //noinspection StatementWithEmptyBody
+                        while (reader.readFrame() != null) {
+                            // nop
+                        }
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
+        thread.start();
+
+        try (DockerfileFixture busyboxDockerfile = new DockerfileFixture(dockerClient, "busyboxDockerfile")) {
+            busyboxDockerfile.open();
+        }
+
+        thread.join();
+
     }
 }
