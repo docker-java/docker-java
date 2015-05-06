@@ -39,7 +39,7 @@ public class EventStreamReaderITest  {
         try (EventStreamReader<PullEventStreamItem> reader = new EventStreamReader<>(
                 dockerClient.pullImageCmd("busybox:latest").exec(),
                 PullEventStreamItem.class)
-        ) {
+        ) {;
             assertThat(reader.readItem(),
                     allOf(
                             hasProperty("status", equalTo("Pulling repository busybox")),
