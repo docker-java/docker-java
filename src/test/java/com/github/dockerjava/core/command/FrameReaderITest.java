@@ -1,44 +1,37 @@
 package com.github.dockerjava.core.command;
 
 
+import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.StreamType;
-import com.github.dockerjava.client.AbstractDockerClientTest;
-import org.testng.annotations.AfterMethod;
+import com.github.dockerjava.core.DockerClientBuilder;
 import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-@Test(groups = "integration")
-public class FrameReaderITest extends AbstractDockerClientTest {
+import static org.testng.Assert.assertEquals;
+import static org.testng.AssertJUnit.assertNull;
 
+@Test(groups = "integration")
+public class FrameReaderITest  {
+
+    private DockerClient dockerClient;
     private DockerfileFixture dockerfileFixture;
 
     @BeforeTest
-    @Override
-    public void beforeTest() {
-        super.beforeTest();
+    public void beforeTest() throws Exception {
+        dockerClient = DockerClientBuilder.getInstance().build();
         dockerfileFixture = new DockerfileFixture(dockerClient, "frameReaderDockerfile");
-    }
-
-    @BeforeMethod
-    public void createAndStartDockerContainer() throws Exception {
         dockerfileFixture.open();
     }
 
-    @AfterMethod
+    @AfterTest
     public void deleteDockerContainerImage() throws Exception {
         dockerfileFixture.close();
-    }
-
-    @AfterTest
-    @Override
-    public void afterTest() {
-        super.afterTest();
+        dockerClient.close();
     }
 
     @Test

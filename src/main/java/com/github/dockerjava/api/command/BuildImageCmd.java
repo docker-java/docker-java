@@ -1,11 +1,11 @@
 package com.github.dockerjava.api.command;
 
+import com.github.dockerjava.api.model.AuthConfigurations;
+import com.github.dockerjava.api.model.EventStreamItem;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-
-import com.github.dockerjava.api.model.AuthConfigurations;
-import com.github.dockerjava.api.model.EventStreamItem;
 
 /**
  * 
@@ -61,6 +61,9 @@ public interface BuildImageCmd extends DockerCmd<BuildImageCmd.Response>{
 	public static interface Exec extends DockerCmdExec<BuildImageCmd, BuildImageCmd.Response> {
 	}
 
+	/**
+	 * @see  {@link com.github.dockerjava.core.command.EventStreamReader}
+	 */
   public static abstract class Response extends InputStream {
     public abstract Iterable<EventStreamItem> getItems() throws IOException;
   }

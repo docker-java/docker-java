@@ -1,11 +1,12 @@
 package com.github.dockerjava.api.command;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.PushEventStreamItem;
+import com.github.dockerjava.core.command.EventStreamReader;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Push the latest image to the repository.
@@ -40,6 +41,9 @@ public interface PushImageCmd extends DockerCmd<PushImageCmd.Response>{
 	public static interface Exec extends DockerCmdExec<PushImageCmd, Response> {
 	}
 
+	/**
+	 * @see {@link EventStreamReader}
+	 */
   	public static abstract class Response extends InputStream {
 	  public abstract Iterable<PushEventStreamItem> getItems() throws IOException;
 	}
