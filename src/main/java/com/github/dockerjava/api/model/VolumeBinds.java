@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,11 +13,15 @@ import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.node.NullNode;
 
 // This is not going to be serialized
 @JsonDeserialize(using = VolumeBinds.Deserializer.class)
+@JsonSerialize(using = VolumeBinds.Serializer.class)
 public class VolumeBinds {
     private final VolumeBind[] binds;
 
@@ -28,6 +33,18 @@ public class VolumeBinds {
         return binds;
     }
 
+    public static final class Serializer extends JsonSerializer<VolumeBinds> {
+
+        @Override
+        public void serialize(VolumeBinds value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
+            jgen.writeStartObject();
+            for (final VolumeBind bind : value.binds) {
+                jgen.writeStringField(bind.getContainerPath(), bind.getHostPath());
+            }
+            jgen.writeEndObject();
+        }    
+    }
+    
     public static final class Deserializer extends JsonDeserializer<VolumeBinds> {
         @Override
         public VolumeBinds deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
