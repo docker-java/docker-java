@@ -47,7 +47,7 @@
 		<jdk.source>1.7</jdk.source>
 		<jdk.target>1.7</jdk.target>
 
-		<jersey.version>2.11</jersey.version>
+		<jersey.version>2.17</jersey.version>
 		<jackson-jaxrs.version>2.1.2</jackson-jaxrs.version>
 		<httpclient.version>4.3.1</httpclient.version>
 		<commons-compress.version>1.5</commons-compress.version>
