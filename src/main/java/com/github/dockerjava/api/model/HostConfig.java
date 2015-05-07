@@ -1,12 +1,10 @@
 package com.github.dockerjava.api.model;
 
-import java.util.Map;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class HostConfig {
@@ -59,13 +57,16 @@ public class HostConfig {
 	@JsonProperty("ExtraHosts")
 	private String[] extraHosts;
 
+	@JsonProperty("Ulimits")
+	private Ulimit[] ulimits;
+
 	public HostConfig() {
 	}
 
 	public HostConfig(Bind[] binds, Link[] links, LxcConf[] lxcConf, Ports portBindings, boolean publishAllPorts,
 			boolean privileged, String[] dns, String[] dnsSearch, VolumesFrom[] volumesFrom, String containerIDFile,
 			Capability[] capAdd, Capability[] capDrop, RestartPolicy restartPolicy, String networkMode, Device[] devices,
-            String[] extraHosts) {
+            String[] extraHosts, Ulimit[] ulimits) {
 		this.binds = new Binds(binds);
 		this.links = new Links(links);
 		this.lxcConf = lxcConf;
@@ -82,6 +83,7 @@ public class HostConfig {
 		this.networkMode = networkMode;
 		this.devices = devices;
 		this.extraHosts = extraHosts;
+		this.ulimits = ulimits;
 	}
 
 
@@ -151,6 +153,10 @@ public class HostConfig {
 		return capDrop;
 	}
 
+	public Ulimit[] getUlimits() {
+		return ulimits;
+	}
+
 	@JsonIgnore
 	public void setBinds(Bind... binds) {
 		this.binds = new Binds(binds);
@@ -215,6 +221,10 @@ public class HostConfig {
 
 	public void setExtraHosts(String[] extraHosts) {
 		this.extraHosts = extraHosts;
+	}
+
+	public void setUlimits(Ulimit[] ulimits) {
+		this.ulimits = ulimits;
 	}
 
 	@Override
