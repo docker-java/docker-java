@@ -38,8 +38,8 @@ public class FrameReaderITest  {
     public void canCloseFrameReaderAndReadExpectedLines() throws Exception {
 
         try (FrameReader reader = new FrameReader(getLoggerStream())) {
-            assertEquals(reader.readFrame(), new Frame(StreamType.STDOUT, String.format("to stdout%n").getBytes()));
-            assertEquals(reader.readFrame(), new Frame(StreamType.STDERR, String.format("to stderr%n").getBytes()));
+            assertEquals(reader.readFrame(), new Frame(StreamType.STDOUT, "to stdout\n".getBytes()));
+            assertEquals(reader.readFrame(), new Frame(StreamType.STDERR, "to stderr\n".getBytes()));
             assertNull(reader.readFrame());
         }
     }
