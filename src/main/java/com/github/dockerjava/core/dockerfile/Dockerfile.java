@@ -189,33 +189,25 @@ public class Dockerfile {
 
         File src = new File(resource);
         if (!src.isAbsolute()) {
-          src = new File(dockerFolder, resource)
-              .getCanonicalFile();
+          src = new File(dockerFolder, resource);
         } else {
           throw new DockerClientException(String.format(
               "Source file %s must be relative to %s",
               src, dockerFolder));
         }
 
-        // if (!src.exists()) {
-        // throw new DockerClientException(String.format(
-        // "Source file %s doesn't exist", src));
-        // }
-        if (src.isDirectory()) {
-          Collection<File> files = FileUtils.listFiles(src,
-                                                       new GoLangMatchFileFilter(src, ignores),
-                                                       TrueFileFilter.INSTANCE);
-          filesToAdd.addAll(files);
-        } else if (!src.exists()) {
-          filesToAdd.addAll(resolveWildcards(src, ignores));
-        } else if (!GoLangFileMatch.match(ignores,
-                                          FilePathUtil.relativize(dockerFolder, src))) {
-          filesToAdd.add(src);
+        if (src.exists()) {
+          src = src.getCanonicalFile();
+          if (src.isDirectory()) {
+            Collection<File> files = FileUtils.listFiles(src, new GoLangMatchFileFilter(src, ignores), TrueFileFilter.INSTANCE);
+            filesToAdd.addAll(files);
+          } else if (!GoLangFileMatch.match(ignores, FilePathUtil.relativize(dockerFolder, src))) {
+            filesToAdd.add(src);
+          } else {
+            throw new DockerClientException(String.format("Source file %s is excluded by .dockerignore file", src));
+          }            
         } else {
-          throw new DockerClientException(
-              String.format(
-                  "Source file %s is excluded by .dockerignore file",
-                  src));
+          filesToAdd.addAll(resolveWildcards(src, ignores));
         }
       }
     }
