@@ -2,6 +2,7 @@ package com.github.dockerjava.core.dockerfile;
 
 import com.github.dockerjava.api.DockerClientException;
 import com.github.dockerjava.core.CompressArchiveUtil;
+import com.github.dockerjava.core.FilePathUtil;
 import com.github.dockerjava.core.GoLangFileMatch;
 import com.github.dockerjava.core.GoLangFileMatchException;
 import com.github.dockerjava.core.GoLangMatchFileFilter;
@@ -23,7 +24,6 @@ import java.util.UUID;
 import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
 /**
@@ -209,8 +209,7 @@ public class Dockerfile {
         } else if (!src.exists()) {
           filesToAdd.addAll(resolveWildcards(src, ignores));
         } else if (!GoLangFileMatch.match(ignores,
-                                          CompressArchiveUtil.relativize(dockerFolder,
-                                                                         src))) {
+                                          FilePathUtil.relativize(dockerFolder, src))) {
           filesToAdd.add(src);
         } else {
           throw new DockerClientException(

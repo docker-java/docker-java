@@ -6,6 +6,8 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 
+import static com.github.dockerjava.core.FilePathUtil.relativize;
+
 public class CompressArchiveUtil {
 
     public static File archiveTARFiles(File base, Iterable<File> files, String archiveNameWithOutExtension) throws IOException {
@@ -15,7 +17,7 @@ public class CompressArchiveUtil {
             tos.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU);
             for (File file : files) {
                 TarArchiveEntry tarEntry = new TarArchiveEntry(file);
-                tarEntry.setName(relativize(base.getCanonicalFile(), file.getCanonicalFile()));
+                tarEntry.setName(relativize(base, file));
 
                 if (!file.isDirectory()) {
                     if (file.canExecute()) {
@@ -35,10 +37,5 @@ public class CompressArchiveUtil {
         }
 
         return tarFile;
-    }
-
-    public static String relativize(File base, File absolute) {
-        String relative = base.toURI().relativize(absolute.toURI()).getPath();
-        return relative;
     }
 }
