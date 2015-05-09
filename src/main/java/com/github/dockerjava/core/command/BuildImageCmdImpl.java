@@ -125,7 +125,11 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageC
 
     @Override
     public String getPathToDockerfile() {
-        return FilePathUtil.relativize(baseDirectory, dockerFile);
+        if (baseDirectory != null && dockerFile != null) {
+            return FilePathUtil.relativize(baseDirectory, dockerFile);
+        } else {
+            return null;
+        }
     }
 
     @Override
