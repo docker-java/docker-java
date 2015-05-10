@@ -8,8 +8,8 @@ import java.io.InputStream;
 
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.model.AuthConfigurations;
+import com.github.dockerjava.core.FilePathUtil;
 import com.github.dockerjava.core.dockerfile.Dockerfile;
-import com.google.common.base.Optional;
 
 /**
  * 
@@ -125,8 +125,11 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageC
 
     @Override
     public String getPathToDockerfile() {
-        int baseLen = baseDirectory.getAbsolutePath().length();
-        return dockerFile.getAbsolutePath().substring(baseLen+1);
+        if (baseDirectory != null && dockerFile != null) {
+            return FilePathUtil.relativize(baseDirectory, dockerFile);
+        } else {
+            return null;
+        }
     }
 
     @Override

@@ -9,10 +9,15 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.UUID;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.lang.StringUtils;
 
 import org.testng.ITestResult;
@@ -24,12 +29,13 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.DockerClientException;
 import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.api.model.EventStreamItem;
 import com.github.dockerjava.client.AbstractDockerClientTest;
-
+import com.github.dockerjava.core.CompressArchiveUtil;
 
 @Test(groups = "integration")
 public class BuildImageCmdImplTest extends AbstractDockerClientTest {
@@ -105,7 +111,16 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
         assertThat(fullLog, containsString("Successfully built"));
     }
 
-	@Test
+    @Test
+    public void testDockerBuilderFromTar() throws IOException {
+        File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testAddFile").getFile());
+        Collection<File> files = FileUtils.listFiles(baseDir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+        File tarFile = CompressArchiveUtil.archiveTARFiles(baseDir, files, UUID.randomUUID().toString());
+        String response = dockerfileBuild(new FileInputStream(tarFile));
+        assertThat(response, containsString("Successfully executed testrun.sh"));
+    }
+
+    @Test
 	public void testDockerBuilderAddUrl()  {
 		File baseDir = new File(Thread.currentThread().getContextClassLoader()
 				.getResource("testAddUrl").getFile());
@@ -150,37 +165,39 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
 		assertThat(response, containsString("Successfully executed testrun.sh"));
 	}
 
+    private String dockerfileBuild(InputStream tarInputStream) {
+        return execBuild(dockerClient.buildImageCmd().withTarInputStream(tarInputStream));
+    }
 
-	private String dockerfileBuild(File baseDir) {
-
-		// Build image
-		InputStream response = dockerClient.buildImageCmd(baseDir).withNoCache().exec();
-
-		String fullLog = asString(response);
-		assertThat(fullLog, containsString("Successfully built"));
-
-		String imageId = StringUtils.substringBetween(fullLog,
-				"Successfully built ", "\\n\"}").trim();
-
-		// Create container based on image
-		CreateContainerResponse container = dockerClient.createContainerCmd(
-				imageId).exec();
-
-		LOG.info("Created container: {}", container.toString());
-		assertThat(container.getId(), not(isEmptyString()));
-
-		dockerClient.startContainerCmd(container.getId()).exec();
-		dockerClient.waitContainerCmd(container.getId()).exec();
-
-		// Log container
-		InputStream logResponse = logContainer(container
-				.getId());
-
-		//assertThat(asString(logResponse), containsString(expectedText));
-
-		return asString(logResponse);
+    private String dockerfileBuild(File baseDir) {
+        return execBuild(dockerClient.buildImageCmd(baseDir));
 	}
 
+    private String execBuild(BuildImageCmd buildImageCmd) {
+        // Build image
+        InputStream response = buildImageCmd.withNoCache().exec();
+
+        String fullLog = asString(response);
+        assertThat(fullLog, containsString("Successfully built"));
+
+        String imageId = StringUtils.substringBetween(fullLog, "Successfully built ", "\\n\"}").trim();
+
+        // Create container based on image
+        CreateContainerResponse container = dockerClient.createContainerCmd(imageId).exec();
+
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+
+        dockerClient.startContainerCmd(container.getId()).exec();
+        dockerClient.waitContainerCmd(container.getId()).exec();
+
+        // Log container
+        InputStream logResponse = logContainer(container.getId());
+
+        //assertThat(asString(logResponse), containsString(expectedText));
+
+        return asString(logResponse);
+    }
 
 	private InputStream logContainer(String containerId) {
 		return dockerClient.logContainerCmd(containerId).withStdErr().withStdOut().exec();
