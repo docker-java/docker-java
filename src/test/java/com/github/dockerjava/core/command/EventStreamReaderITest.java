@@ -42,7 +42,7 @@ public class EventStreamReaderITest  {
         ) {;
             assertThat(reader.readItem(),
                     allOf(
-                            hasProperty("status", equalTo("Pulling repository busybox")),
+                            hasProperty("status", equalTo("Pulling from busybox")),
                             hasProperty("progress", nullValue()),
                             hasProperty("progressDetail", nullValue())
                     )
