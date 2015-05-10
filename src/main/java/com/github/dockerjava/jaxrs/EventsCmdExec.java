@@ -70,7 +70,11 @@ public class EventsCmdExec extends AbstrDockerCmdExec<EventsCmd, ExecutorService
                 InputStream inputStream = new WrappedResponseInputStream(response);
                 JsonParser jp = JSON_FACTORY.createParser(inputStream);
                 while (jp.nextToken() != JsonToken.END_OBJECT && !jp.isClosed() && eventCallback.isReceiving()) {
-                    eventCallback.onEvent(OBJECT_MAPPER.readValue(jp, Event.class));
+                    try {
+                    	eventCallback.onEvent(OBJECT_MAPPER.readValue(jp, Event.class));
+                    } catch(Exception e) {
+                    	eventCallback.onException(e);
+                    }
                     numEvents++;
                 }
             }
