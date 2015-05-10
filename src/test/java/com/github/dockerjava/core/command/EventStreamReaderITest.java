@@ -33,7 +33,7 @@ public class EventStreamReaderITest  {
         dockerClient.close();
     }
 
-    @Test
+    @Test(groups = "ignoreInCircleCi")
     public void pullCanBeStreamed() throws Exception {
 
         try (EventStreamReader<PullEventStreamItem> reader = new EventStreamReader<>(

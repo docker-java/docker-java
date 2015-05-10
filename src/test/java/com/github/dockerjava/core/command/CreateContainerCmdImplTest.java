@@ -6,6 +6,7 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.*;
 import com.github.dockerjava.client.AbstractDockerClientTest;
+
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
@@ -540,7 +541,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 				"00:80:41:ae:fd:7e");
 	}
 
-	@Test
+	@Test(groups = "ignoreInCircleCi")
 	public void createContainerWithULimits() throws DockerException {
 
 		Ulimit[] ulimits = {new Ulimit("nproc", 709, 1026), new Ulimit("nofile", 1024, 4096)};
