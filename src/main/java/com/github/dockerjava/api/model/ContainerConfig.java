@@ -64,7 +64,7 @@ public class ContainerConfig {
 	private boolean networkDisabled = false;
 
 	@JsonProperty("OnBuild")
-	private int[] onBuild;
+	private String[] onBuild;
 
 	@JsonProperty("OpenStdin")
 	private boolean stdinOpen = false;
@@ -180,7 +180,7 @@ public class ContainerConfig {
 		return entrypoint;
 	}
 
-	public int[] getOnBuild() {
+	public String[] getOnBuild() {
 		return onBuild;
 	}
 
