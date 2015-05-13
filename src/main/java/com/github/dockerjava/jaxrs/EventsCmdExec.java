@@ -75,8 +75,13 @@ public class EventsCmdExec extends
 				InputStream inputStream = new WrappedResponseInputStream(
 						response);
 				JsonParser jp = JSON_FACTORY.createParser(inputStream);
-				while (jp.nextToken() != JsonToken.END_OBJECT && !jp.isClosed()
-						&& eventCallback.isReceiving()) {
+				// The following condition looks strange but jp.nextToken() will block until there is an
+				// event from the docker server or the connection is terminated.
+				// therefore we want to check before getting an event (to prevent a blocking operation
+				// and after the event to make sure that the eventCallback is still interested in getting notified.
+				while (eventCallback.isReceiving() && 
+				       jp.nextToken() != JsonToken.END_OBJECT && !jp.isClosed() &&
+				       eventCallback.isReceiving()) {
 					try {
 						eventCallback.onEvent(OBJECT_MAPPER.readValue(jp,
 								Event.class));
