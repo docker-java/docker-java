@@ -349,7 +349,7 @@ public class DockerClientConfig implements Serializable {
         if (uri != null ? !uri.equals(that.uri) : that.uri != null) return false;
         if (username != null ? !username.equals(that.username) : that.username != null) return false;
         if (version != null ? !version.equals(that.version) : that.version != null) return false;
-        
+
         return true;
     }
 
