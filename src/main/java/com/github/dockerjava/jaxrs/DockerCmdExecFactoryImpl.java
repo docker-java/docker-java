@@ -4,11 +4,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
 import java.net.URI;
-
-import com.github.dockerjava.api.command.*;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.List;
+import java.util.Map;
 
 import javax.net.ssl.SSLContext;
 import javax.ws.rs.client.Client;
@@ -25,10 +22,49 @@ import org.glassfish.jersey.apache.connector.ApacheClientProperties;
 import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.github.dockerjava.api.DockerClientException;
+import com.github.dockerjava.api.command.AttachContainerCmd;
+import com.github.dockerjava.api.command.AuthCmd;
+import com.github.dockerjava.api.command.BuildImageCmd;
+import com.github.dockerjava.api.command.CommitCmd;
+import com.github.dockerjava.api.command.ContainerDiffCmd;
+import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
+import com.github.dockerjava.api.command.CreateContainerCmd;
+import com.github.dockerjava.api.command.CreateImageCmd;
+import com.github.dockerjava.api.command.DockerCmdExecFactory;
+import com.github.dockerjava.api.command.EventsCmd;
+import com.github.dockerjava.api.command.ExecCreateCmd;
+import com.github.dockerjava.api.command.ExecStartCmd;
+import com.github.dockerjava.api.command.InfoCmd;
+import com.github.dockerjava.api.command.InspectContainerCmd;
+import com.github.dockerjava.api.command.InspectExecCmd;
+import com.github.dockerjava.api.command.InspectImageCmd;
+import com.github.dockerjava.api.command.KillContainerCmd;
+import com.github.dockerjava.api.command.ListContainersCmd;
+import com.github.dockerjava.api.command.ListImagesCmd;
+import com.github.dockerjava.api.command.LogContainerCmd;
+import com.github.dockerjava.api.command.PauseContainerCmd;
+import com.github.dockerjava.api.command.PingCmd;
+import com.github.dockerjava.api.command.PullImageCmd;
+import com.github.dockerjava.api.command.PushImageCmd;
+import com.github.dockerjava.api.command.RemoveContainerCmd;
+import com.github.dockerjava.api.command.RemoveImageCmd;
+import com.github.dockerjava.api.command.RestartContainerCmd;
+import com.github.dockerjava.api.command.SaveImageCmd;
+import com.github.dockerjava.api.command.SearchImagesCmd;
+import com.github.dockerjava.api.command.StartContainerCmd;
+import com.github.dockerjava.api.command.StopContainerCmd;
+import com.github.dockerjava.api.command.TagImageCmd;
+import com.github.dockerjava.api.command.TopContainerCmd;
+import com.github.dockerjava.api.command.UnpauseContainerCmd;
+import com.github.dockerjava.api.command.VersionCmd;
+import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.http.AbstractHttpFeature;
 import com.github.dockerjava.core.util.FollowRedirectsFilter;
 import com.github.dockerjava.core.util.JsonClientFilter;
 import com.github.dockerjava.core.util.ResponseStatusExceptionFilter;
@@ -41,9 +77,13 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 	private Client client;
 	private WebTarget baseResource;
 
-	@Override
-	public void init(DockerClientConfig dockerClientConfig) {
-		checkNotNull(dockerClientConfig, "config was not specified");
+    @Override
+    public void init(DockerClientConfig dockerClientConfig, List<AbstractHttpFeature> httpFeatures) {
+        checkNotNull(dockerClientConfig, "config was not specified");
+        
+        
+//        	basicAuthFeature = HttpAuthenticationFeature.universal(dockerClientConfig.getBasicAuthUsername(), dockerClientConfig.getBasicAuthPassword());
+//        }
 
 		ClientConfig clientConfig = new ClientConfig();
 		clientConfig.connectorProvider(new ApacheConnectorProvider());
@@ -71,6 +111,21 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
 		SSLContext sslContext = null;
 
+        PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(getSchemeRegistry(originalUri, sslContext));
+        
+        if(dockerClientConfig.getMaxTotalConnections() != null)
+        	connManager.setMaxTotal(dockerClientConfig.getMaxTotalConnections());
+        if(dockerClientConfig.getMaxPerRoutConnections() != null)
+        	connManager.setDefaultMaxPerRoute(dockerClientConfig.getMaxPerRoutConnections());
+        
+        clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER, connManager);
+        for(AbstractHttpFeature feature : httpFeatures){
+        	Map<String, Object> properties = feature.getClientConfigurationProperties();
+        	for(String propertyName : properties.keySet()){
+        		clientConfig.property(propertyName, properties.get(propertyName));
+        	}
+		}
+
 		if (dockerClientConfig.getSslConfig() != null) {
 			try {
 				sslContext = dockerClientConfig.getSslConfig().getSSLContext();
@@ -79,9 +134,6 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 						ex);
 			}
 		}
-
-		PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(
-				getSchemeRegistry(originalUri, sslContext));
 
 		if (dockerClientConfig.getMaxTotalConnections() != null)
 			connManager
@@ -96,17 +148,30 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 		ClientBuilder clientBuilder = ClientBuilder.newBuilder().withConfig(
 				clientConfig);
 
+        if (originalUri.getScheme().equals("unix")) {
+            dockerClientConfig.setUri(UnixConnectionSocketFactory.sanitizeUri(originalUri));
+        }
+
 		if (sslContext != null) {
 			clientBuilder.sslContext(sslContext);
 		}
 
-		client = clientBuilder.build();
+        client = clientBuilder.build();
+        for(AbstractHttpFeature feature : httpFeatures){
+			client.register(feature);
+		}
+        WebTarget webResource = client.target(dockerClientConfig.getUri());
+        
+        if (dockerClientConfig.getVersion() == null || dockerClientConfig.getVersion().isEmpty()) {
+            baseResource = webResource;
+        } else {
+            baseResource = webResource.path("v" + dockerClientConfig.getVersion());
+        }
 
 		if (originalUri.getScheme().equals("unix")) {
 			dockerClientConfig.setUri(UnixConnectionSocketFactory
 					.sanitizeUri(originalUri));
 		}
-		WebTarget webResource = client.target(dockerClientConfig.getUri());
 
 		if (dockerClientConfig.getVersion() == null
 				|| dockerClientConfig.getVersion().isEmpty()) {

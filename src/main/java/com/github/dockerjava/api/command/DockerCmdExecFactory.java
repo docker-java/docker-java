@@ -2,12 +2,14 @@ package com.github.dockerjava.api.command;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.List;
 
 import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.http.AbstractHttpFeature;
 
 public interface DockerCmdExecFactory extends Closeable {
 
-	public void init(DockerClientConfig dockerClientConfig);
+	public void init(DockerClientConfig dockerClientConfig, List<AbstractHttpFeature> httpFeatures);
 
 	public AuthCmd.Exec createAuthCmdExec();
 

@@ -40,6 +40,7 @@ public class DockerClientConfig implements Serializable {
     // connection pooling properties
     private static final String DOCKER_IO_MAX_PER_ROUTE_PROPERTY = "docker.io.perRouteConnections";
     private static final String DOCKER_IO_MAX_TOTAL_PROPERTY = "docker.io.totalConnections";
+    
     /**
      * A map from the environment name to the interval name.
      */
@@ -349,7 +350,6 @@ public class DockerClientConfig implements Serializable {
         if (uri != null ? !uri.equals(that.uri) : that.uri != null) return false;
         if (username != null ? !username.equals(that.username) : that.username != null) return false;
         if (version != null ? !version.equals(that.version) : that.version != null) return false;
-
         return true;
     }
 
@@ -410,6 +410,7 @@ public class DockerClientConfig implements Serializable {
                     .withFollowRedirectsFilter(Boolean.valueOf(p.getProperty(DOCKER_IO_FOLLOW_REDIRECTS_FILTER_PROPERTY, "false")))
                     .withDockerCertPath(p.getProperty(DOCKER_IO_DOCKER_CERT_PATH_PROPERTY))
                     .withDockerCfgPath(p.getProperty(DOCKER_IO_DOCKER_CFG_PATH_PROPERTY))
+                    .withMaxPerRouteConnections(integerValue(p.getProperty(DOCKER_IO_MAX_PER_ROUTE_PROPERTY)))
                     .withMaxPerRouteConnections(integerValue(p.getProperty(DOCKER_IO_MAX_PER_ROUTE_PROPERTY)))
                     .withMaxTotalConnections(integerValue(p.getProperty(DOCKER_IO_MAX_TOTAL_PROPERTY)));
         }

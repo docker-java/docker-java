@@ -7,20 +7,21 @@ import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.EventStreamItem;
 import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
 import com.google.common.collect.ImmutableList;
-import org.glassfish.jersey.client.ClientProperties;
-import org.glassfish.jersey.client.RequestEntityProcessing;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static javax.ws.rs.client.Entity.entity;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
 
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Iterator;
 
-import static javax.ws.rs.client.Entity.entity;
+import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.client.RequestEntityProcessing;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BuildImageCmdExec extends
 		AbstrDockerCmdExec<BuildImageCmd, BuildImageCmd.Response> implements
@@ -70,15 +71,12 @@ public class BuildImageCmdExec extends
 						Response.class);
 
 		return new ResponseImpl(new WrappedResponseInputStream(response));
-
 	}
 
-	private Invocation.Builder resourceWithOptionalAuthConfig(
-			BuildImageCmd command, Invocation.Builder request) {
+	private Invocation.Builder resourceWithOptionalAuthConfig(BuildImageCmd command, Invocation.Builder request) {
 		AuthConfigurations authConfigs = command.getBuildAuthConfigs();
 		if (authConfigs != null) {
-			request = request.header("X-Registry-Config",
-					registryConfigs(authConfigs));
+			request = request.header("X-Registry-Config", registryConfigs(authConfigs));
 		}
 		return request;
 	}
