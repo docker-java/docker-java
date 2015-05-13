@@ -26,9 +26,9 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageC
 	private boolean quiet;
 	private boolean pull;
 	
+	private AuthConfigurations buildAuthConfigs;
     private File dockerFile;
     private File baseDirectory;
-	private AuthConfigurations buildAuthConfigs;
 
     public BuildImageCmdImpl(BuildImageCmd.Exec exec) {
         super(exec);
@@ -143,7 +143,7 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageC
         return this;
     }
 
-	@Override
+    @Override
 	public BuildImageCmdImpl withNoCache() {
 		return withNoCache(true);
 	}
