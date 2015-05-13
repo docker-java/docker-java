@@ -67,6 +67,11 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 			clientConfig.property(ClientProperties.READ_TIMEOUT, readTimeout);
 		}
 
+		if (dockerClientConfig.getConnectTimeout() != null) {
+			int connectTimeout = dockerClientConfig.getConnectTimeout();
+			clientConfig.property(ClientProperties.CONNECT_TIMEOUT, connectTimeout);
+		}
+
 		URI originalUri = dockerClientConfig.getUri();
 
 		SSLContext sslContext = null;
