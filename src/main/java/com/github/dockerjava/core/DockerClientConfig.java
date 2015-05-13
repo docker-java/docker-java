@@ -352,6 +352,7 @@ public class DockerClientConfig implements Serializable {
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
         if (readTimeout != null ? !readTimeout.equals(that.readTimeout) : that.readTimeout != null) return false;
+        if (connectTimeout != null ? !connectTimeout.equals(that.connectTimeout) : that.connectTimeout != null) return false;
         if (serverAddress != null ? !serverAddress.equals(that.serverAddress) : that.serverAddress != null)
             return false;
         if (uri != null ? !uri.equals(that.uri) : that.uri != null) return false;
