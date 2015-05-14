@@ -15,11 +15,15 @@
  */
 package com.github.dockerjava.test.serdes;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.command.CommandJSONSamples;
+
 import java.io.IOException;
 import java.io.InputStream;
+
 import org.apache.commons.io.IOUtils;
+
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
@@ -101,10 +105,14 @@ public class JSONTestHelper {
             throws IOException, AssertionError {
         ObjectMapper mapper = new ObjectMapper();
        
-        String inputItemString = mapper.writeValueAsString(item);
-        TClass convertedItem = mapper.readValue(inputItemString, asclass);
-        String convertedItemString = mapper.writeValueAsString(convertedItem);
-        assertEquals(convertedItemString, inputItemString, "JSONs must be equal after the second roundtrip");
-        return convertedItem;
+        String serialized1 = mapper.writeValueAsString(item);
+        JsonNode json1 = mapper.readTree(serialized1);
+        TClass deserialized1 = mapper.readValue(serialized1, asclass);
+        String serialized2 = mapper.writeValueAsString(deserialized1);
+        JsonNode json2 = mapper.readTree(serialized2);
+        TClass deserialized2 = mapper.readValue(serialized2, asclass);
+        
+        assertEquals(json2, json1, "JSONs must be equal after the second roundtrip");
+        return deserialized2;
     }
 }
