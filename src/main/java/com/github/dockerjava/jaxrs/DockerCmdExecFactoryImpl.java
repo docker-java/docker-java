@@ -22,7 +22,9 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.glassfish.jersey.CommonProperties;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
-import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
+//import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
+// see https://github.com/docker-java/docker-java/issues/196
+import com.github.dockerjava.jaxrs.connector.ApacheConnectorProvider;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 
@@ -33,6 +35,7 @@ import com.github.dockerjava.core.util.FollowRedirectsFilter;
 import com.github.dockerjava.core.util.JsonClientFilter;
 import com.github.dockerjava.core.util.ResponseStatusExceptionFilter;
 import com.github.dockerjava.core.util.SelectiveLoggingFilter;
+
 
 public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
