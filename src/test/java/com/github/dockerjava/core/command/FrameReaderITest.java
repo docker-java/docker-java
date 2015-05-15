@@ -1,86 +1,97 @@
 package com.github.dockerjava.core.command;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.AssertJUnit.assertNull;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.StreamType;
 import com.github.dockerjava.core.DockerClientBuilder;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
-import java.io.IOException;
-import java.io.InputStream;
-
-import static org.testng.Assert.assertEquals;
-import static org.testng.AssertJUnit.assertNull;
 
 @Test(groups = "integration")
-public class FrameReaderITest  {
+public class FrameReaderITest {
 
-    private DockerClient dockerClient;
-    private DockerfileFixture dockerfileFixture;
+	private DockerClient dockerClient;
+	private DockerfileFixture dockerfileFixture;
 
-    @BeforeTest
-    public void beforeTest() throws Exception {
-        dockerClient = DockerClientBuilder.getInstance().build();
-        dockerfileFixture = new DockerfileFixture(dockerClient, "frameReaderDockerfile");
-        dockerfileFixture.open();
-    }
+	@BeforeTest
+	public void beforeTest() throws Exception {
+		dockerClient = DockerClientBuilder.getInstance().build();
+		dockerfileFixture = new DockerfileFixture(dockerClient,
+				"frameReaderDockerfile");
+		dockerfileFixture.open();
+	}
 
-    @AfterTest
-    public void deleteDockerContainerImage() throws Exception {
-        dockerfileFixture.close();
-        dockerClient.close();
-    }
+	@AfterTest
+	public void deleteDockerContainerImage() throws Exception {
+		dockerfileFixture.close();
+		dockerClient.close();
+	}
 
-    @Test
-    public void canCloseFrameReaderAndReadExpectedLines() throws Exception {
+	@Test
+	public void canCloseFrameReaderAndReadExpectedLines() throws Exception {
 
-        try (FrameReader reader = new FrameReader(getLoggerStream())) {
-            assertEquals(reader.readFrame(), new Frame(StreamType.STDOUT, "to stdout\n".getBytes()));
-            assertEquals(reader.readFrame(), new Frame(StreamType.STDERR, "to stderr\n".getBytes()));
-            assertNull(reader.readFrame());
-        }
-    }
+		// wait for the container to be successfully executed 
+		int exitCode = dockerClient.waitContainerCmd(
+				dockerfileFixture.getContainerId()).exec();
+		assertEquals(0, exitCode);
+		
+		InputStream response = getLoggerStream();
 
-    private InputStream getLoggerStream() {
-        return dockerClient
-                .logContainerCmd(dockerfileFixture.getContainerId())
-                .withStdOut()
-                .withStdErr()
-                .withTailAll()
-                .withTail(10)
-                .withFollowStream()
-                .exec();
-    }
+		try (FrameReader reader = new FrameReader(response)) {
+			assertEquals(reader.readFrame(), new Frame(StreamType.STDOUT,
+					"to stdout\n".getBytes()));
+			assertEquals(reader.readFrame(), new Frame(StreamType.STDERR,
+					"to stderr\n".getBytes()));
+			assertNull(reader.readFrame());
+		}
+	}
 
-    @Test
-    public void canLogInOneThreadAndExecuteCommandsInAnother() throws Exception {
+	private InputStream getLoggerStream() {
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    try (FrameReader reader = new FrameReader(getLoggerStream())) {
-                        //noinspection StatementWithEmptyBody
-                        while (reader.readFrame() != null) {
-                            // nop
-                        }
-                    }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
+		return dockerClient.logContainerCmd(dockerfileFixture.getContainerId())
+				.withStdOut()
+				.withStdErr()
+				.withTailAll()
+				// we can't follow stream here as it blocks reading from resulting InputStream infinitely
+				//.withFollowStream()
+				.exec();
+	}
 
-        thread.start();
+	@Test
+	public void canLogInOneThreadAndExecuteCommandsInAnother() throws Exception {
 
-        try (DockerfileFixture busyboxDockerfile = new DockerfileFixture(dockerClient, "busyboxDockerfile")) {
-            busyboxDockerfile.open();
-        }
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					try (FrameReader reader = new FrameReader(getLoggerStream())) {
+						// noinspection StatementWithEmptyBody
+						while (reader.readFrame() != null) {
+							// nop
+						}
+					}
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			}
+		});
 
-        thread.join();
+		thread.start();
 
-    }
+		try (DockerfileFixture busyboxDockerfile = new DockerfileFixture(
+				dockerClient, "busyboxDockerfile")) {
+			busyboxDockerfile.open();
+		}
+
+		thread.join();
+
+	}
 }

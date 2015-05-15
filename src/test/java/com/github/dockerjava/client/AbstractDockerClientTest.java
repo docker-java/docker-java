@@ -104,8 +104,12 @@ public abstract class AbstractDockerClientTest extends Assert {
 				"################################## END OF {} ##################################\n",
 				result.getName());
 	}
+	
+	protected String asString(InputStream response) {
+		return consumeAsString(response);
+	}
 
-	protected String asString(InputStream response)  {
+	public static String consumeAsString(InputStream response)  {
 
 		StringWriter logwriter = new StringWriter();
 
@@ -116,7 +120,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 			while (itr.hasNext()) {
 				String line = itr.next();
 				logwriter.write(line + (itr.hasNext() ? "\n" : ""));
-				//LOG.info("line: "+line);
+				LOG.info("line: "+line);
 			}
 			response.close();
 			

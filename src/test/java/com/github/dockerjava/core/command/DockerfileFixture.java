@@ -1,14 +1,20 @@
 package com.github.dockerjava.core.command;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.InternalServerErrorException;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.model.Image;
+import com.github.dockerjava.client.AbstractDockerClientTest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Start and stop a single container for testing.
@@ -29,11 +35,14 @@ public class DockerfileFixture implements AutoCloseable {
     public void open() throws IOException {
 
         LOGGER.info("building {}", directory);
-        dockerClient
+        InputStream response = dockerClient
                 .buildImageCmd(new File("src/test/resources", directory))
                 .withNoCache() // remove alternatives, cause problems
-                .exec()
-                .close();
+                .exec();
+        
+        String log = AbstractDockerClientTest.consumeAsString(response);
+        
+        assertThat(log, containsString("Successfully built"));
 
         Image lastCreatedImage = dockerClient
                 .listImagesCmd()
