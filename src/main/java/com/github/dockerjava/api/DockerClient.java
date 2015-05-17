@@ -3,6 +3,7 @@ package com.github.dockerjava.api;
 import java.io.*;
 
 import com.github.dockerjava.api.command.*;
+import com.github.dockerjava.api.command.EventsCmd.EventStreamCallback;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Identifier;
 
@@ -112,7 +113,7 @@ public interface DockerClient extends Closeable {
 	
 	public UnpauseContainerCmd unpauseContainerCmd(String containerId);
 
-	public EventsCmd eventsCmd(EventCallback eventCallback);
+	public EventsCmd eventsCmd(EventStreamCallback eventCallback);
 
 	@Override
 	public void close() throws IOException;
