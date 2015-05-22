@@ -65,8 +65,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 		Volume volume2 = new Volume("/opt/webapp2");
 
 		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox")
-				.withVolumes(volume1, volume2)
+				.createContainerCmd("busybox").withVolumes(volume1, volume2)
 				.withCmd("true").exec();
 
 		LOG.info("Created container {}", container.toString());
@@ -91,8 +90,10 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
 		assertContainerHasVolumes(inspectContainerResponse, volume1, volume2);
 
-		assertThat(Arrays.asList(inspectContainerResponse.getVolumesRW()),
-				contains(new VolumeRW(volume1, AccessMode.ro), new VolumeRW(volume2)));
+		assertThat(
+				Arrays.asList(inspectContainerResponse.getVolumesRW()),
+				contains(new VolumeRW(volume1, AccessMode.ro), new VolumeRW(
+						volume2)));
 
 	}
 
@@ -225,6 +226,41 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 	}
 
 	@Test
+	public void startContainerWithRandomPortBindings() throws DockerException {
+
+		ExposedPort tcp22 = ExposedPort.tcp(22);
+		ExposedPort tcp23 = ExposedPort.tcp(23);
+
+		Ports portBindings = new Ports();
+		portBindings.bind(tcp22, Ports.Binding(null));
+		portBindings.bind(tcp23, Ports.Binding(null));
+
+		CreateContainerResponse container = dockerClient
+				.createContainerCmd("busybox").withCmd("sleep", "9999")
+				.withExposedPorts(tcp22, tcp23).withPortBindings(portBindings)
+				.withPublishAllPorts(true).exec();
+
+		LOG.info("Created container {}", container.toString());
+
+		assertThat(container.getId(), not(isEmptyString()));
+
+		dockerClient.startContainerCmd(container.getId()).exec();
+
+		InspectContainerResponse inspectContainerResponse = dockerClient
+				.inspectContainerCmd(container.getId()).exec();
+
+		assertThat(Arrays.asList(inspectContainerResponse.getConfig()
+				.getExposedPorts()), contains(tcp22, tcp23));
+
+		assertThat(inspectContainerResponse.getNetworkSettings().getPorts()
+				.getBindings().get(tcp22)[0].getHostPort(), is(notNullValue()));
+
+		assertThat(inspectContainerResponse.getNetworkSettings().getPorts()
+				.getBindings().get(tcp23)[0], is(notNullValue()));
+
+	}
+
+	@Test
 	public void startContainerWithConflictingPortBindings()
 			throws DockerException {
 
@@ -303,8 +339,9 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 				is(notNullValue()));
 		assertThat(inspectContainerResponse2.getHostConfig().getLinks(),
 				is(notNullValue()));
-		assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] { new Link("container1",
-				"container1Link") }));
+		assertThat(
+				inspectContainerResponse2.getHostConfig().getLinks(),
+				equalTo(new Link[] { new Link("container1", "container1Link") }));
 		assertThat(inspectContainerResponse2.getId(),
 				startsWith(container2.getId()));
 		assertThat(inspectContainerResponse2.getName(), equalTo("/container2"));
@@ -313,8 +350,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 		assertThat(inspectContainerResponse2.getState().isRunning(), is(true));
 
 	}
-	
-	
+
 	@Test
 	public void startContainerWithLinking() throws DockerException {
 
@@ -348,14 +384,12 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 		CreateContainerResponse container2 = dockerClient
 				.createContainerCmd("busybox").withCmd("sleep", "9999")
 				.withName("container2")
-				.withLinks(new Link("container1", "container1Link"))
-				.exec();
+				.withLinks(new Link("container1", "container1Link")).exec();
 
 		LOG.info("Created container2 {}", container2.toString());
 		assertThat(container2.getId(), not(isEmptyString()));
 
-		dockerClient.startContainerCmd(container2.getId())
-				.exec();
+		dockerClient.startContainerCmd(container2.getId()).exec();
 
 		InspectContainerResponse inspectContainerResponse2 = dockerClient
 				.inspectContainerCmd(container2.getId()).exec();
@@ -367,8 +401,9 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 				is(notNullValue()));
 		assertThat(inspectContainerResponse2.getHostConfig().getLinks(),
 				is(notNullValue()));
-		assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] { new Link("container1",
-				"container1Link") }));
+		assertThat(
+				inspectContainerResponse2.getHostConfig().getLinks(),
+				equalTo(new Link[] { new Link("container1", "container1Link") }));
 		assertThat(inspectContainerResponse2.getId(),
 				startsWith(container2.getId()));
 		assertThat(inspectContainerResponse2.getName(), equalTo("/container2"));
@@ -512,8 +547,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 		assertThat(container.getId(), not(isEmptyString()));
 
 		dockerClient.startContainerCmd(container.getId())
-				.withExtraHosts("dockerhost:127.0.0.1")
-				.exec();
+				.withExtraHosts("dockerhost:127.0.0.1").exec();
 
 		InspectContainerResponse inspectContainerResponse = dockerClient
 				.inspectContainerCmd(container.getId()).exec();
