@@ -37,13 +37,15 @@ public class FrameReaderITest {
 
 	@Test
 	public void canCloseFrameReaderAndReadExpectedLines() throws Exception {
+		InputStream response = getLoggerStream();
 
-		// wait for the container to be successfully executed 
+		dockerClient.startContainerCmd(dockerfileFixture.getContainerId())
+				.exec();
+
+		// wait for the container to be successfully executed
 		int exitCode = dockerClient.waitContainerCmd(
 				dockerfileFixture.getContainerId()).exec();
 		assertEquals(0, exitCode);
-		
-		InputStream response = getLoggerStream();
 
 		try (FrameReader reader = new FrameReader(response)) {
 			assertEquals(reader.readFrame(), new Frame(StreamType.STDOUT,
@@ -57,11 +59,10 @@ public class FrameReaderITest {
 	private InputStream getLoggerStream() {
 
 		return dockerClient.logContainerCmd(dockerfileFixture.getContainerId())
-				.withStdOut()
-				.withStdErr()
-				.withTailAll()
-				// we can't follow stream here as it blocks reading from resulting InputStream infinitely
-				//.withFollowStream()
+				.withStdOut().withStdErr().withTailAll()
+				// we can't follow stream here as it blocks reading from
+				// resulting InputStream infinitely
+				// .withFollowStream()
 				.exec();
 	}
 

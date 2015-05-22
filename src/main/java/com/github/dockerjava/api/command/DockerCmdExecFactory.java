@@ -4,10 +4,13 @@ import java.io.Closeable;
 import java.io.IOException;
 
 import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.jaxrs.DockerCmdExecFactoryImpl;
 
 public interface DockerCmdExecFactory extends Closeable {
 
-	public void init(DockerClientConfig dockerClientConfig);
+	public DockerCmdExecFactory withDockerClientConfig(DockerClientConfig dockerClientConfig);
+	
+	public void init();
 
 	public AuthCmd.Exec createAuthCmdExec();
 

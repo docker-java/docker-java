@@ -59,11 +59,11 @@ public class DockerfileFixture implements AutoCloseable {
                 .exec()
                 .getId();
 
-        LOGGER.info("starting {}", containerId);
+  //      LOGGER.info("starting {}", containerId);
 
-        dockerClient
-                .startContainerCmd(containerId)
-                .exec();
+//        dockerClient
+//                .startContainerCmd(containerId)
+//                .exec();
     }
 
     @Override
