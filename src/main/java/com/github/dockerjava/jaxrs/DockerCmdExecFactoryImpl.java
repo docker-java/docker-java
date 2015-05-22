@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import javax.net.ssl.SSLContext;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.ClientResponseFilter;
 import javax.ws.rs.client.WebTarget;
 
 import org.apache.http.config.RegistryBuilder;
@@ -22,31 +23,70 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.glassfish.jersey.CommonProperties;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
+
+
 //import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 // see https://github.com/docker-java/docker-java/issues/196
 import com.github.dockerjava.jaxrs.connector.ApacheConnectorProvider;
+import com.github.dockerjava.jaxrs.util.FollowRedirectsFilter;
+import com.github.dockerjava.jaxrs.util.JsonClientFilter;
+import com.github.dockerjava.jaxrs.util.ResponseStatusExceptionFilter;
+import com.github.dockerjava.jaxrs.util.SelectiveLoggingFilter;
+
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.github.dockerjava.api.DockerClientException;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.util.FollowRedirectsFilter;
-import com.github.dockerjava.core.util.JsonClientFilter;
-import com.github.dockerjava.core.util.ResponseStatusExceptionFilter;
-import com.github.dockerjava.core.util.SelectiveLoggingFilter;
-
 
 public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(DockerCmdExecFactoryImpl.class.getName());
+
+	private DockerClientConfig dockerClientConfig;
 	private Client client;
 	private WebTarget baseResource;
 
-	@Override
-	public void init(DockerClientConfig dockerClientConfig) {
+	private Integer readTimeout, maxTotalConnections, maxPerRouteConnections;
+
+	private Class<? extends ClientResponseFilter>[] clientResponseFilters;
+
+	public final DockerCmdExecFactoryImpl withReadTimeout(Integer readTimeout) {
+		this.readTimeout = readTimeout;
+		return this;
+	}
+
+	public final DockerCmdExecFactoryImpl withMaxTotalConnections(
+			Integer maxTotalConnections) {
+		this.maxTotalConnections = maxTotalConnections;
+		return this;
+	}
+
+	public final DockerCmdExecFactoryImpl withMaxPerRouteConnections(
+			Integer maxPerRouteConnections) {
+		this.maxPerRouteConnections = maxPerRouteConnections;
+		return this;
+	}
+
+	public DockerCmdExecFactoryImpl withClientResponseFilters(
+			Class<? extends ClientResponseFilter>[] clientResponseFilters) {
 		checkNotNull(dockerClientConfig, "config was not specified");
+		this.clientResponseFilters = clientResponseFilters;
+		return this;
+	}
+
+	@Override
+	public DockerCmdExecFactoryImpl withDockerClientConfig(
+			DockerClientConfig dockerClientConfig) {
+		checkNotNull(dockerClientConfig, "config was not specified");
+		this.dockerClientConfig = dockerClientConfig;
+		return this;
+	}
+
+	@Override
+	public void init() {
 
 		ClientConfig clientConfig = new ClientConfig();
 		clientConfig.connectorProvider(new ApacheConnectorProvider());
@@ -57,16 +97,17 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 		clientConfig.register(JsonClientFilter.class);
 		clientConfig.register(JacksonJsonProvider.class);
 
-		if (dockerClientConfig.followRedirectsFilterEnabled()) {
-			clientConfig.register(FollowRedirectsFilter.class);
-		}
-
-		if (dockerClientConfig.isLoggingFilterEnabled()) {
+		if (dockerClientConfig.isLoggingEnabled()) {
 			clientConfig.register(new SelectiveLoggingFilter(LOGGER, true));
 		}
 
-		if (dockerClientConfig.getReadTimeout() != null) {
-			int readTimeout = dockerClientConfig.getReadTimeout();
+		if (clientResponseFilters != null) {
+			for (Class<? extends ClientResponseFilter> filter : clientResponseFilters) {
+				clientConfig.register(filter);
+			}
+		}
+
+		if (readTimeout != null) {
 			clientConfig.property(ClientProperties.READ_TIMEOUT, readTimeout);
 		}
 
@@ -86,12 +127,10 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 		PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(
 				getSchemeRegistry(originalUri, sslContext));
 
-		if (dockerClientConfig.getMaxTotalConnections() != null)
-			connManager
-					.setMaxTotal(dockerClientConfig.getMaxTotalConnections());
-		if (dockerClientConfig.getMaxPerRoutConnections() != null)
-			connManager.setDefaultMaxPerRoute(dockerClientConfig
-					.getMaxPerRoutConnections());
+		if (maxTotalConnections != null)
+			connManager.setMaxTotal(maxTotalConnections);
+		if (maxPerRouteConnections != null)
+			connManager.setDefaultMaxPerRoute(maxPerRouteConnections);
 
 		clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER,
 				connManager);
@@ -104,7 +143,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 		}
 
 		client = clientBuilder.build();
-
+		
 		if (originalUri.getScheme().equals("unix")) {
 			dockerClientConfig.setUri(UnixConnectionSocketFactory
 					.sanitizeUri(originalUri));

@@ -25,14 +25,23 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 	private List<String> imageNames = new ArrayList<String>();
 
 	private DockerCmdExecFactory delegate;
+	
+	private DockerClientConfig dockerClientConfig;
 
 	public TestDockerCmdExecFactory(DockerCmdExecFactory delegate) {
 		this.delegate = delegate;
 	}
+	
+	@Override
+	public DockerCmdExecFactory withDockerClientConfig(
+			DockerClientConfig dockerClientConfig) {
+		this.dockerClientConfig = dockerClientConfig;
+		return this;
+	}
 
 	@Override
-	public void init(DockerClientConfig dockerClientConfig) {
-		delegate.init(dockerClientConfig);
+	public void init() {
+		delegate.withDockerClientConfig(dockerClientConfig).init();
 	}
 
 	@Override
