@@ -4,6 +4,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
+import java.util.Map;
 
 import com.github.dockerjava.api.command.*;
 
@@ -31,6 +33,7 @@ import org.glassfish.jersey.client.ClientProperties;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.github.dockerjava.api.DockerClientException;
 import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.http.AbstractHttpFeature;
 import com.github.dockerjava.core.util.FollowRedirectsFilter;
 import com.github.dockerjava.core.util.JsonClientFilter;
 import com.github.dockerjava.core.util.ResponseStatusExceptionFilter;
@@ -44,8 +47,8 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 	private Client client;
 	private WebTarget baseResource;
 
-	@Override
-	public void init(DockerClientConfig dockerClientConfig) {
+    @Override
+    public void init(DockerClientConfig dockerClientConfig, List<AbstractHttpFeature> httpFeatures) {
 		checkNotNull(dockerClientConfig, "config was not specified");
 
 		ClientConfig clientConfig = new ClientConfig();
@@ -95,6 +98,13 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
 		clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER,
 				connManager);
+		
+        for(AbstractHttpFeature feature : httpFeatures){
+        	Map<String, Object> properties = feature.getClientConfigurationProperties();
+        	for(String propertyName : properties.keySet()){
+        		clientConfig.property(propertyName, properties.get(propertyName));
+        	}
+		}
 
 		ClientBuilder clientBuilder = ClientBuilder.newBuilder().withConfig(
 				clientConfig);
@@ -109,6 +119,11 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 			dockerClientConfig.setUri(UnixConnectionSocketFactory
 					.sanitizeUri(originalUri));
 		}
+
+        for(AbstractHttpFeature feature : httpFeatures){
+			client.register(feature);
+		}
+        
 		WebTarget webResource = client.target(dockerClientConfig.getUri());
 
 		if (dockerClientConfig.getVersion() == null

@@ -6,6 +6,8 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.*;
@@ -13,6 +15,7 @@ import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.Identifier;
 import com.github.dockerjava.core.command.*;
+import com.github.dockerjava.core.http.AbstractHttpFeature;
 
 /**
  * @author Konstantin Pelykh (kpelykh@gmail.com)
@@ -22,6 +25,7 @@ import com.github.dockerjava.core.command.*;
 public class DockerClientImpl implements Closeable, DockerClient {
 
 	private final DockerClientConfig dockerClientConfig;
+	private List<AbstractHttpFeature> httpFeatures = new ArrayList<>();
 
 	private DockerCmdExecFactory dockerCmdExecFactory;
 
@@ -39,6 +43,15 @@ public class DockerClientImpl implements Closeable, DockerClient {
 		this.dockerClientConfig = dockerClientConfig;
 	}
 
+	private DockerClientImpl(DockerClientConfig dockerClientConfig, List<AbstractHttpFeature> httpFeatures) {
+		checkNotNull(dockerClientConfig,
+				"config was not specified");
+		checkNotNull(httpFeatures,
+				"http features were not specified");
+		this.dockerClientConfig = dockerClientConfig;
+		this.httpFeatures = httpFeatures;
+	}
+
 	private static DockerClientConfig configWithServerUrl(String serverUrl) {
 		return DockerClientConfig.createDefaultConfigBuilder()
 				.withUri(serverUrl).build();
@@ -53,6 +66,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
 		return new DockerClientImpl(dockerClientConfig);
 	}
 
+	public static DockerClientImpl getInstance(
+			DockerClientConfig dockerClientConfig, List<AbstractHttpFeature> httpFeatures) {
+		return new DockerClientImpl(dockerClientConfig, httpFeatures);
+	}
+
 	public static DockerClientImpl getInstance(String serverUrl) {
 		return new DockerClientImpl(serverUrl);
 	}
@@ -62,7 +80,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
 		checkNotNull(dockerCmdExecFactory,
 				"dockerCmdExecFactory was not specified");
 		this.dockerCmdExecFactory = dockerCmdExecFactory;
-		this.dockerCmdExecFactory.init(dockerClientConfig);
+		this.dockerCmdExecFactory.init(dockerClientConfig, httpFeatures);
 		return this;
 	}
 
