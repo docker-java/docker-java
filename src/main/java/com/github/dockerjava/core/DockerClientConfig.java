@@ -32,6 +32,7 @@ public class DockerClientConfig implements Serializable {
     private static final String DOCKER_IO_EMAIL_PROPERTY = "docker.io.email";
     private static final String DOCKER_IO_SERVER_ADDRESS_PROPERTY = "docker.io.serverAddress";
     private static final String DOCKER_IO_READ_TIMEOUT_PROPERTY = "docker.io.readTimeout";
+    private static final String DOCKER_IO_CONNECT_TIMEOUT_PROPERTY = "docker.io.connectimeout";
     // this is really confusing, as there are two ways to spell it
     private static final String DOCKER_IO_ENABLE_LOGGING_FILTER_PROPERTY = "docker.io.enableLoggingFilter";
     private static final String DOCKER_IO_FOLLOW_REDIRECTS_FILTER_PROPERTY = "docker.io.followRedirectsFilter";
@@ -54,6 +55,7 @@ public class DockerClientConfig implements Serializable {
         m.put("DOCKER_EMAIL", DOCKER_IO_EMAIL_PROPERTY);
         m.put("DOCKER_SERVER_ADDRESS", DOCKER_IO_SERVER_ADDRESS_PROPERTY);
         m.put("DOCKER_READ_TIMEOUT", DOCKER_IO_READ_TIMEOUT_PROPERTY);
+        m.put("DOCKER_CONNECT_TIMEOUT", DOCKER_IO_CONNECT_TIMEOUT_PROPERTY);
         m.put("DOCKER_LOGGING_FILTER_ENABLED", DOCKER_IO_ENABLE_LOGGING_FILTER_PROPERTY);
         m.put("DOCKER_FOLLOW_REDIRECTS_FILTER_ENABLED", DOCKER_IO_FOLLOW_REDIRECTS_FILTER_PROPERTY);
         m.put(DOCKER_CERT_PATH_PROPERTY, DOCKER_IO_DOCKER_CERT_PATH_PROPERTY);
@@ -64,7 +66,7 @@ public class DockerClientConfig implements Serializable {
     private static final String DOCKER_IO_PROPERTIES_PROPERTY = "docker.io.properties";
     private URI uri;
     private final String version, username, password, email, serverAddress, dockerCfgPath;
-    private final Integer readTimeout;
+    private final Integer readTimeout, connectTimeout;
     private final boolean loggingFilterEnabled;
     private final boolean followRedirectsFilterEnabled;
     private final SSLConfig sslConfig;
@@ -73,7 +75,7 @@ public class DockerClientConfig implements Serializable {
     private final Integer maxPerRouteConnections;
 
     DockerClientConfig(URI uri, String version, String username, String password, String email, String serverAddress,
-                       String dockerCfgPath, Integer readTimeout, boolean loggingFilterEnabled, boolean followRedirectsFilterEnabled, 
+                       String dockerCfgPath, Integer readTimeout, Integer connectTimeout, boolean loggingFilterEnabled, boolean followRedirectsFilterEnabled, 
                        SSLConfig sslConfig, Integer maxTotalConns, Integer maxPerRouteConns) {
         this.uri = uri;
         this.version = version;
@@ -83,6 +85,7 @@ public class DockerClientConfig implements Serializable {
         this.serverAddress = serverAddress;
         this.dockerCfgPath = dockerCfgPath;
         this.readTimeout = readTimeout;
+        this.connectTimeout = connectTimeout;
         this.loggingFilterEnabled = loggingFilterEnabled;
         this.followRedirectsFilterEnabled = followRedirectsFilterEnabled;
         this.sslConfig = sslConfig;
@@ -186,6 +189,7 @@ public class DockerClientConfig implements Serializable {
                 DOCKER_IO_EMAIL_PROPERTY,
                 DOCKER_IO_SERVER_ADDRESS_PROPERTY,
                 DOCKER_IO_READ_TIMEOUT_PROPERTY,
+                DOCKER_IO_CONNECT_TIMEOUT_PROPERTY,
                 DOCKER_IO_ENABLE_LOGGING_FILTER_PROPERTY,
                 DOCKER_IO_FOLLOW_REDIRECTS_FILTER_PROPERTY,
                 DOCKER_IO_DOCKER_CERT_PATH_PROPERTY,
@@ -243,6 +247,10 @@ public class DockerClientConfig implements Serializable {
 
     public Integer getReadTimeout() {
         return readTimeout;
+    }
+
+    public Integer getConnectTimeout() {
+        return connectTimeout;
     }
 
     public boolean isLoggingFilterEnabled() {
@@ -344,6 +352,7 @@ public class DockerClientConfig implements Serializable {
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
         if (readTimeout != null ? !readTimeout.equals(that.readTimeout) : that.readTimeout != null) return false;
+        if (connectTimeout != null ? !connectTimeout.equals(that.connectTimeout) : that.connectTimeout != null) return false;
         if (serverAddress != null ? !serverAddress.equals(that.serverAddress) : that.serverAddress != null)
             return false;
         if (uri != null ? !uri.equals(that.uri) : that.uri != null) return false;
@@ -364,6 +373,7 @@ public class DockerClientConfig implements Serializable {
         result = 31 * result + (dockerCfgPath != null ? dockerCfgPath.hashCode() : 0);
         result = 31 * result + (sslConfig != null ? sslConfig.hashCode() : 0);
         result = 31 * result + (readTimeout != null ? readTimeout.hashCode() : 0);
+        result = 31 * result + (connectTimeout != null ? connectTimeout.hashCode() : 0);
         result = 31 * result + (loggingFilterEnabled ? 1 : 0);
         return result;
     }
@@ -380,6 +390,7 @@ public class DockerClientConfig implements Serializable {
                 ", dockerCfgPath='" + dockerCfgPath + '\'' +
                 ", sslConfig='" + sslConfig + '\'' +
                 ", readTimeout=" + readTimeout +
+                ", connectTimeout=" + connectTimeout +
                 ", loggingFilterEnabled=" + loggingFilterEnabled +
                 ", followRedirectsFilterEnabled=" + followRedirectsFilterEnabled +
                 '}';
@@ -388,7 +399,7 @@ public class DockerClientConfig implements Serializable {
     public static class DockerClientConfigBuilder {
         private URI uri;
         private String version, username, password, email, serverAddress, dockerCfgPath;
-        private Integer readTimeout, maxTotalConnections, maxPerRouteConnections;
+        private Integer readTimeout, connectTimeout, maxTotalConnections, maxPerRouteConnections;
         private boolean loggingFilterEnabled, followRedirectsFilterEnabled;
         private SSLConfig sslConfig;
 
@@ -406,6 +417,7 @@ public class DockerClientConfig implements Serializable {
                     .withEmail(p.getProperty(DOCKER_IO_EMAIL_PROPERTY))
                     .withServerAddress(p.getProperty(DOCKER_IO_SERVER_ADDRESS_PROPERTY))
                     .withReadTimeout(Integer.valueOf(p.getProperty(DOCKER_IO_READ_TIMEOUT_PROPERTY, "0")))
+                    .withConnectTimeout(Integer.valueOf(p.getProperty(DOCKER_IO_CONNECT_TIMEOUT_PROPERTY, "0")))
                     .withLoggingFilter(Boolean.valueOf(p.getProperty(DOCKER_IO_ENABLE_LOGGING_FILTER_PROPERTY, "true")))
                     .withFollowRedirectsFilter(Boolean.valueOf(p.getProperty(DOCKER_IO_FOLLOW_REDIRECTS_FILTER_PROPERTY, "false")))
                     .withDockerCertPath(p.getProperty(DOCKER_IO_DOCKER_CERT_PATH_PROPERTY))
@@ -454,6 +466,11 @@ public class DockerClientConfig implements Serializable {
 
         public final DockerClientConfigBuilder withReadTimeout(Integer readTimeout) {
             this.readTimeout = readTimeout;
+            return this;
+        }
+
+        public final DockerClientConfigBuilder withConnectTimeout(Integer connectTimeout) {
+            this.connectTimeout = connectTimeout;
             return this;
         }
         
@@ -505,6 +522,7 @@ public class DockerClientConfig implements Serializable {
                     serverAddress,
                     dockerCfgPath,
                     readTimeout,
+                    connectTimeout,
                     loggingFilterEnabled,
                     followRedirectsFilterEnabled,
                     sslConfig,
