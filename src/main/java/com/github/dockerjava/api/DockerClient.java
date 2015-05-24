@@ -21,7 +21,7 @@ public interface DockerClient extends Closeable {
 	public PingCmd pingCmd();
 
 	public VersionCmd versionCmd();
-
+	
 	/**
 	 * * IMAGE API *
 	 */
@@ -96,6 +96,8 @@ public interface DockerClient extends Closeable {
 
 	public RestartContainerCmd restartContainerCmd(String containerId);
 
+	public StatsCmd statsCmd(String containerId);
+	
 	public CommitCmd commitCmd(String containerId);
 
     public BuildImageCmd buildImageCmd();
@@ -114,7 +116,7 @@ public interface DockerClient extends Closeable {
 
 	public EventsCmd eventsCmd(EventCallback eventCallback);
 
-	@Override
 	public void close() throws IOException;
+	
 
 }
