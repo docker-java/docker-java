@@ -5,11 +5,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.IOException;
 import java.net.URI;
 
-import com.github.dockerjava.api.command.*;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.net.ssl.SSLContext;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -22,20 +17,59 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.glassfish.jersey.CommonProperties;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
-//import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
-// see https://github.com/docker-java/docker-java/issues/196
-import com.github.dockerjava.jaxrs.connector.ApacheConnectorProvider;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.client.HttpUrlConnectorProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.github.dockerjava.api.DockerClientException;
+import com.github.dockerjava.api.command.AttachContainerCmd;
+import com.github.dockerjava.api.command.AuthCmd;
+import com.github.dockerjava.api.command.BuildImageCmd;
+import com.github.dockerjava.api.command.CommitCmd;
+import com.github.dockerjava.api.command.ContainerDiffCmd;
+import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
+import com.github.dockerjava.api.command.CreateContainerCmd;
+import com.github.dockerjava.api.command.CreateImageCmd;
+import com.github.dockerjava.api.command.DockerCmdExecFactory;
+import com.github.dockerjava.api.command.EventsCmd;
+import com.github.dockerjava.api.command.ExecCreateCmd;
+import com.github.dockerjava.api.command.ExecStartCmd;
+import com.github.dockerjava.api.command.InfoCmd;
+import com.github.dockerjava.api.command.InspectContainerCmd;
+import com.github.dockerjava.api.command.InspectExecCmd;
+import com.github.dockerjava.api.command.InspectImageCmd;
+import com.github.dockerjava.api.command.KillContainerCmd;
+import com.github.dockerjava.api.command.ListContainersCmd;
+import com.github.dockerjava.api.command.ListImagesCmd;
+import com.github.dockerjava.api.command.LogContainerCmd;
+import com.github.dockerjava.api.command.PauseContainerCmd;
+import com.github.dockerjava.api.command.PingCmd;
+import com.github.dockerjava.api.command.PullImageCmd;
+import com.github.dockerjava.api.command.PushImageCmd;
+import com.github.dockerjava.api.command.RemoveContainerCmd;
+import com.github.dockerjava.api.command.RemoveImageCmd;
+import com.github.dockerjava.api.command.RestartContainerCmd;
+import com.github.dockerjava.api.command.SaveImageCmd;
+import com.github.dockerjava.api.command.SearchImagesCmd;
+import com.github.dockerjava.api.command.StartContainerCmd;
+import com.github.dockerjava.api.command.StatsCmd.Exec;
+import com.github.dockerjava.api.command.StopContainerCmd;
+import com.github.dockerjava.api.command.TagImageCmd;
+import com.github.dockerjava.api.command.TopContainerCmd;
+import com.github.dockerjava.api.command.UnpauseContainerCmd;
+import com.github.dockerjava.api.command.VersionCmd;
+import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.util.FollowRedirectsFilter;
 import com.github.dockerjava.core.util.JsonClientFilter;
 import com.github.dockerjava.core.util.ResponseStatusExceptionFilter;
 import com.github.dockerjava.core.util.SelectiveLoggingFilter;
-
+//import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
+// see https://github.com/docker-java/docker-java/issues/196
+import com.github.dockerjava.jaxrs.connector.ApacheConnectorProvider;
 
 public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
@@ -44,12 +78,18 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 	private Client client;
 	private WebTarget baseResource;
 
-	@Override
 	public void init(DockerClientConfig dockerClientConfig) {
 		checkNotNull(dockerClientConfig, "config was not specified");
 
 		ClientConfig clientConfig = new ClientConfig();
-		clientConfig.connectorProvider(new ApacheConnectorProvider());
+		// clientConfig.connectorProvider(new ApacheConnectorProvider());
+		// see #226
+		// StatsCmd could create a live stream for one container. 
+		// Unfortunately, ApacheConnector would perform a ChunkedInputStream call that results in the application blocking. 
+		// The reason is org.apache.http.impl.io.ChunkedInputStream would NEVER closes the underlying stream, even when close
+		// gets called.  Instead, it will read until the "end" of its chunking on close.
+		// see <code>com.github.dockerjava.api.command.StatsCmdTest<code>
+		clientConfig.connectorProvider(new HttpUrlConnectorProvider());
 		clientConfig.property(CommonProperties.FEATURE_AUTO_DISCOVERY_DISABLE,
 				true);
 
@@ -141,182 +181,150 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 		return baseResource;
 	}
 
-	@Override
 	public AuthCmd.Exec createAuthCmdExec() {
 		return new AuthCmdExec(getBaseResource());
 	}
 
-	@Override
 	public InfoCmd.Exec createInfoCmdExec() {
 		return new InfoCmdExec(getBaseResource());
 	}
 
-	@Override
 	public PingCmd.Exec createPingCmdExec() {
 		return new PingCmdExec(getBaseResource());
 	}
 
-	@Override
 	public VersionCmd.Exec createVersionCmdExec() {
 		return new VersionCmdExec(getBaseResource());
 	}
 
-	@Override
 	public PullImageCmd.Exec createPullImageCmdExec() {
 		return new PullImageCmdExec(getBaseResource());
 	}
 
-	@Override
 	public PushImageCmd.Exec createPushImageCmdExec() {
 		return new PushImageCmdExec(getBaseResource());
 	}
 
-	@Override
 	public SaveImageCmd.Exec createSaveImageCmdExec() {
 		return new SaveImageCmdExec(getBaseResource());
 	}
 
-	@Override
 	public CreateImageCmd.Exec createCreateImageCmdExec() {
 		return new CreateImageCmdExec(getBaseResource());
 	}
 
-	@Override
 	public SearchImagesCmd.Exec createSearchImagesCmdExec() {
 		return new SearchImagesCmdExec(getBaseResource());
 	}
 
-	@Override
 	public RemoveImageCmd.Exec createRemoveImageCmdExec() {
 		return new RemoveImageCmdExec(getBaseResource());
 	}
 
-	@Override
 	public ListImagesCmd.Exec createListImagesCmdExec() {
 		return new ListImagesCmdExec(getBaseResource());
 	}
 
-	@Override
 	public InspectImageCmd.Exec createInspectImageCmdExec() {
 		return new InspectImageCmdExec(getBaseResource());
 	}
 
-	@Override
 	public ListContainersCmd.Exec createListContainersCmdExec() {
 		return new ListContainersCmdExec(getBaseResource());
 	}
 
-	@Override
 	public CreateContainerCmd.Exec createCreateContainerCmdExec() {
 		return new CreateContainerCmdExec(getBaseResource());
 	}
 
-	@Override
 	public StartContainerCmd.Exec createStartContainerCmdExec() {
 		return new StartContainerCmdExec(getBaseResource());
 	}
 
-	@Override
 	public InspectContainerCmd.Exec createInspectContainerCmdExec() {
 		return new InspectContainerCmdExec(getBaseResource());
 	}
 
-	@Override
 	public ExecCreateCmd.Exec createExecCmdExec() {
 		return new ExecCreateCmdExec(getBaseResource());
 	}
 
-	@Override
 	public RemoveContainerCmd.Exec createRemoveContainerCmdExec() {
 		return new RemoveContainerCmdExec(getBaseResource());
 	}
 
-	@Override
 	public WaitContainerCmd.Exec createWaitContainerCmdExec() {
 		return new WaitContainerCmdExec(getBaseResource());
 	}
 
-	@Override
 	public AttachContainerCmd.Exec createAttachContainerCmdExec() {
 		return new AttachContainerCmdExec(getBaseResource());
 	}
 
-	@Override
 	public ExecStartCmd.Exec createExecStartCmdExec() {
 		return new ExecStartCmdExec(getBaseResource());
 	}
 
-	@Override
 	public InspectExecCmd.Exec createInspectExecCmdExec() {
 		return new InspectExecCmdExec(getBaseResource());
 	}
 
-	@Override
 	public LogContainerCmd.Exec createLogContainerCmdExec() {
 		return new LogContainerCmdExec(getBaseResource());
 	}
 
-	@Override
 	public CopyFileFromContainerCmd.Exec createCopyFileFromContainerCmdExec() {
 		return new CopyFileFromContainerCmdExec(getBaseResource());
 	}
 
-	@Override
 	public StopContainerCmd.Exec createStopContainerCmdExec() {
 		return new StopContainerCmdExec(getBaseResource());
 	}
 
-	@Override
 	public ContainerDiffCmd.Exec createContainerDiffCmdExec() {
 		return new ContainerDiffCmdExec(getBaseResource());
 	}
 
-	@Override
 	public KillContainerCmd.Exec createKillContainerCmdExec() {
 		return new KillContainerCmdExec(getBaseResource());
 	}
 
-	@Override
 	public RestartContainerCmd.Exec createRestartContainerCmdExec() {
 		return new RestartContainerCmdExec(getBaseResource());
 	}
 
-	@Override
 	public CommitCmd.Exec createCommitCmdExec() {
 		return new CommitCmdExec(getBaseResource());
 	}
 
-	@Override
 	public BuildImageCmd.Exec createBuildImageCmdExec() {
 		return new BuildImageCmdExec(getBaseResource());
 	}
 
-	@Override
 	public TopContainerCmd.Exec createTopContainerCmdExec() {
 		return new TopContainerCmdExec(getBaseResource());
 	}
 
-	@Override
 	public TagImageCmd.Exec createTagImageCmdExec() {
 		return new TagImageCmdExec(getBaseResource());
 	}
 
-	@Override
 	public PauseContainerCmd.Exec createPauseContainerCmdExec() {
 		return new PauseContainerCmdExec(getBaseResource());
 	}
 
-	@Override
 	public UnpauseContainerCmd.Exec createUnpauseContainerCmdExec() {
 		return new UnpauseContainerCmdExec(baseResource);
 	}
 
-	@Override
 	public EventsCmd.Exec createEventsCmdExec() {
 		return new EventsCmdExec(getBaseResource());
 	}
 
-	@Override
+	public Exec createStatsCmdExec() {
+		return new StatsCmdExec(getBaseResource());
+	}
+
 	public void close() throws IOException {
 		checkNotNull(client,
 				"Factory not initialized. You probably forgot to call init()!");
