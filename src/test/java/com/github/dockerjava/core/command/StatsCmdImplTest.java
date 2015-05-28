@@ -57,7 +57,7 @@ public class StatsCmdImplTest extends AbstractDockerClientTest {
 
 		CountDownLatch countDownLatch = new CountDownLatch(NUM_STATS);
 		StatsCallbackTest statsCallback = new StatsCallbackTest(countDownLatch);
-		
+
         String containerName = "generated_" + new SecureRandom().nextInt();
 
 		 CreateContainerResponse container = dockerClient
@@ -74,7 +74,7 @@ public class StatsCmdImplTest extends AbstractDockerClientTest {
 
 		countDownLatch.await(3, TimeUnit.SECONDS);
 		boolean gotStats = statsCallback.gotStats();
-		
+
         LOG.info("Stop stats collection");
 		executorService.shutdown();
 	    statsCallback.close();
@@ -82,7 +82,7 @@ public class StatsCmdImplTest extends AbstractDockerClientTest {
         LOG.info("Stopping container");
         dockerClient.stopContainerCmd(container.getId()).exec();
         dockerClient.removeContainerCmd(container.getId()).exec();
-        
+
         LOG.info("Completed test");
         assertTrue(gotStats, "Expected true");
 
@@ -125,7 +125,7 @@ public class StatsCmdImplTest extends AbstractDockerClientTest {
 		public boolean isReceiving() {
 			return isReceiving.get();
 		}
-		
+
 	    public boolean gotStats() {
 	            return gotStats;
 	    }

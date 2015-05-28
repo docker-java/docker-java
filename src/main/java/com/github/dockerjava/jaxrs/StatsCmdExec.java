@@ -24,7 +24,7 @@ import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
 
 public class StatsCmdExec extends AbstrDockerCmdExec<StatsCmd, ExecutorService> implements StatsCmd.Exec {
     private static final Logger LOGGER = LoggerFactory.getLogger(StatsCmdExec.class);
-    
+
     public StatsCmdExec(WebTarget baseResource) {
         super(baseResource);
     }
@@ -32,7 +32,7 @@ public class StatsCmdExec extends AbstrDockerCmdExec<StatsCmd, ExecutorService> 
     @Override
     protected ExecutorService execute(StatsCmd command) {
     	ExecutorService executorService = Executors.newSingleThreadExecutor();
-    	
+
         WebTarget webResource = getBaseResource().path("/containers/{id}/stats")
             .resolveTemplate("id", command.getContainerId());
 
@@ -41,7 +41,7 @@ public class StatsCmdExec extends AbstrDockerCmdExec<StatsCmd, ExecutorService> 
         executorService.submit(eventNotifier);
         return executorService;
     }
-    
+
     private static class StatsNotifier implements Callable<Void> {
         private static final JsonFactory JSON_FACTORY = new JsonFactory();
         private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
@@ -62,29 +62,42 @@ public class StatsCmdExec extends AbstrDockerCmdExec<StatsCmd, ExecutorService> 
 
         @Override
         public Void call() throws Exception {
-            int numStats=0;
+            int numEvents = 0;
             Response response = null;
             try {
                 response = webTarget.request().get(Response.class);
-                InputStream inputStream = new WrappedResponseInputStream(response);
+                InputStream inputStream = new WrappedResponseInputStream(
+                        response);
                 JsonParser jp = JSON_FACTORY.createParser(inputStream);
-                while (jp.nextToken() != JsonToken.END_OBJECT && !jp.isClosed() && statsCallback.isReceiving()) {
-                    statsCallback.onStats(OBJECT_MAPPER.readValue(jp, Statistics.class));
-                    numStats++;
+                // The following condition looks strange but jp.nextToken() will block until there is an
+                // event from the docker server or the connection is terminated.
+                // therefore we want to check before getting an event (to prevent a blocking operation
+                // and after the event to make sure that the eventCallback is still interested in getting notified.
+                while (statsCallback.isReceiving() &&
+                       jp.nextToken() != JsonToken.END_OBJECT && !jp.isClosed() &&
+                               statsCallback.isReceiving()) {
+                    try {
+                        statsCallback.onStats(OBJECT_MAPPER.readValue(jp,
+                                Statistics.class));
+                    } catch (Exception e) {
+                        statsCallback.onException(e);
+                    }
+                    numEvents++;
                 }
-                statsCallback.onCompletion(numStats);
-                LOGGER.info("Finished collecting stats");
-                return null ;
-            }
-            catch(Throwable t) {
-                statsCallback.onException(t);
-            }
-            finally {                
+            } catch (Exception e) {
+                statsCallback.onException(e);
+            } finally {
                 if (response != null) {
                     response.close();
                 }
+                try {
+                    statsCallback.onCompletion(numEvents);
+                } catch (Exception e) {
+                    statsCallback.onException(e);
+                }
             }
-            return null ;
+
+            return null;
         }
     }
 }

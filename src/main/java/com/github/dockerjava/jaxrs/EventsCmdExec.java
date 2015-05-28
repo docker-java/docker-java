@@ -79,7 +79,7 @@ public class EventsCmdExec extends
 				// event from the docker server or the connection is terminated.
 				// therefore we want to check before getting an event (to prevent a blocking operation
 				// and after the event to make sure that the eventCallback is still interested in getting notified.
-				while (eventCallback.isReceiving() && 
+				while (eventCallback.isReceiving() &&
 				       jp.nextToken() != JsonToken.END_OBJECT && !jp.isClosed() &&
 				       eventCallback.isReceiving()) {
 					try {
@@ -93,14 +93,13 @@ public class EventsCmdExec extends
 			} catch (Exception e) {
 				eventCallback.onException(e);
 			} finally {
-				// call onCompletion before close because of https://github.com/docker-java/docker-java/issues/196
+			    if (response != null) {
+                    response.close();
+                }
 				try {
 					eventCallback.onCompletion(numEvents);
 				} catch (Exception e) {
 					eventCallback.onException(e);
-				}
-				if (response != null) {
-					response.close();
 				}
 			}
 
