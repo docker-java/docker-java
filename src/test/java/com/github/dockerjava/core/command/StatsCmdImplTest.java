@@ -51,7 +51,7 @@ public class StatsCmdImplTest extends AbstractDockerClientTest {
 		super.afterMethod(result);
 	}
 
-	@Test
+	@Test(groups = "ignoreInCircleCi")
 	public void testStatsStreaming() throws InterruptedException, IOException {
 		TimeUnit.SECONDS.sleep(1);
 
