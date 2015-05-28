@@ -346,6 +346,12 @@ public class DockerClientImpl implements Closeable, DockerClient {
 		return new EventsCmdImpl(getDockerCmdExecFactory()
 				.createEventsCmdExec(), eventCallback);
 	}
+	
+	@Override
+    public StatsCmd statsCmd(StatsCallback statsCallback) {
+	    return new StatsCmdImpl(getDockerCmdExecFactory()
+	            .createStatsCmdExec(), statsCallback);
+	}
 
 	@Override
 	public void close() throws IOException {
