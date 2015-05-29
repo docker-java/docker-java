@@ -2,6 +2,8 @@ Change Log
 ===
 Latest SNAPSHOT
 ---
+* [#233](https://github.com/docker-java/docker-java/pull/233) Labels are array of Strings (fixes #232) 
+* [#189](https://github.com/docker-java/docker-java/pull/189) Add docker stats support  
 
 v1.3.0
 ---
