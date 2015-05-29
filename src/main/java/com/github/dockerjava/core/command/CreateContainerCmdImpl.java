@@ -46,8 +46,17 @@ public class CreateContainerCmdImpl extends
 	private long memorySwap = 0;
 	@JsonProperty("CpuShares")
 	private int cpuShares = 0;
+
+	/**
+	 * @see #cpusetCpus
+	 */
+	@Deprecated
 	@JsonProperty("Cpuset")
 	private String cpuset;
+
+	@JsonProperty("CpusetCpus")
+	private String cpusetCpus;
+
 	@JsonProperty("AttachStdin")
 	private boolean attachStdin = false;
 	@JsonProperty("AttachStdout")
@@ -359,9 +368,18 @@ public class CreateContainerCmdImpl extends
 		return this;
 	}
 
+	/**
+	 * @deprecated @see #withCpusetCpus(String)
+	 */
+	@Deprecated
 	@Override
 	public CreateContainerCmdImpl withCpuset(String cpuset) {
 		this.cpuset = cpuset;
+		return this;
+	}
+
+	public CreateContainerCmdImpl withCpusetCpus(String cpusetCpus) {
+		this.hostConfig.setCpusetCpus(cpusetCpus);
 		return this;
 	}
 

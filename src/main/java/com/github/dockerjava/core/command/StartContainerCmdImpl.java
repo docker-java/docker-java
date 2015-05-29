@@ -41,6 +41,18 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	@JsonProperty("LxcConf")
 	private LxcConf[] lxcConf;
 
+	@JsonProperty("Memory")
+	private long memoryLimit = 0;
+
+	@JsonProperty("MemorySwap")
+	private long memorySwap = 0;
+
+	@JsonProperty("CpuShares")
+	private long cpuShares = 0;
+
+	@JsonProperty("CpusetCpus")
+	private String cpusetCpus;
+
 	@JsonProperty("PortBindings")
 	private Ports portBindings;
 
@@ -76,7 +88,10 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	
 	@JsonProperty("CapDrop")
 	private Capability[] capDrop;
-	
+
+	@JsonProperty("ReadonlyRootfs")
+	private Boolean readonlyRootfs;
+
 	public StartContainerCmdImpl(StartContainerCmd.Exec exec, String containerId) {
 		super(exec);
 		withContainerId(containerId);
@@ -100,6 +115,16 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	}
 
 	@Override
+	public long getMemoryLimit() {
+		return memoryLimit;
+	}
+
+	@Override
+	public long getMemorySwap() {
+		return memorySwap;
+	}
+
+	@Override
 	public Ports getPortBindings() {
 		return portBindings;
 	}
@@ -112,6 +137,11 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	@Override
 	public Boolean isPrivileged() {
 		return privileged;
+	}
+
+	@Override
+	public Boolean isReadonlyRootfs() {
+		return null;
 	}
 
 	@Override
@@ -164,6 +194,26 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
     	return capDrop;
     }
 
+	public Boolean getReadonlyRootfs() {
+		return readonlyRootfs;
+	}
+
+	public long getCpuShares() {
+		return cpuShares;
+	}
+
+	public String getCpusetCpus() {
+		return cpusetCpus;
+	}
+
+	public Boolean getPublishAllPorts() {
+		return publishAllPorts;
+	}
+
+	public Boolean getPrivileged() {
+		return privileged;
+	}
+
 	@Override
 	@JsonIgnore
 	public StartContainerCmd withBinds(Bind... binds) {
@@ -188,9 +238,33 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	}
 
 	@Override
+	public StartContainerCmd withMemoryLimit(long memoryLimit) {
+		this.memoryLimit = memoryLimit;
+		return this;
+	}
+
+	@Override
+	public StartContainerCmd withMemorySwap(long memorySwap) {
+		this.memorySwap = memorySwap;
+		return this;
+	}
+
+	@Override
+	public StartContainerCmd withCpusetCpus(String cpusetCpus) {
+		this.cpusetCpus = cpusetCpus;
+		return this;
+	}
+
+	@Override
+	public StartContainerCmd withCpuShares(int cpuShares) {
+		this.cpuShares = cpuShares;
+		return this;
+	}
+
+
+	@Override
 	public StartContainerCmd withPortBindings(Ports portBindings) {
-		checkNotNull(portBindings,
-				"portBindings was not specified");
+		checkNotNull(portBindings, "portBindings was not specified");
 		this.portBindings = portBindings;
 		return this;
 	}
@@ -207,12 +281,21 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 
 	@Override
 	public StartContainerCmd withPrivileged(Boolean privileged) {
+		checkNotNull(privileged, "privileged was not specified");
 		this.privileged = privileged;
 		return this;
 	}
 
 	@Override
+	public StartContainerCmd withReadonlyRootfs(Boolean readonlyRootfs) {
+		checkNotNull(readonlyRootfs, "ReadonlyRootfs was not specified");
+		this.readonlyRootfs = readonlyRootfs;
+		return this;
+	}
+
+	@Override
 	public StartContainerCmd withPublishAllPorts(Boolean publishAllPorts) {
+		checkNotNull(publishAllPorts, "PublishAllPorts was not specified");
 		this.publishAllPorts = publishAllPorts;
 		return this;
 	}
