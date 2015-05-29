@@ -60,13 +60,19 @@ public class HostConfig {
 	@JsonProperty("Ulimits")
 	private Ulimit[] ulimits;
 
+	@JsonProperty("CpuShares")
+	private String cpuShares;
+
+	@JsonProperty("CpusetCpus")
+	private String cpusetCpus;
+
 	public HostConfig() {
 	}
 
 	public HostConfig(Bind[] binds, Link[] links, LxcConf[] lxcConf, Ports portBindings, boolean publishAllPorts,
 			boolean privileged, String[] dns, String[] dnsSearch, VolumesFrom[] volumesFrom, String containerIDFile,
 			Capability[] capAdd, Capability[] capDrop, RestartPolicy restartPolicy, String networkMode, Device[] devices,
-            String[] extraHosts, Ulimit[] ulimits) {
+            String[] extraHosts, Ulimit[] ulimits, String cpuShares, String cpusetCpus) {
 		this.binds = new Binds(binds);
 		this.links = new Links(links);
 		this.lxcConf = lxcConf;
@@ -84,6 +90,8 @@ public class HostConfig {
 		this.devices = devices;
 		this.extraHosts = extraHosts;
 		this.ulimits = ulimits;
+		this.cpuShares = cpuShares;
+		this.cpusetCpus = cpusetCpus;
 	}
 
 
@@ -157,6 +165,14 @@ public class HostConfig {
 		return ulimits;
 	}
 
+	public String getCpuShares() {
+		return cpuShares;
+	}
+
+	public String getCpusetCpus() {
+		return cpusetCpus;
+	}
+
 	@JsonIgnore
 	public void setBinds(Bind... binds) {
 		this.binds = new Binds(binds);
@@ -225,6 +241,14 @@ public class HostConfig {
 
 	public void setUlimits(Ulimit[] ulimits) {
 		this.ulimits = ulimits;
+	}
+
+	public void setCpuShares(String cpuShares) {
+		this.cpuShares = cpuShares;
+	}
+
+	public void setCpusetCpus(String cpusetCpus) {
+		this.cpusetCpus = cpusetCpus;
 	}
 
 	@Override
