@@ -68,13 +68,13 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 		EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback)
 				.withSince(startTime).withUntil(endTime);
 		ExecutorService executorService = eventsCmd.exec();
-		
-		boolean zeroCount = countDownLatch.await(5, TimeUnit.SECONDS);
-		
+
+		boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
+
 		executorService.shutdown();
 		eventCallback.close();
 
-		assertTrue(zeroCount, "" + eventCallback.getEvents());
+		assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
 	}
 
 	@Test
@@ -91,10 +91,10 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 
 		generateEvents();
 
-		boolean zeroCount = countDownLatch.await(5, TimeUnit.SECONDS);
+		boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
 		executorService.shutdown();
 		eventCallback.close();
-		assertTrue(zeroCount, "Expected 4 events, [create, start, die, stop]");
+		assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
 	}
 
 	@Test
@@ -111,10 +111,10 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 
 		generateEvents();
 
-		boolean zeroCount = countDownLatch.await(5, TimeUnit.SECONDS);
+		boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
 		executorService.shutdown();
 		eventCallback.close();
-		assertTrue(zeroCount, "Expected 4 events, [create, start, die, stop]");
+		assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
 	}
 
 	/**
