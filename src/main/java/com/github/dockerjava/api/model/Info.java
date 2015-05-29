@@ -60,7 +60,7 @@ public class Info {
 	private String kernelVersion;
 	
 	@JsonProperty("Labels")
-	private String Labels;
+	private String[] Labels;
 
 	@JsonProperty("MemoryLimit")
 	private boolean memoryLimit;
@@ -140,7 +140,7 @@ public class Info {
 		return kernelVersion;
 	}
 	
-	public String getLabels() {
+	public String[] getLabels() {
 		return Labels;
 	}
 
