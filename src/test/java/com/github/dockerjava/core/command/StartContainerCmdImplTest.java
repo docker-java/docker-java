@@ -126,7 +126,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 		LOG.info("Created container2 {}", container2.toString());
 
 		dockerClient.startContainerCmd(container2.getId())
-				.withVolumesFrom(container1Name).exec();
+				.withVolumesFrom(new VolumesFrom(container1Name)).exec();
 		LOG.info("Started container2 {}", container2.toString());
 
 		InspectContainerResponse inspectContainerResponse2 = dockerClient

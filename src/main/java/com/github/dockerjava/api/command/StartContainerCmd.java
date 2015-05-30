@@ -10,6 +10,7 @@ import com.github.dockerjava.api.model.LxcConf;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.RestartPolicy;
+import com.github.dockerjava.api.model.VolumesFrom;
 
 /**
  * Start a container.
@@ -56,7 +57,7 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 
 	public RestartPolicy getRestartPolicy();
 
-	public String getVolumesFrom();
+	public VolumesFrom[] getVolumesFrom();
 
 	public Boolean isPrivileged();
 
@@ -165,6 +166,6 @@ public interface StartContainerCmd extends DockerCmd<Void> {
 	public StartContainerCmd withRestartPolicy(RestartPolicy restartPolicy);
 
 	@Deprecated
-	public StartContainerCmd withVolumesFrom(String volumesFrom);
+	public StartContainerCmd withVolumesFrom(VolumesFrom... volumesFrom);
 
 }

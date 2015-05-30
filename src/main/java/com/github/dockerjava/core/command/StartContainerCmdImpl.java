@@ -21,6 +21,7 @@ import com.github.dockerjava.api.model.LxcConf;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.RestartPolicy;
+import com.github.dockerjava.api.model.VolumesFrom;
 
 
 /**
@@ -57,7 +58,7 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	private String[] dnsSearch;
 
 	@JsonProperty("VolumesFrom")
-	private String volumesFrom;
+	private VolumesFrom[] volumesFrom;
 	
 	@JsonProperty("NetworkMode")          
     private String networkMode;
@@ -125,7 +126,7 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	}
 
 	@Override
-	public String getVolumesFrom() {
+	public VolumesFrom[] getVolumesFrom() {
 		return volumesFrom;
 	}
 
@@ -232,7 +233,7 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
 	}
 
 	@Override
-	public StartContainerCmd withVolumesFrom(String volumesFrom) {
+	public StartContainerCmd withVolumesFrom(VolumesFrom... volumesFrom) {
 		checkNotNull(volumesFrom, "volumesFrom was not specified");
 		this.volumesFrom = volumesFrom;
 		return this;
