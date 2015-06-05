@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.concurrent.TimeUnit;
 
 import com.github.dockerjava.api.command.*;
 
@@ -22,9 +23,11 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.glassfish.jersey.CommonProperties;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
+
 //import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 // see https://github.com/docker-java/docker-java/issues/196
 import com.github.dockerjava.jaxrs.connector.ApacheConnectorProvider;
+
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 
@@ -84,7 +87,8 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 		}
 
 		PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(
-				getSchemeRegistry(originalUri, sslContext));
+				getSchemeRegistry(originalUri, sslContext), null, null, null, 10, TimeUnit.SECONDS);
+
 
 		if (dockerClientConfig.getMaxTotalConnections() != null)
 			connManager
@@ -315,7 +319,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 	public EventsCmd.Exec createEventsCmdExec() {
 		return new EventsCmdExec(getBaseResource());
 	}
-	
+
 	@Override
     public StatsCmd.Exec createStatsCmdExec() {
 	    return new StatsCmdExec(getBaseResource());
