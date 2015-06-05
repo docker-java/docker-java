@@ -16,6 +16,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
@@ -23,6 +24,7 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.glassfish.jersey.CommonProperties;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
+
 
 //import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 // see https://github.com/docker-java/docker-java/issues/196
@@ -72,7 +74,8 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 			int readTimeout = dockerClientConfig.getReadTimeout();
 			clientConfig.property(ClientProperties.READ_TIMEOUT, readTimeout);
 		}
-		clientConfig.property(ClientProperties.CONNECT_TIMEOUT, 10000);
+
+		//clientConfig.property(ClientProperties.CONNECT_TIMEOUT, 10000);
 
 		URI originalUri = dockerClientConfig.getUri();
 
@@ -100,6 +103,9 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
 		clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER,
 				connManager);
+
+		clientConfig.property(ApacheClientProperties.REQUEST_CONFIG,
+                RequestConfig.custom().setConnectionRequestTimeout(10).build());
 
 		ClientBuilder clientBuilder = ClientBuilder.newBuilder().withConfig(
 				clientConfig);

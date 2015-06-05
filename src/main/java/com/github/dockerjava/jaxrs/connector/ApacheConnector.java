@@ -465,7 +465,7 @@ class ApacheConnector implements Connector {
                 context.setAuthCache(authCache);
             }
 
-            context.setRequestConfig(RequestConfig.custom().setConnectionRequestTimeout(10).build());
+            //context.setRequestConfig(RequestConfig.custom().setConnectionRequestTimeout(10).build());
 
             response = client.execute(getHost(request), request, context);
             HeaderUtils.checkHeaderChanges(clientHeadersSnapshot, clientRequest.getHeaders(),
