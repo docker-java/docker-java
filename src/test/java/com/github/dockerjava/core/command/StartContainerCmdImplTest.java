@@ -253,10 +253,10 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 				.getExposedPorts()), contains(tcp22, tcp23));
 
 		assertThat(inspectContainerResponse.getNetworkSettings().getPorts()
-				.getBindings().get(tcp22)[0].getHostPort(), is(notNullValue()));
+				.getBindings().get(tcp22)[0].getHostPort(), is(not(equalTo(tcp22.getPort()))));
 
 		assertThat(inspectContainerResponse.getNetworkSettings().getPorts()
-				.getBindings().get(tcp23)[0], is(notNullValue()));
+				.getBindings().get(tcp23)[0].getHostPort(), is(not(equalTo(tcp23.getPort()))));
 
 	}
 
