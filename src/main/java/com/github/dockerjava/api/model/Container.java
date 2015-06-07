@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.model;
 
+import com.github.dockerjava.core.util.DockerImageName;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -12,6 +13,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class Container {
+
+    private DockerImageName imageName;
 
 	@JsonProperty("Command")
 	private String command;
@@ -42,8 +45,12 @@ public class Container {
         return command;
     }
 
-    public String getImage() {
-        return image;
+    public DockerImageName getImageName() {
+        if(imageName == null)
+        {
+            imageName = new DockerImageName(image);
+        }
+        return imageName;
     }
 
     public long getCreated() {

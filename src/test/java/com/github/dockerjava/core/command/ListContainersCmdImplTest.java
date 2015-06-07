@@ -82,7 +82,7 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
 		List<Container> containers2 = dockerClient.listContainersCmd().withShowAll(true).exec();
 
 		for(Container container: containers2) {
-			LOG.info("listContainer: id=" + container.getId() +" image=" + container.getImage());
+			LOG.info("listContainer: id=" + container.getId() +" image=" + container.getImageName().toString());
 		}
 
 		assertThat(size + 1, is(equalTo(containers2.size())));
@@ -99,7 +99,7 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
 
 		Container container2 = filteredContainers.get(0);
 		assertThat(container2.getCommand(), not(isEmptyString()));
-		assertThat(container2.getImage(), startsWith(testImage + ":"));
+		assertThat(container2.getImageName().toString(), startsWith(testImage + ":"));
 	}
 
 
