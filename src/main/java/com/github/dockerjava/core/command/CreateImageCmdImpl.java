@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.InputStream;
 
+import com.github.dockerjava.core.util.DockerImageName;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.github.dockerjava.api.command.CreateImageCmd;
@@ -14,28 +15,22 @@ import com.github.dockerjava.api.command.CreateImageResponse;
  */
 public class CreateImageCmdImpl extends	AbstrDockerCmd<CreateImageCmd, CreateImageResponse> implements CreateImageCmd {
 
-	private String repository, tag;
+	private DockerImageName imageName;
 	
 	private InputStream imageStream;
 
 	/**
-	 * @param repository        the repository to import to
 	 * @param imageStream       the InputStream of the tar file
 	 */
-	public CreateImageCmdImpl(CreateImageCmd.Exec exec, String repository, InputStream imageStream) {
+	public CreateImageCmdImpl(CreateImageCmd.Exec exec, DockerImageName imageName, InputStream imageStream) {
 		super(exec);
-		withRepository(repository);
+		withImageName(imageName);
 		withImageStream(imageStream);
 	}
 
     @Override
-	public String getRepository() {
-        return repository;
-    }
-
-    @Override
-	public String getTag() {
-        return tag;
+	public DockerImageName getImageName() {
+        return imageName;
     }
     
     @Override
@@ -44,12 +39,12 @@ public class CreateImageCmdImpl extends	AbstrDockerCmd<CreateImageCmd, CreateIma
     }
 
     /**
-	 * @param repository        the repository to import to
+	 * @param imageName        the repository to import to
 	 */
 	@Override
-	public CreateImageCmdImpl withRepository(String repository) {
-		checkNotNull(repository, "repository was not specified");
-		this.repository = repository;
+	public CreateImageCmdImpl withImageName(DockerImageName imageName) {
+		checkNotNull(imageName, "imageName was not specified");
+		this.imageName = imageName;
 		return this;
 	}
 
@@ -63,21 +58,10 @@ public class CreateImageCmdImpl extends	AbstrDockerCmd<CreateImageCmd, CreateIma
 		return this;
 	}
 
-	/**
-	 * @param tag               any tag for this image
-	 */
-	@Override
-	public CreateImageCmdImpl withTag(String tag) {
-		checkNotNull(tag, "tag was not specified");
-		this.tag = tag;
-		return this;
-	}
-
 	@Override
     public String toString() {
         return new ToStringBuilder(this).append("import - ")
-            .append(repository != null ? repository + ":" : "")
-            .append(tag != null ? tag : "")
+            .append(imageName)
             .toString();
     }
 }

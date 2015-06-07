@@ -2,6 +2,7 @@ package com.github.dockerjava.core.command;
 
 import java.lang.reflect.Method;
 
+import com.github.dockerjava.core.util.DockerImageName;
 import org.apache.commons.lang.math.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,9 +46,9 @@ public class TagImageCmdImplTest extends AbstractDockerClientTest {
 	public void tagImage() throws Exception {
 		String tag = "" + RandomUtils.nextInt(Integer.MAX_VALUE);
 
-		dockerClient.tagImageCmd("busybox:latest", "docker-java/busybox", tag).exec();
+		dockerClient.tagImageCmd(new DockerImageName("busybox:latest"), new DockerImageName("docker-java/busybox"+ tag)).exec();
 
-		dockerClient.removeImageCmd("docker-java/busybox:" + tag).exec();
+		dockerClient.removeImageCmd(new DockerImageName("docker-java/busybox:" + tag)).exec();
 	}
 	
 	@Test
@@ -55,7 +56,7 @@ public class TagImageCmdImplTest extends AbstractDockerClientTest {
 		String tag = "" + RandomUtils.nextInt(Integer.MAX_VALUE);
 		
 		try {
-			dockerClient.tagImageCmd("non-existing", "docker-java/busybox", tag).exec();
+			dockerClient.tagImageCmd(new DockerImageName("non-existing"), new DockerImageName("docker-java/busybox"+ tag)).exec();
 			fail("expected NotFoundException");
 		} catch (NotFoundException e) {
 		}	

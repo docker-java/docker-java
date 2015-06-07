@@ -16,6 +16,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.UUID;
 
+import com.github.dockerjava.core.util.DockerImageName;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.lang.StringUtils;
@@ -74,7 +75,7 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
 				"Successfully built ", "\\n\"}").trim();
 
 		InspectImageResponse inspectImageResponse = dockerClient
-				.inspectImageCmd(imageId).exec();
+				.inspectImageCmd(new DockerImageName(imageId)).exec();
 		assertThat(inspectImageResponse, not(nullValue()));
 		LOG.info("Image Inspect: {}", inspectImageResponse.toString());
 		
@@ -183,7 +184,7 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
         String imageId = StringUtils.substringBetween(fullLog, "Successfully built ", "\\n\"}").trim();
 
         // Create container based on image
-        CreateContainerResponse container = dockerClient.createContainerCmd(imageId).exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd(new DockerImageName(imageId)).exec();
 
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
@@ -247,13 +248,13 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
 
 
 		InspectImageResponse inspectImageResponse = dockerClient
-				.inspectImageCmd(imageId).exec();
+				.inspectImageCmd(new DockerImageName(imageId)).exec();
 		assertThat(inspectImageResponse, not(nullValue()));
 		assertThat(inspectImageResponse.getId(), not(nullValue()));
 		LOG.info("Image Inspect: {}", inspectImageResponse.toString());
 		
 		CreateContainerResponse container = dockerClient.createContainerCmd(
-				inspectImageResponse.getId()).exec();
+				new DockerImageName(inspectImageResponse.getId())).exec();
 		assertThat(container.getId(), not(isEmptyString()));
 		dockerClient.startContainerCmd(container.getId()).exec();
 		

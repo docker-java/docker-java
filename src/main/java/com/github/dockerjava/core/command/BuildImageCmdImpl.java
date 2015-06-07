@@ -10,6 +10,7 @@ import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.core.FilePathUtil;
 import com.github.dockerjava.core.dockerfile.Dockerfile;
+import com.github.dockerjava.core.util.DockerImageName;
 
 /**
  * 
@@ -20,7 +21,7 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageC
 
 
 	private InputStream tarInputStream = null;
-	private String tag;
+	private DockerImageName imageName;
 	private boolean noCache;
 	private boolean remove = true;
 	private boolean quiet;
@@ -92,15 +93,15 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageC
 	}
 
 	@Override
-	public BuildImageCmdImpl withTag(String tag) {
-		checkNotNull(tag, "Tag is null");
-		this.tag = tag;
+	public BuildImageCmdImpl withTag(DockerImageName imageName) {
+		checkNotNull(imageName, "Tag (imageName) is null");
+		this.imageName = imageName;
 		return this;
 	}
 
 	@Override
-	public String getTag() {
-		return tag;
+	public DockerImageName getImageName() {
+		return imageName;
 	}
 
 	@Override
@@ -204,7 +205,7 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageC
 	@Override
 	public String toString() {
 		return new StringBuilder("build ")
-				.append(tag != null ? "-t " + tag + " " : "")
+				.append(imageName != null ? "-t " + imageName + " " : "")
 				.append(noCache ? "--nocache=true " : "")
 				.append(quiet ? "--quiet=true " : "")
 				.append(!remove ? "--rm=false " : "").toString();

@@ -2,6 +2,7 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.github.dockerjava.core.util.DockerImageName;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -18,7 +19,11 @@ import com.github.dockerjava.api.model.Volumes;
  */
 public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements CommitCmd {
 
-	private String containerId, repository, tag, message, author;
+	private String containerId, message, author;
+
+    private DockerImageName originalImageName;
+
+    private DockerImageName newImageName;
 
 	private boolean pause = true;
 
@@ -91,16 +96,11 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 		return this;
 	}
 
+    @Override
+    public DockerImageName getOriginalImageName() { return originalImageName; }
 
     @Override
-	public String getRepository() {
-        return repository;
-    }
-
-    @Override
-	public String getTag() {
-        return tag;
-    }
+    public DockerImageName getNewImageName() { return newImageName; }
 
     @Override
 	public String getMessage() {
@@ -178,16 +178,16 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 	}
 
 	@Override
-	public CommitCmdImpl withTag(String tag) {
-        checkNotNull(tag, "tag was not specified");
-		this.tag = tag;
+	public CommitCmdImpl withTag(DockerImageName newImageName) {
+        checkNotNull(newImageName, "newImageName (tag) was not specified");
+		this.newImageName = newImageName;
 		return this;
 	}
 
 	@Override
-	public CommitCmdImpl withRepository(String repository) {
-        checkNotNull(repository, "repository was not specified");
-		this.repository = repository;
+	public CommitCmdImpl withRepository(DockerImageName originalImageName) {
+        checkNotNull(originalImageName, "originalImageName (repository) was not specified");
+		this.originalImageName = originalImageName;
 		return this;
 	}
 
@@ -356,8 +356,8 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 			.append(author != null ? "--author " + author + " " : "")
 			.append(message != null ? "--message " + message + " " : "")
 			.append(containerId)
-			.append(repository != null ?  " " + repository + ":" : " ")
-			.append(tag != null ?  tag : "")
+			.append(originalImageName != null ?  " " + originalImageName + ":" : " ")
+			.append(newImageName != null ?  newImageName : "")
 			.toString();
 	}
 	

@@ -7,6 +7,7 @@ import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.model.Event;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
+import com.github.dockerjava.core.util.DockerImageName;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -121,7 +122,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 	 * This method generates {#link KNOWN_NUM_EVENTS} events
 	 */
 	private int generateEvents() {
-		String testImage = "busybox";
+		DockerImageName testImage = new DockerImageName("busybox");
 		asString(dockerClient.pullImageCmd(testImage).exec());
 		CreateContainerResponse container = dockerClient
 				.createContainerCmd(testImage).withCmd("sleep", "9999").exec();

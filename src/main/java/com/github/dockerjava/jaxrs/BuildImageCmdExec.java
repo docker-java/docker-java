@@ -38,8 +38,8 @@ public class BuildImageCmdExec extends
 		WebTarget webResource = getBaseResource().path("/build");
 		String dockerFilePath = command.getPathToDockerfile();
 
-		if (command.getTag() != null) {
-			webResource = webResource.queryParam("t", command.getTag());
+		if (command.getImageName() != null) {
+			webResource = webResource.queryParam("t", command.getImageName());
 		}
 		if (command.hasNoCacheEnabled()) {
 			webResource = webResource.queryParam("nocache", "true");

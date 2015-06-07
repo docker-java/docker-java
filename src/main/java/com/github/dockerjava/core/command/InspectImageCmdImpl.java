@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.InspectImageCmd;
 import com.github.dockerjava.api.command.InspectImageResponse;
+import com.github.dockerjava.core.util.DockerImageName;
 
 
 /**
@@ -12,28 +13,28 @@ import com.github.dockerjava.api.command.InspectImageResponse;
  */
 public class InspectImageCmdImpl extends AbstrDockerCmd<InspectImageCmd, InspectImageResponse> implements InspectImageCmd  {
 
-	private String imageId;
+	private DockerImageName imageName;
 
-	public InspectImageCmdImpl(InspectImageCmd.Exec exec, String imageId) {
+	public InspectImageCmdImpl(InspectImageCmd.Exec exec, DockerImageName imageName) {
 		super(exec);
-		withImageId(imageId);
+		withImageName(imageName);
 	}
 
     @Override
-	public String getImageId() {
-        return imageId;
+	public DockerImageName getImageName() {
+        return imageName;
     }
 
     @Override
-	public InspectImageCmd withImageId(String imageId) {
-		checkNotNull(imageId, "imageId was not specified");
-		this.imageId = imageId;
+	public InspectImageCmd withImageName(DockerImageName imageName) {
+		checkNotNull(imageName, "imageName was not specified");
+		this.imageName = imageName;
 		return this;
 	}
 
     @Override
     public String toString() {
-        return "inspect " + imageId;
+        return "inspect " + imageName;
     }
     
     /**

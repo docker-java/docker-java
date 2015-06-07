@@ -10,6 +10,7 @@ import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import com.github.dockerjava.core.util.DockerImageName;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -49,7 +50,7 @@ public class ContainerDiffCmdImplTest extends AbstractDockerClientTest {
 	@Test(groups = "ignoreInCircleCi")
 	public void testContainerDiff() throws DockerException {
 		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd("touch", "/test" ).exec();
+				.createContainerCmd(new DockerImageName("busybox")).withCmd("touch", "/test").exec();
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));
 		dockerClient.startContainerCmd(container.getId()).exec();

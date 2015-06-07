@@ -15,8 +15,7 @@ import java.util.Properties;
 import com.github.dockerjava.api.DockerClientException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
-import com.github.dockerjava.core.NameParser.HostnameReposName;
-import com.github.dockerjava.core.NameParser.ReposTag;
+import com.github.dockerjava.core.util.DockerImageName;
 
 public class DockerClientConfig implements Serializable {
 
@@ -282,7 +281,7 @@ public class DockerClientConfig implements Serializable {
     	return authConfig;
     }
     
-    public AuthConfig effectiveAuthConfig(String imageName) {
+    public AuthConfig effectiveAuthConfig(DockerImageName imageName) {
 		AuthConfig authConfig = null;
 
 		String dockerCfgFile = getDockerCfgPath();
@@ -296,12 +295,9 @@ public class DockerClientConfig implements Serializable {
 				throw new DockerClientException(
 						"Failed to parse dockerCfgFile", e);
 			}
-			ReposTag reposTag = NameParser.parseRepositoryTag(imageName);
-			HostnameReposName hostnameReposName = NameParser
-					.resolveRepositoryName(reposTag.repos);
-			
+
 			authConfig = authConfigFile
-					.resolveAuthConfig(hostnameReposName.hostname);	
+					.resolveAuthConfig(imageName.getRegistry().toString());
 		}
 		
 		AuthConfig _authConfig = getAuthConfig();

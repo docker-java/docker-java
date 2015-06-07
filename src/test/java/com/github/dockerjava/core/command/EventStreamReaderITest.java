@@ -4,6 +4,7 @@ import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.EventStreamItem;
 import com.github.dockerjava.api.model.PullEventStreamItem;
 import com.github.dockerjava.core.DockerClientBuilder;
+import com.github.dockerjava.core.util.DockerImageName;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -37,7 +38,7 @@ public class EventStreamReaderITest  {
     public void pullCanBeStreamed() throws Exception {
 
         try (EventStreamReader<PullEventStreamItem> reader = new EventStreamReader<>(
-                dockerClient.pullImageCmd("busybox:latest").exec(),
+                dockerClient.pullImageCmd(new DockerImageName("busybox:latest")).exec(),
                 PullEventStreamItem.class)
         ) {;
             assertThat(reader.readItem(),

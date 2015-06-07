@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.core.util.DockerImageName;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -55,7 +56,7 @@ public class ListImagesCmdImplTest extends AbstractDockerClientTest {
 		assertThat(img.getCreated(), is(greaterThan(0L)));
 		assertThat(img.getVirtualSize(), is(greaterThan(0L)));
 		assertThat(img.getId(), not(isEmptyString()));
-		assertThat(img.getRepoTags(), not(emptyArray()));
+		assertThat(img.getImageNames(), not(emptyArray()));
 	}
 
 	@Test(groups = "ignoreInCircleCi")
@@ -82,7 +83,7 @@ public class ListImagesCmdImplTest extends AbstractDockerClientTest {
 
 	private String createDanglingImage() {
 		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd("sleep", "5").exec();
+				.createContainerCmd(new DockerImageName("busybox")).withCmd("sleep", "5").exec();
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));
 		dockerClient.startContainerCmd(container.getId()).exec();

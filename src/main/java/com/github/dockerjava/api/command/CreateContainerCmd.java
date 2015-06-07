@@ -15,6 +15,7 @@ import com.github.dockerjava.api.model.RestartPolicy;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
 import com.github.dockerjava.core.command.CreateContainerCmdImpl;
+import com.github.dockerjava.core.util.DockerImageName;
 
 public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 
@@ -59,7 +60,9 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 
 	public String getHostName();
 
-	public String getImage();
+	//public String getImage();
+
+	public DockerImageName getImageName();
 
 	public Link[] getLinks();
 	
@@ -169,7 +172,7 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 
 	public CreateContainerCmd withHostName(String hostName);
 
-	public CreateContainerCmd withImage(String image);
+	public CreateContainerCmd withImage(DockerImageName imageName);
 
 	/**
 	 * Add link to another container.

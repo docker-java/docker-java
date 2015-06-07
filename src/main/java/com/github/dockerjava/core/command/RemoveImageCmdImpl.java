@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.RemoveImageCmd;
+import com.github.dockerjava.core.util.DockerImageName;
 
 /**
  *
@@ -12,18 +13,18 @@ import com.github.dockerjava.api.command.RemoveImageCmd;
  */
 public class RemoveImageCmdImpl extends AbstrDockerCmd<RemoveImageCmd, Void> implements RemoveImageCmd {
 
-	private String imageId;
+	private DockerImageName imageName;
 
 	private boolean force, noPrune;
 
-	public RemoveImageCmdImpl(RemoveImageCmd.Exec exec, String imageId) {
+	public RemoveImageCmdImpl(RemoveImageCmd.Exec exec, DockerImageName imageName) {
 		super(exec);
-		withImageId(imageId);
+		withImageName(imageName);
 	}
 
     @Override
-	public String getImageId() {
-        return imageId;
+	public DockerImageName getImageName() {
+        return imageName;
     }
 
     @Override
@@ -37,9 +38,9 @@ public class RemoveImageCmdImpl extends AbstrDockerCmd<RemoveImageCmd, Void> imp
     }
 
     @Override
-	public RemoveImageCmd withImageId(String imageId) {
-		checkNotNull(imageId, "imageId was not specified");
-		this.imageId = imageId;
+	public RemoveImageCmd withImageName(DockerImageName imageName) {
+		checkNotNull(imageName, "imageName was not specified");
+		this.imageName = imageName;
 		return this;
 	}
 
@@ -70,7 +71,7 @@ public class RemoveImageCmdImpl extends AbstrDockerCmd<RemoveImageCmd, Void> imp
         return new StringBuilder("rmi ")
             .append(noPrune ? "--no-prune=true" : "")
             .append(force ? "--force=true" : "")
-            .append(imageId)
+            .append(imageName)
             .toString();
     }
     

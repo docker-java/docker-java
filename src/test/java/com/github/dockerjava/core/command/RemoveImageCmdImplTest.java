@@ -10,6 +10,7 @@ import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import com.github.dockerjava.core.util.DockerImageName;
 import org.hamcrest.Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +56,7 @@ public class RemoveImageCmdImplTest extends AbstractDockerClientTest {
 	public void removeImage() throws DockerException, InterruptedException {
 
 		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
+				.createContainerCmd(new DockerImageName("busybox")).withCmd("sleep", "9999").exec();
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));
 		dockerClient.startContainerCmd(container.getId()).exec();
@@ -69,7 +70,7 @@ public class RemoveImageCmdImplTest extends AbstractDockerClientTest {
 		dockerClient.removeContainerCmd(container.getId()).exec();
 
 		LOG.info("Removing image: {}", imageId);
-		dockerClient.removeImageCmd(imageId).exec();
+		dockerClient.removeImageCmd(new DockerImageName(imageId)).exec();
 
 		List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
 
@@ -80,7 +81,7 @@ public class RemoveImageCmdImplTest extends AbstractDockerClientTest {
 	@Test
 	public void removeNonExistingImage() throws DockerException, InterruptedException {
 		try {
-			dockerClient.removeImageCmd("non-existing").exec();
+			dockerClient.removeImageCmd(new DockerImageName("non-existing")).exec();
 			fail("expected NotFoundException");
 		} catch (NotFoundException e) {
 		}

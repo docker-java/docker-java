@@ -6,6 +6,7 @@ import com.github.dockerjava.api.command.ExecCreateCmdResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.InspectExecResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.core.util.DockerImageName;
 import com.github.dockerjava.test.serdes.JSONTestHelper;
 import java.io.IOException;
 
@@ -48,9 +49,9 @@ public class InspectExecCmdImplTest extends AbstractDockerClientTest {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
         CreateContainerResponse container = dockerClient
-                .createContainerCmd("busybox")
-                .withCmd("top")
-                .withName(containerName).exec();
+                .createContainerCmd(new DockerImageName("busybox"))
+                        .withCmd("top")
+                        .withName(containerName).exec();
         LOG.info("Created container {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
 

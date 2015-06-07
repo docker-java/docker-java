@@ -9,6 +9,7 @@ import static org.hamcrest.Matchers.not;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 
+import com.github.dockerjava.core.util.DockerImageName;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -50,7 +51,7 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 		String snippet = "hello world";
 
 		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd("/bin/echo", snippet).exec();
+				.createContainerCmd(new DockerImageName("busybox")).withCmd("/bin/echo", snippet).exec();
 
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));
@@ -86,7 +87,7 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 		String snippet = "hello world";
 
 		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd("/bin/echo", snippet).exec();
+				.createContainerCmd(new DockerImageName("busybox")).withCmd("/bin/echo", snippet).exec();
 
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));

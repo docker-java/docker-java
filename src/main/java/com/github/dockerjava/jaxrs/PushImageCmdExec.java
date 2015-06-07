@@ -37,7 +37,7 @@ public class PushImageCmdExec extends AbstrDockerCmdExec<PushImageCmd, Response>
 	@Override
 	protected ResponseImpl execute(PushImageCmd command) {
 		WebTarget webResource = getBaseResource().path("/images/" + name(command) + "/push")
-		    .queryParam("tag", command.getTag());
+		    .queryParam("tag", command.getImageName());
 
 		final String registryAuth = registryAuth(command.getAuthConfig());
 		LOGGER.trace("POST: {}", webResource);
@@ -52,7 +52,7 @@ public class PushImageCmdExec extends AbstrDockerCmdExec<PushImageCmd, Response>
 	}
 	
 	private String name(PushImageCmd command) {
-		String name = command.getName();
+		String name = command.getImageName().toString();
 		AuthConfig authConfig = command.getAuthConfig();
 		return name.contains("/") ? name : authConfig.getUsername();
 	}

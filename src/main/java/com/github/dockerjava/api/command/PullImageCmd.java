@@ -2,6 +2,7 @@ package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.core.command.EventStreamReader;
+import com.github.dockerjava.core.util.DockerImageName;
 
 import java.io.InputStream;
 
@@ -12,19 +13,11 @@ import java.io.InputStream;
 */
 public interface PullImageCmd extends DockerCmd<InputStream>{
 
-	public String getRepository();
-
-	public String getTag();
-
-	public String getRegistry();
+	public DockerImageName getImageName();
 
     public AuthConfig getAuthConfig();
 
-    public PullImageCmd withRepository(String repository);
-
-	public PullImageCmd withTag(String tag);
-
-	public PullImageCmd withRegistry(String registry);
+    public PullImageCmd withImageName(DockerImageName imageName);
 
     public PullImageCmd withAuthConfig(AuthConfig authConfig);
 

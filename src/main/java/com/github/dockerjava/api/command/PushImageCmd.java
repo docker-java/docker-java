@@ -4,6 +4,7 @@ import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.PushEventStreamItem;
 import com.github.dockerjava.core.command.EventStreamReader;
+import com.github.dockerjava.core.util.DockerImageName;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,23 +12,16 @@ import java.io.InputStream;
 /**
  * Push the latest image to the repository.
  *
- * @param name The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
+ * param imageName The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
  */
 public interface PushImageCmd extends DockerCmd<PushImageCmd.Response>{
 
-	public String getName();
-
-	public String getTag();
+	public DockerImageName getImageName();
 
 	/**
-	 * @param name The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
+	 * @param imageName The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
 	 */
-	public PushImageCmd withName(String name);
-	
-    /**
-     * @param tag The image's tag. Not null.
-     */
-    public PushImageCmd withTag(String tag);
+	public PushImageCmd withImageName(DockerImageName imageName);
 
     public AuthConfig getAuthConfig();
 	

@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.command.AuthCmd.Exec;
+import com.github.dockerjava.core.util.DockerImageName;
 import com.github.dockerjava.jaxrs.BuildImageCmdExec;
 
 /**
@@ -84,7 +85,7 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 			@Override
 			public Void exec(RemoveImageCmd command) {
 				delegate.createRemoveImageCmdExec().exec(command);
-				imageNames.remove(command.getImageId());
+				imageNames.remove(command.getImageName());
 				return null;
 			}
 		};
@@ -96,14 +97,14 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 			@Override
 			public BuildImageCmd.Response exec(BuildImageCmd command) {
 				// can't detect image id here so tagging it
-				String tag = command.getTag();
-				if (tag == null || "".equals(tag.trim())) {
-					tag = "" + new SecureRandom().nextInt(Integer.MAX_VALUE);
+				DockerImageName tag = command.getImageName();
+				if (tag == null || "".equals(tag.toString().trim())) {
+					tag = new DockerImageName("" + new SecureRandom().nextInt(Integer.MAX_VALUE));
 					command.withTag(tag);
 				}
 				InputStream inputStream = delegate.createBuildImageCmdExec()
 						.exec(command);
-				imageNames.add(tag);
+				imageNames.add(tag.toString());
 				return new BuildImageCmdExec.ResponseImpl(inputStream);
 			}
 		};

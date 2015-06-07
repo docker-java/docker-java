@@ -6,6 +6,7 @@ import java.io.InputStream;
 
 import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.core.util.DockerImageName;
 
 /**
  *
@@ -14,54 +15,29 @@ import com.github.dockerjava.api.model.AuthConfig;
  */
 public class PullImageCmdImpl extends AbstrAuthCfgDockerCmd<PullImageCmd, InputStream> implements PullImageCmd {
 
-    private String repository, tag, registry;
+    private DockerImageName imageName;
 
-	public PullImageCmdImpl(PullImageCmd.Exec exec, AuthConfig authConfig, String repository) {
+	public PullImageCmdImpl(PullImageCmd.Exec exec, AuthConfig authConfig, DockerImageName imageName) {
 		super(exec, authConfig);
-		withRepository(repository);
+		withImageName(imageName);
 	}
 
     @Override
-	public String getRepository() {
-        return repository;
+	public DockerImageName getImageName() {
+        return imageName;
     }
-
-    @Override
-	public String getTag() {
-        return tag;
-    }
-
-    @Override
-	public String getRegistry() {
-        return registry;
-    }
-
-    @Override
-	public PullImageCmd withRepository(String repository) {
-		checkNotNull(repository, "repository was not specified");
-		this.repository = repository;
-		return this;
-	}
 
 	@Override
-	public PullImageCmd withTag(String tag) {
-		checkNotNull(tag, "tag was not specified");
-		this.tag = tag;
-		return this;
-	}
-
-	@Override
-	public PullImageCmd withRegistry(String registry) {
-		checkNotNull(registry, "registry was not specified");
-		this.registry = registry;
+	public PullImageCmd withImageName(DockerImageName imageName) {
+		checkNotNull(imageName, "imageName was not specified");
+		this.imageName = imageName;
 		return this;
 	}
 
     @Override
     public String toString() {
         return new StringBuilder("pull ")
-            .append(repository)
-            .append(tag != null ? ":" + tag : "")
+            .append(imageName)
             .toString();
     }
 }

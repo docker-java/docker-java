@@ -11,6 +11,7 @@ import com.github.dockerjava.api.model.VolumeBind;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.TestDockerCmdExecFactory;
+import com.github.dockerjava.core.util.DockerImageName;
 import com.google.common.base.Joiner;
 
 import org.apache.commons.io.IOUtils;
@@ -48,7 +49,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 
 		LOG.info("Pulling image 'busybox'");
 		// need to block until image is pulled completely
-		asString(dockerClient.pullImageCmd("busybox").withTag("latest").exec());
+		asString(dockerClient.pullImageCmd(new DockerImageName("busybox")).exec());
 
 		assertNotNull(dockerClient);
 		LOG.info("======================= END OF BEFORETEST =======================\n\n");
@@ -94,7 +95,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 		for (String image : dockerCmdExecFactory.getImageNames()) {
 			LOG.info("Cleaning up temporary image with {}", image);
 			try {
-				dockerClient.removeImageCmd(image).withForce().exec();
+				dockerClient.removeImageCmd(new DockerImageName(image)).withForce().exec();
 			} catch (DockerException ignore) {
 				//ignore.printStackTrace();
 			}

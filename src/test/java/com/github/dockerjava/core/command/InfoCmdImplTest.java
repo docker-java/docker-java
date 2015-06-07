@@ -2,6 +2,7 @@ package com.github.dockerjava.core.command;
 
 import java.lang.reflect.Method;
 
+import com.github.dockerjava.core.util.DockerImageName;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -46,10 +47,10 @@ public class InfoCmdImplTest extends AbstractDockerClientTest {
         // Make sure that there is at least one container for the assertion
         // TODO extract this into a shared method
     if (dockerClient.listContainersCmd().withShowAll(true).exec().size() == 0) {
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
-                .withName("docker-java-itest-info")
-                .withCmd("touch", "/test")
-                .exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd(new DockerImageName("busybox"))
+				.withName("docker-java-itest-info")
+				.withCmd("touch", "/test")
+				.exec();
 
         LOG.info("Created container: {}", container);
         assertThat(container.getId(), not(isEmptyOrNullString()));

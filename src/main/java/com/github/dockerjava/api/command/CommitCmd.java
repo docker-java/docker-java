@@ -3,6 +3,7 @@ package com.github.dockerjava.api.command;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.model.ExposedPorts;
 import com.github.dockerjava.api.model.Volumes;
+import com.github.dockerjava.core.util.DockerImageName;
 
 /**
 *
@@ -15,9 +16,9 @@ public interface CommitCmd extends DockerCmd<String>{
 	
 	public CommitCmd withContainerId(String containerId);
 
-	public String getRepository();
+	public DockerImageName getOriginalImageName();
 
-	public String getTag();
+	public DockerImageName getNewImageName();
 
 	public String getMessage();
 
@@ -45,9 +46,9 @@ public interface CommitCmd extends DockerCmd<String>{
 
 	public CommitCmd withMessage(String message);
 
-	public CommitCmd withTag(String tag);
+	public CommitCmd withTag(DockerImageName newImageName);
 
-	public CommitCmd withRepository(String repository);
+	public CommitCmd withRepository(DockerImageName originalImageName);
 
 	public CommitCmd withPause(boolean pause);
 

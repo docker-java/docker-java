@@ -2,6 +2,7 @@ package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.EventStreamItem;
+import com.github.dockerjava.core.util.DockerImageName;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,11 +17,11 @@ import java.io.InputStream;
  */
 public interface BuildImageCmd extends DockerCmd<BuildImageCmd.Response>{
 
-	public BuildImageCmd withTag(String tag);
+	public BuildImageCmd withTag(DockerImageName imageName);
 
 	public InputStream getTarInputStream();
 
-	public String getTag();
+	public DockerImageName getImageName();
 
 	public boolean hasNoCacheEnabled();
 

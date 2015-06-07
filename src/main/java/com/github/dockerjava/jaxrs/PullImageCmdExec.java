@@ -28,9 +28,10 @@ public class PullImageCmdExec extends
 	@Override
 	protected InputStream execute(PullImageCmd command) {
 		WebTarget webResource = getBaseResource().path("/images/create")
-				.queryParam("tag", command.getTag())
-				.queryParam("fromImage", command.getRepository())
-				.queryParam("registry", command.getRegistry());
+				.queryParam("tag", command.getImageName().getTag())
+				.queryParam("fromImage", command.getImageName().getRepository())
+				.queryParam("repo", command.getImageName().getNamespace())
+				.queryParam("registry", command.getImageName().getRegistry());
 
 		LOGGER.trace("POST: {}", webResource);
 		Response response =  resourceWithOptionalAuthConfig(command, webResource.request())

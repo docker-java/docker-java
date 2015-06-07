@@ -1,29 +1,23 @@
 package com.github.dockerjava.api.command;
 
 
+import com.github.dockerjava.core.util.DockerImageName;
+
 /**
  * Tag an image into a repository
- *
- * @param image			The local image to tag (either a name or an id)
- * @param repository 	The repository to tag in
- * @param force         (not documented)
  * 
  */
 public interface TagImageCmd extends DockerCmd<Void> {
 
-	public String getImageId();
+	public DockerImageName getNewImageName();
 
-	public String getRepository();
-
-	public String getTag();
+	public DockerImageName getOriginalImageName();
 
 	public boolean hasForceEnabled();
 
-	public TagImageCmd withImageId(String imageId);
+	public TagImageCmd withNewImageName(DockerImageName newImageName);
 
-	public TagImageCmd withRepository(String repository);
-
-	public TagImageCmd withTag(String tag);
+	public TagImageCmd withOriginalImageName(DockerImageName originalImageName);
 
 	public TagImageCmd withForce();
 

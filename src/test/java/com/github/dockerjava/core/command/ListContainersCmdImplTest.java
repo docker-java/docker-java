@@ -14,6 +14,7 @@ import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import com.github.dockerjava.core.util.DockerImageName;
 import org.hamcrest.Matcher;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -57,7 +58,7 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
 		String testImage = "busybox";
 
 		// need to block until image is pulled completely
-		asString(dockerClient.pullImageCmd(testImage).exec());
+		asString(dockerClient.pullImageCmd(new DockerImageName(testImage)).exec());
 
 		List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
 		assertThat(containers, notNullValue());
@@ -66,7 +67,7 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
 		int size = containers.size();
 
 		CreateContainerResponse container1 = dockerClient
-				.createContainerCmd(testImage).withCmd("echo").exec();
+				.createContainerCmd(new DockerImageName(testImage)).withCmd("echo").exec();
 
 		assertThat(container1.getId(), not(isEmptyString()));
 

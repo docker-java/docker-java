@@ -4,6 +4,7 @@ import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
+import com.github.dockerjava.core.util.DockerImageName;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
@@ -39,7 +40,7 @@ public class CopyFileFromContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void copyFromContainer() throws Exception {
         // TODO extract this into a shared method
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+        CreateContainerResponse container = dockerClient.createContainerCmd(new DockerImageName("busybox"))
                 .withName("docker-java-itest-copyFromContainer")
                 .withCmd("touch", "/copyFromContainer")
                 .exec();

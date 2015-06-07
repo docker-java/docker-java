@@ -3,6 +3,7 @@ package com.github.dockerjava.core.command;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.core.util.DockerImageName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
@@ -45,22 +46,22 @@ public class PushImageCmdImplTest extends AbstractDockerClientTest {
 	public void pushLatest() throws Exception {
 
 		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd("true").exec();
+				.createContainerCmd(new DockerImageName("busybox")).withCmd("true").exec();
 
 		LOG.info("Created container {}", container.toString());
 
 		assertThat(container.getId(), not(isEmptyString()));
 
 		LOG.info("Committing container: {}", container.toString());
-		String imageId = dockerClient.commitCmd(container.getId()).withRepository(username + "/busybox").exec();
+		String imageId = dockerClient.commitCmd(container.getId()).withRepository(new DockerImageName(username + "/busybox")).exec();
 
 		// we have to block until image is pushed
-		asString(dockerClient.pushImageCmd(username + "/busybox").exec());
+		asString(dockerClient.pushImageCmd(new DockerImageName(username + "/busybox")).exec());
 
         LOG.info("Removing image: {}", imageId);
-		dockerClient.removeImageCmd(imageId).exec();
+		dockerClient.removeImageCmd(new DockerImageName(imageId)).exec();
 		
-		String response = asString(dockerClient.pullImageCmd(username + "/busybox").exec());
+		String response = asString(dockerClient.pullImageCmd(new DockerImageName(username + "/busybox")).exec());
 
 		assertThat(response, not(containsString("HTTP code: 404")));
 	}
@@ -68,7 +69,7 @@ public class PushImageCmdImplTest extends AbstractDockerClientTest {
 	@Test
 	public void pushExistentImage() throws Exception {
 
-		assertThat(asString(dockerClient.pushImageCmd(username + "/xxx").exec()), containsString("error"));
+		assertThat(asString(dockerClient.pushImageCmd(new DockerImageName(username + "/xxx")).exec()), containsString("error"));
 	}
 
 }

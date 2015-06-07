@@ -9,6 +9,7 @@ import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
 
 import java.lang.reflect.Method;
 
+import com.github.dockerjava.core.util.DockerImageName;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -49,7 +50,7 @@ public class CommitCmdImplTest extends AbstractDockerClientTest {
 	public void commit() throws DockerException {
 
 		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd("touch", "/test").exec();
+				.createContainerCmd(new DockerImageName("busybox")).withCmd("touch", "/test").exec();
 		
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));
@@ -60,7 +61,7 @@ public class CommitCmdImplTest extends AbstractDockerClientTest {
 				.commitCmd(container.getId()).exec();
 
 		InspectImageResponse inspectImageResponse = dockerClient
-				.inspectImageCmd(imageId).exec();
+				.inspectImageCmd(new DockerImageName(imageId)).exec();
 		LOG.info("Image Inspect: {}", inspectImageResponse.toString());
 
 		assertThat(inspectImageResponse,
@@ -68,7 +69,7 @@ public class CommitCmdImplTest extends AbstractDockerClientTest {
 		assertThat(inspectImageResponse.getContainerConfig().getImage(),
 				equalTo("busybox"));
 
-		InspectImageResponse busyboxImg = dockerClient.inspectImageCmd("busybox").exec();
+		InspectImageResponse busyboxImg = dockerClient.inspectImageCmd(new DockerImageName("busybox")).exec();
 
 		assertThat(inspectImageResponse.getParent(),
 				equalTo(busyboxImg.getId()));

@@ -7,6 +7,7 @@ import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.core.util.DockerImageName;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
@@ -49,7 +50,7 @@ public class PullImageCmdImplTest extends AbstractDockerClientTest {
 
     @Test
     public void nullAuthConfig() throws Exception {
-        PullImageCmdImpl pullImageCmd = new PullImageCmdImpl(NOP_EXEC, null, "");
+        PullImageCmdImpl pullImageCmd = new PullImageCmdImpl(NOP_EXEC, null, new DockerImageName(""));
         try {
             pullImageCmd.withAuthConfig(null);
             fail();
@@ -76,7 +77,7 @@ public class PullImageCmdImplTest extends AbstractDockerClientTest {
 		LOG.info("Removing image: {}", testImage);
 		
 		try {
-			dockerClient.removeImageCmd(testImage).withForce().exec();
+			dockerClient.removeImageCmd(new DockerImageName(testImage)).withForce().exec();
 		} catch (NotFoundException e) {
 			// just ignore if not exist
 		}
@@ -90,7 +91,7 @@ public class PullImageCmdImplTest extends AbstractDockerClientTest {
 
 		LOG.info("Pulling image: {}", testImage);
 
-		InputStream response = dockerClient.pullImageCmd(testImage).exec();
+		InputStream response = dockerClient.pullImageCmd(new DockerImageName(testImage)).exec();
 
 		assertThat(asString(response), containsString("Download complete"));
 
@@ -100,7 +101,7 @@ public class PullImageCmdImplTest extends AbstractDockerClientTest {
 		assertThat(imgCount, lessThanOrEqualTo(info.getImages()));
 
 		InspectImageResponse inspectImageResponse = dockerClient
-				.inspectImageCmd(testImage).exec();
+				.inspectImageCmd(new DockerImageName(testImage)).exec();
 		LOG.info("Image Inspect: {}", inspectImageResponse.toString());
 		assertThat(inspectImageResponse, notNullValue());
 	}
@@ -109,7 +110,7 @@ public class PullImageCmdImplTest extends AbstractDockerClientTest {
 	public void testPullNonExistingImage() throws DockerException, IOException {
 		
 		// does not throw an exception
-		InputStream is = dockerClient.pullImageCmd("xvxcv/foo").exec();
+		InputStream is = dockerClient.pullImageCmd(new DockerImageName("xvxcv/foo")).exec();
 		// stream needs to be fully read in order to close the underlying connection
 		asString(is);
 	}

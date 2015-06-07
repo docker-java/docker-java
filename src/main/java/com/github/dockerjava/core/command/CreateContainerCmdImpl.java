@@ -2,6 +2,7 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.github.dockerjava.core.util.DockerImageName;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -35,6 +36,7 @@ public class CreateContainerCmdImpl extends
 		CreateContainerCmd {
 
 	private String name;
+	private DockerImageName imageName;
 
 	@JsonProperty("Hostname")
 	private String hostName = "";
@@ -83,10 +85,10 @@ public class CreateContainerCmdImpl extends
 	@JsonProperty("HostConfig")
 	private HostConfig hostConfig = new HostConfig();
 
-	public CreateContainerCmdImpl(CreateContainerCmd.Exec exec, String image) {
+	public CreateContainerCmdImpl(CreateContainerCmd.Exec exec, DockerImageName imageName) {
 		super(exec);
-		checkNotNull(image, "image was not specified");
-		withImage(image);
+		checkNotNull(imageName, "imageName was not specified");
+		withImage(imageName);
 	}
 
 	/**
@@ -182,9 +184,17 @@ public class CreateContainerCmdImpl extends
 		return hostName;
 	}
 
+	/*
 	@Override
 	public String getImage() {
 		return image;
+	}
+	*/
+
+	@Override
+	public DockerImageName getImageName()
+	{
+		return this.imageName;
 	}
 
 	@Override
@@ -313,7 +323,7 @@ public class CreateContainerCmdImpl extends
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this).append("create container ")
-				.append(name != null ? "name=" + name + " " : "").append(this)
+				.append(imageName != null ? "name=" + imageName + " " : "").append(this)
 				.toString();
 	}
 
@@ -433,8 +443,9 @@ public class CreateContainerCmdImpl extends
 	}
 
 	@Override
-	public CreateContainerCmdImpl withImage(String image) {
-		this.image = image;
+	public CreateContainerCmdImpl withImage(DockerImageName imageName) {
+		this.image = imageName.toString();
+		this.imageName = imageName;
 		return this;
 	}
 

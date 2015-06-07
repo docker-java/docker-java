@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.not;
 
 import java.lang.reflect.Method;
 
+import com.github.dockerjava.core.util.DockerImageName;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -48,7 +49,7 @@ public class WaitContainerCmdImplTest extends AbstractDockerClientTest {
 	public void testWaitContainer() throws DockerException {
 
 		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd("true").exec();
+				.createContainerCmd(new DockerImageName("busybox")).withCmd("true").exec();
 
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));

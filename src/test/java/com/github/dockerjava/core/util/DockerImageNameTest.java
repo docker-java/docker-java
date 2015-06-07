@@ -29,7 +29,8 @@ public class DockerImageNameTest {
         "pooldocker:8080/jgriffiths/ubuntu",
         "jgriffiths/ubuntu",
         "jgriffiths/ubuntu:100",
-        "pool.docker/ubuntu:latest"
+        "pool.docker/ubuntu:latest",
+        "registry:5000/namespace/repo-name:1.0.Final"
     };
 
     
@@ -48,7 +49,8 @@ public class DockerImageNameTest {
         "pooldocker:8080/jgriffiths/ubuntu",
         "j.griffiths/ubuntu",
         "&:jgriffiths/ubuntu/repo:100",
-        "pool.docker/ubuntu:latest"
+        "pool.docker/ubuntu:latest",
+        "registry:5000/namespace/repo-name:1.0.Final"
     };
     
     @Test

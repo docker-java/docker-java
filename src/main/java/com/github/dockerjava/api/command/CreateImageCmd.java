@@ -1,31 +1,24 @@
 package com.github.dockerjava.api.command;
 
+import com.github.dockerjava.core.util.DockerImageName;
+
 import java.io.InputStream;
 
 public interface CreateImageCmd extends DockerCmd<CreateImageResponse> {
 
-	public String getRepository();
-
-	// TODO remove method
-	public String getTag();
+	public DockerImageName getImageName();
 	
 	public InputStream getImageStream();
 
 	/**
-	 * @param repository        the repository to import to
+	 * @param imageName        the repository to import to
 	 */
-	public CreateImageCmd withRepository(String repository);
+	public CreateImageCmd withImageName(DockerImageName imageName);
 
 	/**
 	 * @param imageStream       the InputStream of the tar file
 	 */
 	public CreateImageCmd withImageStream(InputStream imageStream);
-
-	/**
-	 * @param tag               any tag for this image
-	 * @deprecated 				use repo:tag format for repository
-	 */
-	public CreateImageCmd withTag(String tag);
 	
 	public static interface Exec extends DockerCmdExec<CreateImageCmd, CreateImageResponse> {
 	}

@@ -22,8 +22,9 @@ public class SaveImageCmdExec extends AbstrDockerCmdExec<SaveImageCmd, InputStre
 
     @Override
     protected InputStream execute(SaveImageCmd command) {
-        WebTarget webResource = getBaseResource().path("/images/" + command.getName() + "/get")
-                .queryParam("tag", command.getTag());
+        WebTarget webResource = getBaseResource().path("/images/" + command.getImageName() + "/get")
+                //.queryParam("tag", command.getTag());
+        ;
 
         LOGGER.trace("GET: {}", webResource);
         Response response =  webResource

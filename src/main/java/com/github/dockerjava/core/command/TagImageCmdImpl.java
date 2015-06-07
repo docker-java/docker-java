@@ -3,42 +3,33 @@ package com.github.dockerjava.core.command;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.github.dockerjava.api.command.TagImageCmd;
+import com.github.dockerjava.core.util.DockerImageName;
 
 
 /**
  * Tag an image into a repository
- *
- * @param image			The local image to tag (either a name or an id)
- * @param repository 	The repository to tag in
- * @param force         (not documented)
  * 
  */
 public class TagImageCmdImpl extends AbstrDockerCmd<TagImageCmd, Void> implements TagImageCmd  {
 
-	private String imageId, repository, tag;
+	private DockerImageName originalImageName, newImageName;
 
 	private boolean force;
 
-	public TagImageCmdImpl(TagImageCmd.Exec exec, String imageId, String repository, String tag) {
+	public TagImageCmdImpl(TagImageCmd.Exec exec, DockerImageName originalImageName, DockerImageName newImageName) {
 		super(exec);
-		withImageId(imageId);
-		withRepository(repository);
-		withTag(tag);
+		withNewImageName(newImageName);
+		withOriginalImageName(originalImageName);
 	}
 
     @Override
-	public String getImageId() {
-        return imageId;
+	public DockerImageName getOriginalImageName() {
+        return originalImageName;
     }
 
     @Override
-	public String getRepository() {
-        return repository;
-    }
-
-    @Override
-	public String getTag() {
-        return tag;
+	public DockerImageName getNewImageName() {
+        return newImageName;
     }
 
     @Override
@@ -47,23 +38,16 @@ public class TagImageCmdImpl extends AbstrDockerCmd<TagImageCmd, Void> implement
     }
 
     @Override
-	public TagImageCmd withImageId(String imageId) {
-		checkNotNull(imageId, "imageId was not specified");
-		this.imageId = imageId;
+	public TagImageCmd withNewImageName(DockerImageName imageName) {
+		checkNotNull(imageName, "newImageName was not specified");
+		this.newImageName = imageName;
 		return this;
 	}
 
 	@Override
-	public TagImageCmd withRepository(String repository) {
-		checkNotNull(repository, "repository was not specified");
-		this.repository = repository;
-		return this;
-	}
-
-	@Override
-	public TagImageCmd withTag(String tag) {
-		checkNotNull(tag, "tag was not specified");
-		this.tag = tag;
+	public TagImageCmd withOriginalImageName(DockerImageName imageName) {
+		checkNotNull(imageName, "originalImageName was not specified");
+		this.originalImageName = imageName;
 		return this;
 	}
 
@@ -82,9 +66,9 @@ public class TagImageCmdImpl extends AbstrDockerCmd<TagImageCmd, Void> implement
     public String toString() {
         return new StringBuilder("tag ")
             .append(force ? "--force=true " : "")
-            .append(repository != null ? repository + "/" : "")
-            .append(imageId)
-            .append(tag != null ? ":" + tag : "")
+            .append(originalImageName)
+            .append(" ")
+            .append(newImageName)
             .toString();
     }
 }

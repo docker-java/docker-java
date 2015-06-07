@@ -9,6 +9,7 @@ import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import com.github.dockerjava.core.util.DockerImageName;
 import org.hamcrest.Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +55,7 @@ public class RemoveContainerCmdImplTest extends AbstractDockerClientTest {
 	public void removeContainer() throws DockerException {
 
 		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd("true").exec();
+				.createContainerCmd(new DockerImageName("busybox")).withCmd("true").exec();
 
 		dockerClient.startContainerCmd(container.getId()).exec();
 		dockerClient.waitContainerCmd(container.getId()).exec();

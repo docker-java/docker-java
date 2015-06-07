@@ -1,24 +1,18 @@
 package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.core.util.DockerImageName;
 
 import java.io.InputStream;
 
 public interface SaveImageCmd extends DockerCmd<InputStream>{
 
-    public String getName();
-
-    public String getTag();
+    public DockerImageName getImageName();
 
     /**
-     * @param name The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
+     * @param imageName The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
      */
-    public SaveImageCmd withName(String name);
-
-    /**
-     * @param tag The image's tag. Not null.
-     */
-    public SaveImageCmd withTag(String tag);
+    public SaveImageCmd withImageName(DockerImageName imageName);
 
     /**
      * Its the responsibility of the caller to consume and/or close the {@link InputStream} to prevent

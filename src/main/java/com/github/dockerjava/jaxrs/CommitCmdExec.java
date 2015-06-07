@@ -24,8 +24,8 @@ public class CommitCmdExec extends AbstrDockerCmdExec<CommitCmd, String> impleme
 	protected String execute(CommitCmd command) {
 		WebTarget webResource = getBaseResource().path("/commit")
                 .queryParam("container", command.getContainerId())
-                .queryParam("repo", command.getRepository())
-                .queryParam("tag", command.getTag())
+                .queryParam("repo", command.getOriginalImageName())
+                .queryParam("tag", command.getNewImageName())
                 .queryParam("m", command.getMessage())
                 .queryParam("author", command.getAuthor())
                 .queryParam("pause",  command.hasPauseEnabled() ? "1" : "0");

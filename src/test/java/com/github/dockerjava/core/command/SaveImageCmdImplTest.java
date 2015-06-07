@@ -3,6 +3,7 @@ package com.github.dockerjava.core.command;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.core.util.DockerImageName;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,7 @@ public class SaveImageCmdImplTest extends AbstractDockerClientTest {
     public static final Logger LOG = LoggerFactory
             .getLogger(SaveImageCmdImplTest.class);
 
-    String username;
+    //String username;
 
     @BeforeTest
     public void beforeTest() throws DockerException {
@@ -54,7 +55,7 @@ public class SaveImageCmdImplTest extends AbstractDockerClientTest {
     public void saveImage() throws Exception {
 
         InputStream image = IOUtils.toBufferedInputStream(dockerClient
-                .saveImageCmd("busybox").exec());
+                .saveImageCmd(new DockerImageName("busybox")).exec());
         assertThat(image.available(), greaterThan(0));
 
     }

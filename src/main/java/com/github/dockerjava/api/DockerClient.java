@@ -4,7 +4,7 @@ import java.io.*;
 
 import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.model.AuthConfig;
-import com.github.dockerjava.api.model.Identifier;
+import com.github.dockerjava.core.util.DockerImageName;
 
 // https://godoc.org/github.com/fsouza/go-dockerclient
 public interface DockerClient extends Closeable {
@@ -26,24 +26,22 @@ public interface DockerClient extends Closeable {
 	 * * IMAGE API *
 	 */
 
-	public PullImageCmd pullImageCmd(String repository);
+	public PullImageCmd pullImageCmd(DockerImageName imageName);
 
-	public PushImageCmd pushImageCmd(String name);
+	public PushImageCmd pushImageCmd(DockerImageName imageName);
 
-        public PushImageCmd pushImageCmd(Identifier identifier);
-
-	public CreateImageCmd createImageCmd(String repository,
+	public CreateImageCmd createImageCmd(DockerImageName imageName,
 			InputStream imageStream);
 
 	public SearchImagesCmd searchImagesCmd(String term);
 
-	public RemoveImageCmd removeImageCmd(String imageId);
+	public RemoveImageCmd removeImageCmd(DockerImageName imageName);
 
 	public ListImagesCmd listImagesCmd();
 
-	public InspectImageCmd inspectImageCmd(String imageId);
+	public InspectImageCmd inspectImageCmd(DockerImageName imageName);
     
-    public SaveImageCmd saveImageCmd(String name);
+    public SaveImageCmd saveImageCmd(DockerImageName imageName);
 
 	/**
 	 * * CONTAINER API *
@@ -51,7 +49,7 @@ public interface DockerClient extends Closeable {
 
 	public ListContainersCmd listContainersCmd();
 
-	public CreateContainerCmd createContainerCmd(String image);
+	public CreateContainerCmd createContainerCmd(DockerImageName imageName);
 
 	/**
 	 * Creates a new {@link StartContainerCmd} for the container with the
@@ -106,7 +104,7 @@ public interface DockerClient extends Closeable {
 
 	public TopContainerCmd topContainerCmd(String containerId);
 
-	public TagImageCmd tagImageCmd(String imageId, String repository, String tag);
+	public TagImageCmd tagImageCmd(DockerImageName originalImageName, DockerImageName newImageName);
 	
 	public PauseContainerCmd pauseContainerCmd(String containerId);
 	

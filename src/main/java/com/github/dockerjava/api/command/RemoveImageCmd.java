@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.core.util.DockerImageName;
 
 /**
 *
@@ -9,13 +10,13 @@ import com.github.dockerjava.api.NotFoundException;
 */
 public interface RemoveImageCmd extends DockerCmd<Void>{
 
-	public String getImageId();
+	public DockerImageName getImageName();
 
 	public boolean hasForceEnabled();
 
 	public boolean hasNoPruneEnabled();
 
-	public RemoveImageCmd withImageId(String imageId);
+	public RemoveImageCmd withImageName(DockerImageName imageName);
 	
 	/**
 	 * force delete of an image, even if it's tagged in multiple repositories

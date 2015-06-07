@@ -11,6 +11,7 @@ import com.github.dockerjava.api.command.StatsCmd;
 import com.github.dockerjava.api.model.Statistics;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
+import com.github.dockerjava.core.util.DockerImageName;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -61,7 +62,7 @@ public class StatsCmdImplTest extends AbstractDockerClientTest {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
 		 CreateContainerResponse container = dockerClient
-             .createContainerCmd("busybox")
+             .createContainerCmd(new DockerImageName("busybox"))
              .withCmd("top")
              .withName(containerName).exec();
 		 LOG.info("Created container {}", container.toString());

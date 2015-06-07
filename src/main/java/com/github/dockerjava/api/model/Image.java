@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.model;
 
+import com.github.dockerjava.core.util.DockerImageName;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -24,6 +25,7 @@ public class Image {
 
 	@JsonProperty("RepoTags")
     private String[] repoTags;
+    private DockerImageName[] imageNames;
 
     @JsonProperty("Size")
     private long size;
@@ -35,8 +37,17 @@ public class Image {
         return id;
     }
 
-    public String[] getRepoTags() {
-        return repoTags;
+    public DockerImageName[] getImageNames()
+    {
+        if(imageNames == null)
+        {
+            imageNames = new DockerImageName[repoTags.length];
+            for(int i = 0;i<repoTags.length;i++)
+            {
+                imageNames[i] = new DockerImageName(repoTags[i]);
+            }
+        }
+        return imageNames;
     }
 
     public String getParentId() {

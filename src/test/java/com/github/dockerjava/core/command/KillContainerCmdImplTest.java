@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.not;
 
 import java.lang.reflect.Method;
 
+import com.github.dockerjava.core.util.DockerImageName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
@@ -53,7 +54,7 @@ public class KillContainerCmdImplTest extends AbstractDockerClientTest {
 	public void killContainer() throws DockerException {
 
 		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
+				.createContainerCmd(new DockerImageName("busybox")).withCmd("sleep", "9999").exec();
 		LOG.info("Created container: {}", container.toString());
 		assertThat(container.getId(), not(isEmptyString()));
 		dockerClient.startContainerCmd(container.getId()).exec();

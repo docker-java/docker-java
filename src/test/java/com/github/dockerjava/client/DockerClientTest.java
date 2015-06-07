@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 
+import com.github.dockerjava.core.util.DockerImageName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
@@ -61,7 +62,7 @@ public class DockerClientTest extends AbstractDockerClientTest {
 			LOG.info("Running command: [{}]", command);
 
 			CreateContainerResponse container = dockerClient
-					.createContainerCmd("busybox").withCmd(commands).exec();
+					.createContainerCmd(new DockerImageName("busybox")).withCmd(commands).exec();
 			dockerClient.startContainerCmd(container.getId());
 			
 			int exitcode = dockerClient.waitContainerCmd(container.getId()).exec();

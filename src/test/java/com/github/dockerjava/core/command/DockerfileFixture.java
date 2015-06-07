@@ -9,6 +9,7 @@ import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
+import com.github.dockerjava.core.util.DockerImageName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +25,8 @@ public class DockerfileFixture implements AutoCloseable {
     private static final Logger LOGGER = LoggerFactory.getLogger(DockerfileFixture.class);
     private final DockerClient dockerClient;
     private String directory;
-    private String repository;
+    //private String repository;
+    private DockerImageName imageName;
     private String containerId;
 
     public DockerfileFixture(DockerClient dockerClient, String directory) {
@@ -49,15 +51,15 @@ public class DockerfileFixture implements AutoCloseable {
                 .exec()
                 .get(0);
 
-        repository = lastCreatedImage
-                .getRepoTags()[0];
+        imageName = lastCreatedImage
+                .getImageNames()[0];
 
-        LOGGER.info("created {} {}", lastCreatedImage.getId(), repository);
+        LOGGER.info("created {} {}", lastCreatedImage.getId(), imageName.toString());
 
         containerId = dockerClient
-                .createContainerCmd(lastCreatedImage.getId())
-                .exec()
-                .getId();
+                .createContainerCmd(new DockerImageName(lastCreatedImage.getId()))
+                        .exec()
+                        .getId();
 
         LOGGER.info("starting {}", containerId);
 
@@ -82,17 +84,17 @@ public class DockerfileFixture implements AutoCloseable {
             containerId = null;
         }
 
-        if (repository != null) {
-            LOGGER.info("removing repository {}", repository);
+        if (imageName != null) {
+            LOGGER.info("removing repository {}", imageName);
             try {
                 dockerClient
-                        .removeImageCmd(repository)
+                        .removeImageCmd(imageName)
                         .withForce()
                         .exec();
             } catch (NotFoundException | InternalServerErrorException e) {
                 LOGGER.info("ignoring {}", e.getMessage());
             }
-            repository = null;
+            imageName = null;
         }
     }
 

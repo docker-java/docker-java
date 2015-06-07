@@ -11,8 +11,8 @@ import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
-import com.github.dockerjava.api.model.Identifier;
 import com.github.dockerjava.core.command.*;
+import com.github.dockerjava.core.util.DockerImageName;
 
 /**
  * @author Konstantin Pelykh (kpelykh@gmail.com)
@@ -121,45 +121,32 @@ public class DockerClientImpl implements Closeable, DockerClient {
 	 * * IMAGE API *
 	 */
 	@Override
-	public PullImageCmd pullImageCmd(String repository) {
+	public PullImageCmd pullImageCmd(DockerImageName originalImageName) {
 		return new PullImageCmdImpl(getDockerCmdExecFactory()
-				.createPullImageCmdExec(), dockerClientConfig.effectiveAuthConfig(repository), repository);
+				.createPullImageCmdExec(), dockerClientConfig.effectiveAuthConfig(originalImageName), originalImageName);
 	}
 
 	@Override
-	public PushImageCmd pushImageCmd(String name) {
+	public PushImageCmd pushImageCmd(DockerImageName imageName) {
           PushImageCmd cmd = new PushImageCmdImpl(getDockerCmdExecFactory()
-				.createPushImageCmdExec(), name);
+				.createPushImageCmdExec(), imageName);
 
-          AuthConfig cfg = dockerClientConfig.effectiveAuthConfig(name);
+          AuthConfig cfg = dockerClientConfig.effectiveAuthConfig(imageName);
           if( cfg != null )
             cmd.withAuthConfig(cfg);
           return cmd;
 	}
 
-        @Override
-        public PushImageCmd pushImageCmd(Identifier identifier) {
-          PushImageCmd cmd = pushImageCmd(identifier.repository.name);
-          if( identifier.tag.isPresent() )
-            cmd.withTag(identifier.tag.get());
-
-          AuthConfig cfg = dockerClientConfig.effectiveAuthConfig(identifier.repository.name);
-          if( cfg != null )
-            cmd.withAuthConfig(cfg);
-
-          return cmd;
-        }
-
-        @Override
-    public SaveImageCmd saveImageCmd(String name) {
-        return new SaveImageCmdImpl(getDockerCmdExecFactory().createSaveImageCmdExec(), name);
+    @Override
+    public SaveImageCmd saveImageCmd(DockerImageName imageName) {
+        return new SaveImageCmdImpl(getDockerCmdExecFactory().createSaveImageCmdExec(), imageName);
     }
 
 	@Override
-	public CreateImageCmd createImageCmd(String repository,
+	public CreateImageCmd createImageCmd(DockerImageName imageName,
 			InputStream imageStream) {
 		return new CreateImageCmdImpl(getDockerCmdExecFactory()
-				.createCreateImageCmdExec(), repository, imageStream);
+				.createCreateImageCmdExec(), imageName, imageStream);
 	}
 
 	@Override
@@ -169,9 +156,9 @@ public class DockerClientImpl implements Closeable, DockerClient {
 	}
 
 	@Override
-	public RemoveImageCmd removeImageCmd(String imageId) {
+	public RemoveImageCmd removeImageCmd(DockerImageName imageName) {
 		return new RemoveImageCmdImpl(getDockerCmdExecFactory()
-				.createRemoveImageCmdExec(), imageId);
+				.createRemoveImageCmdExec(), imageName);
 	}
 
 	@Override
@@ -181,9 +168,9 @@ public class DockerClientImpl implements Closeable, DockerClient {
 	}
 
 	@Override
-	public InspectImageCmd inspectImageCmd(String imageId) {
+	public InspectImageCmd inspectImageCmd(DockerImageName imageName) {
 		return new InspectImageCmdImpl(getDockerCmdExecFactory()
-				.createInspectImageCmdExec(), imageId);
+				.createInspectImageCmdExec(), imageName);
 	}
 
 	/**
@@ -197,9 +184,9 @@ public class DockerClientImpl implements Closeable, DockerClient {
 	}
 
 	@Override
-	public CreateContainerCmd createContainerCmd(String image) {
+	public CreateContainerCmd createContainerCmd(DockerImageName imageName) {
 		return new CreateContainerCmdImpl(getDockerCmdExecFactory()
-				.createCreateContainerCmdExec(), image);
+				.createCreateContainerCmdExec(), imageName);
 	}
 
 	@Override
@@ -324,9 +311,9 @@ public class DockerClientImpl implements Closeable, DockerClient {
 	}
 
 	@Override
-	public TagImageCmd tagImageCmd(String imageId, String repository, String tag) {
+	public TagImageCmd tagImageCmd(DockerImageName originalImageName, DockerImageName newImageName) {
 		return new TagImageCmdImpl(getDockerCmdExecFactory()
-				.createTagImageCmdExec(), imageId, repository, tag);
+				.createTagImageCmdExec(), originalImageName, newImageName);
 	}
 
 	@Override

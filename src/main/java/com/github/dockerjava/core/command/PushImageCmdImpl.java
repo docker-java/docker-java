@@ -4,56 +4,41 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.PushImageCmd;
+import com.github.dockerjava.core.util.DockerImageName;
 
 /**
  * Push the latest image to the repository.
  *
- * @param name The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
+ * param imageName The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
  */
 public class PushImageCmdImpl extends AbstrAuthCfgDockerCmd<PushImageCmd, PushImageCmd.Response> implements PushImageCmd  {
 
-    private String name;
-    private String tag;
+    private DockerImageName imageName;
 
-    public PushImageCmdImpl(PushImageCmd.Exec exec, String name) {
+    public PushImageCmdImpl(PushImageCmd.Exec exec, DockerImageName imageName) {
     	super(exec);
-    	withName(name);
+    	withImageName(imageName);
     }
 
     @Override
-	public String getName() {
-        return name;
-    }
-
-    @Override
-    public String getTag() {
-        return tag;
+	public DockerImageName getImageName() {
+        return imageName;
     }
 
     /**
-	 * @param name The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
+	 * @param imageName The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
 	 */
 	@Override
-	public PushImageCmd withName(String name) {
-		checkNotNull(name, "name was not specified");
-		this.name = name;
+	public PushImageCmd withImageName(DockerImageName imageName) {
+		checkNotNull(imageName, "imageName was not specified");
+		this.imageName = imageName;
 		return this;
 	}
-
-    /**
-     * @param tag The image's tag. Can be null or empty.
-     */
-    @Override
-    public PushImageCmd withTag(String tag) {
-        checkNotNull(tag, "tag was not specified");
-        this.tag = tag;
-        return this;
-    }
 
     @Override
     public String toString() {
         return new StringBuilder("push ")
-            .append(name)
+            .append(imageName.toString())
             .toString();
     }
    
