@@ -48,7 +48,9 @@ public class Volumes {
 			jsonGen.writeStartObject();
 			for (Volume volume : volumes.getVolumes()) {
 				jsonGen.writeFieldName(volume.getPath());
-				jsonGen.writeString(Boolean.toString(volume.getAccessMode().equals(AccessMode.rw) ? true: false));
+				jsonGen.writeStartObject();
+				jsonGen.writeEndObject();
+				//jsonGen.writeString(Boolean.toString(volume.getAccessMode().equals(AccessMode.rw) ? true: false));
 			}
 			jsonGen.writeEndObject();
 		}
@@ -66,7 +68,8 @@ public class Volumes {
 
                 Map.Entry<String, JsonNode> field = it.next();
                 if (!field.getValue().equals(NullNode.getInstance())) {
-                	Volume volume = Volume.parse(field.getKey());
+                	String path = field.getKey();
+                	Volume volume = new Volume(path);
                 	volumes.add(volume);
                 }
             }

@@ -3,8 +3,11 @@ package com.github.dockerjava.core.command;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.ExecCreateCmdResponse;
+import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.InspectExecResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.test.serdes.JSONTestHelper;
+import java.io.IOException;
 
 import org.testng.ITestResult;
 import org.testng.annotations.*;
@@ -41,7 +44,7 @@ public class InspectExecCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test(groups = "ignoreInCircleCi")
-    public void inspectExecTest() {
+    public void inspectExecTest() throws IOException {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
         CreateContainerResponse container = dockerClient
@@ -93,5 +96,9 @@ public class InspectExecCmdImplTest extends AbstractDockerClientTest {
         InspectExecResponse third = dockerClient.inspectExecCmd(checkFileCmdCreateResponse.getId()).exec();
         assertThat(third.getExitCode(), is(0));
 
+        // Get container info and check its roundtrip to ensure the consistency
+        InspectContainerResponse containerInfo = dockerClient.inspectContainerCmd(container.getId()).exec();
+        assertEquals(containerInfo.getId(), container.getId());
+        JSONTestHelper.testRoundTrip(containerInfo);
     }
 }

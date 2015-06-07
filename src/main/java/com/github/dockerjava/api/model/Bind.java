@@ -53,11 +53,11 @@ public class Bind {
 			String[] parts = serialized.split(":");
 			switch (parts.length) {
 			case 2: {
-				return new Bind(parts[0], Volume.parse(parts[1]));
+				return new Bind(parts[0], new Volume(parts[1]));
 			}
 			case 3: {
 				AccessMode accessMode = AccessMode.valueOf(parts[2].toLowerCase());
-				return new Bind(parts[0], Volume.parse(parts[1]), accessMode);
+				return new Bind(parts[0], new Volume(parts[1]), accessMode);
 			}
 			default: {
 				throw new IllegalArgumentException();
@@ -96,7 +96,7 @@ public class Bind {
 	 */
 	@Override
 	public String toString() {
-		return path + ":" + volume.toString() + ":" + accessMode.toString();
+		return path + ":" + volume.getPath() + ":" + accessMode.toString();
 	}
 
 }

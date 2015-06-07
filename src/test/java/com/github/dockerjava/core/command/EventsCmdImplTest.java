@@ -16,6 +16,8 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -67,16 +69,16 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 				.withSince(startTime).withUntil(endTime);
 		ExecutorService executorService = eventsCmd.exec();
 
-		boolean zeroCount = countDownLatch.await(5, TimeUnit.SECONDS);
+		boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
 
 		executorService.shutdown();
 		eventCallback.close();
 
-		assertTrue(zeroCount, "Expected 4 events, [create, start, die, stop]");
+		assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
 	}
 
 	@Test
-	public void testEventStreaming() throws InterruptedException, IOException {
+	public void testEventStreaming1() throws InterruptedException, IOException {
 		// Don't include other tests events
 		TimeUnit.SECONDS.sleep(1);
 
@@ -89,10 +91,30 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 
 		generateEvents();
 
-		boolean zeroCount = countDownLatch.await(5, TimeUnit.SECONDS);
+		boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
 		executorService.shutdown();
 		eventCallback.close();
-		assertTrue(zeroCount, "Expected 4 events, [create, start, die, stop]");
+		assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
+	}
+
+	@Test
+	public void testEventStreaming2() throws InterruptedException, IOException {
+		// Don't include other tests events
+		TimeUnit.SECONDS.sleep(1);
+
+		CountDownLatch countDownLatch = new CountDownLatch(KNOWN_NUM_EVENTS);
+		EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
+
+		EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withSince(
+				getEpochTime());
+		ExecutorService executorService = eventsCmd.exec();
+
+		generateEvents();
+
+		boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
+		executorService.shutdown();
+		eventCallback.close();
+		assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
 	}
 
 	/**
@@ -111,6 +133,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 	private class EventCallbackTest implements EventCallback {
 		private final CountDownLatch countDownLatch;
 		private final AtomicBoolean isReceiving = new AtomicBoolean(true);
+		private final List<Event> events = new ArrayList<Event>();
 
 		public EventCallbackTest(CountDownLatch countDownLatch) {
 			this.countDownLatch = countDownLatch;
@@ -124,6 +147,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 		public void onEvent(Event event) {
 			LOG.info("Received event #{}: {}", countDownLatch.getCount(), event);
 			countDownLatch.countDown();
+			events.add(event);
 		}
 
 		@Override
@@ -139,6 +163,10 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 		@Override
 		public boolean isReceiving() {
 			return isReceiving.get();
+		}
+
+		public List<Event> getEvents() {
+			return new ArrayList<Event>(events);
 		}
 	}
 }

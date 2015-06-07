@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.model;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 import java.util.Map;
 
@@ -54,4 +55,12 @@ public class Ports_addBindingsTest {
 		assertEquals(bindings.get(TCP_80), new Binding[] { BINDING_8080, BINDING_9090 });
 	}
 
+	@Test
+	public void addNullBindings() {
+		ports.add(new PortBinding(null, TCP_80));
+		Map<ExposedPort, Binding[]> bindings = ports.getBindings();
+		// one key with two values
+		assertEquals(bindings.size(), 1);
+		assertEquals(bindings.get(TCP_80), null);
+	}
 }

@@ -75,7 +75,11 @@ public class Ports {
             Binding[] bindings = ports.get(exposedPort);
             ports.put(exposedPort, (Binding[]) ArrayUtils.add(bindings, binding));
         } else {
-            ports.put(exposedPort, new Binding[]{binding});
+            if (binding == null) {
+                ports.put(exposedPort, null);
+            } else {
+                ports.put(exposedPort, new Binding[]{binding});
+            }
         }
     }
 
@@ -282,12 +286,16 @@ public class Ports {
 
                 Map.Entry<String, JsonNode> portNode = it.next();
                 JsonNode bindingsArray = portNode.getValue();
-                for (int i = 0; i < bindingsArray.size(); i++) {
-                    JsonNode bindingNode = bindingsArray.get(i);
-                    if (!bindingNode.equals(NullNode.getInstance())) {
-                        String hostIp = bindingNode.get("HostIp").textValue();
-                        int hostPort = bindingNode.get("HostPort").asInt();
-                        out.bind(ExposedPort.parse(portNode.getKey()), new Binding(hostIp, hostPort));
+                if (bindingsArray.equals(NullNode.getInstance())) {
+                    out.bind(ExposedPort.parse(portNode.getKey()), null);
+                } else {
+                    for (int i = 0; i < bindingsArray.size(); i++) {
+                        JsonNode bindingNode = bindingsArray.get(i);
+                        if (!bindingNode.equals(NullNode.getInstance())) {
+                            String hostIp = bindingNode.get("HostIp").textValue();
+                            int hostPort = bindingNode.get("HostPort").asInt();
+                            out.bind(ExposedPort.parse(portNode.getKey()), new Binding(hostIp, hostPort));
+                        }
                     }
                 }
             }
@@ -304,14 +312,18 @@ public class Ports {
             jsonGen.writeStartObject();
             for(Entry<ExposedPort, Binding[]> entry : portBindings.getBindings().entrySet()){
                 jsonGen.writeFieldName(entry.getKey().toString());
-                jsonGen.writeStartArray();
-                for (Binding binding : entry.getValue()) {
-                    jsonGen.writeStartObject();
-                    jsonGen.writeStringField("HostIp", binding.getHostIp() == null ? "" : binding.getHostIp());
-                    jsonGen.writeStringField("HostPort", binding.getHostPort() == null ? "" : binding.getHostPort().toString());
-                    jsonGen.writeEndObject();
+                if (entry.getValue() != null) {
+                    jsonGen.writeStartArray();
+                    for (Binding binding : entry.getValue()) {
+                        jsonGen.writeStartObject();
+                        jsonGen.writeStringField("HostIp", binding.getHostIp() == null ? "" : binding.getHostIp());
+                        jsonGen.writeStringField("HostPort", binding.getHostPort() == null ? "" : binding.getHostPort().toString());
+                        jsonGen.writeEndObject();
+                    }
+                    jsonGen.writeEndArray();
+                } else {
+                    jsonGen.writeNull();
                 }
-                jsonGen.writeEndArray();
             }
             jsonGen.writeEndObject();
         }

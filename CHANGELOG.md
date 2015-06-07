@@ -2,6 +2,20 @@ Change Log
 ===
 Latest SNAPSHOT
 ---
+* [#233](https://github.com/docker-java/docker-java/pull/233) Labels are array of Strings (fixes #232) 
+* [#189](https://github.com/docker-java/docker-java/pull/189) Add docker stats support  
+
+v1.3.0
+---
+* [#213](https://github.com/docker-java/docker-java/pull/213) Add ulimit support
+* [#208](https://github.com/docker-java/docker-java/pull/208) Added PullEventStreamItem and EventStreamReader to stream the reading of events
+* [#205](https://github.com/docker-java/docker-java/issues/205) Access mode of VolumesRW incorrectly deserialized
+* [#204] (https://github.com/docker-java/docker-java/pull/204) Added support to use the credentials from .dockercfg during build
+* [#203](https://github.com/docker-java/docker-java/issues/203) Missing 'MacAddress' option in create container command
+* [#197](https://github.com/docker-java/docker-java/pull/197) Allow for null bindings
+
+v1.2.0
+---
 * [#194](https://github.com/docker-java/docker-java/pull/194) Fixed remove intermediate containers bug on build goal
 * [#193](https://github.com/docker-java/docker-java/pull/193) Add HostConfig related methods from start command to create command
 * [#192](https://github.com/docker-java/docker-java/pull/192) Added a Links constructor accepting a List object

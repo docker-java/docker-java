@@ -1,21 +1,5 @@
 package com.github.dockerjava.jaxrs;
 
-import static javax.ws.rs.client.Entity.entity;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Iterator;
-
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import org.glassfish.jersey.client.ClientProperties;
-import org.glassfish.jersey.client.RequestEntityProcessing;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.github.dockerjava.api.command.BuildImageCmd;
@@ -23,6 +7,20 @@ import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.EventStreamItem;
 import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
 import com.google.common.collect.ImmutableList;
+import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.client.RequestEntityProcessing;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
+
+import static javax.ws.rs.client.Entity.entity;
 
 public class BuildImageCmdExec extends
 		AbstrDockerCmdExec<BuildImageCmd, BuildImageCmd.Response> implements
@@ -111,6 +109,12 @@ public class BuildImageCmdExec extends
 		@Override
 		public int read() throws IOException {
 			return proxy.read();
+		}
+
+		@Override
+		public void close() throws IOException {
+			proxy.close();
+			super.close();
 		}
 	}
 }

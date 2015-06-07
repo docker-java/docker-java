@@ -13,6 +13,7 @@ public class Ports_SerializingTest {
 	private final ObjectMapper objectMapper = new ObjectMapper();
 	private final String jsonWithDoubleBindingForOnePort = 
 			"{\"80/tcp\":[{\"HostIp\":\"10.0.0.1\",\"HostPort\":\"80\"},{\"HostIp\":\"10.0.0.2\",\"HostPort\":\"80\"}]}";
+	private final String jsonWithNullBindingForOnePort = "{\"80/tcp\":null}";
 
 	@Test
 	public void deserializingPortWithMultipleBindings() throws Exception {
@@ -38,5 +39,21 @@ public class Ports_SerializingTest {
 	public void serializingEmptyBinding() throws Exception {
 		Ports ports = new Ports(ExposedPort.tcp(80), new Binding(null, null));
 		assertEquals(objectMapper.writeValueAsString(ports), "{\"80/tcp\":[{\"HostIp\":\"\",\"HostPort\":\"\"}]}");
+	}
+
+	@Test
+	public void deserializingPortWithNullBindings() throws Exception {
+		Ports ports = objectMapper.readValue(jsonWithNullBindingForOnePort, Ports.class);
+		Map<ExposedPort, Binding[]> map = ports.getBindings();
+		assertEquals(map.size(), 1);
+
+		assertEquals(map.get(ExposedPort.tcp(80)), null);
+	}
+
+	@Test
+	public void serializingWithNullBindings() throws Exception {
+		Ports ports = new Ports();
+		ports.bind(ExposedPort.tcp(80), null);
+		assertEquals(objectMapper.writeValueAsString(ports), jsonWithNullBindingForOnePort);
 	}
 }

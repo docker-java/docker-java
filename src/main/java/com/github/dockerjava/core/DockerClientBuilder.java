@@ -36,6 +36,9 @@ public class DockerClientBuilder {
 	}
 
 	public static DockerCmdExecFactory getDefaultDockerCmdExecFactory() {
+		// clearing the cache is needed because otherwise we will get
+		// the same DockerCmdExecFactory instance each time
+		serviceLoader.reload();
 		if(!serviceLoader.iterator().hasNext()) {
 			throw new RuntimeException("Fatal: Can't find any implementation of '" + DockerCmdExecFactory.class.getName() +  "' in the current classpath.");
 		}

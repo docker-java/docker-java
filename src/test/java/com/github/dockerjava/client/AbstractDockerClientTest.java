@@ -39,7 +39,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 	protected TestDockerCmdExecFactory dockerCmdExecFactory = new TestDockerCmdExecFactory(DockerClientBuilder.getDefaultDockerCmdExecFactory());
 
 	public void beforeTest()  {
-				
+
 		LOG.info("======================= BEFORETEST =======================");
 		LOG.info("Connecting to Docker server");
 		dockerClient = DockerClientBuilder.getInstance(config())
@@ -105,7 +105,11 @@ public abstract class AbstractDockerClientTest extends Assert {
 				result.getName());
 	}
 
-	protected String asString(InputStream response)  {
+	protected String asString(InputStream response) {
+		return consumeAsString(response);
+	}
+
+	public static String consumeAsString(InputStream response)  {
 
 		StringWriter logwriter = new StringWriter();
 
@@ -116,10 +120,10 @@ public abstract class AbstractDockerClientTest extends Assert {
 			while (itr.hasNext()) {
 				String line = itr.next();
 				logwriter.write(line + (itr.hasNext() ? "\n" : ""));
-				//LOG.info("line: "+line);
+				LOG.info("line: "+line);
 			}
 			response.close();
-			
+
 			return logwriter.toString();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -171,11 +175,11 @@ public abstract class AbstractDockerClientTest extends Assert {
 	 * Asserts that {@link InspectContainerResponse#getVolumes()} (<code>.Volumes</code>)
 	 * has {@link VolumeBind}s for the given {@link Volume}s
 	 */
-	public static void assertContainerHasVolumes(InspectContainerResponse inspectContainerResponse, 
+	public static void assertContainerHasVolumes(InspectContainerResponse inspectContainerResponse,
 			Volume ... expectedVolumes) {
 		VolumeBind[] volumeBinds = inspectContainerResponse.getVolumes();
 		LOG.info("Inspect .Volumes = [{}]", Joiner.on(", ").join(volumeBinds));
-	
+
 		List<Volume> volumes = new ArrayList<Volume>();
 		for (VolumeBind bind : volumeBinds) {
 			volumes.add(new Volume(bind.getContainerPath()));

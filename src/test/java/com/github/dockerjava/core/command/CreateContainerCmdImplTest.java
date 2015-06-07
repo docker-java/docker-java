@@ -1,45 +1,24 @@
 package com.github.dockerjava.core.command;
 
-import static com.github.dockerjava.api.model.Capability.MKNOD;
-import static com.github.dockerjava.api.model.Capability.NET_ADMIN;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItemInArray;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.startsWith;
+import com.github.dockerjava.api.ConflictException;
+import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.model.*;
+import com.github.dockerjava.client.AbstractDockerClientTest;
+
+import org.testng.ITestResult;
+import org.testng.annotations.*;
 
 import java.lang.reflect.Method;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.UUID;
 
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
-import com.github.dockerjava.api.ConflictException;
-import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.InspectContainerResponse;
-import com.github.dockerjava.api.model.Bind;
-import com.github.dockerjava.api.model.Device;
-import com.github.dockerjava.api.model.ExposedPort;
-import com.github.dockerjava.api.model.HostConfig;
-import com.github.dockerjava.api.model.Link;
-import com.github.dockerjava.api.model.Ports;
-import com.github.dockerjava.api.model.RestartPolicy;
-import com.github.dockerjava.api.model.Volume;
-import com.github.dockerjava.api.model.VolumesFrom;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import static com.github.dockerjava.api.model.Capability.MKNOD;
+import static com.github.dockerjava.api.model.Capability.NET_ADMIN;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 @Test(groups = "integration")
 public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
@@ -88,9 +67,11 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 	@Test
 	public void createContainerWithVolume() throws DockerException {
 
+		Volume volume = new Volume("/var/log");
+		
 		CreateContainerResponse container = dockerClient
 				.createContainerCmd("busybox")
-				.withVolumes(new Volume("/var/log")).withCmd("true").exec();
+				.withVolumes(volume).withCmd("true").exec();
 
 		LOG.info("Created container {}", container.toString());
 
@@ -104,6 +85,37 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
 		assertThat(inspectContainerResponse.getConfig().getVolumes().keySet(),
 				contains("/var/log"));
+		
+		assertThat(inspectContainerResponse.getVolumesRW(),
+				hasItemInArray(new VolumeRW(volume, AccessMode.rw)));
+	}
+	
+	@Test
+	public void createContainerWithReadOnlyVolume() throws DockerException {
+
+		Volume volume = new Volume("/srv/test");
+		
+		CreateContainerResponse container = dockerClient
+				.createContainerCmd("busybox")
+				.withVolumes(volume)
+				.withCmd("true")
+				.exec();
+
+		LOG.info("Created container {}", container.toString());
+
+		assertThat(container.getId(), not(isEmptyString()));
+
+		InspectContainerResponse inspectContainerResponse = dockerClient
+				.inspectContainerCmd(container.getId()).exec();
+
+		LOG.info("Inspect container {}", inspectContainerResponse.getConfig()
+				.getVolumes());
+
+		assertThat(inspectContainerResponse.getConfig().getVolumes().keySet(),
+				contains("/srv/test"));
+		
+		assertThat(Arrays.asList(inspectContainerResponse.getVolumesRW()),
+				contains(new VolumeRW(volume)));
 	}
 	
 	@Test
@@ -172,8 +184,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
 		assertThat(
 				Arrays.asList(inspectContainerResponse.getConfig().getEnv()),
-				containsInAnyOrder("VARIABLE=success",
-						"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"));
+				containsInAnyOrder("VARIABLE=success"));
 
 		dockerClient.startContainerCmd(container.getId()).exec();
 
@@ -508,6 +519,50 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
 		assertThat(inspectContainerResponse.getHostConfig().getNetworkMode(),
 				is(equalTo("host")));
+	}
+	
+	@Test
+	public void createContainerWithMacAddress() throws DockerException {
+
+		CreateContainerResponse container = dockerClient
+				.createContainerCmd("busybox")
+				.withMacAddress("00:80:41:ae:fd:7e")
+				.withCmd("true")
+				.exec();
+
+		LOG.info("Created container {}", container.toString());
+
+		assertThat(container.getId(), not(isEmptyString()));
+
+		InspectContainerResponse inspectContainerResponse = dockerClient
+				.inspectContainerCmd(container.getId()).exec();
+
+		assertEquals(inspectContainerResponse.getConfig().getMacAddress(),
+				"00:80:41:ae:fd:7e");
+	}
+
+	@Test(groups = "ignoreInCircleCi")
+	public void createContainerWithULimits() throws DockerException {
+
+		Ulimit[] ulimits = {new Ulimit("nproc", 709, 1026), new Ulimit("nofile", 1024, 4096)};
+
+		HostConfig hostConfig = new HostConfig();
+		hostConfig.setUlimits(ulimits);
+
+		CreateContainerResponse container = dockerClient
+				.createContainerCmd("busybox").withName("container")
+				.withHostConfig(hostConfig).exec();
+
+		LOG.info("Created container {}", container.toString());
+
+		assertThat(container.getId(), not(isEmptyString()));
+
+		InspectContainerResponse inspectContainerResponse = dockerClient
+				.inspectContainerCmd(container.getId()).exec();
+
+		assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getUlimits()),
+				containsInAnyOrder(new Ulimit("nproc", 709, 1026), new Ulimit("nofile", 1024, 4096)));
+
 	}
 	
 }

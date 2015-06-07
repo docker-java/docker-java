@@ -51,6 +51,9 @@ public class ContainerConfig {
 	@JsonProperty("Image")
 	private String image;
 
+	@JsonProperty("MacAddress")
+	private String macAddress;
+	
 	@JsonProperty("Memory")
 	private long memoryLimit = 0;
 
@@ -61,7 +64,7 @@ public class ContainerConfig {
 	private boolean networkDisabled = false;
 
 	@JsonProperty("OnBuild")
-	private int[] onBuild;
+	private String[] onBuild;
 
 	@JsonProperty("OpenStdin")
 	private boolean stdinOpen = false;
@@ -124,6 +127,10 @@ public class ContainerConfig {
 	public boolean isStdInOnce() {
 		return stdInOnce;
 	}
+	
+	public String getMacAddress() {
+		return macAddress;
+	}
 
 	public long getMemoryLimit() {
 		return memoryLimit;
@@ -173,7 +180,7 @@ public class ContainerConfig {
 		return entrypoint;
 	}
 
-	public int[] getOnBuild() {
+	public String[] getOnBuild() {
 		return onBuild;
 	}
 
