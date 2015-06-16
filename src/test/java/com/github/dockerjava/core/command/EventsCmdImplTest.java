@@ -97,7 +97,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 		assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
 	}
 
-	@Test
+	@Test(groups = "ignoreInCircleCi")
 	public void testEventStreaming2() throws InterruptedException, IOException {
 		// Don't include other tests events
 		TimeUnit.SECONDS.sleep(1);
