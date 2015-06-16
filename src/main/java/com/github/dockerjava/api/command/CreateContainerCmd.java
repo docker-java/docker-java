@@ -44,7 +44,7 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 	public Device[] getDevices();
 
 	public String[] getDns();
-	
+
 	public String[] getDnsSearch();
 
 	public String[] getEntrypoint();
@@ -52,19 +52,21 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 	public String[] getEnv();
 
 	public ExposedPort[] getExposedPorts();
-	
+
 	public String[] getExtraHosts();
 
 	public HostConfig getHostConfig();
 
 	public String getHostName();
 
+	public String getDomainName();
+
 	public String getImage();
 
 	public Link[] getLinks();
-	
+
 	public LxcConf[] getLxcConf();
-	
+
 	public String getMacAddress();
 
 	public long getMemoryLimit();
@@ -72,13 +74,13 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 	public long getMemorySwap();
 
 	public String getName();
-	
+
 	public String getNetworkMode();
-	
+
 	public Ports getPortBindings();
 
 	public String[] getPortSpecs();
-	
+
 	public RestartPolicy getRestartPolicy();
 
 	public String getUser();
@@ -96,9 +98,9 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 	public boolean isAttachStdout();
 
 	public boolean isNetworkDisabled();
-	
+
 	public Boolean isPrivileged();
-	
+
 	public Boolean isPublishAllPorts();
 
 	public boolean isStdInOnce();
@@ -110,9 +112,9 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 	public CreateContainerCmd withAttachStderr(boolean attachStderr);
 
 	public CreateContainerCmd withAttachStdin(boolean attachStdin);
-	
+
 	public CreateContainerCmd withAttachStdout(boolean attachStdout);
-	
+
 	public CreateContainerCmd withBinds(Bind... binds);
 
 	/**
@@ -134,9 +136,9 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 	public CreateContainerCmd withCmd(String... cmd);
 
 	public CreateContainerCmd withCpuset(String cpuset);
-	
+
 	public CreateContainerCmd withCpuShares(int cpuShares);
-	
+
 	/**
 	 * Add host devices to the container
 	 */
@@ -148,7 +150,7 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 	 * Set custom DNS servers
 	 */
 	public CreateContainerCmd withDns(String... dns);
-	
+
 	/**
 	 * Set custom DNS search domains
 	 */
@@ -157,17 +159,19 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 	public CreateContainerCmd withEntrypoint(String... entrypoint);
 
 	public CreateContainerCmd withEnv(String... env);
-	
+
 	public CreateContainerCmd withExposedPorts(ExposedPort... exposedPorts);
-	
+
 	/**
 	 * Add hostnames to /etc/hosts in the container
 	 */
 	public CreateContainerCmd withExtraHosts(String... extraHosts);
-	
+
 	public CreateContainerCmd withHostConfig(HostConfig hostConfig);
 
 	public CreateContainerCmd withHostName(String hostName);
+
+	public CreateContainerCmd withDomainName(String domainName);
 
 	public CreateContainerCmd withImage(String image);
 
@@ -175,15 +179,15 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 	 * Add link to another container.
 	 */
 	public CreateContainerCmd withLinks(Link... links);
-	
+
 	public CreateContainerCmd withLxcConf(LxcConf... lxcConf);
 
 	public CreateContainerCmd withMemoryLimit(long memoryLimit);
-	
+
 	public CreateContainerCmd withMemorySwap(long memorySwap);
-	
+
 	public CreateContainerCmd withName(String name);
-	
+
 
 	/**
 	 * Set the Network mode for the container
@@ -198,28 +202,28 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 	 * </ul>
 	 */
 	public CreateContainerCmd withNetworkMode(String networkMode);
-	
+
 	/**
 	 * Add one or more {@link PortBinding}s.
 	 * This corresponds to the <code>--publish</code> (<code>-p</code>)
 	 * option of the <code>docker run</code> CLI command.
 	 */
 	public CreateContainerCmd withPortBindings(PortBinding... portBindings);
-	
+
 	/**
 	 * Add the port bindings that are contained in the given {@link Ports}
 	 * object.
-	 * 
+	 *
 	 * @see #withPortBindings(PortBinding...)
 	 */
 	public CreateContainerCmd withPortBindings(Ports portBindings);
 
 	public CreateContainerCmd withPortSpecs(String... portSpecs);
-	
+
 	public CreateContainerCmd withPrivileged(boolean privileged);
-	
+
 	public CreateContainerCmd withPublishAllPorts(boolean publishAllPorts);
-	
+
 	/**
 	 * Set custom {@link RestartPolicy} for the container. Defaults to
 	 * {@link RestartPolicy#noRestart()}
@@ -231,13 +235,13 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
 	public CreateContainerCmd withStdinOpen(boolean stdinOpen);
 
 	public CreateContainerCmd withTty(boolean tty);
-		
+
 	public CreateContainerCmd withUser(String user);
-	
+
 	public CreateContainerCmd withVolumes(Volume... volumes);
-	
+
 	public CreateContainerCmd withVolumesFrom(VolumesFrom... volumesFrom);
-	
+
 	public CreateContainerCmd withWorkingDir(String workingDir);
 
 	public CreateContainerCmd withMacAddress(String macAddress);

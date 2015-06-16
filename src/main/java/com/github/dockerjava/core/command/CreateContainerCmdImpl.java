@@ -26,9 +26,9 @@ import com.github.dockerjava.api.model.VolumesFrom;
 import com.github.dockerjava.api.model.Volumes;
 
 /**
- * 
+ *
  * Creates a new container.
- * 
+ *
  */
 public class CreateContainerCmdImpl extends
 		AbstrDockerCmd<CreateContainerCmd, CreateContainerResponse> implements
@@ -38,6 +38,8 @@ public class CreateContainerCmdImpl extends
 
 	@JsonProperty("Hostname")
 	private String hostName = "";
+	@JsonProperty("Domainname")
+    private String domainName = "";
 	@JsonProperty("User")
 	private String user = "";
 	@JsonProperty("Memory")
@@ -183,6 +185,11 @@ public class CreateContainerCmdImpl extends
 	}
 
 	@Override
+	public String getDomainName() {
+        return domainName;
+    }
+
+	@Override
 	public String getImage() {
 		return image;
 	}
@@ -198,7 +205,7 @@ public class CreateContainerCmdImpl extends
 	public LxcConf[] getLxcConf() {
 		return hostConfig.getLxcConf();
 	}
-	
+
 	public String getMacAddress() {
 		return macAddress;
 	}
@@ -433,6 +440,12 @@ public class CreateContainerCmdImpl extends
 	}
 
 	@Override
+    public CreateContainerCmdImpl withDomainName(String domainName) {
+        this.domainName = domainName;
+        return this;
+    }
+
+	@Override
 	public CreateContainerCmdImpl withImage(String image) {
 		this.image = image;
 		return this;
@@ -451,7 +464,7 @@ public class CreateContainerCmdImpl extends
 		this.hostConfig.setLxcConf(lxcConf);
 		return this;
 	}
-	
+
 	@Override
 	public CreateContainerCmdImpl withMacAddress(String macAddress) {
 		this.macAddress = macAddress;
@@ -515,7 +528,7 @@ public class CreateContainerCmdImpl extends
 		this.hostConfig.setPublishAllPorts(publishAllPorts);
 		return this;
 	}
-	
+
 	@Override
 	public CreateContainerCmd withRestartPolicy(RestartPolicy restartPolicy) {
 		this.hostConfig.setRestartPolicy(restartPolicy);
