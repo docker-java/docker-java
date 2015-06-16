@@ -41,6 +41,26 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse> {
 
     public int getCpuShares();
 
+    /**
+     * @since 1.19
+     */
+    public Integer getCpuPeriod();
+
+    /**
+     * @since 1.19
+     */
+    public String getCpusetMems();
+
+    /**
+     * @since 1.19
+     */
+    public Integer getBlkioWeight();
+
+    /**
+     * @since 1.19
+     */
+    public Boolean isOomKillDisable();
+
     public Device[] getDevices();
 
     public String[] getDns();
@@ -136,6 +156,26 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse> {
     public CreateContainerCmd withCpuset(String cpuset);
 
     public CreateContainerCmd withCpuShares(int cpuShares);
+
+    /**
+     * @since 1.19
+     */
+    public CreateContainerCmd withCpuPeriod(Integer cpuPeriod);
+
+    /**
+     * @since 1.19
+     */
+    public CreateContainerCmd withCpusetMems(String cpusetMems);
+
+    /**
+     * @since 1.19
+     */
+    public CreateContainerCmd withBlkioWeight(Integer blkioWeight);
+
+    /**
+     * @since 1.19
+     */
+    public CreateContainerCmd withOomKillDisable(Boolean oomKillDisable);
 
     /**
      * Add host devices to the container
