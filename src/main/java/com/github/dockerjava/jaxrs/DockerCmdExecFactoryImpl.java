@@ -105,7 +105,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 				connManager);
 
 		clientConfig.property(ApacheClientProperties.REQUEST_CONFIG,
-                RequestConfig.custom().setConnectionRequestTimeout(10).build());
+                RequestConfig.custom().setConnectionRequestTimeout(1000).build());
 
 		ClientBuilder clientBuilder = ClientBuilder.newBuilder().withConfig(
 				clientConfig);
