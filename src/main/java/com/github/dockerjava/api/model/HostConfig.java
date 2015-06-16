@@ -27,6 +27,9 @@ public class HostConfig {
 	@JsonProperty("Privileged")
 	private boolean privileged;
 
+	@JsonProperty("ReadonlyRootfs")
+	private boolean readonlyRootfs;
+
 	@JsonProperty("Dns")
 	private String[] dns;
 
@@ -64,7 +67,7 @@ public class HostConfig {
 	}
 
 	public HostConfig(Bind[] binds, Link[] links, LxcConf[] lxcConf, Ports portBindings, boolean publishAllPorts,
-			boolean privileged, String[] dns, String[] dnsSearch, VolumesFrom[] volumesFrom, String containerIDFile,
+			boolean privileged, boolean readonlyRootfs, String[] dns, String[] dnsSearch, VolumesFrom[] volumesFrom, String containerIDFile,
 			Capability[] capAdd, Capability[] capDrop, RestartPolicy restartPolicy, String networkMode, Device[] devices,
             String[] extraHosts, Ulimit[] ulimits) {
 		this.binds = new Binds(binds);
@@ -73,6 +76,7 @@ public class HostConfig {
 		this.portBindings = portBindings;
 		this.publishAllPorts = publishAllPorts;
 		this.privileged = privileged;
+		this.readonlyRootfs = readonlyRootfs;
 		this.dns = dns;
 		this.dnsSearch = dnsSearch;
 		this.volumesFrom = volumesFrom;
@@ -95,7 +99,7 @@ public class HostConfig {
 	public LxcConf[] getLxcConf() {
 		return lxcConf;
 	}
-	
+
 	public Ports getPortBindings() {
 		return portBindings;
 	}
@@ -106,6 +110,10 @@ public class HostConfig {
 
 	public boolean isPrivileged() {
 		return privileged;
+	}
+
+	public boolean isReadonlyRootfs() {
+		return readonlyRootfs;
 	}
 
 	public String[] getDns() {
@@ -181,6 +189,10 @@ public class HostConfig {
 
 	public void setPrivileged(boolean privileged) {
 		this.privileged = privileged;
+	}
+
+	public void setReadonlyRootfs(boolean readonlyRootfs) {
+		this.readonlyRootfs = readonlyRootfs;
 	}
 
 	public void setDns(String[] dns) {
