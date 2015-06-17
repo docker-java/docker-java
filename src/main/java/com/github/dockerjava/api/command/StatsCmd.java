@@ -1,28 +1,17 @@
 package com.github.dockerjava.api.command;
 
-import com.github.dockerjava.api.async.StreamCallback;
 import com.github.dockerjava.api.model.Statistics;
 
 /**
- * Get stats
- *
+ * Get container stats. The result of {@link Statistics} is handled asynchronously because
+ * the docker remote API will block when a container is stopped until
+ * the container is up again.
  */
-public interface StatsCmd extends DockerCmd<Void> {
+public interface StatsCmd extends AsyncDockerCmd<StatsCmd, Statistics, Void> {
     public StatsCmd withContainerId(String containerId);
 
     public String getContainerId();
 
-    public StatsCmd withStatisticsCallback(StatisticsCallback callback);
-
-    public StatisticsCallback getStatisticsCallback();
-
     public static interface Exec extends DockerCmdExec<StatsCmd, Void> {
     }
-
-    /**
-     * {@link Statistics} stream callback
-     */
-    public interface StatisticsCallback extends StreamCallback<Statistics> {
-    }
-
 }

@@ -6,11 +6,13 @@ import static org.hamcrest.Matchers.contains;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumeBind;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.TestDockerCmdExecFactory;
+import com.github.dockerjava.core.async.ResultCallbackTemplate;
 import com.google.common.base.Joiner;
 
 import org.apache.commons.io.IOUtils;
@@ -186,5 +188,38 @@ public abstract class AbstractDockerClientTest extends Assert {
 		}
 		assertThat(volumes, contains(expectedVolumes));
 	}
+
+	public static class CollectFramesCallback extends ResultCallbackTemplate<Frame> {
+        public final List<Frame> frames = new ArrayList<Frame>();
+        private final StringBuffer log = new StringBuffer();
+
+        @Override
+        public void onError(Throwable throwable) {
+            throwable.printStackTrace();
+            super.onError(throwable);
+        }
+
+        @Override
+        public void onResult(Frame frame) {
+            frames.add(frame);
+            log.append(new String(frame.getPayload()).trim());
+        }
+
+        @Override
+        public String toString() {
+            return log.toString();
+        }
+    }
+
+	protected String containerLog(String containerId) throws Exception {
+
+        CollectFramesCallback collectFramesCallback = new CollectFramesCallback();
+
+        dockerClient.logContainerCmd(containerId, collectFramesCallback).withStdOut().exec();
+
+        collectFramesCallback.awaitFinish();
+
+        return collectFramesCallback.toString();
+    }
 
 }

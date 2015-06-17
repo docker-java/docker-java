@@ -1,14 +1,11 @@
 package com.github.dockerjava.core.command;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -20,10 +17,9 @@ import org.testng.annotations.Test;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.EventsCmd;
-import com.github.dockerjava.api.command.EventsCmd.EventStreamCallback;
 import com.github.dockerjava.api.model.Event;
 import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.github.dockerjava.core.async.DefaultCallback;
+import com.github.dockerjava.core.async.ResultCallbackTemplate;
 
 @Test(groups = "integration")
 public class EventsCmdImplTest extends AbstractDockerClientTest {
@@ -54,6 +50,9 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 		super.afterMethod(result);
 	}
 
+	/*
+	 * This specific test may fail with boot2docker as time may not in sync with host system
+	 */
 	@Test
 	public void testEventStreamTimeBound() throws InterruptedException,
 			IOException {
@@ -132,7 +131,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 		return KNOWN_NUM_EVENTS;
 	}
 
-	private class EventCallbackTest extends DefaultCallback<Event> implements EventStreamCallback {
+	private class EventCallbackTest extends ResultCallbackTemplate<Event> {
 
 		private final CountDownLatch countDownLatch;
 
@@ -142,14 +141,10 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 			this.countDownLatch = countDownLatch;
 		}
 
-		public void onStream(Event event) {
+		public void onResult(Event event) {
 		    LOG.info("Received event #{}: {}", countDownLatch.getCount(), event);
             countDownLatch.countDown();
             events.add(event);
-	    }
-
-		public void onError(Throwable throwable) {
-		    LOG.error("Error occurred: {}", throwable.getMessage());
 	    }
 
 		public List<Event> getEvents() {

@@ -20,10 +20,9 @@ import org.testng.annotations.Test;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.StatsCmd;
-import com.github.dockerjava.api.command.StatsCmd.StatisticsCallback;
 import com.github.dockerjava.api.model.Statistics;
 import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.github.dockerjava.core.async.DefaultCallback;
+import com.github.dockerjava.core.async.ResultCallbackTemplate;
 
 @Test(groups = "integration")
 public class StatsCmdImplTest extends AbstractDockerClientTest {
@@ -85,7 +84,7 @@ public class StatsCmdImplTest extends AbstractDockerClientTest {
 
     }
 
-    private class StatsCallbackTest extends DefaultCallback<Statistics> implements StatisticsCallback {
+    private class StatsCallbackTest extends ResultCallbackTemplate<Statistics> {
         private final CountDownLatch countDownLatch;
 
         private boolean gotStats = false;
@@ -95,7 +94,7 @@ public class StatsCmdImplTest extends AbstractDockerClientTest {
         }
 
         @Override
-        public void onStream(Statistics stats) {
+        public void onResult(Statistics stats) {
             LOG.info("Received stats #{}: {}", countDownLatch.getCount(), stats);
             if (stats != null) {
                 gotStats = true;

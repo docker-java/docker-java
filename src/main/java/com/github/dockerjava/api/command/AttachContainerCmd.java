@@ -4,13 +4,14 @@ import java.io.InputStream;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.model.Frame;
 
 /**
  * Attach to container
- * 
+ *
  * @param logs
  *            - true or false, includes logs. Defaults to false.
- * 
+ *
  * @param followStream
  *            - true or false, return stream. Defaults to false.
  * @param stdout
@@ -21,7 +22,7 @@ import com.github.dockerjava.api.NotFoundException;
  *            - true or false, if true, print timestamps for every log line.
  *            Defaults to false.
  */
-public interface AttachContainerCmd extends DockerCmd<InputStream> {
+public interface AttachContainerCmd extends AsyncDockerCmd<AttachContainerCmd, Frame, Void> {
 
 	public String getContainerId();
 
@@ -67,15 +68,15 @@ public interface AttachContainerCmd extends DockerCmd<InputStream> {
 	/**
 	 * Its the responsibility of the caller to consume and/or close the
 	 * {@link InputStream} to prevent connection leaks.
-	 * 
+	 *
 	 * @throws NotFoundException
 	 *             No such container
 	 */
 	@Override
-	public InputStream exec() throws NotFoundException;
+	public Void exec() throws NotFoundException;
 
 	public static interface Exec extends
-			DockerCmdExec<AttachContainerCmd, InputStream> {
+			DockerCmdExec<AttachContainerCmd, Void> {
 	}
 
 }
