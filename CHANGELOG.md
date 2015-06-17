@@ -2,6 +2,9 @@ Change Log
 ===
 Latest SNAPSHOT
 ---
+* [#248](https://github.com/docker-java/docker-java/pull/233) Removed deprecated start options
+* [#247](https://github.com/docker-java/docker-java/pull/247) Add Domainname attribute on create command
+* [#245](https://github.com/docker-java/docker-java/pull/245) Added ReadonlyRootfs option
 * [#233](https://github.com/docker-java/docker-java/pull/233) Labels are array of Strings (fixes #232) 
 * [#189](https://github.com/docker-java/docker-java/pull/189) Add docker stats support  
 
