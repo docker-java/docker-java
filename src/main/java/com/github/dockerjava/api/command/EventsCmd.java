@@ -1,7 +1,7 @@
 package com.github.dockerjava.api.command;
 
+import com.github.dockerjava.api.async.StreamCallback;
 import com.github.dockerjava.api.model.Event;
-import com.github.dockerjava.api.stream.ObjectStreamCallback;
 
 
 /**
@@ -20,18 +20,16 @@ public interface EventsCmd extends DockerCmd<Void> {
     public String getUntil();
 
     public EventStreamCallback getEventCallback();
-    
+
     public EventsCmd withEventCallback(EventStreamCallback eventCallback);
 
     public static interface Exec extends DockerCmdExec<EventsCmd, Void> {
     }
-    
+
     /**
      * {@link Event} stream callback
      */
-    public interface EventStreamCallback extends ObjectStreamCallback<Event>{
-    	
-        
+    public interface EventStreamCallback extends StreamCallback<Event> {
     }
 
 }

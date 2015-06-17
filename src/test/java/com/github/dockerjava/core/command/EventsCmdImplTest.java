@@ -6,7 +6,9 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -17,9 +19,11 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.command.EventsCmd.EventStreamCallback;
 import com.github.dockerjava.api.model.Event;
 import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.core.async.DefaultCallback;
 
 @Test(groups = "integration")
 public class EventsCmdImplTest extends AbstractDockerClientTest {
@@ -63,62 +67,56 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 		CountDownLatch countDownLatch = new CountDownLatch(expectedEvents);
 		EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
 
-		dockerClient.eventsCmd(eventCallback)
-				.withSince(startTime)
-				.withUntil(endTime)
-				.exec();
-		
-		boolean zeroCount = countDownLatch.await(5, TimeUnit.SECONDS);
-		
-		eventCallback.close();
-		
-		LOG.debug("events: " + eventCallback.getEvents());
+		EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback)
+				.withSince(startTime).withUntil(endTime);
+		eventsCmd.exec();
 
-		assertTrue(zeroCount, "" + eventCallback.getEvents());
+		boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
+
+
+		eventCallback.close();
+
+		assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
 	}
 
 	@Test
-	public void testEventStreamingUnbound() throws InterruptedException, IOException {
+	public void testEventStreaming1() throws InterruptedException, IOException {
 		// Don't include other tests events
 		TimeUnit.SECONDS.sleep(1);
 
 		CountDownLatch countDownLatch = new CountDownLatch(KNOWN_NUM_EVENTS);
 		EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
 
-		dockerClient.eventsCmd(eventCallback)
-			.withSince(getEpochTime())
-			.exec();
+		EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withSince(
+				getEpochTime());
+		eventsCmd.exec();
 
 		generateEvents();
 
-		boolean zeroCount = countDownLatch.await(5, TimeUnit.SECONDS);
+		boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
 
-		System.out.println("close callback");
-		
 		eventCallback.close();
-		assertTrue(zeroCount, "Expected 4 events, [create, start, die, stop]");
-		
-		assertTrue(eventCallback.getErrors().isEmpty(), "At least on Exception was thrown: " + eventCallback.getErrors());
+		assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
 	}
 
 	@Test
-	public void testEventStreamingUnbound2() throws InterruptedException, IOException {
+	public void testEventStreaming2() throws InterruptedException, IOException {
 		// Don't include other tests events
 		TimeUnit.SECONDS.sleep(1);
 
 		CountDownLatch countDownLatch = new CountDownLatch(KNOWN_NUM_EVENTS);
 		EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
 
-		dockerClient.eventsCmd(eventCallback)
-			.withSince(getEpochTime())
-			.exec();
+		EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withSince(
+				getEpochTime());
+		eventsCmd.exec();
 
 		generateEvents();
 
-		boolean zeroCount = countDownLatch.await(5, TimeUnit.SECONDS);
+		boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
 
 		eventCallback.close();
-		assertTrue(zeroCount, "Expected 4 events, [create, start, die, stop]");
+		assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
 	}
 
 	/**
@@ -134,50 +132,28 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 		return KNOWN_NUM_EVENTS;
 	}
 
-	private class EventCallbackTest implements EventStreamCallback, Closeable {
+	private class EventCallbackTest extends DefaultCallback<Event> implements EventStreamCallback {
+
 		private final CountDownLatch countDownLatch;
+
 		private final List<Event> events = new ArrayList<Event>();
-		private final List<Throwable> errors = new ArrayList<Throwable>();
-		private Closeable closeable;
 
 		public EventCallbackTest(CountDownLatch countDownLatch) {
 			this.countDownLatch = countDownLatch;
 		}
 
-		@Override
-		public void close() throws IOException {
-			closeable.close();
-		}
-		
-		@Override
-		public void streamStarted(Closeable closeable) {
-			this.closeable = closeable;
-		}
-
-		@Override
 		public void onStream(Event event) {
-			LOG.info("Received event #{}: {}", countDownLatch.getCount(), event);
-			countDownLatch.countDown();
-			events.add(event);
-		}
+		    LOG.info("Received event #{}: {}", countDownLatch.getCount(), event);
+            countDownLatch.countDown();
+            events.add(event);
+	    }
 
-		@Override
 		public void onError(Throwable throwable) {
-			LOG.error("Error occurred: {}", throwable.getMessage());
-			errors.add(throwable);
-		}
-		
-		@Override
-		public void streamFinished() {
-			LOG.info("Event stream finished");
-		}
+		    LOG.error("Error occurred: {}", throwable.getMessage());
+	    }
 
 		public List<Event> getEvents() {
 			return new ArrayList<Event>(events);
-		}
-		
-		public List<Throwable> getErrors() {
-			return errors;
 		}
 	}
 }

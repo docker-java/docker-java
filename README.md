@@ -4,7 +4,7 @@
 
 Java API client for [Docker](http://docs.docker.io/ "Docker")
 
-Supports a subset of the Docker Client API v1.18, Docker Server version 1.6.0
+Supports a subset of the Docker Remote API [v1.18](https://github.com/docker/docker/blob/master/docs/reference/api/docker_remote_api_v1.18.md), Docker Server version 1.6.x
 
 <b>The current implementation is based on Jersey 2.x and therefore classpath incompatible with older Jersey 1.x dependent libraries!</b>
 

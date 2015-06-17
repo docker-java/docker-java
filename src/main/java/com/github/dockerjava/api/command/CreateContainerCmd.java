@@ -14,232 +14,228 @@ import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.RestartPolicy;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
-import com.github.dockerjava.core.command.CreateContainerCmdImpl;
 
-public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse>{
+public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse> {
 
-	public static interface Exec extends DockerCmdExec<CreateContainerCmd, CreateContainerResponse> {
-	}
+    public static interface Exec extends DockerCmdExec<CreateContainerCmd, CreateContainerResponse> {
+    }
 
-	/**
-	 * @throws NotFoundException No such container
-	 * @throws ConflictException Named container already exists
-	 */
+    /**
+     * @throws NotFoundException
+     *             No such container
+     * @throws ConflictException
+     *             Named container already exists
+     */
     @Override
-	public CreateContainerResponse exec() throws NotFoundException,
-			ConflictException;
+    public CreateContainerResponse exec() throws NotFoundException, ConflictException;
 
-	public Bind[] getBinds();
+    public Bind[] getBinds();
 
-	public Capability[] getCapAdd();
+    public Capability[] getCapAdd();
 
-	public Capability[] getCapDrop();
+    public Capability[] getCapDrop();
 
-	public String[] getCmd();
+    public String[] getCmd();
 
-	public String getCpuset();
+    public String getCpuset();
 
-	public int getCpuShares();
+    public int getCpuShares();
 
-	public Device[] getDevices();
+    public Device[] getDevices();
 
-	public String[] getDns();
-	
-	public String[] getDnsSearch();
+    public String[] getDns();
 
-	public String[] getEntrypoint();
+    public String[] getDnsSearch();
 
-	public String[] getEnv();
+    public String[] getEntrypoint();
 
-	public ExposedPort[] getExposedPorts();
-	
-	public String[] getExtraHosts();
+    public String[] getEnv();
 
-	public HostConfig getHostConfig();
+    public ExposedPort[] getExposedPorts();
 
-	public String getHostName();
+    public String[] getExtraHosts();
 
-	public String getImage();
+    public HostConfig getHostConfig();
 
-	public Link[] getLinks();
-	
-	public LxcConf[] getLxcConf();
-	
-	public String getMacAddress();
+    public String getHostName();
 
-	public long getMemoryLimit();
+    public String getDomainName();
 
-	public long getMemorySwap();
+    public String getImage();
 
-	public String getName();
-	
-	public String getNetworkMode();
-	
-	public Ports getPortBindings();
+    public Link[] getLinks();
 
-	public String[] getPortSpecs();
-	
-	public RestartPolicy getRestartPolicy();
+    public LxcConf[] getLxcConf();
 
-	public String getUser();
+    public String getMacAddress();
 
-	public Volume[] getVolumes();
+    public long getMemoryLimit();
 
-	public VolumesFrom[] getVolumesFrom();
+    public long getMemorySwap();
 
-	public String getWorkingDir();
+    public String getName();
 
-	public boolean isAttachStderr();
+    public String getNetworkMode();
 
-	public boolean isAttachStdin();
+    public Ports getPortBindings();
 
-	public boolean isAttachStdout();
+    public String[] getPortSpecs();
 
-	public boolean isNetworkDisabled();
-	
-	public Boolean isPrivileged();
-	
-	public Boolean isPublishAllPorts();
+    public RestartPolicy getRestartPolicy();
 
-	public boolean isStdInOnce();
+    public String getUser();
 
-	public boolean isStdinOpen();
+    public Volume[] getVolumes();
 
-	public boolean isTty();
+    public VolumesFrom[] getVolumesFrom();
 
-	public CreateContainerCmd withAttachStderr(boolean attachStderr);
+    public String getWorkingDir();
 
-	public CreateContainerCmd withAttachStdin(boolean attachStdin);
-	
-	public CreateContainerCmd withAttachStdout(boolean attachStdout);
-	
-	public CreateContainerCmd withBinds(Bind... binds);
+    public boolean isAttachStderr();
 
-	/**
-	 * Add linux <a
-	 * href="http://man7.org/linux/man-pages/man7/capabilities.7.html">kernel
-	 * capability</a> to the container. For example: adding {@link Capability#MKNOD}
-	 * allows the container to create special files using the 'mknod' command.
-	 */
-	public CreateContainerCmd withCapAdd(Capability... capAdd);
+    public boolean isAttachStdin();
 
-	/**
-	 * Drop linux <a
-	 * href="http://man7.org/linux/man-pages/man7/capabilities.7.html">kernel
-	 * capability</a> from the container. For example: dropping {@link Capability#CHOWN}
-	 * prevents the container from changing the owner of any files.
-	 */
-	public CreateContainerCmd withCapDrop(Capability... capDrop);
+    public boolean isAttachStdout();
 
-	public CreateContainerCmd withCmd(String... cmd);
+    public boolean isNetworkDisabled();
 
-	public CreateContainerCmd withCpuset(String cpuset);
-	
-	public CreateContainerCmd withCpuShares(int cpuShares);
-	
-	/**
-	 * Add host devices to the container
-	 */
-	public CreateContainerCmd withDevices(Device... devices);
+    public Boolean isPrivileged();
 
-	public CreateContainerCmd withNetworkDisabled(boolean disableNetwork);
+    public Boolean isPublishAllPorts();
 
-	/**
-	 * Set custom DNS servers
-	 */
-	public CreateContainerCmd withDns(String... dns);
-	
-	/**
-	 * Set custom DNS search domains
-	 */
-	public CreateContainerCmd withDnsSearch(String... dnsSearch);
+    public boolean isStdInOnce();
 
-	public CreateContainerCmd withEntrypoint(String... entrypoint);
+    public boolean isStdinOpen();
 
-	public CreateContainerCmd withEnv(String... env);
-	
-	public CreateContainerCmd withExposedPorts(ExposedPort... exposedPorts);
-	
-	/**
-	 * Add hostnames to /etc/hosts in the container
-	 */
-	public CreateContainerCmd withExtraHosts(String... extraHosts);
-	
-	public CreateContainerCmd withHostConfig(HostConfig hostConfig);
+    public boolean isTty();
 
-	public CreateContainerCmd withHostName(String hostName);
+    public CreateContainerCmd withAttachStderr(boolean attachStderr);
 
-	public CreateContainerCmd withImage(String image);
+    public CreateContainerCmd withAttachStdin(boolean attachStdin);
 
-	/**
-	 * Add link to another container.
-	 */
-	public CreateContainerCmd withLinks(Link... links);
-	
-	public CreateContainerCmd withLxcConf(LxcConf... lxcConf);
+    public CreateContainerCmd withAttachStdout(boolean attachStdout);
 
-	public CreateContainerCmd withMemoryLimit(long memoryLimit);
-	
-	public CreateContainerCmd withMemorySwap(long memorySwap);
-	
-	public CreateContainerCmd withName(String name);
-	
+    public CreateContainerCmd withBinds(Bind... binds);
 
-	/**
-	 * Set the Network mode for the container
-	 * <ul>
-	 * <li>'bridge': creates a new network stack for the container on the docker
-	 * bridge</li>
-	 * <li>'none': no networking for this container</li>
-	 * <li>'container:<name|id>': reuses another container network stack</li>
-	 * <li>'host': use the host network stack inside the container. Note: the
-	 * host mode gives the container full access to local system services such
-	 * as D-bus and is therefore considered insecure.</li>
-	 * </ul>
-	 */
-	public CreateContainerCmd withNetworkMode(String networkMode);
-	
-	/**
-	 * Add one or more {@link PortBinding}s.
-	 * This corresponds to the <code>--publish</code> (<code>-p</code>)
-	 * option of the <code>docker run</code> CLI command.
-	 */
-	public CreateContainerCmd withPortBindings(PortBinding... portBindings);
-	
-	/**
-	 * Add the port bindings that are contained in the given {@link Ports}
-	 * object.
-	 * 
-	 * @see #withPortBindings(PortBinding...)
-	 */
-	public CreateContainerCmd withPortBindings(Ports portBindings);
+    /**
+     * Add linux <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">kernel capability</a> to the
+     * container. For example: adding {@link Capability#MKNOD} allows the container to create special files using the
+     * 'mknod' command.
+     */
+    public CreateContainerCmd withCapAdd(Capability... capAdd);
 
-	public CreateContainerCmd withPortSpecs(String... portSpecs);
-	
-	public CreateContainerCmd withPrivileged(boolean privileged);
-	
-	public CreateContainerCmd withPublishAllPorts(boolean publishAllPorts);
-	
-	/**
-	 * Set custom {@link RestartPolicy} for the container. Defaults to
-	 * {@link RestartPolicy#noRestart()}
-	 */
-	public CreateContainerCmd withRestartPolicy(RestartPolicy restartPolicy);
+    /**
+     * Drop linux <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">kernel capability</a> from the
+     * container. For example: dropping {@link Capability#CHOWN} prevents the container from changing the owner of any
+     * files.
+     */
+    public CreateContainerCmd withCapDrop(Capability... capDrop);
 
-	public CreateContainerCmd withStdInOnce(boolean stdInOnce);
+    public CreateContainerCmd withCmd(String... cmd);
 
-	public CreateContainerCmd withStdinOpen(boolean stdinOpen);
+    public CreateContainerCmd withCpuset(String cpuset);
 
-	public CreateContainerCmd withTty(boolean tty);
-		
-	public CreateContainerCmd withUser(String user);
-	
-	public CreateContainerCmd withVolumes(Volume... volumes);
-	
-	public CreateContainerCmd withVolumesFrom(VolumesFrom... volumesFrom);
-	
-	public CreateContainerCmd withWorkingDir(String workingDir);
+    public CreateContainerCmd withCpuShares(int cpuShares);
 
-	public CreateContainerCmd withMacAddress(String macAddress);
+    /**
+     * Add host devices to the container
+     */
+    public CreateContainerCmd withDevices(Device... devices);
+
+    public CreateContainerCmd withNetworkDisabled(boolean disableNetwork);
+
+    /**
+     * Set custom DNS servers
+     */
+    public CreateContainerCmd withDns(String... dns);
+
+    /**
+     * Set custom DNS search domains
+     */
+    public CreateContainerCmd withDnsSearch(String... dnsSearch);
+
+    public CreateContainerCmd withEntrypoint(String... entrypoint);
+
+    public CreateContainerCmd withEnv(String... env);
+
+    public CreateContainerCmd withExposedPorts(ExposedPort... exposedPorts);
+
+    /**
+     * Add hostnames to /etc/hosts in the container
+     */
+    public CreateContainerCmd withExtraHosts(String... extraHosts);
+
+    public CreateContainerCmd withHostConfig(HostConfig hostConfig);
+
+    public CreateContainerCmd withHostName(String hostName);
+
+    public CreateContainerCmd withDomainName(String domainName);
+
+    public CreateContainerCmd withImage(String image);
+
+    /**
+     * Add link to another container.
+     */
+    public CreateContainerCmd withLinks(Link... links);
+
+    public CreateContainerCmd withLxcConf(LxcConf... lxcConf);
+
+    public CreateContainerCmd withMemoryLimit(long memoryLimit);
+
+    public CreateContainerCmd withMemorySwap(long memorySwap);
+
+    public CreateContainerCmd withName(String name);
+
+    /**
+     * Set the Network mode for the container
+     * <ul>
+     * <li>'bridge': creates a new network stack for the container on the docker bridge</li>
+     * <li>'none': no networking for this container</li>
+     * <li>'container:<name|id>': reuses another container network stack</li>
+     * <li>'host': use the host network stack inside the container. Note: the host mode gives the container full access
+     * to local system services such as D-bus and is therefore considered insecure.</li>
+     * </ul>
+     */
+    public CreateContainerCmd withNetworkMode(String networkMode);
+
+    /**
+     * Add one or more {@link PortBinding}s. This corresponds to the <code>--publish</code> (<code>-p</code>) option of
+     * the <code>docker run</code> CLI command.
+     */
+    public CreateContainerCmd withPortBindings(PortBinding... portBindings);
+
+    /**
+     * Add the port bindings that are contained in the given {@link Ports} object.
+     *
+     * @see #withPortBindings(PortBinding...)
+     */
+    public CreateContainerCmd withPortBindings(Ports portBindings);
+
+    public CreateContainerCmd withPortSpecs(String... portSpecs);
+
+    public CreateContainerCmd withPrivileged(boolean privileged);
+
+    public CreateContainerCmd withPublishAllPorts(boolean publishAllPorts);
+
+    /**
+     * Set custom {@link RestartPolicy} for the container. Defaults to {@link RestartPolicy#noRestart()}
+     */
+    public CreateContainerCmd withRestartPolicy(RestartPolicy restartPolicy);
+
+    public CreateContainerCmd withStdInOnce(boolean stdInOnce);
+
+    public CreateContainerCmd withStdinOpen(boolean stdinOpen);
+
+    public CreateContainerCmd withTty(boolean tty);
+
+    public CreateContainerCmd withUser(String user);
+
+    public CreateContainerCmd withVolumes(Volume... volumes);
+
+    public CreateContainerCmd withVolumesFrom(VolumesFrom... volumesFrom);
+
+    public CreateContainerCmd withWorkingDir(String workingDir);
+
+    public CreateContainerCmd withMacAddress(String macAddress);
 
 }

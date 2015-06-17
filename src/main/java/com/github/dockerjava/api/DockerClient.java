@@ -4,6 +4,7 @@ import java.io.*;
 
 import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.command.EventsCmd.EventStreamCallback;
+import com.github.dockerjava.api.command.StatsCmd.StatisticsCallback;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Identifier;
 
@@ -43,7 +44,7 @@ public interface DockerClient extends Closeable {
 	public ListImagesCmd listImagesCmd();
 
 	public InspectImageCmd inspectImageCmd(String imageId);
-    
+
     public SaveImageCmd saveImageCmd(String name);
 
 	/**
@@ -62,8 +63,8 @@ public interface DockerClient extends Closeable {
 	 * <p>
 	 * <b>If you customize the command, any existing configuration of the
 	 * target container will get reset to its default before applying the
-	 * new configuration. To preserve the existing configuration, use an 
-	 * unconfigured {@link StartContainerCmd}.</b> 
+	 * new configuration. To preserve the existing configuration, use an
+	 * unconfigured {@link StartContainerCmd}.</b>
 	 * <p>
 	 * This command corresponds to the <code>/containers/{id}/start</code>
 	 * endpoint of the Docker Remote API.
@@ -108,12 +109,14 @@ public interface DockerClient extends Closeable {
 	public TopContainerCmd topContainerCmd(String containerId);
 
 	public TagImageCmd tagImageCmd(String imageId, String repository, String tag);
-	
+
 	public PauseContainerCmd pauseContainerCmd(String containerId);
-	
+
 	public UnpauseContainerCmd unpauseContainerCmd(String containerId);
 
 	public EventsCmd eventsCmd(EventStreamCallback eventCallback);
+
+	public StatsCmd statsCmd(StatisticsCallback statisticsCallback);
 
 	@Override
 	public void close() throws IOException;

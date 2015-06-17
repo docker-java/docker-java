@@ -12,6 +12,7 @@ public class CompressArchiveUtil {
 
     public static File archiveTARFiles(File base, Iterable<File> files, String archiveNameWithOutExtension) throws IOException {
         File tarFile = new File(FileUtils.getTempDirectoryPath(), archiveNameWithOutExtension + ".tar");
+        tarFile.deleteOnExit();
         TarArchiveOutputStream tos = new TarArchiveOutputStream(new FileOutputStream(tarFile));
         try {
             tos.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU);

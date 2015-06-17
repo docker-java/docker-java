@@ -10,6 +10,7 @@ import java.io.InputStream;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.command.EventsCmd.EventStreamCallback;
+import com.github.dockerjava.api.command.StatsCmd.StatisticsCallback;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.Identifier;
@@ -346,6 +347,12 @@ public class DockerClientImpl implements Closeable, DockerClient {
 	public EventsCmd eventsCmd(EventStreamCallback eventCallback) {
 		return new EventsCmdImpl(getDockerCmdExecFactory()
 				.createEventsCmdExec(), eventCallback);
+	}
+
+	@Override
+    public StatsCmd statsCmd(StatisticsCallback statisticsCallback) {
+	    return new StatsCmdImpl(getDockerCmdExecFactory()
+	            .createStatsCmdExec(), statisticsCallback);
 	}
 
 	@Override

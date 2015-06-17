@@ -9,7 +9,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.api.stream.ObjectStreamCallback;
+import com.github.dockerjava.api.async.StreamCallback;
 
 public class Streaming {
 	
@@ -17,12 +17,12 @@ public class Streaming {
 	private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 	
 	public static <T> void processJsonStream(Response response,
-			ObjectStreamCallback<T> objectStreamCallback, Class<T> clazz) {
+			StreamCallback<T> objectStreamCallback, Class<T> clazz) {
 		
 		InputStream inputStream = new WrappedResponseInputStream(
 				response);
 		
-		objectStreamCallback.streamStarted(inputStream);
+		objectStreamCallback.onStart(inputStream);
 		
 		try {
 			JsonParser jp = JSON_FACTORY.createParser(inputStream);
@@ -42,7 +42,7 @@ public class Streaming {
 			} catch (IOException e) {
 				objectStreamCallback.onError(e);
 			} finally {
-				objectStreamCallback.streamFinished();
+				objectStreamCallback.onFinish();
 			}
 		}
 	}

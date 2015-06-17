@@ -27,7 +27,7 @@ public class EventsCmdExec extends AbstrDockerCmdExec<EventsCmd, Void>
 
 	@Override
 	protected Void execute(EventsCmd command) {
-		
+
 
 		WebTarget webTarget = getBaseResource().path("/events")
 				.queryParam("since", command.getSince())
@@ -63,13 +63,14 @@ public class EventsCmdExec extends AbstrDockerCmdExec<EventsCmd, Void>
 
 		@Override
 		public Void call() throws Exception {
+
 			Response response = webTarget.request().get(Response.class);
-						
+
 			Streaming.processJsonStream(response, eventCallback, Event.class);
-			
+
 			return null;
 		}
 	}
 
-	
+
 }
