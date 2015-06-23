@@ -38,23 +38,34 @@ public class FrameReader implements AutoCloseable {
      */
     public Frame readFrame() throws IOException {
         byte[] header = new byte[HEADER_SIZE];
-        int headerSize = inputStream.read(header);
 
-        if (headerSize == -1) {
-            return null;
-        }
+        int actualHeaderSize = 0;
 
-        if (headerSize != HEADER_SIZE) {
-            throw new IOException(String.format("header must be %d bytes long, but was %d", HEADER_SIZE, headerSize));
-        }
+        do {
+            int headerCount = inputStream.read(header, actualHeaderSize, HEADER_SIZE - actualHeaderSize);
+
+            if (headerCount == -1) {
+                return null;
+            }
+            actualHeaderSize += headerCount;
+        } while (actualHeaderSize < HEADER_SIZE);
 
         int payloadSize = ((header[4] & 0xff) << 24) + ((header[5] & 0xff) << 16) + ((header[6] & 0xff) << 8) + (header[7] & 0xff);
 
         byte[] payload = new byte[payloadSize];
-        int actualPayloadSize = inputStream.read(payload);
-        if (actualPayloadSize != payloadSize) {
-            throw new IOException(String.format("payload must be %d bytes long, but was %d", payloadSize, actualPayloadSize));
-        }
+        int actualPayloadSize = 0;
+
+        do {
+            int count = inputStream.read(payload, actualPayloadSize, payloadSize - actualPayloadSize);
+
+            if (count == -1) {
+                if (actualPayloadSize != payloadSize) {
+                    throw new IOException(String.format("payload must be %d bytes long, but was %d", payloadSize, actualPayloadSize));
+                }
+                break;
+            }
+            actualPayloadSize += count;
+        } while (actualPayloadSize < payloadSize);
 
         return new Frame(streamType(header[0]), payload);
     }
