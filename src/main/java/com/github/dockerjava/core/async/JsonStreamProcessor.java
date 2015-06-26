@@ -38,7 +38,7 @@ public class JsonStreamProcessor<T> implements ResponseStreamProcessor<T> {
             JsonParser jp = JSON_FACTORY.createParser(response);
             while (!jp.isClosed() && jp.nextToken() != JsonToken.END_OBJECT) {
                 try {
-                    resultCallback.onResult(OBJECT_MAPPER.readValue(jp, clazz));
+                    resultCallback.onNext(OBJECT_MAPPER.readValue(jp, clazz));
                 } catch (Exception e) {
                     resultCallback.onError(e);
                 }
@@ -51,7 +51,7 @@ public class JsonStreamProcessor<T> implements ResponseStreamProcessor<T> {
             } catch (IOException e) {
                 resultCallback.onError(e);
             } finally {
-                resultCallback.onFinish();
+                resultCallback.onComplete();
             }
         }
 

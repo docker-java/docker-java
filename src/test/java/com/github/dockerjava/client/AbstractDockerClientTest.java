@@ -200,9 +200,9 @@ public abstract class AbstractDockerClientTest extends Assert {
         }
 
         @Override
-        public void onResult(Frame frame) {
+        public void onNext(Frame frame) {
             frames.add(frame);
-            log.append(new String(frame.getPayload()).trim());
+            log.append(new String(frame.getPayload()));
         }
 
         @Override

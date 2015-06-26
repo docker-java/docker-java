@@ -16,7 +16,7 @@ import com.github.dockerjava.api.async.ResultCallback;
  * @author marcus
  *
  */
-public class ResultCallbackTemplate<T> implements ResultCallback<T>, Closeable {
+public class ResultCallbackTemplate<T> implements ResultCallback<T> {
 
     private final CountDownLatch finished = new CountDownLatch(1);
 
@@ -28,7 +28,7 @@ public class ResultCallbackTemplate<T> implements ResultCallback<T>, Closeable {
     }
 
     @Override
-    public void onResult(T object) {
+    public void onNext(T object) {
     }
 
     @Override
@@ -45,7 +45,7 @@ public class ResultCallbackTemplate<T> implements ResultCallback<T>, Closeable {
     }
 
     @Override
-    public void onFinish() {
+    public void onComplete() {
         try {
             close();
         } catch (IOException e) {

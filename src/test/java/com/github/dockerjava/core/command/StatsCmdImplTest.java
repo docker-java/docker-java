@@ -94,7 +94,7 @@ public class StatsCmdImplTest extends AbstractDockerClientTest {
         }
 
         @Override
-        public void onResult(Statistics stats) {
+        public void onNext(Statistics stats) {
             LOG.info("Received stats #{}: {}", countDownLatch.getCount(), stats);
             if (stats != null) {
                 gotStats = true;

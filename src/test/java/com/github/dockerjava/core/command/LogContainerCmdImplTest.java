@@ -92,8 +92,8 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
                 super.onError(throwable);
             }
 
-            public void onFinish() {
-                super.onFinish();
+            public void onComplete() {
+                super.onComplete();
                 fail("expected NotFoundException");
             };
         };

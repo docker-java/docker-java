@@ -141,7 +141,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 			this.countDownLatch = countDownLatch;
 		}
 
-		public void onResult(Event event) {
+		public void onNext(Event event) {
 		    LOG.info("Received event #{}: {}", countDownLatch.getCount(), event);
             countDownLatch.countDown();
             events.add(event);

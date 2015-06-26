@@ -28,7 +28,7 @@ public class FrameStreamProcessor implements ResponseStreamProcessor<Frame> {
             Frame frame = frameReader.readFrame();
             while (frame != null) {
                 try {
-                    resultCallback.onResult(frame);
+                    resultCallback.onNext(frame);
                 } catch (Exception e) {
                     resultCallback.onError(e);
                 } finally {
@@ -44,7 +44,7 @@ public class FrameStreamProcessor implements ResponseStreamProcessor<Frame> {
             } catch (IOException e) {
                 resultCallback.onError(e);
             } finally {
-                resultCallback.onFinish();
+                resultCallback.onComplete();
             }
         }
     }
