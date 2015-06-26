@@ -2,12 +2,13 @@ package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.model.Event;
 
-
 /**
  * Get events
  *
- * @param since - Show all events created since timestamp
- * @param until - Stream events until this timestamp
+ * @param since
+ *            - Show all events created since timestamp
+ * @param until
+ *            - Stream events until this timestamp
  */
 public interface EventsCmd extends AsyncDockerCmd<EventsCmd, Event, Void> {
     public EventsCmd withSince(String since);

@@ -22,78 +22,75 @@ import com.github.dockerjava.client.AbstractDockerClientTest;
 @Test(groups = "integration")
 public class ListImagesCmdImplTest extends AbstractDockerClientTest {
 
-	@BeforeTest
-	public void beforeTest() throws DockerException {
-		super.beforeTest();
-	}
+    @BeforeTest
+    public void beforeTest() throws DockerException {
+        super.beforeTest();
+    }
 
-	@AfterTest
-	public void afterTest() {
-		super.afterTest();
-	}
+    @AfterTest
+    public void afterTest() {
+        super.afterTest();
+    }
 
-	@BeforeMethod
-	public void beforeMethod(Method method) {
-	    super.beforeMethod(method);
-	}
+    @BeforeMethod
+    public void beforeMethod(Method method) {
+        super.beforeMethod(method);
+    }
 
-	@AfterMethod
-	public void afterMethod(ITestResult result) {
-		super.afterMethod(result);
-	}
+    @AfterMethod
+    public void afterMethod(ITestResult result) {
+        super.afterMethod(result);
+    }
 
-	@Test
-	public void listImages() throws DockerException {
-		List<Image> images = dockerClient.listImagesCmd().withShowAll(true).exec();
-		assertThat(images, notNullValue());
-		LOG.info("Images List: {}", images);
-		Info info = dockerClient.infoCmd().exec();
+    @Test
+    public void listImages() throws DockerException {
+        List<Image> images = dockerClient.listImagesCmd().withShowAll(true).exec();
+        assertThat(images, notNullValue());
+        LOG.info("Images List: {}", images);
+        Info info = dockerClient.infoCmd().exec();
 
-		assertThat(images.size(), equalTo(info.getImages()));
+        assertThat(images.size(), equalTo(info.getImages()));
 
-		Image img = images.get(0);
-		assertThat(img.getCreated(), is(greaterThan(0L)));
-		assertThat(img.getVirtualSize(), is(greaterThan(0L)));
-		assertThat(img.getId(), not(isEmptyString()));
-		assertThat(img.getRepoTags(), not(emptyArray()));
-	}
+        Image img = images.get(0);
+        assertThat(img.getCreated(), is(greaterThan(0L)));
+        assertThat(img.getVirtualSize(), is(greaterThan(0L)));
+        assertThat(img.getId(), not(isEmptyString()));
+        assertThat(img.getRepoTags(), not(emptyArray()));
+    }
 
-	@Test(groups = "ignoreInCircleCi")
-	public void listDanglingImages() throws DockerException {
-		String imageId = createDanglingImage();
-		List<Image> images = dockerClient.listImagesCmd()
-				.withFilters("{\"dangling\":[\"true\"]}")
-				.withShowAll(true).exec();
-		assertThat(images, notNullValue());
-		LOG.info("Images List: {}", images);
-		assertThat(images.size(), is(greaterThan(0)));
-		boolean imageInFilteredList = isImageInFilteredList(images, imageId);
-		assertTrue(imageInFilteredList);
-	}
+    @Test(groups = "ignoreInCircleCi")
+    public void listDanglingImages() throws DockerException {
+        String imageId = createDanglingImage();
+        List<Image> images = dockerClient.listImagesCmd().withFilters("{\"dangling\":[\"true\"]}").withShowAll(true)
+                .exec();
+        assertThat(images, notNullValue());
+        LOG.info("Images List: {}", images);
+        assertThat(images.size(), is(greaterThan(0)));
+        boolean imageInFilteredList = isImageInFilteredList(images, imageId);
+        assertTrue(imageInFilteredList);
+    }
 
-	private boolean isImageInFilteredList(List<Image> images, String expectedImageId) {
-		for (Image image : images) {
-			if (expectedImageId.equals(image.getId())) {
-				return true;
-			}
-		}
-		return false;
-	}
+    private boolean isImageInFilteredList(List<Image> images, String expectedImageId) {
+        for (Image image : images) {
+            if (expectedImageId.equals(image.getId())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	private String createDanglingImage() {
-		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd("sleep", "5").exec();
-		LOG.info("Created container: {}", container.toString());
-		assertThat(container.getId(), not(isEmptyString()));
-		dockerClient.startContainerCmd(container.getId()).exec();
+    private String createDanglingImage() {
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "5").exec();
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+        dockerClient.startContainerCmd(container.getId()).exec();
 
-		LOG.info("Committing container {}", container.toString());
-		String imageId = dockerClient
-				.commitCmd(container.getId()).exec();
+        LOG.info("Committing container {}", container.toString());
+        String imageId = dockerClient.commitCmd(container.getId()).exec();
 
-		dockerClient.stopContainerCmd(container.getId()).exec();
-		dockerClient.killContainerCmd(container.getId()).exec();
-		dockerClient.removeContainerCmd(container.getId()).exec();
-		return imageId;
-	}
+        dockerClient.stopContainerCmd(container.getId()).exec();
+        dockerClient.killContainerCmd(container.getId()).exec();
+        dockerClient.removeContainerCmd(container.getId()).exec();
+        return imageId;
+    }
 }

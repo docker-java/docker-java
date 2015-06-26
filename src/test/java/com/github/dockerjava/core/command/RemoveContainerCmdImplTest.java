@@ -28,57 +28,53 @@ import com.github.dockerjava.client.AbstractDockerClientTest;
 @Test(groups = "integration")
 public class RemoveContainerCmdImplTest extends AbstractDockerClientTest {
 
-	public static final Logger LOG = LoggerFactory
-			.getLogger(RemoveContainerCmdImplTest.class);
+    public static final Logger LOG = LoggerFactory.getLogger(RemoveContainerCmdImplTest.class);
 
-	@BeforeTest
-	public void beforeTest() throws DockerException {
-		super.beforeTest();
-	}
-	@AfterTest
-	public void afterTest() {
-		super.afterTest();
-	}
+    @BeforeTest
+    public void beforeTest() throws DockerException {
+        super.beforeTest();
+    }
 
-	@BeforeMethod
-	public void beforeMethod(Method method) {
-	    super.beforeMethod(method);
-	}
+    @AfterTest
+    public void afterTest() {
+        super.afterTest();
+    }
 
-	@AfterMethod
-	public void afterMethod(ITestResult result) {
-		super.afterMethod(result);
-	}
+    @BeforeMethod
+    public void beforeMethod(Method method) {
+        super.beforeMethod(method);
+    }
 
-	@Test(groups = "ignoreInCircleCi")
-	public void removeContainer() throws DockerException {
+    @AfterMethod
+    public void afterMethod(ITestResult result) {
+        super.afterMethod(result);
+    }
 
-		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd("true").exec();
+    @Test(groups = "ignoreInCircleCi")
+    public void removeContainer() throws DockerException {
 
-		dockerClient.startContainerCmd(container.getId()).exec();
-		dockerClient.waitContainerCmd(container.getId()).exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("true").exec();
 
-		LOG.info("Removing container: {}", container.getId());
-		dockerClient.removeContainerCmd(container.getId()).exec();
+        dockerClient.startContainerCmd(container.getId()).exec();
+        dockerClient.waitContainerCmd(container.getId()).exec();
 
-		List<Container> containers2 = dockerClient.listContainersCmd().withShowAll(true).exec();
-		
-		Matcher matcher = not(hasItem(hasField("id",
-				startsWith(container.getId()))));
-		assertThat(containers2, matcher);
+        LOG.info("Removing container: {}", container.getId());
+        dockerClient.removeContainerCmd(container.getId()).exec();
 
-	}
-	
-	@Test
-	public void removeNonExistingContainer() throws DockerException {
-		try {
-			dockerClient.removeContainerCmd("non-existing").exec();
-			fail("expected NotFoundException");			
-		} catch (NotFoundException e) {
-		}
-	}
+        List<Container> containers2 = dockerClient.listContainersCmd().withShowAll(true).exec();
 
+        Matcher matcher = not(hasItem(hasField("id", startsWith(container.getId()))));
+        assertThat(containers2, matcher);
+
+    }
+
+    @Test
+    public void removeNonExistingContainer() throws DockerException {
+        try {
+            dockerClient.removeContainerCmd("non-existing").exec();
+            fail("expected NotFoundException");
+        } catch (NotFoundException e) {
+        }
+    }
 
 }
-

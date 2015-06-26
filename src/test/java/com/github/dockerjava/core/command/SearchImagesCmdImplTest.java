@@ -25,38 +25,35 @@ import com.github.dockerjava.client.AbstractDockerClientTest;
 @Test(groups = "integration")
 public class SearchImagesCmdImplTest extends AbstractDockerClientTest {
 
-	@BeforeTest
-	public void beforeTest() throws DockerException {
-		super.beforeTest();
-	}
-	
-	@AfterTest
-	public void afterTest() {
-		super.afterTest();
-	}
+    @BeforeTest
+    public void beforeTest() throws DockerException {
+        super.beforeTest();
+    }
 
-	@BeforeMethod
-	public void beforeMethod(Method method) {
-	    super.beforeMethod(method);
-	}
+    @AfterTest
+    public void afterTest() {
+        super.afterTest();
+    }
 
-	@AfterMethod
-	public void afterMethod(ITestResult result) {
-		super.afterMethod(result);
-	}
-	
-	@Test
-	public void searchImages() throws DockerException {
-		List<SearchItem> dockerSearch = dockerClient.searchImagesCmd("busybox").exec();
-		LOG.info("Search returned {}", dockerSearch.toString());
+    @BeforeMethod
+    public void beforeMethod(Method method) {
+        super.beforeMethod(method);
+    }
 
-		Matcher matcher = hasItem(hasField("name", equalTo("busybox")));
-		assertThat(dockerSearch, matcher);
+    @AfterMethod
+    public void afterMethod(ITestResult result) {
+        super.afterMethod(result);
+    }
 
-		assertThat(
-				filter(hasField("name", is("busybox")), dockerSearch).size(),
-				equalTo(1));
-	}
+    @Test
+    public void searchImages() throws DockerException {
+        List<SearchItem> dockerSearch = dockerClient.searchImagesCmd("busybox").exec();
+        LOG.info("Search returned {}", dockerSearch.toString());
 
+        Matcher matcher = hasItem(hasField("name", equalTo("busybox")));
+        assertThat(dockerSearch, matcher);
+
+        assertThat(filter(hasField("name", is("busybox")), dockerSearch).size(), equalTo(1));
+    }
 
 }

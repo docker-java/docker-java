@@ -7,17 +7,17 @@ package com.github.dockerjava.api;
  */
 public class NotFoundException extends DockerException {
 
-	private static final long serialVersionUID = -2450396075981100160L;
+    private static final long serialVersionUID = -2450396075981100160L;
 
-	public NotFoundException(String message, Throwable cause) {
+    public NotFoundException(String message, Throwable cause) {
         super(message, 404, cause);
     }
-	
-	public NotFoundException(String message) {
+
+    public NotFoundException(String message) {
         this(message, null);
     }
-	
-	public NotFoundException(Throwable cause) {
+
+    public NotFoundException(Throwable cause) {
         this(cause.getMessage(), cause);
     }
 }

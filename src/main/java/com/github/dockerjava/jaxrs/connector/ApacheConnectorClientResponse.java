@@ -18,35 +18,31 @@ import org.glassfish.jersey.client.ClientResponse;
  *
  */
 public class ApacheConnectorClientResponse extends ClientResponse {
-	
-	private CloseableHttpResponse closeableHttpResponse;
 
-	public ApacheConnectorClientResponse(ClientRequest requestContext,
-			Response response) {
-		super(requestContext, response);
-	}
+    private CloseableHttpResponse closeableHttpResponse;
 
-	public ApacheConnectorClientResponse(StatusType status,
-			ClientRequest requestContext, CloseableHttpResponse closeableHttpResponse) {
-		super(status, requestContext);
-		this.closeableHttpResponse = closeableHttpResponse;
-	}
+    public ApacheConnectorClientResponse(ClientRequest requestContext, Response response) {
+        super(requestContext, response);
+    }
 
-	public ApacheConnectorClientResponse(StatusType status,
-			ClientRequest requestContext) {
-		super(status, requestContext);
-	}
-	
-	@Override
-	public void close() {
-		try {
-			closeableHttpResponse.close();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		super.close();
-	}
-	
-	
+    public ApacheConnectorClientResponse(StatusType status, ClientRequest requestContext,
+            CloseableHttpResponse closeableHttpResponse) {
+        super(status, requestContext);
+        this.closeableHttpResponse = closeableHttpResponse;
+    }
+
+    public ApacheConnectorClientResponse(StatusType status, ClientRequest requestContext) {
+        super(status, requestContext);
+    }
+
+    @Override
+    public void close() {
+        try {
+            closeableHttpResponse.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        super.close();
+    }
 
 }

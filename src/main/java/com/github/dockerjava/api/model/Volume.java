@@ -26,33 +26,33 @@ import com.fasterxml.jackson.databind.node.NullNode;
  */
 public class Volume {
 
-	private String path;
-	
-	public Volume(String path) {
-		this.path = path;
-	}
+    private String path;
 
-	public String getPath() {
-		return path;
-	}
+    public Volume(String path) {
+        this.path = path;
+    }
 
-	@Override
-	public String toString() {
-		return getPath();
-	}
+    public String getPath() {
+        return path;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof Volume) {
-			Volume other = (Volume) obj;
-			return new EqualsBuilder().append(path, other.getPath()).isEquals();
-		} else
-			return super.equals(obj);
-	}
+    @Override
+    public String toString() {
+        return getPath();
+    }
 
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().append(path).toHashCode();
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Volume) {
+            Volume other = (Volume) obj;
+            return new EqualsBuilder().append(path, other.getPath()).isEquals();
+        } else
+            return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(path).toHashCode();
+    }
 
 }

@@ -36,18 +36,20 @@ public class VolumeBinds {
     public static final class Serializer extends JsonSerializer<VolumeBinds> {
 
         @Override
-        public void serialize(VolumeBinds value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
+        public void serialize(VolumeBinds value, JsonGenerator jgen, SerializerProvider provider) throws IOException,
+                JsonProcessingException {
             jgen.writeStartObject();
             for (final VolumeBind bind : value.binds) {
                 jgen.writeStringField(bind.getContainerPath(), bind.getHostPath());
             }
             jgen.writeEndObject();
-        }    
+        }
     }
-    
+
     public static final class Deserializer extends JsonDeserializer<VolumeBinds> {
         @Override
-        public VolumeBinds deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+        public VolumeBinds deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+                throws IOException, JsonProcessingException {
 
             List<VolumeBind> binds = new ArrayList<VolumeBind>();
             ObjectCodec oc = jsonParser.getCodec();
@@ -56,10 +58,11 @@ public class VolumeBinds {
                 Map.Entry<String, JsonNode> field = it.next();
                 JsonNode value = field.getValue();
                 if (!value.equals(NullNode.getInstance())) {
-                    if (!value.isTextual()){
-                        throw deserializationContext.mappingException("Expected path for '"+field.getKey()+"'in host but got '"+ value+"'.");
+                    if (!value.isTextual()) {
+                        throw deserializationContext.mappingException("Expected path for '" + field.getKey()
+                                + "'in host but got '" + value + "'.");
                     }
-                    VolumeBind bind = new VolumeBind(value.asText(),field.getKey());
+                    VolumeBind bind = new VolumeBind(value.asText(), field.getKey());
                     binds.add(bind);
                 }
             }

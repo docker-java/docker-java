@@ -83,6 +83,4 @@ public class FrameReader implements AutoCloseable {
         inputStream.close();
     }
 
-
-
 }

@@ -13,8 +13,7 @@ import com.github.dockerjava.api.command.SaveImageCmd;
 import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
 
 public class SaveImageCmdExec extends AbstrDockerCmdExec<SaveImageCmd, InputStream> implements SaveImageCmd.Exec {
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(SaveImageCmdExec.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SaveImageCmdExec.class);
 
     public SaveImageCmdExec(WebTarget baseResource) {
         super(baseResource);
@@ -22,14 +21,11 @@ public class SaveImageCmdExec extends AbstrDockerCmdExec<SaveImageCmd, InputStre
 
     @Override
     protected InputStream execute(SaveImageCmd command) {
-        WebTarget webResource = getBaseResource().path("/images/" + command.getName() + "/get")
-                .queryParam("tag", command.getTag());
+        WebTarget webResource = getBaseResource().path("/images/" + command.getName() + "/get").queryParam("tag",
+                command.getTag());
 
         LOGGER.trace("GET: {}", webResource);
-        Response response =  webResource
-                .request()
-                .accept(MediaType.APPLICATION_JSON)
-                .get();
+        Response response = webResource.request().accept(MediaType.APPLICATION_JSON).get();
 
         return new WrappedResponseInputStream(response);
     }

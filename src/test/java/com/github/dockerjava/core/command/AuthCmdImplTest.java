@@ -13,41 +13,41 @@ import java.lang.reflect.Method;
 @Test(groups = "integration")
 public class AuthCmdImplTest extends AbstractDockerClientTest {
 
-	@BeforeTest
-	public void beforeTest() throws DockerException  {
-		super.beforeTest();
-	}
-	
-	@AfterTest
-	public void afterTest() {
-		super.afterTest();
-	}
+    @BeforeTest
+    public void beforeTest() throws DockerException {
+        super.beforeTest();
+    }
 
-	@BeforeMethod
-	public void beforeMethod(Method method) {
-	    super.beforeMethod(method);
-	}
+    @AfterTest
+    public void afterTest() {
+        super.afterTest();
+    }
 
-	@AfterMethod
-	public void afterMethod(ITestResult result) {
-		super.afterMethod(result);
-	}
+    @BeforeMethod
+    public void beforeMethod(Method method) {
+        super.beforeMethod(method);
+    }
 
-	@Test
-	public void testAuth() throws Exception {
+    @AfterMethod
+    public void afterMethod(ITestResult result) {
+        super.afterMethod(result);
+    }
+
+    @Test
+    public void testAuth() throws Exception {
         AuthResponse response = dockerClient.authCmd().exec();
 
         assertEquals(response.getStatus(), "Login Succeeded");
     }
 
-	@Test
-	public void testAuthInvalid() throws Exception {
+    @Test
+    public void testAuthInvalid() throws Exception {
 
         try {
-			DockerClientBuilder.getInstance(config("garbage")).build().authCmd().exec();
+            DockerClientBuilder.getInstance(config("garbage")).build().authCmd().exec();
             fail("Expected a UnauthorizedException caused by a bad password.");
-		} catch (UnauthorizedException e) {
-			assertEquals(e.getMessage(), "Wrong login/password, please try again\n");
-		} 
-	}
+        } catch (UnauthorizedException e) {
+            assertEquals(e.getMessage(), "Wrong login/password, please try again\n");
+        }
+    }
 }

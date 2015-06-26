@@ -9,12 +9,12 @@ import java.io.Serializable;
 /**
  * Represents an item returned from pull
  */
-@JsonIgnoreProperties(ignoreUnknown=true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PullEventStreamItem implements Serializable {
 
-	private static final long serialVersionUID = -5187169652557467828L;
+    private static final long serialVersionUID = -5187169652557467828L;
 
-	@JsonProperty("status")
+    @JsonProperty("status")
     private String status;
 
     @JsonProperty("progress")
@@ -22,7 +22,6 @@ public class PullEventStreamItem implements Serializable {
 
     @JsonProperty("progressDetail")
     private ProgressDetail progressDetail;
-
 
     public String getStatus() {
         return status;
@@ -36,11 +35,10 @@ public class PullEventStreamItem implements Serializable {
         return progressDetail;
     }
 
-    @JsonIgnoreProperties(ignoreUnknown=true)
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class ProgressDetail implements Serializable {
         @JsonProperty("current")
         int current;
-
 
         @Override
         public String toString() {
@@ -50,10 +48,7 @@ public class PullEventStreamItem implements Serializable {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
-                .add("status", status)
-                .add("progress", progress)
-                .add("progressDetail", progressDetail)
-                .toString();
+        return Objects.toStringHelper(this).add("status", status).add("progress", progress)
+                .add("progressDetail", progressDetail).toString();
     }
 }

@@ -14,31 +14,30 @@ import com.github.dockerjava.jaxrs.async.GETCallbackNotifier;
 
 public class LogContainerCmdExec extends AbstrDockerCmdExec<LogContainerCmd, Void> implements LogContainerCmd.Exec {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(LogContainerCmdExec.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LogContainerCmdExec.class);
 
-	public LogContainerCmdExec(WebTarget baseResource) {
-		super(baseResource);
-	}
+    public LogContainerCmdExec(WebTarget baseResource) {
+        super(baseResource);
+    }
 
-	@Override
-	protected Void execute(LogContainerCmd command) {
-		WebTarget webTarget = getBaseResource().path("/containers/{id}/logs")
-				.resolveTemplate("id", command.getContainerId())
-				.queryParam("timestamps", command.hasTimestampsEnabled() ? "1" : "0")
-				.queryParam("stdout", command.hasStdoutEnabled() ? "1" : "0")
-				.queryParam("stderr", command.hasStderrEnabled() ? "1" : "0")
-				.queryParam("follow", command.hasFollowStreamEnabled() ? "1" : "0")
-				.queryParam("tail", command.getTail() < 0 ? "all" : "" + command.getTail());
+    @Override
+    protected Void execute(LogContainerCmd command) {
+        WebTarget webTarget = getBaseResource().path("/containers/{id}/logs")
+                .resolveTemplate("id", command.getContainerId())
+                .queryParam("timestamps", command.hasTimestampsEnabled() ? "1" : "0")
+                .queryParam("stdout", command.hasStdoutEnabled() ? "1" : "0")
+                .queryParam("stderr", command.hasStderrEnabled() ? "1" : "0")
+                .queryParam("follow", command.hasFollowStreamEnabled() ? "1" : "0")
+                .queryParam("tail", command.getTail() < 0 ? "all" : "" + command.getTail());
 
-		LOGGER.trace("GET: {}", webTarget);
+        LOGGER.trace("GET: {}", webTarget);
 
-		GETCallbackNotifier<Frame> callbackNotifier = new GETCallbackNotifier<Frame>(
-                new FrameStreamProcessor(), command.getResultCallback(), webTarget);
+        GETCallbackNotifier<Frame> callbackNotifier = new GETCallbackNotifier<Frame>(new FrameStreamProcessor(),
+                command.getResultCallback(), webTarget);
 
         AbstractCallbackNotifier.startAsyncProcessing(callbackNotifier);
 
         return null;
-	}
-
+    }
 
 }

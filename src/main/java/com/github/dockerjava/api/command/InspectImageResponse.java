@@ -14,28 +14,28 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InspectImageResponse {
 
-	@JsonProperty("Architecture")
+    @JsonProperty("Architecture")
     private String arch;
 
-	@JsonProperty("Author")
+    @JsonProperty("Author")
     private String author;
 
-	@JsonProperty("Comment")
+    @JsonProperty("Comment")
     private String comment;
 
-	@JsonProperty("Config")
+    @JsonProperty("Config")
     private ContainerConfig config;
 
-	@JsonProperty("Container")
+    @JsonProperty("Container")
     private String container;
 
-	@JsonProperty("ContainerConfig")
+    @JsonProperty("ContainerConfig")
     private ContainerConfig containerConfig;
 
-	@JsonProperty("Created")
-	private String created;
+    @JsonProperty("Created")
+    private String created;
 
-	@JsonProperty("DockerVersion")
+    @JsonProperty("DockerVersion")
     private String dockerVersion;
 
     @JsonProperty("Id")

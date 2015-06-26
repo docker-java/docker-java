@@ -20,24 +20,23 @@ import com.github.dockerjava.api.model.Frame;
  * @param stderr
  *            - true or false, includes stderr log. Defaults to false.
  * @param timestamps
- *            - true or false, if true, print timestamps for every log line.
- *            Defaults to false.
+ *            - true or false, if true, print timestamps for every log line. Defaults to false.
  */
-public class AttachContainerCmdImpl extends	AbstrDockerCmd<AttachContainerCmd, Void> implements AttachContainerCmd {
+public class AttachContainerCmdImpl extends AbstrDockerCmd<AttachContainerCmd, Void> implements AttachContainerCmd {
 
     private ResultCallback<Frame> resultCallback;
 
-	private String containerId;
+    private String containerId;
 
-	private boolean logs, followStream, timestamps, stdout, stderr;
+    private boolean logs, followStream, timestamps, stdout, stderr;
 
-	public AttachContainerCmdImpl(AttachContainerCmd.Exec exec, String containerId, ResultCallback<Frame> resultCallback) {
-		super(exec);
-		withContainerId(containerId);
-		withResultCallback(resultCallback);
-	}
+    public AttachContainerCmdImpl(AttachContainerCmd.Exec exec, String containerId, ResultCallback<Frame> resultCallback) {
+        super(exec);
+        withContainerId(containerId);
+        withResultCallback(resultCallback);
+    }
 
-	public ResultCallback<Frame> getResultCallback() {
+    public ResultCallback<Frame> getResultCallback() {
         return resultCallback;
     }
 
@@ -48,98 +47,99 @@ public class AttachContainerCmdImpl extends	AbstrDockerCmd<AttachContainerCmd, V
         return this;
     }
 
-	@Override
-	public String getContainerId() {
-		return containerId;
-	}
+    @Override
+    public String getContainerId() {
+        return containerId;
+    }
 
-	@Override
-	public boolean hasLogsEnabled() {
-		return logs;
-	}
+    @Override
+    public boolean hasLogsEnabled() {
+        return logs;
+    }
 
-	@Override
-	public boolean hasFollowStreamEnabled() {
-		return followStream;
-	}
+    @Override
+    public boolean hasFollowStreamEnabled() {
+        return followStream;
+    }
 
-	@Override
-	public boolean hasTimestampsEnabled() {
-		return timestamps;
-	}
+    @Override
+    public boolean hasTimestampsEnabled() {
+        return timestamps;
+    }
 
-	@Override
-	public boolean hasStdoutEnabled() {
-		return stdout;
-	}
+    @Override
+    public boolean hasStdoutEnabled() {
+        return stdout;
+    }
 
-	@Override
-	public boolean hasStderrEnabled() {
-		return stderr;
-	}
+    @Override
+    public boolean hasStderrEnabled() {
+        return stderr;
+    }
 
-	@Override
-	public AttachContainerCmd withContainerId(String containerId) {
-		checkNotNull(containerId, "containerId was not specified");
-		this.containerId = containerId;
-		return this;
-	}
+    @Override
+    public AttachContainerCmd withContainerId(String containerId) {
+        checkNotNull(containerId, "containerId was not specified");
+        this.containerId = containerId;
+        return this;
+    }
 
-	@Override
-	public AttachContainerCmd withFollowStream() {
-		return withFollowStream(true);
-	}
+    @Override
+    public AttachContainerCmd withFollowStream() {
+        return withFollowStream(true);
+    }
 
-	@Override
-	public AttachContainerCmd withFollowStream(boolean followStream) {
-		this.followStream = followStream;
-		return this;
-	}
+    @Override
+    public AttachContainerCmd withFollowStream(boolean followStream) {
+        this.followStream = followStream;
+        return this;
+    }
 
-	@Override
-	public AttachContainerCmd withTimestamps(boolean timestamps) {
-		this.timestamps = timestamps;
-		return this;
-	}
+    @Override
+    public AttachContainerCmd withTimestamps(boolean timestamps) {
+        this.timestamps = timestamps;
+        return this;
+    }
 
-	@Override
-	public AttachContainerCmd withStdOut() {
-		return withStdOut(true);
-	}
+    @Override
+    public AttachContainerCmd withStdOut() {
+        return withStdOut(true);
+    }
 
-	@Override
-	public AttachContainerCmd withStdOut(boolean stdout) {
-		this.stdout = stdout;
-		return this;
-	}
+    @Override
+    public AttachContainerCmd withStdOut(boolean stdout) {
+        this.stdout = stdout;
+        return this;
+    }
 
-	@Override
-	public AttachContainerCmd withStdErr() {
-		return withStdErr(true);
-	}
+    @Override
+    public AttachContainerCmd withStdErr() {
+        return withStdErr(true);
+    }
 
-	@Override
-	public AttachContainerCmd withStdErr(boolean stderr) {
-		this.stderr = stderr;
-		return this;
-	}
+    @Override
+    public AttachContainerCmd withStdErr(boolean stderr) {
+        this.stderr = stderr;
+        return this;
+    }
 
-	@Override
-	public AttachContainerCmd withLogs(boolean logs) {
-		this.logs = logs;
-		return this;
-	}
+    @Override
+    public AttachContainerCmd withLogs(boolean logs) {
+        this.logs = logs;
+        return this;
+    }
 
-	@Override
-	public AttachContainerCmd withLogs() {
-		return withLogs(true);
-	}
+    @Override
+    public AttachContainerCmd withLogs() {
+        return withLogs(true);
+    }
 
-	/**
-	 * @throws NotFoundException No such container
-	 */
-	@Override
-	public Void exec() throws NotFoundException {
-		return super.exec();
-	}
+    /**
+     * @throws NotFoundException
+     *             No such container
+     */
+    @Override
+    public Void exec() throws NotFoundException {
+        return super.exec();
+    }
 }

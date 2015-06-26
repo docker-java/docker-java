@@ -7,21 +7,22 @@ import com.github.dockerjava.api.NotFoundException;
  */
 public interface KillContainerCmd extends DockerCmd<Void> {
 
-	public String getContainerId();
+    public String getContainerId();
 
-	public String getSignal();
+    public String getSignal();
 
-	public KillContainerCmd withContainerId(String containerId);
+    public KillContainerCmd withContainerId(String containerId);
 
-	public KillContainerCmd withSignal(String signal);
+    public KillContainerCmd withSignal(String signal);
 
-	/**
-	 * @throws NotFoundException No such container
-	 */
-	@Override
-	public Void exec() throws NotFoundException;
-	
-	public static interface Exec extends DockerCmdExec<KillContainerCmd, Void> {
-	}
+    /**
+     * @throws NotFoundException
+     *             No such container
+     */
+    @Override
+    public Void exec() throws NotFoundException;
+
+    public static interface Exec extends DockerCmdExec<KillContainerCmd, Void> {
+    }
 
 }

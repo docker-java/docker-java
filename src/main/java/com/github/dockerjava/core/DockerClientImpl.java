@@ -285,7 +285,8 @@ public class DockerClientImpl implements Closeable, DockerClient {
 
     @Override
     public AttachContainerCmd attachContainerCmd(String containerId, ResultCallback<Frame> resultCallback) {
-        return new AttachContainerCmdImpl(getDockerCmdExecFactory().createAttachContainerCmdExec(), containerId, resultCallback);
+        return new AttachContainerCmdImpl(getDockerCmdExecFactory().createAttachContainerCmdExec(), containerId,
+                resultCallback);
     }
 
     @Override
@@ -300,7 +301,8 @@ public class DockerClientImpl implements Closeable, DockerClient {
 
     @Override
     public LogContainerCmd logContainerCmd(String containerId, ResultCallback<Frame> resultCallback) {
-        return new LogContainerCmdImpl(getDockerCmdExecFactory().createLogContainerCmdExec(), containerId, resultCallback);
+        return new LogContainerCmdImpl(getDockerCmdExecFactory().createLogContainerCmdExec(), containerId,
+                resultCallback);
     }
 
     @Override

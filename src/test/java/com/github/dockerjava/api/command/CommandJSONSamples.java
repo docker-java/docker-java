@@ -26,20 +26,20 @@ import static org.testng.Assert.assertNotNull;
 
 /**
  * References test resources and provides basic tests functionality.
+ * 
  * @author Oleg Nenashev
  */
 public enum CommandJSONSamples implements JSONResourceRef {
-    
-    inspectContainerResponse_full,
-    inspectContainerResponse_empty;
-    
+
+    inspectContainerResponse_full, inspectContainerResponse_empty;
+
     @Override
     public String getFileName() {
         return this + ".json";
-    } 
+    }
 
     @Override
     public Class<?> getResourceClass() {
         return CommandJSONSamples.class;
-    }  
+    }
 }

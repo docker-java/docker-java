@@ -20,26 +20,42 @@ import com.github.dockerjava.core.NameParser.ReposTag;
 
 public class DockerClientConfig implements Serializable {
 
-	private static final long serialVersionUID = -4307357472441531489L;
-	
-	private static final String DOCKER_HOST_PROPERTY = "DOCKER_HOST";
+    private static final long serialVersionUID = -4307357472441531489L;
+
+    private static final String DOCKER_HOST_PROPERTY = "DOCKER_HOST";
+
     private static final String DOCKER_CERT_PATH_PROPERTY = "DOCKER_CERT_PATH";
+
     private static final String DOCKER_VERIFY_TLS_PROPERTY = "DOCKER_TLS_VERIFY";
+
     private static final String DOCKER_IO_URL_PROPERTY = "docker.io.url";
+
     private static final String DOCKER_IO_VERSION_PROPERTY = "docker.io.version";
+
     private static final String DOCKER_IO_USERNAME_PROPERTY = "docker.io.username";
+
     private static final String DOCKER_IO_PASSWORD_PROPERTY = "docker.io.password";
+
     private static final String DOCKER_IO_EMAIL_PROPERTY = "docker.io.email";
+
     private static final String DOCKER_IO_SERVER_ADDRESS_PROPERTY = "docker.io.serverAddress";
+
     private static final String DOCKER_IO_READ_TIMEOUT_PROPERTY = "docker.io.readTimeout";
+
     // this is really confusing, as there are two ways to spell it
     private static final String DOCKER_IO_ENABLE_LOGGING_FILTER_PROPERTY = "docker.io.enableLoggingFilter";
+
     private static final String DOCKER_IO_FOLLOW_REDIRECTS_FILTER_PROPERTY = "docker.io.followRedirectsFilter";
+
     private static final String DOCKER_IO_DOCKER_CERT_PATH_PROPERTY = "docker.io.dockerCertPath";
+
     private static final String DOCKER_IO_DOCKER_CFG_PATH_PROPERTY = "docker.io.dockerCfgPath";
+
     // connection pooling properties
     private static final String DOCKER_IO_MAX_PER_ROUTE_PROPERTY = "docker.io.perRouteConnections";
+
     private static final String DOCKER_IO_MAX_TOTAL_PROPERTY = "docker.io.totalConnections";
+
     /**
      * A map from the environment name to the interval name.
      */
@@ -62,19 +78,26 @@ public class DockerClientConfig implements Serializable {
     }
 
     private static final String DOCKER_IO_PROPERTIES_PROPERTY = "docker.io.properties";
+
     private URI uri;
+
     private final String version, username, password, email, serverAddress, dockerCfgPath;
+
     private final Integer readTimeout;
+
     private final boolean loggingFilterEnabled;
+
     private final boolean followRedirectsFilterEnabled;
+
     private final SSLConfig sslConfig;
-    
+
     private final Integer maxTotalConnections;
+
     private final Integer maxPerRouteConnections;
 
     DockerClientConfig(URI uri, String version, String username, String password, String email, String serverAddress,
-                       String dockerCfgPath, Integer readTimeout, boolean loggingFilterEnabled, boolean followRedirectsFilterEnabled, 
-                       SSLConfig sslConfig, Integer maxTotalConns, Integer maxPerRouteConns) {
+            String dockerCfgPath, Integer readTimeout, boolean loggingFilterEnabled,
+            boolean followRedirectsFilterEnabled, SSLConfig sslConfig, Integer maxTotalConns, Integer maxPerRouteConns) {
         this.uri = uri;
         this.version = version;
         this.username = username;
@@ -121,14 +144,16 @@ public class DockerClientConfig implements Serializable {
     /**
      * Creates a new Properties object containing values overridden from ${user.home}/.docker.io.properties
      *
-     * @param p The original set of properties to override
+     * @param p
+     *            The original set of properties to override
      * @return A copy of the original Properties with overridden values
      */
     private static Properties overrideDockerPropertiesWithSettingsFromUserHome(Properties p, Properties systemProperties) {
         Properties overriddenProperties = new Properties();
         overriddenProperties.putAll(p);
 
-        final File usersDockerPropertiesFile = new File(systemProperties.getProperty("user.home"), "." + DOCKER_IO_PROPERTIES_PROPERTY);
+        final File usersDockerPropertiesFile = new File(systemProperties.getProperty("user.home"), "."
+                + DOCKER_IO_PROPERTIES_PROPERTY);
         if (usersDockerPropertiesFile.isFile()) {
             try {
                 final FileInputStream in = new FileInputStream(usersDockerPropertiesFile);
@@ -150,7 +175,8 @@ public class DockerClientConfig implements Serializable {
 
         // special case which is a sensible default
         if (env.containsKey(DOCKER_HOST_PROPERTY)) {
-            overriddenProperties.setProperty(DOCKER_IO_URL_PROPERTY, env.get(DOCKER_HOST_PROPERTY).replace("tcp", protocol(env)));
+            overriddenProperties.setProperty(DOCKER_IO_URL_PROPERTY,
+                    env.get(DOCKER_HOST_PROPERTY).replace("tcp", protocol(env)));
         }
 
         for (Map.Entry<String, String> envEntry : env.entrySet()) {
@@ -165,32 +191,26 @@ public class DockerClientConfig implements Serializable {
 
     private static String protocol(Map<String, String> env) {
         // if this is set, we assume we need SSL
-        return env.containsKey(DOCKER_CERT_PATH_PROPERTY) || "1".equals(env.get(DOCKER_VERIFY_TLS_PROPERTY)) ? "https" : "http";
+        return env.containsKey(DOCKER_CERT_PATH_PROPERTY) || "1".equals(env.get(DOCKER_VERIFY_TLS_PROPERTY)) ? "https"
+                : "http";
     }
 
     /**
      * Creates a new Properties object containing values overridden from the System properties
      *
-     * @param p The original set of properties to override
+     * @param p
+     *            The original set of properties to override
      * @return A copy of the original Properties with overridden values
      */
     private static Properties overrideDockerPropertiesWithSystemProperties(Properties p, Properties systemProperties) {
         Properties overriddenProperties = new Properties();
         overriddenProperties.putAll(p);
 
-        for (String key : new String[]{
-                DOCKER_IO_URL_PROPERTY,
-                DOCKER_IO_VERSION_PROPERTY,
-                DOCKER_IO_USERNAME_PROPERTY,
-                DOCKER_IO_PASSWORD_PROPERTY,
-                DOCKER_IO_EMAIL_PROPERTY,
-                DOCKER_IO_SERVER_ADDRESS_PROPERTY,
-                DOCKER_IO_READ_TIMEOUT_PROPERTY,
-                DOCKER_IO_ENABLE_LOGGING_FILTER_PROPERTY,
-                DOCKER_IO_FOLLOW_REDIRECTS_FILTER_PROPERTY,
-                DOCKER_IO_DOCKER_CERT_PATH_PROPERTY,
-                DOCKER_IO_DOCKER_CFG_PATH_PROPERTY,
-        }) {
+        for (String key : new String[] { DOCKER_IO_URL_PROPERTY, DOCKER_IO_VERSION_PROPERTY,
+                DOCKER_IO_USERNAME_PROPERTY, DOCKER_IO_PASSWORD_PROPERTY, DOCKER_IO_EMAIL_PROPERTY,
+                DOCKER_IO_SERVER_ADDRESS_PROPERTY, DOCKER_IO_READ_TIMEOUT_PROPERTY,
+                DOCKER_IO_ENABLE_LOGGING_FILTER_PROPERTY, DOCKER_IO_FOLLOW_REDIRECTS_FILTER_PROPERTY,
+                DOCKER_IO_DOCKER_CERT_PATH_PROPERTY, DOCKER_IO_DOCKER_CFG_PATH_PROPERTY, }) {
             if (systemProperties.containsKey(key)) {
                 overriddenProperties.setProperty(key, systemProperties.getProperty(key));
             }
@@ -218,8 +238,8 @@ public class DockerClientConfig implements Serializable {
     }
 
     public void setUri(URI uri) {
-		this.uri = uri;
-	}
+        this.uri = uri;
+    }
 
     public String getVersion() {
         return version;
@@ -254,73 +274,67 @@ public class DockerClientConfig implements Serializable {
     }
 
     public SSLConfig getSslConfig() {
-      return sslConfig;
+        return sslConfig;
     }
 
     public String getDockerCfgPath() {
         return dockerCfgPath;
     }
-    
+
     public Integer getMaxTotalConnections() {
-      return maxTotalConnections;
+        return maxTotalConnections;
     }
 
     public Integer getMaxPerRoutConnections() {
-      return maxPerRouteConnections;
+        return maxPerRouteConnections;
     }
-    
+
     private AuthConfig getAuthConfig() {
-    	AuthConfig authConfig = null;
-    	if (getUsername() != null && getPassword() != null && getEmail() != null
-    			&& getServerAddress() != null) {
-    		authConfig = new AuthConfig();
-    		authConfig.setUsername(getUsername());
-    		authConfig.setPassword(getPassword());
-    		authConfig.setEmail(getEmail());
-    		authConfig.setServerAddress(getServerAddress());
-    	} 
-    	return authConfig;
+        AuthConfig authConfig = null;
+        if (getUsername() != null && getPassword() != null && getEmail() != null && getServerAddress() != null) {
+            authConfig = new AuthConfig();
+            authConfig.setUsername(getUsername());
+            authConfig.setPassword(getPassword());
+            authConfig.setEmail(getEmail());
+            authConfig.setServerAddress(getServerAddress());
+        }
+        return authConfig;
     }
-    
+
     public AuthConfig effectiveAuthConfig(String imageName) {
-		AuthConfig authConfig = null;
+        AuthConfig authConfig = null;
 
-		String dockerCfgFile = getDockerCfgPath();
+        String dockerCfgFile = getDockerCfgPath();
 
-		if (dockerCfgFile != null && imageName != null) {
-			AuthConfigFile authConfigFile;
-			try {
-				authConfigFile = AuthConfigFile.loadConfig(new File(
-						dockerCfgFile));
-			} catch (IOException e) {
-				throw new DockerClientException(
-						"Failed to parse dockerCfgFile", e);
-			}
-			ReposTag reposTag = NameParser.parseRepositoryTag(imageName);
-			HostnameReposName hostnameReposName = NameParser
-					.resolveRepositoryName(reposTag.repos);
-			
-			authConfig = authConfigFile
-					.resolveAuthConfig(hostnameReposName.hostname);	
-		}
-		
-		AuthConfig _authConfig = getAuthConfig();
-		
-		if(_authConfig != null) authConfig = _authConfig;
-		
-		return authConfig;
-	}
+        if (dockerCfgFile != null && imageName != null) {
+            AuthConfigFile authConfigFile;
+            try {
+                authConfigFile = AuthConfigFile.loadConfig(new File(dockerCfgFile));
+            } catch (IOException e) {
+                throw new DockerClientException("Failed to parse dockerCfgFile", e);
+            }
+            ReposTag reposTag = NameParser.parseRepositoryTag(imageName);
+            HostnameReposName hostnameReposName = NameParser.resolveRepositoryName(reposTag.repos);
+
+            authConfig = authConfigFile.resolveAuthConfig(hostnameReposName.hostname);
+        }
+
+        AuthConfig _authConfig = getAuthConfig();
+
+        if (_authConfig != null)
+            authConfig = _authConfig;
+
+        return authConfig;
+    }
 
     public AuthConfigurations getAuthConfigurations() {
         String dockerCfgFile = getDockerCfgPath();
         if (dockerCfgFile != null) {
             AuthConfigFile authConfigFile;
             try {
-                authConfigFile = AuthConfigFile.loadConfig(new File(
-                        dockerCfgFile));
+                authConfigFile = AuthConfigFile.loadConfig(new File(dockerCfgFile));
             } catch (IOException e) {
-                throw new DockerClientException(
-                        "Failed to parse dockerCfgFile", e);
+                throw new DockerClientException("Failed to parse dockerCfgFile", e);
             }
 
             return authConfigFile.getAuthConfigurations();
@@ -329,26 +343,35 @@ public class DockerClientConfig implements Serializable {
         return new AuthConfigurations();
     }
 
-  @Override
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         DockerClientConfig that = (DockerClientConfig) o;
 
-        if (loggingFilterEnabled != that.loggingFilterEnabled) return false;
+        if (loggingFilterEnabled != that.loggingFilterEnabled)
+            return false;
         if (sslConfig != null ? !sslConfig.equals(that.sslConfig) : that.sslConfig != null)
             return false;
         if (dockerCfgPath != null ? !dockerCfgPath.equals(that.dockerCfgPath) : that.dockerCfgPath != null)
             return false;
-        if (email != null ? !email.equals(that.email) : that.email != null) return false;
-        if (password != null ? !password.equals(that.password) : that.password != null) return false;
-        if (readTimeout != null ? !readTimeout.equals(that.readTimeout) : that.readTimeout != null) return false;
+        if (email != null ? !email.equals(that.email) : that.email != null)
+            return false;
+        if (password != null ? !password.equals(that.password) : that.password != null)
+            return false;
+        if (readTimeout != null ? !readTimeout.equals(that.readTimeout) : that.readTimeout != null)
+            return false;
         if (serverAddress != null ? !serverAddress.equals(that.serverAddress) : that.serverAddress != null)
             return false;
-        if (uri != null ? !uri.equals(that.uri) : that.uri != null) return false;
-        if (username != null ? !username.equals(that.username) : that.username != null) return false;
-        if (version != null ? !version.equals(that.version) : that.version != null) return false;
+        if (uri != null ? !uri.equals(that.uri) : that.uri != null)
+            return false;
+        if (username != null ? !username.equals(that.username) : that.username != null)
+            return false;
+        if (version != null ? !version.equals(that.version) : that.version != null)
+            return false;
 
         return true;
     }
@@ -370,33 +393,29 @@ public class DockerClientConfig implements Serializable {
 
     @Override
     public String toString() {
-        return "DockerClientConfig{" +
-                "uri=" + uri +
-                ", version='" + version + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", serverAddress='" + serverAddress + '\'' +
-                ", dockerCfgPath='" + dockerCfgPath + '\'' +
-                ", sslConfig='" + sslConfig + '\'' +
-                ", readTimeout=" + readTimeout +
-                ", loggingFilterEnabled=" + loggingFilterEnabled +
-                ", followRedirectsFilterEnabled=" + followRedirectsFilterEnabled +
-                '}';
+        return "DockerClientConfig{" + "uri=" + uri + ", version='" + version + '\'' + ", username='" + username + '\''
+                + ", password='" + password + '\'' + ", email='" + email + '\'' + ", serverAddress='" + serverAddress
+                + '\'' + ", dockerCfgPath='" + dockerCfgPath + '\'' + ", sslConfig='" + sslConfig + '\''
+                + ", readTimeout=" + readTimeout + ", loggingFilterEnabled=" + loggingFilterEnabled
+                + ", followRedirectsFilterEnabled=" + followRedirectsFilterEnabled + '}';
     }
 
     public static class DockerClientConfigBuilder {
         private URI uri;
+
         private String version, username, password, email, serverAddress, dockerCfgPath;
+
         private Integer readTimeout, maxTotalConnections, maxPerRouteConnections;
+
         private boolean loggingFilterEnabled, followRedirectsFilterEnabled;
+
         private SSLConfig sslConfig;
 
         /**
          * This will set all fields in the builder to those contained in the Properties object. The Properties object
          * should contain the following docker.io.* keys: url, version, username, password, email, dockerCertPath, and
          * dockerCfgPath. If docker.io.readTimeout or docker.io.enableLoggingFilter are not contained, they will be set
-         *  to 1000 and true, respectively.
+         * to 1000 and true, respectively.
          */
         public DockerClientConfigBuilder withProperties(Properties p) {
             return withUri(p.getProperty(DOCKER_IO_URL_PROPERTY))
@@ -407,18 +426,19 @@ public class DockerClientConfig implements Serializable {
                     .withServerAddress(p.getProperty(DOCKER_IO_SERVER_ADDRESS_PROPERTY))
                     .withReadTimeout(Integer.valueOf(p.getProperty(DOCKER_IO_READ_TIMEOUT_PROPERTY, "0")))
                     .withLoggingFilter(Boolean.valueOf(p.getProperty(DOCKER_IO_ENABLE_LOGGING_FILTER_PROPERTY, "true")))
-                    .withFollowRedirectsFilter(Boolean.valueOf(p.getProperty(DOCKER_IO_FOLLOW_REDIRECTS_FILTER_PROPERTY, "false")))
+                    .withFollowRedirectsFilter(
+                            Boolean.valueOf(p.getProperty(DOCKER_IO_FOLLOW_REDIRECTS_FILTER_PROPERTY, "false")))
                     .withDockerCertPath(p.getProperty(DOCKER_IO_DOCKER_CERT_PATH_PROPERTY))
                     .withDockerCfgPath(p.getProperty(DOCKER_IO_DOCKER_CFG_PATH_PROPERTY))
                     .withMaxPerRouteConnections(integerValue(p.getProperty(DOCKER_IO_MAX_PER_ROUTE_PROPERTY)))
                     .withMaxTotalConnections(integerValue(p.getProperty(DOCKER_IO_MAX_TOTAL_PROPERTY)));
         }
-        
+
         private Integer integerValue(String value) {
-        	if(value != null)
-        		return Integer.valueOf(value);
-        	else 
-        		return null;
+            if (value != null)
+                return Integer.valueOf(value);
+            else
+                return null;
         }
 
         public final DockerClientConfigBuilder withUri(String uri) {
@@ -456,12 +476,12 @@ public class DockerClientConfig implements Serializable {
             this.readTimeout = readTimeout;
             return this;
         }
-        
+
         public final DockerClientConfigBuilder withMaxTotalConnections(Integer maxTotalConnections) {
             this.maxTotalConnections = maxTotalConnections;
             return this;
         }
-        
+
         public final DockerClientConfigBuilder withMaxPerRouteConnections(Integer maxPerRouteConnections) {
             this.maxPerRouteConnections = maxPerRouteConnections;
             return this;
@@ -478,9 +498,9 @@ public class DockerClientConfig implements Serializable {
         }
 
         public final DockerClientConfigBuilder withDockerCertPath(String dockerCertPath) {
-        	if(dockerCertPath != null) {
-        		this.sslConfig = new LocalDirectorySSLConfig(dockerCertPath);
-        	}
+            if (dockerCertPath != null) {
+                this.sslConfig = new LocalDirectorySSLConfig(dockerCertPath);
+            }
             return this;
         }
 
@@ -489,30 +509,17 @@ public class DockerClientConfig implements Serializable {
             return this;
         }
 
-
         public final DockerClientConfigBuilder withSSLConfig(SSLConfig config) {
             this.sslConfig = config;
             return this;
         }
 
         public DockerClientConfig build() {
-            return new DockerClientConfig(
-                    uri,
-                    version,
-                    username,
-                    password,
-                    email,
-                    serverAddress,
-                    dockerCfgPath,
-                    readTimeout,
-                    loggingFilterEnabled,
-                    followRedirectsFilterEnabled,
-                    sslConfig,
-                    maxTotalConnections,
-                    maxPerRouteConnections
-            );
+            return new DockerClientConfig(uri, version, username, password, email, serverAddress, dockerCfgPath,
+                    readTimeout, loggingFilterEnabled, followRedirectsFilterEnabled, sslConfig, maxTotalConnections,
+                    maxPerRouteConnections);
         }
     }
 
-//   
+    //
 }

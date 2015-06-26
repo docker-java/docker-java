@@ -12,7 +12,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class Ulimit {
 
     @JsonProperty("Name")
-    private String name ;
+    private String name;
 
     @JsonProperty("Soft")
     private int soft;
@@ -48,9 +48,7 @@ public class Ulimit {
     public boolean equals(Object obj) {
         if (obj instanceof Ulimit) {
             Ulimit other = (Ulimit) obj;
-            return new EqualsBuilder()
-                    .append(name, other.getName())
-                    .append(soft, other.getSoft())
+            return new EqualsBuilder().append(name, other.getName()).append(soft, other.getSoft())
                     .append(hard, other.getHard()).isEquals();
         } else
             return super.equals(obj);

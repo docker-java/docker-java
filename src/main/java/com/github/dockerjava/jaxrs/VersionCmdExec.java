@@ -11,20 +11,18 @@ import com.github.dockerjava.api.model.Version;
 
 public class VersionCmdExec extends AbstrDockerCmdExec<VersionCmd, Version> implements VersionCmd.Exec {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(VersionCmdExec.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(VersionCmdExec.class);
 
-	public VersionCmdExec(WebTarget baseResource) {
-		super(baseResource);
-	}
+    public VersionCmdExec(WebTarget baseResource) {
+        super(baseResource);
+    }
 
-	@Override
-	protected Version execute(VersionCmd command) {
-		WebTarget webResource = getBaseResource().path("/version");
+    @Override
+    protected Version execute(VersionCmd command) {
+        WebTarget webResource = getBaseResource().path("/version");
 
-		LOGGER.trace("GET: {}", webResource);
-		return webResource.request().accept(MediaType.APPLICATION_JSON)
-				.get(Version.class);
-	}
+        LOGGER.trace("GET: {}", webResource);
+        return webResource.request().accept(MediaType.APPLICATION_JSON).get(Version.class);
+    }
 
 }

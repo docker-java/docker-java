@@ -6,9 +6,12 @@ import com.github.dockerjava.api.DockerClientException;
 public class FilePathUtil {
 
     /**
-     * Return the relative path. Path elements are separated with / char. 
-     * @param baseDir a parent directory of {@code file}
-     * @param file the file to get the relative path
+     * Return the relative path. Path elements are separated with / char.
+     * 
+     * @param baseDir
+     *            a parent directory of {@code file}
+     * @param file
+     *            the file to get the relative path
      * @return the relative path
      */
     public static String relativize(File baseDir, File file) {

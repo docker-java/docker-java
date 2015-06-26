@@ -24,67 +24,61 @@ import com.github.dockerjava.client.AbstractDockerClientTest;
 @Test(groups = "integration")
 public class RestartContainerCmdImplTest extends AbstractDockerClientTest {
 
-	@BeforeTest
-	public void beforeTest() throws DockerException {
-		super.beforeTest();
-	}
+    @BeforeTest
+    public void beforeTest() throws DockerException {
+        super.beforeTest();
+    }
 
-	@AfterTest
-	public void afterTest() {
-		super.afterTest();
-	}
+    @AfterTest
+    public void afterTest() {
+        super.afterTest();
+    }
 
-	@BeforeMethod
-	public void beforeMethod(Method method) {
-		super.beforeMethod(method);
-	}
+    @BeforeMethod
+    public void beforeMethod(Method method) {
+        super.beforeMethod(method);
+    }
 
-	@AfterMethod
-	public void afterMethod(ITestResult result) {
-		super.afterMethod(result);
-	}
+    @AfterMethod
+    public void afterMethod(ITestResult result) {
+        super.afterMethod(result);
+    }
 
-	@Test
-	public void restartContainer() throws DockerException {
+    @Test
+    public void restartContainer() throws DockerException {
 
-		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
-		LOG.info("Created container: {}", container.toString());
-		assertThat(container.getId(), not(isEmptyString()));
-		dockerClient.startContainerCmd(container.getId()).exec();
-		
-		InspectContainerResponse inspectContainerResponse = dockerClient
-				.inspectContainerCmd(container.getId()).exec();
-		LOG.info("Container Inspect: {}", inspectContainerResponse.toString());
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+        dockerClient.startContainerCmd(container.getId()).exec();
 
-		String startTime = inspectContainerResponse.getState().getStartedAt();
+        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+        LOG.info("Container Inspect: {}", inspectContainerResponse.toString());
 
-		dockerClient.restartContainerCmd(container.getId()).withtTimeout(2).exec();
+        String startTime = inspectContainerResponse.getState().getStartedAt();
 
-		InspectContainerResponse inspectContainerResponse2 = dockerClient
-				.inspectContainerCmd(container.getId()).exec();
-		LOG.info("Container Inspect After Restart: {}",
-				inspectContainerResponse2.toString());
+        dockerClient.restartContainerCmd(container.getId()).withtTimeout(2).exec();
 
-		String startTime2 = inspectContainerResponse2.getState().getStartedAt();
+        InspectContainerResponse inspectContainerResponse2 = dockerClient.inspectContainerCmd(container.getId()).exec();
+        LOG.info("Container Inspect After Restart: {}", inspectContainerResponse2.toString());
 
-		assertThat(startTime, not(equalTo(startTime2)));
+        String startTime2 = inspectContainerResponse2.getState().getStartedAt();
 
-		assertThat(inspectContainerResponse.getState().isRunning(),
-				is(equalTo(true)));
+        assertThat(startTime, not(equalTo(startTime2)));
 
-		dockerClient.killContainerCmd(container.getId()).exec();
-	}
-	
-	@Test
-	public void restartNonExistingContainer() throws DockerException, InterruptedException {
-		try {
-			dockerClient.restartContainerCmd("non-existing").exec();
-			fail("expected NotFoundException");
-		} catch (NotFoundException e) {
-		}
+        assertThat(inspectContainerResponse.getState().isRunning(), is(equalTo(true)));
 
-	}
+        dockerClient.killContainerCmd(container.getId()).exec();
+    }
 
+    @Test
+    public void restartNonExistingContainer() throws DockerException, InterruptedException {
+        try {
+            dockerClient.restartContainerCmd("non-existing").exec();
+            fail("expected NotFoundException");
+        } catch (NotFoundException e) {
+        }
+
+    }
 
 }

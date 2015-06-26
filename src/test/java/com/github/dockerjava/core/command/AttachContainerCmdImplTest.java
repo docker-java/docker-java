@@ -81,7 +81,6 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(collectFramesCallback.toString(), endsWith(snippet));
     }
 
-
     @Test
     public void attachContainerWithTTY() throws Exception {
 
@@ -93,11 +92,9 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
         String fullLog = asString(response);
         assertThat(fullLog, containsString("Successfully built"));
 
-        String imageId = StringUtils.substringBetween(fullLog,
-                "Successfully built ", "\\n\"}").trim();
+        String imageId = StringUtils.substringBetween(fullLog, "Successfully built ", "\\n\"}").trim();
 
-        CreateContainerResponse container = dockerClient.createContainerCmd(imageId)
-                .withTty(true).exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd(imageId).withTty(true).exec();
 
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
@@ -120,7 +117,6 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
         collectFramesCallback.close();
 
         System.out.println("log: " + collectFramesCallback.toString());
-
 
         HexDump.dump(collectFramesCallback.toString().getBytes(), 0, System.out, 0);
 

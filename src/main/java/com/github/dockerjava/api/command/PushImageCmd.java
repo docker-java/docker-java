@@ -11,41 +11,45 @@ import java.io.InputStream;
 /**
  * Push the latest image to the repository.
  *
- * @param name The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
+ * @param name
+ *            The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
  */
-public interface PushImageCmd extends DockerCmd<PushImageCmd.Response>{
+public interface PushImageCmd extends DockerCmd<PushImageCmd.Response> {
 
-	public String getName();
+    public String getName();
 
-	public String getTag();
+    public String getTag();
 
-	/**
-	 * @param name The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
-	 */
-	public PushImageCmd withName(String name);
-	
     /**
-     * @param tag The image's tag. Not null.
+     * @param name
+     *            The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
+     */
+    public PushImageCmd withName(String name);
+
+    /**
+     * @param tag
+     *            The image's tag. Not null.
      */
     public PushImageCmd withTag(String tag);
 
     public AuthConfig getAuthConfig();
-	
-	public PushImageCmd withAuthConfig(AuthConfig authConfig);
 
-	/**
-	 * @throws NotFoundException No such image
-	 */
-	public Response exec() throws NotFoundException;
-	
-	public static interface Exec extends DockerCmdExec<PushImageCmd, Response> {
-	}
+    public PushImageCmd withAuthConfig(AuthConfig authConfig);
 
-	/**
-	 * @see {@link EventStreamReader}
-	 */
-  	public static abstract class Response extends InputStream {
-	  public abstract Iterable<PushEventStreamItem> getItems() throws IOException;
-	}
+    /**
+     * @throws NotFoundException
+     *             No such image
+     */
+    public Response exec() throws NotFoundException;
+
+    public static interface Exec extends DockerCmdExec<PushImageCmd, Response> {
+    }
+
+    /**
+     * @see {@link EventStreamReader}
+     */
+    public static abstract class Response extends InputStream {
+        public abstract Iterable<PushEventStreamItem> getItems() throws IOException;
+    }
 
 }

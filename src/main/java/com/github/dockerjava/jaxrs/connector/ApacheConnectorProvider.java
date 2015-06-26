@@ -50,8 +50,8 @@ import org.glassfish.jersey.client.spi.ConnectorProvider;
 import org.apache.http.client.HttpClient;
 
 /**
- * Connector provider for Jersey {@link Connector connectors} that utilize
- * Apache HTTP Client to send and receive HTTP request and responses.
+ * Connector provider for Jersey {@link Connector connectors} that utilize Apache HTTP Client to send and receive HTTP
+ * request and responses.
  * <p>
  * The following connector configuration properties are supported:
  * <ul>
@@ -62,29 +62,28 @@ import org.apache.http.client.HttpClient;
  * <li>{@link org.glassfish.jersey.client.ClientProperties#PROXY_URI}</li>
  * <li>{@link org.glassfish.jersey.client.ClientProperties#PROXY_USERNAME}</li>
  * <li>{@link org.glassfish.jersey.client.ClientProperties#PROXY_PASSWORD}</li>
- * <li>{@link org.glassfish.jersey.client.ClientProperties#REQUEST_ENTITY_PROCESSING}
- * - default value is {@link org.glassfish.jersey.client.RequestEntityProcessing#CHUNKED}</li>
+ * <li>{@link org.glassfish.jersey.client.ClientProperties#REQUEST_ENTITY_PROCESSING} - default value is
+ * {@link org.glassfish.jersey.client.RequestEntityProcessing#CHUNKED}</li>
  * <li>{@link ApacheClientProperties#PREEMPTIVE_BASIC_AUTHENTICATION}</li>
  * <li>{@link ApacheClientProperties#SSL_CONFIG}</li>
  * </ul>
  * </p>
  * <p>
  * Connector instances created via this connector provider use
- * {@link org.glassfish.jersey.client.RequestEntityProcessing#CHUNKED chunked encoding} as a default setting.
- * This can be overridden by the {@link org.glassfish.jersey.client.ClientProperties#REQUEST_ENTITY_PROCESSING}.
- * By default the {@link org.glassfish.jersey.client.ClientProperties#CHUNKED_ENCODING_SIZE} property is only supported
- * when using the default {@code org.apache.http.conn.HttpClientConnectionManager} instance. If custom
- * connection manager is used, then chunked encoding size can be set by providing a custom
- * {@code org.apache.http.HttpClientConnection} (via custom {@code org.apache.http.impl.conn.ManagedHttpClientConnectionFactory})
- * and overriding it's {@code createOutputStream} method.
+ * {@link org.glassfish.jersey.client.RequestEntityProcessing#CHUNKED chunked encoding} as a default setting. This can
+ * be overridden by the {@link org.glassfish.jersey.client.ClientProperties#REQUEST_ENTITY_PROCESSING}. By default the
+ * {@link org.glassfish.jersey.client.ClientProperties#CHUNKED_ENCODING_SIZE} property is only supported when using the
+ * default {@code org.apache.http.conn.HttpClientConnectionManager} instance. If custom connection manager is used, then
+ * chunked encoding size can be set by providing a custom {@code org.apache.http.HttpClientConnection} (via custom
+ * {@code org.apache.http.impl.conn.ManagedHttpClientConnectionFactory}) and overriding it's {@code createOutputStream}
+ * method.
  * </p>
  * <p>
- * Use of authorization by the AHC-based connectors is dependent on the chunk encoding setting.
- * If the entity buffering is enabled, the entity is buffered and authorization can be performed
- * automatically in response to a 401 by sending the request again. When entity buffering
- * is disabled (chunked encoding is used) then the property
- * {@link org.glassfish.jersey.apache.connector.ApacheClientProperties#PREEMPTIVE_BASIC_AUTHENTICATION} must
- * be set to {@code true}.
+ * Use of authorization by the AHC-based connectors is dependent on the chunk encoding setting. If the entity buffering
+ * is enabled, the entity is buffered and authorization can be performed automatically in response to a 401 by sending
+ * the request again. When entity buffering is disabled (chunked encoding is used) then the property
+ * {@link org.glassfish.jersey.apache.connector.ApacheClientProperties#PREEMPTIVE_BASIC_AUTHENTICATION} must be set to
+ * {@code true}.
  * </p>
  * <p>
  * If a {@link org.glassfish.jersey.client.ClientResponse} is obtained and an entity is not read from the response then
@@ -92,9 +91,8 @@ import org.apache.http.client.HttpClient;
  * connection-based resources.
  * </p>
  * <p>
- * If a response entity is obtained that is an instance of {@link java.io.Closeable}
- * then the instance MUST be closed after processing the entity to release
- * connection-based resources.
+ * If a response entity is obtained that is an instance of {@link java.io.Closeable} then the instance MUST be closed
+ * after processing the entity to release connection-based resources.
  * <p/>
  * <p>
  * The following methods are currently supported: HEAD, GET, POST, PUT, DELETE, OPTIONS, PATCH and TRACE.
@@ -115,23 +113,23 @@ public class ApacheConnectorProvider implements ConnectorProvider {
     }
 
     /**
-     * Retrieve the underlying Apache {@link HttpClient} instance from
-     * {@link org.glassfish.jersey.client.JerseyClient} or {@link org.glassfish.jersey.client.JerseyWebTarget}
-     * configured to use {@code ApacheConnectorProvider}.
+     * Retrieve the underlying Apache {@link HttpClient} instance from {@link org.glassfish.jersey.client.JerseyClient}
+     * or {@link org.glassfish.jersey.client.JerseyWebTarget} configured to use {@code ApacheConnectorProvider}.
      *
-     * @param component {@code JerseyClient} or {@code JerseyWebTarget} instance that is configured to use
-     *                  {@code ApacheConnectorProvider}.
+     * @param component
+     *            {@code JerseyClient} or {@code JerseyWebTarget} instance that is configured to use
+     *            {@code ApacheConnectorProvider}.
      * @return underlying Apache {@code HttpClient} instance.
      *
-     * @throws java.lang.IllegalArgumentException in case the {@code component} is neither {@code JerseyClient}
-     *                                            nor {@code JerseyWebTarget} instance or in case the component
-     *                                            is not configured to use a {@code ApacheConnectorProvider}.
+     * @throws java.lang.IllegalArgumentException
+     *             in case the {@code component} is neither {@code JerseyClient} nor {@code JerseyWebTarget} instance or
+     *             in case the component is not configured to use a {@code ApacheConnectorProvider}.
      * @since 2.8
      */
     public static HttpClient getHttpClient(Configurable<?> component) {
         if (!(component instanceof Initializable)) {
-            throw new IllegalArgumentException(
-                    LocalizationMessages.INVALID_CONFIGURABLE_COMPONENT_TYPE(component.getClass().getName()));
+            throw new IllegalArgumentException(LocalizationMessages.INVALID_CONFIGURABLE_COMPONENT_TYPE(component
+                    .getClass().getName()));
         }
 
         final Initializable<?> initializable = (Initializable<?>) component;
@@ -148,4 +146,3 @@ public class ApacheConnectorProvider implements ConnectorProvider {
         throw new IllegalArgumentException(LocalizationMessages.EXPECTED_CONNECTOR_PROVIDER_NOT_USED());
     }
 }
-

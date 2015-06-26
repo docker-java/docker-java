@@ -24,50 +24,46 @@ import org.testng.annotations.Test;
  */
 @Test(groups = "integration")
 public class DockerClientTest extends AbstractDockerClientTest {
-	public static final Logger LOG = LoggerFactory
-			.getLogger(DockerClientTest.class);
+    public static final Logger LOG = LoggerFactory.getLogger(DockerClientTest.class);
 
-	@BeforeTest
-	public void beforeTest() throws DockerException {
-		super.beforeTest();
-	}
-	@AfterTest
-	public void afterTest() {
-		super.afterTest();
-	}
+    @BeforeTest
+    public void beforeTest() throws DockerException {
+        super.beforeTest();
+    }
 
-	@BeforeMethod
-	public void beforeMethod(Method method) {
-	    super.beforeMethod(method);
-	}
+    @AfterTest
+    public void afterTest() {
+        super.afterTest();
+    }
 
-	@AfterMethod
-	public void afterMethod(ITestResult result) {
-		super.afterMethod(result);
-	}
+    @BeforeMethod
+    public void beforeMethod(Method method) {
+        super.beforeMethod(method);
+    }
 
+    @AfterMethod
+    public void afterMethod(ITestResult result) {
+        super.afterMethod(result);
+    }
 
-	@Test
-	public void testRunShlex() throws DockerException {
+    @Test
+    public void testRunShlex() throws DockerException {
 
-		String[] commands = new String[] {
-				"true",
-				"echo \"The Young Descendant of Tepes & Septette for the Dead Princess\"",
-				"echo -n 'The Young Descendant of Tepes & Septette for the Dead Princess'",
-				"/bin/sh -c echo Hello World", "/bin/sh -c echo 'Hello World'",
-				"echo 'Night of Nights'", "true && echo 'Night of Nights'" };
+        String[] commands = new String[] { "true",
+                "echo \"The Young Descendant of Tepes & Septette for the Dead Princess\"",
+                "echo -n 'The Young Descendant of Tepes & Septette for the Dead Princess'",
+                "/bin/sh -c echo Hello World", "/bin/sh -c echo 'Hello World'", "echo 'Night of Nights'",
+                "true && echo 'Night of Nights'" };
 
-		for (String command : commands) {
-			LOG.info("Running command: [{}]", command);
+        for (String command : commands) {
+            LOG.info("Running command: [{}]", command);
 
-			CreateContainerResponse container = dockerClient
-					.createContainerCmd("busybox").withCmd(commands).exec();
-			dockerClient.startContainerCmd(container.getId());
-			
-			int exitcode = dockerClient.waitContainerCmd(container.getId()).exec();
-			assertThat(exitcode, equalTo(0));
-		}
-	}
+            CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd(commands).exec();
+            dockerClient.startContainerCmd(container.getId());
 
+            int exitcode = dockerClient.waitContainerCmd(container.getId()).exec();
+            assertThat(exitcode, equalTo(0));
+        }
+    }
 
 }

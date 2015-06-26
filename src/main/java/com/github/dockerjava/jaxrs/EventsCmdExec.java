@@ -27,8 +27,8 @@ public class EventsCmdExec extends AbstrDockerCmdExec<EventsCmd, Void> implement
 
         LOGGER.trace("GET: {}", webTarget);
 
-        GETCallbackNotifier<Event> callbackNotifier = new GETCallbackNotifier<Event>(
-                new JsonStreamProcessor<Event>(Event.class), command.getResultCallback(), webTarget);
+        GETCallbackNotifier<Event> callbackNotifier = new GETCallbackNotifier<Event>(new JsonStreamProcessor<Event>(
+                Event.class), command.getResultCallback(), webTarget);
 
         AbstractCallbackNotifier.startAsyncProcessing(callbackNotifier);
 

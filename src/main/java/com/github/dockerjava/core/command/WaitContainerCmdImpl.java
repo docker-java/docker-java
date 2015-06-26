@@ -11,24 +11,24 @@ import com.github.dockerjava.api.command.WaitContainerCmd;
  */
 public class WaitContainerCmdImpl extends AbstrDockerCmd<WaitContainerCmd, Integer> implements WaitContainerCmd {
 
-	private String containerId;
+    private String containerId;
 
-	public WaitContainerCmdImpl(WaitContainerCmd.Exec exec, String containerId) {
-		super(exec);
-		withContainerId(containerId);
-	}
+    public WaitContainerCmdImpl(WaitContainerCmd.Exec exec, String containerId) {
+        super(exec);
+        withContainerId(containerId);
+    }
 
     @Override
-	public String getContainerId() {
+    public String getContainerId() {
         return containerId;
     }
 
     @Override
-	public WaitContainerCmd withContainerId(String containerId) {
-		checkNotNull(containerId, "containerId was not specified");
-		this.containerId = containerId;
-		return this;
-	}
+    public WaitContainerCmd withContainerId(String containerId) {
+        checkNotNull(containerId, "containerId was not specified");
+        this.containerId = containerId;
+        return this;
+    }
 
     @Override
     public String toString() {

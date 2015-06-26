@@ -27,8 +27,8 @@ public abstract class AbstractCallbackNotifier<T> implements Callable<Void> {
 
     protected final WebTarget webTarget;
 
-    protected AbstractCallbackNotifier(ResponseStreamProcessor<T> responseStreamProcessor, ResultCallback<T> resultCallback,
-            WebTarget webTarget) {
+    protected AbstractCallbackNotifier(ResponseStreamProcessor<T> responseStreamProcessor,
+            ResultCallback<T> resultCallback, WebTarget webTarget) {
         checkNotNull(webTarget, "An WebTarget must be provided");
         checkNotNull(responseStreamProcessor, "A ResponseStreamProcessor must be provided");
         this.responseStreamProcessor = responseStreamProcessor;

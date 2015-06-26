@@ -154,27 +154,23 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test
-	public void createContainerWithEnv() throws Exception {
+    public void createContainerWithEnv() throws Exception {
 
-		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withEnv("VARIABLE=success")
-				.withCmd("env").exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withEnv("VARIABLE=success")
+                .withCmd("env").exec();
 
-		LOG.info("Created container {}", container.toString());
+        LOG.info("Created container {}", container.toString());
 
-		assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(isEmptyString()));
 
-		InspectContainerResponse inspectContainerResponse = dockerClient
-				.inspectContainerCmd(container.getId()).exec();
+        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-		assertThat(
-				Arrays.asList(inspectContainerResponse.getConfig().getEnv()),
-				containsInAnyOrder("VARIABLE=success"));
+        assertThat(Arrays.asList(inspectContainerResponse.getConfig().getEnv()), containsInAnyOrder("VARIABLE=success"));
 
-		dockerClient.startContainerCmd(container.getId()).exec();
+        dockerClient.startContainerCmd(container.getId()).exec();
 
-		assertThat(containerLog(container.getId()), containsString("VARIABLE=success"));
-	}
+        assertThat(containerLog(container.getId()), containsString("VARIABLE=success"));
+    }
 
     @Test
     public void createContainerWithHostname() throws Exception {
@@ -192,8 +188,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        assertThat(containerLog(container.getId()),
-                containsString("HOSTNAME=docker-java"));
+        assertThat(containerLog(container.getId()), containsString("HOSTNAME=docker-java"));
     }
 
     @Test

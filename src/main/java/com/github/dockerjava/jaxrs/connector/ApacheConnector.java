@@ -40,7 +40,6 @@ package com.github.dockerjava.jaxrs.connector;
  * holder.
  */
 
-
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -127,8 +126,7 @@ import org.apache.http.util.VersionInfo;
 import jersey.repackaged.com.google.common.util.concurrent.MoreExecutors;
 
 /**
- * A {@link Connector} that utilizes the Apache HTTP Client to send and receive
- * HTTP request and responses.
+ * A {@link Connector} that utilizes the Apache HTTP Client to send and receive HTTP request and responses.
  * <p/>
  * The following properties are only supported at construction of this class:
  * <ul>
@@ -144,35 +142,32 @@ import jersey.repackaged.com.google.common.util.concurrent.MoreExecutors;
  * <li>{@link ApacheClientProperties#SSL_CONFIG}</li>
  * </ul>
  * <p>
- * This connector uses {@link RequestEntityProcessing#CHUNKED chunked encoding} as a default setting. This can
- * be overridden by the {@link ClientProperties#REQUEST_ENTITY_PROCESSING}. By default the
- * {@link ClientProperties#CHUNKED_ENCODING_SIZE} property is only supported by using default connection manager. If custom
- * connection manager needs to be used then chunked encoding size can be set by providing a custom
- * {@link org.apache.http.HttpClientConnection} (via custom {@link org.apache.http.impl.conn.ManagedHttpClientConnectionFactory})
- * and overriding {@code createOutputStream} method.
+ * This connector uses {@link RequestEntityProcessing#CHUNKED chunked encoding} as a default setting. This can be
+ * overridden by the {@link ClientProperties#REQUEST_ENTITY_PROCESSING}. By default the
+ * {@link ClientProperties#CHUNKED_ENCODING_SIZE} property is only supported by using default connection manager. If
+ * custom connection manager needs to be used then chunked encoding size can be set by providing a custom
+ * {@link org.apache.http.HttpClientConnection} (via custom
+ * {@link org.apache.http.impl.conn.ManagedHttpClientConnectionFactory}) and overriding {@code createOutputStream}
+ * method.
  * </p>
  * <p>
- * Using of authorization is dependent on the chunk encoding setting. If the entity
- * buffering is enabled, the entity is buffered and authorization can be performed
- * automatically in response to a 401 by sending the request again. When entity buffering
- * is disabled (chunked encoding is used) then the property
- * {@link org.glassfish.jersey.apache.connector.ApacheClientProperties#PREEMPTIVE_BASIC_AUTHENTICATION} must
- * be set to {@code true}.
+ * Using of authorization is dependent on the chunk encoding setting. If the entity buffering is enabled, the entity is
+ * buffered and authorization can be performed automatically in response to a 401 by sending the request again. When
+ * entity buffering is disabled (chunked encoding is used) then the property
+ * {@link org.glassfish.jersey.apache.connector.ApacheClientProperties#PREEMPTIVE_BASIC_AUTHENTICATION} must be set to
+ * {@code true}.
  * </p>
  * <p>
- * If a {@link org.glassfish.jersey.client.ClientResponse} is obtained and an
- * entity is not read from the response then
- * {@link org.glassfish.jersey.client.ClientResponse#close()} MUST be called
- * after processing the response to release connection-based resources.
- * </p>
- * <p>
- * Client operations are thread safe, the HTTP connection may
- * be shared between different threads.
- * </p>
- * <p>
- * If a response entity is obtained that is an instance of {@link Closeable}
- * then the instance MUST be closed after processing the entity to release
+ * If a {@link org.glassfish.jersey.client.ClientResponse} is obtained and an entity is not read from the response then
+ * {@link org.glassfish.jersey.client.ClientResponse#close()} MUST be called after processing the response to release
  * connection-based resources.
+ * </p>
+ * <p>
+ * Client operations are thread safe, the HTTP connection may be shared between different threads.
+ * </p>
+ * <p>
+ * If a response entity is obtained that is an instance of {@link Closeable} then the instance MUST be closed after
+ * processing the entity to release connection-based resources.
  * </p>
  * <p>
  * The following methods are currently supported: HEAD, GET, POST, PUT, DELETE, OPTIONS, PATCH and TRACE.
@@ -190,6 +185,7 @@ class ApacheConnector implements Connector {
     private final static Logger LOGGER = Logger.getLogger(ApacheConnector.class.getName());
 
     private static final VersionInfo vi;
+
     private static final String release;
 
     static {
@@ -198,14 +194,18 @@ class ApacheConnector implements Connector {
     }
 
     private final CloseableHttpClient client;
+
     private final CookieStore cookieStore;
+
     private final boolean preemptiveBasicAuth;
+
     private final RequestConfig requestConfig;
 
     /**
      * Create the new Apache HTTP Client connector.
      *
-     * @param config client configuration.
+     * @param config
+     *            client configuration.
      */
     ApacheConnector(Configuration config) {
         Object reqConfig = null;
@@ -215,26 +215,18 @@ class ApacheConnector implements Connector {
 
             if (connectionManager != null) {
                 if (!(connectionManager instanceof HttpClientConnectionManager)) {
-                    LOGGER.log(
-                            Level.WARNING,
-                            LocalizationMessages.IGNORING_VALUE_OF_PROPERTY(
-                                    ApacheClientProperties.CONNECTION_MANAGER,
-                                    connectionManager.getClass().getName(),
-                                    HttpClientConnectionManager.class.getName())
-                    );
+                    LOGGER.log(Level.WARNING, LocalizationMessages.IGNORING_VALUE_OF_PROPERTY(
+                            ApacheClientProperties.CONNECTION_MANAGER, connectionManager.getClass().getName(),
+                            HttpClientConnectionManager.class.getName()));
                 }
             }
 
             reqConfig = config.getProperties().get(ApacheClientProperties.REQUEST_CONFIG);
             if (reqConfig != null) {
                 if (!(reqConfig instanceof RequestConfig)) {
-                    LOGGER.log(
-                            Level.WARNING,
-                            LocalizationMessages.IGNORING_VALUE_OF_PROPERTY(
-                                    ApacheClientProperties.REQUEST_CONFIG,
-                                    reqConfig.getClass().getName(),
-                                    RequestConfig.class.getName())
-                    );
+                    LOGGER.log(Level.WARNING, LocalizationMessages.IGNORING_VALUE_OF_PROPERTY(
+                            ApacheClientProperties.REQUEST_CONFIG, reqConfig.getClass().getName(),
+                            RequestConfig.class.getName()));
                     reqConfig = null;
                 }
             }
@@ -267,30 +259,29 @@ class ApacheConnector implements Connector {
                 final URI u = getProxyUri(proxyUri);
                 final HttpHost proxy = new HttpHost(u.getHost(), u.getPort(), u.getScheme());
                 String userName;
-                userName = ClientProperties.getValue(config.getProperties(), ClientProperties.PROXY_USERNAME, String.class);
+                userName = ClientProperties.getValue(config.getProperties(), ClientProperties.PROXY_USERNAME,
+                        String.class);
                 if (userName != null) {
                     String password;
-                    password = ClientProperties.getValue(config.getProperties(), ClientProperties.PROXY_PASSWORD, String.class);
+                    password = ClientProperties.getValue(config.getProperties(), ClientProperties.PROXY_PASSWORD,
+                            String.class);
 
                     if (password != null) {
                         final CredentialsProvider credsProvider = new BasicCredentialsProvider();
-                        credsProvider.setCredentials(
-                                new AuthScope(u.getHost(), u.getPort()),
-                                new UsernamePasswordCredentials(userName, password)
-                        );
+                        credsProvider.setCredentials(new AuthScope(u.getHost(), u.getPort()),
+                                new UsernamePasswordCredentials(userName, password));
                         clientBuilder.setDefaultCredentialsProvider(credsProvider);
                     }
                 }
                 clientBuilder.setProxy(proxy);
             }
 
-            final Boolean preemptiveBasicAuthProperty = (Boolean) config.getProperties()
-                    .get(ApacheClientProperties.PREEMPTIVE_BASIC_AUTHENTICATION);
+            final Boolean preemptiveBasicAuthProperty = (Boolean) config.getProperties().get(
+                    ApacheClientProperties.PREEMPTIVE_BASIC_AUTHENTICATION);
             this.preemptiveBasicAuth = (preemptiveBasicAuthProperty != null) ? preemptiveBasicAuthProperty : false;
         } else {
             this.preemptiveBasicAuth = false;
         }
-
 
         if (reqConfig != null) {
             RequestConfig.Builder reqConfigBuilder = RequestConfig.copy((RequestConfig) reqConfig);
@@ -324,10 +315,8 @@ class ApacheConnector implements Connector {
     }
 
     private SSLContext getSslContext(final Configuration config) {
-        final SslConfigurator sslConfigurator = ApacheClientProperties.getValue(
-                config.getProperties(),
-                ApacheClientProperties.SSL_CONFIG,
-                SslConfigurator.class);
+        final SslConfigurator sslConfigurator = ApacheClientProperties.getValue(config.getProperties(),
+                ApacheClientProperties.SSL_CONFIG, SslConfigurator.class);
 
         return sslConfigurator != null ? sslConfigurator.createSSLContext() : null;
     }
@@ -340,34 +329,22 @@ class ApacheConnector implements Connector {
             if (cmObject instanceof HttpClientConnectionManager) {
                 return (HttpClientConnectionManager) cmObject;
             } else {
-                LOGGER.log(
-                        Level.WARNING,
-                        LocalizationMessages.IGNORING_VALUE_OF_PROPERTY(
-                                ApacheClientProperties.CONNECTION_MANAGER,
-                                cmObject.getClass().getName(),
-                                HttpClientConnectionManager.class.getName())
-                );
+                LOGGER.log(Level.WARNING, LocalizationMessages.IGNORING_VALUE_OF_PROPERTY(
+                        ApacheClientProperties.CONNECTION_MANAGER, cmObject.getClass().getName(),
+                        HttpClientConnectionManager.class.getName()));
             }
         }
 
         // Create custom connection manager.
-        return createConnectionManager(
-                config,
-                sslContext,
-                null,
-                false);
+        return createConnectionManager(config, sslContext, null, false);
     }
 
-    private HttpClientConnectionManager createConnectionManager(
-            final Configuration config,
-            final SSLContext sslContext,
-            X509HostnameVerifier hostnameVerifier,
-            final boolean useSystemProperties) {
+    private HttpClientConnectionManager createConnectionManager(final Configuration config,
+            final SSLContext sslContext, X509HostnameVerifier hostnameVerifier, final boolean useSystemProperties) {
 
-        final String[] supportedProtocols = useSystemProperties ? split(
-                System.getProperty("https.protocols")) : null;
-        final String[] supportedCipherSuites = useSystemProperties ? split(
-                System.getProperty("https.cipherSuites")) : null;
+        final String[] supportedProtocols = useSystemProperties ? split(System.getProperty("https.protocols")) : null;
+        final String[] supportedCipherSuites = useSystemProperties ? split(System.getProperty("https.cipherSuites"))
+                : null;
 
         if (hostnameVerifier == null) {
             hostnameVerifier = SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER;
@@ -375,30 +352,26 @@ class ApacheConnector implements Connector {
 
         final LayeredConnectionSocketFactory sslSocketFactory;
         if (sslContext != null) {
-            sslSocketFactory = new SSLConnectionSocketFactory(
-                    sslContext, supportedProtocols, supportedCipherSuites, hostnameVerifier);
+            sslSocketFactory = new SSLConnectionSocketFactory(sslContext, supportedProtocols, supportedCipherSuites,
+                    hostnameVerifier);
         } else {
             if (useSystemProperties) {
-                sslSocketFactory = new SSLConnectionSocketFactory(
-                        (SSLSocketFactory) SSLSocketFactory.getDefault(),
+                sslSocketFactory = new SSLConnectionSocketFactory((SSLSocketFactory) SSLSocketFactory.getDefault(),
                         supportedProtocols, supportedCipherSuites, hostnameVerifier);
             } else {
-                sslSocketFactory = new SSLConnectionSocketFactory(
-                        SSLContexts.createDefault(),
-                        hostnameVerifier);
+                sslSocketFactory = new SSLConnectionSocketFactory(SSLContexts.createDefault(), hostnameVerifier);
             }
         }
 
-        final Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory>create()
-                .register("http", PlainConnectionSocketFactory.getSocketFactory())
-                .register("https", sslSocketFactory)
+        final Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory> create()
+                .register("http", PlainConnectionSocketFactory.getSocketFactory()).register("https", sslSocketFactory)
                 .build();
 
         final Integer chunkSize = ClientProperties.getValue(config.getProperties(),
                 ClientProperties.CHUNKED_ENCODING_SIZE, 4096, Integer.class);
 
-        final PoolingHttpClientConnectionManager connectionManager =
-                new PoolingHttpClientConnectionManager(registry, new ConnectionFactory(chunkSize));
+        final PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(registry,
+                new ConnectionFactory(chunkSize));
 
         if (useSystemProperties) {
             String s = System.getProperty("http.keepAlive", "true");
@@ -433,8 +406,8 @@ class ApacheConnector implements Connector {
     /**
      * Get the {@link CookieStore}.
      *
-     * @return the {@link CookieStore} instance or {@code null} when {@value ApacheClientProperties#DISABLE_COOKIES} set to
-     * {@code true}.
+     * @return the {@link CookieStore} instance or {@code null} when {@value ApacheClientProperties#DISABLE_COOKIES} set
+     *         to {@code true}.
      */
     public CookieStore getCookieStore() {
         return cookieStore;
@@ -465,15 +438,15 @@ class ApacheConnector implements Connector {
                 context.setAuthCache(authCache);
             }
 
-            //context.setRequestConfig(RequestConfig.custom().setConnectionRequestTimeout(10).build());
+            // context.setRequestConfig(RequestConfig.custom().setConnectionRequestTimeout(10).build());
 
             response = client.execute(getHost(request), request, context);
-            HeaderUtils.checkHeaderChanges(clientHeadersSnapshot, clientRequest.getHeaders(),
-                    this.getClass().getName());
+            HeaderUtils
+                    .checkHeaderChanges(clientHeadersSnapshot, clientRequest.getHeaders(), this.getClass().getName());
 
-            final Response.StatusType status = response.getStatusLine().getReasonPhrase() == null ?
-                    Statuses.from(response.getStatusLine().getStatusCode()) :
-                    Statuses.from(response.getStatusLine().getStatusCode(), response.getStatusLine().getReasonPhrase());
+            final Response.StatusType status = response.getStatusLine().getReasonPhrase() == null ? Statuses
+                    .from(response.getStatusLine().getStatusCode()) : Statuses.from(response.getStatusLine()
+                    .getStatusCode(), response.getStatusLine().getReasonPhrase());
 
             final ClientResponse responseContext = new ApacheConnectorClientResponse(status, clientRequest, response);
             final List<URI> redirectLocations = context.getRedirectLocations();
@@ -505,7 +478,6 @@ class ApacheConnector implements Connector {
                     headers.add(HttpHeaders.CONTENT_ENCODING, contentEncoding.getValue());
                 }
             }
-
 
             try {
                 responseContext.setEntityStream(new HttpClientResponseInputStream(response));
@@ -554,22 +526,17 @@ class ApacheConnector implements Connector {
     }
 
     private HttpUriRequest getUriHttpRequest(final ClientRequest clientRequest) {
-        final Boolean redirectsEnabled =
-                clientRequest.resolveProperty(ClientProperties.FOLLOW_REDIRECTS, requestConfig.isRedirectsEnabled());
+        final Boolean redirectsEnabled = clientRequest.resolveProperty(ClientProperties.FOLLOW_REDIRECTS,
+                requestConfig.isRedirectsEnabled());
         final RequestConfig config = RequestConfig.copy(requestConfig).setRedirectsEnabled(redirectsEnabled).build();
 
         final Boolean bufferingEnabled = clientRequest.resolveProperty(ClientProperties.REQUEST_ENTITY_PROCESSING,
                 RequestEntityProcessing.class) == RequestEntityProcessing.BUFFERED;
         final HttpEntity entity = getHttpEntity(clientRequest, bufferingEnabled);
 
-        return RequestBuilder
-                .create(clientRequest.getMethod())
-                .setUri(clientRequest.getUri())
-                .setConfig(config)
-                .setEntity(entity)
-                .build();
+        return RequestBuilder.create(clientRequest.getMethod()).setUri(clientRequest.getUri()).setConfig(config)
+                .setEntity(entity).build();
     }
-
 
     private HttpEntity getHttpEntity(final ClientRequest clientRequest, final boolean bufferingEnabled) {
         final Object entity = clientRequest.getEntity();
@@ -628,7 +595,8 @@ class ApacheConnector implements Connector {
         }
     }
 
-    private static Map<String, String> writeOutBoundHeaders(final MultivaluedMap<String, Object> headers, final HttpUriRequest request) {
+    private static Map<String, String> writeOutBoundHeaders(final MultivaluedMap<String, Object> headers,
+            final HttpUriRequest request) {
         Map<String, String> stringHeaders = HeaderUtils.asStringHeadersSingleValue(headers);
 
         for (Map.Entry<String, String> e : stringHeaders.entrySet()) {

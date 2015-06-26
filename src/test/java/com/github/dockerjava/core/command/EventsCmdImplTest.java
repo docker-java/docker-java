@@ -24,131 +24,125 @@ import com.github.dockerjava.core.async.ResultCallbackTemplate;
 @Test(groups = "integration")
 public class EventsCmdImplTest extends AbstractDockerClientTest {
 
-	private static int KNOWN_NUM_EVENTS = 4;
+    private static int KNOWN_NUM_EVENTS = 4;
 
-	private static String getEpochTime() {
-		return String.valueOf(System.currentTimeMillis() / 1000);
-	}
+    private static String getEpochTime() {
+        return String.valueOf(System.currentTimeMillis() / 1000);
+    }
 
-	@BeforeTest
-	public void beforeTest() throws DockerException {
-		super.beforeTest();
-	}
+    @BeforeTest
+    public void beforeTest() throws DockerException {
+        super.beforeTest();
+    }
 
-	@AfterTest
-	public void afterTest() {
-		super.afterTest();
-	}
+    @AfterTest
+    public void afterTest() {
+        super.afterTest();
+    }
 
-	@BeforeMethod
-	public void beforeMethod(Method method) {
-		super.beforeMethod(method);
-	}
+    @BeforeMethod
+    public void beforeMethod(Method method) {
+        super.beforeMethod(method);
+    }
 
-	@AfterMethod
-	public void afterMethod(ITestResult result) {
-		super.afterMethod(result);
-	}
+    @AfterMethod
+    public void afterMethod(ITestResult result) {
+        super.afterMethod(result);
+    }
 
-	/*
-	 * This specific test may fail with boot2docker as time may not in sync with host system
-	 */
-	@Test
-	public void testEventStreamTimeBound() throws InterruptedException,
-			IOException {
-		// Don't include other tests events
-		TimeUnit.SECONDS.sleep(1);
+    /*
+     * This specific test may fail with boot2docker as time may not in sync with host system
+     */
+    @Test
+    public void testEventStreamTimeBound() throws InterruptedException, IOException {
+        // Don't include other tests events
+        TimeUnit.SECONDS.sleep(1);
 
-		String startTime = getEpochTime();
-		int expectedEvents = generateEvents();
-		String endTime = getEpochTime();
+        String startTime = getEpochTime();
+        int expectedEvents = generateEvents();
+        String endTime = getEpochTime();
 
-		CountDownLatch countDownLatch = new CountDownLatch(expectedEvents);
-		EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
+        CountDownLatch countDownLatch = new CountDownLatch(expectedEvents);
+        EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
 
-		EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback)
-				.withSince(startTime).withUntil(endTime);
-		eventsCmd.exec();
+        EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withSince(startTime).withUntil(endTime);
+        eventsCmd.exec();
 
-		boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
+        boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
 
+        eventCallback.close();
 
-		eventCallback.close();
+        assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
+    }
 
-		assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
-	}
+    @Test
+    public void testEventStreaming1() throws InterruptedException, IOException {
+        // Don't include other tests events
+        TimeUnit.SECONDS.sleep(1);
 
-	@Test
-	public void testEventStreaming1() throws InterruptedException, IOException {
-		// Don't include other tests events
-		TimeUnit.SECONDS.sleep(1);
+        CountDownLatch countDownLatch = new CountDownLatch(KNOWN_NUM_EVENTS);
+        EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
 
-		CountDownLatch countDownLatch = new CountDownLatch(KNOWN_NUM_EVENTS);
-		EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
+        EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withSince(getEpochTime());
+        eventsCmd.exec();
 
-		EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withSince(
-				getEpochTime());
-		eventsCmd.exec();
+        generateEvents();
 
-		generateEvents();
+        boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
 
-		boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
+        eventCallback.close();
+        assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
+    }
 
-		eventCallback.close();
-		assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
-	}
+    @Test
+    public void testEventStreaming2() throws InterruptedException, IOException {
+        // Don't include other tests events
+        TimeUnit.SECONDS.sleep(1);
 
-	@Test
-	public void testEventStreaming2() throws InterruptedException, IOException {
-		// Don't include other tests events
-		TimeUnit.SECONDS.sleep(1);
+        CountDownLatch countDownLatch = new CountDownLatch(KNOWN_NUM_EVENTS);
+        EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
 
-		CountDownLatch countDownLatch = new CountDownLatch(KNOWN_NUM_EVENTS);
-		EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
+        EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withSince(getEpochTime());
+        eventsCmd.exec();
 
-		EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withSince(
-				getEpochTime());
-		eventsCmd.exec();
+        generateEvents();
 
-		generateEvents();
+        boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
 
-		boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
+        eventCallback.close();
+        assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
+    }
 
-		eventCallback.close();
-		assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
-	}
+    /**
+     * This method generates {#link KNOWN_NUM_EVENTS} events
+     */
+    private int generateEvents() {
+        String testImage = "busybox";
+        asString(dockerClient.pullImageCmd(testImage).exec());
+        CreateContainerResponse container = dockerClient.createContainerCmd(testImage).withCmd("sleep", "9999").exec();
+        dockerClient.startContainerCmd(container.getId()).exec();
+        dockerClient.stopContainerCmd(container.getId()).exec();
+        return KNOWN_NUM_EVENTS;
+    }
 
-	/**
-	 * This method generates {#link KNOWN_NUM_EVENTS} events
-	 */
-	private int generateEvents() {
-		String testImage = "busybox";
-		asString(dockerClient.pullImageCmd(testImage).exec());
-		CreateContainerResponse container = dockerClient
-				.createContainerCmd(testImage).withCmd("sleep", "9999").exec();
-		dockerClient.startContainerCmd(container.getId()).exec();
-		dockerClient.stopContainerCmd(container.getId()).exec();
-		return KNOWN_NUM_EVENTS;
-	}
+    private class EventCallbackTest extends ResultCallbackTemplate<Event> {
 
-	private class EventCallbackTest extends ResultCallbackTemplate<Event> {
+        private final CountDownLatch countDownLatch;
 
-		private final CountDownLatch countDownLatch;
+        private final List<Event> events = new ArrayList<Event>();
 
-		private final List<Event> events = new ArrayList<Event>();
+        public EventCallbackTest(CountDownLatch countDownLatch) {
+            this.countDownLatch = countDownLatch;
+        }
 
-		public EventCallbackTest(CountDownLatch countDownLatch) {
-			this.countDownLatch = countDownLatch;
-		}
-
-		public void onNext(Event event) {
-		    LOG.info("Received event #{}: {}", countDownLatch.getCount(), event);
+        public void onNext(Event event) {
+            LOG.info("Received event #{}: {}", countDownLatch.getCount(), event);
             countDownLatch.countDown();
             events.add(event);
-	    }
+        }
 
-		public List<Event> getEvents() {
-			return new ArrayList<Event>(events);
-		}
-	}
+        public List<Event> getEvents() {
+            return new ArrayList<Event>(events);
+        }
+    }
 }

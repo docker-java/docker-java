@@ -55,7 +55,7 @@ public class ResultCallbackTemplate<T> implements ResultCallback<T> {
 
     @Override
     public void close() throws IOException {
-        if(stream != null)
+        if (stream != null)
             stream.close();
         finished.countDown();
     }

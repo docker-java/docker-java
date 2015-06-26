@@ -11,18 +11,16 @@ import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 
-
 /**
- * A version of the logging filter that will avoid trying to log entities which can cause
- * issues with the console.
+ * A version of the logging filter that will avoid trying to log entities which can cause issues with the console.
  * 
  * @author sfitts
  *
  */
 public class SelectiveLoggingFilter extends LoggingFilter {
-    
+
     // Immutable'ish
-    private static final Set<String> SKIPPED_CONTENT; 
+    private static final Set<String> SKIPPED_CONTENT;
     static {
         Set<String> s = new HashSet<String>();
         s.add(MediaType.APPLICATION_OCTET_STREAM);
@@ -30,12 +28,11 @@ public class SelectiveLoggingFilter extends LoggingFilter {
         SKIPPED_CONTENT = Collections.unmodifiableSet(s);
     }
 
-
     public SelectiveLoggingFilter(Logger logger, boolean b) {
-		super(logger, b);
-	}
+        super(logger, b);
+    }
 
-	@Override
+    @Override
     public void filter(ClientRequestContext context) throws IOException {
         // Unless the content type is in the list of those we want to ellide, then just have
         // our super-class handle things.
@@ -44,5 +41,5 @@ public class SelectiveLoggingFilter extends LoggingFilter {
             super.filter(context);
         }
     }
-    
+
 }

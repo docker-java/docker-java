@@ -41,9 +41,7 @@ public class ExecStartCmdImplTest extends AbstractDockerClientTest {
     public void execStart() throws Exception {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
-        CreateContainerResponse container = dockerClient
-                .createContainerCmd("busybox")
-                .withCmd("top")
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("top")
                 .withName(containerName).exec();
         LOG.info("Created container {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
@@ -51,8 +49,7 @@ public class ExecStartCmdImplTest extends AbstractDockerClientTest {
         dockerClient.startContainerCmd(container.getId()).exec();
 
         ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
-            .withAttachStdout(true)
-            .withCmd("touch", "/execStartTest.log").exec();
+                .withAttachStdout(true).withCmd("touch", "/execStartTest.log").exec();
         dockerClient.execStartCmd(execCreateCmdResponse.getId()).exec();
 
         InputStream response = dockerClient.copyFileFromContainerCmd(container.getId(), "/execStartTest.log").exec();
@@ -69,9 +66,7 @@ public class ExecStartCmdImplTest extends AbstractDockerClientTest {
     public void execStartAttached() throws Exception {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
-        CreateContainerResponse container = dockerClient
-                .createContainerCmd("busybox")
-                .withCmd("sleep", "9999")
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
                 .withName(containerName).exec();
         LOG.info("Created container {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
@@ -79,8 +74,7 @@ public class ExecStartCmdImplTest extends AbstractDockerClientTest {
         dockerClient.startContainerCmd(container.getId()).exec();
 
         ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
-            .withAttachStdout(true)
-            .withCmd("touch", "/execStartTest.log").exec();
+                .withAttachStdout(true).withCmd("touch", "/execStartTest.log").exec();
         dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false).withTty(true).exec();
 
         InputStream response = dockerClient.copyFileFromContainerCmd(container.getId(), "/execStartTest.log").exec();

@@ -25,7 +25,6 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.glassfish.jersey.CommonProperties;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
 
-
 //import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 // see https://github.com/docker-java/docker-java/issues/196
 import com.github.dockerjava.jaxrs.connector.ApacheConnectorProvider;
@@ -41,302 +40,286 @@ import com.github.dockerjava.core.util.JsonClientFilter;
 import com.github.dockerjava.core.util.ResponseStatusExceptionFilter;
 import com.github.dockerjava.core.util.SelectiveLoggingFilter;
 
-
 public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(DockerCmdExecFactoryImpl.class.getName());
-	private Client client;
-	private WebTarget baseResource;
+    private static final Logger LOGGER = LoggerFactory.getLogger(DockerCmdExecFactoryImpl.class.getName());
 
-	@Override
-	public void init(DockerClientConfig dockerClientConfig) {
-		checkNotNull(dockerClientConfig, "config was not specified");
+    private Client client;
 
-		ClientConfig clientConfig = new ClientConfig();
-		clientConfig.connectorProvider(new ApacheConnectorProvider());
-		clientConfig.property(CommonProperties.FEATURE_AUTO_DISCOVERY_DISABLE,
-				true);
+    private WebTarget baseResource;
 
-		clientConfig.register(ResponseStatusExceptionFilter.class);
-		clientConfig.register(JsonClientFilter.class);
-		clientConfig.register(JacksonJsonProvider.class);
+    @Override
+    public void init(DockerClientConfig dockerClientConfig) {
+        checkNotNull(dockerClientConfig, "config was not specified");
 
-		if (dockerClientConfig.followRedirectsFilterEnabled()) {
-			clientConfig.register(FollowRedirectsFilter.class);
-		}
+        ClientConfig clientConfig = new ClientConfig();
+        clientConfig.connectorProvider(new ApacheConnectorProvider());
+        clientConfig.property(CommonProperties.FEATURE_AUTO_DISCOVERY_DISABLE, true);
 
-		if (dockerClientConfig.isLoggingFilterEnabled()) {
-			clientConfig.register(new SelectiveLoggingFilter(LOGGER, true));
-		}
+        clientConfig.register(ResponseStatusExceptionFilter.class);
+        clientConfig.register(JsonClientFilter.class);
+        clientConfig.register(JacksonJsonProvider.class);
 
-		if (dockerClientConfig.getReadTimeout() != null) {
-			int readTimeout = dockerClientConfig.getReadTimeout();
-			clientConfig.property(ClientProperties.READ_TIMEOUT, readTimeout);
-		}
+        if (dockerClientConfig.followRedirectsFilterEnabled()) {
+            clientConfig.register(FollowRedirectsFilter.class);
+        }
 
-		//clientConfig.property(ClientProperties.CONNECT_TIMEOUT, 10000);
+        if (dockerClientConfig.isLoggingFilterEnabled()) {
+            clientConfig.register(new SelectiveLoggingFilter(LOGGER, true));
+        }
 
-		URI originalUri = dockerClientConfig.getUri();
+        if (dockerClientConfig.getReadTimeout() != null) {
+            int readTimeout = dockerClientConfig.getReadTimeout();
+            clientConfig.property(ClientProperties.READ_TIMEOUT, readTimeout);
+        }
 
-		SSLContext sslContext = null;
+        // clientConfig.property(ClientProperties.CONNECT_TIMEOUT, 10000);
 
-		if (dockerClientConfig.getSslConfig() != null) {
-			try {
-				sslContext = dockerClientConfig.getSslConfig().getSSLContext();
-			} catch (Exception ex) {
-				throw new DockerClientException("Error in SSL Configuration",
-						ex);
-			}
-		}
+        URI originalUri = dockerClientConfig.getUri();
 
-		PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(
-				getSchemeRegistry(originalUri, sslContext), null, null, null, 10, TimeUnit.SECONDS);
+        SSLContext sslContext = null;
 
+        if (dockerClientConfig.getSslConfig() != null) {
+            try {
+                sslContext = dockerClientConfig.getSslConfig().getSSLContext();
+            } catch (Exception ex) {
+                throw new DockerClientException("Error in SSL Configuration", ex);
+            }
+        }
 
-		if (dockerClientConfig.getMaxTotalConnections() != null)
-			connManager
-					.setMaxTotal(dockerClientConfig.getMaxTotalConnections());
-		if (dockerClientConfig.getMaxPerRoutConnections() != null)
-			connManager.setDefaultMaxPerRoute(dockerClientConfig
-					.getMaxPerRoutConnections());
+        PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(getSchemeRegistry(
+                originalUri, sslContext), null, null, null, 10, TimeUnit.SECONDS);
 
-		clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER,
-				connManager);
+        if (dockerClientConfig.getMaxTotalConnections() != null)
+            connManager.setMaxTotal(dockerClientConfig.getMaxTotalConnections());
+        if (dockerClientConfig.getMaxPerRoutConnections() != null)
+            connManager.setDefaultMaxPerRoute(dockerClientConfig.getMaxPerRoutConnections());
 
-		clientConfig.property(ApacheClientProperties.REQUEST_CONFIG,
-                RequestConfig.custom().setConnectionRequestTimeout(1000).build());
+        clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER, connManager);
 
-		ClientBuilder clientBuilder = ClientBuilder.newBuilder().withConfig(
-				clientConfig);
+        clientConfig.property(ApacheClientProperties.REQUEST_CONFIG, RequestConfig.custom()
+                .setConnectionRequestTimeout(1000).build());
 
-		if (sslContext != null) {
-			clientBuilder.sslContext(sslContext);
-		}
+        ClientBuilder clientBuilder = ClientBuilder.newBuilder().withConfig(clientConfig);
 
-		client = clientBuilder.build();
+        if (sslContext != null) {
+            clientBuilder.sslContext(sslContext);
+        }
 
-		if (originalUri.getScheme().equals("unix")) {
-			dockerClientConfig.setUri(UnixConnectionSocketFactory
-					.sanitizeUri(originalUri));
-		}
-		WebTarget webResource = client.target(dockerClientConfig.getUri());
+        client = clientBuilder.build();
 
-		if (dockerClientConfig.getVersion() == null
-				|| dockerClientConfig.getVersion().isEmpty()) {
-			baseResource = webResource;
-		} else {
-			baseResource = webResource.path("v"
-					+ dockerClientConfig.getVersion());
-		}
-	}
+        if (originalUri.getScheme().equals("unix")) {
+            dockerClientConfig.setUri(UnixConnectionSocketFactory.sanitizeUri(originalUri));
+        }
+        WebTarget webResource = client.target(dockerClientConfig.getUri());
 
-	private org.apache.http.config.Registry<ConnectionSocketFactory> getSchemeRegistry(
-			final URI originalUri, SSLContext sslContext) {
-		RegistryBuilder<ConnectionSocketFactory> registryBuilder = RegistryBuilder
-				.create();
-		registryBuilder.register("http",
-				PlainConnectionSocketFactory.getSocketFactory());
-		if (sslContext != null) {
-			registryBuilder.register("https", new SSLConnectionSocketFactory(
-					sslContext));
-		}
-		registryBuilder.register("unix", new UnixConnectionSocketFactory(
-				originalUri));
-		return registryBuilder.build();
-	}
+        if (dockerClientConfig.getVersion() == null || dockerClientConfig.getVersion().isEmpty()) {
+            baseResource = webResource;
+        } else {
+            baseResource = webResource.path("v" + dockerClientConfig.getVersion());
+        }
+    }
 
-	protected WebTarget getBaseResource() {
-		checkNotNull(baseResource,
-				"Factory not initialized. You probably forgot to call init()!");
-		return baseResource;
-	}
+    private org.apache.http.config.Registry<ConnectionSocketFactory> getSchemeRegistry(final URI originalUri,
+            SSLContext sslContext) {
+        RegistryBuilder<ConnectionSocketFactory> registryBuilder = RegistryBuilder.create();
+        registryBuilder.register("http", PlainConnectionSocketFactory.getSocketFactory());
+        if (sslContext != null) {
+            registryBuilder.register("https", new SSLConnectionSocketFactory(sslContext));
+        }
+        registryBuilder.register("unix", new UnixConnectionSocketFactory(originalUri));
+        return registryBuilder.build();
+    }
 
-	@Override
-	public AuthCmd.Exec createAuthCmdExec() {
-		return new AuthCmdExec(getBaseResource());
-	}
+    protected WebTarget getBaseResource() {
+        checkNotNull(baseResource, "Factory not initialized. You probably forgot to call init()!");
+        return baseResource;
+    }
 
-	@Override
-	public InfoCmd.Exec createInfoCmdExec() {
-		return new InfoCmdExec(getBaseResource());
-	}
+    @Override
+    public AuthCmd.Exec createAuthCmdExec() {
+        return new AuthCmdExec(getBaseResource());
+    }
 
-	@Override
-	public PingCmd.Exec createPingCmdExec() {
-		return new PingCmdExec(getBaseResource());
-	}
+    @Override
+    public InfoCmd.Exec createInfoCmdExec() {
+        return new InfoCmdExec(getBaseResource());
+    }
 
-	@Override
-	public VersionCmd.Exec createVersionCmdExec() {
-		return new VersionCmdExec(getBaseResource());
-	}
+    @Override
+    public PingCmd.Exec createPingCmdExec() {
+        return new PingCmdExec(getBaseResource());
+    }
 
-	@Override
-	public PullImageCmd.Exec createPullImageCmdExec() {
-		return new PullImageCmdExec(getBaseResource());
-	}
+    @Override
+    public VersionCmd.Exec createVersionCmdExec() {
+        return new VersionCmdExec(getBaseResource());
+    }
 
-	@Override
-	public PushImageCmd.Exec createPushImageCmdExec() {
-		return new PushImageCmdExec(getBaseResource());
-	}
+    @Override
+    public PullImageCmd.Exec createPullImageCmdExec() {
+        return new PullImageCmdExec(getBaseResource());
+    }
 
-	@Override
-	public SaveImageCmd.Exec createSaveImageCmdExec() {
-		return new SaveImageCmdExec(getBaseResource());
-	}
+    @Override
+    public PushImageCmd.Exec createPushImageCmdExec() {
+        return new PushImageCmdExec(getBaseResource());
+    }
 
-	@Override
-	public CreateImageCmd.Exec createCreateImageCmdExec() {
-		return new CreateImageCmdExec(getBaseResource());
-	}
+    @Override
+    public SaveImageCmd.Exec createSaveImageCmdExec() {
+        return new SaveImageCmdExec(getBaseResource());
+    }
 
-	@Override
-	public SearchImagesCmd.Exec createSearchImagesCmdExec() {
-		return new SearchImagesCmdExec(getBaseResource());
-	}
+    @Override
+    public CreateImageCmd.Exec createCreateImageCmdExec() {
+        return new CreateImageCmdExec(getBaseResource());
+    }
 
-	@Override
-	public RemoveImageCmd.Exec createRemoveImageCmdExec() {
-		return new RemoveImageCmdExec(getBaseResource());
-	}
+    @Override
+    public SearchImagesCmd.Exec createSearchImagesCmdExec() {
+        return new SearchImagesCmdExec(getBaseResource());
+    }
 
-	@Override
-	public ListImagesCmd.Exec createListImagesCmdExec() {
-		return new ListImagesCmdExec(getBaseResource());
-	}
+    @Override
+    public RemoveImageCmd.Exec createRemoveImageCmdExec() {
+        return new RemoveImageCmdExec(getBaseResource());
+    }
 
-	@Override
-	public InspectImageCmd.Exec createInspectImageCmdExec() {
-		return new InspectImageCmdExec(getBaseResource());
-	}
+    @Override
+    public ListImagesCmd.Exec createListImagesCmdExec() {
+        return new ListImagesCmdExec(getBaseResource());
+    }
 
-	@Override
-	public ListContainersCmd.Exec createListContainersCmdExec() {
-		return new ListContainersCmdExec(getBaseResource());
-	}
+    @Override
+    public InspectImageCmd.Exec createInspectImageCmdExec() {
+        return new InspectImageCmdExec(getBaseResource());
+    }
 
-	@Override
-	public CreateContainerCmd.Exec createCreateContainerCmdExec() {
-		return new CreateContainerCmdExec(getBaseResource());
-	}
+    @Override
+    public ListContainersCmd.Exec createListContainersCmdExec() {
+        return new ListContainersCmdExec(getBaseResource());
+    }
 
-	@Override
-	public StartContainerCmd.Exec createStartContainerCmdExec() {
-		return new StartContainerCmdExec(getBaseResource());
-	}
+    @Override
+    public CreateContainerCmd.Exec createCreateContainerCmdExec() {
+        return new CreateContainerCmdExec(getBaseResource());
+    }
 
-	@Override
-	public InspectContainerCmd.Exec createInspectContainerCmdExec() {
-		return new InspectContainerCmdExec(getBaseResource());
-	}
+    @Override
+    public StartContainerCmd.Exec createStartContainerCmdExec() {
+        return new StartContainerCmdExec(getBaseResource());
+    }
 
-	@Override
-	public ExecCreateCmd.Exec createExecCmdExec() {
-		return new ExecCreateCmdExec(getBaseResource());
-	}
+    @Override
+    public InspectContainerCmd.Exec createInspectContainerCmdExec() {
+        return new InspectContainerCmdExec(getBaseResource());
+    }
 
-	@Override
-	public RemoveContainerCmd.Exec createRemoveContainerCmdExec() {
-		return new RemoveContainerCmdExec(getBaseResource());
-	}
+    @Override
+    public ExecCreateCmd.Exec createExecCmdExec() {
+        return new ExecCreateCmdExec(getBaseResource());
+    }
 
-	@Override
-	public WaitContainerCmd.Exec createWaitContainerCmdExec() {
-		return new WaitContainerCmdExec(getBaseResource());
-	}
+    @Override
+    public RemoveContainerCmd.Exec createRemoveContainerCmdExec() {
+        return new RemoveContainerCmdExec(getBaseResource());
+    }
 
-	@Override
-	public AttachContainerCmd.Exec createAttachContainerCmdExec() {
-		return new AttachContainerCmdExec(getBaseResource());
-	}
+    @Override
+    public WaitContainerCmd.Exec createWaitContainerCmdExec() {
+        return new WaitContainerCmdExec(getBaseResource());
+    }
 
-	@Override
-	public ExecStartCmd.Exec createExecStartCmdExec() {
-		return new ExecStartCmdExec(getBaseResource());
-	}
+    @Override
+    public AttachContainerCmd.Exec createAttachContainerCmdExec() {
+        return new AttachContainerCmdExec(getBaseResource());
+    }
 
-	@Override
-	public InspectExecCmd.Exec createInspectExecCmdExec() {
-		return new InspectExecCmdExec(getBaseResource());
-	}
+    @Override
+    public ExecStartCmd.Exec createExecStartCmdExec() {
+        return new ExecStartCmdExec(getBaseResource());
+    }
 
-	@Override
-	public LogContainerCmd.Exec createLogContainerCmdExec() {
-		return new LogContainerCmdExec(getBaseResource());
-	}
+    @Override
+    public InspectExecCmd.Exec createInspectExecCmdExec() {
+        return new InspectExecCmdExec(getBaseResource());
+    }
 
-	@Override
-	public CopyFileFromContainerCmd.Exec createCopyFileFromContainerCmdExec() {
-		return new CopyFileFromContainerCmdExec(getBaseResource());
-	}
+    @Override
+    public LogContainerCmd.Exec createLogContainerCmdExec() {
+        return new LogContainerCmdExec(getBaseResource());
+    }
 
-	@Override
-	public StopContainerCmd.Exec createStopContainerCmdExec() {
-		return new StopContainerCmdExec(getBaseResource());
-	}
+    @Override
+    public CopyFileFromContainerCmd.Exec createCopyFileFromContainerCmdExec() {
+        return new CopyFileFromContainerCmdExec(getBaseResource());
+    }
 
-	@Override
-	public ContainerDiffCmd.Exec createContainerDiffCmdExec() {
-		return new ContainerDiffCmdExec(getBaseResource());
-	}
+    @Override
+    public StopContainerCmd.Exec createStopContainerCmdExec() {
+        return new StopContainerCmdExec(getBaseResource());
+    }
 
-	@Override
-	public KillContainerCmd.Exec createKillContainerCmdExec() {
-		return new KillContainerCmdExec(getBaseResource());
-	}
+    @Override
+    public ContainerDiffCmd.Exec createContainerDiffCmdExec() {
+        return new ContainerDiffCmdExec(getBaseResource());
+    }
 
-	@Override
-	public RestartContainerCmd.Exec createRestartContainerCmdExec() {
-		return new RestartContainerCmdExec(getBaseResource());
-	}
+    @Override
+    public KillContainerCmd.Exec createKillContainerCmdExec() {
+        return new KillContainerCmdExec(getBaseResource());
+    }
 
-	@Override
-	public CommitCmd.Exec createCommitCmdExec() {
-		return new CommitCmdExec(getBaseResource());
-	}
+    @Override
+    public RestartContainerCmd.Exec createRestartContainerCmdExec() {
+        return new RestartContainerCmdExec(getBaseResource());
+    }
 
-	@Override
-	public BuildImageCmd.Exec createBuildImageCmdExec() {
-		return new BuildImageCmdExec(getBaseResource());
-	}
+    @Override
+    public CommitCmd.Exec createCommitCmdExec() {
+        return new CommitCmdExec(getBaseResource());
+    }
 
-	@Override
-	public TopContainerCmd.Exec createTopContainerCmdExec() {
-		return new TopContainerCmdExec(getBaseResource());
-	}
+    @Override
+    public BuildImageCmd.Exec createBuildImageCmdExec() {
+        return new BuildImageCmdExec(getBaseResource());
+    }
 
-	@Override
-	public TagImageCmd.Exec createTagImageCmdExec() {
-		return new TagImageCmdExec(getBaseResource());
-	}
+    @Override
+    public TopContainerCmd.Exec createTopContainerCmdExec() {
+        return new TopContainerCmdExec(getBaseResource());
+    }
 
-	@Override
-	public PauseContainerCmd.Exec createPauseContainerCmdExec() {
-		return new PauseContainerCmdExec(getBaseResource());
-	}
+    @Override
+    public TagImageCmd.Exec createTagImageCmdExec() {
+        return new TagImageCmdExec(getBaseResource());
+    }
 
-	@Override
-	public UnpauseContainerCmd.Exec createUnpauseContainerCmdExec() {
-		return new UnpauseContainerCmdExec(baseResource);
-	}
+    @Override
+    public PauseContainerCmd.Exec createPauseContainerCmdExec() {
+        return new PauseContainerCmdExec(getBaseResource());
+    }
 
-	@Override
-	public EventsCmd.Exec createEventsCmdExec() {
-		return new EventsCmdExec(getBaseResource());
-	}
+    @Override
+    public UnpauseContainerCmd.Exec createUnpauseContainerCmdExec() {
+        return new UnpauseContainerCmdExec(baseResource);
+    }
 
-	@Override
+    @Override
+    public EventsCmd.Exec createEventsCmdExec() {
+        return new EventsCmdExec(getBaseResource());
+    }
+
+    @Override
     public StatsCmd.Exec createStatsCmdExec() {
-	    return new StatsCmdExec(getBaseResource());
-	}
+        return new StatsCmdExec(getBaseResource());
+    }
 
-	@Override
-	public void close() throws IOException {
-		checkNotNull(client,
-				"Factory not initialized. You probably forgot to call init()!");
-		client.close();
-	}
+    @Override
+    public void close() throws IOException {
+        checkNotNull(client, "Factory not initialized. You probably forgot to call init()!");
+        client.close();
+    }
 
 }

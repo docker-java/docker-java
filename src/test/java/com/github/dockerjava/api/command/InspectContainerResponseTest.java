@@ -22,18 +22,18 @@ import org.testng.annotations.Test;
 
 /**
  * Tests for {@link InspectContainerResponse}.
+ * 
  * @author Oleg Nenashev
  */
 public class InspectContainerResponseTest {
-    
+
     @Test
     public void roundTrip_full() throws IOException {
-        InspectContainerResponse[] responses = testRoundTrip(
-                        CommandJSONSamples.inspectContainerResponse_full, 
-                        InspectContainerResponse[].class);   
+        InspectContainerResponse[] responses = testRoundTrip(CommandJSONSamples.inspectContainerResponse_full,
+                InspectContainerResponse[].class);
         assertEquals(1, responses.length);
         final InspectContainerResponse response = responses[0];
-        
+
         // Check volumes: https://github.com/docker-java/docker-java/issues/211
         assertEquals(response.getVolumes().length, 2);
         assertEquals(response.getVolumesRW().length, 2);
@@ -43,7 +43,7 @@ public class InspectContainerResponseTest {
         assertFalse(response.getVolumesRW()[1].getAccessMode().toBoolean());
         assertTrue(response.getVolumesRW()[0].getAccessMode().toBoolean());
     }
-    
+
     @Test
     public void roundTrip_empty() throws IOException {
         testRoundTrip(CommandJSONSamples.inspectContainerResponse_empty, InspectContainerResponse[].class);

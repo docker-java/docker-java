@@ -14,7 +14,6 @@ import com.github.dockerjava.api.async.ResultCallback;
  */
 public interface ResponseStreamProcessor<T> {
 
-    void processResponseStream(InputStream response,
-            ResultCallback<T> resultCallback);
+    void processResponseStream(InputStream response, ResultCallback<T> resultCallback);
 
 }

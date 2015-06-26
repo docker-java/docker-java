@@ -16,8 +16,8 @@ public class VolumeBindsTest {
         ObjectMapper objectMapper = new ObjectMapper();
         VolumeBinds volumeBinds = objectMapper.readValue(s, VolumeBinds.class);
         VolumeBind[] binds = volumeBinds.getBinds();
-        assertEquals(binds.length,1);
-        assertEquals(binds[0].getHostPath(),"/some/path");
+        assertEquals(binds.length, 1);
+        assertEquals(binds[0].getHostPath(), "/some/path");
         assertEquals(binds[0].getContainerPath(), "/data");
     }
 
@@ -27,6 +27,5 @@ public class VolumeBindsTest {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.readValue(s, VolumeBinds.class);
     }
-
 
 }

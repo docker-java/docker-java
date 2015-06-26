@@ -12,38 +12,34 @@ import com.github.dockerjava.core.async.JsonStreamProcessor;
 import com.github.dockerjava.jaxrs.async.AbstractCallbackNotifier;
 import com.github.dockerjava.jaxrs.async.POSTCallbackNotifier;
 
-public class AttachContainerCmdExec extends
-		AbstrDockerCmdExec<AttachContainerCmd, Void> implements
-		AttachContainerCmd.Exec {
+public class AttachContainerCmdExec extends AbstrDockerCmdExec<AttachContainerCmd, Void> implements
+        AttachContainerCmd.Exec {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(AttachContainerCmdExec.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AttachContainerCmdExec.class);
 
-	public AttachContainerCmdExec(WebTarget baseResource) {
-		super(baseResource);
-	}
+    public AttachContainerCmdExec(WebTarget baseResource) {
+        super(baseResource);
+    }
 
-	@Override
-	protected Void execute(AttachContainerCmd command) {
-		WebTarget webTarget = getBaseResource()
-				.path("/containers/{id}/attach")
-				.resolveTemplate("id", command.getContainerId())
-				.queryParam("logs", command.hasLogsEnabled() ? "1" : "0")
-				// .queryParam("stdin", command.hasStdinEnabled() ? "1" : "0")
-				.queryParam("stdout", command.hasStdoutEnabled() ? "1" : "0")
-				.queryParam("stderr", command.hasStderrEnabled() ? "1" : "0")
-				.queryParam("stream",
-						command.hasFollowStreamEnabled() ? "1" : "0");
+    @Override
+    protected Void execute(AttachContainerCmd command) {
+        WebTarget webTarget = getBaseResource().path("/containers/{id}/attach")
+                .resolveTemplate("id", command.getContainerId())
+                .queryParam("logs", command.hasLogsEnabled() ? "1" : "0")
+                // .queryParam("stdin", command.hasStdinEnabled() ? "1" : "0")
+                .queryParam("stdout", command.hasStdoutEnabled() ? "1" : "0")
+                .queryParam("stderr", command.hasStderrEnabled() ? "1" : "0")
+                .queryParam("stream", command.hasFollowStreamEnabled() ? "1" : "0");
 
-		LOGGER.trace("POST: {}", webTarget);
+        LOGGER.trace("POST: {}", webTarget);
 
-		POSTCallbackNotifier<Frame> callbackNotifier = new POSTCallbackNotifier<Frame>(
-                new FrameStreamProcessor(), command.getResultCallback(), webTarget);
+        POSTCallbackNotifier<Frame> callbackNotifier = new POSTCallbackNotifier<Frame>(new FrameStreamProcessor(),
+                command.getResultCallback(), webTarget);
 
         AbstractCallbackNotifier.startAsyncProcessing(callbackNotifier);
 
         return null;
 
-	}
+    }
 
 }

@@ -10,7 +10,9 @@ import com.github.dockerjava.api.model.AuthConfig;
 public class NameParser {
 
     private static final Pattern VALID_HEX_PATTERN = Pattern.compile("^([a-f0-9]{64})$");
+
     private static final Pattern VALID_NAMESPACE_PATTERN = Pattern.compile("^([a-z0-9_]{4,30})$");
+
     private static final Pattern VALID_REPO_PATTERN = Pattern.compile("^([a-z0-9-_.]+)$");
 
     public static ReposTag parseRepositoryTag(String name) {
@@ -27,6 +29,7 @@ public class NameParser {
 
     public static class ReposTag {
         public final String repos;
+
         public final String tag;
 
         public ReposTag(String repos, String tag) {
@@ -44,18 +47,15 @@ public class NameParser {
             name = nameParts[0];
             if (VALID_HEX_PATTERN.matcher(name).matches()) {
                 throw new InvalidRepositoryNameException(String.format(
-                        "Invalid repository name (%s), cannot specify 64-byte hexadecimal strings",
-                        name));
+                        "Invalid repository name (%s), cannot specify 64-byte hexadecimal strings", name));
             }
         } else {
             namespace = nameParts[0];
             name = nameParts[1];
         }
         if (!VALID_NAMESPACE_PATTERN.matcher(namespace).matches()) {
-            throw new InvalidRepositoryNameException(
-                    String.format(
-                            "Invalid namespace name (%s), only [a-z0-9_] are allowed, size between 4 and 30",
-                            namespace));
+            throw new InvalidRepositoryNameException(String.format(
+                    "Invalid namespace name (%s), only [a-z0-9_] are allowed, size between 4 and 30", namespace));
         }
         if (!VALID_REPO_PATTERN.matcher(name).matches()) {
             throw new InvalidRepositoryNameException(String.format(
@@ -71,16 +71,15 @@ public class NameParser {
 
         String[] nameParts = reposName.split("/", 2);
         if (nameParts.length == 1
-                || (!nameParts[0].contains(".") && !nameParts[0].contains(":") && !nameParts[0]
-                        .equals("localhost"))) {
+                || (!nameParts[0].contains(".") && !nameParts[0].contains(":") && !nameParts[0].equals("localhost"))) {
             return new HostnameReposName(AuthConfig.DEFAULT_SERVER_ADDRESS, reposName);
         }
 
         String hostname = nameParts[0];
         reposName = nameParts[1];
         if (hostname.contains("index.docker.io")) {
-            throw new InvalidRepositoryNameException(String.format(
-                    "Invalid repository name, try \"%s\" instead", reposName));
+            throw new InvalidRepositoryNameException(String.format("Invalid repository name, try \"%s\" instead",
+                    reposName));
         }
 
         validateRepositoryName(reposName);
@@ -89,6 +88,7 @@ public class NameParser {
 
     public static class HostnameReposName {
         public final String hostname;
+
         public final String reposName;
 
         public HostnameReposName(String hostname, String reposName) {

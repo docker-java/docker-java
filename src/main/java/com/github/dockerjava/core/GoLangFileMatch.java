@@ -23,16 +23,16 @@ import org.apache.commons.lang.StringUtils;
  *                  character class (must be non-empty)
  *       c           matches character c (c != '*', '?', '\\', '[')
  *       '\\' c      matches character c
- *
+ * 
  *   character-range:
  *       c           matches character c (c != '\\', '-', ']')
  *       '\\' c      matches character c
  *       lo '-' hi   matches character c for lo <= c <= hi
- *
+ * 
  *  Match requires pattern to match all of name, not just a substring.
  *  The only possible returned error is ErrBadPattern, when pattern
  *  is malformed.
- *
+ * 
  * On Windows, escaping is disabled. Instead, '\\' is treated as
  *  path separator.
  * </pre>
@@ -234,7 +234,9 @@ public class GoLangFileMatch {
 
     private static final class ScanResult {
         public boolean star;
+
         public String chunk;
+
         public String pattern;
 
         public ScanResult(boolean star, String chunk, String pattern) {
@@ -246,6 +248,7 @@ public class GoLangFileMatch {
 
     private static final class GetEscResult {
         public char lo;
+
         public int chunkOffset;
 
         public GetEscResult(char lo, int chunkOffset) {
