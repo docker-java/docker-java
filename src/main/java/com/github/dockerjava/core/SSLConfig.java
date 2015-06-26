@@ -9,11 +9,11 @@ import javax.net.ssl.SSLContext;
  */
 public interface SSLConfig {
 
-  /**
-   * Get the SSL Context, from wherever it comes (file, keystore).
-   * @return an SSL context.
-   */
-  SSLContext getSSLContext()
-      throws KeyManagementException, UnrecoverableKeyException, NoSuchAlgorithmException,
-             KeyStoreException;
+    /**
+     * Get the SSL Context, from wherever it comes (file, keystore).
+     * 
+     * @return an SSL context.
+     */
+    SSLContext getSSLContext() throws KeyManagementException, UnrecoverableKeyException, NoSuchAlgorithmException,
+            KeyStoreException;
 }

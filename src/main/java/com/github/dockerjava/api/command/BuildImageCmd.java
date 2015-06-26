@@ -14,58 +14,58 @@ import java.io.InputStream;
  * TODO: http://docs.docker.com/reference/builder/#dockerignore
  * 
  */
-public interface BuildImageCmd extends DockerCmd<BuildImageCmd.Response>{
+public interface BuildImageCmd extends DockerCmd<BuildImageCmd.Response> {
 
-	public BuildImageCmd withTag(String tag);
+    public BuildImageCmd withTag(String tag);
 
-	public InputStream getTarInputStream();
+    public InputStream getTarInputStream();
 
-	public String getTag();
+    public String getTag();
 
-	public boolean hasNoCacheEnabled();
+    public boolean hasNoCacheEnabled();
 
-	public boolean hasRemoveEnabled();
-	
-	public boolean isQuiet();
-	
-	public boolean hasPullEnabled();
+    public boolean hasRemoveEnabled();
+
+    public boolean isQuiet();
+
+    public boolean hasPullEnabled();
 
     public String getPathToDockerfile();
 
-	public AuthConfigurations getBuildAuthConfigs();
+    public AuthConfigurations getBuildAuthConfigs();
 
     public BuildImageCmd withBaseDirectory(File baseDirectory);
 
     public BuildImageCmd withDockerfile(File dockerfile);
-	
-	public BuildImageCmd withTarInputStream(InputStream tarInputStream);
 
-	public BuildImageCmd withNoCache();
+    public BuildImageCmd withTarInputStream(InputStream tarInputStream);
 
-	public BuildImageCmd withNoCache(boolean noCache);
-	
-	public BuildImageCmd withRemove();
+    public BuildImageCmd withNoCache();
 
-	public BuildImageCmd withRemove(boolean rm);
-	
-	public BuildImageCmd withQuiet();
+    public BuildImageCmd withNoCache(boolean noCache);
 
-	public BuildImageCmd withQuiet(boolean quiet);
-	
-	public BuildImageCmd withPull();
+    public BuildImageCmd withRemove();
 
-	public BuildImageCmd withPull(boolean pull);
-	
-  	public BuildImageCmd withBuildAuthConfigs(AuthConfigurations authConfig);
-	
-	public static interface Exec extends DockerCmdExec<BuildImageCmd, BuildImageCmd.Response> {
-	}
+    public BuildImageCmd withRemove(boolean rm);
 
-	/**
-	 * @see  {@link com.github.dockerjava.core.command.EventStreamReader}
-	 */
-  public static abstract class Response extends InputStream {
-    public abstract Iterable<EventStreamItem> getItems() throws IOException;
-  }
+    public BuildImageCmd withQuiet();
+
+    public BuildImageCmd withQuiet(boolean quiet);
+
+    public BuildImageCmd withPull();
+
+    public BuildImageCmd withPull(boolean pull);
+
+    public BuildImageCmd withBuildAuthConfigs(AuthConfigurations authConfig);
+
+    public static interface Exec extends DockerCmdExec<BuildImageCmd, BuildImageCmd.Response> {
+    }
+
+    /**
+     * @see {@link com.github.dockerjava.core.command.EventStreamReader}
+     */
+    public static abstract class Response extends InputStream {
+        public abstract Iterable<EventStreamItem> getItems() throws IOException;
+    }
 
 }

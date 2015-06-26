@@ -12,36 +12,31 @@ import org.slf4j.LoggerFactory;
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
 
-public class AttachContainerCmdExec extends
-		AbstrDockerCmdExec<AttachContainerCmd, InputStream> implements
-		AttachContainerCmd.Exec {
+public class AttachContainerCmdExec extends AbstrDockerCmdExec<AttachContainerCmd, InputStream> implements
+        AttachContainerCmd.Exec {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(AttachContainerCmdExec.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AttachContainerCmdExec.class);
 
-	public AttachContainerCmdExec(WebTarget baseResource) {
-		super(baseResource);
-	}
+    public AttachContainerCmdExec(WebTarget baseResource) {
+        super(baseResource);
+    }
 
-	@Override
-	protected InputStream execute(AttachContainerCmd command) {
-		WebTarget webResource = getBaseResource()
-				.path("/containers/{id}/attach")
-				.resolveTemplate("id", command.getContainerId())
-				.queryParam("logs", command.hasLogsEnabled() ? "1" : "0")
-				// .queryParam("stdin", command.hasStdinEnabled() ? "1" : "0")
-				.queryParam("stdout", command.hasStdoutEnabled() ? "1" : "0")
-				.queryParam("stderr", command.hasStderrEnabled() ? "1" : "0")
-				.queryParam("stream",
-						command.hasFollowStreamEnabled() ? "1" : "0");
+    @Override
+    protected InputStream execute(AttachContainerCmd command) {
+        WebTarget webResource = getBaseResource().path("/containers/{id}/attach")
+                .resolveTemplate("id", command.getContainerId())
+                .queryParam("logs", command.hasLogsEnabled() ? "1" : "0")
+                // .queryParam("stdin", command.hasStdinEnabled() ? "1" : "0")
+                .queryParam("stdout", command.hasStdoutEnabled() ? "1" : "0")
+                .queryParam("stderr", command.hasStderrEnabled() ? "1" : "0")
+                .queryParam("stream", command.hasFollowStreamEnabled() ? "1" : "0");
 
-		LOGGER.trace("POST: {}", webResource);
+        LOGGER.trace("POST: {}", webResource);
 
-		Response response = webResource.request()
-				.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
-				.post(null, Response.class);
-		
-		return new WrappedResponseInputStream(response);
-	}
+        Response response = webResource.request().accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
+                .post(null, Response.class);
+
+        return new WrappedResponseInputStream(response);
+    }
 
 }

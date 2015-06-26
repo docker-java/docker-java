@@ -31,10 +31,10 @@ public class StatsCmdExec extends AbstrDockerCmdExec<StatsCmd, ExecutorService> 
 
     @Override
     protected ExecutorService execute(StatsCmd command) {
-    	ExecutorService executorService = Executors.newSingleThreadExecutor();
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-        WebTarget webResource = getBaseResource().path("/containers/{id}/stats")
-            .resolveTemplate("id", command.getContainerId());
+        WebTarget webResource = getBaseResource().path("/containers/{id}/stats").resolveTemplate("id",
+                command.getContainerId());
 
         LOGGER.trace("GET: {}", webResource);
         StatsNotifier eventNotifier = StatsNotifier.create(command.getStatsCallback(), webResource);
@@ -44,9 +44,11 @@ public class StatsCmdExec extends AbstrDockerCmdExec<StatsCmd, ExecutorService> 
 
     private static class StatsNotifier implements Callable<Void> {
         private static final JsonFactory JSON_FACTORY = new JsonFactory();
+
         private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
         private final StatsCallback statsCallback;
+
         private final WebTarget webTarget;
 
         private StatsNotifier(StatsCallback statsCallback, WebTarget webTarget) {
@@ -66,19 +68,16 @@ public class StatsCmdExec extends AbstrDockerCmdExec<StatsCmd, ExecutorService> 
             Response response = null;
             try {
                 response = webTarget.request().get(Response.class);
-                InputStream inputStream = new WrappedResponseInputStream(
-                        response);
+                InputStream inputStream = new WrappedResponseInputStream(response);
                 JsonParser jp = JSON_FACTORY.createParser(inputStream);
                 // The following condition looks strange but jp.nextToken() will block until there is an
                 // event from the docker server or the connection is terminated.
                 // therefore we want to check before getting an event (to prevent a blocking operation
                 // and after the event to make sure that the eventCallback is still interested in getting notified.
-                while (statsCallback.isReceiving() &&
-                       jp.nextToken() != JsonToken.END_OBJECT && !jp.isClosed() &&
-                               statsCallback.isReceiving()) {
+                while (statsCallback.isReceiving() && jp.nextToken() != JsonToken.END_OBJECT && !jp.isClosed()
+                        && statsCallback.isReceiving()) {
                     try {
-                        statsCallback.onStats(OBJECT_MAPPER.readValue(jp,
-                                Statistics.class));
+                        statsCallback.onStats(OBJECT_MAPPER.readValue(jp, Statistics.class));
                     } catch (Exception e) {
                         statsCallback.onException(e);
                     }

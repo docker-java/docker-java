@@ -1,7 +1,5 @@
 package com.github.dockerjava.api.model;
 
-
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,12 +10,12 @@ import com.google.common.base.Objects;
 /**
  * Represents an event stream
  */
-@JsonIgnoreProperties(ignoreUnknown=true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class EventStreamItem implements Serializable {
 
-	private static final long serialVersionUID = 638778515773898651L;
+    private static final long serialVersionUID = 638778515773898651L;
 
-	@JsonProperty("stream")
+    @JsonProperty("stream")
     private String stream;
 
     // {"error":"Error...", "errorDetail":{"code": 123, "message": "Error..."}}
@@ -39,28 +37,23 @@ public class EventStreamItem implements Serializable {
         return errorDetail;
     }
 
-    @JsonIgnoreProperties(ignoreUnknown=true)
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class ErrorDetail implements Serializable {
         @JsonProperty("code")
         String code;
+
         @JsonProperty("message")
         String message;
 
         @Override
         public String toString() {
-            return Objects.toStringHelper(this)
-                    .add("code", code)
-                    .add("message", message)
-                    .toString();
+            return Objects.toStringHelper(this).add("code", code).add("message", message).toString();
         }
     }
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
-                .add("stream", stream)
-                .add("error", error)
-                .add("errorDetail", errorDetail)
+        return Objects.toStringHelper(this).add("stream", stream).add("error", error).add("errorDetail", errorDetail)
                 .toString();
     }
 }

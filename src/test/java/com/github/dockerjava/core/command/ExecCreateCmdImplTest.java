@@ -40,8 +40,7 @@ public class ExecCreateCmdImplTest extends AbstractDockerClientTest {
     public void execCreateTest() {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
-        CreateContainerResponse container = dockerClient
-                .createContainerCmd("busybox").withCmd("top")
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("top")
                 .withName(containerName).exec();
 
         LOG.info("Created container {}", container.toString());
@@ -50,7 +49,8 @@ public class ExecCreateCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId()).withCmd("touch","file.log").exec();
+        ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
+                .withCmd("touch", "file.log").exec();
 
         assertThat(execCreateCmdResponse.getId(), not(isEmptyString()));
     }

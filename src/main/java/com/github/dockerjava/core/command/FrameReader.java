@@ -9,11 +9,12 @@ import java.io.InputStream;
 /**
  * Breaks the input into frame. Similar to how a buffered reader would readLies.
  * <p/>
- * See:  {@link }http://docs.docker.com/v1.6/reference/api/docker_remote_api_v1.13/#attach-to-a-container}
+ * See: {@link }http://docs.docker.com/v1.6/reference/api/docker_remote_api_v1.13/#attach-to-a-container}
  */
 public class FrameReader implements AutoCloseable {
 
     private static final int HEADER_SIZE = 8;
+
     private final InputStream inputStream;
 
     public FrameReader(InputStream inputStream) {
@@ -22,14 +23,14 @@ public class FrameReader implements AutoCloseable {
 
     private static StreamType streamType(byte streamType) {
         switch (streamType) {
-            case 0:
-                return StreamType.STDIN;
-            case 1:
-                return StreamType.STDOUT;
-            case 2:
-                return StreamType.STDERR;
-            default:
-                throw new IllegalArgumentException("invalid streamType");
+        case 0:
+            return StreamType.STDIN;
+        case 1:
+            return StreamType.STDOUT;
+        case 2:
+            return StreamType.STDERR;
+        default:
+            throw new IllegalArgumentException("invalid streamType");
         }
     }
 
@@ -50,7 +51,8 @@ public class FrameReader implements AutoCloseable {
             actualHeaderSize += headerCount;
         } while (actualHeaderSize < HEADER_SIZE);
 
-        int payloadSize = ((header[4] & 0xff) << 24) + ((header[5] & 0xff) << 16) + ((header[6] & 0xff) << 8) + (header[7] & 0xff);
+        int payloadSize = ((header[4] & 0xff) << 24) + ((header[5] & 0xff) << 16) + ((header[6] & 0xff) << 8)
+                + (header[7] & 0xff);
 
         byte[] payload = new byte[payloadSize];
         int actualPayloadSize = 0;
@@ -60,7 +62,8 @@ public class FrameReader implements AutoCloseable {
 
             if (count == -1) {
                 if (actualPayloadSize != payloadSize) {
-                    throw new IOException(String.format("payload must be %d bytes long, but was %d", payloadSize, actualPayloadSize));
+                    throw new IOException(String.format("payload must be %d bytes long, but was %d", payloadSize,
+                            actualPayloadSize));
                 }
                 break;
             }

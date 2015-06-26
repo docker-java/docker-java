@@ -26,8 +26,7 @@ import static org.hamcrest.Matchers.not;
 
 @Test(groups = "integration")
 public class SaveImageCmdImplTest extends AbstractDockerClientTest {
-    public static final Logger LOG = LoggerFactory
-            .getLogger(SaveImageCmdImplTest.class);
+    public static final Logger LOG = LoggerFactory.getLogger(SaveImageCmdImplTest.class);
 
     String username;
 
@@ -35,6 +34,7 @@ public class SaveImageCmdImplTest extends AbstractDockerClientTest {
     public void beforeTest() throws DockerException {
         super.beforeTest();
     }
+
     @AfterTest
     public void afterTest() {
         super.afterTest();
@@ -53,8 +53,7 @@ public class SaveImageCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void saveImage() throws Exception {
 
-        InputStream image = IOUtils.toBufferedInputStream(dockerClient
-                .saveImageCmd("busybox").exec());
+        InputStream image = IOUtils.toBufferedInputStream(dockerClient.saveImageCmd("busybox").exec());
         assertThat(image.available(), greaterThan(0));
 
     }

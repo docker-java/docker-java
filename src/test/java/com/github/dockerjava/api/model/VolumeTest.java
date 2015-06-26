@@ -5,8 +5,8 @@ import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
 
 public class VolumeTest {
-	@Test
-	public void getPath() {
-		assertEquals(new Volume("/path").getPath(), "/path");
-	}
+    @Test
+    public void getPath() {
+        assertEquals(new Volume("/path").getPath(), "/path");
+    }
 }

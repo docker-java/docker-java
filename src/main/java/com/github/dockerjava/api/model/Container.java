@@ -10,16 +10,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  *
  */
-@JsonIgnoreProperties(ignoreUnknown=true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Container {
 
-	@JsonProperty("Command")
-	private String command;
+    @JsonProperty("Command")
+    private String command;
 
-	@JsonProperty("Created")
-	private long created;
+    @JsonProperty("Created")
+    private long created;
 
-	@JsonProperty("Id")
+    @JsonProperty("Id")
     private String id;
 
     @JsonProperty("Image")
@@ -62,7 +62,6 @@ public class Container {
         return names;
     }
 
-
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
@@ -84,20 +83,20 @@ public class Container {
         private String type;
 
         public String getIp() {
-			return ip;
-		}
+            return ip;
+        }
 
         public Integer getPrivatePort() {
-			return privatePort;
-		}
+            return privatePort;
+        }
 
         public Integer getPublicPort() {
-			return publicPort;
-		}
+            return publicPort;
+        }
 
         public String getType() {
-			return type;
-		}
+            return type;
+        }
 
         @Override
         public String toString() {

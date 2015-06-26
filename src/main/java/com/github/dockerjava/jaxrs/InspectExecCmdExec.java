@@ -8,7 +8,8 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
-public class InspectExecCmdExec extends AbstrDockerCmdExec<InspectExecCmd, InspectExecResponse> implements InspectExecCmd.Exec {
+public class InspectExecCmdExec extends AbstrDockerCmdExec<InspectExecCmd, InspectExecResponse> implements
+        InspectExecCmd.Exec {
     private static final Logger LOGGER = LoggerFactory.getLogger(InspectExecCmdExec.class);
 
     public InspectExecCmdExec(WebTarget baseResource) {

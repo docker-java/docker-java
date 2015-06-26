@@ -21,53 +21,51 @@ import static org.hamcrest.Matchers.not;
 @Test(groups = "integration")
 public class InfoCmdImplTest extends AbstractDockerClientTest {
 
-	@BeforeTest
-	public void beforeTest() throws DockerException {
-		super.beforeTest();
-	}
-
-	@AfterTest
-	public void afterTest() {
-		super.afterTest();
-	}
-
-	@BeforeMethod
-	public void beforeMethod(Method method) {
-	    super.beforeMethod(method);
-	}
-
-	@AfterMethod
-	public void afterMethod(ITestResult result) {
-		super.afterMethod(result);
-	}
-
-	@Test
-	public void info() throws DockerException {
-        // Make sure that there is at least one container for the assertion
-        // TODO extract this into a shared method
-    if (dockerClient.listContainersCmd().withShowAll(true).exec().size() == 0) {
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
-                .withName("docker-java-itest-info")
-                .withCmd("touch", "/test")
-                .exec();
-
-        LOG.info("Created container: {}", container);
-        assertThat(container.getId(), not(isEmptyOrNullString()));
-
-        dockerClient.startContainerCmd(container.getId()).exec();
+    @BeforeTest
+    public void beforeTest() throws DockerException {
+        super.beforeTest();
     }
 
-		Info dockerInfo = dockerClient.infoCmd().exec();
-		LOG.info(dockerInfo.toString());
+    @AfterTest
+    public void afterTest() {
+        super.afterTest();
+    }
 
-		assertTrue(dockerInfo.toString().contains("containers"));
-		assertTrue(dockerInfo.toString().contains("images"));
-		assertTrue(dockerInfo.toString().contains("debug"));
+    @BeforeMethod
+    public void beforeMethod(Method method) {
+        super.beforeMethod(method);
+    }
 
-		assertTrue(dockerInfo.getContainers() > 0);
-		assertTrue(dockerInfo.getImages() > 0);
-		assertTrue(dockerInfo.getNFd() > 0);
-		assertTrue(dockerInfo.getNGoroutines() > 0);
-		assertTrue(dockerInfo.getNCPU() > 0);
-	}
+    @AfterMethod
+    public void afterMethod(ITestResult result) {
+        super.afterMethod(result);
+    }
+
+    @Test
+    public void info() throws DockerException {
+        // Make sure that there is at least one container for the assertion
+        // TODO extract this into a shared method
+        if (dockerClient.listContainersCmd().withShowAll(true).exec().size() == 0) {
+            CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+                    .withName("docker-java-itest-info").withCmd("touch", "/test").exec();
+
+            LOG.info("Created container: {}", container);
+            assertThat(container.getId(), not(isEmptyOrNullString()));
+
+            dockerClient.startContainerCmd(container.getId()).exec();
+        }
+
+        Info dockerInfo = dockerClient.infoCmd().exec();
+        LOG.info(dockerInfo.toString());
+
+        assertTrue(dockerInfo.toString().contains("containers"));
+        assertTrue(dockerInfo.toString().contains("images"));
+        assertTrue(dockerInfo.toString().contains("debug"));
+
+        assertTrue(dockerInfo.getContainers() > 0);
+        assertTrue(dockerInfo.getImages() > 0);
+        assertTrue(dockerInfo.getNFd() > 0);
+        assertTrue(dockerInfo.getNGoroutines() > 0);
+        assertTrue(dockerInfo.getNCPU() > 0);
+    }
 }

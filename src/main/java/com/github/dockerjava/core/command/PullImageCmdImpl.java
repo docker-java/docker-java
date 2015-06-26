@@ -16,52 +16,49 @@ public class PullImageCmdImpl extends AbstrAuthCfgDockerCmd<PullImageCmd, InputS
 
     private String repository, tag, registry;
 
-	public PullImageCmdImpl(PullImageCmd.Exec exec, AuthConfig authConfig, String repository) {
-		super(exec, authConfig);
-		withRepository(repository);
-	}
+    public PullImageCmdImpl(PullImageCmd.Exec exec, AuthConfig authConfig, String repository) {
+        super(exec, authConfig);
+        withRepository(repository);
+    }
 
     @Override
-	public String getRepository() {
+    public String getRepository() {
         return repository;
     }
 
     @Override
-	public String getTag() {
+    public String getTag() {
         return tag;
     }
 
     @Override
-	public String getRegistry() {
+    public String getRegistry() {
         return registry;
     }
 
     @Override
-	public PullImageCmd withRepository(String repository) {
-		checkNotNull(repository, "repository was not specified");
-		this.repository = repository;
-		return this;
-	}
+    public PullImageCmd withRepository(String repository) {
+        checkNotNull(repository, "repository was not specified");
+        this.repository = repository;
+        return this;
+    }
 
-	@Override
-	public PullImageCmd withTag(String tag) {
-		checkNotNull(tag, "tag was not specified");
-		this.tag = tag;
-		return this;
-	}
+    @Override
+    public PullImageCmd withTag(String tag) {
+        checkNotNull(tag, "tag was not specified");
+        this.tag = tag;
+        return this;
+    }
 
-	@Override
-	public PullImageCmd withRegistry(String registry) {
-		checkNotNull(registry, "registry was not specified");
-		this.registry = registry;
-		return this;
-	}
+    @Override
+    public PullImageCmd withRegistry(String registry) {
+        checkNotNull(registry, "registry was not specified");
+        this.registry = registry;
+        return this;
+    }
 
     @Override
     public String toString() {
-        return new StringBuilder("pull ")
-            .append(repository)
-            .append(tag != null ? ":" + tag : "")
-            .toString();
+        return new StringBuilder("pull ").append(repository).append(tag != null ? ":" + tag : "").toString();
     }
 }

@@ -8,7 +8,9 @@ import java.io.InputStream;
 public class EventStreamReader<I> implements AutoCloseable {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+
     private final Class<I> type;
+
     private final InputStream inputStream;
 
     public EventStreamReader(InputStream inputStream, Class<I> type) {

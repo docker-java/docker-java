@@ -16,6 +16,7 @@ import com.github.dockerjava.api.command.TopContainerCmd;
 public class StatsCmdImpl extends AbstrDockerCmd<StatsCmd, ExecutorService> implements StatsCmd {
 
     private String containerId;
+
     private StatsCallback statsCallback;
 
     public StatsCmdImpl(StatsCmd.Exec exec, StatsCallback statsCallback) {
@@ -29,19 +30,18 @@ public class StatsCmdImpl extends AbstrDockerCmd<StatsCmd, ExecutorService> impl
         this.containerId = containerId;
         return this;
     }
-    
+
     @Override
     public String getContainerId() {
         return containerId;
     }
-    
+
     @Override
     public StatsCmd withStatsCallback(StatsCallback statsCallback) {
         this.statsCallback = statsCallback;
         return this;
     }
 
-  
     @Override
     public StatsCallback getStatsCallback() {
         return statsCallback;
@@ -54,8 +54,6 @@ public class StatsCmdImpl extends AbstrDockerCmd<StatsCmd, ExecutorService> impl
 
     @Override
     public String toString() {
-        return new StringBuilder("stats")
-                .append(containerId != null ? " --id=" + containerId : "")
-                .toString();
+        return new StringBuilder("stats").append(containerId != null ? " --id=" + containerId : "").toString();
     }
 }

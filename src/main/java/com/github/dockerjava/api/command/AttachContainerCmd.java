@@ -18,64 +18,60 @@ import com.github.dockerjava.api.NotFoundException;
  * @param stderr
  *            - true or false, includes stderr log. Defaults to false.
  * @param timestamps
- *            - true or false, if true, print timestamps for every log line.
- *            Defaults to false.
+ *            - true or false, if true, print timestamps for every log line. Defaults to false.
  */
 public interface AttachContainerCmd extends DockerCmd<InputStream> {
 
-	public String getContainerId();
+    public String getContainerId();
 
-	public boolean hasLogsEnabled();
+    public boolean hasLogsEnabled();
 
-	public boolean hasFollowStreamEnabled();
+    public boolean hasFollowStreamEnabled();
 
-	public boolean hasTimestampsEnabled();
+    public boolean hasTimestampsEnabled();
 
-	public boolean hasStdoutEnabled();
+    public boolean hasStdoutEnabled();
 
-	public boolean hasStderrEnabled();
+    public boolean hasStderrEnabled();
 
-	public AttachContainerCmd withContainerId(String containerId);
+    public AttachContainerCmd withContainerId(String containerId);
 
-	/**
-	 * See {@link #withFollowStream(boolean)}
-	 */
-	public AttachContainerCmd withFollowStream();
+    /**
+     * See {@link #withFollowStream(boolean)}
+     */
+    public AttachContainerCmd withFollowStream();
 
-	/**
-	 * Following the stream means the resulting {@link InputStream} returned by
-	 * {@link #exec()} reads infinitely. So a {@link InputStream#read()} MAY
-	 * BLOCK FOREVER as long as no data is streamed from the docker host to
-	 * {@link DockerClient}!
-	 */
-	public AttachContainerCmd withFollowStream(boolean followStream);
+    /**
+     * Following the stream means the resulting {@link InputStream} returned by {@link #exec()} reads infinitely. So a
+     * {@link InputStream#read()} MAY BLOCK FOREVER as long as no data is streamed from the docker host to
+     * {@link DockerClient}!
+     */
+    public AttachContainerCmd withFollowStream(boolean followStream);
 
-	public AttachContainerCmd withTimestamps(boolean timestamps);
+    public AttachContainerCmd withTimestamps(boolean timestamps);
 
-	public AttachContainerCmd withStdOut();
+    public AttachContainerCmd withStdOut();
 
-	public AttachContainerCmd withStdOut(boolean stdout);
+    public AttachContainerCmd withStdOut(boolean stdout);
 
-	public AttachContainerCmd withStdErr();
+    public AttachContainerCmd withStdErr();
 
-	public AttachContainerCmd withStdErr(boolean stderr);
+    public AttachContainerCmd withStdErr(boolean stderr);
 
-	public AttachContainerCmd withLogs(boolean logs);
+    public AttachContainerCmd withLogs(boolean logs);
 
-	public AttachContainerCmd withLogs();
+    public AttachContainerCmd withLogs();
 
-	/**
-	 * Its the responsibility of the caller to consume and/or close the
-	 * {@link InputStream} to prevent connection leaks.
-	 * 
-	 * @throws NotFoundException
-	 *             No such container
-	 */
-	@Override
-	public InputStream exec() throws NotFoundException;
+    /**
+     * Its the responsibility of the caller to consume and/or close the {@link InputStream} to prevent connection leaks.
+     * 
+     * @throws NotFoundException
+     *             No such container
+     */
+    @Override
+    public InputStream exec() throws NotFoundException;
 
-	public static interface Exec extends
-			DockerCmdExec<AttachContainerCmd, InputStream> {
-	}
+    public static interface Exec extends DockerCmdExec<AttachContainerCmd, InputStream> {
+    }
 
 }

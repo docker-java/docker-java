@@ -28,24 +28,24 @@ public class PullImageCmdImplTest extends AbstractDockerClientTest {
     };
 
     @BeforeTest
-	public void beforeTest() throws DockerException {
-		super.beforeTest();
-	}
+    public void beforeTest() throws DockerException {
+        super.beforeTest();
+    }
 
-	@AfterTest
-	public void afterTest() {
-		super.afterTest();
-	}
+    @AfterTest
+    public void afterTest() {
+        super.afterTest();
+    }
 
-	@BeforeMethod
-	public void beforeMethod(Method method) {
-		super.beforeMethod(method);
-	}
+    @BeforeMethod
+    public void beforeMethod(Method method) {
+        super.beforeMethod(method);
+    }
 
-	@AfterMethod
-	public void afterMethod(ITestResult result) {
-		super.afterMethod(result);
-	}
+    @AfterMethod
+    public void afterMethod(ITestResult result) {
+        super.afterMethod(result);
+    }
 
     @Test
     public void nullAuthConfig() throws Exception {
@@ -59,59 +59,57 @@ public class PullImageCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test
-	public void testPullImage() throws DockerException, IOException {
-		Info info = dockerClient.infoCmd().exec();
-		LOG.info("Client info: {}", info.toString());
+    public void testPullImage() throws DockerException, IOException {
+        Info info = dockerClient.infoCmd().exec();
+        LOG.info("Client info: {}", info.toString());
 
-		int imgCount = info.getImages();
-		LOG.info("imgCount1: {}", imgCount);
+        int imgCount = info.getImages();
+        LOG.info("imgCount1: {}", imgCount);
 
-		// This should be an image that is not used by other repositories
-		// already
-		// pulled down, preferably small in size. If tag is not used pull will
-		// download all images in that repository but tmpImgs will only
-		// deleted 'latest' image but not images with other tags
-		String testImage = "hackmann/empty";
+        // This should be an image that is not used by other repositories
+        // already
+        // pulled down, preferably small in size. If tag is not used pull will
+        // download all images in that repository but tmpImgs will only
+        // deleted 'latest' image but not images with other tags
+        String testImage = "hackmann/empty";
 
-		LOG.info("Removing image: {}", testImage);
-		
-		try {
-			dockerClient.removeImageCmd(testImage).withForce().exec();
-		} catch (NotFoundException e) {
-			// just ignore if not exist
-		}
-		
+        LOG.info("Removing image: {}", testImage);
 
-		info = dockerClient.infoCmd().exec();
-		LOG.info("Client info: {}", info.toString());
+        try {
+            dockerClient.removeImageCmd(testImage).withForce().exec();
+        } catch (NotFoundException e) {
+            // just ignore if not exist
+        }
 
-		imgCount = info.getImages();
-		LOG.info("imgCount2: {}", imgCount);
+        info = dockerClient.infoCmd().exec();
+        LOG.info("Client info: {}", info.toString());
 
-		LOG.info("Pulling image: {}", testImage);
+        imgCount = info.getImages();
+        LOG.info("imgCount2: {}", imgCount);
 
-		InputStream response = dockerClient.pullImageCmd(testImage).exec();
+        LOG.info("Pulling image: {}", testImage);
 
-		assertThat(asString(response), containsString("Download complete"));
+        InputStream response = dockerClient.pullImageCmd(testImage).exec();
 
-		info = dockerClient.infoCmd().exec();
-		LOG.info("Client info after pull, {}", info.toString());
+        assertThat(asString(response), containsString("Download complete"));
 
-		assertThat(imgCount, lessThanOrEqualTo(info.getImages()));
+        info = dockerClient.infoCmd().exec();
+        LOG.info("Client info after pull, {}", info.toString());
 
-		InspectImageResponse inspectImageResponse = dockerClient
-				.inspectImageCmd(testImage).exec();
-		LOG.info("Image Inspect: {}", inspectImageResponse.toString());
-		assertThat(inspectImageResponse, notNullValue());
-	}
+        assertThat(imgCount, lessThanOrEqualTo(info.getImages()));
 
-	@Test
-	public void testPullNonExistingImage() throws DockerException, IOException {
-		
-		// does not throw an exception
-		InputStream is = dockerClient.pullImageCmd("xvxcv/foo").exec();
-		// stream needs to be fully read in order to close the underlying connection
-		asString(is);
-	}
+        InspectImageResponse inspectImageResponse = dockerClient.inspectImageCmd(testImage).exec();
+        LOG.info("Image Inspect: {}", inspectImageResponse.toString());
+        assertThat(inspectImageResponse, notNullValue());
+    }
+
+    @Test
+    public void testPullNonExistingImage() throws DockerException, IOException {
+
+        // does not throw an exception
+        InputStream is = dockerClient.pullImageCmd("xvxcv/foo").exec();
+        // stream needs to be fully read in order to close the underlying connection
+        asString(is);
+    }
 
 }

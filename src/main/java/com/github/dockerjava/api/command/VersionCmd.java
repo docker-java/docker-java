@@ -6,8 +6,8 @@ import com.github.dockerjava.api.model.Version;
  * Returns the Docker version info.
  */
 public interface VersionCmd extends DockerCmd<Version> {
-	
-	public static interface Exec extends DockerCmdExec<VersionCmd, Version> {
-	}
+
+    public static interface Exec extends DockerCmdExec<VersionCmd, Version> {
+    }
 
 }

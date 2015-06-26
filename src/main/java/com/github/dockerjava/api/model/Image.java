@@ -13,16 +13,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Image {
 
-	@JsonProperty("Created")
-	private long created;
+    @JsonProperty("Created")
+    private long created;
 
-	@JsonProperty("Id")
+    @JsonProperty("Id")
     private String id;
 
-	@JsonProperty("ParentId")
-	private String parentId;
+    @JsonProperty("ParentId")
+    private String parentId;
 
-	@JsonProperty("RepoTags")
+    @JsonProperty("RepoTags")
     private String[] repoTags;
 
     @JsonProperty("Size")

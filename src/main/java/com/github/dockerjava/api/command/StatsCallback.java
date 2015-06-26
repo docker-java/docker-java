@@ -7,7 +7,10 @@ import com.github.dockerjava.api.model.Statistics;
  */
 public interface StatsCallback {
     public void onStats(Statistics stats);
+
     public void onException(Throwable throwable);
+
     public void onCompletion(int numStats);
+
     public boolean isReceiving();
 }

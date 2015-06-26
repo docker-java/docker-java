@@ -16,60 +16,58 @@ import static org.hamcrest.Matchers.*;
 @Test(groups = "integration")
 public class PushImageCmdImplTest extends AbstractDockerClientTest {
 
-	public static final Logger LOG = LoggerFactory
-			.getLogger(PushImageCmdImplTest.class);
+    public static final Logger LOG = LoggerFactory.getLogger(PushImageCmdImplTest.class);
 
     String username;
 
-	@BeforeTest
-	public void beforeTest() throws DockerException {
-		super.beforeTest();
+    @BeforeTest
+    public void beforeTest() throws DockerException {
+        super.beforeTest();
         username = dockerClient.authConfig().getUsername();
-	}
-	@AfterTest
-	public void afterTest() {
-		super.afterTest();
-	}
+    }
 
-	@BeforeMethod
-	public void beforeMethod(Method method) {
-	    super.beforeMethod(method);
-	}
+    @AfterTest
+    public void afterTest() {
+        super.afterTest();
+    }
 
-	@AfterMethod
-	public void afterMethod(ITestResult result) {
-		super.afterMethod(result);
-	}
+    @BeforeMethod
+    public void beforeMethod(Method method) {
+        super.beforeMethod(method);
+    }
 
-	@Test
-	public void pushLatest() throws Exception {
+    @AfterMethod
+    public void afterMethod(ITestResult result) {
+        super.afterMethod(result);
+    }
 
-		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd("true").exec();
+    @Test
+    public void pushLatest() throws Exception {
 
-		LOG.info("Created container {}", container.toString());
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("true").exec();
 
-		assertThat(container.getId(), not(isEmptyString()));
+        LOG.info("Created container {}", container.toString());
 
-		LOG.info("Committing container: {}", container.toString());
-		String imageId = dockerClient.commitCmd(container.getId()).withRepository(username + "/busybox").exec();
+        assertThat(container.getId(), not(isEmptyString()));
 
-		// we have to block until image is pushed
-		asString(dockerClient.pushImageCmd(username + "/busybox").exec());
+        LOG.info("Committing container: {}", container.toString());
+        String imageId = dockerClient.commitCmd(container.getId()).withRepository(username + "/busybox").exec();
+
+        // we have to block until image is pushed
+        asString(dockerClient.pushImageCmd(username + "/busybox").exec());
 
         LOG.info("Removing image: {}", imageId);
-		dockerClient.removeImageCmd(imageId).exec();
-		
-		String response = asString(dockerClient.pullImageCmd(username + "/busybox").exec());
+        dockerClient.removeImageCmd(imageId).exec();
 
-		assertThat(response, not(containsString("HTTP code: 404")));
-	}
+        String response = asString(dockerClient.pullImageCmd(username + "/busybox").exec());
 
-	@Test
-	public void pushExistentImage() throws Exception {
+        assertThat(response, not(containsString("HTTP code: 404")));
+    }
 
-		assertThat(asString(dockerClient.pushImageCmd(username + "/xxx").exec()), containsString("error"));
-	}
+    @Test
+    public void pushExistentImage() throws Exception {
+
+        assertThat(asString(dockerClient.pushImageCmd(username + "/xxx").exec()), containsString("error"));
+    }
 
 }
-

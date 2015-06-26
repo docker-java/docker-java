@@ -10,12 +10,12 @@ import com.google.common.base.Objects;
 /**
  * Represents an item returned from push
  */
-@JsonIgnoreProperties(ignoreUnknown=true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PushEventStreamItem implements Serializable {
 
-	private static final long serialVersionUID = -5187169652557467828L;
+    private static final long serialVersionUID = -5187169652557467828L;
 
-	@JsonProperty("status")
+    @JsonProperty("status")
     private String status;
 
     @JsonProperty("progress")
@@ -23,7 +23,6 @@ public class PushEventStreamItem implements Serializable {
 
     @JsonProperty("progressDetail")
     private ProgressDetail progressDetail;
-
 
     public String getStatus() {
         return status;
@@ -37,11 +36,10 @@ public class PushEventStreamItem implements Serializable {
         return progressDetail;
     }
 
-    @JsonIgnoreProperties(ignoreUnknown=true)
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class ProgressDetail implements Serializable {
         @JsonProperty("current")
         int current;
-
 
         @Override
         public String toString() {
@@ -51,10 +49,7 @@ public class PushEventStreamItem implements Serializable {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
-                .add("status", status)
-                .add("progress", progress)
-                .add("progressDetail", progressDetail)
-                .toString();
+        return Objects.toStringHelper(this).add("status", status).add("progress", progress)
+                .add("progressDetail", progressDetail).toString();
     }
 }

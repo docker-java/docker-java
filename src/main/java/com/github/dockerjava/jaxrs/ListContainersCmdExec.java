@@ -12,19 +12,19 @@ import org.slf4j.LoggerFactory;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.model.Container;
 
-public class ListContainersCmdExec extends AbstrDockerCmdExec<ListContainersCmd, List<Container>> implements ListContainersCmd.Exec {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ListContainersCmdExec.class);
-	
-	public ListContainersCmdExec(WebTarget baseResource) {
-		super(baseResource);
-	}
+public class ListContainersCmdExec extends AbstrDockerCmdExec<ListContainersCmd, List<Container>> implements
+        ListContainersCmd.Exec {
 
-	@Override
-	protected List<Container> execute(ListContainersCmd command) {
-		WebTarget webResource = getBaseResource().path("/containers/json")
-                .queryParam("all", command.hasShowAllEnabled() ? "1" : "0")
-                .queryParam("since", command.getSinceId())
+    private static final Logger LOGGER = LoggerFactory.getLogger(ListContainersCmdExec.class);
+
+    public ListContainersCmdExec(WebTarget baseResource) {
+        super(baseResource);
+    }
+
+    @Override
+    protected List<Container> execute(ListContainersCmd command) {
+        WebTarget webResource = getBaseResource().path("/containers/json")
+                .queryParam("all", command.hasShowAllEnabled() ? "1" : "0").queryParam("since", command.getSinceId())
                 .queryParam("before", command.getBeforeId())
                 .queryParam("size", command.hasShowSizeEnabled() ? "1" : "0");
 
@@ -32,12 +32,13 @@ public class ListContainersCmdExec extends AbstrDockerCmdExec<ListContainersCmd,
             webResource = webResource.queryParam("limit", String.valueOf(command.getLimit()));
         }
 
-		LOGGER.trace("GET: {}", webResource);
-		List<Container> containers = webResource.request().accept(MediaType.APPLICATION_JSON).get(new GenericType<List<Container>>() {
-        });
-		LOGGER.trace("Response: {}", containers);
+        LOGGER.trace("GET: {}", webResource);
+        List<Container> containers = webResource.request().accept(MediaType.APPLICATION_JSON)
+                .get(new GenericType<List<Container>>() {
+                });
+        LOGGER.trace("Response: {}", containers);
 
-		return containers;
-	}
+        return containers;
+    }
 
 }

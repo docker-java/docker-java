@@ -4,6 +4,6 @@ import java.io.Closeable;
 
 public interface DockerCmd<RES_T> extends Closeable {
 
-	public RES_T exec();
+    public RES_T exec();
 
 }

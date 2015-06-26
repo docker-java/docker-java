@@ -24,56 +24,54 @@ import com.github.dockerjava.client.AbstractDockerClientTest;
 @Test(groups = "integration")
 public class WaitContainerCmdImplTest extends AbstractDockerClientTest {
 
-	@BeforeTest
-	public void beforeTest() throws DockerException {
-		super.beforeTest();
-	}
+    @BeforeTest
+    public void beforeTest() throws DockerException {
+        super.beforeTest();
+    }
 
-	@AfterTest
-	public void afterTest() {
-		super.afterTest();
-	}
+    @AfterTest
+    public void afterTest() {
+        super.afterTest();
+    }
 
-	@BeforeMethod
-	public void beforeMethod(Method method) {
-		super.beforeMethod(method);
-	}
+    @BeforeMethod
+    public void beforeMethod(Method method) {
+        super.beforeMethod(method);
+    }
 
-	@AfterMethod
-	public void afterMethod(ITestResult result) {
-		super.afterMethod(result);
-	}
+    @AfterMethod
+    public void afterMethod(ITestResult result) {
+        super.afterMethod(result);
+    }
 
-	@Test
-	public void testWaitContainer() throws DockerException {
+    @Test
+    public void testWaitContainer() throws DockerException {
 
-		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd("true").exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("true").exec();
 
-		LOG.info("Created container: {}", container.toString());
-		assertThat(container.getId(), not(isEmptyString()));
-		
-		dockerClient.startContainerCmd(container.getId()).exec();
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
 
-		int exitCode = dockerClient.waitContainerCmd(container.getId()).exec();
-		LOG.info("Container exit code: {}", exitCode);
+        dockerClient.startContainerCmd(container.getId()).exec();
 
-		assertThat(exitCode, equalTo(0));
+        int exitCode = dockerClient.waitContainerCmd(container.getId()).exec();
+        LOG.info("Container exit code: {}", exitCode);
 
-		InspectContainerResponse inspectContainerResponse = dockerClient
-				.inspectContainerCmd(container.getId()).exec();
-		LOG.info("Container Inspect: {}", inspectContainerResponse.toString());
+        assertThat(exitCode, equalTo(0));
 
-		assertThat(inspectContainerResponse.getState().isRunning(),	is(equalTo(false)));
-		assertThat(inspectContainerResponse.getState().getExitCode(), is(equalTo(exitCode)));
-	}
-	
-	@Test
-	public void testWaitNonExistingContainer() throws DockerException {
-		try {
-			dockerClient.waitContainerCmd("non-existing").exec();
-			fail("expected NotFoundException");
-		} catch (NotFoundException e) {
-		}
-	}
+        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+        LOG.info("Container Inspect: {}", inspectContainerResponse.toString());
+
+        assertThat(inspectContainerResponse.getState().isRunning(), is(equalTo(false)));
+        assertThat(inspectContainerResponse.getState().getExitCode(), is(equalTo(exitCode)));
+    }
+
+    @Test
+    public void testWaitNonExistingContainer() throws DockerException {
+        try {
+            dockerClient.waitContainerCmd("non-existing").exec();
+            fail("expected NotFoundException");
+        } catch (NotFoundException e) {
+        }
+    }
 }

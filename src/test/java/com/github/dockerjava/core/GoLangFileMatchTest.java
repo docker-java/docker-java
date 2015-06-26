@@ -40,8 +40,7 @@ public class GoLangFileMatchTest {
 
     @DataProvider
     public Object[][] getTestData() {
-        return new Object[][] {
-                new Object[] { new MatchTestCase("abc", "abc", true, false) },
+        return new Object[][] { new Object[] { new MatchTestCase("abc", "abc", true, false) },
                 new Object[] { new MatchTestCase("*", "abc", true, false) },
                 new Object[] { new MatchTestCase("*c", "abc", true, false) },
                 new Object[] { new MatchTestCase("a*", "a", true, false) },
@@ -99,8 +98,11 @@ public class GoLangFileMatchTest {
 
     private final class MatchTestCase {
         private final String pattern;
+
         private final String s;
+
         private final boolean matches;
+
         private final boolean expectException;
 
         public MatchTestCase(String pattern, String s, boolean matches, boolean expectException) {
@@ -113,8 +115,8 @@ public class GoLangFileMatchTest {
 
         @Override
         public String toString() {
-            return "MatchTestCase [pattern=" + pattern + ", s=" + s + ", matches=" + matches
-                    + ", expectException=" + expectException + "]";
+            return "MatchTestCase [pattern=" + pattern + ", s=" + s + ", matches=" + matches + ", expectException="
+                    + expectException + "]";
         }
     }
 

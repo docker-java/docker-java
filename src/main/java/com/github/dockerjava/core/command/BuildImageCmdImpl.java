@@ -18,16 +18,22 @@ import com.github.dockerjava.core.dockerfile.Dockerfile;
  */
 public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageCmd.Response> implements BuildImageCmd {
 
+    private InputStream tarInputStream = null;
 
-	private InputStream tarInputStream = null;
-	private String tag;
-	private boolean noCache;
-	private boolean remove = true;
-	private boolean quiet;
-	private boolean pull;
-	
-	private AuthConfigurations buildAuthConfigs;
+    private String tag;
+
+    private boolean noCache;
+
+    private boolean remove = true;
+
+    private boolean quiet;
+
+    private boolean pull;
+
+    private AuthConfigurations buildAuthConfigs;
+
     private File dockerFile;
+
     private File baseDirectory;
 
     public BuildImageCmdImpl(BuildImageCmd.Exec exec) {
@@ -35,48 +41,43 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageC
     }
 
     public BuildImageCmdImpl(BuildImageCmd.Exec exec, File dockerFileOrFolder) {
-		super(exec);
-		checkNotNull(dockerFileOrFolder, "dockerFolder is null");
+        super(exec);
+        checkNotNull(dockerFileOrFolder, "dockerFolder is null");
 
-        if( dockerFileOrFolder.isDirectory() ) {
+        if (dockerFileOrFolder.isDirectory()) {
             withBaseDirectory(dockerFileOrFolder);
             withDockerfile(new File(dockerFileOrFolder, "Dockerfile"));
-        }
-        else {
+        } else {
             withDockerfile(dockerFileOrFolder);
         }
-	}
+    }
 
-	public BuildImageCmdImpl(BuildImageCmd.Exec exec, InputStream tarInputStream) {
-		super(exec);
-		checkNotNull(tarInputStream, "tarInputStream is null");
-		withTarInputStream(tarInputStream);
-	}
+    public BuildImageCmdImpl(BuildImageCmd.Exec exec, InputStream tarInputStream) {
+        super(exec);
+        checkNotNull(tarInputStream, "tarInputStream is null");
+        withTarInputStream(tarInputStream);
+    }
 
-	@Override
-	public InputStream getTarInputStream() {
-		return tarInputStream;
-	}
+    @Override
+    public InputStream getTarInputStream() {
+        return tarInputStream;
+    }
 
     @Override
     public BuildImageCmdImpl withDockerfile(File dockerfile) {
         checkNotNull(dockerfile);
-        if( !dockerfile.exists() )
+        if (!dockerfile.exists())
             throw new IllegalArgumentException("Dockerfile does not exist");
-        if( !dockerfile.isFile() )
+        if (!dockerfile.isFile())
             throw new IllegalArgumentException("Not a directory");
 
-        if( baseDirectory == null )
+        if (baseDirectory == null)
             withBaseDirectory(dockerfile.getParentFile());
-
 
         this.dockerFile = dockerfile;
 
         try {
-            withTarInputStream(
-                    new Dockerfile(dockerfile)
-                            .parse()
-                            .buildDockerFolderTar(baseDirectory) );
+            withTarInputStream(new Dockerfile(dockerfile).parse().buildDockerFolderTar(baseDirectory));
         } catch (IOException e) {
             // we just created the file this should never happen.
             throw new RuntimeException(e);
@@ -84,44 +85,44 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageC
         return this;
     }
 
-	@Override
-	public BuildImageCmdImpl withTarInputStream(InputStream tarInputStream) {
-		checkNotNull(tarInputStream, "tarInputStream is null");
-		this.tarInputStream = tarInputStream;
-		return this;
-	}
+    @Override
+    public BuildImageCmdImpl withTarInputStream(InputStream tarInputStream) {
+        checkNotNull(tarInputStream, "tarInputStream is null");
+        this.tarInputStream = tarInputStream;
+        return this;
+    }
 
-	@Override
-	public BuildImageCmdImpl withTag(String tag) {
-		checkNotNull(tag, "Tag is null");
-		this.tag = tag;
-		return this;
-	}
+    @Override
+    public BuildImageCmdImpl withTag(String tag) {
+        checkNotNull(tag, "Tag is null");
+        this.tag = tag;
+        return this;
+    }
 
-	@Override
-	public String getTag() {
-		return tag;
-	}
+    @Override
+    public String getTag() {
+        return tag;
+    }
 
-	@Override
-	public boolean hasNoCacheEnabled() {
-		return noCache;
-	}
+    @Override
+    public boolean hasNoCacheEnabled() {
+        return noCache;
+    }
 
-	@Override
-	public boolean hasRemoveEnabled() {
-		return remove;
-	}
+    @Override
+    public boolean hasRemoveEnabled() {
+        return remove;
+    }
 
-	@Override
-	public boolean isQuiet() {
-		return quiet;
-	}
-	
-	@Override
-	public boolean hasPullEnabled() {
-		return pull;
-	}
+    @Override
+    public boolean isQuiet() {
+        return quiet;
+    }
+
+    @Override
+    public boolean hasPullEnabled() {
+        return pull;
+    }
 
     @Override
     public String getPathToDockerfile() {
@@ -133,9 +134,9 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageC
     }
 
     @Override
-	public AuthConfigurations getBuildAuthConfigs() {
-		return buildAuthConfigs;
-	}
+    public AuthConfigurations getBuildAuthConfigs() {
+        return buildAuthConfigs;
+    }
 
     @Override
     public BuildImageCmd withBaseDirectory(File baseDirectory) {
@@ -144,71 +145,68 @@ public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageC
     }
 
     @Override
-	public BuildImageCmdImpl withNoCache() {
-		return withNoCache(true);
-	}
+    public BuildImageCmdImpl withNoCache() {
+        return withNoCache(true);
+    }
 
-	@Override
-	public BuildImageCmdImpl withNoCache(boolean noCache) {
-		this.noCache = noCache;
-		return this;
-	}
+    @Override
+    public BuildImageCmdImpl withNoCache(boolean noCache) {
+        this.noCache = noCache;
+        return this;
+    }
 
-	@Override
-	public BuildImageCmdImpl withRemove() {
-		return withRemove(true);
-	}
+    @Override
+    public BuildImageCmdImpl withRemove() {
+        return withRemove(true);
+    }
 
-	@Override
-	public BuildImageCmdImpl withRemove(boolean rm) {
-		this.remove = rm;
-		return this;
-	}
+    @Override
+    public BuildImageCmdImpl withRemove(boolean rm) {
+        this.remove = rm;
+        return this;
+    }
 
-	@Override
-	public BuildImageCmdImpl withQuiet() {
-		return withQuiet(true);
-	}
+    @Override
+    public BuildImageCmdImpl withQuiet() {
+        return withQuiet(true);
+    }
 
-	@Override
-	public BuildImageCmdImpl withQuiet(boolean quiet) {
-		this.quiet = quiet;
-		return this;
-	}
-	
-	@Override
-	public BuildImageCmdImpl withPull() {
-		return withPull(true);
-	}
+    @Override
+    public BuildImageCmdImpl withQuiet(boolean quiet) {
+        this.quiet = quiet;
+        return this;
+    }
 
-	@Override
-	public BuildImageCmdImpl withPull(boolean pull) {
-		this.pull = pull;
-		return this;
-	}
+    @Override
+    public BuildImageCmdImpl withPull() {
+        return withPull(true);
+    }
 
-	@Override
-	public BuildImageCmd withBuildAuthConfigs(AuthConfigurations authConfigs) {
-		checkNotNull(authConfigs, "authConfig is null");
-		this.buildAuthConfigs = authConfigs;
-		return this;
-	}
+    @Override
+    public BuildImageCmdImpl withPull(boolean pull) {
+        this.pull = pull;
+        return this;
+    }
 
-	@Override
-	public void close() throws IOException {
-		super.close();
+    @Override
+    public BuildImageCmd withBuildAuthConfigs(AuthConfigurations authConfigs) {
+        checkNotNull(authConfigs, "authConfig is null");
+        this.buildAuthConfigs = authConfigs;
+        return this;
+    }
 
-		tarInputStream.close();
-	}
+    @Override
+    public void close() throws IOException {
+        super.close();
 
-	@Override
-	public String toString() {
-		return new StringBuilder("build ")
-				.append(tag != null ? "-t " + tag + " " : "")
-				.append(noCache ? "--nocache=true " : "")
-				.append(quiet ? "--quiet=true " : "")
-				.append(!remove ? "--rm=false " : "").toString();
-	}
+        tarInputStream.close();
+    }
 
+    @Override
+    public String toString() {
+        return new StringBuilder("build ").append(tag != null ? "-t " + tag + " " : "")
+                .append(noCache ? "--nocache=true " : "").append(quiet ? "--quiet=true " : "")
+                .append(!remove ? "--rm=false " : "").toString();
+    }
 
 }

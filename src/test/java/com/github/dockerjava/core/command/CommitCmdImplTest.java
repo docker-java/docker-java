@@ -25,63 +25,56 @@ import com.github.dockerjava.client.AbstractDockerClientTest;
 @Test(groups = "integration")
 public class CommitCmdImplTest extends AbstractDockerClientTest {
 
-	@BeforeTest
-	public void beforeTest() throws DockerException {
-		super.beforeTest();
-	}
+    @BeforeTest
+    public void beforeTest() throws DockerException {
+        super.beforeTest();
+    }
 
-	@AfterTest
-	public void afterTest() {
-		super.afterTest();
-	}
+    @AfterTest
+    public void afterTest() {
+        super.afterTest();
+    }
 
-	@BeforeMethod
-	public void beforeMethod(Method method) {
-	    super.beforeMethod(method);
-	}
+    @BeforeMethod
+    public void beforeMethod(Method method) {
+        super.beforeMethod(method);
+    }
 
-	@AfterMethod
-	public void afterMethod(ITestResult result) {
-		super.afterMethod(result);
-	}
+    @AfterMethod
+    public void afterMethod(ITestResult result) {
+        super.afterMethod(result);
+    }
 
-	@Test
-	public void commit() throws DockerException {
+    @Test
+    public void commit() throws DockerException {
 
-		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd("touch", "/test").exec();
-		
-		LOG.info("Created container: {}", container.toString());
-		assertThat(container.getId(), not(isEmptyString()));
-		dockerClient.startContainerCmd(container.getId()).exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("touch", "/test").exec();
 
-		LOG.info("Commiting container: {}", container.toString());
-		String imageId = dockerClient
-				.commitCmd(container.getId()).exec();
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+        dockerClient.startContainerCmd(container.getId()).exec();
 
-		InspectImageResponse inspectImageResponse = dockerClient
-				.inspectImageCmd(imageId).exec();
-		LOG.info("Image Inspect: {}", inspectImageResponse.toString());
+        LOG.info("Commiting container: {}", container.toString());
+        String imageId = dockerClient.commitCmd(container.getId()).exec();
 
-		assertThat(inspectImageResponse,
-				hasField("container", startsWith(container.getId())));
-		assertThat(inspectImageResponse.getContainerConfig().getImage(),
-				equalTo("busybox"));
+        InspectImageResponse inspectImageResponse = dockerClient.inspectImageCmd(imageId).exec();
+        LOG.info("Image Inspect: {}", inspectImageResponse.toString());
 
-		InspectImageResponse busyboxImg = dockerClient.inspectImageCmd("busybox").exec();
+        assertThat(inspectImageResponse, hasField("container", startsWith(container.getId())));
+        assertThat(inspectImageResponse.getContainerConfig().getImage(), equalTo("busybox"));
 
-		assertThat(inspectImageResponse.getParent(),
-				equalTo(busyboxImg.getId()));
-	}
-	
-	
-	@Test
-	public void commitNonExistingContainer() throws DockerException {
-		try {
-			dockerClient.commitCmd("non-existent").exec();
-			fail("expected NotFoundException");
-		} catch (NotFoundException e) {
-		}
-	}
+        InspectImageResponse busyboxImg = dockerClient.inspectImageCmd("busybox").exec();
+
+        assertThat(inspectImageResponse.getParent(), equalTo(busyboxImg.getId()));
+    }
+
+    @Test
+    public void commitNonExistingContainer() throws DockerException {
+        try {
+            dockerClient.commitCmd("non-existent").exec();
+            fail("expected NotFoundException");
+        } catch (NotFoundException e) {
+        }
+    }
 
 }

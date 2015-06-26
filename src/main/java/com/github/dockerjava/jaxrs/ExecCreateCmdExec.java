@@ -10,10 +10,10 @@ import javax.ws.rs.core.MediaType;
 
 import static javax.ws.rs.client.Entity.entity;
 
-public class ExecCreateCmdExec extends AbstrDockerCmdExec<ExecCreateCmd, ExecCreateCmdResponse> implements ExecCreateCmd.Exec {
+public class ExecCreateCmdExec extends AbstrDockerCmdExec<ExecCreateCmd, ExecCreateCmdResponse> implements
+        ExecCreateCmd.Exec {
 
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(VersionCmdExec.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(VersionCmdExec.class);
 
     public ExecCreateCmdExec(WebTarget baseResource) {
         super(baseResource);
@@ -21,13 +21,12 @@ public class ExecCreateCmdExec extends AbstrDockerCmdExec<ExecCreateCmd, ExecCre
 
     @Override
     protected ExecCreateCmdResponse execute(ExecCreateCmd command) {
-        WebTarget webResource = getBaseResource().path("/containers/{id}/exec").resolveTemplate("id", command.getContainerId());
+        WebTarget webResource = getBaseResource().path("/containers/{id}/exec").resolveTemplate("id",
+                command.getContainerId());
 
         LOGGER.trace("POST: {}", webResource);
 
-		return webResource
-				.request()
-				.accept(MediaType.APPLICATION_JSON)
-				.post(entity(command, MediaType.APPLICATION_JSON), ExecCreateCmdResponse.class);
+        return webResource.request().accept(MediaType.APPLICATION_JSON)
+                .post(entity(command, MediaType.APPLICATION_JSON), ExecCreateCmdResponse.class);
     }
 }

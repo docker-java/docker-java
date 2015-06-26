@@ -14,35 +14,30 @@ import com.github.dockerjava.api.model.Image;
 
 import static com.google.common.net.UrlEscapers.urlPathSegmentEscaper;
 
-public class ListImagesCmdExec extends
-		AbstrDockerCmdExec<ListImagesCmd, List<Image>> implements
-		ListImagesCmd.Exec {
+public class ListImagesCmdExec extends AbstrDockerCmdExec<ListImagesCmd, List<Image>> implements ListImagesCmd.Exec {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(ListImagesCmdExec.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ListImagesCmdExec.class);
 
-	public ListImagesCmdExec(WebTarget baseResource) {
-		super(baseResource);
-	}
+    public ListImagesCmdExec(WebTarget baseResource) {
+        super(baseResource);
+    }
 
-	@Override
-	protected List<Image> execute(ListImagesCmd command) {
-		WebTarget webResource = getBaseResource().path("/images/json")
-				.queryParam("all", command.hasShowAllEnabled() ? "1" : "0");
+    @Override
+    protected List<Image> execute(ListImagesCmd command) {
+        WebTarget webResource = getBaseResource().path("/images/json").queryParam("all",
+                command.hasShowAllEnabled() ? "1" : "0");
 
-		if (command.getFilters() != null)
-			webResource = webResource.queryParam("filters",
-					urlPathSegmentEscaper().escape(command.getFilters()));
+        if (command.getFilters() != null)
+            webResource = webResource.queryParam("filters", urlPathSegmentEscaper().escape(command.getFilters()));
 
-		LOGGER.trace("GET: {}", webResource);
+        LOGGER.trace("GET: {}", webResource);
 
-		List<Image> images = webResource.request()
-				.accept(MediaType.APPLICATION_JSON)
-				.get(new GenericType<List<Image>>() {
-				});
-		LOGGER.trace("Response: {}", images);
+        List<Image> images = webResource.request().accept(MediaType.APPLICATION_JSON)
+                .get(new GenericType<List<Image>>() {
+                });
+        LOGGER.trace("Response: {}", images);
 
-		return images;
-	}
+        return images;
+    }
 
 }

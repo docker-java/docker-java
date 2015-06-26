@@ -17,37 +17,36 @@ import com.github.dockerjava.client.AbstractDockerClientTest;
 @Test(groups = "integration")
 public class VersionCmdImplTest extends AbstractDockerClientTest {
 
-	@BeforeTest
-	public void beforeTest() throws DockerException {
-		super.beforeTest();
-	}
-	
-	@AfterTest
-	public void afterTest() {
-		super.afterTest();
-	}
+    @BeforeTest
+    public void beforeTest() throws DockerException {
+        super.beforeTest();
+    }
 
-	@BeforeMethod
-	public void beforeMethod(Method method) {
-	    super.beforeMethod(method);
-	}
+    @AfterTest
+    public void afterTest() {
+        super.afterTest();
+    }
 
-	@AfterMethod
-	public void afterMethod(ITestResult result) {
-		super.afterMethod(result);
-	}
-	
-	@Test
-	public void version() throws DockerException {
-		Version version = dockerClient.versionCmd().exec();
-		LOG.info(version.toString());
+    @BeforeMethod
+    public void beforeMethod(Method method) {
+        super.beforeMethod(method);
+    }
 
-		assertTrue(version.getGoVersion().length() > 0);
-		assertTrue(version.getVersion().length() > 0);
+    @AfterMethod
+    public void afterMethod(ITestResult result) {
+        super.afterMethod(result);
+    }
 
-		assertEquals(StringUtils.split(version.getVersion(), ".").length, 3);
+    @Test
+    public void version() throws DockerException {
+        Version version = dockerClient.versionCmd().exec();
+        LOG.info(version.toString());
 
-	}
+        assertTrue(version.getGoVersion().length() > 0);
+        assertTrue(version.getVersion().length() > 0);
 
+        assertEquals(StringUtils.split(version.getVersion(), ".").length, 3);
+
+    }
 
 }

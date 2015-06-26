@@ -7,6 +7,7 @@ import java.util.Arrays;
  */
 public class Frame {
     private final StreamType streamType;
+
     private final byte[] payload;
 
     public Frame(StreamType streamType, byte[] payload) {
@@ -29,8 +30,10 @@ public class Frame {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         Frame frame = (Frame) o;
 

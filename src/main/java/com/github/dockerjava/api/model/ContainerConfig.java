@@ -15,177 +15,177 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ContainerConfig {
 
-	@JsonProperty("AttachStderr")
-	private boolean attachStderr = false;
+    @JsonProperty("AttachStderr")
+    private boolean attachStderr = false;
 
-	@JsonProperty("AttachStdin")
-	private boolean attachStdin = false;
+    @JsonProperty("AttachStdin")
+    private boolean attachStdin = false;
 
-	@JsonProperty("AttachStdout")
-	private boolean attachStdout = false;
+    @JsonProperty("AttachStdout")
+    private boolean attachStdout = false;
 
-	@JsonProperty("Cmd")
-	private String[] cmd;
+    @JsonProperty("Cmd")
+    private String[] cmd;
 
-	@JsonProperty("CpuShares")
-	private int cpuShares = 0;
+    @JsonProperty("CpuShares")
+    private int cpuShares = 0;
 
-	@JsonProperty("Cpuset")
-	private String cpuset = "";
+    @JsonProperty("Cpuset")
+    private String cpuset = "";
 
-	@JsonProperty("Domainname")
-	private String domainName = "";
+    @JsonProperty("Domainname")
+    private String domainName = "";
 
-	@JsonProperty("Entrypoint")
-	private String[] entrypoint = new String[] {};
+    @JsonProperty("Entrypoint")
+    private String[] entrypoint = new String[] {};
 
-	@JsonProperty("Env")
-	private String[] env;
+    @JsonProperty("Env")
+    private String[] env;
 
-	@JsonProperty("ExposedPorts")
-	private ExposedPorts exposedPorts;
+    @JsonProperty("ExposedPorts")
+    private ExposedPorts exposedPorts;
 
-	@JsonProperty("Hostname")
-	private String hostName = "";
+    @JsonProperty("Hostname")
+    private String hostName = "";
 
-	@JsonProperty("Image")
-	private String image;
+    @JsonProperty("Image")
+    private String image;
 
-	@JsonProperty("MacAddress")
-	private String macAddress;
-	
-	@JsonProperty("Memory")
-	private long memoryLimit = 0;
+    @JsonProperty("MacAddress")
+    private String macAddress;
 
-	@JsonProperty("MemorySwap")
-	private long memorySwap = 0;
+    @JsonProperty("Memory")
+    private long memoryLimit = 0;
 
-	@JsonProperty("NetworkDisabled")
-	private boolean networkDisabled = false;
+    @JsonProperty("MemorySwap")
+    private long memorySwap = 0;
 
-	@JsonProperty("OnBuild")
-	private String[] onBuild;
+    @JsonProperty("NetworkDisabled")
+    private boolean networkDisabled = false;
 
-	@JsonProperty("OpenStdin")
-	private boolean stdinOpen = false;
+    @JsonProperty("OnBuild")
+    private String[] onBuild;
 
-	@JsonProperty("PortSpecs")
-	private String[] portSpecs;
+    @JsonProperty("OpenStdin")
+    private boolean stdinOpen = false;
 
-	@JsonProperty("StdinOnce")
-	private boolean stdInOnce = false;
+    @JsonProperty("PortSpecs")
+    private String[] portSpecs;
 
-	@JsonProperty("Tty")
-	private boolean tty = false;
+    @JsonProperty("StdinOnce")
+    private boolean stdInOnce = false;
 
-	@JsonProperty("User")
-	private String user = "";
+    @JsonProperty("Tty")
+    private boolean tty = false;
 
-	@JsonProperty("Volumes")
-	private Map<String, ?> volumes;
+    @JsonProperty("User")
+    private String user = "";
 
-	@JsonProperty("WorkingDir")
-	private String workingDir = "";
+    @JsonProperty("Volumes")
+    private Map<String, ?> volumes;
 
-	@JsonIgnore
-	public ExposedPort[] getExposedPorts() {
-		return exposedPorts.getExposedPorts();
-	}
+    @JsonProperty("WorkingDir")
+    private String workingDir = "";
 
-	public boolean isNetworkDisabled() {
-		return networkDisabled;
-	}
+    @JsonIgnore
+    public ExposedPort[] getExposedPorts() {
+        return exposedPorts.getExposedPorts();
+    }
 
-	public String getDomainName() {
-		return domainName;
-	}
+    public boolean isNetworkDisabled() {
+        return networkDisabled;
+    }
 
-	public String getWorkingDir() {
-		return workingDir;
-	}
+    public String getDomainName() {
+        return domainName;
+    }
 
-	public String getHostName() {
-		return hostName;
-	}
+    public String getWorkingDir() {
+        return workingDir;
+    }
 
-	public String[] getPortSpecs() {
-		return portSpecs;
-	}
+    public String getHostName() {
+        return hostName;
+    }
 
-	public String getUser() {
-		return user;
-	}
+    public String[] getPortSpecs() {
+        return portSpecs;
+    }
 
-	public boolean isTty() {
-		return tty;
-	}
+    public String getUser() {
+        return user;
+    }
 
-	public boolean isStdinOpen() {
-		return stdinOpen;
-	}
+    public boolean isTty() {
+        return tty;
+    }
 
-	public boolean isStdInOnce() {
-		return stdInOnce;
-	}
-	
-	public String getMacAddress() {
-		return macAddress;
-	}
+    public boolean isStdinOpen() {
+        return stdinOpen;
+    }
 
-	public long getMemoryLimit() {
-		return memoryLimit;
-	}
+    public boolean isStdInOnce() {
+        return stdInOnce;
+    }
 
-	public long getMemorySwap() {
-		return memorySwap;
-	}
+    public String getMacAddress() {
+        return macAddress;
+    }
 
-	public int getCpuShares() {
-		return cpuShares;
-	}
+    public long getMemoryLimit() {
+        return memoryLimit;
+    }
 
-	public String getCpuset() {
-		return cpuset;
-	}
+    public long getMemorySwap() {
+        return memorySwap;
+    }
 
-	public boolean isAttachStdin() {
-		return attachStdin;
-	}
+    public int getCpuShares() {
+        return cpuShares;
+    }
 
-	public boolean isAttachStdout() {
-		return attachStdout;
-	}
+    public String getCpuset() {
+        return cpuset;
+    }
 
-	public boolean isAttachStderr() {
-		return attachStderr;
-	}
+    public boolean isAttachStdin() {
+        return attachStdin;
+    }
 
-	public String[] getEnv() {
-		return env;
-	}
+    public boolean isAttachStdout() {
+        return attachStdout;
+    }
 
-	public String[] getCmd() {
-		return cmd;
-	}
+    public boolean isAttachStderr() {
+        return attachStderr;
+    }
 
-	public String getImage() {
-		return image;
-	}
+    public String[] getEnv() {
+        return env;
+    }
 
-	public Map<String, ?> getVolumes() {
-		return volumes;
-	}
+    public String[] getCmd() {
+        return cmd;
+    }
 
-	public String[] getEntrypoint() {
-		return entrypoint;
-	}
+    public String getImage() {
+        return image;
+    }
 
-	public String[] getOnBuild() {
-		return onBuild;
-	}
+    public Map<String, ?> getVolumes() {
+        return volumes;
+    }
 
-	@Override
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
-	}
+    public String[] getEntrypoint() {
+        return entrypoint;
+    }
+
+    public String[] getOnBuild() {
+        return onBuild;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
 }

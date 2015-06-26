@@ -14,26 +14,26 @@ import org.slf4j.LoggerFactory;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
 import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
 
-public class CopyFileFromContainerCmdExec extends AbstrDockerCmdExec<CopyFileFromContainerCmd, InputStream> implements CopyFileFromContainerCmd.Exec {
-	
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(CopyFileFromContainerCmdExec.class);
-	
-	public CopyFileFromContainerCmdExec(WebTarget baseResource) {
-		super(baseResource);
-	}
+public class CopyFileFromContainerCmdExec extends AbstrDockerCmdExec<CopyFileFromContainerCmd, InputStream> implements
+        CopyFileFromContainerCmd.Exec {
 
-	@Override
-	protected InputStream execute(CopyFileFromContainerCmd command) {
-		WebTarget webResource = getBaseResource()
-				.path("/containers/{id}/copy")
-				.resolveTemplate("id", command.getContainerId());
+    private static final Logger LOGGER = LoggerFactory.getLogger(CopyFileFromContainerCmdExec.class);
 
-		LOGGER.trace("POST: " + webResource.toString());
-		
-		Response response = webResource.request().accept(MediaType.APPLICATION_OCTET_STREAM_TYPE).post(entity(command, MediaType.APPLICATION_JSON));
-		
-		return new WrappedResponseInputStream(response);
-	}
+    public CopyFileFromContainerCmdExec(WebTarget baseResource) {
+        super(baseResource);
+    }
+
+    @Override
+    protected InputStream execute(CopyFileFromContainerCmd command) {
+        WebTarget webResource = getBaseResource().path("/containers/{id}/copy").resolveTemplate("id",
+                command.getContainerId());
+
+        LOGGER.trace("POST: " + webResource.toString());
+
+        Response response = webResource.request().accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
+                .post(entity(command, MediaType.APPLICATION_JSON));
+
+        return new WrappedResponseInputStream(response);
+    }
 
 }

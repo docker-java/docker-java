@@ -29,55 +29,53 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Test(groups = "integration")
 public class StatsCmdImplTest extends AbstractDockerClientTest {
 
-	private static int NUM_STATS = 5;
+    private static int NUM_STATS = 5;
 
-	@BeforeTest
-	public void beforeTest() throws DockerException {
-		super.beforeTest();
-	}
+    @BeforeTest
+    public void beforeTest() throws DockerException {
+        super.beforeTest();
+    }
 
-	@AfterTest
-	public void afterTest() {
-		super.afterTest();
-	}
+    @AfterTest
+    public void afterTest() {
+        super.afterTest();
+    }
 
-	@BeforeMethod
-	public void beforeMethod(Method method) {
-		super.beforeMethod(method);
-	}
+    @BeforeMethod
+    public void beforeMethod(Method method) {
+        super.beforeMethod(method);
+    }
 
-	@AfterMethod
-	public void afterMethod(ITestResult result) {
-		super.afterMethod(result);
-	}
+    @AfterMethod
+    public void afterMethod(ITestResult result) {
+        super.afterMethod(result);
+    }
 
-	@Test(groups = "ignoreInCircleCi")
-	public void testStatsStreaming() throws InterruptedException, IOException {
-		TimeUnit.SECONDS.sleep(1);
+    @Test(groups = "ignoreInCircleCi")
+    public void testStatsStreaming() throws InterruptedException, IOException {
+        TimeUnit.SECONDS.sleep(1);
 
-		CountDownLatch countDownLatch = new CountDownLatch(NUM_STATS);
-		StatsCallbackTest statsCallback = new StatsCallbackTest(countDownLatch);
+        CountDownLatch countDownLatch = new CountDownLatch(NUM_STATS);
+        StatsCallbackTest statsCallback = new StatsCallbackTest(countDownLatch);
 
         String containerName = "generated_" + new SecureRandom().nextInt();
 
-		 CreateContainerResponse container = dockerClient
-             .createContainerCmd("busybox")
-             .withCmd("top")
-             .withName(containerName).exec();
-		 LOG.info("Created container {}", container.toString());
-		 assertThat(container.getId(), not(isEmptyString()));
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("top")
+                .withName(containerName).exec();
+        LOG.info("Created container {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
 
-	     dockerClient.startContainerCmd(container.getId()).exec();
+        dockerClient.startContainerCmd(container.getId()).exec();
 
-		StatsCmd statsCmd = dockerClient.statsCmd(statsCallback).withContainerId(container.getId());
-		ExecutorService executorService = statsCmd.exec();
+        StatsCmd statsCmd = dockerClient.statsCmd(statsCallback).withContainerId(container.getId());
+        ExecutorService executorService = statsCmd.exec();
 
-		countDownLatch.await(3, TimeUnit.SECONDS);
-		boolean gotStats = statsCallback.gotStats();
+        countDownLatch.await(3, TimeUnit.SECONDS);
+        boolean gotStats = statsCallback.gotStats();
 
         LOG.info("Stop stats collection");
-		executorService.shutdown();
-	    statsCallback.close();
+        executorService.shutdown();
+        statsCallback.close();
 
         LOG.info("Stopping container");
         dockerClient.stopContainerCmd(container.getId()).exec();
@@ -86,48 +84,50 @@ public class StatsCmdImplTest extends AbstractDockerClientTest {
         LOG.info("Completed test");
         assertTrue(gotStats, "Expected true");
 
-	}
+    }
 
-	private class StatsCallbackTest implements StatsCallback {
-		private final CountDownLatch countDownLatch;
-		private final AtomicBoolean isReceiving = new AtomicBoolean(true);
-		private boolean gotStats = false;
+    private class StatsCallbackTest implements StatsCallback {
+        private final CountDownLatch countDownLatch;
 
-		public StatsCallbackTest(CountDownLatch countDownLatch) {
-			this.countDownLatch = countDownLatch;
-		}
+        private final AtomicBoolean isReceiving = new AtomicBoolean(true);
 
-		public void close() {
-	        LOG.info("Closing StatsCallback");
-			isReceiving.set(false);
-		}
+        private boolean gotStats = false;
 
-		@Override
-		public void onStats(Statistics stats) {
-			LOG.info("Received stats #{}: {}", countDownLatch.getCount(), stats);
-			if(stats != null) {
-			    gotStats = true;
-			}
-			countDownLatch.countDown();
-		}
+        public StatsCallbackTest(CountDownLatch countDownLatch) {
+            this.countDownLatch = countDownLatch;
+        }
 
-		@Override
-		public void onException(Throwable throwable) {
-			LOG.error("Error occurred: {}", throwable.getMessage());
-		}
+        public void close() {
+            LOG.info("Closing StatsCallback");
+            isReceiving.set(false);
+        }
 
-		@Override
-		public void onCompletion(int numStats) {
-			LOG.info("Number of stats received: {}", numStats);
-		}
+        @Override
+        public void onStats(Statistics stats) {
+            LOG.info("Received stats #{}: {}", countDownLatch.getCount(), stats);
+            if (stats != null) {
+                gotStats = true;
+            }
+            countDownLatch.countDown();
+        }
 
-		@Override
-		public boolean isReceiving() {
-			return isReceiving.get();
-		}
+        @Override
+        public void onException(Throwable throwable) {
+            LOG.error("Error occurred: {}", throwable.getMessage());
+        }
 
-	    public boolean gotStats() {
-	            return gotStats;
-	    }
-	}
+        @Override
+        public void onCompletion(int numStats) {
+            LOG.info("Number of stats received: {}", numStats);
+        }
+
+        @Override
+        public boolean isReceiving() {
+            return isReceiving.get();
+        }
+
+        public boolean gotStats() {
+            return gotStats;
+        }
+    }
 }

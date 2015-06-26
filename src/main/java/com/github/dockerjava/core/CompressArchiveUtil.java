@@ -10,7 +10,8 @@ import static com.github.dockerjava.core.FilePathUtil.relativize;
 
 public class CompressArchiveUtil {
 
-    public static File archiveTARFiles(File base, Iterable<File> files, String archiveNameWithOutExtension) throws IOException {
+    public static File archiveTARFiles(File base, Iterable<File> files, String archiveNameWithOutExtension)
+            throws IOException {
         File tarFile = new File(FileUtils.getTempDirectoryPath(), archiveNameWithOutExtension + ".tar");
         tarFile.deleteOnExit();
         TarArchiveOutputStream tos = new TarArchiveOutputStream(new FileOutputStream(tarFile));

@@ -14,13 +14,16 @@ import static org.testng.Assert.assertNull;
 
 public class FrameReaderTest {
     public static final int HEADER_SIZE = 8;
+
     private final List<Integer> bytes = new ArrayList<>();
+
     private final InputStream inputStream = new InputStream() {
         @Override
         public int read() throws IOException {
             return bytes.isEmpty() ? -1 : bytes.remove(0);
         }
     };
+
     private final FrameReader frameReader = new FrameReader(inputStream);
 
     @Test

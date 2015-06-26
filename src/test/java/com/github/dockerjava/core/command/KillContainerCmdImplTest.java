@@ -26,60 +26,55 @@ import com.github.dockerjava.client.AbstractDockerClientTest;
 @Test(groups = "integration")
 public class KillContainerCmdImplTest extends AbstractDockerClientTest {
 
-	public static final Logger LOG = LoggerFactory
-			.getLogger(KillContainerCmdImplTest.class);
+    public static final Logger LOG = LoggerFactory.getLogger(KillContainerCmdImplTest.class);
 
-	@BeforeTest
-	public void beforeTest() throws DockerException {
-		super.beforeTest();
-	}
+    @BeforeTest
+    public void beforeTest() throws DockerException {
+        super.beforeTest();
+    }
 
-	@AfterTest
-	public void afterTest() {
-		super.afterTest();
-	}
+    @AfterTest
+    public void afterTest() {
+        super.afterTest();
+    }
 
-	@BeforeMethod
-	public void beforeMethod(Method method) {
-		super.beforeMethod(method);
-	}
+    @BeforeMethod
+    public void beforeMethod(Method method) {
+        super.beforeMethod(method);
+    }
 
-	@AfterMethod
-	public void afterMethod(ITestResult result) {
-		super.afterMethod(result);
-	}
+    @AfterMethod
+    public void afterMethod(ITestResult result) {
+        super.afterMethod(result);
+    }
 
-	@Test(groups = "ignoreInCircleCi")
-	public void killContainer() throws DockerException {
+    @Test(groups = "ignoreInCircleCi")
+    public void killContainer() throws DockerException {
 
-		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
-		LOG.info("Created container: {}", container.toString());
-		assertThat(container.getId(), not(isEmptyString()));
-		dockerClient.startContainerCmd(container.getId()).exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+        dockerClient.startContainerCmd(container.getId()).exec();
 
-		LOG.info("Killing container: {}", container.getId());
-		dockerClient.killContainerCmd(container.getId()).exec();
+        LOG.info("Killing container: {}", container.getId());
+        dockerClient.killContainerCmd(container.getId()).exec();
 
-		InspectContainerResponse inspectContainerResponse = dockerClient
-				.inspectContainerCmd(container.getId()).exec();
-		LOG.info("Container Inspect: {}", inspectContainerResponse.toString());
+        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+        LOG.info("Container Inspect: {}", inspectContainerResponse.toString());
 
-		assertThat(inspectContainerResponse.getState().isRunning(),
-				is(equalTo(false)));
-		assertThat(inspectContainerResponse.getState().getExitCode(),
-				not(equalTo(0)));
+        assertThat(inspectContainerResponse.getState().isRunning(), is(equalTo(false)));
+        assertThat(inspectContainerResponse.getState().getExitCode(), not(equalTo(0)));
 
-	}
-	
-	@Test
-	public void killNonExistingContainer() throws DockerException {
+    }
 
-		try {
-			dockerClient.killContainerCmd("non-existing").exec();
-			fail("expected NotFoundException");
-		} catch (NotFoundException e) {
-		}
-	}
+    @Test
+    public void killNonExistingContainer() throws DockerException {
+
+        try {
+            dockerClient.killContainerCmd("non-existing").exec();
+            fail("expected NotFoundException");
+        } catch (NotFoundException e) {
+        }
+    }
 
 }

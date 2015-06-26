@@ -25,117 +25,118 @@ import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
 
 public class CertificateUtils {
-    
+
     public static boolean verifyCertificatesExist(String dockerCertPath) {
-        String[] files = {"ca.pem", "cert.pem", "key.pem"};
+        String[] files = { "ca.pem", "cert.pem", "key.pem" };
         for (String file : files) {
             File path = new File(dockerCertPath, file);
             boolean exists = path.exists();
-            if(!exists) {
+            if (!exists) {
                 return false;
             }
         }
-        
+
         return true;
     }
-    
-    public static KeyStore createKeyStore(final String dockerCertPath) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException, CertificateException, KeyStoreException {
+
+    public static KeyStore createKeyStore(final String dockerCertPath) throws NoSuchAlgorithmException,
+            InvalidKeySpecException, IOException, CertificateException, KeyStoreException {
         KeyPair keyPair = loadPrivateKey(dockerCertPath);
         Certificate privateCertificate = loadCertificate(dockerCertPath);
 
         KeyStore keyStore = KeyStore.getInstance("JKS");
         keyStore.load(null);
 
-        keyStore.setKeyEntry("docker", keyPair.getPrivate(), "docker".toCharArray(), new Certificate[]{privateCertificate});
+        keyStore.setKeyEntry("docker", keyPair.getPrivate(), "docker".toCharArray(),
+                new Certificate[] { privateCertificate });
         return keyStore;
     }
-    
-    public static KeyStore createTrustStore(final String dockerCertPath) throws IOException, CertificateException, KeyStoreException, NoSuchAlgorithmException {
+
+    public static KeyStore createTrustStore(final String dockerCertPath) throws IOException, CertificateException,
+            KeyStoreException, NoSuchAlgorithmException {
         File caPath = new File(dockerCertPath, "ca.pem");
         BufferedReader reader = new BufferedReader(new FileReader(caPath));
         PEMParser pemParser = null;
-        
+
         try {
             pemParser = new PEMParser(reader);
             X509CertificateHolder certificateHolder = (X509CertificateHolder) pemParser.readObject();
-            Certificate caCertificate = new JcaX509CertificateConverter().setProvider("BC").getCertificate(certificateHolder);
-            
+            Certificate caCertificate = new JcaX509CertificateConverter().setProvider("BC").getCertificate(
+                    certificateHolder);
+
             KeyStore trustStore = KeyStore.getInstance("JKS");
             trustStore.load(null);
             trustStore.setCertificateEntry("ca", caCertificate);
             return trustStore;
-            
-        }
-        finally {
-            if(pemParser != null) {
+
+        } finally {
+            if (pemParser != null) {
                 IOUtils.closeQuietly(pemParser);
             }
 
-            if(reader != null) {
+            if (reader != null) {
                 IOUtils.closeQuietly(reader);
             }
         }
-        
+
     }
-    
+
     private static Certificate loadCertificate(final String dockerCertPath) throws IOException, CertificateException {
         File certificate = new File(dockerCertPath, "cert.pem");
         BufferedReader reader = new BufferedReader(new FileReader(certificate));
         PEMParser pemParser = null;
-        
+
         try {
-           pemParser = new PEMParser(reader);
-           X509CertificateHolder certificateHolder = (X509CertificateHolder) pemParser.readObject();
-           return new JcaX509CertificateConverter().setProvider("BC").getCertificate(certificateHolder);
-        }
-        finally {
-            if(pemParser != null) {
+            pemParser = new PEMParser(reader);
+            X509CertificateHolder certificateHolder = (X509CertificateHolder) pemParser.readObject();
+            return new JcaX509CertificateConverter().setProvider("BC").getCertificate(certificateHolder);
+        } finally {
+            if (pemParser != null) {
                 IOUtils.closeQuietly(pemParser);
             }
-            
-            if(reader != null) {
+
+            if (reader != null) {
                 IOUtils.closeQuietly(reader);
             }
         }
-        
+
     }
-    
-    private static KeyPair loadPrivateKey(final String dockerCertPath) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+
+    private static KeyPair loadPrivateKey(final String dockerCertPath) throws IOException, NoSuchAlgorithmException,
+            InvalidKeySpecException {
         File certificate = new File(dockerCertPath, "key.pem");
         BufferedReader reader = new BufferedReader(new FileReader(certificate));
 
         PEMParser pemParser = null;
-        
+
         try {
-           pemParser = new PEMParser(reader);
-           
-           PEMKeyPair pemKeyPair = (PEMKeyPair) pemParser.readObject();
-          
-           byte[] pemPrivateKeyEncoded = pemKeyPair.getPrivateKeyInfo().getEncoded();
-           byte[] pemPublicKeyEncoded = pemKeyPair.getPublicKeyInfo().getEncoded();
+            pemParser = new PEMParser(reader);
 
-           KeyFactory factory = KeyFactory.getInstance("RSA");
+            PEMKeyPair pemKeyPair = (PEMKeyPair) pemParser.readObject();
 
-           X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(pemPublicKeyEncoded);
-           PublicKey publicKey = factory.generatePublic(publicKeySpec);
+            byte[] pemPrivateKeyEncoded = pemKeyPair.getPrivateKeyInfo().getEncoded();
+            byte[] pemPublicKeyEncoded = pemKeyPair.getPublicKeyInfo().getEncoded();
 
-           PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(pemPrivateKeyEncoded);
-           PrivateKey privateKey = factory.generatePrivate(privateKeySpec);
+            KeyFactory factory = KeyFactory.getInstance("RSA");
 
-           return new KeyPair(publicKey, privateKey);
-        
-        }
-        finally {
-            if(pemParser != null) {
+            X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(pemPublicKeyEncoded);
+            PublicKey publicKey = factory.generatePublic(publicKeySpec);
+
+            PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(pemPrivateKeyEncoded);
+            PrivateKey privateKey = factory.generatePrivate(privateKeySpec);
+
+            return new KeyPair(publicKey, privateKey);
+
+        } finally {
+            if (pemParser != null) {
                 IOUtils.closeQuietly(pemParser);
             }
-            
-            if(reader != null) {
+
+            if (reader != null) {
                 IOUtils.closeQuietly(reader);
             }
         }
 
-        
     }
 
 }

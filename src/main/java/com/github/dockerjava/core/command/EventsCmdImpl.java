@@ -11,7 +11,9 @@ import com.github.dockerjava.api.command.EventsCmd;
 public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, ExecutorService> implements EventsCmd {
 
     private String since;
+
     private String until;
+
     private EventCallback eventCallback;
 
     public EventsCmdImpl(EventsCmd.Exec exec, EventCallback eventCallback) {
@@ -30,7 +32,7 @@ public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, ExecutorService> im
         this.until = until;
         return this;
     }
-    
+
     @Override
     public EventsCmd withEventCallback(EventCallback eventCallback) {
         this.eventCallback = eventCallback;
@@ -59,9 +61,7 @@ public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, ExecutorService> im
 
     @Override
     public String toString() {
-        return new StringBuilder("events")
-                .append(since != null ? " --since=" + since : "")
-                .append(until != null ? " --until=" + until : "")
-                .toString();
+        return new StringBuilder("events").append(since != null ? " --since=" + since : "")
+                .append(until != null ? " --until=" + until : "").toString();
     }
 }

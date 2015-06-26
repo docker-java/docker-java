@@ -17,9 +17,8 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.testng.AssertJUnit.assertNull;
 
-
 @Test(groups = "integration")
-public class EventStreamReaderITest  {
+public class EventStreamReaderITest {
 
     private DockerClient dockerClient;
 
@@ -36,17 +35,13 @@ public class EventStreamReaderITest  {
     @Test(groups = "ignoreInCircleCi")
     public void pullCanBeStreamed() throws Exception {
 
-        try (EventStreamReader<PullEventStreamItem> reader = new EventStreamReader<>(
-                dockerClient.pullImageCmd("busybox:latest").exec(),
-                PullEventStreamItem.class)
-        ) {;
-            assertThat(reader.readItem(),
-                    allOf(
-                            hasProperty("status", equalTo("Pulling from busybox")),
-                            hasProperty("progress", nullValue()),
-                            hasProperty("progressDetail", nullValue())
-                    )
-                );
+        try (EventStreamReader<PullEventStreamItem> reader = new EventStreamReader<>(dockerClient.pullImageCmd(
+                "busybox:latest").exec(), PullEventStreamItem.class)) {
+            ;
+            assertThat(
+                    reader.readItem(),
+                    allOf(hasProperty("status", equalTo("Pulling from busybox")), hasProperty("progress", nullValue()),
+                            hasProperty("progressDetail", nullValue())));
             assertNull(reader.readItem());
         }
     }
@@ -54,17 +49,12 @@ public class EventStreamReaderITest  {
     @Test
     public void buildCanBeStreamed() throws Exception {
 
-        try (EventStreamReader<EventStreamItem> reader = new EventStreamReader<>(
-                dockerClient.buildImageCmd(new File("src/test/resources/eventStreamReaderDockerfile")).exec(),
-                EventStreamItem.class)
-        ) {
-            assertThat(reader.readItem(),
-                    allOf(
-                            hasProperty("stream", equalTo("Step 0 : FROM busybox:latest\n")),
-                            hasProperty("error", nullValue()),
-                            hasProperty("errorDetail", nullValue())
-                    )
-            );
+        try (EventStreamReader<EventStreamItem> reader = new EventStreamReader<>(dockerClient.buildImageCmd(
+                new File("src/test/resources/eventStreamReaderDockerfile")).exec(), EventStreamItem.class)) {
+            assertThat(
+                    reader.readItem(),
+                    allOf(hasProperty("stream", equalTo("Step 0 : FROM busybox:latest\n")),
+                            hasProperty("error", nullValue()), hasProperty("errorDetail", nullValue())));
             assertNull(reader.readItem());
 
         }

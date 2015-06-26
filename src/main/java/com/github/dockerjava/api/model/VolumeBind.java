@@ -2,9 +2,10 @@ package com.github.dockerjava.api.model;
 
 public class VolumeBind {
     private final String hostPath;
+
     private final String containerPath;
 
-    public VolumeBind(String hostPath, String containerPath){
+    public VolumeBind(String hostPath, String containerPath) {
         this.hostPath = hostPath;
         this.containerPath = containerPath;
     }

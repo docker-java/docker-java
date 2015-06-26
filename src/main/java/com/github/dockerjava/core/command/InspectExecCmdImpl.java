@@ -32,7 +32,8 @@ public class InspectExecCmdImpl extends AbstrDockerCmd<InspectExecCmd, InspectEx
     }
 
     /**
-     * @throws NotFoundException No such exec
+     * @throws NotFoundException
+     *             No such exec
      */
     @Override
     public InspectExecResponse exec() throws NotFoundException {

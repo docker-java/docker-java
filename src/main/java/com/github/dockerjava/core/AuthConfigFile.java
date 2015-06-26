@@ -18,7 +18,10 @@ import com.github.dockerjava.api.model.AuthConfig;
 
 public class AuthConfigFile {
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    private static final TypeReference<Map<String, AuthConfig>> CONFIG_MAP_TYPE = new TypeReference<Map<String, AuthConfig>>() {};
+
+    private static final TypeReference<Map<String, AuthConfig>> CONFIG_MAP_TYPE = new TypeReference<Map<String, AuthConfig>>() {
+    };
+
     private final Map<String, AuthConfig> authConfigMap;
 
     public AuthConfigFile() {
@@ -53,7 +56,7 @@ public class AuthConfigFile {
 
     public AuthConfigurations getAuthConfigurations() {
         final AuthConfigurations authConfigurations = new AuthConfigurations();
-        for(Map.Entry<String, AuthConfig> authConfigEntry : authConfigMap.entrySet()) {
+        for (Map.Entry<String, AuthConfig> authConfigEntry : authConfigMap.entrySet()) {
             authConfigurations.addConfig(authConfigEntry.getValue());
         }
 
@@ -89,7 +92,6 @@ public class AuthConfigFile {
     public String toString() {
         return "AuthConfigFile [authConfigMap=" + authConfigMap + "]";
     }
-
 
     public static AuthConfigFile loadConfig(File confFile) throws IOException {
         AuthConfigFile configFile = new AuthConfigFile();

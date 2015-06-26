@@ -9,17 +9,18 @@ import com.github.dockerjava.api.NotFoundException;
  */
 public interface WaitContainerCmd extends DockerCmd<Integer> {
 
-	public String getContainerId();
+    public String getContainerId();
 
-	public WaitContainerCmd withContainerId(String containerId);
-	
-	/**
-	 * @throws NotFoundException container not found
-	 */
-	@Override
-	public Integer exec() throws NotFoundException;
-	
-	public static interface Exec extends DockerCmdExec<WaitContainerCmd, Integer> {
-	}
+    public WaitContainerCmd withContainerId(String containerId);
+
+    /**
+     * @throws NotFoundException
+     *             container not found
+     */
+    @Override
+    public Integer exec() throws NotFoundException;
+
+    public static interface Exec extends DockerCmdExec<WaitContainerCmd, Integer> {
+    }
 
 }

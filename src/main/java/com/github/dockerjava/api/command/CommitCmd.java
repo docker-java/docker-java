@@ -5,111 +5,112 @@ import com.github.dockerjava.api.model.ExposedPorts;
 import com.github.dockerjava.api.model.Volumes;
 
 /**
-*
-* Create a new image from a container's changes. Returns the new image ID.
-*
-*/
-public interface CommitCmd extends DockerCmd<String>{
+ *
+ * Create a new image from a container's changes. Returns the new image ID.
+ *
+ */
+public interface CommitCmd extends DockerCmd<String> {
 
-	public String getContainerId();
-	
-	public CommitCmd withContainerId(String containerId);
+    public String getContainerId();
 
-	public String getRepository();
+    public CommitCmd withContainerId(String containerId);
 
-	public String getTag();
+    public String getRepository();
 
-	public String getMessage();
+    public String getTag();
 
-	public String getAuthor();
+    public String getMessage();
 
-	public boolean hasPauseEnabled();
+    public String getAuthor();
 
-	public CommitCmd withAttachStderr(boolean attachStderr);
+    public boolean hasPauseEnabled();
 
-	public CommitCmd withAttachStderr();
+    public CommitCmd withAttachStderr(boolean attachStderr);
 
-	public CommitCmd withAttachStdin(boolean attachStdin);
+    public CommitCmd withAttachStderr();
 
-	public CommitCmd withAttachStdin();
+    public CommitCmd withAttachStdin(boolean attachStdin);
 
-	public CommitCmd withAttachStdout(boolean attachStdout);
+    public CommitCmd withAttachStdin();
 
-	public CommitCmd withAttachStdout();
+    public CommitCmd withAttachStdout(boolean attachStdout);
 
-	public CommitCmd withCmd(String... cmd);
+    public CommitCmd withAttachStdout();
 
-	public CommitCmd withDisableNetwork(boolean disableNetwork);
+    public CommitCmd withCmd(String... cmd);
 
-	public CommitCmd withAuthor(String author);
+    public CommitCmd withDisableNetwork(boolean disableNetwork);
 
-	public CommitCmd withMessage(String message);
+    public CommitCmd withAuthor(String author);
 
-	public CommitCmd withTag(String tag);
+    public CommitCmd withMessage(String message);
 
-	public CommitCmd withRepository(String repository);
+    public CommitCmd withTag(String tag);
 
-	public CommitCmd withPause(boolean pause);
+    public CommitCmd withRepository(String repository);
 
-	public String[] getEnv();
+    public CommitCmd withPause(boolean pause);
 
-	public CommitCmd withEnv(String... env);
+    public String[] getEnv();
 
-	public ExposedPorts getExposedPorts();
+    public CommitCmd withEnv(String... env);
 
-	public CommitCmd withExposedPorts(ExposedPorts exposedPorts);
+    public ExposedPorts getExposedPorts();
 
-	public String getHostname();
+    public CommitCmd withExposedPorts(ExposedPorts exposedPorts);
 
-	public CommitCmd withHostname(String hostname);
+    public String getHostname();
 
-	public Integer getMemory();
+    public CommitCmd withHostname(String hostname);
 
-	public CommitCmd withMemory(Integer memory);
+    public Integer getMemory();
 
-	public Integer getMemorySwap();
+    public CommitCmd withMemory(Integer memory);
 
-	public CommitCmd withMemorySwap(Integer memorySwap);
+    public Integer getMemorySwap();
 
-	public boolean isOpenStdin();
+    public CommitCmd withMemorySwap(Integer memorySwap);
 
-	public CommitCmd withOpenStdin(boolean openStdin);
+    public boolean isOpenStdin();
 
-	public String[] getPortSpecs();
+    public CommitCmd withOpenStdin(boolean openStdin);
 
-	public CommitCmd withPortSpecs(String... portSpecs);
+    public String[] getPortSpecs();
 
-	public boolean isStdinOnce();
+    public CommitCmd withPortSpecs(String... portSpecs);
 
-	public CommitCmd withStdinOnce(boolean stdinOnce);
+    public boolean isStdinOnce();
 
-	public CommitCmd withStdinOnce();
+    public CommitCmd withStdinOnce(boolean stdinOnce);
 
-	public boolean isTty();
+    public CommitCmd withStdinOnce();
 
-	public CommitCmd withTty(boolean tty);
+    public boolean isTty();
 
-	public CommitCmd withTty();
+    public CommitCmd withTty(boolean tty);
 
-	public String getUser();
+    public CommitCmd withTty();
 
-	public CommitCmd withUser(String user);
+    public String getUser();
 
-	public Volumes getVolumes();
+    public CommitCmd withUser(String user);
 
-	public CommitCmd withVolumes(Volumes volumes);
+    public Volumes getVolumes();
 
-	public String getWorkingDir();
+    public CommitCmd withVolumes(Volumes volumes);
 
-	public CommitCmd withWorkingDir(String workingDir);
+    public String getWorkingDir();
 
-	/**
-	 * @throws NotFoundException No such container
-	 */
-	@Override
-	public String exec() throws NotFoundException;
-	
-	public static interface Exec extends DockerCmdExec<CommitCmd, String> {
-	}
+    public CommitCmd withWorkingDir(String workingDir);
+
+    /**
+     * @throws NotFoundException
+     *             No such container
+     */
+    @Override
+    public String exec() throws NotFoundException;
+
+    public static interface Exec extends DockerCmdExec<CommitCmd, String> {
+    }
 
 }

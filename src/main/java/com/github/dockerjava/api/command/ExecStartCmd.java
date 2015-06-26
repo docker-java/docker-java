@@ -6,33 +6,31 @@ import java.io.InputStream;
 
 public interface ExecStartCmd extends DockerCmd<InputStream> {
 
-	public String getExecId();
+    public String getExecId();
 
-	public ExecStartCmd withExecId(String execId);
+    public ExecStartCmd withExecId(String execId);
 
-	public boolean hasDetachEnabled();
+    public boolean hasDetachEnabled();
 
-	public ExecStartCmd withDetach(boolean detach);
-	
-	public ExecStartCmd withDetach();
+    public ExecStartCmd withDetach(boolean detach);
 
-	public boolean hasTtyEnabled();
+    public ExecStartCmd withDetach();
 
-	public ExecStartCmd withTty(boolean tty);
-	
-	public ExecStartCmd withTty();
+    public boolean hasTtyEnabled();
 
-	/**
-	 * Its the responsibility of the caller to consume and/or close the {@link InputStream} to prevent
-	 * connection leaks.
-	 * 
-	 * @throws com.github.dockerjava.api.NotFoundException
-	 *             No such exec instance
-	 */
-	@Override
-	public InputStream exec() throws NotFoundException;
+    public ExecStartCmd withTty(boolean tty);
 
-	public static interface Exec extends
-			DockerCmdExec<ExecStartCmd, InputStream> {
-	}
+    public ExecStartCmd withTty();
+
+    /**
+     * Its the responsibility of the caller to consume and/or close the {@link InputStream} to prevent connection leaks.
+     * 
+     * @throws com.github.dockerjava.api.NotFoundException
+     *             No such exec instance
+     */
+    @Override
+    public InputStream exec() throws NotFoundException;
+
+    public static interface Exec extends DockerCmdExec<ExecStartCmd, InputStream> {
+    }
 }

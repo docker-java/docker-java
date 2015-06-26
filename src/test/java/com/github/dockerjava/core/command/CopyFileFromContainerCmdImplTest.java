@@ -40,9 +40,7 @@ public class CopyFileFromContainerCmdImplTest extends AbstractDockerClientTest {
     public void copyFromContainer() throws Exception {
         // TODO extract this into a shared method
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
-                .withName("docker-java-itest-copyFromContainer")
-                .withCmd("touch", "/copyFromContainer")
-                .exec();
+                .withName("docker-java-itest-copyFromContainer").withCmd("touch", "/copyFromContainer").exec();
 
         LOG.info("Created container: {}", container);
         assertThat(container.getId(), not(isEmptyOrNullString()));
@@ -58,7 +56,7 @@ public class CopyFileFromContainerCmdImplTest extends AbstractDockerClientTest {
         assertNotNull(responseAsString);
         assertTrue(responseAsString.length() > 0);
     }
-    
+
     @Test
     public void copyFromNonExistingContainer() throws Exception {
         try {

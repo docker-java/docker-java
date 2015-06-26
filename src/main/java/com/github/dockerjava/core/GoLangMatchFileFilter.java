@@ -10,10 +10,9 @@ import org.apache.commons.io.filefilter.AbstractFileFilter;
 
 public class GoLangMatchFileFilter extends AbstractFileFilter {
 
-	private final File base;
-	
-    private final List<String> patterns;
+    private final File base;
 
+    private final List<String> patterns;
 
     public GoLangMatchFileFilter(File base, List<String> patterns) {
         super();
@@ -24,10 +23,9 @@ public class GoLangMatchFileFilter extends AbstractFileFilter {
     @Override
     public boolean accept(File file) {
         String relativePath = FilePathUtil.relativize(base, file);
-        
+
         boolean match = GoLangFileMatch.match(patterns, relativePath);
         return !match;
     }
-
 
 }
