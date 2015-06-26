@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
-import org.apache.commons.io.HexDump;
-
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.StreamType;
 
@@ -75,7 +73,6 @@ public class FrameReader implements AutoCloseable {
             return new Frame(streamType(buffer[0]), payload);
 
         }
-
     }
 
     @Override

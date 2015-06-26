@@ -78,7 +78,7 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
 
         collectFramesCallback.close();
 
-        assertThat(collectFramesCallback.toString(), endsWith(snippet));
+        assertThat(collectFramesCallback.toString(), containsString(snippet));
     }
 
     @Test
