@@ -51,6 +51,9 @@ public class ContainerConfig {
     @JsonProperty("Image")
     private String image;
 
+    @JsonProperty("Labels")
+    private Map<String, String> labels;
+
     @JsonProperty("MacAddress")
     private String macAddress;
 
@@ -182,6 +185,10 @@ public class ContainerConfig {
 
     public String[] getOnBuild() {
         return onBuild;
+    }
+
+    public Map<String, String> getLabels() {
+        return labels;
     }
 
     @Override
