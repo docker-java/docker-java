@@ -23,6 +23,10 @@ public interface EventsCmd extends DockerCmd<ExecutorService> {
 
     public EventsCmd withEventCallback(EventCallback eventCallback);
 
+    public String getFilters();
+
+    public EventsCmd withFilters(String filters);
+
     public static interface Exec extends DockerCmdExec<EventsCmd, ExecutorService> {
     }
 }
