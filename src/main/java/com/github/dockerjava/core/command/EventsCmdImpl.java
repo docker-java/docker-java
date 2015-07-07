@@ -1,5 +1,7 @@
 package com.github.dockerjava.core.command;
 
+import static com.google.common.base.Preconditions.*;
+
 import java.util.concurrent.ExecutorService;
 
 import com.github.dockerjava.api.command.EventCallback;
@@ -15,6 +17,8 @@ public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, ExecutorService> im
     private String until;
 
     private EventCallback eventCallback;
+
+    private String filters;
 
     public EventsCmdImpl(EventsCmd.Exec exec, EventCallback eventCallback) {
         super(exec);
@@ -40,6 +44,13 @@ public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, ExecutorService> im
     }
 
     @Override
+    public EventsCmd withFilters(String filters) {
+        checkNotNull(filters, "filters have not been specified");
+        this.filters = filters;
+        return this;
+    }
+
+    @Override
     public String getSince() {
         return since;
     }
@@ -55,6 +66,11 @@ public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, ExecutorService> im
     }
 
     @Override
+    public String getFilters() {
+        return filters;
+    }
+
+    @Override
     public ExecutorService exec() {
         return super.exec();
     }
@@ -62,6 +78,7 @@ public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, ExecutorService> im
     @Override
     public String toString() {
         return new StringBuilder("events").append(since != null ? " --since=" + since : "")
-                .append(until != null ? " --until=" + until : "").toString();
+                .append(until != null ? " --until=" + until : "")
+                .append(filters != null ? " --filters=" + filters : "").toString();
     }
 }

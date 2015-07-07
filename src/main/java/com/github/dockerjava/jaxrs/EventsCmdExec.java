@@ -1,6 +1,7 @@
 package com.github.dockerjava.jaxrs;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.net.UrlEscapers.*;
 
 import java.io.InputStream;
 import java.util.concurrent.Callable;
@@ -35,6 +36,9 @@ public class EventsCmdExec extends AbstrDockerCmdExec<EventsCmd, ExecutorService
 
         WebTarget webResource = getBaseResource().path("/events").queryParam("since", command.getSince())
                 .queryParam("until", command.getUntil());
+
+        if (command.getFilters() != null)
+            webResource = webResource.queryParam("filters", urlPathSegmentEscaper().escape(command.getFilters()));
 
         LOGGER.trace("GET: {}", webResource);
         EventNotifier eventNotifier = EventNotifier.create(command.getEventCallback(), webResource);

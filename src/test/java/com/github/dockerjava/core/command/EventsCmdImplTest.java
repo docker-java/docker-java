@@ -94,6 +94,25 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
     }
 
+    @Test
+    public void testEventStreamingWithFilter() throws InterruptedException, IOException {
+        // Don't include other tests events
+        TimeUnit.SECONDS.sleep(1);
+
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
+
+        EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withFilters("{\"event\":[\"start\"]}");
+        ExecutorService executorService = eventsCmd.exec();
+
+        generateEvents();
+
+        boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
+        executorService.shutdown();
+        eventCallback.close();
+        assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
+    }
+
     @Test(groups = "ignoreInCircleCi")
     public void testEventStreaming2() throws InterruptedException, IOException {
         // Don't include other tests events
