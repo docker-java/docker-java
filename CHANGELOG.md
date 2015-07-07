@@ -1,6 +1,10 @@
 Change Log
 ===
+
 Latest SNAPSHOT
+---
+
+v.1.4.0
 ---
 * [#248](https://github.com/docker-java/docker-java/pull/233) Removed deprecated start options
 * [#247](https://github.com/docker-java/docker-java/pull/247) Add Domainname attribute on create command
