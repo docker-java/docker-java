@@ -2,10 +2,8 @@ package com.github.dockerjava.core.command;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.containsString;
 
 import java.io.File;
 import java.io.InputStream;
@@ -66,7 +64,7 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
         CollectFramesCallback collectFramesCallback = new CollectFramesCallback() {
             @Override
             public void onNext(Frame frame) {
-                assertEquals(frame.getStreamType(), StreamType.RAW);
+                assertEquals(frame.getStreamType(), StreamType.STDOUT);
                 super.onNext(frame);
             };
         };
