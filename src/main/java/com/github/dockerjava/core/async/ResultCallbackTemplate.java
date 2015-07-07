@@ -11,12 +11,12 @@ import java.util.concurrent.TimeUnit;
 import com.github.dockerjava.api.async.ResultCallback;
 
 /**
- * Template implementation of {@link ResultCallback}
+ * Abstract template implementation of {@link ResultCallback}
  *
  * @author marcus
  *
  */
-public class ResultCallbackTemplate<T> implements ResultCallback<T> {
+public abstract class ResultCallbackTemplate<T> implements ResultCallback<T> {
 
     private final CountDownLatch finished = new CountDownLatch(1);
 
