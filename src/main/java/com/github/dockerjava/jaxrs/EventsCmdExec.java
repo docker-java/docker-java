@@ -12,6 +12,7 @@ import com.github.dockerjava.jaxrs.async.AbstractCallbackNotifier;
 import com.github.dockerjava.jaxrs.async.GETCallbackNotifier;
 
 public class EventsCmdExec extends AbstrDockerCmdExec<EventsCmd, Void> implements EventsCmd.Exec {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(EventsCmdExec.class);
 
     public EventsCmdExec(WebTarget baseResource) {

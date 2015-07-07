@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.core.async.FrameStreamProcessor;
-import com.github.dockerjava.core.async.JsonStreamProcessor;
 import com.github.dockerjava.jaxrs.async.AbstractCallbackNotifier;
 import com.github.dockerjava.jaxrs.async.POSTCallbackNotifier;
 
@@ -39,7 +38,5 @@ public class AttachContainerCmdExec extends AbstrDockerCmdExec<AttachContainerCm
         AbstractCallbackNotifier.startAsyncProcessing(callbackNotifier);
 
         return null;
-
     }
-
 }

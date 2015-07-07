@@ -38,5 +38,4 @@ public class LogContainerCmdExec extends AbstrDockerCmdExec<LogContainerCmd, Voi
 
         return null;
     }
-
 }

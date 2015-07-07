@@ -159,5 +159,4 @@ public class LogContainerCmdImpl extends AbstrDockerCmd<LogContainerCmd, Void> i
     public Void exec() throws NotFoundException {
         return super.exec();
     }
-
 }

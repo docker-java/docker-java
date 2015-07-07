@@ -181,6 +181,7 @@ public abstract class AbstractDockerClientTest extends Assert {
         assertThat(volumes, contains(expectedVolumes));
     }
 
+
     public static class CollectFramesCallback extends ResultCallbackTemplate<Frame> {
         public final List<Frame> frames = new ArrayList<Frame>();
 
@@ -214,5 +215,4 @@ public abstract class AbstractDockerClientTest extends Assert {
 
         return collectFramesCallback.toString();
     }
-
 }

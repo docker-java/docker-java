@@ -5,7 +5,6 @@ import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.model.Frame;
 
 import java.io.InputStream;
-import java.util.concurrent.Future;
 
 /**
  * Get container logs
@@ -20,16 +19,6 @@ import java.util.concurrent.Future;
  *            - true or false, if true, print timestamps for every log line. Defaults to false.
  * @param tail
  *            - `all` or `<number>`, Output specified number of lines at the end of logs
-<<<<<<< HEAD
- *
- *            Consider wrapping any input stream you get with a frame reader to make reading frame easier.
- *
-=======
- *
- *            Consider wrapping any input stream you get with a frame reader to make reading frame easier.
- *
- * @see com.github.dockerjava.core.command.FrameReader
->>>>>>> refs/heads/master
  */
 public interface LogContainerCmd extends AsyncDockerCmd<LogContainerCmd, Frame, Void> {
 
