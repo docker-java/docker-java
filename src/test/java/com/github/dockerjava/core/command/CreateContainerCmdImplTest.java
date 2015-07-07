@@ -490,7 +490,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
     }
 
-    @Test
+    @Test(groups = "ignoreInCircleCi")
     public void createContainerWithLabels() throws DockerException {
 
         Map<String, String> labels = new HashMap<String, String>();
