@@ -13,6 +13,8 @@ import org.testng.annotations.*;
 import java.lang.reflect.Method;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static com.github.dockerjava.api.model.Capability.MKNOD;
@@ -488,4 +490,24 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
     }
 
+    @Test
+    public void createContainerWithLabels() throws DockerException {
+
+        Map<String, String> labels = new HashMap<String, String>();
+        labels.put("com.github.dockerjava.null", null);
+        labels.put("com.github.dockerjava.boolean", "true");
+
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
+                .withLabels(labels).exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+
+        // null becomes empty string
+        labels.put("com.github.dockerjava.null", "");
+        assertThat(inspectContainerResponse.getConfig().getLabels(), is(equalTo(labels)));
+    }
 }

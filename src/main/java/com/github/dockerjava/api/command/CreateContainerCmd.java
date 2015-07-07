@@ -1,5 +1,7 @@
 package com.github.dockerjava.api.command;
 
+import java.util.Map;
+
 import com.github.dockerjava.api.ConflictException;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.model.Bind;
@@ -173,6 +175,8 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse> {
 
     public CreateContainerCmd withImage(String image);
 
+    public CreateContainerCmd withLabels(Map<String, String> labels);
+
     /**
      * Add link to another container.
      */
@@ -237,5 +241,10 @@ public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse> {
     public CreateContainerCmd withWorkingDir(String workingDir);
 
     public CreateContainerCmd withMacAddress(String macAddress);
+
+    /**
+     * @return
+     */
+    Map<String, String> getLabels();
 
 }

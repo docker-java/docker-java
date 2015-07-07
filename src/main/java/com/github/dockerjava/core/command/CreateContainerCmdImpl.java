@@ -2,6 +2,8 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Map;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -106,6 +108,9 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @JsonProperty("HostConfig")
     private HostConfig hostConfig = new HostConfig();
+
+    @JsonProperty("Labels")
+    private Map<String, String> labels;
 
     public CreateContainerCmdImpl(CreateContainerCmd.Exec exec, String image) {
         super(exec);
@@ -219,6 +224,12 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @JsonIgnore
     public Link[] getLinks() {
         return hostConfig.getLinks();
+    }
+
+    @Override
+    @JsonIgnore
+    public Map<String, String> getLabels() {
+        return labels;
     }
 
     @Override
@@ -468,6 +479,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmdImpl withImage(String image) {
         this.image = image;
+        return this;
+    }
+
+    @Override
+    public CreateContainerCmdImpl withLabels(Map<String, String> labels) {
+        checkNotNull(labels, "labels was not specified");
+        this.labels = labels;
         return this;
     }
 
