@@ -27,7 +27,7 @@ public class Event {
 
     /**
      * Constructor.
-     * 
+     *
      * @param id
      *            Container ID
      * @param status
@@ -51,7 +51,7 @@ public class Event {
      * Status of docker image or container. List of statuses is available in <a
      * href="https://docs.docker.com/reference/api/docker_remote_api_v1.16/#monitor-dockers-events">Docker API
      * v.1.16</a>
-     * 
+     *
      * @return Status string
      */
     public String getStatus() {
@@ -60,7 +60,7 @@ public class Event {
 
     /**
      * Get ID of docker container.
-     * 
+     *
      * @return Container ID
      */
     public String getId() {
@@ -69,7 +69,7 @@ public class Event {
 
     /**
      * Get source image of the container.
-     * 
+     *
      * @return Name of the parent container
      */
     public String getFrom() {
@@ -78,13 +78,16 @@ public class Event {
 
     /**
      * Get the event time. The time is specified in milliseconds since January 1, 1970, 00:00:00 GMT
-     * 
+     *
      * @return Event time in the specified format.
      */
     public long getTime() {
         return time;
     }
 
+    /**
+     * Returns the node when working against docker swarm
+     */
     public Node getNode() {
         return node;
     }
