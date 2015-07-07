@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.dockerjava.api.async.ResultCallback;
 
 /**
@@ -17,6 +20,8 @@ import com.github.dockerjava.api.async.ResultCallback;
  *
  */
 public abstract class ResultCallbackTemplate<T> implements ResultCallback<T> {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(ResultCallbackTemplate.class);
 
     private final CountDownLatch finished = new CountDownLatch(1);
 
@@ -34,6 +39,7 @@ public abstract class ResultCallbackTemplate<T> implements ResultCallback<T> {
     @Override
     public void onError(Throwable throwable) {
         try {
+            LOGGER.error("Error during callback", throwable);
             throw new RuntimeException(throwable);
         } finally {
             try {

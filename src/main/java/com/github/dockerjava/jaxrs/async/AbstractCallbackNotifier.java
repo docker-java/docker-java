@@ -48,6 +48,11 @@ public abstract class AbstractCallbackNotifier<T> implements Callable<Void> {
                 resultCallback.onError(e.getCause());
             }
             return null;
+        } catch (Exception e) {
+            if (resultCallback != null) {
+                resultCallback.onError(e);
+            }
+            return null;
         }
 
         try {
