@@ -1,10 +1,12 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  * Representation of a Docker event.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Event {
     private String status;
 
@@ -13,6 +15,9 @@ public class Event {
     private String from;
 
     private long time;
+
+    @JsonIgnoreProperties
+    private Node node;
 
     /**
      * Default constructor for the deserialization.
@@ -78,6 +83,10 @@ public class Event {
      */
     public long getTime() {
         return time;
+    }
+
+    public Node getNode() {
+        return node;
     }
 
     @Override
