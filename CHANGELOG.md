@@ -4,6 +4,9 @@ Change Log
 Latest SNAPSHOT
 ---
 
+* [#263](https://github.com/docker-java/docker-java/pull/263) Refactoring of streaming commands APIs (event, stats, log, attach)
+* [#260](https://github.com/docker-java/docker-java/pull/260) Add labels to create and inspect container
+
 v.1.4.0
 ---
 * [#248](https://github.com/docker-java/docker-java/pull/233) Removed deprecated start options
