@@ -14,13 +14,13 @@ import com.github.dockerjava.api.model.StreamType;
  */
 public class FrameReader implements AutoCloseable {
 
-    private static final int BUFFER_SIZE = 100;
-
     private static final int HEADER_SIZE = 8;
 
     private final InputStream inputStream;
 
-    private boolean rawDetected = false;
+    private boolean rawStreamDetected = false;
+
+    private final byte[] rawBuffer = new byte[1000];
 
     public FrameReader(InputStream inputStream) {
         this.inputStream = inputStream;
@@ -35,7 +35,7 @@ public class FrameReader implements AutoCloseable {
         case 2:
             return StreamType.STDERR;
         default:
-            throw new IllegalArgumentException("invalid streamType");
+            return StreamType.RAW;
         }
     }
 
@@ -44,34 +44,55 @@ public class FrameReader implements AutoCloseable {
      */
     public Frame readFrame() throws IOException {
 
-        byte[] buffer = new byte[BUFFER_SIZE];
+        if (rawStreamDetected) {
 
-        int readBytes = inputStream.read(buffer);
 
-        if (readBytes == -1) {
-            return null;
-        }
+            int read = inputStream.read(rawBuffer);
 
-        if (rawDetected || readBytes != HEADER_SIZE) {
-            rawDetected = true;
+            return new Frame(StreamType.RAW, Arrays.copyOf(rawBuffer, read));
 
-            byte[] read = Arrays.copyOfRange(buffer, 0, readBytes);
-
-            return new Frame(StreamType.RAW, read);
         } else {
 
-            int payloadSize = ((buffer[4] & 0xff) << 24) + ((buffer[5] & 0xff) << 16) + ((buffer[6] & 0xff) << 8)
-                    + (buffer[7] & 0xff);
+            byte[] header = new byte[HEADER_SIZE];
 
-            byte[] payload = new byte[payloadSize];
-            int actualPayloadSize = inputStream.read(payload);
-            if (actualPayloadSize != payloadSize) {
-                throw new IOException(String.format("payload must be %d bytes long, but was %d", payloadSize,
-                        actualPayloadSize));
+            int actualHeaderSize = 0;
+
+            do {
+                int headerCount = inputStream.read(header, actualHeaderSize, HEADER_SIZE - actualHeaderSize);
+
+                if (headerCount == -1) {
+                    return null;
+                }
+                actualHeaderSize += headerCount;
+            } while (actualHeaderSize < HEADER_SIZE);
+
+            StreamType streamType = streamType(header[0]);
+
+            if(streamType.equals(StreamType.RAW)) {
+                rawStreamDetected = true;
+                return new Frame(StreamType.RAW, Arrays.copyOf(header, HEADER_SIZE));
             }
 
-            return new Frame(streamType(buffer[0]), payload);
+            int payloadSize = ((header[4] & 0xff) << 24) + ((header[5] & 0xff) << 16) + ((header[6] & 0xff) << 8)
+                    + (header[7] & 0xff);
 
+            byte[] payload = new byte[payloadSize];
+            int actualPayloadSize = 0;
+
+            do {
+                int count = inputStream.read(payload, actualPayloadSize, payloadSize - actualPayloadSize);
+
+                if (count == -1) {
+                    if (actualPayloadSize != payloadSize) {
+                        throw new IOException(String.format("payload must be %d bytes long, but was %d", payloadSize,
+                                actualPayloadSize));
+                    }
+                    break;
+                }
+                actualPayloadSize += count;
+            } while (actualPayloadSize < payloadSize);
+
+            return new Frame(streamType, payload);
         }
     }
 
