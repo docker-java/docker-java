@@ -3,6 +3,7 @@ package com.github.dockerjava.api.command;
 import java.util.List;
 
 import com.github.dockerjava.api.model.Container;
+import com.github.dockerjava.api.model.Filters;
 
 /**
  * List containers
@@ -31,6 +32,8 @@ public interface ListContainersCmd extends DockerCmd<List<Container>> {
 
     public String getBeforeId();
 
+    public Filters getFilters();
+
     public ListContainersCmd withShowAll(boolean showAll);
 
     public ListContainersCmd withShowSize(boolean showSize);
@@ -40,6 +43,8 @@ public interface ListContainersCmd extends DockerCmd<List<Container>> {
     public ListContainersCmd withSince(String since);
 
     public ListContainersCmd withBefore(String before);
+
+    public ListContainersCmd withFilters(Filters filters);
 
     public static interface Exec extends DockerCmdExec<ListContainersCmd, List<Container>> {
     }
