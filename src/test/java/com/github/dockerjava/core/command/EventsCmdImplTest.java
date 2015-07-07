@@ -18,6 +18,7 @@ import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.model.Event;
+import com.github.dockerjava.api.model.EventFilters;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
 
@@ -84,6 +85,25 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
 
         EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withSince(getEpochTime());
+        eventsCmd.exec();
+
+        generateEvents();
+
+        boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
+
+        eventCallback.close();
+        assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
+    }
+
+    @Test
+    public void testEventStreamingWithFilter() throws InterruptedException, IOException {
+        // Don't include other tests events
+        TimeUnit.SECONDS.sleep(1);
+
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
+
+        EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withFilters(new EventFilters().withEvent("start"));
         eventsCmd.exec();
 
         generateEvents();

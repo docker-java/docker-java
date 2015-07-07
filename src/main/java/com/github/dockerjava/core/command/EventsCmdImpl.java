@@ -1,8 +1,11 @@
 package com.github.dockerjava.core.command;
 
+import static com.google.common.base.Preconditions.*;
+
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.model.Event;
+import com.github.dockerjava.api.model.Filters;
 
 /**
  * Stream docker events
@@ -12,6 +15,8 @@ public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, Void> implements Ev
     private String since;
 
     private String until;
+
+    private Filters filters;
 
     private ResultCallback<Event> resultCallback;
 
@@ -39,6 +44,13 @@ public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, Void> implements Ev
     }
 
     @Override
+    public EventsCmd withFilters(Filters filters) {
+        checkNotNull(filters, "filters have not been specified");
+        this.filters = filters;
+        return this;
+    }
+
+    @Override
     public String getSince() {
         return since;
     }
@@ -54,8 +66,14 @@ public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, Void> implements Ev
     }
 
     @Override
+    public Filters getFilters() {
+        return filters;
+    }
+
+    @Override
     public String toString() {
         return new StringBuilder("events").append(since != null ? " --since=" + since : "")
-                .append(until != null ? " --until=" + until : "").toString();
+                .append(until != null ? " --until=" + until : "")
+                .append(filters != null ? " --filters=" + filters : "").toString();
     }
 }

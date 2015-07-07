@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.model.Event;
+import com.github.dockerjava.api.model.Filters;
 
 /**
  * Get events
@@ -18,6 +19,10 @@ public interface EventsCmd extends AsyncDockerCmd<EventsCmd, Event, Void> {
     public String getSince();
 
     public String getUntil();
+
+    public Filters getFilters();
+
+    public EventsCmd withFilters(Filters filters);
 
     public static interface Exec extends DockerCmdExec<EventsCmd, Void> {
     }
