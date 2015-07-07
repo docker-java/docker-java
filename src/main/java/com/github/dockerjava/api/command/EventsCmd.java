@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.command;
 
-import java.util.concurrent.ExecutorService;
+import com.github.dockerjava.api.model.Event;
 
 /**
  * Get events
@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutorService;
  * @param until
  *            - Stream events until this timestamp
  */
-public interface EventsCmd extends DockerCmd<ExecutorService> {
+public interface EventsCmd extends AsyncDockerCmd<EventsCmd, Event, Void> {
     public EventsCmd withSince(String since);
 
     public EventsCmd withUntil(String until);
@@ -19,10 +19,6 @@ public interface EventsCmd extends DockerCmd<ExecutorService> {
 
     public String getUntil();
 
-    public EventCallback getEventCallback();
-
-    public EventsCmd withEventCallback(EventCallback eventCallback);
-
-    public static interface Exec extends DockerCmdExec<EventsCmd, ExecutorService> {
+    public static interface Exec extends DockerCmdExec<EventsCmd, Void> {
     }
 }

@@ -2,12 +2,13 @@ package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.model.Frame;
 
 import java.io.InputStream;
 
 /**
  * Get container logs
- * 
+ *
  * @param followStream
  *            - true or false, return stream. Defaults to false.
  * @param stdout
@@ -18,12 +19,8 @@ import java.io.InputStream;
  *            - true or false, if true, print timestamps for every log line. Defaults to false.
  * @param tail
  *            - `all` or `<number>`, Output specified number of lines at the end of logs
- * 
- *            Consider wrapping any input stream you get with a frame reader to make reading frame easier.
- * 
- * @see com.github.dockerjava.core.command.FrameReader
  */
-public interface LogContainerCmd extends DockerCmd<InputStream> {
+public interface LogContainerCmd extends AsyncDockerCmd<LogContainerCmd, Frame, Void> {
 
     public String getContainerId();
 
@@ -69,14 +66,14 @@ public interface LogContainerCmd extends DockerCmd<InputStream> {
 
     /**
      * Its the responsibility of the caller to consume and/or close the {@link InputStream} to prevent connection leaks.
-     * 
+     *
      * @throws NotFoundException
      *             No such container
      */
     @Override
-    public InputStream exec() throws NotFoundException;
+    public Void exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdExec<LogContainerCmd, InputStream> {
+    public static interface Exec extends DockerCmdExec<LogContainerCmd, Void> {
     }
 
 }

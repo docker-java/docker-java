@@ -2,26 +2,22 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.concurrent.ExecutorService;
-
-import com.github.dockerjava.api.command.EventCallback;
-import com.github.dockerjava.api.command.EventsCmd;
-import com.github.dockerjava.api.command.StatsCallback;
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.StatsCmd;
-import com.github.dockerjava.api.command.TopContainerCmd;
+import com.github.dockerjava.api.model.Statistics;
 
 /**
- * Stream docker stats
+ * Container stats
  */
-public class StatsCmdImpl extends AbstrDockerCmd<StatsCmd, ExecutorService> implements StatsCmd {
+public class StatsCmdImpl extends AbstrDockerCmd<StatsCmd, Void> implements StatsCmd {
 
     private String containerId;
 
-    private StatsCallback statsCallback;
+    private ResultCallback<Statistics> resultCallback;
 
-    public StatsCmdImpl(StatsCmd.Exec exec, StatsCallback statsCallback) {
+    public StatsCmdImpl(StatsCmd.Exec exec, ResultCallback<Statistics> resultCallback) {
         super(exec);
-        withStatsCallback(statsCallback);
+        withResultCallback(resultCallback);
     }
 
     @Override
@@ -37,18 +33,18 @@ public class StatsCmdImpl extends AbstrDockerCmd<StatsCmd, ExecutorService> impl
     }
 
     @Override
-    public StatsCmd withStatsCallback(StatsCallback statsCallback) {
-        this.statsCallback = statsCallback;
+    public StatsCmd withResultCallback(ResultCallback<Statistics> resultCallback) {
+        this.resultCallback = resultCallback;
         return this;
     }
 
     @Override
-    public StatsCallback getStatsCallback() {
-        return statsCallback;
+    public ResultCallback<Statistics> getResultCallback() {
+        return resultCallback;
     }
 
     @Override
-    public ExecutorService exec() {
+    public Void exec() {
         return super.exec();
     }
 

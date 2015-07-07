@@ -2,17 +2,17 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.io.InputStream;
-
 import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.AttachContainerCmd;
+import com.github.dockerjava.api.model.Frame;
 
 /**
  * Attach to container
- * 
+ *
  * @param logs
  *            - true or false, includes logs. Defaults to false.
- * 
+ *
  * @param followStream
  *            - true or false, return stream. Defaults to false.
  * @param stdout
@@ -22,16 +22,29 @@ import com.github.dockerjava.api.command.AttachContainerCmd;
  * @param timestamps
  *            - true or false, if true, print timestamps for every log line. Defaults to false.
  */
-public class AttachContainerCmdImpl extends AbstrDockerCmd<AttachContainerCmd, InputStream> implements
-        AttachContainerCmd {
+public class AttachContainerCmdImpl extends AbstrDockerCmd<AttachContainerCmd, Void> implements AttachContainerCmd {
+
+    private ResultCallback<Frame> resultCallback;
 
     private String containerId;
 
     private boolean logs, followStream, timestamps, stdout, stderr;
 
-    public AttachContainerCmdImpl(AttachContainerCmd.Exec exec, String containerId) {
+    public AttachContainerCmdImpl(AttachContainerCmd.Exec exec, String containerId, ResultCallback<Frame> resultCallback) {
         super(exec);
         withContainerId(containerId);
+        withResultCallback(resultCallback);
+    }
+
+    public ResultCallback<Frame> getResultCallback() {
+        return resultCallback;
+    }
+
+    @Override
+    public AttachContainerCmd withResultCallback(ResultCallback<Frame> resultCallback) {
+        checkNotNull(resultCallback, "resultCallback was not specified");
+        this.resultCallback = resultCallback;
+        return this;
     }
 
     @Override
@@ -126,7 +139,7 @@ public class AttachContainerCmdImpl extends AbstrDockerCmd<AttachContainerCmd, I
      *             No such container
      */
     @Override
-    public InputStream exec() throws NotFoundException {
+    public Void exec() throws NotFoundException {
         return super.exec();
     }
 }

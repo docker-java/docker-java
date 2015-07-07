@@ -8,11 +8,86 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.*;
+import com.github.dockerjava.api.async.ResultCallback;
+import com.github.dockerjava.api.command.AttachContainerCmd;
+import com.github.dockerjava.api.command.AuthCmd;
+import com.github.dockerjava.api.command.BuildImageCmd;
+import com.github.dockerjava.api.command.CommitCmd;
+import com.github.dockerjava.api.command.ContainerDiffCmd;
+import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
+import com.github.dockerjava.api.command.CreateContainerCmd;
+import com.github.dockerjava.api.command.CreateImageCmd;
+import com.github.dockerjava.api.command.DockerCmdExecFactory;
+import com.github.dockerjava.api.command.EventsCmd;
+import com.github.dockerjava.api.command.ExecCreateCmd;
+import com.github.dockerjava.api.command.ExecStartCmd;
+import com.github.dockerjava.api.command.InfoCmd;
+import com.github.dockerjava.api.command.InspectContainerCmd;
+import com.github.dockerjava.api.command.InspectExecCmd;
+import com.github.dockerjava.api.command.InspectImageCmd;
+import com.github.dockerjava.api.command.KillContainerCmd;
+import com.github.dockerjava.api.command.ListContainersCmd;
+import com.github.dockerjava.api.command.ListImagesCmd;
+import com.github.dockerjava.api.command.LogContainerCmd;
+import com.github.dockerjava.api.command.PauseContainerCmd;
+import com.github.dockerjava.api.command.PingCmd;
+import com.github.dockerjava.api.command.PullImageCmd;
+import com.github.dockerjava.api.command.PushImageCmd;
+import com.github.dockerjava.api.command.RemoveContainerCmd;
+import com.github.dockerjava.api.command.RemoveImageCmd;
+import com.github.dockerjava.api.command.RestartContainerCmd;
+import com.github.dockerjava.api.command.SaveImageCmd;
+import com.github.dockerjava.api.command.SearchImagesCmd;
+import com.github.dockerjava.api.command.StartContainerCmd;
+import com.github.dockerjava.api.command.StatsCmd;
+import com.github.dockerjava.api.command.StopContainerCmd;
+import com.github.dockerjava.api.command.TagImageCmd;
+import com.github.dockerjava.api.command.TopContainerCmd;
+import com.github.dockerjava.api.command.UnpauseContainerCmd;
+import com.github.dockerjava.api.command.VersionCmd;
+import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
+import com.github.dockerjava.api.model.Event;
+import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.Identifier;
-import com.github.dockerjava.core.command.*;
+import com.github.dockerjava.api.model.Statistics;
+import com.github.dockerjava.core.command.AttachContainerCmdImpl;
+import com.github.dockerjava.core.command.AuthCmdImpl;
+import com.github.dockerjava.core.command.BuildImageCmdImpl;
+import com.github.dockerjava.core.command.CommitCmdImpl;
+import com.github.dockerjava.core.command.ContainerDiffCmdImpl;
+import com.github.dockerjava.core.command.CopyFileFromContainerCmdImpl;
+import com.github.dockerjava.core.command.CreateContainerCmdImpl;
+import com.github.dockerjava.core.command.CreateImageCmdImpl;
+import com.github.dockerjava.core.command.EventsCmdImpl;
+import com.github.dockerjava.core.command.ExecCreateCmdImpl;
+import com.github.dockerjava.core.command.ExecStartCmdImpl;
+import com.github.dockerjava.core.command.InfoCmdImpl;
+import com.github.dockerjava.core.command.InspectContainerCmdImpl;
+import com.github.dockerjava.core.command.InspectExecCmdImpl;
+import com.github.dockerjava.core.command.InspectImageCmdImpl;
+import com.github.dockerjava.core.command.KillContainerCmdImpl;
+import com.github.dockerjava.core.command.ListContainersCmdImpl;
+import com.github.dockerjava.core.command.ListImagesCmdImpl;
+import com.github.dockerjava.core.command.LogContainerCmdImpl;
+import com.github.dockerjava.core.command.PauseContainerCmdImpl;
+import com.github.dockerjava.core.command.PingCmdImpl;
+import com.github.dockerjava.core.command.PullImageCmdImpl;
+import com.github.dockerjava.core.command.PushImageCmdImpl;
+import com.github.dockerjava.core.command.RemoveContainerCmdImpl;
+import com.github.dockerjava.core.command.RemoveImageCmdImpl;
+import com.github.dockerjava.core.command.RestartContainerCmdImpl;
+import com.github.dockerjava.core.command.SaveImageCmdImpl;
+import com.github.dockerjava.core.command.SearchImagesCmdImpl;
+import com.github.dockerjava.core.command.StartContainerCmdImpl;
+import com.github.dockerjava.core.command.StatsCmdImpl;
+import com.github.dockerjava.core.command.StopContainerCmdImpl;
+import com.github.dockerjava.core.command.TagImageCmdImpl;
+import com.github.dockerjava.core.command.TopContainerCmdImpl;
+import com.github.dockerjava.core.command.UnpauseContainerCmdImpl;
+import com.github.dockerjava.core.command.VersionCmdImpl;
+import com.github.dockerjava.core.command.WaitContainerCmdImpl;
 
 /**
  * @author Konstantin Pelykh (kpelykh@gmail.com)
@@ -209,8 +284,9 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
-    public AttachContainerCmd attachContainerCmd(String containerId) {
-        return new AttachContainerCmdImpl(getDockerCmdExecFactory().createAttachContainerCmdExec(), containerId);
+    public AttachContainerCmd attachContainerCmd(String containerId, ResultCallback<Frame> resultCallback) {
+        return new AttachContainerCmdImpl(getDockerCmdExecFactory().createAttachContainerCmdExec(), containerId,
+                resultCallback);
     }
 
     @Override
@@ -224,8 +300,9 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
-    public LogContainerCmd logContainerCmd(String containerId) {
-        return new LogContainerCmdImpl(getDockerCmdExecFactory().createLogContainerCmdExec(), containerId);
+    public LogContainerCmd logContainerCmd(String containerId, ResultCallback<Frame> resultCallback) {
+        return new LogContainerCmdImpl(getDockerCmdExecFactory().createLogContainerCmdExec(), containerId,
+                resultCallback);
     }
 
     @Override
@@ -306,13 +383,13 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
-    public EventsCmd eventsCmd(EventCallback eventCallback) {
+    public EventsCmd eventsCmd(ResultCallback<Event> eventCallback) {
         return new EventsCmdImpl(getDockerCmdExecFactory().createEventsCmdExec(), eventCallback);
     }
 
     @Override
-    public StatsCmd statsCmd(StatsCallback statsCallback) {
-        return new StatsCmdImpl(getDockerCmdExecFactory().createStatsCmdExec(), statsCallback);
+    public StatsCmd statsCmd(ResultCallback<Statistics> statisticsCallback) {
+        return new StatsCmdImpl(getDockerCmdExecFactory().createStatsCmdExec(), statisticsCallback);
     }
 
     @Override

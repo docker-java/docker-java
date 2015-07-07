@@ -154,7 +154,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test
-    public void createContainerWithEnv() throws DockerException {
+    public void createContainerWithEnv() throws Exception {
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withEnv("VARIABLE=success")
                 .withCmd("env").exec();
@@ -169,12 +169,11 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        assertThat(asString(dockerClient.logContainerCmd(container.getId()).withStdOut().exec()),
-                containsString("VARIABLE=success"));
+        assertThat(containerLog(container.getId()), containsString("VARIABLE=success"));
     }
 
     @Test
-    public void createContainerWithHostname() throws DockerException {
+    public void createContainerWithHostname() throws Exception {
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withHostName("docker-java")
                 .withCmd("env").exec();
@@ -189,8 +188,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        assertThat(asString(dockerClient.logContainerCmd(container.getId()).withStdOut().exec()),
-                containsString("HOSTNAME=docker-java"));
+        assertThat(containerLog(container.getId()), containsString("HOSTNAME=docker-java"));
     }
 
     @Test

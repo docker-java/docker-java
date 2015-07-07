@@ -1,13 +1,14 @@
 package com.github.dockerjava.core.command;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 
-import java.io.InputStream;
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -19,7 +20,9 @@ import org.testng.annotations.Test;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.core.async.ResultCallbackTemplate;
 
 @Test(groups = "integration")
 public class LogContainerCmdImplTest extends AbstractDockerClientTest {
@@ -45,7 +48,7 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test
-    public void logContainer() throws Exception {
+    public void asyncLogContainer() throws Exception {
 
         String snippet = "hello world";
 
@@ -61,27 +64,47 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
         assertThat(exitCode, equalTo(0));
 
-        InputStream response = dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec();
+        CollectFramesCallback loggingCallback = new CollectFramesCallback();
 
-        String log = asString(response);
+        dockerClient.logContainerCmd(container.getId(), loggingCallback).withStdErr().withStdOut().exec();
 
-        // LOG.info("resonse: " + log);
+        loggingCallback.awaitFinish();
 
-        assertThat(log, endsWith(snippet));
+        assertTrue(loggingCallback.toString().contains(snippet));
     }
 
     @Test
-    public void logNonExistingContainer() throws Exception {
+    public void asyncLogNonExistingContainer() throws Exception {
 
-        try {
-            dockerClient.logContainerCmd("non-existing").withStdErr().withStdOut().exec();
-            fail("expected NotFoundException");
-        } catch (NotFoundException e) {
-        }
+        CollectFramesCallback loggingCallback = new CollectFramesCallback() {
+            @Override
+            public void onError(Throwable throwable) {
+
+                assertEquals(throwable.getClass().getName(), NotFoundException.class.getName());
+
+                try {
+                    // close the callback to prevent the call to onFinish
+                    close();
+                } catch (IOException e) {
+                    throw new RuntimeException();
+                }
+
+                super.onError(throwable);
+            }
+
+            public void onComplete() {
+                super.onComplete();
+                fail("expected NotFoundException");
+            };
+        };
+
+        dockerClient.logContainerCmd("non-existing", loggingCallback).withStdErr().withStdOut().exec();
+
+        loggingCallback.awaitFinish();
     }
 
     @Test
-    public void multipleLogContainer() throws Exception {
+    public void asyncMultipleLogContainer() throws Exception {
 
         String snippet = "hello world";
 
@@ -97,22 +120,24 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
         assertThat(exitCode, equalTo(0));
 
-        InputStream response = dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec();
+        CollectFramesCallback loggingCallback = new CollectFramesCallback();
 
-        response.close();
+        dockerClient.logContainerCmd(container.getId(), loggingCallback).withStdErr().withStdOut().exec();
 
-        // String log = asString(response);
+        loggingCallback.close();
 
-        response = dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec();
+        loggingCallback = new CollectFramesCallback();
 
-        // log = asString(response);
-        response.close();
+        dockerClient.logContainerCmd(container.getId(), loggingCallback).withStdErr().withStdOut().exec();
 
-        response = dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec();
+        loggingCallback.close();
 
-        String log = asString(response);
+        loggingCallback = new CollectFramesCallback();
 
-        assertThat(log, endsWith(snippet));
+        dockerClient.logContainerCmd(container.getId(), loggingCallback).withStdErr().withStdOut().exec();
+
+        loggingCallback.awaitFinish();
+
+        assertTrue(loggingCallback.toString().contains(snippet));
     }
-
 }

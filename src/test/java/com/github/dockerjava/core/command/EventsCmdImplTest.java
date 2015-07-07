@@ -1,11 +1,11 @@
 package com.github.dockerjava.core.command;
 
-import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.EventCallback;
-import com.github.dockerjava.api.command.EventsCmd;
-import com.github.dockerjava.api.model.Event;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -14,14 +14,12 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
+import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.EventsCmd;
+import com.github.dockerjava.api.model.Event;
+import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.core.async.ResultCallbackTemplate;
 
 @Test(groups = "integration")
 public class EventsCmdImplTest extends AbstractDockerClientTest {
@@ -52,6 +50,9 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         super.afterMethod(result);
     }
 
+    /*
+     * This specific test may fail with boot2docker as time may not in sync with host system
+     */
     @Test
     public void testEventStreamTimeBound() throws InterruptedException, IOException {
         // Don't include other tests events
@@ -65,11 +66,10 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
 
         EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withSince(startTime).withUntil(endTime);
-        ExecutorService executorService = eventsCmd.exec();
+        eventsCmd.exec();
 
         boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
 
-        executorService.shutdown();
         eventCallback.close();
 
         assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
@@ -84,17 +84,17 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
 
         EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withSince(getEpochTime());
-        ExecutorService executorService = eventsCmd.exec();
+        eventsCmd.exec();
 
         generateEvents();
 
         boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
-        executorService.shutdown();
+
         eventCallback.close();
         assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
     }
 
-    @Test(groups = "ignoreInCircleCi")
+    @Test
     public void testEventStreaming2() throws InterruptedException, IOException {
         // Don't include other tests events
         TimeUnit.SECONDS.sleep(1);
@@ -103,12 +103,12 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
 
         EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withSince(getEpochTime());
-        ExecutorService executorService = eventsCmd.exec();
+        eventsCmd.exec();
 
         generateEvents();
 
         boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
-        executorService.shutdown();
+
         eventCallback.close();
         assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
     }
@@ -125,10 +125,9 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         return KNOWN_NUM_EVENTS;
     }
 
-    private class EventCallbackTest implements EventCallback {
-        private final CountDownLatch countDownLatch;
+    private class EventCallbackTest extends ResultCallbackTemplate<Event> {
 
-        private final AtomicBoolean isReceiving = new AtomicBoolean(true);
+        private final CountDownLatch countDownLatch;
 
         private final List<Event> events = new ArrayList<Event>();
 
@@ -136,30 +135,10 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
             this.countDownLatch = countDownLatch;
         }
 
-        public void close() {
-            isReceiving.set(false);
-        }
-
-        @Override
-        public void onEvent(Event event) {
+        public void onNext(Event event) {
             LOG.info("Received event #{}: {}", countDownLatch.getCount(), event);
             countDownLatch.countDown();
             events.add(event);
-        }
-
-        @Override
-        public void onException(Throwable throwable) {
-            LOG.error("Error occurred: {}", throwable.getMessage());
-        }
-
-        @Override
-        public void onCompletion(int numEvents) {
-            LOG.info("Number of events received: {}", numEvents);
-        }
-
-        @Override
-        public boolean isReceiving() {
-            return isReceiving.get();
         }
 
         public List<Event> getEvents() {

@@ -1,18 +1,17 @@
 package com.github.dockerjava.jaxrs;
 
-import java.io.InputStream;
-
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.api.command.AttachContainerCmd;
-import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
+import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.core.async.FrameStreamProcessor;
+import com.github.dockerjava.jaxrs.async.AbstractCallbackNotifier;
+import com.github.dockerjava.jaxrs.async.POSTCallbackNotifier;
 
-public class AttachContainerCmdExec extends AbstrDockerCmdExec<AttachContainerCmd, InputStream> implements
+public class AttachContainerCmdExec extends AbstrDockerCmdExec<AttachContainerCmd, Void> implements
         AttachContainerCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AttachContainerCmdExec.class);
@@ -22,8 +21,8 @@ public class AttachContainerCmdExec extends AbstrDockerCmdExec<AttachContainerCm
     }
 
     @Override
-    protected InputStream execute(AttachContainerCmd command) {
-        WebTarget webResource = getBaseResource().path("/containers/{id}/attach")
+    protected Void execute(AttachContainerCmd command) {
+        WebTarget webTarget = getBaseResource().path("/containers/{id}/attach")
                 .resolveTemplate("id", command.getContainerId())
                 .queryParam("logs", command.hasLogsEnabled() ? "1" : "0")
                 // .queryParam("stdin", command.hasStdinEnabled() ? "1" : "0")
@@ -31,12 +30,13 @@ public class AttachContainerCmdExec extends AbstrDockerCmdExec<AttachContainerCm
                 .queryParam("stderr", command.hasStderrEnabled() ? "1" : "0")
                 .queryParam("stream", command.hasFollowStreamEnabled() ? "1" : "0");
 
-        LOGGER.trace("POST: {}", webResource);
+        LOGGER.trace("POST: {}", webTarget);
 
-        Response response = webResource.request().accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
-                .post(null, Response.class);
+        POSTCallbackNotifier<Frame> callbackNotifier = new POSTCallbackNotifier<Frame>(new FrameStreamProcessor(),
+                command.getResultCallback(), webTarget);
 
-        return new WrappedResponseInputStream(response);
+        AbstractCallbackNotifier.startAsyncProcessing(callbackNotifier);
+
+        return null;
     }
-
 }

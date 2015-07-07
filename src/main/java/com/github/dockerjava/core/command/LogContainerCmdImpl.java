@@ -3,9 +3,12 @@ package com.github.dockerjava.core.command;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.InputStream;
+import java.util.concurrent.Future;
 
 import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.LogContainerCmd;
+import com.github.dockerjava.api.model.Frame;
 
 /**
  * Get container logs
@@ -21,7 +24,9 @@ import com.github.dockerjava.api.command.LogContainerCmd;
  * @param tail
  *            - `all` or `<number>`, Output specified number of lines at the end of logs
  */
-public class LogContainerCmdImpl extends AbstrDockerCmd<LogContainerCmd, InputStream> implements LogContainerCmd {
+public class LogContainerCmdImpl extends AbstrDockerCmd<LogContainerCmd, Void> implements LogContainerCmd {
+
+    private ResultCallback<Frame> resultCallback;
 
     private String containerId;
 
@@ -29,14 +34,27 @@ public class LogContainerCmdImpl extends AbstrDockerCmd<LogContainerCmd, InputSt
 
     private boolean followStream, timestamps, stdout, stderr;
 
-    public LogContainerCmdImpl(LogContainerCmd.Exec exec, String containerId) {
+    public LogContainerCmdImpl(LogContainerCmd.Exec exec, String containerId, ResultCallback<Frame> resultCallback) {
         super(exec);
         withContainerId(containerId);
+        withResultCallback(resultCallback);
     }
 
     @Override
     public String getContainerId() {
         return containerId;
+    }
+
+    @Override
+    public ResultCallback<Frame> getResultCallback() {
+        return resultCallback;
+    }
+
+    @Override
+    public LogContainerCmd withResultCallback(ResultCallback<Frame> resultCallback) {
+        checkNotNull(resultCallback, "resultCallback was not specified");
+        this.resultCallback = resultCallback;
+        return this;
     }
 
     @Override
@@ -138,7 +156,7 @@ public class LogContainerCmdImpl extends AbstrDockerCmd<LogContainerCmd, InputSt
      *             No such container
      */
     @Override
-    public InputStream exec() throws NotFoundException {
+    public Void exec() throws NotFoundException {
         return super.exec();
     }
 }

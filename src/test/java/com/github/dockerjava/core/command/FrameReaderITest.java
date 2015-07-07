@@ -1,10 +1,10 @@
 package com.github.dockerjava.core.command;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.AssertJUnit.assertNull;
+import static org.testng.Assert.assertFalse;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.Iterator;
+import java.util.List;
 
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
@@ -13,6 +13,7 @@ import org.testng.annotations.Test;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.StreamType;
+import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.core.DockerClientBuilder;
 
 @Test(groups = "integration")
@@ -42,21 +43,27 @@ public class FrameReaderITest {
         int exitCode = dockerClient.waitContainerCmd(dockerfileFixture.getContainerId()).exec();
         assertEquals(0, exitCode);
 
-        InputStream response = getLoggerStream();
+        Iterator<Frame> response = getLoggingFrames().iterator();
 
-        try (FrameReader reader = new FrameReader(response)) {
-            assertEquals(reader.readFrame(), new Frame(StreamType.STDOUT, "to stdout\n".getBytes()));
-            assertEquals(reader.readFrame(), new Frame(StreamType.STDERR, "to stderr\n".getBytes()));
-            assertNull(reader.readFrame());
-        }
+        assertEquals(response.next(), new Frame(StreamType.STDOUT, "to stdout\n".getBytes()));
+        assertEquals(response.next(), new Frame(StreamType.STDERR, "to stderr\n".getBytes()));
+        assertFalse(response.hasNext());
+
     }
 
-    private InputStream getLoggerStream() {
+    private List<Frame> getLoggingFrames() throws Exception {
 
-        return dockerClient.logContainerCmd(dockerfileFixture.getContainerId()).withStdOut().withStdErr().withTailAll()
-        // we can't follow stream here as it blocks reading from resulting InputStream infinitely
-        // .withFollowStream()
+        AbstractDockerClientTest.CollectFramesCallback collectFramesCallback = new AbstractDockerClientTest.CollectFramesCallback();
+
+        dockerClient.logContainerCmd(dockerfileFixture.getContainerId(), collectFramesCallback).withStdOut()
+                .withStdErr().withTailAll()
+                // we can't follow stream here as it blocks reading from resulting InputStream infinitely
+                // .withFollowStream()
                 .exec();
+
+        collectFramesCallback.awaitFinish();
+
+        return collectFramesCallback.frames;
     }
 
     @Test
@@ -66,13 +73,14 @@ public class FrameReaderITest {
             @Override
             public void run() {
                 try {
-                    try (FrameReader reader = new FrameReader(getLoggerStream())) {
-                        // noinspection StatementWithEmptyBody
-                        while (reader.readFrame() != null) {
-                            // nop
-                        }
+
+                    Iterator<Frame> frames = getLoggingFrames().iterator();
+
+                    while (frames.hasNext()) {
+                        frames.next();
                     }
-                } catch (IOException e) {
+
+                } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             }

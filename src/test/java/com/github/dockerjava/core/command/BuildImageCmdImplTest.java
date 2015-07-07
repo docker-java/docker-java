@@ -19,7 +19,6 @@ import java.util.UUID;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.lang.StringUtils;
-
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -103,7 +102,7 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test
-    public void testDockerBuilderFromTar() throws IOException {
+    public void testDockerBuilderFromTar() throws Exception {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testAddFile").getFile());
         Collection<File> files = FileUtils.listFiles(baseDir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
         File tarFile = CompressArchiveUtil.archiveTARFiles(baseDir, files, UUID.randomUUID().toString());
@@ -112,14 +111,14 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test
-    public void testDockerBuilderAddUrl() {
+    public void testDockerBuilderAddUrl() throws Exception {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testAddUrl").getFile());
         String response = dockerfileBuild(baseDir);
         assertThat(response, containsString("Docker"));
     }
 
     @Test
-    public void testDockerBuilderAddFileInSubfolder() throws DockerException, IOException {
+    public void testDockerBuilderAddFileInSubfolder() throws Exception {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testAddFileInSubfolder")
                 .getFile());
         String response = dockerfileBuild(baseDir);
@@ -127,7 +126,7 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test
-    public void testDockerBuilderAddFilesViaWildcard() throws DockerException, IOException {
+    public void testDockerBuilderAddFilesViaWildcard() throws Exception {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testAddFilesViaWildcard")
                 .getFile());
         String response = dockerfileBuild(baseDir);
@@ -136,28 +135,28 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test
-    public void testDockerBuilderAddFolder() throws DockerException, IOException {
+    public void testDockerBuilderAddFolder() throws Exception {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testAddFolder").getFile());
         String response = dockerfileBuild(baseDir);
         assertThat(response, containsString("Successfully executed testAddFolder.sh"));
     }
 
     @Test
-    public void testDockerBuilderEnv() throws DockerException, IOException {
+    public void testDockerBuilderEnv() throws Exception {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testEnv").getFile());
         String response = dockerfileBuild(baseDir);
         assertThat(response, containsString("Successfully executed testrun.sh"));
     }
 
-    private String dockerfileBuild(InputStream tarInputStream) {
+    private String dockerfileBuild(InputStream tarInputStream) throws Exception {
         return execBuild(dockerClient.buildImageCmd().withTarInputStream(tarInputStream));
     }
 
-    private String dockerfileBuild(File baseDir) {
+    private String dockerfileBuild(File baseDir) throws Exception {
         return execBuild(dockerClient.buildImageCmd(baseDir));
     }
 
-    private String execBuild(BuildImageCmd buildImageCmd) {
+    private String execBuild(BuildImageCmd buildImageCmd) throws Exception {
         // Build image
         InputStream response = buildImageCmd.withNoCache().exec();
 
@@ -175,16 +174,8 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
         dockerClient.startContainerCmd(container.getId()).exec();
         dockerClient.waitContainerCmd(container.getId()).exec();
 
-        // Log container
-        InputStream logResponse = logContainer(container.getId());
+        return containerLog(container.getId());
 
-        // assertThat(asString(logResponse), containsString(expectedText));
-
-        return asString(logResponse);
-    }
-
-    private InputStream logContainer(String containerId) {
-        return dockerClient.logContainerCmd(containerId).withStdErr().withStdOut().exec();
     }
 
     @Test(expectedExceptions = { DockerClientException.class })
@@ -202,7 +193,7 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test(groups = "ignoreInCircleCi")
-    public void testDockerIgnore() throws DockerException, IOException {
+    public void testDockerIgnore() throws Exception {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testDockerignore")
                 .getFile());
         String response = dockerfileBuild(baseDir);
@@ -251,7 +242,7 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test
-    public void testAddAndCopySubstitution() throws DockerException, IOException {
+    public void testAddAndCopySubstitution() throws Exception {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testENVSubstitution")
                 .getFile());
         String response = dockerfileBuild(baseDir);

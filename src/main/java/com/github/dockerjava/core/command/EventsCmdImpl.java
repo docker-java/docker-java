@@ -1,24 +1,23 @@
 package com.github.dockerjava.core.command;
 
-import java.util.concurrent.ExecutorService;
-
-import com.github.dockerjava.api.command.EventCallback;
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.EventsCmd;
+import com.github.dockerjava.api.model.Event;
 
 /**
  * Stream docker events
  */
-public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, ExecutorService> implements EventsCmd {
+public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, Void> implements EventsCmd {
 
     private String since;
 
     private String until;
 
-    private EventCallback eventCallback;
+    private ResultCallback<Event> resultCallback;
 
-    public EventsCmdImpl(EventsCmd.Exec exec, EventCallback eventCallback) {
+    public EventsCmdImpl(EventsCmd.Exec exec, ResultCallback<Event> resultCallback) {
         super(exec);
-        withEventCallback(eventCallback);
+        withResultCallback(resultCallback);
     }
 
     @Override
@@ -34,8 +33,8 @@ public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, ExecutorService> im
     }
 
     @Override
-    public EventsCmd withEventCallback(EventCallback eventCallback) {
-        this.eventCallback = eventCallback;
+    public EventsCmd withResultCallback(ResultCallback<Event> resultCallback) {
+        this.resultCallback = resultCallback;
         return this;
     }
 
@@ -50,13 +49,8 @@ public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, ExecutorService> im
     }
 
     @Override
-    public EventCallback getEventCallback() {
-        return eventCallback;
-    }
-
-    @Override
-    public ExecutorService exec() {
-        return super.exec();
+    public ResultCallback<Event> getResultCallback() {
+        return resultCallback;
     }
 
     @Override

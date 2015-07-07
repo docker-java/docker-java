@@ -4,12 +4,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 
-import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.StatsCallback;
-import com.github.dockerjava.api.command.StatsCmd;
-import com.github.dockerjava.api.model.Statistics;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.security.SecureRandom;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -18,13 +17,12 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.security.SecureRandom;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
+import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.StatsCmd;
+import com.github.dockerjava.api.model.Statistics;
+import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.core.async.ResultCallbackTemplate;
 
 @Test(groups = "integration")
 public class StatsCmdImplTest extends AbstractDockerClientTest {
@@ -68,13 +66,13 @@ public class StatsCmdImplTest extends AbstractDockerClientTest {
         dockerClient.startContainerCmd(container.getId()).exec();
 
         StatsCmd statsCmd = dockerClient.statsCmd(statsCallback).withContainerId(container.getId());
-        ExecutorService executorService = statsCmd.exec();
+        statsCmd.exec();
 
         countDownLatch.await(3, TimeUnit.SECONDS);
         boolean gotStats = statsCallback.gotStats();
 
         LOG.info("Stop stats collection");
-        executorService.shutdown();
+
         statsCallback.close();
 
         LOG.info("Stopping container");
@@ -86,10 +84,8 @@ public class StatsCmdImplTest extends AbstractDockerClientTest {
 
     }
 
-    private class StatsCallbackTest implements StatsCallback {
+    private class StatsCallbackTest extends ResultCallbackTemplate<Statistics> {
         private final CountDownLatch countDownLatch;
-
-        private final AtomicBoolean isReceiving = new AtomicBoolean(true);
 
         private boolean gotStats = false;
 
@@ -97,33 +93,13 @@ public class StatsCmdImplTest extends AbstractDockerClientTest {
             this.countDownLatch = countDownLatch;
         }
 
-        public void close() {
-            LOG.info("Closing StatsCallback");
-            isReceiving.set(false);
-        }
-
         @Override
-        public void onStats(Statistics stats) {
+        public void onNext(Statistics stats) {
             LOG.info("Received stats #{}: {}", countDownLatch.getCount(), stats);
             if (stats != null) {
                 gotStats = true;
             }
             countDownLatch.countDown();
-        }
-
-        @Override
-        public void onException(Throwable throwable) {
-            LOG.error("Error occurred: {}", throwable.getMessage());
-        }
-
-        @Override
-        public void onCompletion(int numStats) {
-            LOG.info("Number of stats received: {}", numStats);
-        }
-
-        @Override
-        public boolean isReceiving() {
-            return isReceiving.get();
         }
 
         public boolean gotStats() {
