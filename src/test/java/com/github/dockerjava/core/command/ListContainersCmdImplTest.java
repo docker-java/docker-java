@@ -26,7 +26,9 @@ import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Container;
+import com.github.dockerjava.api.model.Filters;
 import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.google.common.collect.ImmutableMap;
 
 @Test(groups = "integration")
 public class ListContainersCmdImplTest extends AbstractDockerClientTest {
@@ -65,7 +67,8 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
 
         int size = containers.size();
 
-        CreateContainerResponse container1 = dockerClient.createContainerCmd(testImage).withCmd("echo").exec();
+        CreateContainerResponse container1 = dockerClient.createContainerCmd(testImage).withCmd("echo")
+                .withLabels(ImmutableMap.of("test", "docker-java")).exec();
 
         assertThat(container1.getId(), not(isEmptyString()));
 
@@ -96,7 +99,22 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
 
         Container container2 = filteredContainers.get(0);
         assertThat(container2.getCommand(), not(isEmptyString()));
-        assertThat(container2.getImage(), startsWith(testImage + ":"));
+        assertThat(container2.getImage(), startsWith(testImage));
+
+        // list with filter by label
+        filteredContainers = dockerClient.listContainersCmd().withShowAll(true)
+                .withFilters(new Filters().withLabel("test", "docker-java")).exec();
+        assertThat(filteredContainers.size(), is(equalTo(1)));
+        Container container3 = filteredContainers.get(0);
+        assertThat(container3.getCommand(), not(isEmptyString()));
+        assertThat(container3.getImage(), startsWith(testImage));
+
+        filteredContainers = dockerClient.listContainersCmd().withShowAll(true)
+                .withFilters(new Filters().withLabel("test")).exec();
+        assertThat(filteredContainers.size(), is(equalTo(1)));
+        container3 = filteredContainers.get(0);
+        assertThat(container3.getCommand(), not(isEmptyString()));
+        assertThat(container3.getImage(), startsWith(testImage));
     }
 
 }

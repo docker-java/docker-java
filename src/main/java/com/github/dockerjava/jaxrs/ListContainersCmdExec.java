@@ -1,5 +1,7 @@
 package com.github.dockerjava.jaxrs;
 
+import static com.google.common.net.UrlEscapers.*;
+
 import java.util.List;
 
 import javax.ws.rs.client.WebTarget;
@@ -30,6 +32,11 @@ public class ListContainersCmdExec extends AbstrDockerCmdExec<ListContainersCmd,
 
         if (command.getLimit() >= 0) {
             webResource = webResource.queryParam("limit", String.valueOf(command.getLimit()));
+        }
+
+        if (command.getFilters() != null) {
+            webResource = webResource.queryParam("filters",
+                    urlPathSegmentEscaper().escape(command.getFilters().toString()));
         }
 
         LOGGER.trace("GET: {}", webResource);

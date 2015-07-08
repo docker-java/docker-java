@@ -1,12 +1,12 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 import java.util.List;
 
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.model.Container;
+import com.github.dockerjava.api.model.Filters;
 
 /**
  * List containers
@@ -31,6 +31,8 @@ public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, Lis
     private boolean showSize, showAll = false;
 
     private String sinceId, beforeId;
+
+    private Filters filters;
 
     public ListContainersCmdImpl(ListContainersCmd.Exec exec) {
         super(exec);
@@ -59,6 +61,11 @@ public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, Lis
     @Override
     public String getBeforeId() {
         return beforeId;
+    }
+
+    @Override
+    public Filters getFilters() {
+        return filters;
     }
 
     @Override
@@ -95,10 +102,17 @@ public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, Lis
     }
 
     @Override
+    public ListContainersCmd withFilters(Filters filters) {
+        checkNotNull(filters, "filters was not specified");
+        this.filters = filters;
+        return this;
+    }
+
+    @Override
     public String toString() {
         return new StringBuilder("ps ").append(showAll ? "--all=true" : "").append(showSize ? "--size=true" : "")
                 .append(sinceId != null ? "--since " + sinceId : "")
                 .append(beforeId != null ? "--before " + beforeId : "").append(limit != -1 ? "-n " + limit : "")
-                .toString();
+                .append(filters != null ? "--filters " + filters : "").toString();
     }
 }
