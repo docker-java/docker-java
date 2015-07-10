@@ -111,8 +111,8 @@ public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, Lis
     @Override
     public String toString() {
         return new StringBuilder("ps ").append(showAll ? "--all=true" : "").append(showSize ? "--size=true" : "")
-                .append(sinceId != null ? "--since " + sinceId : "")
-                .append(beforeId != null ? "--before " + beforeId : "").append(limit != -1 ? "-n " + limit : "")
-                .append(filters != null ? "--filters " + filters : "").toString();
+                .append(sinceId != null ? " --since " + sinceId : "")
+                .append(beforeId != null ? " --before " + beforeId : "").append(limit != -1 ? "-n " + limit : "")
+                .append(filters != null ? " --filters " + filters : "").toString();
     }
 }
