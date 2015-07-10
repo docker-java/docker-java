@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.model;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class Filters {
     private static ObjectMapper OBJECT_MAPPER = new JacksonJaxbJsonProvider().locateMapper(Map.class,
             MediaType.APPLICATION_JSON_TYPE);
 
-    private Map<String, String[]> filters = new HashMap<String, String[]>();
+    private Map<String, List<String>> filters = new HashMap<String, List<String>>();
 
     public Filters() {
     }
@@ -40,42 +41,41 @@ public class Filters {
     }
 
     public Filters withFilter(String key, String... value) {
-        filters.put(key, value);
+        filters.put(key, Arrays.asList(value));
         return this;
     }
 
-    public String[] getFilter(String key) {
+    public List<String> getFilter(String key) {
         return filters.get(key);
     }
 
     public Filters withImage(String... image) {
-        filters.put("image", image);
+        filters.put("image", Arrays.asList(image));
         return this;
     }
 
-    public String[] getImage() {
+    public List<String> getImage() {
         return getFilter("image");
     }
 
     public Filters withContainer(String... container) {
-        filters.put("container", container);
+        filters.put("container", Arrays.asList(container));
         return this;
     }
 
-    public String[] getContainer() {
+    public List<String> getContainer() {
         return getFilter("container");
     }
 
-    public Filters withLabel(String label) {
-        return withLabel(label, (String[]) null);
-    }
-
-    public Filters withLabel(String label, String... value) {
-        if (value != null) {
-            filters.put(label, value);
-        } else {
-            filters.put("label", new String[] { label });
-        }
+    /**
+     * Filter by labels
+     * 
+     * @param labels
+     *            string array in the form ["key"] or ["key=value"] or a mix of both
+     * @return
+     */
+    public Filters withLabel(String... labels) {
+        filters.put("label", Arrays.asList(labels));
         return this;
     }
 
