@@ -55,6 +55,9 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @JsonProperty("CpuShares")
     private int cpuShares = 0;
 
+    @JsonProperty("CpuPeriod")
+    private Integer cpuPeriod;
+
     @JsonProperty("Cpuset")
     private String cpuset;
 
@@ -112,6 +115,15 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @JsonProperty("Labels")
     private Map<String, String> labels;
 
+    @JsonProperty("CpusetMems")
+    private String cpusetMems;
+
+    @JsonProperty("BlkioWeight")
+    private Integer blkioWeight;
+
+    @JsonProperty("OomKillDisable")
+    private Boolean oomKillDisable;
+
     public CreateContainerCmdImpl(CreateContainerCmd.Exec exec, String image) {
         super(exec);
         checkNotNull(image, "image was not specified");
@@ -158,6 +170,26 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public int getCpuShares() {
         return cpuShares;
+    }
+
+    @Override
+    public Integer getCpuPeriod() {
+        return cpuPeriod;
+    }
+
+    @Override
+    public String getCpusetMems() {
+        return cpusetMems;
+    }
+
+    @Override
+    public Integer getBlkioWeight() {
+        return blkioWeight;
+    }
+
+    @Override
+    public Boolean isOomKillDisable() {
+        return oomKillDisable;
     }
 
     @Override
@@ -407,6 +439,30 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public CreateContainerCmdImpl withCpuShares(int cpuShares) {
         this.cpuShares = cpuShares;
         return this;
+    }
+
+    @Override
+    public CreateContainerCmd withCpuPeriod(Integer cpuPeriod) {
+        this.cpuPeriod = cpuPeriod;
+        return this;
+    }
+
+    @Override
+    public CreateContainerCmd withCpusetMems(String cpusetMems) {
+        this.cpusetMems = cpusetMems;
+        return null;
+    }
+
+    @Override
+    public CreateContainerCmd withBlkioWeight(Integer blkioWeight) {
+        this.blkioWeight = blkioWeight;
+        return null;
+    }
+
+    @Override
+    public CreateContainerCmd withOomKillDisable(Boolean oomKillDisable) {
+        this.oomKillDisable = oomKillDisable;
+        return null;
     }
 
     @Override

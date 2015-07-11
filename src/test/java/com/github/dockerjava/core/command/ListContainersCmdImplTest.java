@@ -148,12 +148,10 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
         assertThat(container2.getCommand(), not(isEmptyString()));
         assertThat(container2.getImage(), startsWith(testImage));
 
-
         Map<String, String> labels = ImmutableMap.of("test", "docker-java");
 
         // list with filter by label
-        dockerClient.createContainerCmd(testImage).withCmd("echo").withLabels(labels)
-                .exec();
+        dockerClient.createContainerCmd(testImage).withCmd("echo").withLabels(labels).exec();
         filteredContainers = dockerClient.listContainersCmd().withShowAll(true)
                 .withFilters(new Filters().withLabels(labels)).exec();
         assertThat(filteredContainers.size(), is(equalTo(1)));
