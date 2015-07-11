@@ -7,31 +7,31 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class Node {
 
-  @JsonProperty("Name")
-  private String name;
+    @JsonProperty("Name")
+    private String name;
 
-  @JsonProperty("Id")
-  private String id;
+    @JsonProperty("Id")
+    private String id;
 
-  @JsonProperty("Addr")
-  private String addr;
+    @JsonProperty("Addr")
+    private String addr;
 
-  @JsonProperty("Ip")
-  private String ip;
+    @JsonProperty("Ip")
+    private String ip;
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public String getId() {
-    return id;
-  }
+    public String getId() {
+        return id;
+    }
 
-  public String getAddr() {
-    return addr;
-  }
+    public String getAddr() {
+        return addr;
+    }
 
-  public String getIp() {
-    return ip;
-  }
+    public String getIp() {
+        return ip;
+    }
 }

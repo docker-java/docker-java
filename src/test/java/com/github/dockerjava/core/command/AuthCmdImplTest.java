@@ -41,7 +41,7 @@ public class AuthCmdImplTest extends AbstractDockerClientTest {
     }
 
     // Disabled because of 500/InternalServerException
-    @Test(enabled=false)
+    @Test(enabled = false)
     public void testAuthInvalid() throws Exception {
 
         try {

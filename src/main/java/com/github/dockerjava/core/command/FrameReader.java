@@ -46,7 +46,6 @@ public class FrameReader implements AutoCloseable {
 
         if (rawStreamDetected) {
 
-
             int read = inputStream.read(rawBuffer);
 
             return new Frame(StreamType.RAW, Arrays.copyOf(rawBuffer, read));
@@ -68,7 +67,7 @@ public class FrameReader implements AutoCloseable {
 
             StreamType streamType = streamType(header[0]);
 
-            if(streamType.equals(StreamType.RAW)) {
+            if (streamType.equals(StreamType.RAW)) {
                 rawStreamDetected = true;
                 return new Frame(StreamType.RAW, Arrays.copyOf(header, HEADER_SIZE));
             }
