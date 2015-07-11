@@ -1,5 +1,7 @@
 package com.github.dockerjava.api.model;
 
+import java.util.Map;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -31,6 +33,9 @@ public class Container {
     @JsonProperty("Ports")
     public Port[] ports;
 
+    @JsonProperty("Labels")
+    public Map<String, String> labels;
+
     @JsonProperty("Status")
     private String status;
 
@@ -56,6 +61,10 @@ public class Container {
 
     public Port[] getPorts() {
         return ports;
+    }
+
+    public Map<String, String> getLabels() {
+        return labels;
     }
 
     public String[] getNames() {
