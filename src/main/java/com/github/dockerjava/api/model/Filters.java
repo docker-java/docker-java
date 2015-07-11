@@ -1,9 +1,11 @@
 package com.github.dockerjava.api.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.ws.rs.core.MediaType;
 
@@ -27,19 +29,6 @@ public class Filters {
     public Filters() {
     }
 
-    /**
-     * Constructor.
-     * 
-     * @param image
-     *            image to filter
-     * @param container
-     *            container to filter
-     */
-    public Filters(String image, String container) {
-        withImage(image);
-        withContainer(container);
-    }
-
     public Filters withFilter(String key, String... value) {
         filters.put(key, Arrays.asList(value));
         return this;
@@ -49,8 +38,8 @@ public class Filters {
         return filters.get(key);
     }
 
-    public Filters withImage(String... image) {
-        filters.put("image", Arrays.asList(image));
+    public Filters withImages(String... image) {
+        withFilter("image", image);
         return this;
     }
 
@@ -58,8 +47,8 @@ public class Filters {
         return getFilter("image");
     }
 
-    public Filters withContainer(String... container) {
-        filters.put("container", Arrays.asList(container));
+    public Filters withContainers(String... container) {
+        withFilter("container", container);
         return this;
     }
 
@@ -69,14 +58,39 @@ public class Filters {
 
     /**
      * Filter by labels
-     * 
+     *
      * @param labels
      *            string array in the form ["key"] or ["key=value"] or a mix of both
      * @return
      */
-    public Filters withLabel(String... labels) {
-        filters.put("label", Arrays.asList(labels));
+    public Filters withLabels(String... labels) {
+        withFilter("label", labels);
         return this;
+    }
+
+    /**
+     * Filter by labels
+     *
+     * @param labels
+     *            {@link Map} of labels that contains label keys and values
+     * @return
+     */
+    public Filters withLabels(Map<String, String> labels) {
+        withFilter("label", labelsMapToList(labels).toArray(new String[labels.size()]));
+        return this;
+    }
+
+    private static List<String> labelsMapToList(Map<String, String> labels) {
+        List<String> result = new ArrayList<String>();
+        for (Entry<String, String> entry : labels.entrySet()) {
+            String rest = (entry.getValue() != null & !entry.getValue().isEmpty()) ? "=" + entry.getValue()
+                    : "";
+
+            String label = entry.getKey() + rest;
+
+            result.add(label);
+        }
+        return result;
     }
 
     @Override
