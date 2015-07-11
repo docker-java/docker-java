@@ -83,8 +83,7 @@ public class Filters {
     private static List<String> labelsMapToList(Map<String, String> labels) {
         List<String> result = new ArrayList<String>();
         for (Entry<String, String> entry : labels.entrySet()) {
-            String rest = (entry.getValue() != null & !entry.getValue().isEmpty()) ? "=" + entry.getValue()
-                    : "";
+            String rest = (entry.getValue() != null & !entry.getValue().isEmpty()) ? "=" + entry.getValue() : "";
 
             String label = entry.getKey() + rest;
 
