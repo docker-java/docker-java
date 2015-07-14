@@ -1,5 +1,9 @@
 package com.github.dockerjava.core.command;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.not;
+
 import java.lang.reflect.Method;
 
 import org.testng.ITestResult;
@@ -14,15 +18,11 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.hamcrest.Matchers.not;
-
 @Test(groups = "integration")
 public class InfoCmdImplTest extends AbstractDockerClientTest {
 
     @BeforeTest
-    public void beforeTest() throws DockerException {
+    public void beforeTest() throws Exception {
         super.beforeTest();
     }
 

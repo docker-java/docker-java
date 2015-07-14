@@ -64,13 +64,11 @@ public interface AttachContainerCmd extends AsyncDockerCmd<AttachContainerCmd, F
     public AttachContainerCmd withLogs();
 
     /**
-     * Its the responsibility of the caller to consume and/or close the {@link InputStream} to prevent connection leaks.
-     *
      * @throws NotFoundException
      *             No such container
      */
     @Override
-    public Void exec() throws NotFoundException;
+    public Void exec();
 
     public static interface Exec extends DockerCmdExec<AttachContainerCmd, Void> {
     }

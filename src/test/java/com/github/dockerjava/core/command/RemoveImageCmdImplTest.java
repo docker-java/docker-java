@@ -32,7 +32,7 @@ public class RemoveImageCmdImplTest extends AbstractDockerClientTest {
     public static final Logger LOG = LoggerFactory.getLogger(RemoveImageCmdImplTest.class);
 
     @BeforeTest
-    public void beforeTest() throws DockerException {
+    public void beforeTest() throws Exception {
         super.beforeTest();
     }
 

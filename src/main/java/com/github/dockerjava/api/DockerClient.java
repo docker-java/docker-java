@@ -44,8 +44,11 @@ import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Event;
+import com.github.dockerjava.api.model.BuildResponseItem;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.Identifier;
+import com.github.dockerjava.api.model.PullResponseItem;
+import com.github.dockerjava.api.model.PushResponseItem;
 import com.github.dockerjava.api.model.Statistics;
 
 // https://godoc.org/github.com/fsouza/go-dockerclient
@@ -68,11 +71,11 @@ public interface DockerClient extends Closeable {
      * * IMAGE API *
      */
 
-    public PullImageCmd pullImageCmd(String repository);
+    public PullImageCmd pullImageCmd(String repository, ResultCallback<PullResponseItem> resultCallback);
 
-    public PushImageCmd pushImageCmd(String name);
+    public PushImageCmd pushImageCmd(String name, ResultCallback<PushResponseItem> resultCallback);
 
-    public PushImageCmd pushImageCmd(Identifier identifier);
+    public PushImageCmd pushImageCmd(Identifier identifier, ResultCallback<PushResponseItem> resultCallback);
 
     public CreateImageCmd createImageCmd(String repository, InputStream imageStream);
 
@@ -134,11 +137,11 @@ public interface DockerClient extends Closeable {
 
     public CommitCmd commitCmd(String containerId);
 
-    public BuildImageCmd buildImageCmd();
+    public BuildImageCmd buildImageCmd(ResultCallback<BuildResponseItem> resultCallback);
 
-    public BuildImageCmd buildImageCmd(File dockerFileOrFolder);
+    public BuildImageCmd buildImageCmd(File dockerFileOrFolder, ResultCallback<BuildResponseItem> resultCallback);
 
-    public BuildImageCmd buildImageCmd(InputStream tarInputStream);
+    public BuildImageCmd buildImageCmd(InputStream tarInputStream, ResultCallback<BuildResponseItem> resultCallback);
 
     public TopContainerCmd topContainerCmd(String containerId);
 

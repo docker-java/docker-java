@@ -26,7 +26,7 @@ import com.github.dockerjava.client.AbstractDockerClientTest;
 public class SearchImagesCmdImplTest extends AbstractDockerClientTest {
 
     @BeforeTest
-    public void beforeTest() throws DockerException {
+    public void beforeTest() throws Exception {
         super.beforeTest();
     }
 

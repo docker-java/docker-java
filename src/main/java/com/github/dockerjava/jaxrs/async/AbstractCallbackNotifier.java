@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import javax.ws.rs.ProcessingException;
-import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.core.Response;
 
 import com.github.dockerjava.api.async.ResultCallback;
@@ -25,15 +25,15 @@ public abstract class AbstractCallbackNotifier<T> implements Callable<Void> {
 
     private final ResultCallback<T> resultCallback;
 
-    protected final WebTarget webTarget;
+    protected final Builder requestBuilder;
 
     protected AbstractCallbackNotifier(ResponseStreamProcessor<T> responseStreamProcessor,
-            ResultCallback<T> resultCallback, WebTarget webTarget) {
-        checkNotNull(webTarget, "An WebTarget must be provided");
+            ResultCallback<T> resultCallback, Builder requestBuilder) {
+        checkNotNull(requestBuilder, "An WebTarget must be provided");
         checkNotNull(responseStreamProcessor, "A ResponseStreamProcessor must be provided");
         this.responseStreamProcessor = responseStreamProcessor;
         this.resultCallback = resultCallback;
-        this.webTarget = webTarget;
+        this.requestBuilder = requestBuilder;
     }
 
     @Override

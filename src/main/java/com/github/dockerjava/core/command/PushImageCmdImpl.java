@@ -3,7 +3,10 @@ package com.github.dockerjava.core.command;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.PushImageCmd;
+import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.api.model.PushResponseItem;
 
 /**
  * Push the latest image to the repository.
@@ -11,15 +14,16 @@ import com.github.dockerjava.api.command.PushImageCmd;
  * @param name
  *            The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
  */
-public class PushImageCmdImpl extends AbstrAuthCfgDockerCmd<PushImageCmd, PushImageCmd.Response> implements
-        PushImageCmd {
+public class PushImageCmdImpl extends AbstrAsyncDockerCmd<PushImageCmd, PushResponseItem, Void> implements PushImageCmd {
 
     private String name;
 
     private String tag;
 
-    public PushImageCmdImpl(PushImageCmd.Exec exec, String name) {
-        super(exec);
+    private AuthConfig authConfig;
+
+    public PushImageCmdImpl(PushImageCmd.Exec exec, String name, ResultCallback<PushResponseItem> resultCallback) {
+        super(exec, resultCallback);
         withName(name);
     }
 
@@ -55,6 +59,20 @@ public class PushImageCmdImpl extends AbstrAuthCfgDockerCmd<PushImageCmd, PushIm
         return this;
     }
 
+    public AuthConfig getAuthConfig() {
+        return authConfig;
+    }
+
+    public PushImageCmd withAuthConfig(AuthConfig authConfig) {
+        checkNotNull(authConfig, "authConfig was not specified");
+        return withOptionalAuthConfig(authConfig);
+    }
+
+    private PushImageCmd withOptionalAuthConfig(AuthConfig authConfig) {
+        this.authConfig = authConfig;
+        return this;
+    }
+
     @Override
     public String toString() {
         return new StringBuilder("push ").append(name).toString();
@@ -65,7 +83,7 @@ public class PushImageCmdImpl extends AbstrAuthCfgDockerCmd<PushImageCmd, PushIm
      *             No such image
      */
     @Override
-    public Response exec() throws NotFoundException {
+    public Void exec() throws NotFoundException {
         return super.exec();
     }
 }

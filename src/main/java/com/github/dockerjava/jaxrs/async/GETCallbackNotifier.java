@@ -3,14 +3,13 @@
  */
 package com.github.dockerjava.jaxrs.async;
 
-import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.core.Response;
 
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.core.async.ResponseStreamProcessor;
 
 /**
- * <TODO: class description>
  *
  * @author marcus
  *
@@ -18,12 +17,12 @@ import com.github.dockerjava.core.async.ResponseStreamProcessor;
 public class GETCallbackNotifier<T> extends AbstractCallbackNotifier<T> {
 
     public GETCallbackNotifier(ResponseStreamProcessor<T> responseStreamProcessor, ResultCallback<T> resultCallback,
-            WebTarget webTarget) {
-        super(responseStreamProcessor, resultCallback, webTarget);
+            Builder requestBuilder) {
+        super(responseStreamProcessor, resultCallback, requestBuilder);
     }
 
     protected Response response() {
-        return webTarget.request().get(Response.class);
+        return requestBuilder.get(Response.class);
     }
 
 }

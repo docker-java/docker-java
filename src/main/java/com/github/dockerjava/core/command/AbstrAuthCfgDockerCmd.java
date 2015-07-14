@@ -39,12 +39,6 @@ public abstract class AbstrAuthCfgDockerCmd<T extends DockerCmd<RES_T>, RES_T> e
         return (T) this;
     }
 
-    protected String registryAuth() {
-        try {
-            return Base64.encodeBase64String(new ObjectMapper().writeValueAsString(authConfig).getBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 
 }

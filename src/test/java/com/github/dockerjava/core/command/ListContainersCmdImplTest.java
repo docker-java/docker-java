@@ -35,7 +35,7 @@ import com.google.common.collect.ImmutableMap;
 public class ListContainersCmdImplTest extends AbstractDockerClientTest {
 
     @BeforeTest
-    public void beforeTest() throws DockerException {
+    public void beforeTest() throws Exception {
         super.beforeTest();
     }
 
@@ -54,12 +54,14 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
         super.afterMethod(result);
     }
 
-    public void testListContainers() throws DockerException {
+    public void testListContainers() throws Exception {
 
         String testImage = "busybox";
 
         // need to block until image is pulled completely
-        asString(dockerClient.pullImageCmd(testImage).exec());
+        PullResponseCallback callback = new PullResponseCallback();
+        dockerClient.pullImageCmd(testImage, callback).exec();
+        callback.awaitFinish();
 
         List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
         assertThat(containers, notNullValue());
@@ -102,12 +104,14 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test
-    public void testListContainersWithLabelsFilter() throws DockerException {
+    public void testListContainersWithLabelsFilter() throws Exception {
 
         String testImage = "busybox";
 
+        PullResponseCallback callback = new PullResponseCallback();
         // need to block until image is pulled completely
-        asString(dockerClient.pullImageCmd(testImage).exec());
+        dockerClient.pullImageCmd(testImage, callback).exec();
+        callback.awaitFinish();
 
         List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
         assertThat(containers, notNullValue());

@@ -13,9 +13,9 @@ import com.github.dockerjava.jaxrs.BuildImageCmdExec;
 /**
  * Special {@link DockerCmdExecFactory} implementation that collects container and image creations while test execution
  * for the purpose of automatically cleanup.
- * 
+ *
  * @author marcus
- * 
+ *
  */
 public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 
@@ -91,16 +91,16 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
     public BuildImageCmd.Exec createBuildImageCmdExec() {
         return new BuildImageCmd.Exec() {
             @Override
-            public BuildImageCmd.Response exec(BuildImageCmd command) {
+            public Void exec(BuildImageCmd command) {
                 // can't detect image id here so tagging it
                 String tag = command.getTag();
                 if (tag == null || "".equals(tag.trim())) {
                     tag = "" + new SecureRandom().nextInt(Integer.MAX_VALUE);
                     command.withTag(tag);
                 }
-                InputStream inputStream = delegate.createBuildImageCmdExec().exec(command);
+                delegate.createBuildImageCmdExec().exec(command);
                 imageNames.add(tag);
-                return new BuildImageCmdExec.ResponseImpl(inputStream);
+                return null;
             }
         };
     }

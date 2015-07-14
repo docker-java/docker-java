@@ -63,7 +63,7 @@ public class FrameReaderITest {
 
         collectFramesCallback.awaitFinish();
 
-        return collectFramesCallback.frames;
+        return collectFramesCallback.items;
     }
 
     @Test

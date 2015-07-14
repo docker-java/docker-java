@@ -49,8 +49,11 @@ import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.Event;
+import com.github.dockerjava.api.model.BuildResponseItem;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.Identifier;
+import com.github.dockerjava.api.model.PullResponseItem;
+import com.github.dockerjava.api.model.PushResponseItem;
 import com.github.dockerjava.api.model.Statistics;
 import com.github.dockerjava.core.command.AttachContainerCmdImpl;
 import com.github.dockerjava.core.command.AuthCmdImpl;
@@ -186,14 +189,14 @@ public class DockerClientImpl implements Closeable, DockerClient {
      * * IMAGE API *
      */
     @Override
-    public PullImageCmd pullImageCmd(String repository) {
+    public PullImageCmd pullImageCmd(String repository, ResultCallback<PullResponseItem> resultCallback) {
         return new PullImageCmdImpl(getDockerCmdExecFactory().createPullImageCmdExec(),
-                dockerClientConfig.effectiveAuthConfig(repository), repository);
+                dockerClientConfig.effectiveAuthConfig(repository), repository, resultCallback);
     }
 
     @Override
-    public PushImageCmd pushImageCmd(String name) {
-        PushImageCmd cmd = new PushImageCmdImpl(getDockerCmdExecFactory().createPushImageCmdExec(), name);
+    public PushImageCmd pushImageCmd(String name, ResultCallback<PushResponseItem> resultCallback) {
+        PushImageCmd cmd = new PushImageCmdImpl(getDockerCmdExecFactory().createPushImageCmdExec(), name, resultCallback);
 
         AuthConfig cfg = dockerClientConfig.effectiveAuthConfig(name);
         if (cfg != null)
@@ -202,8 +205,8 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
-    public PushImageCmd pushImageCmd(Identifier identifier) {
-        PushImageCmd cmd = pushImageCmd(identifier.repository.name);
+    public PushImageCmd pushImageCmd(Identifier identifier, ResultCallback<PushResponseItem> resultCallback) {
+        PushImageCmd cmd = pushImageCmd(identifier.repository.name, resultCallback);
         if (identifier.tag.isPresent())
             cmd.withTag(identifier.tag.get());
 
@@ -337,20 +340,21 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
-    public BuildImageCmd buildImageCmd() {
-        return augmentBuildImageCmd(new BuildImageCmdImpl(getDockerCmdExecFactory().createBuildImageCmdExec()));
+    public BuildImageCmd buildImageCmd(ResultCallback<BuildResponseItem> resultCallback) {
+        return augmentBuildImageCmd(new BuildImageCmdImpl(getDockerCmdExecFactory().createBuildImageCmdExec(),
+                resultCallback));
     }
 
     @Override
-    public BuildImageCmd buildImageCmd(File dockerFileOrFolder) {
+    public BuildImageCmd buildImageCmd(File dockerFileOrFolder, ResultCallback<BuildResponseItem> resultCallback) {
         return augmentBuildImageCmd(new BuildImageCmdImpl(getDockerCmdExecFactory().createBuildImageCmdExec(),
-                dockerFileOrFolder));
+                dockerFileOrFolder, resultCallback));
     }
 
     @Override
-    public BuildImageCmd buildImageCmd(InputStream tarInputStream) {
+    public BuildImageCmd buildImageCmd(InputStream tarInputStream, ResultCallback<BuildResponseItem> resultCallback) {
         return augmentBuildImageCmd(new BuildImageCmdImpl(getDockerCmdExecFactory().createBuildImageCmdExec(),
-                tarInputStream));
+                tarInputStream, resultCallback));
     }
 
     private BuildImageCmd augmentBuildImageCmd(BuildImageCmd buildImageCmd) {

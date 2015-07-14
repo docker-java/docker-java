@@ -2,11 +2,14 @@ package com.github.dockerjava.client;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsString;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.model.BuildResponseItem;
 import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.api.model.PullResponseItem;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumeBind;
 import com.github.dockerjava.core.DockerClientBuilder;
@@ -17,11 +20,13 @@ import com.google.common.base.Joiner;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.ITestResult;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -40,15 +45,18 @@ public abstract class AbstractDockerClientTest extends Assert {
     protected TestDockerCmdExecFactory dockerCmdExecFactory = new TestDockerCmdExecFactory(
             DockerClientBuilder.getDefaultDockerCmdExecFactory());
 
-    public void beforeTest() {
+    public void beforeTest() throws Exception {
 
         LOG.info("======================= BEFORETEST =======================");
         LOG.info("Connecting to Docker server");
         dockerClient = DockerClientBuilder.getInstance(config()).withDockerCmdExecFactory(dockerCmdExecFactory).build();
 
         LOG.info("Pulling image 'busybox'");
+
+        PullResponseCallback callback = new PullResponseCallback();
         // need to block until image is pulled completely
-        asString(dockerClient.pullImageCmd("busybox").withTag("latest").exec());
+        dockerClient.pullImageCmd("busybox", callback).withTag("latest").exec();
+        callback.awaitFinish();
 
         assertNotNull(dockerClient);
         LOG.info("======================= END OF BEFORETEST =======================\n\n");
@@ -181,27 +189,14 @@ public abstract class AbstractDockerClientTest extends Assert {
         assertThat(volumes, contains(expectedVolumes));
     }
 
-    public static class CollectFramesCallback extends ResultCallbackTemplate<Frame> {
-        public final List<Frame> frames = new ArrayList<Frame>();
-
-        private final StringBuffer log = new StringBuffer();
-
-        @Override
-        public void onError(Throwable throwable) {
-            throwable.printStackTrace();
-            super.onError(throwable);
-        }
+    public static class CollectFramesCallback extends CollectStreamItemCallback<Frame> {
 
         @Override
         public void onNext(Frame frame) {
-            frames.add(frame);
+            items.add(frame);
             log.append(new String(frame.getPayload()));
         }
 
-        @Override
-        public String toString() {
-            return log.toString();
-        }
     }
 
     protected String containerLog(String containerId) throws Exception {
@@ -213,5 +208,52 @@ public abstract class AbstractDockerClientTest extends Assert {
         collectFramesCallback.awaitFinish();
 
         return collectFramesCallback.toString();
+    }
+
+
+    public static class CollectStreamItemCallback<T> extends ResultCallbackTemplate<T> {
+        public final List<T> items = new ArrayList<T>();
+
+        protected final StringBuffer log = new StringBuffer();
+
+        @Override
+        public void onError(Throwable throwable) {
+            throwable.printStackTrace();
+            super.onError(throwable);
+        }
+
+        @Override
+        public void onNext(T item) {
+            items.add(item);
+            log.append("" + item);
+            LOG.info(item.toString());
+        }
+
+        @Override
+        public String toString() {
+            return log.toString();
+        }
+    }
+
+    public static class BuildLogCallback extends CollectStreamItemCallback<BuildResponseItem> {
+        public String awaitImageId() throws Exception {
+            awaitFinish();
+            BuildResponseItem item = items.get(items.size() - 1);
+            assertThat(item.toString(), containsString("Successfully built"));
+            return item.getStream().replaceFirst("Successfully built", "").trim();
+        }
+    }
+
+    public static class PullResponseCallback extends CollectStreamItemCallback<PullResponseItem> {
+
+    }
+
+    protected String buildImage(File baseDir) throws Exception {
+
+        BuildLogCallback callback = new BuildLogCallback();
+
+        dockerClient.buildImageCmd(baseDir, callback).withNoCache().exec();
+
+        return callback.awaitImageId();
     }
 }

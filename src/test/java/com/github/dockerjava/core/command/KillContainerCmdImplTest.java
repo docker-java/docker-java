@@ -29,7 +29,7 @@ public class KillContainerCmdImplTest extends AbstractDockerClientTest {
     public static final Logger LOG = LoggerFactory.getLogger(KillContainerCmdImplTest.class);
 
     @BeforeTest
-    public void beforeTest() throws DockerException {
+    public void beforeTest() throws Exception {
         super.beforeTest();
     }
 

@@ -31,7 +31,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
     }
 
     @BeforeTest
-    public void beforeTest() throws DockerException {
+    public void beforeTest() throws Exception {
         super.beforeTest();
     }
 
@@ -54,7 +54,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
      * This specific test may fail with boot2docker as time may not in sync with host system
      */
     @Test
-    public void testEventStreamTimeBound() throws InterruptedException, IOException {
+    public void testEventStreamTimeBound() throws Exception {
         // Don't include other tests events
         TimeUnit.SECONDS.sleep(1);
 
@@ -76,7 +76,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test
-    public void testEventStreaming1() throws InterruptedException, IOException {
+    public void testEventStreaming1() throws Exception {
         // Don't include other tests events
         TimeUnit.SECONDS.sleep(1);
 
@@ -95,7 +95,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test
-    public void testEventStreaming2() throws InterruptedException, IOException {
+    public void testEventStreaming2() throws Exception {
         // Don't include other tests events
         TimeUnit.SECONDS.sleep(1);
 
@@ -116,9 +116,12 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
     /**
      * This method generates {#link KNOWN_NUM_EVENTS} events
      */
-    private int generateEvents() {
+    private int generateEvents() throws Exception {
         String testImage = "busybox";
-        asString(dockerClient.pullImageCmd(testImage).exec());
+
+        PullResponseCallback callback = new PullResponseCallback();
+        dockerClient.pullImageCmd(testImage, callback).exec();
+        callback.awaitFinish();
         CreateContainerResponse container = dockerClient.createContainerCmd(testImage).withCmd("sleep", "9999").exec();
         dockerClient.startContainerCmd(container.getId()).exec();
         dockerClient.stopContainerCmd(container.getId()).exec();

@@ -27,7 +27,7 @@ public class DockerClientTest extends AbstractDockerClientTest {
     public static final Logger LOG = LoggerFactory.getLogger(DockerClientTest.class);
 
     @BeforeTest
-    public void beforeTest() throws DockerException {
+    public void beforeTest() throws Exception {
         super.beforeTest();
     }
 

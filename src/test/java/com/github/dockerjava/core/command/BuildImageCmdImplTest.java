@@ -27,12 +27,11 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.DockerClientException;
-import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.InspectImageResponse;
-import com.github.dockerjava.api.model.EventStreamItem;
+import com.github.dockerjava.api.model.BuildResponseItem;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.core.CompressArchiveUtil;
 
@@ -40,7 +39,7 @@ import com.github.dockerjava.core.CompressArchiveUtil;
 public class BuildImageCmdImplTest extends AbstractDockerClientTest {
 
     @BeforeTest
-    public void beforeTest() throws DockerException {
+    public void beforeTest() throws Exception {
         super.beforeTest();
     }
 
@@ -60,15 +59,10 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test
-    public void testNginxDockerfileBuilder() {
+    public void testNginxDockerfileBuilder() throws Exception {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("nginx").getFile());
 
-        InputStream response = dockerClient.buildImageCmd(baseDir).withNoCache().exec();
-
-        String fullLog = asString(response);
-        assertThat(fullLog, containsString("Successfully built"));
-
-        String imageId = StringUtils.substringBetween(fullLog, "Successfully built ", "\\n\"}").trim();
+        String imageId = buildImage(baseDir);
 
         InspectImageResponse inspectImageResponse = dockerClient.inspectImageCmd(imageId).exec();
         assertThat(inspectImageResponse, not(nullValue()));
@@ -78,27 +72,25 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test(groups = "ignoreInCircleCi")
-    public void testNonstandard1() {
+    public void testNonstandard1() throws Exception {
         File baseDir = new File(Thread.currentThread().getContextClassLoader()
                 .getResource("nonstandard/subdirectory/Dockerfile-nonstandard").getFile());
 
-        InputStream response = dockerClient.buildImageCmd(baseDir).withNoCache().exec();
-
-        String fullLog = asString(response);
-        assertThat(fullLog, containsString("Successfully built"));
+        buildImage(baseDir);
     }
 
     @Test(groups = "ignoreInCircleCi")
-    public void testNonstandard2() {
+    public void testNonstandard2() throws Exception {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("nonstandard").getFile());
         File dockerFile = new File(Thread.currentThread().getContextClassLoader()
                 .getResource("nonstandard/subdirectory/Dockerfile-nonstandard").getFile());
 
-        InputStream response = dockerClient.buildImageCmd().withBaseDirectory(baseDir).withDockerfile(dockerFile)
+        BuildLogCallback resultCallback = new BuildLogCallback();
+
+        dockerClient.buildImageCmd(resultCallback).withBaseDirectory(baseDir).withDockerfile(dockerFile)
                 .withNoCache().exec();
 
-        String fullLog = asString(response);
-        assertThat(fullLog, containsString("Successfully built"));
+        resultCallback.awaitImageId();
     }
 
     @Test
@@ -149,21 +141,22 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
     }
 
     private String dockerfileBuild(InputStream tarInputStream) throws Exception {
-        return execBuild(dockerClient.buildImageCmd().withTarInputStream(tarInputStream));
+        BuildLogCallback resultCallback = new BuildLogCallback();
+        return execBuild(dockerClient.buildImageCmd(resultCallback).withTarInputStream(tarInputStream));
     }
 
     private String dockerfileBuild(File baseDir) throws Exception {
-        return execBuild(dockerClient.buildImageCmd(baseDir));
+        BuildLogCallback resultCallback = new BuildLogCallback();
+        return execBuild(dockerClient.buildImageCmd(baseDir, resultCallback));
     }
 
     private String execBuild(BuildImageCmd buildImageCmd) throws Exception {
-        // Build image
-        InputStream response = buildImageCmd.withNoCache().exec();
 
-        String fullLog = asString(response);
-        assertThat(fullLog, containsString("Successfully built"));
+        BuildLogCallback resultCallback = (BuildLogCallback) buildImageCmd.getResultCallback();
 
-        String imageId = StringUtils.substringBetween(fullLog, "Successfully built ", "\\n\"}").trim();
+        buildImageCmd.withNoCache().exec();
+
+        String imageId = resultCallback.awaitImageId();
 
         // Create container based on image
         CreateContainerResponse container = dockerClient.createContainerCmd(imageId).exec();
@@ -179,17 +172,22 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test(expectedExceptions = { DockerClientException.class })
-    public void testDockerfileIgnored() {
+    public void testDockerfileIgnored() throws Exception{
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testDockerfileIgnored")
                 .getFile());
-        dockerClient.buildImageCmd(baseDir).withNoCache().exec();
+        BuildLogCallback resultCallback = new BuildLogCallback();
+        dockerClient.buildImageCmd(baseDir, resultCallback).withNoCache().exec();
+        resultCallback.awaitImageId();
+
     }
 
     @Test(expectedExceptions = { DockerClientException.class })
-    public void testInvalidDockerIgnorePattern() {
+    public void testInvalidDockerIgnorePattern() throws Exception {
         File baseDir = new File(Thread.currentThread().getContextClassLoader()
                 .getResource("testInvalidDockerignorePattern").getFile());
-        dockerClient.buildImageCmd(baseDir).withNoCache().exec();
+        BuildLogCallback resultCallback = new BuildLogCallback();
+        dockerClient.buildImageCmd(baseDir, resultCallback).withNoCache().exec();
+        resultCallback.awaitImageId();
     }
 
     @Test(groups = "ignoreInCircleCi")
@@ -204,11 +202,14 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
     public void testNetCatDockerfileBuilder() throws InterruptedException, IOException {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("netcat").getFile());
 
-        Iterable<EventStreamItem> response = dockerClient.buildImageCmd(baseDir).withNoCache().exec().getItems();
+        BuildLogCallback resultCallback = new BuildLogCallback();
+        dockerClient.buildImageCmd(baseDir, resultCallback).withNoCache().exec();
+
+        resultCallback.awaitFinish();
 
         String imageId = null;
 
-        for (EventStreamItem item : response) {
+        for (BuildResponseItem item : resultCallback.items) {
             String text = item.getStream();
             if (text.startsWith("Successfully built ")) {
                 imageId = StringUtils.substringBetween(text, "Successfully built ", "\n").trim();
