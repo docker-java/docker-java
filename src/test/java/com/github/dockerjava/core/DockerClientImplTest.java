@@ -1,9 +1,9 @@
 package com.github.dockerjava.core;
 
-import org.testng.annotations.Test;
-
 import static org.testng.Assert.assertEquals;
 import static org.testng.AssertJUnit.fail;
+
+import org.testng.annotations.Test;
 
 public class DockerClientImplTest {
 

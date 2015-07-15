@@ -1,13 +1,13 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.testng.annotations.Test;
+import static org.testng.Assert.assertEquals;
 
 import java.io.IOException;
 
-import static org.testng.Assert.*;
+import org.testng.annotations.Test;
+
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class VolumeBindsTest {
     @Test

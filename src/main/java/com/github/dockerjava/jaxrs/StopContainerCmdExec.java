@@ -8,7 +8,8 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.api.command.StopContainerCmd;
 
-public class StopContainerCmdExec extends AbstrSyncDockerCmdExec<StopContainerCmd, Void> implements StopContainerCmd.Exec {
+public class StopContainerCmdExec extends AbstrSyncDockerCmdExec<StopContainerCmd, Void> implements
+        StopContainerCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StopContainerCmdExec.class);
 

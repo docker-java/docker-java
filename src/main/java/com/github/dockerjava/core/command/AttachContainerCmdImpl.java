@@ -2,8 +2,6 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.model.Frame;
 
@@ -22,7 +20,8 @@ import com.github.dockerjava.api.model.Frame;
  * @param timestamps
  *            - true or false, if true, print timestamps for every log line. Defaults to false.
  */
-public class AttachContainerCmdImpl extends AbstrAsyncDockerCmd<AttachContainerCmd, Frame> implements AttachContainerCmd {
+public class AttachContainerCmdImpl extends AbstrAsyncDockerCmd<AttachContainerCmd, Frame> implements
+        AttachContainerCmd {
 
     private String containerId;
 

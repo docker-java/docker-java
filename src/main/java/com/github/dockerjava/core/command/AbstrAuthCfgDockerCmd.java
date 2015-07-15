@@ -2,11 +2,6 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.io.IOException;
-
-import org.apache.commons.codec.binary.Base64;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.command.DockerCmd;
 import com.github.dockerjava.api.command.DockerCmdSyncExec;
 import com.github.dockerjava.api.model.AuthConfig;
@@ -38,7 +33,5 @@ public abstract class AbstrAuthCfgDockerCmd<T extends DockerCmd<RES_T>, RES_T> e
         this.authConfig = authConfig;
         return (T) this;
     }
-
-
 
 }

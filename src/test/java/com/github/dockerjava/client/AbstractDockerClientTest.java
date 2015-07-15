@@ -4,6 +4,23 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsString;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.lang.reflect.Method;
+import java.net.DatagramSocket;
+import java.net.ServerSocket;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.LineIterator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.testng.Assert;
+import org.testng.ITestResult;
+
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.async.ResultCallback;
@@ -18,24 +35,6 @@ import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.TestDockerCmdExecFactory;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
 import com.google.common.base.Joiner;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.LineIterator;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.testng.Assert;
-import org.testng.ITestResult;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.lang.reflect.Method;
-import java.net.DatagramSocket;
-import java.net.ServerSocket;
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class AbstractDockerClientTest extends Assert {
 
@@ -208,7 +207,8 @@ public abstract class AbstractDockerClientTest extends Assert {
         return collectFramesCallback.toString();
     }
 
-    public static class CollectStreamItemCallback<RC_T extends ResultCallback<A_RES_T>, A_RES_T> extends ResultCallbackTemplate<RC_T, A_RES_T> {
+    public static class CollectStreamItemCallback<RC_T extends ResultCallback<A_RES_T>, A_RES_T> extends
+            ResultCallbackTemplate<RC_T, A_RES_T> {
         public final List<A_RES_T> items = new ArrayList<A_RES_T>();
 
         protected final StringBuffer log = new StringBuffer();

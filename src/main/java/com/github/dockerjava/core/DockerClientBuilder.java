@@ -1,23 +1,24 @@
 package com.github.dockerjava.core;
 
+import java.util.Iterator;
+import java.util.ServiceLoader;
+
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.core.DockerClientConfig.DockerClientConfigBuilder;
 
-import java.util.Iterator;
-import java.util.ServiceLoader;
-
 public class DockerClientBuilder {
 
     private static Class<? extends DockerCmdExecFactory> factoryClass;
+
     private static ServiceLoader<DockerCmdExecFactory> serviceLoader = ServiceLoader.load(DockerCmdExecFactory.class);
 
     static {
         serviceLoader.reload();
         Iterator<DockerCmdExecFactory> iterator = serviceLoader.iterator();
         if (!iterator.hasNext()) {
-           throw new RuntimeException("Fatal: Can't find any implementation of '"
-                 + DockerCmdExecFactory.class.getName() + "' in the current classpath.");
+            throw new RuntimeException("Fatal: Can't find any implementation of '"
+                    + DockerCmdExecFactory.class.getName() + "' in the current classpath.");
         }
 
         factoryClass = iterator.next().getClass();
@@ -48,14 +49,11 @@ public class DockerClientBuilder {
     }
 
     public static DockerCmdExecFactory getDefaultDockerCmdExecFactory() {
-       try
-       {
-          return factoryClass.newInstance();
-       }
-       catch (InstantiationException | IllegalAccessException e)
-       {
-          throw new RuntimeException("Fatal: Can't create new instance of '" + factoryClass.getName() + "'");
-       }
+        try {
+            return factoryClass.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException("Fatal: Can't create new instance of '" + factoryClass.getName() + "'");
+        }
     }
 
     public DockerClientBuilder withDockerCmdExecFactory(DockerCmdExecFactory dockerCmdExecFactory) {

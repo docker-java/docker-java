@@ -1,18 +1,18 @@
 package com.github.dockerjava.jaxrs;
 
-import com.github.dockerjava.api.command.ExecStartCmd;
-import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
+import static javax.ws.rs.client.Entity.entity;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.InputStream;
 
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import java.io.InputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import static javax.ws.rs.client.Entity.entity;
+import com.github.dockerjava.api.command.ExecStartCmd;
+import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
 
 public class ExecStartCmdExec extends AbstrSyncDockerCmdExec<ExecStartCmd, InputStream> implements ExecStartCmd.Exec {
 

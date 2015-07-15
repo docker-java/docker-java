@@ -16,7 +16,8 @@ import com.github.dockerjava.api.async.ResultCallback;
  * @author marcus
  *
  */
-public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T>, A_RES_T> implements ResultCallback<A_RES_T> {
+public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T>, A_RES_T> implements
+        ResultCallback<A_RES_T> {
 
     private final CountDownLatch finished = new CountDownLatch(1);
 

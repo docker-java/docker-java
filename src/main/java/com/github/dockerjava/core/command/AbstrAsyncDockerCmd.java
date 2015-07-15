@@ -33,6 +33,4 @@ public abstract class AbstrAsyncDockerCmd<CMD_T extends AsyncDockerCmd<CMD_T, A_
     public void close() throws IOException {
     }
 
-
-
 }

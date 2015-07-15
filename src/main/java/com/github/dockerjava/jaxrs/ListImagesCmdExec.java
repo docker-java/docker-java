@@ -1,5 +1,7 @@
 package com.github.dockerjava.jaxrs;
 
+import static com.google.common.net.UrlEscapers.urlPathSegmentEscaper;
+
 import java.util.List;
 
 import javax.ws.rs.client.WebTarget;
@@ -11,8 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.model.Image;
-
-import static com.google.common.net.UrlEscapers.urlPathSegmentEscaper;
 
 public class ListImagesCmdExec extends AbstrSyncDockerCmdExec<ListImagesCmd, List<Image>> implements ListImagesCmd.Exec {
 

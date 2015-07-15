@@ -16,8 +16,12 @@
 package com.github.dockerjava.api.command;
 
 import static com.github.dockerjava.test.serdes.JSONTestHelper.testRoundTrip;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
+
 import java.io.IOException;
-import static org.testng.Assert.*;
+
 import org.testng.annotations.Test;
 
 /**

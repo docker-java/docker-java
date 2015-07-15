@@ -1,11 +1,11 @@
 package com.github.dockerjava.core.command;
 
-import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.command.SaveImageCmd;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.InputStream;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.command.SaveImageCmd;
 
 public class SaveImageCmdImpl extends AbstrDockerCmd<SaveImageCmd, InputStream> implements SaveImageCmd {
     private String name;

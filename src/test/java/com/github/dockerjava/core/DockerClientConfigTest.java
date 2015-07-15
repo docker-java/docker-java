@@ -1,7 +1,6 @@
 package com.github.dockerjava.core;
 
-import com.github.dockerjava.api.model.AuthConfig;
-import org.testng.annotations.Test;
+import static org.testng.Assert.assertEquals;
 
 import java.net.URI;
 import java.util.Collections;
@@ -9,7 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import static org.testng.Assert.assertEquals;
+import org.testng.annotations.Test;
+
+import com.github.dockerjava.api.model.AuthConfig;
 
 public class DockerClientConfigTest {
 
