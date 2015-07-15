@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.api.command.RemoveImageCmd;
 
-public class RemoveImageCmdExec extends AbstrDockerCmdExec<RemoveImageCmd, Void> implements RemoveImageCmd.Exec {
+public class RemoveImageCmdExec extends AbstrSyncDockerCmdExec<RemoveImageCmd, Void> implements RemoveImageCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RemoveImageCmdExec.class);
 

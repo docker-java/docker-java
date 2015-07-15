@@ -85,12 +85,8 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
         File dockerFile = new File(Thread.currentThread().getContextClassLoader()
                 .getResource("nonstandard/subdirectory/Dockerfile-nonstandard").getFile());
 
-        BuildLogCallback resultCallback = new BuildLogCallback();
-
-        dockerClient.buildImageCmd(resultCallback).withBaseDirectory(baseDir).withDockerfile(dockerFile)
-                .withNoCache().exec();
-
-        resultCallback.awaitImageId();
+        dockerClient.buildImageCmd().withBaseDirectory(baseDir).withDockerfile(dockerFile)
+                .withNoCache().exec(new BuildLogCallback()).awaitImageId();
     }
 
     @Test
@@ -141,20 +137,20 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
     }
 
     private String dockerfileBuild(InputStream tarInputStream) throws Exception {
-        BuildLogCallback resultCallback = new BuildLogCallback();
-        return execBuild(dockerClient.buildImageCmd(resultCallback).withTarInputStream(tarInputStream));
+
+        return execBuild(dockerClient.buildImageCmd().withTarInputStream(tarInputStream));
     }
 
     private String dockerfileBuild(File baseDir) throws Exception {
-        BuildLogCallback resultCallback = new BuildLogCallback();
-        return execBuild(dockerClient.buildImageCmd(baseDir, resultCallback));
+
+        return execBuild(dockerClient.buildImageCmd(baseDir));
     }
 
     private String execBuild(BuildImageCmd buildImageCmd) throws Exception {
 
-        BuildLogCallback resultCallback = (BuildLogCallback) buildImageCmd.getResultCallback();
+        BuildLogCallback resultCallback = new BuildLogCallback();;
 
-        buildImageCmd.withNoCache().exec();
+        buildImageCmd.withNoCache().exec(resultCallback);
 
         String imageId = resultCallback.awaitImageId();
 
@@ -175,19 +171,16 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
     public void testDockerfileIgnored() throws Exception{
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testDockerfileIgnored")
                 .getFile());
-        BuildLogCallback resultCallback = new BuildLogCallback();
-        dockerClient.buildImageCmd(baseDir, resultCallback).withNoCache().exec();
-        resultCallback.awaitImageId();
 
+        dockerClient.buildImageCmd(baseDir).withNoCache().exec(new BuildLogCallback()).awaitImageId();
     }
 
     @Test(expectedExceptions = { DockerClientException.class })
     public void testInvalidDockerIgnorePattern() throws Exception {
         File baseDir = new File(Thread.currentThread().getContextClassLoader()
                 .getResource("testInvalidDockerignorePattern").getFile());
-        BuildLogCallback resultCallback = new BuildLogCallback();
-        dockerClient.buildImageCmd(baseDir, resultCallback).withNoCache().exec();
-        resultCallback.awaitImageId();
+
+        dockerClient.buildImageCmd(baseDir).withNoCache().exec( new BuildLogCallback()).awaitImageId();
     }
 
     @Test(groups = "ignoreInCircleCi")
@@ -203,9 +196,9 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("netcat").getFile());
 
         BuildLogCallback resultCallback = new BuildLogCallback();
-        dockerClient.buildImageCmd(baseDir, resultCallback).withNoCache().exec();
+        dockerClient.buildImageCmd(baseDir).withNoCache().exec(resultCallback);
 
-        resultCallback.awaitFinish();
+        resultCallback.awaitCompletion();
 
         String imageId = null;
 

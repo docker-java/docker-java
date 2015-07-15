@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
 import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
 
-public class CopyFileFromContainerCmdExec extends AbstrDockerCmdExec<CopyFileFromContainerCmd, InputStream> implements
+public class CopyFileFromContainerCmdExec extends AbstrSyncDockerCmdExec<CopyFileFromContainerCmd, InputStream> implements
         CopyFileFromContainerCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CopyFileFromContainerCmdExec.class);

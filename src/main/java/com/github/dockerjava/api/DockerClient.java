@@ -71,11 +71,11 @@ public interface DockerClient extends Closeable {
      * * IMAGE API *
      */
 
-    public PullImageCmd pullImageCmd(String repository, ResultCallback<PullResponseItem> resultCallback);
+    public PullImageCmd pullImageCmd(String repository);
 
-    public PushImageCmd pushImageCmd(String name, ResultCallback<PushResponseItem> resultCallback);
+    public PushImageCmd pushImageCmd(String name);
 
-    public PushImageCmd pushImageCmd(Identifier identifier, ResultCallback<PushResponseItem> resultCallback);
+    public PushImageCmd pushImageCmd(Identifier identifier);
 
     public CreateImageCmd createImageCmd(String repository, InputStream imageStream);
 
@@ -117,13 +117,13 @@ public interface DockerClient extends Closeable {
 
     public WaitContainerCmd waitContainerCmd(String containerId);
 
-    public AttachContainerCmd attachContainerCmd(String containerId, ResultCallback<Frame> resultCallback);
+    public AttachContainerCmd attachContainerCmd(String containerId);
 
     public ExecStartCmd execStartCmd(String containerId);
 
     public InspectExecCmd inspectExecCmd(String execId);
 
-    public LogContainerCmd logContainerCmd(String containerId, ResultCallback<Frame> resultCallback);
+    public LogContainerCmd logContainerCmd(String containerId);
 
     public CopyFileFromContainerCmd copyFileFromContainerCmd(String containerId, String resource);
 
@@ -137,11 +137,11 @@ public interface DockerClient extends Closeable {
 
     public CommitCmd commitCmd(String containerId);
 
-    public BuildImageCmd buildImageCmd(ResultCallback<BuildResponseItem> resultCallback);
+    public BuildImageCmd buildImageCmd();
 
-    public BuildImageCmd buildImageCmd(File dockerFileOrFolder, ResultCallback<BuildResponseItem> resultCallback);
+    public BuildImageCmd buildImageCmd(File dockerFileOrFolder);
 
-    public BuildImageCmd buildImageCmd(InputStream tarInputStream, ResultCallback<BuildResponseItem> resultCallback);
+    public BuildImageCmd buildImageCmd(InputStream tarInputStream);
 
     public TopContainerCmd topContainerCmd(String containerId);
 
@@ -151,9 +151,9 @@ public interface DockerClient extends Closeable {
 
     public UnpauseContainerCmd unpauseContainerCmd(String containerId);
 
-    public EventsCmd eventsCmd(ResultCallback<Event> resultCallback);
+    public EventsCmd eventsCmd();
 
-    public StatsCmd statsCmd(ResultCallback<Statistics> resultCallback);
+    public StatsCmd statsCmd();
 
     @Override
     public void close() throws IOException;

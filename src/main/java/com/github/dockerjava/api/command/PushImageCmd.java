@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.PushResponseItem;
 
@@ -10,7 +11,7 @@ import com.github.dockerjava.api.model.PushResponseItem;
  * @param name
  *            The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
  */
-public interface PushImageCmd extends AsyncDockerCmd<PushImageCmd, PushResponseItem, Void> {
+public interface PushImageCmd extends AsyncDockerCmd<PushImageCmd, PushResponseItem> {
 
     public String getName();
 
@@ -36,8 +37,9 @@ public interface PushImageCmd extends AsyncDockerCmd<PushImageCmd, PushResponseI
      * @throws NotFoundException
      *             No such image
      */
-    public Void exec() throws NotFoundException;
+    @Override
+    public <T extends ResultCallback<PushResponseItem>> T exec(T resultCallback);
 
-    public static interface Exec extends DockerCmdExec<PushImageCmd, Void> {
+    public static interface Exec extends DockerCmdAsyncExec<PushImageCmd, PushResponseItem> {
     }
 }

@@ -53,7 +53,6 @@ public class StatsCmdImplTest extends AbstractDockerClientTest {
         TimeUnit.SECONDS.sleep(1);
 
         CountDownLatch countDownLatch = new CountDownLatch(NUM_STATS);
-        StatsCallbackTest statsCallback = new StatsCallbackTest(countDownLatch);
 
         String containerName = "generated_" + new SecureRandom().nextInt();
 
@@ -64,8 +63,7 @@ public class StatsCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        StatsCmd statsCmd = dockerClient.statsCmd(statsCallback).withContainerId(container.getId());
-        statsCmd.exec();
+        StatsCallbackTest statsCallback = dockerClient.statsCmd().withContainerId(container.getId()).exec(new StatsCallbackTest(countDownLatch));
 
         countDownLatch.await(3, TimeUnit.SECONDS);
         boolean gotStats = statsCallback.gotStats();
@@ -83,7 +81,7 @@ public class StatsCmdImplTest extends AbstractDockerClientTest {
 
     }
 
-    private class StatsCallbackTest extends ResultCallbackTemplate<Statistics> {
+    private class StatsCallbackTest extends ResultCallbackTemplate<StatsCallbackTest, Statistics> {
         private final CountDownLatch countDownLatch;
 
         private boolean gotStats = false;

@@ -13,7 +13,7 @@ import com.github.dockerjava.api.model.BuildResponseItem;
  * TODO: http://docs.docker.com/reference/builder/#dockerignore
  *
  */
-public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildResponseItem, Void> {
+public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildResponseItem> {
 
     public BuildImageCmd withTag(String tag);
 
@@ -57,7 +57,7 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
 
     public BuildImageCmd withBuildAuthConfigs(AuthConfigurations authConfig);
 
-    public static interface Exec extends DockerCmdExec<BuildImageCmd, Void> {
+    public static interface Exec extends DockerCmdAsyncExec<BuildImageCmd, BuildResponseItem> {
     }
 
 

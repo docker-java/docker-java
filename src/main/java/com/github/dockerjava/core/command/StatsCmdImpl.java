@@ -9,12 +9,12 @@ import com.github.dockerjava.api.model.Statistics;
 /**
  * Container stats
  */
-public class StatsCmdImpl extends AbstrAsyncDockerCmd<StatsCmd, Statistics, Void> implements StatsCmd {
+public class StatsCmdImpl extends AbstrAsyncDockerCmd<StatsCmd, Statistics> implements StatsCmd {
 
     private String containerId;
 
-    public StatsCmdImpl(StatsCmd.Exec exec, ResultCallback<Statistics> resultCallback) {
-        super(exec, resultCallback);
+    public StatsCmdImpl(StatsCmd.Exec exec) {
+        super(exec);
     }
 
     @Override
@@ -27,11 +27,6 @@ public class StatsCmdImpl extends AbstrAsyncDockerCmd<StatsCmd, Statistics, Void
     @Override
     public String getContainerId() {
         return containerId;
-    }
-
-    @Override
-    public Void exec() {
-        return super.exec();
     }
 
     @Override

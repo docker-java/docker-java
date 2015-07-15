@@ -2,37 +2,37 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.AsyncDockerCmd;
-import com.github.dockerjava.api.command.DockerCmdExec;
+import com.github.dockerjava.api.command.DockerCmdAsyncExec;
 
-public abstract class AbstrAsyncDockerCmd<CMD_T extends AsyncDockerCmd<CMD_T, A_RES_T, RES_T>, A_RES_T, RES_T>
-        extends AbstrDockerCmd<CMD_T, RES_T> implements AsyncDockerCmd<CMD_T, A_RES_T, RES_T>{
+public abstract class AbstrAsyncDockerCmd<CMD_T extends AsyncDockerCmd<CMD_T, A_RES_T>, A_RES_T> implements
+        AsyncDockerCmd<CMD_T, A_RES_T> {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(AbstrAsyncDockerCmd.class);
 
-    private ResultCallback<A_RES_T> resultCallback;
+    protected DockerCmdAsyncExec<CMD_T, A_RES_T> execution;
 
-    public AbstrAsyncDockerCmd(DockerCmdExec<CMD_T, RES_T> execution, ResultCallback<A_RES_T> resultCallback) {
-        super(execution);
-        checkNotNull(resultCallback, "resultCallback was not specified");
-        withResultCallback(resultCallback);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public CMD_T withResultCallback(ResultCallback<A_RES_T> resultCallback) {
-        checkNotNull(resultCallback, "resultCallback was not specified");
-        this.resultCallback = resultCallback;
-        return ((CMD_T) this);
+    public AbstrAsyncDockerCmd(DockerCmdAsyncExec<CMD_T, A_RES_T> execution) {
+        checkNotNull(execution, "execution was not specified");
+        this.execution = execution;
     }
 
     @Override
-    public ResultCallback<A_RES_T> getResultCallback() {
+    public <T extends ResultCallback<A_RES_T>> T exec(T resultCallback) {
+        execution.exec((CMD_T) this, resultCallback);
         return resultCallback;
     }
+
+    @Override
+    public void close() throws IOException {
+    }
+
+
 
 }

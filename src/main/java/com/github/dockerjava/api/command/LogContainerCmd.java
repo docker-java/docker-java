@@ -1,10 +1,9 @@
 package com.github.dockerjava.api.command;
 
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.model.Frame;
-
 import java.io.InputStream;
+
+import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.model.Frame;
 
 /**
  * Get container logs
@@ -20,7 +19,7 @@ import java.io.InputStream;
  * @param tail
  *            - `all` or `<number>`, Output specified number of lines at the end of logs
  */
-public interface LogContainerCmd extends AsyncDockerCmd<LogContainerCmd, Frame, Void> {
+public interface LogContainerCmd extends AsyncDockerCmd<LogContainerCmd, Frame> {
 
     public String getContainerId();
 
@@ -64,15 +63,7 @@ public interface LogContainerCmd extends AsyncDockerCmd<LogContainerCmd, Frame, 
 
     public LogContainerCmd withTail(int tail);
 
-    /**
-     *
-     * @throws NotFoundException
-     *             No such container
-     */
-    @Override
-    public Void exec();
-
-    public static interface Exec extends DockerCmdExec<LogContainerCmd, Void> {
+    public static interface Exec extends DockerCmdAsyncExec<LogContainerCmd, Frame> {
     }
 
 }

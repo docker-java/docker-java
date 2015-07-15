@@ -5,7 +5,7 @@ import com.github.dockerjava.api.NotFoundException;
 /**
  * Inspect the details of an image.
  */
-public interface InspectImageCmd extends DockerCmd<InspectImageResponse> {
+public interface InspectImageCmd extends SyncDockerCmd<InspectImageResponse> {
 
     public String getImageId();
 
@@ -18,7 +18,7 @@ public interface InspectImageCmd extends DockerCmd<InspectImageResponse> {
     @Override
     public InspectImageResponse exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdExec<InspectImageCmd, InspectImageResponse> {
+    public static interface Exec extends DockerCmdSyncExec<InspectImageCmd, InspectImageResponse> {
     }
 
 }

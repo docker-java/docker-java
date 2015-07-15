@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.BuildResponseItem;
@@ -18,7 +17,7 @@ import com.github.dockerjava.core.dockerfile.Dockerfile;
  * Build an image from Dockerfile.
  *
  */
-public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildResponseItem, Void> implements BuildImageCmd {
+public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildResponseItem> implements BuildImageCmd {
 
     private InputStream tarInputStream = null;
 
@@ -38,12 +37,12 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     private File baseDirectory;
 
-    public BuildImageCmdImpl(BuildImageCmd.Exec exec, ResultCallback<BuildResponseItem> resultCallback) {
-        super(exec, resultCallback);
+    public BuildImageCmdImpl(BuildImageCmd.Exec exec) {
+        super(exec);
     }
 
-    public BuildImageCmdImpl(BuildImageCmd.Exec exec, File dockerFileOrFolder, ResultCallback<BuildResponseItem> resultCallback) {
-        super(exec, resultCallback);
+    public BuildImageCmdImpl(BuildImageCmd.Exec exec, File dockerFileOrFolder) {
+        super(exec);
         checkNotNull(dockerFileOrFolder, "dockerFolder is null");
 
         if (dockerFileOrFolder.isDirectory()) {
@@ -54,8 +53,8 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
         }
     }
 
-    public BuildImageCmdImpl(BuildImageCmd.Exec exec, InputStream tarInputStream, ResultCallback<BuildResponseItem> resultCallback) {
-        super(exec, resultCallback);
+    public BuildImageCmdImpl(BuildImageCmd.Exec exec, InputStream tarInputStream) {
+        super(exec);
         checkNotNull(tarInputStream, "tarInputStream is null");
         withTarInputStream(tarInputStream);
     }

@@ -8,17 +8,17 @@ import org.apache.commons.codec.binary.Base64;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.command.DockerCmd;
-import com.github.dockerjava.api.command.DockerCmdExec;
+import com.github.dockerjava.api.command.DockerCmdSyncExec;
 import com.github.dockerjava.api.model.AuthConfig;
 
 public abstract class AbstrAuthCfgDockerCmd<T extends DockerCmd<RES_T>, RES_T> extends AbstrDockerCmd<T, RES_T> {
 
-    public AbstrAuthCfgDockerCmd(DockerCmdExec<T, RES_T> execution, AuthConfig authConfig) {
+    public AbstrAuthCfgDockerCmd(DockerCmdSyncExec<T, RES_T> execution, AuthConfig authConfig) {
         super(execution);
         withOptionalAuthConfig(authConfig);
     }
 
-    public AbstrAuthCfgDockerCmd(DockerCmdExec<T, RES_T> execution) {
+    public AbstrAuthCfgDockerCmd(DockerCmdSyncExec<T, RES_T> execution) {
         super(execution);
     }
 

@@ -14,7 +14,7 @@ import com.github.dockerjava.api.model.Image;
 
 import static com.google.common.net.UrlEscapers.urlPathSegmentEscaper;
 
-public class ListImagesCmdExec extends AbstrDockerCmdExec<ListImagesCmd, List<Image>> implements ListImagesCmd.Exec {
+public class ListImagesCmdExec extends AbstrSyncDockerCmdExec<ListImagesCmd, List<Image>> implements ListImagesCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ListImagesCmdExec.class);
 

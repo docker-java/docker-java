@@ -15,19 +15,20 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.model.Info;
+import com.github.dockerjava.api.model.PullResponseItem;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
 @Test(groups = "integration")
 public class PullImageCmdImplTest extends AbstractDockerClientTest {
 
     private static final PullImageCmd.Exec NOP_EXEC = new PullImageCmd.Exec() {
-        @Override
-        public Void exec(PullImageCmd command) {
+        public Void exec(PullImageCmd command, ResultCallback<PullResponseItem> resultCallback) {
             return null;
-        }
+        };
     };
 
     @BeforeTest
@@ -52,7 +53,7 @@ public class PullImageCmdImplTest extends AbstractDockerClientTest {
 
     @Test
     public void nullAuthConfig() throws Exception {
-        PullImageCmdImpl pullImageCmd = new PullImageCmdImpl(NOP_EXEC, null, "", new PullResponseCallback());
+        PullImageCmdImpl pullImageCmd = new PullImageCmdImpl(NOP_EXEC, null, "");
         try {
             pullImageCmd.withAuthConfig(null);
             fail();
@@ -94,11 +95,9 @@ public class PullImageCmdImplTest extends AbstractDockerClientTest {
 
         LOG.info("Pulling image: {}", testImage);
 
-        PullResponseCallback callback = new PullResponseCallback();
+        PullResponseCallback callback = dockerClient.pullImageCmd(testImage).exec(new PullResponseCallback());
 
-        dockerClient.pullImageCmd(testImage, callback).exec();
-
-        callback.awaitFinish();
+        callback.awaitCompletion();
 
         assertThat(callback.toString(), containsString("Download complete"));
 
@@ -116,12 +115,8 @@ public class PullImageCmdImplTest extends AbstractDockerClientTest {
     public void testPullNonExistingImage() throws Exception {
 
         // does not throw an exception
-
-        PullResponseCallback callback = new PullResponseCallback();
-
-        dockerClient.pullImageCmd("xvxcv/foo", callback).exec();
         // stream needs to be fully read in order to close the underlying connection
-        callback.awaitFinish();
+        dockerClient.pullImageCmd("xvxcv/foo").exec(new PullResponseCallback()).awaitCompletion();
     }
 
 }

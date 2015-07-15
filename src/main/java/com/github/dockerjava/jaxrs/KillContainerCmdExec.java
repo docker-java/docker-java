@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.api.command.KillContainerCmd;
 
-public class KillContainerCmdExec extends AbstrDockerCmdExec<KillContainerCmd, Void> implements KillContainerCmd.Exec {
+public class KillContainerCmdExec extends AbstrSyncDockerCmdExec<KillContainerCmd, Void> implements KillContainerCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KillContainerCmdExec.class);
 

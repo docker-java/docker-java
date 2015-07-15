@@ -10,7 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 import static javax.ws.rs.client.Entity.entity;
 
-public class ExecCreateCmdExec extends AbstrDockerCmdExec<ExecCreateCmd, ExecCreateCmdResponse> implements
+public class ExecCreateCmdExec extends AbstrSyncDockerCmdExec<ExecCreateCmd, ExecCreateCmdResponse> implements
         ExecCreateCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VersionCmdExec.class);

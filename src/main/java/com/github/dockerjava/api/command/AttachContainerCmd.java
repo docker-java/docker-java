@@ -3,7 +3,6 @@ package com.github.dockerjava.api.command;
 import java.io.InputStream;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.model.Frame;
 
 /**
@@ -21,7 +20,7 @@ import com.github.dockerjava.api.model.Frame;
  * @param timestamps
  *            - true or false, if true, print timestamps for every log line. Defaults to false.
  */
-public interface AttachContainerCmd extends AsyncDockerCmd<AttachContainerCmd, Frame, Void> {
+public interface AttachContainerCmd extends AsyncDockerCmd<AttachContainerCmd, Frame> {
 
     public String getContainerId();
 
@@ -63,14 +62,7 @@ public interface AttachContainerCmd extends AsyncDockerCmd<AttachContainerCmd, F
 
     public AttachContainerCmd withLogs();
 
-    /**
-     * @throws NotFoundException
-     *             No such container
-     */
-    @Override
-    public Void exec();
-
-    public static interface Exec extends DockerCmdExec<AttachContainerCmd, Void> {
+    public static interface Exec extends DockerCmdAsyncExec<AttachContainerCmd, Frame> {
     }
 
 }

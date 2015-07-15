@@ -12,7 +12,8 @@ import com.github.dockerjava.core.async.FrameStreamProcessor;
 import com.github.dockerjava.jaxrs.async.AbstractCallbackNotifier;
 import com.github.dockerjava.jaxrs.async.GETCallbackNotifier;
 
-public class LogContainerCmdExec extends AbstrAsyncDockerCmdExec<LogContainerCmd, Frame, Void> implements LogContainerCmd.Exec {
+public class LogContainerCmdExec extends AbstrAsyncDockerCmdExec<LogContainerCmd, Frame> implements
+        LogContainerCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogContainerCmdExec.class);
 
@@ -34,7 +35,6 @@ public class LogContainerCmdExec extends AbstrAsyncDockerCmdExec<LogContainerCmd
 
         LOGGER.trace("GET: {}", webTarget);
 
-        return new GETCallbackNotifier<Frame>(new FrameStreamProcessor(),
-                command.getResultCallback(), webTarget.request());
+        return new GETCallbackNotifier<Frame>(new FrameStreamProcessor(), resultCallback, webTarget.request());
     }
 }

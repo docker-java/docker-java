@@ -2,8 +2,6 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.PushResponseItem;
@@ -14,7 +12,7 @@ import com.github.dockerjava.api.model.PushResponseItem;
  * @param name
  *            The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
  */
-public class PushImageCmdImpl extends AbstrAsyncDockerCmd<PushImageCmd, PushResponseItem, Void> implements PushImageCmd {
+public class PushImageCmdImpl extends AbstrAsyncDockerCmd<PushImageCmd, PushResponseItem> implements PushImageCmd {
 
     private String name;
 
@@ -22,8 +20,8 @@ public class PushImageCmdImpl extends AbstrAsyncDockerCmd<PushImageCmd, PushResp
 
     private AuthConfig authConfig;
 
-    public PushImageCmdImpl(PushImageCmd.Exec exec, String name, ResultCallback<PushResponseItem> resultCallback) {
-        super(exec, resultCallback);
+    public PushImageCmdImpl(PushImageCmd.Exec exec, String name) {
+        super(exec);
         withName(name);
     }
 
@@ -78,12 +76,5 @@ public class PushImageCmdImpl extends AbstrAsyncDockerCmd<PushImageCmd, PushResp
         return new StringBuilder("push ").append(name).toString();
     }
 
-    /**
-     * @throws NotFoundException
-     *             No such image
-     */
-    @Override
-    public Void exec() throws NotFoundException {
-        return super.exec();
-    }
+
 }

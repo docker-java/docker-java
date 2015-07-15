@@ -12,7 +12,7 @@ import com.github.dockerjava.core.async.JsonStreamProcessor;
 import com.github.dockerjava.jaxrs.async.AbstractCallbackNotifier;
 import com.github.dockerjava.jaxrs.async.GETCallbackNotifier;
 
-public class EventsCmdExec extends AbstrAsyncDockerCmdExec<EventsCmd, Event, Void> implements EventsCmd.Exec {
+public class EventsCmdExec extends AbstrAsyncDockerCmdExec<EventsCmd, Event> implements EventsCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EventsCmdExec.class);
 
@@ -28,6 +28,6 @@ public class EventsCmdExec extends AbstrAsyncDockerCmdExec<EventsCmd, Event, Voi
         LOGGER.trace("GET: {}", webTarget);
 
         return new GETCallbackNotifier<Event>(new JsonStreamProcessor<Event>(
-                Event.class), command.getResultCallback(), webTarget.request());
+                Event.class), resultCallback, webTarget.request());
     }
 }

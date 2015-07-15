@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.api.command.RestartContainerCmd;
 
-public class RestartContainerCmdExec extends AbstrDockerCmdExec<RestartContainerCmd, Void> implements
+public class RestartContainerCmdExec extends AbstrSyncDockerCmdExec<RestartContainerCmd, Void> implements
         RestartContainerCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RestartContainerCmdExec.class);

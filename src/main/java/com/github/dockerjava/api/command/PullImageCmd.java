@@ -2,16 +2,13 @@ package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.PullResponseItem;
-import com.github.dockerjava.core.command.EventStreamReader;
-
-import java.io.InputStream;
 
 /**
  *
  * Pull image from repository.
  *
  */
-public interface PullImageCmd extends AsyncDockerCmd<PullImageCmd, PullResponseItem, Void> {
+public interface PullImageCmd extends AsyncDockerCmd<PullImageCmd, PullResponseItem> {
 
     public String getRepository();
 
@@ -29,10 +26,6 @@ public interface PullImageCmd extends AsyncDockerCmd<PullImageCmd, PullResponseI
 
     public PullImageCmd withAuthConfig(AuthConfig authConfig);
 
-    public static interface Exec extends DockerCmdExec<PullImageCmd, Void> {
+    public static interface Exec extends DockerCmdAsyncExec<PullImageCmd, PullResponseItem> {
     }
-
-    @Override
-    public Void exec();
-
 }

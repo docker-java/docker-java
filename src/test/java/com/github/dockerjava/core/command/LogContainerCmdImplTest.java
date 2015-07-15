@@ -61,9 +61,9 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
         CollectFramesCallback loggingCallback = new CollectFramesCallback();
 
-        dockerClient.logContainerCmd(container.getId(), loggingCallback).withStdErr().withStdOut().exec();
+        dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec(loggingCallback);
 
-        loggingCallback.awaitFinish();
+        loggingCallback.awaitCompletion();
 
         assertTrue(loggingCallback.toString().contains(snippet));
     }
@@ -93,9 +93,7 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
             };
         };
 
-        dockerClient.logContainerCmd("non-existing", loggingCallback).withStdErr().withStdOut().exec();
-
-        loggingCallback.awaitFinish();
+        dockerClient.logContainerCmd("non-existing").withStdErr().withStdOut().exec(loggingCallback).awaitCompletion();
     }
 
     @Test
@@ -117,21 +115,21 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
         CollectFramesCallback loggingCallback = new CollectFramesCallback();
 
-        dockerClient.logContainerCmd(container.getId(), loggingCallback).withStdErr().withStdOut().exec();
+        dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec(loggingCallback);
 
         loggingCallback.close();
 
         loggingCallback = new CollectFramesCallback();
 
-        dockerClient.logContainerCmd(container.getId(), loggingCallback).withStdErr().withStdOut().exec();
+        dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec(loggingCallback);
 
         loggingCallback.close();
 
         loggingCallback = new CollectFramesCallback();
 
-        dockerClient.logContainerCmd(container.getId(), loggingCallback).withStdErr().withStdOut().exec();
+        dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec(loggingCallback);
 
-        loggingCallback.awaitFinish();
+        loggingCallback.awaitCompletion();
 
         assertTrue(loggingCallback.toString().contains(snippet));
     }

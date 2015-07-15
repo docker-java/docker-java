@@ -1,7 +1,7 @@
 package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.command.DockerCmdExec;
+import com.github.dockerjava.api.command.DockerCmdSyncExec;
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectExecResponse;
 import com.google.common.base.Preconditions;

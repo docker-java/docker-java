@@ -4,10 +4,10 @@ import com.github.dockerjava.api.NotFoundException;
 
 /**
  * Wait a container
- * 
+ *
  * Block until container stops, then returns its exit code
  */
-public interface WaitContainerCmd extends DockerCmd<Integer> {
+public interface WaitContainerCmd extends SyncDockerCmd<Integer> {
 
     public String getContainerId();
 
@@ -20,7 +20,7 @@ public interface WaitContainerCmd extends DockerCmd<Integer> {
     @Override
     public Integer exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdExec<WaitContainerCmd, Integer> {
+    public static interface Exec extends DockerCmdSyncExec<WaitContainerCmd, Integer> {
     }
 
 }

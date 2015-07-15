@@ -4,7 +4,7 @@ import com.github.dockerjava.api.NotFoundException;
 
 import java.io.InputStream;
 
-public interface SaveImageCmd extends DockerCmd<InputStream> {
+public interface SaveImageCmd extends SyncDockerCmd<InputStream> {
 
     public String getName();
 
@@ -24,13 +24,13 @@ public interface SaveImageCmd extends DockerCmd<InputStream> {
 
     /**
      * Its the responsibility of the caller to consume and/or close the {@link InputStream} to prevent connection leaks.
-     * 
+     *
      * @throws com.github.dockerjava.api.NotFoundException
      *             No such image
      */
     public InputStream exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdExec<SaveImageCmd, InputStream> {
+    public static interface Exec extends DockerCmdSyncExec<SaveImageCmd, InputStream> {
     }
 
 }

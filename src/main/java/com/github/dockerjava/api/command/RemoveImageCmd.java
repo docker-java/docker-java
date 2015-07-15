@@ -7,7 +7,7 @@ import com.github.dockerjava.api.NotFoundException;
  * Remove an image, deleting any tags it might have.
  *
  */
-public interface RemoveImageCmd extends DockerCmd<Void> {
+public interface RemoveImageCmd extends SyncDockerCmd<Void> {
 
     public String getImageId();
 
@@ -34,7 +34,7 @@ public interface RemoveImageCmd extends DockerCmd<Void> {
 
     /**
      * noprune parameter to prevent the deletion of parent images
-     * 
+     *
      */
     public RemoveImageCmd withNoPrune(boolean noPrune);
 
@@ -45,7 +45,7 @@ public interface RemoveImageCmd extends DockerCmd<Void> {
     @Override
     public Void exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdExec<RemoveImageCmd, Void> {
+    public static interface Exec extends DockerCmdSyncExec<RemoveImageCmd, Void> {
     }
 
 }

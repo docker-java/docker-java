@@ -65,10 +65,10 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
             };
         };
 
-        dockerClient.attachContainerCmd(container.getId(), collectFramesCallback).withStdErr().withStdOut()
-                .withFollowStream().withLogs().exec();
+        dockerClient.attachContainerCmd(container.getId()).withStdErr().withStdOut()
+                .withFollowStream().withLogs().exec(collectFramesCallback);
 
-        collectFramesCallback.awaitFinish(30, TimeUnit.SECONDS);
+        collectFramesCallback.awaitCompletion(30, TimeUnit.SECONDS);
 
         collectFramesCallback.close();
 
@@ -98,10 +98,10 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
             };
         };
 
-        dockerClient.attachContainerCmd(container.getId(), collectFramesCallback).withStdErr().withStdOut()
-                .withFollowStream().exec();
+        dockerClient.attachContainerCmd(container.getId()).withStdErr().withStdOut()
+                .withFollowStream().exec(collectFramesCallback);
 
-        collectFramesCallback.awaitFinish(15, TimeUnit.SECONDS);
+        collectFramesCallback.awaitCompletion(15, TimeUnit.SECONDS);
 
         collectFramesCallback.close();
 

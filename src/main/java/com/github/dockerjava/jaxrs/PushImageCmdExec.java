@@ -17,7 +17,7 @@ import com.github.dockerjava.core.async.JsonStreamProcessor;
 import com.github.dockerjava.jaxrs.async.AbstractCallbackNotifier;
 import com.github.dockerjava.jaxrs.async.POSTCallbackNotifier;
 
-public class PushImageCmdExec extends AbstrAsyncDockerCmdExec<PushImageCmd, PushResponseItem, Void> implements
+public class PushImageCmdExec extends AbstrAsyncDockerCmdExec<PushImageCmd, PushResponseItem> implements
         PushImageCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PushImageCmdExec.class);

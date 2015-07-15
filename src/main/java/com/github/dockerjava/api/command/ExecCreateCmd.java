@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.command;
 
-public interface ExecCreateCmd extends DockerCmd<ExecCreateCmdResponse> {
+public interface ExecCreateCmd extends SyncDockerCmd<ExecCreateCmdResponse> {
 
     public String getContainerId();
 
@@ -32,6 +32,6 @@ public interface ExecCreateCmd extends DockerCmd<ExecCreateCmdResponse> {
 
     public boolean hasTtyEnabled();
 
-    public static interface Exec extends DockerCmdExec<ExecCreateCmd, ExecCreateCmdResponse> {
+    public static interface Exec extends DockerCmdSyncExec<ExecCreateCmd, ExecCreateCmdResponse> {
     }
 }

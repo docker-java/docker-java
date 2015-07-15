@@ -5,7 +5,7 @@ import com.github.dockerjava.api.NotFoundException;
 /**
  * Kill a running container.
  */
-public interface KillContainerCmd extends DockerCmd<Void> {
+public interface KillContainerCmd extends SyncDockerCmd<Void> {
 
     public String getContainerId();
 
@@ -22,7 +22,7 @@ public interface KillContainerCmd extends DockerCmd<Void> {
     @Override
     public Void exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdExec<KillContainerCmd, Void> {
+    public static interface Exec extends DockerCmdSyncExec<KillContainerCmd, Void> {
     }
 
 }

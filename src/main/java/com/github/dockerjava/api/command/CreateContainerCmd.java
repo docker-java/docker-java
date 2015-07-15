@@ -17,9 +17,9 @@ import com.github.dockerjava.api.model.RestartPolicy;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
 
-public interface CreateContainerCmd extends DockerCmd<CreateContainerResponse> {
+public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerResponse> {
 
-    public static interface Exec extends DockerCmdExec<CreateContainerCmd, CreateContainerResponse> {
+    public static interface Exec extends DockerCmdSyncExec<CreateContainerCmd, CreateContainerResponse> {
     }
 
     /**

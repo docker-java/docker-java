@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.model.Version;
 
-public class VersionCmdExec extends AbstrDockerCmdExec<VersionCmd, Version> implements VersionCmd.Exec {
+public class VersionCmdExec extends AbstrSyncDockerCmdExec<VersionCmd, Version> implements VersionCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VersionCmdExec.class);
 

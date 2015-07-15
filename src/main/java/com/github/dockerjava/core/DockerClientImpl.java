@@ -189,14 +189,14 @@ public class DockerClientImpl implements Closeable, DockerClient {
      * * IMAGE API *
      */
     @Override
-    public PullImageCmd pullImageCmd(String repository, ResultCallback<PullResponseItem> resultCallback) {
+    public PullImageCmd pullImageCmd(String repository) {
         return new PullImageCmdImpl(getDockerCmdExecFactory().createPullImageCmdExec(),
-                dockerClientConfig.effectiveAuthConfig(repository), repository, resultCallback);
+                dockerClientConfig.effectiveAuthConfig(repository), repository);
     }
 
     @Override
-    public PushImageCmd pushImageCmd(String name, ResultCallback<PushResponseItem> resultCallback) {
-        PushImageCmd cmd = new PushImageCmdImpl(getDockerCmdExecFactory().createPushImageCmdExec(), name, resultCallback);
+    public PushImageCmd pushImageCmd(String name) {
+        PushImageCmd cmd = new PushImageCmdImpl(getDockerCmdExecFactory().createPushImageCmdExec(), name);
 
         AuthConfig cfg = dockerClientConfig.effectiveAuthConfig(name);
         if (cfg != null)
@@ -205,8 +205,8 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
-    public PushImageCmd pushImageCmd(Identifier identifier, ResultCallback<PushResponseItem> resultCallback) {
-        PushImageCmd cmd = pushImageCmd(identifier.repository.name, resultCallback);
+    public PushImageCmd pushImageCmd(Identifier identifier) {
+        PushImageCmd cmd = pushImageCmd(identifier.repository.name);
         if (identifier.tag.isPresent())
             cmd.withTag(identifier.tag.get());
 
@@ -287,9 +287,8 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
-    public AttachContainerCmd attachContainerCmd(String containerId, ResultCallback<Frame> resultCallback) {
-        return new AttachContainerCmdImpl(getDockerCmdExecFactory().createAttachContainerCmdExec(), containerId,
-                resultCallback);
+    public AttachContainerCmd attachContainerCmd(String containerId) {
+        return new AttachContainerCmdImpl(getDockerCmdExecFactory().createAttachContainerCmdExec(), containerId);
     }
 
     @Override
@@ -303,9 +302,8 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
-    public LogContainerCmd logContainerCmd(String containerId, ResultCallback<Frame> resultCallback) {
-        return new LogContainerCmdImpl(getDockerCmdExecFactory().createLogContainerCmdExec(), containerId,
-                resultCallback);
+    public LogContainerCmd logContainerCmd(String containerId) {
+        return new LogContainerCmdImpl(getDockerCmdExecFactory().createLogContainerCmdExec(), containerId);
     }
 
     @Override
@@ -340,21 +338,20 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
-    public BuildImageCmd buildImageCmd(ResultCallback<BuildResponseItem> resultCallback) {
-        return augmentBuildImageCmd(new BuildImageCmdImpl(getDockerCmdExecFactory().createBuildImageCmdExec(),
-                resultCallback));
+    public BuildImageCmd buildImageCmd() {
+        return augmentBuildImageCmd(new BuildImageCmdImpl(getDockerCmdExecFactory().createBuildImageCmdExec()));
     }
 
     @Override
-    public BuildImageCmd buildImageCmd(File dockerFileOrFolder, ResultCallback<BuildResponseItem> resultCallback) {
+    public BuildImageCmd buildImageCmd(File dockerFileOrFolder) {
         return augmentBuildImageCmd(new BuildImageCmdImpl(getDockerCmdExecFactory().createBuildImageCmdExec(),
-                dockerFileOrFolder, resultCallback));
+                dockerFileOrFolder));
     }
 
     @Override
-    public BuildImageCmd buildImageCmd(InputStream tarInputStream, ResultCallback<BuildResponseItem> resultCallback) {
+    public BuildImageCmd buildImageCmd(InputStream tarInputStream) {
         return augmentBuildImageCmd(new BuildImageCmdImpl(getDockerCmdExecFactory().createBuildImageCmdExec(),
-                tarInputStream, resultCallback));
+                tarInputStream));
     }
 
     private BuildImageCmd augmentBuildImageCmd(BuildImageCmd buildImageCmd) {
@@ -387,13 +384,13 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
-    public EventsCmd eventsCmd(ResultCallback<Event> eventCallback) {
-        return new EventsCmdImpl(getDockerCmdExecFactory().createEventsCmdExec(), eventCallback);
+    public EventsCmd eventsCmd() {
+        return new EventsCmdImpl(getDockerCmdExecFactory().createEventsCmdExec());
     }
 
     @Override
-    public StatsCmd statsCmd(ResultCallback<Statistics> statisticsCallback) {
-        return new StatsCmdImpl(getDockerCmdExecFactory().createStatsCmdExec(), statisticsCallback);
+    public StatsCmd statsCmd() {
+        return new StatsCmdImpl(getDockerCmdExecFactory().createStatsCmdExec());
     }
 
     @Override

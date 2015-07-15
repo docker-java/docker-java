@@ -12,16 +12,15 @@ import com.github.dockerjava.api.model.PullResponseItem;
  * Pull image from repository.
  *
  */
-public class PullImageCmdImpl extends AbstrAsyncDockerCmd<PullImageCmd, PullResponseItem, Void> implements PullImageCmd {
+public class PullImageCmdImpl extends AbstrAsyncDockerCmd<PullImageCmd, PullResponseItem> implements PullImageCmd {
 
     private String repository, tag, registry;
 
     private AuthConfig authConfig;
 
-    public PullImageCmdImpl(PullImageCmd.Exec exec, AuthConfig authConfig, String repository,
-            ResultCallback<PullResponseItem> resultCallback) {
-        super(exec, resultCallback);
-        withAuthConfig(authConfig);
+    public PullImageCmdImpl(PullImageCmd.Exec exec, AuthConfig authConfig, String repository) {
+        super(exec);
+        withOptionalAuthConfig(authConfig);
         withRepository(repository);
     }
 

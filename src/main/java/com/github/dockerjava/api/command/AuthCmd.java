@@ -5,11 +5,11 @@ import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthResponse;
 
 /**
- * 
+ *
  * Authenticate with the server, useful for checking authentication.
- * 
+ *
  */
-public interface AuthCmd extends DockerCmd<AuthResponse> {
+public interface AuthCmd extends SyncDockerCmd<AuthResponse> {
 
     public AuthConfig getAuthConfig();
 
@@ -24,7 +24,7 @@ public interface AuthCmd extends DockerCmd<AuthResponse> {
     @Override
     public AuthResponse exec() throws UnauthorizedException;
 
-    public static interface Exec extends DockerCmdExec<AuthCmd, AuthResponse> {
+    public static interface Exec extends DockerCmdSyncExec<AuthCmd, AuthResponse> {
     }
 
 }

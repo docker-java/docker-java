@@ -65,8 +65,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         CountDownLatch countDownLatch = new CountDownLatch(expectedEvents);
         EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
 
-        EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withSince(startTime).withUntil(endTime);
-        eventsCmd.exec();
+        dockerClient.eventsCmd().withSince(startTime).withUntil(endTime).exec(eventCallback);
 
         boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
 
@@ -83,8 +82,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         CountDownLatch countDownLatch = new CountDownLatch(KNOWN_NUM_EVENTS);
         EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
 
-        EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withSince(getEpochTime());
-        eventsCmd.exec();
+        dockerClient.eventsCmd().withSince(getEpochTime()).exec(eventCallback);
 
         generateEvents();
 
@@ -102,8 +100,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         CountDownLatch countDownLatch = new CountDownLatch(KNOWN_NUM_EVENTS);
         EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
 
-        EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withSince(getEpochTime());
-        eventsCmd.exec();
+        dockerClient.eventsCmd().withSince(getEpochTime()).exec(eventCallback);
 
         generateEvents();
 
@@ -119,16 +116,15 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
     private int generateEvents() throws Exception {
         String testImage = "busybox";
 
-        PullResponseCallback callback = new PullResponseCallback();
-        dockerClient.pullImageCmd(testImage, callback).exec();
-        callback.awaitFinish();
+        dockerClient.pullImageCmd(testImage).exec(new PullResponseCallback()).awaitCompletion();
+
         CreateContainerResponse container = dockerClient.createContainerCmd(testImage).withCmd("sleep", "9999").exec();
         dockerClient.startContainerCmd(container.getId()).exec();
         dockerClient.stopContainerCmd(container.getId()).exec();
         return KNOWN_NUM_EVENTS;
     }
 
-    private class EventCallbackTest extends ResultCallbackTemplate<Event> {
+    private class EventCallbackTest extends ResultCallbackTemplate<EventCallbackTest, Event> {
 
         private final CountDownLatch countDownLatch;
 

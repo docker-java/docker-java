@@ -40,15 +40,9 @@ public class DockerfileFixture implements AutoCloseable {
     public void open() throws Exception {
 
         LOGGER.info("building {}", directory);
-        BuildLogCallback resultCallback = new BuildLogCallback();
 
-        dockerClient.buildImageCmd(new File("src/test/resources", directory), resultCallback).withNoCache() // remove
-                                                                                                                   // alternatives,
-                                                                                                                   // cause
-                                                                                                                   // problems
-                .exec();
-
-        resultCallback.awaitImageId();
+        dockerClient.buildImageCmd(new File("src/test/resources", directory)).withNoCache()
+                .exec(new BuildLogCallback()).awaitImageId();
 
         Image lastCreatedImage = dockerClient.listImagesCmd().exec().get(0);
 

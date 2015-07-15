@@ -7,7 +7,7 @@ import com.github.dockerjava.api.InternalServerErrorException;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.model.ChangeLog;
 
-public interface ContainerDiffCmd extends DockerCmd<List<ChangeLog>> {
+public interface ContainerDiffCmd extends SyncDockerCmd<List<ChangeLog>> {
 
     public String getContainerId();
 
@@ -27,7 +27,7 @@ public interface ContainerDiffCmd extends DockerCmd<List<ChangeLog>> {
     @Override
     public List<ChangeLog> exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdExec<ContainerDiffCmd, List<ChangeLog>> {
+    public static interface Exec extends DockerCmdSyncExec<ContainerDiffCmd, List<ChangeLog>> {
     }
 
 }

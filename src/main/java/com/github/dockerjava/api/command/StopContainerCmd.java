@@ -12,7 +12,7 @@ import com.github.dockerjava.api.NotModifiedException;
  *            - Timeout in seconds before killing the container. Defaults to 10 seconds.
  *
  */
-public interface StopContainerCmd extends DockerCmd<Void> {
+public interface StopContainerCmd extends SyncDockerCmd<Void> {
 
     public String getContainerId();
 
@@ -31,7 +31,7 @@ public interface StopContainerCmd extends DockerCmd<Void> {
     @Override
     public Void exec() throws NotFoundException, NotModifiedException;
 
-    public static interface Exec extends DockerCmdExec<StopContainerCmd, Void> {
+    public static interface Exec extends DockerCmdSyncExec<StopContainerCmd, Void> {
     }
 
 }

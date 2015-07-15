@@ -12,7 +12,7 @@ import com.github.dockerjava.core.async.FrameStreamProcessor;
 import com.github.dockerjava.jaxrs.async.AbstractCallbackNotifier;
 import com.github.dockerjava.jaxrs.async.POSTCallbackNotifier;
 
-public class AttachContainerCmdExec extends AbstrAsyncDockerCmdExec<AttachContainerCmd, Frame, Void> implements
+public class AttachContainerCmdExec extends AbstrAsyncDockerCmdExec<AttachContainerCmd, Frame> implements
         AttachContainerCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AttachContainerCmdExec.class);
@@ -36,6 +36,6 @@ public class AttachContainerCmdExec extends AbstrAsyncDockerCmdExec<AttachContai
         LOGGER.trace("POST: {}", webTarget);
 
         return new POSTCallbackNotifier<Frame>(new FrameStreamProcessor(),
-                command.getResultCallback(), webTarget.request(), null);
+                resultCallback, webTarget.request(), null);
     }
 }

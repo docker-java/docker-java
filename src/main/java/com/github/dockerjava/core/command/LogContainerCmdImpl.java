@@ -24,7 +24,7 @@ import com.github.dockerjava.api.model.Frame;
  * @param tail
  *            - `all` or `<number>`, Output specified number of lines at the end of logs
  */
-public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Frame, Void> implements LogContainerCmd {
+public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Frame> implements LogContainerCmd {
 
     private String containerId;
 
@@ -32,8 +32,8 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
 
     private boolean followStream, timestamps, stdout, stderr;
 
-    public LogContainerCmdImpl(LogContainerCmd.Exec exec, String containerId, ResultCallback<Frame> resultCallback) {
-        super(exec, resultCallback);
+    public LogContainerCmdImpl(LogContainerCmd.Exec exec, String containerId) {
+        super(exec);
         withContainerId(containerId);
     }
 
@@ -136,12 +136,4 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
                 .append(timestamps ? "--timestamps=true" : "").append(containerId).toString();
     }
 
-    /**
-     * @throws NotFoundException
-     *             No such container
-     */
-    @Override
-    public Void exec() throws NotFoundException {
-        return super.exec();
-    }
 }

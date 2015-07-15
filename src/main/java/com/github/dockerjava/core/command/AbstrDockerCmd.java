@@ -11,16 +11,17 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.DockerCmd;
-import com.github.dockerjava.api.command.DockerCmdExec;
+import com.github.dockerjava.api.command.DockerCmdSyncExec;
+import com.github.dockerjava.api.command.SyncDockerCmd;
 import com.github.dockerjava.api.model.AuthConfig;
 
-public abstract class AbstrDockerCmd<CMD_T extends DockerCmd<RES_T>, RES_T> implements DockerCmd<RES_T> {
+public abstract class AbstrDockerCmd<CMD_T extends DockerCmd<RES_T>, RES_T> implements SyncDockerCmd<RES_T> {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(AbstrDockerCmd.class);
 
-    protected DockerCmdExec<CMD_T, RES_T> execution;
+    protected DockerCmdSyncExec<CMD_T, RES_T> execution;
 
-    public AbstrDockerCmd(DockerCmdExec<CMD_T, RES_T> execution) {
+    public AbstrDockerCmd(DockerCmdSyncExec<CMD_T, RES_T> execution) {
         checkNotNull(execution, "execution was not specified");
         this.execution = execution;
     }

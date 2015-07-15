@@ -11,10 +11,9 @@ import com.github.dockerjava.api.async.ResultCallback;
  * @author marcus
  *
  */
-public interface AsyncDockerCmd<CMD_T extends AsyncDockerCmd<CMD_T, A_RES_T, RES_T>, A_RES_T, RES_T> extends DockerCmd<RES_T> {
+public interface AsyncDockerCmd<CMD_T extends AsyncDockerCmd<CMD_T, A_RES_T>, A_RES_T> extends DockerCmd<Void> {
 
-    public ResultCallback<A_RES_T> getResultCallback();
 
-    public CMD_T withResultCallback(ResultCallback<A_RES_T> resultCallback);
+    public <T extends ResultCallback<A_RES_T>> T exec(T resultCallback);
 
 }

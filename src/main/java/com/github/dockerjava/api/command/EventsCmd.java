@@ -10,7 +10,7 @@ import com.github.dockerjava.api.model.Event;
  * @param until
  *            - Stream events until this timestamp
  */
-public interface EventsCmd extends AsyncDockerCmd<EventsCmd, Event, Void> {
+public interface EventsCmd extends AsyncDockerCmd<EventsCmd, Event> {
     public EventsCmd withSince(String since);
 
     public EventsCmd withUntil(String until);
@@ -19,6 +19,6 @@ public interface EventsCmd extends AsyncDockerCmd<EventsCmd, Event, Void> {
 
     public String getUntil();
 
-    public static interface Exec extends DockerCmdExec<EventsCmd, Void> {
+    public static interface Exec extends DockerCmdAsyncExec<EventsCmd, Event> {
     }
 }

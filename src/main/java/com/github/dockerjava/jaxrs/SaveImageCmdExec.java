@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.github.dockerjava.api.command.SaveImageCmd;
 import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
 
-public class SaveImageCmdExec extends AbstrDockerCmdExec<SaveImageCmd, InputStream> implements SaveImageCmd.Exec {
+public class SaveImageCmdExec extends AbstrSyncDockerCmdExec<SaveImageCmd, InputStream> implements SaveImageCmd.Exec {
     private static final Logger LOGGER = LoggerFactory.getLogger(SaveImageCmdExec.class);
 
     public SaveImageCmdExec(WebTarget baseResource) {

@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.api.command.PingCmd;
 
-public class PingCmdExec extends AbstrDockerCmdExec<PingCmd, Void> implements PingCmd.Exec {
+public class PingCmdExec extends AbstrSyncDockerCmdExec<PingCmd, Void> implements PingCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PingCmdExec.class);
 

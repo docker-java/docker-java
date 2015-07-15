@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.github.dockerjava.api.command.SearchImagesCmd;
 import com.github.dockerjava.api.model.SearchItem;
 
-public class SearchImagesCmdExec extends AbstrDockerCmdExec<SearchImagesCmd, List<SearchItem>> implements
+public class SearchImagesCmdExec extends AbstrSyncDockerCmdExec<SearchImagesCmd, List<SearchItem>> implements
         SearchImagesCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchImagesCmdExec.class);

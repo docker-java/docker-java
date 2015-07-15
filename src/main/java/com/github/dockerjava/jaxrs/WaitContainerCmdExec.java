@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 
-public class WaitContainerCmdExec extends AbstrDockerCmdExec<WaitContainerCmd, Integer> implements
+public class WaitContainerCmdExec extends AbstrSyncDockerCmdExec<WaitContainerCmd, Integer> implements
         WaitContainerCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WaitContainerCmdExec.class);

@@ -7,9 +7,9 @@ import com.github.dockerjava.api.NotModifiedException;
  * Start a container.
  *
  */
-public interface StartContainerCmd extends DockerCmd<Void> {
+public interface StartContainerCmd extends SyncDockerCmd<Void> {
 
-    public static interface Exec extends DockerCmdExec<StartContainerCmd, Void> {
+    public static interface Exec extends DockerCmdSyncExec<StartContainerCmd, Void> {
     }
 
     String getContainerId();

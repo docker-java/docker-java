@@ -9,7 +9,7 @@ import com.github.dockerjava.api.NotFoundException;
  *            - Timeout in seconds before killing the container. Defaults to 10 seconds.
  *
  */
-public interface RestartContainerCmd extends DockerCmd<Void> {
+public interface RestartContainerCmd extends SyncDockerCmd<Void> {
 
     public String getContainerId();
 
@@ -26,7 +26,7 @@ public interface RestartContainerCmd extends DockerCmd<Void> {
     @Override
     public Void exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdExec<RestartContainerCmd, Void> {
+    public static interface Exec extends DockerCmdSyncExec<RestartContainerCmd, Void> {
     }
 
 }

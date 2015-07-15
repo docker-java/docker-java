@@ -59,9 +59,7 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
         String testImage = "busybox";
 
         // need to block until image is pulled completely
-        PullResponseCallback callback = new PullResponseCallback();
-        dockerClient.pullImageCmd(testImage, callback).exec();
-        callback.awaitFinish();
+        dockerClient.pullImageCmd(testImage).exec(new PullResponseCallback()).awaitCompletion();
 
         List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
         assertThat(containers, notNullValue());
@@ -108,10 +106,8 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
 
         String testImage = "busybox";
 
-        PullResponseCallback callback = new PullResponseCallback();
         // need to block until image is pulled completely
-        dockerClient.pullImageCmd(testImage, callback).exec();
-        callback.awaitFinish();
+        dockerClient.pullImageCmd(testImage).exec(new PullResponseCallback()).awaitCompletion();
 
         List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
         assertThat(containers, notNullValue());

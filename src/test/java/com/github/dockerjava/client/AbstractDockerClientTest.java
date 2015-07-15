@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.containsString;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.BuildResponseItem;
 import com.github.dockerjava.api.model.Frame;
@@ -53,10 +54,8 @@ public abstract class AbstractDockerClientTest extends Assert {
 
         LOG.info("Pulling image 'busybox'");
 
-        PullResponseCallback callback = new PullResponseCallback();
         // need to block until image is pulled completely
-        dockerClient.pullImageCmd("busybox", callback).withTag("latest").exec();
-        callback.awaitFinish();
+        dockerClient.pullImageCmd("busybox").withTag("latest").exec(new PullResponseCallback()).awaitCompletion();
 
         assertNotNull(dockerClient);
         LOG.info("======================= END OF BEFORETEST =======================\n\n");
@@ -189,7 +188,7 @@ public abstract class AbstractDockerClientTest extends Assert {
         assertThat(volumes, contains(expectedVolumes));
     }
 
-    public static class CollectFramesCallback extends CollectStreamItemCallback<Frame> {
+    public static class CollectFramesCallback extends CollectStreamItemCallback<CollectFramesCallback, Frame> {
 
         @Override
         public void onNext(Frame frame) {
@@ -201,18 +200,16 @@ public abstract class AbstractDockerClientTest extends Assert {
 
     protected String containerLog(String containerId) throws Exception {
 
-        CollectFramesCallback collectFramesCallback = new CollectFramesCallback();
+        CollectFramesCallback collectFramesCallback = dockerClient.logContainerCmd(containerId).withStdOut()
+                .exec(new CollectFramesCallback());
 
-        dockerClient.logContainerCmd(containerId, collectFramesCallback).withStdOut().exec();
-
-        collectFramesCallback.awaitFinish();
+        collectFramesCallback.awaitCompletion();
 
         return collectFramesCallback.toString();
     }
 
-
-    public static class CollectStreamItemCallback<T> extends ResultCallbackTemplate<T> {
-        public final List<T> items = new ArrayList<T>();
+    public static class CollectStreamItemCallback<RC_T extends ResultCallback<A_RES_T>, A_RES_T> extends ResultCallbackTemplate<RC_T, A_RES_T> {
+        public final List<A_RES_T> items = new ArrayList<A_RES_T>();
 
         protected final StringBuffer log = new StringBuffer();
 
@@ -223,7 +220,7 @@ public abstract class AbstractDockerClientTest extends Assert {
         }
 
         @Override
-        public void onNext(T item) {
+        public void onNext(A_RES_T item) {
             items.add(item);
             log.append("" + item);
             LOG.info(item.toString());
@@ -235,25 +232,21 @@ public abstract class AbstractDockerClientTest extends Assert {
         }
     }
 
-    public static class BuildLogCallback extends CollectStreamItemCallback<BuildResponseItem> {
+    public static class BuildLogCallback extends CollectStreamItemCallback<BuildLogCallback, BuildResponseItem> {
         public String awaitImageId() throws Exception {
-            awaitFinish();
+            awaitCompletion();
             BuildResponseItem item = items.get(items.size() - 1);
             assertThat(item.toString(), containsString("Successfully built"));
             return item.getStream().replaceFirst("Successfully built", "").trim();
         }
     }
 
-    public static class PullResponseCallback extends CollectStreamItemCallback<PullResponseItem> {
+    public static class PullResponseCallback extends CollectStreamItemCallback<PullResponseCallback, PullResponseItem> {
 
     }
 
     protected String buildImage(File baseDir) throws Exception {
 
-        BuildLogCallback callback = new BuildLogCallback();
-
-        dockerClient.buildImageCmd(baseDir, callback).withNoCache().exec();
-
-        return callback.awaitImageId();
+        return dockerClient.buildImageCmd(baseDir).withNoCache().exec(new BuildLogCallback()).awaitImageId();
     }
 }

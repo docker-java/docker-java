@@ -22,14 +22,14 @@ import com.github.dockerjava.api.model.Frame;
  * @param timestamps
  *            - true or false, if true, print timestamps for every log line. Defaults to false.
  */
-public class AttachContainerCmdImpl extends AbstrAsyncDockerCmd<AttachContainerCmd, Frame, Void> implements AttachContainerCmd {
+public class AttachContainerCmdImpl extends AbstrAsyncDockerCmd<AttachContainerCmd, Frame> implements AttachContainerCmd {
 
     private String containerId;
 
     private boolean logs, followStream, timestamps, stdout, stderr;
 
-    public AttachContainerCmdImpl(AttachContainerCmd.Exec exec, String containerId, ResultCallback<Frame> resultCallback) {
-        super(exec, resultCallback);
+    public AttachContainerCmdImpl(AttachContainerCmd.Exec exec, String containerId) {
+        super(exec);
         withContainerId(containerId);
     }
 
@@ -118,14 +118,5 @@ public class AttachContainerCmdImpl extends AbstrAsyncDockerCmd<AttachContainerC
     @Override
     public AttachContainerCmd withLogs() {
         return withLogs(true);
-    }
-
-    /**
-     * @throws NotFoundException
-     *             No such container
-     */
-    @Override
-    public Void exec() throws NotFoundException {
-        return super.exec();
     }
 }

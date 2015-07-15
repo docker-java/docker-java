@@ -60,22 +60,14 @@ public class PushImageCmdImplTest extends AbstractDockerClientTest {
         LOG.info("Committing container: {}", container.toString());
         String imageId = dockerClient.commitCmd(container.getId()).withRepository(username + "/busybox").exec();
 
-
-        PushResponseCallback callback  = new PushResponseCallback();
-
         // we have to block until image is pushed
-        dockerClient.pushImageCmd(username + "/busybox", callback).exec();
-
-        callback.awaitFinish();
+        dockerClient.pushImageCmd(username + "/busybox").exec(new PushResponseCallback()).awaitCompletion();
 
         LOG.info("Removing image: {}", imageId);
         dockerClient.removeImageCmd(imageId).exec();
 
-        PullResponseCallback pushCallback = new PullResponseCallback();
-
-        dockerClient.pullImageCmd(username + "/busybox", pushCallback).exec();
-
-        pushCallback.awaitFinish();
+        PullResponseCallback pushCallback = dockerClient.pullImageCmd(username + "/busybox")
+                .exec(new PullResponseCallback()).awaitCompletion();
 
         assertThat(pushCallback.toString(), not(containsString("HTTP code: 404")));
     }
@@ -83,16 +75,13 @@ public class PushImageCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void pushNonExistentImage() throws Exception {
 
-        PushResponseCallback callback  = new PushResponseCallback();
-
-        dockerClient.pushImageCmd(username + "/xxx", callback).exec();
-
-        callback.awaitFinish();
+        PushResponseCallback callback = dockerClient.pushImageCmd(username + "/xxx").exec(new PushResponseCallback())
+                .awaitCompletion();
 
         assertThat(callback.toString(), containsString("error"));
     }
 
-    public static class PushResponseCallback extends CollectStreamItemCallback<PushResponseItem> {
+    public static class PushResponseCallback extends CollectStreamItemCallback<PushResponseCallback, PushResponseItem> {
 
     }
 
