@@ -31,7 +31,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
     }
 
     @BeforeTest
-    public void beforeTest() throws DockerException {
+    public void beforeTest() throws Exception {
         super.beforeTest();
     }
 
@@ -54,7 +54,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
      * This specific test may fail with boot2docker as time may not in sync with host system
      */
     @Test
-    public void testEventStreamTimeBound() throws InterruptedException, IOException {
+    public void testEventStreamTimeBound() throws Exception {
         // Don't include other tests events
         TimeUnit.SECONDS.sleep(1);
 
@@ -65,8 +65,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         CountDownLatch countDownLatch = new CountDownLatch(expectedEvents);
         EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
 
-        EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withSince(startTime).withUntil(endTime);
-        eventsCmd.exec();
+        dockerClient.eventsCmd().withSince(startTime).withUntil(endTime).exec(eventCallback);
 
         boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
 
@@ -76,15 +75,14 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test
-    public void testEventStreaming1() throws InterruptedException, IOException {
+    public void testEventStreaming1() throws Exception {
         // Don't include other tests events
         TimeUnit.SECONDS.sleep(1);
 
         CountDownLatch countDownLatch = new CountDownLatch(KNOWN_NUM_EVENTS);
         EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
 
-        EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withSince(getEpochTime());
-        eventsCmd.exec();
+        dockerClient.eventsCmd().withSince(getEpochTime()).exec(eventCallback);
 
         generateEvents();
 
@@ -95,15 +93,14 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test
-    public void testEventStreaming2() throws InterruptedException, IOException {
+    public void testEventStreaming2() throws Exception {
         // Don't include other tests events
         TimeUnit.SECONDS.sleep(1);
 
         CountDownLatch countDownLatch = new CountDownLatch(KNOWN_NUM_EVENTS);
         EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
 
-        EventsCmd eventsCmd = dockerClient.eventsCmd(eventCallback).withSince(getEpochTime());
-        eventsCmd.exec();
+        dockerClient.eventsCmd().withSince(getEpochTime()).exec(eventCallback);
 
         generateEvents();
 
@@ -116,16 +113,18 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
     /**
      * This method generates {#link KNOWN_NUM_EVENTS} events
      */
-    private int generateEvents() {
+    private int generateEvents() throws Exception {
         String testImage = "busybox";
-        asString(dockerClient.pullImageCmd(testImage).exec());
+
+        dockerClient.pullImageCmd(testImage).exec(new PullResponseCallback()).awaitCompletion();
+
         CreateContainerResponse container = dockerClient.createContainerCmd(testImage).withCmd("sleep", "9999").exec();
         dockerClient.startContainerCmd(container.getId()).exec();
         dockerClient.stopContainerCmd(container.getId()).exec();
         return KNOWN_NUM_EVENTS;
     }
 
-    private class EventCallbackTest extends ResultCallbackTemplate<Event> {
+    private class EventCallbackTest extends ResultCallbackTemplate<EventCallbackTest, Event> {
 
         private final CountDownLatch countDownLatch;
 

@@ -2,7 +2,7 @@ package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.NotFoundException;
 
-public interface InspectContainerCmd extends DockerCmd<InspectContainerResponse> {
+public interface InspectContainerCmd extends SyncDockerCmd<InspectContainerResponse> {
 
     public String getContainerId();
 
@@ -15,7 +15,7 @@ public interface InspectContainerCmd extends DockerCmd<InspectContainerResponse>
     @Override
     public InspectContainerResponse exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdExec<InspectContainerCmd, InspectContainerResponse> {
+    public static interface Exec extends DockerCmdSyncExec<InspectContainerCmd, InspectContainerResponse> {
     }
 
 }

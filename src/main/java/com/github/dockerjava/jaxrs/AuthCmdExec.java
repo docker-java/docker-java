@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 
 import static javax.ws.rs.client.Entity.entity;
 
-public class AuthCmdExec extends AbstrDockerCmdExec<AuthCmd, AuthResponse> implements AuthCmd.Exec {
+public class AuthCmdExec extends AbstrSyncDockerCmdExec<AuthCmd, AuthResponse> implements AuthCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthCmdExec.class);
 

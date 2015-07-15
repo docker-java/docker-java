@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.github.dockerjava.api.command.TopContainerCmd;
 import com.github.dockerjava.api.command.TopContainerResponse;
 
-public class TopContainerCmdExec extends AbstrDockerCmdExec<TopContainerCmd, TopContainerResponse> implements
+public class TopContainerCmdExec extends AbstrSyncDockerCmdExec<TopContainerCmd, TopContainerResponse> implements
         TopContainerCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TopContainerCmdExec.class);

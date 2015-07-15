@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.model.Container;
 
-public class ListContainersCmdExec extends AbstrDockerCmdExec<ListContainersCmd, List<Container>> implements
+public class ListContainersCmdExec extends AbstrSyncDockerCmdExec<ListContainersCmd, List<Container>> implements
         ListContainersCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ListContainersCmdExec.class);

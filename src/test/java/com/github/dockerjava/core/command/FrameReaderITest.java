@@ -55,15 +55,15 @@ public class FrameReaderITest {
 
         AbstractDockerClientTest.CollectFramesCallback collectFramesCallback = new AbstractDockerClientTest.CollectFramesCallback();
 
-        dockerClient.logContainerCmd(dockerfileFixture.getContainerId(), collectFramesCallback).withStdOut()
+        dockerClient.logContainerCmd(dockerfileFixture.getContainerId()).withStdOut()
                 .withStdErr().withTailAll()
                 // we can't follow stream here as it blocks reading from resulting InputStream infinitely
                 // .withFollowStream()
-                .exec();
+                .exec(collectFramesCallback);
 
-        collectFramesCallback.awaitFinish();
+        collectFramesCallback.awaitCompletion();
 
-        return collectFramesCallback.frames;
+        return collectFramesCallback.items;
     }
 
     @Test

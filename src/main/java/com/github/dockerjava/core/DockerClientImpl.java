@@ -49,8 +49,11 @@ import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.Event;
+import com.github.dockerjava.api.model.BuildResponseItem;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.Identifier;
+import com.github.dockerjava.api.model.PullResponseItem;
+import com.github.dockerjava.api.model.PushResponseItem;
 import com.github.dockerjava.api.model.Statistics;
 import com.github.dockerjava.core.command.AttachContainerCmdImpl;
 import com.github.dockerjava.core.command.AuthCmdImpl;
@@ -284,9 +287,8 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
-    public AttachContainerCmd attachContainerCmd(String containerId, ResultCallback<Frame> resultCallback) {
-        return new AttachContainerCmdImpl(getDockerCmdExecFactory().createAttachContainerCmdExec(), containerId,
-                resultCallback);
+    public AttachContainerCmd attachContainerCmd(String containerId) {
+        return new AttachContainerCmdImpl(getDockerCmdExecFactory().createAttachContainerCmdExec(), containerId);
     }
 
     @Override
@@ -300,9 +302,8 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
-    public LogContainerCmd logContainerCmd(String containerId, ResultCallback<Frame> resultCallback) {
-        return new LogContainerCmdImpl(getDockerCmdExecFactory().createLogContainerCmdExec(), containerId,
-                resultCallback);
+    public LogContainerCmd logContainerCmd(String containerId) {
+        return new LogContainerCmdImpl(getDockerCmdExecFactory().createLogContainerCmdExec(), containerId);
     }
 
     @Override
@@ -383,13 +384,13 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
-    public EventsCmd eventsCmd(ResultCallback<Event> eventCallback) {
-        return new EventsCmdImpl(getDockerCmdExecFactory().createEventsCmdExec(), eventCallback);
+    public EventsCmd eventsCmd() {
+        return new EventsCmdImpl(getDockerCmdExecFactory().createEventsCmdExec());
     }
 
     @Override
-    public StatsCmd statsCmd(ResultCallback<Statistics> statisticsCallback) {
-        return new StatsCmdImpl(getDockerCmdExecFactory().createStatsCmdExec(), statisticsCallback);
+    public StatsCmd statsCmd() {
+        return new StatsCmdImpl(getDockerCmdExecFactory().createStatsCmdExec());
     }
 
     @Override

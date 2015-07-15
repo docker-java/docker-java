@@ -16,7 +16,7 @@ import com.github.dockerjava.api.async.ResultCallback;
  * @author marcus
  *
  */
-public abstract class ResultCallbackTemplate<T> implements ResultCallback<T> {
+public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T>, A_RES_T> implements ResultCallback<A_RES_T> {
 
     private final CountDownLatch finished = new CountDownLatch(1);
 
@@ -28,7 +28,7 @@ public abstract class ResultCallbackTemplate<T> implements ResultCallback<T> {
     }
 
     @Override
-    public void onNext(T object) {
+    public void onNext(A_RES_T object) {
     }
 
     @Override
@@ -60,11 +60,21 @@ public abstract class ResultCallbackTemplate<T> implements ResultCallback<T> {
         finished.countDown();
     }
 
-    public void awaitFinish() throws InterruptedException {
+    /**
+     * Blocks until {@link ResultCallback#onComplete()} was called
+     */
+    @SuppressWarnings("unchecked")
+    public RC_T awaitCompletion() throws InterruptedException {
         finished.await();
+        return (RC_T) this;
     }
 
-    public void awaitFinish(long timeout, TimeUnit timeUnit) throws InterruptedException {
+    /**
+     * Blocks until {@link ResultCallback#onComplete()} was called or the given timeout occurs
+     */
+    @SuppressWarnings("unchecked")
+    public RC_T awaitCompletion(long timeout, TimeUnit timeUnit) throws InterruptedException {
         finished.await(timeout, timeUnit);
+        return (RC_T) this;
     }
 }

@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.dockerjava.api.command.CommitCmd;
 
-public class CommitCmdExec extends AbstrDockerCmdExec<CommitCmd, String> implements CommitCmd.Exec {
+public class CommitCmdExec extends AbstrSyncDockerCmdExec<CommitCmd, String> implements CommitCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommitCmdExec.class);
 

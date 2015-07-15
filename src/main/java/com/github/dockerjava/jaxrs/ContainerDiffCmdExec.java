@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.github.dockerjava.api.command.ContainerDiffCmd;
 import com.github.dockerjava.api.model.ChangeLog;
 
-public class ContainerDiffCmdExec extends AbstrDockerCmdExec<ContainerDiffCmd, List<ChangeLog>> implements
+public class ContainerDiffCmdExec extends AbstrSyncDockerCmdExec<ContainerDiffCmd, List<ChangeLog>> implements
         ContainerDiffCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ContainerDiffCmdExec.class);

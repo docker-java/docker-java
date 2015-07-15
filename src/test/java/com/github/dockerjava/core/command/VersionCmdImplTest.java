@@ -18,7 +18,7 @@ import com.github.dockerjava.client.AbstractDockerClientTest;
 public class VersionCmdImplTest extends AbstractDockerClientTest {
 
     @BeforeTest
-    public void beforeTest() throws DockerException {
+    public void beforeTest() throws Exception {
         super.beforeTest();
     }
 

@@ -2,7 +2,7 @@ package com.github.dockerjava.api.command;
 
 import java.io.InputStream;
 
-public interface CreateImageCmd extends DockerCmd<CreateImageResponse> {
+public interface CreateImageCmd extends SyncDockerCmd<CreateImageResponse> {
 
     public String getRepository();
 
@@ -30,7 +30,7 @@ public interface CreateImageCmd extends DockerCmd<CreateImageResponse> {
      */
     public CreateImageCmd withTag(String tag);
 
-    public static interface Exec extends DockerCmdExec<CreateImageCmd, CreateImageResponse> {
+    public static interface Exec extends DockerCmdSyncExec<CreateImageCmd, CreateImageResponse> {
     }
 
 }

@@ -17,7 +17,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class CopyFileFromContainerCmdImplTest extends AbstractDockerClientTest {
 
     @BeforeTest
-    public void beforeTest() {
+    public void beforeTest() throws Exception {
         super.beforeTest();
     }
 

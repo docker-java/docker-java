@@ -4,7 +4,7 @@ import com.github.dockerjava.api.NotFoundException;
 
 import java.io.InputStream;
 
-public interface ExecStartCmd extends DockerCmd<InputStream> {
+public interface ExecStartCmd extends SyncDockerCmd<InputStream> {
 
     public String getExecId();
 
@@ -24,13 +24,13 @@ public interface ExecStartCmd extends DockerCmd<InputStream> {
 
     /**
      * Its the responsibility of the caller to consume and/or close the {@link InputStream} to prevent connection leaks.
-     * 
+     *
      * @throws com.github.dockerjava.api.NotFoundException
      *             No such exec instance
      */
     @Override
     public InputStream exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdExec<ExecStartCmd, InputStream> {
+    public static interface Exec extends DockerCmdSyncExec<ExecStartCmd, InputStream> {
     }
 }

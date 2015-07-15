@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.model.Info;
 
-public class InfoCmdExec extends AbstrDockerCmdExec<InfoCmd, Info> implements InfoCmd.Exec {
+public class InfoCmdExec extends AbstrSyncDockerCmdExec<InfoCmd, Info> implements InfoCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InfoCmdExec.class);
 

@@ -1,16 +1,14 @@
 package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.model.AuthConfig;
-import com.github.dockerjava.core.command.EventStreamReader;
-
-import java.io.InputStream;
+import com.github.dockerjava.api.model.PullResponseItem;
 
 /**
  *
  * Pull image from repository.
  *
  */
-public interface PullImageCmd extends DockerCmd<InputStream> {
+public interface PullImageCmd extends AsyncDockerCmd<PullImageCmd, PullResponseItem> {
 
     public String getRepository();
 
@@ -28,15 +26,6 @@ public interface PullImageCmd extends DockerCmd<InputStream> {
 
     public PullImageCmd withAuthConfig(AuthConfig authConfig);
 
-    public static interface Exec extends DockerCmdExec<PullImageCmd, InputStream> {
+    public static interface Exec extends DockerCmdAsyncExec<PullImageCmd, PullResponseItem> {
     }
-
-    /**
-     * Its the responsibility of the caller to consume and/or close the {@link InputStream} to prevent connection leaks.
-     *
-     * @see {@link EventStreamReader}
-     */
-    @Override
-    public InputStream exec();
-
 }

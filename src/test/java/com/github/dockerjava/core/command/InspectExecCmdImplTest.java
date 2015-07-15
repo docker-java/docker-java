@@ -1,30 +1,33 @@
 package com.github.dockerjava.core.command;
 
-import com.github.dockerjava.api.DockerException;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.security.SecureRandom;
+
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.ExecCreateCmdResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.InspectExecResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.test.serdes.JSONTestHelper;
-import java.io.IOException;
-
-import org.testng.ITestResult;
-import org.testng.annotations.*;
-
-import java.io.InputStream;
-import java.lang.reflect.Method;
-import java.security.SecureRandom;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
 
 @Test(groups = "integration")
 public class InspectExecCmdImplTest extends AbstractDockerClientTest {
     @BeforeTest
-    public void beforeTest() throws DockerException {
+    public void beforeTest() throws Exception {
         super.beforeTest();
     }
 

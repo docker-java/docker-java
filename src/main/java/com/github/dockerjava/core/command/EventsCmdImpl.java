@@ -7,17 +7,14 @@ import com.github.dockerjava.api.model.Event;
 /**
  * Stream docker events
  */
-public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, Void> implements EventsCmd {
+public class EventsCmdImpl extends AbstrAsyncDockerCmd<EventsCmd, Event> implements EventsCmd {
 
     private String since;
 
     private String until;
 
-    private ResultCallback<Event> resultCallback;
-
-    public EventsCmdImpl(EventsCmd.Exec exec, ResultCallback<Event> resultCallback) {
+    public EventsCmdImpl(EventsCmd.Exec exec) {
         super(exec);
-        withResultCallback(resultCallback);
     }
 
     @Override
@@ -33,12 +30,6 @@ public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, Void> implements Ev
     }
 
     @Override
-    public EventsCmd withResultCallback(ResultCallback<Event> resultCallback) {
-        this.resultCallback = resultCallback;
-        return this;
-    }
-
-    @Override
     public String getSince() {
         return since;
     }
@@ -46,11 +37,6 @@ public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, Void> implements Ev
     @Override
     public String getUntil() {
         return until;
-    }
-
-    @Override
-    public ResultCallback<Event> getResultCallback() {
-        return resultCallback;
     }
 
     @Override

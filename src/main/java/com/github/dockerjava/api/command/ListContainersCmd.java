@@ -20,7 +20,7 @@ import com.github.dockerjava.api.model.Filters;
  *            - Show only containers created before Id, include non-running ones.
  *
  */
-public interface ListContainersCmd extends DockerCmd<List<Container>> {
+public interface ListContainersCmd extends SyncDockerCmd<List<Container>> {
 
     public int getLimit();
 
@@ -46,7 +46,7 @@ public interface ListContainersCmd extends DockerCmd<List<Container>> {
 
     public ListContainersCmd withFilters(Filters filters);
 
-    public static interface Exec extends DockerCmdExec<ListContainersCmd, List<Container>> {
+    public static interface Exec extends DockerCmdSyncExec<ListContainersCmd, List<Container>> {
     }
 
 }

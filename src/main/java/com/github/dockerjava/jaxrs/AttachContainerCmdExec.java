@@ -5,13 +5,14 @@ import javax.ws.rs.client.WebTarget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.core.async.FrameStreamProcessor;
 import com.github.dockerjava.jaxrs.async.AbstractCallbackNotifier;
 import com.github.dockerjava.jaxrs.async.POSTCallbackNotifier;
 
-public class AttachContainerCmdExec extends AbstrDockerCmdExec<AttachContainerCmd, Void> implements
+public class AttachContainerCmdExec extends AbstrAsyncDockerCmdExec<AttachContainerCmd, Frame> implements
         AttachContainerCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AttachContainerCmdExec.class);
@@ -21,7 +22,9 @@ public class AttachContainerCmdExec extends AbstrDockerCmdExec<AttachContainerCm
     }
 
     @Override
-    protected Void execute(AttachContainerCmd command) {
+    protected AbstractCallbackNotifier<Frame> callbackNotifier(AttachContainerCmd command,
+            ResultCallback<Frame> resultCallback) {
+
         WebTarget webTarget = getBaseResource().path("/containers/{id}/attach")
                 .resolveTemplate("id", command.getContainerId())
                 .queryParam("logs", command.hasLogsEnabled() ? "1" : "0")
@@ -32,11 +35,7 @@ public class AttachContainerCmdExec extends AbstrDockerCmdExec<AttachContainerCm
 
         LOGGER.trace("POST: {}", webTarget);
 
-        POSTCallbackNotifier<Frame> callbackNotifier = new POSTCallbackNotifier<Frame>(new FrameStreamProcessor(),
-                command.getResultCallback(), webTarget);
-
-        AbstractCallbackNotifier.startAsyncProcessing(callbackNotifier);
-
-        return null;
+        return new POSTCallbackNotifier<Frame>(new FrameStreamProcessor(),
+                resultCallback, webTarget.request(), null);
     }
 }

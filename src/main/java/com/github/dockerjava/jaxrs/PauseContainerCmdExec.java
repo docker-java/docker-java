@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.api.command.PauseContainerCmd;
 
-public class PauseContainerCmdExec extends AbstrDockerCmdExec<PauseContainerCmd, Void> implements
+public class PauseContainerCmdExec extends AbstrSyncDockerCmdExec<PauseContainerCmd, Void> implements
         PauseContainerCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PauseContainerCmdExec.class);

@@ -8,15 +8,16 @@ import java.io.InputStream;
 
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.model.AuthConfigurations;
+import com.github.dockerjava.api.model.BuildResponseItem;
 import com.github.dockerjava.core.FilePathUtil;
 import com.github.dockerjava.core.dockerfile.Dockerfile;
 
 /**
- * 
+ *
  * Build an image from Dockerfile.
- * 
+ *
  */
-public class BuildImageCmdImpl extends AbstrDockerCmd<BuildImageCmd, BuildImageCmd.Response> implements BuildImageCmd {
+public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildResponseItem> implements BuildImageCmd {
 
     private InputStream tarInputStream = null;
 

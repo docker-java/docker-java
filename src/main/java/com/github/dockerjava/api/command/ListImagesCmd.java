@@ -12,7 +12,7 @@ import com.github.dockerjava.api.model.Image;
  * @param filters
  *            - a json encoded value of the filters (a map[string][]string) to process on the images list.
  */
-public interface ListImagesCmd extends DockerCmd<List<Image>> {
+public interface ListImagesCmd extends SyncDockerCmd<List<Image>> {
 
     public String getFilters();
 
@@ -22,7 +22,7 @@ public interface ListImagesCmd extends DockerCmd<List<Image>> {
 
     public ListImagesCmd withFilters(String filters);
 
-    public static interface Exec extends DockerCmdExec<ListImagesCmd, List<Image>> {
+    public static interface Exec extends DockerCmdSyncExec<ListImagesCmd, List<Image>> {
     }
 
 }

@@ -14,7 +14,7 @@ import java.io.InputStream;
 
 import static javax.ws.rs.client.Entity.entity;
 
-public class ExecStartCmdExec extends AbstrDockerCmdExec<ExecStartCmd, InputStream> implements ExecStartCmd.Exec {
+public class ExecStartCmdExec extends AbstrSyncDockerCmdExec<ExecStartCmd, InputStream> implements ExecStartCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecStartCmdExec.class);
 

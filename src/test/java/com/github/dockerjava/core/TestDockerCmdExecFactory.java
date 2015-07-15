@@ -1,21 +1,58 @@
 package com.github.dockerjava.core;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.dockerjava.api.command.*;
+import com.github.dockerjava.api.async.ResultCallback;
+import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd.Exec;
-import com.github.dockerjava.jaxrs.BuildImageCmdExec;
+import com.github.dockerjava.api.command.BuildImageCmd;
+import com.github.dockerjava.api.command.CommitCmd;
+import com.github.dockerjava.api.command.ContainerDiffCmd;
+import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
+import com.github.dockerjava.api.command.CreateContainerCmd;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.CreateImageCmd;
+import com.github.dockerjava.api.command.CreateImageResponse;
+import com.github.dockerjava.api.command.DockerCmdExecFactory;
+import com.github.dockerjava.api.command.EventsCmd;
+import com.github.dockerjava.api.command.ExecCreateCmd;
+import com.github.dockerjava.api.command.ExecStartCmd;
+import com.github.dockerjava.api.command.InfoCmd;
+import com.github.dockerjava.api.command.InspectContainerCmd;
+import com.github.dockerjava.api.command.InspectExecCmd;
+import com.github.dockerjava.api.command.InspectImageCmd;
+import com.github.dockerjava.api.command.KillContainerCmd;
+import com.github.dockerjava.api.command.ListContainersCmd;
+import com.github.dockerjava.api.command.ListImagesCmd;
+import com.github.dockerjava.api.command.LogContainerCmd;
+import com.github.dockerjava.api.command.PauseContainerCmd;
+import com.github.dockerjava.api.command.PingCmd;
+import com.github.dockerjava.api.command.PullImageCmd;
+import com.github.dockerjava.api.command.PushImageCmd;
+import com.github.dockerjava.api.command.RemoveContainerCmd;
+import com.github.dockerjava.api.command.RemoveImageCmd;
+import com.github.dockerjava.api.command.RestartContainerCmd;
+import com.github.dockerjava.api.command.SaveImageCmd;
+import com.github.dockerjava.api.command.SearchImagesCmd;
+import com.github.dockerjava.api.command.StartContainerCmd;
+import com.github.dockerjava.api.command.StatsCmd;
+import com.github.dockerjava.api.command.StopContainerCmd;
+import com.github.dockerjava.api.command.TagImageCmd;
+import com.github.dockerjava.api.command.TopContainerCmd;
+import com.github.dockerjava.api.command.UnpauseContainerCmd;
+import com.github.dockerjava.api.command.VersionCmd;
+import com.github.dockerjava.api.command.WaitContainerCmd;
+import com.github.dockerjava.api.model.BuildResponseItem;
 
 /**
  * Special {@link DockerCmdExecFactory} implementation that collects container and image creations while test execution
  * for the purpose of automatically cleanup.
- * 
+ *
  * @author marcus
- * 
+ *
  */
 public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 
@@ -91,16 +128,16 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
     public BuildImageCmd.Exec createBuildImageCmdExec() {
         return new BuildImageCmd.Exec() {
             @Override
-            public BuildImageCmd.Response exec(BuildImageCmd command) {
+            public Void exec(BuildImageCmd command, ResultCallback<BuildResponseItem> resultCallback) {
                 // can't detect image id here so tagging it
                 String tag = command.getTag();
                 if (tag == null || "".equals(tag.trim())) {
                     tag = "" + new SecureRandom().nextInt(Integer.MAX_VALUE);
                     command.withTag(tag);
                 }
-                InputStream inputStream = delegate.createBuildImageCmdExec().exec(command);
+                delegate.createBuildImageCmdExec().exec(command, resultCallback);
                 imageNames.add(tag);
-                return new BuildImageCmdExec.ResponseImpl(inputStream);
+                return null;
             }
         };
     }

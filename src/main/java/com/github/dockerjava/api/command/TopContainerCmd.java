@@ -5,7 +5,7 @@ import com.github.dockerjava.api.NotFoundException;
 /**
  * List processes running inside a container
  */
-public interface TopContainerCmd extends DockerCmd<TopContainerResponse> {
+public interface TopContainerCmd extends SyncDockerCmd<TopContainerResponse> {
 
     public String getContainerId();
 
@@ -22,7 +22,7 @@ public interface TopContainerCmd extends DockerCmd<TopContainerResponse> {
     @Override
     public TopContainerResponse exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdExec<TopContainerCmd, TopContainerResponse> {
+    public static interface Exec extends DockerCmdSyncExec<TopContainerCmd, TopContainerResponse> {
     }
 
 }

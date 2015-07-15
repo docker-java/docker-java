@@ -2,23 +2,40 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.io.InputStream;
-
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.api.model.PullResponseItem;
 
 /**
  *
  * Pull image from repository.
  *
  */
-public class PullImageCmdImpl extends AbstrAuthCfgDockerCmd<PullImageCmd, InputStream> implements PullImageCmd {
+public class PullImageCmdImpl extends AbstrAsyncDockerCmd<PullImageCmd, PullResponseItem> implements PullImageCmd {
 
     private String repository, tag, registry;
 
+    private AuthConfig authConfig;
+
     public PullImageCmdImpl(PullImageCmd.Exec exec, AuthConfig authConfig, String repository) {
-        super(exec, authConfig);
+        super(exec);
+        withOptionalAuthConfig(authConfig);
         withRepository(repository);
+    }
+
+    public AuthConfig getAuthConfig() {
+        return authConfig;
+    }
+
+    public PullImageCmd withAuthConfig(AuthConfig authConfig) {
+        checkNotNull(authConfig, "authConfig was not specified");
+        return withOptionalAuthConfig(authConfig);
+    }
+
+    private PullImageCmd withOptionalAuthConfig(AuthConfig authConfig) {
+        this.authConfig = authConfig;
+        return this;
     }
 
     @Override

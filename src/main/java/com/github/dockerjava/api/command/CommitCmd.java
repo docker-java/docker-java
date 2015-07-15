@@ -9,7 +9,7 @@ import com.github.dockerjava.api.model.Volumes;
  * Create a new image from a container's changes. Returns the new image ID.
  *
  */
-public interface CommitCmd extends DockerCmd<String> {
+public interface CommitCmd extends SyncDockerCmd<String> {
 
     public String getContainerId();
 
@@ -110,7 +110,7 @@ public interface CommitCmd extends DockerCmd<String> {
     @Override
     public String exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdExec<CommitCmd, String> {
+    public static interface Exec extends DockerCmdSyncExec<CommitCmd, String> {
     }
 
 }

@@ -24,9 +24,7 @@ import com.github.dockerjava.api.model.Frame;
  * @param tail
  *            - `all` or `<number>`, Output specified number of lines at the end of logs
  */
-public class LogContainerCmdImpl extends AbstrDockerCmd<LogContainerCmd, Void> implements LogContainerCmd {
-
-    private ResultCallback<Frame> resultCallback;
+public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Frame> implements LogContainerCmd {
 
     private String containerId;
 
@@ -34,27 +32,14 @@ public class LogContainerCmdImpl extends AbstrDockerCmd<LogContainerCmd, Void> i
 
     private boolean followStream, timestamps, stdout, stderr;
 
-    public LogContainerCmdImpl(LogContainerCmd.Exec exec, String containerId, ResultCallback<Frame> resultCallback) {
+    public LogContainerCmdImpl(LogContainerCmd.Exec exec, String containerId) {
         super(exec);
         withContainerId(containerId);
-        withResultCallback(resultCallback);
     }
 
     @Override
     public String getContainerId() {
         return containerId;
-    }
-
-    @Override
-    public ResultCallback<Frame> getResultCallback() {
-        return resultCallback;
-    }
-
-    @Override
-    public LogContainerCmd withResultCallback(ResultCallback<Frame> resultCallback) {
-        checkNotNull(resultCallback, "resultCallback was not specified");
-        this.resultCallback = resultCallback;
-        return this;
     }
 
     @Override
@@ -151,12 +136,4 @@ public class LogContainerCmdImpl extends AbstrDockerCmd<LogContainerCmd, Void> i
                 .append(timestamps ? "--timestamps=true" : "").append(containerId).toString();
     }
 
-    /**
-     * @throws NotFoundException
-     *             No such container
-     */
-    @Override
-    public Void exec() throws NotFoundException {
-        return super.exec();
-    }
 }

@@ -31,7 +31,7 @@ public class RemoveContainerCmdImplTest extends AbstractDockerClientTest {
     public static final Logger LOG = LoggerFactory.getLogger(RemoveContainerCmdImplTest.class);
 
     @BeforeTest
-    public void beforeTest() throws DockerException {
+    public void beforeTest() throws Exception {
         super.beforeTest();
     }
 

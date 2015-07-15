@@ -1,20 +1,19 @@
 package com.github.dockerjava.api.command;
 
-import com.github.dockerjava.api.model.AuthConfigurations;
-import com.github.dockerjava.api.model.EventStreamItem;
-
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 
+import com.github.dockerjava.api.model.AuthConfigurations;
+import com.github.dockerjava.api.model.BuildResponseItem;
+
 /**
- * 
+ *
  * Build an image from Dockerfile.
- * 
+ *
  * TODO: http://docs.docker.com/reference/builder/#dockerignore
- * 
+ *
  */
-public interface BuildImageCmd extends DockerCmd<BuildImageCmd.Response> {
+public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildResponseItem> {
 
     public BuildImageCmd withTag(String tag);
 
@@ -58,14 +57,9 @@ public interface BuildImageCmd extends DockerCmd<BuildImageCmd.Response> {
 
     public BuildImageCmd withBuildAuthConfigs(AuthConfigurations authConfig);
 
-    public static interface Exec extends DockerCmdExec<BuildImageCmd, BuildImageCmd.Response> {
+    public static interface Exec extends DockerCmdAsyncExec<BuildImageCmd, BuildResponseItem> {
     }
 
-    /**
-     * @see {@link com.github.dockerjava.core.command.EventStreamReader}
-     */
-    public static abstract class Response extends InputStream {
-        public abstract Iterable<EventStreamItem> getItems() throws IOException;
-    }
+
 
 }

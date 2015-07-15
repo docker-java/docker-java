@@ -9,7 +9,7 @@ import com.github.dockerjava.api.NotFoundException;
  *            - Id of the container
  *
  */
-public interface UnpauseContainerCmd extends DockerCmd<Void> {
+public interface UnpauseContainerCmd extends SyncDockerCmd<Void> {
 
     public String getContainerId();
 
@@ -22,7 +22,7 @@ public interface UnpauseContainerCmd extends DockerCmd<Void> {
     @Override
     public Void exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdExec<UnpauseContainerCmd, Void> {
+    public static interface Exec extends DockerCmdSyncExec<UnpauseContainerCmd, Void> {
     }
 
 }

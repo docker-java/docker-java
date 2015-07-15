@@ -11,13 +11,13 @@ import com.github.dockerjava.api.model.SearchItem;
  *            - search term
  *
  */
-public interface SearchImagesCmd extends DockerCmd<List<SearchItem>> {
+public interface SearchImagesCmd extends SyncDockerCmd<List<SearchItem>> {
 
     public String getTerm();
 
     public SearchImagesCmd withTerm(String term);
 
-    public static interface Exec extends DockerCmdExec<SearchImagesCmd, List<SearchItem>> {
+    public static interface Exec extends DockerCmdSyncExec<SearchImagesCmd, List<SearchItem>> {
     }
 
 }

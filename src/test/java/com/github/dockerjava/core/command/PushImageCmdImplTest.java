@@ -1,17 +1,24 @@
 package com.github.dockerjava.core.command;
 
-import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.client.AbstractDockerClientTest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.testng.ITestResult;
-import org.testng.annotations.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
 
 import java.lang.reflect.Method;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.model.PushResponseItem;
+import com.github.dockerjava.client.AbstractDockerClientTest;
 
 @Test(groups = "integration")
 public class PushImageCmdImplTest extends AbstractDockerClientTest {
@@ -21,7 +28,7 @@ public class PushImageCmdImplTest extends AbstractDockerClientTest {
     String username;
 
     @BeforeTest
-    public void beforeTest() throws DockerException {
+    public void beforeTest() throws Exception {
         super.beforeTest();
         username = dockerClient.authConfig().getUsername();
     }
@@ -54,20 +61,28 @@ public class PushImageCmdImplTest extends AbstractDockerClientTest {
         String imageId = dockerClient.commitCmd(container.getId()).withRepository(username + "/busybox").exec();
 
         // we have to block until image is pushed
-        asString(dockerClient.pushImageCmd(username + "/busybox").exec());
+        dockerClient.pushImageCmd(username + "/busybox").exec(new PushResponseCallback()).awaitCompletion();
 
         LOG.info("Removing image: {}", imageId);
         dockerClient.removeImageCmd(imageId).exec();
 
-        String response = asString(dockerClient.pullImageCmd(username + "/busybox").exec());
+        PullResponseCallback pushCallback = dockerClient.pullImageCmd(username + "/busybox")
+                .exec(new PullResponseCallback()).awaitCompletion();
 
-        assertThat(response, not(containsString("HTTP code: 404")));
+        assertThat(pushCallback.toString(), not(containsString("HTTP code: 404")));
     }
 
     @Test
-    public void pushExistentImage() throws Exception {
+    public void pushNonExistentImage() throws Exception {
 
-        assertThat(asString(dockerClient.pushImageCmd(username + "/xxx").exec()), containsString("error"));
+        PushResponseCallback callback = dockerClient.pushImageCmd(username + "/xxx").exec(new PushResponseCallback())
+                .awaitCompletion();
+
+        assertThat(callback.toString(), containsString("error"));
+    }
+
+    public static class PushResponseCallback extends CollectStreamItemCallback<PushResponseCallback, PushResponseItem> {
+
     }
 
 }

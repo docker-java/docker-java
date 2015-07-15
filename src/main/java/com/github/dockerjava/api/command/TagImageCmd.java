@@ -9,9 +9,9 @@ package com.github.dockerjava.api.command;
  *            The repository to tag in
  * @param force
  *            (not documented)
- * 
+ *
  */
-public interface TagImageCmd extends DockerCmd<Void> {
+public interface TagImageCmd extends SyncDockerCmd<Void> {
 
     public String getImageId();
 
@@ -31,7 +31,7 @@ public interface TagImageCmd extends DockerCmd<Void> {
 
     public TagImageCmd withForce(boolean force);
 
-    public static interface Exec extends DockerCmdExec<TagImageCmd, Void> {
+    public static interface Exec extends DockerCmdSyncExec<TagImageCmd, Void> {
     }
 
 }

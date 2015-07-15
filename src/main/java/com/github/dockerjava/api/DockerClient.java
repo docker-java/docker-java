@@ -44,8 +44,11 @@ import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Event;
+import com.github.dockerjava.api.model.BuildResponseItem;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.Identifier;
+import com.github.dockerjava.api.model.PullResponseItem;
+import com.github.dockerjava.api.model.PushResponseItem;
 import com.github.dockerjava.api.model.Statistics;
 
 // https://godoc.org/github.com/fsouza/go-dockerclient
@@ -114,13 +117,13 @@ public interface DockerClient extends Closeable {
 
     public WaitContainerCmd waitContainerCmd(String containerId);
 
-    public AttachContainerCmd attachContainerCmd(String containerId, ResultCallback<Frame> resultCallback);
+    public AttachContainerCmd attachContainerCmd(String containerId);
 
     public ExecStartCmd execStartCmd(String containerId);
 
     public InspectExecCmd inspectExecCmd(String execId);
 
-    public LogContainerCmd logContainerCmd(String containerId, ResultCallback<Frame> resultCallback);
+    public LogContainerCmd logContainerCmd(String containerId);
 
     public CopyFileFromContainerCmd copyFileFromContainerCmd(String containerId, String resource);
 
@@ -148,9 +151,9 @@ public interface DockerClient extends Closeable {
 
     public UnpauseContainerCmd unpauseContainerCmd(String containerId);
 
-    public EventsCmd eventsCmd(ResultCallback<Event> resultCallback);
+    public EventsCmd eventsCmd();
 
-    public StatsCmd statsCmd(ResultCallback<Statistics> resultCallback);
+    public StatsCmd statsCmd();
 
     @Override
     public void close() throws IOException;

@@ -7,8 +7,6 @@ import static org.hamcrest.Matchers.not;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -17,18 +15,15 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.github.dockerjava.core.async.ResultCallbackTemplate;
 
 @Test(groups = "integration")
 public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
     @BeforeTest
-    public void beforeTest() throws DockerException {
+    public void beforeTest() throws Exception {
         super.beforeTest();
     }
 
@@ -66,9 +61,9 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
         CollectFramesCallback loggingCallback = new CollectFramesCallback();
 
-        dockerClient.logContainerCmd(container.getId(), loggingCallback).withStdErr().withStdOut().exec();
+        dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec(loggingCallback);
 
-        loggingCallback.awaitFinish();
+        loggingCallback.awaitCompletion();
 
         assertTrue(loggingCallback.toString().contains(snippet));
     }
@@ -98,9 +93,7 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
             };
         };
 
-        dockerClient.logContainerCmd("non-existing", loggingCallback).withStdErr().withStdOut().exec();
-
-        loggingCallback.awaitFinish();
+        dockerClient.logContainerCmd("non-existing").withStdErr().withStdOut().exec(loggingCallback).awaitCompletion();
     }
 
     @Test
@@ -122,21 +115,21 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
         CollectFramesCallback loggingCallback = new CollectFramesCallback();
 
-        dockerClient.logContainerCmd(container.getId(), loggingCallback).withStdErr().withStdOut().exec();
+        dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec(loggingCallback);
 
         loggingCallback.close();
 
         loggingCallback = new CollectFramesCallback();
 
-        dockerClient.logContainerCmd(container.getId(), loggingCallback).withStdErr().withStdOut().exec();
+        dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec(loggingCallback);
 
         loggingCallback.close();
 
         loggingCallback = new CollectFramesCallback();
 
-        dockerClient.logContainerCmd(container.getId(), loggingCallback).withStdErr().withStdOut().exec();
+        dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec(loggingCallback);
 
-        loggingCallback.awaitFinish();
+        loggingCallback.awaitCompletion();
 
         assertTrue(loggingCallback.toString().contains(snippet));
     }

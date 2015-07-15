@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.api.command.UnpauseContainerCmd;
 
-public class UnpauseContainerCmdExec extends AbstrDockerCmdExec<UnpauseContainerCmd, Void> implements
+public class UnpauseContainerCmdExec extends AbstrSyncDockerCmdExec<UnpauseContainerCmd, Void> implements
         UnpauseContainerCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UnpauseContainerCmdExec.class);

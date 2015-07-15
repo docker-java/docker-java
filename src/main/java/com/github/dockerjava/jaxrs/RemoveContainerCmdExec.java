@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.api.command.RemoveContainerCmd;
 
-public class RemoveContainerCmdExec extends AbstrDockerCmdExec<RemoveContainerCmd, Void> implements
+public class RemoveContainerCmdExec extends AbstrSyncDockerCmdExec<RemoveContainerCmd, Void> implements
         RemoveContainerCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RemoveContainerCmdExec.class);

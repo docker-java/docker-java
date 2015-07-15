@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.api.command.TagImageCmd;
 
-public class TagImageCmdExec extends AbstrDockerCmdExec<TagImageCmd, Void> implements TagImageCmd.Exec {
+public class TagImageCmdExec extends AbstrSyncDockerCmdExec<TagImageCmd, Void> implements TagImageCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TagImageCmdExec.class);
 

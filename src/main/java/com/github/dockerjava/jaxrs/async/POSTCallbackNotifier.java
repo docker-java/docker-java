@@ -3,27 +3,30 @@
  */
 package com.github.dockerjava.jaxrs.async;
 
-import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.core.Response;
 
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.core.async.ResponseStreamProcessor;
 
 /**
- * <TODO: class description>
  *
  * @author marcus
  *
  */
 public class POSTCallbackNotifier<T> extends AbstractCallbackNotifier<T> {
 
+    Entity<?> entity = null;
+
     public POSTCallbackNotifier(ResponseStreamProcessor<T> responseStreamProcessor, ResultCallback<T> resultCallback,
-            WebTarget webTarget) {
-        super(responseStreamProcessor, resultCallback, webTarget);
+            Builder requestBuilder, Entity<?> entity) {
+        super(responseStreamProcessor, resultCallback, requestBuilder);
+        this.entity = entity;
     }
 
     protected Response response() {
-        return webTarget.request().post(null, Response.class);
+        return requestBuilder.post(entity, Response.class);
     }
 
 }

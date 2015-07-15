@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 
-public class InspectContainerCmdExec extends AbstrDockerCmdExec<InspectContainerCmd, InspectContainerResponse>
+public class InspectContainerCmdExec extends AbstrSyncDockerCmdExec<InspectContainerCmd, InspectContainerResponse>
         implements InspectContainerCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InspectContainerCmdExec.class);

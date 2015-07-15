@@ -6,12 +6,9 @@ import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 
 import java.io.File;
-import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.io.HexDump;
-import org.apache.commons.lang.StringUtils;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -19,7 +16,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.StreamType;
@@ -29,7 +25,7 @@ import com.github.dockerjava.client.AbstractDockerClientTest;
 public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
 
     @BeforeTest
-    public void beforeTest() throws DockerException {
+    public void beforeTest() throws Exception {
         super.beforeTest();
     }
 
@@ -69,10 +65,10 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
             };
         };
 
-        dockerClient.attachContainerCmd(container.getId(), collectFramesCallback).withStdErr().withStdOut()
-                .withFollowStream().withLogs().exec();
+        dockerClient.attachContainerCmd(container.getId()).withStdErr().withStdOut()
+                .withFollowStream().withLogs().exec(collectFramesCallback);
 
-        collectFramesCallback.awaitFinish(30, TimeUnit.SECONDS);
+        collectFramesCallback.awaitCompletion(30, TimeUnit.SECONDS);
 
         collectFramesCallback.close();
 
@@ -85,12 +81,7 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
         File baseDir = new File(Thread.currentThread().getContextClassLoader()
                 .getResource("attachContainerTestDockerfile").getFile());
 
-        InputStream response = dockerClient.buildImageCmd(baseDir).withNoCache().exec();
-
-        String fullLog = asString(response);
-        assertThat(fullLog, containsString("Successfully built"));
-
-        String imageId = StringUtils.substringBetween(fullLog, "Successfully built ", "\\n\"}").trim();
+        String imageId = buildImage(baseDir);
 
         CreateContainerResponse container = dockerClient.createContainerCmd(imageId).withTty(true).exec();
 
@@ -107,16 +98,16 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
             };
         };
 
-        dockerClient.attachContainerCmd(container.getId(), collectFramesCallback).withStdErr().withStdOut()
-                .withFollowStream().exec();
+        dockerClient.attachContainerCmd(container.getId()).withStdErr().withStdOut()
+                .withFollowStream().exec(collectFramesCallback);
 
-        collectFramesCallback.awaitFinish(10, TimeUnit.SECONDS);
+        collectFramesCallback.awaitCompletion(15, TimeUnit.SECONDS);
 
         collectFramesCallback.close();
 
         System.out.println("log: " + collectFramesCallback.toString());
 
-        HexDump.dump(collectFramesCallback.toString().getBytes(), 0, System.out, 0);
+        //HexDump.dump(collectFramesCallback.toString().getBytes(), 0, System.out, 0);
 
         assertThat(collectFramesCallback.toString(), containsString("stdout\r\nstderr"));
     }

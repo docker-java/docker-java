@@ -1,12 +1,9 @@
 package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.model.AuthConfig;
-import com.github.dockerjava.api.model.PushEventStreamItem;
-import com.github.dockerjava.core.command.EventStreamReader;
-
-import java.io.IOException;
-import java.io.InputStream;
+import com.github.dockerjava.api.model.PushResponseItem;
 
 /**
  * Push the latest image to the repository.
@@ -14,7 +11,7 @@ import java.io.InputStream;
  * @param name
  *            The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
  */
-public interface PushImageCmd extends DockerCmd<PushImageCmd.Response> {
+public interface PushImageCmd extends AsyncDockerCmd<PushImageCmd, PushResponseItem> {
 
     public String getName();
 
@@ -40,16 +37,9 @@ public interface PushImageCmd extends DockerCmd<PushImageCmd.Response> {
      * @throws NotFoundException
      *             No such image
      */
-    public Response exec() throws NotFoundException;
+    @Override
+    public <T extends ResultCallback<PushResponseItem>> T exec(T resultCallback);
 
-    public static interface Exec extends DockerCmdExec<PushImageCmd, Response> {
+    public static interface Exec extends DockerCmdAsyncExec<PushImageCmd, PushResponseItem> {
     }
-
-    /**
-     * @see {@link EventStreamReader}
-     */
-    public static abstract class Response extends InputStream {
-        public abstract Iterable<PushEventStreamItem> getItems() throws IOException;
-    }
-
 }

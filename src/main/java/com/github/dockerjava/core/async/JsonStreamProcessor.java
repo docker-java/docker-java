@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonFactory.Feature;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,15 +34,22 @@ public class JsonStreamProcessor<T> implements ResponseStreamProcessor<T> {
     public void processResponseStream(InputStream response, ResultCallback<T> resultCallback) {
 
         resultCallback.onStart(response);
+        OBJECT_MAPPER.configure(com.fasterxml.jackson.core.JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
 
         try {
             JsonParser jp = JSON_FACTORY.createParser(response);
-            while (!jp.isClosed() && jp.nextToken() != JsonToken.END_OBJECT) {
+            boolean closed = jp.isClosed();
+            JsonToken nextToken = jp.nextToken();
+            while (!closed && nextToken != null && nextToken != JsonToken.END_OBJECT) {
                 try {
-                    resultCallback.onNext(OBJECT_MAPPER.readValue(jp, clazz));
+                    T next = OBJECT_MAPPER.readValue(jp, clazz);
+                    resultCallback.onNext(next);
                 } catch (Exception e) {
                     resultCallback.onError(e);
                 }
+
+                closed = jp.isClosed();
+                nextToken = jp.nextToken();
             }
         } catch (Throwable t) {
             resultCallback.onError(t);
