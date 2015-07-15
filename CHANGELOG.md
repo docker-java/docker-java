@@ -3,7 +3,10 @@ Change Log
 
 Latest SNAPSHOT
 ---
+
 * [#270](https://github.com/docker-java/docker-java/pull/270) Passing result callbacks for async commands via commands exec()
+* [#269](https://github.com/docker-java/docker-java/pull/269) Add filters option to events operation 
+* [#268](https://github.com/docker-java/docker-java/pull/268) Concurrent DockerCmdExecFactory.getDefaultDockerCmdExecFactory fails on reload
 * [#263](https://github.com/docker-java/docker-java/pull/263) Refactoring of streaming commands APIs (event, stats, log, attach)
 * [#262](https://github.com/docker-java/docker-java/pull/262) Accept filters in list containers 
 * [#260](https://github.com/docker-java/docker-java/pull/260) Add labels to create and inspect container
