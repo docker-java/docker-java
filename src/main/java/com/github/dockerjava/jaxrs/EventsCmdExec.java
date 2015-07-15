@@ -1,5 +1,7 @@
 package com.github.dockerjava.jaxrs;
 
+import static com.google.common.net.UrlEscapers.*;
+
 import javax.ws.rs.client.WebTarget;
 
 import org.slf4j.Logger;
@@ -24,6 +26,11 @@ public class EventsCmdExec extends AbstrAsyncDockerCmdExec<EventsCmd, Event> imp
     protected AbstractCallbackNotifier<Event> callbackNotifier(EventsCmd command, ResultCallback<Event> resultCallback) {
         WebTarget webTarget = getBaseResource().path("/events").queryParam("since", command.getSince())
                 .queryParam("until", command.getUntil());
+
+        if (command.getFilters() != null) {
+            webTarget = webTarget
+                    .queryParam("filters", urlPathSegmentEscaper().escape(command.getFilters().toString()));
+        }
 
         LOGGER.trace("GET: {}", webTarget);
 

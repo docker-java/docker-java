@@ -15,6 +15,7 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Event;
+import com.github.dockerjava.api.model.EventFilters;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
 
@@ -98,6 +99,22 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
 
         dockerClient.eventsCmd().withSince(getEpochTime()).exec(eventCallback);
+
+        generateEvents();
+
+        boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
+
+        eventCallback.close();
+        assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
+    }
+
+    public void testEventStreamingWithFilter() throws Exception {
+        // Don't include other tests events
+        TimeUnit.SECONDS.sleep(1);
+
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        EventCallbackTest eventCallback = dockerClient.eventsCmd().withFilters(new EventFilters().withEvent("start"))
+                .exec(new EventCallbackTest(countDownLatch));
 
         generateEvents();
 

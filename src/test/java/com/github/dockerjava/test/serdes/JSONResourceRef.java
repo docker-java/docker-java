@@ -15,7 +15,6 @@
  */
 package com.github.dockerjava.test.serdes;
 
-
 /**
  * References JSON resources, which
  * 
