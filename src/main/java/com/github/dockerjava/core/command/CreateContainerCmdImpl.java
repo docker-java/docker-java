@@ -24,8 +24,8 @@ import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.RestartPolicy;
 import com.github.dockerjava.api.model.Volume;
-import com.github.dockerjava.api.model.VolumesFrom;
 import com.github.dockerjava.api.model.Volumes;
+import com.github.dockerjava.api.model.VolumesFrom;
 
 /**
  *

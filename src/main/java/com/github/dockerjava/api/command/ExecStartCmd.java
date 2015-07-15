@@ -1,8 +1,8 @@
 package com.github.dockerjava.api.command;
 
-import com.github.dockerjava.api.NotFoundException;
-
 import java.io.InputStream;
+
+import com.github.dockerjava.api.NotFoundException;
 
 public interface ExecStartCmd extends SyncDockerCmd<InputStream> {
 

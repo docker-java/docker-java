@@ -1,16 +1,5 @@
 package com.github.dockerjava.core.dockerfile;
 
-import com.github.dockerjava.api.DockerClientException;
-import com.github.dockerjava.core.CompressArchiveUtil;
-import com.github.dockerjava.core.FilePathUtil;
-import com.github.dockerjava.core.GoLangFileMatch;
-import com.github.dockerjava.core.GoLangFileMatchException;
-import com.github.dockerjava.core.GoLangMatchFileFilter;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +10,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
+
+import com.github.dockerjava.api.DockerClientException;
+import com.github.dockerjava.core.CompressArchiveUtil;
+import com.github.dockerjava.core.FilePathUtil;
+import com.github.dockerjava.core.GoLangFileMatch;
+import com.github.dockerjava.core.GoLangFileMatchException;
+import com.github.dockerjava.core.GoLangMatchFileFilter;
 import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;

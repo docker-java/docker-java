@@ -1,6 +1,6 @@
 package com.github.dockerjava.jaxrs;
 
-import static com.google.common.net.UrlEscapers.*;
+import static com.google.common.net.UrlEscapers.urlPathSegmentEscaper;
 
 import java.util.List;
 

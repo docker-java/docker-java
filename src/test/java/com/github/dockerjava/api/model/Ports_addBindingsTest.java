@@ -1,7 +1,6 @@
 package com.github.dockerjava.api.model;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
 
 import java.util.Map;
 

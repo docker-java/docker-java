@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import static com.github.dockerjava.api.model.InternetProtocol.*;
+import static com.github.dockerjava.api.model.InternetProtocol.TCP;
 import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;

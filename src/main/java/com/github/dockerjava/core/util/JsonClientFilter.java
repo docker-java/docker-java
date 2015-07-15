@@ -1,10 +1,11 @@
 package com.github.dockerjava.core.util;
 
+import java.io.IOException;
+
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientResponseContext;
 import javax.ws.rs.client.ClientResponseFilter;
 import javax.ws.rs.core.MediaType;
-import java.io.IOException;
 
 /**
  *

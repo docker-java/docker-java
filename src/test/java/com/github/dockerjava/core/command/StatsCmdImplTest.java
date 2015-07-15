@@ -18,7 +18,6 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.StatsCmd;
 import com.github.dockerjava.api.model.Statistics;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
@@ -63,7 +62,8 @@ public class StatsCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        StatsCallbackTest statsCallback = dockerClient.statsCmd().withContainerId(container.getId()).exec(new StatsCallbackTest(countDownLatch));
+        StatsCallbackTest statsCallback = dockerClient.statsCmd().withContainerId(container.getId())
+                .exec(new StatsCallbackTest(countDownLatch));
 
         countDownLatch.await(3, TimeUnit.SECONDS);
         boolean gotStats = statsCallback.gotStats();

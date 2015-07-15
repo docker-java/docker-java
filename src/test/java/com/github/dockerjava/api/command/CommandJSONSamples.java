@@ -15,14 +15,7 @@
  */
 package com.github.dockerjava.api.command;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.test.serdes.AbstractJSONResourceRef;
 import com.github.dockerjava.test.serdes.JSONResourceRef;
-import java.io.IOException;
-import java.io.InputStream;
-import org.apache.commons.io.IOUtils;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
 
 /**
  * References test resources and provides basic tests functionality.

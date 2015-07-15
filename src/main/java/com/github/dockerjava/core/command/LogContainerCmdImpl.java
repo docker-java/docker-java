@@ -2,11 +2,6 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.io.InputStream;
-import java.util.concurrent.Future;
-
-import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.LogContainerCmd;
 import com.github.dockerjava.api.model.Frame;
 

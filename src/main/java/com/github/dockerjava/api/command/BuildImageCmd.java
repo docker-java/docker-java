@@ -60,6 +60,4 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     public static interface Exec extends DockerCmdAsyncExec<BuildImageCmd, BuildResponseItem> {
     }
 
-
-
 }

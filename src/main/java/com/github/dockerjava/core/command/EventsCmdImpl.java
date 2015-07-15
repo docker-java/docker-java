@@ -1,6 +1,5 @@
 package com.github.dockerjava.core.command;
 
-import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.model.Event;
 

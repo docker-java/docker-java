@@ -1,16 +1,17 @@
 package com.github.dockerjava.jaxrs;
 
-import com.github.dockerjava.api.UnauthorizedException;
-import com.github.dockerjava.api.command.AuthCmd;
-import com.github.dockerjava.api.model.AuthResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static javax.ws.rs.client.Entity.entity;
 
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static javax.ws.rs.client.Entity.entity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.dockerjava.api.UnauthorizedException;
+import com.github.dockerjava.api.command.AuthCmd;
+import com.github.dockerjava.api.model.AuthResponse;
 
 public class AuthCmdExec extends AbstrSyncDockerCmdExec<AuthCmd, AuthResponse> implements AuthCmd.Exec {
 

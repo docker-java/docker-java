@@ -15,7 +15,6 @@
  */
 package com.github.dockerjava.test.serdes;
 
-import java.io.IOException;
 
 /**
  * References JSON resources, which

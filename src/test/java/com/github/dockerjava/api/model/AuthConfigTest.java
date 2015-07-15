@@ -1,9 +1,9 @@
 package com.github.dockerjava.api.model;
 
+import static org.testng.Assert.assertEquals;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import static org.testng.Assert.assertEquals;
 
 public class AuthConfigTest {
 

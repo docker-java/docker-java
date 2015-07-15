@@ -65,8 +65,8 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
             };
         };
 
-        dockerClient.attachContainerCmd(container.getId()).withStdErr().withStdOut()
-                .withFollowStream().withLogs().exec(collectFramesCallback);
+        dockerClient.attachContainerCmd(container.getId()).withStdErr().withStdOut().withFollowStream().withLogs()
+                .exec(collectFramesCallback);
 
         collectFramesCallback.awaitCompletion(30, TimeUnit.SECONDS);
 
@@ -98,8 +98,8 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
             };
         };
 
-        dockerClient.attachContainerCmd(container.getId()).withStdErr().withStdOut()
-                .withFollowStream().exec(collectFramesCallback);
+        dockerClient.attachContainerCmd(container.getId()).withStdErr().withStdOut().withFollowStream()
+                .exec(collectFramesCallback);
 
         collectFramesCallback.awaitCompletion(15, TimeUnit.SECONDS);
 
@@ -107,7 +107,7 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
 
         System.out.println("log: " + collectFramesCallback.toString());
 
-        //HexDump.dump(collectFramesCallback.toString().getBytes(), 0, System.out, 0);
+        // HexDump.dump(collectFramesCallback.toString().getBytes(), 0, System.out, 0);
 
         assertThat(collectFramesCallback.toString(), containsString("stdout\r\nstderr"));
     }
