@@ -254,10 +254,8 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         LOG.info("Container1 Inspect: {}", inspectContainerResponse1.toString());
         assertThat(inspectContainerResponse1.getState().isRunning(), is(true));
 
-        HostConfig hostConfig = new HostConfig();
-        hostConfig.setLinks(new Link("container1", "container1Link"));
         CreateContainerResponse container2 = dockerClient.createContainerCmd("busybox").withName("container2")
-                .withHostConfig(hostConfig).withCmd("env").exec();
+                .withCmd("env").withLinks(new Link("container1", "container1Link")).exec();
         LOG.info("Created container {}", container2.toString());
         assertThat(container2.getId(), not(isEmptyString()));
 
@@ -324,11 +322,8 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         String[] extraHosts = { "dockerhost:127.0.0.1", "otherhost:10.0.0.1" };
 
-        HostConfig hostConfig = new HostConfig();
-        hostConfig.setExtraHosts(extraHosts);
-
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withName("container")
-                .withHostConfig(hostConfig).exec();
+                .withExtraHosts(extraHosts).exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -497,11 +492,8 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         Ulimit[] ulimits = { new Ulimit("nproc", 709, 1026), new Ulimit("nofile", 1024, 4096) };
 
-        HostConfig hostConfig = new HostConfig();
-        hostConfig.setUlimits(ulimits);
-
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withName("container")
-                .withHostConfig(hostConfig).exec();
+                .withUlimits(ulimits).exec();
 
         LOG.info("Created container {}", container.toString());
 
