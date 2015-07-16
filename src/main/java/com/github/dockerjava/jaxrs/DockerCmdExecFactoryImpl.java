@@ -4,14 +4,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
-import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
@@ -120,7 +118,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         }
 
         PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(getSchemeRegistry(
-                originalUri, sslContext), null, null, null, 10, TimeUnit.SECONDS);
+                originalUri, sslContext));
 
         if (dockerClientConfig.getMaxTotalConnections() != null)
             connManager.setMaxTotal(dockerClientConfig.getMaxTotalConnections());
@@ -129,8 +127,9 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
         clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER, connManager);
 
-        clientConfig.property(ApacheClientProperties.REQUEST_CONFIG, RequestConfig.custom()
-                .setConnectionRequestTimeout(1000).build());
+        // Configure connection pool timeout
+        // clientConfig.property(ApacheClientProperties.REQUEST_CONFIG, RequestConfig.custom()
+        // .setConnectionRequestTimeout(1000).build());
 
         ClientBuilder clientBuilder = ClientBuilder.newBuilder().withConfig(clientConfig);
 
