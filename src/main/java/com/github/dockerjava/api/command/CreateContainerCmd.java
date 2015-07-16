@@ -8,12 +8,12 @@ import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Capability;
 import com.github.dockerjava.api.model.Device;
 import com.github.dockerjava.api.model.ExposedPort;
-import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.LxcConf;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.RestartPolicy;
+import com.github.dockerjava.api.model.Ulimit;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
 
@@ -77,8 +77,6 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     public String[] getExtraHosts();
 
-    public HostConfig getHostConfig();
-
     public String getHostName();
 
     public String getDomainName();
@@ -112,6 +110,8 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     public VolumesFrom[] getVolumesFrom();
 
     public String getWorkingDir();
+
+    public Ulimit[] getUlimits();
 
     public boolean isAttachStderr();
 
@@ -207,8 +207,6 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
      */
     public CreateContainerCmd withExtraHosts(String... extraHosts);
 
-    public CreateContainerCmd withHostConfig(HostConfig hostConfig);
-
     public CreateContainerCmd withHostName(String hostName);
 
     public CreateContainerCmd withDomainName(String domainName);
@@ -281,6 +279,12 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     public CreateContainerCmd withWorkingDir(String workingDir);
 
     public CreateContainerCmd withMacAddress(String macAddress);
+
+    public CreateContainerCmd withUlimits(Ulimit[] ulimits);
+
+    public CreateContainerCmd withReadonlyRootfs(boolean readonlyRootfs);
+
+    public CreateContainerCmd withContainerIDFile(String containerIDFile);
 
     /**
      * @return
