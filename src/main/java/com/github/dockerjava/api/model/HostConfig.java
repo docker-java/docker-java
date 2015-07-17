@@ -17,6 +17,9 @@ public class HostConfig {
 
     @JsonProperty("LxcConf")
     private LxcConf[] lxcConf;
+    
+    @JsonProperty("LogConfig")
+    private LogConfig logConfig;
 
     @JsonProperty("PortBindings")
     private Ports portBindings;
@@ -66,13 +69,14 @@ public class HostConfig {
     public HostConfig() {
     }
 
-    public HostConfig(Bind[] binds, Link[] links, LxcConf[] lxcConf, Ports portBindings, boolean publishAllPorts,
+    public HostConfig(Bind[] binds, Link[] links, LxcConf[] lxcConf, LogConfig logConfig, Ports portBindings, boolean publishAllPorts,
             boolean privileged, boolean readonlyRootfs, String[] dns, String[] dnsSearch, VolumesFrom[] volumesFrom,
             String containerIDFile, Capability[] capAdd, Capability[] capDrop, RestartPolicy restartPolicy,
             String networkMode, Device[] devices, String[] extraHosts, Ulimit[] ulimits) {
         this.binds = new Binds(binds);
         this.links = new Links(links);
         this.lxcConf = lxcConf;
+        this.logConfig = logConfig;
         this.portBindings = portBindings;
         this.publishAllPorts = publishAllPorts;
         this.privileged = privileged;
@@ -97,6 +101,11 @@ public class HostConfig {
 
     public LxcConf[] getLxcConf() {
         return lxcConf;
+    }
+    
+    @JsonIgnore
+    public LogConfig getLogConfig() {
+        return (logConfig == null) ? new LogConfig() : logConfig;
     }
 
     public Ports getPortBindings() {
@@ -176,6 +185,11 @@ public class HostConfig {
 
     public void setLxcConf(LxcConf[] lxcConf) {
         this.lxcConf = lxcConf;
+    }
+    
+    @JsonIgnore
+    public void setLogConfig(LogConfig logConfig) {
+        this.logConfig = logConfig;
     }
 
     public void setPortBindings(Ports portBindings) {
