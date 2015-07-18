@@ -10,6 +10,7 @@ import com.github.dockerjava.api.model.Device;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Link;
+import com.github.dockerjava.api.model.LogConfig;
 import com.github.dockerjava.api.model.LxcConf;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
@@ -88,6 +89,8 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     public Link[] getLinks();
 
     public LxcConf[] getLxcConf();
+    
+    public LogConfig getLogConfig();
 
     public String getMacAddress();
 
@@ -223,6 +226,8 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     public CreateContainerCmd withLinks(Link... links);
 
     public CreateContainerCmd withLxcConf(LxcConf... lxcConf);
+
+    public CreateContainerCmd withLogConfig(LogConfig logConfig);
 
     public CreateContainerCmd withMemoryLimit(long memoryLimit);
 

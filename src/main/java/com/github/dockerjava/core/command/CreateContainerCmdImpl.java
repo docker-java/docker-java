@@ -19,6 +19,7 @@ import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.ExposedPorts;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Link;
+import com.github.dockerjava.api.model.LogConfig;
 import com.github.dockerjava.api.model.LxcConf;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
@@ -268,6 +269,12 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @JsonIgnore
     public LxcConf[] getLxcConf() {
         return hostConfig.getLxcConf();
+    }
+    
+    @Override
+    @JsonIgnore
+    public LogConfig getLogConfig() {
+        return hostConfig.getLogConfig();
     }
 
     public String getMacAddress() {
@@ -556,6 +563,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public CreateContainerCmd withLxcConf(LxcConf... lxcConf) {
         checkNotNull(lxcConf, "lxcConf was not specified");
         this.hostConfig.setLxcConf(lxcConf);
+        return this;
+    }
+    
+    @Override
+    public CreateContainerCmd withLogConfig(LogConfig logConfig) {
+        checkNotNull(logConfig, "logConfig was not specified");
+        this.hostConfig.setLogConfig(logConfig);
         return this;
     }
 
