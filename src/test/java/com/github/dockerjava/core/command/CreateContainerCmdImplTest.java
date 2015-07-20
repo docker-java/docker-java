@@ -535,13 +535,12 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         labels.put("com.github.dockerjava.null", "");
         assertThat(inspectContainerResponse.getConfig().getLabels(), is(equalTo(labels)));
     }
-    
+
     @Test(groups = "ignoreInCircleCi")
     public void createContainerWithLogConfig() throws DockerException {
 
-    	LogConfig logConfig = new LogConfig("none", null);
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").
-        		withLogConfig(logConfig).exec();
+        LogConfig logConfig = new LogConfig(LogConfig.LoggingType.NONE, null);
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withLogConfig(logConfig).exec();
 
         LOG.info("Created container {}", container.toString());
 

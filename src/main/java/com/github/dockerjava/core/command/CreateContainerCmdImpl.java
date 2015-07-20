@@ -270,7 +270,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public LxcConf[] getLxcConf() {
         return hostConfig.getLxcConf();
     }
-    
+
     @Override
     @JsonIgnore
     public LogConfig getLogConfig() {
@@ -565,7 +565,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         this.hostConfig.setLxcConf(lxcConf);
         return this;
     }
-    
+
     @Override
     public CreateContainerCmd withLogConfig(LogConfig logConfig) {
         checkNotNull(logConfig, "logConfig was not specified");

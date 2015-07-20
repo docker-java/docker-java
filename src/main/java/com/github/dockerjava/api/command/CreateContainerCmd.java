@@ -89,7 +89,7 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     public Link[] getLinks();
 
     public LxcConf[] getLxcConf();
-    
+
     public LogConfig getLogConfig();
 
     public String getMacAddress();
