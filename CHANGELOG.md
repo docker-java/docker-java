@@ -3,6 +3,7 @@ Change Log
 
 Latest SNAPSHOT
 ---
+* [#275](https://github.com/docker-java/docker-java/pull/275) Implemented LogConfig (create and inspect containers) 
 * [#272](https://github.com/docker-java/docker-java/pull/272) remove withHostConfig() from create container command
 * [#270](https://github.com/docker-java/docker-java/pull/270) Passing result callbacks for async commands via commands exec()
 * [#269](https://github.com/docker-java/docker-java/pull/269) Add filters option to events operation 
