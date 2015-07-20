@@ -38,6 +38,7 @@ import com.github.dockerjava.api.model.Device;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Link;
+import com.github.dockerjava.api.model.LogConfig;
 import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.RestartPolicy;
 import com.github.dockerjava.api.model.Ulimit;
@@ -533,5 +534,22 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         // null becomes empty string
         labels.put("com.github.dockerjava.null", "");
         assertThat(inspectContainerResponse.getConfig().getLabels(), is(equalTo(labels)));
+    }
+    
+    @Test(groups = "ignoreInCircleCi")
+    public void createContainerWithLogConfig() throws DockerException {
+
+    	LogConfig logConfig = new LogConfig("none", null);
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").
+        		withLogConfig(logConfig).exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+
+        // null becomes empty string
+        assertEquals(inspectContainerResponse.getHostConfig().getLogConfig().type, logConfig.type);
     }
 }
