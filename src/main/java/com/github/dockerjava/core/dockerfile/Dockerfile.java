@@ -1,19 +1,5 @@
 package com.github.dockerjava.core.dockerfile;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
-
 import com.github.dockerjava.api.DockerClientException;
 import com.github.dockerjava.core.CompressArchiveUtil;
 import com.github.dockerjava.core.FilePathUtil;
@@ -24,6 +10,20 @@ import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Parse a Dockerfile.
@@ -130,15 +130,29 @@ public class Dockerfile {
 
         public InputStream buildDockerFolderTar(File directory) {
 
-            // ARCHIVE TAR
             File dockerFolderTar = null;
 
             try {
-                String archiveNameWithOutExtension = UUID.randomUUID().toString();
+                final String archiveNameWithOutExtension = UUID.randomUUID().toString();
 
                 dockerFolderTar = CompressArchiveUtil.archiveTARFiles(directory, filesToAdd,
                         archiveNameWithOutExtension);
-                return FileUtils.openInputStream(dockerFolderTar);
+
+                final InputStream tarInputStream = FileUtils.openInputStream(dockerFolderTar);
+                final File tarFile = dockerFolderTar;
+
+                return new InputStream() {
+                    @Override
+                    public int read() throws IOException {
+                        return tarInputStream.read();
+                    }
+
+                    @Override
+                    public void close() throws IOException {
+                        IOUtils.closeQuietly(tarInputStream);
+                        FileUtils.deleteQuietly(tarFile);
+                    }
+                };
 
             } catch (IOException ex) {
                 FileUtils.deleteQuietly(dockerFolderTar);
