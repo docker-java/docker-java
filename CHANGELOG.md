@@ -3,6 +3,7 @@ Change Log
 
 Latest SNAPSHOT
 ---
+* [#280](https://github.com/docker-java/docker-java/pull/280) Handle multiple source files in ADD command 
 * [#278](https://github.com/docker-java/docker-java/pull/278) Stop leaking tar files in temporary folder
 * [#275](https://github.com/docker-java/docker-java/pull/275) Implemented LogConfig (create and inspect containers) 
 * [#272](https://github.com/docker-java/docker-java/pull/272) remove withHostConfig() from create container command
