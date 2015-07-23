@@ -184,10 +184,9 @@ public class Dockerfile {
 
             add = add.transform(environmentMap);
 
-            if (add.isFileResource()) {
+            for (String resource : add.getFileResources()) {
 
                 File dockerFolder = getDockerFolder();
-                String resource = add.source;
 
                 File src = new File(resource);
                 if (!src.isAbsolute()) {
