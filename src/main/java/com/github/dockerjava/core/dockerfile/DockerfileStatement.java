@@ -2,13 +2,19 @@ package com.github.dockerjava.core.dockerfile;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.github.dockerjava.api.DockerClientException;
+import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * A statement present in a dockerfile.
@@ -72,36 +78,42 @@ public abstract class DockerfileStatement<T extends DockerfileStatement> {
      */
     public static class Add extends DockerfileStatement<Add> {
 
-        private static final Pattern ADD_OR_COPY_PATTERN = Pattern.compile("^(ADD|COPY)\\s+(.*)\\s+(.*)$");
+        private static final Pattern ARGUMENT_TOKENIZER = Pattern.compile("(?:\"[^\"]+\")|(\\S+)");
 
-        public final String source;
+        public final Collection<String> sources;
 
         public final String destination;
 
-        private Add(String source, String destination) {
-            this.source = source;
+        private Add(Collection<String> sources, String destination) {
+            this.sources = sources;
             this.destination = destination;
         }
 
-        private Add(final Matcher matcher) {
-            source = matcher.group(2);
-            destination = matcher.group(3);
-        }
-
         @Override
-        public Add transform(Map<String, String> env) {
-            String resource = filterForEnvironmentVars(env, source).trim();
-            return new Add(resource, destination);
+        public Add transform(final Map<String, String> env) {
+            Collection<String> resources = Collections2.transform(sources, new Function<String, String>() {
+                @Override
+                public String apply(String source) {
+                    return filterForEnvironmentVars(env, source).trim();
+                }
+            });
+            return new Add(resources, destination);
         }
 
-        public boolean isFileResource() {
-            URI uri;
-            try {
-                uri = new URI(source);
-            } catch (URISyntaxException e) {
-                return false;
-            }
-            return uri.getScheme() == null || "file".equals(uri.getScheme());
+        public Iterable<String> getFileResources() {
+            return Collections2.filter(sources, new Predicate<String>() {
+
+                @Override
+                public boolean apply(String source) {
+                    URI uri;
+                    try {
+                        uri = new URI(source);
+                    } catch (URISyntaxException e) {
+                        return false;
+                    }
+                    return uri.getScheme() == null || "file".equals(uri.getScheme());
+                }
+            });
         }
 
         /**
@@ -112,21 +124,37 @@ public abstract class DockerfileStatement<T extends DockerfileStatement> {
          * @return optional typed item.
          */
         public static Optional<Add> create(String statement) {
-            Matcher matcher = ADD_OR_COPY_PATTERN.matcher(statement.trim());
-            if (!matcher.find()) {
+            Matcher argumentMatcher = ARGUMENT_TOKENIZER.matcher(statement.trim());
+
+            if (!argumentMatcher.find()) {
                 return Optional.absent();
             }
 
-            if (matcher.groupCount() != 3) {
+            String commandName = argumentMatcher.group();
+            if (!(StringUtils.equals(commandName, "ADD") || StringUtils.equals(commandName, "COPY"))) {
+                return Optional.absent();
+            }
+
+            String lastToken = null;
+            Collection<String> sources = new ArrayList<>();
+
+            while (argumentMatcher.find()) {
+                if (lastToken != null) {
+                    sources.add(lastToken);
+                }
+                lastToken = argumentMatcher.group().replaceAll("(^\")|(\"$)", "");
+            }
+
+            if (sources.isEmpty()) {
                 throw new DockerClientException("Wrong ADD or COPY format");
             }
 
-            return Optional.of(new Add(matcher));
+            return Optional.of(new Add(sources, lastToken));
         }
 
         @Override
         public String toString() {
-            return Objects.toStringHelper(this).add("source", source).add("destination", destination).toString();
+            return Objects.toStringHelper(this).add("sources", sources).add("destination", destination).toString();
         }
     }
 
