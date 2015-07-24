@@ -55,7 +55,7 @@ public class BuildImageResultCallback extends ResultCallbackTemplate<BuildImageR
         try {
             awaitCompletion(timeout, timeUnit);
         } catch (InterruptedException e) {
-            throw new DockerClientException("", e);
+            throw new DockerClientException("Awaiting image id interrupted: ", e);
         }
 
         return getImageId();
