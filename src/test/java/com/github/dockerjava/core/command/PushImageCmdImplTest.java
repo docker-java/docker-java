@@ -1,7 +1,6 @@
 package com.github.dockerjava.core.command;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 
@@ -16,8 +15,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import com.github.dockerjava.api.DockerClientException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.model.PushResponseItem;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
 @Test(groups = "integration")
@@ -61,28 +60,23 @@ public class PushImageCmdImplTest extends AbstractDockerClientTest {
         String imageId = dockerClient.commitCmd(container.getId()).withRepository(username + "/busybox").exec();
 
         // we have to block until image is pushed
-        dockerClient.pushImageCmd(username + "/busybox").exec(new PushResponseCallback()).awaitCompletion();
+        dockerClient.pushImageCmd(username + "/busybox").exec(new PushImageResultCallback()).awaitSuccess();
 
         LOG.info("Removing image: {}", imageId);
         dockerClient.removeImageCmd(imageId).exec();
 
-        PullResponseCallback pushCallback = dockerClient.pullImageCmd(username + "/busybox")
-                .exec(new PullResponseCallback()).awaitCompletion();
-
-        assertThat(pushCallback.toString(), not(containsString("HTTP code: 404")));
+        dockerClient.pullImageCmd(username + "/busybox")
+                .exec(new PullImageResultCallback()).awaitSuccess();
     }
 
-    @Test
+    @Test(expectedExceptions = DockerClientException.class)
     public void pushNonExistentImage() throws Exception {
 
-        PushResponseCallback callback = dockerClient.pushImageCmd(username + "/xxx").exec(new PushResponseCallback())
-                .awaitCompletion();
+        dockerClient.pushImageCmd(username + "/xxx").exec(new PushImageResultCallback())
+                .awaitSuccess();
 
-        assertThat(callback.toString(), containsString("error"));
-    }
-
-    public static class PushResponseCallback extends CollectStreamItemCallback<PushResponseCallback, PushResponseItem> {
 
     }
+
 
 }

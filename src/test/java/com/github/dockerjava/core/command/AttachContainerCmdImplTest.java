@@ -57,7 +57,7 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        CollectFramesCallback collectFramesCallback = new CollectFramesCallback() {
+        AttachContainerTestCallback callback = new AttachContainerTestCallback() {
             @Override
             public void onNext(Frame frame) {
                 assertEquals(frame.getStreamType(), StreamType.STDOUT);
@@ -66,13 +66,9 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
         };
 
         dockerClient.attachContainerCmd(container.getId()).withStdErr().withStdOut().withFollowStream().withLogs()
-                .exec(collectFramesCallback);
+                .exec(callback).awaitCompletion(30, TimeUnit.SECONDS).close();
 
-        collectFramesCallback.awaitCompletion(30, TimeUnit.SECONDS);
-
-        collectFramesCallback.close();
-
-        assertThat(collectFramesCallback.toString(), containsString(snippet));
+        assertThat(callback.toString(), containsString(snippet));
     }
 
     @Test
@@ -90,7 +86,7 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        CollectFramesCallback collectFramesCallback = new CollectFramesCallback() {
+        AttachContainerTestCallback callback = new AttachContainerTestCallback() {
             @Override
             public void onNext(Frame frame) {
                 assertEquals(frame.getStreamType(), StreamType.RAW);
@@ -99,16 +95,27 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
         };
 
         dockerClient.attachContainerCmd(container.getId()).withStdErr().withStdOut().withFollowStream()
-                .exec(collectFramesCallback);
+                .exec(callback).awaitCompletion(15, TimeUnit.SECONDS).close();
 
-        collectFramesCallback.awaitCompletion(15, TimeUnit.SECONDS);
-
-        collectFramesCallback.close();
-
-        System.out.println("log: " + collectFramesCallback.toString());
+        System.out.println("log: " + callback.toString());
 
         // HexDump.dump(collectFramesCallback.toString().getBytes(), 0, System.out, 0);
 
-        assertThat(collectFramesCallback.toString(), containsString("stdout\r\nstderr"));
+        assertThat(callback.toString(), containsString("stdout\r\nstderr"));
+    }
+
+    public static class AttachContainerTestCallback extends AttachContainerResultCallback {
+        private StringBuffer log = new StringBuffer();
+
+        @Override
+        public void onNext(Frame item) {
+            log.append(new String(item.getPayload()));
+            super.onNext(item);
+        }
+
+        @Override
+        public String toString() {
+            return log.toString();
+        }
     }
 }

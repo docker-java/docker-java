@@ -18,6 +18,8 @@ public class WrappedResponseInputStream extends InputStream {
 
     private InputStream delegate;
 
+    private boolean closed = false;
+
     public WrappedResponseInputStream(Response response) {
         this.response = response;
         this.delegate = response.readEntity(InputStream.class);
@@ -52,6 +54,7 @@ public class WrappedResponseInputStream extends InputStream {
     }
 
     public void close() throws IOException {
+        closed = true;
         response.close();
         delegate.close();
     }
@@ -66,6 +69,10 @@ public class WrappedResponseInputStream extends InputStream {
 
     public boolean markSupported() {
         return delegate.markSupported();
+    }
+
+    public boolean isClosed() {
+        return closed;
     }
 
 }
