@@ -22,16 +22,13 @@ import org.testng.ITestResult;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Frame;
-import com.github.dockerjava.api.model.PullResponseItem;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumeBind;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.TestDockerCmdExecFactory;
-import com.github.dockerjava.core.async.ResultCallbackTemplate;
 import com.github.dockerjava.core.command.BuildImageResultCallback;
 import com.github.dockerjava.core.command.LogContainerResultCallback;
 import com.github.dockerjava.core.command.PullImageResultCallback;
@@ -188,45 +185,10 @@ public abstract class AbstractDockerClientTest extends Assert {
         assertThat(volumes, contains(expectedVolumes));
     }
 
-//    public static class CollectFramesCallback extends CollectStreamItemCallback<CollectFramesCallback, Frame> {
-//
-//        @Override
-//        public void onNext(Frame frame) {
-//            items.add(frame);
-//            log.append(new String(frame.getPayload()));
-//        }
-//
-//    }
-
     protected String containerLog(String containerId) throws Exception {
         return dockerClient.logContainerCmd(containerId).withStdOut()
                 .exec(new LogContainerTestCallback()).awaitCompletion().toString();
     }
-
-//    public static class CollectStreamItemCallback<RC_T extends ResultCallback<A_RES_T>, A_RES_T> extends
-//            ResultCallbackTemplate<RC_T, A_RES_T> {
-//        public final List<A_RES_T> items = new ArrayList<A_RES_T>();
-//
-//        protected final StringBuffer log = new StringBuffer();
-//
-//        @Override
-//        public void onError(Throwable throwable) {
-//            throwable.printStackTrace();
-//            super.onError(throwable);
-//        }
-//
-//        @Override
-//        public void onNext(A_RES_T item) {
-//            items.add(item);
-//            log.append("" + item);
-//            LOG.info(item.toString());
-//        }
-//
-//        @Override
-//        public String toString() {
-//            return log.toString();
-//        }
-//    }
 
     public static class LogContainerTestCallback extends LogContainerResultCallback {
         protected final StringBuffer log = new StringBuffer();
