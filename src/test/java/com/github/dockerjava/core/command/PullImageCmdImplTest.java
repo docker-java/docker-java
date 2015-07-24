@@ -1,7 +1,6 @@
 package com.github.dockerjava.core.command;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.notNullValue;
 
@@ -95,11 +94,7 @@ public class PullImageCmdImplTest extends AbstractDockerClientTest {
 
         LOG.info("Pulling image: {}", testImage);
 
-        PullResponseCallback callback = dockerClient.pullImageCmd(testImage).exec(new PullResponseCallback());
-
-        callback.awaitCompletion();
-
-        assertThat(callback.toString(), containsString("Download complete"));
+        dockerClient.pullImageCmd(testImage).exec(new PullImageResultCallback()).awaitSuccess();
 
         info = dockerClient.infoCmd().exec();
         LOG.info("Client info after pull, {}", info.toString());
@@ -116,7 +111,7 @@ public class PullImageCmdImplTest extends AbstractDockerClientTest {
 
         // does not throw an exception
         // stream needs to be fully read in order to close the underlying connection
-        dockerClient.pullImageCmd("xvxcv/foo").exec(new PullResponseCallback()).awaitCompletion();
+        dockerClient.pullImageCmd("xvxcv/foo").exec(new PullImageResultCallback()).awaitCompletion();
     }
 
 }

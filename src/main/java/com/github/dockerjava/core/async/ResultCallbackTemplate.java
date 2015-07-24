@@ -24,21 +24,22 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ResultCallbackTemplate.class);
 
-    private final CountDownLatch finished = new CountDownLatch(1);
+    private final CountDownLatch completed = new CountDownLatch(1);
 
     private Closeable stream;
+
+    private boolean closed = false;
 
     @Override
     public void onStart(Closeable stream) {
         this.stream = stream;
-    }
-
-    @Override
-    public void onNext(A_RES_T object) {
+        this.closed = false;
     }
 
     @Override
     public void onError(Throwable throwable) {
+        if(closed) return;
+
         try {
             LOGGER.error("Error during callback", throwable);
             throw new RuntimeException(throwable);
@@ -64,7 +65,8 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
     public void close() throws IOException {
         if (stream != null)
             stream.close();
-        finished.countDown();
+        completed.countDown();
+        closed = true;
     }
 
     /**
@@ -72,7 +74,7 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
      */
     @SuppressWarnings("unchecked")
     public RC_T awaitCompletion() throws InterruptedException {
-        finished.await();
+        completed.await();
         return (RC_T) this;
     }
 
@@ -81,7 +83,7 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
      */
     @SuppressWarnings("unchecked")
     public RC_T awaitCompletion(long timeout, TimeUnit timeUnit) throws InterruptedException {
-        finished.await(timeout, timeUnit);
+        completed.await(timeout, timeUnit);
         return (RC_T) this;
     }
 }

@@ -17,7 +17,6 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Event;
 import com.github.dockerjava.api.model.EventFilters;
 import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.github.dockerjava.core.async.ResultCallbackTemplate;
 
 @Test(groups = "integration")
 public class EventsCmdImplTest extends AbstractDockerClientTest {
@@ -61,7 +60,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         String endTime = getEpochTime();
 
         CountDownLatch countDownLatch = new CountDownLatch(expectedEvents);
-        EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
+        EventsTestCallback eventCallback = new EventsTestCallback(countDownLatch);
 
         dockerClient.eventsCmd().withSince(startTime).withUntil(endTime).exec(eventCallback);
 
@@ -78,7 +77,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         TimeUnit.SECONDS.sleep(1);
 
         CountDownLatch countDownLatch = new CountDownLatch(KNOWN_NUM_EVENTS);
-        EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
+        EventsTestCallback eventCallback = new EventsTestCallback(countDownLatch);
 
         dockerClient.eventsCmd().withSince(getEpochTime()).exec(eventCallback);
 
@@ -96,7 +95,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         TimeUnit.SECONDS.sleep(1);
 
         CountDownLatch countDownLatch = new CountDownLatch(KNOWN_NUM_EVENTS);
-        EventCallbackTest eventCallback = new EventCallbackTest(countDownLatch);
+        EventsTestCallback eventCallback = new EventsTestCallback(countDownLatch);
 
         dockerClient.eventsCmd().withSince(getEpochTime()).exec(eventCallback);
 
@@ -113,8 +112,8 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         TimeUnit.SECONDS.sleep(1);
 
         CountDownLatch countDownLatch = new CountDownLatch(1);
-        EventCallbackTest eventCallback = dockerClient.eventsCmd().withFilters(new EventFilters().withEvent("start"))
-                .exec(new EventCallbackTest(countDownLatch));
+        EventsTestCallback eventCallback = dockerClient.eventsCmd().withFilters(new EventFilters().withEvent("start"))
+                .exec(new EventsTestCallback(countDownLatch));
 
         generateEvents();
 
@@ -130,7 +129,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
     private int generateEvents() throws Exception {
         String testImage = "busybox";
 
-        dockerClient.pullImageCmd(testImage).exec(new PullResponseCallback()).awaitCompletion();
+        dockerClient.pullImageCmd(testImage).exec(new PullImageResultCallback()).awaitSuccess();
 
         CreateContainerResponse container = dockerClient.createContainerCmd(testImage).withCmd("sleep", "9999").exec();
         dockerClient.startContainerCmd(container.getId()).exec();
@@ -138,13 +137,13 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         return KNOWN_NUM_EVENTS;
     }
 
-    private class EventCallbackTest extends ResultCallbackTemplate<EventCallbackTest, Event> {
+    private class EventsTestCallback extends EventsResultCallback {
 
         private final CountDownLatch countDownLatch;
 
         private final List<Event> events = new ArrayList<Event>();
 
-        public EventCallbackTest(CountDownLatch countDownLatch) {
+        public EventsTestCallback(CountDownLatch countDownLatch) {
             this.countDownLatch = countDownLatch;
         }
 

@@ -50,6 +50,14 @@ public class ResponseItem implements Serializable {
         return id;
     }
 
+    public String getError() {
+        return error;
+    }
+
+    public ErrorDetail getErrorDetail() {
+        return errorDetail;
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = false)
     public static class ProgressDetail implements Serializable {
         private static final long serialVersionUID = -1954994695645715264L;

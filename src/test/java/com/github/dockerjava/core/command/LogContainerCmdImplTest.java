@@ -17,6 +17,7 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
 @Test(groups = "integration")
@@ -59,7 +60,7 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
         assertThat(exitCode, equalTo(0));
 
-        CollectFramesCallback loggingCallback = new CollectFramesCallback();
+        LogContainerTestCallback loggingCallback = new LogContainerTestCallback();
 
         dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec(loggingCallback);
 
@@ -71,7 +72,7 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void asyncLogNonExistingContainer() throws Exception {
 
-        CollectFramesCallback loggingCallback = new CollectFramesCallback() {
+        LogContainerTestCallback loggingCallback = new LogContainerTestCallback() {
             @Override
             public void onError(Throwable throwable) {
 
@@ -113,19 +114,19 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
         assertThat(exitCode, equalTo(0));
 
-        CollectFramesCallback loggingCallback = new CollectFramesCallback();
+        LogContainerTestCallback loggingCallback = new LogContainerTestCallback();
 
         dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec(loggingCallback);
 
         loggingCallback.close();
 
-        loggingCallback = new CollectFramesCallback();
+        loggingCallback = new LogContainerTestCallback();
 
         dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec(loggingCallback);
 
         loggingCallback.close();
 
-        loggingCallback = new CollectFramesCallback();
+        loggingCallback = new LogContainerTestCallback();
 
         dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec(loggingCallback);
 
@@ -133,4 +134,6 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
         assertTrue(loggingCallback.toString().contains(snippet));
     }
+
+
 }

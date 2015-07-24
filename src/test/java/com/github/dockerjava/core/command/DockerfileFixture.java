@@ -9,7 +9,6 @@ import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.InternalServerErrorException;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.model.Image;
-import com.github.dockerjava.client.AbstractDockerClientTest.BuildLogCallback;
 
 /**
  * Start and stop a single container for testing.
@@ -36,7 +35,7 @@ public class DockerfileFixture implements AutoCloseable {
         LOGGER.info("building {}", directory);
 
         dockerClient.buildImageCmd(new File("src/test/resources", directory)).withNoCache()
-                .exec(new BuildLogCallback()).awaitImageId();
+                .exec(new BuildImageResultCallback()).awaitImageId();
 
         Image lastCreatedImage = dockerClient.listImagesCmd().exec().get(0);
 

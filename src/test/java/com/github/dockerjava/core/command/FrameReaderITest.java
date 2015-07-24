@@ -3,6 +3,7 @@ package com.github.dockerjava.core.command;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -53,16 +54,14 @@ public class FrameReaderITest {
 
     private List<Frame> getLoggingFrames() throws Exception {
 
-        AbstractDockerClientTest.CollectFramesCallback collectFramesCallback = new AbstractDockerClientTest.CollectFramesCallback();
+        FrameReaderITestCallback collectFramesCallback = new FrameReaderITestCallback();
 
         dockerClient.logContainerCmd(dockerfileFixture.getContainerId()).withStdOut().withStdErr().withTailAll()
         // we can't follow stream here as it blocks reading from resulting InputStream infinitely
         // .withFollowStream()
-                .exec(collectFramesCallback);
+                .exec(collectFramesCallback).awaitCompletion();
 
-        collectFramesCallback.awaitCompletion();
-
-        return collectFramesCallback.items;
+        return collectFramesCallback.frames;
     }
 
     @Test
@@ -92,6 +91,18 @@ public class FrameReaderITest {
         }
 
         thread.join();
+
+    }
+
+    public static class FrameReaderITestCallback extends LogContainerResultCallback {
+
+        public List<Frame> frames = new ArrayList<Frame>();
+
+        @Override
+        public void onNext(Frame item) {
+            frames.add(item);
+            super.onNext(item);
+        }
 
     }
 }
