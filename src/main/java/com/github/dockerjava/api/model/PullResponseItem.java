@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = false)
 public class PullResponseItem extends ResponseItem {
 
-    private static final long serialVersionUID = 6316219017613249047L;
+    private static final long serialVersionUID = -2575482839766823293L;
 
     /**
      * Returns whether the status indicates a successful pull operation
