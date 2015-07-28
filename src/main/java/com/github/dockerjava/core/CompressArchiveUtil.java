@@ -2,9 +2,11 @@ package com.github.dockerjava.core;
 
 import static com.github.dockerjava.core.FilePathUtil.relativize;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.zip.GZIPOutputStream;
 
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
@@ -16,7 +18,8 @@ public class CompressArchiveUtil {
             throws IOException {
         File tarFile = new File(FileUtils.getTempDirectoryPath(), archiveNameWithOutExtension + ".tar");
         tarFile.deleteOnExit();
-        TarArchiveOutputStream tos = new TarArchiveOutputStream(new FileOutputStream(tarFile));
+        TarArchiveOutputStream tos = new TarArchiveOutputStream(new GZIPOutputStream(
+                new BufferedOutputStream(new FileOutputStream(tarFile))));
         try {
             tos.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU);
             for (File file : files) {

@@ -5,10 +5,12 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
@@ -43,7 +45,8 @@ public class CompressArchiveUtilTest {
         expectedFile.delete();
         assertThat(expectedFile.exists(), is(false));
 
-        TarArchiveInputStream tarArchiveInputStream = new TarArchiveInputStream(new FileInputStream(archive));
+        TarArchiveInputStream tarArchiveInputStream = new TarArchiveInputStream(new GZIPInputStream(
+                new BufferedInputStream(new FileInputStream(archive))));
         TarArchiveEntry entry;
         while ((entry = tarArchiveInputStream.getNextTarEntry()) != null) {
             String individualFiles = entry.getName();
