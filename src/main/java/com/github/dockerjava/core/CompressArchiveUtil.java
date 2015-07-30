@@ -18,9 +18,8 @@ public class CompressArchiveUtil {
             throws IOException {
         File tarFile = new File(FileUtils.getTempDirectoryPath(), archiveNameWithOutExtension + ".tar");
         tarFile.deleteOnExit();
-        TarArchiveOutputStream tos = new TarArchiveOutputStream(new GZIPOutputStream(
-                new BufferedOutputStream(new FileOutputStream(tarFile))));
-        try {
+        try(TarArchiveOutputStream tos = new TarArchiveOutputStream(new GZIPOutputStream(
+                new BufferedOutputStream(new FileOutputStream(tarFile))))) {
             tos.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU);
             for (File file : files) {
                 TarArchiveEntry tarEntry = new TarArchiveEntry(file);
@@ -39,8 +38,6 @@ public class CompressArchiveUtil {
                 }
                 tos.closeArchiveEntry();
             }
-        } finally {
-            tos.close();
         }
 
         return tarFile;
