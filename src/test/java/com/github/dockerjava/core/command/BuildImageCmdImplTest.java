@@ -225,4 +225,17 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
         String response = dockerfileBuild(baseDir);
         assertThat(response, containsString("testENVSubstitution successfully completed"));
     }
+    
+    @Test
+    public void testBuilderPerformance() throws Exception {
+        File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("nginx").getFile());
+
+        String imageId = buildImage(baseDir);
+
+        InspectImageResponse inspectImageResponse = dockerClient.inspectImageCmd(imageId).exec();
+        assertThat(inspectImageResponse, not(nullValue()));
+        LOG.info("Image Inspect: {}", inspectImageResponse.toString());
+
+        assertThat(inspectImageResponse.getAuthor(), equalTo("Guillaume J. Charmes \"guillaume@dotcloud.com\""));
+    }
 }
