@@ -1,7 +1,7 @@
 Change Log
 ===
 
-Latest SNAPSHOT
+v.2.0.0
 ---
 
 * [#284](https://github.com/docker-java/docker-java/pull/284) Added GZIP compression for build context creation
