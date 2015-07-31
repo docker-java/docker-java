@@ -17,15 +17,15 @@ public class DockerClientConfigTest {
     public static final DockerClientConfig EXAMPLE_CONFIG = newExampleConfig();
 
     private static DockerClientConfig newExampleConfig() {
-        return new DockerClientConfig(URI.create("http://foo"), "bar", "baz", "qux", "blam", "wham", "flam", 877,
-                false, false, new LocalDirectorySSLConfig("flim"), 20, 2);
+        return new DockerClientConfig(URI.create("http://foo"), "bar", "baz", "qux", "blam", "wham", "flam",
+                new LocalDirectorySSLConfig("flim"));
     }
 
     @Test
     public void string() throws Exception {
         assertEquals(
-                "DockerClientConfig{uri=http://foo, version='bar', username='baz', password='qux', email='blam', serverAddress='wham', dockerCfgPath='flam', sslConfig='LocalDirectorySSLConfig{dockerCertPath=flim}', readTimeout=877, loggingFilterEnabled=false, followRedirectsFilterEnabled=false}",
-                EXAMPLE_CONFIG.toString());
+                EXAMPLE_CONFIG.toString(),
+                "DockerClientConfig{uri=http://foo, version='bar', username='baz', password='qux', email='blam', serverAddress='wham', dockerCfgPath='flam', sslConfig='LocalDirectorySSLConfig{dockerCertPath=flim}'}");
     }
 
     @Test
@@ -160,7 +160,6 @@ public class DockerClientConfigTest {
         assertEquals(config.getUsername(), "someUserName");
         assertEquals(config.getServerAddress(), AuthConfig.DEFAULT_SERVER_ADDRESS);
         assertEquals(config.getVersion(), null);
-        assertEquals(config.isLoggingFilterEnabled(), true);
         assertEquals(config.getDockerCfgPath(), "someHomeDir/.dockercfg");
         assertEquals(((LocalDirectorySSLConfig) config.getSslConfig()).getDockerCertPath(), "someHomeDir/.docker");
     }
@@ -178,8 +177,6 @@ public class DockerClientConfigTest {
         systemProperties.setProperty("docker.io.serverAddress", "wham");
         systemProperties.setProperty("docker.io.dockerCertPath", "flim");
         systemProperties.setProperty("docker.io.dockerCfgPath", "flam");
-        systemProperties.setProperty("docker.io.readTimeout", "877");
-        systemProperties.setProperty("docker.io.enableLoggingFilter", "false");
 
         // when you build new config
         DockerClientConfig config = buildConfig(Collections.<String, String> emptyMap(), systemProperties);

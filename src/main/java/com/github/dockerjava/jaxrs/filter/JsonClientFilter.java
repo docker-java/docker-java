@@ -1,4 +1,4 @@
-package com.github.dockerjava.core.util;
+package com.github.dockerjava.jaxrs.filter;
 
 import java.io.IOException;
 
