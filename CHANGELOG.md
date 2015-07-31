@@ -5,7 +5,7 @@ v.2.0.0
 ---
 Release notes
 
-* Some commands APIs has been changed to be callback-driven now to simplify the processing of the result streams for the client application. This affects namely the events, log, attach, build, push and pull commands. Look at the Wiki how to [process events](https://github.com/docker-java/docker-java/wiki#handle-events) or how to [build an image](https://github.com/docker-java/docker-java/wiki#build-image-from-dockerfile) from dockerfile for example.
+* Some commands APIs has been changed to be callback-driven now to simplify the processing of the result streams for the client application. This affects namely the events, stats, log, attach, build, push and pull commands. Look at the Wiki how to [process events](https://github.com/docker-java/docker-java/wiki#handle-events) or how to [build an image](https://github.com/docker-java/docker-java/wiki#build-image-from-dockerfile) from dockerfile for example.
 * The `DockerClientConfig` API has changed to free it from implementation specific configuration options like `readTimeout`, `maxTotalConnections`, `maxPerRouteConnections` and `enableLoggingFilter`. Most options can be configured via `DockerCmdExecFactoryImpl` [programmatically](https://github.com/docker-java/docker-java/wiki#intialize-docker-client-advanced) now. Logging is configurable via [logback](https://github.com/docker-java/docker-java/blob/master/src/test/resources/logback.xml) configuration file in the classpath.
 
 All changes
