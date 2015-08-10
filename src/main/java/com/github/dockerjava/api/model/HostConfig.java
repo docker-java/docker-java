@@ -66,6 +66,15 @@ public class HostConfig {
     @JsonProperty("Ulimits")
     private Ulimit[] ulimits;
 
+    @JsonProperty("Memory")
+    private long memoryLimit = 0;
+
+    @JsonProperty("MemorySwap")
+    private long memorySwap = 0;
+
+    @JsonProperty("CpuShares")
+    private int cpuShares = 0;
+
     public HostConfig() {
     }
 
@@ -171,6 +180,18 @@ public class HostConfig {
 
     public Ulimit[] getUlimits() {
         return ulimits;
+    }
+
+    public long getMemoryLimit() {
+        return memoryLimit;
+    }
+
+    public long getMemorySwap() {
+        return memorySwap;
+    }
+
+    public int getCpuShares() {
+        return cpuShares;
     }
 
     @JsonIgnore
