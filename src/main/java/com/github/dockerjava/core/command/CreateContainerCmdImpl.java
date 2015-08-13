@@ -631,7 +631,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public CreateContainerCmd withOomKillDisable(Boolean oomKillDisable) {
         checkNotNull(oomKillDisable, "oomKillDisable was not specified");
         this.oomKillDisable = oomKillDisable;
-        return null;
+        return this;
     }
 
     @Override
