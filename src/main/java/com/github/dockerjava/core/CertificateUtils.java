@@ -1,5 +1,11 @@
 package com.github.dockerjava.core;
 
+import org.apache.commons.io.IOUtils;
+import org.bouncycastle.cert.X509CertificateHolder;
+import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
+import org.bouncycastle.openssl.PEMKeyPair;
+import org.bouncycastle.openssl.PEMParser;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -16,12 +22,8 @@ import java.security.cert.CertificateException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-
-import org.apache.commons.io.IOUtils;
-import org.bouncycastle.cert.X509CertificateHolder;
-import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
-import org.bouncycastle.openssl.PEMKeyPair;
-import org.bouncycastle.openssl.PEMParser;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CertificateUtils {
 
@@ -41,13 +43,13 @@ public class CertificateUtils {
     public static KeyStore createKeyStore(final String dockerCertPath) throws NoSuchAlgorithmException,
             InvalidKeySpecException, IOException, CertificateException, KeyStoreException {
         KeyPair keyPair = loadPrivateKey(dockerCertPath);
-        Certificate privateCertificate = loadCertificate(dockerCertPath);
+        List<Certificate> privateCertificates = loadCertificates(dockerCertPath);
 
         KeyStore keyStore = KeyStore.getInstance("JKS");
         keyStore.load(null);
 
         keyStore.setKeyEntry("docker", keyPair.getPrivate(), "docker".toCharArray(),
-                new Certificate[] { privateCertificate });
+                privateCertificates.toArray(new Certificate[privateCertificates.size()]) );
         return keyStore;
     }
 
@@ -80,15 +82,25 @@ public class CertificateUtils {
 
     }
 
-    private static Certificate loadCertificate(final String dockerCertPath) throws IOException, CertificateException {
+    private static List<Certificate> loadCertificates(final String dockerCertPath) throws IOException, CertificateException {
         File certificate = new File(dockerCertPath, "cert.pem");
         BufferedReader reader = new BufferedReader(new FileReader(certificate));
         PEMParser pemParser = null;
 
         try {
+            List<Certificate> certificates = new ArrayList<>();
             pemParser = new PEMParser(reader);
-            X509CertificateHolder certificateHolder = (X509CertificateHolder) pemParser.readObject();
-            return new JcaX509CertificateConverter().setProvider("BC").getCertificate(certificateHolder);
+            JcaX509CertificateConverter certificateConverter = new JcaX509CertificateConverter().setProvider("BC");
+            Object certObj = pemParser.readObject();
+
+            while (certObj != null) {
+                X509CertificateHolder certificateHolder = (X509CertificateHolder) certObj;
+                certificates.add(certificateConverter.getCertificate(certificateHolder));
+
+                certObj = pemParser.readObject();
+            }
+
+            return certificates;
         } finally {
             if (pemParser != null) {
                 IOUtils.closeQuietly(pemParser);
