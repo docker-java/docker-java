@@ -3,6 +3,7 @@ Change Log
 
 Latest SNAPSHOT
 ---
+* [#295] (https://github.com/docker-java/docker-java/pull/295) Support certificate chains in cert.pem
 * [#287] (https://github.com/docker-java/docker-java/pull/287) Using the oomKillDisable flag throws a null pointer exception
 
 v.2.0.0
