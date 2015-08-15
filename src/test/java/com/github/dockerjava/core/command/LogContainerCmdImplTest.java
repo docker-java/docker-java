@@ -135,5 +135,4 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
         assertTrue(loggingCallback.toString().contains(snippet));
     }
 
-
 }

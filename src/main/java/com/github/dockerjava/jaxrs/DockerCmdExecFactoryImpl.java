@@ -124,8 +124,8 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
         if (clientRequestFilters != null) {
             for (ClientRequestFilter clientRequestFilter : clientRequestFilters) {
-                if(clientRequestFilter != null)
-                clientConfig.register(clientRequestFilter);
+                if (clientRequestFilter != null)
+                    clientConfig.register(clientRequestFilter);
             }
         }
 

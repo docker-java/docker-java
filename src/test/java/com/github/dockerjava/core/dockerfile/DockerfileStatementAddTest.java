@@ -20,16 +20,14 @@ public class DockerfileStatementAddTest extends TestCase {
 
     @DataProvider(name = "valid scenarios")
     public Object[][] validScenarios() {
-        return new Object[][] {
-                {"ADD src dest", contains("src"), "dest"},
-                {"ADD \"src file\" \"dest\"", contains("src file"), "dest"},
-                {"ADD src\"file dest", contains("src\"file"), "dest"},
-                {"ADD src1 src2 dest", containsInAnyOrder("src1", "src2"), "dest"},
-                {"COPY src dest", contains("src"), "dest"},
-                {"COPY \"src file\" \"dest\"", contains("src file"), "dest"},
-                {"COPY src\"file dest", contains("src\"file"), "dest"},
-                {"COPY src1 src2 dest", containsInAnyOrder("src1", "src2"), "dest"}
-        };
+        return new Object[][] { { "ADD src dest", contains("src"), "dest" },
+                { "ADD \"src file\" \"dest\"", contains("src file"), "dest" },
+                { "ADD src\"file dest", contains("src\"file"), "dest" },
+                { "ADD src1 src2 dest", containsInAnyOrder("src1", "src2"), "dest" },
+                { "COPY src dest", contains("src"), "dest" },
+                { "COPY \"src file\" \"dest\"", contains("src file"), "dest" },
+                { "COPY src\"file dest", contains("src\"file"), "dest" },
+                { "COPY src1 src2 dest", containsInAnyOrder("src1", "src2"), "dest" } };
     }
 
     @Test(dataProvider = "valid scenarios")

@@ -65,18 +65,14 @@ public class PushImageCmdImplTest extends AbstractDockerClientTest {
         LOG.info("Removing image: {}", imageId);
         dockerClient.removeImageCmd(imageId).exec();
 
-        dockerClient.pullImageCmd(username + "/busybox")
-                .exec(new PullImageResultCallback()).awaitSuccess();
+        dockerClient.pullImageCmd(username + "/busybox").exec(new PullImageResultCallback()).awaitSuccess();
     }
 
     @Test(expectedExceptions = DockerClientException.class)
     public void pushNonExistentImage() throws Exception {
 
-        dockerClient.pushImageCmd(username + "/xxx").exec(new PushImageResultCallback())
-                .awaitSuccess();
-
+        dockerClient.pushImageCmd(username + "/xxx").exec(new PushImageResultCallback()).awaitSuccess();
 
     }
-
 
 }

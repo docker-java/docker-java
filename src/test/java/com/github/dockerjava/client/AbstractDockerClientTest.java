@@ -186,8 +186,8 @@ public abstract class AbstractDockerClientTest extends Assert {
     }
 
     protected String containerLog(String containerId) throws Exception {
-        return dockerClient.logContainerCmd(containerId).withStdOut()
-                .exec(new LogContainerTestCallback()).awaitCompletion().toString();
+        return dockerClient.logContainerCmd(containerId).withStdOut().exec(new LogContainerTestCallback())
+                .awaitCompletion().toString();
     }
 
     public static class LogContainerTestCallback extends LogContainerResultCallback {

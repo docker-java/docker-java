@@ -38,7 +38,8 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
 
     @Override
     public void onError(Throwable throwable) {
-        if(closed) return;
+        if (closed)
+            return;
 
         try {
             LOGGER.error("Error during callback", throwable);
