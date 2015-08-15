@@ -10,7 +10,6 @@ import static org.hamcrest.Matchers.nullValue;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -18,7 +17,6 @@ import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.apache.commons.lang.StringUtils;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -31,7 +29,11 @@ import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.InspectImageResponse;
-import com.github.dockerjava.api.model.BuildResponseItem;
+import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.api.model.AuthConfigurations;
+import com.github.dockerjava.api.model.ExposedPort;
+import com.github.dockerjava.api.model.PortBinding;
+import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.core.CompressArchiveUtil;
 
@@ -225,10 +227,10 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
         String response = dockerfileBuild(baseDir);
         assertThat(response, containsString("testENVSubstitution successfully completed"));
     }
-    
+
     @Test
-    public void testBuilderPerformance() throws Exception {
-        File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("nginx").getFile());
+    public void testBuildFromPrivateRegistry() throws Exception {
+        File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("privateRegistry").getFile());
 
         String imageId = buildImage(baseDir);
 
@@ -236,6 +238,50 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
         assertThat(inspectImageResponse, not(nullValue()));
         LOG.info("Image Inspect: {}", inspectImageResponse.toString());
 
-        assertThat(inspectImageResponse.getAuthor(), equalTo("Guillaume J. Charmes \"guillaume@dotcloud.com\""));
+        dockerClient.tagImageCmd(imageId, "testregistry", "2").withForce().exec();
+
+        // see https://github.com/docker/distribution/blob/master/docs/deploying.md#native-basic-auth
+        CreateContainerResponse testregistry = dockerClient
+                .createContainerCmd("testregistry:2")
+                .withName("registry")
+                .withPortBindings(new PortBinding(new Ports.Binding(5000), ExposedPort.tcp(5000)))
+                .withEnv("REGISTRY_AUTH=htpasswd", "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm",
+                        "REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd", "REGISTRY_LOG_LEVEL=debug",
+                        "REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt", "REGISTRY_HTTP_TLS_KEY=/certs/domain.key")
+                .exec();
+
+        dockerClient.startContainerCmd(testregistry.getId()).exec();
+
+        AuthConfig authConfig = new AuthConfig();
+
+        // credentials as configured in /auth/htpasswd
+        authConfig.setUsername("testuser");
+        authConfig.setPassword("testpassword");
+        authConfig.setEmail("foo@bar.de");
+        authConfig.setServerAddress("localhost:5000");
+
+        dockerClient.authCmd().withAuthConfig(authConfig).exec();
+        dockerClient.tagImageCmd("busybox:latest", "localhost:5000/testuser/busybox", "latest").withForce().exec();
+
+        dockerClient.pushImageCmd("localhost:5000/testuser/busybox").withTag("latest").withAuthConfig(authConfig)
+                .exec(new PushImageResultCallback()).awaitSuccess();
+
+        dockerClient.removeImageCmd("busybox:latest").withForce().exec();
+
+        dockerClient.removeImageCmd("localhost:5000/testuser/busybox").withForce().exec();
+
+        baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testBuildFromPrivateRegistry")
+                .getFile());
+
+        AuthConfigurations authConfigurations = new AuthConfigurations();
+        authConfigurations.addConfig(authConfig);
+
+        imageId = dockerClient.buildImageCmd(baseDir).withNoCache().withBuildAuthConfigs(authConfigurations)
+                .exec(new BuildImageResultCallback()).awaitImageId();
+
+        inspectImageResponse = dockerClient.inspectImageCmd(imageId).exec();
+        assertThat(inspectImageResponse, not(nullValue()));
+        LOG.info("Image Inspect: {}", inspectImageResponse.toString());
+
     }
 }
