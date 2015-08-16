@@ -266,8 +266,6 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
         dockerClient.pushImageCmd("localhost:5000/testuser/busybox").withTag("latest").withAuthConfig(authConfig)
                 .exec(new PushImageResultCallback()).awaitSuccess();
 
-        dockerClient.removeImageCmd("busybox:latest").withForce().exec();
-
         dockerClient.removeImageCmd("localhost:5000/testuser/busybox").withForce().exec();
 
         baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testBuildFromPrivateRegistry")
