@@ -15,6 +15,7 @@ import com.github.dockerjava.api.model.Image;
 public interface ListImagesCmd extends SyncDockerCmd<List<Image>> {
 
     public String getFilters();
+    
     public String getImageNameFilter();
 
     public boolean hasShowAllEnabled();
@@ -22,6 +23,7 @@ public interface ListImagesCmd extends SyncDockerCmd<List<Image>> {
     public ListImagesCmd withShowAll(boolean showAll);
 
     public ListImagesCmd withImageNameFilter(String imageName);
+    
     public ListImagesCmd withFilters(String filters);
 
     public static interface Exec extends DockerCmdSyncExec<ListImagesCmd, List<Image>> {

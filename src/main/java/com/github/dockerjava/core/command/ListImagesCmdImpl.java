@@ -55,15 +55,15 @@ public class ListImagesCmdImpl extends AbstrDockerCmd<ListImagesCmd, List<Image>
                 .append(filters != null ? "--filter " + filters : "").toString();
     }
 
-	@Override
-	public ListImagesCmd withImageNameFilter(String imageNameFilter) {
-        checkNotNull(imageNameFilter, "image name filter has not been specified");
-		this.imageNameFilter = imageNameFilter;
-		return this;
-	}
+    @Override
+    public ListImagesCmd withImageNameFilter(String imageNameFilter) {
+        checkNotNull(imageNameFilter, "image name filter not specified");
+        this.imageNameFilter = imageNameFilter;
+        return this;
+    }
 
-	@Override
-	public String getImageNameFilter() {
-		return this.imageNameFilter;
+    @Override
+    public String getImageNameFilter() {
+        return this.imageNameFilter;
 	}
 }
