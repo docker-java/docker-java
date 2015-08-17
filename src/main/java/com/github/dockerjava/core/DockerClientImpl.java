@@ -90,7 +90,7 @@ import com.github.dockerjava.core.command.WaitContainerCmdImpl;
  *
  * @see "https://github.com/docker/docker/blob/master/api/client/commands.go"
  */
-public class DockerClientImpl implements Closeable, DockerClient {
+public class DockerClientImpl implements Closeable, AutoCloseable, DockerClient {
 
     private final DockerClientConfig dockerClientConfig;
 
