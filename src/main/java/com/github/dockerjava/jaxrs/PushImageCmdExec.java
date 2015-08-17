@@ -29,7 +29,7 @@ public class PushImageCmdExec extends AbstrAsyncDockerCmdExec<PushImageCmd, Push
     private String name(PushImageCmd command) {
         String name = command.getName();
         AuthConfig authConfig = command.getAuthConfig();
-        return name.contains("/") ? name : authConfig.getUsername();
+        return (name.contains("/") || authConfig == null) ? name : authConfig.getUsername();
     }
 
     @Override
