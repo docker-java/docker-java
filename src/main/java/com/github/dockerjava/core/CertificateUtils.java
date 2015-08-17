@@ -49,7 +49,7 @@ public class CertificateUtils {
         keyStore.load(null);
 
         keyStore.setKeyEntry("docker", keyPair.getPrivate(), "docker".toCharArray(),
-                privateCertificates.toArray(new Certificate[privateCertificates.size()]) );
+                privateCertificates.toArray(new Certificate[privateCertificates.size()]));
         return keyStore;
     }
 
@@ -82,7 +82,8 @@ public class CertificateUtils {
 
     }
 
-    private static List<Certificate> loadCertificates(final String dockerCertPath) throws IOException, CertificateException {
+    private static List<Certificate> loadCertificates(final String dockerCertPath) throws IOException,
+            CertificateException {
         File certificate = new File(dockerCertPath, "cert.pem");
         BufferedReader reader = new BufferedReader(new FileReader(certificate));
         PEMParser pemParser = null;

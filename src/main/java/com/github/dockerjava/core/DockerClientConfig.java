@@ -177,8 +177,8 @@ public class DockerClientConfig implements Serializable {
 
         for (String key : new String[] { DOCKER_IO_URL_PROPERTY, DOCKER_IO_VERSION_PROPERTY,
                 DOCKER_IO_USERNAME_PROPERTY, DOCKER_IO_PASSWORD_PROPERTY, DOCKER_IO_EMAIL_PROPERTY,
-                DOCKER_IO_SERVER_ADDRESS_PROPERTY,
-                DOCKER_IO_DOCKER_CERT_PATH_PROPERTY, DOCKER_IO_DOCKER_CFG_PATH_PROPERTY, }) {
+                DOCKER_IO_SERVER_ADDRESS_PROPERTY, DOCKER_IO_DOCKER_CERT_PATH_PROPERTY,
+                DOCKER_IO_DOCKER_CFG_PATH_PROPERTY, }) {
             if (systemProperties.containsKey(key)) {
                 overriddenProperties.setProperty(key, systemProperties.getProperty(key));
             }
@@ -337,8 +337,7 @@ public class DockerClientConfig implements Serializable {
     public String toString() {
         return "DockerClientConfig{" + "uri=" + uri + ", version='" + version + '\'' + ", username='" + username + '\''
                 + ", password='" + password + '\'' + ", email='" + email + '\'' + ", serverAddress='" + serverAddress
-                + '\'' + ", dockerCfgPath='" + dockerCfgPath + '\'' + ", sslConfig='" + sslConfig + '\''
-                + '}';
+                + '\'' + ", dockerCfgPath='" + dockerCfgPath + '\'' + ", sslConfig='" + sslConfig + '\'' + '}';
     }
 
     public static class DockerClientConfigBuilder {
@@ -415,7 +414,7 @@ public class DockerClientConfig implements Serializable {
 
         public DockerClientConfig build() {
             return new DockerClientConfig(uri, version, username, password, email, serverAddress, dockerCfgPath,
-                     sslConfig);
+                    sslConfig);
         }
     }
 

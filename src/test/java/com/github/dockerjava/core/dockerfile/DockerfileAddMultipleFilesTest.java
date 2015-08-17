@@ -17,6 +17,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 public class DockerfileAddMultipleFilesTest extends TestCase {
 
     private static final Logger log = LoggerFactory.getLogger(DockerfileAddMultipleFilesTest.class);
+
     private static final Function<File, String> TO_FILE_NAMES = new Function<File, String>() {
         @Override
         public String apply(File file) {
@@ -26,7 +27,8 @@ public class DockerfileAddMultipleFilesTest extends TestCase {
 
     @Test
     public void testAddMultipleFiles() throws IOException {
-        File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testAddMultipleFiles").getFile());
+        File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testAddMultipleFiles")
+                .getFile());
         Dockerfile dockerfile = new Dockerfile(new File(baseDir, "Dockerfile"));
         Dockerfile.ScannedResult result = dockerfile.parse();
         Collection<String> filesToAdd = transform(result.filesToAdd, TO_FILE_NAMES);
