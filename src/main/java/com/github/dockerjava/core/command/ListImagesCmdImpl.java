@@ -17,6 +17,7 @@ import com.github.dockerjava.api.model.Image;
  */
 public class ListImagesCmdImpl extends AbstrDockerCmd<ListImagesCmd, List<Image>> implements ListImagesCmd {
 
+	private String imageNameFilter;
     private String filters;
 
     private boolean showAll = false;
@@ -53,4 +54,16 @@ public class ListImagesCmdImpl extends AbstrDockerCmd<ListImagesCmd, List<Image>
         return new StringBuilder("images ").append(showAll ? "--all=true" : "")
                 .append(filters != null ? "--filter " + filters : "").toString();
     }
+
+	@Override
+	public ListImagesCmd withImageNameFilter(String imageNameFilter) {
+        checkNotNull(imageNameFilter, "image name filter has not been specified");
+		this.imageNameFilter = imageNameFilter;
+		return this;
+	}
+
+	@Override
+	public String getImageNameFilter() {
+		return this.imageNameFilter;
+	}
 }
