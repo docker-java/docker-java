@@ -32,7 +32,7 @@ public class ListImagesCmdExec extends AbstrSyncDockerCmdExec<ListImagesCmd, Lis
         }
         
         if (command.getImageNameFilter() != null) {
-        	webResource = webResource.queryParam("filter", urlPathSegmentEscaper().escape(command.getImageNameFilter()));
+            webResource = webResource.queryParam("filter", urlPathSegmentEscaper().escape(command.getImageNameFilter()));
         }
 
         LOGGER.trace("GET: {}", webResource);
