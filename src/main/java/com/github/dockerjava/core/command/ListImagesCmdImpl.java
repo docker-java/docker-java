@@ -66,5 +66,5 @@ public class ListImagesCmdImpl extends AbstrDockerCmd<ListImagesCmd, List<Image>
     @Override
     public String getImageNameFilter() {
         return this.imageNameFilter;
-        }
+    }
 }
