@@ -52,7 +52,8 @@ public class ListImagesCmdImpl extends AbstrDockerCmd<ListImagesCmd, List<Image>
     @Override
     public String toString() {
         return new StringBuilder("images ").append(showAll ? "--all=true" : "")
-                .append(filters != null ? "--filter " + filters : "").toString();
+                .append(filters != null ? "--filters " + filters : "")
+                .append(imageNameFilter != null ? "--filter " + imageNameFilter : "").toString();
     }
 
     @Override
@@ -65,5 +66,5 @@ public class ListImagesCmdImpl extends AbstrDockerCmd<ListImagesCmd, List<Image>
     @Override
     public String getImageNameFilter() {
         return this.imageNameFilter;
-	}
+        }
 }
