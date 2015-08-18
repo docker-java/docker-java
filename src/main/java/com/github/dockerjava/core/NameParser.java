@@ -5,15 +5,24 @@ package com.github.dockerjava.core;
 
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import com.github.dockerjava.api.model.AuthConfig;
 
 public class NameParser {
 
-    private static final Pattern VALID_HEX_PATTERN = Pattern.compile("^([a-f0-9]{64})$");
+    private static final int RepositoryNameTotalLengthMax = 255;
 
-    private static final Pattern VALID_NAMESPACE_PATTERN = Pattern.compile("^([a-z0-9_]{4,30})$");
+    private static final Pattern RepositoryNameComponentRegexp = Pattern.compile("[a-z0-9]+(?:[._-][a-z0-9]+)*");
 
-    private static final Pattern VALID_REPO_PATTERN = Pattern.compile("^([a-z0-9-_.]+)$");
+    private static final Pattern RepositoryNameComponentAnchoredRegexp = Pattern.compile("^"
+            + RepositoryNameComponentRegexp.pattern() + "$");
+
+    // private static final Pattern RepositoryNameRegexp = Pattern.compile("(?:" +
+    // RepositoryNameComponentRegexp.pattern()
+    // + "/)*" + RepositoryNameComponentRegexp.pattern());
 
     public static ReposTag parseRepositoryTag(String name) {
         int n = name.lastIndexOf(':');
@@ -36,30 +45,44 @@ public class NameParser {
             this.repos = repos;
             this.tag = tag;
         }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof ReposTag) {
+                ReposTag other = (ReposTag) obj;
+                return new EqualsBuilder().append(repos, other.repos).append(tag, other.tag).isEquals();
+
+            } else {
+                return false;
+            }
+        }
+
+        @Override
+        public String toString() {
+            return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
+        }
     }
 
-    public static void validateRepositoryName(String repositoryName) {
-        String name;
-        String namespace;
-        String[] nameParts = repositoryName.split("/", 2);
-        if (nameParts.length < 2) {
-            namespace = "library";
-            name = nameParts[0];
-            if (VALID_HEX_PATTERN.matcher(name).matches()) {
+    /*
+     * see https://github.com/docker/distribution/blob/master/registry/api/v2/names.go
+     */
+    public static void validateRepoName(String name) {
+        if (name.isEmpty()) {
+            throw new InvalidRepositoryNameException(String.format("Invalid empty repository name \"%s\"", name));
+        }
+
+        if (name.length() > RepositoryNameTotalLengthMax) {
+            throw new InvalidRepositoryNameException(String.format("Repository name \"%s\" is longer than "
+                    + RepositoryNameTotalLengthMax, name));
+        }
+
+        String[] components = name.split("/");
+
+        for (String component : components) {
+            if (!RepositoryNameComponentAnchoredRegexp.matcher(component).matches()) {
                 throw new InvalidRepositoryNameException(String.format(
-                        "Invalid repository name (%s), cannot specify 64-byte hexadecimal strings", name));
+                        "Repository name \"%s\" is invalid. Component: %s", name, component));
             }
-        } else {
-            namespace = nameParts[0];
-            name = nameParts[1];
-        }
-        if (!VALID_NAMESPACE_PATTERN.matcher(namespace).matches()) {
-            throw new InvalidRepositoryNameException(String.format(
-                    "Invalid namespace name (%s), only [a-z0-9_] are allowed, size between 4 and 30", namespace));
-        }
-        if (!VALID_REPO_PATTERN.matcher(name).matches()) {
-            throw new InvalidRepositoryNameException(String.format(
-                    "Invalid repository name (%s), only [a-z0-9-_.] are allowed", name));
         }
     }
 
@@ -82,7 +105,7 @@ public class NameParser {
                     reposName));
         }
 
-        validateRepositoryName(reposName);
+        validateRepoName(reposName);
         return new HostnameReposName(hostname, reposName);
     }
 
@@ -94,6 +117,23 @@ public class NameParser {
         public HostnameReposName(String hostname, String reposName) {
             this.hostname = hostname;
             this.reposName = reposName;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof HostnameReposName) {
+                HostnameReposName other = (HostnameReposName) obj;
+                return new EqualsBuilder().append(hostname, other.hostname).append(reposName, other.reposName)
+                        .isEquals();
+
+            } else {
+                return false;
+            }
+        }
+
+        @Override
+        public String toString() {
+            return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
         }
 
     }
