@@ -3,6 +3,7 @@ Change Log
 
 Latest SNAPSHOT
 ---
+* [#298] (https://github.com/docker-java/docker-java/pull/298) Fix repository name validation errors
 * [#296] (https://github.com/docker-java/docker-java/pull/296) Fix Build FROM private registry broken with docker 1.7.x 
 * [#295] (https://github.com/docker-java/docker-java/pull/295) Support certificate chains in cert.pem
 * [#287] (https://github.com/docker-java/docker-java/pull/287) Using the oomKillDisable flag throws a null pointer exception
