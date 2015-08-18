@@ -16,7 +16,7 @@ Developer forum for [docker-java](https://groups.google.com/forum/?hl=de#!forum/
 
 * Java 1.7
 * Maven 3.0.5
-* Docker daemon running
+* Docker 1.7.x
 
 If you need SSL, then you'll need to put your `*.pem` file into `~/.docker/`, if you're using boot2docker, do this: 
  
