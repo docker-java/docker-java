@@ -51,7 +51,6 @@ public class NameParser {
             if (obj instanceof ReposTag) {
                 ReposTag other = (ReposTag) obj;
                 return new EqualsBuilder().append(repos, other.repos).append(tag, other.tag).isEquals();
-
             } else {
                 return false;
             }
@@ -125,7 +124,6 @@ public class NameParser {
                 HostnameReposName other = (HostnameReposName) obj;
                 return new EqualsBuilder().append(hostname, other.hostname).append(reposName, other.reposName)
                         .isEquals();
-
             } else {
                 return false;
             }
