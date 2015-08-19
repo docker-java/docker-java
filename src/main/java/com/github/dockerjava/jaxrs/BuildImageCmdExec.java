@@ -85,8 +85,11 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
 
         LOGGER.trace("POST: {}", webTarget);
 
-        return new POSTCallbackNotifier<BuildResponseItem>(new JsonStreamProcessor<BuildResponseItem>(
-                BuildResponseItem.class), resultCallback, resourceWithOptionalAuthConfig(command, webTarget.request())
-                .accept(MediaType.TEXT_PLAIN), entity(command.getTarInputStream(), "application/tar"));
+        return new POSTCallbackNotifier<>(new JsonStreamProcessor<>(BuildResponseItem.class),
+                resultCallback,
+                resourceWithOptionalAuthConfig(command, webTarget.request())
+                .accept(MediaType.TEXT_PLAIN),
+                entity(command.getTarInputStream(), "application/tar")
+        );
     }
 }
