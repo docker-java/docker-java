@@ -171,6 +171,14 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
         dockerClient.buildImageCmd(baseDir).withNoCache().exec(new BuildImageResultCallback()).awaitImageId();
     }
 
+    @Test
+    public void testDockerfileNotIgnored() throws Exception {
+        File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testDockerfileNotIgnored")
+                .getFile());
+
+        dockerClient.buildImageCmd(baseDir).withNoCache().exec(new BuildImageResultCallback()).awaitImageId();
+    }
+
     @Test(expectedExceptions = { DockerClientException.class })
     public void testInvalidDockerIgnorePattern() throws Exception {
         File baseDir = new File(Thread.currentThread().getContextClassLoader()
