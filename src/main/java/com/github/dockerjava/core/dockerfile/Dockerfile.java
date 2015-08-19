@@ -188,6 +188,7 @@ public class Dockerfile {
          */
         private List<String> matchingIgnorePatterns(String fileName) {
             List<String> matches = new ArrayList<String>();
+
             int lineNumber = 0;
             for (String pattern : ignores) {
                 lineNumber++;
@@ -199,8 +200,8 @@ public class Dockerfile {
                     throw new DockerClientException(String.format(
                             "Invalid pattern '%s' on line %s in .dockerignore file", pattern, lineNumber));
                 }
-
             }
+
             return matches;
         }
 
@@ -286,10 +287,7 @@ public class Dockerfile {
         }
 
         private void processEnvStatement(DockerfileStatement.Env env) {
-
             environmentMap.put(env.variable, env.value);
         }
-
     }
-
 }
