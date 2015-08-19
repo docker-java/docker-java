@@ -19,7 +19,7 @@ import org.apache.commons.lang.StringUtils;
 /**
  * A statement present in a dockerfile.
  */
-public abstract class DockerfileStatement<T extends DockerfileStatement> {
+public abstract class DockerfileStatement<T extends DockerfileStatement<?>> {
 
     private DockerfileStatement() {
     }

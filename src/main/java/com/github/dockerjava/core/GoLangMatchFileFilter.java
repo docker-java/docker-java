@@ -24,8 +24,7 @@ public class GoLangMatchFileFilter extends AbstractFileFilter {
     public boolean accept(File file) {
         String relativePath = FilePathUtil.relativize(base, file);
 
-        boolean match = GoLangFileMatch.match(patterns, relativePath);
-        return !match;
+        return GoLangFileMatch.match(patterns, relativePath).isEmpty();
     }
 
 }

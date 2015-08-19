@@ -10,6 +10,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -89,12 +90,6 @@ public class Dockerfile {
                 }
                 pattern = FilenameUtils.normalize(pattern);
                 try {
-                    // validate pattern and make sure we aren't excluding Dockerfile
-                    if (GoLangFileMatch.match(pattern, "Dockerfile")) {
-                        throw new DockerClientException(String.format(
-                                "Dockerfile is excluded by pattern '%s' on line %s in .dockerignore file", pattern,
-                                lineNumber));
-                    }
                     ignores.add(pattern);
                 } catch (GoLangFileMatchException e) {
                     throw new DockerClientException(String.format(
@@ -169,7 +164,15 @@ public class Dockerfile {
         public ScannedResult() throws IOException {
 
             ignores = getIgnores();
-            filesToAdd.add(dockerFile);
+
+            String matchingIgnorePattern = effectiveMatchingIgnorePattern(dockerFile);
+
+            if (matchingIgnorePattern == null) {
+                filesToAdd.add(dockerFile);
+            } else {
+                throw new DockerClientException(String.format(
+                        "Dockerfile is excluded by pattern '%s' in .dockerignore file", matchingIgnorePattern));
+            }
 
             for (DockerfileStatement statement : getStatements()) {
                 if (statement instanceof DockerfileStatement.Env) {
@@ -178,6 +181,55 @@ public class Dockerfile {
                     processAddStatement((DockerfileStatement.Add) statement);
                 }
             }
+        }
+
+        /**
+         * Returns all matching ignore patterns for the given file name.
+         */
+        private List<String> matchingIgnorePatterns(String fileName) {
+            List<String> matches = new ArrayList<String>();
+            int lineNumber = 0;
+            for (String pattern : ignores) {
+                lineNumber++;
+                try {
+                    if (GoLangFileMatch.match(pattern, fileName)) {
+                        matches.add(pattern);
+                    }
+                } catch (GoLangFileMatchException e) {
+                    throw new DockerClientException(String.format(
+                            "Invalid pattern '%s' on line %s in .dockerignore file", pattern, lineNumber));
+                }
+
+            }
+            return matches;
+        }
+
+        /**
+         * Returns the matching ignore pattern for the given file or null if it should NOT be ignored.
+         * Exception rules like "!Dockerfile" will be respected.
+         */
+        private String effectiveMatchingIgnorePattern(File file) {
+            String relativeFilename = FilePathUtil.relativize(getDockerFolder(), file);
+
+            List<String> matchingPattern = matchingIgnorePatterns(relativeFilename);
+
+            if (matchingPattern.isEmpty())
+                return null;
+
+            String lastMatchingPattern = matchingPattern.get(matchingPattern.size() - 1);
+
+            int lastMatchingPatternIndex = ignores.lastIndexOf(lastMatchingPattern);
+
+            if(lastMatchingPatternIndex == ignores.size() - 1) return lastMatchingPattern;
+
+            List<String> remainingIgnorePattern = ignores.subList(lastMatchingPatternIndex + 1, ignores.size());
+
+            for (String ignorePattern : remainingIgnorePattern) {
+                if (ignorePattern.equals("!" + relativeFilename))
+                    return null;
+            }
+
+            return lastMatchingPattern;
         }
 
         private void processAddStatement(DockerfileStatement.Add add) throws IOException {
@@ -202,7 +254,7 @@ public class Dockerfile {
                         Collection<File> files = FileUtils.listFiles(src, new GoLangMatchFileFilter(src, ignores),
                                 TrueFileFilter.INSTANCE);
                         filesToAdd.addAll(files);
-                    } else if (!GoLangFileMatch.match(ignores, FilePathUtil.relativize(dockerFolder, src))) {
+                    } else if (effectiveMatchingIgnorePattern(src) == null) {
                         filesToAdd.add(src);
                     } else {
                         throw new DockerClientException(String.format(
