@@ -12,6 +12,8 @@ import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.BuildResponseItem;
 import com.github.dockerjava.core.FilePathUtil;
 import com.github.dockerjava.core.dockerfile.Dockerfile;
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 import javax.annotation.CheckForNull;
 
@@ -324,19 +326,6 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     @Override
     public String toString() {
-        return new StringBuilder("build ")
-                .append(tag != null ? "-t " + tag + " " : "")
-                .append(remote != null ? "--remote=" + remote.toString() + " " : "")
-                .append((quiet != null && quiet) ? "--quiet=true " : "")
-                .append((noCache != null && noCache) ? "--nocache=true " : "")
-                .append((pull != null && pull) ? "--pull=true" : "")
-                .append((remove != null && !remove) ? "--rm=false " : "")
-                .append((forcerm != null && forcerm) ? "--forcerm=true " : " ")
-                .append(memory != null ? "--memory=" + memory + " " : "")
-                .append(memswap != null ? "--memswap=" + memswap + " " : "")
-                .append(cpushares != null ? "--cpushares=" + cpushares + " " : "")
-                .append(cpusetcpus != null ? "--cpusetcpus=" + cpusetcpus + " " : "")
-                .toString();
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SIMPLE_STYLE);
     }
-
 }
