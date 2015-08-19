@@ -19,9 +19,8 @@ import com.github.dockerjava.core.async.JsonStreamProcessor;
 import com.github.dockerjava.jaxrs.async.AbstractCallbackNotifier;
 import com.github.dockerjava.jaxrs.async.POSTCallbackNotifier;
 
-public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, BuildResponseItem> implements
-        BuildImageCmd.Exec {
-
+public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, BuildResponseItem>
+        implements BuildImageCmd.Exec {
     private static final Logger LOGGER = LoggerFactory.getLogger(BuildImageCmdExec.class);
 
     public BuildImageCmdExec(WebTarget baseResource) {
