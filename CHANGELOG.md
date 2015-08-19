@@ -3,6 +3,7 @@ Change Log
 
 Latest SNAPSHOT
 ---
+* [#301] (https://github.com/docker-java/docker-java/pull/301) Respect exception rules in .dockerignore file while build images
 * [#298] (https://github.com/docker-java/docker-java/pull/298) Fix repository name validation errors
 * [#296] (https://github.com/docker-java/docker-java/pull/296) Fix Build FROM private registry broken with docker 1.7.x 
 * [#295] (https://github.com/docker-java/docker-java/pull/295) Support certificate chains in cert.pem
