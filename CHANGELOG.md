@@ -1,15 +1,20 @@
 Change Log
 ===
 
-Latest SNAPSHOT
+v2.0.1
 ---
+Release notes
+* This is a bugfix release. With this release docker >= v1.7.0 is recommended.
+
+All changes
+
 * [#301] (https://github.com/docker-java/docker-java/pull/301) Respect exception rules in .dockerignore file while build images
 * [#298] (https://github.com/docker-java/docker-java/pull/298) Fix repository name validation errors
 * [#296] (https://github.com/docker-java/docker-java/pull/296) Fix Build FROM private registry broken with docker 1.7.x 
 * [#295] (https://github.com/docker-java/docker-java/pull/295) Support certificate chains in cert.pem
 * [#287] (https://github.com/docker-java/docker-java/pull/287) Using the oomKillDisable flag throws a null pointer exception
 
-v.2.0.0
+v2.0.0
 ---
 Release notes
 
@@ -31,7 +36,7 @@ All changes
 * [#262](https://github.com/docker-java/docker-java/pull/262) Accept filters in list containers 
 * [#260](https://github.com/docker-java/docker-java/pull/260) Add labels to create and inspect container
 
-v.1.4.0
+v1.4.0
 ---
 * [#248](https://github.com/docker-java/docker-java/pull/248) Removed deprecated start options
 * [#247](https://github.com/docker-java/docker-java/pull/247) Add Domainname attribute on create command
