@@ -40,14 +40,12 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     /**
      * "nocache" in API
      */
-    @CheckForNull
-    public Boolean hasNoCacheEnabled();
+    public boolean hasNoCacheEnabled();
 
     /**
      * "rm" in API
      */
-    @CheckForNull
-    public Boolean hasRemoveEnabled();
+    public boolean hasRemoveEnabled();
 
     /**
      * "forcerm" in API
@@ -62,14 +60,10 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
      */
     public boolean isQuiet();
 
-    @CheckForNull
-    public Boolean getQuiet();
-
     /**
      * "pull" in API
      */
-    @CheckForNull
-    public Boolean hasPullEnabled();
+    public boolean hasPullEnabled();
 
     @CheckForNull
     public String getPathToDockerfile();
@@ -106,7 +100,7 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
 
     public BuildImageCmd withForcerm();
 
-    public BuildImageCmd withForcerm(boolean forcerm);
+    public BuildImageCmd withForcerm(Boolean forcerm);
 
     public BuildImageCmd withQuiet();
 
