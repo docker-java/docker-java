@@ -10,7 +10,7 @@
 	<groupId>com.github.docker-java</groupId>
 	<artifactId>docker-java</artifactId>
 	<packaging>jar</packaging>
-	<version>2.0.1-SNAPSHOT</version>
+	<version>2.0.1</version>
 
 	<name>docker-java</name>
 	<url>https://github.com/docker-java/docker-java</url>
@@ -28,7 +28,7 @@
 		<connection>scm:git:git@github.com:docker-java/docker-java.git</connection>
 		<url>git@github.com:docker-java/docker-java.git</url>
 		<developerConnection>scm:git:git@github.com:docker-java/docker-java.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>docker-java-2.0.1</tag>
 	</scm>
 
 	<developers>
