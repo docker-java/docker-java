@@ -19,25 +19,17 @@ public abstract class AbstrSyncDockerCmdExec<CMD_T extends DockerCmd<RES_T>, RES
     @Override
     public RES_T exec(CMD_T command) {
         // this hack works because of ResponseStatusExceptionFilter
-        RES_T result;
-        try {
-            result = execute(command);
-
-        } catch (ProcessingException e) {
-            if (e.getCause() instanceof DockerException) {
-                throw (DockerException) e.getCause();
-            } else {
-                throw e;
-            }
-        } finally {
+        try(CMD_T cmd = command) {
             try {
-                command.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                return execute(cmd);
+            } catch (ProcessingException e) {
+                if (e.getCause() instanceof DockerException) {
+                    throw (DockerException) e.getCause();
+                } else {
+                    throw e;
+                }
             }
         }
-
-        return result;
     }
 
     protected abstract RES_T execute(CMD_T command);
