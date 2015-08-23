@@ -50,11 +50,7 @@ public abstract class AbstrAsyncDockerCmdExec<CMD_T extends AsyncDockerCmd<CMD_T
             @Override
             public void onComplete() {
                 resultCallback.onComplete();
-                try {
-                    command.close();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                command.close();
             }
         };
 

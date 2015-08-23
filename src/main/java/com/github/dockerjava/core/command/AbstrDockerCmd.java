@@ -34,7 +34,7 @@ public abstract class AbstrDockerCmd<CMD_T extends DockerCmd<RES_T>, RES_T> impl
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
     }
 
     protected String registryAuth(AuthConfig authConfig) {
