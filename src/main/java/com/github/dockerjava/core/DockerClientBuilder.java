@@ -48,7 +48,7 @@ public class DockerClientBuilder {
     public static DockerCmdExecFactory getDefaultDockerCmdExecFactory() {
         if (factoryClass == null) {
             throw new RuntimeException("Fatal: Can't find any implementation of '"
-                + DockerCmdExecFactory.class.getName() + "' in the current classpath.");
+                    + DockerCmdExecFactory.class.getName() + "' in the current classpath.");
         }
 
         try {
