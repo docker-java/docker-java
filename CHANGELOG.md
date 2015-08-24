@@ -1,6 +1,10 @@
 Change Log
 ===
 
+Latest SNAPSHOT
+---
+* [#304] (https://github.com/docker-java/docker-java/pull/304) Throw original exception when command.close() throws Exception too
+
 v2.0.1
 ---
 Release notes
