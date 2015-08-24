@@ -3,6 +3,8 @@ Change Log
 
 Latest SNAPSHOT
 ---
+* [#306] (https://github.com/docker-java/docker-java/pull/306) fix(core): fix NPE if latestItem is null in result callback
+* [#305] (https://github.com/docker-java/docker-java/pull/305) chore(core): do not expect default DockerCmdExecFactory service
 * [#304] (https://github.com/docker-java/docker-java/pull/304) Throw original exception when command.close() throws Exception too
 
 v2.0.1
