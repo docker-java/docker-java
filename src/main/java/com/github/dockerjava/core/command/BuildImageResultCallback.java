@@ -62,7 +62,9 @@ public class BuildImageResultCallback extends ResultCallbackTemplate<BuildImageR
     }
 
     private String getImageId() {
-        if (latestItem == null || !latestItem.isBuildSuccessIndicated()) {
+        if (latestItem == null) {
+            throw new DockerClientException("Could not build image");
+        } else if (!latestItem.isBuildSuccessIndicated()) {
             throw new DockerClientException("Could not build image: " + latestItem.getError());
         } else {
             return latestItem.getImageId();

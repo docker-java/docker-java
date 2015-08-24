@@ -40,7 +40,9 @@ public class PushImageResultCallback extends ResultCallbackTemplate<PushImageRes
             throw new DockerClientException("", e);
         }
 
-        if (latestItem == null || latestItem.isErrorIndicated()) {
+        if (latestItem == null) {
+            throw new DockerClientException("Could not push image");
+        } else if (latestItem.isErrorIndicated()) {
             throw new DockerClientException("Could not push image: " + latestItem.getError());
         }
     }
