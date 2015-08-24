@@ -16,12 +16,9 @@ public class DockerClientBuilder {
     static {
         serviceLoader.reload();
         Iterator<DockerCmdExecFactory> iterator = serviceLoader.iterator();
-        if (!iterator.hasNext()) {
-            throw new RuntimeException("Fatal: Can't find any implementation of '"
-                    + DockerCmdExecFactory.class.getName() + "' in the current classpath.");
+        if (iterator.hasNext()) {
+            factoryClass = iterator.next().getClass();
         }
-
-        factoryClass = iterator.next().getClass();
     }
 
     private DockerClientImpl dockerClient = null;
@@ -49,6 +46,11 @@ public class DockerClientBuilder {
     }
 
     public static DockerCmdExecFactory getDefaultDockerCmdExecFactory() {
+        if (factoryClass == null) {
+            throw new RuntimeException("Fatal: Can't find any implementation of '"
+                    + DockerCmdExecFactory.class.getName() + "' in the current classpath.");
+        }
+
         try {
             return factoryClass.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
