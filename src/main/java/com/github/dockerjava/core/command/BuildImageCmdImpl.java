@@ -197,10 +197,14 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         super.close();
 
-        tarInputStream.close();
+        try {
+            tarInputStream.close();
+        } catch (IOException e) {
+           throw new RuntimeException(e);
+        }
     }
 
     @Override
