@@ -206,8 +206,8 @@ public class Dockerfile {
         }
 
         /**
-         * Returns the matching ignore pattern for the given file or null if it should NOT be ignored.
-         * Exception rules like "!Dockerfile" will be respected.
+         * Returns the matching ignore pattern for the given file or null if it should NOT be ignored. Exception rules
+         * like "!Dockerfile" will be respected.
          */
         private String effectiveMatchingIgnorePattern(File file) {
             String relativeFilename = FilePathUtil.relativize(getDockerFolder(), file);
@@ -221,7 +221,8 @@ public class Dockerfile {
 
             int lastMatchingPatternIndex = ignores.lastIndexOf(lastMatchingPattern);
 
-            if(lastMatchingPatternIndex == ignores.size() - 1) return lastMatchingPattern;
+            if (lastMatchingPatternIndex == ignores.size() - 1)
+                return lastMatchingPattern;
 
             List<String> remainingIgnorePattern = ignores.subList(lastMatchingPatternIndex + 1, ignores.size());
 
