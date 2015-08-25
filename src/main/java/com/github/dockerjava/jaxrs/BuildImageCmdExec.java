@@ -21,7 +21,6 @@ import com.github.dockerjava.jaxrs.async.POSTCallbackNotifier;
 
 public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, BuildResponseItem> implements
         BuildImageCmd.Exec {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(BuildImageCmdExec.class);
 
     public BuildImageCmdExec(WebTarget baseResource) {
@@ -43,23 +42,41 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
         WebTarget webTarget = getBaseResource().path("/build");
         String dockerFilePath = command.getPathToDockerfile();
 
+        if (dockerFilePath != null && command.getRemote() == null && !"Dockerfile".equals(dockerFilePath)) {
+            webTarget = webTarget.queryParam("dockerfile", dockerFilePath);
+        }
         if (command.getTag() != null) {
             webTarget = webTarget.queryParam("t", command.getTag());
         }
-        if (command.hasNoCacheEnabled()) {
-            webTarget = webTarget.queryParam("nocache", "true");
-        }
-        if (!command.hasRemoveEnabled()) {
-            webTarget = webTarget.queryParam("rm", "false");
+        if (command.getRemote() != null) {
+            webTarget = webTarget.queryParam("remote", command.getRemote().toString());
         }
         if (command.isQuiet()) {
             webTarget = webTarget.queryParam("q", "true");
         }
+        if (command.hasNoCacheEnabled()) {
+            webTarget = webTarget.queryParam("nocache", "true");
+        }
         if (command.hasPullEnabled()) {
             webTarget = webTarget.queryParam("pull", "true");
         }
-        if (dockerFilePath != null && !"Dockerfile".equals(dockerFilePath)) {
-            webTarget = webTarget.queryParam("dockerfile", dockerFilePath);
+        if (!command.hasRemoveEnabled()) {
+            webTarget = webTarget.queryParam("rm", "false");
+        }
+        if (command.isForcerm()) {
+            webTarget = webTarget.queryParam("forcerm", "true");
+        }
+        if (command.getMemory() != null) {
+            webTarget = webTarget.queryParam("memory", command.getMemory());
+        }
+        if (command.getMemswap() != null) {
+            webTarget = webTarget.queryParam("memswap", command.getMemswap());
+        }
+        if (command.getCpushares() != null) {
+            webTarget = webTarget.queryParam("cpushares", command.getCpushares());
+        }
+        if (command.getCpusetcpus() != null) {
+            webTarget = webTarget.queryParam("cpusetcpus", command.getCpusetcpus());
         }
 
         webTarget.property(ClientProperties.REQUEST_ENTITY_PROCESSING, RequestEntityProcessing.CHUNKED);
@@ -67,8 +84,8 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
 
         LOGGER.trace("POST: {}", webTarget);
 
-        return new POSTCallbackNotifier<BuildResponseItem>(new JsonStreamProcessor<BuildResponseItem>(
-                BuildResponseItem.class), resultCallback, resourceWithOptionalAuthConfig(command, webTarget.request())
-                .accept(MediaType.TEXT_PLAIN), entity(command.getTarInputStream(), "application/tar"));
+        return new POSTCallbackNotifier<>(new JsonStreamProcessor<>(BuildResponseItem.class), resultCallback,
+                resourceWithOptionalAuthConfig(command, webTarget.request()).accept(MediaType.TEXT_PLAIN), entity(
+                        command.getTarInputStream(), "application/tar"));
     }
 }
