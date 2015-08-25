@@ -87,7 +87,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
         withTarInputStream(tarInputStream);
     }
 
-// getters API
+    // getters API
 
     @Override
     public String getTag() {
@@ -158,7 +158,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
         return cpusetcpus;
     }
 
-// getter lib specific
+    // getter lib specific
 
     @Override
     public AuthConfigurations getBuildAuthConfigs() {
@@ -170,7 +170,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
         return tarInputStream;
     }
 
-// setters
+    // setters
 
     @Override
     public BuildImageCmdImpl withTag(String tag) {
@@ -264,7 +264,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
         return this;
     }
 
-// lib specific
+    // lib specific
 
     @Override
     public BuildImageCmd withBaseDirectory(File baseDirectory) {

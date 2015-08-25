@@ -13,17 +13,18 @@ import java.net.URI;
  * <p>
  * TODO: http://docs.docker.com/reference/builder/#dockerignore
  *
- * @see <a href="https://docs.docker.com/reference/api/docker_remote_api_v1.20/#build-image-from-a-dockerfile">build-image-from-a-dockerfile</a>
+ * @see <a
+ *      href="https://docs.docker.com/reference/api/docker_remote_api_v1.20/#build-image-from-a-dockerfile">build-image-from-a-dockerfile</a>
  */
 public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildResponseItem> {
 
-// lib specific
+    // lib specific
 
     public InputStream getTarInputStream();
 
     public AuthConfigurations getBuildAuthConfigs();
 
-// getters
+    // getters
 
     /**
      * "t" in API
@@ -80,7 +81,7 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     @CheckForNull
     public String getCpusetcpus();
 
-// setters
+    // setters
 
     public BuildImageCmd withTag(String tag);
 
@@ -118,7 +119,7 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
 
     public BuildImageCmd withCpusetcpus(String cpusetcpus);
 
-// setters lib specific
+    // setters lib specific
 
     public BuildImageCmd withBuildAuthConfigs(AuthConfigurations authConfig);
 
