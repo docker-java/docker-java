@@ -7,6 +7,7 @@ Latest SNAPSHOT
 * [#305] (https://github.com/docker-java/docker-java/pull/305) chore(core): do not expect default DockerCmdExecFactory service
 * [#304] (https://github.com/docker-java/docker-java/pull/304) Throw original exception when command.close() throws Exception too
 * [#299] (https://github.com/docker-java/docker-java/pull/299) BuildImage sync to 1.20 API
+* [#291] (https://github.com/docker-java/docker-java/pull/291) Moved "Memory", "MemorySwap" and "CpuShares" mappings from ContainerConfig to HostConfig
 
 v2.0.1
 ---
