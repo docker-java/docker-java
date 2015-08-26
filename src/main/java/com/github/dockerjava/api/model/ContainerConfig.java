@@ -28,12 +28,6 @@ public class ContainerConfig {
     @JsonProperty("Cmd")
     private String[] cmd;
 
-    @JsonProperty("CpuShares")
-    private int cpuShares = 0;
-
-    @JsonProperty("Cpuset")
-    private String cpuset = "";
-
     @JsonProperty("Domainname")
     private String domainName = "";
 
@@ -57,12 +51,6 @@ public class ContainerConfig {
 
     @JsonProperty("MacAddress")
     private String macAddress;
-
-    @JsonProperty("Memory")
-    private long memoryLimit = 0;
-
-    @JsonProperty("MemorySwap")
-    private long memorySwap = 0;
 
     @JsonProperty("NetworkDisabled")
     private boolean networkDisabled = false;
@@ -134,22 +122,6 @@ public class ContainerConfig {
 
     public String getMacAddress() {
         return macAddress;
-    }
-
-    public long getMemoryLimit() {
-        return memoryLimit;
-    }
-
-    public long getMemorySwap() {
-        return memorySwap;
-    }
-
-    public int getCpuShares() {
-        return cpuShares;
-    }
-
-    public String getCpuset() {
-        return cpuset;
     }
 
     public boolean isAttachStdin() {
