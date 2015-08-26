@@ -37,7 +37,7 @@ public class JsonStreamProcessor<T> implements ResponseStreamProcessor<T> {
 
         try {
             JsonParser jp = JSON_FACTORY.createParser(response);
-            boolean closed = jp.isClosed();
+            Boolean closed = jp.isClosed();
             JsonToken nextToken = jp.nextToken();
             while (!closed && nextToken != null && nextToken != JsonToken.END_OBJECT) {
                 try {

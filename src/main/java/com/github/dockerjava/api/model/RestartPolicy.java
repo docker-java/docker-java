@@ -9,16 +9,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Container restart policy
- * 
+ *
  * <dl>
  * <dt>no</dt>
  * <dd>Do not restart the container if it dies. (default)</dd>
- * 
+ *
  * <dt>on-failure</dt>
  * <dd>Restart the container if it exits with a non-zero exit code. Can also accept an optional maximum restart count
  * (e.g. on-failure:5).
  * <dd>
- * 
+ *
  * <dt>always</dt>
  * <dd>Always restart the container no matter what exit code is returned.
  * <dd>
@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class RestartPolicy {
 
     @JsonProperty("MaximumRetryCount")
-    private int maximumRetryCount = 0;
+    private Integer maximumRetryCount = 0;
 
     @JsonProperty("Name")
     private String name = "";
@@ -60,7 +60,7 @@ public class RestartPolicy {
 
     /**
      * Restart the container if it exits with a non-zero exit code.
-     * 
+     *
      * @param maximumRetryCount
      *            the maximum number of restarts. Set to <code>0</code> for unlimited retries.
      */
@@ -68,7 +68,7 @@ public class RestartPolicy {
         return new RestartPolicy(maximumRetryCount, "on-failure");
     }
 
-    public int getMaximumRetryCount() {
+    public Integer getMaximumRetryCount() {
         return maximumRetryCount;
     }
 
@@ -78,7 +78,7 @@ public class RestartPolicy {
 
     /**
      * Parses a textual restart polixy specification (as used by the Docker CLI) to a {@link RestartPolicy}.
-     * 
+     *
      * @param serialized
      *            the specification, e.g. <code>on-failure:2</code>
      * @return a {@link RestartPolicy} matching the specification
@@ -109,7 +109,7 @@ public class RestartPolicy {
     /**
      * Returns a string representation of this {@link RestartPolicy}. The format is <code>name[:count]</code>, like the
      * argument in {@link #parse(String)}.
-     * 
+     *
      * @return a string representation of this {@link RestartPolicy}
      */
     @Override

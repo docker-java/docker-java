@@ -15,11 +15,11 @@ public enum AccessMode {
      */
     public static final AccessMode DEFAULT = rw;
 
-    public static final AccessMode fromBoolean(boolean accessMode) {
+    public static final AccessMode fromBoolean(Boolean accessMode) {
         return accessMode ? rw : ro;
     }
 
-    public final boolean toBoolean() {
+    public final Boolean toBoolean() {
         return this.equals(AccessMode.rw) ? true : false;
     }
 

@@ -19,7 +19,7 @@ public interface TagImageCmd extends SyncDockerCmd<Void> {
 
     public String getTag();
 
-    public boolean hasForceEnabled();
+    public Boolean hasForceEnabled();
 
     public TagImageCmd withImageId(String imageId);
 
@@ -29,7 +29,7 @@ public interface TagImageCmd extends SyncDockerCmd<Void> {
 
     public TagImageCmd withForce();
 
-    public TagImageCmd withForce(boolean force);
+    public TagImageCmd withForce(Boolean force);
 
     public static interface Exec extends DockerCmdSyncExec<TagImageCmd, Void> {
     }

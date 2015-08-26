@@ -14,17 +14,17 @@ public interface RemoveContainerCmd extends SyncDockerCmd<Void> {
 
     public String getContainerId();
 
-    public boolean hasRemoveVolumesEnabled();
+    public Boolean hasRemoveVolumesEnabled();
 
-    public boolean hasForceEnabled();
+    public Boolean hasForceEnabled();
 
     public RemoveContainerCmd withContainerId(String containerId);
 
-    public RemoveContainerCmd withRemoveVolumes(boolean removeVolumes);
+    public RemoveContainerCmd withRemoveVolumes(Boolean removeVolumes);
 
     public RemoveContainerCmd withForce();
 
-    public RemoveContainerCmd withForce(boolean force);
+    public RemoveContainerCmd withForce(Boolean force);
 
     /**
      * @throws NotFoundException

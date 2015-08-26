@@ -16,9 +16,9 @@ public interface ListImagesCmd extends SyncDockerCmd<List<Image>> {
 
     public String getFilters();
 
-    public boolean hasShowAllEnabled();
+    public Boolean hasShowAllEnabled();
 
-    public ListImagesCmd withShowAll(boolean showAll);
+    public ListImagesCmd withShowAll(Boolean showAll);
 
     public ListImagesCmd withFilters(String filters);
 

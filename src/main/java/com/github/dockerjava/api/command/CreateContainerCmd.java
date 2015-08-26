@@ -40,9 +40,9 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     public String[] getCmd();
 
-    public String getCpuset();
+    public String getCpusetCpus();
 
-    public int getCpuShares();
+    public Integer getCpuShares();
 
     /**
      * @since 1.19
@@ -92,9 +92,9 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     public String getMacAddress();
 
-    public long getMemoryLimit();
+    public Long getMemory();
 
-    public long getMemorySwap();
+    public Long getMemorySwap();
 
     public String getName();
 
@@ -116,29 +116,31 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     public Ulimit[] getUlimits();
 
-    public boolean isAttachStderr();
+    public Boolean isAttachStderr();
 
-    public boolean isAttachStdin();
+    public Boolean isAttachStdin();
 
-    public boolean isAttachStdout();
+    public Boolean isAttachStdout();
 
-    public boolean isNetworkDisabled();
+    public Boolean isNetworkDisabled();
 
     public Boolean isPrivileged();
 
     public Boolean isPublishAllPorts();
 
-    public boolean isStdInOnce();
+    public Boolean isReadonlyRootfs();
 
-    public boolean isStdinOpen();
+    public Boolean isStdInOnce();
 
-    public boolean isTty();
+    public Boolean isStdinOpen();
 
-    public CreateContainerCmd withAttachStderr(boolean attachStderr);
+    public Boolean isTty();
 
-    public CreateContainerCmd withAttachStdin(boolean attachStdin);
+    public CreateContainerCmd withAttachStderr(Boolean attachStderr);
 
-    public CreateContainerCmd withAttachStdout(boolean attachStdout);
+    public CreateContainerCmd withAttachStdin(Boolean attachStdin);
+
+    public CreateContainerCmd withAttachStdout(Boolean attachStdout);
 
     public CreateContainerCmd withBinds(Bind... binds);
 
@@ -158,9 +160,9 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     public CreateContainerCmd withCmd(String... cmd);
 
-    public CreateContainerCmd withCpuset(String cpuset);
+    public CreateContainerCmd withCpusetCpus(String cpusetCpus);
 
-    public CreateContainerCmd withCpuShares(int cpuShares);
+    public CreateContainerCmd withCpuShares(Integer cpuShares);
 
     /**
      * @since 1.19
@@ -187,7 +189,7 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
      */
     public CreateContainerCmd withDevices(Device... devices);
 
-    public CreateContainerCmd withNetworkDisabled(boolean disableNetwork);
+    public CreateContainerCmd withNetworkDisabled(Boolean disableNetwork);
 
     /**
      * Set custom DNS servers
@@ -227,9 +229,9 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     public CreateContainerCmd withLogConfig(LogConfig logConfig);
 
-    public CreateContainerCmd withMemoryLimit(long memoryLimit);
+    public CreateContainerCmd withMemory(Long memory);
 
-    public CreateContainerCmd withMemorySwap(long memorySwap);
+    public CreateContainerCmd withMemorySwap(Long memorySwap);
 
     public CreateContainerCmd withName(String name);
 
@@ -260,20 +262,20 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     public CreateContainerCmd withPortSpecs(String... portSpecs);
 
-    public CreateContainerCmd withPrivileged(boolean privileged);
+    public CreateContainerCmd withPrivileged(Boolean privileged);
 
-    public CreateContainerCmd withPublishAllPorts(boolean publishAllPorts);
+    public CreateContainerCmd withPublishAllPorts(Boolean publishAllPorts);
 
     /**
      * Set custom {@link RestartPolicy} for the container. Defaults to {@link RestartPolicy#noRestart()}
      */
     public CreateContainerCmd withRestartPolicy(RestartPolicy restartPolicy);
 
-    public CreateContainerCmd withStdInOnce(boolean stdInOnce);
+    public CreateContainerCmd withStdInOnce(Boolean stdInOnce);
 
-    public CreateContainerCmd withStdinOpen(boolean stdinOpen);
+    public CreateContainerCmd withStdinOpen(Boolean stdinOpen);
 
-    public CreateContainerCmd withTty(boolean tty);
+    public CreateContainerCmd withTty(Boolean tty);
 
     public CreateContainerCmd withUser(String user);
 
@@ -287,7 +289,7 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     public CreateContainerCmd withUlimits(Ulimit[] ulimits);
 
-    public CreateContainerCmd withReadonlyRootfs(boolean readonlyRootfs);
+    public CreateContainerCmd withReadonlyRootfs(Boolean readonlyRootfs);
 
     public CreateContainerCmd withContainerIDFile(String containerIDFile);
 

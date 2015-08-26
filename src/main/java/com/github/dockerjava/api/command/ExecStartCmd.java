@@ -10,15 +10,15 @@ public interface ExecStartCmd extends SyncDockerCmd<InputStream> {
 
     public ExecStartCmd withExecId(String execId);
 
-    public boolean hasDetachEnabled();
+    public Boolean hasDetachEnabled();
 
-    public ExecStartCmd withDetach(boolean detach);
+    public ExecStartCmd withDetach(Boolean detach);
 
     public ExecStartCmd withDetach();
 
-    public boolean hasTtyEnabled();
+    public Boolean hasTtyEnabled();
 
-    public ExecStartCmd withTty(boolean tty);
+    public ExecStartCmd withTty(Boolean tty);
 
     public ExecStartCmd withTty();
 

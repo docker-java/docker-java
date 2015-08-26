@@ -24,20 +24,20 @@ public interface AttachContainerCmd extends AsyncDockerCmd<AttachContainerCmd, F
 
     public String getContainerId();
 
-    public boolean hasLogsEnabled();
+    public Boolean hasLogsEnabled();
 
-    public boolean hasFollowStreamEnabled();
+    public Boolean hasFollowStreamEnabled();
 
-    public boolean hasTimestampsEnabled();
+    public Boolean hasTimestampsEnabled();
 
-    public boolean hasStdoutEnabled();
+    public Boolean hasStdoutEnabled();
 
-    public boolean hasStderrEnabled();
+    public Boolean hasStderrEnabled();
 
     public AttachContainerCmd withContainerId(String containerId);
 
     /**
-     * See {@link #withFollowStream(boolean)}
+     * See {@link #withFollowStream(Boolean)}
      */
     public AttachContainerCmd withFollowStream();
 
@@ -46,19 +46,19 @@ public interface AttachContainerCmd extends AsyncDockerCmd<AttachContainerCmd, F
      * {@link InputStream#read()} MAY BLOCK FOREVER as long as no data is streamed from the docker host to
      * {@link DockerClient}!
      */
-    public AttachContainerCmd withFollowStream(boolean followStream);
+    public AttachContainerCmd withFollowStream(Boolean followStream);
 
-    public AttachContainerCmd withTimestamps(boolean timestamps);
+    public AttachContainerCmd withTimestamps(Boolean timestamps);
 
     public AttachContainerCmd withStdOut();
 
-    public AttachContainerCmd withStdOut(boolean stdout);
+    public AttachContainerCmd withStdOut(Boolean stdout);
 
     public AttachContainerCmd withStdErr();
 
-    public AttachContainerCmd withStdErr(boolean stderr);
+    public AttachContainerCmd withStdErr(Boolean stderr);
 
-    public AttachContainerCmd withLogs(boolean logs);
+    public AttachContainerCmd withLogs(Boolean logs);
 
     public AttachContainerCmd withLogs();
 

@@ -6,7 +6,9 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 /**
  *
@@ -14,16 +16,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(Include.NON_NULL)
 public class ContainerConfig {
 
     @JsonProperty("AttachStderr")
-    private boolean attachStderr = false;
+    private Boolean attachStderr = false;
 
     @JsonProperty("AttachStdin")
-    private boolean attachStdin = false;
+    private Boolean attachStdin = false;
 
     @JsonProperty("AttachStdout")
-    private boolean attachStdout = false;
+    private Boolean attachStdout = false;
 
     @JsonProperty("Cmd")
     private String[] cmd;
@@ -53,22 +56,22 @@ public class ContainerConfig {
     private String macAddress;
 
     @JsonProperty("NetworkDisabled")
-    private boolean networkDisabled = false;
+    private Boolean networkDisabled = false;
 
     @JsonProperty("OnBuild")
     private String[] onBuild;
 
     @JsonProperty("OpenStdin")
-    private boolean stdinOpen = false;
+    private Boolean stdinOpen = false;
 
     @JsonProperty("PortSpecs")
     private String[] portSpecs;
 
     @JsonProperty("StdinOnce")
-    private boolean stdInOnce = false;
+    private Boolean stdInOnce = false;
 
     @JsonProperty("Tty")
-    private boolean tty = false;
+    private Boolean tty = false;
 
     @JsonProperty("User")
     private String user = "";
@@ -84,7 +87,7 @@ public class ContainerConfig {
         return exposedPorts.getExposedPorts();
     }
 
-    public boolean isNetworkDisabled() {
+    public Boolean isNetworkDisabled() {
         return networkDisabled;
     }
 
@@ -108,15 +111,15 @@ public class ContainerConfig {
         return user;
     }
 
-    public boolean isTty() {
+    public Boolean isTty() {
         return tty;
     }
 
-    public boolean isStdinOpen() {
+    public Boolean isStdinOpen() {
         return stdinOpen;
     }
 
-    public boolean isStdInOnce() {
+    public Boolean isStdInOnce() {
         return stdInOnce;
     }
 
@@ -124,15 +127,15 @@ public class ContainerConfig {
         return macAddress;
     }
 
-    public boolean isAttachStdin() {
+    public Boolean isAttachStdin() {
         return attachStdin;
     }
 
-    public boolean isAttachStdout() {
+    public Boolean isAttachStdout() {
         return attachStdout;
     }
 
-    public boolean isAttachStderr() {
+    public Boolean isAttachStderr() {
         return attachStderr;
     }
 

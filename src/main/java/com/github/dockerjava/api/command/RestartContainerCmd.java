@@ -13,11 +13,11 @@ public interface RestartContainerCmd extends SyncDockerCmd<Void> {
 
     public String getContainerId();
 
-    public int getTimeout();
+    public Integer getTimeout();
 
     public RestartContainerCmd withContainerId(String containerId);
 
-    public RestartContainerCmd withtTimeout(int timeout);
+    public RestartContainerCmd withtTimeout(Integer timeout);
 
     /**
      * @throws NotFoundException

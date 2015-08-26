@@ -2,6 +2,9 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.TopContainerCmd;
 import com.github.dockerjava.api.command.TopContainerResponse;
@@ -43,11 +46,6 @@ public class TopContainerCmdImpl extends AbstrDockerCmd<TopContainerCmd, TopCont
         checkNotNull(psArgs, "psArgs was not specified");
         this.psArgs = psArgs;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return new StringBuilder("top ").append(containerId).append(psArgs != null ? " " + psArgs : "").toString();
     }
 
     /**

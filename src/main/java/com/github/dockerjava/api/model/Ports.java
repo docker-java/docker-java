@@ -30,7 +30,7 @@ import com.github.dockerjava.api.command.InspectContainerResponse.NetworkSetting
  * <p>
  * <i>Note: This is an abstraction used for querying existing port bindings from a container configuration. It is not to
  * be confused with the {@link PortBinding} abstraction used for adding new port bindings to a container.</i>
- * 
+ *
  * @see HostConfig#getPortBindings()
  * @see NetworkSettings#getPorts()
  */
@@ -93,7 +93,7 @@ public class Ports {
     /**
      * Returns the port bindings in the format used by the Docker remote API, i.e. the {@link Binding}s grouped by
      * {@link ExposedPort}.
-     * 
+     *
      * @return the port bindings as a {@link Map} that contains one or more {@link Binding}s per {@link ExposedPort}.
      */
     public Map<ExposedPort, Binding[]> getBindings() {
@@ -128,7 +128,7 @@ public class Ports {
      * A {@link Binding} represents a socket on the Docker host that is used in a {@link PortBinding}. It is
      * characterized by an {@link #getHostIp() IP address} and a {@link #getHostPort() port number}. Both properties may
      * be <code>null</code> in order to let Docker assign them dynamically/using defaults.
-     * 
+     *
      * @see Ports#bind(ExposedPort, Binding)
      * @see ExposedPort
      */
@@ -141,7 +141,7 @@ public class Ports {
         /**
          * Creates a {@link Binding} for the given {@link #getHostIp() IP address} and {@link #getHostPort() port
          * number}.
-         * 
+         *
          * @see Ports#bind(ExposedPort, Binding)
          * @see ExposedPort
          */
@@ -153,7 +153,7 @@ public class Ports {
         /**
          * Creates a {@link Binding} for the given {@link #getHostPort() port number}, leaving the {@link #getHostIp()
          * IP address} undefined.
-         * 
+         *
          * @see Ports#bind(ExposedPort, Binding)
          * @see ExposedPort
          */
@@ -197,7 +197,7 @@ public class Ports {
          * Parses a textual host and port specification (as used by the Docker CLI) to a {@link Binding}.
          * <p>
          * Legal syntax: <code>IP|IP:port|port</code>
-         * 
+         *
          * @param serialized
          *            serialized the specification, e.g. <code>127.0.0.1:80</code>
          * @return a {@link Binding} matching the specification
@@ -230,7 +230,7 @@ public class Ports {
         /**
          * Returns a string representation of this {@link Binding} suitable for inclusion in a JSON message. The format
          * is <code>[IP:]Port</code>, like the argument in {@link #parse(String)}.
-         * 
+         *
          * @return a string representation of this {@link Binding}
          */
         @Override

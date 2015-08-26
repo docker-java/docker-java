@@ -64,7 +64,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.eventsCmd().withSince(startTime).withUntil(endTime).exec(eventCallback);
 
-        boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
+        Boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
 
         eventCallback.close();
 
@@ -83,7 +83,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 
         generateEvents();
 
-        boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
+        Boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
 
         eventCallback.close();
         assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
@@ -101,7 +101,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 
         generateEvents();
 
-        boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
+        Boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
 
         eventCallback.close();
         assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
@@ -117,7 +117,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 
         generateEvents();
 
-        boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
+        Boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
 
         eventCallback.close();
         assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());

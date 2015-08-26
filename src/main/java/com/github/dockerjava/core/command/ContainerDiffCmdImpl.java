@@ -38,11 +38,6 @@ public class ContainerDiffCmdImpl extends AbstrDockerCmd<ContainerDiffCmd, List<
         return this;
     }
 
-    @Override
-    public String toString() {
-        return new StringBuilder("diff ").append(containerId).toString();
-    }
-
     /**
      * @throws NotFoundException
      *             No such container

@@ -11,9 +11,9 @@ public interface RemoveImageCmd extends SyncDockerCmd<Void> {
 
     public String getImageId();
 
-    public boolean hasForceEnabled();
+    public Boolean hasForceEnabled();
 
-    public boolean hasNoPruneEnabled();
+    public Boolean hasNoPruneEnabled();
 
     public RemoveImageCmd withImageId(String imageId);
 
@@ -25,7 +25,7 @@ public interface RemoveImageCmd extends SyncDockerCmd<Void> {
     /**
      * force parameter to force delete of an image, even if it's tagged in multiple repositories
      */
-    public RemoveImageCmd withForce(boolean force);
+    public RemoveImageCmd withForce(Boolean force);
 
     /**
      * prevent the deletion of parent images
@@ -36,7 +36,7 @@ public interface RemoveImageCmd extends SyncDockerCmd<Void> {
      * noprune parameter to prevent the deletion of parent images
      *
      */
-    public RemoveImageCmd withNoPrune(boolean noPrune);
+    public RemoveImageCmd withNoPrune(Boolean noPrune);
 
     /**
      * @throws NotFoundException

@@ -66,7 +66,7 @@ public class StatsCmdImplTest extends AbstractDockerClientTest {
                 .exec(new StatsCallbackTest(countDownLatch));
 
         countDownLatch.await(3, TimeUnit.SECONDS);
-        boolean gotStats = statsCallback.gotStats();
+        Boolean gotStats = statsCallback.gotStats();
 
         LOG.info("Stop stats collection");
 
@@ -84,7 +84,7 @@ public class StatsCmdImplTest extends AbstractDockerClientTest {
     private class StatsCallbackTest extends ResultCallbackTemplate<StatsCallbackTest, Statistics> {
         private final CountDownLatch countDownLatch;
 
-        private boolean gotStats = false;
+        private Boolean gotStats = false;
 
         public StatsCallbackTest(CountDownLatch countDownLatch) {
             this.countDownLatch = countDownLatch;
@@ -99,7 +99,7 @@ public class StatsCmdImplTest extends AbstractDockerClientTest {
             countDownLatch.countDown();
         }
 
-        public boolean gotStats() {
+        public Boolean gotStats() {
             return gotStats;
         }
     }

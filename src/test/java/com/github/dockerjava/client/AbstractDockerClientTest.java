@@ -138,7 +138,7 @@ public abstract class AbstractDockerClientTest extends Assert {
      * @param port
      *            the port to check for availability
      */
-    public static boolean available(int port) {
+    public static Boolean available(int port) {
         if (port < 1100 || port > 60000) {
             throw new IllegalArgumentException("Invalid start port: " + port);
         }

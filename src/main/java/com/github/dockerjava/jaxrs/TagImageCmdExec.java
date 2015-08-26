@@ -17,12 +17,13 @@ public class TagImageCmdExec extends AbstrSyncDockerCmdExec<TagImageCmd, Void> i
 
     @Override
     protected Void execute(TagImageCmd command) {
-        WebTarget webResource = getBaseResource().path("/images/" + command.getImageId() + "/tag")
-                .queryParam("repo", command.getRepository()).queryParam("tag", command.getTag())
-                .queryParam("force", command.hasForceEnabled() ? "1" : "0");
+        WebTarget webTarget = getBaseResource().path("/images/" + command.getImageId() + "/tag")
+                .queryParam("repo", command.getRepository()).queryParam("tag", command.getTag());
 
-        LOGGER.trace("POST: {}", webResource);
-        webResource.request().post(null).close();
+        webTarget = booleanQueryParam(webTarget, "force", command.hasForceEnabled());
+
+        LOGGER.trace("POST: {}", webTarget);
+        webTarget.request().post(null).close();
         return null;
     }
 

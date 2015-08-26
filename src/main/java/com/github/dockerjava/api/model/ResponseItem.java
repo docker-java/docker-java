@@ -63,10 +63,10 @@ public class ResponseItem implements Serializable {
         private static final long serialVersionUID = -1954994695645715264L;
 
         @JsonProperty("current")
-        int current;
+        Integer current;
 
         @JsonProperty("total")
-        int total;
+        Integer total;
 
         @Override
         public String toString() {

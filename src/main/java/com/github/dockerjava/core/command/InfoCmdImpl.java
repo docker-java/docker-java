@@ -12,8 +12,4 @@ public class InfoCmdImpl extends AbstrDockerCmd<InfoCmd, Info> implements InfoCm
         super(exec);
     }
 
-    @Override
-    public String toString() {
-        return "info";
-    }
 }

@@ -23,20 +23,20 @@ public interface LogContainerCmd extends AsyncDockerCmd<LogContainerCmd, Frame> 
 
     public String getContainerId();
 
-    public int getTail();
+    public Integer getTail();
 
-    public boolean hasFollowStreamEnabled();
+    public Boolean hasFollowStreamEnabled();
 
-    public boolean hasTimestampsEnabled();
+    public Boolean hasTimestampsEnabled();
 
-    public boolean hasStdoutEnabled();
+    public Boolean hasStdoutEnabled();
 
-    public boolean hasStderrEnabled();
+    public Boolean hasStderrEnabled();
 
     public LogContainerCmd withContainerId(String containerId);
 
     /**
-     * See {@link #withFollowStream(boolean)}
+     * See {@link #withFollowStream(Boolean)}
      */
     public LogContainerCmd withFollowStream();
 
@@ -45,23 +45,23 @@ public interface LogContainerCmd extends AsyncDockerCmd<LogContainerCmd, Frame> 
      * {@link InputStream#read()} MAY BLOCK FOREVER as long as no data is streamed from the docker host to
      * {@link DockerClient}!
      */
-    public LogContainerCmd withFollowStream(boolean followStream);
+    public LogContainerCmd withFollowStream(Boolean followStream);
 
     public LogContainerCmd withTimestamps();
 
-    public LogContainerCmd withTimestamps(boolean timestamps);
+    public LogContainerCmd withTimestamps(Boolean timestamps);
 
     public LogContainerCmd withStdOut();
 
-    public LogContainerCmd withStdOut(boolean stdout);
+    public LogContainerCmd withStdOut(Boolean stdout);
 
     public LogContainerCmd withStdErr();
 
-    public LogContainerCmd withStdErr(boolean stderr);
+    public LogContainerCmd withStdErr(Boolean stderr);
 
     public LogContainerCmd withTailAll();
 
-    public LogContainerCmd withTail(int tail);
+    public LogContainerCmd withTail(Integer tail);
 
     public static interface Exec extends DockerCmdAsyncExec<LogContainerCmd, Frame> {
     }

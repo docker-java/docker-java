@@ -26,12 +26,16 @@ public class LogContainerCmdExec extends AbstrAsyncDockerCmdExec<LogContainerCmd
             ResultCallback<Frame> resultCallback) {
 
         WebTarget webTarget = getBaseResource().path("/containers/{id}/logs")
-                .resolveTemplate("id", command.getContainerId())
-                .queryParam("timestamps", command.hasTimestampsEnabled() ? "1" : "0")
-                .queryParam("stdout", command.hasStdoutEnabled() ? "1" : "0")
-                .queryParam("stderr", command.hasStderrEnabled() ? "1" : "0")
-                .queryParam("follow", command.hasFollowStreamEnabled() ? "1" : "0")
-                .queryParam("tail", command.getTail() < 0 ? "all" : "" + command.getTail());
+                .resolveTemplate("id", command.getContainerId());
+
+        if(command.getTail() != null) {
+            webTarget = webTarget.queryParam("tail", command.getTail() < 0 ? "all" : "" + command.getTail());
+        }
+
+        webTarget = booleanQueryParam(webTarget, "timestamps", command.hasTimestampsEnabled());
+        webTarget = booleanQueryParam(webTarget, "stdout", command.hasStdoutEnabled());
+        webTarget = booleanQueryParam(webTarget, "stderr", command.hasStderrEnabled());
+        webTarget = booleanQueryParam(webTarget, "follow", command.hasFollowStreamEnabled());
 
         LOGGER.trace("GET: {}", webTarget);
 

@@ -24,15 +24,16 @@ public class ListImagesCmdExec extends AbstrSyncDockerCmdExec<ListImagesCmd, Lis
 
     @Override
     protected List<Image> execute(ListImagesCmd command) {
-        WebTarget webResource = getBaseResource().path("/images/json").queryParam("all",
-                command.hasShowAllEnabled() ? "1" : "0");
+        WebTarget webTarget = getBaseResource().path("/images/json");
+
+        webTarget = booleanQueryParam(webTarget, "all", command.hasShowAllEnabled());
 
         if (command.getFilters() != null)
-            webResource = webResource.queryParam("filters", urlPathSegmentEscaper().escape(command.getFilters()));
+            webTarget = webTarget.queryParam("filters", urlPathSegmentEscaper().escape(command.getFilters()));
 
-        LOGGER.trace("GET: {}", webResource);
+        LOGGER.trace("GET: {}", webTarget);
 
-        List<Image> images = webResource.request().accept(MediaType.APPLICATION_JSON)
+        List<Image> images = webTarget.request().accept(MediaType.APPLICATION_JSON)
                 .get(new GenericType<List<Image>>() {
                 });
         LOGGER.trace("Response: {}", images);

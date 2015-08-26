@@ -7,6 +7,8 @@ import java.util.Map;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.ConflictException;
 import com.github.dockerjava.api.NotFoundException;
@@ -34,55 +36,41 @@ import com.github.dockerjava.api.model.VolumesFrom;
  * Creates a new container.
  *
  */
+@JsonInclude(Include.NON_NULL)
 public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, CreateContainerResponse> implements
         CreateContainerCmd {
 
     private String name;
 
     @JsonProperty("Hostname")
-    private String hostName = "";
+    private String hostName;
 
     @JsonProperty("Domainname")
-    private String domainName = "";
+    private String domainName;
 
     @JsonProperty("User")
-    private String user = "";
-
-    @JsonProperty("Memory")
-    private long memoryLimit = 0;
-
-    @JsonProperty("MemorySwap")
-    private long memorySwap = 0;
-
-    @JsonProperty("CpuShares")
-    private int cpuShares = 0;
-
-    @JsonProperty("CpuPeriod")
-    private Integer cpuPeriod;
-
-    @JsonProperty("Cpuset")
-    private String cpuset;
+    private String user;
 
     @JsonProperty("AttachStdin")
-    private boolean attachStdin = false;
+    private Boolean attachStdin;
 
     @JsonProperty("AttachStdout")
-    private boolean attachStdout = false;
+    private Boolean attachStdout;
 
     @JsonProperty("AttachStderr")
-    private boolean attachStderr = false;
+    private Boolean attachStderr;
 
     @JsonProperty("PortSpecs")
     private String[] portSpecs;
 
     @JsonProperty("Tty")
-    private boolean tty = false;
+    private Boolean tty;
 
     @JsonProperty("OpenStdin")
-    private boolean stdinOpen = false;
+    private Boolean stdinOpen;
 
     @JsonProperty("StdinOnce")
-    private boolean stdInOnce = false;
+    private Boolean stdInOnce;
 
     @JsonProperty("Env")
     private String[] env;
@@ -100,13 +88,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     private Volumes volumes = new Volumes();
 
     @JsonProperty("WorkingDir")
-    private String workingDir = "";
+    private String workingDir;
 
     @JsonProperty("MacAddress")
     private String macAddress;
 
     @JsonProperty("NetworkDisabled")
-    private boolean networkDisabled = false;
+    private Boolean networkDisabled;
 
     @JsonProperty("ExposedPorts")
     private ExposedPorts exposedPorts = new ExposedPorts();
@@ -117,14 +105,6 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @JsonProperty("Labels")
     private Map<String, String> labels;
 
-    @JsonProperty("CpusetMems")
-    private String cpusetMems;
-
-    @JsonProperty("BlkioWeight")
-    private Integer blkioWeight;
-
-    @JsonProperty("OomKillDisable")
-    private Boolean oomKillDisable;
 
     public CreateContainerCmdImpl(CreateContainerCmd.Exec exec, String image) {
         super(exec);
@@ -150,16 +130,19 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
+    @JsonIgnore
     public Integer getBlkioWeight() {
-        return blkioWeight;
+        return hostConfig.getBlkioWeight();
     }
 
     @Override
+    @JsonIgnore
     public Capability[] getCapAdd() {
         return hostConfig.getCapAdd();
     }
 
     @Override
+    @JsonIgnore
     public Capability[] getCapDrop() {
         return hostConfig.getCapDrop();
     }
@@ -169,28 +152,28 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         return cmd;
     }
 
-    public String getContainerIDFile() {
-        return hostConfig.getContainerIDFile();
-    }
-
     @Override
+    @JsonIgnore
     public Integer getCpuPeriod() {
-        return cpuPeriod;
+        return hostConfig.getCpuPeriod();
     }
 
     @Override
-    public String getCpuset() {
-        return cpuset;
+    @JsonIgnore
+    public String getCpusetCpus() {
+        return hostConfig.getCpusetCpus();
     }
 
     @Override
+    @JsonIgnore
     public String getCpusetMems() {
-        return cpusetMems;
+        return hostConfig.getCpusetMems();
     }
 
     @Override
-    public int getCpuShares() {
-        return cpuShares;
+    @JsonIgnore
+    public Integer getCpuShares() {
+        return hostConfig.getCpuShares();
     }
 
     @Override
@@ -272,18 +255,21 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         return hostConfig.getLogConfig();
     }
 
+    @Override
     public String getMacAddress() {
         return macAddress;
     }
 
     @Override
-    public long getMemoryLimit() {
-        return memoryLimit;
+    @JsonIgnore
+    public Long getMemory() {
+        return hostConfig.getMemory();
     }
 
     @Override
-    public long getMemorySwap() {
-        return memorySwap;
+    @JsonIgnore
+    public Long getMemorySwap() {
+        return hostConfig.getMemorySwap();
     }
 
     @Override
@@ -315,6 +301,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
+    @JsonIgnore
     public Ulimit[] getUlimits() {
         return hostConfig.getUlimits();
     }
@@ -342,28 +329,29 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
-    public boolean isAttachStderr() {
+    public Boolean isAttachStderr() {
         return attachStderr;
     }
 
     @Override
-    public boolean isAttachStdin() {
+    public Boolean isAttachStdin() {
         return attachStdin;
     }
 
     @Override
-    public boolean isAttachStdout() {
+    public Boolean isAttachStdout() {
         return attachStdout;
     }
 
     @Override
-    public boolean isNetworkDisabled() {
+    public Boolean isNetworkDisabled() {
         return networkDisabled;
     }
 
     @Override
+    @JsonIgnore
     public Boolean isOomKillDisable() {
-        return oomKillDisable;
+        return hostConfig.isOomKillDisable();
     }
 
     @Override
@@ -378,22 +366,24 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         return hostConfig.isPublishAllPorts();
     }
 
-    public boolean isReadonlyRootfs() {
+    @Override
+    @JsonIgnore
+    public Boolean isReadonlyRootfs() {
         return hostConfig.isReadonlyRootfs();
     }
 
     @Override
-    public boolean isStdInOnce() {
+    public Boolean isStdInOnce() {
         return stdInOnce;
     }
 
     @Override
-    public boolean isStdinOpen() {
+    public Boolean isStdinOpen() {
         return stdinOpen;
     }
 
     @Override
-    public boolean isTty() {
+    public Boolean isTty() {
         return tty;
     }
 
@@ -404,19 +394,22 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
-    public CreateContainerCmdImpl withAttachStderr(boolean attachStderr) {
+    public CreateContainerCmdImpl withAttachStderr(Boolean attachStderr) {
+        checkNotNull(attachStderr, "attachStderr was not specified");
         this.attachStderr = attachStderr;
         return this;
     }
 
     @Override
-    public CreateContainerCmdImpl withAttachStdin(boolean attachStdin) {
+    public CreateContainerCmdImpl withAttachStdin(Boolean attachStdin) {
+        checkNotNull(attachStdin, "attachStdin was not specified");
         this.attachStdin = attachStdin;
         return this;
     }
 
     @Override
-    public CreateContainerCmdImpl withAttachStdout(boolean attachStdout) {
+    public CreateContainerCmdImpl withAttachStdout(Boolean attachStdout) {
+        checkNotNull(attachStdout, "attachStdout was not specified");
         this.attachStdout = attachStdout;
         return this;
     }
@@ -431,8 +424,8 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withBlkioWeight(Integer blkioWeight) {
         checkNotNull(blkioWeight, "blkioWeight was not specified");
-        this.blkioWeight = blkioWeight;
-        return null;
+        hostConfig.setBlkioWeight(blkioWeight);
+        return this;
     }
 
     @Override
@@ -466,27 +459,28 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withCpuPeriod(Integer cpuPeriod) {
         checkNotNull(cpuPeriod, "cpuPeriod was not specified");
-        this.cpuPeriod = cpuPeriod;
+        hostConfig.setCpuPeriod(cpuPeriod);
         return this;
     }
 
     @Override
-    public CreateContainerCmdImpl withCpuset(String cpuset) {
-        checkNotNull(cpuset, "cpuset was not specified");
-        this.cpuset = cpuset;
+    public CreateContainerCmdImpl withCpusetCpus(String cpusetCpus) {
+        checkNotNull(cpusetCpus, "cpusetCpus was not specified");
+        hostConfig.setCpusetCpus(cpusetCpus);
         return this;
     }
 
     @Override
     public CreateContainerCmd withCpusetMems(String cpusetMems) {
         checkNotNull(cpusetMems, "cpusetMems was not specified");
-        this.cpusetMems = cpusetMems;
+        hostConfig.setCpusetMems(cpusetMems);
         return null;
     }
 
     @Override
-    public CreateContainerCmdImpl withCpuShares(int cpuShares) {
-        this.cpuShares = cpuShares;
+    public CreateContainerCmdImpl withCpuShares(Integer cpuShares) {
+        checkNotNull(cpuShares, "cpuShares was not specified");
+        hostConfig.setCpuShares(cpuShares);
         return this;
     }
 
@@ -596,14 +590,16 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
-    public CreateContainerCmdImpl withMemoryLimit(long memoryLimit) {
-        this.memoryLimit = memoryLimit;
+    public CreateContainerCmdImpl withMemory(Long memory) {
+        checkNotNull(memory, "memory was not specified");
+        hostConfig.setMemory(memory);
         return this;
     }
 
     @Override
-    public CreateContainerCmdImpl withMemorySwap(long memorySwap) {
-        this.memorySwap = memorySwap;
+    public CreateContainerCmdImpl withMemorySwap(Long memorySwap) {
+        checkNotNull(memorySwap, "memorySwap was not specified");
+        hostConfig.setMemorySwap(memorySwap);
         return this;
     }
 
@@ -615,7 +611,8 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
-    public CreateContainerCmdImpl withNetworkDisabled(boolean disableNetwork) {
+    public CreateContainerCmdImpl withNetworkDisabled(Boolean disableNetwork) {
+        checkNotNull(disableNetwork, "disableNetwork was not specified");
         this.networkDisabled = disableNetwork;
         return this;
     }
@@ -630,7 +627,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withOomKillDisable(Boolean oomKillDisable) {
         checkNotNull(oomKillDisable, "oomKillDisable was not specified");
-        this.oomKillDisable = oomKillDisable;
+        hostConfig.setOomKillDisable(oomKillDisable);
         return this;
     }
 
@@ -656,19 +653,22 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
-    public CreateContainerCmd withPrivileged(boolean privileged) {
+    public CreateContainerCmd withPrivileged(Boolean privileged) {
+        checkNotNull(privileged, "no privileged was specified");
         this.hostConfig.setPrivileged(privileged);
         return this;
     }
 
     @Override
-    public CreateContainerCmd withPublishAllPorts(boolean publishAllPorts) {
+    public CreateContainerCmd withPublishAllPorts(Boolean publishAllPorts) {
+        checkNotNull(publishAllPorts, "no publishAllPorts was specified");
         this.hostConfig.setPublishAllPorts(publishAllPorts);
         return this;
     }
 
     @Override
-    public CreateContainerCmd withReadonlyRootfs(boolean readonlyRootfs) {
+    public CreateContainerCmd withReadonlyRootfs(Boolean readonlyRootfs) {
+        checkNotNull(readonlyRootfs, "no readonlyRootfs was specified");
         hostConfig.setReadonlyRootfs(readonlyRootfs);
         return this;
     }
@@ -681,19 +681,22 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
-    public CreateContainerCmdImpl withStdInOnce(boolean stdInOnce) {
+    public CreateContainerCmdImpl withStdInOnce(Boolean stdInOnce) {
+        checkNotNull(stdInOnce, "no stdInOnce was specified");
         this.stdInOnce = stdInOnce;
         return this;
     }
 
     @Override
-    public CreateContainerCmdImpl withStdinOpen(boolean stdinOpen) {
+    public CreateContainerCmdImpl withStdinOpen(Boolean stdinOpen) {
+        checkNotNull(stdinOpen, "no stdinOpen was specified");
         this.stdinOpen = stdinOpen;
         return this;
     }
 
     @Override
-    public CreateContainerCmdImpl withTty(boolean tty) {
+    public CreateContainerCmdImpl withTty(Boolean tty) {
+        checkNotNull(tty, "no tty was specified");
         this.tty = tty;
         return this;
     }

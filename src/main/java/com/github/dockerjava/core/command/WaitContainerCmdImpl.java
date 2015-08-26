@@ -6,7 +6,7 @@ import com.github.dockerjava.api.command.WaitContainerCmd;
 
 /**
  * Wait a container
- * 
+ *
  * Block until container stops, then returns its exit code
  */
 public class WaitContainerCmdImpl extends AbstrDockerCmd<WaitContainerCmd, Integer> implements WaitContainerCmd {
@@ -30,8 +30,4 @@ public class WaitContainerCmdImpl extends AbstrDockerCmd<WaitContainerCmd, Integ
         return this;
     }
 
-    @Override
-    public String toString() {
-        return "wait " + containerId;
-    }
 }

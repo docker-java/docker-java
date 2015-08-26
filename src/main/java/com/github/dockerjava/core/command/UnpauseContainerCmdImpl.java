@@ -33,11 +33,6 @@ public class UnpauseContainerCmdImpl extends AbstrDockerCmd<UnpauseContainerCmd,
         return this;
     }
 
-    @Override
-    public String toString() {
-        return new StringBuilder("pause ").append(containerId).toString();
-    }
-
     /**
      * @throws NotFoundException
      *             No such container

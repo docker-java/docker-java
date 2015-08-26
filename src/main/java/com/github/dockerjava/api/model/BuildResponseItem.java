@@ -25,7 +25,7 @@ public class BuildResponseItem extends ResponseItem {
      * Returns whether the stream field indicates a successful build operation
      */
     @JsonIgnore
-    public boolean isBuildSuccessIndicated() {
+    public Boolean isBuildSuccessIndicated() {
         if (getStream() == null)
             return false;
 

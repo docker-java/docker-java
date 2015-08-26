@@ -73,8 +73,4 @@ public class PullImageCmdImpl extends AbstrAsyncDockerCmd<PullImageCmd, PullResp
         return this;
     }
 
-    @Override
-    public String toString() {
-        return new StringBuilder("pull ").append(repository).append(tag != null ? ":" + tag : "").toString();
-    }
 }

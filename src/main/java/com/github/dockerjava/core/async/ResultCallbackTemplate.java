@@ -28,7 +28,7 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
 
     private Closeable stream;
 
-    private boolean closed = false;
+    private Boolean closed = false;
 
     @Override
     public void onStart(Closeable stream) {

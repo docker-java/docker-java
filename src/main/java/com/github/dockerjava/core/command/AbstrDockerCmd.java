@@ -5,6 +5,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.IOException;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +37,11 @@ public abstract class AbstrDockerCmd<CMD_T extends DockerCmd<RES_T>, RES_T> impl
 
     @Override
     public void close() {
+    }
+
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SIMPLE_STYLE);
     }
 
     protected String registryAuth(AuthConfig authConfig) {

@@ -43,7 +43,8 @@ public class PullImageResultCallback extends ResultCallbackTemplate<PullImageRes
         if (latestItem == null) {
             throw new DockerClientException("Could not pull image");
         } else if (!latestItem.isPullSuccessIndicated()) {
-            throw new DockerClientException("Could not pull image: " + latestItem.getError());
+            String message = (latestItem.getError() != null) ? latestItem.getError() : latestItem.getStatus();
+            throw new DockerClientException("Could not pull image: " + message);
         }
     }
 }

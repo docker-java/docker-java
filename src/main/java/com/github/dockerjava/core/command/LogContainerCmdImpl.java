@@ -23,9 +23,9 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
 
     private String containerId;
 
-    private int tail = -1;
+    private Integer tail;
 
-    private boolean followStream, timestamps, stdout, stderr;
+    private Boolean followStream, timestamps, stdout, stderr;
 
     public LogContainerCmdImpl(LogContainerCmd.Exec exec, String containerId) {
         super(exec);
@@ -38,27 +38,27 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
     }
 
     @Override
-    public int getTail() {
+    public Integer getTail() {
         return tail;
     }
 
     @Override
-    public boolean hasFollowStreamEnabled() {
+    public Boolean hasFollowStreamEnabled() {
         return followStream;
     }
 
     @Override
-    public boolean hasTimestampsEnabled() {
+    public Boolean hasTimestampsEnabled() {
         return timestamps;
     }
 
     @Override
-    public boolean hasStdoutEnabled() {
+    public Boolean hasStdoutEnabled() {
         return stdout;
     }
 
     @Override
-    public boolean hasStderrEnabled() {
+    public Boolean hasStderrEnabled() {
         return stderr;
     }
 
@@ -75,7 +75,7 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
     }
 
     @Override
-    public LogContainerCmd withFollowStream(boolean followStream) {
+    public LogContainerCmd withFollowStream(Boolean followStream) {
         this.followStream = followStream;
         return this;
     }
@@ -86,7 +86,7 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
     }
 
     @Override
-    public LogContainerCmd withTimestamps(boolean timestamps) {
+    public LogContainerCmd withTimestamps(Boolean timestamps) {
         this.timestamps = timestamps;
         return this;
     }
@@ -97,7 +97,7 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
     }
 
     @Override
-    public LogContainerCmd withStdOut(boolean stdout) {
+    public LogContainerCmd withStdOut(Boolean stdout) {
         this.stdout = stdout;
         return this;
     }
@@ -108,7 +108,7 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
     }
 
     @Override
-    public LogContainerCmd withStdErr(boolean stderr) {
+    public LogContainerCmd withStdErr(Boolean stderr) {
         this.stderr = stderr;
         return this;
     }
@@ -120,15 +120,9 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
     }
 
     @Override
-    public LogContainerCmd withTail(int tail) {
+    public LogContainerCmd withTail(Integer tail) {
         this.tail = tail;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return new StringBuilder("logs ").append(followStream ? "--follow=true" : "")
-                .append(timestamps ? "--timestamps=true" : "").append(containerId).toString();
     }
 
 }

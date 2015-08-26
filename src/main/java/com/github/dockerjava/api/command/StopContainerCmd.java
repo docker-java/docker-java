@@ -16,11 +16,11 @@ public interface StopContainerCmd extends SyncDockerCmd<Void> {
 
     public String getContainerId();
 
-    public int getTimeout();
+    public Integer getTimeout();
 
     public StopContainerCmd withContainerId(String containerId);
 
-    public StopContainerCmd withTimeout(int timeout);
+    public StopContainerCmd withTimeout(Integer timeout);
 
     /**
      * @throws NotFoundException

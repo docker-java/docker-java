@@ -17,6 +17,8 @@ import com.github.dockerjava.api.DockerClientException;
  */
 public class LocalDirectorySSLConfig implements SSLConfig, Serializable {
 
+    private static final long serialVersionUID = -4736328026418377358L;
+
     private final String dockerCertPath;
 
     public LocalDirectorySSLConfig(String dockerCertPath) {
@@ -31,7 +33,7 @@ public class LocalDirectorySSLConfig implements SSLConfig, Serializable {
     @Override
     public SSLContext getSSLContext() {
 
-        boolean certificatesExist = CertificateUtils.verifyCertificatesExist(dockerCertPath);
+        Boolean certificatesExist = CertificateUtils.verifyCertificatesExist(dockerCertPath);
 
         if (certificatesExist) {
 

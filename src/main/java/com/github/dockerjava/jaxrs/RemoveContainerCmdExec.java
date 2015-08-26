@@ -19,12 +19,13 @@ public class RemoveContainerCmdExec extends AbstrSyncDockerCmdExec<RemoveContain
 
     @Override
     protected Void execute(RemoveContainerCmd command) {
-        WebTarget webResource = getBaseResource().path("/containers/" + command.getContainerId())
-                .queryParam("v", command.hasRemoveVolumesEnabled() ? "1" : "0")
-                .queryParam("force", command.hasForceEnabled() ? "1" : "0");
+        WebTarget webTarget = getBaseResource().path("/containers/" + command.getContainerId());
 
-        LOGGER.trace("DELETE: {}", webResource);
-        webResource.request().accept(MediaType.APPLICATION_JSON).delete().close();
+        webTarget = booleanQueryParam(webTarget, "v", command.hasRemoveVolumesEnabled());
+        webTarget = booleanQueryParam(webTarget, "force", command.hasForceEnabled());
+
+        LOGGER.trace("DELETE: {}", webTarget);
+        webTarget.request().accept(MediaType.APPLICATION_JSON).delete().close();
 
         return null;
     }

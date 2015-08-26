@@ -55,10 +55,4 @@ public class EventsCmdImpl extends AbstrAsyncDockerCmd<EventsCmd, Event> impleme
         return filters;
     }
 
-    @Override
-    public String toString() {
-        return new StringBuilder("events").append(since != null ? " --since=" + since : "")
-                .append(until != null ? " --until=" + until : "")
-                .append(filters != null ? " --filters=" + filters : "").toString();
-    }
 }

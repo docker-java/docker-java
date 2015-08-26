@@ -8,29 +8,29 @@ public interface ExecCreateCmd extends SyncDockerCmd<ExecCreateCmdResponse> {
 
     public ExecCreateCmd withCmd(String... cmd);
 
-    public ExecCreateCmd withAttachStdin(boolean attachStdin);
+    public ExecCreateCmd withAttachStdin(Boolean attachStdin);
 
     public ExecCreateCmd withAttachStdin();
 
-    public boolean hasAttachStdinEnabled();
+    public Boolean hasAttachStdinEnabled();
 
-    public ExecCreateCmd withAttachStdout(boolean attachStdout);
+    public ExecCreateCmd withAttachStdout(Boolean attachStdout);
 
     public ExecCreateCmd withAttachStdout();
 
-    public boolean hasAttachStdoutEnabled();
+    public Boolean hasAttachStdoutEnabled();
 
-    public ExecCreateCmd withAttachStderr(boolean attachStderr);
+    public ExecCreateCmd withAttachStderr(Boolean attachStderr);
 
     public ExecCreateCmd withAttachStderr();
 
-    public boolean hasAttachStderrEnabled();
+    public Boolean hasAttachStderrEnabled();
 
-    public ExecCreateCmd withTty(boolean tty);
+    public ExecCreateCmd withTty(Boolean tty);
 
     public ExecCreateCmd withTty();
 
-    public boolean hasTtyEnabled();
+    public Boolean hasTtyEnabled();
 
     public static interface Exec extends DockerCmdSyncExec<ExecCreateCmd, ExecCreateCmdResponse> {
     }

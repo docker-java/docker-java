@@ -41,17 +41,17 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     /**
      * "nocache" in API
      */
-    public boolean hasNoCacheEnabled();
+    public Boolean hasNoCacheEnabled();
 
     /**
      * "rm" in API
      */
-    public boolean hasRemoveEnabled();
+    public Boolean hasRemoveEnabled();
 
     /**
      * "forcerm" in API
      */
-    public boolean isForcerm();
+    public Boolean isForcerm();
 
     @CheckForNull
     public Boolean getForcerm();
@@ -59,12 +59,12 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     /**
      * "q" in API
      */
-    public boolean isQuiet();
+    public Boolean isQuiet();
 
     /**
      * "pull" in API
      */
-    public boolean hasPullEnabled();
+    public Boolean hasPullEnabled();
 
     @CheckForNull
     public String getPathToDockerfile();
@@ -93,11 +93,11 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
 
     public BuildImageCmd withNoCache();
 
-    public BuildImageCmd withNoCache(boolean noCache);
+    public BuildImageCmd withNoCache(Boolean noCache);
 
     public BuildImageCmd withRemove();
 
-    public BuildImageCmd withRemove(boolean rm);
+    public BuildImageCmd withRemove(Boolean rm);
 
     public BuildImageCmd withForcerm();
 
@@ -105,15 +105,15 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
 
     public BuildImageCmd withQuiet();
 
-    public BuildImageCmd withQuiet(boolean quiet);
+    public BuildImageCmd withQuiet(Boolean quiet);
 
     public BuildImageCmd withPull();
 
-    public BuildImageCmd withPull(boolean pull);
+    public BuildImageCmd withPull(Boolean pull);
 
-    public BuildImageCmd withMemory(long memory);
+    public BuildImageCmd withMemory(Long memory);
 
-    public BuildImageCmd withMemswap(long memswap);
+    public BuildImageCmd withMemswap(Long memswap);
 
     public BuildImageCmd withCpushares(String cpushares);
 

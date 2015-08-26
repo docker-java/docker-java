@@ -23,23 +23,23 @@ public interface CommitCmd extends SyncDockerCmd<String> {
 
     public String getAuthor();
 
-    public boolean hasPauseEnabled();
+    public Boolean hasPauseEnabled();
 
-    public CommitCmd withAttachStderr(boolean attachStderr);
+    public CommitCmd withAttachStderr(Boolean attachStderr);
 
     public CommitCmd withAttachStderr();
 
-    public CommitCmd withAttachStdin(boolean attachStdin);
+    public CommitCmd withAttachStdin(Boolean attachStdin);
 
     public CommitCmd withAttachStdin();
 
-    public CommitCmd withAttachStdout(boolean attachStdout);
+    public CommitCmd withAttachStdout(Boolean attachStdout);
 
     public CommitCmd withAttachStdout();
 
     public CommitCmd withCmd(String... cmd);
 
-    public CommitCmd withDisableNetwork(boolean disableNetwork);
+    public CommitCmd withDisableNetwork(Boolean disableNetwork);
 
     public CommitCmd withAuthor(String author);
 
@@ -49,7 +49,7 @@ public interface CommitCmd extends SyncDockerCmd<String> {
 
     public CommitCmd withRepository(String repository);
 
-    public CommitCmd withPause(boolean pause);
+    public CommitCmd withPause(Boolean pause);
 
     public String[] getEnv();
 
@@ -71,23 +71,23 @@ public interface CommitCmd extends SyncDockerCmd<String> {
 
     public CommitCmd withMemorySwap(Integer memorySwap);
 
-    public boolean isOpenStdin();
+    public Boolean isOpenStdin();
 
-    public CommitCmd withOpenStdin(boolean openStdin);
+    public CommitCmd withOpenStdin(Boolean openStdin);
 
     public String[] getPortSpecs();
 
     public CommitCmd withPortSpecs(String... portSpecs);
 
-    public boolean isStdinOnce();
+    public Boolean isStdinOnce();
 
-    public CommitCmd withStdinOnce(boolean stdinOnce);
+    public CommitCmd withStdinOnce(Boolean stdinOnce);
 
     public CommitCmd withStdinOnce();
 
-    public boolean isTty();
+    public Boolean isTty();
 
-    public CommitCmd withTty(boolean tty);
+    public CommitCmd withTty(Boolean tty);
 
     public CommitCmd withTty();
 

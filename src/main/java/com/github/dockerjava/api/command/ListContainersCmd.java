@@ -22,11 +22,11 @@ import com.github.dockerjava.api.model.Filters;
  */
 public interface ListContainersCmd extends SyncDockerCmd<List<Container>> {
 
-    public int getLimit();
+    public Integer getLimit();
 
-    public boolean hasShowSizeEnabled();
+    public Boolean hasShowSizeEnabled();
 
-    public boolean hasShowAllEnabled();
+    public Boolean hasShowAllEnabled();
 
     public String getSinceId();
 
@@ -34,11 +34,11 @@ public interface ListContainersCmd extends SyncDockerCmd<List<Container>> {
 
     public Filters getFilters();
 
-    public ListContainersCmd withShowAll(boolean showAll);
+    public ListContainersCmd withShowAll(Boolean showAll);
 
-    public ListContainersCmd withShowSize(boolean showSize);
+    public ListContainersCmd withShowSize(Boolean showSize);
 
-    public ListContainersCmd withLimit(int limit);
+    public ListContainersCmd withLimit(Integer limit);
 
     public ListContainersCmd withSince(String since);
 

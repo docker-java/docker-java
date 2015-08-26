@@ -25,7 +25,7 @@ public class AttachContainerCmdImpl extends AbstrAsyncDockerCmd<AttachContainerC
 
     private String containerId;
 
-    private boolean logs, followStream, timestamps, stdout, stderr;
+    private Boolean logs, followStream, timestamps, stdout, stderr;
 
     public AttachContainerCmdImpl(AttachContainerCmd.Exec exec, String containerId) {
         super(exec);
@@ -38,27 +38,27 @@ public class AttachContainerCmdImpl extends AbstrAsyncDockerCmd<AttachContainerC
     }
 
     @Override
-    public boolean hasLogsEnabled() {
+    public Boolean hasLogsEnabled() {
         return logs;
     }
 
     @Override
-    public boolean hasFollowStreamEnabled() {
+    public Boolean hasFollowStreamEnabled() {
         return followStream;
     }
 
     @Override
-    public boolean hasTimestampsEnabled() {
+    public Boolean hasTimestampsEnabled() {
         return timestamps;
     }
 
     @Override
-    public boolean hasStdoutEnabled() {
+    public Boolean hasStdoutEnabled() {
         return stdout;
     }
 
     @Override
-    public boolean hasStderrEnabled() {
+    public Boolean hasStderrEnabled() {
         return stderr;
     }
 
@@ -75,13 +75,13 @@ public class AttachContainerCmdImpl extends AbstrAsyncDockerCmd<AttachContainerC
     }
 
     @Override
-    public AttachContainerCmd withFollowStream(boolean followStream) {
+    public AttachContainerCmd withFollowStream(Boolean followStream) {
         this.followStream = followStream;
         return this;
     }
 
     @Override
-    public AttachContainerCmd withTimestamps(boolean timestamps) {
+    public AttachContainerCmd withTimestamps(Boolean timestamps) {
         this.timestamps = timestamps;
         return this;
     }
@@ -92,7 +92,7 @@ public class AttachContainerCmdImpl extends AbstrAsyncDockerCmd<AttachContainerC
     }
 
     @Override
-    public AttachContainerCmd withStdOut(boolean stdout) {
+    public AttachContainerCmd withStdOut(Boolean stdout) {
         this.stdout = stdout;
         return this;
     }
@@ -103,13 +103,13 @@ public class AttachContainerCmdImpl extends AbstrAsyncDockerCmd<AttachContainerC
     }
 
     @Override
-    public AttachContainerCmd withStdErr(boolean stderr) {
+    public AttachContainerCmd withStdErr(Boolean stderr) {
         this.stderr = stderr;
         return this;
     }
 
     @Override
-    public AttachContainerCmd withLogs(boolean logs) {
+    public AttachContainerCmd withLogs(Boolean logs) {
         this.logs = logs;
         return this;
     }

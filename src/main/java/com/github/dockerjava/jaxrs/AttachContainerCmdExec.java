@@ -26,12 +26,13 @@ public class AttachContainerCmdExec extends AbstrAsyncDockerCmdExec<AttachContai
             ResultCallback<Frame> resultCallback) {
 
         WebTarget webTarget = getBaseResource().path("/containers/{id}/attach")
-                .resolveTemplate("id", command.getContainerId())
-                .queryParam("logs", command.hasLogsEnabled() ? "1" : "0")
-                // .queryParam("stdin", command.hasStdinEnabled() ? "1" : "0")
-                .queryParam("stdout", command.hasStdoutEnabled() ? "1" : "0")
-                .queryParam("stderr", command.hasStderrEnabled() ? "1" : "0")
-                .queryParam("stream", command.hasFollowStreamEnabled() ? "1" : "0");
+                .resolveTemplate("id", command.getContainerId());
+
+        webTarget = booleanQueryParam(webTarget, "logs", command.hasLogsEnabled());
+        webTarget = booleanQueryParam(webTarget, "stdout", command.hasStdoutEnabled());
+        //webTarget = booleanQueryParam(webTarget, "stdin", command.hasStdinEnabled());
+        webTarget = booleanQueryParam(webTarget, "stderr", command.hasStderrEnabled());
+        webTarget = booleanQueryParam(webTarget, "stream", command.hasFollowStreamEnabled());
 
         LOGGER.trace("POST: {}", webTarget);
 

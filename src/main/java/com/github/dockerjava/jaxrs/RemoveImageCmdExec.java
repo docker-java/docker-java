@@ -17,12 +17,13 @@ public class RemoveImageCmdExec extends AbstrSyncDockerCmdExec<RemoveImageCmd, V
 
     @Override
     protected Void execute(RemoveImageCmd command) {
-        WebTarget webResource = getBaseResource().path("/images/" + command.getImageId())
-                .queryParam("force", command.hasForceEnabled() ? "1" : "0")
-                .queryParam("noprune", command.hasNoPruneEnabled() ? "1" : "0");
+        WebTarget webTarget = getBaseResource().path("/images/" + command.getImageId());
 
-        LOGGER.trace("DELETE: {}", webResource);
-        webResource.request().delete().close();
+        webTarget = booleanQueryParam(webTarget, "force", command.hasForceEnabled());
+        webTarget = booleanQueryParam(webTarget, "noprune", command.hasNoPruneEnabled());
+
+        LOGGER.trace("DELETE: {}", webTarget);
+        webTarget.request().delete().close();
 
         return null;
     }

@@ -25,11 +25,6 @@ public class InspectExecCmdImpl extends AbstrDockerCmd<InspectExecCmd, InspectEx
         return this;
     }
 
-    @Override
-    public String toString() {
-        return "inspect " + execId;
-    }
-
     /**
      * @throws NotFoundException
      *             No such exec

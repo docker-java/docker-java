@@ -17,7 +17,7 @@ public class PullResponseItem extends ResponseItem {
      * @returns true: status indicates that pull was successful, false: status doesn't indicate a successful pull
      */
     @JsonIgnore
-    public boolean isPullSuccessIndicated() {
+    public Boolean isPullSuccessIndicated() {
         if (getStatus() == null)
             return false;
 

@@ -2,12 +2,15 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.RemoveContainerCmd;
 
 /**
  * Remove a container.
- * 
+ *
  * @param removeVolumes
  *            - true or false, Remove the volumes associated to the container. Defaults to false
  * @param force
@@ -17,7 +20,7 @@ public class RemoveContainerCmdImpl extends AbstrDockerCmd<RemoveContainerCmd, V
 
     private String containerId;
 
-    private boolean removeVolumes, force;
+    private Boolean removeVolumes, force;
 
     public RemoveContainerCmdImpl(RemoveContainerCmd.Exec exec, String containerId) {
         super(exec);
@@ -30,12 +33,12 @@ public class RemoveContainerCmdImpl extends AbstrDockerCmd<RemoveContainerCmd, V
     }
 
     @Override
-    public boolean hasRemoveVolumesEnabled() {
+    public Boolean hasRemoveVolumesEnabled() {
         return removeVolumes;
     }
 
     @Override
-    public boolean hasForceEnabled() {
+    public Boolean hasForceEnabled() {
         return force;
     }
 
@@ -47,7 +50,7 @@ public class RemoveContainerCmdImpl extends AbstrDockerCmd<RemoveContainerCmd, V
     }
 
     @Override
-    public RemoveContainerCmd withRemoveVolumes(boolean removeVolumes) {
+    public RemoveContainerCmd withRemoveVolumes(Boolean removeVolumes) {
         this.removeVolumes = removeVolumes;
         return this;
     }
@@ -58,15 +61,9 @@ public class RemoveContainerCmdImpl extends AbstrDockerCmd<RemoveContainerCmd, V
     }
 
     @Override
-    public RemoveContainerCmd withForce(boolean force) {
+    public RemoveContainerCmd withForce(Boolean force) {
         this.force = force;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return new StringBuilder("rm ").append(removeVolumes ? "--volumes=true" : "")
-                .append(force ? "--force=true" : "").append(containerId).toString();
     }
 
     /**
