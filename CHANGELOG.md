@@ -1,7 +1,7 @@
 Change Log
 ===
 
-Latest SNAPSHOT
+v2.1.0
 ---
 * [#306] (https://github.com/docker-java/docker-java/pull/306) fix(core): fix NPE if latestItem is null in result callback
 * [#305] (https://github.com/docker-java/docker-java/pull/305) chore(core): do not expect default DockerCmdExecFactory service
