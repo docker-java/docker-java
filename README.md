@@ -8,7 +8,7 @@ Supports a subset of the Docker Remote API [v1.19](https://github.com/docker/doc
 
 <b>The current implementation is based on Jersey 2.x and therefore classpath incompatible with older Jersey 1.x dependent libraries!</b>
 
-Developer forum for [docker-java](https://groups.google.com/forum/?hl=de#!forum/docker-java-dev "docker-java")
+Developer forum for [docker-java](https://groups.google.com/forum/?#!forum/docker-java-dev "docker-java")
 
 ## Build with Maven
 
