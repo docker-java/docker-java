@@ -18,6 +18,8 @@ import com.github.dockerjava.api.model.Frame;
  *            - true or false, if true, print timestamps for every log line. Defaults to false.
  * @param tail
  *            - `all` or `<number>`, Output specified number of lines at the end of logs
+ * @param since
+ *            - UNIX timestamp (integer) to filter logs. Specifying a timestamp will only output log-entries since that timestamp. Default: 0 (unfiltered)
  */
 public interface LogContainerCmd extends AsyncDockerCmd<LogContainerCmd, Frame> {
 
@@ -32,6 +34,8 @@ public interface LogContainerCmd extends AsyncDockerCmd<LogContainerCmd, Frame> 
     public boolean hasStdoutEnabled();
 
     public boolean hasStderrEnabled();
+
+    public int getSince();
 
     public LogContainerCmd withContainerId(String containerId);
 
@@ -62,6 +66,8 @@ public interface LogContainerCmd extends AsyncDockerCmd<LogContainerCmd, Frame> 
     public LogContainerCmd withTailAll();
 
     public LogContainerCmd withTail(int tail);
+
+    public LogContainerCmd withSince(int since);
 
     public static interface Exec extends DockerCmdAsyncExec<LogContainerCmd, Frame> {
     }
