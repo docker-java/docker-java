@@ -62,12 +62,15 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
         LogContainerTestCallback loggingCallback = new LogContainerTestCallback();
 
+        //this essentially test the since=0 case
         dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec(loggingCallback);
 
         loggingCallback.awaitCompletion();
 
         assertTrue(loggingCallback.toString().contains(snippet));
     }
+
+
 
     @Test
     public void asyncLogNonExistingContainer() throws Exception {
@@ -133,6 +136,32 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
         loggingCallback.awaitCompletion();
 
         assertTrue(loggingCallback.toString().contains(snippet));
+    }
+
+    @Test
+    public void asyncLogContainerWithSince() throws Exception {
+        String snippet = "hello world";
+
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("/bin/echo", snippet)
+                .exec();
+
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+
+        dockerClient.startContainerCmd(container.getId()).exec();
+
+        int exitCode = dockerClient.waitContainerCmd(container.getId()).exec();
+
+        assertThat(exitCode, equalTo(0));
+
+        LogContainerTestCallback loggingCallback = new LogContainerTestCallback();
+
+        int oneMinuteIntoFuture = (int)(System.currentTimeMillis()/1000) + 60;
+        dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().withSince(oneMinuteIntoFuture).exec(loggingCallback);
+
+        loggingCallback.awaitCompletion();
+
+        assertFalse(loggingCallback.toString().contains(snippet));
     }
 
 }
