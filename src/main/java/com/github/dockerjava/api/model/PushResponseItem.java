@@ -18,7 +18,7 @@ public class PushResponseItem extends ResponseItem {
      */
     @JsonIgnore
     public boolean isErrorIndicated() {
-        if (getError() == null)
+        if (getError() == null && getErrorDetail() == null)
             return false;
 
         return true;
