@@ -11,16 +11,4 @@ public class PushResponseItem extends ResponseItem {
 
     private static final long serialVersionUID = 8256977108011295857L;
 
-    /**
-     * Returns whether the error field indicates an error
-     *
-     * @returns true: the error field indicates an error, false: the error field doesn't indicate an error
-     */
-    @JsonIgnore
-    public boolean isErrorIndicated() {
-        if (getError() == null)
-            return false;
-
-        return true;
-    }
 }
