@@ -3,6 +3,7 @@ Change Log
 
 Latest SNAPSHOT version
 ---
+* [#326] (https://github.com/docker-java/docker-java/pull/326) Add all missing fields to ResponseItem and related classes 
 * [#320] (https://github.com/docker-java/docker-java/pull/320) Support "since" field for logs command
 
 v2.1.0
