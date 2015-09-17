@@ -19,16 +19,18 @@ public class BuildResponseItem extends ResponseItem {
      */
     @JsonIgnore
     public boolean isBuildSuccessIndicated() {
-        if (getStream() == null)
+        if (isErrorIndicated() || getStream() == null) {
             return false;
+        }
 
         return getStream().contains(BUILD_SUCCESS);
     }
 
     @JsonIgnore
     public String getImageId() {
-        if (!isBuildSuccessIndicated())
+        if (!isBuildSuccessIndicated()) {
             return null;
+        }
 
         return getStream().replaceFirst(BUILD_SUCCESS, "").trim();
     }
