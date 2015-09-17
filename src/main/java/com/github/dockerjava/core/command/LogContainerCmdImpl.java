@@ -18,14 +18,19 @@ import com.github.dockerjava.api.model.Frame;
  *            - true or false, if true, print timestamps for every log line. Defaults to false.
  * @param tail
  *            - `all` or `<number>`, Output specified number of lines at the end of logs
+ * @param since
+ *            - UNIX timestamp (integer) to filter logs. Specifying a timestamp will only output log-entries since that
+ *            timestamp. Default: 0 (unfiltered)
  */
 public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Frame> implements LogContainerCmd {
 
     private String containerId;
 
-    private Integer tail;
+    private int tail;
 
     private Boolean followStream, timestamps, stdout, stderr;
+
+    private Integer since;
 
     public LogContainerCmdImpl(LogContainerCmd.Exec exec, String containerId) {
         super(exec);
@@ -60,6 +65,11 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
     @Override
     public Boolean hasStderrEnabled() {
         return stderr;
+    }
+
+    @Override
+    public Integer getSince() {
+        return since;
     }
 
     @Override
@@ -123,6 +133,19 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
     public LogContainerCmd withTail(Integer tail) {
         this.tail = tail;
         return this;
+    }
+
+    @Override
+    public LogContainerCmd withSince(Integer since) {
+        this.since = since;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder("logs ").append(followStream ? "--follow=true" : "")
+                .append(timestamps ? "--timestamps=true" : "").append(since > 0 ? "--since=" + since : "")
+                .append(containerId).toString();
     }
 
 }

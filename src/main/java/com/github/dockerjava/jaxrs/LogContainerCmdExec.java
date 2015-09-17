@@ -32,6 +32,10 @@ public class LogContainerCmdExec extends AbstrAsyncDockerCmdExec<LogContainerCmd
             webTarget = webTarget.queryParam("tail", command.getTail() < 0 ? "all" : "" + command.getTail());
         }
 
+        if(command.getSince() != null) {
+            webTarget = webTarget.queryParam("since", command.getSince());
+        }
+
         webTarget = booleanQueryParam(webTarget, "timestamps", command.hasTimestampsEnabled());
         webTarget = booleanQueryParam(webTarget, "stdout", command.hasStdoutEnabled());
         webTarget = booleanQueryParam(webTarget, "stderr", command.hasStderrEnabled());
