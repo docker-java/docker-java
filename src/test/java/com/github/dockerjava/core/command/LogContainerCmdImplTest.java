@@ -62,15 +62,13 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
         LogContainerTestCallback loggingCallback = new LogContainerTestCallback();
 
-        //this essentially test the since=0 case
+        // this essentially test the since=0 case
         dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec(loggingCallback);
 
         loggingCallback.awaitCompletion();
 
         assertTrue(loggingCallback.toString().contains(snippet));
     }
-
-
 
     @Test
     public void asyncLogNonExistingContainer() throws Exception {
@@ -148,6 +146,8 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
 
+        int timestamp = (int) (System.currentTimeMillis() / 1000);
+
         dockerClient.startContainerCmd(container.getId()).exec();
 
         int exitCode = dockerClient.waitContainerCmd(container.getId()).exec();
@@ -156,8 +156,8 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
         LogContainerTestCallback loggingCallback = new LogContainerTestCallback();
 
-        int oneMinuteIntoFuture = (int)(System.currentTimeMillis()/1000) + 60;
-        dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().withSince(oneMinuteIntoFuture).exec(loggingCallback);
+        dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().withSince(timestamp)
+                .exec(loggingCallback);
 
         loggingCallback.awaitCompletion();
 
