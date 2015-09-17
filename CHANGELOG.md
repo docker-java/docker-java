@@ -1,6 +1,10 @@
 Change Log
 ===
 
+Latest SNAPSHOT version
+---
+* [#320] (https://github.com/docker-java/docker-java/pull/320) Support "since" field for logs command
+
 v2.1.0
 ---
 * [#306] (https://github.com/docker-java/docker-java/pull/306) fix(core): fix NPE if latestItem is null in result callback
