@@ -27,14 +27,11 @@ import java.util.List;
 
 public class CertificateUtils {
 
-    public static Boolean verifyCertificatesExist(String dockerCertPath) {
+    public static boolean verifyCertificatesExist(String dockerCertPath) {
         String[] files = { "ca.pem", "cert.pem", "key.pem" };
         for (String file : files) {
             File path = new File(dockerCertPath, file);
-            Boolean exists = path.exists();
-            if (!exists) {
-                return false;
-            }
+            return path.exists();
         }
 
         return true;

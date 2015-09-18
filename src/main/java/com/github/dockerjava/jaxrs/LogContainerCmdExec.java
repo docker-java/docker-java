@@ -29,7 +29,7 @@ public class LogContainerCmdExec extends AbstrAsyncDockerCmdExec<LogContainerCmd
                 .resolveTemplate("id", command.getContainerId());
 
         if(command.getTail() != null) {
-            webTarget = webTarget.queryParam("tail", command.getTail() < 0 ? "all" : "" + command.getTail());
+            webTarget = webTarget.queryParam("tail", command.getTail());
         }
 
         if(command.getSince() != null) {

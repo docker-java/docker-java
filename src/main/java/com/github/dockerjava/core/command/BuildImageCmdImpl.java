@@ -108,7 +108,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     }
 
     @Override
-    public Boolean isForcerm() {
+    public boolean isForcerm() {
         return forcerm != null && forcerm;
     }
 

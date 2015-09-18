@@ -2,6 +2,9 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import com.github.dockerjava.api.command.LogContainerCmd;
 import com.github.dockerjava.api.model.Frame;
 
@@ -26,11 +29,9 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
 
     private String containerId;
 
-    private int tail;
-
     private Boolean followStream, timestamps, stdout, stderr;
 
-    private Integer since;
+    private Integer tail, since;
 
     public LogContainerCmdImpl(LogContainerCmd.Exec exec, String containerId) {
         super(exec);
@@ -143,9 +144,7 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
 
     @Override
     public String toString() {
-        return new StringBuilder("logs ").append(followStream ? "--follow=true" : "")
-                .append(timestamps ? "--timestamps=true" : "").append(since > 0 ? "--since=" + since : "")
-                .append(containerId).toString();
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
 }

@@ -93,34 +93,6 @@ public class HostConfig {
     @JsonProperty("VolumesFrom")
     private VolumesFrom[] volumesFrom;
 
-    public HostConfig() {
-    }
-
-    // public HostConfig(Bind[] binds, Link[] links, LxcConf[] lxcConf, LogConfig logConfig, Ports portBindings,
-    // Boolean publishAllPorts, Boolean privileged, Boolean readonlyRootfs, String[] dns, String[] dnsSearch,
-    // VolumesFrom[] volumesFrom, String containerIDFile, Capability[] capAdd, Capability[] capDrop,
-    // RestartPolicy restartPolicy, String networkMode, Device[] devices, String[] extraHosts, Ulimit[] ulimits) {
-    // this.binds = new Binds(binds);
-    // this.links = new Links(links);
-    // this.lxcConf = lxcConf;
-    // this.logConfig = logConfig;
-    // this.portBindings = portBindings;
-    // this.publishAllPorts = publishAllPorts;
-    // this.privileged = privileged;
-    // this.readonlyRootfs = readonlyRootfs;
-    // this.dns = dns;
-    // this.dnsSearch = dnsSearch;
-    // this.volumesFrom = volumesFrom;
-    // this.containerIDFile = containerIDFile;
-    // this.capAdd = capAdd;
-    // this.capDrop = capDrop;
-    // this.restartPolicy = restartPolicy;
-    // this.networkMode = networkMode;
-    // this.devices = devices;
-    // this.extraHosts = extraHosts;
-    // this.ulimits = ulimits;
-    // }
-
     @JsonIgnore
     public Bind[] getBinds() {
         return (binds == null) ? new Bind[0] : binds.getBinds();

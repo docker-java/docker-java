@@ -51,7 +51,7 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     /**
      * "forcerm" in API
      */
-    public Boolean isForcerm();
+    public boolean isForcerm();
 
     @CheckForNull
     public Boolean getForcerm();

@@ -20,22 +20,22 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public class ContainerConfig {
 
     @JsonProperty("AttachStderr")
-    private Boolean attachStderr = false;
+    private Boolean attachStderr;
 
     @JsonProperty("AttachStdin")
-    private Boolean attachStdin = false;
+    private Boolean attachStdin;
 
     @JsonProperty("AttachStdout")
-    private Boolean attachStdout = false;
+    private Boolean attachStdout;
 
     @JsonProperty("Cmd")
     private String[] cmd;
 
     @JsonProperty("Domainname")
-    private String domainName = "";
+    private String domainName;
 
     @JsonProperty("Entrypoint")
-    private String[] entrypoint = new String[] {};
+    private String[] entrypoint;
 
     @JsonProperty("Env")
     private String[] env;
@@ -44,7 +44,7 @@ public class ContainerConfig {
     private ExposedPorts exposedPorts;
 
     @JsonProperty("Hostname")
-    private String hostName = "";
+    private String hostName;
 
     @JsonProperty("Image")
     private String image;
@@ -56,31 +56,31 @@ public class ContainerConfig {
     private String macAddress;
 
     @JsonProperty("NetworkDisabled")
-    private Boolean networkDisabled = false;
+    private Boolean networkDisabled;
 
     @JsonProperty("OnBuild")
     private String[] onBuild;
 
     @JsonProperty("OpenStdin")
-    private Boolean stdinOpen = false;
+    private Boolean stdinOpen;
 
     @JsonProperty("PortSpecs")
     private String[] portSpecs;
 
     @JsonProperty("StdinOnce")
-    private Boolean stdInOnce = false;
+    private Boolean stdInOnce;
 
     @JsonProperty("Tty")
-    private Boolean tty = false;
+    private Boolean tty;
 
     @JsonProperty("User")
-    private String user = "";
+    private String user;
 
     @JsonProperty("Volumes")
     private Map<String, ?> volumes;
 
     @JsonProperty("WorkingDir")
-    private String workingDir = "";
+    private String workingDir;
 
     @JsonIgnore
     public ExposedPort[] getExposedPorts() {

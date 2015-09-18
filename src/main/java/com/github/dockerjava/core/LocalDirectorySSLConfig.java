@@ -33,7 +33,7 @@ public class LocalDirectorySSLConfig implements SSLConfig, Serializable {
     @Override
     public SSLContext getSSLContext() {
 
-        Boolean certificatesExist = CertificateUtils.verifyCertificatesExist(dockerCertPath);
+        boolean certificatesExist = CertificateUtils.verifyCertificatesExist(dockerCertPath);
 
         if (certificatesExist) {
 

@@ -24,16 +24,16 @@ import org.apache.commons.lang.StringUtils;
  *                  character class (must be non-empty)
  *       c           matches character c (c != '*', '?', '\\', '[')
  *       '\\' c      matches character c
- * 
+ *
  *   character-range:
  *       c           matches character c (c != '\\', '-', ']')
  *       '\\' c      matches character c
  *       lo '-' hi   matches character c for lo <= c <= hi
- * 
+ *
  *  Match requires pattern to match all of name, not just a substring.
  *  The only possible returned error is ErrBadPattern, when pattern
  *  is malformed.
- * 
+ *
  * On Windows, escaping is disabled. Instead, '\\' is treated as
  *  path separator.
  * </pre>
@@ -43,13 +43,13 @@ import org.apache.commons.lang.StringUtils;
  */
 public class GoLangFileMatch {
 
-    public static final Boolean IS_WINDOWS = File.separatorChar == '\\';
+    public static final boolean IS_WINDOWS = File.separatorChar == '\\';
 
-    public static Boolean match(List<String> patterns, File file) {
+    public static boolean match(List<String> patterns, File file) {
         return !match(patterns, file.getPath()).isEmpty();
     }
 
-    public static Boolean match(String pattern, File file) {
+    public static boolean match(String pattern, File file) {
         return match(pattern, file.getPath());
     }
 
@@ -66,7 +66,7 @@ public class GoLangFileMatch {
         return matches;
     }
 
-    public static Boolean match(String pattern, String name) {
+    public static boolean match(String pattern, String name) {
         Pattern: while (!pattern.isEmpty()) {
             ScanResult scanResult = scanChunk(pattern);
             pattern = scanResult.pattern;
@@ -103,12 +103,12 @@ public class GoLangFileMatch {
     }
 
     static ScanResult scanChunk(String pattern) {
-        Boolean star = false;
+        boolean star = false;
         if (!pattern.isEmpty() && pattern.charAt(0) == '*') {
             pattern = pattern.substring(1);
             star = true;
         }
-        Boolean inRange = false;
+        boolean inRange = false;
         int i;
         Scan: for (i = 0; i < pattern.length(); i++) {
             switch (pattern.charAt(i)) {
@@ -157,12 +157,12 @@ public class GoLangFileMatch {
                     throw new GoLangFileMatchException();
                 }
                 // possibly negated
-                Boolean negated = chunk.charAt(chunkOffset) == '^';
+                boolean negated = chunk.charAt(chunkOffset) == '^';
                 if (negated) {
                     chunkOffset++;
                 }
                 // parse all ranges
-                Boolean match = false;
+                boolean match = false;
                 int nrange = 0;
                 while (true) {
                     if (chunkOffset < chunkLength && chunk.charAt(chunkOffset) == ']' && nrange > 0) {
@@ -238,13 +238,13 @@ public class GoLangFileMatch {
     }
 
     private static final class ScanResult {
-        public Boolean star;
+        public boolean star;
 
         public String chunk;
 
         public String pattern;
 
-        public ScanResult(Boolean star, String chunk, String pattern) {
+        public ScanResult(boolean star, String chunk, String pattern) {
             this.star = star;
             this.chunk = chunk;
             this.pattern = pattern;
