@@ -1,7 +1,6 @@
 package com.github.dockerjava.api.async;
 
 import java.io.Closeable;
-import java.io.IOException;
 
 /**
  * Result callback
