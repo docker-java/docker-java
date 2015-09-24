@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.command;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.CheckForNull;
@@ -226,27 +227,53 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     public CreateContainerCmd withDevices(Device... devices);
 
     /**
+     * Add host devices to the container
+     */
+    public CreateContainerCmd withDevices(List<Device> devices);
+
+    /**
      * Set custom DNS servers
      */
     public CreateContainerCmd withDns(String... dns);
+
+    /**
+     * Set custom DNS servers
+     */
+    public CreateContainerCmd withDns(List<String> dns);
 
     /**
      * Set custom DNS search domains
      */
     public CreateContainerCmd withDnsSearch(String... dnsSearch);
 
+    /**
+     * Set custom DNS search domains
+     */
+    public CreateContainerCmd withDnsSearch(List<String> dnsSearch);
+
     public CreateContainerCmd withDomainName(String domainName);
 
     public CreateContainerCmd withEntrypoint(String... entrypoint);
 
+    public CreateContainerCmd withEntrypoint(List<String> entrypoint);
+
     public CreateContainerCmd withEnv(String... env);
 
+    public CreateContainerCmd withEnv(List<String> env);
+
     public CreateContainerCmd withExposedPorts(ExposedPort... exposedPorts);
+
+    public CreateContainerCmd withExposedPorts(List<ExposedPort> exposedPorts);
 
     /**
      * Add hostnames to /etc/hosts in the container
      */
     public CreateContainerCmd withExtraHosts(String... extraHosts);
+
+    /**
+     * Add hostnames to /etc/hosts in the container
+     */
+    public CreateContainerCmd withExtraHosts(List<String> extraHosts);
 
     public CreateContainerCmd withHostName(String hostName);
 
@@ -259,9 +286,16 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
      */
     public CreateContainerCmd withLinks(Link... links);
 
+    /**
+     * Add link to another container.
+     */
+    public CreateContainerCmd withLinks(List<Link> links);
+
     public CreateContainerCmd withLogConfig(LogConfig logConfig);
 
     public CreateContainerCmd withLxcConf(LxcConf... lxcConf);
+
+    public CreateContainerCmd withLxcConf(List<LxcConf> lxcConf);
 
     public CreateContainerCmd withMacAddress(String macAddress);
 
@@ -297,6 +331,12 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     public CreateContainerCmd withPortBindings(PortBinding... portBindings);
 
     /**
+     * Add one or more {@link PortBinding}s. This corresponds to the <code>--publish</code> (<code>-p</code>) option of
+     * the <code>docker run</code> CLI command.
+     */
+    public CreateContainerCmd withPortBindings(List<PortBinding> portBindings);
+
+    /**
      * Add the port bindings that are contained in the given {@link Ports} object.
      *
      * @see #withPortBindings(PortBinding...)
@@ -304,6 +344,8 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     public CreateContainerCmd withPortBindings(Ports portBindings);
 
     public CreateContainerCmd withPortSpecs(String... portSpecs);
+
+    public CreateContainerCmd withPortSpecs(List<String> portSpecs);
 
     public CreateContainerCmd withPrivileged(Boolean privileged);
 
@@ -322,13 +364,19 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     public CreateContainerCmd withTty(Boolean tty);
 
-    public CreateContainerCmd withUlimits(Ulimit[] ulimits);
+    public CreateContainerCmd withUlimits(Ulimit... ulimits);
+
+    public CreateContainerCmd withUlimits(List<Ulimit> ulimits);
 
     public CreateContainerCmd withUser(String user);
 
     public CreateContainerCmd withVolumes(Volume... volumes);
 
+    public CreateContainerCmd withVolumes(List<Volume> volumes);
+
     public CreateContainerCmd withVolumesFrom(VolumesFrom... volumesFrom);
+
+    public CreateContainerCmd withVolumesFrom(List<VolumesFrom> volumesFrom);
 
     public CreateContainerCmd withWorkingDir(String workingDir);
 
