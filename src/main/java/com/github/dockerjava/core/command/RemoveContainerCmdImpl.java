@@ -56,11 +56,6 @@ public class RemoveContainerCmdImpl extends AbstrDockerCmd<RemoveContainerCmd, V
     }
 
     @Override
-    public RemoveContainerCmd withForce() {
-        return withForce(true);
-    }
-
-    @Override
     public RemoveContainerCmd withForce(Boolean force) {
         this.force = force;
         return this;

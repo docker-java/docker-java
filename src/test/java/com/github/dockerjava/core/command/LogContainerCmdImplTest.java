@@ -63,7 +63,7 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
         LogContainerTestCallback loggingCallback = new LogContainerTestCallback();
 
         // this essentially test the since=0 case
-        dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec(loggingCallback);
+        dockerClient.logContainerCmd(container.getId()).withStdErr(true).withStdOut(true).exec(loggingCallback);
 
         loggingCallback.awaitCompletion();
 
@@ -95,7 +95,7 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
             };
         };
 
-        dockerClient.logContainerCmd("non-existing").withStdErr().withStdOut().exec(loggingCallback).awaitCompletion();
+        dockerClient.logContainerCmd("non-existing").withStdErr(true).withStdOut(true).exec(loggingCallback).awaitCompletion();
     }
 
     @Test
@@ -117,19 +117,19 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
         LogContainerTestCallback loggingCallback = new LogContainerTestCallback();
 
-        dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec(loggingCallback);
+        dockerClient.logContainerCmd(container.getId()).withStdErr(true).withStdOut(true).exec(loggingCallback);
 
         loggingCallback.close();
 
         loggingCallback = new LogContainerTestCallback();
 
-        dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec(loggingCallback);
+        dockerClient.logContainerCmd(container.getId()).withStdErr(true).withStdOut(true).exec(loggingCallback);
 
         loggingCallback.close();
 
         loggingCallback = new LogContainerTestCallback();
 
-        dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec(loggingCallback);
+        dockerClient.logContainerCmd(container.getId()).withStdErr(true).withStdOut(true).exec(loggingCallback);
 
         loggingCallback.awaitCompletion();
 
@@ -156,7 +156,7 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
         LogContainerTestCallback loggingCallback = new LogContainerTestCallback();
 
-        dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().withSince(timestamp)
+        dockerClient.logContainerCmd(container.getId()).withStdErr(true).withStdOut(true).withSince(timestamp)
                 .exec(loggingCallback);
 
         loggingCallback.awaitCompletion();

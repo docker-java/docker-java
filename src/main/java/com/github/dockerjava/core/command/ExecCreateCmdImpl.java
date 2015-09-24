@@ -48,19 +48,9 @@ public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateC
     }
 
     @Override
-    public ExecCreateCmd withAttachStdin() {
-        return withAttachStdin(true);
-    }
-
-    @Override
     public ExecCreateCmd withAttachStdout(Boolean attachStdout) {
         this.attachStdout = attachStdout;
         return this;
-    }
-
-    @Override
-    public ExecCreateCmd withAttachStdout() {
-        return withAttachStdout(true);
     }
 
     @Override
@@ -70,19 +60,9 @@ public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateC
     }
 
     @Override
-    public ExecCreateCmd withAttachStderr() {
-        return withAttachStderr(true);
-    }
-
-    @Override
     public ExecCreateCmd withTty(Boolean tty) {
         this.tty = tty;
         return this;
-    }
-
-    @Override
-    public ExecCreateCmd withTty() {
-        return withTty(true);
     }
 
     @Override

@@ -81,19 +81,9 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
     }
 
     @Override
-    public LogContainerCmd withFollowStream() {
-        return withFollowStream(true);
-    }
-
-    @Override
     public LogContainerCmd withFollowStream(Boolean followStream) {
         this.followStream = followStream;
         return this;
-    }
-
-    @Override
-    public LogContainerCmd withTimestamps() {
-        return withTimestamps(true);
     }
 
     @Override
@@ -103,19 +93,9 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
     }
 
     @Override
-    public LogContainerCmd withStdOut() {
-        return withStdOut(true);
-    }
-
-    @Override
     public LogContainerCmd withStdOut(Boolean stdout) {
         this.stdout = stdout;
         return this;
-    }
-
-    @Override
-    public LogContainerCmd withStdErr() {
-        return withStdErr(true);
     }
 
     @Override

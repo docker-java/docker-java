@@ -1,5 +1,8 @@
 package com.github.dockerjava.api.command;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 import com.github.dockerjava.api.model.Statistics;
 
 /**
@@ -7,9 +10,11 @@ import com.github.dockerjava.api.model.Statistics;
  * block when a container is stopped until the container is up again.
  */
 public interface StatsCmd extends AsyncDockerCmd<StatsCmd, Statistics> {
-    public StatsCmd withContainerId(String containerId);
 
+    @CheckForNull
     public String getContainerId();
+
+    public StatsCmd withContainerId(@Nonnull String containerId);
 
     public static interface Exec extends DockerCmdAsyncExec<StatsCmd, Statistics> {
     }

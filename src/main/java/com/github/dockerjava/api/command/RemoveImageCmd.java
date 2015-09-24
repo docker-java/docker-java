@@ -1,5 +1,8 @@
 package com.github.dockerjava.api.command;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 import com.github.dockerjava.api.NotFoundException;
 
 /**
@@ -9,28 +12,21 @@ import com.github.dockerjava.api.NotFoundException;
  */
 public interface RemoveImageCmd extends SyncDockerCmd<Void> {
 
+    @CheckForNull
     public String getImageId();
 
+    @CheckForNull
     public Boolean hasForceEnabled();
 
+    @CheckForNull
     public Boolean hasNoPruneEnabled();
 
-    public RemoveImageCmd withImageId(String imageId);
-
-    /**
-     * force delete of an image, even if it's tagged in multiple repositories
-     */
-    public RemoveImageCmd withForce();
+    public RemoveImageCmd withImageId(@Nonnull String imageId);
 
     /**
      * force parameter to force delete of an image, even if it's tagged in multiple repositories
      */
     public RemoveImageCmd withForce(Boolean force);
-
-    /**
-     * prevent the deletion of parent images
-     */
-    public RemoveImageCmd withNoPrune();
 
     /**
      * noprune parameter to prevent the deletion of parent images

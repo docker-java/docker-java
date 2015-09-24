@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 
-import javax.annotation.CheckForNull;
-
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.BuildResponseItem;
@@ -22,10 +20,8 @@ import com.github.dockerjava.core.dockerfile.Dockerfile;
  */
 public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildResponseItem> implements BuildImageCmd {
 
-    @CheckForNull
     private InputStream tarInputStream;
 
-    @CheckForNull
     private String tag;
 
     private Boolean noCache;
@@ -36,31 +32,22 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     private Boolean pull;
 
-    @CheckForNull
     private AuthConfigurations buildAuthConfigs;
 
-    @CheckForNull
     private File dockerFile;
 
-    @CheckForNull
     private File baseDirectory;
 
-    @CheckForNull
     private String cpusetcpus;
 
-    @CheckForNull
     private Long memory;
 
-    @CheckForNull
     private String cpushares;
 
-    @CheckForNull
     private Boolean forcerm;
 
-    @CheckForNull
     private Long memswap;
 
-    @CheckForNull
     private URI remote;
 
     public BuildImageCmdImpl(BuildImageCmd.Exec exec) {
@@ -108,12 +95,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     }
 
     @Override
-    public boolean isForcerm() {
-        return forcerm != null && forcerm;
-    }
-
-    @Override
-    public Boolean getForcerm() {
+    public Boolean isForcerm() {
         return forcerm;
     }
 
@@ -184,19 +166,9 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     }
 
     @Override
-    public BuildImageCmdImpl withNoCache() {
-        return withNoCache(true);
-    }
-
-    @Override
     public BuildImageCmdImpl withNoCache(Boolean noCache) {
         this.noCache = noCache;
         return this;
-    }
-
-    @Override
-    public BuildImageCmdImpl withRemove() {
-        return withRemove(true);
     }
 
     @Override
@@ -206,30 +178,15 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     }
 
     @Override
-    public BuildImageCmd withForcerm() {
-        return withForcerm(true);
-    }
-
-    @Override
     public BuildImageCmd withForcerm(Boolean forcerm) {
         this.forcerm = forcerm;
         return this;
     }
 
     @Override
-    public BuildImageCmdImpl withQuiet() {
-        return withQuiet(true);
-    }
-
-    @Override
     public BuildImageCmdImpl withQuiet(Boolean quiet) {
         this.quiet = quiet;
         return this;
-    }
-
-    @Override
-    public BuildImageCmdImpl withPull() {
-        return withPull(true);
     }
 
     @Override

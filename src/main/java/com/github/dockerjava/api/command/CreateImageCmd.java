@@ -2,20 +2,25 @@ package com.github.dockerjava.api.command;
 
 import java.io.InputStream;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 public interface CreateImageCmd extends SyncDockerCmd<CreateImageResponse> {
 
+    @CheckForNull
     public String getRepository();
 
-    // TODO remove method
+    @CheckForNull
     public String getTag();
 
+    @CheckForNull
     public InputStream getImageStream();
 
     /**
      * @param repository
      *            the repository to import to
      */
-    public CreateImageCmd withRepository(String repository);
+    public CreateImageCmd withRepository(@Nonnull String repository);
 
     /**
      * @param imageStream

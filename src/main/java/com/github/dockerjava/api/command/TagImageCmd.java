@@ -1,5 +1,8 @@
 package com.github.dockerjava.api.command;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 /**
  * Tag an image into a repository
  *
@@ -13,15 +16,19 @@ package com.github.dockerjava.api.command;
  */
 public interface TagImageCmd extends SyncDockerCmd<Void> {
 
+    @CheckForNull
     public String getImageId();
 
+    @CheckForNull
     public String getRepository();
 
+    @CheckForNull
     public String getTag();
 
+    @CheckForNull
     public Boolean hasForceEnabled();
 
-    public TagImageCmd withImageId(String imageId);
+    public TagImageCmd withImageId(@Nonnull String imageId);
 
     public TagImageCmd withRepository(String repository);
 

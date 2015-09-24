@@ -1,5 +1,8 @@
 package com.github.dockerjava.api.command;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 import com.github.dockerjava.api.UnauthorizedException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthResponse;
@@ -11,9 +14,10 @@ import com.github.dockerjava.api.model.AuthResponse;
  */
 public interface AuthCmd extends SyncDockerCmd<AuthResponse> {
 
+    @CheckForNull
     public AuthConfig getAuthConfig();
 
-    public AuthCmd withAuthConfig(AuthConfig authConfig);
+    public AuthCmd withAuthConfig(@Nonnull AuthConfig authConfig);
 
     /**
      * @return The status. Based on it's value you may mean you need to authorise your account, e.g.:

@@ -87,7 +87,7 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
         File dockerFile = new File(Thread.currentThread().getContextClassLoader()
                 .getResource("nonstandard/subdirectory/Dockerfile-nonstandard").getFile());
 
-        dockerClient.buildImageCmd().withBaseDirectory(baseDir).withDockerfile(dockerFile).withNoCache()
+        dockerClient.buildImageCmd().withBaseDirectory(baseDir).withDockerfile(dockerFile).withNoCache(true)
                 .exec(new BuildImageResultCallback()).awaitImageId();
     }
 
@@ -149,7 +149,7 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
     }
 
     private String execBuild(BuildImageCmd buildImageCmd) throws Exception {
-        String imageId = buildImageCmd.withNoCache().exec(new BuildImageResultCallback()).awaitImageId();
+        String imageId = buildImageCmd.withNoCache(true).exec(new BuildImageResultCallback()).awaitImageId();
 
         // Create container based on image
         CreateContainerResponse container = dockerClient.createContainerCmd(imageId).exec();
@@ -168,7 +168,7 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testDockerfileIgnored")
                 .getFile());
 
-        dockerClient.buildImageCmd(baseDir).withNoCache().exec(new BuildImageResultCallback()).awaitImageId();
+        dockerClient.buildImageCmd(baseDir).withNoCache(true).exec(new BuildImageResultCallback()).awaitImageId();
     }
 
     @Test
@@ -176,7 +176,7 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testDockerfileNotIgnored")
                 .getFile());
 
-        dockerClient.buildImageCmd(baseDir).withNoCache().exec(new BuildImageResultCallback()).awaitImageId();
+        dockerClient.buildImageCmd(baseDir).withNoCache(true).exec(new BuildImageResultCallback()).awaitImageId();
     }
 
     @Test(expectedExceptions = { DockerClientException.class })
@@ -184,7 +184,7 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
         File baseDir = new File(Thread.currentThread().getContextClassLoader()
                 .getResource("testInvalidDockerignorePattern").getFile());
 
-        dockerClient.buildImageCmd(baseDir).withNoCache().exec(new BuildImageResultCallback()).awaitImageId();
+        dockerClient.buildImageCmd(baseDir).withNoCache(true).exec(new BuildImageResultCallback()).awaitImageId();
     }
 
     @Test(groups = "ignoreInCircleCi")
@@ -199,7 +199,7 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
     public void testNetCatDockerfileBuilder() throws Exception {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("netcat").getFile());
 
-        String imageId = dockerClient.buildImageCmd(baseDir).withNoCache().exec(new BuildImageResultCallback())
+        String imageId = dockerClient.buildImageCmd(baseDir).withNoCache(true).exec(new BuildImageResultCallback())
                 .awaitImageId();
 
         assertNotNull(imageId, "Not successful in build");
@@ -274,7 +274,7 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
         dockerClient.pushImageCmd("localhost:5000/testuser/busybox").withTag("latest").withAuthConfig(authConfig)
                 .exec(new PushImageResultCallback()).awaitSuccess();
 
-        dockerClient.removeImageCmd("localhost:5000/testuser/busybox").withForce().exec();
+        dockerClient.removeImageCmd("localhost:5000/testuser/busybox").withForce(true).exec();
 
         baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testBuildFromPrivateRegistry")
                 .getFile());
@@ -282,7 +282,7 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
         AuthConfigurations authConfigurations = new AuthConfigurations();
         authConfigurations.addConfig(authConfig);
 
-        imageId = dockerClient.buildImageCmd(baseDir).withNoCache().withBuildAuthConfigs(authConfigurations)
+        imageId = dockerClient.buildImageCmd(baseDir).withNoCache(true).withBuildAuthConfigs(authConfigurations)
                 .exec(new BuildImageResultCallback()).awaitImageId();
 
         inspectImageResponse = dockerClient.inspectImageCmd(imageId).exec();

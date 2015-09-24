@@ -2,6 +2,9 @@ package com.github.dockerjava.api.command;
 
 import java.io.InputStream;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Frame;
 
@@ -22,24 +25,25 @@ import com.github.dockerjava.api.model.Frame;
  */
 public interface AttachContainerCmd extends AsyncDockerCmd<AttachContainerCmd, Frame> {
 
+    @CheckForNull
     public String getContainerId();
 
+    @CheckForNull
     public Boolean hasLogsEnabled();
 
+    @CheckForNull
     public Boolean hasFollowStreamEnabled();
 
+    @CheckForNull
     public Boolean hasTimestampsEnabled();
 
+    @CheckForNull
     public Boolean hasStdoutEnabled();
 
+    @CheckForNull
     public Boolean hasStderrEnabled();
 
-    public AttachContainerCmd withContainerId(String containerId);
-
-    /**
-     * See {@link #withFollowStream(Boolean)}
-     */
-    public AttachContainerCmd withFollowStream();
+    public AttachContainerCmd withContainerId(@Nonnull String containerId);
 
     /**
      * Following the stream means the resulting {@link InputStream} returned by {@link #exec()} reads infinitely. So a
@@ -50,17 +54,11 @@ public interface AttachContainerCmd extends AsyncDockerCmd<AttachContainerCmd, F
 
     public AttachContainerCmd withTimestamps(Boolean timestamps);
 
-    public AttachContainerCmd withStdOut();
-
     public AttachContainerCmd withStdOut(Boolean stdout);
-
-    public AttachContainerCmd withStdErr();
 
     public AttachContainerCmd withStdErr(Boolean stderr);
 
     public AttachContainerCmd withLogs(Boolean logs);
-
-    public AttachContainerCmd withLogs();
 
     public static interface Exec extends DockerCmdAsyncExec<AttachContainerCmd, Frame> {
     }

@@ -76,7 +76,7 @@ public class ListImagesCmdImplTest extends AbstractDockerClientTest {
         assertTrue(imageInFilteredList);
     }
 
-    private Boolean isImageInFilteredList(List<Image> images, String expectedImageId) {
+    private boolean isImageInFilteredList(List<Image> images, String expectedImageId) {
         for (Image image : images) {
             if (expectedImageId.equals(image.getId())) {
                 return true;

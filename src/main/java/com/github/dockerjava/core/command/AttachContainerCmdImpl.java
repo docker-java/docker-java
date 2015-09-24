@@ -70,11 +70,6 @@ public class AttachContainerCmdImpl extends AbstrAsyncDockerCmd<AttachContainerC
     }
 
     @Override
-    public AttachContainerCmd withFollowStream() {
-        return withFollowStream(true);
-    }
-
-    @Override
     public AttachContainerCmd withFollowStream(Boolean followStream) {
         this.followStream = followStream;
         return this;
@@ -87,19 +82,9 @@ public class AttachContainerCmdImpl extends AbstrAsyncDockerCmd<AttachContainerC
     }
 
     @Override
-    public AttachContainerCmd withStdOut() {
-        return withStdOut(true);
-    }
-
-    @Override
     public AttachContainerCmd withStdOut(Boolean stdout) {
         this.stdout = stdout;
         return this;
-    }
-
-    @Override
-    public AttachContainerCmd withStdErr() {
-        return withStdErr(true);
     }
 
     @Override
@@ -112,10 +97,5 @@ public class AttachContainerCmdImpl extends AbstrAsyncDockerCmd<AttachContainerC
     public AttachContainerCmd withLogs(Boolean logs) {
         this.logs = logs;
         return this;
-    }
-
-    @Override
-    public AttachContainerCmd withLogs() {
-        return withLogs(true);
     }
 }

@@ -2,6 +2,8 @@ package com.github.dockerjava.api.command;
 
 import java.util.List;
 
+import javax.annotation.CheckForNull;
+
 import com.github.dockerjava.api.model.Image;
 
 /**
@@ -14,8 +16,10 @@ import com.github.dockerjava.api.model.Image;
  */
 public interface ListImagesCmd extends SyncDockerCmd<List<Image>> {
 
+    @CheckForNull
     public String getFilters();
 
+    @CheckForNull
     public Boolean hasShowAllEnabled();
 
     public ListImagesCmd withShowAll(Boolean showAll);

@@ -34,7 +34,7 @@ public class DockerfileFixture implements AutoCloseable {
 
         LOGGER.info("building {}", directory);
 
-        dockerClient.buildImageCmd(new File("src/test/resources", directory)).withNoCache()
+        dockerClient.buildImageCmd(new File("src/test/resources", directory)).withNoCache(true)
                 .exec(new BuildImageResultCallback()).awaitImageId();
 
         Image lastCreatedImage = dockerClient.listImagesCmd().exec().get(0);
@@ -56,7 +56,7 @@ public class DockerfileFixture implements AutoCloseable {
         if (containerId != null) {
             LOGGER.info("removing container {}", containerId);
             try {
-                dockerClient.removeContainerCmd(containerId).withForce() // stop too
+                dockerClient.removeContainerCmd(containerId).withForce(true) // stop too
                         .exec();
             } catch (NotFoundException | InternalServerErrorException ignored) {
                 LOGGER.info("ignoring {}", ignored.getMessage());
@@ -67,7 +67,7 @@ public class DockerfileFixture implements AutoCloseable {
         if (repository != null) {
             LOGGER.info("removing repository {}", repository);
             try {
-                dockerClient.removeImageCmd(repository).withForce().exec();
+                dockerClient.removeImageCmd(repository).withForce(true).exec();
             } catch (NotFoundException | InternalServerErrorException e) {
                 LOGGER.info("ignoring {}", e.getMessage());
             }

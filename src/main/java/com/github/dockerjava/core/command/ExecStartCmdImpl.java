@@ -52,16 +52,6 @@ public class ExecStartCmdImpl extends AbstrDockerCmd<ExecStartCmd, InputStream> 
         return this;
     }
 
-    @Override
-    public ExecStartCmd withDetach() {
-        return withDetach(true);
-    }
-
-    @Override
-    public ExecStartCmd withTty() {
-        return withTty(true);
-    }
-
     /**
      * @throws com.github.dockerjava.api.NotFoundException
      *             No such exec instance

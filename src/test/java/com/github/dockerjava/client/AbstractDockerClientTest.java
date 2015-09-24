@@ -86,7 +86,7 @@ public abstract class AbstractDockerClientTest extends Assert {
             LOG.info("Cleaning up temporary container {}", container);
 
             try {
-                dockerClient.removeContainerCmd(container).withForce().exec();
+                dockerClient.removeContainerCmd(container).withForce(true).exec();
             } catch (DockerException ignore) {
                 // ignore.printStackTrace();
             }
@@ -95,7 +95,7 @@ public abstract class AbstractDockerClientTest extends Assert {
         for (String image : dockerCmdExecFactory.getImageNames()) {
             LOG.info("Cleaning up temporary image with {}", image);
             try {
-                dockerClient.removeImageCmd(image).withForce().exec();
+                dockerClient.removeImageCmd(image).withForce(true).exec();
             } catch (DockerException ignore) {
                 // ignore.printStackTrace();
             }
@@ -186,7 +186,7 @@ public abstract class AbstractDockerClientTest extends Assert {
     }
 
     protected String containerLog(String containerId) throws Exception {
-        return dockerClient.logContainerCmd(containerId).withStdOut().exec(new LogContainerTestCallback())
+        return dockerClient.logContainerCmd(containerId).withStdOut(true).exec(new LogContainerTestCallback())
                 .awaitCompletion().toString();
     }
 
@@ -207,7 +207,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 
     protected String buildImage(File baseDir) throws Exception {
 
-        return dockerClient.buildImageCmd(baseDir).withNoCache().exec(new BuildImageResultCallback()).awaitImageId();
+        return dockerClient.buildImageCmd(baseDir).withNoCache(true).exec(new BuildImageResultCallback()).awaitImageId();
     }
 
 }

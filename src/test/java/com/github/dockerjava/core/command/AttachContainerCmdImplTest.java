@@ -65,7 +65,7 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
             };
         };
 
-        dockerClient.attachContainerCmd(container.getId()).withStdErr().withStdOut().withFollowStream().withLogs()
+        dockerClient.attachContainerCmd(container.getId()).withStdErr(true).withStdOut(true).withFollowStream(true).withLogs(true)
                 .exec(callback).awaitCompletion(30, TimeUnit.SECONDS).close();
 
         assertThat(callback.toString(), containsString(snippet));
@@ -94,7 +94,7 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
             };
         };
 
-        dockerClient.attachContainerCmd(container.getId()).withStdErr().withStdOut().withFollowStream().exec(callback)
+        dockerClient.attachContainerCmd(container.getId()).withStdErr(true).withStdOut(true).withFollowStream(true).exec(callback)
                 .awaitCompletion(15, TimeUnit.SECONDS).close();
 
         System.out.println("log: " + callback.toString());

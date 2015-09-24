@@ -119,30 +119,15 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
     }
 
     @Override
-    public CommitCmdImpl withAttachStderr() {
-        return withAttachStderr(true);
-    }
-
-    @Override
     public CommitCmdImpl withAttachStdin(Boolean attachStdin) {
         this.attachStdin = attachStdin;
         return this;
     }
 
     @Override
-    public CommitCmdImpl withAttachStdin() {
-        return withAttachStdin(true);
-    }
-
-    @Override
     public CommitCmdImpl withAttachStdout(Boolean attachStdout) {
         this.attachStdout = attachStdout;
         return this;
-    }
-
-    @Override
-    public CommitCmdImpl withAttachStdout() {
-        return withAttachStdout(true);
     }
 
     @Override
@@ -288,11 +273,6 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
     }
 
     @Override
-    public CommitCmdImpl withStdinOnce() {
-        return withStdinOnce(true);
-    }
-
-    @Override
     public Boolean isTty() {
         return tty;
     }
@@ -301,11 +281,6 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
     public CommitCmdImpl withTty(Boolean tty) {
         this.tty = tty;
         return this;
-    }
-
-    @Override
-    public CommitCmdImpl withTty() {
-        return withTty(true);
     }
 
     @Override

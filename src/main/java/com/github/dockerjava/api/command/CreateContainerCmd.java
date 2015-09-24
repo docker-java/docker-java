@@ -2,6 +2,8 @@ package com.github.dockerjava.api.command;
 
 import java.util.Map;
 
+import javax.annotation.CheckForNull;
+
 import com.github.dockerjava.api.ConflictException;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.model.Bind;
@@ -20,120 +22,157 @@ import com.github.dockerjava.api.model.VolumesFrom;
 
 public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerResponse> {
 
-    public static interface Exec extends DockerCmdSyncExec<CreateContainerCmd, CreateContainerResponse> {
-    }
-
-    /**
-     * @throws NotFoundException
-     *             No such container
-     * @throws ConflictException
-     *             Named container already exists
-     */
-    @Override
-    public CreateContainerResponse exec() throws NotFoundException, ConflictException;
-
+    @CheckForNull
     public Bind[] getBinds();
 
-    public Capability[] getCapAdd();
-
-    public Capability[] getCapDrop();
-
-    public String[] getCmd();
-
-    public String getCpusetCpus();
-
-    public Integer getCpuShares();
-
     /**
      * @since 1.19
      */
-    public Integer getCpuPeriod();
-
-    /**
-     * @since 1.19
-     */
-    public String getCpusetMems();
-
-    /**
-     * @since 1.19
-     */
+    @CheckForNull
     public Integer getBlkioWeight();
 
+    @CheckForNull
+    public Capability[] getCapAdd();
+
+    @CheckForNull
+    public Capability[] getCapDrop();
+
+    @CheckForNull
+    public String[] getCmd();
+
     /**
      * @since 1.19
      */
-    public Boolean isOomKillDisable();
+    @CheckForNull
+    public Integer getCpuPeriod();
 
+    @CheckForNull
+    public String getCpusetCpus();
+
+    /**
+     * @since 1.19
+     */
+    @CheckForNull
+    public String getCpusetMems();
+
+    @CheckForNull
+    public Integer getCpuShares();
+
+    @CheckForNull
     public Device[] getDevices();
 
+    @CheckForNull
     public String[] getDns();
 
+    @CheckForNull
     public String[] getDnsSearch();
 
-    public String[] getEntrypoint();
-
-    public String[] getEnv();
-
-    public ExposedPort[] getExposedPorts();
-
-    public String[] getExtraHosts();
-
-    public String getHostName();
-
+    @CheckForNull
     public String getDomainName();
 
+    @CheckForNull
+    public String[] getEntrypoint();
+
+    @CheckForNull
+    public String[] getEnv();
+
+    @CheckForNull
+    public ExposedPort[] getExposedPorts();
+
+    @CheckForNull
+    public String[] getExtraHosts();
+
+    @CheckForNull
+    public String getHostName();
+
+    @CheckForNull
     public String getImage();
 
+    @CheckForNull
+    Map<String, String> getLabels();
+
+    @CheckForNull
     public Link[] getLinks();
 
-    public LxcConf[] getLxcConf();
-
+    @CheckForNull
     public LogConfig getLogConfig();
 
+    @CheckForNull
+    public LxcConf[] getLxcConf();
+
+    @CheckForNull
     public String getMacAddress();
 
+    @CheckForNull
     public Long getMemory();
 
+    @CheckForNull
     public Long getMemorySwap();
 
+    @CheckForNull
     public String getName();
 
+    @CheckForNull
     public String getNetworkMode();
 
+    @CheckForNull
     public Ports getPortBindings();
 
+    @CheckForNull
     public String[] getPortSpecs();
 
+    @CheckForNull
     public RestartPolicy getRestartPolicy();
 
-    public String getUser();
-
-    public Volume[] getVolumes();
-
-    public VolumesFrom[] getVolumesFrom();
-
-    public String getWorkingDir();
-
+    @CheckForNull
     public Ulimit[] getUlimits();
 
+    @CheckForNull
+    public String getUser();
+
+    @CheckForNull
+    public Volume[] getVolumes();
+
+    @CheckForNull
+    public VolumesFrom[] getVolumesFrom();
+
+    @CheckForNull
+    public String getWorkingDir();
+
+    @CheckForNull
     public Boolean isAttachStderr();
 
+    @CheckForNull
     public Boolean isAttachStdin();
 
+    @CheckForNull
     public Boolean isAttachStdout();
 
+    @CheckForNull
     public Boolean isNetworkDisabled();
 
+    /**
+     * @since 1.19
+     */
+    @CheckForNull
+    public Boolean isOomKillDisable();
+
+    @CheckForNull
     public Boolean isPrivileged();
 
+    @CheckForNull
     public Boolean isPublishAllPorts();
 
+    @CheckForNull
     public Boolean isReadonlyRootfs();
 
+    @CheckForNull
     public Boolean isStdInOnce();
 
+    @CheckForNull
     public Boolean isStdinOpen();
 
+    @CheckForNull
     public Boolean isTty();
 
     public CreateContainerCmd withAttachStderr(Boolean attachStderr);
@@ -143,6 +182,11 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     public CreateContainerCmd withAttachStdout(Boolean attachStdout);
 
     public CreateContainerCmd withBinds(Bind... binds);
+
+    /**
+     * @since 1.19
+     */
+    public CreateContainerCmd withBlkioWeight(Integer blkioWeight);
 
     /**
      * Add linux <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">kernel capability</a> to the
@@ -160,36 +204,26 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     public CreateContainerCmd withCmd(String... cmd);
 
-    public CreateContainerCmd withCpusetCpus(String cpusetCpus);
-
-    public CreateContainerCmd withCpuShares(Integer cpuShares);
+    public CreateContainerCmd withContainerIDFile(String containerIDFile);
 
     /**
      * @since 1.19
      */
     public CreateContainerCmd withCpuPeriod(Integer cpuPeriod);
 
+    public CreateContainerCmd withCpusetCpus(String cpusetCpus);
+
     /**
      * @since 1.19
      */
     public CreateContainerCmd withCpusetMems(String cpusetMems);
 
-    /**
-     * @since 1.19
-     */
-    public CreateContainerCmd withBlkioWeight(Integer blkioWeight);
-
-    /**
-     * @since 1.19
-     */
-    public CreateContainerCmd withOomKillDisable(Boolean oomKillDisable);
+    public CreateContainerCmd withCpuShares(Integer cpuShares);
 
     /**
      * Add host devices to the container
      */
     public CreateContainerCmd withDevices(Device... devices);
-
-    public CreateContainerCmd withNetworkDisabled(Boolean disableNetwork);
 
     /**
      * Set custom DNS servers
@@ -200,6 +234,8 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
      * Set custom DNS search domains
      */
     public CreateContainerCmd withDnsSearch(String... dnsSearch);
+
+    public CreateContainerCmd withDomainName(String domainName);
 
     public CreateContainerCmd withEntrypoint(String... entrypoint);
 
@@ -214,8 +250,6 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     public CreateContainerCmd withHostName(String hostName);
 
-    public CreateContainerCmd withDomainName(String domainName);
-
     public CreateContainerCmd withImage(String image);
 
     public CreateContainerCmd withLabels(Map<String, String> labels);
@@ -225,15 +259,19 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
      */
     public CreateContainerCmd withLinks(Link... links);
 
+    public CreateContainerCmd withLogConfig(LogConfig logConfig);
+
     public CreateContainerCmd withLxcConf(LxcConf... lxcConf);
 
-    public CreateContainerCmd withLogConfig(LogConfig logConfig);
+    public CreateContainerCmd withMacAddress(String macAddress);
 
     public CreateContainerCmd withMemory(Long memory);
 
     public CreateContainerCmd withMemorySwap(Long memorySwap);
 
     public CreateContainerCmd withName(String name);
+
+    public CreateContainerCmd withNetworkDisabled(Boolean disableNetwork);
 
     /**
      * Set the Network mode for the container
@@ -246,6 +284,11 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
      * </ul>
      */
     public CreateContainerCmd withNetworkMode(String networkMode);
+
+    /**
+     * @since 1.19
+     */
+    public CreateContainerCmd withOomKillDisable(Boolean oomKillDisable);
 
     /**
      * Add one or more {@link PortBinding}s. This corresponds to the <code>--publish</code> (<code>-p</code>) option of
@@ -266,6 +309,8 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     public CreateContainerCmd withPublishAllPorts(Boolean publishAllPorts);
 
+    public CreateContainerCmd withReadonlyRootfs(Boolean readonlyRootfs);
+
     /**
      * Set custom {@link RestartPolicy} for the container. Defaults to {@link RestartPolicy#noRestart()}
      */
@@ -277,6 +322,8 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     public CreateContainerCmd withTty(Boolean tty);
 
+    public CreateContainerCmd withUlimits(Ulimit[] ulimits);
+
     public CreateContainerCmd withUser(String user);
 
     public CreateContainerCmd withVolumes(Volume... volumes);
@@ -285,17 +332,15 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     public CreateContainerCmd withWorkingDir(String workingDir);
 
-    public CreateContainerCmd withMacAddress(String macAddress);
-
-    public CreateContainerCmd withUlimits(Ulimit[] ulimits);
-
-    public CreateContainerCmd withReadonlyRootfs(Boolean readonlyRootfs);
-
-    public CreateContainerCmd withContainerIDFile(String containerIDFile);
-
     /**
-     * @return
+     * @throws NotFoundException
+     *             No such container
+     * @throws ConflictException
+     *             Named container already exists
      */
-    Map<String, String> getLabels();
+    @Override
+    public CreateContainerResponse exec() throws NotFoundException, ConflictException;
 
+    public static interface Exec extends DockerCmdSyncExec<CreateContainerCmd, CreateContainerResponse> {
+    }
 }

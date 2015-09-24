@@ -1,5 +1,8 @@
 package com.github.dockerjava.api.command;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.model.ExposedPorts;
 import com.github.dockerjava.api.model.Volumes;
@@ -11,95 +14,103 @@ import com.github.dockerjava.api.model.Volumes;
  */
 public interface CommitCmd extends SyncDockerCmd<String> {
 
-    public String getContainerId();
-
-    public CommitCmd withContainerId(String containerId);
-
-    public String getRepository();
-
-    public String getTag();
-
-    public String getMessage();
-
+    @CheckForNull
     public String getAuthor();
 
+    @CheckForNull
+    public String getContainerId();
+
+    @CheckForNull
+    public String[] getEnv();
+
+    @CheckForNull
+    public ExposedPorts getExposedPorts();
+
+    @CheckForNull
+    public String getHostname();
+
+    @CheckForNull
+    public Integer getMemory();
+
+    @CheckForNull
+    public Integer getMemorySwap();
+
+    @CheckForNull
+    public String getMessage();
+
+    @CheckForNull
+    public String[] getPortSpecs();
+
+    @CheckForNull
+    public String getRepository();
+
+    @CheckForNull
+    public String getTag();
+
+    @CheckForNull
+    public String getUser();
+
+    @CheckForNull
+    public Volumes getVolumes();
+
+    @CheckForNull
+    public String getWorkingDir();
+
+    @CheckForNull
     public Boolean hasPauseEnabled();
+
+    @CheckForNull
+    public Boolean isOpenStdin();
+
+    @CheckForNull
+    public Boolean isStdinOnce();
+
+    @CheckForNull
+    public Boolean isTty();
 
     public CommitCmd withAttachStderr(Boolean attachStderr);
 
-    public CommitCmd withAttachStderr();
-
     public CommitCmd withAttachStdin(Boolean attachStdin);
-
-    public CommitCmd withAttachStdin();
 
     public CommitCmd withAttachStdout(Boolean attachStdout);
 
-    public CommitCmd withAttachStdout();
+    public CommitCmd withAuthor(String author);
 
     public CommitCmd withCmd(String... cmd);
 
+    public CommitCmd withContainerId(@Nonnull String containerId);
+
     public CommitCmd withDisableNetwork(Boolean disableNetwork);
-
-    public CommitCmd withAuthor(String author);
-
-    public CommitCmd withMessage(String message);
-
-    public CommitCmd withTag(String tag);
-
-    public CommitCmd withRepository(String repository);
-
-    public CommitCmd withPause(Boolean pause);
-
-    public String[] getEnv();
 
     public CommitCmd withEnv(String... env);
 
-    public ExposedPorts getExposedPorts();
-
     public CommitCmd withExposedPorts(ExposedPorts exposedPorts);
-
-    public String getHostname();
 
     public CommitCmd withHostname(String hostname);
 
-    public Integer getMemory();
-
     public CommitCmd withMemory(Integer memory);
-
-    public Integer getMemorySwap();
 
     public CommitCmd withMemorySwap(Integer memorySwap);
 
-    public Boolean isOpenStdin();
+    public CommitCmd withMessage(String message);
 
     public CommitCmd withOpenStdin(Boolean openStdin);
 
-    public String[] getPortSpecs();
+    public CommitCmd withPause(Boolean pause);
 
     public CommitCmd withPortSpecs(String... portSpecs);
 
-    public Boolean isStdinOnce();
+    public CommitCmd withRepository(String repository);
 
     public CommitCmd withStdinOnce(Boolean stdinOnce);
 
-    public CommitCmd withStdinOnce();
-
-    public Boolean isTty();
+    public CommitCmd withTag(String tag);
 
     public CommitCmd withTty(Boolean tty);
 
-    public CommitCmd withTty();
-
-    public String getUser();
-
     public CommitCmd withUser(String user);
 
-    public Volumes getVolumes();
-
     public CommitCmd withVolumes(Volumes volumes);
-
-    public String getWorkingDir();
 
     public CommitCmd withWorkingDir(String workingDir);
 
@@ -112,5 +123,4 @@ public interface CommitCmd extends SyncDockerCmd<String> {
 
     public static interface Exec extends DockerCmdSyncExec<CommitCmd, String> {
     }
-
 }
