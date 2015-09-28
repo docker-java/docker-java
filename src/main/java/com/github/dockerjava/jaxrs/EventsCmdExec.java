@@ -1,7 +1,5 @@
 package com.github.dockerjava.jaxrs;
 
-import static com.google.common.net.UrlEscapers.*;
-
 import javax.ws.rs.client.WebTarget;
 
 import org.slf4j.Logger;
@@ -13,6 +11,8 @@ import com.github.dockerjava.api.model.Event;
 import com.github.dockerjava.core.async.JsonStreamProcessor;
 import com.github.dockerjava.jaxrs.async.AbstractCallbackNotifier;
 import com.github.dockerjava.jaxrs.async.GETCallbackNotifier;
+
+import static com.google.common.net.UrlEscapers.urlPathSegmentEscaper;
 
 public class EventsCmdExec extends AbstrAsyncDockerCmdExec<EventsCmd, Event> implements EventsCmd.Exec {
 

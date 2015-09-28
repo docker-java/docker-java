@@ -18,6 +18,8 @@ import com.github.dockerjava.api.model.Ulimit;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
 
+import javax.annotation.CheckForNull;
+
 public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerResponse> {
 
     public static interface Exec extends DockerCmdSyncExec<CreateContainerCmd, CreateContainerResponse> {
@@ -134,6 +136,7 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     public boolean isTty();
 
+    @CheckForNull
     public String getPidMode();
 
     public CreateContainerCmd withAttachStderr(boolean attachStderr);

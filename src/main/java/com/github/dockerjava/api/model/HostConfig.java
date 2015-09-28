@@ -282,7 +282,9 @@ public class HostConfig {
         this.ulimits = ulimits;
     }
 
-    public void setPidMode(String pidMode) { this.pidMode = pidMode; }
+    public void setPidMode(String pidMode) {
+        this.pidMode = pidMode;
+    }
 
     @Override
     public String toString() {
