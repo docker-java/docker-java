@@ -134,6 +134,8 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     public boolean isTty();
 
+    public String getPidMode();
+
     public CreateContainerCmd withAttachStderr(boolean attachStderr);
 
     public CreateContainerCmd withAttachStdin(boolean attachStdin);
@@ -291,6 +293,7 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     public CreateContainerCmd withContainerIDFile(String containerIDFile);
 
+    public CreateContainerCmd withPidMode(String pidMode);
     /**
      * @return
      */

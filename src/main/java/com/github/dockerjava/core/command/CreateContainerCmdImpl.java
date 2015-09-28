@@ -1,11 +1,5 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.util.Map;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.ConflictException;
@@ -28,6 +22,11 @@ import com.github.dockerjava.api.model.Ulimit;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.Volumes;
 import com.github.dockerjava.api.model.VolumesFrom;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
+import java.util.Map;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  *
@@ -398,6 +397,12 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
+    @JsonIgnore
+    public String getPidMode() {
+        return hostConfig.getPidMode();
+    }
+
+    @Override
     public String toString() {
         return new ToStringBuilder(this).append("create container ").append(name != null ? "name=" + name + " " : "")
                 .append(this).toString();
@@ -730,6 +735,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public CreateContainerCmdImpl withWorkingDir(String workingDir) {
         checkNotNull(workingDir, "workingDir was not specified");
         this.workingDir = workingDir;
+        return this;
+    }
+
+    @Override
+    public CreateContainerCmd withPidMode(String pidMode) {
+        checkNotNull(pidMode, "pidMode was not specified");
+        this.hostConfig.setPidMode(pidMode);
         return this;
     }
 
