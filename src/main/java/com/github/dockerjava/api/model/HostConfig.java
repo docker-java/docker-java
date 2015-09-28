@@ -84,7 +84,8 @@ public class HostConfig {
     public HostConfig(Bind[] binds, Link[] links, LxcConf[] lxcConf, LogConfig logConfig, Ports portBindings,
             boolean publishAllPorts, boolean privileged, boolean readonlyRootfs, String[] dns, String[] dnsSearch,
             VolumesFrom[] volumesFrom, String containerIDFile, Capability[] capAdd, Capability[] capDrop,
-            RestartPolicy restartPolicy, String networkMode, Device[] devices, String[] extraHosts, Ulimit[] ulimits, String pidMode) {
+            RestartPolicy restartPolicy, String networkMode, Device[] devices, String[] extraHosts, Ulimit[] ulimits,
+            String pidMode) {
         this.binds = new Binds(binds);
         this.links = new Links(links);
         this.lxcConf = lxcConf;
@@ -198,7 +199,9 @@ public class HostConfig {
         return cpuShares;
     }
 
-    public String getPidMode() { return pidMode; }
+    public String getPidMode() {
+        return pidMode;
+    }
 
     @JsonIgnore
     public void setBinds(Bind... binds) {
