@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.annotation.CheckForNull;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class HostConfig {
 
@@ -199,6 +201,7 @@ public class HostConfig {
         return cpuShares;
     }
 
+    @CheckForNull
     public String getPidMode() {
         return pidMode;
     }
