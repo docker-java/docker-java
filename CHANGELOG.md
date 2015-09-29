@@ -1,5 +1,8 @@
 Change Log
 ===
+Latest SNAPSHOT version
+---
+* [#333] (https://github.com/docker-java/docker-java/pull/333) Adding support for withPidMode 
 
 v2.1.1
 ---
