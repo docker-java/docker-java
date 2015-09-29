@@ -296,7 +296,7 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     public CreateContainerCmd withContainerIDFile(String containerIDFile);
 
-    public CreateContainerCmd withPidMode(String pidMode);
+    public CreateContainerCmd withPid(String pidMode);
     /**
      * @return
      */
