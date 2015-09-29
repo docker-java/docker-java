@@ -457,7 +457,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
     public void createContainerWithPidMode() throws DockerException {
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("true")
-                .withPid("host").exec();
+                .withPidMode("host").exec();
 
         LOG.info("Created container {}", container.toString());
 

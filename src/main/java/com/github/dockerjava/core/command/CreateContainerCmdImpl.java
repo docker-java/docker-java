@@ -739,7 +739,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
-    public CreateContainerCmd withPid(String pidMode) {
+    public CreateContainerCmd withPidMode(String pidMode) {
         checkNotNull(pidMode, "pidMode was not specified");
         this.hostConfig.setPidMode(pidMode);
         return this;

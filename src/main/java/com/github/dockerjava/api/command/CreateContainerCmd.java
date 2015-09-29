@@ -296,7 +296,12 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     public CreateContainerCmd withContainerIDFile(String containerIDFile);
 
-    public CreateContainerCmd withPid(String pidMode);
+    /**
+     * Set the PID (Process) Namespace mode for the container, 'host': use the host's PID namespace
+     * inside the container
+     */
+    public CreateContainerCmd withPidMode(String pidMode);
+
     /**
      * @return
      */
