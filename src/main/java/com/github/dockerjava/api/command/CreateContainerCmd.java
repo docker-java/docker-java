@@ -18,6 +18,8 @@ import com.github.dockerjava.api.model.Ulimit;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
 
+import javax.annotation.CheckForNull;
+
 public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerResponse> {
 
     public static interface Exec extends DockerCmdSyncExec<CreateContainerCmd, CreateContainerResponse> {
@@ -133,6 +135,9 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     public boolean isStdinOpen();
 
     public boolean isTty();
+
+    @CheckForNull
+    public String getPidMode();
 
     public CreateContainerCmd withAttachStderr(boolean attachStderr);
 
@@ -290,6 +295,12 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     public CreateContainerCmd withReadonlyRootfs(boolean readonlyRootfs);
 
     public CreateContainerCmd withContainerIDFile(String containerIDFile);
+
+    /**
+     * Set the PID (Process) Namespace mode for the container, 'host': use the host's PID namespace
+     * inside the container
+     */
+    public CreateContainerCmd withPidMode(String pidMode);
 
     /**
      * @return

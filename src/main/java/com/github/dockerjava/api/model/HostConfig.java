@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.annotation.CheckForNull;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class HostConfig {
 
@@ -75,13 +77,17 @@ public class HostConfig {
     @JsonProperty("CpuShares")
     private int cpuShares = 0;
 
+    @JsonProperty("PidMode")
+    private String pidMode;
+
     public HostConfig() {
     }
 
     public HostConfig(Bind[] binds, Link[] links, LxcConf[] lxcConf, LogConfig logConfig, Ports portBindings,
             boolean publishAllPorts, boolean privileged, boolean readonlyRootfs, String[] dns, String[] dnsSearch,
             VolumesFrom[] volumesFrom, String containerIDFile, Capability[] capAdd, Capability[] capDrop,
-            RestartPolicy restartPolicy, String networkMode, Device[] devices, String[] extraHosts, Ulimit[] ulimits) {
+            RestartPolicy restartPolicy, String networkMode, Device[] devices, String[] extraHosts, Ulimit[] ulimits,
+            String pidMode) {
         this.binds = new Binds(binds);
         this.links = new Links(links);
         this.lxcConf = lxcConf;
@@ -101,6 +107,7 @@ public class HostConfig {
         this.devices = devices;
         this.extraHosts = extraHosts;
         this.ulimits = ulimits;
+        this.pidMode = pidMode;
     }
 
     @JsonIgnore
@@ -194,6 +201,11 @@ public class HostConfig {
         return cpuShares;
     }
 
+    @CheckForNull
+    public String getPidMode() {
+        return pidMode;
+    }
+
     @JsonIgnore
     public void setBinds(Bind... binds) {
         this.binds = new Binds(binds);
@@ -271,6 +283,10 @@ public class HostConfig {
 
     public void setUlimits(Ulimit[] ulimits) {
         this.ulimits = ulimits;
+    }
+
+    public void setPidMode(String pidMode) {
+        this.pidMode = pidMode;
     }
 
     @Override
