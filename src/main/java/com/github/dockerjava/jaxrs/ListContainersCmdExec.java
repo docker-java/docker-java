@@ -1,26 +1,25 @@
 package com.github.dockerjava.jaxrs;
 
-import static com.google.common.net.UrlEscapers.urlPathSegmentEscaper;
-
-import java.util.List;
+import com.github.dockerjava.api.command.ListContainersCmd;
+import com.github.dockerjava.api.model.Container;
+import com.github.dockerjava.core.DockerClientConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.github.dockerjava.api.command.ListContainersCmd;
-import com.github.dockerjava.api.model.Container;
+import static com.google.common.net.UrlEscapers.urlPathSegmentEscaper;
 
 public class ListContainersCmdExec extends AbstrSyncDockerCmdExec<ListContainersCmd, List<Container>> implements
         ListContainersCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ListContainersCmdExec.class);
 
-    public ListContainersCmdExec(WebTarget baseResource) {
-        super(baseResource);
+    public ListContainersCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
+        super(baseResource, dockerClientConfig);
     }
 
     @Override

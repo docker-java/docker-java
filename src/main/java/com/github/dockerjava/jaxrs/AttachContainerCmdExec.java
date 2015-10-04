@@ -1,24 +1,24 @@
 package com.github.dockerjava.jaxrs;
 
-import javax.ws.rs.client.WebTarget;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.async.FrameStreamProcessor;
 import com.github.dockerjava.jaxrs.async.AbstractCallbackNotifier;
 import com.github.dockerjava.jaxrs.async.POSTCallbackNotifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ws.rs.client.WebTarget;
 
 public class AttachContainerCmdExec extends AbstrAsyncDockerCmdExec<AttachContainerCmd, Frame> implements
         AttachContainerCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AttachContainerCmdExec.class);
 
-    public AttachContainerCmdExec(WebTarget baseResource) {
-        super(baseResource);
+    public AttachContainerCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
+        super(baseResource, dockerClientConfig);
     }
 
     @Override

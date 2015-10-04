@@ -1,6 +1,7 @@
 package com.github.dockerjava.core;
 
-import static org.testng.Assert.assertEquals;
+import com.github.dockerjava.api.model.AuthConfig;
+import org.testng.annotations.Test;
 
 import java.net.URI;
 import java.util.Collections;
@@ -8,9 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.testng.annotations.Test;
-
-import com.github.dockerjava.api.model.AuthConfig;
+import static org.testng.Assert.assertEquals;
 
 public class DockerClientConfigTest {
 
@@ -25,7 +24,7 @@ public class DockerClientConfigTest {
     public void string() throws Exception {
         assertEquals(
                 EXAMPLE_CONFIG.toString(),
-                "DockerClientConfig{uri=http://foo, version='bar', username='baz', password='qux', email='blam', serverAddress='wham', dockerCfgPath='flam', sslConfig='LocalDirectorySSLConfig{dockerCertPath=flim}'}");
+                "DockerClientConfig{uri=http://foo, version='{UNKNOWN_VERSION}', username='baz', password='qux', email='blam', serverAddress='wham', dockerCfgPath='flam', sslConfig='LocalDirectorySSLConfig{dockerCertPath=flim}'}");
     }
 
     @Test
@@ -159,7 +158,7 @@ public class DockerClientConfigTest {
         assertEquals(config.getUri(), URI.create("https://localhost:2376"));
         assertEquals(config.getUsername(), "someUserName");
         assertEquals(config.getServerAddress(), AuthConfig.DEFAULT_SERVER_ADDRESS);
-        assertEquals(config.getVersion(), null);
+        assertEquals(config.getVersion(), RemoteApiVersion.unknown());
         assertEquals(config.getDockerCfgPath(), "someHomeDir/.dockercfg");
         assertEquals(((LocalDirectorySSLConfig) config.getSslConfig()).getDockerCertPath(), "someHomeDir/.docker");
     }

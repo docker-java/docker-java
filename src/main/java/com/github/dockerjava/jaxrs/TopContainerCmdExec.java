@@ -1,22 +1,22 @@
 package com.github.dockerjava.jaxrs;
 
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-
+import com.github.dockerjava.api.command.TopContainerCmd;
+import com.github.dockerjava.api.command.TopContainerResponse;
+import com.github.dockerjava.core.DockerClientConfig;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.api.command.TopContainerCmd;
-import com.github.dockerjava.api.command.TopContainerResponse;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 
 public class TopContainerCmdExec extends AbstrSyncDockerCmdExec<TopContainerCmd, TopContainerResponse> implements
         TopContainerCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TopContainerCmdExec.class);
 
-    public TopContainerCmdExec(WebTarget baseResource) {
-        super(baseResource);
+    public TopContainerCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
+        super(baseResource, dockerClientConfig);
     }
 
     @Override

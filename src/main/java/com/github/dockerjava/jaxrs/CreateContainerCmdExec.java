@@ -1,23 +1,23 @@
 package com.github.dockerjava.jaxrs;
 
-import static javax.ws.rs.client.Entity.entity;
+import com.github.dockerjava.api.command.CreateContainerCmd;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.core.DockerClientConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.github.dockerjava.api.command.CreateContainerCmd;
-import com.github.dockerjava.api.command.CreateContainerResponse;
+import static javax.ws.rs.client.Entity.entity;
 
 public class CreateContainerCmdExec extends AbstrSyncDockerCmdExec<CreateContainerCmd, CreateContainerResponse>
         implements CreateContainerCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CreateContainerCmdExec.class);
 
-    public CreateContainerCmdExec(WebTarget baseResource) {
-        super(baseResource);
+    public CreateContainerCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
+        super(baseResource, dockerClientConfig);
     }
 
     @Override

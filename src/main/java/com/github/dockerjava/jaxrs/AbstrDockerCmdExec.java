@@ -1,28 +1,35 @@
 package com.github.dockerjava.jaxrs;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.io.IOException;
-
-import javax.ws.rs.client.WebTarget;
-
-import org.apache.commons.codec.binary.Base64;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
+import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.RemoteApiVersion;
+import org.apache.commons.codec.binary.Base64;
+
+import javax.ws.rs.client.WebTarget;
+import java.io.IOException;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class AbstrDockerCmdExec {
 
-    private WebTarget baseResource;
+    private final DockerClientConfig dockerClientConfig;
+    private final WebTarget baseResource;
 
-    public AbstrDockerCmdExec(WebTarget baseResource) {
+    public AbstrDockerCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
         checkNotNull(baseResource, "baseResource was not specified");
+        checkNotNull(dockerClientConfig, "dockerClientConfig was not specified");
         this.baseResource = baseResource;
+        this.dockerClientConfig = dockerClientConfig;
     }
 
     protected WebTarget getBaseResource() {
         return baseResource;
+    }
+
+    protected AuthConfigurations getBuildAuthConfigs() {
+        return dockerClientConfig.getAuthConfigurations();
     }
 
     protected String registryAuth(AuthConfig authConfig) {
@@ -35,7 +42,13 @@ public abstract class AbstrDockerCmdExec {
 
     protected String registryConfigs(AuthConfigurations authConfigs) {
         try {
-            String json = new ObjectMapper().writeValueAsString(authConfigs.getConfigs());
+            final String json;
+            if (dockerClientConfig.getVersion().isGreaterOrEqual(RemoteApiVersion.VERSION_1_19)) {
+                json = new ObjectMapper().writeValueAsString(authConfigs.getConfigs());
+            } else {
+                json = new ObjectMapper().writeValueAsString(authConfigs);
+            }
+
             return Base64.encodeBase64String(json.getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
