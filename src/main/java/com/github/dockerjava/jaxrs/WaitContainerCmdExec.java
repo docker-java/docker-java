@@ -1,21 +1,21 @@
 package com.github.dockerjava.jaxrs;
 
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.github.dockerjava.api.command.WaitContainerCmd;
+import com.github.dockerjava.core.DockerClientConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.github.dockerjava.api.command.WaitContainerCmd;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 
 public class WaitContainerCmdExec extends AbstrSyncDockerCmdExec<WaitContainerCmd, Integer> implements
         WaitContainerCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WaitContainerCmdExec.class);
 
-    public WaitContainerCmdExec(WebTarget baseResource) {
-        super(baseResource);
+    public WaitContainerCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
+        super(baseResource, dockerClientConfig);
     }
 
     @Override

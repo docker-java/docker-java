@@ -1,12 +1,5 @@
 package com.github.dockerjava.core;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.io.Closeable;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
@@ -46,7 +39,6 @@ import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.model.AuthConfig;
-import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.Identifier;
 import com.github.dockerjava.core.command.AttachContainerCmdImpl;
 import com.github.dockerjava.core.command.AuthCmdImpl;
@@ -84,6 +76,13 @@ import com.github.dockerjava.core.command.TopContainerCmdImpl;
 import com.github.dockerjava.core.command.UnpauseContainerCmdImpl;
 import com.github.dockerjava.core.command.VersionCmdImpl;
 import com.github.dockerjava.core.command.WaitContainerCmdImpl;
+
+import java.io.Closeable;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * @author Konstantin Pelykh (kpelykh@gmail.com)
@@ -332,28 +331,17 @@ public class DockerClientImpl implements Closeable, DockerClient {
 
     @Override
     public BuildImageCmd buildImageCmd() {
-        return augmentBuildImageCmd(new BuildImageCmdImpl(getDockerCmdExecFactory().createBuildImageCmdExec()));
+        return new BuildImageCmdImpl(getDockerCmdExecFactory().createBuildImageCmdExec());
     }
 
     @Override
     public BuildImageCmd buildImageCmd(File dockerFileOrFolder) {
-        return augmentBuildImageCmd(new BuildImageCmdImpl(getDockerCmdExecFactory().createBuildImageCmdExec(),
-                dockerFileOrFolder));
+        return new BuildImageCmdImpl(getDockerCmdExecFactory().createBuildImageCmdExec(), dockerFileOrFolder);
     }
 
     @Override
     public BuildImageCmd buildImageCmd(InputStream tarInputStream) {
-        return augmentBuildImageCmd(new BuildImageCmdImpl(getDockerCmdExecFactory().createBuildImageCmdExec(),
-                tarInputStream));
-    }
-
-    private BuildImageCmd augmentBuildImageCmd(BuildImageCmd buildImageCmd) {
-        final AuthConfigurations authConfigurations = dockerClientConfig.getAuthConfigurations();
-        if (!authConfigurations.getConfigs().isEmpty()) {
-            buildImageCmd.withBuildAuthConfigs(authConfigurations);
-        }
-
-        return buildImageCmd;
+        return new BuildImageCmdImpl(getDockerCmdExecFactory().createBuildImageCmdExec(), tarInputStream);
     }
 
     @Override

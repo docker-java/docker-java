@@ -1,6 +1,10 @@
 package com.github.dockerjava.core;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.github.dockerjava.api.DockerClientException;
+import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.api.model.AuthConfigurations;
+import com.github.dockerjava.core.NameParser.HostnameReposName;
+import com.github.dockerjava.core.NameParser.ReposTag;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,11 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import com.github.dockerjava.api.DockerClientException;
-import com.github.dockerjava.api.model.AuthConfig;
-import com.github.dockerjava.api.model.AuthConfigurations;
-import com.github.dockerjava.core.NameParser.HostnameReposName;
-import com.github.dockerjava.core.NameParser.ReposTag;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class DockerClientConfig implements Serializable {
 
@@ -66,14 +66,16 @@ public class DockerClientConfig implements Serializable {
 
     private URI uri;
 
-    private final String version, username, password, email, serverAddress, dockerCfgPath;
+    private final String username, password, email, serverAddress, dockerCfgPath;
+
+    private final RemoteApiVersion version;
 
     private final SSLConfig sslConfig;
 
     DockerClientConfig(URI uri, String version, String username, String password, String email, String serverAddress,
             String dockerCfgPath, SSLConfig sslConfig) {
         this.uri = uri;
-        this.version = version;
+        this.version = RemoteApiVersion.parseConfigWithDefault(version);
         this.username = username;
         this.password = password;
         this.email = email;
@@ -209,7 +211,7 @@ public class DockerClientConfig implements Serializable {
         this.uri = uri;
     }
 
-    public String getVersion() {
+    public RemoteApiVersion getVersion() {
         return version;
     }
 

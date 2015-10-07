@@ -38,6 +38,8 @@ public abstract class AbstractDockerClientTest extends Assert {
 
     public static final Logger LOG = LoggerFactory.getLogger(AbstractDockerClientTest.class);
 
+    private String apiVersion = "1.19";
+
     protected DockerClient dockerClient;
 
     protected TestDockerCmdExecFactory dockerCmdExecFactory = new TestDockerCmdExecFactory(
@@ -68,7 +70,8 @@ public abstract class AbstractDockerClientTest extends Assert {
         if (password != null) {
             builder = builder.withPassword(password);
         }
-        return builder.build();
+
+        return builder.withVersion(apiVersion).build();
     }
 
     public void afterTest() {
