@@ -35,7 +35,8 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
         return request;
     }
 
-    private static AuthConfigurations firstNonNull(final AuthConfigurations fromCommand, final AuthConfigurations fromConfig) {
+    private static AuthConfigurations firstNonNull(final AuthConfigurations fromCommand,
+            final AuthConfigurations fromConfig) {
         if (fromCommand != null) {
             return fromCommand;
         }

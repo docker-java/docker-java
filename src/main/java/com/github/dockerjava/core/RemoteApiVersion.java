@@ -18,7 +18,9 @@ import java.util.regex.Pattern;
 public class RemoteApiVersion {
 
     public static final RemoteApiVersion VERSION_1_19 = RemoteApiVersion.create(1, 19);
+
     private static final Pattern VERSION_REGEX = Pattern.compile("v?(\\d+)\\.(\\d+)");
+
     private static final RemoteApiVersion UNKNOWN_VERSION = new RemoteApiVersion(0, 0) {
 
         @Override
@@ -36,8 +38,11 @@ public class RemoteApiVersion {
             return "";
         }
     };
+
     private final int major;
+
     private final int minor;
+
     private RemoteApiVersion(final int major, final int minor) {
         this.major = major;
         this.minor = minor;
@@ -85,11 +90,12 @@ public class RemoteApiVersion {
 
     @Override
     public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         final RemoteApiVersion that = (RemoteApiVersion) o;
-        return Objects.equal(major, that.major) &&
-                Objects.equal(minor, that.minor);
+        return Objects.equal(major, that.major) && Objects.equal(minor, that.minor);
     }
 
     @Override
@@ -99,10 +105,7 @@ public class RemoteApiVersion {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("major", major)
-                .add("minor", minor)
-                .toString();
+        return MoreObjects.toStringHelper(this).add("major", major).add("minor", minor).toString();
     }
 
     public String asWebPathPart() {

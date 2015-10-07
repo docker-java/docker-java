@@ -167,9 +167,8 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         if (originalUri.getScheme().equals("unix")) {
             dockerClientConfig.setUri(UnixConnectionSocketFactory.sanitizeUri(originalUri));
         }
-        WebTarget webResource = client.target(dockerClientConfig.getUri());
 
-        baseResource = webResource.path(dockerClientConfig.getVersion().asWebPathPart());
+        baseResource = client.target(dockerClientConfig.getUri()).path(dockerClientConfig.getVersion().asWebPathPart());
 
         this.dockerClientConfig = dockerClientConfig;
     }
@@ -189,9 +188,10 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         checkNotNull(baseResource, "Factory not initialized, baseResource not set. You probably forgot to call init()!");
         return baseResource;
     }
-    
+
     protected DockerClientConfig getDockerClientConfig() {
-        checkNotNull(dockerClientConfig, "Factor not initialized, dockerClientConfig not set. You probably forgot to call init()!");
+        checkNotNull(dockerClientConfig,
+                "Factor not initialized, dockerClientConfig not set. You probably forgot to call init()!");
         return dockerClientConfig;
     }
 
