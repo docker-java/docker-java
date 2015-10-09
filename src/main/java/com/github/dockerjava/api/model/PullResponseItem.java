@@ -23,7 +23,7 @@ public class PullResponseItem extends ResponseItem {
         }
 
         return (getStatus().contains("Download complete") || getStatus().contains("Image is up to date") || getStatus()
-                .contains("Downloaded newer image"));
+                .contains("Downloaded newer image") || getStatus().contains(": downloaded"));
     }
 
 }
