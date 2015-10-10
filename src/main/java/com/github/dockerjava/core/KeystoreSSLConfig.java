@@ -57,7 +57,9 @@ public class KeystoreSSLConfig implements SSLConfig, Serializable {
         checkNotNull(pfxFile);
         checkNotNull(password);
         keystore = KeyStore.getInstance("pkcs12");
-        keystore.load(new FileInputStream(pfxFile), password.toCharArray());
+        try (FileInputStream fs = new FileInputStream(pfxFile)) {
+            keystore.load(fs, password.toCharArray());
+        }
         keystorePassword = password;
     }
 
