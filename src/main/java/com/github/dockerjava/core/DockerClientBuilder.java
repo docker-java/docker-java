@@ -14,6 +14,10 @@ public class DockerClientBuilder {
     private static ServiceLoader<DockerCmdExecFactory> serviceLoader = ServiceLoader.load(DockerCmdExecFactory.class);
 
     static {
+        reloadFactory();
+    }
+
+    private static void reloadFactory() {
         serviceLoader.reload();
         Iterator<DockerCmdExecFactory> iterator = serviceLoader.iterator();
         if (iterator.hasNext()) {
@@ -65,6 +69,7 @@ public class DockerClientBuilder {
 
     public DockerClientBuilder withServiceLoaderClassLoader(ClassLoader classLoader) {
         serviceLoader = ServiceLoader.load(DockerCmdExecFactory.class, classLoader);
+        reloadFactory();
         return this;
     }
 
