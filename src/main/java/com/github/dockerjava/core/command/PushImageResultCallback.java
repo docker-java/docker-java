@@ -10,6 +10,8 @@ import com.github.dockerjava.api.DockerClientException;
 import com.github.dockerjava.api.model.PushResponseItem;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
 
+import javax.annotation.CheckForNull;
+
 /**
  *
  * @author marcus
@@ -19,6 +21,7 @@ public class PushImageResultCallback extends ResultCallbackTemplate<PushImageRes
 
     private final static Logger LOGGER = LoggerFactory.getLogger(PushImageResultCallback.class);
 
+    @CheckForNull
     private PushResponseItem latestItem = null;
 
     @Override

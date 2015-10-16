@@ -80,10 +80,8 @@ public class RemoteApiVersion {
     }
 
     public boolean isGreaterOrEqual(final RemoteApiVersion other) {
-        if (major >= other.major) {
-            if (minor >= other.minor) {
-                return true;
-            }
+        if (major >= other.major && minor >= other.minor) {
+            return true;
         }
         return false;
     }

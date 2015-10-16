@@ -9,6 +9,7 @@ import com.github.dockerjava.core.NameParser.ReposTag;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.Collections;
@@ -85,9 +86,9 @@ public class DockerClientConfig implements Serializable {
     }
 
     private static Properties loadIncludedDockerProperties(Properties systemProperties) {
-        try {
+        try (InputStream is = DockerClientConfig.class.getResourceAsStream("/" + DOCKER_IO_PROPERTIES_PROPERTY)) {
             Properties p = new Properties();
-            p.load(DockerClientConfig.class.getResourceAsStream("/" + DOCKER_IO_PROPERTIES_PROPERTY));
+            p.load(is);
             replaceProperties(p, systemProperties);
             return p;
         } catch (IOException e) {
