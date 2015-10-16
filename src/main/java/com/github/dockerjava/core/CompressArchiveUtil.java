@@ -25,10 +25,8 @@ public class CompressArchiveUtil {
                 TarArchiveEntry tarEntry = new TarArchiveEntry(file);
                 tarEntry.setName(relativize(base, file));
 
-                if (!file.isDirectory()) {
-                    if (file.canExecute()) {
-                        tarEntry.setMode(tarEntry.getMode() | 0755);
-                    }
+                if (!file.isDirectory() && file.canExecute()) {
+                    tarEntry.setMode(tarEntry.getMode() | 0755);
                 }
 
                 tos.putArchiveEntry(tarEntry);

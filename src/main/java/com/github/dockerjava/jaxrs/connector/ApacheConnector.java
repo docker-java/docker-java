@@ -213,12 +213,10 @@ class ApacheConnector implements Connector {
         if (config != null) {
             final Object connectionManager = config.getProperties().get(ApacheClientProperties.CONNECTION_MANAGER);
 
-            if (connectionManager != null) {
-                if (!(connectionManager instanceof HttpClientConnectionManager)) {
-                    LOGGER.log(Level.WARNING, LocalizationMessages.IGNORING_VALUE_OF_PROPERTY(
-                            ApacheClientProperties.CONNECTION_MANAGER, connectionManager.getClass().getName(),
-                            HttpClientConnectionManager.class.getName()));
-                }
+            if (connectionManager != null && !(connectionManager instanceof HttpClientConnectionManager)) {
+                LOGGER.log(Level.WARNING, LocalizationMessages.IGNORING_VALUE_OF_PROPERTY(
+                        ApacheClientProperties.CONNECTION_MANAGER, connectionManager.getClass().getName(),
+                        HttpClientConnectionManager.class.getName()));
             }
 
             reqConfig = config.getProperties().get(ApacheClientProperties.REQUEST_CONFIG);
