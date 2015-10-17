@@ -43,6 +43,7 @@ import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Identifier;
+import com.github.dockerjava.core.command.CopyFileToContainerCmd;
 
 // https://godoc.org/github.com/fsouza/go-dockerclient
 public interface DockerClient extends Closeable {
@@ -119,6 +120,8 @@ public interface DockerClient extends Closeable {
     public LogContainerCmd logContainerCmd(String containerId);
 
     public CopyFileFromContainerCmd copyFileFromContainerCmd(String containerId, String resource);
+
+    public CopyFileToContainerCmd copyFileToContainerCmd(String containerId, String hostResource);
 
     public ContainerDiffCmd containerDiffCmd(String containerId);
 

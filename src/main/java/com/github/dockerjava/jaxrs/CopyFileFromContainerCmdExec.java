@@ -1,17 +1,16 @@
 package com.github.dockerjava.jaxrs;
 
-import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
-import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
+import java.io.InputStream;
+
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.io.InputStream;
-
-import static javax.ws.rs.client.Entity.entity;
+import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
+import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
 
 public class CopyFileFromContainerCmdExec extends AbstrSyncDockerCmdExec<CopyFileFromContainerCmd, InputStream>
         implements CopyFileFromContainerCmd.Exec {
@@ -24,13 +23,12 @@ public class CopyFileFromContainerCmdExec extends AbstrSyncDockerCmdExec<CopyFil
 
     @Override
     protected InputStream execute(CopyFileFromContainerCmd command) {
-        WebTarget webResource = getBaseResource().path("/containers/{id}/copy").resolveTemplate("id",
+        WebTarget webResource = getBaseResource().path("/containers/{id}/archive").resolveTemplate("id",
                 command.getContainerId());
 
-        LOGGER.trace("POST: " + webResource.toString());
+        LOGGER.trace("Get: " + webResource.toString());
 
-        Response response = webResource.request().accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
-                .post(entity(command, MediaType.APPLICATION_JSON));
+        Response response = webResource.queryParam("path", command.getResource()).request().accept("application/x-tar").get();
 
         return new WrappedResponseInputStream(response);
     }

@@ -38,7 +38,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 
     public static final Logger LOG = LoggerFactory.getLogger(AbstractDockerClientTest.class);
 
-    private String apiVersion = "1.19";
+    private String apiVersion = "1.20";
 
     protected DockerClient dockerClient;
 

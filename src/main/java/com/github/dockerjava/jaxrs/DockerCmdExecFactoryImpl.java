@@ -41,6 +41,7 @@ import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.RemoteApiVersion;
+import com.github.dockerjava.core.command.CopyFileToContainerCmd;
 import com.github.dockerjava.jaxrs.connector.ApacheConnectorProvider;
 import com.github.dockerjava.jaxrs.filter.JsonClientFilter;
 import com.github.dockerjava.jaxrs.filter.ResponseStatusExceptionFilter;
@@ -313,6 +314,11 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     @Override
     public CopyFileFromContainerCmd.Exec createCopyFileFromContainerCmdExec() {
         return new CopyFileFromContainerCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public CopyFileToContainerCmd.Exec createCopyFileToContainerCmdExec() {
+        return new CopyFileToContainerCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override

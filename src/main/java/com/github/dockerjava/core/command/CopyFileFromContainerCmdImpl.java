@@ -6,24 +6,19 @@ import java.io.InputStream;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
 
 /**
- *
  * Copy files or folders from a container.
- *
  */
 public class CopyFileFromContainerCmdImpl extends AbstrDockerCmd<CopyFileFromContainerCmd, InputStream> implements
         CopyFileFromContainerCmd {
 
     private String containerId;
 
-    @JsonProperty("HostPath")
     private String hostPath = ".";
 
-    @JsonProperty("Resource")
     private String resource;
 
     public CopyFileFromContainerCmdImpl(CopyFileFromContainerCmd.Exec exec, String containerId, String resource) {
@@ -70,12 +65,11 @@ public class CopyFileFromContainerCmdImpl extends AbstrDockerCmd<CopyFileFromCon
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("cp ").append(containerId).append(":").append(resource).toString();
+        return new ToStringBuilder(this).append("cp ").append(hostPath).append(" ").append(containerId).append(":").append(resource).toString();
     }
 
     /**
-     * @throws NotFoundException
-     *             No such container
+     * @throws NotFoundException No such container
      */
     @Override
     public InputStream exec() throws NotFoundException {

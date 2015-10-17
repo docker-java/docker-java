@@ -46,13 +46,13 @@ import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.model.BuildResponseItem;
+import com.github.dockerjava.core.command.CopyFileToContainerCmd;
 
 /**
  * Special {@link DockerCmdExecFactory} implementation that collects container and image creations while test execution
  * for the purpose of automatically cleanup.
  *
  * @author marcus
- *
  */
 public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 
@@ -240,6 +240,11 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
     @Override
     public CopyFileFromContainerCmd.Exec createCopyFileFromContainerCmdExec() {
         return delegate.createCopyFileFromContainerCmdExec();
+    }
+
+    @Override
+    public CopyFileToContainerCmd.Exec createCopyFileToContainerCmdExec() {
+        return delegate.createCopyFileToContainerCmdExec();
     }
 
     @Override

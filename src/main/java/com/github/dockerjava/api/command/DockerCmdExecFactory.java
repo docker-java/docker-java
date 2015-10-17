@@ -4,6 +4,7 @@ import java.io.Closeable;
 import java.io.IOException;
 
 import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.command.CopyFileToContainerCmd;
 
 public interface DockerCmdExecFactory extends Closeable {
 
@@ -57,6 +58,8 @@ public interface DockerCmdExecFactory extends Closeable {
 
     public CopyFileFromContainerCmd.Exec createCopyFileFromContainerCmdExec();
 
+    public CopyFileToContainerCmd.Exec createCopyFileToContainerCmdExec();
+
     public StopContainerCmd.Exec createStopContainerCmdExec();
 
     public ContainerDiffCmd.Exec createContainerDiffCmdExec();
@@ -83,5 +86,4 @@ public interface DockerCmdExecFactory extends Closeable {
 
     @Override
     public void close() throws IOException;
-
 }
