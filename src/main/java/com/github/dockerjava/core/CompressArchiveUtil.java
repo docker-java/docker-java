@@ -20,20 +20,26 @@ import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
 import org.apache.commons.io.FileUtils;
 
 import com.google.common.io.ByteStreams;
-import com.google.common.io.Closeables;
 
 public class CompressArchiveUtil {
 
     static void putTarEntry(TarArchiveOutputStream tarOutputStream, TarArchiveEntry tarEntry, Path file) throws IOException {
         tarEntry.setSize(Files.size(file));
         tarOutputStream.putArchiveEntry(tarEntry);
-        InputStream input = new BufferedInputStream(Files.newInputStream(file));
-        try {
+        try (InputStream input = new BufferedInputStream(Files.newInputStream(file))) {
             ByteStreams.copy(input, tarOutputStream);
             tarOutputStream.closeArchiveEntry();
-        } finally {
-            input.close();
         }
+    }
+
+    private static TarArchiveOutputStream buildTarStream(Path outputPath, boolean gZipped) throws IOException {
+        OutputStream outputStream = new BufferedOutputStream(Files.newOutputStream(outputPath));
+        if (gZipped) {
+            outputStream = new GzipCompressorOutputStream(outputStream);
+        }
+        TarArchiveOutputStream tarArchiveOutputStream = new TarArchiveOutputStream(outputStream);
+        tarArchiveOutputStream.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU);
+        return tarArchiveOutputStream;
     }
 
     /**
@@ -50,13 +56,8 @@ public class CompressArchiveUtil {
             throw new FileNotFoundException("File not found " + inputPath);
         }
         FileUtils.touch(outputPath.toFile());
-        OutputStream outputStream = new BufferedOutputStream(Files.newOutputStream(outputPath));
-        if (gZipped) {
-            outputStream = new GzipCompressorOutputStream(outputStream);
-        }
-        TarArchiveOutputStream tarArchiveOutputStream = new TarArchiveOutputStream(outputStream);
-        tarArchiveOutputStream.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU);
-        try {
+
+        try (TarArchiveOutputStream tarArchiveOutputStream = buildTarStream(outputPath, gZipped)) {
             if (!Files.isDirectory(inputPath)) {
                 putTarEntry(tarArchiveOutputStream, new TarArchiveEntry(inputPath.getFileName().toString()), inputPath);
             } else {
@@ -68,8 +69,6 @@ public class CompressArchiveUtil {
                 Files.walkFileTree(inputPath, new TarDirWalker(sourcePath, tarArchiveOutputStream));
             }
             tarArchiveOutputStream.flush();
-        } finally {
-            Closeables.close(tarArchiveOutputStream, true);
         }
     }
 
