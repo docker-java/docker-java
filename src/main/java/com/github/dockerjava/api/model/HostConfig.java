@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.annotation.CheckForNull;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
 public class HostConfig {
@@ -92,6 +94,9 @@ public class HostConfig {
 
     @JsonProperty("VolumesFrom")
     private VolumesFrom[] volumesFrom;
+
+    @JsonProperty("PidMode")
+    private String pidMode;
 
     @JsonIgnore
     public Bind[] getBinds() {
@@ -204,6 +209,11 @@ public class HostConfig {
         return readonlyRootfs;
     }
 
+    @CheckForNull
+    public String getPidMode() {
+        return pidMode;
+    }
+
     @JsonIgnore
     public void setBinds(Bind... binds) {
         this.binds = new Binds(binds);
@@ -313,6 +323,10 @@ public class HostConfig {
 
     public void setVolumesFrom(VolumesFrom[] volumesFrom) {
         this.volumesFrom = volumesFrom;
+    }
+
+    public void setPidMode(String pidMode) {
+        this.pidMode = pidMode;
     }
 
     @Override

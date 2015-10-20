@@ -12,6 +12,8 @@ import com.github.dockerjava.api.DockerClientException;
 import com.github.dockerjava.api.model.BuildResponseItem;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
 
+import javax.annotation.CheckForNull;
+
 /**
  *
  * @author marcus
@@ -21,6 +23,7 @@ public class BuildImageResultCallback extends ResultCallbackTemplate<BuildImageR
 
     private final static Logger LOGGER = LoggerFactory.getLogger(BuildImageResultCallback.class);
 
+    @CheckForNull
     private BuildResponseItem latestItem = null;
 
     @Override

@@ -83,8 +83,7 @@ public class ResponseStatusExceptionFilter implements ClientResponseFilter {
                 if (charset == null) {
                     charset = Charset.defaultCharset();
                 }
-                String message = new String(buffer, charset);
-                return message;
+                return new String(buffer, charset);
             }
         }
         return null;

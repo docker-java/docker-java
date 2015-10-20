@@ -1,7 +1,5 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +29,8 @@ import com.github.dockerjava.api.model.Ulimit;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.Volumes;
 import com.github.dockerjava.api.model.VolumesFrom;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  *
@@ -386,6 +386,12 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public Boolean isTty() {
         return tty;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getPidMode() {
+        return hostConfig.getPidMode();
     }
 
     @Override
@@ -818,6 +824,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public CreateContainerCmd withWorkingDir(String workingDir) {
         checkNotNull(workingDir, "workingDir was not specified");
         this.workingDir = workingDir;
+        return this;
+    }
+
+    @Override
+    public CreateContainerCmd withPidMode(String pidMode) {
+        checkNotNull(pidMode, "pidMode was not specified");
+        this.hostConfig.setPidMode(pidMode);
         return this;
     }
 

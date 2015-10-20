@@ -10,6 +10,8 @@ import com.github.dockerjava.api.DockerClientException;
 import com.github.dockerjava.api.model.PullResponseItem;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
 
+import javax.annotation.CheckForNull;
+
 /**
  *
  * @author marcus
@@ -19,6 +21,7 @@ public class PullImageResultCallback extends ResultCallbackTemplate<PullImageRes
 
     private final static Logger LOGGER = LoggerFactory.getLogger(PullImageResultCallback.class);
 
+    @CheckForNull
     private PullResponseItem latestItem = null;
 
     @Override

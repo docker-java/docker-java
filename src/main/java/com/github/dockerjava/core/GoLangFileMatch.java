@@ -113,11 +113,8 @@ public class GoLangFileMatch {
         Scan: for (i = 0; i < pattern.length(); i++) {
             switch (pattern.charAt(i)) {
             case '\\': {
-                if (!IS_WINDOWS) {
-                    // error check handled in matchChunk: bad pattern.
-                    if (i + 1 < pattern.length()) {
-                        i++;
-                    }
+                if (!IS_WINDOWS && i + 1 < pattern.length()) {
+                    i++;
                 }
                 break;
             }
