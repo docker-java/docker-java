@@ -9,17 +9,7 @@ import com.github.dockerjava.core.DockerClientConfig.DockerClientConfigBuilder;
 
 public class DockerClientBuilder {
 
-    private static Class<? extends DockerCmdExecFactory> factoryClass;
-
-    private static ServiceLoader<DockerCmdExecFactory> serviceLoader = ServiceLoader.load(DockerCmdExecFactory.class);
-
-    static {
-        serviceLoader.reload();
-        Iterator<DockerCmdExecFactory> iterator = serviceLoader.iterator();
-        if (iterator.hasNext()) {
-            factoryClass = iterator.next().getClass();
-        }
-    }
+    private ClassLoader classLoader;
 
     private DockerClientImpl dockerClient = null;
 
@@ -46,16 +36,17 @@ public class DockerClientBuilder {
     }
 
     public static DockerCmdExecFactory getDefaultDockerCmdExecFactory() {
-        if (factoryClass == null) {
-            throw new RuntimeException("Fatal: Can't find any implementation of '"
-                    + DockerCmdExecFactory.class.getName() + "' in the current classpath.");
-        }
+        return getDefaultDockerCmdExecFactory(Thread.currentThread().getContextClassLoader());
+    }
 
-        try {
-            return factoryClass.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException("Fatal: Can't create new instance of '" + factoryClass.getName() + "'");
+    public static DockerCmdExecFactory getDefaultDockerCmdExecFactory(ClassLoader classLoader) {
+        ServiceLoader<DockerCmdExecFactory> serviceLoader = ServiceLoader.load(DockerCmdExecFactory.class, classLoader);
+        Iterator<DockerCmdExecFactory> iterator = serviceLoader.iterator();
+        if (iterator.hasNext()) {
+            return iterator.next();
         }
+        throw new RuntimeException("Fatal: Can't find any implementation of '"
+                + DockerCmdExecFactory.class.getName() + "' in the current classpath.");
     }
 
     public DockerClientBuilder withDockerCmdExecFactory(DockerCmdExecFactory dockerCmdExecFactory) {
@@ -64,7 +55,7 @@ public class DockerClientBuilder {
     }
 
     public DockerClientBuilder withServiceLoaderClassLoader(ClassLoader classLoader) {
-        serviceLoader = ServiceLoader.load(DockerCmdExecFactory.class, classLoader);
+        this.classLoader = classLoader;
         return this;
     }
 
@@ -72,7 +63,7 @@ public class DockerClientBuilder {
         if (dockerCmdExecFactory != null) {
             dockerClient.withDockerCmdExecFactory(dockerCmdExecFactory);
         } else {
-            dockerClient.withDockerCmdExecFactory(getDefaultDockerCmdExecFactory());
+            dockerClient.withDockerCmdExecFactory(getDefaultDockerCmdExecFactory(this.classLoader == null ? Thread.currentThread().getContextClassLoader() : this.classLoader));
         }
 
         return dockerClient;
