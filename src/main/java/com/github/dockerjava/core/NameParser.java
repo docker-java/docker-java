@@ -15,7 +15,7 @@ public class NameParser {
 
     private static final int RepositoryNameTotalLengthMax = 255;
 
-    private static final Pattern RepositoryNameComponentRegexp = Pattern.compile("[a-z0-9]+(?:[._-][a-z0-9]+)*");
+    private static final Pattern RepositoryNameComponentRegexp = Pattern.compile("[a-zA-Z0-9]+(?:[._-][a-zA-Z0-9]+)*");
 
     private static final Pattern RepositoryNameComponentAnchoredRegexp = Pattern.compile("^"
             + RepositoryNameComponentRegexp.pattern() + "$");
