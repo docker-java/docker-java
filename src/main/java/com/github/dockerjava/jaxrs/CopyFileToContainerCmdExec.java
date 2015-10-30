@@ -17,7 +17,6 @@ import com.github.dockerjava.api.DockerClientException;
 import com.github.dockerjava.core.CompressArchiveUtil;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.command.CopyFileToContainerCmd;
-import com.google.common.io.Closeables;
 
 public class CopyFileToContainerCmdExec extends AbstrSyncDockerCmdExec<CopyFileToContainerCmd, Void> implements CopyFileToContainerCmd.Exec {
 
@@ -27,17 +26,19 @@ public class CopyFileToContainerCmdExec extends AbstrSyncDockerCmdExec<CopyFileT
         super(baseResource, dockerClientConfig);
     }
 
+    private InputStream buildUploadStream(CopyFileToContainerCmd command) throws IOException {
+        Path toUpload = Files.createTempFile("docker-java", ".tar.gz");
+        CompressArchiveUtil.tar(Paths.get(command.getHostResource()), toUpload, true, command.isDirChildrenOnly());
+        return Files.newInputStream(toUpload);
+    }
+
     @Override
     protected Void execute(CopyFileToContainerCmd command) {
         WebTarget webResource = getBaseResource().path("/containers/{id}/archive").resolveTemplate("id",
                 command.getContainerId());
 
         LOGGER.trace("PUT: " + webResource.toString());
-        InputStream streamToUpload = null;
-        try {
-            Path toUpload = Files.createTempFile("docker-java", "tar.gz");
-            CompressArchiveUtil.tar(Paths.get(command.getHostResource()), toUpload, true, command.isDirChildrenOnly());
-            streamToUpload = Files.newInputStream(toUpload);
+        try (InputStream streamToUpload = buildUploadStream(command)) {
             webResource
                     .queryParam("path", command.getRemotePath())
                     .queryParam("noOverwriteDirNonDir", command.isNoOverwriteDirNonDir())
@@ -47,11 +48,6 @@ public class CopyFileToContainerCmdExec extends AbstrSyncDockerCmdExec<CopyFileT
             return null;
         } catch (IOException e) {
             throw new DockerClientException("Error occurred while preparing uploading host resource <" + command.getHostResource() + ">", e);
-        } finally {
-            if (streamToUpload != null) {
-                Closeables.closeQuietly(streamToUpload);
-            }
         }
     }
-
 }

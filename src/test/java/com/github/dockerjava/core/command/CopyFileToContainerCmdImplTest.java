@@ -17,7 +17,6 @@ import org.testng.annotations.Test;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.google.common.io.Closeables;
 
 public class CopyFileToContainerCmdImplTest extends AbstractDockerClientTest {
     @BeforeTest
@@ -52,10 +51,10 @@ public class CopyFileToContainerCmdImplTest extends AbstractDockerClientTest {
         dockerClient.startContainerCmd(container.getId()).exec();
 
         dockerClient.copyFileToContainerCmd(container.getId(), "src/test/resources/testReadFile").exec();
-        InputStream response = dockerClient.copyFileFromContainerCmd(container.getId(), "testReadFile").exec();
-        boolean bytesAvailable = response.available() > 0;
-        assertTrue(bytesAvailable, "The file was not copied to the container.");
-        Closeables.closeQuietly(response);
+        try (InputStream response = dockerClient.copyFileFromContainerCmd(container.getId(), "testReadFile").exec()) {
+            boolean bytesAvailable = response.available() > 0;
+            assertTrue(bytesAvailable, "The file was not copied to the container.");
+        }
     }
 
     @Test
