@@ -1,0 +1,2 @@
+# provide a client builder tailored/customized for Jersey under JAX-RS 2.0
+com.github.dockerjava.jaxrs.jersey.jaxrs.jersey.JerseyClientBuilderProvider
