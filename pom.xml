@@ -22,6 +22,8 @@
 
 		<!-- jaxrs 2.0 - jersey -->
 		<module>jaxrs-2_0-jersey-impl</module>
+
+        <!-- jaxrs 2.0 - testing (all impls) -->
         <module>jaxrs-2_0-tests</module>
 
         <!-- jaxrs 2.0 - resteasy -->

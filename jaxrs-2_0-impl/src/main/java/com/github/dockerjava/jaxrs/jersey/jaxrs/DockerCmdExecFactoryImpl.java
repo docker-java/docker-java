@@ -105,7 +105,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         provider.setClientResponseFilters(this.clientResponseFilters);
 
         // get client builder
-        final ClientBuilder clientBuilder = provider.getClientBuilder(this.dockerClientConfig);
+        final ClientBuilder clientBuilder = provider.getClientBuilder(dockerClientConfig);
 
         if (sslContext != null) {
             clientBuilder.sslContext(sslContext);
