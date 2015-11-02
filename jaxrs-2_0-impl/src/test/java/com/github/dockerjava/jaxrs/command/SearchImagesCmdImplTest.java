@@ -1,0 +1,63 @@
+package com.github.dockerjava.jaxrs.command;
+
+import static ch.lambdaj.Lambda.filter;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
+import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
+
+import java.lang.reflect.Method;
+import java.util.List;
+
+import ch.lambdaj.Lambda;
+import org.hamcrest.Matcher;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.testinfected.hamcrest.jpa.HasFieldWithValue;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+
+import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.model.SearchItem;
+import com.github.dockerjava.jaxrs.client.AbstractDockerClientTest;
+
+@Test(groups = "integration")
+public class SearchImagesCmdImplTest extends AbstractDockerClientTest {
+
+    @BeforeTest
+    public void beforeTest() throws Exception {
+        super.beforeTest();
+    }
+
+    @AfterTest
+    public void afterTest() {
+        super.afterTest();
+    }
+
+    @BeforeMethod
+    public void beforeMethod(Method method) {
+        super.beforeMethod(method);
+    }
+
+    @AfterMethod
+    public void afterMethod(ITestResult result) {
+        super.afterMethod(result);
+    }
+
+    @Test
+    public void searchImages() throws DockerException {
+        List<SearchItem> dockerSearch = dockerClient.searchImagesCmd("busybox").exec();
+        AbstractDockerClientTest.LOG.info("Search returned {}", dockerSearch.toString());
+
+        Matcher matcher = Matchers.hasItem(HasFieldWithValue.hasField("name", Matchers.equalTo("busybox")));
+        MatcherAssert.assertThat(dockerSearch, matcher);
+
+        MatcherAssert.assertThat(Lambda.filter(HasFieldWithValue.hasField("name", Matchers.is("busybox")), dockerSearch).size(), Matchers.equalTo(1));
+    }
+
+}

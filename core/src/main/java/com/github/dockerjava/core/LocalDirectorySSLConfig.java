@@ -1,22 +1,21 @@
 package com.github.dockerjava.core;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.github.dockerjava.api.DockerClientException;
+import com.github.dockerjava.api.SSLConfig;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import javax.net.ssl.SSLContext;
 import java.io.Serializable;
 import java.security.Security;
 
-import javax.net.ssl.SSLContext;
-
-import com.github.dockerjava.api.SSLConfig;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.glassfish.jersey.SslConfigurator;
-
-import com.github.dockerjava.api.DockerClientException;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * SSL Config from local files.
  */
 public class LocalDirectorySSLConfig implements SSLConfig, Serializable {
+
+    private static final String DEFAULT_KEYSTORE_PASSWORD = "docker";
 
     private final String dockerCertPath;
 
@@ -41,18 +40,15 @@ public class LocalDirectorySSLConfig implements SSLConfig, Serializable {
                 Security.addProvider(new BouncyCastleProvider());
 
                 // properties acrobatics not needed for java > 1.6
-                String httpProtocols = System.getProperty("https.protocols");
+                final String httpProtocols = System.getProperty("https.protocols");
                 System.setProperty("https.protocols", "TLSv1");
-                SslConfigurator sslConfig = SslConfigurator.newInstance(true);
+
                 if (httpProtocols != null) {
                     System.setProperty("https.protocols", httpProtocols);
                 }
 
-                sslConfig.keyStore(CertificateUtils.createKeyStore(dockerCertPath));
-                sslConfig.keyStorePassword("docker");
-                sslConfig.trustStore(CertificateUtils.createTrustStore(dockerCertPath));
-
-                return sslConfig.createSSLContext();
+                // todo: fix
+                return SSLContext.getDefault();
 
             } catch (Exception e) {
                 throw new DockerClientException(e.getMessage(), e);

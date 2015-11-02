@@ -17,6 +17,9 @@
 
 		<!-- jaxrs 1.0 - resteasy -->
 
+		<!-- jaxrs 2.0 - vanilla -->
+		<module>jaxrs-2_0-impl</module>
+
 		<!-- jaxrs 2.0 - jersey -->
 		<module>jaxrs-2_0-jersey-impl</module>
 
@@ -70,6 +73,10 @@
 		<jdk.source>1.7</jdk.source>
 		<jdk.target>1.7</jdk.target>
 
+		<!-- api versions -->
+		<jaxrs-2.0.version>2.0</jaxrs-2.0.version>
+
+		<!-- dependency versions -->
 		<jersey.version>2.11</jersey.version>
 		<jackson-jaxrs.version>2.1.2</jackson-jaxrs.version>
 		<httpclient.version>4.3.1</httpclient.version>
@@ -90,7 +97,6 @@
 		<hamcrest.jpa-matchers>1.6</hamcrest.jpa-matchers>
 		<lambdaj.version>2.3.3</lambdaj.version>
 
-
 		<maven-jar-plugin.version>2.2</maven-jar-plugin.version>
 		<maven-compiler-plugin.version>2.3.1</maven-compiler-plugin.version>
 		<maven-release-plugin.version>2.3.1</maven-release-plugin.version>
@@ -102,12 +108,14 @@
 
 	<dependencyManagement>
 		<dependencies>
-			<!-- /// Cross-Module References /////////////////////////// -->
+			<!-- /// Supported JAX-RS APIs /////////////////////////// -->
 			<dependency>
-				<groupId>com.github.docker-java</groupId>
-				<artifactId>docker-java-test-support</artifactId>
-				<version>${project.version}</version>
+				<groupId>javax.ws.rs</groupId>
+				<artifactId>javax.ws.rs-api</artifactId>
+				<version>${jaxrs-2.0.version}</version>
 			</dependency>
+
+			<!-- /// Cross-Module References /////////////////////////// -->
 			<dependency>
 				<groupId>com.github.docker-java</groupId>
 				<artifactId>docker-java-api</artifactId>
@@ -116,6 +124,11 @@
 			<dependency>
 				<groupId>com.github.docker-java</groupId>
 				<artifactId>docker-java-spi</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.docker-java</groupId>
+				<artifactId>docker-java-core</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
@@ -191,6 +204,12 @@
 			</dependency>
 
 			<!-- /// Test /////////////////////////// -->
+			<dependency>
+				<groupId>com.github.docker-java</groupId>
+				<artifactId>docker-java-test-support</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
 			<dependency>
 				<groupId>ch.qos.logback</groupId>
 				<artifactId>logback-core</artifactId>

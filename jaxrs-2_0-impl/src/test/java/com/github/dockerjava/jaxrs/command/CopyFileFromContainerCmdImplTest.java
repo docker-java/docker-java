@@ -1,0 +1,76 @@
+package com.github.dockerjava.jaxrs.command;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.not;
+
+import java.io.InputStream;
+import java.lang.reflect.Method;
+
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.testng.Assert;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+
+import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.jaxrs.client.AbstractDockerClientTest;
+
+@Test(groups = "integration")
+public class CopyFileFromContainerCmdImplTest extends AbstractDockerClientTest {
+
+    @BeforeTest
+    public void beforeTest() throws Exception {
+        super.beforeTest();
+    }
+
+    @AfterTest
+    public void afterTest() {
+        super.afterTest();
+    }
+
+    @BeforeMethod
+    public void beforeMethod(Method method) {
+        super.beforeMethod(method);
+    }
+
+    @AfterMethod
+    public void afterMethod(ITestResult result) {
+        super.afterMethod(result);
+    }
+
+    @Test
+    public void copyFromContainer() throws Exception {
+        // TODO extract this into a shared method
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+                .withName("docker-java-itest-copyFromContainer").withCmd("touch", "/copyFromContainer").exec();
+
+        AbstractDockerClientTest.LOG.info("Created container: {}", container);
+        MatcherAssert.assertThat(container.getId(), Matchers.not(Matchers.isEmptyOrNullString()));
+
+        dockerClient.startContainerCmd(container.getId()).exec();
+
+        InputStream response = dockerClient.copyFileFromContainerCmd(container.getId(), "/copyFromContainer").exec();
+        boolean bytesAvailable = response.available() > 0;
+        Assert.assertTrue(bytesAvailable, "The file was not copied from the container.");
+
+        // read the stream fully. Otherwise, the underlying stream will not be closed.
+        String responseAsString = asString(response);
+        Assert.assertNotNull(responseAsString);
+        Assert.assertTrue(responseAsString.length() > 0);
+    }
+
+    @Test
+    public void copyFromNonExistingContainer() throws Exception {
+        try {
+            dockerClient.copyFileFromContainerCmd("non-existing", "/test").exec();
+            Assert.fail("expected NotFoundException");
+        } catch (NotFoundException ignored) {
+        }
+    }
+}
