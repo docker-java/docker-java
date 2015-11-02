@@ -1,1 +1,1 @@
-com.github.dockerjava.jaxrs.DockerCmdExecFactoryImpl
+com.github.dockerjava.jaxrs.jersey.jaxrs.DockerCmdExecFactoryImpl

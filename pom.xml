@@ -22,8 +22,9 @@
 
 		<!-- jaxrs 2.0 - jersey -->
 		<module>jaxrs-2_0-jersey-impl</module>
+        <module>jaxrs-2_0-tests</module>
 
-		<!-- jaxrs 2.0 - resteasy -->
+        <!-- jaxrs 2.0 - resteasy -->
 
 	</modules>
 
@@ -108,12 +109,6 @@
 
 	<dependencyManagement>
 		<dependencies>
-			<!-- /// Supported JAX-RS APIs /////////////////////////// -->
-			<dependency>
-				<groupId>javax.ws.rs</groupId>
-				<artifactId>javax.ws.rs-api</artifactId>
-				<version>${jaxrs-2.0.version}</version>
-			</dependency>
 
 			<!-- /// Cross-Module References /////////////////////////// -->
 			<dependency>
@@ -131,13 +126,32 @@
 				<artifactId>docker-java-core</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.github.docker-java</groupId>
+				<artifactId>docker-java-jaxrs-2_0-impl</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+            <dependency>
+                <groupId>com.github.docker-java</groupId>
+                <artifactId>docker-java-jaxrs-2_0-jersey-impl</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-			<!-- /// JAXRS - 2.0 - Jersey /////////////////////////// -->
+            <!-- /// Supported JAX-RS APIs /////////////////////////// -->
+            <dependency>
+                <groupId>javax.ws.rs</groupId>
+                <artifactId>javax.ws.rs-api</artifactId>
+                <version>${jaxrs-2.0.version}</version>
+            </dependency>
+
+            <!-- /// JAX-RS JSON Provider /////////////////////////// -->
 			<dependency>
 				<groupId>com.fasterxml.jackson.jaxrs</groupId>
 				<artifactId>jackson-jaxrs-json-provider</artifactId>
 				<version>${jackson-jaxrs.version}</version>
 			</dependency>
+
+            <!-- /// JAXRS - 2.0 - Jersey /////////////////////////// -->
 			<dependency>
 				<groupId>org.glassfish.jersey.connectors</groupId>
 				<artifactId>jersey-apache-connector</artifactId>

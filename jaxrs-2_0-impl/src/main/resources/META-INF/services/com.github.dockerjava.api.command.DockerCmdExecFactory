@@ -1,2 +1,2 @@
 # implementation of execution commands for jax-rs 2.0
-com.github.dockerjava.jaxrs.DockerCmdExecFactoryImpl
+com.github.dockerjava.jaxrs.jersey.jaxrs.jersey.jaxrs.DockerCmdExecFactoryImpl
