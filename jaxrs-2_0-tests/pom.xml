@@ -55,7 +55,17 @@
     </dependencies>
 
     <build>
-
+        <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.18.1</version>
+                <configuration>
+                    <failIfNoTests>false</failIfNoTests>
+                    <!-- execute nothing -->
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 
     <profiles>
@@ -69,6 +79,8 @@
                 <dependency>
                     <groupId>com.github.docker-java</groupId>
                     <artifactId>docker-java-jaxrs-2_0-jersey-impl</artifactId>
+                    <version>${project.version}</version>
+                    <scope>test</scope>
                 </dependency>
             </dependencies>
 
@@ -80,8 +92,12 @@
                         <executions>
                             <execution>
                                 <id>test-jaxrs-2.0-jersey</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
                                 <configuration>
-
+                                    <skip>false</skip>
                                 </configuration>
                             </execution>
                         </executions>
@@ -89,6 +105,43 @@
                 </plugins>
             </build>
 
+        </profile>
+
+        <profile>
+            <id>jaxrs-2.0-resteasy</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
+            <dependencies>
+                <dependency>
+                    <groupId>com.github.docker-java</groupId>
+                    <artifactId>docker-java-jaxrs-2_0-resteasy-impl</artifactId>
+                    <version>${project.version}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.18.1</version>
+                        <executions>
+                            <execution>
+                                <id>test-jaxrs-2.0-resteasy</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>false</skip>
+                                </configuration>
+                            </execution>
+                        </executions>
+                     </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 

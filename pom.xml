@@ -25,6 +25,7 @@
 
         <!-- jaxrs 2.0 - testing (all impls) -->
         <module>jaxrs-2_0-tests</module>
+        <module>jaxrs-2_0-resteasy-impl</module>
 
         <!-- jaxrs 2.0 - resteasy -->
 
@@ -81,6 +82,7 @@
 
 		<!-- dependency versions -->
 		<jersey.version>2.11</jersey.version>
+        <resteasy.client.version>3.0.13.Final</resteasy.client.version>
 		<jackson-jaxrs.version>2.1.2</jackson-jaxrs.version>
 		<httpclient.version>4.3.1</httpclient.version>
 		<commons-compress.version>1.5</commons-compress.version>
@@ -138,12 +140,18 @@
                 <artifactId>docker-java-jaxrs-2_0-jersey-impl</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.github.docker-java</groupId>
+                <artifactId>docker-java-jaxrs-2_0-resteasy-impl</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!-- /// Supported JAX-RS APIs /////////////////////////// -->
             <dependency>
                 <groupId>javax.ws.rs</groupId>
                 <artifactId>javax.ws.rs-api</artifactId>
                 <version>${jaxrs-2.0.version}</version>
+				<scope>provided</scope>
             </dependency>
 
             <!-- /// JAX-RS JSON Provider /////////////////////////// -->
@@ -169,6 +177,13 @@
 				<artifactId>jersey-client</artifactId>
 				<version>${jersey.version}</version>
 			</dependency>
+
+            <!-- /// JAXRS - 2.0 - Resteasy /////////////////////////// -->
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-client</artifactId>
+                <version>${resteasy.client.version}</version>
+            </dependency>
 
 			<!-- /// Socket /////////////////////////// -->
 			<dependency>
@@ -285,7 +300,7 @@
 	</dependencyManagement>
 
 	<dependencies>
-		<!-- defered to children -->
+		<!-- deferred to modules -->
 	</dependencies>
 
 	<distributionManagement>
