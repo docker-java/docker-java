@@ -1,11 +1,11 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.command.ExecStartCmd;
 
 import java.io.InputStream;
 
-import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.command.ExecStartCmd;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class ExecStartCmdImpl extends AbstrDockerCmd<ExecStartCmd, InputStream> implements ExecStartCmd {
 

@@ -1,11 +1,10 @@
 package com.github.dockerjava.api.model;
 
+import com.github.dockerjava.api.command.InspectContainerResponse.NetworkSettings;
+import com.github.dockerjava.api.model.Ports.Binding;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-
-import com.github.dockerjava.api.command.InspectContainerResponse.NetworkSettings;
-import com.github.dockerjava.api.model.Ports.Binding;
 
 /**
  * In a {@link PortBinding}, a network socket on the Docker host, expressed as a {@link Binding}, is bound to an

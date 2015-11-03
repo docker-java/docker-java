@@ -3,7 +3,6 @@ package com.github.dockerjava.jaxrs.jersey.client;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.jaxrs.jersey.client.client.AbstractDockerClientTest;
-import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +14,8 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Unit test for DockerClient.
@@ -61,7 +62,7 @@ public class DockerClientTest extends AbstractDockerClientTest {
             dockerClient.startContainerCmd(container.getId());
 
             int exitcode = dockerClient.waitContainerCmd(container.getId()).exec();
-            MatcherAssert.assertThat(exitcode, Matchers.equalTo(0));
+            assertThat(exitcode, Matchers.equalTo(0));
         }
     }
 

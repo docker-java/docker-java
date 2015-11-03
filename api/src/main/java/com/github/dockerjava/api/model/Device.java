@@ -1,11 +1,10 @@
 package com.github.dockerjava.api.model;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class Device {
 

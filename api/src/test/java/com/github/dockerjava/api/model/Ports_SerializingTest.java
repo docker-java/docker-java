@@ -2,10 +2,11 @@ package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.model.Ports.Binding;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.Map;
+
+import static org.testng.Assert.assertEquals;
 
 public class Ports_SerializingTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -18,12 +19,12 @@ public class Ports_SerializingTest {
     public void deserializingPortWithMultipleBindings() throws Exception {
         Ports ports = objectMapper.readValue(jsonWithDoubleBindingForOnePort, Ports.class);
         Map<ExposedPort, Binding[]> map = ports.getBindings();
-        Assert.assertEquals(map.size(), 1);
+        assertEquals(map.size(), 1);
 
         Binding[] bindings = map.get(ExposedPort.tcp(80));
-        Assert.assertEquals(bindings.length, 2);
-        Assert.assertEquals(bindings[0], new Binding("10.0.0.1", 80));
-        Assert.assertEquals(bindings[1], new Binding("10.0.0.2", 80));
+        assertEquals(bindings.length, 2);
+        assertEquals(bindings[0], new Binding("10.0.0.1", 80));
+        assertEquals(bindings[1], new Binding("10.0.0.2", 80));
     }
 
     @Test
@@ -31,28 +32,28 @@ public class Ports_SerializingTest {
         Ports ports = new Ports();
         ports.bind(ExposedPort.tcp(80), new Binding("10.0.0.1", 80));
         ports.bind(ExposedPort.tcp(80), new Binding("10.0.0.2", 80));
-        Assert.assertEquals(objectMapper.writeValueAsString(ports), jsonWithDoubleBindingForOnePort);
+        assertEquals(objectMapper.writeValueAsString(ports), jsonWithDoubleBindingForOnePort);
     }
 
     @Test
     public void serializingEmptyBinding() throws Exception {
         Ports ports = new Ports(ExposedPort.tcp(80), new Binding(null, null));
-        Assert.assertEquals(objectMapper.writeValueAsString(ports), "{\"80/tcp\":[{\"HostIp\":\"\",\"HostPort\":\"\"}]}");
+        assertEquals(objectMapper.writeValueAsString(ports), "{\"80/tcp\":[{\"HostIp\":\"\",\"HostPort\":\"\"}]}");
     }
 
     @Test
     public void deserializingPortWithNullBindings() throws Exception {
         Ports ports = objectMapper.readValue(jsonWithNullBindingForOnePort, Ports.class);
         Map<ExposedPort, Binding[]> map = ports.getBindings();
-        Assert.assertEquals(map.size(), 1);
+        assertEquals(map.size(), 1);
 
-        Assert.assertEquals(map.get(ExposedPort.tcp(80)), null);
+        assertEquals(map.get(ExposedPort.tcp(80)), null);
     }
 
     @Test
     public void serializingWithNullBindings() throws Exception {
         Ports ports = new Ports();
         ports.bind(ExposedPort.tcp(80), null);
-        Assert.assertEquals(objectMapper.writeValueAsString(ports), jsonWithNullBindingForOnePort);
+        assertEquals(objectMapper.writeValueAsString(ports), jsonWithNullBindingForOnePort);
     }
 }

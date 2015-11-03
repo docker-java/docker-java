@@ -1,11 +1,12 @@
 package com.github.dockerjava.api.model;
 
 import com.github.dockerjava.api.model.Ports.Binding;
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.Map;
+
+import static org.testng.Assert.assertEquals;
 
 /**
  * As there may be several {@link Binding}s per {@link ExposedPort}, it makes a difference if you add
@@ -34,9 +35,9 @@ public class Ports_addBindingsTest {
 
         Map<ExposedPort, Binding[]> bindings = ports.getBindings();
         // two keys with one value each
-        Assert.assertEquals(bindings.size(), 2);
-        Assert.assertEquals(bindings.get(TCP_80), new Binding[] { BINDING_8080 });
-        Assert.assertEquals(bindings.get(TCP_90), new Binding[] { BINDING_9090 });
+        assertEquals(bindings.size(), 2);
+        assertEquals(bindings.get(TCP_80), new Binding[] { BINDING_8080 });
+        assertEquals(bindings.get(TCP_90), new Binding[] { BINDING_9090 });
     }
 
     @Test
@@ -45,8 +46,8 @@ public class Ports_addBindingsTest {
 
         Map<ExposedPort, Binding[]> bindings = ports.getBindings();
         // one key with two values
-        Assert.assertEquals(bindings.size(), 1);
-        Assert.assertEquals(bindings.get(TCP_80), new Binding[] { BINDING_8080, BINDING_9090 });
+        assertEquals(bindings.size(), 1);
+        assertEquals(bindings.get(TCP_80), new Binding[] { BINDING_8080, BINDING_9090 });
     }
 
     @Test
@@ -54,7 +55,7 @@ public class Ports_addBindingsTest {
         ports.add(new PortBinding(null, TCP_80));
         Map<ExposedPort, Binding[]> bindings = ports.getBindings();
         // one key with two values
-        Assert.assertEquals(bindings.size(), 1);
-        Assert.assertEquals(bindings.get(TCP_80), null);
+        assertEquals(bindings.size(), 1);
+        assertEquals(bindings.get(TCP_80), null);
     }
 }

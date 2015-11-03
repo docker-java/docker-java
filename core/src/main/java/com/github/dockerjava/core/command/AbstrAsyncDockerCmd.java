@@ -1,12 +1,10 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.io.IOException;
-
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.AsyncDockerCmd;
 import com.github.dockerjava.api.command.DockerCmdAsyncExec;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class AbstrAsyncDockerCmd<CMD_T extends AsyncDockerCmd<CMD_T, A_RES_T>, A_RES_T> implements
         AsyncDockerCmd<CMD_T, A_RES_T> {

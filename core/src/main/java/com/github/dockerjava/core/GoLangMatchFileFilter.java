@@ -3,10 +3,10 @@
  */
 package com.github.dockerjava.core;
 
+import org.apache.commons.io.filefilter.AbstractFileFilter;
+
 import java.io.File;
 import java.util.List;
-
-import org.apache.commons.io.filefilter.AbstractFileFilter;
 
 public class GoLangMatchFileFilter extends AbstractFileFilter {
 

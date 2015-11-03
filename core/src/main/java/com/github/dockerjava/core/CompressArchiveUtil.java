@@ -1,6 +1,8 @@
 package com.github.dockerjava.core;
 
-import static com.github.dockerjava.core.FilePathUtil.relativize;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
+import org.apache.commons.io.FileUtils;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -8,9 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.zip.GZIPOutputStream;
 
-import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
-import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
-import org.apache.commons.io.FileUtils;
+import static com.github.dockerjava.core.FilePathUtil.relativize;
 
 public class CompressArchiveUtil {
 

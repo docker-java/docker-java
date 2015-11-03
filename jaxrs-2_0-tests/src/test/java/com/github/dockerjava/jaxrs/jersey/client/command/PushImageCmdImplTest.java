@@ -1,13 +1,10 @@
 package com.github.dockerjava.jaxrs.jersey.client.command;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
-
-import java.lang.reflect.Method;
-
+import com.github.dockerjava.api.DockerClientException;
+import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.core.command.PushImageResultCallback;
+import com.github.dockerjava.jaxrs.jersey.client.client.AbstractDockerClientTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
@@ -17,9 +14,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.DockerClientException;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.jaxrs.jersey.client.client.AbstractDockerClientTest;
+import java.lang.reflect.Method;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
 
 @Test(groups = "integration")
 public class PushImageCmdImplTest extends AbstractDockerClientTest {

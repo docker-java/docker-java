@@ -1,10 +1,10 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import com.github.dockerjava.api.command.DockerCmd;
 import com.github.dockerjava.api.command.DockerCmdSyncExec;
 import com.github.dockerjava.api.model.AuthConfig;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class AbstrAuthCfgDockerCmd<T extends DockerCmd<RES_T>, RES_T> extends AbstrDockerCmd<T, RES_T> {
 

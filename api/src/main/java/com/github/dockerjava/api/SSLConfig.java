@@ -1,11 +1,10 @@
 package com.github.dockerjava.api;
 
+import javax.net.ssl.SSLContext;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
-
-import javax.net.ssl.SSLContext;
 
 /**
  * Get an SSL Config. Allows for various different implementations.

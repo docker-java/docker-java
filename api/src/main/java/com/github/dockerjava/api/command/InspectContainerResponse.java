@@ -1,10 +1,5 @@
 package com.github.dockerjava.api.command;
 
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,6 +10,10 @@ import com.github.dockerjava.api.model.VolumeBind;
 import com.github.dockerjava.api.model.VolumeBinds;
 import com.github.dockerjava.api.model.VolumeRW;
 import com.github.dockerjava.api.model.VolumesRW;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  *

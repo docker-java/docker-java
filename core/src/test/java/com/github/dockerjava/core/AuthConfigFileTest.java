@@ -3,13 +3,13 @@
  */
 package com.github.dockerjava.core;
 
+import com.github.dockerjava.api.model.AuthConfig;
+import org.testng.annotations.Test;
+
 import java.io.File;
 import java.io.IOException;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-import com.github.dockerjava.api.model.AuthConfig;
+import static org.testng.Assert.assertEquals;
 
 public class AuthConfigFileTest {
 
@@ -64,7 +64,7 @@ public class AuthConfigFileTest {
         expected.addConfig(authConfig1);
         expected.addConfig(authConfig2);
 
-        Assert.assertEquals(runTest("validJson"), expected);
+        assertEquals(runTest("validJson"), expected);
 
     }
 
@@ -79,13 +79,13 @@ public class AuthConfigFileTest {
         AuthConfigFile expected = new AuthConfigFile();
         expected.addConfig(authConfig);
 
-        Assert.assertEquals(runTest("validLegacy"), expected);
+        assertEquals(runTest("validLegacy"), expected);
     }
 
     @Test
     public void nonExistent() throws IOException {
         AuthConfigFile expected = new AuthConfigFile();
-        Assert.assertEquals(runTest("idontexist"), expected);
+        assertEquals(runTest("idontexist"), expected);
     }
 
     private AuthConfigFile runTest(String testFileName) throws IOException {

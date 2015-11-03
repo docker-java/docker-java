@@ -1,8 +1,8 @@
 package com.github.dockerjava.api.command;
 
-import java.util.List;
-
 import com.github.dockerjava.api.model.Image;
+
+import java.util.List;
 
 /**
  * List images

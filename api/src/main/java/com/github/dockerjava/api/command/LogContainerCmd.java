@@ -1,9 +1,9 @@
 package com.github.dockerjava.api.command;
 
-import java.io.InputStream;
-
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Frame;
+
+import java.io.InputStream;
 
 /**
  * Get container logs

@@ -1,15 +1,8 @@
 package com.github.dockerjava.jaxrs.jersey.client.command;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
-
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.security.SecureRandom;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.model.Statistics;
+import com.github.dockerjava.core.async.ResultCallbackTemplate;
 import com.github.dockerjava.jaxrs.jersey.client.client.AbstractDockerClientTest;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -18,9 +11,15 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.model.Statistics;
-import com.github.dockerjava.core.async.ResultCallbackTemplate;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.security.SecureRandom;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
 
 @Test(groups = "integration")
 public class StatsCmdImplTest extends AbstractDockerClientTest {

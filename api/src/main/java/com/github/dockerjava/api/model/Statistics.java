@@ -1,11 +1,10 @@
 package com.github.dockerjava.api.model;
 
-import java.util.Map;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
+import java.util.Map;
 
 /**
  * Representation of a Docker statistics.

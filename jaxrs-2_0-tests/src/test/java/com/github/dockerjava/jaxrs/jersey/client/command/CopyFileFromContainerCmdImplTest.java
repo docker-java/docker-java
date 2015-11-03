@@ -1,13 +1,8 @@
 package com.github.dockerjava.jaxrs.jersey.client.command;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.hamcrest.Matchers.not;
-
-import java.io.InputStream;
-import java.lang.reflect.Method;
-
-import org.testng.Assert;
+import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.jaxrs.jersey.client.client.AbstractDockerClientTest;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -15,9 +10,12 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.jaxrs.jersey.client.client.AbstractDockerClientTest;
+import java.io.InputStream;
+import java.lang.reflect.Method;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.not;
 
 @Test(groups = "integration")
 public class CopyFileFromContainerCmdImplTest extends AbstractDockerClientTest {
@@ -55,19 +53,19 @@ public class CopyFileFromContainerCmdImplTest extends AbstractDockerClientTest {
 
         InputStream response = dockerClient.copyFileFromContainerCmd(container.getId(), "/copyFromContainer").exec();
         boolean bytesAvailable = response.available() > 0;
-        Assert.assertTrue(bytesAvailable, "The file was not copied from the container.");
+        assertTrue(bytesAvailable, "The file was not copied from the container.");
 
         // read the stream fully. Otherwise, the underlying stream will not be closed.
         String responseAsString = asString(response);
-        Assert.assertNotNull(responseAsString);
-        Assert.assertTrue(responseAsString.length() > 0);
+        assertNotNull(responseAsString);
+        assertTrue(responseAsString.length() > 0);
     }
 
     @Test
     public void copyFromNonExistingContainer() throws Exception {
         try {
             dockerClient.copyFileFromContainerCmd("non-existing", "/test").exec();
-            Assert.fail("expected NotFoundException");
+            fail("expected NotFoundException");
         } catch (NotFoundException ignored) {
         }
     }

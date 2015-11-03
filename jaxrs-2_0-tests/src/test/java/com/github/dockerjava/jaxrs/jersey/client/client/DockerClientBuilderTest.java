@@ -2,7 +2,6 @@ package com.github.dockerjava.jaxrs.jersey.client.client;
 
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.core.DockerClientBuilder;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -29,16 +28,16 @@ public class DockerClientBuilderTest {
             public void run() {
                 DockerCmdExecFactory factory = DockerClientBuilder.getDefaultDockerCmdExecFactory();
                 // factory created
-                Assert.assertNotNull(factory);
+                assertNotNull(factory);
                 // and is unique
-                Assert.assertFalse(instances.contains(factory));
+                assertFalse(instances.contains(factory));
                 instances.add(factory);
             }
         };
 
         parallel(AMOUNT, runnable);
         // set contains all required unique instances
-        Assert.assertEquals(instances.size(), AMOUNT);
+        assertEquals(instances.size(), AMOUNT);
     }
 
     public static void parallel(int threads, final Runnable task) throws Exception {

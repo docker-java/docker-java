@@ -9,10 +9,8 @@ import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.jaxrs.jersey.client.client.AbstractDockerClientTest;
 import com.google.common.collect.ImmutableMap;
 import org.hamcrest.Matcher;
-import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.testinfected.hamcrest.jpa.HasFieldWithValue;
-import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -23,6 +21,8 @@ import org.testng.annotations.Test;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 
 @Test(groups = "integration")
 public class ListContainersCmdImplTest extends AbstractDockerClientTest {
@@ -55,18 +55,18 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
         dockerClient.pullImageCmd(testImage).exec(new PullImageResultCallback()).awaitSuccess();
 
         List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
-        MatcherAssert.assertThat(containers, Matchers.notNullValue());
+        assertThat(containers, Matchers.notNullValue());
         AbstractDockerClientTest.LOG.info("Container List: {}", containers);
 
         int size = containers.size();
 
         CreateContainerResponse container1 = dockerClient.createContainerCmd(testImage).withCmd("echo").exec();
 
-        MatcherAssert.assertThat(container1.getId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(container1.getId(), Matchers.not(Matchers.isEmptyString()));
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container1.getId()).exec();
 
-        MatcherAssert.assertThat(inspectContainerResponse.getConfig().getImage(), Matchers.is(Matchers.equalTo(testImage)));
+        assertThat(inspectContainerResponse.getConfig().getImage(), Matchers.is(Matchers.equalTo(testImage)));
 
         dockerClient.startContainerCmd(container1.getId()).exec();
 
@@ -78,20 +78,20 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
             AbstractDockerClientTest.LOG.info("listContainer: id=" + container.getId() + " image=" + container.getImage());
         }
 
-        MatcherAssert.assertThat(size + 1, Matchers.is(Matchers.equalTo(containers2.size())));
+        assertThat(size + 1, Matchers.is(Matchers.equalTo(containers2.size())));
         Matcher matcher = Matchers.hasItem(HasFieldWithValue.hasField("id", Matchers.startsWith(container1.getId())));
-        MatcherAssert.assertThat(containers2, matcher);
+        assertThat(containers2, matcher);
 
         List<Container> filteredContainers = Lambda.filter(HasFieldWithValue.hasField("id", Matchers.startsWith(container1.getId())), containers2);
-        MatcherAssert.assertThat(filteredContainers.size(), Matchers.is(Matchers.equalTo(1)));
+        assertThat(filteredContainers.size(), Matchers.is(Matchers.equalTo(1)));
 
         for (Container container : filteredContainers) {
             AbstractDockerClientTest.LOG.info("filteredContainer: " + container);
         }
 
         Container container2 = filteredContainers.get(0);
-        MatcherAssert.assertThat(container2.getCommand(), Matchers.not(Matchers.isEmptyString()));
-        MatcherAssert.assertThat(container2.getImage(), Matchers.startsWith(testImage));
+        assertThat(container2.getCommand(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(container2.getImage(), Matchers.startsWith(testImage));
     }
 
     @Test
@@ -103,18 +103,18 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
         dockerClient.pullImageCmd(testImage).exec(new PullImageResultCallback()).awaitCompletion();
 
         List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
-        MatcherAssert.assertThat(containers, Matchers.notNullValue());
+        assertThat(containers, Matchers.notNullValue());
         AbstractDockerClientTest.LOG.info("Container List: {}", containers);
 
         int size = containers.size();
 
         CreateContainerResponse container1 = dockerClient.createContainerCmd(testImage).withCmd("echo").exec();
 
-        MatcherAssert.assertThat(container1.getId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(container1.getId(), Matchers.not(Matchers.isEmptyString()));
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container1.getId()).exec();
 
-        MatcherAssert.assertThat(inspectContainerResponse.getConfig().getImage(), Matchers.is(Matchers.equalTo(testImage)));
+        assertThat(inspectContainerResponse.getConfig().getImage(), Matchers.is(Matchers.equalTo(testImage)));
 
         dockerClient.startContainerCmd(container1.getId()).exec();
 
@@ -126,20 +126,20 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
             AbstractDockerClientTest.LOG.info("listContainer: id=" + container.getId() + " image=" + container.getImage());
         }
 
-        MatcherAssert.assertThat(size + 1, Matchers.is(Matchers.equalTo(containers2.size())));
+        assertThat(size + 1, Matchers.is(Matchers.equalTo(containers2.size())));
         Matcher matcher = Matchers.hasItem(HasFieldWithValue.hasField("id", Matchers.startsWith(container1.getId())));
-        MatcherAssert.assertThat(containers2, matcher);
+        assertThat(containers2, matcher);
 
         List<Container> filteredContainers = Lambda.filter(HasFieldWithValue.hasField("id", Matchers.startsWith(container1.getId())), containers2);
-        MatcherAssert.assertThat(filteredContainers.size(), Matchers.is(Matchers.equalTo(1)));
+        assertThat(filteredContainers.size(), Matchers.is(Matchers.equalTo(1)));
 
         for (Container container : filteredContainers) {
             AbstractDockerClientTest.LOG.info("filteredContainer: " + container);
         }
 
         Container container2 = filteredContainers.get(0);
-        MatcherAssert.assertThat(container2.getCommand(), Matchers.not(Matchers.isEmptyString()));
-        MatcherAssert.assertThat(container2.getImage(), Matchers.startsWith(testImage));
+        assertThat(container2.getCommand(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(container2.getImage(), Matchers.startsWith(testImage));
 
         Map<String, String> labels = ImmutableMap.of("test", "docker-java");
 
@@ -147,18 +147,18 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
         dockerClient.createContainerCmd(testImage).withCmd("echo").withLabels(labels).exec();
         filteredContainers = dockerClient.listContainersCmd().withShowAll(true)
                 .withFilters(new Filters().withLabels(labels)).exec();
-        MatcherAssert.assertThat(filteredContainers.size(), Matchers.is(Matchers.equalTo(1)));
+        assertThat(filteredContainers.size(), Matchers.is(Matchers.equalTo(1)));
         Container container3 = filteredContainers.get(0);
-        MatcherAssert.assertThat(container3.getCommand(), Matchers.not(Matchers.isEmptyString()));
-        MatcherAssert.assertThat(container3.getImage(), Matchers.startsWith(testImage));
+        assertThat(container3.getCommand(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(container3.getImage(), Matchers.startsWith(testImage));
 
         filteredContainers = dockerClient.listContainersCmd().withShowAll(true)
                 .withFilters(new Filters().withLabels("test")).exec();
-        MatcherAssert.assertThat(filteredContainers.size(), Matchers.is(Matchers.equalTo(1)));
+        assertThat(filteredContainers.size(), Matchers.is(Matchers.equalTo(1)));
         container3 = filteredContainers.get(0);
-        MatcherAssert.assertThat(container3.getCommand(), Matchers.not(Matchers.isEmptyString()));
-        MatcherAssert.assertThat(container3.getImage(), Matchers.startsWith(testImage));
-        Assert.assertEquals(container3.getLabels(), labels);
+        assertThat(container3.getCommand(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(container3.getImage(), Matchers.startsWith(testImage));
+        assertEquals(container3.getLabels(), labels);
     }
 
 }

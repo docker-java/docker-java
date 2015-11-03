@@ -1,13 +1,7 @@
 package com.github.dockerjava.jaxrs.jersey.client.command;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
-
-import java.io.InputStream;
-import java.lang.reflect.Method;
-import java.security.SecureRandom;
-
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.ExecCreateCmdResponse;
 import com.github.dockerjava.jaxrs.jersey.client.client.AbstractDockerClientTest;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -16,8 +10,13 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.ExecCreateCmdResponse;
+import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.security.SecureRandom;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
 
 @Test(groups = "integration")
 public class ExecStartCmdImplTest extends AbstractDockerClientTest {

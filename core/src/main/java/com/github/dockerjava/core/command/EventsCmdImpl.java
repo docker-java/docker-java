@@ -1,10 +1,10 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.model.Event;
 import com.github.dockerjava.api.model.Filters;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Stream docker events

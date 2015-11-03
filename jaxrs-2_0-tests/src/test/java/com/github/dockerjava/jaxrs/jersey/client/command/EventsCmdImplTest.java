@@ -1,14 +1,11 @@
 package com.github.dockerjava.jaxrs.jersey.client.command;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.model.Event;
+import com.github.dockerjava.api.model.EventFilters;
 import com.github.dockerjava.core.command.EventsResultCallback;
 import com.github.dockerjava.core.command.PullImageResultCallback;
-import org.testng.Assert;
+import com.github.dockerjava.jaxrs.jersey.client.client.AbstractDockerClientTest;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -16,10 +13,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.model.Event;
-import com.github.dockerjava.api.model.EventFilters;
-import com.github.dockerjava.jaxrs.jersey.client.client.AbstractDockerClientTest;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 @Test(groups = "integration")
 public class EventsCmdImplTest extends AbstractDockerClientTest {
@@ -71,7 +69,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 
         eventCallback.close();
 
-        Assert.assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
+        assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
     }
 
     @Test
@@ -89,7 +87,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
 
         eventCallback.close();
-        Assert.assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
+        assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
     }
 
     @Test
@@ -107,7 +105,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
 
         eventCallback.close();
-        Assert.assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
+        assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
     }
 
     public void testEventStreamingWithFilter() throws Exception {
@@ -123,7 +121,7 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
         boolean zeroCount = countDownLatch.await(10, TimeUnit.SECONDS);
 
         eventCallback.close();
-        Assert.assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
+        assertTrue(zeroCount, "Received only: " + eventCallback.getEvents());
     }
 
     /**

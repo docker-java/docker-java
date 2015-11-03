@@ -1,32 +1,33 @@
 package com.github.dockerjava.api.model;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import static org.testng.AssertJUnit.assertEquals;
 
 public class BindTest {
 
     @Test
     public void parseUsingDefaultAccessMode() {
         Bind bind = Bind.parse("/host:/container");
-        Assert.assertEquals(bind.getPath(), "/host");
-        Assert.assertEquals(bind.getVolume().getPath(), "/container");
-        Assert.assertEquals(bind.getAccessMode(), AccessMode.DEFAULT);
+        assertEquals(bind.getPath(), "/host");
+        assertEquals(bind.getVolume().getPath(), "/container");
+        assertEquals(bind.getAccessMode(), AccessMode.DEFAULT);
     }
 
     @Test
     public void parseReadWrite() {
         Bind bind = Bind.parse("/host:/container:rw");
-        Assert.assertEquals(bind.getPath(), "/host");
-        Assert.assertEquals(bind.getVolume().getPath(), "/container");
-        Assert.assertEquals(bind.getAccessMode(), AccessMode.rw);
+        assertEquals(bind.getPath(), "/host");
+        assertEquals(bind.getVolume().getPath(), "/container");
+        assertEquals(bind.getAccessMode(), AccessMode.rw);
     }
 
     @Test
     public void parseReadOnly() {
         Bind bind = Bind.parse("/host:/container:ro");
-        Assert.assertEquals(bind.getPath(), "/host");
-        Assert.assertEquals(bind.getVolume().getPath(), "/container");
-        Assert.assertEquals(bind.getAccessMode(), AccessMode.ro);
+        assertEquals(bind.getPath(), "/host");
+        assertEquals(bind.getVolume().getPath(), "/container");
+        assertEquals(bind.getAccessMode(), AccessMode.ro);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing Bind.*")
@@ -46,17 +47,17 @@ public class BindTest {
 
     @Test
     public void toStringReadOnly() {
-        Assert.assertEquals(Bind.parse("/host:/container:ro").toString(), "/host:/container:ro");
+        assertEquals(Bind.parse("/host:/container:ro").toString(), "/host:/container:ro");
     }
 
     @Test
     public void toStringReadWrite() {
-        Assert.assertEquals(Bind.parse("/host:/container:rw").toString(), "/host:/container:rw");
+        assertEquals(Bind.parse("/host:/container:rw").toString(), "/host:/container:rw");
     }
 
     @Test
     public void toStringDefaultAccessMode() {
-        Assert.assertEquals(Bind.parse("/host:/container").toString(), "/host:/container:rw");
+        assertEquals(Bind.parse("/host:/container").toString(), "/host:/container:rw");
     }
 
 }

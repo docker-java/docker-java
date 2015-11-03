@@ -15,16 +15,14 @@
  */
 package com.github.dockerjava.api.command;
 
-import static com.github.dockerjava.test.serdes.JSONTestHelper.testRoundTrip;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import com.github.dockerjava.test.serdes.JSONTestHelper;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 
-import com.github.dockerjava.test.serdes.JSONTestHelper;
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Tests for {@link InspectContainerResponse}.
@@ -37,17 +35,17 @@ public class InspectContainerResponseTest {
     public void roundTrip_full() throws IOException {
         InspectContainerResponse[] responses = JSONTestHelper.testRoundTrip(CommandJSONSamples.inspectContainerResponse_full,
                 InspectContainerResponse[].class);
-        Assert.assertEquals(1, responses.length);
+        assertEquals(1, responses.length);
         final InspectContainerResponse response = responses[0];
 
         // Check volumes: https://github.com/docker-java/docker-java/issues/211
-        Assert.assertEquals(response.getVolumes().length, 2);
-        Assert.assertEquals(response.getVolumesRW().length, 2);
-        Assert.assertEquals(response.getVolumes()[1].getContainerPath(), "/bar/foo/myvol2");
-        Assert.assertEquals(response.getVolumes()[1].getHostPath(), "/path2");
-        Assert.assertEquals(response.getVolumesRW()[1].getVolume().getPath(), "/bar/foo/myvol2");
-        Assert.assertFalse(response.getVolumesRW()[1].getAccessMode().toBoolean());
-        Assert.assertTrue(response.getVolumesRW()[0].getAccessMode().toBoolean());
+        assertEquals(response.getVolumes().length, 2);
+        assertEquals(response.getVolumesRW().length, 2);
+        assertEquals(response.getVolumes()[1].getContainerPath(), "/bar/foo/myvol2");
+        assertEquals(response.getVolumes()[1].getHostPath(), "/path2");
+        assertEquals(response.getVolumesRW()[1].getVolume().getPath(), "/bar/foo/myvol2");
+        assertFalse(response.getVolumesRW()[1].getAccessMode().toBoolean());
+        assertTrue(response.getVolumesRW()[0].getAccessMode().toBoolean());
     }
 
     @Test

@@ -1,13 +1,12 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.github.dockerjava.api.command.CreateImageCmd;
+import com.github.dockerjava.api.command.CreateImageResponse;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.io.InputStream;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
-import com.github.dockerjava.api.command.CreateImageCmd;
-import com.github.dockerjava.api.command.CreateImageResponse;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Create an image by importing the given stream of a tar file.

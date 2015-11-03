@@ -1,9 +1,9 @@
 package com.github.dockerjava.jaxrs.jersey.client.command;
 
-import java.lang.reflect.Method;
-
+import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.model.Version;
+import com.github.dockerjava.jaxrs.jersey.client.client.AbstractDockerClientTest;
 import org.apache.commons.lang.StringUtils;
-import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -11,9 +11,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.api.model.Version;
-import com.github.dockerjava.jaxrs.jersey.client.client.AbstractDockerClientTest;
+import java.lang.reflect.Method;
 
 @Test(groups = "integration")
 public class VersionCmdImplTest extends AbstractDockerClientTest {
@@ -43,10 +41,10 @@ public class VersionCmdImplTest extends AbstractDockerClientTest {
         Version version = dockerClient.versionCmd().exec();
         AbstractDockerClientTest.LOG.info(version.toString());
 
-        Assert.assertTrue(version.getGoVersion().length() > 0);
-        Assert.assertTrue(version.getVersion().length() > 0);
+        assertTrue(version.getGoVersion().length() > 0);
+        assertTrue(version.getVersion().length() > 0);
 
-        Assert.assertEquals(StringUtils.split(version.getVersion(), ".").length, 3);
+        assertEquals(StringUtils.split(version.getVersion(), ".").length, 3);
 
     }
 

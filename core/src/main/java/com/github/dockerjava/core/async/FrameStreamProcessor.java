@@ -3,12 +3,12 @@
  */
 package com.github.dockerjava.core.async;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.core.command.FrameReader;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  *

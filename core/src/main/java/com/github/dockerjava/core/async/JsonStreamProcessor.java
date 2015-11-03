@@ -3,14 +3,14 @@
  */
 package com.github.dockerjava.core.async;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.async.ResultCallback;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  *

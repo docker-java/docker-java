@@ -18,15 +18,20 @@ import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumeRW;
 import com.github.dockerjava.api.model.VolumesFrom;
 import com.github.dockerjava.jaxrs.jersey.client.client.AbstractDockerClientTest;
-import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+
+import java.lang.reflect.Method;
+import java.security.SecureRandom;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -39,15 +44,6 @@ import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.startsWith;
-
-import java.lang.reflect.Method;
-import java.security.SecureRandom;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import static org.hamcrest.MatcherAssert.assertThat;
 
 @Test(groups = "integration")
 public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
@@ -86,7 +82,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         try {
             dockerClient.createContainerCmd("busybox").withCmd("env").withName(containerName).exec();
-            Assert.fail("expected ConflictException");
+            fail("expected ConflictException");
         } catch (ConflictException e) {
         }
     }
@@ -198,7 +194,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        MatcherAssert.assertThat(containerLog(container.getId()), containsString("VARIABLE=success"));
+        assertThat(containerLog(container.getId()), containsString("VARIABLE=success"));
     }
 
     @Test
@@ -217,7 +213,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        MatcherAssert.assertThat(containerLog(container.getId()), containsString("HOSTNAME=docker-java"));
+        assertThat(containerLog(container.getId()), containsString("HOSTNAME=docker-java"));
     }
 
     @Test
@@ -236,7 +232,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         try {
             dockerClient.createContainerCmd("busybox").withName("container").withCmd("env").exec();
-            Assert.fail("Expected ConflictException");
+            fail("Expected ConflictException");
         } catch (ConflictException e) {
         }
 
@@ -502,7 +498,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-        Assert.assertEquals(inspectContainerResponse.getConfig().getMacAddress(), "00:80:41:ae:fd:7e");
+        assertEquals(inspectContainerResponse.getConfig().getMacAddress(), "00:80:41:ae:fd:7e");
     }
 
     @Test(groups = "ignoreInCircleCi")
@@ -558,6 +554,6 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
         // null becomes empty string
-        Assert.assertEquals(inspectContainerResponse.getHostConfig().getLogConfig().type, logConfig.type);
+        assertEquals(inspectContainerResponse.getHostConfig().getLogConfig().type, logConfig.type);
     }
 }

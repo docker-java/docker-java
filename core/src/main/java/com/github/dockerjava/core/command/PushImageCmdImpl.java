@@ -1,10 +1,10 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.PushResponseItem;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Push the latest image to the repository.

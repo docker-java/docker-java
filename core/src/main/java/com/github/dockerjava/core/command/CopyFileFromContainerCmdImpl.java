@@ -1,14 +1,13 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.io.InputStream;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
+import java.io.InputStream;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  *

@@ -1,11 +1,11 @@
 package com.github.dockerjava.api.command;
 
-import java.util.List;
-
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.InternalServerErrorException;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.model.ChangeLog;
+
+import java.util.List;
 
 public interface ContainerDiffCmd extends SyncDockerCmd<List<ChangeLog>> {
 

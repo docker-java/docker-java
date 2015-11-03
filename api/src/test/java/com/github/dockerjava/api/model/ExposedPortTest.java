@@ -1,20 +1,21 @@
 package com.github.dockerjava.api.model;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import static org.testng.Assert.assertEquals;
 
 public class ExposedPortTest {
 
     @Test
     public void parsePortAndProtocol() {
         ExposedPort exposedPort = ExposedPort.parse("80/tcp");
-        Assert.assertEquals(exposedPort, new ExposedPort(80, InternetProtocol.TCP));
+        assertEquals(exposedPort, new ExposedPort(80, InternetProtocol.TCP));
     }
 
     @Test
     public void parsePortOnly() {
         ExposedPort exposedPort = ExposedPort.parse("80");
-        Assert.assertEquals(exposedPort, new ExposedPort(80, InternetProtocol.DEFAULT));
+        assertEquals(exposedPort, new ExposedPort(80, InternetProtocol.DEFAULT));
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing ExposedPort 'nonsense'")
@@ -29,7 +30,7 @@ public class ExposedPortTest {
 
     @Test
     public void stringify() {
-        Assert.assertEquals(ExposedPort.parse("80/tcp").toString(), "80/tcp");
+        assertEquals(ExposedPort.parse("80/tcp").toString(), "80/tcp");
     }
 
 }

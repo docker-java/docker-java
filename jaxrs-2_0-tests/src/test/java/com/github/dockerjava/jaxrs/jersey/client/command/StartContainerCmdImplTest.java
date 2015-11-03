@@ -19,9 +19,7 @@ import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumeRW;
 import com.github.dockerjava.api.model.VolumesFrom;
 import com.github.dockerjava.jaxrs.jersey.client.client.AbstractDockerClientTest;
-import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -32,6 +30,8 @@ import org.testng.annotations.Test;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.UUID;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 
 @Test(groups = "integration")
 public class StartContainerCmdImplTest extends AbstractDockerClientTest {
@@ -70,11 +70,11 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         AbstractDockerClientTest.LOG.info("Created container {}", container.toString());
 
-        MatcherAssert.assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-        MatcherAssert.assertThat(inspectContainerResponse.getConfig().getVolumes().keySet(), Matchers.contains("/opt/webapp1", "/opt/webapp2"));
+        assertThat(inspectContainerResponse.getConfig().getVolumes().keySet(), Matchers.contains("/opt/webapp1", "/opt/webapp2"));
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
@@ -84,7 +84,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         AbstractDockerClientTest.assertContainerHasVolumes(inspectContainerResponse, volume1, volume2);
 
-        MatcherAssert.assertThat(Arrays.asList(inspectContainerResponse.getVolumesRW()),
+        assertThat(Arrays.asList(inspectContainerResponse.getVolumesRW()),
                 Matchers.contains(new VolumeRW(volume1, AccessMode.ro), new VolumeRW(volume2)));
 
     }
@@ -134,13 +134,13 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         AbstractDockerClientTest.LOG.info("Created container {}", container.toString());
 
-        MatcherAssert.assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-        MatcherAssert.assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getDns()),
+        assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getDns()),
                 Matchers.contains(aDnsServer, anotherDnsServer));
     }
 
@@ -154,7 +154,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         AbstractDockerClientTest.LOG.info("Created container {}", container.toString());
 
-        MatcherAssert.assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
@@ -162,7 +162,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-        MatcherAssert.assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getDnsSearch()), Matchers.contains(dnsSearch));
+        assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getDnsSearch()), Matchers.contains(dnsSearch));
     }
 
     @Test
@@ -181,7 +181,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         AbstractDockerClientTest.LOG.info("Created container {}", container.toString());
 
-        MatcherAssert.assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
@@ -189,15 +189,15 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-        MatcherAssert.assertThat(Arrays.asList(inspectContainerResponse.getConfig().getExposedPorts()), Matchers.contains(tcp22, tcp23));
+        assertThat(Arrays.asList(inspectContainerResponse.getConfig().getExposedPorts()), Matchers.contains(tcp22, tcp23));
 
-        MatcherAssert.assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp22)[0],
+        assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp22)[0],
                 Matchers.is(Matchers.equalTo(Ports.Binding(11022))));
 
-        MatcherAssert.assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23)[0],
+        assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23)[0],
                 Matchers.is(Matchers.equalTo(Ports.Binding(11023))));
 
-        MatcherAssert.assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23)[1],
+        assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23)[1],
                 Matchers.is(Matchers.equalTo(Ports.Binding(11024))));
 
     }
@@ -217,18 +217,18 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         AbstractDockerClientTest.LOG.info("Created container {}", container.toString());
 
-        MatcherAssert.assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-        MatcherAssert.assertThat(Arrays.asList(inspectContainerResponse.getConfig().getExposedPorts()), Matchers.contains(tcp22, tcp23));
+        assertThat(Arrays.asList(inspectContainerResponse.getConfig().getExposedPorts()), Matchers.contains(tcp22, tcp23));
 
-        MatcherAssert.assertThat(inspectContainerResponse.getNetworkSettings().getPorts().getBindings().get(tcp22)[0].getHostPort(),
+        assertThat(inspectContainerResponse.getNetworkSettings().getPorts().getBindings().get(tcp22)[0].getHostPort(),
                 Matchers.is(Matchers.not(Matchers.equalTo(tcp22.getPort()))));
 
-        MatcherAssert.assertThat(inspectContainerResponse.getNetworkSettings().getPorts().getBindings().get(tcp23)[0].getHostPort(),
+        assertThat(inspectContainerResponse.getNetworkSettings().getPorts().getBindings().get(tcp23)[0].getHostPort(),
                 Matchers.is(Matchers.not(Matchers.equalTo(tcp23.getPort()))));
 
     }
@@ -248,11 +248,11 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         AbstractDockerClientTest.LOG.info("Created container {}", container.toString());
 
-        MatcherAssert.assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
 
         try {
             dockerClient.startContainerCmd(container.getId()).exec();
-            Assert.fail("expected InternalServerErrorException");
+           fail("expected InternalServerErrorException");
         } catch (InternalServerErrorException e) {
 
         }
@@ -266,7 +266,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
                 .withName("container1").exec();
 
         AbstractDockerClientTest.LOG.info("Created container1 {}", container1.toString());
-        MatcherAssert.assertThat(container1.getId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(container1.getId(), Matchers.not(Matchers.isEmptyString()));
 
         dockerClient.startContainerCmd(container1.getId()).exec();
 
@@ -274,23 +274,23 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
                 .exec();
         AbstractDockerClientTest.LOG.info("Container1 Inspect: {}", inspectContainerResponse1.toString());
 
-        MatcherAssert.assertThat(inspectContainerResponse1.getConfig(), Matchers.is(Matchers.notNullValue()));
-        MatcherAssert.assertThat(inspectContainerResponse1.getId(), Matchers.not(Matchers.isEmptyString()));
-        MatcherAssert.assertThat(inspectContainerResponse1.getId(), Matchers.startsWith(container1.getId()));
-        MatcherAssert.assertThat(inspectContainerResponse1.getName(), Matchers.equalTo("/container1"));
-        MatcherAssert.assertThat(inspectContainerResponse1.getImageId(), Matchers.not(Matchers.isEmptyString()));
-        MatcherAssert.assertThat(inspectContainerResponse1.getState(), Matchers.is(Matchers.notNullValue()));
-        MatcherAssert.assertThat(inspectContainerResponse1.getState().isRunning(), Matchers.is(true));
+        assertThat(inspectContainerResponse1.getConfig(), Matchers.is(Matchers.notNullValue()));
+        assertThat(inspectContainerResponse1.getId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(inspectContainerResponse1.getId(), Matchers.startsWith(container1.getId()));
+        assertThat(inspectContainerResponse1.getName(), Matchers.equalTo("/container1"));
+        assertThat(inspectContainerResponse1.getImageId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(inspectContainerResponse1.getState(), Matchers.is(Matchers.notNullValue()));
+        assertThat(inspectContainerResponse1.getState().isRunning(), Matchers.is(true));
 
         if (!inspectContainerResponse1.getState().isRunning()) {
-            MatcherAssert.assertThat(inspectContainerResponse1.getState().getExitCode(), Matchers.is(Matchers.equalTo(0)));
+            assertThat(inspectContainerResponse1.getState().getExitCode(), Matchers.is(Matchers.equalTo(0)));
         }
 
         CreateContainerResponse container2 = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
                 .withName("container2").withLinks(new Link("container1", "container1Link")).exec();
 
         AbstractDockerClientTest.LOG.info("Created container2 {}", container2.toString());
-        MatcherAssert.assertThat(container2.getId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(container2.getId(), Matchers.not(Matchers.isEmptyString()));
 
         dockerClient.startContainerCmd(container2.getId()).exec();
 
@@ -298,17 +298,17 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
                 .exec();
         AbstractDockerClientTest.LOG.info("Container2 Inspect: {}", inspectContainerResponse2.toString());
 
-        MatcherAssert.assertThat(inspectContainerResponse2.getConfig(), Matchers.is(Matchers.notNullValue()));
-        MatcherAssert.assertThat(inspectContainerResponse2.getId(), Matchers.not(Matchers.isEmptyString()));
-        MatcherAssert.assertThat(inspectContainerResponse2.getHostConfig(), Matchers.is(Matchers.notNullValue()));
-        MatcherAssert.assertThat(inspectContainerResponse2.getHostConfig().getLinks(), Matchers.is(Matchers.notNullValue()));
-        MatcherAssert.assertThat(inspectContainerResponse2.getHostConfig().getLinks(), Matchers.equalTo(new Link[] { new Link("container1",
+        assertThat(inspectContainerResponse2.getConfig(), Matchers.is(Matchers.notNullValue()));
+        assertThat(inspectContainerResponse2.getId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(inspectContainerResponse2.getHostConfig(), Matchers.is(Matchers.notNullValue()));
+        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), Matchers.is(Matchers.notNullValue()));
+        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), Matchers.equalTo(new Link[] { new Link("container1",
                 "container1Link") }));
-        MatcherAssert.assertThat(inspectContainerResponse2.getId(), Matchers.startsWith(container2.getId()));
-        MatcherAssert.assertThat(inspectContainerResponse2.getName(), Matchers.equalTo("/container2"));
-        MatcherAssert.assertThat(inspectContainerResponse2.getImageId(), Matchers.not(Matchers.isEmptyString()));
-        MatcherAssert.assertThat(inspectContainerResponse2.getState(), Matchers.is(Matchers.notNullValue()));
-        MatcherAssert.assertThat(inspectContainerResponse2.getState().isRunning(), Matchers.is(true));
+        assertThat(inspectContainerResponse2.getId(), Matchers.startsWith(container2.getId()));
+        assertThat(inspectContainerResponse2.getName(), Matchers.equalTo("/container2"));
+        assertThat(inspectContainerResponse2.getImageId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(inspectContainerResponse2.getState(), Matchers.is(Matchers.notNullValue()));
+        assertThat(inspectContainerResponse2.getState().isRunning(), Matchers.is(true));
 
     }
 
@@ -319,7 +319,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
                 .withName("container1").exec();
 
         AbstractDockerClientTest.LOG.info("Created container1 {}", container1.toString());
-        MatcherAssert.assertThat(container1.getId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(container1.getId(), Matchers.not(Matchers.isEmptyString()));
 
         dockerClient.startContainerCmd(container1.getId()).exec();
 
@@ -327,23 +327,23 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
                 .exec();
         AbstractDockerClientTest.LOG.info("Container1 Inspect: {}", inspectContainerResponse1.toString());
 
-        MatcherAssert.assertThat(inspectContainerResponse1.getConfig(), Matchers.is(Matchers.notNullValue()));
-        MatcherAssert.assertThat(inspectContainerResponse1.getId(), Matchers.not(Matchers.isEmptyString()));
-        MatcherAssert.assertThat(inspectContainerResponse1.getId(), Matchers.startsWith(container1.getId()));
-        MatcherAssert.assertThat(inspectContainerResponse1.getName(), Matchers.equalTo("/container1"));
-        MatcherAssert.assertThat(inspectContainerResponse1.getImageId(), Matchers.not(Matchers.isEmptyString()));
-        MatcherAssert.assertThat(inspectContainerResponse1.getState(), Matchers.is(Matchers.notNullValue()));
-        MatcherAssert.assertThat(inspectContainerResponse1.getState().isRunning(), Matchers.is(true));
+        assertThat(inspectContainerResponse1.getConfig(), Matchers.is(Matchers.notNullValue()));
+        assertThat(inspectContainerResponse1.getId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(inspectContainerResponse1.getId(), Matchers.startsWith(container1.getId()));
+        assertThat(inspectContainerResponse1.getName(), Matchers.equalTo("/container1"));
+        assertThat(inspectContainerResponse1.getImageId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(inspectContainerResponse1.getState(), Matchers.is(Matchers.notNullValue()));
+        assertThat(inspectContainerResponse1.getState().isRunning(), Matchers.is(true));
 
         if (!inspectContainerResponse1.getState().isRunning()) {
-            MatcherAssert.assertThat(inspectContainerResponse1.getState().getExitCode(), Matchers.is(Matchers.equalTo(0)));
+            assertThat(inspectContainerResponse1.getState().getExitCode(), Matchers.is(Matchers.equalTo(0)));
         }
 
         CreateContainerResponse container2 = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
                 .withName("container2").withLinks(new Link("container1", "container1Link")).exec();
 
         AbstractDockerClientTest.LOG.info("Created container2 {}", container2.toString());
-        MatcherAssert.assertThat(container2.getId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(container2.getId(), Matchers.not(Matchers.isEmptyString()));
 
         dockerClient.startContainerCmd(container2.getId()).exec();
 
@@ -351,17 +351,17 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
                 .exec();
         AbstractDockerClientTest.LOG.info("Container2 Inspect: {}", inspectContainerResponse2.toString());
 
-        MatcherAssert.assertThat(inspectContainerResponse2.getConfig(), Matchers.is(Matchers.notNullValue()));
-        MatcherAssert.assertThat(inspectContainerResponse2.getId(), Matchers.not(Matchers.isEmptyString()));
-        MatcherAssert.assertThat(inspectContainerResponse2.getHostConfig(), Matchers.is(Matchers.notNullValue()));
-        MatcherAssert.assertThat(inspectContainerResponse2.getHostConfig().getLinks(), Matchers.is(Matchers.notNullValue()));
-        MatcherAssert.assertThat(inspectContainerResponse2.getHostConfig().getLinks(), Matchers.equalTo(new Link[] { new Link("container1",
+        assertThat(inspectContainerResponse2.getConfig(), Matchers.is(Matchers.notNullValue()));
+        assertThat(inspectContainerResponse2.getId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(inspectContainerResponse2.getHostConfig(), Matchers.is(Matchers.notNullValue()));
+        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), Matchers.is(Matchers.notNullValue()));
+        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), Matchers.equalTo(new Link[] { new Link("container1",
                 "container1Link") }));
-        MatcherAssert.assertThat(inspectContainerResponse2.getId(), Matchers.startsWith(container2.getId()));
-        MatcherAssert.assertThat(inspectContainerResponse2.getName(), Matchers.equalTo("/container2"));
-        MatcherAssert.assertThat(inspectContainerResponse2.getImageId(), Matchers.not(Matchers.isEmptyString()));
-        MatcherAssert.assertThat(inspectContainerResponse2.getState(), Matchers.is(Matchers.notNullValue()));
-        MatcherAssert.assertThat(inspectContainerResponse2.getState().isRunning(), Matchers.is(true));
+        assertThat(inspectContainerResponse2.getId(), Matchers.startsWith(container2.getId()));
+        assertThat(inspectContainerResponse2.getName(), Matchers.equalTo("/container2"));
+        assertThat(inspectContainerResponse2.getImageId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(inspectContainerResponse2.getState(), Matchers.is(Matchers.notNullValue()));
+        assertThat(inspectContainerResponse2.getState().isRunning(), Matchers.is(true));
 
     }
 
@@ -372,25 +372,25 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
                 .exec();
 
         AbstractDockerClientTest.LOG.info("Created container {}", container.toString());
-        MatcherAssert.assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
         AbstractDockerClientTest.LOG.info("Container Inspect: {}", inspectContainerResponse.toString());
 
-        MatcherAssert.assertThat(inspectContainerResponse.getConfig(), Matchers.is(Matchers.notNullValue()));
-        MatcherAssert.assertThat(inspectContainerResponse.getId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(inspectContainerResponse.getConfig(), Matchers.is(Matchers.notNullValue()));
+        assertThat(inspectContainerResponse.getId(), Matchers.not(Matchers.isEmptyString()));
 
-        MatcherAssert.assertThat(inspectContainerResponse.getId(), Matchers.startsWith(container.getId()));
+        assertThat(inspectContainerResponse.getId(), Matchers.startsWith(container.getId()));
 
-        MatcherAssert.assertThat(inspectContainerResponse.getImageId(), Matchers.not(Matchers.isEmptyString()));
-        MatcherAssert.assertThat(inspectContainerResponse.getState(), Matchers.is(Matchers.notNullValue()));
+        assertThat(inspectContainerResponse.getImageId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(inspectContainerResponse.getState(), Matchers.is(Matchers.notNullValue()));
 
-        MatcherAssert.assertThat(inspectContainerResponse.getState().isRunning(), Matchers.is(true));
+        assertThat(inspectContainerResponse.getState().isRunning(), Matchers.is(true));
 
         if (!inspectContainerResponse.getState().isRunning()) {
-            MatcherAssert.assertThat(inspectContainerResponse.getState().getExitCode(), Matchers.is(Matchers.equalTo(0)));
+            assertThat(inspectContainerResponse.getState().getExitCode(), Matchers.is(Matchers.equalTo(0)));
         }
     }
 
@@ -398,7 +398,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
     public void testStartNonExistingContainer() throws DockerException {
         try {
             dockerClient.startContainerCmd("non-existing").exec();
-            Assert.fail("expected NotFoundException");
+           fail("expected NotFoundException");
         } catch (NotFoundException e) {
         }
     }
@@ -418,7 +418,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         AbstractDockerClientTest.LOG.info("Created container {}", container.toString());
 
-        MatcherAssert.assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
@@ -426,7 +426,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-        MatcherAssert.assertThat(inspectContainerResponse.getHostConfig().getNetworkMode(), Matchers.is(Matchers.equalTo("host")));
+        assertThat(inspectContainerResponse.getHostConfig().getNetworkMode(), Matchers.is(Matchers.equalTo("host")));
     }
 
     @Test
@@ -437,17 +437,17 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         AbstractDockerClientTest.LOG.info("Created container {}", container.toString());
 
-        MatcherAssert.assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-        MatcherAssert.assertThat(inspectContainerResponse.getState().isRunning(), Matchers.is(true));
+        assertThat(inspectContainerResponse.getState().isRunning(), Matchers.is(true));
 
-        MatcherAssert.assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getCapAdd()), Matchers.contains(Capability.NET_ADMIN));
+        assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getCapAdd()), Matchers.contains(Capability.NET_ADMIN));
 
-        MatcherAssert.assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getCapDrop()), Matchers.contains(Capability.MKNOD));
+        assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getCapDrop()), Matchers.contains(Capability.MKNOD));
     }
 
     @Test
@@ -458,15 +458,15 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         AbstractDockerClientTest.LOG.info("Created container {}", container.toString());
 
-        MatcherAssert.assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-        MatcherAssert.assertThat(inspectContainerResponse.getState().isRunning(), Matchers.is(true));
+        assertThat(inspectContainerResponse.getState().isRunning(), Matchers.is(true));
 
-        MatcherAssert.assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getDevices()), Matchers.contains(new Device("rwm",
+        assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getDevices()), Matchers.contains(new Device("rwm",
                 "/dev/nulo", "/dev/zero")));
     }
 
@@ -478,15 +478,15 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         AbstractDockerClientTest.LOG.info("Created container {}", container.toString());
 
-        MatcherAssert.assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-        MatcherAssert.assertThat(inspectContainerResponse.getState().isRunning(), Matchers.is(true));
+        assertThat(inspectContainerResponse.getState().isRunning(), Matchers.is(true));
 
-        MatcherAssert.assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getExtraHosts()),
+        assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getExtraHosts()),
                 Matchers.contains("dockerhost:127.0.0.1"));
     }
 
@@ -500,15 +500,15 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         AbstractDockerClientTest.LOG.info("Created container {}", container.toString());
 
-        MatcherAssert.assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-        MatcherAssert.assertThat(inspectContainerResponse.getState().isRunning(), Matchers.is(true));
+        assertThat(inspectContainerResponse.getState().isRunning(), Matchers.is(true));
 
-        MatcherAssert.assertThat(inspectContainerResponse.getHostConfig().getRestartPolicy(), Matchers.is(Matchers.equalTo(restartPolicy)));
+        assertThat(inspectContainerResponse.getHostConfig().getRestartPolicy(), Matchers.is(Matchers.equalTo(restartPolicy)));
     }
 
     @Test
@@ -522,7 +522,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         AbstractDockerClientTest.LOG.info("Created container {}", container.toString());
 
-        MatcherAssert.assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
+        assertThat(container.getId(), Matchers.not(Matchers.isEmptyString()));
 
         // start container _without_any_customization_ (important!)
         dockerClient.startContainerCmd(container.getId()).exec();
@@ -530,14 +530,14 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
         // The DNS setting survived.
-        MatcherAssert.assertThat(inspectContainerResponse.getHostConfig().getDns(), Matchers.is(Matchers.notNullValue()));
-        MatcherAssert.assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getDns()), Matchers.contains(dnsServer));
+        assertThat(inspectContainerResponse.getHostConfig().getDns(), Matchers.is(Matchers.notNullValue()));
+        assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getDns()), Matchers.contains(dnsServer));
     }
 
     @Test
     public void anUnconfiguredCommandSerializesToEmptyJson() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         StartContainerCmd command = dockerClient.startContainerCmd("");
-        MatcherAssert.assertThat(objectMapper.writeValueAsString(command), Matchers.is("{}"));
+        assertThat(objectMapper.writeValueAsString(command), Matchers.is("{}"));
     }
 }

@@ -1,15 +1,14 @@
 package com.github.dockerjava.jaxrs.jersey.client.command;
 
-import java.io.File;
-
-import com.github.dockerjava.core.command.BuildImageResultCallback;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.InternalServerErrorException;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.model.Image;
+import com.github.dockerjava.core.command.BuildImageResultCallback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
 
 /**
  * Start and stop a single container for testing.

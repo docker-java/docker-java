@@ -1,16 +1,5 @@
 package com.github.dockerjava.api.model;
 
-import static org.apache.commons.lang.StringUtils.isEmpty;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.builder.EqualsBuilder;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,6 +13,16 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.github.dockerjava.api.command.InspectContainerResponse.NetworkSettings;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.builder.EqualsBuilder;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import static org.apache.commons.lang.StringUtils.isEmpty;
 
 /**
  * A container for port bindings, made available as a {@link Map} via its {@link #getBindings()} method.

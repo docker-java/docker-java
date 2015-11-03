@@ -1,9 +1,9 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Map;
 import java.util.TreeMap;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AuthConfigurations {
 

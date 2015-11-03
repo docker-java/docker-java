@@ -1,11 +1,10 @@
 package com.github.dockerjava.jaxrs.jersey.client.command;
 
-import java.lang.reflect.Method;
-
+import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.jaxrs.jersey.client.client.AbstractDockerClientTest;
 import org.apache.commons.lang.math.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -13,8 +12,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.jaxrs.jersey.client.client.AbstractDockerClientTest;
+import java.lang.reflect.Method;
 
 @Test(groups = "integration")
 public class TagImageCmdImplTest extends AbstractDockerClientTest {
@@ -56,7 +54,7 @@ public class TagImageCmdImplTest extends AbstractDockerClientTest {
 
         try {
             dockerClient.tagImageCmd("non-existing", "docker-java/busybox", tag).exec();
-            Assert.fail("expected NotFoundException");
+            fail("expected NotFoundException");
         } catch (NotFoundException e) {
         }
     }

@@ -3,15 +3,14 @@
  */
 package com.github.dockerjava.core.async;
 
+import com.github.dockerjava.api.async.ResultCallback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.github.dockerjava.api.async.ResultCallback;
 
 /**
  * Abstract template implementation of {@link ResultCallback}

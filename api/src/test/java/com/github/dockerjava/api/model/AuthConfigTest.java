@@ -1,8 +1,9 @@
 package com.github.dockerjava.api.model;
 
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import static org.testng.AssertJUnit.assertEquals;
 
 public class AuthConfigTest {
 
@@ -19,12 +20,12 @@ public class AuthConfigTest {
 
     @Test
     public void string() throws Exception {
-        Assert.assertEquals(authConfig.toString(),
+        assertEquals(authConfig.toString(),
                 "AuthConfig{username='qux', password='bar', email='foo', serverAddress='baz'}");
     }
 
     @Test
     public void defaultServerAddress() throws Exception {
-        Assert.assertEquals(new AuthConfig().getServerAddress(), "https://index.docker.io/v1/");
+        assertEquals(new AuthConfig().getServerAddress(), "https://index.docker.io/v1/");
     }
 }

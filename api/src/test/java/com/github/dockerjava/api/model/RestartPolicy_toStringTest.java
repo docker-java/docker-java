@@ -1,8 +1,9 @@
 package com.github.dockerjava.api.model;
 
-import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import static org.testng.Assert.assertEquals;
 
 public class RestartPolicy_toStringTest {
 
@@ -13,7 +14,7 @@ public class RestartPolicy_toStringTest {
 
     @Test(dataProvider = "input")
     public void serializationWithoutCount(String policy) throws Exception {
-        Assert.assertEquals(RestartPolicy.parse(policy).toString(), policy);
+        assertEquals(RestartPolicy.parse(policy).toString(), policy);
     }
 
 }

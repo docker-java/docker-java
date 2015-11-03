@@ -2,8 +2,10 @@ package com.github.dockerjava.core;
 
 import com.github.dockerjava.api.SSLConfig;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -17,10 +19,7 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * An SSL Config that is based on an pre-existing or pre-loaded KeyStore.

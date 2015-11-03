@@ -1,8 +1,5 @@
 package com.github.dockerjava.api.model;
 
-import java.io.IOException;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -16,6 +13,9 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import java.io.IOException;
+import java.util.Map;
 
 /**
  * Log driver to use for a created/running container. The available types are:

@@ -3,9 +3,9 @@
  */
 package com.github.dockerjava.core.async;
 
-import java.io.InputStream;
-
 import com.github.dockerjava.api.async.ResultCallback;
+
+import java.io.InputStream;
 
 /**
  *

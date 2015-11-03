@@ -1,19 +1,18 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.io.IOException;
-
-import org.apache.commons.codec.binary.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.DockerCmd;
 import com.github.dockerjava.api.command.DockerCmdSyncExec;
 import com.github.dockerjava.api.command.SyncDockerCmd;
 import com.github.dockerjava.api.model.AuthConfig;
+import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class AbstrDockerCmd<CMD_T extends DockerCmd<RES_T>, RES_T> implements SyncDockerCmd<RES_T> {
 

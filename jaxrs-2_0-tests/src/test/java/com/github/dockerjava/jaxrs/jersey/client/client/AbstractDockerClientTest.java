@@ -15,7 +15,6 @@ import com.github.dockerjava.jaxrs.jersey.client.TestDockerCmdExecFactory;
 import com.google.common.base.Joiner;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
-import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +30,8 @@ import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public abstract class AbstractDockerClientTest extends Assert {
 
@@ -183,7 +184,7 @@ public abstract class AbstractDockerClientTest extends Assert {
         for (VolumeBind bind : volumeBinds) {
             volumes.add(new Volume(bind.getContainerPath()));
         }
-        MatcherAssert.assertThat(volumes, Matchers.contains(expectedVolumes));
+        assertThat(volumes, Matchers.contains(expectedVolumes));
     }
 
     protected String containerLog(String containerId) throws Exception {

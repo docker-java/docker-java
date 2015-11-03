@@ -15,18 +15,15 @@
  */
 package com.github.dockerjava.test.serdes;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dockerjava.api.command.CommandJSONSamples;
+import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.io.IOUtils;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.api.command.CommandJSONSamples;
-import org.testng.Assert;
+import static org.testng.Assert.assertEquals;
 
 /**
  * Provides helper methods for serialization-deserialization tests
@@ -90,7 +87,7 @@ public class JSONTestHelper {
     public static <TClass> TClass testRoundTrip(JSONResourceRef resource, Class<TClass> tclass) throws IOException,
             AssertionError {
         TClass item = readObject(resource, tclass);
-        Assert.assertNotNull(item);
+        assertNotNull(item);
         return testRoundTrip(item, tclass);
     }
 
@@ -137,7 +134,7 @@ public class JSONTestHelper {
         JsonNode json2 = mapper.readTree(serialized2);
         TClass deserialized2 = mapper.readValue(serialized2, asclass);
 
-        Assert.assertEquals(json2, json1, "JSONs must be equal after the second roundtrip");
+        assertEquals(json2, json1, "JSONs must be equal after the second roundtrip");
         return deserialized2;
     }
 }

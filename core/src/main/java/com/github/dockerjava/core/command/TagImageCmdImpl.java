@@ -1,8 +1,8 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import com.github.dockerjava.api.command.TagImageCmd;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Tag an image into a repository

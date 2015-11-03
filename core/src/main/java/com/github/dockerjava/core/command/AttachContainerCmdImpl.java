@@ -1,9 +1,9 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.model.Frame;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Attach to container

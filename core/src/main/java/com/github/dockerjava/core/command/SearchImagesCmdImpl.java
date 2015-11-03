@@ -1,11 +1,11 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.github.dockerjava.api.command.SearchImagesCmd;
+import com.github.dockerjava.api.model.SearchItem;
 
 import java.util.List;
 
-import com.github.dockerjava.api.command.SearchImagesCmd;
-import com.github.dockerjava.api.model.SearchItem;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Search images

@@ -1,14 +1,5 @@
 package com.github.dockerjava.api.model;
 
-import static com.github.dockerjava.api.model.InternetProtocol.TCP;
-import static com.github.dockerjava.api.model.InternetProtocol.UDP;
-
-import java.io.IOException;
-import java.util.Map.Entry;
-
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,6 +13,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.github.dockerjava.api.model.Ports.Binding;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
+import java.io.IOException;
+import java.util.Map.Entry;
+
+import static com.github.dockerjava.api.model.InternetProtocol.TCP;
+import static com.github.dockerjava.api.model.InternetProtocol.UDP;
 
 /**
  * Represents a container port that Docker exposes to external clients. The port is defined by its {@link #getPort()

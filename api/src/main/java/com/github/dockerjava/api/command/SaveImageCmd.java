@@ -1,8 +1,8 @@
 package com.github.dockerjava.api.command;
 
-import java.io.InputStream;
-
 import com.github.dockerjava.api.NotFoundException;
+
+import java.io.InputStream;
 
 public interface SaveImageCmd extends SyncDockerCmd<InputStream> {
 

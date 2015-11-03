@@ -1,9 +1,9 @@
 package com.github.dockerjava.api.command;
 
-import java.util.List;
-
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Filters;
+
+import java.util.List;
 
 /**
  * List containers

@@ -1,14 +1,8 @@
 package com.github.dockerjava.jaxrs.jersey.client.command;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
-
-import java.io.IOException;
-import java.lang.reflect.Method;
-
-import org.testng.Assert;
+import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.jaxrs.jersey.client.client.AbstractDockerClientTest;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -16,9 +10,13 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.jaxrs.jersey.client.client.AbstractDockerClientTest;
+import java.io.IOException;
+import java.lang.reflect.Method;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
 
 @Test(groups = "integration")
 public class LogContainerCmdImplTest extends AbstractDockerClientTest {
@@ -67,7 +65,7 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
         loggingCallback.awaitCompletion();
 
-        Assert.assertTrue(loggingCallback.toString().contains(snippet));
+        assertTrue(loggingCallback.toString().contains(snippet));
     }
 
     @Test
@@ -77,7 +75,7 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
             @Override
             public void onError(Throwable throwable) {
 
-                Assert.assertEquals(throwable.getClass().getName(), NotFoundException.class.getName());
+                assertEquals(throwable.getClass().getName(), NotFoundException.class.getName());
 
                 try {
                     // close the callback to prevent the call to onFinish
@@ -91,7 +89,7 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
             public void onComplete() {
                 super.onComplete();
-                Assert.fail("expected NotFoundException");
+                fail("expected NotFoundException");
             };
         };
 
@@ -133,7 +131,7 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
         loggingCallback.awaitCompletion();
 
-        Assert.assertTrue(loggingCallback.toString().contains(snippet));
+        assertTrue(loggingCallback.toString().contains(snippet));
     }
 
     @Test
@@ -161,7 +159,7 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
         loggingCallback.awaitCompletion();
 
-        Assert.assertFalse(loggingCallback.toString().contains(snippet));
+        assertFalse(loggingCallback.toString().contains(snippet));
     }
 
 }

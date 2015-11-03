@@ -1,16 +1,11 @@
 package com.github.dockerjava.jaxrs.jersey.client.command;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Method;
-import java.security.SecureRandom;
-
-import org.testng.Assert;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.ExecCreateCmdResponse;
+import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.command.InspectExecResponse;
+import com.github.dockerjava.jaxrs.jersey.client.client.AbstractDockerClientTest;
+import com.github.dockerjava.test.serdes.JSONTestHelper;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -18,12 +13,15 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.ExecCreateCmdResponse;
-import com.github.dockerjava.api.command.InspectContainerResponse;
-import com.github.dockerjava.api.command.InspectExecResponse;
-import com.github.dockerjava.jaxrs.jersey.client.client.AbstractDockerClientTest;
-import com.github.dockerjava.test.serdes.JSONTestHelper;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.security.SecureRandom;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
 
 @Test(groups = "integration")
 public class InspectExecCmdImplTest extends AbstractDockerClientTest {
@@ -93,7 +91,7 @@ public class InspectExecCmdImplTest extends AbstractDockerClientTest {
 
         // Get container info and check its roundtrip to ensure the consistency
         InspectContainerResponse containerInfo = dockerClient.inspectContainerCmd(container.getId()).exec();
-        Assert.assertEquals(containerInfo.getId(), container.getId());
+        assertEquals(containerInfo.getId(), container.getId());
         JSONTestHelper.testRoundTrip(containerInfo);
     }
 }

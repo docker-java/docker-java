@@ -3,13 +3,15 @@ package com.github.dockerjava.jaxrs.jersey.client.command;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.StreamType;
 import com.github.dockerjava.core.command.FrameReader;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
 
 public class FrameReaderTest {
     public static final int HEADER_SIZE = 8;
@@ -27,12 +29,12 @@ public class FrameReaderTest {
 
     @Test
     public void endOfStreamReturnsNull() throws Exception {
-        Assert.assertNull(nextFrame());
+        assertNull(nextFrame());
     }
 
     @Test
     public void stdInBytesFrameReturnsFrame() throws Exception {
-        Assert.assertEquals(nextFrame(0, 0, 0, 0, 0, 0, 0, 0), new Frame(StreamType.STDIN, new byte[0]));
+        assertEquals(nextFrame(0, 0, 0, 0, 0, 0, 0, 0), new Frame(StreamType.STDIN, new byte[0]));
     }
 
     private Frame nextFrame(int... bytes) throws IOException {
@@ -42,12 +44,12 @@ public class FrameReaderTest {
 
     @Test
     public void stdOutBytesFrameReturnsFrame() throws Exception {
-        Assert.assertEquals(nextFrame(1, 0, 0, 0, 0, 0, 0, 0), new Frame(StreamType.STDOUT, new byte[0]));
+        assertEquals(nextFrame(1, 0, 0, 0, 0, 0, 0, 0), new Frame(StreamType.STDOUT, new byte[0]));
     }
 
     @Test
     public void stdErrBytesFrameReturnsFrame() throws Exception {
-        Assert.assertEquals(nextFrame(2, 0, 0, 0, 0, 0, 0, 0), new Frame(StreamType.STDERR, new byte[0]));
+        assertEquals(nextFrame(2, 0, 0, 0, 0, 0, 0, 0), new Frame(StreamType.STDERR, new byte[0]));
     }
 
     private void setBytes(int... bytes) {

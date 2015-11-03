@@ -3,13 +3,14 @@
  */
 package com.github.dockerjava.core;
 
-import java.io.IOException;
-
-import junit.framework.Assert;
-
 import org.apache.commons.io.FilenameUtils;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import java.io.IOException;
+
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.fail;
 
 public class GoLangFileMatchTest {
 
@@ -28,9 +29,9 @@ public class GoLangFileMatchTest {
         try {
             boolean matched = GoLangFileMatch.match(pattern, s);
             if (testCase.expectException) {
-                Assert.fail("Expected GoFileMatchException");
+                fail("Expected GoFileMatchException");
             }
-            Assert.assertEquals(testCase.matches, matched);
+            assertEquals(testCase.matches, matched);
         } catch (GoLangFileMatchException e) {
             if (!testCase.expectException) {
                 throw e;

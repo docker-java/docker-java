@@ -1,22 +1,20 @@
 package com.github.dockerjava.jaxrs.jersey.client.command;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
+import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.api.model.StreamType;
+import com.github.dockerjava.core.DockerClientBuilder;
+import com.github.dockerjava.core.command.LogContainerResultCallback;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.github.dockerjava.core.command.LogContainerResultCallback;
-import org.testng.Assert;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.model.Frame;
-import com.github.dockerjava.api.model.StreamType;
-import com.github.dockerjava.core.DockerClientBuilder;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 
 @Test(groups = "integration")
 public class FrameReaderITest {
@@ -43,13 +41,13 @@ public class FrameReaderITest {
 
         // wait for the container to be successfully executed
         int exitCode = dockerClient.waitContainerCmd(dockerfileFixture.getContainerId()).exec();
-        Assert.assertEquals(0, exitCode);
+        assertEquals(0, exitCode);
 
         Iterator<Frame> response = getLoggingFrames().iterator();
 
-        Assert.assertEquals(response.next(), new Frame(StreamType.STDOUT, "to stdout\n".getBytes()));
-        Assert.assertEquals(response.next(), new Frame(StreamType.STDERR, "to stderr\n".getBytes()));
-        Assert.assertFalse(response.hasNext());
+        assertEquals(response.next(), new Frame(StreamType.STDOUT, "to stdout\n".getBytes()));
+        assertEquals(response.next(), new Frame(StreamType.STDERR, "to stderr\n".getBytes()));
+        assertFalse(response.hasNext());
 
     }
 

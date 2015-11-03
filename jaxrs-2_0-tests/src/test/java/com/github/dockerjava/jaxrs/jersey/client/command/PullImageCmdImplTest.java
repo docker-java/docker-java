@@ -1,14 +1,14 @@
 package com.github.dockerjava.jaxrs.jersey.client.command;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.lessThanOrEqualTo;
-import static org.hamcrest.Matchers.notNullValue;
-
-import java.lang.reflect.Method;
-
+import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.async.ResultCallback;
+import com.github.dockerjava.api.command.InspectImageResponse;
+import com.github.dockerjava.api.command.PullImageCmd;
+import com.github.dockerjava.api.model.Info;
+import com.github.dockerjava.api.model.PullResponseItem;
 import com.github.dockerjava.core.command.PullImageCmdImpl;
 import com.github.dockerjava.core.command.PullImageResultCallback;
-import org.testng.Assert;
+import com.github.dockerjava.jaxrs.jersey.client.client.AbstractDockerClientTest;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -16,13 +16,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.async.ResultCallback;
-import com.github.dockerjava.api.command.InspectImageResponse;
-import com.github.dockerjava.api.command.PullImageCmd;
-import com.github.dockerjava.api.model.Info;
-import com.github.dockerjava.api.model.PullResponseItem;
-import com.github.dockerjava.jaxrs.jersey.client.client.AbstractDockerClientTest;
+import java.lang.reflect.Method;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
+import static org.hamcrest.Matchers.notNullValue;
 
 @Test(groups = "integration")
 public class PullImageCmdImplTest extends AbstractDockerClientTest {
@@ -58,9 +56,9 @@ public class PullImageCmdImplTest extends AbstractDockerClientTest {
         PullImageCmdImpl pullImageCmd = new PullImageCmdImpl(NOP_EXEC, null, "");
         try {
             pullImageCmd.withAuthConfig(null);
-            Assert.fail();
+            fail();
         } catch (Exception e) {
-            Assert.assertEquals(e.getMessage(), "authConfig was not specified");
+            assertEquals(e.getMessage(), "authConfig was not specified");
         } finally {
             pullImageCmd.close();
         }

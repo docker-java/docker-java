@@ -1,11 +1,11 @@
 package com.github.dockerjava.core.command;
 
+import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.api.model.StreamType;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-
-import com.github.dockerjava.api.model.Frame;
-import com.github.dockerjava.api.model.StreamType;
 
 /**
  * Breaks the input into frame. Similar to how a buffered reader would readLies.

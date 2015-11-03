@@ -1,7 +1,5 @@
 package com.github.dockerjava.api.command;
 
-import java.util.Map;
-
 import com.github.dockerjava.api.ConflictException;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.model.Bind;
@@ -19,6 +17,7 @@ import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
 
 import javax.annotation.CheckForNull;
+import java.util.Map;
 
 public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerResponse> {
 

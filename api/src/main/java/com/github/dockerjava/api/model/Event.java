@@ -1,8 +1,7 @@
 package com.github.dockerjava.api.model;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  * Representation of a Docker event.

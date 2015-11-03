@@ -3,14 +3,13 @@
  */
 package com.github.dockerjava.core;
 
+import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.core.NameParser.HostnameReposName;
+import com.github.dockerjava.core.NameParser.ReposTag;
 import org.apache.commons.lang.StringUtils;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
-
-import com.github.dockerjava.api.model.AuthConfig;
-import com.github.dockerjava.core.NameParser.HostnameReposName;
-import com.github.dockerjava.core.NameParser.ReposTag;
 
 /**
  *

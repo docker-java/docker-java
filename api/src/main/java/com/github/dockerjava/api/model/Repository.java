@@ -1,9 +1,9 @@
 package com.github.dockerjava.api.model;
 
+import com.google.common.base.Objects;
+
 import java.net.MalformedURLException;
 import java.net.URL;
-
-import com.google.common.base.Objects;
 
 /**
  * A repository or image name.
