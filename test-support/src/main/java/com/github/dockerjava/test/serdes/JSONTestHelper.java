@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.AssertJUnit.assertNotNull;
 
 /**
  * Provides helper methods for serialization-deserialization tests
