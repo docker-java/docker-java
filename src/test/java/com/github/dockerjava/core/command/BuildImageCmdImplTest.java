@@ -158,7 +158,7 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
         assertThat(container.getId(), not(isEmptyString()));
 
         dockerClient.startContainerCmd(container.getId()).exec();
-        dockerClient.waitContainerCmd(container.getId()).exec();
+        dockerClient.waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback()).awaitStatusCode();
 
         return containerLog(container.getId());
     }
