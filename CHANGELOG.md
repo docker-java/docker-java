@@ -1,7 +1,8 @@
 Change Log
 ===
-Latest SNAPSHOT version
+v2.1.2
 ---
+* [#350] (https://github.com/docker-java/docker-java/pull/350) Remove ServiceLoader logic
 * [#344] (https://github.com/docker-java/docker-java/pull/344) Implement equals/hashCode for Filters
 * [#335] (https://github.com/docker-java/docker-java/pull/335) Improve backward-compatibility support for older API versions
 * [#333] (https://github.com/docker-java/docker-java/pull/333) Adding support for withPidMode 
