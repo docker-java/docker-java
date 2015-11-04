@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.CheckForNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,6 +98,7 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
         return (RC_T) this;
     }
 
+    @CheckForNull
     protected RuntimeException getFirstError() {
         if (firstError != null) {
             // this call throws a RuntimeException
