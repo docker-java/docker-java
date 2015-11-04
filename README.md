@@ -36,11 +36,11 @@ listening on TCP port. To allow Docker server to use TCP add the following line 
 
     DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock"
 
-However you can force docker-java to use UNIX socket communication by configure the following url:
+However you can force docker-java to use UNIX socket communication by configuring the following url:
 
     unix:///var/run/docker.sock
 
-More details setting up Docker server can be found in official documentation: http://docs.docker.io/en/latest/use/basics/
+More details about setting up Docker server can be found in official documentation: http://docs.docker.io/en/latest/use/basics/
 
 Now make sure that docker is up:
 
