@@ -17,7 +17,6 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
 @Test(groups = "integration")
@@ -56,7 +55,8 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        int exitCode = dockerClient.waitContainerCmd(container.getId()).exec();
+        int exitCode = dockerClient.waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback())
+                .awaitStatusCode();
 
         assertThat(exitCode, equalTo(0));
 
@@ -80,7 +80,7 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
                 assertEquals(throwable.getClass().getName(), NotFoundException.class.getName());
 
                 try {
-                    // close the callback to prevent the call to onFinish
+                    // close the callback to prevent the call to onComplete
                     close();
                 } catch (IOException e) {
                     throw new RuntimeException();
@@ -111,7 +111,8 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        int exitCode = dockerClient.waitContainerCmd(container.getId()).exec();
+        int exitCode = dockerClient.waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback())
+                .awaitStatusCode();
 
         assertThat(exitCode, equalTo(0));
 
@@ -150,7 +151,8 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        int exitCode = dockerClient.waitContainerCmd(container.getId()).exec();
+        int exitCode = dockerClient.waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback())
+                .awaitStatusCode();
 
         assertThat(exitCode, equalTo(0));
 

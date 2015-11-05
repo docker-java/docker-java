@@ -53,7 +53,7 @@ public class ContainerDiffCmdImplTest extends AbstractDockerClientTest {
         assertThat(container.getId(), not(isEmptyString()));
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        int exitCode = dockerClient.waitContainerCmd(container.getId()).exec();
+        int exitCode = dockerClient.waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback()).awaitStatusCode();
         assertThat(exitCode, equalTo(0));
 
         List<ChangeLog> filesystemDiff = dockerClient.containerDiffCmd(container.getId()).exec();

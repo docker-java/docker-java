@@ -41,7 +41,8 @@ public class FrameReaderITest {
     public void canCloseFrameReaderAndReadExpectedLines() throws Exception {
 
         // wait for the container to be successfully executed
-        int exitCode = dockerClient.waitContainerCmd(dockerfileFixture.getContainerId()).exec();
+        int exitCode = dockerClient.waitContainerCmd(dockerfileFixture.getContainerId())
+                .exec(new WaitContainerResultCallback()).awaitStatusCode();
         assertEquals(0, exitCode);
 
         Iterator<Frame> response = getLoggingFrames().iterator();
