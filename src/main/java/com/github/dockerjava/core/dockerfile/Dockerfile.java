@@ -143,6 +143,11 @@ public class Dockerfile {
                     }
 
                     @Override
+                    public int read(byte [] buff, int offset, int len) throws IOException {
+                        return tarInputStream.read(buff, offset, len);
+                    }
+
+                    @Override
                     public void close() throws IOException {
                         IOUtils.closeQuietly(tarInputStream);
                         FileUtils.deleteQuietly(tarFile);
