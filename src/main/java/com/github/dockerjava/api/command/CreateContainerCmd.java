@@ -21,8 +21,6 @@ import com.github.dockerjava.api.model.Ulimit;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
 
-import javax.annotation.CheckForNull;
-
 public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerResponse> {
 
     @CheckForNull
@@ -189,6 +187,8 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     public CreateContainerCmd withBinds(Bind... binds);
 
+    public CreateContainerCmd withBinds(List<Bind> binds);
+
     /**
      * @since 1.19
      */
@@ -202,13 +202,29 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     public CreateContainerCmd withCapAdd(Capability... capAdd);
 
     /**
+     * Add linux <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">kernel capability</a> to the
+     * container. For example: adding {@link Capability#MKNOD} allows the container to create special files using the
+     * 'mknod' command.
+     */
+    public CreateContainerCmd withCapAdd(List<Capability> capAdd);
+
+    /**
      * Drop linux <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">kernel capability</a> from the
      * container. For example: dropping {@link Capability#CHOWN} prevents the container from changing the owner of any
      * files.
      */
     public CreateContainerCmd withCapDrop(Capability... capDrop);
 
+    /**
+     * Drop linux <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">kernel capability</a> from the
+     * container. For example: dropping {@link Capability#CHOWN} prevents the container from changing the owner of any
+     * files.
+     */
+    public CreateContainerCmd withCapDrop(List<Capability> capDrop);
+
     public CreateContainerCmd withCmd(String... cmd);
+
+    public CreateContainerCmd withCmd(List<String> cmd);
 
     public CreateContainerCmd withContainerIDFile(String containerIDFile);
 

@@ -106,7 +106,6 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @JsonProperty("Labels")
     private Map<String, String> labels;
 
-
     public CreateContainerCmdImpl(CreateContainerCmd.Exec exec, String image) {
         super(exec);
         checkNotNull(image, "image was not specified");
@@ -429,6 +428,12 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
+    public CreateContainerCmd withBinds(List<Bind> binds) {
+        checkNotNull(binds, "binds was not specified");
+        return withBinds(binds.toArray(new Bind[binds.size()]));
+    }
+
+    @Override
     public CreateContainerCmd withBlkioWeight(Integer blkioWeight) {
         checkNotNull(blkioWeight, "blkioWeight was not specified");
         hostConfig.setBlkioWeight(blkioWeight);
@@ -443,6 +448,12 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
+    public CreateContainerCmd withCapAdd(List<Capability> capAdd) {
+        checkNotNull(capAdd, "capAdd was not specified");
+        return withCapAdd(capAdd.toArray(new Capability[capAdd.size()]));
+    }
+
+    @Override
     public CreateContainerCmd withCapDrop(Capability... capDrop) {
         checkNotNull(capDrop, "capDrop was not specified");
         hostConfig.setCapDrop(capDrop);
@@ -450,10 +461,22 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
+    public CreateContainerCmd withCapDrop(List<Capability> capDrop) {
+        checkNotNull(capDrop, "capDrop was not specified");
+        return withCapDrop(capDrop.toArray(new Capability[capDrop.size()]));
+    }
+
+    @Override
     public CreateContainerCmd withCmd(String... cmd) {
         checkNotNull(cmd, "cmd was not specified");
         this.cmd = cmd;
         return this;
+    }
+
+    @Override
+    public CreateContainerCmd withCmd(List<String> cmd) {
+        checkNotNull(cmd, "cmd was not specified");
+        return withCmd(cmd.toArray(new String[cmd.size()]));
     }
 
     @Override
@@ -481,7 +504,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public CreateContainerCmd withCpusetMems(String cpusetMems) {
         checkNotNull(cpusetMems, "cpusetMems was not specified");
         hostConfig.setCpusetMems(cpusetMems);
-        return null;
+        return this;
     }
 
     @Override
@@ -501,7 +524,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withDevices(List<Device> devices) {
         checkNotNull(devices, "devices was not specified");
-        return withDevices(devices.toArray(new Device[0]));
+        return withDevices(devices.toArray(new Device[devices.size()]));
     }
 
     @Override
@@ -514,7 +537,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withDns(List<String> dns) {
         checkNotNull(dns, "dns was not specified");
-        return withDns(dns.toArray(new String[0]));
+        return withDns(dns.toArray(new String[dns.size()]));
     }
 
     @Override
@@ -547,7 +570,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withEntrypoint(List<String> entrypoint) {
         checkNotNull(entrypoint, "entrypoint was not specified");
-        return withEntrypoint(entrypoint.toArray(new String[0]));
+        return withEntrypoint(entrypoint.toArray(new String[entrypoint.size()]));
     }
 
     @Override
@@ -560,7 +583,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withEnv(List<String> env) {
         checkNotNull(env, "env was not specified");
-        return withEnv(env.toArray(new String[0]));
+        return withEnv(env.toArray(new String[env.size()]));
     }
 
     @Override
@@ -573,7 +596,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withExposedPorts(List<ExposedPort> exposedPorts) {
         checkNotNull(exposedPorts, "exposedPorts was not specified");
-        return withExposedPorts(exposedPorts.toArray(new ExposedPort[0]));
+        return withExposedPorts(exposedPorts.toArray(new ExposedPort[exposedPorts.size()]));
     }
 
     @Override
@@ -586,7 +609,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withExtraHosts(List<String> extraHosts) {
         checkNotNull(extraHosts, "extraHosts was not specified");
-        return withExtraHosts(extraHosts.toArray(new String[0]));
+        return withExtraHosts(extraHosts.toArray(new String[extraHosts.size()]));
     }
 
     @Override
@@ -620,7 +643,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withLinks(List<Link> links) {
         checkNotNull(links, "links was not specified");
-        return withLinks(links.toArray(new Link[0]));
+        return withLinks(links.toArray(new Link[links.size()]));
     }
 
     @Override
@@ -722,7 +745,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withPortSpecs(List<String> portSpecs) {
         checkNotNull(portSpecs, "portSpecs was not specified");
-        return withPortSpecs(portSpecs.toArray(new String[0]));
+        return withPortSpecs(portSpecs.toArray(new String[portSpecs.size()]));
     }
 
     @Override
@@ -784,7 +807,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withUlimits(List<Ulimit> ulimits) {
         checkNotNull(ulimits, "no ulimits was specified");
-        return withUlimits(ulimits.toArray(new Ulimit[0]));
+        return withUlimits(ulimits.toArray(new Ulimit[ulimits.size()]));
     }
 
     @Override
@@ -804,7 +827,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withVolumes(List<Volume> volumes) {
         checkNotNull(volumes, "volumes was not specified");
-        return withVolumes(volumes.toArray(new Volume[0]));
+        return withVolumes(volumes.toArray(new Volume[volumes.size()]));
     }
 
     @Override
@@ -817,7 +840,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withVolumesFrom(List<VolumesFrom> volumesFrom) {
         checkNotNull(volumesFrom, "volumesFrom was not specified");
-        return withVolumesFrom(volumesFrom.toArray(new VolumesFrom[0]));
+        return withVolumesFrom(volumesFrom.toArray(new VolumesFrom[volumesFrom.size()]));
     }
 
     @Override
