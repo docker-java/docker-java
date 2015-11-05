@@ -1,5 +1,9 @@
 Change Log
 ===
+Latest SNAPSHOT
+---
+* [#357] (https://github.com/docker-java/docker-java/pull/357)  Wait container command needs possibility to abort operation
+
 v2.1.2
 ---
 * [#350] (https://github.com/docker-java/docker-java/pull/350) Remove ServiceLoader logic
