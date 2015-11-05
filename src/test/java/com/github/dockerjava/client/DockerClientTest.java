@@ -16,6 +16,7 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.core.command.WaitContainerResultCallback;
 
 /**
  * Unit test for DockerClient.
@@ -61,7 +62,7 @@ public class DockerClientTest extends AbstractDockerClientTest {
             CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd(commands).exec();
             dockerClient.startContainerCmd(container.getId());
 
-            int exitcode = dockerClient.waitContainerCmd(container.getId()).exec();
+            int exitcode = dockerClient.waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback()).awaitStatusCode();
             assertThat(exitcode, equalTo(0));
         }
     }
