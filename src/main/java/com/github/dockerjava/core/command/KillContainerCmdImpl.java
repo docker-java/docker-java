@@ -41,11 +41,6 @@ public class KillContainerCmdImpl extends AbstrDockerCmd<KillContainerCmd, Void>
         return this;
     }
 
-    @Override
-    public String toString() {
-        return "kill " + containerId;
-    }
-
     /**
      * @throws NotFoundException
      *             No such container

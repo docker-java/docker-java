@@ -44,7 +44,7 @@ public class VolumesFrom {
 
     /**
      * Parses a volume from specification to a {@link VolumesFrom}.
-     * 
+     *
      * @param serialized
      *            the specification, e.g. <code>container:ro</code>
      * @return a {@link VolumesFrom} matching the specification
@@ -89,7 +89,7 @@ public class VolumesFrom {
     /**
      * Returns a string representation of this {@link VolumesFrom} suitable for inclusion in a JSON message. The format
      * is <code>&lt;container&gt;:&lt;access mode&gt;</code>, like the argument in {@link #parse(String)}.
-     * 
+     *
      * @return a string representation of this {@link VolumesFrom}
      */
     @Override

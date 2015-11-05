@@ -11,7 +11,7 @@ public class ExecStartCmdImpl extends AbstrDockerCmd<ExecStartCmd, InputStream> 
 
     private String execId;
 
-    private boolean detach, tty;
+    private Boolean detach, tty;
 
     public ExecStartCmdImpl(ExecStartCmd.Exec exec, String execId) {
         super(exec);
@@ -31,35 +31,25 @@ public class ExecStartCmdImpl extends AbstrDockerCmd<ExecStartCmd, InputStream> 
     }
 
     @Override
-    public boolean hasDetachEnabled() {
+    public Boolean hasDetachEnabled() {
         return detach;
     }
 
     @Override
-    public boolean hasTtyEnabled() {
+    public Boolean hasTtyEnabled() {
         return tty;
     }
 
     @Override
-    public ExecStartCmd withDetach(boolean detach) {
+    public ExecStartCmd withDetach(Boolean detach) {
         this.detach = detach;
         return this;
     }
 
     @Override
-    public ExecStartCmd withTty(boolean tty) {
+    public ExecStartCmd withTty(Boolean tty) {
         this.tty = tty;
         return this;
-    }
-
-    @Override
-    public ExecStartCmd withDetach() {
-        return withDetach(true);
-    }
-
-    @Override
-    public ExecStartCmd withTty() {
-        return withTty(true);
     }
 
     /**

@@ -31,10 +31,7 @@ public class CertificateUtils {
         String[] files = { "ca.pem", "cert.pem", "key.pem" };
         for (String file : files) {
             File path = new File(dockerCertPath, file);
-            boolean exists = path.exists();
-            if (!exists) {
-                return false;
-            }
+            return path.exists();
         }
 
         return true;

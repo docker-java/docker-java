@@ -1,5 +1,8 @@
 package com.github.dockerjava.api.command;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 import com.github.dockerjava.api.NotFoundException;
 
 /**
@@ -11,13 +14,15 @@ import com.github.dockerjava.api.NotFoundException;
  */
 public interface RestartContainerCmd extends SyncDockerCmd<Void> {
 
+    @CheckForNull
     public String getContainerId();
 
-    public int getTimeout();
+    @CheckForNull
+    public Integer getTimeout();
 
-    public RestartContainerCmd withContainerId(String containerId);
+    public RestartContainerCmd withContainerId(@Nonnull String containerId);
 
-    public RestartContainerCmd withtTimeout(int timeout);
+    public RestartContainerCmd withtTimeout(Integer timeout);
 
     /**
      * @throws NotFoundException

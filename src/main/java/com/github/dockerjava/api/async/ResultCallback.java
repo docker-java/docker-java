@@ -20,5 +20,4 @@ public interface ResultCallback<A_RES_T> extends Closeable {
 
     /** Called when processing was finished either by reaching the end or by aborting it */
     void onComplete();
-
 }

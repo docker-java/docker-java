@@ -2,19 +2,24 @@ package com.github.dockerjava.api.command;
 
 import java.io.InputStream;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 import com.github.dockerjava.api.NotFoundException;
 
 public interface SaveImageCmd extends SyncDockerCmd<InputStream> {
 
+    @CheckForNull
     public String getName();
 
+    @CheckForNull
     public String getTag();
 
     /**
      * @param name
      *            The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
      */
-    public SaveImageCmd withName(String name);
+    public SaveImageCmd withName(@Nonnull String name);
 
     /**
      * @param tag

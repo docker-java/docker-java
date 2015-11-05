@@ -17,13 +17,13 @@ public class ChangeLog {
     private String path;
 
     @JsonProperty("Kind")
-    private int kind;
+    private Integer kind;
 
     public String getPath() {
         return path;
     }
 
-    public int getKind() {
+    public Integer getKind() {
         return kind;
     }
 

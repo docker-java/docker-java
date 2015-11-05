@@ -4,8 +4,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.InputStream;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
@@ -66,11 +64,6 @@ public class CopyFileFromContainerCmdImpl extends AbstrDockerCmd<CopyFileFromCon
         checkNotNull(hostPath, "hostPath was not specified");
         this.hostPath = hostPath;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append("cp ").append(containerId).append(":").append(resource).toString();
     }
 
     /**

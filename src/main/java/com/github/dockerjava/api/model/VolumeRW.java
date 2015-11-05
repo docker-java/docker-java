@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.node.NullNode;
 
 /**
  * Represents a bind mounted volume in a Docker container.
- * 
+ *
  * @see Bind
  */
 @JsonDeserialize(using = VolumeRW.Deserializer.class)
@@ -52,7 +52,7 @@ public class VolumeRW {
     /**
      * Returns a string representation of this {@link VolumeRW} suitable for inclusion in a JSON message. The returned
      * String is simply the container path, {@link #getPath()}.
-     * 
+     *
      * @return a string representation of this {@link VolumeRW}
      */
     @Override

@@ -48,7 +48,7 @@ public class InspectImageResponse {
     private String parent;
 
     @JsonProperty("Size")
-    private long size;
+    private Long size;
 
     public String getId() {
         return id;
@@ -70,7 +70,7 @@ public class InspectImageResponse {
         return containerConfig;
     }
 
-    public long getSize() {
+    public Long getSize() {
         return size;
     }
 

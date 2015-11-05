@@ -16,10 +16,10 @@ public class Ulimit {
     private String name;
 
     @JsonProperty("Soft")
-    private int soft;
+    private Integer soft;
 
     @JsonProperty("Hard")
-    private int hard;
+    private Integer hard;
 
     public Ulimit() {
 
@@ -37,11 +37,11 @@ public class Ulimit {
         return name;
     }
 
-    public int getSoft() {
+    public Integer getSoft() {
         return soft;
     }
 
-    public int getHard() {
+    public Integer getHard() {
         return hard;
     }
 

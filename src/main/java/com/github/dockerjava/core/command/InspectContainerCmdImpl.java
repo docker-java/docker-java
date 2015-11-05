@@ -31,11 +31,6 @@ public class InspectContainerCmdImpl extends AbstrDockerCmd<InspectContainerCmd,
         return this;
     }
 
-    @Override
-    public String toString() {
-        return "inspect " + containerId;
-    }
-
     /**
      * @throws NotFoundException
      *             No such container

@@ -2,6 +2,9 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import com.github.dockerjava.api.command.TagImageCmd;
 
 /**
@@ -13,13 +16,13 @@ import com.github.dockerjava.api.command.TagImageCmd;
  *            The repository to tag in
  * @param force
  *            (not documented)
- * 
+ *
  */
 public class TagImageCmdImpl extends AbstrDockerCmd<TagImageCmd, Void> implements TagImageCmd {
 
     private String imageId, repository, tag;
 
-    private boolean force;
+    private Boolean force;
 
     public TagImageCmdImpl(TagImageCmd.Exec exec, String imageId, String repository, String tag) {
         super(exec);
@@ -44,7 +47,7 @@ public class TagImageCmdImpl extends AbstrDockerCmd<TagImageCmd, Void> implement
     }
 
     @Override
-    public boolean hasForceEnabled() {
+    public Boolean hasForceEnabled() {
         return force;
     }
 
@@ -75,15 +78,9 @@ public class TagImageCmdImpl extends AbstrDockerCmd<TagImageCmd, Void> implement
     }
 
     @Override
-    public TagImageCmd withForce(boolean force) {
+    public TagImageCmd withForce(Boolean force) {
         this.force = force;
         return this;
     }
 
-    @Override
-    public String toString() {
-        return new StringBuilder("tag ").append(force ? "--force=true " : "")
-                .append(repository != null ? repository + "/" : "").append(imageId)
-                .append(tag != null ? ":" + tag : "").toString();
-    }
 }

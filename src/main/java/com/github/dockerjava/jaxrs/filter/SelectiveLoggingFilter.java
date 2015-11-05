@@ -28,7 +28,7 @@ public class SelectiveLoggingFilter extends LoggingFilter {
         SKIPPED_CONTENT = Collections.unmodifiableSet(s);
     }
 
-    public SelectiveLoggingFilter(Logger logger, boolean b) {
+    public SelectiveLoggingFilter(Logger logger, Boolean b) {
         super(logger, b);
     }
 

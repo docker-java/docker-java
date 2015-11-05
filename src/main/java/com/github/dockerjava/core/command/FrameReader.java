@@ -18,7 +18,7 @@ public class FrameReader implements AutoCloseable {
 
     private final InputStream inputStream;
 
-    private boolean rawStreamDetected = false;
+    private Boolean rawStreamDetected = false;
 
     private final byte[] rawBuffer = new byte[1000];
 

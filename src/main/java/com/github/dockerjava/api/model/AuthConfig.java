@@ -1,8 +1,14 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@JsonInclude(Include.NON_NULL)
 public class AuthConfig {
 
     /**
@@ -70,8 +76,7 @@ public class AuthConfig {
 
     @Override
     public String toString() {
-        return "AuthConfig{" + "username='" + username + '\'' + ", password='" + password + '\'' + ", email='" + email
-                + '\'' + ", serverAddress='" + serverAddress + '\'' + '}';
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
     @Override

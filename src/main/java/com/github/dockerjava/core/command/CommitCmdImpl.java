@@ -2,8 +2,6 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CommitCmd;
@@ -19,22 +17,22 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     private String containerId, repository, tag, message, author;
 
-    private boolean pause = true;
+    private Boolean pause = true;
 
     @JsonProperty("AttachStdin")
-    private boolean attachStdin;
+    private Boolean attachStdin;
 
     @JsonProperty("AttachStdout")
-    private boolean attachStdout;
+    private Boolean attachStdout;
 
     @JsonProperty("AttachStderr")
-    private boolean attachStderr;
+    private Boolean attachStderr;
 
     @JsonProperty("Cmd")
     private String[] cmd;
 
     @JsonProperty("DisableNetwork")
-    private boolean disableNetwork;
+    private Boolean disableNetwork;
 
     @JsonProperty("Env")
     private String[] env;
@@ -52,16 +50,16 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
     private Integer memorySwap;
 
     @JsonProperty("OpenStdin")
-    private boolean openStdin;
+    private Boolean openStdin;
 
     @JsonProperty("PortSpecs")
     private String[] portSpecs;
 
     @JsonProperty("StdinOnce")
-    private boolean stdinOnce;
+    private Boolean stdinOnce;
 
     @JsonProperty("Tty")
-    private boolean tty;
+    private Boolean tty;
 
     @JsonProperty("User")
     private String user;
@@ -110,41 +108,26 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
     }
 
     @Override
-    public boolean hasPauseEnabled() {
+    public Boolean hasPauseEnabled() {
         return pause;
     }
 
     @Override
-    public CommitCmdImpl withAttachStderr(boolean attachStderr) {
+    public CommitCmdImpl withAttachStderr(Boolean attachStderr) {
         this.attachStderr = attachStderr;
         return this;
     }
 
     @Override
-    public CommitCmdImpl withAttachStderr() {
-        return withAttachStderr(true);
-    }
-
-    @Override
-    public CommitCmdImpl withAttachStdin(boolean attachStdin) {
+    public CommitCmdImpl withAttachStdin(Boolean attachStdin) {
         this.attachStdin = attachStdin;
         return this;
     }
 
     @Override
-    public CommitCmdImpl withAttachStdin() {
-        return withAttachStdin(true);
-    }
-
-    @Override
-    public CommitCmdImpl withAttachStdout(boolean attachStdout) {
+    public CommitCmdImpl withAttachStdout(Boolean attachStdout) {
         this.attachStdout = attachStdout;
         return this;
-    }
-
-    @Override
-    public CommitCmdImpl withAttachStdout() {
-        return withAttachStdout(true);
     }
 
     @Override
@@ -155,7 +138,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
     }
 
     @Override
-    public CommitCmdImpl withDisableNetwork(boolean disableNetwork) {
+    public CommitCmdImpl withDisableNetwork(Boolean disableNetwork) {
         this.disableNetwork = disableNetwork;
         return this;
     }
@@ -189,7 +172,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
     }
 
     @Override
-    public CommitCmdImpl withPause(boolean pause) {
+    public CommitCmdImpl withPause(Boolean pause) {
         this.pause = pause;
         return this;
     }
@@ -255,12 +238,12 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
     }
 
     @Override
-    public boolean isOpenStdin() {
+    public Boolean isOpenStdin() {
         return openStdin;
     }
 
     @Override
-    public CommitCmdImpl withOpenStdin(boolean openStdin) {
+    public CommitCmdImpl withOpenStdin(Boolean openStdin) {
         checkNotNull(openStdin, "openStdin was not specified");
         this.openStdin = openStdin;
         return this;
@@ -279,35 +262,25 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
     }
 
     @Override
-    public boolean isStdinOnce() {
+    public Boolean isStdinOnce() {
         return stdinOnce;
     }
 
     @Override
-    public CommitCmdImpl withStdinOnce(boolean stdinOnce) {
+    public CommitCmdImpl withStdinOnce(Boolean stdinOnce) {
         this.stdinOnce = stdinOnce;
         return this;
     }
 
     @Override
-    public CommitCmdImpl withStdinOnce() {
-        return withStdinOnce(true);
-    }
-
-    @Override
-    public boolean isTty() {
+    public Boolean isTty() {
         return tty;
     }
 
     @Override
-    public CommitCmdImpl withTty(boolean tty) {
+    public CommitCmdImpl withTty(Boolean tty) {
         this.tty = tty;
         return this;
-    }
-
-    @Override
-    public CommitCmdImpl withTty() {
-        return withTty(true);
     }
 
     @Override
@@ -344,13 +317,6 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
         checkNotNull(workingDir, "workingDir was not specified");
         this.workingDir = workingDir;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append("commit ").append(author != null ? "--author " + author + " " : "")
-                .append(message != null ? "--message " + message + " " : "").append(containerId)
-                .append(repository != null ? " " + repository + ":" : " ").append(tag != null ? tag : "").toString();
     }
 
     /**

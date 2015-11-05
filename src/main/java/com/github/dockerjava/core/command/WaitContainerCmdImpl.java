@@ -31,8 +31,4 @@ public class WaitContainerCmdImpl extends AbstrAsyncDockerCmd<WaitContainerCmd, 
         return this;
     }
 
-    @Override
-    public String toString() {
-        return "wait " + containerId;
-    }
 }

@@ -53,7 +53,7 @@ public class CopyFileFromContainerCmdImplTest extends AbstractDockerClientTest {
         dockerClient.startContainerCmd(container.getId()).exec();
 
         InputStream response = dockerClient.copyFileFromContainerCmd(container.getId(), "/copyFromContainer").exec();
-        boolean bytesAvailable = response.available() > 0;
+        Boolean bytesAvailable = response.available() > 0;
         assertTrue(bytesAvailable, "The file was not copied from the container.");
 
         // read the stream fully. Otherwise, the underlying stream will not be closed.

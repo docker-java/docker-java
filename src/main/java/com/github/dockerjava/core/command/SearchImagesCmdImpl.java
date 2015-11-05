@@ -35,8 +35,4 @@ public class SearchImagesCmdImpl extends AbstrDockerCmd<SearchImagesCmd, List<Se
         return this;
     }
 
-    @Override
-    public String toString() {
-        return new StringBuilder("search ").append(term).toString();
-    }
 }

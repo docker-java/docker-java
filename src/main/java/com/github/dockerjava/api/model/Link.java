@@ -17,7 +17,7 @@ public class Link {
 
     /**
      * Creates a {@link Link} for the container with the given name and an aliased name for use in the target container.
-     * 
+     *
      * @param name
      *            the name of the container that you want to link into the target container
      * @param alias
@@ -44,7 +44,7 @@ public class Link {
 
     /**
      * Parses a textual link specification (as used by the Docker CLI) to a {@link Link}.
-     * 
+     *
      * @param serialized
      *            the specification, e.g. <code>name:alias</code> or <code>/name1:/name2/alias</code>
      * @return a {@link Link} matching the specification
@@ -86,7 +86,7 @@ public class Link {
     /**
      * Returns a string representation of this {@link Link} suitable for inclusion in a JSON message. The format is
      * <code>name:alias</code>, like the argument in {@link #parse(String)}.
-     * 
+     *
      * @return a string representation of this {@link Link}
      */
     @Override

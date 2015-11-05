@@ -38,7 +38,7 @@ public class ExposedPort {
 
     /**
      * Creates an {@link ExposedPort} for the given parameters.
-     * 
+     *
      * @param port
      *            the {@link #getPort() port number}
      * @param protocol
@@ -51,7 +51,7 @@ public class ExposedPort {
 
     /**
      * Creates an {@link ExposedPort} for the given {@link #getPort() port number} and {@link InternetProtocol#DEFAULT}.
-     * 
+     *
      * @param port
      *            the {@link #getPort() port number}
      */
@@ -61,7 +61,7 @@ public class ExposedPort {
 
     /**
      * Creates an {@link ExposedPort} for the given parameters.
-     * 
+     *
      * @param scheme
      *            the {@link #getScheme() scheme}, <code>tcp</code> or <code>udp</code>
      * @param port
@@ -112,7 +112,7 @@ public class ExposedPort {
 
     /**
      * Parses a textual port specification (as used by the Docker CLI) to an {@link ExposedPort}.
-     * 
+     *
      * @param serialized
      *            the specification, e.g. <code>80/tcp</code>
      * @return an {@link ExposedPort} matching the specification
@@ -138,7 +138,7 @@ public class ExposedPort {
     /**
      * Returns a string representation of this {@link ExposedPort} suitable for inclusion in a JSON message. The format
      * is <code>port/protocol</code>, like the argument in {@link #parse(String)}.
-     * 
+     *
      * @return a string representation of this {@link ExposedPort}
      */
     @Override
