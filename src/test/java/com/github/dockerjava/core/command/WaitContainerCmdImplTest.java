@@ -90,7 +90,8 @@ public class WaitContainerCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        WaitContainerResultCallback callback = dockerClient.waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback());
+        WaitContainerResultCallback callback = dockerClient.waitContainerCmd(container.getId()).exec(
+                new WaitContainerResultCallback());
 
         Thread.sleep(5000);
 

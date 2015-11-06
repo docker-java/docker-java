@@ -10,7 +10,8 @@ import com.github.dockerjava.api.model.WaitResponse;
  *
  * Block until container stops, then returns its exit code
  */
-public class WaitContainerCmdImpl extends AbstrAsyncDockerCmd<WaitContainerCmd, WaitResponse> implements WaitContainerCmd {
+public class WaitContainerCmdImpl extends AbstrAsyncDockerCmd<WaitContainerCmd, WaitResponse> implements
+        WaitContainerCmd {
 
     private String containerId;
 

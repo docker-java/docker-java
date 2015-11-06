@@ -19,10 +19,10 @@ public class StopContainerCmdExec extends AbstrSyncDockerCmdExec<StopContainerCm
 
     @Override
     protected Void execute(StopContainerCmd command) {
-        WebTarget webResource = getBaseResource().path("/containers/{id}/stop")
-                .resolveTemplate("id", command.getContainerId());
+        WebTarget webResource = getBaseResource().path("/containers/{id}/stop").resolveTemplate("id",
+                command.getContainerId());
 
-        if(command.getTimeout() != null) {
+        if (command.getTimeout() != null) {
             webResource = webResource.queryParam("t", String.valueOf(command.getTimeout()));
         }
 

@@ -95,7 +95,8 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
             };
         };
 
-        dockerClient.logContainerCmd("non-existing").withStdErr(true).withStdOut(true).exec(loggingCallback).awaitCompletion();
+        dockerClient.logContainerCmd("non-existing").withStdErr(true).withStdOut(true).exec(loggingCallback)
+                .awaitCompletion();
     }
 
     @Test

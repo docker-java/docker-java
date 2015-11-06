@@ -32,9 +32,8 @@ public class ListImagesCmdExec extends AbstrSyncDockerCmdExec<ListImagesCmd, Lis
 
         LOGGER.trace("GET: {}", webTarget);
 
-        List<Image> images = webTarget.request().accept(MediaType.APPLICATION_JSON)
-                .get(new GenericType<List<Image>>() {
-                });
+        List<Image> images = webTarget.request().accept(MediaType.APPLICATION_JSON).get(new GenericType<List<Image>>() {
+        });
         LOGGER.trace("Response: {}", images);
 
         return images;

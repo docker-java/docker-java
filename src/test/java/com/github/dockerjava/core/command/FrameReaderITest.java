@@ -57,9 +57,10 @@ public class FrameReaderITest {
 
         FrameReaderITestCallback collectFramesCallback = new FrameReaderITestCallback();
 
-        dockerClient.logContainerCmd(dockerfileFixture.getContainerId()).withStdOut(true).withStdErr(true).withTailAll()
-        // we can't follow stream here as it blocks reading from resulting InputStream infinitely
-        // .withFollowStream()
+        dockerClient.logContainerCmd(dockerfileFixture.getContainerId()).withStdOut(true).withStdErr(true)
+                .withTailAll()
+                // we can't follow stream here as it blocks reading from resulting InputStream infinitely
+                // .withFollowStream()
                 .exec(collectFramesCallback).awaitCompletion();
 
         return collectFramesCallback.frames;

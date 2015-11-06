@@ -61,7 +61,7 @@ public abstract class AbstrDockerCmdExec {
     }
 
     protected WebTarget booleanQueryParam(WebTarget webTarget, String name, Boolean value) {
-        if(bool(value)) {
+        if (bool(value)) {
             webTarget = webTarget.queryParam(name, bool(value) + "");
         }
 

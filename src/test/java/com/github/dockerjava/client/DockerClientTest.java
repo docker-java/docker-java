@@ -62,7 +62,8 @@ public class DockerClientTest extends AbstractDockerClientTest {
             CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd(commands).exec();
             dockerClient.startContainerCmd(container.getId());
 
-            int exitcode = dockerClient.waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback()).awaitStatusCode();
+            int exitcode = dockerClient.waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback())
+                    .awaitStatusCode();
             assertThat(exitcode, equalTo(0));
         }
     }

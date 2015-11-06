@@ -143,7 +143,7 @@ public class Dockerfile {
                     }
 
                     @Override
-                    public int read(byte [] buff, int offset, int len) throws IOException {
+                    public int read(byte[] buff, int offset, int len) throws IOException {
                         return tarInputStream.read(buff, offset, len);
                     }
 
