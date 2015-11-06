@@ -31,11 +31,6 @@ public class InspectImageCmdImpl extends AbstrDockerCmd<InspectImageCmd, Inspect
         return this;
     }
 
-    @Override
-    public String toString() {
-        return "inspect " + imageId;
-    }
-
     /**
      * @throws NotFoundException
      *             No such image

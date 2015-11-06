@@ -529,7 +529,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         Map<String, String> labels = new HashMap<String, String>();
         labels.put("com.github.dockerjava.null", null);
-        labels.put("com.github.dockerjava.boolean", "true");
+        labels.put("com.github.dockerjava.Boolean", "true");
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
                 .withLabels(labels).exec();

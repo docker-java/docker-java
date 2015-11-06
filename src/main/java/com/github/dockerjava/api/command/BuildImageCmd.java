@@ -4,6 +4,8 @@ import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.BuildResponseItem;
 
 import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
@@ -20,8 +22,10 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
 
     // lib specific
 
+    @CheckForNull
     public InputStream getTarInputStream();
 
+    @CheckForNull
     public AuthConfigurations getBuildAuthConfigs();
 
     // getters
@@ -41,30 +45,32 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     /**
      * "nocache" in API
      */
-    public boolean hasNoCacheEnabled();
+    @CheckForNull
+    public Boolean hasNoCacheEnabled();
 
     /**
      * "rm" in API
      */
-    public boolean hasRemoveEnabled();
+    @CheckForNull
+    public Boolean hasRemoveEnabled();
 
     /**
      * "forcerm" in API
      */
-    public boolean isForcerm();
-
     @CheckForNull
-    public Boolean getForcerm();
+    public Boolean isForcerm();
 
     /**
      * "q" in API
      */
-    public boolean isQuiet();
+    @CheckForNull
+    public Boolean isQuiet();
 
     /**
      * "pull" in API
      */
-    public boolean hasPullEnabled();
+    @CheckForNull
+    public Boolean hasPullEnabled();
 
     @CheckForNull
     public String getPathToDockerfile();
@@ -91,29 +97,19 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
 
     public BuildImageCmd withDockerfile(File dockerfile);
 
-    public BuildImageCmd withNoCache();
+    public BuildImageCmd withNoCache(Boolean noCache);
 
-    public BuildImageCmd withNoCache(boolean noCache);
-
-    public BuildImageCmd withRemove();
-
-    public BuildImageCmd withRemove(boolean rm);
-
-    public BuildImageCmd withForcerm();
+    public BuildImageCmd withRemove(Boolean rm);
 
     public BuildImageCmd withForcerm(Boolean forcerm);
 
-    public BuildImageCmd withQuiet();
+    public BuildImageCmd withQuiet(Boolean quiet);
 
-    public BuildImageCmd withQuiet(boolean quiet);
+    public BuildImageCmd withPull(Boolean pull);
 
-    public BuildImageCmd withPull();
+    public BuildImageCmd withMemory(Long memory);
 
-    public BuildImageCmd withPull(boolean pull);
-
-    public BuildImageCmd withMemory(long memory);
-
-    public BuildImageCmd withMemswap(long memswap);
+    public BuildImageCmd withMemswap(Long memswap);
 
     public BuildImageCmd withCpushares(String cpushares);
 
@@ -123,7 +119,7 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
 
     public BuildImageCmd withBuildAuthConfigs(AuthConfigurations authConfig);
 
-    public BuildImageCmd withTarInputStream(InputStream tarInputStream);
+    public BuildImageCmd withTarInputStream(@Nonnull InputStream tarInputStream);
 
     public static interface Exec extends DockerCmdAsyncExec<BuildImageCmd, BuildResponseItem> {
     }

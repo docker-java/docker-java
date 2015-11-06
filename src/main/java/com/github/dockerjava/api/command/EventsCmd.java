@@ -1,5 +1,7 @@
 package com.github.dockerjava.api.command;
 
+import javax.annotation.CheckForNull;
+
 import com.github.dockerjava.api.model.Event;
 import com.github.dockerjava.api.model.Filters;
 
@@ -12,19 +14,22 @@ import com.github.dockerjava.api.model.Filters;
  *            - Stream events until this timestamp
  */
 public interface EventsCmd extends AsyncDockerCmd<EventsCmd, Event> {
+
+    @CheckForNull
+    public Filters getFilters();
+
+    @CheckForNull
+    public String getSince();
+
+    @CheckForNull
+    public String getUntil();
+
+    public EventsCmd withFilters(Filters filters);
+
     public EventsCmd withSince(String since);
 
     public EventsCmd withUntil(String until);
 
-    public String getSince();
-
-    public String getUntil();
-
-    public Filters getFilters();
-
-    public EventsCmd withFilters(Filters filters);
-
     public static interface Exec extends DockerCmdAsyncExec<EventsCmd, Event> {
-
     }
 }

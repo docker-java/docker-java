@@ -56,7 +56,7 @@ public class RemoveContainerCmdImplTest extends AbstractDockerClientTest {
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("true").exec();
 
         dockerClient.startContainerCmd(container.getId()).exec();
-        dockerClient.waitContainerCmd(container.getId()).exec();
+        dockerClient.waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback()).awaitStatusCode();
 
         LOG.info("Removing container: {}", container.getId());
         dockerClient.removeContainerCmd(container.getId()).exec();

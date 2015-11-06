@@ -26,7 +26,7 @@ public class GoLangFileMatchTest {
             s = FilenameUtils.normalize(s);
         }
         try {
-            boolean matched = GoLangFileMatch.match(pattern, s);
+            Boolean matched = GoLangFileMatch.match(pattern, s);
             if (testCase.expectException) {
                 Assert.fail("Expected GoFileMatchException");
             }
@@ -101,11 +101,11 @@ public class GoLangFileMatchTest {
 
         private final String s;
 
-        private final boolean matches;
+        private final Boolean matches;
 
-        private final boolean expectException;
+        private final Boolean expectException;
 
-        public MatchTestCase(String pattern, String s, boolean matches, boolean expectException) {
+        public MatchTestCase(String pattern, String s, Boolean matches, Boolean expectException) {
             super();
             this.pattern = pattern;
             this.s = s;

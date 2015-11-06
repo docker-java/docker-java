@@ -1,5 +1,8 @@
 package com.github.dockerjava.api.command;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 import com.github.dockerjava.api.NotFoundException;
 
 /**
@@ -7,9 +10,10 @@ import com.github.dockerjava.api.NotFoundException;
  */
 public interface InspectImageCmd extends SyncDockerCmd<InspectImageResponse> {
 
+    @CheckForNull
     public String getImageId();
 
-    public InspectImageCmd withImageId(String imageId);
+    public InspectImageCmd withImageId(@Nonnull String imageId);
 
     /**
      * @throws NotFoundException

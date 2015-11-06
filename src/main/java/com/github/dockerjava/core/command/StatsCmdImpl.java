@@ -28,8 +28,4 @@ public class StatsCmdImpl extends AbstrAsyncDockerCmd<StatsCmd, Statistics> impl
         return containerId;
     }
 
-    @Override
-    public String toString() {
-        return new StringBuilder("stats").append(containerId != null ? " --id=" + containerId : "").toString();
-    }
 }

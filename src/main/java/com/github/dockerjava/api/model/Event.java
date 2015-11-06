@@ -3,11 +3,14 @@ package com.github.dockerjava.api.model;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 /**
  * Representation of a Docker event.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(Include.NON_NULL)
 public class Event {
     private String status;
 
@@ -15,7 +18,7 @@ public class Event {
 
     private String from;
 
-    private long time;
+    private Long time;
 
     @JsonIgnoreProperties
     private Node node;
@@ -41,7 +44,7 @@ public class Event {
      *            Event time The time is specified in milliseconds since January 1, 1970, 00:00:00 GMT
      * @since TODO
      */
-    public Event(String status, String id, String from, long time) {
+    public Event(String status, String id, String from, Long time) {
         this.status = status;
         this.id = id;
         this.from = from;
@@ -82,7 +85,7 @@ public class Event {
      *
      * @return Event time in the specified format.
      */
-    public long getTime() {
+    public Long getTime() {
         return time;
     }
 

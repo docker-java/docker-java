@@ -4,13 +4,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.InputStream;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
 
 /**
+ *
  * Copy files or folders from a container.
+ *
  */
 public class CopyFileFromContainerCmdImpl extends AbstrDockerCmd<CopyFileFromContainerCmd, InputStream> implements
         CopyFileFromContainerCmd {
@@ -63,13 +63,9 @@ public class CopyFileFromContainerCmdImpl extends AbstrDockerCmd<CopyFileFromCon
         return this;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append("cp ").append(hostPath).append(" ").append(containerId).append(":").append(resource).toString();
-    }
-
     /**
-     * @throws NotFoundException No such container
+     * @throws NotFoundException
+     *             No such container
      */
     @Override
     public InputStream exec() throws NotFoundException {

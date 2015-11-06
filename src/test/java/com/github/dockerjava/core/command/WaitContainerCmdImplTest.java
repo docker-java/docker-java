@@ -19,6 +19,7 @@ import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.model.WaitResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
 @Test(groups = "integration")
@@ -54,7 +55,8 @@ public class WaitContainerCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        int exitCode = dockerClient.waitContainerCmd(container.getId()).exec();
+        int exitCode = dockerClient.waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback())
+                .awaitStatusCode();
         LOG.info("Container exit code: {}", exitCode);
 
         assertThat(exitCode, equalTo(0));
@@ -66,12 +68,40 @@ public class WaitContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(inspectContainerResponse.getState().getExitCode(), is(equalTo(exitCode)));
     }
 
-    @Test
+    @Test(expectedExceptions = NotFoundException.class)
     public void testWaitNonExistingContainer() throws DockerException {
-        try {
-            dockerClient.waitContainerCmd("non-existing").exec();
-            fail("expected NotFoundException");
-        } catch (NotFoundException e) {
-        }
+
+        WaitContainerResultCallback callback = new WaitContainerResultCallback() {
+            public void onNext(WaitResponse waitResponse) {
+                fail("expected NotFoundException");
+            };
+        };
+
+        dockerClient.waitContainerCmd("non-existing").exec(callback).awaitStatusCode();
+    }
+
+    @Test
+    public void testWaitContainerAbort() throws Exception {
+
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
+
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+
+        dockerClient.startContainerCmd(container.getId()).exec();
+
+        WaitContainerResultCallback callback = dockerClient.waitContainerCmd(container.getId()).exec(
+                new WaitContainerResultCallback());
+
+        Thread.sleep(5000);
+
+        callback.close();
+
+        dockerClient.killContainerCmd(container.getId()).exec();
+
+        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+        LOG.info("Container Inspect: {}", inspectContainerResponse.toString());
+
+        assertThat(inspectContainerResponse.getState().isRunning(), is(equalTo(false)));
     }
 }

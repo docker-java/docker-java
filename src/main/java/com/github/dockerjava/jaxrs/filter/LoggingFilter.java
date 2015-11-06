@@ -111,7 +111,7 @@ public class LoggingFilter implements ContainerRequestFilter, ClientRequestFilte
 
     private final AtomicLong _id = new AtomicLong(0);
 
-    private final boolean printEntity;
+    private final Boolean printEntity;
 
     private final int maxEntitySize;
 
@@ -132,7 +132,7 @@ public class LoggingFilter implements ContainerRequestFilter, ClientRequestFilte
      *            if true, entity will be logged as well up to the default maxEntitySize, which is 8KB
      */
     @SuppressWarnings("BooleanParameter")
-    public LoggingFilter(final Logger logger, final boolean printEntity) {
+    public LoggingFilter(final Logger logger, final Boolean printEntity) {
         this.logger = logger;
         this.printEntity = printEntity;
         this.maxEntitySize = DEFAULT_MAX_ENTITY_SIZE;
@@ -189,7 +189,7 @@ public class LoggingFilter implements ContainerRequestFilter, ClientRequestFilte
                 prefixId(b, id).append(prefix).append(header).append(": ").append(val.get(0)).append("\n");
             } else {
                 final StringBuilder sb = new StringBuilder();
-                boolean add = false;
+                Boolean add = false;
                 for (final Object s : val) {
                     if (add) {
                         sb.append(',');

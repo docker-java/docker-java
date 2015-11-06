@@ -8,23 +8,21 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  *
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  *
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @JsonInclude(Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Info {
 
     @JsonProperty("Containers")
-    private int containers;
+    private Integer containers;
 
     @JsonProperty("Debug")
-    private boolean debug;
+    private Boolean debug;
 
     @JsonProperty("DockerRootDir")
     private String DockerRootDir;
@@ -42,10 +40,10 @@ public class Info {
     private String ID;
 
     @JsonProperty("IPv4Forwarding")
-    private boolean IPv4Forwarding;
+    private Boolean IPv4Forwarding;
 
     @JsonProperty("Images")
-    private int images;
+    private Integer images;
 
     @JsonProperty("IndexServerAddress")
     private String IndexServerAddress;
@@ -63,25 +61,25 @@ public class Info {
     private String[] Labels;
 
     @JsonProperty("MemoryLimit")
-    private boolean memoryLimit;
+    private Boolean memoryLimit;
 
     @JsonProperty("MemTotal")
-    private long memTotal;
+    private Long memTotal;
 
     @JsonProperty("Name")
     private String name;
 
     @JsonProperty("NCPU")
-    private int NCPU;
+    private Integer NCPU;
 
     @JsonProperty("NEventsListener")
-    private long nEventListener;
+    private Long nEventListener;
 
     @JsonProperty("NFd")
-    private int NFd;
+    private Integer NFd;
 
     @JsonProperty("NGoroutines")
-    private int NGoroutines;
+    private Integer NGoroutines;
 
     @JsonProperty("OperatingSystem")
     private String OperatingSystem;
@@ -90,13 +88,13 @@ public class Info {
     private String[] sockets;
 
     @JsonProperty("SwapLimit")
-    private boolean swapLimit;
+    private Boolean swapLimit;
 
-    public boolean isDebug() {
+    public Boolean isDebug() {
         return debug;
     }
 
-    public int getContainers() {
+    public Integer getContainers() {
         return containers;
     }
 
@@ -112,7 +110,7 @@ public class Info {
         return driverStatuses;
     }
 
-    public int getImages() {
+    public Integer getImages() {
         return images;
     }
 
@@ -120,7 +118,7 @@ public class Info {
         return ID;
     }
 
-    public boolean getIPv4Forwarding() {
+    public Boolean getIPv4Forwarding() {
         return IPv4Forwarding;
     }
 
@@ -148,15 +146,15 @@ public class Info {
         return sockets;
     }
 
-    public boolean isMemoryLimit() {
+    public Boolean isMemoryLimit() {
         return memoryLimit;
     }
 
-    public long getnEventListener() {
+    public Long getnEventListener() {
         return nEventListener;
     }
 
-    public long getMemTotal() {
+    public Long getMemTotal() {
         return memTotal;
     }
 
@@ -164,15 +162,15 @@ public class Info {
         return name;
     }
 
-    public int getNCPU() {
+    public Integer getNCPU() {
         return NCPU;
     }
 
-    public int getNFd() {
+    public Integer getNFd() {
         return NFd;
     }
 
-    public int getNGoroutines() {
+    public Integer getNGoroutines() {
         return NGoroutines;
     }
 
@@ -180,7 +178,7 @@ public class Info {
         return OperatingSystem;
     }
 
-    public boolean getSwapLimit() {
+    public Boolean getSwapLimit() {
         return swapLimit;
     }
 

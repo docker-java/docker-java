@@ -2,6 +2,9 @@ package com.github.dockerjava.api.command;
 
 import java.io.InputStream;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Frame;
 
@@ -24,51 +27,47 @@ import com.github.dockerjava.api.model.Frame;
  */
 public interface LogContainerCmd extends AsyncDockerCmd<LogContainerCmd, Frame> {
 
+    @CheckForNull
     public String getContainerId();
 
-    public int getTail();
+    @CheckForNull
+    public Integer getTail();
 
-    public boolean hasFollowStreamEnabled();
+    @CheckForNull
+    public Boolean hasFollowStreamEnabled();
 
-    public boolean hasTimestampsEnabled();
+    @CheckForNull
+    public Boolean hasTimestampsEnabled();
 
-    public boolean hasStdoutEnabled();
+    @CheckForNull
+    public Boolean hasStdoutEnabled();
 
-    public boolean hasStderrEnabled();
+    @CheckForNull
+    public Boolean hasStderrEnabled();
 
-    public int getSince();
+    @CheckForNull
+    public Integer getSince();
 
-    public LogContainerCmd withContainerId(String containerId);
-
-    /**
-     * See {@link #withFollowStream(boolean)}
-     */
-    public LogContainerCmd withFollowStream();
+    public LogContainerCmd withContainerId(@Nonnull String containerId);
 
     /**
      * Following the stream means the resulting {@link InputStream} returned by {@link #exec()} reads infinitely. So a
      * {@link InputStream#read()} MAY BLOCK FOREVER as long as no data is streamed from the docker host to
      * {@link DockerClient}!
      */
-    public LogContainerCmd withFollowStream(boolean followStream);
+    public LogContainerCmd withFollowStream(Boolean followStream);
 
-    public LogContainerCmd withTimestamps();
+    public LogContainerCmd withTimestamps(Boolean timestamps);
 
-    public LogContainerCmd withTimestamps(boolean timestamps);
+    public LogContainerCmd withStdOut(Boolean stdout);
 
-    public LogContainerCmd withStdOut();
-
-    public LogContainerCmd withStdOut(boolean stdout);
-
-    public LogContainerCmd withStdErr();
-
-    public LogContainerCmd withStdErr(boolean stderr);
+    public LogContainerCmd withStdErr(Boolean stderr);
 
     public LogContainerCmd withTailAll();
 
-    public LogContainerCmd withTail(int tail);
+    public LogContainerCmd withTail(Integer tail);
 
-    public LogContainerCmd withSince(int since);
+    public LogContainerCmd withSince(Integer since);
 
     public static interface Exec extends DockerCmdAsyncExec<LogContainerCmd, Frame> {
     }

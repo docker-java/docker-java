@@ -39,7 +39,7 @@ public class Bind {
 
     /**
      * Parses a bind mount specification to a {@link Bind}.
-     * 
+     *
      * @param serialized
      *            the specification, e.g. <code>/host:/container:ro</code>
      * @return a {@link Bind} matching the specification
@@ -85,7 +85,7 @@ public class Bind {
      * Returns a string representation of this {@link Bind} suitable for inclusion in a JSON message. The format is
      * <code>&lt;host path&gt;:&lt;container path&gt;:&lt;access mode&gt;</code>, like the argument in
      * {@link #parse(String)}.
-     * 
+     *
      * @return a string representation of this {@link Bind}
      */
     @Override

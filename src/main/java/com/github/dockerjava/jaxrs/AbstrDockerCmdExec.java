@@ -56,4 +56,16 @@ public abstract class AbstrDockerCmdExec {
         }
     }
 
+    protected boolean bool(Boolean bool) {
+        return bool != null && bool;
+    }
+
+    protected WebTarget booleanQueryParam(WebTarget webTarget, String name, Boolean value) {
+        if (bool(value)) {
+            webTarget = webTarget.queryParam(name, bool(value) + "");
+        }
+
+        return webTarget;
+    }
+
 }

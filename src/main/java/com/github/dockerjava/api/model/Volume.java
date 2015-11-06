@@ -5,7 +5,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
  * Represents a bind mounted volume in a Docker container.
- * 
+ *
  * @see Bind
  */
 public class Volume {

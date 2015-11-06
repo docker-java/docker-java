@@ -49,11 +49,6 @@ public class SaveImageCmdImpl extends AbstrDockerCmd<SaveImageCmd, InputStream> 
         return this;
     }
 
-    @Override
-    public String toString() {
-        return new StringBuilder("get ").append(name).toString();
-    }
-
     /**
      * @throws com.github.dockerjava.api.NotFoundException
      *             No such image

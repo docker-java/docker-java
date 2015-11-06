@@ -178,7 +178,7 @@ public class InspectContainerResponse {
         private String ipAddress;
 
         @JsonProperty("IPPrefixLen")
-        private int ipPrefixLen;
+        private Integer ipPrefixLen;
 
         @JsonProperty("Gateway")
         private String gateway;
@@ -196,7 +196,7 @@ public class InspectContainerResponse {
             return ipAddress;
         }
 
-        public int getIpPrefixLen() {
+        public Integer getIpPrefixLen() {
             return ipPrefixLen;
         }
 
@@ -226,16 +226,16 @@ public class InspectContainerResponse {
     public class ContainerState {
 
         @JsonProperty("Running")
-        private boolean running;
+        private Boolean running;
 
         @JsonProperty("Paused")
-        private boolean paused;
+        private Boolean paused;
 
         @JsonProperty("Pid")
-        private int pid;
+        private Integer pid;
 
         @JsonProperty("ExitCode")
-        private int exitCode;
+        private Integer exitCode;
 
         @JsonProperty("StartedAt")
         private String startedAt;
@@ -243,19 +243,19 @@ public class InspectContainerResponse {
         @JsonProperty("FinishedAt")
         private String finishedAt;
 
-        public boolean isRunning() {
+        public Boolean isRunning() {
             return running;
         }
 
-        public boolean isPaused() {
+        public Boolean isPaused() {
             return paused;
         }
 
-        public int getPid() {
+        public Integer getPid() {
             return pid;
         }
 
-        public int getExitCode() {
+        public Integer getExitCode() {
             return exitCode;
         }
 

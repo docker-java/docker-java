@@ -2,6 +2,9 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import com.github.dockerjava.api.command.LogContainerCmd;
 import com.github.dockerjava.api.model.Frame;
 
@@ -26,11 +29,9 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
 
     private String containerId;
 
-    private int tail = -1;
+    private Boolean followStream, timestamps, stdout, stderr;
 
-    private boolean followStream, timestamps, stdout, stderr;
-
-    private int since = 0;
+    private Integer tail, since;
 
     public LogContainerCmdImpl(LogContainerCmd.Exec exec, String containerId) {
         super(exec);
@@ -43,32 +44,32 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
     }
 
     @Override
-    public int getTail() {
+    public Integer getTail() {
         return tail;
     }
 
     @Override
-    public boolean hasFollowStreamEnabled() {
+    public Boolean hasFollowStreamEnabled() {
         return followStream;
     }
 
     @Override
-    public boolean hasTimestampsEnabled() {
+    public Boolean hasTimestampsEnabled() {
         return timestamps;
     }
 
     @Override
-    public boolean hasStdoutEnabled() {
+    public Boolean hasStdoutEnabled() {
         return stdout;
     }
 
     @Override
-    public boolean hasStderrEnabled() {
+    public Boolean hasStderrEnabled() {
         return stderr;
     }
 
     @Override
-    public int getSince() {
+    public Integer getSince() {
         return since;
     }
 
@@ -80,45 +81,25 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
     }
 
     @Override
-    public LogContainerCmd withFollowStream() {
-        return withFollowStream(true);
-    }
-
-    @Override
-    public LogContainerCmd withFollowStream(boolean followStream) {
+    public LogContainerCmd withFollowStream(Boolean followStream) {
         this.followStream = followStream;
         return this;
     }
 
     @Override
-    public LogContainerCmd withTimestamps() {
-        return withTimestamps(true);
-    }
-
-    @Override
-    public LogContainerCmd withTimestamps(boolean timestamps) {
+    public LogContainerCmd withTimestamps(Boolean timestamps) {
         this.timestamps = timestamps;
         return this;
     }
 
     @Override
-    public LogContainerCmd withStdOut() {
-        return withStdOut(true);
-    }
-
-    @Override
-    public LogContainerCmd withStdOut(boolean stdout) {
+    public LogContainerCmd withStdOut(Boolean stdout) {
         this.stdout = stdout;
         return this;
     }
 
     @Override
-    public LogContainerCmd withStdErr() {
-        return withStdErr(true);
-    }
-
-    @Override
-    public LogContainerCmd withStdErr(boolean stderr) {
+    public LogContainerCmd withStdErr(Boolean stderr) {
         this.stderr = stderr;
         return this;
     }
@@ -130,22 +111,20 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
     }
 
     @Override
-    public LogContainerCmd withTail(int tail) {
+    public LogContainerCmd withTail(Integer tail) {
         this.tail = tail;
         return this;
     }
 
     @Override
-    public LogContainerCmd withSince(int since) {
+    public LogContainerCmd withSince(Integer since) {
         this.since = since;
         return this;
     }
 
     @Override
     public String toString() {
-        return new StringBuilder("logs ").append(followStream ? "--follow=true" : "")
-                .append(timestamps ? "--timestamps=true" : "").append(since > 0 ? "--since=" + since : "")
-                .append(containerId).toString();
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
 }

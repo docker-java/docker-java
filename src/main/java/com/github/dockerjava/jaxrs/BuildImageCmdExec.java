@@ -62,21 +62,18 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
         if (command.getRemote() != null) {
             webTarget = webTarget.queryParam("remote", command.getRemote().toString());
         }
-        if (command.isQuiet()) {
-            webTarget = webTarget.queryParam("q", "true");
-        }
-        if (command.hasNoCacheEnabled()) {
-            webTarget = webTarget.queryParam("nocache", "true");
-        }
-        if (command.hasPullEnabled()) {
-            webTarget = webTarget.queryParam("pull", "true");
-        }
-        if (!command.hasRemoveEnabled()) {
+
+        webTarget = booleanQueryParam(webTarget, "q", command.isQuiet());
+        webTarget = booleanQueryParam(webTarget, "nocache", command.hasNoCacheEnabled());
+        webTarget = booleanQueryParam(webTarget, "pull", command.hasPullEnabled());
+        webTarget = booleanQueryParam(webTarget, "rm", command.hasRemoveEnabled());
+        webTarget = booleanQueryParam(webTarget, "forcerm", command.isForcerm());
+
+        // this has to be handled differently as it should switch to 'false'
+        if (command.hasRemoveEnabled() == null || !command.hasRemoveEnabled()) {
             webTarget = webTarget.queryParam("rm", "false");
         }
-        if (command.isForcerm()) {
-            webTarget = webTarget.queryParam("forcerm", "true");
-        }
+
         if (command.getMemory() != null) {
             webTarget = webTarget.queryParam("memory", command.getMemory());
         }

@@ -37,11 +37,6 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
         return containerId;
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this).toString();
-    }
-
     /**
      * @throws NotFoundException
      *             No such container

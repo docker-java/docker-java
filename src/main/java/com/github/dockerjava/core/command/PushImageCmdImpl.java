@@ -71,9 +71,4 @@ public class PushImageCmdImpl extends AbstrAsyncDockerCmd<PushImageCmd, PushResp
         return this;
     }
 
-    @Override
-    public String toString() {
-        return new StringBuilder("push ").append(name).toString();
-    }
-
 }

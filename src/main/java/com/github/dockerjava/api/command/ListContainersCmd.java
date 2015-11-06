@@ -2,6 +2,8 @@ package com.github.dockerjava.api.command;
 
 import java.util.List;
 
+import javax.annotation.CheckForNull;
+
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Filters;
 
@@ -22,29 +24,35 @@ import com.github.dockerjava.api.model.Filters;
  */
 public interface ListContainersCmd extends SyncDockerCmd<List<Container>> {
 
-    public int getLimit();
-
-    public boolean hasShowSizeEnabled();
-
-    public boolean hasShowAllEnabled();
-
-    public String getSinceId();
-
+    @CheckForNull
     public String getBeforeId();
 
+    @CheckForNull
     public Filters getFilters();
 
-    public ListContainersCmd withShowAll(boolean showAll);
+    @CheckForNull
+    public Integer getLimit();
 
-    public ListContainersCmd withShowSize(boolean showSize);
+    @CheckForNull
+    public String getSinceId();
 
-    public ListContainersCmd withLimit(int limit);
+    @CheckForNull
+    public Boolean hasShowAllEnabled();
 
-    public ListContainersCmd withSince(String since);
+    @CheckForNull
+    public Boolean hasShowSizeEnabled();
 
     public ListContainersCmd withBefore(String before);
 
     public ListContainersCmd withFilters(Filters filters);
+
+    public ListContainersCmd withLimit(Integer limit);
+
+    public ListContainersCmd withShowAll(Boolean showAll);
+
+    public ListContainersCmd withShowSize(Boolean showSize);
+
+    public ListContainersCmd withSince(String since);
 
     public static interface Exec extends DockerCmdSyncExec<ListContainersCmd, List<Container>> {
     }

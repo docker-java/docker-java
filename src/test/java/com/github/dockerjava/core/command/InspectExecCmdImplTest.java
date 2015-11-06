@@ -58,11 +58,11 @@ public class InspectExecCmdImplTest extends AbstractDockerClientTest {
         dockerClient.startContainerCmd(container.getId()).exec();
 
         ExecCreateCmdResponse touchFileCmdCreateResponse = dockerClient.execCreateCmd(container.getId())
-                .withAttachStdout().withAttachStderr().withCmd("touch", "/marker").exec();
+                .withAttachStdout(true).withAttachStderr(true).withCmd("touch", "/marker").exec();
         LOG.info("Created exec {}", touchFileCmdCreateResponse.toString());
         assertThat(touchFileCmdCreateResponse.getId(), not(isEmptyString()));
         ExecCreateCmdResponse checkFileCmdCreateResponse = dockerClient.execCreateCmd(container.getId())
-                .withAttachStdout().withAttachStderr().withCmd("test", "-e", "/marker").exec();
+                .withAttachStdout(true).withAttachStderr(true).withCmd("test", "-e", "/marker").exec();
         LOG.info("Created exec {}", checkFileCmdCreateResponse.toString());
         assertThat(checkFileCmdCreateResponse.getId(), not(isEmptyString()));
 

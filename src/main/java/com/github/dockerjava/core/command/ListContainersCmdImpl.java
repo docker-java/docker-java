@@ -27,9 +27,9 @@ import com.github.dockerjava.api.model.Filters;
 public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, List<Container>> implements
         ListContainersCmd {
 
-    private int limit = -1;
+    private Integer limit = -1;
 
-    private boolean showSize, showAll = false;
+    private Boolean showSize, showAll = false;
 
     private String sinceId, beforeId;
 
@@ -40,17 +40,17 @@ public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, Lis
     }
 
     @Override
-    public int getLimit() {
+    public Integer getLimit() {
         return limit;
     }
 
     @Override
-    public boolean hasShowSizeEnabled() {
+    public Boolean hasShowSizeEnabled() {
         return showSize;
     }
 
     @Override
-    public boolean hasShowAllEnabled() {
+    public Boolean hasShowAllEnabled() {
         return showAll;
     }
 
@@ -70,19 +70,20 @@ public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, Lis
     }
 
     @Override
-    public ListContainersCmd withShowAll(boolean showAll) {
+    public ListContainersCmd withShowAll(Boolean showAll) {
         this.showAll = showAll;
         return this;
     }
 
     @Override
-    public ListContainersCmd withShowSize(boolean showSize) {
+    public ListContainersCmd withShowSize(Boolean showSize) {
         this.showSize = showSize;
         return this;
     }
 
     @Override
-    public ListContainersCmd withLimit(int limit) {
+    public ListContainersCmd withLimit(Integer limit) {
+        checkNotNull(limit, "limit was not specified");
         checkArgument(limit > 0, "limit must be greater 0");
         this.limit = limit;
         return this;
@@ -109,11 +110,4 @@ public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, Lis
         return this;
     }
 
-    @Override
-    public String toString() {
-        return new StringBuilder("ps ").append(showAll ? "--all=true" : "").append(showSize ? "--size=true" : "")
-                .append(sinceId != null ? " --since " + sinceId : "")
-                .append(beforeId != null ? " --before " + beforeId : "").append(limit != -1 ? "-n " + limit : "")
-                .append(filters != null ? " --filters " + filters : "").toString();
-    }
 }

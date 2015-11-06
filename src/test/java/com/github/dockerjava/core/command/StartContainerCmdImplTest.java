@@ -87,7 +87,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        dockerClient.waitContainerCmd(container.getId()).exec();
+        dockerClient.waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback()).awaitStatusCode();
 
         inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 

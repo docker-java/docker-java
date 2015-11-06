@@ -2,25 +2,27 @@ package com.github.dockerjava.api.command;
 
 import java.io.InputStream;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 import com.github.dockerjava.api.NotFoundException;
 
 public interface ExecStartCmd extends SyncDockerCmd<InputStream> {
 
+    @CheckForNull
     public String getExecId();
 
-    public ExecStartCmd withExecId(String execId);
+    @CheckForNull
+    public Boolean hasDetachEnabled();
 
-    public boolean hasDetachEnabled();
+    @CheckForNull
+    public Boolean hasTtyEnabled();
 
-    public ExecStartCmd withDetach(boolean detach);
+    public ExecStartCmd withDetach(Boolean detach);
 
-    public ExecStartCmd withDetach();
+    public ExecStartCmd withExecId(@Nonnull String execId);
 
-    public boolean hasTtyEnabled();
-
-    public ExecStartCmd withTty(boolean tty);
-
-    public ExecStartCmd withTty();
+    public ExecStartCmd withTty(Boolean tty);
 
     /**
      * Its the responsibility of the caller to consume and/or close the {@link InputStream} to prevent connection leaks.
@@ -33,4 +35,5 @@ public interface ExecStartCmd extends SyncDockerCmd<InputStream> {
 
     public static interface Exec extends DockerCmdSyncExec<ExecStartCmd, InputStream> {
     }
+
 }
