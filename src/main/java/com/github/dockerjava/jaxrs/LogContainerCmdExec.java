@@ -25,14 +25,14 @@ public class LogContainerCmdExec extends AbstrAsyncDockerCmdExec<LogContainerCmd
     protected AbstractCallbackNotifier<Frame> callbackNotifier(LogContainerCmd command,
             ResultCallback<Frame> resultCallback) {
 
-        WebTarget webTarget = getBaseResource().path("/containers/{id}/logs")
-                .resolveTemplate("id", command.getContainerId());
+        WebTarget webTarget = getBaseResource().path("/containers/{id}/logs").resolveTemplate("id",
+                command.getContainerId());
 
-        if(command.getTail() != null) {
+        if (command.getTail() != null) {
             webTarget = webTarget.queryParam("tail", command.getTail());
         }
 
-        if(command.getSince() != null) {
+        if (command.getSince() != null) {
             webTarget = webTarget.queryParam("since", command.getSince());
         }
 

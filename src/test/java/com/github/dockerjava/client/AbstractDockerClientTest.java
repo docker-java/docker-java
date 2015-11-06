@@ -210,7 +210,8 @@ public abstract class AbstractDockerClientTest extends Assert {
 
     protected String buildImage(File baseDir) throws Exception {
 
-        return dockerClient.buildImageCmd(baseDir).withNoCache(true).exec(new BuildImageResultCallback()).awaitImageId();
+        return dockerClient.buildImageCmd(baseDir).withNoCache(true).exec(new BuildImageResultCallback())
+                .awaitImageId();
     }
 
 }
