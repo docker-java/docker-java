@@ -8,6 +8,7 @@ Notes
 
 All changes
 
+* [#359] (https://github.com/docker-java/docker-java/pull/359) Fix performance issue of build command by adding bulk-read variant of InputStream.read()
 * [#357] (https://github.com/docker-java/docker-java/pull/357) Wait container command needs possibility to abort operation
 * [#313] (https://github.com/docker-java/docker-java/pull/313) Refactor primitive type fields to be of object type in JSON objects
 
