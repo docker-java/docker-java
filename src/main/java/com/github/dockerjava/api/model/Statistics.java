@@ -16,6 +16,13 @@ public class Statistics {
     @JsonProperty("read")
     private String read;
 
+    @JsonProperty("networks")
+    private Map<String, Object> networksStats;
+
+    /**
+     * Deprecated as of Docker Remote API 1.21
+     */
+    @Deprecated
     @JsonProperty("network")
     private Map<String, Object> networkStats;
 
@@ -27,6 +34,10 @@ public class Statistics {
 
     @JsonProperty("cpu_stats")
     private Map<String, Object> cpuStats;
+
+    public Map<String, Object> getNetworksStats() {
+        return networksStats;
+    }
 
     public Map<String, Object> getNetworkStats() {
         return networkStats;
