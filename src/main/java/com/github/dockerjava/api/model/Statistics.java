@@ -23,10 +23,10 @@ public class Statistics {
      */
     @CheckForNull
     @JsonProperty("networks")
-    private Map<String, Object> networksStats;
+    private Map<String, Object> networks;
 
     /**
-     * @deprecated as of Docker Remote API 1.21, replaced by {@link #networksStats}
+     * @deprecated as of Docker Remote API 1.21, replaced by {@link #networks}
      */
     @Deprecated
     @JsonProperty("network")
@@ -45,12 +45,12 @@ public class Statistics {
      * @since Docker Remote API 1.21
      */
     @CheckForNull
-    public Map<String, Object> getNetworksStats() {
-        return networksStats;
+    public Map<String, Object> getNetworks() {
+        return networks;
     }
 
     /**
-     * @deprecated as of Docker Remote API 1.21, replaced by {@link #getNetworksStats()}
+     * @deprecated as of Docker Remote API 1.21, replaced by {@link #getNetworks()}
      */
     @Deprecated
     public Map<String, Object> getNetworkStats() {
