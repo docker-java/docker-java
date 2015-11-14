@@ -35,7 +35,7 @@ import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.github.dockerjava.core.CompressArchiveUtil;
+import com.github.dockerjava.core.util.CompressArchiveUtil;
 
 @Test(groups = "integration")
 public class BuildImageCmdImplTest extends AbstractDockerClientTest {

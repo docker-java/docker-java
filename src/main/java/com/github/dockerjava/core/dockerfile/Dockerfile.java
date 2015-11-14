@@ -1,8 +1,8 @@
 package com.github.dockerjava.core.dockerfile;
 
 import com.github.dockerjava.api.exception.DockerClientException;
-import com.github.dockerjava.core.CompressArchiveUtil;
-import com.github.dockerjava.core.FilePathUtil;
+import com.github.dockerjava.core.util.CompressArchiveUtil;
+import com.github.dockerjava.core.util.FilePathUtil;
 import com.github.dockerjava.core.GoLangFileMatch;
 import com.github.dockerjava.core.exception.GoLangFileMatchException;
 import com.github.dockerjava.core.GoLangMatchFileFilter;

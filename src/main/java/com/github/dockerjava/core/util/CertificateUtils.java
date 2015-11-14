@@ -1,4 +1,4 @@
-package com.github.dockerjava.core;
+package com.github.dockerjava.core.util;
 
 import org.apache.commons.io.IOUtils;
 import org.bouncycastle.cert.X509CertificateHolder;

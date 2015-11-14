@@ -6,6 +6,7 @@ package com.github.dockerjava.core;
 import java.io.File;
 import java.util.List;
 
+import com.github.dockerjava.core.util.FilePathUtil;
 import org.apache.commons.io.filefilter.AbstractFileFilter;
 
 public class GoLangMatchFileFilter extends AbstractFileFilter {

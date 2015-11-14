@@ -1,4 +1,4 @@
-package com.github.dockerjava.core;
+package com.github.dockerjava.core.util;
 
 import java.io.File;
 import java.io.IOException;

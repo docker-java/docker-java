@@ -1,4 +1,4 @@
-package com.github.dockerjava.core;
+package com.github.dockerjava.core.util;
 
 import static com.github.dockerjava.core.util.FilePathUtil.relativize;
 

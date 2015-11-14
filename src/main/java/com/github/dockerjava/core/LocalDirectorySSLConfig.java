@@ -7,6 +7,7 @@ import java.security.Security;
 
 import javax.net.ssl.SSLContext;
 
+import com.github.dockerjava.core.util.CertificateUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.glassfish.jersey.SslConfigurator;
 
