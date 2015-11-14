@@ -21,6 +21,8 @@ public class DockerRawStreamHandler extends SimpleChannelInboundHandler<ByteBuf>
 	private byte[] header = new byte[HEADER_SIZE];
 
 	private int headerCnt = 0;
+	
+	private byte[] payload = new byte[0];
 
 	private int payloadCnt = 0;
 
@@ -32,13 +34,13 @@ public class DockerRawStreamHandler extends SimpleChannelInboundHandler<ByteBuf>
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
 
-		// System.out.println("msg: " + msg.readableBytes());
-		rawBuffer.writeBytes(msg.copy());
-		// System.out.println("readableBytes: " + rawBuffer.readableBytes());
+		rawBuffer.writeBytes(msg.copy(), 0, msg.readableBytes());
 
 		Frame frame = null;
 
 		do {
+			frame = decode();
+			
 			if (frame != null) {
 				switch (frame.getStreamType()) {
 				case STDOUT:
@@ -53,11 +55,15 @@ public class DockerRawStreamHandler extends SimpleChannelInboundHandler<ByteBuf>
 						stderr.flush();
 					}
 					break;
+				default:
+					System.err.println("unknown stream type");		
 				}
+				
 				headerCnt = 0;
 				payloadCnt = 0;
-			}
-		} while ((frame = decode()) != null);
+			} 
+			
+		} while (frame != null);
 
 	}
 
@@ -86,7 +92,8 @@ public class DockerRawStreamHandler extends SimpleChannelInboundHandler<ByteBuf>
 		int payloadSize = ((header[4] & 0xff) << 24) + ((header[5] & 0xff) << 16) + ((header[6] & 0xff) << 8)
 				+ (header[7] & 0xff);
 
-		byte[] payload = new byte[payloadSize];
+		if(payloadCnt == 0)
+			payload = new byte[payloadSize];
 
 		int count = read(payload, payloadCnt, payloadSize - payloadCnt);
 
