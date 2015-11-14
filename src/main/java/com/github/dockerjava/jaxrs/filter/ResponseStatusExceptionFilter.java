@@ -12,14 +12,14 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.io.IOUtils;
 
-import com.github.dockerjava.api.BadRequestException;
-import com.github.dockerjava.api.ConflictException;
-import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.api.InternalServerErrorException;
-import com.github.dockerjava.api.NotAcceptableException;
-import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.NotModifiedException;
-import com.github.dockerjava.api.UnauthorizedException;
+import com.github.dockerjava.api.exception.BadRequestException;
+import com.github.dockerjava.api.exception.ConflictException;
+import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.exception.InternalServerErrorException;
+import com.github.dockerjava.api.exception.NotAcceptableException;
+import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.api.exception.NotModifiedException;
+import com.github.dockerjava.api.exception.UnauthorizedException;
 
 /**
  * This {@link ClientResponseFilter} implementation detects http status codes and throws {@link DockerException}s

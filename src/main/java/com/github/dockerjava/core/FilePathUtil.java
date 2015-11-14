@@ -3,7 +3,7 @@ package com.github.dockerjava.core;
 import java.io.File;
 import java.io.IOException;
 
-import com.github.dockerjava.api.DockerClientException;
+import com.github.dockerjava.api.exception.DockerClientException;
 
 public class FilePathUtil {
 

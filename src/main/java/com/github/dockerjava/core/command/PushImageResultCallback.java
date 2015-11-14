@@ -6,7 +6,7 @@ package com.github.dockerjava.core.command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.api.DockerClientException;
+import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.PushResponseItem;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
 

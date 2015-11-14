@@ -1,10 +1,10 @@
 package com.github.dockerjava.core.dockerfile;
 
-import com.github.dockerjava.api.DockerClientException;
+import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.core.CompressArchiveUtil;
 import com.github.dockerjava.core.FilePathUtil;
 import com.github.dockerjava.core.GoLangFileMatch;
-import com.github.dockerjava.core.GoLangFileMatchException;
+import com.github.dockerjava.core.exception.GoLangFileMatchException;
 import com.github.dockerjava.core.GoLangMatchFileFilter;
 import com.google.common.base.Function;
 import com.google.common.base.Objects;

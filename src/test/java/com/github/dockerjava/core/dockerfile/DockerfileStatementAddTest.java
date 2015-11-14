@@ -1,6 +1,6 @@
 package com.github.dockerjava.core.dockerfile;
 
-import com.github.dockerjava.api.DockerClientException;
+import com.github.dockerjava.api.exception.DockerClientException;
 import com.google.common.base.Optional;
 import junit.framework.TestCase;
 import org.hamcrest.Matcher;

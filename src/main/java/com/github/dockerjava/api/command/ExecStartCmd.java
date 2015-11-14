@@ -5,7 +5,7 @@ import java.io.InputStream;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.exception.NotFoundException;
 
 public interface ExecStartCmd extends SyncDockerCmd<InputStream> {
 
@@ -27,7 +27,7 @@ public interface ExecStartCmd extends SyncDockerCmd<InputStream> {
     /**
      * Its the responsibility of the caller to consume and/or close the {@link InputStream} to prevent connection leaks.
      *
-     * @throws com.github.dockerjava.api.NotFoundException
+     * @throws NotFoundException
      *             No such exec instance
      */
     @Override

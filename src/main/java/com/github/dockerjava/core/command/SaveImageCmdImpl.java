@@ -4,7 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.InputStream;
 
-import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.command.SaveImageCmd;
 
 public class SaveImageCmdImpl extends AbstrDockerCmd<SaveImageCmd, InputStream> implements SaveImageCmd {
@@ -50,7 +50,7 @@ public class SaveImageCmdImpl extends AbstrDockerCmd<SaveImageCmd, InputStream> 
     }
 
     /**
-     * @throws com.github.dockerjava.api.NotFoundException
+     * @throws NotFoundException
      *             No such image
      */
     @Override

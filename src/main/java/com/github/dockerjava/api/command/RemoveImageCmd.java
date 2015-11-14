@@ -3,7 +3,7 @@ package com.github.dockerjava.api.command;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.exception.NotFoundException;
 
 /**
  *
