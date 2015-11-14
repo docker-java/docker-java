@@ -7,15 +7,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.TimeUnit;
-
-import org.apache.commons.io.HexDump;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,12 +20,9 @@ import com.github.dockerjava.netty.handler.HijackHttpConnectionHandler;
 import com.github.dockerjava.netty.handler.HttpRequestProvider;
 import com.github.dockerjava.netty.handler.HttpResponseInboundHandler;
 import com.github.dockerjava.netty.handler.HttpResponseStreamInboundHandler;
-import com.github.dockerjava.netty.handler.SerializeJsonOutboundHandler;
 
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelHandler;
 import io.netty.handler.codec.http.DefaultFullHttpRequest;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpClientCodec;
@@ -41,8 +32,6 @@ import io.netty.handler.codec.http.HttpHeaderValues;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpVersion;
-import io.netty.handler.codec.http.multipart.HttpPostRequestEncoder;
-import io.netty.handler.codec.http.multipart.InterfaceHttpData;
 import io.netty.handler.codec.json.JsonObjectDecoder;
 
 public class InvocationBuilder {
@@ -155,7 +144,7 @@ public class InvocationBuilder {
 		HttpResponseStreamInboundHandler streamHandler = new HttpResponseStreamInboundHandler();
 
 		final Channel channel = channelProvider.getChannel();
-		
+
 		HijackHttpConnectionHandler hijackHandler = new HijackHttpConnectionHandler();
 		channel.pipeline()
 				.addLast(new HttpClientUpgradeHandler(new HttpClientCodec(), hijackHandler, Integer.MAX_VALUE));
@@ -168,31 +157,21 @@ public class InvocationBuilder {
 
 		channel.pipeline().addLast(streamHandler);
 
-		System.out.println("resource: " + resource);
-		System.out.println(channel.isActive());
-
 		channel.writeAndFlush(request);
 
 		// wait for successful http upgrade procedure
 		hijackHandler.await();
 
-//		Iterator<Entry<String, ChannelHandler>> iterator = channel.pipeline().iterator();
-//
-//		while (iterator.hasNext()) {
-//			Entry<String, ChannelHandler> next = iterator.next();
-//			System.out.println(next.getValue());
-//		}
-
 		// start a new thread that reads from stdin and writes to the channel
 		new Thread(new Runnable() {
-			
+
 			@Override
 			public void run() {
-				
+
 				BufferedReader reader = new BufferedReader(new InputStreamReader(stdin));
-				
+
 				int read = -1;
-				while((read = read(reader)) != -1) {
+				while ((read = read(reader)) != -1) {
 					byte[] bytes = ByteBuffer.allocate(4).putInt(read).array();
 					channel.writeAndFlush(Unpooled.copiedBuffer(bytes));
 				}
@@ -206,18 +185,19 @@ public class InvocationBuilder {
 				}
 			}
 		}).start();
-		
+
 		return streamHandler.getInputStream();
 	}
-	
-	public void post(final Object entity, final OutputStream stdout, final OutputStream stderr, final InputStream stdin) {
+
+	public void post(final Object entity, final OutputStream stdout, final OutputStream stderr,
+			final InputStream stdin) {
 
 		HttpRequest request = preparePostRequest(resource, entity);
 
 		DockerRawStreamHandler streamHandler = new DockerRawStreamHandler(stdout, stderr);
 
 		final Channel channel = channelProvider.getChannel();
-		
+
 		HijackHttpConnectionHandler hijackHandler = new HijackHttpConnectionHandler();
 		channel.pipeline()
 				.addLast(new HttpClientUpgradeHandler(new HttpClientCodec(), hijackHandler, Integer.MAX_VALUE));
@@ -230,49 +210,28 @@ public class InvocationBuilder {
 
 		channel.pipeline().addLast(streamHandler);
 
-		System.out.println("resource: " + resource);
-		System.out.println(channel.isActive());
-
 		channel.writeAndFlush(request);
 
 		// wait for successful http upgrade procedure
 		hijackHandler.await();
 
-//		Iterator<Entry<String, ChannelHandler>> iterator = channel.pipeline().iterator();
-//
-//		while (iterator.hasNext()) {
-//			Entry<String, ChannelHandler> next = iterator.next();
-//			System.out.println(next.getValue());
-//		}
-
 		// start a new thread that reads from stdin and writes to the channel
 		new Thread(new Runnable() {
-			
+
 			@Override
 			public void run() {
-				
+
 				BufferedReader reader = new BufferedReader(new InputStreamReader(stdin, Charset.forName("UTF-8")));
-				
+
 				int read = -1;
-				while((read = read(reader)) != -1) {
+				while ((read = read(reader)) != -1) {
 					byte[] bytes = ByteBuffer.allocate(4).putInt(read).array();
 					try {
 						bytes = new String(bytes).getBytes("US-ASCII");
-						
-						HexDump.dump(bytes, 0, System.err, 0);
 					} catch (UnsupportedEncodingException e) {
 						throw new RuntimeException(e);
-					} catch (ArrayIndexOutOfBoundsException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IllegalArgumentException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
 					}
-					
+
 					channel.writeAndFlush(Unpooled.copiedBuffer(bytes));
 				}
 			}
@@ -285,10 +244,8 @@ public class InvocationBuilder {
 				}
 			}
 		}).start();
-		
-		
-	}
 
+	}
 
 	private HttpRequest preparePostRequest(String uri, Object entity) {
 		// Prepare the HTTP request.
