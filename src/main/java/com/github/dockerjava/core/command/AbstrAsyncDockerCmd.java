@@ -2,8 +2,6 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.io.IOException;
-
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.AsyncDockerCmd;
 import com.github.dockerjava.api.command.DockerCmdAsyncExec;

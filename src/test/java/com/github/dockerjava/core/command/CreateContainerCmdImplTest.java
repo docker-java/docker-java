@@ -45,8 +45,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.github.dockerjava.api.model.Capability.MKNOD;
-import static com.github.dockerjava.api.model.Capability.NET_ADMIN;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @Test(groups = "integration")

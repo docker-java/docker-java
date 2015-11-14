@@ -5,7 +5,6 @@ import javax.annotation.Nonnull;
 
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.async.ResultCallback;
-import com.github.dockerjava.api.model.BuildResponseItem;
 import com.github.dockerjava.api.model.WaitResponse;
 
 /**
