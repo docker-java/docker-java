@@ -68,7 +68,7 @@ public class DockerImageHelper {
 
     /**
      * Effective V2 unix registry.
-     * TODO support V1 registry? some enum?
+     * TODO support V1 registry? some enum? https://github.com/docker/docker/blob/729c9a97822ebee2c978a322d37060454af6bc66/registry/types.go#L64-L73
      */
     public String getEffectiveRegistryHost() {
         if (registryHost != null) {
