@@ -26,6 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CertificateUtils {
+    private CertificateUtils() {
+        // utility class
+    }
 
     public static boolean verifyCertificatesExist(String dockerCertPath) {
         String[] files = { "ca.pem", "cert.pem", "key.pem" };

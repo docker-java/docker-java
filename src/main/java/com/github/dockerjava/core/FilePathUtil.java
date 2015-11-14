@@ -6,6 +6,9 @@ import java.io.IOException;
 import com.github.dockerjava.api.exception.DockerClientException;
 
 public class FilePathUtil {
+    private FilePathUtil() {
+        // utility class
+    }
 
     /**
      * Return the relative path. Path elements are separated with / char.
