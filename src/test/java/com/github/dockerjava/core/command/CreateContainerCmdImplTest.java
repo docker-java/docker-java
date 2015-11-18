@@ -253,7 +253,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         InspectContainerResponse inspectContainerResponse1 = dockerClient.inspectContainerCmd(container1.getId())
                 .exec();
         LOG.info("Container1 Inspect: {}", inspectContainerResponse1.toString());
-        assertThat(inspectContainerResponse1.getState().isRunning(), is(true));
+        assertThat(inspectContainerResponse1.getState().getRunning(), is(true));
 
         CreateContainerResponse container2 = dockerClient.createContainerCmd("busybox").withName("container2")
                 .withCmd("env").withLinks(new Link("container1", "container1Link")).exec();
@@ -406,9 +406,9 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(inspectContainerResponse1.getName(), equalTo("/container1"));
         assertThat(inspectContainerResponse1.getImageId(), not(isEmptyString()));
         assertThat(inspectContainerResponse1.getState(), is(notNullValue()));
-        assertThat(inspectContainerResponse1.getState().isRunning(), is(true));
+        assertThat(inspectContainerResponse1.getState().getRunning(), is(true));
 
-        if (!inspectContainerResponse1.getState().isRunning()) {
+        if (!inspectContainerResponse1.getState().getRunning()) {
             assertThat(inspectContainerResponse1.getState().getExitCode(), is(equalTo(0)));
         }
 
