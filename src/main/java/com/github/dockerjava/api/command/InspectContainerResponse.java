@@ -225,17 +225,32 @@ public class InspectContainerResponse {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public class ContainerState {
 
+        @JsonProperty("Status")
+        private String status;
+        
         @JsonProperty("Running")
         private Boolean running;
 
         @JsonProperty("Paused")
         private Boolean paused;
 
+        @JsonProperty("Restarting")
+        private Boolean restarting;
+        
+        @JsonProperty("OOMKilled")
+        private Boolean oomKilled;
+        
+        @JsonProperty("Dead")
+        private Boolean dead;
+        
         @JsonProperty("Pid")
         private Integer pid;
 
         @JsonProperty("ExitCode")
         private Integer exitCode;
+        
+        @JsonProperty("Error")
+        private String error;
 
         @JsonProperty("StartedAt")
         private String startedAt;
@@ -243,12 +258,28 @@ public class InspectContainerResponse {
         @JsonProperty("FinishedAt")
         private String finishedAt;
 
+        public String getStatus() {
+            return status;
+        }
+        
         public Boolean isRunning() {
             return running;
         }
 
         public Boolean isPaused() {
             return paused;
+        }
+        
+        public Boolean isRestarting() {
+            return restarting;
+        }
+        
+        public Boolean isOOMKilled() {
+            return oomKilled;
+        }
+        
+        public Boolean isDead() {
+            return dead;
         }
 
         public Integer getPid() {
@@ -259,6 +290,10 @@ public class InspectContainerResponse {
             return exitCode;
         }
 
+        public String getError() {
+            return error;
+        }
+        
         public String getStartedAt() {
             return startedAt;
         }
