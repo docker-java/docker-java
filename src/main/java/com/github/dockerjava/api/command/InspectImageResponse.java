@@ -1,10 +1,10 @@
 package com.github.dockerjava.api.command;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.model.ContainerConfig;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  *
@@ -14,28 +14,28 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InspectImageResponse {
 
-	@JsonProperty("Architecture")
+    @JsonProperty("Architecture")
     private String arch;
 
-	@JsonProperty("Author")
+    @JsonProperty("Author")
     private String author;
 
-	@JsonProperty("Comment")
+    @JsonProperty("Comment")
     private String comment;
 
-	@JsonProperty("Config")
+    @JsonProperty("Config")
     private ContainerConfig config;
 
-	@JsonProperty("Container")
+    @JsonProperty("Container")
     private String container;
 
-	@JsonProperty("ContainerConfig")
+    @JsonProperty("ContainerConfig")
     private ContainerConfig containerConfig;
 
-	@JsonProperty("Created")
-	private String created;
+    @JsonProperty("Created")
+    private String created;
 
-	@JsonProperty("DockerVersion")
+    @JsonProperty("DockerVersion")
     private String dockerVersion;
 
     @JsonProperty("Id")
@@ -48,7 +48,7 @@ public class InspectImageResponse {
     private String parent;
 
     @JsonProperty("Size")
-    private long size;
+    private Long size;
 
     public String getId() {
         return id;
@@ -70,7 +70,7 @@ public class InspectImageResponse {
         return containerConfig;
     }
 
-    public long getSize() {
+    public Long getSize() {
         return size;
     }
 

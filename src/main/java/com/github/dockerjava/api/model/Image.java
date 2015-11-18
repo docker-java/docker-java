@@ -3,7 +3,9 @@ package com.github.dockerjava.api.model;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 /**
  *
@@ -11,25 +13,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(Include.NON_NULL)
 public class Image {
 
-	@JsonProperty("Created")
-	private long created;
+    @JsonProperty("Created")
+    private Long created;
 
-	@JsonProperty("Id")
+    @JsonProperty("Id")
     private String id;
 
-	@JsonProperty("ParentId")
-	private String parentId;
+    @JsonProperty("ParentId")
+    private String parentId;
 
-	@JsonProperty("RepoTags")
+    @JsonProperty("RepoTags")
     private String[] repoTags;
 
     @JsonProperty("Size")
-    private long size;
+    private Long size;
 
     @JsonProperty("VirtualSize")
-    private long virtualSize;
+    private Long virtualSize;
 
     public String getId() {
         return id;
@@ -43,15 +46,15 @@ public class Image {
         return parentId;
     }
 
-    public long getCreated() {
+    public Long getCreated() {
         return created;
     }
 
-    public long getSize() {
+    public Long getSize() {
         return size;
     }
 
-    public long getVirtualSize() {
+    public Long getVirtualSize() {
         return virtualSize;
     }
 

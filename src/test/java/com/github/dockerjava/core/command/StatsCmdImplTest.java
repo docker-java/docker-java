@@ -4,12 +4,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 
-import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.StatsCallback;
-import com.github.dockerjava.api.command.StatsCmd;
-import com.github.dockerjava.api.model.Statistics;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.security.SecureRandom;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -18,116 +17,90 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.security.SecureRandom;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.model.Statistics;
+import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.core.async.ResultCallbackTemplate;
 
 @Test(groups = "integration")
 public class StatsCmdImplTest extends AbstractDockerClientTest {
 
-	private static int NUM_STATS = 5;
+    private static int NUM_STATS = 5;
 
-	@BeforeTest
-	public void beforeTest() throws DockerException {
-		super.beforeTest();
-	}
+    @BeforeTest
+    public void beforeTest() throws Exception {
+        super.beforeTest();
+    }
 
-	@AfterTest
-	public void afterTest() {
-		super.afterTest();
-	}
+    @AfterTest
+    public void afterTest() {
+        super.afterTest();
+    }
 
-	@BeforeMethod
-	public void beforeMethod(Method method) {
-		super.beforeMethod(method);
-	}
+    @BeforeMethod
+    public void beforeMethod(Method method) {
+        super.beforeMethod(method);
+    }
 
-	@AfterMethod
-	public void afterMethod(ITestResult result) {
-		super.afterMethod(result);
-	}
+    @AfterMethod
+    public void afterMethod(ITestResult result) {
+        super.afterMethod(result);
+    }
 
-	@Test
-	public void testStatsStreaming() throws InterruptedException, IOException {
-		TimeUnit.SECONDS.sleep(1);
+    @Test(groups = "ignoreInCircleCi")
+    public void testStatsStreaming() throws InterruptedException, IOException {
+        TimeUnit.SECONDS.sleep(1);
 
-		CountDownLatch countDownLatch = new CountDownLatch(NUM_STATS);
-		StatsCallbackTest statsCallback = new StatsCallbackTest(countDownLatch);
-		
+        CountDownLatch countDownLatch = new CountDownLatch(NUM_STATS);
+
         String containerName = "generated_" + new SecureRandom().nextInt();
 
-		 CreateContainerResponse container = dockerClient
-             .createContainerCmd("busybox")
-             .withCmd("top")
-             .withName(containerName).exec();
-		 LOG.info("Created container {}", container.toString());
-		 assertThat(container.getId(), not(isEmptyString()));
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("top")
+                .withName(containerName).exec();
+        LOG.info("Created container {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
 
-	     dockerClient.startContainerCmd(container.getId()).exec();
+        dockerClient.startContainerCmd(container.getId()).exec();
 
-		StatsCmd statsCmd = dockerClient.statsCmd(statsCallback).withContainerId(container.getId());
-		ExecutorService executorService = statsCmd.exec();
+        StatsCallbackTest statsCallback = dockerClient.statsCmd().withContainerId(container.getId())
+                .exec(new StatsCallbackTest(countDownLatch));
 
-		countDownLatch.await(3, TimeUnit.SECONDS);
-		boolean gotStats = statsCallback.gotStats();
-		
+        countDownLatch.await(3, TimeUnit.SECONDS);
+        Boolean gotStats = statsCallback.gotStats();
+
         LOG.info("Stop stats collection");
-		executorService.shutdown();
-	    statsCallback.close();
+
+        statsCallback.close();
 
         LOG.info("Stopping container");
         dockerClient.stopContainerCmd(container.getId()).exec();
         dockerClient.removeContainerCmd(container.getId()).exec();
-        
+
         LOG.info("Completed test");
         assertTrue(gotStats, "Expected true");
 
-	}
+    }
 
-	private class StatsCallbackTest implements StatsCallback {
-		private final CountDownLatch countDownLatch;
-		private final AtomicBoolean isReceiving = new AtomicBoolean(true);
-		private boolean gotStats = false;
+    private class StatsCallbackTest extends ResultCallbackTemplate<StatsCallbackTest, Statistics> {
+        private final CountDownLatch countDownLatch;
 
-		public StatsCallbackTest(CountDownLatch countDownLatch) {
-			this.countDownLatch = countDownLatch;
-		}
+        private Boolean gotStats = false;
 
-		public void close() {
-	        LOG.info("Closing StatsCallback");
-			isReceiving.set(false);
-		}
+        public StatsCallbackTest(CountDownLatch countDownLatch) {
+            this.countDownLatch = countDownLatch;
+        }
 
-		@Override
-		public void onStats(Statistics stats) {
-			LOG.info("Received stats #{}: {}", countDownLatch.getCount(), stats);
-			if(stats != null) {
-			    gotStats = true;
-			}
-			countDownLatch.countDown();
-		}
+        @Override
+        public void onNext(Statistics stats) {
+            LOG.info("Received stats #{}: {}", countDownLatch.getCount(), stats);
+            if (stats != null) {
+                gotStats = true;
+            }
+            countDownLatch.countDown();
+        }
 
-		@Override
-		public void onException(Throwable throwable) {
-			LOG.error("Error occurred: {}", throwable.getMessage());
-		}
-
-		@Override
-		public void onCompletion(int numStats) {
-			LOG.info("Number of stats received: {}", numStats);
-		}
-
-		@Override
-		public boolean isReceiving() {
-			return isReceiving.get();
-		}
-		
-	    public boolean gotStats() {
-	            return gotStats;
-	    }
-	}
+        public Boolean gotStats() {
+            return gotStats;
+        }
+    }
 }

@@ -3,8 +3,6 @@
  */
 package com.github.dockerjava.core;
 
-import static org.apache.commons.lang.StringUtils.stripStart;
-
 import java.io.File;
 import java.util.List;
 
@@ -12,10 +10,9 @@ import org.apache.commons.io.filefilter.AbstractFileFilter;
 
 public class GoLangMatchFileFilter extends AbstractFileFilter {
 
-	private final File base;
-	
-    private final List<String> patterns;
+    private final File base;
 
+    private final List<String> patterns;
 
     public GoLangMatchFileFilter(File base, List<String> patterns) {
         super();
@@ -25,12 +22,9 @@ public class GoLangMatchFileFilter extends AbstractFileFilter {
 
     @Override
     public boolean accept(File file) {
-        String basePath = base.getAbsolutePath() + File.separatorChar;
-        String relativePath = stripStart(file.getAbsolutePath(), basePath);
-        
-        boolean match = GoLangFileMatch.match(patterns, relativePath);
-        return !match;
-    }
+        String relativePath = FilePathUtil.relativize(base, file);
 
+        return GoLangFileMatch.match(patterns, relativePath).isEmpty();
+    }
 
 }

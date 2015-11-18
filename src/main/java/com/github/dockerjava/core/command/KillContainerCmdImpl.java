@@ -5,53 +5,48 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.KillContainerCmd;
 
-
 /**
  * Kill a running container.
  */
 public class KillContainerCmdImpl extends AbstrDockerCmd<KillContainerCmd, Void> implements KillContainerCmd {
 
-	private String containerId, signal;
+    private String containerId, signal;
 
-	public KillContainerCmdImpl(KillContainerCmd.Exec exec, String containerId) {
-		super(exec);
-		withContainerId(containerId);
-	}
+    public KillContainerCmdImpl(KillContainerCmd.Exec exec, String containerId) {
+        super(exec);
+        withContainerId(containerId);
+    }
 
     @Override
-	public String getContainerId() {
+    public String getContainerId() {
         return containerId;
     }
 
     @Override
-	public String getSignal() {
+    public String getSignal() {
         return signal;
     }
 
     @Override
-	public KillContainerCmd withContainerId(String containerId) {
-		checkNotNull(containerId, "containerId was not specified");
-		this.containerId = containerId;
-		return this;
-	}
-
-	@Override
-	public KillContainerCmd withSignal(String signal) {
-		checkNotNull(signal, "signal was not specified");
-		this.signal = signal;
-		return this;
-	}
+    public KillContainerCmd withContainerId(String containerId) {
+        checkNotNull(containerId, "containerId was not specified");
+        this.containerId = containerId;
+        return this;
+    }
 
     @Override
-    public String toString() {
-        return "kill " + containerId;
+    public KillContainerCmd withSignal(String signal) {
+        checkNotNull(signal, "signal was not specified");
+        this.signal = signal;
+        return this;
     }
-    
+
     /**
-     * @throws NotFoundException No such container
+     * @throws NotFoundException
+     *             No such container
      */
-	@Override
+    @Override
     public Void exec() throws NotFoundException {
-    	return super.exec();
+        return super.exec();
     }
 }

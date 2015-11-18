@@ -2,41 +2,59 @@ package com.github.dockerjava.api.command;
 
 import java.util.List;
 
+import javax.annotation.CheckForNull;
+
 import com.github.dockerjava.api.model.Container;
+import com.github.dockerjava.api.model.Filters;
 
 /**
  * List containers
  *
- * @param showAll - true or false, Show all containers. Only running containers are shown by default.
- * @param showSize - true or false, Show the containers sizes. This is false by default.
- * @param limit - Show `limit` last created containers, include non-running ones. There is no limit by default.
- * @param sinceId - Show only containers created since Id, include non-running ones.
- * @param beforeId - Show only containers created before Id, include non-running ones.
+ * @param showAll
+ *            - true or false, Show all containers. Only running containers are shown by default.
+ * @param showSize
+ *            - true or false, Show the containers sizes. This is false by default.
+ * @param limit
+ *            - Show `limit` last created containers, include non-running ones. There is no limit by default.
+ * @param sinceId
+ *            - Show only containers created since Id, include non-running ones.
+ * @param beforeId
+ *            - Show only containers created before Id, include non-running ones.
  *
  */
-public interface ListContainersCmd extends DockerCmd<List<Container>>{
+public interface ListContainersCmd extends SyncDockerCmd<List<Container>> {
 
-	public int getLimit();
+    @CheckForNull
+    public String getBeforeId();
 
-	public boolean hasShowSizeEnabled();
+    @CheckForNull
+    public Filters getFilters();
 
-	public boolean hasShowAllEnabled();
+    @CheckForNull
+    public Integer getLimit();
 
-	public String getSinceId();
+    @CheckForNull
+    public String getSinceId();
 
-	public String getBeforeId();
+    @CheckForNull
+    public Boolean hasShowAllEnabled();
 
-	public ListContainersCmd withShowAll(boolean showAll);
+    @CheckForNull
+    public Boolean hasShowSizeEnabled();
 
-	public ListContainersCmd withShowSize(boolean showSize);
+    public ListContainersCmd withBefore(String before);
 
-	public ListContainersCmd withLimit(int limit);
+    public ListContainersCmd withFilters(Filters filters);
 
-	public ListContainersCmd withSince(String since);
+    public ListContainersCmd withLimit(Integer limit);
 
-	public ListContainersCmd withBefore(String before);
-	
-	public static interface Exec extends DockerCmdExec<ListContainersCmd, List<Container>> {
-	}
+    public ListContainersCmd withShowAll(Boolean showAll);
+
+    public ListContainersCmd withShowSize(Boolean showSize);
+
+    public ListContainersCmd withSince(String since);
+
+    public static interface Exec extends DockerCmdSyncExec<ListContainersCmd, List<Container>> {
+    }
 
 }

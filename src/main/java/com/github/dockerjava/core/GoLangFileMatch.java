@@ -4,6 +4,7 @@
 package com.github.dockerjava.core;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -23,16 +24,16 @@ import org.apache.commons.lang.StringUtils;
  *                  character class (must be non-empty)
  *       c           matches character c (c != '*', '?', '\\', '[')
  *       '\\' c      matches character c
- *
+ * 
  *   character-range:
  *       c           matches character c (c != '\\', '-', ']')
  *       '\\' c      matches character c
  *       lo '-' hi   matches character c for lo <= c <= hi
- *
+ * 
  *  Match requires pattern to match all of name, not just a substring.
  *  The only possible returned error is ErrBadPattern, when pattern
  *  is malformed.
- *
+ * 
  * On Windows, escaping is disabled. Instead, '\\' is treated as
  *  path separator.
  * </pre>
@@ -45,20 +46,24 @@ public class GoLangFileMatch {
     public static final boolean IS_WINDOWS = File.separatorChar == '\\';
 
     public static boolean match(List<String> patterns, File file) {
-        return match(patterns, file.getPath());
+        return !match(patterns, file.getPath()).isEmpty();
     }
 
     public static boolean match(String pattern, File file) {
         return match(pattern, file.getPath());
     }
 
-    public static boolean match(List<String> patterns, String name) {
+    /**
+     * Returns the matching patterns for the given string
+     */
+    public static List<String> match(List<String> patterns, String name) {
+        List<String> matches = new ArrayList<String>();
         for (String pattern : patterns) {
             if (match(pattern, name)) {
-                return true;
+                matches.add(pattern);
             }
         }
-        return false;
+        return matches;
     }
 
     public static boolean match(String pattern, String name) {
@@ -108,11 +113,8 @@ public class GoLangFileMatch {
         Scan: for (i = 0; i < pattern.length(); i++) {
             switch (pattern.charAt(i)) {
             case '\\': {
-                if (!IS_WINDOWS) {
-                    // error check handled in matchChunk: bad pattern.
-                    if (i + 1 < pattern.length()) {
-                        i++;
-                    }
+                if (!IS_WINDOWS && i + 1 < pattern.length()) {
+                    i++;
                 }
                 break;
             }
@@ -234,7 +236,9 @@ public class GoLangFileMatch {
 
     private static final class ScanResult {
         public boolean star;
+
         public String chunk;
+
         public String pattern;
 
         public ScanResult(boolean star, String chunk, String pattern) {
@@ -246,6 +250,7 @@ public class GoLangFileMatch {
 
     private static final class GetEscResult {
         public char lo;
+
         public int chunkOffset;
 
         public GetEscResult(char lo, int chunkOffset) {

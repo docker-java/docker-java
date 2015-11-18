@@ -1,8 +1,9 @@
 package com.github.dockerjava.api.model;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  *
@@ -13,13 +14,13 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 public class SearchItem {
 
     @JsonProperty("star_count")
-    private int starCount;
+    private Integer starCount;
 
     @JsonProperty("is_official")
-    private boolean isOfficial;
+    private Boolean isOfficial;
 
     @JsonProperty("is_trusted")
-    private boolean isTrusted;
+    private Boolean isTrusted;
 
     @JsonProperty("name")
     private String name;
@@ -27,15 +28,15 @@ public class SearchItem {
     @JsonProperty("description")
     private String description;
 
-    public int getStarCount() {
+    public Integer getStarCount() {
         return starCount;
     }
 
-    public boolean isOfficial() {
+    public Boolean isOfficial() {
         return isOfficial;
     }
 
-    public boolean isTrusted() {
+    public Boolean isTrusted() {
         return isTrusted;
     }
 

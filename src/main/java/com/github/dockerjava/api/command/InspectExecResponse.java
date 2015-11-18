@@ -1,10 +1,11 @@
 package com.github.dockerjava.api.command;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InspectExecResponse {
@@ -12,41 +13,41 @@ public class InspectExecResponse {
     private String id;
 
     @JsonProperty("OpenStdin")
-    private boolean openStdin;
+    private Boolean openStdin;
 
     @JsonProperty("OpenStderr")
-    private boolean openStderr;
+    private Boolean openStderr;
 
     @JsonProperty("OpenStdout")
-    private boolean openStdout;
+    private Boolean openStdout;
 
     @JsonProperty("Running")
-    private boolean running;
+    private Boolean running;
 
     @JsonProperty("ExitCode")
-    private int exitCode;
+    private Integer exitCode;
 
     public String getId() {
         return id;
     }
 
-    public boolean isOpenStdin() {
+    public Boolean isOpenStdin() {
         return openStdin;
     }
 
-    public boolean isOpenStderr() {
+    public Boolean isOpenStderr() {
         return openStderr;
     }
 
-    public boolean isOpenStdout() {
+    public Boolean isOpenStdout() {
         return openStdout;
     }
 
-    public boolean isRunning() {
+    public Boolean isRunning() {
         return running;
     }
 
-    public int getExitCode() {
+    public Integer getExitCode() {
         return exitCode;
     }
 
@@ -64,10 +65,10 @@ public class InspectExecResponse {
         private String entryPoint;
 
         @JsonProperty("privileged")
-        private boolean privileged;
+        private Boolean privileged;
 
         @JsonProperty("tty")
-        private boolean tty;
+        private Boolean tty;
 
         @JsonProperty("user")
         private String user;
@@ -80,11 +81,11 @@ public class InspectExecResponse {
             return entryPoint;
         }
 
-        public boolean isPrivileged() {
+        public Boolean isPrivileged() {
             return privileged;
         }
 
-        public boolean isTty() {
+        public Boolean isTty() {
             return tty;
         }
 

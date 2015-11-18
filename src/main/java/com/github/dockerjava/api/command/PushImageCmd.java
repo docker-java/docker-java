@@ -1,47 +1,51 @@
 package com.github.dockerjava.api.command;
 
-import java.io.IOException;
-import java.io.InputStream;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.model.AuthConfig;
-import com.github.dockerjava.api.model.PushEventStreamItem;
+import com.github.dockerjava.api.model.PushResponseItem;
 
 /**
  * Push the latest image to the repository.
  *
- * @param name The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
+ * @param name
+ *            The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
  */
-public interface PushImageCmd extends DockerCmd<PushImageCmd.Response>{
+public interface PushImageCmd extends AsyncDockerCmd<PushImageCmd, PushResponseItem> {
 
-	public String getName();
+    @CheckForNull
+    public AuthConfig getAuthConfig();
 
-	public String getTag();
+    @CheckForNull
+    public String getName();
 
-	/**
-	 * @param name The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
-	 */
-	public PushImageCmd withName(String name);
-	
+    @CheckForNull
+    public String getTag();
+
     /**
-     * @param tag The image's tag. Not null.
+     * @param name
+     *            The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
+     */
+    public PushImageCmd withName(@Nonnull String name);
+
+    /**
+     * @param tag
+     *            The image's tag. Not null.
      */
     public PushImageCmd withTag(String tag);
 
-    public AuthConfig getAuthConfig();
-	
-	public PushImageCmd withAuthConfig(AuthConfig authConfig);
+    public PushImageCmd withAuthConfig(AuthConfig authConfig);
 
-	/**
-	 * @throws NotFoundException No such image
-	 */
-	public Response exec() throws NotFoundException;
-	
-	public static interface Exec extends DockerCmdExec<PushImageCmd, Response> {
-	}
+    /**
+     * @throws NotFoundException
+     *             No such image
+     */
+    @Override
+    public <T extends ResultCallback<PushResponseItem>> T exec(T resultCallback);
 
-  	public static abstract class Response extends InputStream {
-	  public abstract Iterable<PushEventStreamItem> getItems() throws IOException;
-	}
-
+    public static interface Exec extends DockerCmdAsyncExec<PushImageCmd, PushResponseItem> {
+    }
 }

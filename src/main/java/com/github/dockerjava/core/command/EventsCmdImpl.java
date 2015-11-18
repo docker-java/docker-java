@@ -1,22 +1,24 @@
 package com.github.dockerjava.core.command;
 
-import java.util.concurrent.ExecutorService;
+import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.github.dockerjava.api.command.EventCallback;
 import com.github.dockerjava.api.command.EventsCmd;
+import com.github.dockerjava.api.model.Event;
+import com.github.dockerjava.api.model.Filters;
 
 /**
  * Stream docker events
  */
-public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, ExecutorService> implements EventsCmd {
+public class EventsCmdImpl extends AbstrAsyncDockerCmd<EventsCmd, Event> implements EventsCmd {
 
     private String since;
-    private String until;
-    private EventCallback eventCallback;
 
-    public EventsCmdImpl(EventsCmd.Exec exec, EventCallback eventCallback) {
+    private String until;
+
+    private Filters filters;
+
+    public EventsCmdImpl(EventsCmd.Exec exec) {
         super(exec);
-        withEventCallback(eventCallback);
     }
 
     @Override
@@ -30,10 +32,11 @@ public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, ExecutorService> im
         this.until = until;
         return this;
     }
-    
+
     @Override
-    public EventsCmd withEventCallback(EventCallback eventCallback) {
-        this.eventCallback = eventCallback;
+    public EventsCmd withFilters(Filters filters) {
+        checkNotNull(filters, "filters have not been specified");
+        this.filters = filters;
         return this;
     }
 
@@ -48,20 +51,8 @@ public class EventsCmdImpl extends AbstrDockerCmd<EventsCmd, ExecutorService> im
     }
 
     @Override
-    public EventCallback getEventCallback() {
-        return eventCallback;
+    public Filters getFilters() {
+        return filters;
     }
 
-    @Override
-    public ExecutorService exec() {
-        return super.exec();
-    }
-
-    @Override
-    public String toString() {
-        return new StringBuilder("events")
-                .append(since != null ? " --since=" + since : "")
-                .append(until != null ? " --until=" + until : "")
-                .toString();
-    }
 }

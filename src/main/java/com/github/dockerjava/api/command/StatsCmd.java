@@ -1,22 +1,21 @@
 package com.github.dockerjava.api.command;
 
-import java.util.concurrent.ExecutorService;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
+import com.github.dockerjava.api.model.Statistics;
 
 /**
- * Get stats
- *
+ * Get container stats. The result of {@link Statistics} is handled asynchronously because the docker remote API will
+ * block when a container is stopped until the container is up again.
  */
-public interface StatsCmd extends DockerCmd<ExecutorService> {
-    public StatsCmd withContainerId(String containerId);
-    
+public interface StatsCmd extends AsyncDockerCmd<StatsCmd, Statistics> {
+
+    @CheckForNull
     public String getContainerId();
-    
-    public StatsCmd withStatsCallback(StatsCallback statsCallback);
-    
-    public StatsCallback getStatsCallback();
 
-    public static interface Exec extends DockerCmdExec<StatsCmd, ExecutorService> {
+    public StatsCmd withContainerId(@Nonnull String containerId);
+
+    public static interface Exec extends DockerCmdAsyncExec<StatsCmd, Statistics> {
     }
-
 }

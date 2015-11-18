@@ -9,37 +9,34 @@ import com.github.dockerjava.api.command.InspectContainerResponse;
 /**
  * Inspect the details of a container.
  */
-public class InspectContainerCmdImpl extends AbstrDockerCmd<InspectContainerCmd, InspectContainerResponse> implements InspectContainerCmd {
+public class InspectContainerCmdImpl extends AbstrDockerCmd<InspectContainerCmd, InspectContainerResponse> implements
+        InspectContainerCmd {
 
-	private String containerId;
+    private String containerId;
 
-	public InspectContainerCmdImpl(InspectContainerCmd.Exec exec, String containerId) {
-		super(exec);
-		withContainerId(containerId);
-	}
+    public InspectContainerCmdImpl(InspectContainerCmd.Exec exec, String containerId) {
+        super(exec);
+        withContainerId(containerId);
+    }
 
     @Override
-	public String getContainerId() {
+    public String getContainerId() {
         return containerId;
     }
 
     @Override
-	public InspectContainerCmd withContainerId(String containerId) {
-		checkNotNull(containerId, "containerId was not specified");
-		this.containerId = containerId;
-		return this;
-	}
-
-    @Override
-    public String toString() {
-        return "inspect " + containerId;
+    public InspectContainerCmd withContainerId(String containerId) {
+        checkNotNull(containerId, "containerId was not specified");
+        this.containerId = containerId;
+        return this;
     }
-    
+
     /**
-     * @throws NotFoundException No such container
+     * @throws NotFoundException
+     *             No such container
      */
-	@Override
+    @Override
     public InspectContainerResponse exec() throws NotFoundException {
-    	return super.exec();
+        return super.exec();
     }
 }

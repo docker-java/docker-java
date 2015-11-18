@@ -26,56 +26,54 @@ import com.github.dockerjava.client.AbstractDockerClientTest;
 @Test(groups = "integration")
 public class ContainerDiffCmdImplTest extends AbstractDockerClientTest {
 
-	@BeforeTest
-	public void beforeTest() throws DockerException {
-		super.beforeTest();
-	}
+    @BeforeTest
+    public void beforeTest() throws Exception {
+        super.beforeTest();
+    }
 
-	@AfterTest
-	public void afterTest() {
-		super.afterTest();
-	}
+    @AfterTest
+    public void afterTest() {
+        super.afterTest();
+    }
 
-	@BeforeMethod
-	public void beforeMethod(Method method) {
-		super.beforeMethod(method);
-	}
+    @BeforeMethod
+    public void beforeMethod(Method method) {
+        super.beforeMethod(method);
+    }
 
-	@AfterMethod
-	public void afterMethod(ITestResult result) {
-		super.afterMethod(result);
-	}
+    @AfterMethod
+    public void afterMethod(ITestResult result) {
+        super.afterMethod(result);
+    }
 
-	@Test(groups = "ignoreInCircleCi")
-	public void testContainerDiff() throws DockerException {
-		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd("touch", "/test" ).exec();
-		LOG.info("Created container: {}", container.toString());
-		assertThat(container.getId(), not(isEmptyString()));
-		dockerClient.startContainerCmd(container.getId()).exec();
-		
-		int exitCode = dockerClient.waitContainerCmd(container.getId()).exec();
-		assertThat(exitCode, equalTo(0));
+    @Test(groups = "ignoreInCircleCi")
+    public void testContainerDiff() throws DockerException {
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("touch", "/test").exec();
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+        dockerClient.startContainerCmd(container.getId()).exec();
 
-		List<ChangeLog> filesystemDiff = dockerClient.containerDiffCmd(container.getId()).exec();
-		LOG.info("Container DIFF: {}", filesystemDiff.toString());
+        int exitCode = dockerClient.waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback())
+                .awaitStatusCode();
+        assertThat(exitCode, equalTo(0));
 
-		assertThat(filesystemDiff.size(), equalTo(1));
-		ChangeLog testChangeLog = selectUnique(filesystemDiff,
-				hasField("path", equalTo("/test")));
+        List<ChangeLog> filesystemDiff = dockerClient.containerDiffCmd(container.getId()).exec();
+        LOG.info("Container DIFF: {}", filesystemDiff.toString());
 
-		assertThat(testChangeLog, hasField("path", equalTo("/test")));
-		assertThat(testChangeLog, hasField("kind", equalTo(1)));
-	}
-	
-	@Test
-	public void testContainerDiffWithNonExistingContainer() throws DockerException {
-		try {
-			dockerClient.containerDiffCmd("non-existing").exec();
-			fail("expected NotFoundException");
-		} catch (NotFoundException e) {
-		}
-	}
+        assertThat(filesystemDiff.size(), equalTo(1));
+        ChangeLog testChangeLog = selectUnique(filesystemDiff, hasField("path", equalTo("/test")));
 
+        assertThat(testChangeLog, hasField("path", equalTo("/test")));
+        assertThat(testChangeLog, hasField("kind", equalTo(1)));
+    }
+
+    @Test
+    public void testContainerDiffWithNonExistingContainer() throws DockerException {
+        try {
+            dockerClient.containerDiffCmd("non-existing").exec();
+            fail("expected NotFoundException");
+        } catch (NotFoundException e) {
+        }
+    }
 
 }

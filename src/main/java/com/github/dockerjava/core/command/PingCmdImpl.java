@@ -8,7 +8,7 @@ import com.github.dockerjava.api.command.PingCmd;
  */
 public class PingCmdImpl extends AbstrDockerCmd<PingCmd, Void> implements PingCmd {
 
-	public PingCmdImpl(PingCmd.Exec exec) {
-		super(exec);
-	}
+    public PingCmdImpl(PingCmd.Exec exec) {
+        super(exec);
+    }
 }

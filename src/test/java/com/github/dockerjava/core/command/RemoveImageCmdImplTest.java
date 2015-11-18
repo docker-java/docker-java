@@ -29,64 +29,60 @@ import com.github.dockerjava.client.AbstractDockerClientTest;
 @Test(groups = "integration")
 public class RemoveImageCmdImplTest extends AbstractDockerClientTest {
 
-	public static final Logger LOG = LoggerFactory
-			.getLogger(RemoveImageCmdImplTest.class);
+    public static final Logger LOG = LoggerFactory.getLogger(RemoveImageCmdImplTest.class);
 
-	@BeforeTest
-	public void beforeTest() throws DockerException {
-		super.beforeTest();
-	}
-	@AfterTest
-	public void afterTest() {
-		super.afterTest();
-	}
+    @BeforeTest
+    public void beforeTest() throws Exception {
+        super.beforeTest();
+    }
 
-	@BeforeMethod
-	public void beforeMethod(Method method) {
-	    super.beforeMethod(method);
-	}
+    @AfterTest
+    public void afterTest() {
+        super.afterTest();
+    }
 
-	@AfterMethod
-	public void afterMethod(ITestResult result) {
-		super.afterMethod(result);
-	}
+    @BeforeMethod
+    public void beforeMethod(Method method) {
+        super.beforeMethod(method);
+    }
 
-	@Test(groups = "ignoreInCircleCi")
-	public void removeImage() throws DockerException, InterruptedException {
+    @AfterMethod
+    public void afterMethod(ITestResult result) {
+        super.afterMethod(result);
+    }
 
-		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
-		LOG.info("Created container: {}", container.toString());
-		assertThat(container.getId(), not(isEmptyString()));
-		dockerClient.startContainerCmd(container.getId()).exec();
+    @Test(groups = "ignoreInCircleCi")
+    public void removeImage() throws DockerException, InterruptedException {
 
-		LOG.info("Committing container {}", container.toString());
-		String imageId = dockerClient
-				.commitCmd(container.getId()).exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+        dockerClient.startContainerCmd(container.getId()).exec();
 
-		dockerClient.stopContainerCmd(container.getId()).exec();
-		dockerClient.killContainerCmd(container.getId()).exec();
-		dockerClient.removeContainerCmd(container.getId()).exec();
+        LOG.info("Committing container {}", container.toString());
+        String imageId = dockerClient.commitCmd(container.getId()).exec();
 
-		LOG.info("Removing image: {}", imageId);
-		dockerClient.removeImageCmd(imageId).exec();
+        dockerClient.stopContainerCmd(container.getId()).exec();
+        dockerClient.killContainerCmd(container.getId()).exec();
+        dockerClient.removeContainerCmd(container.getId()).exec();
 
-		List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
+        LOG.info("Removing image: {}", imageId);
+        dockerClient.removeImageCmd(imageId).exec();
 
-		Matcher matcher = not(hasItem(hasField("id", startsWith(imageId))));
-		assertThat(containers, matcher);
-	}
+        List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
 
-	@Test
-	public void removeNonExistingImage() throws DockerException, InterruptedException {
-		try {
-			dockerClient.removeImageCmd("non-existing").exec();
-			fail("expected NotFoundException");
-		} catch (NotFoundException e) {
-		}
+        Matcher matcher = not(hasItem(hasField("id", startsWith(imageId))));
+        assertThat(containers, matcher);
+    }
 
-	}
+    @Test
+    public void removeNonExistingImage() throws DockerException, InterruptedException {
+        try {
+            dockerClient.removeImageCmd("non-existing").exec();
+            fail("expected NotFoundException");
+        } catch (NotFoundException e) {
+        }
 
+    }
 
 }
-

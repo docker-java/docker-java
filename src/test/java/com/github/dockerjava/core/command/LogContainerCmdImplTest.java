@@ -1,12 +1,11 @@
 package com.github.dockerjava.core.command;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 
-import java.io.InputStream;
+import java.io.IOException;
 import java.lang.reflect.Method;
 
 import org.testng.ITestResult;
@@ -16,7 +15,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
@@ -24,96 +22,149 @@ import com.github.dockerjava.client.AbstractDockerClientTest;
 @Test(groups = "integration")
 public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
-	@BeforeTest
-	public void beforeTest() throws DockerException {
-		super.beforeTest();
-	}
+    @BeforeTest
+    public void beforeTest() throws Exception {
+        super.beforeTest();
+    }
 
-	@AfterTest
-	public void afterTest() {
-		super.afterTest();
-	}
+    @AfterTest
+    public void afterTest() {
+        super.afterTest();
+    }
 
-	@BeforeMethod
-	public void beforeMethod(Method method) {
-		super.beforeMethod(method);
-	}
+    @BeforeMethod
+    public void beforeMethod(Method method) {
+        super.beforeMethod(method);
+    }
 
-	@AfterMethod
-	public void afterMethod(ITestResult result) {
-		super.afterMethod(result);
-	}
+    @AfterMethod
+    public void afterMethod(ITestResult result) {
+        super.afterMethod(result);
+    }
 
-	@Test
-	public void logContainer() throws Exception {
+    @Test
+    public void asyncLogContainer() throws Exception {
 
-		String snippet = "hello world";
+        String snippet = "hello world";
 
-		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd("/bin/echo", snippet).exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("/bin/echo", snippet)
+                .exec();
 
-		LOG.info("Created container: {}", container.toString());
-		assertThat(container.getId(), not(isEmptyString()));
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
 
-		dockerClient.startContainerCmd(container.getId()).exec();
-		
-		int exitCode = dockerClient.waitContainerCmd(container.getId()).exec();
+        dockerClient.startContainerCmd(container.getId()).exec();
 
-		assertThat(exitCode, equalTo(0));
+        int exitCode = dockerClient.waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback())
+                .awaitStatusCode();
 
-		InputStream response = dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec();
+        assertThat(exitCode, equalTo(0));
 
-		String log = asString(response);
-		
-		//LOG.info("resonse: " + log);
-		
-		assertThat(log, endsWith(snippet));
-	}
-	
-	@Test
-	public void logNonExistingContainer() throws Exception {
+        LogContainerTestCallback loggingCallback = new LogContainerTestCallback();
 
-		try {
-			dockerClient.logContainerCmd("non-existing").withStdErr().withStdOut().exec();
-			fail("expected NotFoundException");
-		} catch (NotFoundException e) {
-		}
-	}
-	
-	@Test
-	public void multipleLogContainer() throws Exception {
+        // this essentially test the since=0 case
+        dockerClient.logContainerCmd(container.getId()).withStdErr(true).withStdOut(true).exec(loggingCallback);
 
-		String snippet = "hello world";
+        loggingCallback.awaitCompletion();
 
-		CreateContainerResponse container = dockerClient
-				.createContainerCmd("busybox").withCmd("/bin/echo", snippet).exec();
+        assertTrue(loggingCallback.toString().contains(snippet));
+    }
 
-		LOG.info("Created container: {}", container.toString());
-		assertThat(container.getId(), not(isEmptyString()));
+    @Test
+    public void asyncLogNonExistingContainer() throws Exception {
 
-		dockerClient.startContainerCmd(container.getId()).exec();
-		
-		int exitCode = dockerClient.waitContainerCmd(container.getId()).exec();
+        LogContainerTestCallback loggingCallback = new LogContainerTestCallback() {
+            @Override
+            public void onError(Throwable throwable) {
 
-		assertThat(exitCode, equalTo(0));
+                assertEquals(throwable.getClass().getName(), NotFoundException.class.getName());
 
-		InputStream response = dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec();
+                try {
+                    // close the callback to prevent the call to onComplete
+                    close();
+                } catch (IOException e) {
+                    throw new RuntimeException();
+                }
 
-		response.close();
-		
-		//String log = asString(response);
-		
-		response = dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec();
+                super.onError(throwable);
+            }
 
-		//log = asString(response);
-		response.close();
-		
-		response = dockerClient.logContainerCmd(container.getId()).withStdErr().withStdOut().exec();
+            public void onComplete() {
+                super.onComplete();
+                fail("expected NotFoundException");
+            };
+        };
 
-		String log = asString(response);
-		
-		assertThat(log, endsWith(snippet));
-	}
+        dockerClient.logContainerCmd("non-existing").withStdErr(true).withStdOut(true).exec(loggingCallback)
+                .awaitCompletion();
+    }
 
+    @Test
+    public void asyncMultipleLogContainer() throws Exception {
+
+        String snippet = "hello world";
+
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("/bin/echo", snippet)
+                .exec();
+
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+
+        dockerClient.startContainerCmd(container.getId()).exec();
+
+        int exitCode = dockerClient.waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback())
+                .awaitStatusCode();
+
+        assertThat(exitCode, equalTo(0));
+
+        LogContainerTestCallback loggingCallback = new LogContainerTestCallback();
+
+        dockerClient.logContainerCmd(container.getId()).withStdErr(true).withStdOut(true).exec(loggingCallback);
+
+        loggingCallback.close();
+
+        loggingCallback = new LogContainerTestCallback();
+
+        dockerClient.logContainerCmd(container.getId()).withStdErr(true).withStdOut(true).exec(loggingCallback);
+
+        loggingCallback.close();
+
+        loggingCallback = new LogContainerTestCallback();
+
+        dockerClient.logContainerCmd(container.getId()).withStdErr(true).withStdOut(true).exec(loggingCallback);
+
+        loggingCallback.awaitCompletion();
+
+        assertTrue(loggingCallback.toString().contains(snippet));
+    }
+
+    @Test
+    public void asyncLogContainerWithSince() throws Exception {
+        String snippet = "hello world";
+
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("/bin/echo", snippet)
+                .exec();
+
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+
+        int timestamp = (int) (System.currentTimeMillis() / 1000);
+
+        dockerClient.startContainerCmd(container.getId()).exec();
+
+        int exitCode = dockerClient.waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback())
+                .awaitStatusCode();
+
+        assertThat(exitCode, equalTo(0));
+
+        LogContainerTestCallback loggingCallback = new LogContainerTestCallback();
+
+        dockerClient.logContainerCmd(container.getId()).withStdErr(true).withStdOut(true).withSince(timestamp)
+                .exec(loggingCallback);
+
+        loggingCallback.awaitCompletion();
+
+        assertFalse(loggingCallback.toString().contains(snippet));
+    }
 
 }

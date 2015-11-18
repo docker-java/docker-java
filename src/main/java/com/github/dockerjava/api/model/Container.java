@@ -1,25 +1,30 @@
 package com.github.dockerjava.api.model;
 
+import java.util.Map;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 /**
  *
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  *
  */
-@JsonIgnoreProperties(ignoreUnknown=true)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(Include.NON_NULL)
 public class Container {
 
-	@JsonProperty("Command")
-	private String command;
+    @JsonProperty("Command")
+    private String command;
 
-	@JsonProperty("Created")
-	private long created;
+    @JsonProperty("Created")
+    private Long created;
 
-	@JsonProperty("Id")
+    @JsonProperty("Id")
     private String id;
 
     @JsonProperty("Image")
@@ -30,6 +35,9 @@ public class Container {
 
     @JsonProperty("Ports")
     public Port[] ports;
+
+    @JsonProperty("Labels")
+    public Map<String, String> labels;
 
     @JsonProperty("Status")
     private String status;
@@ -46,7 +54,7 @@ public class Container {
         return image;
     }
 
-    public long getCreated() {
+    public Long getCreated() {
         return created;
     }
 
@@ -58,10 +66,13 @@ public class Container {
         return ports;
     }
 
+    public Map<String, String> getLabels() {
+        return labels;
+    }
+
     public String[] getNames() {
         return names;
     }
-
 
     @Override
     public String toString() {
@@ -84,20 +95,20 @@ public class Container {
         private String type;
 
         public String getIp() {
-			return ip;
-		}
+            return ip;
+        }
 
         public Integer getPrivatePort() {
-			return privatePort;
-		}
+            return privatePort;
+        }
 
         public Integer getPublicPort() {
-			return publicPort;
-		}
+            return publicPort;
+        }
 
         public String getType() {
-			return type;
-		}
+            return type;
+        }
 
         @Override
         public String toString() {

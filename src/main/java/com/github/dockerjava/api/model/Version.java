@@ -1,8 +1,9 @@
 package com.github.dockerjava.api.model;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  *
@@ -12,25 +13,25 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Version {
 
-	@JsonProperty("ApiVersion")
-	private String apiVersion;
+    @JsonProperty("ApiVersion")
+    private String apiVersion;
 
-	@JsonProperty("Arch")
-	private String  arch;
+    @JsonProperty("Arch")
+    private String arch;
 
-	@JsonProperty("GitCommit")
-	private String  gitCommit;
+    @JsonProperty("GitCommit")
+    private String gitCommit;
 
-	@JsonProperty("GoVersion")
-	private String  goVersion;
+    @JsonProperty("GoVersion")
+    private String goVersion;
 
-	@JsonProperty("KernelVersion")
-	private String kernelVersion;
+    @JsonProperty("KernelVersion")
+    private String kernelVersion;
 
-	@JsonProperty("Os")
-	private String operatingSystem;
+    @JsonProperty("Os")
+    private String operatingSystem;
 
-	@JsonProperty("Version")
+    @JsonProperty("Version")
     private String version;
 
     public String getVersion() {
@@ -53,13 +54,13 @@ public class Version {
         return arch;
     }
 
-   public String getOperatingSystem() {
+    public String getOperatingSystem() {
         return operatingSystem;
     }
 
     public String getApiVersion() {
-		return apiVersion;
-	}
+        return apiVersion;
+    }
 
     @Override
     public String toString() {

@@ -1,50 +1,47 @@
 package com.github.dockerjava.api.command;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 import com.github.dockerjava.api.NotFoundException;
 
 /**
-*
-* Remove an image, deleting any tags it might have.
-*
-*/
-public interface RemoveImageCmd extends DockerCmd<Void>{
+ *
+ * Remove an image, deleting any tags it might have.
+ *
+ */
+public interface RemoveImageCmd extends SyncDockerCmd<Void> {
 
-	public String getImageId();
+    @CheckForNull
+    public String getImageId();
 
-	public boolean hasForceEnabled();
+    @CheckForNull
+    public Boolean hasForceEnabled();
 
-	public boolean hasNoPruneEnabled();
+    @CheckForNull
+    public Boolean hasNoPruneEnabled();
 
-	public RemoveImageCmd withImageId(String imageId);
-	
-	/**
-	 * force delete of an image, even if it's tagged in multiple repositories
-	 */
-	public RemoveImageCmd withForce();
+    public RemoveImageCmd withImageId(@Nonnull String imageId);
 
-	/**
-	 * force parameter to force delete of an image, even if it's tagged in multiple repositories
-	 */
-	public RemoveImageCmd withForce(boolean force);
+    /**
+     * force parameter to force delete of an image, even if it's tagged in multiple repositories
+     */
+    public RemoveImageCmd withForce(Boolean force);
 
-	/**
-	 * prevent the deletion of parent images
-	 */
-	public RemoveImageCmd withNoPrune();
-	
-	/**
-	 * noprune parameter to prevent the deletion of parent images
-	 * 
-	 */
-	public RemoveImageCmd withNoPrune(boolean noPrune);
+    /**
+     * noprune parameter to prevent the deletion of parent images
+     *
+     */
+    public RemoveImageCmd withNoPrune(Boolean noPrune);
 
-	/**
-	 * @throws NotFoundException No such image
-	 */
-	@Override
-	public Void exec() throws NotFoundException;
-	
-	public static interface Exec extends DockerCmdExec<RemoveImageCmd, Void> {
-	}
+    /**
+     * @throws NotFoundException
+     *             No such image
+     */
+    @Override
+    public Void exec() throws NotFoundException;
+
+    public static interface Exec extends DockerCmdSyncExec<RemoveImageCmd, Void> {
+    }
 
 }

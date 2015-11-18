@@ -2,216 +2,336 @@ package com.github.dockerjava.api.model;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.annotation.CheckForNull;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(Include.NON_NULL)
 public class HostConfig {
 
-	@JsonProperty("Binds")
-	private String[] binds;
+    @JsonProperty("Binds")
+    private Binds binds;
 
-	@JsonProperty("Links")
-	private Links links;
+    @JsonProperty("BlkioWeight")
+    private Integer blkioWeight;
 
-	@JsonProperty("LxcConf")
-	private LxcConf[] lxcConf;
+    @JsonProperty("CapAdd")
+    private Capability[] capAdd;
 
-	@JsonProperty("PortBindings")
-	private Ports portBindings;
+    @JsonProperty("CapDrop")
+    private Capability[] capDrop;
 
-	@JsonProperty("PublishAllPorts")
-	private boolean publishAllPorts;
+    @JsonProperty("ContainerIDFile")
+    private String containerIDFile;
 
-	@JsonProperty("Privileged")
-	private boolean privileged;
+    @JsonProperty("CpuPeriod")
+    private Integer cpuPeriod;
 
-	@JsonProperty("Dns")
-	private String[] dns;
+    @JsonProperty("CpuShares")
+    private Integer cpuShares;
 
-	@JsonProperty("DnsSearch")
-	private String[] dnsSearch;
+    @JsonProperty("CpusetCpus")
+    private String cpusetCpus;
 
-	@JsonProperty("VolumesFrom")
-	private VolumesFrom[] volumesFrom;
+    @JsonProperty("CpusetMems")
+    private String cpusetMems;
 
-	@JsonProperty("ContainerIDFile")
-	private String containerIDFile;
+    @JsonProperty("Devices")
+    private Device[] devices;
 
-	@JsonProperty("CapAdd")
-	private Capability[] capAdd;
+    @JsonProperty("Dns")
+    private String[] dns;
 
-	@JsonProperty("CapDrop")
-	private Capability[] capDrop;
+    @JsonProperty("DnsSearch")
+    private String[] dnsSearch;
 
-	@JsonProperty("RestartPolicy")
-	private RestartPolicy restartPolicy;
+    @JsonProperty("ExtraHosts")
+    private String[] extraHosts;
 
-	@JsonProperty("NetworkMode")
-	private String networkMode;
+    @JsonProperty("Links")
+    private Links links;
 
-	@JsonProperty("Devices")
-	private Device[] devices;
+    @JsonProperty("LogConfig")
+    private LogConfig logConfig;
 
-	@JsonProperty("ExtraHosts")
-	private String[] extraHosts;
+    @JsonProperty("LxcConf")
+    private LxcConf[] lxcConf;
 
-	public HostConfig() {
-	}
+    @JsonProperty("Memory")
+    private Long memory;
 
-	public HostConfig(String[] binds, Links links, LxcConf[] lxcConf, Ports portBindings, boolean publishAllPorts,
-			boolean privileged, String[] dns, String[] dnsSearch, VolumesFrom[] volumesFrom, String containerIDFile,
-			Capability[] capAdd, Capability[] capDrop, RestartPolicy restartPolicy, String networkMode, Device[] devices,
-            String[] extraHosts) {
-		this.binds = binds;
-		this.links = links;
-		this.lxcConf = lxcConf;
-		this.portBindings = portBindings;
-		this.publishAllPorts = publishAllPorts;
-		this.privileged = privileged;
-		this.dns = dns;
-		this.dnsSearch = dnsSearch;
-		this.volumesFrom = volumesFrom;
-		this.containerIDFile = containerIDFile;
-		this.capAdd = capAdd;
-		this.capDrop = capDrop;
-		this.restartPolicy = restartPolicy;
-		this.networkMode = networkMode;
-		this.devices = devices;
-		this.extraHosts = extraHosts;
-	}
+    @JsonProperty("MemorySwap")
+    private Long memorySwap;
 
-	public String[] getBinds() {
-		return binds;
-	}
+    @JsonProperty("NetworkMode")
+    private String networkMode;
 
-	public LxcConf[] getLxcConf() {
-		return lxcConf;
-	}
+    @JsonProperty("OomKillDisable")
+    private Boolean oomKillDisable;
 
-	public Ports getPortBindings() {
-		return portBindings;
-	}
+    @JsonProperty("PortBindings")
+    private Ports portBindings;
 
-	public boolean isPublishAllPorts() {
-		return publishAllPorts;
-	}
+    @JsonProperty("Privileged")
+    private Boolean privileged;
 
-	public boolean isPrivileged() {
-		return privileged;
-	}
+    @JsonProperty("PublishAllPorts")
+    private Boolean publishAllPorts;
 
-	public String[] getDns() {
-		return dns;
-	}
+    @JsonProperty("ReadonlyRootfs")
+    private Boolean readonlyRootfs;
 
-	public VolumesFrom[] getVolumesFrom() {
-		return volumesFrom;
-	}
+    @JsonProperty("RestartPolicy")
+    private RestartPolicy restartPolicy;
 
-	public String getContainerIDFile() {
-		return containerIDFile;
-	}
+    @JsonProperty("Ulimits")
+    private Ulimit[] ulimits;
 
-	public String[] getDnsSearch() {
-		return dnsSearch;
-	}
+    @JsonProperty("VolumesFrom")
+    private VolumesFrom[] volumesFrom;
 
-	public Links getLinks() {
-		return links;
-	}
+    @JsonProperty("PidMode")
+    private String pidMode;
 
-	public String getNetworkMode() {
-		return networkMode;
-	}
+    @JsonIgnore
+    public Bind[] getBinds() {
+        return (binds == null) ? new Bind[0] : binds.getBinds();
+    }
 
-	public Device[] getDevices() {
-		return devices;
-	}
+    public Integer getBlkioWeight() {
+        return blkioWeight;
+    }
 
-	public String[] getExtraHosts() {
-		return extraHosts;
-	}
+    public Capability[] getCapAdd() {
+        return capAdd;
+    }
 
-	public RestartPolicy getRestartPolicy() {
-		return restartPolicy;
-	}
+    public Capability[] getCapDrop() {
+        return capDrop;
+    }
 
-	public Capability[] getCapAdd() {
-		return capAdd;
-	}
+    public String getContainerIDFile() {
+        return containerIDFile;
+    }
 
-	public Capability[] getCapDrop() {
-		return capDrop;
-	}
+    public Integer getCpuPeriod() {
+        return cpuPeriod;
+    }
 
-	public void setBinds(String[] binds) {
-		this.binds = binds;
-	}
+    public Integer getCpuShares() {
+        return cpuShares;
+    }
 
-	public void setLinks(Links links) {
-		this.links = links;
-	}
+    public String getCpusetCpus() {
+        return cpusetCpus;
+    }
 
-	public void setLxcConf(LxcConf[] lxcConf) {
-		this.lxcConf = lxcConf;
-	}
+    public String getCpusetMems() {
+        return cpusetMems;
+    }
 
-	public void setPortBindings(Ports portBindings) {
-		this.portBindings = portBindings;
-	}
+    public Device[] getDevices() {
+        return devices;
+    }
 
-	public void setPublishAllPorts(boolean publishAllPorts) {
-		this.publishAllPorts = publishAllPorts;
-	}
+    public String[] getDns() {
+        return dns;
+    }
 
-	public void setPrivileged(boolean privileged) {
-		this.privileged = privileged;
-	}
+    public String[] getDnsSearch() {
+        return dnsSearch;
+    }
 
-	public void setDns(String[] dns) {
-		this.dns = dns;
-	}
+    public String[] getExtraHosts() {
+        return extraHosts;
+    }
 
-	public void setDnsSearch(String[] dnsSearch) {
-		this.dnsSearch = dnsSearch;
-	}
+    @JsonIgnore
+    public Link[] getLinks() {
+        return (links == null) ? new Link[0] : links.getLinks();
+    }
 
-	public void setVolumesFrom(VolumesFrom[] volumesFrom) {
-		this.volumesFrom = volumesFrom;
-	}
+    @JsonIgnore
+    public LogConfig getLogConfig() {
+        return (logConfig == null) ? new LogConfig() : logConfig;
+    }
 
-	public void setContainerIDFile(String containerIDFile) {
-		this.containerIDFile = containerIDFile;
-	}
+    public LxcConf[] getLxcConf() {
+        return lxcConf;
+    }
 
-	public void setCapAdd(Capability[] capAdd) {
-		this.capAdd = capAdd;
-	}
+    public Long getMemory() {
+        return memory;
+    }
 
-	public void setCapDrop(Capability[] capDrop) {
-		this.capDrop = capDrop;
-	}
+    public Long getMemorySwap() {
+        return memorySwap;
+    }
 
-	public void setRestartPolicy(RestartPolicy restartPolicy) {
-		this.restartPolicy = restartPolicy;
-	}
+    public String getNetworkMode() {
+        return networkMode;
+    }
 
-	public void setNetworkMode(String networkMode) {
-		this.networkMode = networkMode;
-	}
+    public Ports getPortBindings() {
+        return portBindings;
+    }
 
-	public void setDevices(Device[] devices) {
-		this.devices = devices;
-	}
+    public RestartPolicy getRestartPolicy() {
+        return restartPolicy;
+    }
 
-	public void setExtraHosts(String[] extraHosts) {
-		this.extraHosts = extraHosts;
-	}
+    public Ulimit[] getUlimits() {
+        return ulimits;
+    }
 
-	@Override
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
-	}
+    public VolumesFrom[] getVolumesFrom() {
+        return volumesFrom;
+    }
+
+    public Boolean isOomKillDisable() {
+        return oomKillDisable;
+    }
+
+    public Boolean isPrivileged() {
+        return privileged;
+    }
+
+    public Boolean isPublishAllPorts() {
+        return publishAllPorts;
+    }
+
+    public Boolean isReadonlyRootfs() {
+        return readonlyRootfs;
+    }
+
+    @CheckForNull
+    public String getPidMode() {
+        return pidMode;
+    }
+
+    @JsonIgnore
+    public void setBinds(Bind... binds) {
+        this.binds = new Binds(binds);
+    }
+
+    public void setBlkioWeight(Integer blkioWeight) {
+        this.blkioWeight = blkioWeight;
+    }
+
+    public void setCpuPeriod(Integer cpuPeriod) {
+        this.cpuPeriod = cpuPeriod;
+    }
+
+    public void setCpuShares(Integer cpuShares) {
+        this.cpuShares = cpuShares;
+    }
+
+    public void setCpusetCpus(String cpusetCpus) {
+        this.cpusetCpus = cpusetCpus;
+    }
+
+    public void setCpusetMems(String cpusetMems) {
+        this.cpusetMems = cpusetMems;
+    }
+
+    public void setCapAdd(Capability[] capAdd) {
+        this.capAdd = capAdd;
+    }
+
+    public void setCapDrop(Capability[] capDrop) {
+        this.capDrop = capDrop;
+    }
+
+    public void setContainerIDFile(String containerIDFile) {
+        this.containerIDFile = containerIDFile;
+    }
+
+    public void setDevices(Device[] devices) {
+        this.devices = devices;
+    }
+
+    public void setDns(String[] dns) {
+        this.dns = dns;
+    }
+
+    public void setDnsSearch(String[] dnsSearch) {
+        this.dnsSearch = dnsSearch;
+    }
+
+    public void setExtraHosts(String[] extraHosts) {
+        this.extraHosts = extraHosts;
+    }
+
+    @JsonIgnore
+    public void setLinks(Link... links) {
+        this.links = new Links(links);
+    }
+
+    @JsonIgnore
+    public void setLogConfig(LogConfig logConfig) {
+        this.logConfig = logConfig;
+    }
+
+    public void setLxcConf(LxcConf[] lxcConf) {
+        this.lxcConf = lxcConf;
+    }
+
+    public void setMemory(Long memory) {
+        this.memory = memory;
+    }
+
+    public void setMemorySwap(Long memorySwap) {
+        this.memorySwap = memorySwap;
+    }
+
+    public void setNetworkMode(String networkMode) {
+        this.networkMode = networkMode;
+    }
+
+    public void setOomKillDisable(Boolean oomKillDisable) {
+        this.oomKillDisable = oomKillDisable;
+    }
+
+    public void setPortBindings(Ports portBindings) {
+        this.portBindings = portBindings;
+    }
+
+    public void setPrivileged(Boolean privileged) {
+        this.privileged = privileged;
+    }
+
+    public void setPublishAllPorts(Boolean publishAllPorts) {
+        this.publishAllPorts = publishAllPorts;
+    }
+
+    public void setReadonlyRootfs(Boolean readonlyRootfs) {
+        this.readonlyRootfs = readonlyRootfs;
+    }
+
+    public void setRestartPolicy(RestartPolicy restartPolicy) {
+        this.restartPolicy = restartPolicy;
+    }
+
+    public void setUlimits(Ulimit[] ulimits) {
+        this.ulimits = ulimits;
+    }
+
+    public void setVolumesFrom(VolumesFrom[] volumesFrom) {
+        this.volumesFrom = volumesFrom;
+    }
+
+    public void setPidMode(String pidMode) {
+        this.pidMode = pidMode;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
 
 }

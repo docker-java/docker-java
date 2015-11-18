@@ -9,57 +9,52 @@ import com.github.dockerjava.api.command.RestartContainerCmd;
 /**
  * Restart a running container.
  *
- * @param timeout - Timeout in seconds before killing the container. Defaults to 10 seconds.
+ * @param timeout
+ *            - Timeout in seconds before killing the container. Defaults to 10 seconds.
  *
  */
 public class RestartContainerCmdImpl extends AbstrDockerCmd<RestartContainerCmd, Void> implements RestartContainerCmd {
 
-	private String containerId;
+    private String containerId;
 
-	private int timeout = 10;
+    private Integer timeout = 10;
 
-	public RestartContainerCmdImpl(RestartContainerCmd.Exec exec, String containerId) {
-		super(exec);
-		withContainerId(containerId);
-	}
+    public RestartContainerCmdImpl(RestartContainerCmd.Exec exec, String containerId) {
+        super(exec);
+        withContainerId(containerId);
+    }
 
     @Override
-	public String getContainerId() {
+    public String getContainerId() {
         return containerId;
     }
 
     @Override
-	public int getTimeout() {
+    public Integer getTimeout() {
         return timeout;
     }
 
     @Override
-	public RestartContainerCmd withContainerId(String containerId) {
-		checkNotNull(containerId, "containerId was not specified");
-		this.containerId = containerId;
-		return this;
-	}
-
-	@Override
-	public RestartContainerCmd withtTimeout(int timeout) {
-		checkArgument(timeout >= 0, "timeout must be greater or equal 0");
-		this.timeout = timeout;
-		return this;
-	}
+    public RestartContainerCmd withContainerId(String containerId) {
+        checkNotNull(containerId, "containerId was not specified");
+        this.containerId = containerId;
+        return this;
+    }
 
     @Override
-    public String toString() {
-        return new StringBuilder("restart ")
-            .append("--time=" + timeout + " ")
-            .append(containerId)
-            .toString();
+    public RestartContainerCmd withtTimeout(Integer timeout) {
+        checkNotNull(timeout, "timeout was not specified");
+        checkArgument(timeout >= 0, "timeout must be greater or equal 0");
+        this.timeout = timeout;
+        return this;
     }
-    
+
     /**
-     * @throws NotFoundException No such container
+     * @throws NotFoundException
+     *             No such container
      */
-	@Override
+    @Override
     public Void exec() throws NotFoundException {
-    	return super.exec();
+        return super.exec();
     }
 }

@@ -1,7 +1,6 @@
 package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectExecResponse;
 import com.google.common.base.Preconditions;
@@ -26,13 +25,9 @@ public class InspectExecCmdImpl extends AbstrDockerCmd<InspectExecCmd, InspectEx
         return this;
     }
 
-    @Override
-    public String toString() {
-        return "inspect " + execId;
-    }
-
     /**
-     * @throws NotFoundException No such exec
+     * @throws NotFoundException
+     *             No such exec
      */
     @Override
     public InspectExecResponse exec() throws NotFoundException {

@@ -6,14 +6,10 @@ import com.github.dockerjava.api.model.Info;
 /**
  * Return Docker server info
  */
-public class InfoCmdImpl extends AbstrDockerCmd<InfoCmd, Info> implements InfoCmd  {
+public class InfoCmdImpl extends AbstrDockerCmd<InfoCmd, Info> implements InfoCmd {
 
-	public InfoCmdImpl(InfoCmd.Exec exec) {
-		super(exec);
-	}
-	
-	@Override
-    public String toString() {
-        return "info";
+    public InfoCmdImpl(InfoCmd.Exec exec) {
+        super(exec);
     }
+
 }

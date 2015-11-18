@@ -2,14 +2,18 @@ package com.github.dockerjava.api.command;
 
 import java.io.InputStream;
 
-import com.github.dockerjava.api.NotFoundException;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
+import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.model.Frame;
 
 /**
  * Attach to container
- * 
+ *
  * @param logs
  *            - true or false, includes logs. Defaults to false.
- * 
+ *
  * @param followStream
  *            - true or false, return stream. Defaults to false.
  * @param stdout
@@ -17,53 +21,46 @@ import com.github.dockerjava.api.NotFoundException;
  * @param stderr
  *            - true or false, includes stderr log. Defaults to false.
  * @param timestamps
- *            - true or false, if true, print timestamps for every log line.
- *            Defaults to false.
+ *            - true or false, if true, print timestamps for every log line. Defaults to false.
  */
-public interface AttachContainerCmd extends DockerCmd<InputStream>{
+public interface AttachContainerCmd extends AsyncDockerCmd<AttachContainerCmd, Frame> {
 
-	public String getContainerId();
+    @CheckForNull
+    public String getContainerId();
 
-	public boolean hasLogsEnabled();
+    @CheckForNull
+    public Boolean hasLogsEnabled();
 
-	public boolean hasFollowStreamEnabled();
+    @CheckForNull
+    public Boolean hasFollowStreamEnabled();
 
-	public boolean hasTimestampsEnabled();
+    @CheckForNull
+    public Boolean hasTimestampsEnabled();
 
-	public boolean hasStdoutEnabled();
+    @CheckForNull
+    public Boolean hasStdoutEnabled();
 
-	public boolean hasStderrEnabled();
+    @CheckForNull
+    public Boolean hasStderrEnabled();
 
-	public AttachContainerCmd withContainerId(String containerId);
+    public AttachContainerCmd withContainerId(@Nonnull String containerId);
 
-	public AttachContainerCmd withFollowStream();
+    /**
+     * Following the stream means the resulting {@link InputStream} returned by {@link #exec()} reads infinitely. So a
+     * {@link InputStream#read()} MAY BLOCK FOREVER as long as no data is streamed from the docker host to
+     * {@link DockerClient}!
+     */
+    public AttachContainerCmd withFollowStream(Boolean followStream);
 
-	public AttachContainerCmd withFollowStream(boolean followStream);
+    public AttachContainerCmd withTimestamps(Boolean timestamps);
 
-	public AttachContainerCmd withTimestamps(boolean timestamps);
+    public AttachContainerCmd withStdOut(Boolean stdout);
 
-	public AttachContainerCmd withStdOut();
+    public AttachContainerCmd withStdErr(Boolean stderr);
 
-	public AttachContainerCmd withStdOut(boolean stdout);
+    public AttachContainerCmd withLogs(Boolean logs);
 
-	public AttachContainerCmd withStdErr();
-
-	public AttachContainerCmd withStdErr(boolean stderr);
-
-	public AttachContainerCmd withLogs(boolean logs);
-	
-	public AttachContainerCmd withLogs();
-
-	/**
-	 * Its the responsibility of the caller to consume and/or close the {@link InputStream} to prevent
-	 * connection leaks.
-	 * 
-	 * @throws NotFoundException No such container 
-	 */
-	@Override
-	public InputStream exec() throws NotFoundException;
-	
-	public static interface Exec extends DockerCmdExec<AttachContainerCmd, InputStream> {
-	}
+    public static interface Exec extends DockerCmdAsyncExec<AttachContainerCmd, Frame> {
+    }
 
 }

@@ -14,10 +14,14 @@ import org.apache.commons.lang.StringUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.api.model.AuthConfigurations;
 
 public class AuthConfigFile {
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    private static final TypeReference<Map<String, AuthConfig>> CONFIG_MAP_TYPE = new TypeReference<Map<String, AuthConfig>>() {};
+
+    private static final TypeReference<Map<String, AuthConfig>> CONFIG_MAP_TYPE = new TypeReference<Map<String, AuthConfig>>() {
+    };
+
     private final Map<String, AuthConfig> authConfigMap;
 
     public AuthConfigFile() {
@@ -50,6 +54,15 @@ public class AuthConfigFile {
         return null;
     }
 
+    public AuthConfigurations getAuthConfigurations() {
+        final AuthConfigurations authConfigurations = new AuthConfigurations();
+        for (Map.Entry<String, AuthConfig> authConfigEntry : authConfigMap.entrySet()) {
+            authConfigurations.addConfig(authConfigEntry.getValue());
+        }
+
+        return authConfigurations;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -79,7 +92,6 @@ public class AuthConfigFile {
     public String toString() {
         return "AuthConfigFile [authConfigMap=" + authConfigMap + "]";
     }
-
 
     public static AuthConfigFile loadConfig(File confFile) throws IOException {
         AuthConfigFile configFile = new AuthConfigFile();

@@ -25,110 +25,111 @@ import javax.net.ssl.X509TrustManager;
  */
 public class KeystoreSSLConfig implements SSLConfig, Serializable {
 
-  private final KeyStore keystore;
-  private final String keystorePassword;
+    private final KeyStore keystore;
 
-  /**
-   * @param keystore a KeyStore
-   * @param keystorePassword key password
-   */
-  public KeystoreSSLConfig(KeyStore keystore, String keystorePassword) {
-    this.keystorePassword = keystorePassword;
-    checkNotNull(keystore);
-    this.keystore = keystore;
-  }
+    private final String keystorePassword;
 
-  /**
-   *
-   * @param pfxFile a PKCS12 file
-   * @param password Password for the keystore
-   * @throws KeyStoreException
-   * @throws IOException
-   * @throws CertificateException
-   * @throws NoSuchAlgorithmException
-   */
-  public KeystoreSSLConfig(File pfxFile, String password)
-      throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException {
-    checkNotNull(pfxFile);
-    checkNotNull(password);
-    keystore = KeyStore.getInstance("pkcs12");
-    keystore.load(new FileInputStream(pfxFile), password.toCharArray());
-    keystorePassword = password;
-  }
+    /**
+     * @param keystore
+     *            a KeyStore
+     * @param keystorePassword
+     *            key password
+     */
+    public KeystoreSSLConfig(KeyStore keystore, String keystorePassword) {
+        this.keystorePassword = keystorePassword;
+        checkNotNull(keystore);
+        this.keystore = keystore;
+    }
 
-
-  /**
-   * Get the SSL Context out of the keystore.
-   * @return java SSLContext
-   * @throws KeyManagementException
-   * @throws UnrecoverableKeyException
-   * @throws NoSuchAlgorithmException
-   * @throws KeyStoreException
-   */
-  @Override
-  public SSLContext getSSLContext()
-      throws KeyManagementException, UnrecoverableKeyException, NoSuchAlgorithmException,
-             KeyStoreException {
-
-    final SSLContext context = SSLContext.getInstance("TLS");
-
-    String httpProtocols = System.getProperty("https.protocols");
-    System.setProperty("https.protocols", "TLSv1");
-
-    if (httpProtocols != null)
-      System.setProperty("https.protocols", httpProtocols);
-
-    final KeyManagerFactory
-        keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-    keyManagerFactory.init(keystore, keystorePassword.toCharArray());
-    context.init(keyManagerFactory.getKeyManagers(), new TrustManager[]{
-        new X509TrustManager() {
-          @Override
-          public X509Certificate[] getAcceptedIssuers() {
-            return new X509Certificate[]{};
-          }
-
-          @Override
-          public void checkClientTrusted(final X509Certificate[] arg0, final String arg1) {
-
-          }
-
-          @Override
-          public void checkServerTrusted(final X509Certificate[] arg0, final String arg1) {
-
-          }
+    /**
+     *
+     * @param pfxFile
+     *            a PKCS12 file
+     * @param password
+     *            Password for the keystore
+     * @throws KeyStoreException
+     * @throws IOException
+     * @throws CertificateException
+     * @throws NoSuchAlgorithmException
+     */
+    public KeystoreSSLConfig(File pfxFile, String password) throws KeyStoreException, IOException,
+            CertificateException, NoSuchAlgorithmException {
+        checkNotNull(pfxFile);
+        checkNotNull(password);
+        keystore = KeyStore.getInstance("pkcs12");
+        try (FileInputStream fs = new FileInputStream(pfxFile)) {
+            keystore.load(fs, password.toCharArray());
         }
-    }, new SecureRandom());
-
-    return context;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+        keystorePassword = password;
     }
 
-    KeystoreSSLConfig that = (KeystoreSSLConfig) o;
+    /**
+     * Get the SSL Context out of the keystore.
+     * 
+     * @return java SSLContext
+     * @throws KeyManagementException
+     * @throws UnrecoverableKeyException
+     * @throws NoSuchAlgorithmException
+     * @throws KeyStoreException
+     */
+    @Override
+    public SSLContext getSSLContext() throws KeyManagementException, UnrecoverableKeyException,
+            NoSuchAlgorithmException, KeyStoreException {
 
-    return keystore.equals(that.keystore);
+        final SSLContext context = SSLContext.getInstance("TLS");
 
-  }
+        String httpProtocols = System.getProperty("https.protocols");
+        System.setProperty("https.protocols", "TLSv1");
 
-  @Override
-  public int hashCode() {
-    return keystore.hashCode();
-  }
+        if (httpProtocols != null)
+            System.setProperty("https.protocols", httpProtocols);
 
-  @Override
-  public String toString() {
-    return new StringBuilder()
-        .append(this.getClass().getSimpleName()).append("{")
-            .append("keystore=").append(keystore)
-        .append("}")
-        .toString();
-  }
+        final KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory
+                .getDefaultAlgorithm());
+        keyManagerFactory.init(keystore, keystorePassword.toCharArray());
+        context.init(keyManagerFactory.getKeyManagers(), new TrustManager[] { new X509TrustManager() {
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+                return new X509Certificate[] {};
+            }
+
+            @Override
+            public void checkClientTrusted(final X509Certificate[] arg0, final String arg1) {
+
+            }
+
+            @Override
+            public void checkServerTrusted(final X509Certificate[] arg0, final String arg1) {
+
+            }
+        } }, new SecureRandom());
+
+        return context;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        KeystoreSSLConfig that = (KeystoreSSLConfig) o;
+
+        return keystore.equals(that.keystore);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return keystore.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder().append(this.getClass().getSimpleName()).append("{").append("keystore=")
+                .append(keystore).append("}").toString();
+    }
 }

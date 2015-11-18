@@ -1,34 +1,31 @@
 package com.github.dockerjava.jaxrs;
 
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-
+import com.github.dockerjava.api.command.PauseContainerCmd;
+import com.github.dockerjava.core.DockerClientConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.api.command.PauseContainerCmd;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 
-public class PauseContainerCmdExec extends
-		AbstrDockerCmdExec<PauseContainerCmd, Void> implements
-		PauseContainerCmd.Exec {
+public class PauseContainerCmdExec extends AbstrSyncDockerCmdExec<PauseContainerCmd, Void> implements
+        PauseContainerCmd.Exec {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(PauseContainerCmdExec.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PauseContainerCmdExec.class);
 
-	public PauseContainerCmdExec(WebTarget baseResource) {
-		super(baseResource);
-	}
+    public PauseContainerCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
+        super(baseResource, dockerClientConfig);
+    }
 
-	@Override
-	protected Void execute(PauseContainerCmd command) {
-		WebTarget webResource = getBaseResource()
-				.path("/containers/{id}/pause").resolveTemplate("id",
-						command.getContainerId());
+    @Override
+    protected Void execute(PauseContainerCmd command) {
+        WebTarget webResource = getBaseResource().path("/containers/{id}/pause").resolveTemplate("id",
+                command.getContainerId());
 
-		LOGGER.trace("POST: {}", webResource);
-		webResource.request().accept(MediaType.APPLICATION_JSON).post(null).close();
+        LOGGER.trace("POST: {}", webResource);
+        webResource.request().accept(MediaType.APPLICATION_JSON).post(null).close();
 
-		return null;
-	}
+        return null;
+    }
 
 }

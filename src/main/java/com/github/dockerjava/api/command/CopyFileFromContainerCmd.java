@@ -2,32 +2,37 @@ package com.github.dockerjava.api.command;
 
 import java.io.InputStream;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 import com.github.dockerjava.api.NotFoundException;
 
-public interface CopyFileFromContainerCmd extends DockerCmd<InputStream> {
+public interface CopyFileFromContainerCmd extends SyncDockerCmd<InputStream> {
 
-	public String getContainerId();
+    @CheckForNull
+    public String getContainerId();
 
-	public String getResource();
+    @CheckForNull
+    public String getHostPath();
 
-	public CopyFileFromContainerCmd withContainerId(String containerId);
+    @CheckForNull
+    public String getResource();
 
-	public CopyFileFromContainerCmd withResource(String resource);
+    public CopyFileFromContainerCmd withContainerId(@Nonnull String containerId);
 
-	public String getHostPath();
+    public CopyFileFromContainerCmd withHostPath(String hostPath);
 
-	public CopyFileFromContainerCmd withHostPath(String hostPath);
+    public CopyFileFromContainerCmd withResource(@Nonnull String resource);
 
-	/**
-	 * Its the responsibility of the caller to consume and/or close the {@link InputStream} to prevent
-	 * connection leaks.
-	 * 
-	 * @throws NotFoundException No such container
-	 */
-	@Override
-	public InputStream exec() throws NotFoundException;
-	
-	public static interface Exec extends DockerCmdExec<CopyFileFromContainerCmd, InputStream> {
-	}
+    /**
+     * Its the responsibility of the caller to consume and/or close the {@link InputStream} to prevent connection leaks.
+     *
+     * @throws NotFoundException
+     *             No such container
+     */
+    @Override
+    public InputStream exec() throws NotFoundException;
 
+    public static interface Exec extends DockerCmdSyncExec<CopyFileFromContainerCmd, InputStream> {
+    }
 }

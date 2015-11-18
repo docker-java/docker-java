@@ -1,43 +1,51 @@
 package com.github.dockerjava.jaxrs;
 
-import java.util.List;
+import com.github.dockerjava.api.command.ListContainersCmd;
+import com.github.dockerjava.api.model.Container;
+import com.github.dockerjava.core.DockerClientConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static com.google.common.net.UrlEscapers.urlPathSegmentEscaper;
 
-import com.github.dockerjava.api.command.ListContainersCmd;
-import com.github.dockerjava.api.model.Container;
+public class ListContainersCmdExec extends AbstrSyncDockerCmdExec<ListContainersCmd, List<Container>> implements
+        ListContainersCmd.Exec {
 
-public class ListContainersCmdExec extends AbstrDockerCmdExec<ListContainersCmd, List<Container>> implements ListContainersCmd.Exec {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ListContainersCmdExec.class);
-	
-	public ListContainersCmdExec(WebTarget baseResource) {
-		super(baseResource);
-	}
+    private static final Logger LOGGER = LoggerFactory.getLogger(ListContainersCmdExec.class);
 
-	@Override
-	protected List<Container> execute(ListContainersCmd command) {
-		WebTarget webResource = getBaseResource().path("/containers/json")
-                .queryParam("all", command.hasShowAllEnabled() ? "1" : "0")
-                .queryParam("since", command.getSinceId())
-                .queryParam("before", command.getBeforeId())
-                .queryParam("size", command.hasShowSizeEnabled() ? "1" : "0");
+    public ListContainersCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
+        super(baseResource, dockerClientConfig);
+    }
 
-        if (command.getLimit() >= 0) {
-            webResource = webResource.queryParam("limit", String.valueOf(command.getLimit()));
+    @Override
+    protected List<Container> execute(ListContainersCmd command) {
+        WebTarget webTarget = getBaseResource().path("/containers/json").queryParam("since", command.getSinceId())
+                .queryParam("before", command.getBeforeId());
+
+        webTarget = booleanQueryParam(webTarget, "all", command.hasShowAllEnabled());
+        webTarget = booleanQueryParam(webTarget, "size", command.hasShowSizeEnabled());
+
+        if (command.getLimit() != null && command.getLimit() >= 0) {
+            webTarget = webTarget.queryParam("limit", String.valueOf(command.getLimit()));
         }
 
-		LOGGER.trace("GET: {}", webResource);
-		List<Container> containers = webResource.request().accept(MediaType.APPLICATION_JSON).get(new GenericType<List<Container>>() {
-        });
-		LOGGER.trace("Response: {}", containers);
+        if (command.getFilters() != null) {
+            webTarget = webTarget
+                    .queryParam("filters", urlPathSegmentEscaper().escape(command.getFilters().toString()));
+        }
 
-		return containers;
-	}
+        LOGGER.trace("GET: {}", webTarget);
+        List<Container> containers = webTarget.request().accept(MediaType.APPLICATION_JSON)
+                .get(new GenericType<List<Container>>() {
+                });
+        LOGGER.trace("Response: {}", containers);
+
+        return containers;
+    }
 
 }

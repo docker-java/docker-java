@@ -1,40 +1,37 @@
 package com.github.dockerjava.api.command;
 
-import com.github.dockerjava.api.model.AuthConfig;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
-import java.io.InputStream;
+import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.api.model.PullResponseItem;
 
 /**
-*
-* Pull image from repository.
-*
-*/
-public interface PullImageCmd extends DockerCmd<InputStream>{
+ *
+ * Pull image from repository.
+ *
+ */
+public interface PullImageCmd extends AsyncDockerCmd<PullImageCmd, PullResponseItem> {
 
-	public String getRepository();
+    @CheckForNull
+    public String getRepository();
 
-	public String getTag();
+    @CheckForNull
+    public String getTag();
 
-	public String getRegistry();
+    @CheckForNull
+    public String getRegistry();
 
     public AuthConfig getAuthConfig();
 
-    public PullImageCmd withRepository(String repository);
+    public PullImageCmd withRepository(@Nonnull String repository);
 
-	public PullImageCmd withTag(String tag);
+    public PullImageCmd withTag(String tag);
 
-	public PullImageCmd withRegistry(String registry);
+    public PullImageCmd withRegistry(String registry);
 
     public PullImageCmd withAuthConfig(AuthConfig authConfig);
 
-    public static interface Exec extends DockerCmdExec<PullImageCmd, InputStream> {
-	}
-    
-    /**
-     * Its the responsibility of the caller to consume and/or close the {@link InputStream} to prevent
-	 * connection leaks.
-     */
-    @Override
-    public InputStream exec();
-
+    public static interface Exec extends DockerCmdAsyncExec<PullImageCmd, PullResponseItem> {
+    }
 }

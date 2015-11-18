@@ -1,14 +1,15 @@
 package com.github.dockerjava.core.command;
 
-import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.command.SaveImageCmd;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.InputStream;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.command.SaveImageCmd;
 
 public class SaveImageCmdImpl extends AbstrDockerCmd<SaveImageCmd, InputStream> implements SaveImageCmd {
     private String name;
+
     private String tag;
 
     public SaveImageCmdImpl(SaveImageCmd.Exec exec, String name) {
@@ -27,7 +28,8 @@ public class SaveImageCmdImpl extends AbstrDockerCmd<SaveImageCmd, InputStream> 
     }
 
     /**
-     * @param name The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
+     * @param name
+     *            The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
      */
     @Override
     public SaveImageCmd withName(String name) {
@@ -37,7 +39,8 @@ public class SaveImageCmdImpl extends AbstrDockerCmd<SaveImageCmd, InputStream> 
     }
 
     /**
-     * @param tag The image's tag. Can be null or empty.
+     * @param tag
+     *            The image's tag. Can be null or empty.
      */
     @Override
     public SaveImageCmd withTag(String tag) {
@@ -46,15 +49,9 @@ public class SaveImageCmdImpl extends AbstrDockerCmd<SaveImageCmd, InputStream> 
         return this;
     }
 
-    @Override
-    public String toString() {
-        return new StringBuilder("get ")
-                .append(name)
-                .toString();
-    }
-
     /**
-     * @throws com.github.dockerjava.api.NotFoundException No such image
+     * @throws com.github.dockerjava.api.NotFoundException
+     *             No such image
      */
     @Override
     public InputStream exec() throws NotFoundException {

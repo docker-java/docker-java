@@ -2,33 +2,40 @@ package com.github.dockerjava.api.command;
 
 import java.io.InputStream;
 
-public interface CreateImageCmd extends DockerCmd<CreateImageResponse> {
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
-	public String getRepository();
+public interface CreateImageCmd extends SyncDockerCmd<CreateImageResponse> {
 
-	// TODO remove method
-	public String getTag();
-	
-	public InputStream getImageStream();
+    @CheckForNull
+    public String getRepository();
 
-	/**
-	 * @param repository        the repository to import to
-	 */
-	public CreateImageCmd withRepository(String repository);
+    @CheckForNull
+    public String getTag();
 
-	/**
-	 * @param imageStream       the InputStream of the tar file
-	 */
-	public CreateImageCmd withImageStream(InputStream imageStream);
+    @CheckForNull
+    public InputStream getImageStream();
 
-	/**
-	 * @param tag               any tag for this image
-	 * @deprecated 				use repo:tag format for repository
-	 */
-	public CreateImageCmd withTag(String tag);
-	
-	public static interface Exec extends DockerCmdExec<CreateImageCmd, CreateImageResponse> {
-	}
+    /**
+     * @param repository
+     *            the repository to import to
+     */
+    public CreateImageCmd withRepository(@Nonnull String repository);
 
+    /**
+     * @param imageStream
+     *            the InputStream of the tar file
+     */
+    public CreateImageCmd withImageStream(InputStream imageStream);
+
+    /**
+     * @param tag
+     *            any tag for this image
+     * @deprecated use repo:tag format for repository
+     */
+    public CreateImageCmd withTag(String tag);
+
+    public static interface Exec extends DockerCmdSyncExec<CreateImageCmd, CreateImageResponse> {
+    }
 
 }

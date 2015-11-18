@@ -2,6 +2,9 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.RemoveImageCmd;
 
@@ -12,73 +15,55 @@ import com.github.dockerjava.api.command.RemoveImageCmd;
  */
 public class RemoveImageCmdImpl extends AbstrDockerCmd<RemoveImageCmd, Void> implements RemoveImageCmd {
 
-	private String imageId;
+    private String imageId;
 
-	private boolean force, noPrune;
+    private Boolean force, noPrune;
 
-	public RemoveImageCmdImpl(RemoveImageCmd.Exec exec, String imageId) {
-		super(exec);
-		withImageId(imageId);
-	}
+    public RemoveImageCmdImpl(RemoveImageCmd.Exec exec, String imageId) {
+        super(exec);
+        withImageId(imageId);
+    }
 
     @Override
-	public String getImageId() {
+    public String getImageId() {
         return imageId;
     }
 
     @Override
-	public boolean hasForceEnabled() {
+    public Boolean hasForceEnabled() {
         return force;
     }
 
     @Override
-	public boolean hasNoPruneEnabled() {
+    public Boolean hasNoPruneEnabled() {
         return noPrune;
     }
 
     @Override
-	public RemoveImageCmd withImageId(String imageId) {
-		checkNotNull(imageId, "imageId was not specified");
-		this.imageId = imageId;
-		return this;
-	}
-
-	@Override
-	public RemoveImageCmd withForce() {
-		return withForce(true);
-	}
-
-	@Override
-	public RemoveImageCmd withForce(boolean force) {
-		this.force = force;
-		return this;
-	}
-	
-	@Override
-	public RemoveImageCmd withNoPrune() {
-		return withNoPrune(true);
-	}
-
-	@Override
-	public RemoveImageCmd withNoPrune(boolean noPrune) {
-		this.noPrune = noPrune;
-		return this;
-	}
+    public RemoveImageCmd withImageId(String imageId) {
+        checkNotNull(imageId, "imageId was not specified");
+        this.imageId = imageId;
+        return this;
+    }
 
     @Override
-    public String toString() {
-        return new StringBuilder("rmi ")
-            .append(noPrune ? "--no-prune=true" : "")
-            .append(force ? "--force=true" : "")
-            .append(imageId)
-            .toString();
+    public RemoveImageCmd withForce(Boolean force) {
+        this.force = force;
+        return this;
     }
-    
+
+    @Override
+    public RemoveImageCmd withNoPrune(Boolean noPrune) {
+        this.noPrune = noPrune;
+        return this;
+    }
+
     /**
-     * @throws NotFoundException No such image
+     * @throws NotFoundException
+     *             No such image
      */
-	@Override
+    @Override
     public Void exec() throws NotFoundException {
-    	return super.exec();
+        return super.exec();
     }
 }

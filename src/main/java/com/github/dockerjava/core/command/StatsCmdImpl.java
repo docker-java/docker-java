@@ -2,25 +2,18 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.concurrent.ExecutorService;
-
-import com.github.dockerjava.api.command.EventCallback;
-import com.github.dockerjava.api.command.EventsCmd;
-import com.github.dockerjava.api.command.StatsCallback;
 import com.github.dockerjava.api.command.StatsCmd;
-import com.github.dockerjava.api.command.TopContainerCmd;
+import com.github.dockerjava.api.model.Statistics;
 
 /**
- * Stream docker stats
+ * Container stats
  */
-public class StatsCmdImpl extends AbstrDockerCmd<StatsCmd, ExecutorService> implements StatsCmd {
+public class StatsCmdImpl extends AbstrAsyncDockerCmd<StatsCmd, Statistics> implements StatsCmd {
 
     private String containerId;
-    private StatsCallback statsCallback;
 
-    public StatsCmdImpl(StatsCmd.Exec exec, StatsCallback statsCallback) {
+    public StatsCmdImpl(StatsCmd.Exec exec) {
         super(exec);
-        withStatsCallback(statsCallback);
     }
 
     @Override
@@ -29,33 +22,10 @@ public class StatsCmdImpl extends AbstrDockerCmd<StatsCmd, ExecutorService> impl
         this.containerId = containerId;
         return this;
     }
-    
+
     @Override
     public String getContainerId() {
         return containerId;
     }
-    
-    @Override
-    public StatsCmd withStatsCallback(StatsCallback statsCallback) {
-        this.statsCallback = statsCallback;
-        return this;
-    }
 
-  
-    @Override
-    public StatsCallback getStatsCallback() {
-        return statsCallback;
-    }
-
-    @Override
-    public ExecutorService exec() {
-        return super.exec();
-    }
-
-    @Override
-    public String toString() {
-        return new StringBuilder("stats")
-                .append(containerId != null ? " --id=" + containerId : "")
-                .toString();
-    }
 }

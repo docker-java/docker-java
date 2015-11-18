@@ -8,185 +8,183 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  *
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  *
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @JsonInclude(Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Info {
 
-	@JsonProperty("Containers")
-	private int containers;
+    @JsonProperty("Containers")
+    private Integer containers;
 
-	@JsonProperty("Debug")
-	private boolean debug;
-	
-	@JsonProperty("DockerRootDir")
-	private String DockerRootDir;
+    @JsonProperty("Debug")
+    private Boolean debug;
 
-	@JsonProperty("Driver")
-	private String driver;
+    @JsonProperty("DockerRootDir")
+    private String DockerRootDir;
 
-	@JsonProperty("DriverStatus")
-	private List<Object> driverStatuses;
+    @JsonProperty("Driver")
+    private String driver;
 
-	@JsonProperty("ExecutionDriver")
-	private String executionDriver;
-	
-	@JsonProperty("ID")
-	private String ID;
+    @JsonProperty("DriverStatus")
+    private List<Object> driverStatuses;
 
-	@JsonProperty("IPv4Forwarding")
-	private boolean IPv4Forwarding;
+    @JsonProperty("ExecutionDriver")
+    private String executionDriver;
 
-	@JsonProperty("Images")
-	private int images;
+    @JsonProperty("ID")
+    private String ID;
 
-	@JsonProperty("IndexServerAddress")
-	private String IndexServerAddress;
+    @JsonProperty("IPv4Forwarding")
+    private Boolean IPv4Forwarding;
 
-	@JsonProperty("InitPath")
-	private String initPath;
+    @JsonProperty("Images")
+    private Integer images;
 
-	@JsonProperty("InitSha1")
-	private String initSha1;
+    @JsonProperty("IndexServerAddress")
+    private String IndexServerAddress;
 
-	@JsonProperty("KernelVersion")
-	private String kernelVersion;
-	
-	@JsonProperty("Labels")
-	private String Labels;
+    @JsonProperty("InitPath")
+    private String initPath;
 
-	@JsonProperty("MemoryLimit")
-	private boolean memoryLimit;
-	
-	@JsonProperty("MemTotal")
-	private long memTotal;
-		
-	@JsonProperty("Name")
-	private String name;
-	
-	@JsonProperty("NCPU")
-	private int NCPU;
+    @JsonProperty("InitSha1")
+    private String initSha1;
 
-	@JsonProperty("NEventsListener")
-	private long nEventListener;
+    @JsonProperty("KernelVersion")
+    private String kernelVersion;
 
-	@JsonProperty("NFd")
-	private int NFd;
+    @JsonProperty("Labels")
+    private String[] Labels;
 
-	@JsonProperty("NGoroutines")
-	private int NGoroutines;
-	
-	@JsonProperty("OperatingSystem")
-	private String OperatingSystem;
+    @JsonProperty("MemoryLimit")
+    private Boolean memoryLimit;
 
-	@JsonProperty("Sockets")
-	private String[] sockets;
+    @JsonProperty("MemTotal")
+    private Long memTotal;
 
-	@JsonProperty("SwapLimit")
-	private boolean swapLimit;
+    @JsonProperty("Name")
+    private String name;
 
-	public boolean isDebug() {
-		return debug;
-	}
+    @JsonProperty("NCPU")
+    private Integer NCPU;
 
-	public int getContainers() {
-		return containers;
-	}
-	
-	public String getDockerRootDir() {
-		return DockerRootDir;
-	}
+    @JsonProperty("NEventsListener")
+    private Long nEventListener;
 
-	public String getDriver() {
-		return driver;
-	}
+    @JsonProperty("NFd")
+    private Integer NFd;
 
-	public List<Object> getDriverStatuses() {
-		return driverStatuses;
-	}
+    @JsonProperty("NGoroutines")
+    private Integer NGoroutines;
 
-	public int getImages() {
-		return images;
-	}
-	
-	public String getID() {
-		return ID;
-	}
+    @JsonProperty("OperatingSystem")
+    private String OperatingSystem;
 
-	public boolean getIPv4Forwarding() {
-		return IPv4Forwarding;
-	}
+    @JsonProperty("Sockets")
+    private String[] sockets;
 
-	public String getIndexServerAddress() {
-		return IndexServerAddress;
-	}
+    @JsonProperty("SwapLimit")
+    private Boolean swapLimit;
 
-	public String getInitPath() {
-		return initPath;
-	}
+    public Boolean isDebug() {
+        return debug;
+    }
 
-	public String getInitSha1() {
-		return initSha1;
-	}
+    public Integer getContainers() {
+        return containers;
+    }
 
-	public String getKernelVersion() {
-		return kernelVersion;
-	}
-	
-	public String getLabels() {
-		return Labels;
-	}
+    public String getDockerRootDir() {
+        return DockerRootDir;
+    }
 
-	public String[] getSockets() {
-		return sockets;
-	}
+    public String getDriver() {
+        return driver;
+    }
 
-	public boolean isMemoryLimit() {
-		return memoryLimit;
-	}
+    public List<Object> getDriverStatuses() {
+        return driverStatuses;
+    }
 
-	public long getnEventListener() {
-		return nEventListener;
-	}
-	
-	public long getMemTotal() {
-		return memTotal;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public int getNCPU() {
-		return NCPU;
-	}
+    public Integer getImages() {
+        return images;
+    }
 
-	public int getNFd() {
-		return NFd;
-	}
+    public String getID() {
+        return ID;
+    }
 
-	public int getNGoroutines() {
-		return NGoroutines;
-	}
-	
-	public String getOperatingSystem() {
-		return OperatingSystem;
-	}
+    public Boolean getIPv4Forwarding() {
+        return IPv4Forwarding;
+    }
 
-	public boolean getSwapLimit() {
-		return swapLimit;
-	}
+    public String getIndexServerAddress() {
+        return IndexServerAddress;
+    }
 
-	public String getExecutionDriver() {
-		return executionDriver;
-	}
+    public String getInitPath() {
+        return initPath;
+    }
+
+    public String getInitSha1() {
+        return initSha1;
+    }
+
+    public String getKernelVersion() {
+        return kernelVersion;
+    }
+
+    public String[] getLabels() {
+        return Labels;
+    }
+
+    public String[] getSockets() {
+        return sockets;
+    }
+
+    public Boolean isMemoryLimit() {
+        return memoryLimit;
+    }
+
+    public Long getnEventListener() {
+        return nEventListener;
+    }
+
+    public Long getMemTotal() {
+        return memTotal;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Integer getNCPU() {
+        return NCPU;
+    }
+
+    public Integer getNFd() {
+        return NFd;
+    }
+
+    public Integer getNGoroutines() {
+        return NGoroutines;
+    }
+
+    public String getOperatingSystem() {
+        return OperatingSystem;
+    }
+
+    public Boolean getSwapLimit() {
+        return swapLimit;
+    }
+
+    public String getExecutionDriver() {
+        return executionDriver;
+    }
 
     @Override
     public String toString() {

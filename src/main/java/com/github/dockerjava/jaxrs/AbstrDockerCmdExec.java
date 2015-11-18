@@ -1,77 +1,71 @@
 package com.github.dockerjava.jaxrs;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.io.IOException;
-
-import javax.ws.rs.ProcessingException;
-import javax.ws.rs.client.WebTarget;
-
-import org.apache.commons.codec.binary.Base64;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.api.command.DockerCmd;
-import com.github.dockerjava.api.command.DockerCmdExec;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
+import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.RemoteApiVersion;
+import org.apache.commons.codec.binary.Base64;
 
-public abstract class AbstrDockerCmdExec<CMD_T extends DockerCmd<RES_T>, RES_T>
-		implements DockerCmdExec<CMD_T, RES_T> {
+import javax.ws.rs.client.WebTarget;
+import java.io.IOException;
 
-	private WebTarget baseResource;
+import static com.google.common.base.Preconditions.checkNotNull;
 
-	public AbstrDockerCmdExec(WebTarget baseResource) {
-		checkNotNull(baseResource,
-				"baseResource was not specified");
-		this.baseResource = baseResource;
-	}
+public abstract class AbstrDockerCmdExec {
 
-	protected WebTarget getBaseResource() {
-		return baseResource;
-	}
+    private final DockerClientConfig dockerClientConfig;
 
-	protected String registryAuth(AuthConfig authConfig) {
-		try {
-			return Base64.encodeBase64String(new ObjectMapper()
-					.writeValueAsString(authConfig).getBytes());
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    private final WebTarget baseResource;
 
-	protected String registryConfigs(AuthConfigurations authConfigs) {
-		try {
-			return Base64.encodeBase64String(new ObjectMapper()
-					.writeValueAsString(authConfigs).getBytes());
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
-	@Override
-	public RES_T exec(CMD_T command) {
-		// this hack works because of ResponseStatusExceptionFilter
-		RES_T result;
-		try {
-			result = execute(command);
-			
-		} catch (ProcessingException e) {
-			if(e.getCause() instanceof DockerException) {
-				throw (DockerException)e.getCause();
-			} else {
-				throw e;
-			}
-		} finally {
-			try {
-				command.close();
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-		}
-		
-		return result;
-	}
+    public AbstrDockerCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
+        checkNotNull(baseResource, "baseResource was not specified");
+        checkNotNull(dockerClientConfig, "dockerClientConfig was not specified");
+        this.baseResource = baseResource;
+        this.dockerClientConfig = dockerClientConfig;
+    }
 
-	protected abstract RES_T execute(CMD_T command);
+    protected WebTarget getBaseResource() {
+        return baseResource;
+    }
+
+    protected AuthConfigurations getBuildAuthConfigs() {
+        return dockerClientConfig.getAuthConfigurations();
+    }
+
+    protected String registryAuth(AuthConfig authConfig) {
+        try {
+            return Base64.encodeBase64String(new ObjectMapper().writeValueAsString(authConfig).getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected String registryConfigs(AuthConfigurations authConfigs) {
+        try {
+            final String json;
+            if (dockerClientConfig.getVersion().isGreaterOrEqual(RemoteApiVersion.VERSION_1_19)) {
+                json = new ObjectMapper().writeValueAsString(authConfigs.getConfigs());
+            } else {
+                json = new ObjectMapper().writeValueAsString(authConfigs);
+            }
+
+            return Base64.encodeBase64String(json.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected boolean bool(Boolean bool) {
+        return bool != null && bool;
+    }
+
+    protected WebTarget booleanQueryParam(WebTarget webTarget, String name, Boolean value) {
+        if (bool(value)) {
+            webTarget = webTarget.queryParam(name, bool(value) + "");
+        }
+
+        return webTarget;
+    }
+
 }

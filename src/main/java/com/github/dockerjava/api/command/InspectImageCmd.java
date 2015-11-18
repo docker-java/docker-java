@@ -1,23 +1,28 @@
 package com.github.dockerjava.api.command;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 import com.github.dockerjava.api.NotFoundException;
 
 /**
  * Inspect the details of an image.
  */
-public interface InspectImageCmd extends DockerCmd<InspectImageResponse>{
+public interface InspectImageCmd extends SyncDockerCmd<InspectImageResponse> {
 
-	public String getImageId();
+    @CheckForNull
+    public String getImageId();
 
-	public InspectImageCmd withImageId(String imageId);
+    public InspectImageCmd withImageId(@Nonnull String imageId);
 
-	/**
-	 * @throws NotFoundException No such image
-	 */
-	@Override
-	public InspectImageResponse exec() throws NotFoundException;
-	
-	public static interface Exec extends DockerCmdExec<InspectImageCmd, InspectImageResponse> {
-	}
+    /**
+     * @throws NotFoundException
+     *             No such image
+     */
+    @Override
+    public InspectImageResponse exec() throws NotFoundException;
+
+    public static interface Exec extends DockerCmdSyncExec<InspectImageCmd, InspectImageResponse> {
+    }
 
 }

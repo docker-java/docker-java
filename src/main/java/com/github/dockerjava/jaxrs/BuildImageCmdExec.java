@@ -1,116 +1,99 @@
 package com.github.dockerjava.jaxrs;
 
-import static javax.ws.rs.client.Entity.entity;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Iterator;
-
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
+import com.github.dockerjava.api.async.ResultCallback;
+import com.github.dockerjava.api.command.BuildImageCmd;
+import com.github.dockerjava.api.model.AuthConfigurations;
+import com.github.dockerjava.api.model.BuildResponseItem;
+import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.async.JsonStreamProcessor;
+import com.github.dockerjava.jaxrs.async.AbstractCallbackNotifier;
+import com.github.dockerjava.jaxrs.async.POSTCallbackNotifier;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.RequestEntityProcessing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
-import com.github.dockerjava.api.command.BuildImageCmd;
-import com.github.dockerjava.api.model.AuthConfigurations;
-import com.github.dockerjava.api.model.EventStreamItem;
-import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
-import com.google.common.collect.ImmutableList;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 
-public class BuildImageCmdExec extends
-		AbstrDockerCmdExec<BuildImageCmd, BuildImageCmd.Response> implements
-		BuildImageCmd.Exec {
+import static javax.ws.rs.client.Entity.entity;
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(BuildImageCmdExec.class);
+public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, BuildResponseItem> implements
+        BuildImageCmd.Exec {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BuildImageCmdExec.class);
 
-	public BuildImageCmdExec(WebTarget baseResource) {
-		super(baseResource);
-	}
+    public BuildImageCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
+        super(baseResource, dockerClientConfig);
+    }
 
-	@Override
-	protected ResponseImpl execute(BuildImageCmd command) {
-		WebTarget webResource = getBaseResource().path("/build");
-		String dockerFilePath = command.getPathToDockerfile();
+    private Invocation.Builder resourceWithOptionalAuthConfig(BuildImageCmd command, Invocation.Builder request) {
+        final AuthConfigurations authConfigs = firstNonNull(command.getBuildAuthConfigs(), getBuildAuthConfigs());
+        if (authConfigs != null) {
+            request = request.header("X-Registry-Config", registryConfigs(authConfigs));
+        }
+        return request;
+    }
 
-		if (command.getTag() != null) {
-			webResource = webResource.queryParam("t", command.getTag());
-		}
-		if (command.hasNoCacheEnabled()) {
-			webResource = webResource.queryParam("nocache", "true");
-		}
-		if (command.hasRemoveEnabled()) {
-			webResource = webResource.queryParam("rm", "true");
-		}
-		if (command.isQuiet()) {
-			webResource = webResource.queryParam("q", "true");
-		}
-		if (command.hasPullEnabled()) {
-			webResource = webResource.queryParam("pull", "true");
-		}
-		if (dockerFilePath != null && !"Dockerfile".equals(dockerFilePath)) {
-			webResource = webResource.queryParam("dockerfile", dockerFilePath);
-		}
+    private static AuthConfigurations firstNonNull(final AuthConfigurations fromCommand,
+            final AuthConfigurations fromConfig) {
+        if (fromCommand != null) {
+            return fromCommand;
+        }
+        if (fromConfig != null) {
+            return fromConfig;
+        }
+        return null;
+    }
 
-		webResource.property(ClientProperties.REQUEST_ENTITY_PROCESSING,
-				RequestEntityProcessing.CHUNKED);
-		webResource.property(ClientProperties.CHUNKED_ENCODING_SIZE,
-				1024 * 1024);
+    @Override
+    protected AbstractCallbackNotifier<BuildResponseItem> callbackNotifier(BuildImageCmd command,
+            ResultCallback<BuildResponseItem> resultCallback) {
 
-		LOGGER.debug("POST: {}", webResource);
-		Response response = resourceWithOptionalAuthConfig(command,
-				webResource.request())
-				.accept(MediaType.TEXT_PLAIN)
-				.post(entity(command.getTarInputStream(), "application/tar"),
-						Response.class);
+        WebTarget webTarget = getBaseResource().path("/build");
+        String dockerFilePath = command.getPathToDockerfile();
 
-		return new ResponseImpl(new WrappedResponseInputStream(response));
+        if (dockerFilePath != null && command.getRemote() == null && !"Dockerfile".equals(dockerFilePath)) {
+            webTarget = webTarget.queryParam("dockerfile", dockerFilePath);
+        }
+        if (command.getTag() != null) {
+            webTarget = webTarget.queryParam("t", command.getTag());
+        }
+        if (command.getRemote() != null) {
+            webTarget = webTarget.queryParam("remote", command.getRemote().toString());
+        }
 
-	}
+        webTarget = booleanQueryParam(webTarget, "q", command.isQuiet());
+        webTarget = booleanQueryParam(webTarget, "nocache", command.hasNoCacheEnabled());
+        webTarget = booleanQueryParam(webTarget, "pull", command.hasPullEnabled());
+        webTarget = booleanQueryParam(webTarget, "rm", command.hasRemoveEnabled());
+        webTarget = booleanQueryParam(webTarget, "forcerm", command.isForcerm());
 
-	private Invocation.Builder resourceWithOptionalAuthConfig(
-			BuildImageCmd command, Invocation.Builder request) {
-		AuthConfigurations authConfigs = command.getBuildAuthConfigs();
-		if (authConfigs != null) {
-			request = request.header("X-Registry-Config",
-					registryConfigs(authConfigs));
-		}
-		return request;
-	}
+        // this has to be handled differently as it should switch to 'false'
+        if (command.hasRemoveEnabled() == null || !command.hasRemoveEnabled()) {
+            webTarget = webTarget.queryParam("rm", "false");
+        }
 
-	public static class ResponseImpl extends BuildImageCmd.Response {
+        if (command.getMemory() != null) {
+            webTarget = webTarget.queryParam("memory", command.getMemory());
+        }
+        if (command.getMemswap() != null) {
+            webTarget = webTarget.queryParam("memswap", command.getMemswap());
+        }
+        if (command.getCpushares() != null) {
+            webTarget = webTarget.queryParam("cpushares", command.getCpushares());
+        }
+        if (command.getCpusetcpus() != null) {
+            webTarget = webTarget.queryParam("cpusetcpus", command.getCpusetcpus());
+        }
 
-		private final InputStream proxy;
+        webTarget.property(ClientProperties.REQUEST_ENTITY_PROCESSING, RequestEntityProcessing.CHUNKED);
+        webTarget.property(ClientProperties.CHUNKED_ENCODING_SIZE, 1024 * 1024);
 
-		public ResponseImpl(InputStream proxy) {
-			this.proxy = proxy;
-		}
+        LOGGER.trace("POST: {}", webTarget);
 
-		@Override
-		public Iterable<EventStreamItem> getItems() throws IOException {
-			ObjectMapper mapper = new ObjectMapper();
-			// we'll be reading instances of MyBean
-			ObjectReader reader = mapper.reader(EventStreamItem.class);
-			// and then do other configuration, if any, and read:
-			Iterator<EventStreamItem> items = reader.readValues(proxy);
-
-			try {
-				return ImmutableList.copyOf(items);
-			} finally {
-				proxy.close();
-			}
-		}
-
-		@Override
-		public int read() throws IOException {
-			return proxy.read();
-		}
-	}
+        return new POSTCallbackNotifier<>(new JsonStreamProcessor<>(BuildResponseItem.class), resultCallback,
+                resourceWithOptionalAuthConfig(command, webTarget.request()).accept(MediaType.TEXT_PLAIN), entity(
+                        command.getTarInputStream(), "application/tar"));
+    }
 }

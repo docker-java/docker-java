@@ -1,4 +1,5 @@
 package com.github.dockerjava.jaxrs;
+
 /*
  * Copyright (c) 2014 Spotify AB.
  *
@@ -20,7 +21,12 @@ package com.github.dockerjava.jaxrs;
  * under the License.
  */
 
-
+import java.io.File;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
+import java.net.URI;
 
 import org.apache.http.HttpHost;
 import org.apache.http.annotation.Immutable;
@@ -29,57 +35,46 @@ import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.protocol.HttpContext;
 import org.newsclub.net.unix.AFUNIXSocketAddress;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.SocketTimeoutException;
-import java.net.URI;
-
 /**
  * Provides a ConnectionSocketFactory for connecting Apache HTTP clients to Unix sockets.
  */
 @Immutable
 public class UnixConnectionSocketFactory implements ConnectionSocketFactory {
 
-  private File socketFile;
+    private File socketFile;
 
-  public UnixConnectionSocketFactory(final URI socketUri) {
-    super();
+    public UnixConnectionSocketFactory(final URI socketUri) {
+        super();
 
-    final String filename = socketUri.toString()
-        .replaceAll("^unix:///", "unix://localhost/")
-        .replaceAll("^unix://localhost", "");
+        final String filename = socketUri.toString().replaceAll("^unix:///", "unix://localhost/")
+                .replaceAll("^unix://localhost", "");
 
-    this.socketFile = new File(filename);
-  }
-
-  public static URI sanitizeUri(final URI uri) {
-    if (uri.getScheme().equals("unix")) {
-      return URI.create("unix://localhost:80");
-    } else {
-      return uri;
-    }
-  }
-
-  @Override
-  public Socket createSocket(final HttpContext context) throws IOException {
-    return new ApacheUnixSocket();
-  }
-
-  @Override
-  public Socket connectSocket(final int connectTimeout,
-                              final Socket socket,
-                              final HttpHost host,
-                              final InetSocketAddress remoteAddress,
-                              final InetSocketAddress localAddress,
-                              final HttpContext context) throws IOException {
-    try {
-      socket.connect(new AFUNIXSocketAddress(socketFile), connectTimeout);
-    } catch (SocketTimeoutException e) {
-      throw new ConnectTimeoutException(e, null, remoteAddress.getAddress());
+        this.socketFile = new File(filename);
     }
 
-    return socket;
-  }
+    public static URI sanitizeUri(final URI uri) {
+        if (uri.getScheme().equals("unix")) {
+            return URI.create("unix://localhost:80");
+        } else {
+            return uri;
+        }
+    }
+
+    @Override
+    public Socket createSocket(final HttpContext context) throws IOException {
+        return new ApacheUnixSocket();
+    }
+
+    @Override
+    public Socket connectSocket(final int connectTimeout, final Socket socket, final HttpHost host,
+            final InetSocketAddress remoteAddress, final InetSocketAddress localAddress, final HttpContext context)
+            throws IOException {
+        try {
+            socket.connect(new AFUNIXSocketAddress(socketFile), connectTimeout);
+        } catch (SocketTimeoutException e) {
+            throw new ConnectTimeoutException(e, null, remoteAddress.getAddress());
+        }
+
+        return socket;
+    }
 }

@@ -21,109 +21,104 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @JsonDeserialize(using = VolumesFrom.Deserializer.class)
 public class VolumesFrom {
 
-	private String container;
+    private String container;
 
-	private AccessMode accessMode;
+    private AccessMode accessMode;
 
-	public VolumesFrom(String container) {
-		this(container, AccessMode.DEFAULT);
-	}
+    public VolumesFrom(String container) {
+        this(container, AccessMode.DEFAULT);
+    }
 
-	public VolumesFrom(String container, AccessMode accessMode) {
-		this.container = container;
-		this.accessMode = accessMode;
-	}
-	
-	public String getContainer() {
-		return container;
-	}
-	
-	public AccessMode getAccessMode() {
-		return accessMode;
-	}
+    public VolumesFrom(String container, AccessMode accessMode) {
+        this.container = container;
+        this.accessMode = accessMode;
+    }
 
+    public String getContainer() {
+        return container;
+    }
 
-	/**
-	 * Parses a volume from specification to a {@link VolumesFrom}.
-	 * 
-	 * @param serialized the specification, e.g. <code>container:ro</code>
-	 * @return a {@link VolumesFrom} matching the specification
-	 * @throws IllegalArgumentException if the specification cannot be parsed
-	 */
-	public static VolumesFrom parse(String serialized) {
-		try {
-			String[] parts = serialized.split(":");
-			switch (parts.length) {
-			case 1: {
-				return new VolumesFrom(parts[0]);
-			}
-			case 2: {
-				return new VolumesFrom(parts[0], AccessMode.valueOf(parts[1]));
-			}
-			
-			default: {
-				throw new IllegalArgumentException();
-			}
-			}
-		} catch (Exception e) {
-			throw new IllegalArgumentException("Error parsing Bind '" + serialized
-					+ "'");
-		}
-	}
+    public AccessMode getAccessMode() {
+        return accessMode;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof VolumesFrom) {
-			VolumesFrom other = (VolumesFrom) obj;
-			return new EqualsBuilder().append(container, other.getContainer())
-					.append(accessMode, other.getAccessMode()).isEquals();
-		} else
-			return super.equals(obj);
-	}
+    /**
+     * Parses a volume from specification to a {@link VolumesFrom}.
+     *
+     * @param serialized
+     *            the specification, e.g. <code>container:ro</code>
+     * @return a {@link VolumesFrom} matching the specification
+     * @throws IllegalArgumentException
+     *             if the specification cannot be parsed
+     */
+    public static VolumesFrom parse(String serialized) {
+        try {
+            String[] parts = serialized.split(":");
+            switch (parts.length) {
+            case 1: {
+                return new VolumesFrom(parts[0]);
+            }
+            case 2: {
+                return new VolumesFrom(parts[0], AccessMode.valueOf(parts[1]));
+            }
 
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().append(container)
-				.append(accessMode).toHashCode();
-	}
+            default: {
+                throw new IllegalArgumentException();
+            }
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error parsing Bind '" + serialized + "'");
+        }
+    }
 
-	/**
-	 * Returns a string representation of this {@link VolumesFrom} suitable
-	 * for inclusion in a JSON message.
-	 * The format is <code>&lt;container&gt;:&lt;access mode&gt;</code>,
-	 * like the argument in {@link #parse(String)}.
-	 * 
-	 * @return a string representation of this {@link VolumesFrom}
-	 */
-	@Override
-	public String toString() {
-		return container + ":" + accessMode.toString();
-	}
-	
-	public static class Serializer extends JsonSerializer<VolumesFrom> {
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof VolumesFrom) {
+            VolumesFrom other = (VolumesFrom) obj;
+            return new EqualsBuilder().append(container, other.getContainer())
+                    .append(accessMode, other.getAccessMode()).isEquals();
+        } else
+            return super.equals(obj);
+    }
 
-		@Override
-		public void serialize(VolumesFrom volumeFrom, JsonGenerator jsonGen,
-				SerializerProvider serProvider) throws IOException,
-				JsonProcessingException {
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(container).append(accessMode).toHashCode();
+    }
 
-			jsonGen.writeString(volumeFrom.toString());
-			
-		}
+    /**
+     * Returns a string representation of this {@link VolumesFrom} suitable for inclusion in a JSON message. The format
+     * is <code>&lt;container&gt;:&lt;access mode&gt;</code>, like the argument in {@link #parse(String)}.
+     *
+     * @return a string representation of this {@link VolumesFrom}
+     */
+    @Override
+    public String toString() {
+        return container + ":" + accessMode.toString();
+    }
 
-	}
+    public static class Serializer extends JsonSerializer<VolumesFrom> {
 
-	public static class Deserializer extends JsonDeserializer<VolumesFrom> {
-		@Override
-		public VolumesFrom deserialize(JsonParser jsonParser,
-				DeserializationContext deserializationContext)
-				throws IOException, JsonProcessingException {
+        @Override
+        public void serialize(VolumesFrom volumeFrom, JsonGenerator jsonGen, SerializerProvider serProvider)
+                throws IOException, JsonProcessingException {
 
-			ObjectCodec oc = jsonParser.getCodec();
-			JsonNode node = oc.readTree(jsonParser);
-			return VolumesFrom.parse(node.asText());
-			
-		}
-	}
+            jsonGen.writeString(volumeFrom.toString());
+
+        }
+
+    }
+
+    public static class Deserializer extends JsonDeserializer<VolumesFrom> {
+        @Override
+        public VolumesFrom deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+                throws IOException, JsonProcessingException {
+
+            ObjectCodec oc = jsonParser.getCodec();
+            JsonNode node = oc.readTree(jsonParser);
+            return VolumesFrom.parse(node.asText());
+
+        }
+    }
 
 }

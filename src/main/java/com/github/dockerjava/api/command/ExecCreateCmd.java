@@ -1,37 +1,38 @@
 package com.github.dockerjava.api.command;
 
-public interface ExecCreateCmd extends DockerCmd<ExecCreateCmdResponse> {
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
+public interface ExecCreateCmd extends SyncDockerCmd<ExecCreateCmdResponse> {
+
+    @CheckForNull
     public String getContainerId();
-    
-    public ExecCreateCmd withContainerId(String containerId);
+
+    @CheckForNull
+    public Boolean hasAttachStderrEnabled();
+
+    @CheckForNull
+    public Boolean hasAttachStdinEnabled();
+
+    @CheckForNull
+    public Boolean hasAttachStdoutEnabled();
+
+    @CheckForNull
+    public Boolean hasTtyEnabled();
+
+    public ExecCreateCmd withAttachStderr(Boolean attachStderr);
+
+    public ExecCreateCmd withAttachStdin(Boolean attachStdin);
+
+    public ExecCreateCmd withAttachStdout(Boolean attachStdout);
 
     public ExecCreateCmd withCmd(String... cmd);
 
-    public ExecCreateCmd withAttachStdin(boolean attachStdin);
-    
-    public ExecCreateCmd withAttachStdin();
-    
-    public boolean hasAttachStdinEnabled();
+    public ExecCreateCmd withContainerId(@Nonnull String containerId);
 
-    public ExecCreateCmd withAttachStdout(boolean attachStdout);
-    
-    public ExecCreateCmd withAttachStdout();
-    
-    public boolean hasAttachStdoutEnabled();
+    public ExecCreateCmd withTty(Boolean tty);
 
-    public ExecCreateCmd withAttachStderr(boolean attachStderr);
-    
-    public ExecCreateCmd withAttachStderr();
-    
-    public boolean hasAttachStderrEnabled();
-
-    public ExecCreateCmd withTty(boolean tty);
-    
-    public ExecCreateCmd withTty();
-    
-    public boolean hasTtyEnabled();
-
-    public static interface Exec extends DockerCmdExec<ExecCreateCmd, ExecCreateCmdResponse> {
+    public static interface Exec extends DockerCmdSyncExec<ExecCreateCmd, ExecCreateCmdResponse> {
     }
+
 }

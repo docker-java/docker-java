@@ -12,88 +12,85 @@ import org.glassfish.jersey.SslConfigurator;
 
 import com.github.dockerjava.api.DockerClientException;
 
-
 /**
  * SSL Config from local files.
  */
 public class LocalDirectorySSLConfig implements SSLConfig, Serializable {
 
-  private final String dockerCertPath;
+    private static final long serialVersionUID = -4736328026418377358L;
 
-  public LocalDirectorySSLConfig(String dockerCertPath) {
-    checkNotNull(dockerCertPath);
-    this.dockerCertPath = dockerCertPath;
-  }
+    private final String dockerCertPath;
 
-  public String getDockerCertPath() {
-    return dockerCertPath;
-  }
+    public LocalDirectorySSLConfig(String dockerCertPath) {
+        checkNotNull(dockerCertPath);
+        this.dockerCertPath = dockerCertPath;
+    }
 
-  @Override
-  public SSLContext getSSLContext() {
+    public String getDockerCertPath() {
+        return dockerCertPath;
+    }
 
-    boolean certificatesExist = CertificateUtils.verifyCertificatesExist(dockerCertPath);
+    @Override
+    public SSLContext getSSLContext() {
 
-    if (certificatesExist) {
+        boolean certificatesExist = CertificateUtils.verifyCertificatesExist(dockerCertPath);
 
-      try {
+        if (certificatesExist) {
 
-        Security.addProvider(new BouncyCastleProvider());
+            try {
 
-        // properties acrobatics not needed for java > 1.6
-        String httpProtocols = System.getProperty("https.protocols");
-        System.setProperty("https.protocols", "TLSv1");
-        SslConfigurator sslConfig = SslConfigurator.newInstance(true);
-        if (httpProtocols != null) {
-          System.setProperty("https.protocols", httpProtocols);
+                Security.addProvider(new BouncyCastleProvider());
+
+                // properties acrobatics not needed for java > 1.6
+                String httpProtocols = System.getProperty("https.protocols");
+                System.setProperty("https.protocols", "TLSv1");
+                SslConfigurator sslConfig = SslConfigurator.newInstance(true);
+                if (httpProtocols != null) {
+                    System.setProperty("https.protocols", httpProtocols);
+                }
+
+                sslConfig.keyStore(CertificateUtils.createKeyStore(dockerCertPath));
+                sslConfig.keyStorePassword("docker");
+                sslConfig.trustStore(CertificateUtils.createTrustStore(dockerCertPath));
+
+                return sslConfig.createSSLContext();
+
+            } catch (Exception e) {
+                throw new DockerClientException(e.getMessage(), e);
+            }
+
         }
 
-        sslConfig.keyStore(CertificateUtils.createKeyStore(dockerCertPath));
-        sslConfig.keyStorePassword("docker");
-        sslConfig.trustStore(CertificateUtils.createTrustStore(dockerCertPath));
-
-        return sslConfig.createSSLContext();
-
-
-      } catch (Exception e) {
-        throw new DockerClientException(e.getMessage(), e);
-      }
+        return null;
 
     }
 
-    return null;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
-  }
+        LocalDirectorySSLConfig that = (LocalDirectorySSLConfig) o;
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
+        if (!dockerCertPath.equals(that.dockerCertPath)) {
+            return false;
+        }
+
+        return true;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    @Override
+    public int hashCode() {
+        return dockerCertPath.hashCode();
     }
 
-    LocalDirectorySSLConfig that = (LocalDirectorySSLConfig) o;
-
-    if (!dockerCertPath.equals(that.dockerCertPath)) {
-      return false;
+    @Override
+    public String toString() {
+        return new StringBuilder().append(this.getClass().getSimpleName()).append("{").append("dockerCertPath=")
+                .append(dockerCertPath).append("}").toString();
     }
-
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    return dockerCertPath.hashCode();
-  }
-
-  @Override
-  public String toString() {
-    return new StringBuilder()
-        .append(this.getClass().getSimpleName()).append("{")
-            .append("dockerCertPath=").append(dockerCertPath)
-        .append("}")
-        .toString();
-  }
 }

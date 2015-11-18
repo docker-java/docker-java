@@ -12,54 +12,52 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
 @Test(groups = "integration")
 public class TagImageCmdImplTest extends AbstractDockerClientTest {
 
-	public static final Logger LOG = LoggerFactory
-			.getLogger(TagImageCmdImplTest.class);
+    public static final Logger LOG = LoggerFactory.getLogger(TagImageCmdImplTest.class);
 
-	@BeforeTest
-	public void beforeTest() throws DockerException {
-		super.beforeTest();
-	}
-	@AfterTest
-	public void afterTest() {
-		super.afterTest();
-	}
+    @BeforeTest
+    public void beforeTest() throws Exception {
+        super.beforeTest();
+    }
 
-	@BeforeMethod
-	public void beforeMethod(Method method) {
-	    super.beforeMethod(method);
-	}
+    @AfterTest
+    public void afterTest() {
+        super.afterTest();
+    }
 
-	@AfterMethod
-	public void afterMethod(ITestResult result) {
-		super.afterMethod(result);
-	}
+    @BeforeMethod
+    public void beforeMethod(Method method) {
+        super.beforeMethod(method);
+    }
 
-	@Test
-	public void tagImage() throws Exception {
-		String tag = "" + RandomUtils.nextInt(Integer.MAX_VALUE);
+    @AfterMethod
+    public void afterMethod(ITestResult result) {
+        super.afterMethod(result);
+    }
 
-		dockerClient.tagImageCmd("busybox:latest", "docker-java/busybox", tag).exec();
+    @Test
+    public void tagImage() throws Exception {
+        String tag = "" + RandomUtils.nextInt(Integer.MAX_VALUE);
 
-		dockerClient.removeImageCmd("docker-java/busybox:" + tag).exec();
-	}
-	
-	@Test
-	public void tagNonExistingImage() throws Exception {
-		String tag = "" + RandomUtils.nextInt(Integer.MAX_VALUE);
-		
-		try {
-			dockerClient.tagImageCmd("non-existing", "docker-java/busybox", tag).exec();
-			fail("expected NotFoundException");
-		} catch (NotFoundException e) {
-		}	
-	}
+        dockerClient.tagImageCmd("busybox:latest", "docker-java/busybox", tag).exec();
+
+        dockerClient.removeImageCmd("docker-java/busybox:" + tag).exec();
+    }
+
+    @Test
+    public void tagNonExistingImage() throws Exception {
+        String tag = "" + RandomUtils.nextInt(Integer.MAX_VALUE);
+
+        try {
+            dockerClient.tagImageCmd("non-existing", "docker-java/busybox", tag).exec();
+            fail("expected NotFoundException");
+        } catch (NotFoundException e) {
+        }
+    }
 
 }
-

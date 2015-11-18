@@ -1,8 +1,9 @@
 package com.github.dockerjava.api.model;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  *
@@ -16,13 +17,13 @@ public class ChangeLog {
     private String path;
 
     @JsonProperty("Kind")
-    private int kind;
+    private Integer kind;
 
     public String getPath() {
         return path;
     }
 
-    public int getKind() {
+    public Integer getKind() {
         return kind;
     }
 

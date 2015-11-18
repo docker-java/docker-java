@@ -1,36 +1,43 @@
 package com.github.dockerjava.api.command;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 import com.github.dockerjava.api.NotFoundException;
 
 /**
  * Remove a container.
- * 
- * @param removeVolumes - true or false, Remove the volumes associated to the container. Defaults to false
- * @param force - true or false, Removes the container even if it was running. Defaults to false
+ *
+ * @param removeVolumes
+ *            - true or false, Remove the volumes associated to the container. Defaults to false
+ * @param force
+ *            - true or false, Removes the container even if it was running. Defaults to false
  */
-public interface RemoveContainerCmd extends DockerCmd<Void> {
+public interface RemoveContainerCmd extends SyncDockerCmd<Void> {
 
-	public String getContainerId();
+    @CheckForNull
+    public String getContainerId();
 
-	public boolean hasRemoveVolumesEnabled();
+    @CheckForNull
+    public Boolean hasRemoveVolumesEnabled();
 
-	public boolean hasForceEnabled();
+    @CheckForNull
+    public Boolean hasForceEnabled();
 
-	public RemoveContainerCmd withContainerId(String containerId);
+    public RemoveContainerCmd withContainerId(@Nonnull String containerId);
 
-	public RemoveContainerCmd withRemoveVolumes(boolean removeVolumes);
+    public RemoveContainerCmd withRemoveVolumes(Boolean removeVolumes);
 
-	public RemoveContainerCmd withForce();
+    public RemoveContainerCmd withForce(Boolean force);
 
-	public RemoveContainerCmd withForce(boolean force);
+    /**
+     * @throws NotFoundException
+     *             No such container
+     */
+    @Override
+    public Void exec() throws NotFoundException;
 
-	/**
-	 * @throws NotFoundException No such container
-	 */
-	@Override
-	public Void exec() throws NotFoundException;
-	
-	public static interface Exec extends DockerCmdExec<RemoveContainerCmd, Void> {
-	}
+    public static interface Exec extends DockerCmdSyncExec<RemoveContainerCmd, Void> {
+    }
 
 }

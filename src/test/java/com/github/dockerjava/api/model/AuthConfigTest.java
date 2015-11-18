@@ -1,9 +1,9 @@
 package com.github.dockerjava.api.model;
 
+import static org.testng.Assert.assertEquals;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import static org.testng.Assert.assertEquals;
 
 public class AuthConfigTest {
 
@@ -16,12 +16,6 @@ public class AuthConfigTest {
         authConfig.setPassword("bar");
         authConfig.setServerAddress("baz");
         authConfig.setUsername("qux");
-    }
-
-    @Test
-    public void string() throws Exception {
-        assertEquals(authConfig.toString(),
-                "AuthConfig{username='qux', password='bar', email='foo', serverAddress='baz'}");
     }
 
     @Test

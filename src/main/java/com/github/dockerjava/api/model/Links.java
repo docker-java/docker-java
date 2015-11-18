@@ -1,4 +1,3 @@
-
 package com.github.dockerjava.api.model;
 
 import java.io.IOException;
@@ -21,54 +20,53 @@ import com.fasterxml.jackson.databind.node.NullNode;
 
 @JsonSerialize(using = Links.Serializer.class)
 @JsonDeserialize(using = Links.Deserializer.class)
-public class Links
-{
+public class Links {
 
-	private final Link[] links;
+    private final Link[] links;
 
-	public Links(final Link... links)
-	{
-		this.links = links;
-	}
+    public Links(final Link... links) {
+        this.links = links;
+    }
 
-	public Link[] getLinks()
-	{
-		return links;
-	}
+    public Links(final List<Link> links) {
+        this.links = links.toArray(new Link[links.size()]);
+    }
 
-	public static class Serializer extends JsonSerializer<Links>
-	{
+    public Link[] getLinks() {
+        return links;
+    }
 
-		@Override
-		public void serialize(final Links links, final JsonGenerator jsonGen, final SerializerProvider serProvider) throws IOException, JsonProcessingException
-		{
-			jsonGen.writeStartArray();
-			for (final Link link : links.getLinks()) {
-				jsonGen.writeString(link.toString());
-			}
-			jsonGen.writeEndArray();
-		}
+    public static class Serializer extends JsonSerializer<Links> {
 
-	}
+        @Override
+        public void serialize(final Links links, final JsonGenerator jsonGen, final SerializerProvider serProvider)
+                throws IOException, JsonProcessingException {
+            jsonGen.writeStartArray();
+            for (final Link link : links.getLinks()) {
+                jsonGen.writeString(link.toString());
+            }
+            jsonGen.writeEndArray();
+        }
 
-	public static class Deserializer extends JsonDeserializer<Links>
-	{
+    }
 
-		@Override
-		public Links deserialize(final JsonParser jsonParser, final DeserializationContext deserializationContext) throws IOException, JsonProcessingException
-		{
-			final List<Link> binds = new ArrayList<Link>();
-			final ObjectCodec oc = jsonParser.getCodec();
-			final JsonNode node = oc.readTree(jsonParser);
-			for (final Iterator<JsonNode> it = node.elements(); it.hasNext();) {
+    public static class Deserializer extends JsonDeserializer<Links> {
 
-				final JsonNode element = it.next();
-				if (!element.equals(NullNode.getInstance())) {
-					binds.add(Link.parse(element.asText()));
-				}
-			}
-			return new Links(binds.toArray(new Link[0]));
-		}
-	}
+        @Override
+        public Links deserialize(final JsonParser jsonParser, final DeserializationContext deserializationContext)
+                throws IOException, JsonProcessingException {
+            final List<Link> binds = new ArrayList<Link>();
+            final ObjectCodec oc = jsonParser.getCodec();
+            final JsonNode node = oc.readTree(jsonParser);
+            for (final Iterator<JsonNode> it = node.elements(); it.hasNext();) {
+
+                final JsonNode element = it.next();
+                if (!element.equals(NullNode.getInstance())) {
+                    binds.add(Link.parse(element.asText()));
+                }
+            }
+            return new Links(binds.toArray(new Link[0]));
+        }
+    }
 
 }
