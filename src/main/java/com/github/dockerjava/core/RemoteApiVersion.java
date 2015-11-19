@@ -5,6 +5,8 @@ import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 
+import java.io.Serializable;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,7 +17,7 @@ import java.util.regex.Pattern;
  *
  * @author Marcus Thiesen
  */
-public class RemoteApiVersion {
+public class RemoteApiVersion implements Serializable {
 
     public static final RemoteApiVersion VERSION_1_19 = RemoteApiVersion.create(1, 19);
 
