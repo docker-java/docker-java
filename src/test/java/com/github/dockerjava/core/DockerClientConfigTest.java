@@ -1,6 +1,7 @@
 package com.github.dockerjava.core;
 
 import com.github.dockerjava.api.model.AuthConfig;
+import org.apache.commons.lang.SerializationUtils;
 import org.testng.annotations.Test;
 
 import java.net.URI;
@@ -9,6 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.testng.Assert.assertEquals;
 
 public class DockerClientConfigTest {
@@ -183,5 +186,13 @@ public class DockerClientConfigTest {
         // then it is the same as the example
         assertEquals(config, EXAMPLE_CONFIG);
 
+    }
+
+    @Test
+    public void serializableTest() {
+        final byte[] serialized = SerializationUtils.serialize(EXAMPLE_CONFIG);
+        final DockerClientConfig deserialized = (DockerClientConfig) SerializationUtils.deserialize(serialized);
+
+        assertThat("Deserialized object mush match source object", deserialized, equalTo(EXAMPLE_CONFIG));
     }
 }
