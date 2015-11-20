@@ -2,12 +2,11 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.io.InputStream;
-
-import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.ExecStartCmd;
+import com.github.dockerjava.api.model.Frame;
 
-public class ExecStartCmdImpl extends AbstrDockerCmd<ExecStartCmd, InputStream> implements ExecStartCmd {
+public class ExecStartCmdImpl extends AbstrAsyncDockerCmd<ExecStartCmd, Frame> implements ExecStartCmd {
 
     private String execId;
 
@@ -57,8 +56,7 @@ public class ExecStartCmdImpl extends AbstrDockerCmd<ExecStartCmd, InputStream> 
      *             No such exec instance
      */
     @Override
-    public InputStream exec() throws NotFoundException {
-        return super.exec();
+    public <T extends ResultCallback<Frame>> T exec(T resultCallback) {
+        return super.exec(resultCallback);
     }
-
 }

@@ -1,9 +1,10 @@
-package com.github.dockerjava.netty;
+package com.github.dockerjava.netty.exec;
 
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.DockerCmd;
 import com.github.dockerjava.api.command.DockerCmdSyncExec;
 import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.netty.WebTarget;
 
 
 public abstract class AbstrSyncDockerCmdExec<CMD_T extends DockerCmd<RES_T>, RES_T> extends AbstrDockerCmdExec

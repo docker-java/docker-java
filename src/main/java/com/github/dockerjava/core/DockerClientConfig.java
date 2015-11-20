@@ -73,20 +73,16 @@ public class DockerClientConfig implements Serializable {
 
     private final SSLConfig sslConfig;
 
-    private final String dockerCertPath;
-
     DockerClientConfig(URI uri, String version, String username, String password, String email, String serverAddress,
-            String dockerCfgPath, String dockerCertPath, SSLConfig sslConfig) {
+            String dockerCfgPath, SSLConfig sslConfig) {
         this.uri = uri;
         this.version = RemoteApiVersion.parseConfigWithDefault(version);
         this.username = username;
         this.password = password;
         this.email = email;
         this.serverAddress = serverAddress;
-
         this.dockerCfgPath = dockerCfgPath;
         this.sslConfig = sslConfig;
-        this.dockerCertPath = dockerCertPath;
     }
 
     private static Properties loadIncludedDockerProperties(Properties systemProperties) {
@@ -242,10 +238,6 @@ public class DockerClientConfig implements Serializable {
 
     public String getDockerCfgPath() {
         return dockerCfgPath;
-    }
-
-    public String getDockerCertPath() {
-        return dockerCertPath;
     }
 
     private AuthConfig getAuthConfig() {
@@ -425,7 +417,7 @@ public class DockerClientConfig implements Serializable {
         }
 
         public DockerClientConfig build() {
-            return new DockerClientConfig(uri, version, username, password, email, serverAddress, dockerCfgPath, dockerCertPath,
+            return new DockerClientConfig(uri, version, username, password, email, serverAddress, dockerCfgPath,
                     sslConfig);
         }
     }

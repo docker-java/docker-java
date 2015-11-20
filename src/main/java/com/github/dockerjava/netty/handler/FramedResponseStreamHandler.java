@@ -1,34 +1,32 @@
 package com.github.dockerjava.netty.handler;
 
-import java.io.OutputStream;
-
-import com.github.dockerjava.api.model.Frame;
-import com.github.dockerjava.api.model.StreamType;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
-public class DockerRawStreamHandler extends SimpleChannelInboundHandler<ByteBuf> {
+import com.github.dockerjava.api.async.ResultCallback;
+import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.api.model.StreamType;
+
+public class FramedResponseStreamHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
 	private static final int HEADER_SIZE = 8;
 
 	private final ByteBuf rawBuffer = Unpooled.buffer(1000);
 
-	private OutputStream stdout, stderr;
-
 	private byte[] header = new byte[HEADER_SIZE];
 
 	private int headerCnt = 0;
-	
+
 	private byte[] payload = new byte[0];
 
 	private int payloadCnt = 0;
 
-	public DockerRawStreamHandler(OutputStream stdout, OutputStream stderr) {
-		this.stdout = stdout;
-		this.stderr = stderr;
+	private ResultCallback<Frame> resultCallback;
+
+	public FramedResponseStreamHandler(ResultCallback<Frame> resultCallback) {
+		this.resultCallback = resultCallback;
 	}
 
 	@Override
@@ -40,29 +38,13 @@ public class DockerRawStreamHandler extends SimpleChannelInboundHandler<ByteBuf>
 
 		do {
 			frame = decode();
-			
+
 			if (frame != null) {
-				switch (frame.getStreamType()) {
-				case STDOUT:
-					if (stdout != null) {
-						stdout.write(frame.getPayload());
-						stdout.flush();
-					}
-					break;
-				case STDERR:
-					if (stderr != null) {
-						stderr.write(frame.getPayload());
-						stderr.flush();
-					}
-					break;
-				default:
-					System.err.println("unknown stream type");		
-				}
-				
+			    resultCallback.onNext(frame);
 				headerCnt = 0;
 				payloadCnt = 0;
-			} 
-			
+			}
+
 		} while (frame != null);
 
 	}
@@ -111,7 +93,7 @@ public class DockerRawStreamHandler extends SimpleChannelInboundHandler<ByteBuf>
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		cause.printStackTrace();
+		resultCallback.onError(cause);
 		ctx.close();
 	}
 

@@ -13,23 +13,23 @@ import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.handler.codec.http.HttpClientUpgradeHandler;
 import io.netty.handler.codec.http.HttpRequest;
 
-public class HijackHttpConnectionHandler implements HttpClientUpgradeHandler.UpgradeCodec {
-	
+public class HttpConnectionHijackHandler implements HttpClientUpgradeHandler.UpgradeCodec {
+
 	private CountDownLatch latch = new CountDownLatch(1);
-	
+
+	private HttpResponseHandler httpResponseHandler;
+
+	public HttpConnectionHijackHandler(HttpResponseHandler httpResponseHandler) {
+        this.httpResponseHandler = httpResponseHandler;
+    }
+
 	@Override
 	public void upgradeTo(ChannelHandlerContext ctx, FullHttpResponse upgradeResponse)
 			throws Exception {
 		System.out.println("UPGRADED");
+		httpResponseHandler.channelRead(ctx, upgradeResponse);
+		ctx.pipeline().addLast(httpResponseHandler);
 		latch.countDown();
-//		ChannelHandler removed = ctx.pipeline().remove(HttpClientCodec.class);
-//		
-//		System.out.println("removed: " + removed);
-		
-		
-		
-		
-
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class HijackHttpConnectionHandler implements HttpClientUpgradeHandler.Upg
 	public CharSequence protocol() {
 		return "tcp";
 	}
-	
+
 	public void await() {
 		try {
 			latch.await();
@@ -51,7 +51,7 @@ public class HijackHttpConnectionHandler implements HttpClientUpgradeHandler.Upg
 			throw new RuntimeException(e);
 		}
 	}
-	
-	
+
+
 
 }

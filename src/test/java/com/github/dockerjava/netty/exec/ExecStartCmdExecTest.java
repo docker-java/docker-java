@@ -1,4 +1,4 @@
-package com.github.dockerjava.core.command;
+package com.github.dockerjava.netty.exec;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyString;
@@ -17,10 +17,11 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.ExecCreateCmdResponse;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.core.command.ExecStartResultCallback;
+import com.github.dockerjava.netty.AbstractDockerClientTest;
 
 @Test(groups = "integration")
-public class ExecStartCmdImplTest extends AbstractDockerClientTest {
+public class ExecStartCmdExecTest extends AbstractDockerClientTest {
     @BeforeTest
     public void beforeTest() throws Exception {
         super.beforeTest();
@@ -58,6 +59,7 @@ public class ExecStartCmdImplTest extends AbstractDockerClientTest {
                 new ExecStartResultCallback(System.out, System.err));
 
         InputStream response = dockerClient.copyFileFromContainerCmd(container.getId(), "/execStartTest.log").exec();
+
         Boolean bytesAvailable = response.available() > 0;
         assertTrue(bytesAvailable, "The file was not copied from the container.");
 

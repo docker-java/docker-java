@@ -1,10 +1,12 @@
-package com.github.dockerjava.netty;
+package com.github.dockerjava.netty.exec;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.RemoteApiVersion;
+import com.github.dockerjava.netty.WebTarget;
+
 import org.apache.commons.codec.binary.Base64;
 
 import java.io.IOException;

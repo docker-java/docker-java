@@ -13,19 +13,18 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.channel.unix.DomainSocketAddress;
 import io.netty.channel.unix.UnixChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
-import io.netty.handler.ssl.SslContext;
-import io.netty.handler.ssl.SslContextBuilder;
-import io.netty.handler.ssl.SslProvider;
+import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.ssl.SslHandler;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.security.Security;
 
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.SSLParameters;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
@@ -69,10 +68,25 @@ import com.github.dockerjava.api.command.TopContainerCmd;
 import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
-import com.github.dockerjava.core.CertificateUtils;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.command.ExecCreateCmdImpl;
 import com.github.dockerjava.core.command.ExecStartCmdImpl;
+import com.github.dockerjava.core.command.ExecStartResultCallback;
+import com.github.dockerjava.netty.exec.AuthCmdExec;
+import com.github.dockerjava.netty.exec.CopyFileFromContainerCmdExec;
+import com.github.dockerjava.netty.exec.CreateContainerCmdExec;
+import com.github.dockerjava.netty.exec.ExecCreateCmdExec;
+import com.github.dockerjava.netty.exec.ExecStartCmdExec;
+import com.github.dockerjava.netty.exec.InfoCmdExec;
+import com.github.dockerjava.netty.exec.InspectContainerCmdExec;
+import com.github.dockerjava.netty.exec.InspectExecCmdExec;
+import com.github.dockerjava.netty.exec.InspectImageCmdExec;
+import com.github.dockerjava.netty.exec.KillContainerCmdExec;
+import com.github.dockerjava.netty.exec.LogContainerCmdExec;
+import com.github.dockerjava.netty.exec.RemoveContainerCmdExec;
+import com.github.dockerjava.netty.exec.StartContainerCmdExec;
+import com.github.dockerjava.netty.exec.StopContainerCmdExec;
+import com.github.dockerjava.netty.exec.WaitContainerCmdExec;
 
 /**
  * http://stackoverflow.com/questions/33296749/netty-connect-to-unix-domain- socket-failed
@@ -97,7 +111,9 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     private ChannelProvider channelProvider = new ChannelProvider() {
         @Override
         public Channel getChannel() {
-            return connect();
+            Channel channel = connect();
+            channel.pipeline().addLast(new LoggingHandler(getClass()));
+            return channel;
         }
     };
 
@@ -128,14 +144,14 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     }
 
     private Channel connect(final Bootstrap bootstrap) throws InterruptedException {
-       return nettyInitializer.connect(bootstrap);
+        return nettyInitializer.connect(bootstrap);
     }
 
     private static interface NettyInitializer {
         EventLoopGroup init(final Bootstrap bootstrap, DockerClientConfig dockerClientConfig);
+
         Channel connect(final Bootstrap bootstrap) throws InterruptedException;
     }
-
 
     private class UnixDomainSocketInitializer implements NettyInitializer {
         @Override
@@ -159,14 +175,14 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
     private class InetSocketInitializer implements NettyInitializer {
         @Override
-        public EventLoopGroup init(Bootstrap bootstrap, DockerClientConfig dockerClientConfig) {
+        public EventLoopGroup init(Bootstrap bootstrap, final DockerClientConfig dockerClientConfig) {
             EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
 
             InetAddress addr = InetAddress.getLoopbackAddress();
 
             final SocketAddress proxyAddress = new InetSocketAddress(addr, 8008);
 
-            final SslContext sslCtx = initSslContext(dockerClientConfig);
+            Security.addProvider(new BouncyCastleProvider());
 
             bootstrap.group(eventLoopGroup).channel(NioSocketChannel.class)
                     .handler(new ChannelInitializer<SocketChannel>() {
@@ -174,11 +190,6 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
                         protected void initChannel(final SocketChannel channel) throws Exception {
                             // channel.pipeline().addLast(new
                             // HttpProxyHandler(proxyAddress));
-
-                            if (sslCtx != null) {
-                                channel.pipeline().addLast(sslCtx.newHandler(channel.alloc()));
-                            }
-
                             channel.pipeline().addLast(new HttpClientCodec());
                         }
                     });
@@ -195,35 +206,42 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
                 throw new RuntimeException("no port configured for " + host);
             }
 
-            return bootstrap.connect(host, port).sync().channel();
+            Channel channel = bootstrap.connect(host, port).sync().channel();
+
+            if ("https".equals(dockerClientConfig.getUri().getScheme())) {
+                final SslHandler ssl = initSsl(dockerClientConfig);
+
+                if (ssl != null) {
+                    channel.pipeline().addFirst(ssl);
+                }
+            }
+
+            return channel;
         }
 
-        private SslContext initSslContext(DockerClientConfig dockerClientConfig) {
-            SslContext sslContext = null;
+        private SslHandler initSsl(DockerClientConfig dockerClientConfig) {
+            SslHandler ssl = null;
 
-            String scheme = dockerClientConfig.getUri().getScheme();
+            try {
+                String host = dockerClientConfig.getUri().getHost();
+                int port = dockerClientConfig.getUri().getPort();
 
-            if ("https".equals(scheme) && dockerClientConfig.getDockerCertPath() != null) {
+                SSLContext sslContext = dockerClientConfig.getSslConfig().getSSLContext();
 
-                String dockerCertPath = dockerClientConfig.getDockerCertPath();
+                SSLEngine engine = sslContext.createSSLEngine(host, port);
+                engine.setUseClientMode(true);
+                engine.setSSLParameters(enableHostNameVerification(engine.getSSLParameters()));
 
-                Security.addProvider(new BouncyCastleProvider());
+                // in the future we may use HostnameVerifier like here:
+                // https://github.com/AsyncHttpClient/async-http-client/blob/1.8.x/src/main/java/com/ning/http/client/providers/netty/NettyConnectListener.java#L76
 
-                try {
-                    TrustManagerFactory tmFactory = TrustManagerFactory.getInstance("PKIX");
-                    tmFactory.init(CertificateUtils.createTrustStore(dockerCertPath));
+                ssl = new SslHandler(engine);
 
-                    KeyManagerFactory kmFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-                    kmFactory.init(CertificateUtils.createKeyStore(dockerCertPath), "docker".toCharArray());
-
-                    sslContext = SslContextBuilder.forClient().sslProvider(SslProvider.JDK).keyManager(kmFactory)
-                            .trustManager(tmFactory).build();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-            return sslContext;
+
+            return ssl;
         }
     }
 
@@ -233,15 +251,19 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         return dockerClientConfig;
     }
 
+    public SSLParameters enableHostNameVerification(SSLParameters sslParameters) {
+        sslParameters.setEndpointIdentificationAlgorithm("HTTPS");
+        return sslParameters;
+    }
+
     @Override
     public AuthCmd.Exec createAuthCmdExec() {
-        return null; // new AuthCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new AuthCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public InfoCmd.Exec createInfoCmdExec() {
-        return new InfoCmdExec(new WebTarget(channelProvider), getDockerClientConfig());
+        return new InfoCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
@@ -300,8 +322,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
     @Override
     public InspectImageCmd.Exec createInspectImageCmdExec() {
-        return null; // new InspectImageCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new InspectImageCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
@@ -312,37 +333,32 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
     @Override
     public CreateContainerCmd.Exec createCreateContainerCmdExec() {
-        return null; // new CreateContainerCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new CreateContainerCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public StartContainerCmd.Exec createStartContainerCmdExec() {
-        return null; // new StartContainerCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new StartContainerCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public InspectContainerCmd.Exec createInspectContainerCmdExec() {
-        return null; // new InspectContainerCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new InspectContainerCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public ExecCreateCmd.Exec createExecCmdExec() {
-        return new ExecCreateCmdExec(new WebTarget(channelProvider), getDockerClientConfig());
+        return new ExecCreateCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public RemoveContainerCmd.Exec createRemoveContainerCmdExec() {
-        return null; // new RemoveContainerCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new RemoveContainerCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public WaitContainerCmd.Exec createWaitContainerCmdExec() {
-        return null; // new WaitContainerCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new WaitContainerCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
@@ -353,32 +369,27 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
     @Override
     public ExecStartCmd.Exec createExecStartCmdExec() {
-
-        return new ExecStartCmdExec(new WebTarget(channelProvider), getDockerClientConfig());
+        return new ExecStartCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public InspectExecCmd.Exec createInspectExecCmdExec() {
-        return null; // new InspectExecCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new InspectExecCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public LogContainerCmd.Exec createLogContainerCmdExec() {
-        return null; // new LogContainerCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new LogContainerCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public CopyFileFromContainerCmd.Exec createCopyFileFromContainerCmdExec() {
-        return null; // new CopyFileFromContainerCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new CopyFileFromContainerCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public StopContainerCmd.Exec createStopContainerCmdExec() {
-        return null; // new StopContainerCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new StopContainerCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
@@ -389,8 +400,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
     @Override
     public KillContainerCmd.Exec createKillContainerCmdExec() {
-        return null; // new KillContainerCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new KillContainerCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
@@ -456,13 +466,18 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         eventLoopGroup.shutdownGracefully();
     }
 
+    private WebTarget getBaseResource() {
+        return new WebTarget(channelProvider);
+    }
+
     public static void main(String[] args) throws IOException {
         DockerCmdExecFactory execFactory = new DockerCmdExecFactoryImpl();
         // execFactory.init(new
         // DockerClientConfigBuilder().withUri("unix:///var/run/docker.sock").build());
         // execFactory.init(new DockerClientConfigBuilder().withUri("http://localhost:2375").build());
 
-        DockerClientConfig config = DockerClientConfig.createDefaultConfigBuilder().withUri("https://192.168.59.103:2376").build();
+        DockerClientConfig config = DockerClientConfig.createDefaultConfigBuilder()
+                .withUri("https://192.168.59.103:2376").build();
 
         execFactory.init(config);
 
@@ -490,7 +505,18 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         ExecStartCmd execStartCmd = new ExecStartCmdImpl(execStart, execCreateCmdResponse.getId()).withDetach(false)
                 .withTty(true);
 
-        InputStream response = execStart.exec(execStartCmd);
+        ExecStartResultCallback callback = new ExecStartResultCallback(System.out, System.err);
+
+        execStart.exec(execStartCmd, callback);
+
+        try {
+            callback.awaitCompletion();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        System.err.println("main finished");
 
         // FrameReader frameReader = new FrameReader(response);
         //

@@ -1,9 +1,12 @@
-package com.github.dockerjava.netty;
+package com.github.dockerjava.netty.exec;
 
 import com.github.dockerjava.api.command.ExecCreateCmd;
 import com.github.dockerjava.api.command.ExecCreateCmdResponse;
+import com.github.dockerjava.api.command.ExecCreateCmd.Exec;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.netty.AbstrSyncDockerCmdExec;
+import com.github.dockerjava.netty.MediaType;
+import com.github.dockerjava.netty.WebTarget;
+import com.github.dockerjava.netty.exec.AbstrSyncDockerCmdExec;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

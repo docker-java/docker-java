@@ -1,4 +1,4 @@
-package com.github.dockerjava.core.command;
+package com.github.dockerjava.netty.exec;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.security.SecureRandom;
 
@@ -21,11 +20,13 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.ExecCreateCmdResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.InspectExecResponse;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.core.command.ExecStartResultCallback;
+import com.github.dockerjava.netty.AbstractDockerClientTest;
 import com.github.dockerjava.test.serdes.JSONTestHelper;
 
 @Test(groups = "integration")
-public class InspectExecCmdImplTest extends AbstractDockerClientTest {
+public class InspectExecCmdExecTest extends AbstractDockerClientTest {
+
     @BeforeTest
     public void beforeTest() throws Exception {
         super.beforeTest();
@@ -69,7 +70,6 @@ public class InspectExecCmdImplTest extends AbstractDockerClientTest {
         // Check that file does not exist
         dockerClient.execStartCmd(container.getId())
                 .withExecId(checkFileCmdCreateResponse.getId()).exec(new ExecStartResultCallback(System.out, System.err));
-
 
         InspectExecResponse first = dockerClient.inspectExecCmd(checkFileCmdCreateResponse.getId()).exec();
         assertThat(first.getExitCode(), is(1));

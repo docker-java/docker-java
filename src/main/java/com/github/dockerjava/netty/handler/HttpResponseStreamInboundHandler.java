@@ -1,5 +1,9 @@
 package com.github.dockerjava.netty.handler;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.CountDownLatch;
@@ -7,87 +11,99 @@ import java.util.concurrent.LinkedTransferQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.apache.commons.io.HexDump;
-
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
-
 public class HttpResponseStreamInboundHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
-	private CountDownLatch latch = new CountDownLatch(1);
-	private HttpResponseInputStream stream = new HttpResponseInputStream();
+    private CountDownLatch latch = new CountDownLatch(1);
 
-	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
+    private HttpResponseInputStream stream = new HttpResponseInputStream();
 
-		latch.countDown();
-		stream.write(msg.copy());
+    @Override
+    protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
 
-		//System.out.println("got data: " + msg.readableBytes());
+        latch.countDown();
+        stream.write(msg.copy());
+    }
 
-		if (msg.readableBytes() == 0) {			
-			stream.close();
-		}
-	}
+    @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+        stream.close();
+        super.channelReadComplete(ctx);
+    }
 
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		cause.printStackTrace();
-		ctx.close();
-	}
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        cause.printStackTrace();
+        ctx.close();
+    }
 
-	public InputStream getInputStream() {
-		try {
-			latch.await();
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
-		return stream;
-	}
+    public InputStream getInputStream() {
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return stream;
+    }
 
-	public static class HttpResponseInputStream extends InputStream {
+    public static class HttpResponseInputStream extends InputStream {
 
-		private AtomicBoolean closed = new AtomicBoolean(false);
+        private AtomicBoolean closed = new AtomicBoolean(false);
 
-		private LinkedTransferQueue<ByteBuf> queue = new LinkedTransferQueue<ByteBuf>();
+        private LinkedTransferQueue<ByteBuf> queue = new LinkedTransferQueue<ByteBuf>();
 
-		private ByteBuf current = null;
+        private ByteBuf current = null;
 
-		public void write(ByteBuf byteBuf) {
-			queue.put(byteBuf);
-		}
+        public void write(ByteBuf byteBuf) {
+            queue.put(byteBuf);
+        }
 
-		@Override
-		public void close() throws IOException {
-			closed.set(true);
-			super.close();
-		}
+        @Override
+        public void close() throws IOException {
+            closed.set(true);
+            super.close();
+        }
 
-		@Override
-		public int read() throws IOException {
-			if (closed.get())
-				return -1;
+        @Override
+        public int available() throws IOException {
+            poll();
+            return readableBytes();
+        }
 
-			if (current == null || current.readableBytes() == 0) {
-				try {
-					current = queue.poll(10, TimeUnit.SECONDS);
-				} catch (InterruptedException e) {
-					throw new RuntimeException(e);
-				}
-			}
-			
-			if(current != null && current.readableBytes() > 0) {
-				return current.readByte();
-			} else {
-				return read();
-			}
-			
-			
+        private int readableBytes() {
+            if (current != null)
+                return current.readableBytes();
+            else
+                return 0;
+        }
 
-			
-		}
+        @Override
+        public int read() throws IOException {
 
-	}
+            poll();
+
+            if (readableBytes() == 0) {
+                if (closed.get())
+                    return -1;
+            }
+
+            if (current != null && current.readableBytes() > 0) {
+                return current.readByte();
+            } else {
+                return read();
+            }
+
+        }
+
+        private void poll() {
+            if (readableBytes() == 0) {
+                try {
+                    current = queue.poll(50, TimeUnit.MILLISECONDS);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+    }
 
 }
