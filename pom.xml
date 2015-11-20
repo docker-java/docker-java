@@ -373,25 +373,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>findbugs-maven-plugin</artifactId>
-				<version>3.0.2</version>
-				<configuration>
-					<effort>Max</effort>
-					<threshold>Low</threshold>
-					<xmlOutput>true</xmlOutput>
-					<!-- until all will be fixed -->
-					<failOnError>false</failOnError>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
 
@@ -422,6 +403,9 @@
 		</profile>
 		<profile>
 			<id>docker-java-analyses</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<build>
 				<plugins>
 					<plugin>
@@ -446,6 +430,25 @@
 								src/test/resources/checkstyle/checkstyle-config.xml
 							</configLocation>
 						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>findbugs-maven-plugin</artifactId>
+						<version>3.0.2</version>
+						<configuration>
+							<effort>Max</effort>
+							<threshold>Low</threshold>
+							<xmlOutput>true</xmlOutput>
+							<!-- until all will be fixed -->
+							<failOnError>false</failOnError>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>check</goal>
+								</goals>
+							</execution>
+						</executions>
 					</plugin>
 				</plugins>
 			</build>
