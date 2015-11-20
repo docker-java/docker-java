@@ -5,9 +5,9 @@ import java.util.List;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.api.InternalServerErrorException;
-import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.exception.InternalServerErrorException;
+import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.ChangeLog;
 
 public interface ContainerDiffCmd extends SyncDockerCmd<List<ChangeLog>> {

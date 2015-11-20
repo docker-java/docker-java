@@ -1,6 +1,6 @@
 package com.github.dockerjava.jaxrs;
 
-import com.github.dockerjava.api.UnauthorizedException;
+import com.github.dockerjava.api.exception.UnauthorizedException;
 import com.github.dockerjava.api.command.AuthCmd;
 import com.github.dockerjava.api.model.AuthResponse;
 import com.github.dockerjava.core.DockerClientConfig;

@@ -1,7 +1,7 @@
 package com.github.dockerjava.core.command;
 
-import com.github.dockerjava.api.ConflictException;
-import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.exception.ConflictException;
+import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.AccessMode;
@@ -45,8 +45,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.github.dockerjava.api.model.Capability.MKNOD;
-import static com.github.dockerjava.api.model.Capability.NET_ADMIN;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @Test(groups = "integration")

@@ -1,6 +1,6 @@
-package com.github.dockerjava.core;
+package com.github.dockerjava.core.util;
 
-import static com.github.dockerjava.core.FilePathUtil.relativize;
+import static com.github.dockerjava.core.util.FilePathUtil.relativize;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -13,6 +13,9 @@ import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.io.FileUtils;
 
 public class CompressArchiveUtil {
+    private CompressArchiveUtil() {
+        // utility class
+    }
 
     public static File archiveTARFiles(File base, Iterable<File> files, String archiveNameWithOutExtension)
             throws IOException {

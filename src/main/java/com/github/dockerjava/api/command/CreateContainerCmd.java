@@ -5,8 +5,8 @@ import java.util.Map;
 
 import javax.annotation.CheckForNull;
 
-import com.github.dockerjava.api.ConflictException;
-import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.exception.ConflictException;
+import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Capability;
 import com.github.dockerjava.api.model.Device;

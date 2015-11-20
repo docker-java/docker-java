@@ -24,7 +24,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.DockerClientException;
+import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
@@ -35,7 +35,7 @@ import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.github.dockerjava.core.CompressArchiveUtil;
+import com.github.dockerjava.core.util.CompressArchiveUtil;
 
 @Test(groups = "integration")
 public class BuildImageCmdImplTest extends AbstractDockerClientTest {

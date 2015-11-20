@@ -1,7 +1,7 @@
 package com.github.dockerjava.jaxrs;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
-import com.github.dockerjava.api.DockerClientException;
+import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
 import com.github.dockerjava.api.command.BuildImageCmd;
@@ -40,7 +40,6 @@ import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.RemoteApiVersion;
 import com.github.dockerjava.jaxrs.connector.ApacheConnectorProvider;
 import com.github.dockerjava.jaxrs.filter.JsonClientFilter;
 import com.github.dockerjava.jaxrs.filter.ResponseStatusExceptionFilter;

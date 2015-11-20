@@ -9,7 +9,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.UnauthorizedException;
+import com.github.dockerjava.api.exception.UnauthorizedException;
 import com.github.dockerjava.api.model.AuthResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.core.DockerClientBuilder;

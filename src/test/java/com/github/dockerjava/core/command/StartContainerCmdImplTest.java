@@ -24,9 +24,9 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.api.InternalServerErrorException;
-import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.exception.InternalServerErrorException;
+import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.StartContainerCmd;

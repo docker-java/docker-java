@@ -1,6 +1,6 @@
 package com.github.dockerjava.core;
 
-import com.github.dockerjava.api.DockerClientException;
+import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.core.NameParser.HostnameReposName;
