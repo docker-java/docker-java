@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.github.dockerjava.core.RemoteApiVersion;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -393,6 +395,16 @@ public class InspectContainerResponse {
         @CheckForNull
         public String getFinishedAt() {
             return finishedAt;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return EqualsBuilder.reflectionEquals(this, o);
+        }
+
+        @Override
+        public int hashCode() {
+            return HashCodeBuilder.reflectionHashCode(this);
         }
 
         @Override
