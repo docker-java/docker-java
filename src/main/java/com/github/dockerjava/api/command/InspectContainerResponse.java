@@ -3,6 +3,8 @@ package com.github.dockerjava.api.command;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.CheckForNull;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -258,46 +260,57 @@ public class InspectContainerResponse {
         @JsonProperty("FinishedAt")
         private String finishedAt;
 
+        @CheckForNull
         public String getStatus() {
             return status;
         }
         
+        @CheckForNull
         public Boolean isRunning() {
             return running;
         }
 
+        @CheckForNull
         public Boolean isPaused() {
             return paused;
         }
         
+        @CheckForNull
         public Boolean isRestarting() {
             return restarting;
         }
         
+        @CheckForNull
         public Boolean isOOMKilled() {
             return oomKilled;
         }
         
+        @CheckForNull
         public Boolean isDead() {
             return dead;
         }
 
+        @CheckForNull
         public Integer getPid() {
             return pid;
         }
 
+        @CheckForNull
         public Integer getExitCode() {
             return exitCode;
         }
 
+        @CheckForNull
         public String getError() {
             return error;
         }
         
+        @CheckForNull
         public String getStartedAt() {
             return startedAt;
         }
 
+        @CheckForNull
         public String getFinishedAt() {
             return finishedAt;
         }
