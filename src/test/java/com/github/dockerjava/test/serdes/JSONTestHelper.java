@@ -25,7 +25,6 @@ import org.apache.commons.io.IOUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.api.command.CommandJSONSamples;
 
 /**
  * Provides helper methods for serialization-deserialization tests
@@ -45,7 +44,7 @@ public class JSONTestHelper {
      *             JSON Conversion error
      */
     public static String readString(JSONResourceRef resource) throws IOException {
-        InputStream istream = CommandJSONSamples.class.getResourceAsStream(resource.getFileName());
+        InputStream istream = resource.getResourceClass().getResourceAsStream(resource.getFileName());
         if (istream == null) {
             throw new IOException("Cannot retrieve resource " + resource.getFileName());
         }
