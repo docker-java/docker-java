@@ -22,8 +22,9 @@ public class PullResponseItem extends ResponseItem {
             return false;
         }
 
-        return (getStatus().contains("Download complete") || getStatus().contains("Image is up to date") || getStatus()
-                .contains("Downloaded newer image"));
+        return (getStatus().contains("Download complete") || getStatus().contains("Image is up to date")
+                || getStatus().contains("Downloaded newer image")
+                || getStatus().contains("this image was pulled from a legacy registry"));
     }
 
 }
