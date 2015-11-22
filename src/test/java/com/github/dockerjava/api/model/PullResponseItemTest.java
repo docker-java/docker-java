@@ -28,8 +28,7 @@ import org.testng.annotations.Test;
  *
  * @author Zach Marshall
  */
-public class PullResponseItemTest
-{
+public class PullResponseItemTest {
     @Test
     public void pullNewerImage()
         throws IOException

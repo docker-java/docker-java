@@ -30,8 +30,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Provides helper methods for serialization-deserialization tests
  * 
  * @author Oleg Nenashev
- * @since TODO
  */
+//TODO: Create helper that loads json files from simple folder structure using a type,
+// version number, and name.
 public class JSONTestHelper {
 
     /**
@@ -44,11 +45,12 @@ public class JSONTestHelper {
      *             JSON Conversion error
      */
     public static String readString(JSONResourceRef resource) throws IOException {
-        InputStream istream = resource.getResourceClass().getResourceAsStream(resource.getFileName());
-        if (istream == null) {
-            throw new IOException("Cannot retrieve resource " + resource.getFileName());
+        try (InputStream istream = resource.getResourceClass().getResourceAsStream(resource.getFileName())) {
+            if (istream == null) {
+                throw new IOException("Cannot retrieve resource " + resource.getFileName());
+            }
+            return IOUtils.toString(istream, "UTF-8");
         }
-        return IOUtils.toString(istream, "UTF-8");
     }
 
     /**
