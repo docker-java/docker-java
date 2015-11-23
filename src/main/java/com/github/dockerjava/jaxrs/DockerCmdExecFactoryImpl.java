@@ -1,7 +1,7 @@
 package com.github.dockerjava.jaxrs;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
-import com.github.dockerjava.api.DockerClientException;
+import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
 import com.github.dockerjava.api.command.BuildImageCmd;

@@ -5,7 +5,7 @@ import java.io.InputStream;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.exception.NotFoundException;
 
 public interface CopyFileFromContainerCmd extends SyncDockerCmd<InputStream> {
 

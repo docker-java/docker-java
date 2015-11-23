@@ -4,7 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.InputStream;
 
-import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.command.ExecStartCmd;
 
 public class ExecStartCmdImpl extends AbstrDockerCmd<ExecStartCmd, InputStream> implements ExecStartCmd {
@@ -53,7 +53,7 @@ public class ExecStartCmdImpl extends AbstrDockerCmd<ExecStartCmd, InputStream> 
     }
 
     /**
-     * @throws com.github.dockerjava.api.NotFoundException
+     * @throws NotFoundException
      *             No such exec instance
      */
     @Override

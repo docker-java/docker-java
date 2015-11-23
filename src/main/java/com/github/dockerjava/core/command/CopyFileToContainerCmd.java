@@ -1,8 +1,8 @@
 package com.github.dockerjava.core.command;
 
-import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.DockerCmdSyncExec;
 import com.github.dockerjava.api.command.SyncDockerCmd;
+import com.github.dockerjava.api.exception.NotFoundException;
 
 public interface CopyFileToContainerCmd extends SyncDockerCmd<Void> {
 

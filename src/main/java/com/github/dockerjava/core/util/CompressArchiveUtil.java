@@ -1,6 +1,6 @@
-package com.github.dockerjava.core;
+package com.github.dockerjava.core.util;
 
-import static com.github.dockerjava.core.FilePathUtil.relativize;
+import static com.github.dockerjava.core.util.FilePathUtil.relativize;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -19,9 +19,13 @@ import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
 import org.apache.commons.io.FileUtils;
 
+import com.github.dockerjava.core.TarDirWalker;
 import com.google.common.io.ByteStreams;
 
 public class CompressArchiveUtil {
+    private CompressArchiveUtil() {
+        // utility class
+    }
 
     static void putTarEntry(TarArchiveOutputStream tarOutputStream, TarArchiveEntry tarEntry, Path file) throws IOException {
         tarEntry.setSize(Files.size(file));

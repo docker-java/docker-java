@@ -1,4 +1,4 @@
-package com.github.dockerjava.core;
+package com.github.dockerjava.core.util;
 
 import org.apache.commons.io.IOUtils;
 import org.bouncycastle.cert.X509CertificateHolder;
@@ -26,6 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CertificateUtils {
+    private CertificateUtils() {
+        // utility class
+    }
 
     public static boolean verifyCertificatesExist(String dockerCertPath) {
         String[] files = { "ca.pem", "cert.pem", "key.pem" };

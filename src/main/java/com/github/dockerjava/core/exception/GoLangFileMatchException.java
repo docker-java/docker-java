@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2014 SignalFuse, Inc.
  */
-package com.github.dockerjava.core;
+package com.github.dockerjava.core.exception;
 
 public class GoLangFileMatchException extends IllegalArgumentException {
 

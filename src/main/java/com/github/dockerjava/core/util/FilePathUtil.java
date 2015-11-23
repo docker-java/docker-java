@@ -1,12 +1,15 @@
-package com.github.dockerjava.core;
+package com.github.dockerjava.core.util;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import com.github.dockerjava.api.DockerClientException;
+import com.github.dockerjava.api.exception.DockerClientException;
 
 public class FilePathUtil {
+    private FilePathUtil() {
+        // utility class
+    }
 
     /**
      * Return the relative path. Path elements are separated with / char.

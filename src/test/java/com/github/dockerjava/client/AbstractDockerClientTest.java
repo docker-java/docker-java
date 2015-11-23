@@ -21,7 +21,7 @@ import org.testng.Assert;
 import org.testng.ITestResult;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.Volume;

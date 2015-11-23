@@ -1,4 +1,4 @@
-package com.github.dockerjava.api;
+package com.github.dockerjava.api.exception;
 
 /**
  *

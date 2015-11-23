@@ -4,7 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.exception.NotFoundException;
 
 public class CopyFileToContainerCmdImpl extends AbstrDockerCmd<CopyFileToContainerCmd, Void> implements CopyFileToContainerCmd {
 
@@ -88,7 +88,7 @@ public class CopyFileToContainerCmdImpl extends AbstrDockerCmd<CopyFileToContain
     }
 
     /**
-     * @throws NotFoundException No such container
+     * @throws com.github.dockerjava.api.exception.NotFoundException No such container
      */
     @Override
     public Void exec() throws NotFoundException {
