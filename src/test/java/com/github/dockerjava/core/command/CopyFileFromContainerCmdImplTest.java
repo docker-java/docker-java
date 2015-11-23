@@ -14,11 +14,13 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
-public class CopyArchiveToContainerCmdImplTest extends AbstractDockerClientTest {
+@Test(groups = "integration")
+public class CopyFileFromContainerCmdImplTest extends AbstractDockerClientTest {
+
     @BeforeTest
     public void beforeTest() throws Exception {
         super.beforeTest();
@@ -40,7 +42,7 @@ public class CopyArchiveToContainerCmdImplTest extends AbstractDockerClientTest 
     }
 
     @Test
-    public void copyToContainer() throws Exception {
+    public void copyFromContainer() throws Exception {
         // TODO extract this into a shared method
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
                 .withName("docker-java-itest-copyFromContainer").withCmd("touch", "/copyFromContainer").exec();
@@ -50,20 +52,22 @@ public class CopyArchiveToContainerCmdImplTest extends AbstractDockerClientTest 
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        dockerClient.copyArchiveToContainerCmd(container.getId(), "src/test/resources/testReadFile").exec();
-        try (InputStream response = dockerClient.copyArchiveFromContainerCmd(container.getId(), "testReadFile").exec()) {
-            boolean bytesAvailable = response.available() > 0;
-            assertTrue(bytesAvailable, "The file was not copied to the container.");
-        }
+        InputStream response = dockerClient.copyFileFromContainerCmd(container.getId(), "/copyFromContainer").exec();
+        Boolean bytesAvailable = response.available() > 0;
+        assertTrue(bytesAvailable, "The file was not copied from the container.");
+
+        // read the stream fully. Otherwise, the underlying stream will not be closed.
+        String responseAsString = asString(response);
+        assertNotNull(responseAsString);
+        assertTrue(responseAsString.length() > 0);
     }
 
     @Test
-    public void copyToNonExistingContainer() throws Exception {
+    public void copyFromNonExistingContainer() throws Exception {
         try {
-            dockerClient.copyArchiveFromContainerCmd("non-existing", "/test").exec();
+            dockerClient.copyFileFromContainerCmd("non-existing", "/test").exec();
             fail("expected NotFoundException");
         } catch (NotFoundException ignored) {
         }
     }
-
 }

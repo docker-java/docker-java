@@ -1,6 +1,4 @@
-package com.github.dockerjava.core;
-
-import static com.github.dockerjava.core.FilePathUtil.relativize;
+package com.github.dockerjava.core.util;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -27,14 +25,14 @@ public class TarDirWalker extends SimpleFileVisitor<Path> {
     @Override
     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
         if (!dir.equals(basePath)) {
-            tarArchiveOutputStream.putArchiveEntry(new TarArchiveEntry(relativize(basePath, dir)));
+            tarArchiveOutputStream.putArchiveEntry(new TarArchiveEntry(FilePathUtil.relativize(basePath, dir)));
         }
         return FileVisitResult.CONTINUE;
     }
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-        CompressArchiveUtil.putTarEntry(tarArchiveOutputStream, new TarArchiveEntry(relativize(basePath, file)), file);
+        CompressArchiveUtil.putTarEntry(tarArchiveOutputStream, new TarArchiveEntry(FilePathUtil.relativize(basePath, file)), file);
         return FileVisitResult.CONTINUE;
     }
 

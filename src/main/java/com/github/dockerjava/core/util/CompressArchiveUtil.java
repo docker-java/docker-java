@@ -19,7 +19,6 @@ import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
 import org.apache.commons.io.FileUtils;
 
-import com.github.dockerjava.core.TarDirWalker;
 import com.google.common.io.ByteStreams;
 
 public class CompressArchiveUtil {

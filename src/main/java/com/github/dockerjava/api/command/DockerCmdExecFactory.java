@@ -55,6 +55,8 @@ public interface DockerCmdExecFactory extends Closeable {
 
     public LogContainerCmd.Exec createLogContainerCmdExec();
 
+    public CopyFileFromContainerCmd.Exec createCopyFileFromContainerCmdExec();
+
     public CopyArchiveFromContainerCmd.Exec createCopyArchiveFromContainerCmdExec();
 
     public CopyArchiveToContainerCmd.Exec createCopyArchiveToContainerCmdExec();
