@@ -10,7 +10,7 @@ import com.github.dockerjava.api.command.AuthCmd;
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.CommitCmd;
 import com.github.dockerjava.api.command.ContainerDiffCmd;
-import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
+import com.github.dockerjava.api.command.CopyArchiveFromContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateImageCmd;
 import com.github.dockerjava.api.command.EventsCmd;
@@ -44,7 +44,7 @@ import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Identifier;
-import com.github.dockerjava.core.command.CopyFileToContainerCmd;
+import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 
 // https://godoc.org/github.com/fsouza/go-dockerclient
 public interface DockerClient extends Closeable {
@@ -120,9 +120,9 @@ public interface DockerClient extends Closeable {
 
     public LogContainerCmd logContainerCmd(String containerId);
 
-    public CopyFileFromContainerCmd copyFileFromContainerCmd(String containerId, String resource);
+    public CopyArchiveFromContainerCmd copyArchiveFromContainerCmd(String containerId, String resource);
 
-    public CopyFileToContainerCmd copyFileToContainerCmd(String containerId, String hostResource);
+    public CopyArchiveToContainerCmd copyArchiveToContainerCmd(String containerId, String hostResource);
 
     public ContainerDiffCmd containerDiffCmd(String containerId);
 

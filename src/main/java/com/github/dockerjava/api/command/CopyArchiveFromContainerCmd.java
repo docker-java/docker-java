@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
 
 import com.github.dockerjava.api.exception.NotFoundException;
 
-public interface CopyFileFromContainerCmd extends SyncDockerCmd<InputStream> {
+public interface CopyArchiveFromContainerCmd extends SyncDockerCmd<InputStream> {
 
     @CheckForNull
     public String getContainerId();
@@ -18,11 +18,11 @@ public interface CopyFileFromContainerCmd extends SyncDockerCmd<InputStream> {
     @CheckForNull
     public String getResource();
 
-    public CopyFileFromContainerCmd withContainerId(@Nonnull String containerId);
+    public CopyArchiveFromContainerCmd withContainerId(@Nonnull String containerId);
 
-    public CopyFileFromContainerCmd withHostPath(String hostPath);
+    public CopyArchiveFromContainerCmd withHostPath(String hostPath);
 
-    public CopyFileFromContainerCmd withResource(@Nonnull String resource);
+    public CopyArchiveFromContainerCmd withResource(@Nonnull String resource);
 
     /**
      * Its the responsibility of the caller to consume and/or close the {@link InputStream} to prevent connection leaks.
@@ -33,6 +33,6 @@ public interface CopyFileFromContainerCmd extends SyncDockerCmd<InputStream> {
     @Override
     public InputStream exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdSyncExec<CopyFileFromContainerCmd, InputStream> {
+    public static interface Exec extends DockerCmdSyncExec<CopyArchiveFromContainerCmd, InputStream> {
     }
 }

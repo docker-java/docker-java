@@ -18,7 +18,7 @@ import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
-public class CopyFileToContainerCmdImplTest extends AbstractDockerClientTest {
+public class CopyArchiveToContainerCmdImplTest extends AbstractDockerClientTest {
     @BeforeTest
     public void beforeTest() throws Exception {
         super.beforeTest();
@@ -50,8 +50,8 @@ public class CopyFileToContainerCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        dockerClient.copyFileToContainerCmd(container.getId(), "src/test/resources/testReadFile").exec();
-        try (InputStream response = dockerClient.copyFileFromContainerCmd(container.getId(), "testReadFile").exec()) {
+        dockerClient.copyArchiveToContainerCmd(container.getId(), "src/test/resources/testReadFile").exec();
+        try (InputStream response = dockerClient.copyArchiveFromContainerCmd(container.getId(), "testReadFile").exec()) {
             boolean bytesAvailable = response.available() > 0;
             assertTrue(bytesAvailable, "The file was not copied to the container.");
         }
@@ -60,7 +60,7 @@ public class CopyFileToContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void copyToNonExistingContainer() throws Exception {
         try {
-            dockerClient.copyFileFromContainerCmd("non-existing", "/test").exec();
+            dockerClient.copyArchiveFromContainerCmd("non-existing", "/test").exec();
             fail("expected NotFoundException");
         } catch (NotFoundException ignored) {
         }

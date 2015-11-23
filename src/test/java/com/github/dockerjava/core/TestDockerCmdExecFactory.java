@@ -11,7 +11,7 @@ import com.github.dockerjava.api.command.AuthCmd.Exec;
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.CommitCmd;
 import com.github.dockerjava.api.command.ContainerDiffCmd;
-import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
+import com.github.dockerjava.api.command.CopyArchiveFromContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.CreateImageCmd;
@@ -46,7 +46,7 @@ import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.model.BuildResponseItem;
-import com.github.dockerjava.core.command.CopyFileToContainerCmd;
+import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 
 /**
  * Special {@link DockerCmdExecFactory} implementation that collects container and image creations while test execution
@@ -238,13 +238,13 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     @Override
-    public CopyFileFromContainerCmd.Exec createCopyFileFromContainerCmdExec() {
-        return delegate.createCopyFileFromContainerCmdExec();
+    public CopyArchiveFromContainerCmd.Exec createCopyArchiveFromContainerCmdExec() {
+        return delegate.createCopyArchiveFromContainerCmdExec();
     }
 
     @Override
-    public CopyFileToContainerCmd.Exec createCopyFileToContainerCmdExec() {
-        return delegate.createCopyFileToContainerCmdExec();
+    public CopyArchiveToContainerCmd.Exec createCopyArchiveToContainerCmdExec() {
+        return delegate.createCopyArchiveToContainerCmdExec();
     }
 
     @Override

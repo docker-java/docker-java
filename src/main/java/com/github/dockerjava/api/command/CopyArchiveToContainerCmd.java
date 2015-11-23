@@ -1,10 +1,8 @@
-package com.github.dockerjava.core.command;
+package com.github.dockerjava.api.command;
 
-import com.github.dockerjava.api.command.DockerCmdSyncExec;
-import com.github.dockerjava.api.command.SyncDockerCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
 
-public interface CopyFileToContainerCmd extends SyncDockerCmd<Void> {
+public interface CopyArchiveToContainerCmd extends SyncDockerCmd<Void> {
 
     public String getContainerId();
 
@@ -20,7 +18,7 @@ public interface CopyFileToContainerCmd extends SyncDockerCmd<Void> {
      * @param containerId id of the container to copy file to
      * @return this
      */
-    public CopyFileToContainerCmd withContainerId(String containerId);
+    public CopyArchiveToContainerCmd withContainerId(String containerId);
 
     /**
      * Set path to the resource on the host machine
@@ -28,7 +26,7 @@ public interface CopyFileToContainerCmd extends SyncDockerCmd<Void> {
      * @param resource path to the resource on the host machine
      * @return this
      */
-    public CopyFileToContainerCmd withHostResource(String resource);
+    public CopyArchiveToContainerCmd withHostResource(String resource);
 
     /**
      * If set to true then it will be an error if unpacking the given content would cause an existing directory to be replaced with a non-directory and vice versa
@@ -36,7 +34,7 @@ public interface CopyFileToContainerCmd extends SyncDockerCmd<Void> {
      * @param noOverwriteDirNonDir flag to know if non directory can be overwritten
      * @return this
      */
-    public CopyFileToContainerCmd withNoOverwriteDirNonDir(boolean noOverwriteDirNonDir);
+    public CopyArchiveToContainerCmd withNoOverwriteDirNonDir(boolean noOverwriteDirNonDir);
 
     /**
      * If this flag is set to true, all children of the local directory will be copied to the remote without the root directory.
@@ -47,16 +45,16 @@ public interface CopyFileToContainerCmd extends SyncDockerCmd<Void> {
      * @param dirChildrenOnly if root directory is ignored
      * @return this
      */
-    public CopyFileToContainerCmd withDirChildrenOnly(boolean dirChildrenOnly);
+    public CopyArchiveToContainerCmd withDirChildrenOnly(boolean dirChildrenOnly);
 
     public String getRemotePath();
 
-    public CopyFileToContainerCmd withRemotePath(String remotePath);
+    public CopyArchiveToContainerCmd withRemotePath(String remotePath);
 
     @Override
     public Void exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdSyncExec<CopyFileToContainerCmd, Void> {
+    public static interface Exec extends DockerCmdSyncExec<CopyArchiveToContainerCmd, Void> {
     }
 
 }

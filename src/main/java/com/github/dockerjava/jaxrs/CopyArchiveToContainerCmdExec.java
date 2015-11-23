@@ -13,27 +13,27 @@ import javax.ws.rs.client.WebTarget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.api.DockerClientException;
-import com.github.dockerjava.core.CompressArchiveUtil;
+import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
+import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.command.CopyFileToContainerCmd;
+import com.github.dockerjava.core.util.CompressArchiveUtil;
 
-public class CopyFileToContainerCmdExec extends AbstrSyncDockerCmdExec<CopyFileToContainerCmd, Void> implements CopyFileToContainerCmd.Exec {
+public class CopyArchiveToContainerCmdExec extends AbstrSyncDockerCmdExec<CopyArchiveToContainerCmd, Void> implements CopyArchiveToContainerCmd.Exec {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CopyFileFromContainerCmdExec.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CopyArchiveFromContainerCmdExec.class);
 
-    public CopyFileToContainerCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
+    public CopyArchiveToContainerCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
         super(baseResource, dockerClientConfig);
     }
 
-    private InputStream buildUploadStream(CopyFileToContainerCmd command) throws IOException {
+    private InputStream buildUploadStream(CopyArchiveToContainerCmd command) throws IOException {
         Path toUpload = Files.createTempFile("docker-java", ".tar.gz");
         CompressArchiveUtil.tar(Paths.get(command.getHostResource()), toUpload, true, command.isDirChildrenOnly());
         return Files.newInputStream(toUpload);
     }
 
     @Override
-    protected Void execute(CopyFileToContainerCmd command) {
+    protected Void execute(CopyArchiveToContainerCmd command) {
         WebTarget webResource = getBaseResource().path("/containers/{id}/archive").resolveTemplate("id",
                 command.getContainerId());
 

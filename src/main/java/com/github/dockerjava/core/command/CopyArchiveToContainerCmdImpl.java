@@ -4,9 +4,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
 
-public class CopyFileToContainerCmdImpl extends AbstrDockerCmd<CopyFileToContainerCmd, Void> implements CopyFileToContainerCmd {
+public class CopyArchiveToContainerCmdImpl extends AbstrDockerCmd<CopyArchiveToContainerCmd, Void> implements CopyArchiveToContainerCmd {
 
     private String containerId;
 
@@ -18,21 +19,21 @@ public class CopyFileToContainerCmdImpl extends AbstrDockerCmd<CopyFileToContain
 
     private boolean dirChildrenOnly = false;
 
-    public CopyFileToContainerCmdImpl(CopyFileToContainerCmd.Exec exec, String containerId, String hostResource) {
+    public CopyArchiveToContainerCmdImpl(CopyArchiveToContainerCmd.Exec exec, String containerId, String hostResource) {
         super(exec);
         withContainerId(containerId);
         withHostResource(hostResource);
     }
 
     @Override
-    public CopyFileToContainerCmd withContainerId(String containerId) {
+    public CopyArchiveToContainerCmd withContainerId(String containerId) {
         checkNotNull(containerId, "containerId was not specified");
         this.containerId = containerId;
         return this;
     }
 
     @Override
-    public CopyFileToContainerCmd withHostResource(String hostResource) {
+    public CopyArchiveToContainerCmd withHostResource(String hostResource) {
         checkNotNull(hostResource, "hostResource was not specified");
         this.hostResource = hostResource;
         return this;
@@ -54,13 +55,13 @@ public class CopyFileToContainerCmdImpl extends AbstrDockerCmd<CopyFileToContain
     }
 
     @Override
-    public CopyFileToContainerCmd withNoOverwriteDirNonDir(boolean noOverwriteDirNonDir) {
+    public CopyArchiveToContainerCmd withNoOverwriteDirNonDir(boolean noOverwriteDirNonDir) {
         this.noOverwriteDirNonDir = noOverwriteDirNonDir;
         return this;
     }
 
     @Override
-    public CopyFileToContainerCmd withRemotePath(String remotePath) {
+    public CopyArchiveToContainerCmd withRemotePath(String remotePath) {
         checkNotNull(remotePath, "remotePath was not specified");
         this.remotePath = remotePath;
         return this;
@@ -77,7 +78,7 @@ public class CopyFileToContainerCmdImpl extends AbstrDockerCmd<CopyFileToContain
     }
 
     @Override
-    public CopyFileToContainerCmd withDirChildrenOnly(boolean dirChildrenOnly) {
+    public CopyArchiveToContainerCmd withDirChildrenOnly(boolean dirChildrenOnly) {
         this.dirChildrenOnly = dirChildrenOnly;
         return this;
     }

@@ -8,21 +8,21 @@ import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
+import com.github.dockerjava.api.command.CopyArchiveFromContainerCmd;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
 
-public class CopyFileFromContainerCmdExec extends AbstrSyncDockerCmdExec<CopyFileFromContainerCmd, InputStream>
-        implements CopyFileFromContainerCmd.Exec {
+public class CopyArchiveFromContainerCmdExec extends AbstrSyncDockerCmdExec<CopyArchiveFromContainerCmd, InputStream>
+        implements CopyArchiveFromContainerCmd.Exec {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CopyFileFromContainerCmdExec.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CopyArchiveFromContainerCmdExec.class);
 
-    public CopyFileFromContainerCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
+    public CopyArchiveFromContainerCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
         super(baseResource, dockerClientConfig);
     }
 
     @Override
-    protected InputStream execute(CopyFileFromContainerCmd command) {
+    protected InputStream execute(CopyArchiveFromContainerCmd command) {
         WebTarget webResource = getBaseResource().path("/containers/{id}/archive").resolveTemplate("id",
                 command.getContainerId());
 

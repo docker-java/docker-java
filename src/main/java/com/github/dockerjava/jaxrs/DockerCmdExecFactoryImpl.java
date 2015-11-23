@@ -7,7 +7,7 @@ import com.github.dockerjava.api.command.AuthCmd;
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.CommitCmd;
 import com.github.dockerjava.api.command.ContainerDiffCmd;
-import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
+import com.github.dockerjava.api.command.CopyArchiveFromContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateImageCmd;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
@@ -40,8 +40,7 @@ import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.RemoteApiVersion;
-import com.github.dockerjava.core.command.CopyFileToContainerCmd;
+import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 import com.github.dockerjava.jaxrs.connector.ApacheConnectorProvider;
 import com.github.dockerjava.jaxrs.filter.JsonClientFilter;
 import com.github.dockerjava.jaxrs.filter.ResponseStatusExceptionFilter;
@@ -312,13 +311,13 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     }
 
     @Override
-    public CopyFileFromContainerCmd.Exec createCopyFileFromContainerCmdExec() {
-        return new CopyFileFromContainerCmdExec(getBaseResource(), getDockerClientConfig());
+    public CopyArchiveFromContainerCmd.Exec createCopyArchiveFromContainerCmdExec() {
+        return new CopyArchiveFromContainerCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
-    public CopyFileToContainerCmd.Exec createCopyFileToContainerCmdExec() {
-        return new CopyFileToContainerCmdExec(getBaseResource(), getDockerClientConfig());
+    public CopyArchiveToContainerCmd.Exec createCopyArchiveToContainerCmdExec() {
+        return new CopyArchiveToContainerCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
