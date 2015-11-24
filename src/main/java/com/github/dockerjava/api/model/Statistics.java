@@ -2,12 +2,14 @@ package com.github.dockerjava.api.model;
 
 import java.util.Map;
 
+import javax.annotation.CheckForNull;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Representation of a Docker statistics.
@@ -19,6 +21,17 @@ public class Statistics {
     @JsonProperty("read")
     private String read;
 
+    /**
+     * @since Docker Remote API 1.21
+     */
+    @CheckForNull
+    @JsonProperty("networks")
+    private Map<String, Object> networksStats;
+
+    /**
+     * @deprecated as of Docker Remote API 1.21, replaced by {@link #networksStats}
+     */
+    @Deprecated
     @JsonProperty("network")
     private Map<String, Object> networkStats;
 
@@ -31,6 +44,18 @@ public class Statistics {
     @JsonProperty("cpu_stats")
     private Map<String, Object> cpuStats;
 
+    /**
+     * @since Docker Remote API 1.21
+     */
+    @CheckForNull
+    public Map<String, Object> getNetworksStats() {
+        return networksStats;
+    }
+
+    /**
+     * @deprecated as of Docker Remote API 1.21, replaced by {@link #getNetworksStats()}
+     */
+    @Deprecated
     public Map<String, Object> getNetworkStats() {
         return networkStats;
     }
