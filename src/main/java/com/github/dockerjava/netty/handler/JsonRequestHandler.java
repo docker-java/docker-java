@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
-public class SerializeJsonOutboundHandler extends MessageToByteEncoder<Object>{
+public class JsonRequestHandler extends MessageToByteEncoder<Object>{
 	
 	private ObjectMapper mapper = new ObjectMapper();
 

@@ -3,6 +3,7 @@ package com.github.dockerjava.netty.exec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.dockerjava.api.command.AuthCmd;
 import com.github.dockerjava.api.model.AuthResponse;
 import com.github.dockerjava.core.DockerClientConfig;
@@ -22,13 +23,8 @@ public class AuthCmdExec extends AbstrSyncDockerCmdExec<AuthCmd, AuthResponse> i
         WebTarget webResource = getBaseResource().path("/auth");
         LOGGER.trace("POST: {}", webResource);
         return webResource.request().accept(MediaType.APPLICATION_JSON)
-                .post(command.getAuthConfig(), AuthResponse.class);
-
-//        if (response.getStatus() == 401) {
-//            throw new UnauthorizedException("Unauthorized");
-//        }
-//
-//        return response.readEntity(AuthResponse.class);
+                .post(command.getAuthConfig(), new TypeReference<AuthResponse>() {
+                });
     }
 
 }

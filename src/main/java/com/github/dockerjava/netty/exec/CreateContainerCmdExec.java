@@ -1,5 +1,6 @@
 package com.github.dockerjava.netty.exec;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.CreateContainerCmd.Exec;
@@ -29,7 +30,8 @@ public class CreateContainerCmdExec extends AbstrSyncDockerCmdExec<CreateContain
 
         LOGGER.trace("POST: {} ", webResource);
         return webResource.request().accept(MediaType.APPLICATION_JSON)
-                .post(command, CreateContainerResponse.class);
+                .post(command, new TypeReference<CreateContainerResponse>() {
+                });
     }
 
 }

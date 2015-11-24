@@ -1,5 +1,6 @@
 package com.github.dockerjava.netty.exec;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.dockerjava.api.command.ExecCreateCmd;
 import com.github.dockerjava.api.command.ExecCreateCmdResponse;
 import com.github.dockerjava.api.command.ExecCreateCmd.Exec;
@@ -11,23 +12,24 @@ import com.github.dockerjava.netty.exec.AbstrSyncDockerCmdExec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ExecCreateCmdExec extends AbstrSyncDockerCmdExec<ExecCreateCmd, ExecCreateCmdResponse>
-		implements ExecCreateCmd.Exec {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ExecCreateCmdExec.class);
+public class ExecCreateCmdExec extends AbstrSyncDockerCmdExec<ExecCreateCmd, ExecCreateCmdResponse> implements
+        ExecCreateCmd.Exec {
 
-	public ExecCreateCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
-		super(baseResource, dockerClientConfig);
-	}
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExecCreateCmdExec.class);
 
-	@Override
-	protected ExecCreateCmdResponse execute(ExecCreateCmd command) {
-		WebTarget webResource = getBaseResource().path("/containers/{id}/exec").resolveTemplate("id",
-				command.getContainerId());
+    public ExecCreateCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
+        super(baseResource, dockerClientConfig);
+    }
 
-		LOGGER.trace("POST: {}", webResource);
+    @Override
+    protected ExecCreateCmdResponse execute(ExecCreateCmd command) {
+        WebTarget webResource = getBaseResource().path("/containers/{id}/exec").resolveTemplate("id",
+                command.getContainerId());
 
-		return webResource.request().accept(MediaType.APPLICATION_JSON)
-				.post(command, ExecCreateCmdResponse.class);
-	}
+        LOGGER.trace("POST: {}", webResource);
+
+        return webResource.request().accept(MediaType.APPLICATION_JSON)
+                .post(command, new TypeReference<ExecCreateCmdResponse>() {
+                });
+    }
 }

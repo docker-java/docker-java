@@ -230,13 +230,6 @@ public class CreateContainerCmdExecTest extends AbstractDockerClientTest {
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
         assertThat(inspectContainerResponse.getName(), equalTo("/container"));
-
-        try {
-            dockerClient.createContainerCmd("busybox").withName("container").withCmd("env").exec();
-            fail("Expected ConflictException");
-        } catch (ConflictException e) {
-        }
-
     }
 
     @Test

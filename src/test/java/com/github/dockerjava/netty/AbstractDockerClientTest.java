@@ -206,6 +206,14 @@ public abstract class AbstractDockerClientTest extends Assert {
         public String toString() {
             return log.toString();
         }
+
+        @Override
+        public LogContainerResultCallback awaitCompletion() throws InterruptedException {
+            LogContainerResultCallback result =  super.awaitCompletion();
+            System.err.println("awaitCompletion returned");
+
+            return result;
+        }
     }
 
     protected String buildImage(File baseDir) throws Exception {

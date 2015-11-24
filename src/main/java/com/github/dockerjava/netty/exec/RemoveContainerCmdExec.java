@@ -25,9 +25,7 @@ public class RemoveContainerCmdExec extends AbstrSyncDockerCmdExec<RemoveContain
         webTarget = booleanQueryParam(webTarget, "force", command.hasForceEnabled());
 
         LOGGER.trace("DELETE: {}", webTarget);
-        webTarget.request().accept(MediaType.APPLICATION_JSON).delete();
-
-        return null;
+        return webTarget.request().accept(MediaType.APPLICATION_JSON).delete().awaitResult();
     }
 
 }

@@ -6,21 +6,16 @@ import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedTransferQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class HttpResponseStreamInboundHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
-    private CountDownLatch latch = new CountDownLatch(1);
-
     private HttpResponseInputStream stream = new HttpResponseInputStream();
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-
-        latch.countDown();
         stream.write(msg.copy());
     }
 
@@ -37,11 +32,6 @@ public class HttpResponseStreamInboundHandler extends SimpleChannelInboundHandle
     }
 
     public InputStream getInputStream() {
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         return stream;
     }
 

@@ -96,6 +96,8 @@ public class WaitContainerCmdExecTest extends AbstractDockerClientTest {
 
         Thread.sleep(5000);
 
+        System.err.println("closing callback");
+
         callback.close();
 
         dockerClient.killContainerCmd(container.getId()).exec();

@@ -126,7 +126,7 @@ public class InspectContainerResponse {
 
     @JsonIgnore
     public VolumeBind[] getVolumes() {
-        return volumes.getBinds();
+        return volumes == null ? new VolumeBind[0]: volumes.getBinds();
     }
 
     @JsonIgnore

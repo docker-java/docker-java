@@ -68,10 +68,12 @@ import com.github.dockerjava.api.command.TopContainerCmd;
 import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
+import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.command.ExecCreateCmdImpl;
 import com.github.dockerjava.core.command.ExecStartCmdImpl;
 import com.github.dockerjava.core.command.ExecStartResultCallback;
+import com.github.dockerjava.core.command.InfoCmdImpl;
 import com.github.dockerjava.netty.exec.AuthCmdExec;
 import com.github.dockerjava.netty.exec.CopyFileFromContainerCmdExec;
 import com.github.dockerjava.netty.exec.CreateContainerCmdExec;
@@ -82,6 +84,7 @@ import com.github.dockerjava.netty.exec.InspectContainerCmdExec;
 import com.github.dockerjava.netty.exec.InspectExecCmdExec;
 import com.github.dockerjava.netty.exec.InspectImageCmdExec;
 import com.github.dockerjava.netty.exec.KillContainerCmdExec;
+import com.github.dockerjava.netty.exec.ListContainersCmdExec;
 import com.github.dockerjava.netty.exec.LogContainerCmdExec;
 import com.github.dockerjava.netty.exec.RemoveContainerCmdExec;
 import com.github.dockerjava.netty.exec.StartContainerCmdExec;
@@ -327,8 +330,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
     @Override
     public ListContainersCmd.Exec createListContainersCmdExec() {
-        return null; // new ListContainersCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new ListContainersCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
@@ -481,15 +483,15 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
         execFactory.init(config);
 
-        // InfoCmd.Exec exec = execFactory.createInfoCmdExec();
-        //
-        // InfoCmd infoCmd = new InfoCmdImpl(exec);
-        //
-        // Info info = infoCmd.exec();
-        //
-        // System.out.println("result: " + info);
-        //
-        // infoCmd.close();
+        InfoCmd.Exec exec = execFactory.createInfoCmdExec();
+
+        InfoCmd infoCmd = new InfoCmdImpl(exec);
+
+        Info info = infoCmd.exec();
+
+        System.out.println("result: " + info);
+
+        infoCmd.close();
 
         ExecCreateCmd.Exec execCreate = execFactory.createExecCmdExec();
 

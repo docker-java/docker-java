@@ -2,8 +2,10 @@ package com.github.dockerjava.netty.handler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.util.concurrent.GenericFutureListener;
 
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.model.Frame;
@@ -47,7 +49,19 @@ public class FramedResponseStreamHandler extends SimpleChannelInboundHandler<Byt
 
 		} while (frame != null);
 
+
+//		ctx.channel().closeFuture().addListener(new GenericFutureListener<ChannelFuture>() {
+//
+//            @Override
+//            public void operationComplete(ChannelFuture future) throws Exception {
+//                System.err.println("channel closed");
+//                resultCallback.onComplete();
+//            }
+//        });
+
 	}
+
+
 
 	private int read(byte[] buf, int offset, int length) {
 		length = Math.min(rawBuffer.readableBytes(), length);

@@ -17,8 +17,8 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.core.command.WaitContainerResultCallback;
+import com.github.dockerjava.netty.AbstractDockerClientTest;
 
 @Test(groups = "integration")
 public class LogContainerCmdExecTest extends AbstractDockerClientTest {

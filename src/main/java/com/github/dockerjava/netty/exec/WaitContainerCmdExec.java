@@ -3,14 +3,13 @@ package com.github.dockerjava.netty.exec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.model.WaitResponse;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.async.JsonStreamProcessor;
 import com.github.dockerjava.netty.MediaType;
 import com.github.dockerjava.netty.WebTarget;
-
 
 public class WaitContainerCmdExec extends AbstrAsyncDockerCmdExec<WaitContainerCmd, WaitResponse> implements
         WaitContainerCmd.Exec {
@@ -28,7 +27,8 @@ public class WaitContainerCmdExec extends AbstrAsyncDockerCmdExec<WaitContainerC
 
         LOGGER.trace("POST: {}", webTarget);
 
-        webTarget.request().accept(MediaType.APPLICATION_JSON).post(null, WaitResponse.class);
+        webTarget.request().accept(MediaType.APPLICATION_JSON).post(null, new TypeReference<WaitResponse>() {
+        }, resultCallback);
 
         return null;
     }

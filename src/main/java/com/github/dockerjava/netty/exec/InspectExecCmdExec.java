@@ -1,13 +1,14 @@
 package com.github.dockerjava.netty.exec;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectExecResponse;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.netty.MediaType;
 import com.github.dockerjava.netty.WebTarget;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class InspectExecCmdExec extends AbstrSyncDockerCmdExec<InspectExecCmd, InspectExecResponse> implements
         InspectExecCmd.Exec {
@@ -20,7 +21,10 @@ public class InspectExecCmdExec extends AbstrSyncDockerCmdExec<InspectExecCmd, I
     @Override
     protected InspectExecResponse execute(InspectExecCmd command) {
         WebTarget webResource = getBaseResource().path("/exec/{id}/json").resolveTemplate("id", command.getExecId());
+
         LOGGER.debug("GET: {}", webResource);
-        return webResource.request().accept(MediaType.APPLICATION_JSON).get(InspectExecResponse.class);
+
+        return webResource.request().accept(MediaType.APPLICATION_JSON).get(new TypeReference<InspectExecResponse>() {
+        }).awaitResult();
     }
 }
