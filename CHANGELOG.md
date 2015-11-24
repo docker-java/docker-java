@@ -1,6 +1,7 @@
 Change Log
 ===
-Latest SNAPSHOT (3.0.0-SNAPSHOT)
+
+3.0.0-SNAPSHOT
 ---
 Notes
 
@@ -8,9 +9,14 @@ Notes
 
 All changes
 
+* [#362] (https://github.com/docker-java/docker-java/pull/362) Deprecate "network" and enable "networks" stats (remote Docker API 1.21) 
 * [#359] (https://github.com/docker-java/docker-java/pull/359) Fix performance issue of build command by adding bulk-read variant of InputStream.read()
 * [#357] (https://github.com/docker-java/docker-java/pull/357) Wait container command needs possibility to abort operation
 * [#313] (https://github.com/docker-java/docker-java/pull/313) Refactor primitive type fields to be of object type in JSON objects
+
+2.1.3-SNAPSHOT
+---
+* [#362] (https://github.com/docker-java/docker-java/pull/362) Deprecate "network" and enable "networks" stats (remote Docker API 1.21) 
 
 v2.1.2
 ---
