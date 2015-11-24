@@ -30,7 +30,7 @@ public class Statistics {
      */
     @Deprecated
     @JsonProperty("network")
-    private Map<String, Object> networkStats;
+    private Map<String, Object> network;
 
     @JsonProperty("memory_stats")
     private Map<String, Object> memoryStats;
@@ -53,8 +53,8 @@ public class Statistics {
      * @deprecated as of Docker Remote API 1.21, replaced by {@link #getNetworks()}
      */
     @Deprecated
-    public Map<String, Object> getNetworkStats() {
-        return networkStats;
+    public Map<String, Object> getNetwork() {
+        return network;
     }
 
     public Map<String, Object> getCpuStats() {
