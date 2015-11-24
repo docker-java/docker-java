@@ -5,17 +5,26 @@ import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.api.model.Container;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.security.SecureRandom;
+import java.util.Collections;
+import java.util.Map;
+import java.util.UUID;
 
 import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
+import static com.github.dockerjava.utils.TestUtils.isSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -38,6 +47,39 @@ public class InspectContainerCmdIT extends CmdIT {
         InspectContainerResponse containerInfo = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
         assertEquals(containerInfo.getId(), container.getId());
 
+    }
+
+    @Test
+    public void inspectContainerNodeProperty() throws DockerException {
+        Map<String, String> label = Collections.singletonMap("inspectContainerNodeProperty", UUID.randomUUID().toString());
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
+                .withLabels(label)
+                .exec();
+
+        Container containerResult = dockerRule.getClient().listContainersCmd()
+                .withShowAll(true)
+                .withLabelFilter(label)
+                .exec()
+                .get(0);
+
+        String name = containerResult.getNames()[0];
+
+        InspectContainerResponse containerInfo = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
+
+        InspectContainerResponse.Node node = containerInfo.getNode();
+        if (isSwarm(dockerRule.getClient())) {
+            assertThat(node, is(notNullValue()));
+            assertThat(node.getAddr(), is(notNullValue()));
+            assertThat(node.getId(), is(notNullValue()));
+            assertThat(node.getIp(), is(notNullValue()));
+            assertThat(node.getLabels(), is(notNullValue()));
+            assertThat(node.getLabels().get("com.github.dockerjava.test"), is("docker-java"));
+            assertThat(node.getCpus(), is(greaterThanOrEqualTo(1)));
+            assertThat(node.getMemory(), is(greaterThanOrEqualTo(64 * 1024 * 1024L)));
+            assertThat("/" + node.getName() + containerInfo.getName(), is(name));
+        } else {
+            assertThat(node, is(nullValue()));
+        }
     }
 
     @Test()
