@@ -126,12 +126,12 @@ public class InspectContainerResponse {
 
     @JsonIgnore
     public VolumeBind[] getVolumes() {
-        return volumes.getBinds();
+        return volumes == null ? null : volumes.getBinds();
     }
 
     @JsonIgnore
     public VolumeRW[] getVolumesRW() {
-        return volumesRW.getVolumesRW();
+        return volumesRW == null ? null : volumesRW.getVolumesRW();
     }
 
     public String getHostnamePath() {
