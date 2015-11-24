@@ -4,6 +4,7 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Event;
 import com.github.dockerjava.core.command.EventsResultCallback;
 import com.github.dockerjava.core.command.PullImageResultCallback;
+import com.github.dockerjava.utils.TestUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -32,8 +34,6 @@ public class EventsCmdIT extends CmdIT {
 
     @Test
     public void testEventStreamTimeBound() throws Exception {
-        assumeNotSwarm("", dockerRule);
-
         // Don't include other tests events
         TimeUnit.SECONDS.sleep(1);
 
@@ -56,8 +56,6 @@ public class EventsCmdIT extends CmdIT {
 
     @Test
     public void testEventStreaming() throws Exception {
-        assumeNotSwarm("", dockerRule);
-
         // Don't include other tests events
         TimeUnit.SECONDS.sleep(1);
 
@@ -76,6 +74,18 @@ public class EventsCmdIT extends CmdIT {
 
         // we may receive more events as expected
         assertTrue("Received events: " + events, events.size() >= expectedEvents);
+
+        for (Event event : events) {
+            if (TestUtils.isSwarm(dockerRule.getClient())) {
+                assertThat(event.getNode(), is(notNullValue()));
+                assertThat(event.getNode().getAddr(), is(notNullValue()));
+                assertThat(event.getNode().getId(), is(notNullValue()));
+                assertThat(event.getNode().getIp(), is(notNullValue()));
+                assertThat(event.getNode().getName(), is(notNullValue()));
+            } else {
+                assertThat(event.getNode(), is(notNullValue()));
+            }
+        }
     }
 
 

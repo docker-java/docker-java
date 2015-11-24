@@ -61,6 +61,7 @@ DOCKER_OPTS="\
 -D \
 -H=unix:///var/run/docker.sock \
 -H=tcp://0.0.0.0:${HOST_PORT}  \
+--label=com.github.dockerjava.test=docker-java \
 "
 EOF
 
