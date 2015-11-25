@@ -8,9 +8,11 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.api.DockerClientException;
+import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.BuildResponseItem;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
+
+import javax.annotation.CheckForNull;
 
 /**
  *
@@ -21,6 +23,7 @@ public class BuildImageResultCallback extends ResultCallbackTemplate<BuildImageR
 
     private final static Logger LOGGER = LoggerFactory.getLogger(BuildImageResultCallback.class);
 
+    @CheckForNull
     private BuildResponseItem latestItem = null;
 
     @Override
@@ -62,7 +65,9 @@ public class BuildImageResultCallback extends ResultCallbackTemplate<BuildImageR
     }
 
     private String getImageId() {
-        if (latestItem == null || !latestItem.isBuildSuccessIndicated()) {
+        if (latestItem == null) {
+            throw new DockerClientException("Could not build image");
+        } else if (!latestItem.isBuildSuccessIndicated()) {
             throw new DockerClientException("Could not build image: " + latestItem.getError());
         } else {
             return latestItem.getImageId();

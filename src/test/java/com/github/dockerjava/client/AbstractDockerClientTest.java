@@ -21,7 +21,7 @@ import org.testng.Assert;
 import org.testng.ITestResult;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.Volume;
@@ -37,6 +37,8 @@ import com.google.common.base.Joiner;
 public abstract class AbstractDockerClientTest extends Assert {
 
     public static final Logger LOG = LoggerFactory.getLogger(AbstractDockerClientTest.class);
+
+    private String apiVersion = "1.19";
 
     protected DockerClient dockerClient;
 
@@ -68,7 +70,8 @@ public abstract class AbstractDockerClientTest extends Assert {
         if (password != null) {
             builder = builder.withPassword(password);
         }
-        return builder.build();
+
+        return builder.withVersion(apiVersion).build();
     }
 
     public void afterTest() {
@@ -86,7 +89,7 @@ public abstract class AbstractDockerClientTest extends Assert {
             LOG.info("Cleaning up temporary container {}", container);
 
             try {
-                dockerClient.removeContainerCmd(container).withForce().exec();
+                dockerClient.removeContainerCmd(container).withForce(true).exec();
             } catch (DockerException ignore) {
                 // ignore.printStackTrace();
             }
@@ -95,7 +98,7 @@ public abstract class AbstractDockerClientTest extends Assert {
         for (String image : dockerCmdExecFactory.getImageNames()) {
             LOG.info("Cleaning up temporary image with {}", image);
             try {
-                dockerClient.removeImageCmd(image).withForce().exec();
+                dockerClient.removeImageCmd(image).withForce(true).exec();
             } catch (DockerException ignore) {
                 // ignore.printStackTrace();
             }
@@ -138,7 +141,7 @@ public abstract class AbstractDockerClientTest extends Assert {
      * @param port
      *            the port to check for availability
      */
-    public static boolean available(int port) {
+    public static Boolean available(int port) {
         if (port < 1100 || port > 60000) {
             throw new IllegalArgumentException("Invalid start port: " + port);
         }
@@ -175,19 +178,20 @@ public abstract class AbstractDockerClientTest extends Assert {
      */
     public static void assertContainerHasVolumes(InspectContainerResponse inspectContainerResponse,
             Volume... expectedVolumes) {
-        VolumeBind[] volumeBinds = inspectContainerResponse.getVolumes();
-        LOG.info("Inspect .Volumes = [{}]", Joiner.on(", ").join(volumeBinds));
 
         List<Volume> volumes = new ArrayList<Volume>();
-        for (VolumeBind bind : volumeBinds) {
-            volumes.add(new Volume(bind.getContainerPath()));
+        VolumeBind[] volumeBinds = inspectContainerResponse.getVolumes();
+        if (volumeBinds != null) {
+            for (VolumeBind bind : volumeBinds) {
+                volumes.add(new Volume(bind.getContainerPath()));
+            }
         }
         assertThat(volumes, contains(expectedVolumes));
     }
 
     protected String containerLog(String containerId) throws Exception {
-        return dockerClient.logContainerCmd(containerId).withStdOut()
-                .exec(new LogContainerTestCallback()).awaitCompletion().toString();
+        return dockerClient.logContainerCmd(containerId).withStdOut(true).exec(new LogContainerTestCallback())
+                .awaitCompletion().toString();
     }
 
     public static class LogContainerTestCallback extends LogContainerResultCallback {
@@ -207,7 +211,8 @@ public abstract class AbstractDockerClientTest extends Assert {
 
     protected String buildImage(File baseDir) throws Exception {
 
-        return dockerClient.buildImageCmd(baseDir).withNoCache().exec(new BuildImageResultCallback()).awaitImageId();
+        return dockerClient.buildImageCmd(baseDir).withNoCache(true).exec(new BuildImageResultCallback())
+                .awaitImageId();
     }
 
 }

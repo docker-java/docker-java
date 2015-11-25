@@ -19,12 +19,6 @@ public class AuthConfigTest {
     }
 
     @Test
-    public void string() throws Exception {
-        assertEquals(authConfig.toString(),
-                "AuthConfig{username='qux', password='bar', email='foo', serverAddress='baz'}");
-    }
-
-    @Test
     public void defaultServerAddress() throws Exception {
         assertEquals(new AuthConfig().getServerAddress(), "https://index.docker.io/v1/");
     }

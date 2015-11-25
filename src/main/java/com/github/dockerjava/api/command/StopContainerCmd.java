@@ -1,7 +1,10 @@
 package com.github.dockerjava.api.command;
 
-import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.NotModifiedException;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
+import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.api.exception.NotModifiedException;
 
 /**
  * Stop a running container.
@@ -14,13 +17,15 @@ import com.github.dockerjava.api.NotModifiedException;
  */
 public interface StopContainerCmd extends SyncDockerCmd<Void> {
 
+    @CheckForNull
     public String getContainerId();
 
-    public int getTimeout();
+    @CheckForNull
+    public Integer getTimeout();
 
-    public StopContainerCmd withContainerId(String containerId);
+    public StopContainerCmd withContainerId(@Nonnull String containerId);
 
-    public StopContainerCmd withTimeout(int timeout);
+    public StopContainerCmd withTimeout(Integer timeout);
 
     /**
      * @throws NotFoundException

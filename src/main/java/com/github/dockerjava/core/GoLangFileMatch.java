@@ -4,8 +4,10 @@
 package com.github.dockerjava.core;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.github.dockerjava.core.exception.GoLangFileMatchException;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -45,20 +47,24 @@ public class GoLangFileMatch {
     public static final boolean IS_WINDOWS = File.separatorChar == '\\';
 
     public static boolean match(List<String> patterns, File file) {
-        return match(patterns, file.getPath());
+        return !match(patterns, file.getPath()).isEmpty();
     }
 
     public static boolean match(String pattern, File file) {
         return match(pattern, file.getPath());
     }
 
-    public static boolean match(List<String> patterns, String name) {
+    /**
+     * Returns the matching patterns for the given string
+     */
+    public static List<String> match(List<String> patterns, String name) {
+        List<String> matches = new ArrayList<String>();
         for (String pattern : patterns) {
             if (match(pattern, name)) {
-                return true;
+                matches.add(pattern);
             }
         }
-        return false;
+        return matches;
     }
 
     public static boolean match(String pattern, String name) {
@@ -108,11 +114,8 @@ public class GoLangFileMatch {
         Scan: for (i = 0; i < pattern.length(); i++) {
             switch (pattern.charAt(i)) {
             case '\\': {
-                if (!IS_WINDOWS) {
-                    // error check handled in matchChunk: bad pattern.
-                    if (i + 1 < pattern.length()) {
-                        i++;
-                    }
+                if (!IS_WINDOWS && i + 1 < pattern.length()) {
+                    i++;
                 }
                 break;
             }

@@ -1,28 +1,29 @@
 package com.github.dockerjava.jaxrs;
 
-import javax.ws.rs.client.WebTarget;
-
+import com.github.dockerjava.api.command.TagImageCmd;
+import com.github.dockerjava.core.DockerClientConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.api.command.TagImageCmd;
+import javax.ws.rs.client.WebTarget;
 
 public class TagImageCmdExec extends AbstrSyncDockerCmdExec<TagImageCmd, Void> implements TagImageCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TagImageCmdExec.class);
 
-    public TagImageCmdExec(WebTarget baseResource) {
-        super(baseResource);
+    public TagImageCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
+        super(baseResource, dockerClientConfig);
     }
 
     @Override
     protected Void execute(TagImageCmd command) {
-        WebTarget webResource = getBaseResource().path("/images/" + command.getImageId() + "/tag")
-                .queryParam("repo", command.getRepository()).queryParam("tag", command.getTag())
-                .queryParam("force", command.hasForceEnabled() ? "1" : "0");
+        WebTarget webTarget = getBaseResource().path("/images/" + command.getImageId() + "/tag")
+                .queryParam("repo", command.getRepository()).queryParam("tag", command.getTag());
 
-        LOGGER.trace("POST: {}", webResource);
-        webResource.request().post(null).close();
+        webTarget = booleanQueryParam(webTarget, "force", command.hasForceEnabled());
+
+        LOGGER.trace("POST: {}", webTarget);
+        webTarget.request().post(null).close();
         return null;
     }
 

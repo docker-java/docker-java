@@ -6,9 +6,11 @@ package com.github.dockerjava.core.command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.api.DockerClientException;
+import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.PullResponseItem;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
+
+import javax.annotation.CheckForNull;
 
 /**
  *
@@ -19,6 +21,7 @@ public class PullImageResultCallback extends ResultCallbackTemplate<PullImageRes
 
     private final static Logger LOGGER = LoggerFactory.getLogger(PullImageResultCallback.class);
 
+    @CheckForNull
     private PullResponseItem latestItem = null;
 
     @Override
@@ -40,8 +43,11 @@ public class PullImageResultCallback extends ResultCallbackTemplate<PullImageRes
             throw new DockerClientException("", e);
         }
 
-        if (latestItem == null || !latestItem.isPullSuccessIndicated()) {
-            throw new DockerClientException("Could not pull image: " + latestItem.getError());
+        if (latestItem == null) {
+            throw new DockerClientException("Could not pull image");
+        } else if (!latestItem.isPullSuccessIndicated()) {
+            String message = (latestItem.getError() != null) ? latestItem.getError() : latestItem.getStatus();
+            throw new DockerClientException("Could not pull image: " + message);
         }
     }
 }

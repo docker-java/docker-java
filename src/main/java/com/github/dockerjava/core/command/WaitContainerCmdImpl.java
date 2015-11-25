@@ -3,13 +3,15 @@ package com.github.dockerjava.core.command;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.github.dockerjava.api.command.WaitContainerCmd;
+import com.github.dockerjava.api.model.WaitResponse;
 
 /**
  * Wait a container
- * 
+ *
  * Block until container stops, then returns its exit code
  */
-public class WaitContainerCmdImpl extends AbstrDockerCmd<WaitContainerCmd, Integer> implements WaitContainerCmd {
+public class WaitContainerCmdImpl extends AbstrAsyncDockerCmd<WaitContainerCmd, WaitResponse> implements
+        WaitContainerCmd {
 
     private String containerId;
 
@@ -30,8 +32,4 @@ public class WaitContainerCmdImpl extends AbstrDockerCmd<WaitContainerCmd, Integ
         return this;
     }
 
-    @Override
-    public String toString() {
-        return "wait " + containerId;
-    }
 }

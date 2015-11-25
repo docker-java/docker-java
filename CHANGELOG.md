@@ -1,12 +1,57 @@
 Change Log
 ===
 
-Latest SNAPSHOT
+3.0.0-SNAPSHOT
 ---
+Notes
+
+* The upcoming release will contain multiple API breaking changes therefore the major version switch
+
+All changes
+
+* [#362] (https://github.com/docker-java/docker-java/pull/362) Deprecate "network" and enable "networks" stats (remote Docker API 1.21) 
+* [#359] (https://github.com/docker-java/docker-java/pull/359) Fix performance issue of build command by adding bulk-read variant of InputStream.read()
+* [#357] (https://github.com/docker-java/docker-java/pull/357) Wait container command needs possibility to abort operation
+* [#313] (https://github.com/docker-java/docker-java/pull/313) Refactor primitive type fields to be of object type in JSON objects
+
+2.1.3-SNAPSHOT
+---
+* [#362] (https://github.com/docker-java/docker-java/pull/362) Deprecate "network" and enable "networks" stats (remote Docker API 1.21) 
+
+v2.1.2
+---
+* [#350] (https://github.com/docker-java/docker-java/pull/350) Remove ServiceLoader logic
+* [#344] (https://github.com/docker-java/docker-java/pull/344) Implement equals/hashCode for Filters
+* [#335] (https://github.com/docker-java/docker-java/pull/335) Improve backward-compatibility support for older API versions
+* [#333] (https://github.com/docker-java/docker-java/pull/333) Adding support for withPidMode 
+
+v2.1.1
+---
+* [#326] (https://github.com/docker-java/docker-java/pull/326) Add all missing fields to ResponseItem and related classes 
+* [#320] (https://github.com/docker-java/docker-java/pull/320) Support "since" field for logs command
+
+v2.1.0
+---
+* [#306] (https://github.com/docker-java/docker-java/pull/306) fix(core): fix NPE if latestItem is null in result callback
+* [#305] (https://github.com/docker-java/docker-java/pull/305) chore(core): do not expect default DockerCmdExecFactory service
+* [#304] (https://github.com/docker-java/docker-java/pull/304) Throw original exception when command.close() throws Exception too
+* [#299] (https://github.com/docker-java/docker-java/pull/299) BuildImage sync to 1.20 API
+* [#291] (https://github.com/docker-java/docker-java/pull/291) Moved "Memory", "MemorySwap" and "CpuShares" mappings from ContainerConfig to HostConfig
+
+v2.0.1
+---
+Release notes
+* This is a bugfix release. With this release docker >= v1.7.0 is recommended.
+
+All changes
+
+* [#301] (https://github.com/docker-java/docker-java/pull/301) Respect exception rules in .dockerignore file while build images
+* [#298] (https://github.com/docker-java/docker-java/pull/298) Fix repository name validation errors
+* [#296] (https://github.com/docker-java/docker-java/pull/296) Fix Build FROM private registry broken with docker 1.7.x 
 * [#295] (https://github.com/docker-java/docker-java/pull/295) Support certificate chains in cert.pem
 * [#287] (https://github.com/docker-java/docker-java/pull/287) Using the oomKillDisable flag throws a null pointer exception
 
-v.2.0.0
+v2.0.0
 ---
 Release notes
 
@@ -28,7 +73,7 @@ All changes
 * [#262](https://github.com/docker-java/docker-java/pull/262) Accept filters in list containers 
 * [#260](https://github.com/docker-java/docker-java/pull/260) Add labels to create and inspect container
 
-v.1.4.0
+v1.4.0
 ---
 * [#248](https://github.com/docker-java/docker-java/pull/248) Removed deprecated start options
 * [#247](https://github.com/docker-java/docker-java/pull/247) Add Domainname attribute on create command

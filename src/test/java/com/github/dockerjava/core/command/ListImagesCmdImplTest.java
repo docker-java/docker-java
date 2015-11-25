@@ -19,7 +19,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.api.model.Info;
@@ -72,7 +72,7 @@ public class ListImagesCmdImplTest extends AbstractDockerClientTest {
         assertThat(images, notNullValue());
         LOG.info("Images List: {}", images);
         assertThat(images.size(), is(greaterThan(0)));
-        boolean imageInFilteredList = isImageInFilteredList(images, imageId);
+        Boolean imageInFilteredList = isImageInFilteredList(images, imageId);
         assertTrue(imageInFilteredList);
     }
 

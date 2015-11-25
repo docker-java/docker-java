@@ -2,19 +2,24 @@ package com.github.dockerjava.api.command;
 
 import java.io.InputStream;
 
-import com.github.dockerjava.api.NotFoundException;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
+import com.github.dockerjava.api.exception.NotFoundException;
 
 public interface SaveImageCmd extends SyncDockerCmd<InputStream> {
 
+    @CheckForNull
     public String getName();
 
+    @CheckForNull
     public String getTag();
 
     /**
      * @param name
      *            The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
      */
-    public SaveImageCmd withName(String name);
+    public SaveImageCmd withName(@Nonnull String name);
 
     /**
      * @param tag
@@ -25,7 +30,7 @@ public interface SaveImageCmd extends SyncDockerCmd<InputStream> {
     /**
      * Its the responsibility of the caller to consume and/or close the {@link InputStream} to prevent connection leaks.
      *
-     * @throws com.github.dockerjava.api.NotFoundException
+     * @throws NotFoundException
      *             No such image
      */
     public InputStream exec() throws NotFoundException;

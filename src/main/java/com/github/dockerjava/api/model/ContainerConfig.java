@@ -6,7 +6,9 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 /**
  *
@@ -14,31 +16,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(Include.NON_NULL)
 public class ContainerConfig {
 
     @JsonProperty("AttachStderr")
-    private boolean attachStderr = false;
+    private Boolean attachStderr;
 
     @JsonProperty("AttachStdin")
-    private boolean attachStdin = false;
+    private Boolean attachStdin;
 
     @JsonProperty("AttachStdout")
-    private boolean attachStdout = false;
+    private Boolean attachStdout;
 
     @JsonProperty("Cmd")
     private String[] cmd;
 
-    @JsonProperty("CpuShares")
-    private int cpuShares = 0;
-
-    @JsonProperty("Cpuset")
-    private String cpuset = "";
-
     @JsonProperty("Domainname")
-    private String domainName = "";
+    private String domainName;
 
     @JsonProperty("Entrypoint")
-    private String[] entrypoint = new String[] {};
+    private String[] entrypoint;
 
     @JsonProperty("Env")
     private String[] env;
@@ -47,7 +44,7 @@ public class ContainerConfig {
     private ExposedPorts exposedPorts;
 
     @JsonProperty("Hostname")
-    private String hostName = "";
+    private String hostName;
 
     @JsonProperty("Image")
     private String image;
@@ -58,45 +55,39 @@ public class ContainerConfig {
     @JsonProperty("MacAddress")
     private String macAddress;
 
-    @JsonProperty("Memory")
-    private long memoryLimit = 0;
-
-    @JsonProperty("MemorySwap")
-    private long memorySwap = 0;
-
     @JsonProperty("NetworkDisabled")
-    private boolean networkDisabled = false;
+    private Boolean networkDisabled;
 
     @JsonProperty("OnBuild")
     private String[] onBuild;
 
     @JsonProperty("OpenStdin")
-    private boolean stdinOpen = false;
+    private Boolean stdinOpen;
 
     @JsonProperty("PortSpecs")
     private String[] portSpecs;
 
     @JsonProperty("StdinOnce")
-    private boolean stdInOnce = false;
+    private Boolean stdInOnce;
 
     @JsonProperty("Tty")
-    private boolean tty = false;
+    private Boolean tty;
 
     @JsonProperty("User")
-    private String user = "";
+    private String user;
 
     @JsonProperty("Volumes")
     private Map<String, ?> volumes;
 
     @JsonProperty("WorkingDir")
-    private String workingDir = "";
+    private String workingDir;
 
     @JsonIgnore
     public ExposedPort[] getExposedPorts() {
         return exposedPorts.getExposedPorts();
     }
 
-    public boolean isNetworkDisabled() {
+    public Boolean isNetworkDisabled() {
         return networkDisabled;
     }
 
@@ -120,15 +111,15 @@ public class ContainerConfig {
         return user;
     }
 
-    public boolean isTty() {
+    public Boolean isTty() {
         return tty;
     }
 
-    public boolean isStdinOpen() {
+    public Boolean isStdinOpen() {
         return stdinOpen;
     }
 
-    public boolean isStdInOnce() {
+    public Boolean isStdInOnce() {
         return stdInOnce;
     }
 
@@ -136,31 +127,15 @@ public class ContainerConfig {
         return macAddress;
     }
 
-    public long getMemoryLimit() {
-        return memoryLimit;
-    }
-
-    public long getMemorySwap() {
-        return memorySwap;
-    }
-
-    public int getCpuShares() {
-        return cpuShares;
-    }
-
-    public String getCpuset() {
-        return cpuset;
-    }
-
-    public boolean isAttachStdin() {
+    public Boolean isAttachStdin() {
         return attachStdin;
     }
 
-    public boolean isAttachStdout() {
+    public Boolean isAttachStdout() {
         return attachStdout;
     }
 
-    public boolean isAttachStderr() {
+    public Boolean isAttachStderr() {
         return attachStderr;
     }
 

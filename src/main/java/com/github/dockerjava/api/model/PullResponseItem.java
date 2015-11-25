@@ -18,8 +18,9 @@ public class PullResponseItem extends ResponseItem {
      */
     @JsonIgnore
     public boolean isPullSuccessIndicated() {
-        if (getStatus() == null)
+        if (isErrorIndicated() || getStatus() == null) {
             return false;
+        }
 
         return (getStatus().contains("Download complete") || getStatus().contains("Image is up to date") || getStatus()
                 .contains("Downloaded newer image"));

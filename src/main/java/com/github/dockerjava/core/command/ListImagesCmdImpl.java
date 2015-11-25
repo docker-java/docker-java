@@ -20,7 +20,7 @@ public class ListImagesCmdImpl extends AbstrDockerCmd<ListImagesCmd, List<Image>
 	private String imageNameFilter;
     private String filters;
 
-    private boolean showAll = false;
+    private Boolean showAll = false;
 
     public ListImagesCmdImpl(ListImagesCmd.Exec exec) {
         super(exec);
@@ -32,12 +32,12 @@ public class ListImagesCmdImpl extends AbstrDockerCmd<ListImagesCmd, List<Image>
     }
 
     @Override
-    public boolean hasShowAllEnabled() {
+    public Boolean hasShowAllEnabled() {
         return showAll;
     }
 
     @Override
-    public ListImagesCmd withShowAll(boolean showAll) {
+    public ListImagesCmd withShowAll(Boolean showAll) {
         this.showAll = showAll;
         return this;
     }

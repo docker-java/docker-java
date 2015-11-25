@@ -3,12 +3,10 @@ package com.github.dockerjava.core.command;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.NotModifiedException;
+import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.api.exception.NotModifiedException;
 import com.github.dockerjava.api.command.StartContainerCmd;
 
 /**
@@ -35,11 +33,6 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
     @Override
     public String getContainerId() {
         return containerId;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this).toString();
     }
 
     /**

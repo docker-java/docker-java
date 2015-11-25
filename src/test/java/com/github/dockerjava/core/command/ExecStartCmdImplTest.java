@@ -57,7 +57,7 @@ public class ExecStartCmdImplTest extends AbstractDockerClientTest {
         dockerClient.execStartCmd(execCreateCmdResponse.getId()).exec();
 
         InputStream response = dockerClient.copyFileFromContainerCmd(container.getId(), "/execStartTest.log").exec();
-        boolean bytesAvailable = response.available() > 0;
+        Boolean bytesAvailable = response.available() > 0;
         assertTrue(bytesAvailable, "The file was not copied from the container.");
 
         // read the stream fully. Otherwise, the underlying stream will not be closed.
@@ -82,7 +82,7 @@ public class ExecStartCmdImplTest extends AbstractDockerClientTest {
         dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false).withTty(true).exec();
 
         InputStream response = dockerClient.copyFileFromContainerCmd(container.getId(), "/execStartTest.log").exec();
-        boolean bytesAvailable = response.available() > 0;
+        Boolean bytesAvailable = response.available() > 0;
         assertTrue(bytesAvailable, "The file was not copied from the container.");
 
         // read the stream fully. Otherwise, the underlying stream will not be closed.

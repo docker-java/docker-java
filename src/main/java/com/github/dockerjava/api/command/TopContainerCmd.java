@@ -1,17 +1,22 @@
 package com.github.dockerjava.api.command;
 
-import com.github.dockerjava.api.NotFoundException;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
+import com.github.dockerjava.api.exception.NotFoundException;
 
 /**
  * List processes running inside a container
  */
 public interface TopContainerCmd extends SyncDockerCmd<TopContainerResponse> {
 
+    @CheckForNull
     public String getContainerId();
 
+    @CheckForNull
     public String getPsArgs();
 
-    public TopContainerCmd withContainerId(String containerId);
+    public TopContainerCmd withContainerId(@Nonnull String containerId);
 
     public TopContainerCmd withPsArgs(String psArgs);
 

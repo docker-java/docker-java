@@ -4,8 +4,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.InputStream;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.github.dockerjava.api.command.CreateImageCmd;
 import com.github.dockerjava.api.command.CreateImageResponse;
 
@@ -76,11 +74,5 @@ public class CreateImageCmdImpl extends AbstrDockerCmd<CreateImageCmd, CreateIma
         checkNotNull(tag, "tag was not specified");
         this.tag = tag;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append("import - ").append(repository != null ? repository + ":" : "")
-                .append(tag != null ? tag : "").toString();
     }
 }

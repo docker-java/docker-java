@@ -1,7 +1,10 @@
 package com.github.dockerjava.api.command;
 
-import com.github.dockerjava.api.NotFoundException;
-import com.github.dockerjava.api.NotModifiedException;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
+import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.api.exception.NotModifiedException;
 
 /**
  * Start a container.
@@ -9,12 +12,10 @@ import com.github.dockerjava.api.NotModifiedException;
  */
 public interface StartContainerCmd extends SyncDockerCmd<Void> {
 
-    public static interface Exec extends DockerCmdSyncExec<StartContainerCmd, Void> {
-    }
-
+    @CheckForNull
     String getContainerId();
 
-    StartContainerCmd withContainerId(String containerId);
+    StartContainerCmd withContainerId(@Nonnull String containerId);
 
     /**
      * @throws NotFoundException
@@ -24,4 +25,7 @@ public interface StartContainerCmd extends SyncDockerCmd<Void> {
      */
     @Override
     public Void exec() throws NotFoundException, NotModifiedException;
+
+    public static interface Exec extends DockerCmdSyncExec<StartContainerCmd, Void> {
+    }
 }

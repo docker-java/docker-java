@@ -93,6 +93,24 @@ public class Filters {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        Filters filters1 = (Filters) o;
+
+        return filters.equals(filters1.filters);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return filters.hashCode();
+    }
+
+    @Override
     public String toString() {
         try {
             return OBJECT_MAPPER.writeValueAsString(filters);
@@ -100,4 +118,5 @@ public class Filters {
             throw new RuntimeException(e);
         }
     }
+
 }

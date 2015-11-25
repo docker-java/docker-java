@@ -3,7 +3,7 @@ package com.github.dockerjava.core.command;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 
 /**
@@ -17,7 +17,7 @@ public class RestartContainerCmdImpl extends AbstrDockerCmd<RestartContainerCmd,
 
     private String containerId;
 
-    private int timeout = 10;
+    private Integer timeout = 10;
 
     public RestartContainerCmdImpl(RestartContainerCmd.Exec exec, String containerId) {
         super(exec);
@@ -30,7 +30,7 @@ public class RestartContainerCmdImpl extends AbstrDockerCmd<RestartContainerCmd,
     }
 
     @Override
-    public int getTimeout() {
+    public Integer getTimeout() {
         return timeout;
     }
 
@@ -42,15 +42,11 @@ public class RestartContainerCmdImpl extends AbstrDockerCmd<RestartContainerCmd,
     }
 
     @Override
-    public RestartContainerCmd withtTimeout(int timeout) {
+    public RestartContainerCmd withtTimeout(Integer timeout) {
+        checkNotNull(timeout, "timeout was not specified");
         checkArgument(timeout >= 0, "timeout must be greater or equal 0");
         this.timeout = timeout;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return new StringBuilder("restart ").append("--time=" + timeout + " ").append(containerId).toString();
     }
 
     /**

@@ -4,9 +4,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 
-import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.api.InternalServerErrorException;
-import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.exception.InternalServerErrorException;
+import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.command.ContainerDiffCmd;
 import com.github.dockerjava.api.model.ChangeLog;
 
@@ -36,11 +36,6 @@ public class ContainerDiffCmdImpl extends AbstrDockerCmd<ContainerDiffCmd, List<
         checkNotNull(containerId, "containerId was not specified");
         this.containerId = containerId;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return new StringBuilder("diff ").append(containerId).toString();
     }
 
     /**

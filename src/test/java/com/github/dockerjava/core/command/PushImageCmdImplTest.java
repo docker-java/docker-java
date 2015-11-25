@@ -15,7 +15,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.DockerClientException;
+import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
@@ -65,18 +65,14 @@ public class PushImageCmdImplTest extends AbstractDockerClientTest {
         LOG.info("Removing image: {}", imageId);
         dockerClient.removeImageCmd(imageId).exec();
 
-        dockerClient.pullImageCmd(username + "/busybox")
-                .exec(new PullImageResultCallback()).awaitSuccess();
+        dockerClient.pullImageCmd(username + "/busybox").exec(new PullImageResultCallback()).awaitSuccess();
     }
 
     @Test(expectedExceptions = DockerClientException.class)
     public void pushNonExistentImage() throws Exception {
 
-        dockerClient.pushImageCmd(username + "/xxx").exec(new PushImageResultCallback())
-                .awaitSuccess();
-
+        dockerClient.pushImageCmd(username + "/xxx").exec(new PushImageResultCallback()).awaitSuccess();
 
     }
-
 
 }

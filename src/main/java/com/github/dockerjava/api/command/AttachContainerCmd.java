@@ -2,6 +2,9 @@ package com.github.dockerjava.api.command;
 
 import java.io.InputStream;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Frame;
 
@@ -22,45 +25,40 @@ import com.github.dockerjava.api.model.Frame;
  */
 public interface AttachContainerCmd extends AsyncDockerCmd<AttachContainerCmd, Frame> {
 
+    @CheckForNull
     public String getContainerId();
 
-    public boolean hasLogsEnabled();
+    @CheckForNull
+    public Boolean hasLogsEnabled();
 
-    public boolean hasFollowStreamEnabled();
+    @CheckForNull
+    public Boolean hasFollowStreamEnabled();
 
-    public boolean hasTimestampsEnabled();
+    @CheckForNull
+    public Boolean hasTimestampsEnabled();
 
-    public boolean hasStdoutEnabled();
+    @CheckForNull
+    public Boolean hasStdoutEnabled();
 
-    public boolean hasStderrEnabled();
+    @CheckForNull
+    public Boolean hasStderrEnabled();
 
-    public AttachContainerCmd withContainerId(String containerId);
-
-    /**
-     * See {@link #withFollowStream(boolean)}
-     */
-    public AttachContainerCmd withFollowStream();
+    public AttachContainerCmd withContainerId(@Nonnull String containerId);
 
     /**
      * Following the stream means the resulting {@link InputStream} returned by {@link #exec()} reads infinitely. So a
      * {@link InputStream#read()} MAY BLOCK FOREVER as long as no data is streamed from the docker host to
      * {@link DockerClient}!
      */
-    public AttachContainerCmd withFollowStream(boolean followStream);
+    public AttachContainerCmd withFollowStream(Boolean followStream);
 
-    public AttachContainerCmd withTimestamps(boolean timestamps);
+    public AttachContainerCmd withTimestamps(Boolean timestamps);
 
-    public AttachContainerCmd withStdOut();
+    public AttachContainerCmd withStdOut(Boolean stdout);
 
-    public AttachContainerCmd withStdOut(boolean stdout);
+    public AttachContainerCmd withStdErr(Boolean stderr);
 
-    public AttachContainerCmd withStdErr();
-
-    public AttachContainerCmd withStdErr(boolean stderr);
-
-    public AttachContainerCmd withLogs(boolean logs);
-
-    public AttachContainerCmd withLogs();
+    public AttachContainerCmd withLogs(Boolean logs);
 
     public static interface Exec extends DockerCmdAsyncExec<AttachContainerCmd, Frame> {
     }

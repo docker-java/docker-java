@@ -8,10 +8,13 @@ import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.CheckForNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.api.async.ResultCallback;
+import com.google.common.base.Throwables;
 
 /**
  * Abstract template implementation of {@link ResultCallback}
@@ -30,6 +33,8 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
 
     private boolean closed = false;
 
+    private Throwable firstError = null;
+
     @Override
     public void onStart(Closeable stream) {
         this.stream = stream;
@@ -38,11 +43,15 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
 
     @Override
     public void onError(Throwable throwable) {
-        if(closed) return;
+
+        if (closed)
+            return;
+
+        if (this.firstError == null)
+            this.firstError = throwable;
 
         try {
             LOGGER.error("Error during callback", throwable);
-            throw new RuntimeException(throwable);
         } finally {
             try {
                 close();
@@ -75,6 +84,8 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
     @SuppressWarnings("unchecked")
     public RC_T awaitCompletion() throws InterruptedException {
         completed.await();
+        // eventually (re)throws RuntimeException
+        getFirstError();
         return (RC_T) this;
     }
 
@@ -85,5 +96,15 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
     public RC_T awaitCompletion(long timeout, TimeUnit timeUnit) throws InterruptedException {
         completed.await(timeout, timeUnit);
         return (RC_T) this;
+    }
+
+    @CheckForNull
+    protected RuntimeException getFirstError() {
+        if (firstError != null) {
+            // this call throws a RuntimeException
+            return Throwables.propagate(firstError);
+        } else {
+            return null;
+        }
     }
 }

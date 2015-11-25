@@ -1,6 +1,9 @@
 package com.github.dockerjava.api.command;
 
-import com.github.dockerjava.api.NotFoundException;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
+import com.github.dockerjava.api.exception.NotFoundException;
 
 /**
  * Remove a container.
@@ -12,19 +15,20 @@ import com.github.dockerjava.api.NotFoundException;
  */
 public interface RemoveContainerCmd extends SyncDockerCmd<Void> {
 
+    @CheckForNull
     public String getContainerId();
 
-    public boolean hasRemoveVolumesEnabled();
+    @CheckForNull
+    public Boolean hasRemoveVolumesEnabled();
 
-    public boolean hasForceEnabled();
+    @CheckForNull
+    public Boolean hasForceEnabled();
 
-    public RemoveContainerCmd withContainerId(String containerId);
+    public RemoveContainerCmd withContainerId(@Nonnull String containerId);
 
-    public RemoveContainerCmd withRemoveVolumes(boolean removeVolumes);
+    public RemoveContainerCmd withRemoveVolumes(Boolean removeVolumes);
 
-    public RemoveContainerCmd withForce();
-
-    public RemoveContainerCmd withForce(boolean force);
+    public RemoveContainerCmd withForce(Boolean force);
 
     /**
      * @throws NotFoundException

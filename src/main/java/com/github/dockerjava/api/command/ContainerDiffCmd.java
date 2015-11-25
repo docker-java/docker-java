@@ -2,16 +2,20 @@ package com.github.dockerjava.api.command;
 
 import java.util.List;
 
-import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.api.InternalServerErrorException;
-import com.github.dockerjava.api.NotFoundException;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
+import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.exception.InternalServerErrorException;
+import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.ChangeLog;
 
 public interface ContainerDiffCmd extends SyncDockerCmd<List<ChangeLog>> {
 
+    @CheckForNull
     public String getContainerId();
 
-    public ContainerDiffCmd withContainerId(String containerId);
+    public ContainerDiffCmd withContainerId(@Nonnull String containerId);
 
     @Override
     public String toString();

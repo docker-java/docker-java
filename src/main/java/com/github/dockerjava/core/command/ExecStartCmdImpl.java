@@ -4,14 +4,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.InputStream;
 
-import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.command.ExecStartCmd;
 
 public class ExecStartCmdImpl extends AbstrDockerCmd<ExecStartCmd, InputStream> implements ExecStartCmd {
 
     private String execId;
 
-    private boolean detach, tty;
+    private Boolean detach, tty;
 
     public ExecStartCmdImpl(ExecStartCmd.Exec exec, String execId) {
         super(exec);
@@ -31,39 +31,29 @@ public class ExecStartCmdImpl extends AbstrDockerCmd<ExecStartCmd, InputStream> 
     }
 
     @Override
-    public boolean hasDetachEnabled() {
+    public Boolean hasDetachEnabled() {
         return detach;
     }
 
     @Override
-    public boolean hasTtyEnabled() {
+    public Boolean hasTtyEnabled() {
         return tty;
     }
 
     @Override
-    public ExecStartCmd withDetach(boolean detach) {
+    public ExecStartCmd withDetach(Boolean detach) {
         this.detach = detach;
         return this;
     }
 
     @Override
-    public ExecStartCmd withTty(boolean tty) {
+    public ExecStartCmd withTty(Boolean tty) {
         this.tty = tty;
         return this;
     }
 
-    @Override
-    public ExecStartCmd withDetach() {
-        return withDetach(true);
-    }
-
-    @Override
-    public ExecStartCmd withTty() {
-        return withTty(true);
-    }
-
     /**
-     * @throws com.github.dockerjava.api.NotFoundException
+     * @throws NotFoundException
      *             No such exec instance
      */
     @Override

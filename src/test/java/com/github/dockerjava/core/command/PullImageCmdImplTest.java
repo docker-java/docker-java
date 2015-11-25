@@ -13,7 +13,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.api.command.PullImageCmd;
@@ -81,7 +81,7 @@ public class PullImageCmdImplTest extends AbstractDockerClientTest {
         LOG.info("Removing image: {}", testImage);
 
         try {
-            dockerClient.removeImageCmd(testImage).withForce().exec();
+            dockerClient.removeImageCmd(testImage).withForce(true).exec();
         } catch (NotFoundException e) {
             // just ignore if not exist
         }

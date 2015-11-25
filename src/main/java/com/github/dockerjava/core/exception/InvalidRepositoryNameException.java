@@ -1,4 +1,4 @@
-package com.github.dockerjava.core;
+package com.github.dockerjava.core.exception;
 
 public class InvalidRepositoryNameException extends IllegalArgumentException {
 

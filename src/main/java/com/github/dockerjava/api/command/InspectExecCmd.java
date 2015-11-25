@@ -1,11 +1,16 @@
 package com.github.dockerjava.api.command;
 
-import com.github.dockerjava.api.NotFoundException;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
+import com.github.dockerjava.api.exception.NotFoundException;
 
 public interface InspectExecCmd extends SyncDockerCmd<InspectExecResponse> {
+
+    @CheckForNull
     public String getExecId();
 
-    public InspectExecCmd withExecId(String execId);
+    public InspectExecCmd withExecId(@Nonnull String execId);
 
     /**
      * @throws NotFoundException
