@@ -18,12 +18,16 @@ public interface ListImagesCmd extends SyncDockerCmd<List<Image>> {
 
     @CheckForNull
     public String getFilters();
+    
+    public String getImageNameFilter();
 
     @CheckForNull
     public Boolean hasShowAllEnabled();
 
     public ListImagesCmd withShowAll(Boolean showAll);
 
+    public ListImagesCmd withImageNameFilter(String imageName);
+    
     public ListImagesCmd withFilters(String filters);
 
     public static interface Exec extends DockerCmdSyncExec<ListImagesCmd, List<Image>> {
