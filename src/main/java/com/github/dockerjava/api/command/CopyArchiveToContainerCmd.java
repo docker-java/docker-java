@@ -16,7 +16,6 @@ public interface CopyArchiveToContainerCmd extends SyncDockerCmd<Void> {
      * Set container's id
      *
      * @param containerId id of the container to copy file to
-     * @return this
      */
     public CopyArchiveToContainerCmd withContainerId(String containerId);
 
@@ -24,7 +23,6 @@ public interface CopyArchiveToContainerCmd extends SyncDockerCmd<Void> {
      * Set path to the resource on the host machine
      *
      * @param resource path to the resource on the host machine
-     * @return this
      */
     public CopyArchiveToContainerCmd withHostResource(String resource);
 
@@ -32,7 +30,6 @@ public interface CopyArchiveToContainerCmd extends SyncDockerCmd<Void> {
      * If set to true then it will be an error if unpacking the given content would cause an existing directory to be replaced with a non-directory and vice versa
      *
      * @param noOverwriteDirNonDir flag to know if non directory can be overwritten
-     * @return this
      */
     public CopyArchiveToContainerCmd withNoOverwriteDirNonDir(boolean noOverwriteDirNonDir);
 
@@ -43,7 +40,6 @@ public interface CopyArchiveToContainerCmd extends SyncDockerCmd<Void> {
      * dirChildrenOnly = false will create /var/data/root/titi and /var/data/root/tata
      *
      * @param dirChildrenOnly if root directory is ignored
-     * @return this
      */
     public CopyArchiveToContainerCmd withDirChildrenOnly(boolean dirChildrenOnly);
 
