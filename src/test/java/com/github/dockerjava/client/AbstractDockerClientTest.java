@@ -178,12 +178,13 @@ public abstract class AbstractDockerClientTest extends Assert {
      */
     public static void assertContainerHasVolumes(InspectContainerResponse inspectContainerResponse,
             Volume... expectedVolumes) {
-        VolumeBind[] volumeBinds = inspectContainerResponse.getVolumes();
-        LOG.info("Inspect .Volumes = [{}]", Joiner.on(", ").join(volumeBinds));
 
         List<Volume> volumes = new ArrayList<Volume>();
-        for (VolumeBind bind : volumeBinds) {
-            volumes.add(new Volume(bind.getContainerPath()));
+        VolumeBind[] volumeBinds = inspectContainerResponse.getVolumes();
+        if (volumeBinds != null) {
+            for (VolumeBind bind : volumeBinds) {
+                volumes.add(new Volume(bind.getContainerPath()));
+            }
         }
         assertThat(volumes, contains(expectedVolumes));
     }
