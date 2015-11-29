@@ -5,6 +5,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.handler.codec.http.DefaultFullHttpRequest;
+import io.netty.handler.codec.http.DefaultHttpRequest;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.handler.codec.http.HttpClientUpgradeHandler;
@@ -13,8 +14,12 @@ import io.netty.handler.codec.http.HttpHeaderValues;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpVersion;
+import io.netty.handler.codec.http.LastHttpContent;
 import io.netty.handler.codec.json.JsonObjectDecoder;
+import io.netty.handler.stream.ChunkedStream;
+import io.netty.handler.stream.ChunkedWriteHandler;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.IOException;
@@ -29,6 +34,7 @@ import java.util.Map;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dockerjava.api.DockerClientException;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
@@ -36,7 +42,7 @@ import com.github.dockerjava.netty.handler.FramedResponseStreamHandler;
 import com.github.dockerjava.netty.handler.HttpConnectionHijackHandler;
 import com.github.dockerjava.netty.handler.HttpRequestProvider;
 import com.github.dockerjava.netty.handler.HttpResponseHandler;
-import com.github.dockerjava.netty.handler.HttpResponseStreamInboundHandler;
+import com.github.dockerjava.netty.handler.HttpResponseStreamHandler;
 import com.github.dockerjava.netty.handler.JsonResponseCallbackHandler;
 
 public class InvocationBuilder {
@@ -72,7 +78,11 @@ public class InvocationBuilder {
     }
 
     public InvocationBuilder accept(MediaType mediaType) {
-        headers.put(HttpHeaderNames.ACCEPT.toString(), mediaType.getMediaType());
+        return header(HttpHeaderNames.ACCEPT.toString(), mediaType.getMediaType());
+    }
+
+    public InvocationBuilder header(String name, String value) {
+        headers.put(name, value);
         return this;
     }
 
@@ -88,7 +98,7 @@ public class InvocationBuilder {
 
         channel.pipeline().addLast(responseHandler);
 
-        sendRequestAndHandleResponse(requestProvider, channel);
+        sendRequest(requestProvider, channel);
 
         return callback;
     }
@@ -106,7 +116,7 @@ public class InvocationBuilder {
         channel.pipeline().addLast(responseHandler);
         channel.pipeline().addLast(streamHandler);
 
-        sendRequestAndHandleResponse(requestProvider, channel);
+        sendRequest(requestProvider, channel);
     }
 
     public <T> ResponseCallback<T> get(TypeReference<T> typeReference) {
@@ -135,15 +145,13 @@ public class InvocationBuilder {
         channel.pipeline().addLast(new JsonObjectDecoder());
         channel.pipeline().addLast(jsonResponseHandler);
 
-        sendRequestAndHandleResponse(requestProvider, channel);
+        sendRequest(requestProvider, channel);
 
         return;
     }
 
     private Channel getChannel() {
-        Channel channel = channelProvider.getChannel();
-
-        return channel;
+        return channelProvider.getChannel();
     }
 
     private HttpRequestProvider httpDeleteRequestProvider() {
@@ -179,17 +187,17 @@ public class InvocationBuilder {
 
         Channel channel = getChannel();
 
-        ResponseCallback<Void> callback = new ResponseCallback<Void>();
+        ResponseCallback<InputStream> callback = new ResponseCallback<InputStream>();
 
         HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, callback);
-        HttpResponseStreamInboundHandler streamHandler = new HttpResponseStreamInboundHandler();
+        HttpResponseStreamHandler streamHandler = new HttpResponseStreamHandler(callback);
 
         channel.pipeline().addLast(responseHandler);
         channel.pipeline().addLast(streamHandler);
 
-        sendRequestAndHandleResponse(requestProvider, channel);
+        sendRequest(requestProvider, channel);
 
-        return streamHandler.getInputStream();
+        return callback.awaitResult();
     }
 
     public void post(final Object entity, final InputStream stdin, ResultCallback<Frame> resultCallback) {
@@ -208,7 +216,7 @@ public class InvocationBuilder {
                 new HttpClientUpgradeHandler(new HttpClientCodec(), hijackHandler, Integer.MAX_VALUE));
         channel.pipeline().addLast(streamHandler);
 
-        sendRequestAndHandleResponse(requestProvider, channel);
+        sendRequest(requestProvider, channel);
 
         // wait for successful http upgrade procedure
         hijackHandler.await();
@@ -270,7 +278,7 @@ public class InvocationBuilder {
         channel.pipeline().addLast(new JsonObjectDecoder());
         channel.pipeline().addLast(jsonResponseHandler);
 
-        sendRequestAndHandleResponse(requestProvider, channel);
+        sendRequest(requestProvider, channel);
 
         return;
     }
@@ -311,11 +319,12 @@ public class InvocationBuilder {
 
     private HttpRequest preparePostRequest(String uri, Object entity) {
 
-        FullHttpRequest request = new DefaultFullHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.POST, uri);
-
-        setDefaultHeaders(request);
+        HttpRequest request = null;
 
         if (entity != null) {
+
+            FullHttpRequest fullRequest = new DefaultFullHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.POST, uri);
+
             byte[] bytes;
             try {
                 bytes = new ObjectMapper().writeValueAsBytes(entity);
@@ -323,17 +332,22 @@ public class InvocationBuilder {
                 throw new RuntimeException(e);
             }
 
-            request.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json");
-            request.content().clear().writeBytes(Unpooled.copiedBuffer(bytes));
-            request.headers().set(HttpHeaderNames.CONTENT_LENGTH, bytes.length);
+            fullRequest.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json");
+            fullRequest.content().clear().writeBytes(Unpooled.copiedBuffer(bytes));
+            fullRequest.headers().set(HttpHeaderNames.CONTENT_LENGTH, bytes.length);
+
+            request = fullRequest;
         } else {
+            request = new DefaultHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.POST, uri);
             request.headers().set(HttpHeaderNames.CONTENT_LENGTH, 0);
         }
+
+        setDefaultHeaders(request);
 
         return request;
     }
 
-    private void sendRequestAndHandleResponse(HttpRequestProvider requestProvider, Channel channel) {
+    private void sendRequest(HttpRequestProvider requestProvider, Channel channel) {
 
         ChannelFuture channelFuture = channel.writeAndFlush(requestProvider.getHttpRequest(resource));
 
@@ -356,5 +370,73 @@ public class InvocationBuilder {
         for (Map.Entry<String, String> entry : headers.entrySet()) {
             request.headers().set((CharSequence) entry.getKey(), entry.getValue());
         }
+    }
+
+    public <T> T post(TypeReference<T> typeReference, InputStream body) {
+
+        ResponseCallback<T> callback = new ResponseCallback<T>();
+
+        post(typeReference, callback, body);
+
+        return callback.awaitResult();
+    }
+
+
+    public <T> void post(TypeReference<T> typeReference, ResultCallback<T> resultCallback, InputStream body) {
+        HttpRequestProvider requestProvider = httpPostRequestProvider(null);
+
+        Channel channel = getChannel();
+
+        resultCallbackOnStart(channel, resultCallback);
+
+        JsonResponseCallbackHandler<T> jsonResponseHandler = new JsonResponseCallbackHandler<T>(typeReference,
+                resultCallback);
+
+        HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, resultCallback);
+
+        channel.pipeline().addLast(new ChunkedWriteHandler());
+        channel.pipeline().addLast(responseHandler);
+        channel.pipeline().addLast(new JsonObjectDecoder());
+        channel.pipeline().addLast(jsonResponseHandler);
+
+        HttpRequest request = requestProvider.getHttpRequest(resource);
+
+        // don't accept FullHttpRequest here
+        if (request instanceof FullHttpRequest) {
+            throw new DockerClientException("fatal: request is instance of FullHttpRequest");
+        }
+
+        request.headers().set(HttpHeaderNames.TRANSFER_ENCODING, HttpHeaderValues.CHUNKED);
+        request.headers().remove(HttpHeaderNames.CONTENT_LENGTH);
+
+        channel.write(request);
+
+        channel.write(new ChunkedStream(new BufferedInputStream(body, 1024 * 1024), 1024 * 1024));
+        channel.write(LastHttpContent.EMPTY_LAST_CONTENT);
+        channel.flush();
+
+        return;
+
+    }
+
+    public InputStream get() {
+        HttpRequestProvider requestProvider = httpGetRequestProvider();
+
+        Channel channel = getChannel();
+
+        ResponseCallback<InputStream> resultCallback = new ResponseCallback<InputStream>();
+
+        resultCallbackOnStart(channel, resultCallback);
+
+        HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, resultCallback);
+
+        HttpResponseStreamHandler streamHandler = new HttpResponseStreamHandler(resultCallback);
+
+        channel.pipeline().addLast(responseHandler);
+        channel.pipeline().addLast(streamHandler);
+
+        sendRequest(requestProvider, channel);
+
+        return resultCallback.awaitResult();
     };
 }

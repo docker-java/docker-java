@@ -1,14 +1,12 @@
 package com.github.dockerjava.netty.exec;
 
-import com.github.dockerjava.api.command.StartContainerCmd;
-import com.github.dockerjava.api.command.StartContainerCmd.Exec;
-import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.netty.MediaType;
-import com.github.dockerjava.netty.WebTarget;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.dockerjava.api.command.StartContainerCmd;
+import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.netty.MediaType;
+import com.github.dockerjava.netty.WebTarget;
 
 public class StartContainerCmdExec extends AbstrSyncDockerCmdExec<StartContainerCmd, Void> implements
         StartContainerCmd.Exec {

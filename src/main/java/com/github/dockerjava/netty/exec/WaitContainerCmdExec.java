@@ -27,7 +27,7 @@ public class WaitContainerCmdExec extends AbstrAsyncDockerCmdExec<WaitContainerC
 
         LOGGER.trace("POST: {}", webTarget);
 
-        webTarget.request().accept(MediaType.APPLICATION_JSON).post(null, new TypeReference<WaitResponse>() {
+        webTarget.request().accept(MediaType.APPLICATION_JSON).post((Object) null, new TypeReference<WaitResponse>() {
         }, resultCallback);
 
         return null;

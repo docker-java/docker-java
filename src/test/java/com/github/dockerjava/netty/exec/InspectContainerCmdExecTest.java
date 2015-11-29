@@ -1,8 +1,6 @@
 package com.github.dockerjava.netty.exec;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 
@@ -21,12 +19,8 @@ import org.testng.annotations.Test;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.ExecCreateCmdResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
-import com.github.dockerjava.api.command.InspectExecResponse;
-import com.github.dockerjava.core.command.ExecStartResultCallback;
 import com.github.dockerjava.netty.AbstractDockerClientTest;
-import com.github.dockerjava.test.serdes.JSONTestHelper;
 
 @Test(groups = "integration")
 public class InspectContainerCmdExecTest extends AbstractDockerClientTest {

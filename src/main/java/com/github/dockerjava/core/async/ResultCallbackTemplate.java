@@ -63,6 +63,7 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
 
     @Override
     public void onComplete() {
+        System.err.println("callback onComplete");
         try {
             close();
         } catch (IOException e) {

@@ -2,7 +2,11 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.io.InputStream;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.dockerjava.api.async.ResultCallback;
+import com.github.dockerjava.api.command.ExecCreateCmd;
 import com.github.dockerjava.api.command.ExecStartCmd;
 import com.github.dockerjava.api.model.Frame;
 
@@ -11,6 +15,8 @@ public class ExecStartCmdImpl extends AbstrAsyncDockerCmd<ExecStartCmd, Frame> i
     private String execId;
 
     private Boolean detach, tty;
+
+    private InputStream stdin;
 
     public ExecStartCmdImpl(ExecStartCmd.Exec exec, String execId) {
         super(exec);
@@ -40,6 +46,13 @@ public class ExecStartCmdImpl extends AbstrAsyncDockerCmd<ExecStartCmd, Frame> i
     }
 
     @Override
+    @JsonIgnore
+    public InputStream getStdin() {
+        return stdin;
+    }
+
+
+    @Override
     public ExecStartCmd withDetach(Boolean detach) {
         this.detach = detach;
         return this;
@@ -48,6 +61,12 @@ public class ExecStartCmdImpl extends AbstrAsyncDockerCmd<ExecStartCmd, Frame> i
     @Override
     public ExecStartCmd withTty(Boolean tty) {
         this.tty = tty;
+        return this;
+    }
+
+    @Override
+    public ExecStartCmd withStdIn(InputStream stdin) {
+        this.stdin = stdin;
         return this;
     }
 

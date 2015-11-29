@@ -8,8 +8,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
-import io.netty.channel.Channel;
-
 public class WebTarget {
 
     private ChannelProvider channelProvider;

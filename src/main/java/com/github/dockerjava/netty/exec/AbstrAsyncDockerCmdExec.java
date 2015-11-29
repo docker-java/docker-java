@@ -1,14 +1,13 @@
 package com.github.dockerjava.netty.exec;
 
+import java.io.Closeable;
+import java.io.IOException;
+
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.AsyncDockerCmd;
 import com.github.dockerjava.api.command.DockerCmdAsyncExec;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.jaxrs.async.AbstractCallbackNotifier;
 import com.github.dockerjava.netty.WebTarget;
-
-import java.io.Closeable;
-import java.io.IOException;
 
 public abstract class AbstrAsyncDockerCmdExec<CMD_T extends AsyncDockerCmd<CMD_T, A_RES_T>, A_RES_T> extends
         AbstrDockerCmdExec implements DockerCmdAsyncExec<CMD_T, A_RES_T> {
@@ -60,8 +59,5 @@ public abstract class AbstrAsyncDockerCmdExec<CMD_T extends AsyncDockerCmd<CMD_T
     }
 
     protected abstract Void execute0(final CMD_T command, final ResultCallback<A_RES_T> resultCallback);
-
-
-
 
 }

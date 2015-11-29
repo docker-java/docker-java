@@ -74,9 +74,15 @@ import com.github.dockerjava.core.command.ExecCreateCmdImpl;
 import com.github.dockerjava.core.command.ExecStartCmdImpl;
 import com.github.dockerjava.core.command.ExecStartResultCallback;
 import com.github.dockerjava.core.command.InfoCmdImpl;
+import com.github.dockerjava.netty.exec.AttachContainerCmdExec;
 import com.github.dockerjava.netty.exec.AuthCmdExec;
+import com.github.dockerjava.netty.exec.BuildImageCmdExec;
+import com.github.dockerjava.netty.exec.CommitCmdExec;
+import com.github.dockerjava.netty.exec.ContainerDiffCmdExec;
 import com.github.dockerjava.netty.exec.CopyFileFromContainerCmdExec;
 import com.github.dockerjava.netty.exec.CreateContainerCmdExec;
+import com.github.dockerjava.netty.exec.CreateImageCmdExec;
+import com.github.dockerjava.netty.exec.EventsCmdExec;
 import com.github.dockerjava.netty.exec.ExecCreateCmdExec;
 import com.github.dockerjava.netty.exec.ExecStartCmdExec;
 import com.github.dockerjava.netty.exec.InfoCmdExec;
@@ -85,16 +91,30 @@ import com.github.dockerjava.netty.exec.InspectExecCmdExec;
 import com.github.dockerjava.netty.exec.InspectImageCmdExec;
 import com.github.dockerjava.netty.exec.KillContainerCmdExec;
 import com.github.dockerjava.netty.exec.ListContainersCmdExec;
+import com.github.dockerjava.netty.exec.ListImagesCmdExec;
 import com.github.dockerjava.netty.exec.LogContainerCmdExec;
+import com.github.dockerjava.netty.exec.PauseContainerCmdExec;
+import com.github.dockerjava.netty.exec.PingCmdExec;
+import com.github.dockerjava.netty.exec.PullImageCmdExec;
+import com.github.dockerjava.netty.exec.PushImageCmdExec;
 import com.github.dockerjava.netty.exec.RemoveContainerCmdExec;
+import com.github.dockerjava.netty.exec.RemoveImageCmdExec;
+import com.github.dockerjava.netty.exec.RestartContainerCmdExec;
+import com.github.dockerjava.netty.exec.SaveImageCmdExec;
+import com.github.dockerjava.netty.exec.SearchImagesCmdExec;
 import com.github.dockerjava.netty.exec.StartContainerCmdExec;
+import com.github.dockerjava.netty.exec.StatsCmdExec;
 import com.github.dockerjava.netty.exec.StopContainerCmdExec;
+import com.github.dockerjava.netty.exec.TagImageCmdExec;
+import com.github.dockerjava.netty.exec.TopContainerCmdExec;
+import com.github.dockerjava.netty.exec.UnpauseContainerCmdExec;
+import com.github.dockerjava.netty.exec.VersionCmdExec;
 import com.github.dockerjava.netty.exec.WaitContainerCmdExec;
 
 /**
- * http://stackoverflow.com/questions/33296749/netty-connect-to-unix-domain- socket-failed
+ * http://stackoverflow.com/questions/33296749/netty-connect-to-unix-domain-socket-failed
  * http://netty.io/wiki/native-transports.html
- * https://github.com/netty/netty/blob/master/example/src/main/java/io/netty/ example/http/snoop/HttpSnoopClient.java
+ * https://github.com/netty/netty/blob/master/example/src/main/java/io/netty/example/http/snoop/HttpSnoopClient.java
  *
  * @author marcus
  *
@@ -271,56 +291,47 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
     @Override
     public PingCmd.Exec createPingCmdExec() {
-        return null; // new PingCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new PingCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public VersionCmd.Exec createVersionCmdExec() {
-        return null; // new VersionCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new VersionCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public PullImageCmd.Exec createPullImageCmdExec() {
-        return null; // new PullImageCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new PullImageCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public PushImageCmd.Exec createPushImageCmdExec() {
-        return null; // new PushImageCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new PushImageCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public SaveImageCmd.Exec createSaveImageCmdExec() {
-        return null; // new SaveImageCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new SaveImageCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public CreateImageCmd.Exec createCreateImageCmdExec() {
-        return null; // new CreateImageCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new CreateImageCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public SearchImagesCmd.Exec createSearchImagesCmdExec() {
-        return null; // new SearchImagesCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new SearchImagesCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public RemoveImageCmd.Exec createRemoveImageCmdExec() {
-        return null; // new RemoveImageCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new RemoveImageCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public ListImagesCmd.Exec createListImagesCmdExec() {
-        return null; // new ListImagesCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new ListImagesCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
@@ -365,8 +376,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
     @Override
     public AttachContainerCmd.Exec createAttachContainerCmdExec() {
-        return null; // new AttachContainerCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new AttachContainerCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
@@ -396,8 +406,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
     @Override
     public ContainerDiffCmd.Exec createContainerDiffCmdExec() {
-        return null; // new ContainerDiffCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new ContainerDiffCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
@@ -407,63 +416,52 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
     @Override
     public RestartContainerCmd.Exec createRestartContainerCmdExec() {
-        return null; // new RestartContainerCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new RestartContainerCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public CommitCmd.Exec createCommitCmdExec() {
-        return null; // new CommitCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new CommitCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public BuildImageCmd.Exec createBuildImageCmdExec() {
-        return null; // new BuildImageCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new BuildImageCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public TopContainerCmd.Exec createTopContainerCmdExec() {
-        return null; // new TopContainerCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new TopContainerCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public TagImageCmd.Exec createTagImageCmdExec() {
-        return null; // new TagImageCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new TagImageCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public PauseContainerCmd.Exec createPauseContainerCmdExec() {
-        return null; // new PauseContainerCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new PauseContainerCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public UnpauseContainerCmd.Exec createUnpauseContainerCmdExec() {
-        return null; // new UnpauseContainerCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new UnpauseContainerCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public EventsCmd.Exec createEventsCmdExec() {
-        return null; // new EventsCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new EventsCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public StatsCmd.Exec createStatsCmdExec() {
-        return null; // new StatsCmdExec(getBaseResource(),
-                     // getDockerClientConfig());
+        return new StatsCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
     public void close() throws IOException {
-        // checkNotNull(client, "Factory not initialized. You probably forgot to
-        // call init()!");
-        // client.close();
+        checkNotNull(eventLoopGroup, "Factory not initialized. You probably forgot to call init()!");
 
         eventLoopGroup.shutdownGracefully();
     }

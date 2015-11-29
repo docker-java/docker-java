@@ -1,5 +1,7 @@
 package com.github.dockerjava.api.command;
 
+import java.io.InputStream;
+
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 

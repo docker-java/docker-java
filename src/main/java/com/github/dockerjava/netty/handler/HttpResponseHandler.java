@@ -12,7 +12,6 @@ import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.LastHttpContent;
 
 import java.nio.charset.Charset;
-import java.util.concurrent.CountDownLatch;
 
 import com.github.dockerjava.api.BadRequestException;
 import com.github.dockerjava.api.ConflictException;
@@ -74,7 +73,6 @@ public class HttpResponseHandler extends SimpleChannelInboundHandler<HttpObject>
                     case 302:
                         if (response.headers().contains(HttpHeaderNames.LOCATION)) {
                             String location = response.headers().get(HttpHeaderNames.LOCATION);
-                            System.out.println("redirected to :" + location);
                             HttpRequest redirected = requestProvider.getHttpRequest(location);
 
                             ctx.channel().writeAndFlush(redirected);
@@ -100,18 +98,13 @@ public class HttpResponseHandler extends SimpleChannelInboundHandler<HttpObject>
                 } catch (Throwable e) {
                     resultCallback.onError(e);
                 } finally {
-                    System.err.println("LastHttpContent");
                     resultCallback.onComplete();
                 }
             }
-        } else {
-            System.err.println("UNKNOWN");
         }
-
     }
 
     private String getBodyAsMessage(ByteBuf body) {
         return body.readBytes(body.readableBytes()).toString(Charset.forName("UTF-8"));
     }
-
 }

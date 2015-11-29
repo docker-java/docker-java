@@ -4,9 +4,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.security.SecureRandom;
+import java.util.concurrent.TimeUnit;
 
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -93,5 +96,51 @@ public class ExecStartCmdExecTest extends AbstractDockerClientTest {
         String responseAsString = asString(response);
         assertNotNull(responseAsString);
         assertTrue(responseAsString.length() > 0);
+    }
+
+    @Test(groups = "ignoreInCircleCi")
+    public void execStartAttachStdin() throws Exception {
+        String containerName = "generated_" + new SecureRandom().nextInt();
+
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
+                .withName(containerName).exec();
+        LOG.info("Created container {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+
+        dockerClient.startContainerCmd(container.getId()).exec();
+
+        InputStream stdin = new ByteArrayInputStream("echo STDIN\n".getBytes());
+
+        ByteArrayOutputStream stdout = new ByteArrayOutputStream();
+
+        ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
+                .withAttachStdout(true).withAttachStdin(true).withCmd("/bin/sh").exec();
+        dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false).withTty(true).withStdIn(stdin)
+                .exec(new ExecStartResultCallback(stdout, System.err)).awaitCompletion(5, TimeUnit.SECONDS);
+
+        assertEquals(stdout.toString(), "STDIN\n");
+    }
+
+    @Test(groups = "ignoreInCircleCi")
+    public void execStartNotAttachedStdin() throws Exception {
+        String containerName = "generated_" + new SecureRandom().nextInt();
+
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
+                .withName(containerName).exec();
+        LOG.info("Created container {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+
+        dockerClient.startContainerCmd(container.getId()).exec();
+
+        InputStream stdin = new ByteArrayInputStream("echo STDIN\n".getBytes());
+
+        ByteArrayOutputStream stdout = new ByteArrayOutputStream();
+
+        ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
+                .withAttachStdout(true).withAttachStdin(false).withCmd("/bin/sh").exec();
+        dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false).withTty(true).withStdIn(stdin)
+                .exec(new ExecStartResultCallback(stdout, System.err)).awaitCompletion(5, TimeUnit.SECONDS);
+
+        assertEquals(stdout.toString(), "");
     }
 }

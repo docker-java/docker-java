@@ -36,7 +36,6 @@ public class JsonResponseCallbackHandler<T> extends SimpleChannelInboundHandler<
         }
 
         callback.onNext(object);
-        callback.close();
     }
 
     @Override

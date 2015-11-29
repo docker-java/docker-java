@@ -12,17 +12,17 @@ import com.github.dockerjava.netty.WebTarget;
 
 public class ExecStartCmdExec extends AbstrAsyncDockerCmdExec<ExecStartCmd, Frame> implements ExecStartCmd.Exec {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ExecStartCmdExec.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExecStartCmdExec.class);
 
-	public ExecStartCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
-		super(baseResource, dockerClientConfig);
-	}
+    public ExecStartCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
+        super(baseResource, dockerClientConfig);
+    }
 
     @Override
     protected Void execute0(ExecStartCmd command, ResultCallback<Frame> resultCallback) {
         WebTarget webTarget = getBaseResource().path("/exec/{id}/start").resolveTemplate("id", command.getExecId());
 
-        webTarget.request().accept(MediaType.APPLICATION_JSON).post(command, System.in, resultCallback);
+        webTarget.request().accept(MediaType.APPLICATION_JSON).post(command, command.getStdin(), resultCallback);
 
         return null;
     }

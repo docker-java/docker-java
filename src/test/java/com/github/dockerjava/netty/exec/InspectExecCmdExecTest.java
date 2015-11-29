@@ -59,7 +59,7 @@ public class InspectExecCmdExecTest extends AbstractDockerClientTest {
         dockerClient.startContainerCmd(container.getId()).exec();
 
         ExecCreateCmdResponse touchFileCmdCreateResponse = dockerClient.execCreateCmd(container.getId())
-                .withAttachStdout(true).withAttachStderr(true).withCmd("touch", "/marker").exec();
+                .withAttachStdout(true).withAttachStderr(true).withCmd("touch", "/marker").withTty(true).exec();
         LOG.info("Created exec {}", touchFileCmdCreateResponse.toString());
         assertThat(touchFileCmdCreateResponse.getId(), not(isEmptyString()));
         ExecCreateCmdResponse checkFileCmdCreateResponse = dockerClient.execCreateCmd(container.getId())
@@ -68,22 +68,26 @@ public class InspectExecCmdExecTest extends AbstractDockerClientTest {
         assertThat(checkFileCmdCreateResponse.getId(), not(isEmptyString()));
 
         // Check that file does not exist
-        dockerClient.execStartCmd(container.getId())
-                .withExecId(checkFileCmdCreateResponse.getId()).exec(new ExecStartResultCallback(System.out, System.err));
+        dockerClient.execStartCmd(container.getId()).withDetach(false).withTty(true)
+                .withExecId(checkFileCmdCreateResponse.getId())
+                .exec(new ExecStartResultCallback(System.out, System.err));
 
         InspectExecResponse first = dockerClient.inspectExecCmd(checkFileCmdCreateResponse.getId()).exec();
+        assertEquals(first.isRunning(), new Boolean(false));
         assertThat(first.getExitCode(), is(1));
 
         // Create the file
-        dockerClient.execStartCmd(container.getId())
-                .withExecId(touchFileCmdCreateResponse.getId()).exec(new ExecStartResultCallback(System.out, System.err));
+        dockerClient.execStartCmd(container.getId()).withDetach(false).withTty(true)
+                .withExecId(touchFileCmdCreateResponse.getId())
+                .exec(new ExecStartResultCallback(System.out, System.err));
 
         InspectExecResponse second = dockerClient.inspectExecCmd(touchFileCmdCreateResponse.getId()).exec();
+        assertEquals(first.isRunning(), new Boolean(false));
         assertThat(second.getExitCode(), is(0));
 
         // Check that file does exist now
-        dockerClient.execStartCmd(container.getId())
-                .withExecId(checkFileCmdCreateResponse.getId()).exec(new ExecStartResultCallback(System.out, System.err));
+        dockerClient.execStartCmd(container.getId()).withExecId(checkFileCmdCreateResponse.getId())
+                .exec(new ExecStartResultCallback(System.out, System.err));
 
         InspectExecResponse third = dockerClient.inspectExecCmd(checkFileCmdCreateResponse.getId()).exec();
         assertThat(third.getExitCode(), is(0));

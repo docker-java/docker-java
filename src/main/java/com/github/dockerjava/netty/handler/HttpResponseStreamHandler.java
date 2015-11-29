@@ -10,9 +10,15 @@ import java.util.concurrent.LinkedTransferQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class HttpResponseStreamInboundHandler extends SimpleChannelInboundHandler<ByteBuf> {
+import com.github.dockerjava.api.async.ResultCallback;
+
+public class HttpResponseStreamHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     private HttpResponseInputStream stream = new HttpResponseInputStream();
+
+    public HttpResponseStreamHandler(ResultCallback<InputStream> resultCallback) {
+        resultCallback.onNext(stream);
+    }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
@@ -23,16 +29,6 @@ public class HttpResponseStreamInboundHandler extends SimpleChannelInboundHandle
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         stream.close();
         super.channelReadComplete(ctx);
-    }
-
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        cause.printStackTrace();
-        ctx.close();
-    }
-
-    public InputStream getInputStream() {
-        return stream;
     }
 
     public static class HttpResponseInputStream extends InputStream {
