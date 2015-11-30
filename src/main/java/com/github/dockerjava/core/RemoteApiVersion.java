@@ -10,7 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Bean to encapsulate the version of the Docker Remote API (REST API)
+ * Bean to encapsulate the version of the
+ * <a href="http://docs.docker.com/engine/reference/api/docker_remote_api/">Docker Remote (REST) API</a>
  * <p>
  * Contains the minor and major version of the API as well as operations to compare API versions.
  *
@@ -19,10 +20,49 @@ import java.util.regex.Pattern;
 public class RemoteApiVersion implements Serializable {
     private static final long serialVersionUID = -5382212999262115459L;
 
-    public static final RemoteApiVersion VERSION_1_19 = RemoteApiVersion.create(1, 19);
-
     private static final Pattern VERSION_REGEX = Pattern.compile("v?(\\d+)\\.(\\d+)");
 
+    /**
+     * @see <a href="http://docs.docker.com/engine/reference/api/docker_remote_api_v1.16/">Docker API 1.16</a>
+     */
+    public static final RemoteApiVersion VERSION_1_16 = RemoteApiVersion.create(1, 16);
+
+    /**
+     * @see <a href="http://docs.docker.com/engine/reference/api/docker_remote_api_v1.17/">Docker API 1.17</a>
+     */
+    public static final RemoteApiVersion VERSION_1_17 = RemoteApiVersion.create(1, 17);
+
+    /**
+     * @see <a href="http://docs.docker.com/engine/reference/api/docker_remote_api_v1.18/">Docker API 1.18</a>
+     */
+    public static final RemoteApiVersion VERSION_1_18 = RemoteApiVersion.create(1, 18);
+
+    /**
+     * @see <a href="http://docs.docker.com/engine/reference/api/docker_remote_api_v1.19/">Docker API 1.19</a>
+     */
+    public static final RemoteApiVersion VERSION_1_19 = RemoteApiVersion.create(1, 19);
+
+    /**
+     * @see <a href="http://docs.docker.com/engine/reference/api/docker_remote_api_v1.20/">Docker API 1.20</a>
+     */
+    public static final RemoteApiVersion VERSION_1_20 = RemoteApiVersion.create(1, 20);
+
+
+    /**
+     * @see <a href="http://docs.docker.com/engine/reference/api/docker_remote_api_v1.21/">Docker API 1.21</a>
+     */
+    public static final RemoteApiVersion VERSION_1_21 = RemoteApiVersion.create(1, 21);
+
+    /**
+     * @see <a href="https://github.com/docker/docker/blob/master/docs/reference/api/docker_remote_api_v1.22.md">Docker API 1.22</a>
+     */
+    public static final RemoteApiVersion VERSION_1_22 = RemoteApiVersion.create(1, 22);
+
+
+    /**
+     * Unknown, docker doesn't reflect reality.
+     * I.e. we implemented method, but for javadoc it not clear when it was added.
+     */
     private static final RemoteApiVersion UNKNOWN_VERSION = new RemoteApiVersion(0, 0) {
 
         @Override

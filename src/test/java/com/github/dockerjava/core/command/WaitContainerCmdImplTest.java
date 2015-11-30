@@ -64,7 +64,7 @@ public class WaitContainerCmdImplTest extends AbstractDockerClientTest {
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
         LOG.info("Container Inspect: {}", inspectContainerResponse.toString());
 
-        assertThat(inspectContainerResponse.getState().isRunning(), is(equalTo(false)));
+        assertThat(inspectContainerResponse.getState().getRunning(), is(equalTo(false)));
         assertThat(inspectContainerResponse.getState().getExitCode(), is(equalTo(exitCode)));
     }
 
@@ -102,6 +102,6 @@ public class WaitContainerCmdImplTest extends AbstractDockerClientTest {
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
         LOG.info("Container Inspect: {}", inspectContainerResponse.toString());
 
-        assertThat(inspectContainerResponse.getState().isRunning(), is(equalTo(false)));
+        assertThat(inspectContainerResponse.getState().getRunning(), is(equalTo(false)));
     }
 }
