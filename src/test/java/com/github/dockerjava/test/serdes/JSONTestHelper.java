@@ -25,13 +25,14 @@ import org.apache.commons.io.IOUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.api.command.CommandJSONSamples;
 
 /**
- * Provides helper methods for serialization-deserialization tests
- * 
+ * Provides helper methods for serialization-deserialization tests.
+ *
+ * <p><b>TODO</b>: Create helper that loads json files from simple folder
+ * structure using a type, version number, and name.</p>
+ *
  * @author Oleg Nenashev
- * @since TODO
  */
 public class JSONTestHelper {
 
@@ -45,11 +46,12 @@ public class JSONTestHelper {
      *             JSON Conversion error
      */
     public static String readString(JSONResourceRef resource) throws IOException {
-        InputStream istream = CommandJSONSamples.class.getResourceAsStream(resource.getFileName());
-        if (istream == null) {
-            throw new IOException("Cannot retrieve resource " + resource.getFileName());
+        try (InputStream istream = resource.getResourceClass().getResourceAsStream(resource.getFileName())) {
+            if (istream == null) {
+                throw new IOException("Cannot retrieve resource " + resource.getFileName());
+            }
+            return IOUtils.toString(istream, "UTF-8");
         }
-        return IOUtils.toString(istream, "UTF-8");
     }
 
     /**
