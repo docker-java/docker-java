@@ -27,12 +27,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * Provides helper methods for serialization-deserialization tests
- * 
+ * Provides helper methods for serialization-deserialization tests.
+ *
+ * <p><b>TODO</b>: Create helper that loads json files from simple folder
+ * structure using a type, version number, and name.</p>
+ *
  * @author Oleg Nenashev
  */
-//TODO: Create helper that loads json files from simple folder structure using a type,
-// version number, and name.
 public class JSONTestHelper {
 
     /**

@@ -30,9 +30,7 @@ import org.testng.annotations.Test;
  */
 public class PullResponseItemTest {
     @Test
-    public void pullNewerImage()
-        throws IOException
-    {
+    public void pullNewerImage() throws IOException {
         PullResponseItem response =
                 testRoundTrip(PullResponseJSONSamples.pullImageResponse_newerImage, PullResponseItem.class);
         assertTrue(response.isPullSuccessIndicated());
@@ -40,9 +38,7 @@ public class PullResponseItemTest {
     }
 
     @Test
-    public void pullUpToDate()
-        throws IOException
-    {
+    public void pullUpToDate() throws IOException {
         PullResponseItem response =
                 testRoundTrip(PullResponseJSONSamples.pullImageResponse_upToDate, PullResponseItem.class);
         assertTrue(response.isPullSuccessIndicated());
@@ -50,9 +46,7 @@ public class PullResponseItemTest {
     }
 
     @Test
-    public void pullLegacyRegistry()
-        throws IOException
-    {
+    public void pullLegacyRegistry() throws IOException {
         PullResponseItem response =
                 testRoundTrip(PullResponseJSONSamples.pullImageResponse_legacy, PullResponseItem.class);
         assertTrue(response.isPullSuccessIndicated());
@@ -60,9 +54,7 @@ public class PullResponseItemTest {
     }
 
     @Test
-    public void pullAndEncounterError()
-        throws IOException
-    {
+    public void pullAndEncounterError() throws IOException {
         PullResponseItem response =
                 testRoundTrip(PullResponseJSONSamples.pullImageResponse_error, PullResponseItem.class);
         assertFalse(response.isPullSuccessIndicated());
