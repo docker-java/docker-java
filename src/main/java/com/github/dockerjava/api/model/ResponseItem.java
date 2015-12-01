@@ -100,13 +100,25 @@ public class ResponseItem implements Serializable {
         private static final long serialVersionUID = -1954994695645715264L;
 
         @JsonProperty("current")
-        long current;
+        public long current;
 
         @JsonProperty("total")
-        long total;
+        public long total;
 
         @JsonProperty("start")
-        long start;
+        public long start;
+
+        public long getCurrent() {
+            return current;
+        }
+
+        public long getTotal() {
+            return total;
+        }
+
+        public long getStart() {
+            return start;
+        }
 
         @Override
         public String toString() {
@@ -123,6 +135,14 @@ public class ResponseItem implements Serializable {
 
         @JsonProperty("message")
         String message;
+
+        public int getCode() {
+            return code;
+        }
+
+        public String getMessage() {
+            return message;
+        }
 
         @Override
         public String toString() {
