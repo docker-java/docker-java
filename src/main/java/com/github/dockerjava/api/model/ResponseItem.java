@@ -100,13 +100,13 @@ public class ResponseItem implements Serializable {
         private static final long serialVersionUID = -1954994695645715264L;
 
         @JsonProperty("current")
-        public long current;
+        long current;
 
         @JsonProperty("total")
-        public long total;
+        long total;
 
         @JsonProperty("start")
-        public long start;
+        long start;
 
         public long getCurrent() {
             return current;
