@@ -2,7 +2,8 @@ Change Log
 ===
 2.1.3-SNAPSHOT
 ---
-* [#362] (https://github.com/docker-java/docker-java/pull/362) Deprecate "network" and enable "networks" stats (remote Docker API 1.21) 
+* [#387] (https://github.com/docker-java/docker-java/pull/387) Make ProgressDetails attributes public
+* [#362] (https://github.com/docker-java/docker-java/pull/362) Deprecate "network" and enable "networks" stats (remote Docker API 1.21)
 
 ===
 v2.1.2
