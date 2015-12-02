@@ -108,6 +108,18 @@ public class ResponseItem implements Serializable {
         @JsonProperty("start")
         long start;
 
+        public long getCurrent() {
+            return current;
+        }
+
+        public long getTotal() {
+            return total;
+        }
+
+        public long getStart() {
+            return start;
+        }
+
         @Override
         public String toString() {
             return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE).toString();
@@ -123,6 +135,14 @@ public class ResponseItem implements Serializable {
 
         @JsonProperty("message")
         String message;
+
+        public int getCode() {
+            return code;
+        }
+
+        public String getMessage() {
+            return message;
+        }
 
         @Override
         public String toString() {
