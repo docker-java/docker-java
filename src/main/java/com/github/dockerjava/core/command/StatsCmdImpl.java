@@ -12,8 +12,9 @@ public class StatsCmdImpl extends AbstrAsyncDockerCmd<StatsCmd, Statistics> impl
 
     private String containerId;
 
-    public StatsCmdImpl(StatsCmd.Exec exec) {
+    public StatsCmdImpl(StatsCmd.Exec exec, String containerId) {
         super(exec);
+        withContainerId(containerId);
     }
 
     @Override

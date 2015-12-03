@@ -147,7 +147,7 @@ public interface DockerClient extends Closeable {
 
     public EventsCmd eventsCmd();
 
-    public StatsCmd statsCmd();
+    public StatsCmd statsCmd(String containerId);
 
     @Override
     public void close() throws IOException;

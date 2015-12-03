@@ -370,8 +370,8 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
-    public StatsCmd statsCmd() {
-        return new StatsCmdImpl(getDockerCmdExecFactory().createStatsCmdExec());
+    public StatsCmd statsCmd(String containerId) {
+        return new StatsCmdImpl(getDockerCmdExecFactory().createStatsCmdExec(), containerId);
     }
 
     @Override
