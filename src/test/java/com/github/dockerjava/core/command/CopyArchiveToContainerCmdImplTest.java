@@ -4,8 +4,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -17,6 +21,7 @@ import org.testng.annotations.Test;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.core.util.CompressArchiveUtil;
 
 public class CopyArchiveToContainerCmdImplTest extends AbstractDockerClientTest {
     @BeforeTest
@@ -40,17 +45,33 @@ public class CopyArchiveToContainerCmdImplTest extends AbstractDockerClientTest 
     }
 
     @Test
-    public void copyToContainer() throws Exception {
-        // TODO extract this into a shared method
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
-                .withName("docker-java-itest-copyFromContainer").withCmd("touch", "/copyFromContainer").exec();
+    public void copyFileToContainer() throws Exception {
+        CreateContainerResponse container = prepareContainerForCopy();
+        Path temp = Files.createTempFile("", ".tar.gz");
+        CompressArchiveUtil.tar(Paths.get("src/test/resources/testReadFile"), temp, true, false);
+        try (InputStream uploadStream = Files.newInputStream(temp)) {
+            dockerClient.copyArchiveToContainerCmd(container.getId()).withTarInputStream(uploadStream).exec();
+            assertFileCopied(container);
+        }
+    }
 
+    @Test
+    public void copyStreamToContainer() throws Exception {
+        CreateContainerResponse container = prepareContainerForCopy();
+        dockerClient.copyArchiveToContainerCmd(container.getId()).withHostResource("src/test/resources/testReadFile").exec();
+        assertFileCopied(container);
+    }
+
+    private CreateContainerResponse prepareContainerForCopy() {
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withName("docker-java-itest-copyToContainer").exec();
         LOG.info("Created container: {}", container);
         assertThat(container.getId(), not(isEmptyOrNullString()));
-
         dockerClient.startContainerCmd(container.getId()).exec();
+        // Copy a folder to the container
+        return container;
+    }
 
-        dockerClient.copyArchiveToContainerCmd(container.getId(), "src/test/resources/testReadFile").exec();
+    private void assertFileCopied(CreateContainerResponse container) throws IOException {
         try (InputStream response = dockerClient.copyArchiveFromContainerCmd(container.getId(), "testReadFile").exec()) {
             boolean bytesAvailable = response.available() > 0;
             assertTrue(bytesAvailable, "The file was not copied to the container.");
@@ -60,7 +81,7 @@ public class CopyArchiveToContainerCmdImplTest extends AbstractDockerClientTest 
     @Test
     public void copyToNonExistingContainer() throws Exception {
         try {
-            dockerClient.copyArchiveFromContainerCmd("non-existing", "/test").exec();
+            dockerClient.copyArchiveToContainerCmd("non-existing").withHostResource("src/test/resources/testReadFile").exec();
             fail("expected NotFoundException");
         } catch (NotFoundException ignored) {
         }

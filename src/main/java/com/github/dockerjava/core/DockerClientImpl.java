@@ -314,9 +314,9 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
-    public CopyArchiveToContainerCmd copyArchiveToContainerCmd(String containerId, String hostResource) {
+    public CopyArchiveToContainerCmd copyArchiveToContainerCmd(String containerId) {
         return new CopyArchiveToContainerCmdImpl(getDockerCmdExecFactory().createCopyArchiveToContainerCmdExec(),
-                containerId, hostResource);
+                containerId);
     }
 
     @Override

@@ -133,24 +133,24 @@ public interface DockerClient extends Closeable {
 
     /**
      * Copy resource from container to local machine.
-     * Deprecated, since docker API version 1.20 and above use copyArchiveFromContainerCmd instead.
      *
      * @param containerId id of the container
      * @param resource    path to container's resource
      * @return created command
+     * @see #copyArchiveFromContainerCmd(String, String)
+     * @deprecated since docker API version 1.20 and replaced by {@link #copyArchiveFromContainerCmd(String, String)} instead
      */
     @Deprecated
     public CopyFileFromContainerCmd copyFileFromContainerCmd(String containerId, String resource);
 
     /**
      * Copy archive from local machine to remote container
-     * Since docker API version 1.20 and above.
      *
-     * @param containerId  id of the container
-     * @param hostResource path to container's resource
+     * @param containerId id of the container
      * @return created command
+     * @since docker API version 1.20 and above.
      */
-    public CopyArchiveToContainerCmd copyArchiveToContainerCmd(String containerId, String hostResource);
+    public CopyArchiveToContainerCmd copyArchiveToContainerCmd(String containerId);
 
     public ContainerDiffCmd containerDiffCmd(String containerId);
 
