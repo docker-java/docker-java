@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.annotation.Nonnull;
+
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
 import com.github.dockerjava.api.command.BuildImageCmd;
@@ -65,23 +67,23 @@ public interface DockerClient extends Closeable {
      * * IMAGE API *
      */
 
-    public PullImageCmd pullImageCmd(String repository);
+    public PullImageCmd pullImageCmd(@Nonnull String repository);
 
-    public PushImageCmd pushImageCmd(String name);
+    public PushImageCmd pushImageCmd(@Nonnull String name);
 
-    public PushImageCmd pushImageCmd(Identifier identifier);
+    public PushImageCmd pushImageCmd(@Nonnull Identifier identifier);
 
-    public CreateImageCmd createImageCmd(String repository, InputStream imageStream);
+    public CreateImageCmd createImageCmd(@Nonnull String repository, @Nonnull InputStream imageStream);
 
-    public SearchImagesCmd searchImagesCmd(String term);
+    public SearchImagesCmd searchImagesCmd(@Nonnull String term);
 
-    public RemoveImageCmd removeImageCmd(String imageId);
+    public RemoveImageCmd removeImageCmd(@Nonnull String imageId);
 
     public ListImagesCmd listImagesCmd();
 
-    public InspectImageCmd inspectImageCmd(String imageId);
+    public InspectImageCmd inspectImageCmd(@Nonnull String imageId);
 
-    public SaveImageCmd saveImageCmd(String name);
+    public SaveImageCmd saveImageCmd(@Nonnull String name);
 
     /**
      * * CONTAINER API *
@@ -89,7 +91,7 @@ public interface DockerClient extends Closeable {
 
     public ListContainersCmd listContainersCmd();
 
-    public CreateContainerCmd createContainerCmd(String image);
+    public CreateContainerCmd createContainerCmd(@Nonnull String image);
 
     /**
      * Creates a new {@link StartContainerCmd} for the container with the given ID. The command can then be further
@@ -101,35 +103,35 @@ public interface DockerClient extends Closeable {
      * <p>
      * This command corresponds to the <code>/containers/{id}/start</code> endpoint of the Docker Remote API.
      */
-    public StartContainerCmd startContainerCmd(String containerId);
+    public StartContainerCmd startContainerCmd(@Nonnull String containerId);
 
-    public ExecCreateCmd execCreateCmd(String containerId);
+    public ExecCreateCmd execCreateCmd(@Nonnull String containerId);
 
-    public InspectContainerCmd inspectContainerCmd(String containerId);
+    public InspectContainerCmd inspectContainerCmd(@Nonnull String containerId);
 
-    public RemoveContainerCmd removeContainerCmd(String containerId);
+    public RemoveContainerCmd removeContainerCmd(@Nonnull String containerId);
 
-    public WaitContainerCmd waitContainerCmd(String containerId);
+    public WaitContainerCmd waitContainerCmd(@Nonnull String containerId);
 
-    public AttachContainerCmd attachContainerCmd(String containerId);
+    public AttachContainerCmd attachContainerCmd(@Nonnull String containerId);
 
-    public ExecStartCmd execStartCmd(String containerId);
+    public ExecStartCmd execStartCmd(@Nonnull String containerId);
 
-    public InspectExecCmd inspectExecCmd(String execId);
+    public InspectExecCmd inspectExecCmd(@Nonnull String execId);
 
-    public LogContainerCmd logContainerCmd(String containerId);
+    public LogContainerCmd logContainerCmd(@Nonnull String containerId);
 
-    public CopyFileFromContainerCmd copyFileFromContainerCmd(String containerId, String resource);
+    public CopyFileFromContainerCmd copyFileFromContainerCmd(@Nonnull String containerId, @Nonnull String resource);
 
-    public ContainerDiffCmd containerDiffCmd(String containerId);
+    public ContainerDiffCmd containerDiffCmd(@Nonnull String containerId);
 
-    public StopContainerCmd stopContainerCmd(String containerId);
+    public StopContainerCmd stopContainerCmd(@Nonnull String containerId);
 
-    public KillContainerCmd killContainerCmd(String containerId);
+    public KillContainerCmd killContainerCmd(@Nonnull String containerId);
 
-    public RestartContainerCmd restartContainerCmd(String containerId);
+    public RestartContainerCmd restartContainerCmd(@Nonnull String containerId);
 
-    public CommitCmd commitCmd(String containerId);
+    public CommitCmd commitCmd(@Nonnull String containerId);
 
     public BuildImageCmd buildImageCmd();
 
