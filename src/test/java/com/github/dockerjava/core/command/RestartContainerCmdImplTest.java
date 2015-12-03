@@ -66,7 +66,7 @@ public class RestartContainerCmdImplTest extends AbstractDockerClientTest {
 
         assertThat(startTime, not(equalTo(startTime2)));
 
-        assertThat(inspectContainerResponse.getState().isRunning(), is(equalTo(true)));
+        assertThat(inspectContainerResponse.getState().getRunning(), is(equalTo(true)));
 
         dockerClient.killContainerCmd(container.getId()).exec();
     }

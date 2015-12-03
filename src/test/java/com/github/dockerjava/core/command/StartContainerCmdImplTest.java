@@ -289,9 +289,9 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(inspectContainerResponse1.getName(), equalTo("/container1"));
         assertThat(inspectContainerResponse1.getImageId(), not(isEmptyString()));
         assertThat(inspectContainerResponse1.getState(), is(notNullValue()));
-        assertThat(inspectContainerResponse1.getState().isRunning(), is(true));
+        assertThat(inspectContainerResponse1.getState().getRunning(), is(true));
 
-        if (!inspectContainerResponse1.getState().isRunning()) {
+        if (!inspectContainerResponse1.getState().getRunning()) {
             assertThat(inspectContainerResponse1.getState().getExitCode(), is(equalTo(0)));
         }
 
@@ -317,7 +317,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(inspectContainerResponse2.getName(), equalTo("/container2"));
         assertThat(inspectContainerResponse2.getImageId(), not(isEmptyString()));
         assertThat(inspectContainerResponse2.getState(), is(notNullValue()));
-        assertThat(inspectContainerResponse2.getState().isRunning(), is(true));
+        assertThat(inspectContainerResponse2.getState().getRunning(), is(true));
 
     }
 
@@ -342,9 +342,9 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(inspectContainerResponse1.getName(), equalTo("/container1"));
         assertThat(inspectContainerResponse1.getImageId(), not(isEmptyString()));
         assertThat(inspectContainerResponse1.getState(), is(notNullValue()));
-        assertThat(inspectContainerResponse1.getState().isRunning(), is(true));
+        assertThat(inspectContainerResponse1.getState().getRunning(), is(true));
 
-        if (!inspectContainerResponse1.getState().isRunning()) {
+        if (!inspectContainerResponse1.getState().getRunning()) {
             assertThat(inspectContainerResponse1.getState().getExitCode(), is(equalTo(0)));
         }
 
@@ -370,7 +370,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(inspectContainerResponse2.getName(), equalTo("/container2"));
         assertThat(inspectContainerResponse2.getImageId(), not(isEmptyString()));
         assertThat(inspectContainerResponse2.getState(), is(notNullValue()));
-        assertThat(inspectContainerResponse2.getState().isRunning(), is(true));
+        assertThat(inspectContainerResponse2.getState().getRunning(), is(true));
 
     }
 
@@ -396,9 +396,9 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(inspectContainerResponse.getImageId(), not(isEmptyString()));
         assertThat(inspectContainerResponse.getState(), is(notNullValue()));
 
-        assertThat(inspectContainerResponse.getState().isRunning(), is(true));
+        assertThat(inspectContainerResponse.getState().getRunning(), is(true));
 
-        if (!inspectContainerResponse.getState().isRunning()) {
+        if (!inspectContainerResponse.getState().getRunning()) {
             assertThat(inspectContainerResponse.getState().getExitCode(), is(equalTo(0)));
         }
     }
@@ -452,7 +452,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-        assertThat(inspectContainerResponse.getState().isRunning(), is(true));
+        assertThat(inspectContainerResponse.getState().getRunning(), is(true));
 
         assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getCapAdd()), contains(NET_ADMIN));
 
@@ -473,7 +473,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-        assertThat(inspectContainerResponse.getState().isRunning(), is(true));
+        assertThat(inspectContainerResponse.getState().getRunning(), is(true));
 
         assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getDevices()), contains(new Device("rwm",
                 "/dev/nulo", "/dev/zero")));
@@ -493,7 +493,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-        assertThat(inspectContainerResponse.getState().isRunning(), is(true));
+        assertThat(inspectContainerResponse.getState().getRunning(), is(true));
 
         assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getExtraHosts()),
                 contains("dockerhost:127.0.0.1"));
@@ -515,7 +515,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-        assertThat(inspectContainerResponse.getState().isRunning(), is(true));
+        assertThat(inspectContainerResponse.getState().getRunning(), is(true));
 
         assertThat(inspectContainerResponse.getHostConfig().getRestartPolicy(), is(equalTo(restartPolicy)));
     }

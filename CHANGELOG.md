@@ -9,6 +9,7 @@ Notes
 
 All changes
 
+* [#387] (https://github.com/docker-java/docker-java/pull/387) Make ProgressDetails attributes public
 * [#362] (https://github.com/docker-java/docker-java/pull/362) Deprecate "network" and enable "networks" stats (remote Docker API 1.21) 
 * [#359] (https://github.com/docker-java/docker-java/pull/359) Fix performance issue of build command by adding bulk-read variant of InputStream.read()
 * [#357] (https://github.com/docker-java/docker-java/pull/357) Wait container command needs possibility to abort operation
@@ -16,6 +17,7 @@ All changes
 
 2.1.3-SNAPSHOT
 ---
+* [#387] (https://github.com/docker-java/docker-java/pull/387) Make ProgressDetails attributes public
 * [#362] (https://github.com/docker-java/docker-java/pull/362) Deprecate "network" and enable "networks" stats (remote Docker API 1.21) 
 
 v2.1.2

@@ -62,7 +62,7 @@ public class StatsCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        StatsCallbackTest statsCallback = dockerClient.statsCmd().withContainerId(container.getId())
+        StatsCallbackTest statsCallback = dockerClient.statsCmd(container.getId())
                 .exec(new StatsCallbackTest(countDownLatch));
 
         countDownLatch.await(3, TimeUnit.SECONDS);
