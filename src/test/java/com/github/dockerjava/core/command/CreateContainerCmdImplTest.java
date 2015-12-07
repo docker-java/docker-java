@@ -1,29 +1,5 @@
 package com.github.dockerjava.core.command;
 
-import com.github.dockerjava.api.exception.ConflictException;
-import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.InspectContainerResponse;
-import com.github.dockerjava.api.model.AccessMode;
-import com.github.dockerjava.api.model.Bind;
-import com.github.dockerjava.api.model.Device;
-import com.github.dockerjava.api.model.ExposedPort;
-import com.github.dockerjava.api.model.Link;
-import com.github.dockerjava.api.model.LogConfig;
-import com.github.dockerjava.api.model.Ports;
-import com.github.dockerjava.api.model.RestartPolicy;
-import com.github.dockerjava.api.model.Ulimit;
-import com.github.dockerjava.api.model.Volume;
-import com.github.dockerjava.api.model.VolumeRW;
-import com.github.dockerjava.api.model.VolumesFrom;
-import com.github.dockerjava.client.AbstractDockerClientTest;
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
 import static com.github.dockerjava.api.model.Capability.MKNOD;
 import static com.github.dockerjava.api.model.Capability.NET_ADMIN;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -45,7 +21,29 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.exception.ConflictException;
+import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.model.AccessMode;
+import com.github.dockerjava.api.model.Bind;
+import com.github.dockerjava.api.model.Device;
+import com.github.dockerjava.api.model.ExposedPort;
+import com.github.dockerjava.api.model.Link;
+import com.github.dockerjava.api.model.LogConfig;
+import com.github.dockerjava.api.model.Ports;
+import com.github.dockerjava.api.model.RestartPolicy;
+import com.github.dockerjava.api.model.Ulimit;
+import com.github.dockerjava.api.model.Volume;
+import com.github.dockerjava.api.model.VolumesFrom;
+import com.github.dockerjava.client.AbstractDockerClientTest;
 
 @Test(groups = "integration")
 public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
@@ -107,8 +105,11 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         assertThat(inspectContainerResponse.getConfig().getVolumes().keySet(), contains("/var/log"));
 
-        assertThat(inspectContainerResponse.getVolumesRW(), hasItemInArray(new VolumeRW(volume, AccessMode.rw)));
+        assertEquals(inspectContainerResponse.getMounts().get(0).getDestination(), volume);
+        assertEquals(inspectContainerResponse.getMounts().get(0).getMode(), AccessMode.rw);
+        assertTrue(inspectContainerResponse.getMounts().get(0).getRW());
     }
+
 
     @Test
     public void createContainerWithReadOnlyVolume() throws DockerException {
@@ -128,7 +129,9 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         assertThat(inspectContainerResponse.getConfig().getVolumes().keySet(), contains("/srv/test"));
 
-        assertThat(Arrays.asList(inspectContainerResponse.getVolumesRW()), contains(new VolumeRW(volume)));
+        assertEquals(inspectContainerResponse.getMounts().get(0).getDestination(), volume);
+        // TODO: Create a read-only volume and test like this
+        // assertFalse(inspectContainerResponse.getMounts().get(0).getRW());
     }
 
     @Test

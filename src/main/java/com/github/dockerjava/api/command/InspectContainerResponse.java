@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.github.dockerjava.core.RemoteApiVersion;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.model.ContainerConfig;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Ports;
+import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumeBind;
 import com.github.dockerjava.api.model.VolumeBinds;
 import com.github.dockerjava.api.model.VolumeRW;
@@ -89,6 +91,9 @@ public class InspectContainerResponse {
     @JsonProperty("VolumesRW")
     private VolumesRW volumesRW;
 
+    @JsonProperty("Mounts")
+    private List<Mount> mounts;
+
     public String getId() {
         return id;
     }
@@ -134,7 +139,12 @@ public class InspectContainerResponse {
         return volumes == null ? null : volumes.getBinds();
     }
 
+    /**
+     * @deprecated As of {@link RemoteApiVersion#VERSION_1_20}
+     * use {@link #getMounts()} instead
+     */
     @JsonIgnore
+    @Deprecated
     public VolumeRW[] getVolumesRW() {
         return volumesRW == null ? null : volumesRW.getVolumesRW();
     }
@@ -165,6 +175,10 @@ public class InspectContainerResponse {
 
     public String getMountLabel() {
         return mountLabel;
+    }
+
+    public List<Mount> getMounts() {
+        return mounts;
     }
 
     public List<String> getExecIds() {
@@ -411,6 +425,83 @@ public class InspectContainerResponse {
         public String toString() {
             return ToStringBuilder.reflectionToString(this);
         }
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Mount {
+
+        /**
+         * @since {@link RemoteApiVersion#VERSION_1_20}
+         */
+        @CheckForNull
+        @JsonProperty("Name")
+        private String name;
+
+        /**
+         * @since {@link RemoteApiVersion#VERSION_1_20}
+         */
+        @CheckForNull
+        @JsonProperty("Source")
+        private String source;
+
+        /**
+         * @since {@link RemoteApiVersion#VERSION_1_20}
+         */
+        @CheckForNull
+        @JsonProperty("Destination")
+        private Volume destination;
+
+        /**
+         * @since {@link RemoteApiVersion#VERSION_1_20}
+         */
+        @CheckForNull
+        @JsonProperty("Driver")
+        private String driver;
+
+        /**
+         * @since {@link RemoteApiVersion#VERSION_1_20}
+         */
+        @CheckForNull
+        @JsonProperty("Mode")
+        private String mode;
+
+        /**
+         * @since {@link RemoteApiVersion#VERSION_1_20}
+         */
+        @CheckForNull
+        @JsonProperty("RW")
+        private Boolean rw;
+
+        @CheckForNull
+        public String getName() {
+            return name;
+        }
+
+        @CheckForNull
+        public String getSource() {
+            return source;
+        }
+
+        @CheckForNull
+        public Volume getDestination() {
+            return destination;
+        }
+
+        @CheckForNull
+        public String getDriver() {
+            return driver;
+        }
+
+        @CheckForNull
+        public String getMode() {
+            return mode;
+        }
+
+        @CheckForNull
+        public Boolean getRW() {
+            return rw;
+        }
+
     }
 
 }

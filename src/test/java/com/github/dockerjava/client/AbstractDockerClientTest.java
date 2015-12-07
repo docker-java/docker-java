@@ -2,6 +2,7 @@ package com.github.dockerjava.client;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +24,8 @@ import org.testng.ITestResult;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.command.InspectContainerResponse.Mount;
+import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumeBind;
@@ -38,7 +41,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 
     public static final Logger LOG = LoggerFactory.getLogger(AbstractDockerClientTest.class);
 
-    private String apiVersion = "1.19";
+    private String apiVersion = "1.21";
 
     protected DockerClient dockerClient;
 
@@ -180,13 +183,13 @@ public abstract class AbstractDockerClientTest extends Assert {
             Volume... expectedVolumes) {
 
         List<Volume> volumes = new ArrayList<Volume>();
-        VolumeBind[] volumeBinds = inspectContainerResponse.getVolumes();
-        if (volumeBinds != null) {
-            for (VolumeBind bind : volumeBinds) {
-                volumes.add(new Volume(bind.getContainerPath()));
+        List<Mount> mounts = inspectContainerResponse.getMounts();
+        if (mounts != null) {
+            for (Mount mount : mounts) {
+                volumes.add(mount.getDestination());
             }
         }
-        assertThat(volumes, contains(expectedVolumes));
+        assertThat(volumes, containsInAnyOrder(expectedVolumes));
     }
 
     protected String containerLog(String containerId) throws Exception {

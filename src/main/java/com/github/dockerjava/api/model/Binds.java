@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -17,7 +16,6 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.node.NullNode;
 
 @JsonSerialize(using = Binds.Serializer.class)
 @JsonDeserialize(using = Binds.Deserializer.class)
@@ -58,12 +56,11 @@ public class Binds {
             List<Bind> binds = new ArrayList<Bind>();
             ObjectCodec oc = jsonParser.getCodec();
             JsonNode node = oc.readTree(jsonParser);
-            for (Iterator<Map.Entry<String, JsonNode>> it = node.fields(); it.hasNext();) {
+            for (Iterator<JsonNode> it = node.elements(); it.hasNext();) {
 
-                Map.Entry<String, JsonNode> field = it.next();
-                if (!field.getValue().equals(NullNode.getInstance())) {
-                    binds.add(Bind.parse(field.getKey()));
-                }
+                JsonNode field = it.next();
+                binds.add(Bind.parse(field.asText()));
+
             }
             return new Binds(binds.toArray(new Bind[0]));
         }

@@ -93,9 +93,15 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         assertContainerHasVolumes(inspectContainerResponse, volume1, volume2);
 
-        assertThat(Arrays.asList(inspectContainerResponse.getVolumesRW()),
-                contains(new VolumeRW(volume1, AccessMode.ro), new VolumeRW(volume2)));
+        assertEquals(inspectContainerResponse.getMounts().size(), 2);
 
+        assertEquals(inspectContainerResponse.getMounts().get(0).getDestination(), volume1);
+        assertEquals(inspectContainerResponse.getMounts().get(0).getMode(), "ro");
+        assertEquals(inspectContainerResponse.getMounts().get(0).getRW(), Boolean.FALSE);
+
+        assertEquals(inspectContainerResponse.getMounts().get(1).getDestination(), volume2);
+        assertEquals(inspectContainerResponse.getMounts().get(1).getMode(), "rw");
+        assertEquals(inspectContainerResponse.getMounts().get(1).getRW(), Boolean.TRUE);
     }
 
     @Test
