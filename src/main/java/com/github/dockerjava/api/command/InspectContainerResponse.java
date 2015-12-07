@@ -145,6 +145,7 @@ public class InspectContainerResponse {
      */
     @JsonIgnore
     @Deprecated
+    @CheckForNull
     public VolumeRW[] getVolumesRW() {
         return volumesRW == null ? null : volumesRW.getVolumesRW();
     }
