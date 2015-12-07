@@ -5,6 +5,7 @@ import static com.github.dockerjava.api.model.Capability.MKNOD;
 import static com.github.dockerjava.api.model.Capability.NET_ADMIN;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
@@ -24,13 +25,12 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.api.exception.InternalServerErrorException;
-import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.StartContainerCmd;
-import com.github.dockerjava.api.model.AccessMode;
+import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.exception.InternalServerErrorException;
+import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Device;
 import com.github.dockerjava.api.model.ExposedPort;
@@ -38,7 +38,6 @@ import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.RestartPolicy;
 import com.github.dockerjava.api.model.Volume;
-import com.github.dockerjava.api.model.VolumeRW;
 import com.github.dockerjava.api.model.VolumesFrom;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
@@ -91,7 +90,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-        assertContainerHasVolumes(inspectContainerResponse, volume1, volume2);
+        assertThat(inspectContainerResponse, mountedVolumes(containsInAnyOrder(volume1, volume2)));
 
         assertThat(inspectContainerResponse.getMounts().size(), equalTo(2));
 
@@ -123,7 +122,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         InspectContainerResponse inspectContainerResponse1 = dockerClient.inspectContainerCmd(container1.getId())
                 .exec();
 
-        assertContainerHasVolumes(inspectContainerResponse1, volume1, volume2);
+        assertThat(inspectContainerResponse1, mountedVolumes(containsInAnyOrder(volume1, volume2)));
 
         CreateContainerResponse container2 = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
                 .withVolumesFrom(new VolumesFrom(container1Name)).exec();
@@ -135,7 +134,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         InspectContainerResponse inspectContainerResponse2 = dockerClient.inspectContainerCmd(container2.getId())
                 .exec();
 
-        assertContainerHasVolumes(inspectContainerResponse2, volume1, volume2);
+        assertThat(inspectContainerResponse2, mountedVolumes(containsInAnyOrder(volume1, volume2)));
     }
 
     @Test

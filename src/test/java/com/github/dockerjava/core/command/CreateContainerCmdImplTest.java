@@ -32,7 +32,6 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.api.model.AccessMode;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Device;
 import com.github.dockerjava.api.model.ExposedPort;
@@ -154,7 +153,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         InspectContainerResponse inspectContainerResponse1 = dockerClient.inspectContainerCmd(container1.getId())
                 .exec();
 
-        assertContainerHasVolumes(inspectContainerResponse1, volume1, volume2);
+        assertThat(inspectContainerResponse1, mountedVolumes(containsInAnyOrder(volume1, volume2)));
 
         // create a second container with volumes from first container
         CreateContainerResponse container2 = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
@@ -180,7 +179,8 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         assertThat(inspectContainerResponse2.getHostConfig().getVolumesFrom(), hasItemInArray(new VolumesFrom(
                 container1Name)));
-        assertContainerHasVolumes(inspectContainerResponse2, volume1, volume2);
+
+        assertThat(inspectContainerResponse2, mountedVolumes(containsInAnyOrder(volume1, volume2)));
     }
 
     @Test

@@ -15,6 +15,8 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
+import org.hamcrest.FeatureMatcher;
+import org.hamcrest.Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
@@ -172,21 +174,23 @@ public abstract class AbstractDockerClientTest extends Assert {
         return false;
     }
 
-    /**
-     * Asserts that {@link InspectContainerResponse#getVolumes()} (<code>.Volumes</code>) has {@link VolumeBind}s for
-     * the given {@link Volume}s
-     */
-    public static void assertContainerHasVolumes(InspectContainerResponse inspectContainerResponse,
-            Volume... expectedVolumes) {
+    protected MountedVolumes mountedVolumes(Matcher<? super List<Volume>> subMatcher) {
+       return new MountedVolumes(subMatcher, "Mounted volumes", "mountedVolumes");
+    }
 
-        List<Volume> volumes = new ArrayList<Volume>();
-        List<Mount> mounts = inspectContainerResponse.getMounts();
-        if (mounts != null) {
-            for (Mount mount : mounts) {
-                volumes.add(mount.getDestination());
-            }
+    private static class MountedVolumes extends FeatureMatcher<InspectContainerResponse, List<Volume>> {
+        public MountedVolumes(Matcher<? super List<Volume>> subMatcher, String featureDescription, String featureName) {
+            super(subMatcher, featureDescription, featureName);
         }
-        assertThat(volumes, containsInAnyOrder(expectedVolumes));
+
+        @Override
+        public List<Volume> featureValueOf(InspectContainerResponse item) {
+           List<Volume> volumes = new ArrayList<Volume>();
+             for (Mount mount : item.getMounts()) {
+                   volumes.add(mount.getDestination());
+            }
+            return volumes;
+        }
     }
 
     protected String containerLog(String containerId) throws Exception {
