@@ -1,7 +1,6 @@
 package com.github.dockerjava.client;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
 import java.io.File;
@@ -22,10 +21,9 @@ import org.testng.Assert;
 import org.testng.ITestResult;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse.Mount;
-import com.github.dockerjava.api.model.Bind;
+import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumeBind;
@@ -35,7 +33,6 @@ import com.github.dockerjava.core.TestDockerCmdExecFactory;
 import com.github.dockerjava.core.command.BuildImageResultCallback;
 import com.github.dockerjava.core.command.LogContainerResultCallback;
 import com.github.dockerjava.core.command.PullImageResultCallback;
-import com.google.common.base.Joiner;
 
 public abstract class AbstractDockerClientTest extends Assert {
 

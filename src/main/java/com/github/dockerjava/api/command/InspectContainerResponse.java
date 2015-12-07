@@ -177,6 +177,10 @@ public class InspectContainerResponse {
         return mountLabel;
     }
 
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_20}
+     */
+    @CheckForNull
     public List<Mount> getMounts() {
         return mounts;
     }

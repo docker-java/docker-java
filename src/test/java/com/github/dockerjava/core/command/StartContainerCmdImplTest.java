@@ -93,15 +93,15 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         assertContainerHasVolumes(inspectContainerResponse, volume1, volume2);
 
-        assertEquals(inspectContainerResponse.getMounts().size(), 2);
+        assertThat(inspectContainerResponse.getMounts().size(), equalTo(2));
 
-        assertEquals(inspectContainerResponse.getMounts().get(0).getDestination(), volume1);
-        assertEquals(inspectContainerResponse.getMounts().get(0).getMode(), "ro");
-        assertEquals(inspectContainerResponse.getMounts().get(0).getRW(), Boolean.FALSE);
+        assertThat(inspectContainerResponse.getMounts().get(0).getDestination(), equalTo(volume1));
+        assertThat(inspectContainerResponse.getMounts().get(0).getMode(), equalTo("ro"));
+        assertThat(inspectContainerResponse.getMounts().get(0).getRW(), equalTo(Boolean.FALSE));
 
-        assertEquals(inspectContainerResponse.getMounts().get(1).getDestination(), volume2);
-        assertEquals(inspectContainerResponse.getMounts().get(1).getMode(), "rw");
-        assertEquals(inspectContainerResponse.getMounts().get(1).getRW(), Boolean.TRUE);
+        assertThat(inspectContainerResponse.getMounts().get(1).getDestination(), equalTo(volume2));
+        assertThat(inspectContainerResponse.getMounts().get(1).getMode(), equalTo("rw"));
+        assertThat(inspectContainerResponse.getMounts().get(1).getRW(), equalTo(Boolean.TRUE));
     }
 
     @Test

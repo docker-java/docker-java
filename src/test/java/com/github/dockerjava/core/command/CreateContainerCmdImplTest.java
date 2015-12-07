@@ -105,9 +105,9 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         assertThat(inspectContainerResponse.getConfig().getVolumes().keySet(), contains("/var/log"));
 
-        assertEquals(inspectContainerResponse.getMounts().get(0).getDestination(), volume);
-        assertEquals(inspectContainerResponse.getMounts().get(0).getMode(), AccessMode.rw);
-        assertTrue(inspectContainerResponse.getMounts().get(0).getRW());
+        assertThat(inspectContainerResponse.getMounts().get(0).getDestination(), equalTo(volume));
+        assertThat(inspectContainerResponse.getMounts().get(0).getMode(), equalTo(""));
+        assertThat(inspectContainerResponse.getMounts().get(0).getRW(), equalTo(true));
     }
 
 
@@ -129,7 +129,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         assertThat(inspectContainerResponse.getConfig().getVolumes().keySet(), contains("/srv/test"));
 
-        assertEquals(inspectContainerResponse.getMounts().get(0).getDestination(), volume);
+        assertThat(inspectContainerResponse.getMounts().get(0).getDestination(), equalTo(volume));
         // TODO: Create a read-only volume and test like this
         // assertFalse(inspectContainerResponse.getMounts().get(0).getRW());
     }
