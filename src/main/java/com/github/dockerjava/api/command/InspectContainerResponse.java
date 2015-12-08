@@ -140,8 +140,7 @@ public class InspectContainerResponse {
     }
 
     /**
-     * @deprecated As of {@link RemoteApiVersion#VERSION_1_20}
-     * use {@link #getMounts()} instead
+     * @deprecated As of {@link RemoteApiVersion#VERSION_1_20} use {@link #getMounts()} instead
      */
     @JsonIgnore
     @Deprecated
@@ -286,6 +285,7 @@ public class InspectContainerResponse {
 
         /**
          * <a href="https://github.com/docker/docker/pull/18127">Unclear</a>
+         * 
          * @since {@link RemoteApiVersion#UNKNOWN_VERSION}
          */
         @CheckForNull
@@ -326,7 +326,6 @@ public class InspectContainerResponse {
         @CheckForNull
         @JsonProperty("FinishedAt")
         private String finishedAt;
-
 
         /**
          * See {@link #status}

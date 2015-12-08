@@ -175,7 +175,7 @@ public abstract class AbstractDockerClientTest extends Assert {
     }
 
     protected MountedVolumes mountedVolumes(Matcher<? super List<Volume>> subMatcher) {
-       return new MountedVolumes(subMatcher, "Mounted volumes", "mountedVolumes");
+        return new MountedVolumes(subMatcher, "Mounted volumes", "mountedVolumes");
     }
 
     private static class MountedVolumes extends FeatureMatcher<InspectContainerResponse, List<Volume>> {
@@ -185,9 +185,9 @@ public abstract class AbstractDockerClientTest extends Assert {
 
         @Override
         public List<Volume> featureValueOf(InspectContainerResponse item) {
-           List<Volume> volumes = new ArrayList<Volume>();
-             for (Mount mount : item.getMounts()) {
-                   volumes.add(mount.getDestination());
+            List<Volume> volumes = new ArrayList<Volume>();
+            for (Mount mount : item.getMounts()) {
+                volumes.add(mount.getDestination());
             }
             return volumes;
         }

@@ -11,6 +11,8 @@ import com.github.dockerjava.api.command.AuthCmd.Exec;
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.CommitCmd;
 import com.github.dockerjava.api.command.ContainerDiffCmd;
+import com.github.dockerjava.api.command.CopyArchiveFromContainerCmd;
+import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
@@ -52,7 +54,6 @@ import com.github.dockerjava.api.model.BuildResponseItem;
  * for the purpose of automatically cleanup.
  *
  * @author marcus
- *
  */
 public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 
@@ -240,6 +241,16 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
     @Override
     public CopyFileFromContainerCmd.Exec createCopyFileFromContainerCmdExec() {
         return delegate.createCopyFileFromContainerCmdExec();
+    }
+
+    @Override
+    public CopyArchiveFromContainerCmd.Exec createCopyArchiveFromContainerCmdExec() {
+        return delegate.createCopyArchiveFromContainerCmdExec();
+    }
+
+    @Override
+    public CopyArchiveToContainerCmd.Exec createCopyArchiveToContainerCmdExec() {
+        return delegate.createCopyArchiveToContainerCmdExec();
     }
 
     @Override

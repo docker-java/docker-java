@@ -109,7 +109,6 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(inspectContainerResponse.getMounts().get(0).getRW(), equalTo(true));
     }
 
-
     @Test
     public void createContainerWithReadOnlyVolume() throws DockerException {
 

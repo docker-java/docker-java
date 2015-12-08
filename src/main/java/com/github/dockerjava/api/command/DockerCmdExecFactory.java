@@ -57,6 +57,10 @@ public interface DockerCmdExecFactory extends Closeable {
 
     public CopyFileFromContainerCmd.Exec createCopyFileFromContainerCmdExec();
 
+    public CopyArchiveFromContainerCmd.Exec createCopyArchiveFromContainerCmdExec();
+
+    public CopyArchiveToContainerCmd.Exec createCopyArchiveToContainerCmdExec();
+
     public StopContainerCmd.Exec createStopContainerCmdExec();
 
     public ContainerDiffCmd.Exec createContainerDiffCmdExec();
@@ -83,5 +87,4 @@ public interface DockerCmdExecFactory extends Closeable {
 
     @Override
     public void close() throws IOException;
-
 }
