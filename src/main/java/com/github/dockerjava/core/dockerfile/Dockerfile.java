@@ -5,7 +5,6 @@ import com.github.dockerjava.core.util.CompressArchiveUtil;
 import com.github.dockerjava.core.util.FilePathUtil;
 import com.github.dockerjava.core.GoLangFileMatch;
 import com.github.dockerjava.core.exception.GoLangFileMatchException;
-import com.github.dockerjava.core.GoLangMatchFileFilter;
 import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
@@ -21,9 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -115,8 +112,6 @@ public class Dockerfile {
 
         final List<String> ignores;
 
-        final Map<String, String> environmentMap = new HashMap<String, String>();
-
         final List<File> filesToAdd = new ArrayList<File>();
 
         public InputStream buildDockerFolderTar() {
@@ -162,8 +157,7 @@ public class Dockerfile {
 
         @Override
         public String toString() {
-            return Objects.toStringHelper(this).add("ignores", ignores).add("environmentMap", environmentMap)
-                    .add("filesToAdd", filesToAdd).toString();
+            return Objects.toStringHelper(this).add("ignores", ignores).add("filesToAdd", filesToAdd).toString();
         }
 
         public ScannedResult() throws IOException {
@@ -172,18 +166,17 @@ public class Dockerfile {
 
             String matchingIgnorePattern = effectiveMatchingIgnorePattern(dockerFile);
 
-            if (matchingIgnorePattern == null) {
-                filesToAdd.add(dockerFile);
-            } else {
+            if (matchingIgnorePattern != null) {
                 throw new DockerClientException(String.format(
                         "Dockerfile is excluded by pattern '%s' in .dockerignore file", matchingIgnorePattern));
             }
 
-            for (DockerfileStatement statement : getStatements()) {
-                if (statement instanceof DockerfileStatement.Env) {
-                    processEnvStatement((DockerfileStatement.Env) statement);
-                } else if (statement instanceof DockerfileStatement.Add) {
-                    processAddStatement((DockerfileStatement.Add) statement);
+            Collection<File> filesInBuildContext = FileUtils.listFiles(getDockerFolder(), TrueFileFilter.INSTANCE,
+                    TrueFileFilter.INSTANCE);
+
+            for (File f : filesInBuildContext) {
+                if (effectiveMatchingIgnorePattern(f) == null) {
+                    filesToAdd.add(f);
                 }
             }
         }
@@ -237,63 +230,6 @@ public class Dockerfile {
             }
 
             return lastMatchingPattern;
-        }
-
-        private void processAddStatement(DockerfileStatement.Add add) throws IOException {
-
-            add = add.transform(environmentMap);
-
-            for (String resource : add.getFileResources()) {
-
-                File dockerFolder = getDockerFolder();
-
-                File src = new File(resource);
-                if (!src.isAbsolute()) {
-                    src = new File(dockerFolder, resource);
-                } else {
-                    throw new DockerClientException(String.format("Source file %s must be relative to %s", src,
-                            dockerFolder));
-                }
-
-                if (src.exists()) {
-                    src = src.getCanonicalFile();
-                    if (src.isDirectory()) {
-                        Collection<File> files = FileUtils.listFiles(src, new GoLangMatchFileFilter(src, ignores),
-                                TrueFileFilter.INSTANCE);
-                        filesToAdd.addAll(files);
-                    } else if (effectiveMatchingIgnorePattern(src) == null) {
-                        filesToAdd.add(src);
-                    } else {
-                        throw new DockerClientException(String.format(
-                                "Source file %s is excluded by .dockerignore file", src));
-                    }
-                } else {
-                    filesToAdd.addAll(resolveWildcards(src, ignores));
-                }
-            }
-        }
-
-        private Collection<File> resolveWildcards(File file, List<String> ignores) {
-            List<File> filesToAdd = new ArrayList<File>();
-
-            File parent = file.getParentFile();
-            if (parent != null) {
-                if (parent.isDirectory()) {
-                    Collection<File> files = FileUtils.listFiles(parent, new GoLangMatchFileFilter(parent, ignores),
-                            TrueFileFilter.INSTANCE);
-                    filesToAdd.addAll(files);
-                } else {
-                    filesToAdd.addAll(resolveWildcards(parent, ignores));
-                }
-            } else {
-                throw new DockerClientException(String.format("Source file %s doesn't exist", file));
-            }
-
-            return filesToAdd;
-        }
-
-        private void processEnvStatement(DockerfileStatement.Env env) {
-            environmentMap.put(env.variable, env.value);
         }
     }
 }

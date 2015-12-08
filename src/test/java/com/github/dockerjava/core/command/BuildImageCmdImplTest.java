@@ -101,6 +101,17 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test
+    public void testDockerBuildWithOnBuild() throws Exception {
+        File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testAddOnBuild/onbuild")
+                .getFile());
+        dockerClient.buildImageCmd(baseDir).withNoCache(true).withTag("docker-java-onbuild")
+                .exec(new BuildImageResultCallback()).awaitImageId();
+        baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testAddOnBuild/test").getFile());
+        String response = dockerfileBuild(baseDir);
+        assertThat(response, containsString("Successfully executed testrun.sh"));
+    }
+
+    @Test
     public void testDockerBuilderAddUrl() throws Exception {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testAddUrl").getFile());
         String response = dockerfileBuild(baseDir);
