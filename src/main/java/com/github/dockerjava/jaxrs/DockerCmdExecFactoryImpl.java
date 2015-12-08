@@ -44,6 +44,7 @@ import com.github.dockerjava.jaxrs.connector.ApacheConnectorProvider;
 import com.github.dockerjava.jaxrs.filter.JsonClientFilter;
 import com.github.dockerjava.jaxrs.filter.ResponseStatusExceptionFilter;
 import com.github.dockerjava.jaxrs.filter.SelectiveLoggingFilter;
+
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
@@ -62,8 +63,13 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.client.ClientResponseFilter;
 import javax.ws.rs.client.WebTarget;
+
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.ProxySelector;
 import java.net.URI;
+import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -95,6 +101,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     @Override
     public void init(DockerClientConfig dockerClientConfig) {
         checkNotNull(dockerClientConfig, "config was not specified");
+        this.dockerClientConfig = dockerClientConfig;
 
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.connectorProvider(new ApacheConnectorProvider());
@@ -134,11 +141,14 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         SSLContext sslContext = null;
 
         if (dockerClientConfig.getSslConfig() != null) {
+            configureProxy(clientConfig, "https");
             try {
                 sslContext = dockerClientConfig.getSslConfig().getSSLContext();
             } catch (Exception ex) {
                 throw new DockerClientException("Error in SSL Configuration", ex);
             }
+        } else {
+            configureProxy(clientConfig, "http");
         }
 
         PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(getSchemeRegistry(
@@ -169,7 +179,30 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
         baseResource = client.target(dockerClientConfig.getUri()).path(dockerClientConfig.getVersion().asWebPathPart());
 
-        this.dockerClientConfig = dockerClientConfig;
+    }
+
+    private void configureProxy(ClientConfig clientConfig, String protocol) {
+
+        List<Proxy> proxies = ProxySelector.getDefault().select(dockerClientConfig.getUri());
+
+        for (Proxy proxy : proxies) {
+            InetSocketAddress address = (InetSocketAddress) proxy.address();
+            if (address != null) {
+                String hostname = address.getHostName();
+                int port = address.getPort();
+
+                clientConfig.property(ClientProperties.PROXY_URI, protocol + "://" + hostname + ":" + port);
+
+                String httpProxyUser = System.getProperty(protocol + ".proxyUser");
+                if (httpProxyUser != null) {
+                    clientConfig.property(ClientProperties.PROXY_USERNAME, httpProxyUser);
+                    String httpProxyPassword = System.getProperty(protocol + ".proxyPassword");
+                    if (httpProxyPassword != null) {
+                        clientConfig.property(ClientProperties.PROXY_PASSWORD, httpProxyPassword);
+                    }
+                }
+            }
+        }
     }
 
     private org.apache.http.config.Registry<ConnectionSocketFactory> getSchemeRegistry(final URI originalUri,
