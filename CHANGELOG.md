@@ -5,7 +5,7 @@ Change Log
 ---
 Notes
 
-* The upcoming release will contain multiple API breaking changes therefore the major version switch
+* The upcoming release will contain multiple API breaking changes therefore the major version switch. It will supports a subset of v.1.21 of the docker remote API.
 
 All changes
 
