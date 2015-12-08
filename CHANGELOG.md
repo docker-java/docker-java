@@ -1,6 +1,6 @@
 Change Log
 ===
-2.1.3-SNAPSHOT
+2.1.3
 ---
  
 * [#387] (https://github.com/docker-java/docker-java/pull/387) Make ProgressDetails attributes public
