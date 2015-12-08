@@ -8,7 +8,7 @@ Notes
 * The upcoming release will contain multiple API breaking changes therefore the major version switch. It will supports a subset of v.1.21 of the docker remote API.
 
 All changes
-
+* [#393] (https://github.com/docker-java/docker-java/pull/392) Support ONBUILD instruction in Dockerfiles 
 * [#392] (https://github.com/docker-java/docker-java/pull/392) Introduce InspectContainerResponse.Mounts
 * [#387] (https://github.com/docker-java/docker-java/pull/387) Make ProgressDetails attributes public
 * [#386] (https://github.com/docker-java/docker-java/pull/386) Basic http proxy configuration support
