@@ -23,6 +23,7 @@ import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.core.util.CompressArchiveUtil;
 
+@Test(groups = "integration")
 public class CopyArchiveToContainerCmdImplTest extends AbstractDockerClientTest {
     @BeforeTest
     public void beforeTest() throws Exception {
