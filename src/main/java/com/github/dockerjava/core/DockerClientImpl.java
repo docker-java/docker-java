@@ -1,11 +1,19 @@
 package com.github.dockerjava.core;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.io.Closeable;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.CommitCmd;
 import com.github.dockerjava.api.command.ContainerDiffCmd;
+import com.github.dockerjava.api.command.CopyArchiveFromContainerCmd;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateImageCmd;
@@ -45,6 +53,9 @@ import com.github.dockerjava.core.command.AuthCmdImpl;
 import com.github.dockerjava.core.command.BuildImageCmdImpl;
 import com.github.dockerjava.core.command.CommitCmdImpl;
 import com.github.dockerjava.core.command.ContainerDiffCmdImpl;
+import com.github.dockerjava.core.command.CopyArchiveFromContainerCmdImpl;
+import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
+import com.github.dockerjava.core.command.CopyArchiveToContainerCmdImpl;
 import com.github.dockerjava.core.command.CopyFileFromContainerCmdImpl;
 import com.github.dockerjava.core.command.CreateContainerCmdImpl;
 import com.github.dockerjava.core.command.CreateImageCmdImpl;
@@ -77,16 +88,8 @@ import com.github.dockerjava.core.command.UnpauseContainerCmdImpl;
 import com.github.dockerjava.core.command.VersionCmdImpl;
 import com.github.dockerjava.core.command.WaitContainerCmdImpl;
 
-import java.io.Closeable;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
  * @author Konstantin Pelykh (kpelykh@gmail.com)
- *
  * @see "https://github.com/docker/docker/blob/master/api/client/commands.go"
  */
 public class DockerClientImpl implements Closeable, DockerClient {
@@ -302,6 +305,18 @@ public class DockerClientImpl implements Closeable, DockerClient {
     public CopyFileFromContainerCmd copyFileFromContainerCmd(String containerId, String resource) {
         return new CopyFileFromContainerCmdImpl(getDockerCmdExecFactory().createCopyFileFromContainerCmdExec(),
                 containerId, resource);
+    }
+
+    @Override
+    public CopyArchiveFromContainerCmd copyArchiveFromContainerCmd(String containerId, String resource) {
+        return new CopyArchiveFromContainerCmdImpl(getDockerCmdExecFactory().createCopyArchiveFromContainerCmdExec(),
+                containerId, resource);
+    }
+
+    @Override
+    public CopyArchiveToContainerCmd copyArchiveToContainerCmd(String containerId) {
+        return new CopyArchiveToContainerCmdImpl(getDockerCmdExecFactory().createCopyArchiveToContainerCmdExec(),
+                containerId);
     }
 
     @Override

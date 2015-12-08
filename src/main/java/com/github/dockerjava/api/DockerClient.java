@@ -12,6 +12,8 @@ import com.github.dockerjava.api.command.AuthCmd;
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.CommitCmd;
 import com.github.dockerjava.api.command.ContainerDiffCmd;
+import com.github.dockerjava.api.command.CopyArchiveFromContainerCmd;
+import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateImageCmd;
@@ -46,6 +48,7 @@ import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Identifier;
+import com.github.dockerjava.core.RemoteApiVersion;
 
 // https://godoc.org/github.com/fsouza/go-dockerclient
 public interface DockerClient extends Closeable {
@@ -121,7 +124,41 @@ public interface DockerClient extends Closeable {
 
     public LogContainerCmd logContainerCmd(@Nonnull String containerId);
 
+    /**
+     * Copy resource from container to local machine.
+     *
+     * @param containerId
+     *            id of the container
+     * @param resource
+     *            path to container's resource
+     * @return created command
+     * @since {@link RemoteApiVersion#VERSION_1_20}
+     */
+    public CopyArchiveFromContainerCmd copyArchiveFromContainerCmd(@Nonnull String containerId, @Nonnull String resource);
+
+    /**
+     * Copy resource from container to local machine.
+     *
+     * @param containerId
+     *            id of the container
+     * @param resource
+     *            path to container's resource
+     * @return created command
+     * @see #copyArchiveFromContainerCmd(String, String)
+     * @deprecated since docker API version 1.20, replaced by {@link #copyArchiveFromContainerCmd(String, String)}
+     */
+    @Deprecated
     public CopyFileFromContainerCmd copyFileFromContainerCmd(@Nonnull String containerId, @Nonnull String resource);
+
+    /**
+     * Copy archive from local machine to remote container
+     *
+     * @param containerId
+     *            id of the container
+     * @return created command
+     * @since {@link RemoteApiVersion#VERSION_1_20}
+     */
+    public CopyArchiveToContainerCmd copyArchiveToContainerCmd(@Nonnull String containerId);
 
     public ContainerDiffCmd containerDiffCmd(@Nonnull String containerId);
 

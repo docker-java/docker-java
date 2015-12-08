@@ -31,32 +31,32 @@ import org.testng.annotations.Test;
 public class PullResponseItemTest {
     @Test
     public void pullNewerImage() throws IOException {
-        PullResponseItem response =
-                testRoundTrip(PullResponseJSONSamples.pullImageResponse_newerImage, PullResponseItem.class);
+        PullResponseItem response = testRoundTrip(PullResponseJSONSamples.pullImageResponse_newerImage,
+                PullResponseItem.class);
         assertTrue(response.isPullSuccessIndicated());
         assertFalse(response.isErrorIndicated());
     }
 
     @Test
     public void pullUpToDate() throws IOException {
-        PullResponseItem response =
-                testRoundTrip(PullResponseJSONSamples.pullImageResponse_upToDate, PullResponseItem.class);
+        PullResponseItem response = testRoundTrip(PullResponseJSONSamples.pullImageResponse_upToDate,
+                PullResponseItem.class);
         assertTrue(response.isPullSuccessIndicated());
         assertFalse(response.isErrorIndicated());
     }
 
     @Test
     public void pullLegacyRegistry() throws IOException {
-        PullResponseItem response =
-                testRoundTrip(PullResponseJSONSamples.pullImageResponse_legacy, PullResponseItem.class);
+        PullResponseItem response = testRoundTrip(PullResponseJSONSamples.pullImageResponse_legacy,
+                PullResponseItem.class);
         assertTrue(response.isPullSuccessIndicated());
         assertFalse(response.isErrorIndicated());
     }
 
     @Test
     public void pullAndEncounterError() throws IOException {
-        PullResponseItem response =
-                testRoundTrip(PullResponseJSONSamples.pullImageResponse_error, PullResponseItem.class);
+        PullResponseItem response = testRoundTrip(PullResponseJSONSamples.pullImageResponse_error,
+                PullResponseItem.class);
         assertFalse(response.isPullSuccessIndicated());
         assertTrue(response.isErrorIndicated());
     }
