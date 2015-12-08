@@ -157,9 +157,7 @@ public class Dockerfile {
 
         @Override
         public String toString() {
-            return Objects.toStringHelper(this)
-                    .add("ignores", ignores)
-                    .add("filesToAdd", filesToAdd).toString();
+            return Objects.toStringHelper(this).add("ignores", ignores).add("filesToAdd", filesToAdd).toString();
         }
 
         public ScannedResult() throws IOException {
