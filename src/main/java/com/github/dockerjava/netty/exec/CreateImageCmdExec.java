@@ -1,14 +1,14 @@
 package com.github.dockerjava.netty.exec;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.dockerjava.api.command.CreateImageCmd;
 import com.github.dockerjava.api.command.CreateImageResponse;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.netty.MediaType;
 import com.github.dockerjava.netty.WebTarget;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CreateImageCmdExec extends AbstrSyncDockerCmdExec<CreateImageCmd, CreateImageResponse> implements
         CreateImageCmd.Exec {

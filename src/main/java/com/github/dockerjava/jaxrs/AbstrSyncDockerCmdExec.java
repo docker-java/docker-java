@@ -1,12 +1,12 @@
 package com.github.dockerjava.jaxrs;
 
-import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.api.command.DockerCmd;
-import com.github.dockerjava.api.command.DockerCmdSyncExec;
-import com.github.dockerjava.core.DockerClientConfig;
-
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.WebTarget;
+
+import com.github.dockerjava.api.command.DockerCmd;
+import com.github.dockerjava.api.command.DockerCmdSyncExec;
+import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.core.DockerClientConfig;
 
 public abstract class AbstrSyncDockerCmdExec<CMD_T extends DockerCmd<RES_T>, RES_T> extends AbstrDockerCmdExec
         implements DockerCmdSyncExec<CMD_T, RES_T> {

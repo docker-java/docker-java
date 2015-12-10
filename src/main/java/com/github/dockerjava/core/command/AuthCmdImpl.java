@@ -1,7 +1,7 @@
 package com.github.dockerjava.core.command;
 
-import com.github.dockerjava.api.UnauthorizedException;
 import com.github.dockerjava.api.command.AuthCmd;
+import com.github.dockerjava.api.exception.UnauthorizedException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthResponse;
 

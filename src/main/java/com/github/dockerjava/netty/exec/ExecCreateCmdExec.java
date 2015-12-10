@@ -1,16 +1,14 @@
 package com.github.dockerjava.netty.exec;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.dockerjava.api.command.ExecCreateCmd;
 import com.github.dockerjava.api.command.ExecCreateCmdResponse;
-import com.github.dockerjava.api.command.ExecCreateCmd.Exec;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.netty.MediaType;
 import com.github.dockerjava.netty.WebTarget;
-import com.github.dockerjava.netty.exec.AbstrSyncDockerCmdExec;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ExecCreateCmdExec extends AbstrSyncDockerCmdExec<ExecCreateCmd, ExecCreateCmdResponse> implements
         ExecCreateCmd.Exec {

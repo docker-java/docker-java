@@ -1,15 +1,16 @@
 package com.github.dockerjava.jaxrs;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.github.dockerjava.api.command.CommitCmd;
-import com.github.dockerjava.core.DockerClientConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static javax.ws.rs.client.Entity.entity;
 
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
-import static javax.ws.rs.client.Entity.entity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.github.dockerjava.api.command.CommitCmd;
+import com.github.dockerjava.core.DockerClientConfig;
 
 public class CommitCmdExec extends AbstrSyncDockerCmdExec<CommitCmd, String> implements CommitCmd.Exec {
 

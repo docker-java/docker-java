@@ -16,10 +16,10 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.netty.AbstractDockerClientTest;
+import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
 @Test(groups = "integration")
-public class SaveImageCmdExecTest extends AbstractDockerClientTest {
+public class SaveImageCmdExecTest extends AbstractNettyDockerClientTest {
     public static final Logger LOG = LoggerFactory.getLogger(SaveImageCmdExecTest.class);
 
     String username;

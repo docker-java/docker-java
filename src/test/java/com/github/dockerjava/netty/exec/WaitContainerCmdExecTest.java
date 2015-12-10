@@ -15,16 +15,16 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.WaitResponse;
 import com.github.dockerjava.core.command.WaitContainerResultCallback;
-import com.github.dockerjava.netty.AbstractDockerClientTest;
+import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
 @Test(groups = "integration")
-public class WaitContainerCmdExecTest extends AbstractDockerClientTest {
+public class WaitContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
     @BeforeTest
     public void beforeTest() throws Exception {
@@ -65,7 +65,7 @@ public class WaitContainerCmdExecTest extends AbstractDockerClientTest {
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
         LOG.info("Container Inspect: {}", inspectContainerResponse.toString());
 
-        assertThat(inspectContainerResponse.getState().isRunning(), is(equalTo(false)));
+        assertThat(inspectContainerResponse.getState().getRunning(), is(equalTo(false)));
         assertThat(inspectContainerResponse.getState().getExitCode(), is(equalTo(exitCode)));
     }
 
@@ -105,6 +105,6 @@ public class WaitContainerCmdExecTest extends AbstractDockerClientTest {
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
         LOG.info("Container Inspect: {}", inspectContainerResponse.toString());
 
-        assertThat(inspectContainerResponse.getState().isRunning(), is(equalTo(false)));
+        assertThat(inspectContainerResponse.getState().getRunning(), is(equalTo(false)));
     }
 }

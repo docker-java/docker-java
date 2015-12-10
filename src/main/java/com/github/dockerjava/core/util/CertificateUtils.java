@@ -1,10 +1,4 @@
-package com.github.dockerjava.core;
-
-import org.apache.commons.io.IOUtils;
-import org.bouncycastle.cert.X509CertificateHolder;
-import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
-import org.bouncycastle.openssl.PEMKeyPair;
-import org.bouncycastle.openssl.PEMParser;
+package com.github.dockerjava.core.util;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,7 +19,16 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
+import org.bouncycastle.cert.X509CertificateHolder;
+import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
+import org.bouncycastle.openssl.PEMKeyPair;
+import org.bouncycastle.openssl.PEMParser;
+
 public class CertificateUtils {
+    private CertificateUtils() {
+        // utility class
+    }
 
     public static boolean verifyCertificatesExist(String dockerCertPath) {
         String[] files = { "ca.pem", "cert.pem", "key.pem" };

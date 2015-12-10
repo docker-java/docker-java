@@ -1,14 +1,15 @@
 package com.github.dockerjava.jaxrs;
 
+import java.io.Closeable;
+import java.io.IOException;
+
+import javax.ws.rs.client.WebTarget;
+
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.AsyncDockerCmd;
 import com.github.dockerjava.api.command.DockerCmdAsyncExec;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.jaxrs.async.AbstractCallbackNotifier;
-
-import javax.ws.rs.client.WebTarget;
-import java.io.Closeable;
-import java.io.IOException;
 
 public abstract class AbstrAsyncDockerCmdExec<CMD_T extends AsyncDockerCmd<CMD_T, A_RES_T>, A_RES_T> extends
         AbstrDockerCmdExec implements DockerCmdAsyncExec<CMD_T, A_RES_T> {

@@ -5,6 +5,7 @@ package com.github.dockerjava.core;
 
 import java.io.IOException;
 
+import com.github.dockerjava.core.exception.GoLangFileMatchException;
 import junit.framework.Assert;
 
 import org.apache.commons.io.FilenameUtils;

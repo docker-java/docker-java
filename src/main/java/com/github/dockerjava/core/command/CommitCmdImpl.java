@@ -3,8 +3,8 @@ package com.github.dockerjava.core.command;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CommitCmd;
+import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.ExposedPorts;
 import com.github.dockerjava.api.model.Volumes;
 

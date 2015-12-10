@@ -19,14 +19,14 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.api.model.Info;
-import com.github.dockerjava.netty.AbstractDockerClientTest;
+import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
 @Test(groups = "integration")
-public class ListImagesCmdExecTest extends AbstractDockerClientTest {
+public class ListImagesCmdExecTest extends AbstractNettyDockerClientTest {
 
     @BeforeTest
     public void beforeTest() throws Exception {

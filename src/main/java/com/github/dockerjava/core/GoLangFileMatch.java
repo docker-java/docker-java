@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.github.dockerjava.core.exception.GoLangFileMatchException;
+
 /**
  * Implementation of golang's file.Match
  *

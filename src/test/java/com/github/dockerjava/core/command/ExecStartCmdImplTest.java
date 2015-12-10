@@ -57,7 +57,7 @@ public class ExecStartCmdImplTest extends AbstractDockerClientTest {
         dockerClient.execStartCmd(execCreateCmdResponse.getId()).exec(
                 new ExecStartResultCallback(System.out, System.err));
 
-        InputStream response = dockerClient.copyFileFromContainerCmd(container.getId(), "/execStartTest.log").exec();
+        InputStream response = dockerClient.copyArchiveFromContainerCmd(container.getId(), "/execStartTest.log").exec();
         Boolean bytesAvailable = response.available() > 0;
         assertTrue(bytesAvailable, "The file was not copied from the container.");
 
@@ -83,7 +83,7 @@ public class ExecStartCmdImplTest extends AbstractDockerClientTest {
         dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false).withTty(true)
                 .exec(new ExecStartResultCallback(System.out, System.err));
 
-        InputStream response = dockerClient.copyFileFromContainerCmd(container.getId(), "/execStartTest.log").exec();
+        InputStream response = dockerClient.copyArchiveFromContainerCmd(container.getId(), "/execStartTest.log").exec();
         Boolean bytesAvailable = response.available() > 0;
         assertTrue(bytesAvailable, "The file was not copied from the container.");
 

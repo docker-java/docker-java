@@ -35,13 +35,14 @@ import com.github.dockerjava.api.command.AuthCmd;
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.CommitCmd;
 import com.github.dockerjava.api.command.ContainerDiffCmd;
+import com.github.dockerjava.api.command.CopyArchiveFromContainerCmd;
+import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateImageCmd;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.command.ExecCreateCmd;
-import com.github.dockerjava.api.command.ExecCreateCmdResponse;
 import com.github.dockerjava.api.command.ExecStartCmd;
 import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
@@ -68,17 +69,14 @@ import com.github.dockerjava.api.command.TopContainerCmd;
 import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
-import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.command.ExecCreateCmdImpl;
-import com.github.dockerjava.core.command.ExecStartCmdImpl;
-import com.github.dockerjava.core.command.ExecStartResultCallback;
-import com.github.dockerjava.core.command.InfoCmdImpl;
 import com.github.dockerjava.netty.exec.AttachContainerCmdExec;
 import com.github.dockerjava.netty.exec.AuthCmdExec;
 import com.github.dockerjava.netty.exec.BuildImageCmdExec;
 import com.github.dockerjava.netty.exec.CommitCmdExec;
 import com.github.dockerjava.netty.exec.ContainerDiffCmdExec;
+import com.github.dockerjava.netty.exec.CopyArchiveFromContainerCmdExec;
+import com.github.dockerjava.netty.exec.CopyArchiveToContainerCmdExec;
 import com.github.dockerjava.netty.exec.CopyFileFromContainerCmdExec;
 import com.github.dockerjava.netty.exec.CreateContainerCmdExec;
 import com.github.dockerjava.netty.exec.CreateImageCmdExec;
@@ -115,6 +113,7 @@ import com.github.dockerjava.netty.exec.WaitContainerCmdExec;
  * http://stackoverflow.com/questions/33296749/netty-connect-to-unix-domain-socket-failed
  * http://netty.io/wiki/native-transports.html
  * https://github.com/netty/netty/blob/master/example/src/main/java/io/netty/example/http/snoop/HttpSnoopClient.java
+ * https://github.com/slandelle/netty-request-chunking/blob/master/src/test/java/slandelle/ChunkingTest.java
  *
  * @author marcus
  *
@@ -277,6 +276,16 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     public SSLParameters enableHostNameVerification(SSLParameters sslParameters) {
         sslParameters.setEndpointIdentificationAlgorithm("HTTPS");
         return sslParameters;
+    }
+
+    @Override
+    public CopyArchiveFromContainerCmd.Exec createCopyArchiveFromContainerCmdExec() {
+        return new CopyArchiveFromContainerCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public CopyArchiveToContainerCmd.Exec createCopyArchiveToContainerCmdExec() {
+        return new CopyArchiveToContainerCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
@@ -469,72 +478,4 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     private WebTarget getBaseResource() {
         return new WebTarget(channelProvider);
     }
-
-    public static void main(String[] args) throws IOException {
-        DockerCmdExecFactory execFactory = new DockerCmdExecFactoryImpl();
-        // execFactory.init(new
-        // DockerClientConfigBuilder().withUri("unix:///var/run/docker.sock").build());
-        // execFactory.init(new DockerClientConfigBuilder().withUri("http://localhost:2375").build());
-
-        DockerClientConfig config = DockerClientConfig.createDefaultConfigBuilder()
-                .withUri("https://192.168.59.103:2376").build();
-
-        execFactory.init(config);
-
-        InfoCmd.Exec exec = execFactory.createInfoCmdExec();
-
-        InfoCmd infoCmd = new InfoCmdImpl(exec);
-
-        Info info = infoCmd.exec();
-
-        System.out.println("result: " + info);
-
-        infoCmd.close();
-
-        ExecCreateCmd.Exec execCreate = execFactory.createExecCmdExec();
-
-        ExecCreateCmd execCreateCmd = new ExecCreateCmdImpl(execCreate, "test").withCmd("/bin/bash")
-                .withAttachStdout(true).withAttachStderr(true).withAttachStdin(true);
-
-        ExecCreateCmdResponse execCreateCmdResponse = execCreate.exec(execCreateCmd);
-
-        System.out.println("result: " + execCreateCmdResponse);
-
-        ExecStartCmd.Exec execStart = execFactory.createExecStartCmdExec();
-
-        ExecStartCmd execStartCmd = new ExecStartCmdImpl(execStart, execCreateCmdResponse.getId()).withDetach(false)
-                .withTty(true);
-
-        ExecStartResultCallback callback = new ExecStartResultCallback(System.out, System.err);
-
-        execStart.exec(execStartCmd, callback);
-
-        try {
-            callback.awaitCompletion();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        System.err.println("main finished");
-
-        // FrameReader frameReader = new FrameReader(response);
-        //
-        // System.out.println("read frame");
-        // Frame frame = frameReader.readFrame();
-        //
-        // while(frame != null) {
-        // System.out.println("frame: " + frame);
-        // frame = frameReader.readFrame();
-        // }
-        // System.out.println("all frames read");
-        //
-        // System.out.flush();
-
-        // System.out.println("response: " + IOUtils.toString(response,
-        // "UTF-8"));
-
-        // execFactory.close();
-    }
-
 }

@@ -2,11 +2,8 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-
-import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.RemoveContainerCmd;
+import com.github.dockerjava.api.exception.NotFoundException;
 
 /**
  * Remove a container.

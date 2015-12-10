@@ -18,12 +18,12 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.DockerException;
+import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.SearchItem;
-import com.github.dockerjava.netty.AbstractDockerClientTest;
+import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
 @Test(groups = "integration")
-public class SearchImagesCmdExecTest extends AbstractDockerClientTest {
+public class SearchImagesCmdExecTest extends AbstractNettyDockerClientTest {
 
     @BeforeTest
     public void beforeTest() throws Exception {

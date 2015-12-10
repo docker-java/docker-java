@@ -15,14 +15,14 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.DockerClientException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.core.command.PushImageResultCallback;
-import com.github.dockerjava.netty.AbstractDockerClientTest;
+import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
 @Test(groups = "integration")
-public class PushImageCmdExecTest extends AbstractDockerClientTest {
+public class PushImageCmdExecTest extends AbstractNettyDockerClientTest {
 
     public static final Logger LOG = LoggerFactory.getLogger(PushImageCmdExecTest.class);
 

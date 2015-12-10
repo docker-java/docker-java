@@ -1,8 +1,8 @@
 package com.github.dockerjava.netty.exec;
 
-import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.DockerCmd;
 import com.github.dockerjava.api.command.DockerCmdSyncExec;
+import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.netty.WebTarget;
 

@@ -1,5 +1,11 @@
 package com.github.dockerjava.jaxrs;
 
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.ExecStartCmd;
 import com.github.dockerjava.api.model.Frame;
@@ -7,18 +13,6 @@ import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.async.FrameStreamProcessor;
 import com.github.dockerjava.jaxrs.async.AbstractCallbackNotifier;
 import com.github.dockerjava.jaxrs.async.POSTCallbackNotifier;
-import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import java.io.InputStream;
-
-import static javax.ws.rs.client.Entity.entity;
 
 public class ExecStartCmdExec extends AbstrAsyncDockerCmdExec<ExecStartCmd, Frame> implements ExecStartCmd.Exec {
 

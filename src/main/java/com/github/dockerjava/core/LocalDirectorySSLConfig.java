@@ -10,7 +10,8 @@ import javax.net.ssl.SSLContext;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.glassfish.jersey.SslConfigurator;
 
-import com.github.dockerjava.api.DockerClientException;
+import com.github.dockerjava.api.exception.DockerClientException;
+import com.github.dockerjava.core.util.CertificateUtils;
 
 /**
  * SSL Config from local files.

@@ -15,14 +15,14 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
-import com.github.dockerjava.netty.AbstractDockerClientTest;
+import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
 @Test(groups = "integration")
-public class RestartContainerCmdExecTest extends AbstractDockerClientTest {
+public class RestartContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
     @BeforeTest
     public void beforeTest() throws Exception {
@@ -66,7 +66,7 @@ public class RestartContainerCmdExecTest extends AbstractDockerClientTest {
 
         assertThat(startTime, not(equalTo(startTime2)));
 
-        assertThat(inspectContainerResponse.getState().isRunning(), is(equalTo(true)));
+        assertThat(inspectContainerResponse.getState().getRunning(), is(equalTo(true)));
 
         dockerClient.killContainerCmd(container.getId()).exec();
     }

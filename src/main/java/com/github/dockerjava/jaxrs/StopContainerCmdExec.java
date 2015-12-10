@@ -1,12 +1,13 @@
 package com.github.dockerjava.jaxrs;
 
-import com.github.dockerjava.api.command.StopContainerCmd;
-import com.github.dockerjava.core.DockerClientConfig;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
+import com.github.dockerjava.api.command.StopContainerCmd;
+import com.github.dockerjava.core.DockerClientConfig;
 
 public class StopContainerCmdExec extends AbstrSyncDockerCmdExec<StopContainerCmd, Void> implements
         StopContainerCmd.Exec {

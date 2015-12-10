@@ -1,16 +1,16 @@
 package com.github.dockerjava.netty.exec;
 
+import static com.google.common.net.UrlEscapers.urlPathSegmentEscaper;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.model.Event;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.netty.WebTarget;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import static com.google.common.net.UrlEscapers.urlPathSegmentEscaper;
 
 public class EventsCmdExec extends AbstrAsyncDockerCmdExec<EventsCmd, Event> implements EventsCmd.Exec {
 

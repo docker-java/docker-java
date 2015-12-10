@@ -16,10 +16,10 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.ExecCreateCmdResponse;
-import com.github.dockerjava.netty.AbstractDockerClientTest;
+import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
 @Test(groups = "integration")
-public class ExecCreateCmdExecTest extends AbstractDockerClientTest {
+public class ExecCreateCmdExecTest extends AbstractNettyDockerClientTest {
     @BeforeTest
     public void beforeTest() throws Exception {
         super.beforeTest();

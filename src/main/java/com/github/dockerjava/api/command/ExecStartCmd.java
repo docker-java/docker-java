@@ -6,6 +6,7 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 import com.github.dockerjava.api.async.ResultCallback;
+import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.Frame;
 
 public interface ExecStartCmd extends AsyncDockerCmd<ExecStartCmd, Frame> {
@@ -32,7 +33,7 @@ public interface ExecStartCmd extends AsyncDockerCmd<ExecStartCmd, Frame> {
 
     /**
      *
-     * @throws com.github.dockerjava.api.NotFoundException
+     * @throws NotFoundException
      *             No such exec instance
      */
     @Override

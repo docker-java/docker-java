@@ -18,10 +18,10 @@ import com.github.dockerjava.api.model.Event;
 import com.github.dockerjava.api.model.EventFilters;
 import com.github.dockerjava.core.command.EventsResultCallback;
 import com.github.dockerjava.core.command.PullImageResultCallback;
-import com.github.dockerjava.netty.AbstractDockerClientTest;
+import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
 @Test(groups = "integration")
-public class EventsCmdExecTest extends AbstractDockerClientTest {
+public class EventsCmdExecTest extends AbstractNettyDockerClientTest {
 
     private static int KNOWN_NUM_EVENTS = 4;
 

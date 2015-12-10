@@ -21,11 +21,11 @@ import com.github.dockerjava.api.command.ExecCreateCmdResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.InspectExecResponse;
 import com.github.dockerjava.core.command.ExecStartResultCallback;
-import com.github.dockerjava.netty.AbstractDockerClientTest;
+import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 import com.github.dockerjava.test.serdes.JSONTestHelper;
 
 @Test(groups = "integration")
-public class InspectExecCmdExecTest extends AbstractDockerClientTest {
+public class InspectExecCmdExecTest extends AbstractNettyDockerClientTest {
 
     @BeforeTest
     public void beforeTest() throws Exception {

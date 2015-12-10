@@ -20,10 +20,10 @@ import org.testng.annotations.Test;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Statistics;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
-import com.github.dockerjava.netty.AbstractDockerClientTest;
+import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
 @Test(groups = "integration")
-public class StatsCmdExecTest extends AbstractDockerClientTest {
+public class StatsCmdExecTest extends AbstractNettyDockerClientTest {
 
     private static int NUM_STATS = 5;
 
@@ -62,7 +62,7 @@ public class StatsCmdExecTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        StatsCallbackTest statsCallback = dockerClient.statsCmd().withContainerId(container.getId())
+        StatsCallbackTest statsCallback = dockerClient.statsCmd(container.getId())
                 .exec(new StatsCallbackTest(countDownLatch));
 
         countDownLatch.await(3, TimeUnit.SECONDS);

@@ -34,8 +34,8 @@ import java.util.Map;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.api.DockerClientException;
 import com.github.dockerjava.api.async.ResultCallback;
+import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
 import com.github.dockerjava.netty.handler.FramedResponseStreamHandler;
@@ -181,6 +181,15 @@ public class InvocationBuilder {
         };
     }
 
+    private HttpRequestProvider httpPutRequestProvider(final Object entity) {
+        return new HttpRequestProvider() {
+            @Override
+            public HttpRequest getHttpRequest(String uri) {
+                return preparePutRequest(uri, entity);
+            }
+        };
+    }
+
     public InputStream post(final Object entity) {
 
         HttpRequestProvider requestProvider = httpPostRequestProvider(entity);
@@ -318,12 +327,20 @@ public class InvocationBuilder {
     }
 
     private HttpRequest preparePostRequest(String uri, Object entity) {
+        return prepareRequest(uri, entity, HttpMethod.POST);
+    }
+
+    private HttpRequest preparePutRequest(String uri, Object entity) {
+        return prepareRequest(uri, entity, HttpMethod.PUT);
+    }
+
+    private HttpRequest prepareRequest(String uri, Object entity, HttpMethod httpMethod) {
 
         HttpRequest request = null;
 
         if (entity != null) {
 
-            FullHttpRequest fullRequest = new DefaultFullHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.POST, uri);
+            FullHttpRequest fullRequest = new DefaultFullHttpRequest(HttpVersion.HTTP_1_1, httpMethod, uri);
 
             byte[] bytes;
             try {
@@ -338,7 +355,7 @@ public class InvocationBuilder {
 
             request = fullRequest;
         } else {
-            request = new DefaultHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.POST, uri);
+            request = new DefaultHttpRequest(HttpVersion.HTTP_1_1, httpMethod, uri);
             request.headers().set(HttpHeaderNames.CONTENT_LENGTH, 0);
         }
 
@@ -414,9 +431,6 @@ public class InvocationBuilder {
         channel.write(new ChunkedStream(new BufferedInputStream(body, 1024 * 1024), 1024 * 1024));
         channel.write(LastHttpContent.EMPTY_LAST_CONTENT);
         channel.flush();
-
-        return;
-
     }
 
     public InputStream get() {
@@ -438,5 +452,36 @@ public class InvocationBuilder {
         sendRequest(requestProvider, channel);
 
         return resultCallback.awaitResult();
+    }
+
+    public void put(InputStream body, MediaType mediaType) {
+        HttpRequestProvider requestProvider = httpPutRequestProvider(null);
+
+        Channel channel = getChannel();
+
+        ResponseCallback<Void> resultCallback = new ResponseCallback<Void>();
+
+        HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, resultCallback);
+
+        channel.pipeline().addLast(new ChunkedWriteHandler());
+        channel.pipeline().addLast(responseHandler);
+
+        HttpRequest request = requestProvider.getHttpRequest(resource);
+
+        // don't accept FullHttpRequest here
+        if (request instanceof FullHttpRequest) {
+            throw new DockerClientException("fatal: request is instance of FullHttpRequest");
+        }
+
+        request.headers().set(HttpHeaderNames.TRANSFER_ENCODING, HttpHeaderValues.CHUNKED);
+        request.headers().remove(HttpHeaderNames.CONTENT_LENGTH);
+        request.headers().set(HttpHeaderNames.CONTENT_TYPE, mediaType.getMediaType());
+
+        channel.write(request);
+        channel.write(new ChunkedStream(new BufferedInputStream(body, 1024 * 1024)));
+        channel.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT);
+
+        resultCallback.awaitResult();
+
     };
 }

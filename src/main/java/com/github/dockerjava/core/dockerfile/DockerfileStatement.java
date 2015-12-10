@@ -8,13 +8,14 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.github.dockerjava.api.DockerClientException;
+import org.apache.commons.lang.StringUtils;
+
+import com.github.dockerjava.api.exception.DockerClientException;
 import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * A statement present in a dockerfile.

@@ -10,6 +10,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.core.exception.InvalidRepositoryNameException;
 
 public class NameParser {
 

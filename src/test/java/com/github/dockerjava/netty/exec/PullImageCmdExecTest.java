@@ -13,18 +13,18 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.api.command.PullImageCmd;
+import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.api.model.PullResponseItem;
 import com.github.dockerjava.core.command.PullImageCmdImpl;
 import com.github.dockerjava.core.command.PullImageResultCallback;
-import com.github.dockerjava.netty.AbstractDockerClientTest;
+import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
 @Test(groups = "integration")
-public class PullImageCmdExecTest extends AbstractDockerClientTest {
+public class PullImageCmdExecTest extends AbstractNettyDockerClientTest {
 
     private static final PullImageCmd.Exec NOP_EXEC = new PullImageCmd.Exec() {
         public Void exec(PullImageCmd command, ResultCallback<PullResponseItem> resultCallback) {

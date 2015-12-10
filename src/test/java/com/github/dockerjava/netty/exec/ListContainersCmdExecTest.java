@@ -28,11 +28,11 @@ import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Filters;
 import com.github.dockerjava.core.command.PullImageResultCallback;
-import com.github.dockerjava.netty.AbstractDockerClientTest;
+import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 import com.google.common.collect.ImmutableMap;
 
 @Test(groups = "integration")
-public class ListContainersCmdExecTest extends AbstractDockerClientTest {
+public class ListContainersCmdExecTest extends AbstractNettyDockerClientTest {
 
     @BeforeTest
     public void beforeTest() throws Exception {

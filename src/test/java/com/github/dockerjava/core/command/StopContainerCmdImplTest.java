@@ -17,8 +17,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
@@ -62,7 +62,7 @@ public class StopContainerCmdImplTest extends AbstractDockerClientTest {
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
         LOG.info("Container Inspect: {}", inspectContainerResponse.toString());
 
-        assertThat(inspectContainerResponse.getState().isRunning(), is(equalTo(false)));
+        assertThat(inspectContainerResponse.getState().getRunning(), is(equalTo(false)));
         assertThat(inspectContainerResponse.getState().getExitCode(), not(equalTo(0)));
     }
 

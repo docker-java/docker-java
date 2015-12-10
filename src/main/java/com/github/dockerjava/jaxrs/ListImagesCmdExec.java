@@ -1,17 +1,19 @@
 package com.github.dockerjava.jaxrs;
 
-import com.github.dockerjava.api.command.ListImagesCmd;
-import com.github.dockerjava.api.model.Image;
-import com.github.dockerjava.core.DockerClientConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static com.google.common.net.UrlEscapers.urlPathSegmentEscaper;
+
+import java.util.List;
 
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
-import static com.google.common.net.UrlEscapers.urlPathSegmentEscaper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.dockerjava.api.command.ListImagesCmd;
+import com.github.dockerjava.api.model.Image;
+import com.github.dockerjava.core.DockerClientConfig;
 
 public class ListImagesCmdExec extends AbstrSyncDockerCmdExec<ListImagesCmd, List<Image>> implements ListImagesCmd.Exec {
 

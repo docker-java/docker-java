@@ -6,8 +6,8 @@ import java.io.InputStream;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.dockerjava.api.async.ResultCallback;
-import com.github.dockerjava.api.command.ExecCreateCmd;
 import com.github.dockerjava.api.command.ExecStartCmd;
+import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.Frame;
 
 public class ExecStartCmdImpl extends AbstrAsyncDockerCmd<ExecStartCmd, Frame> implements ExecStartCmd {
@@ -71,7 +71,7 @@ public class ExecStartCmdImpl extends AbstrAsyncDockerCmd<ExecStartCmd, Frame> i
     }
 
     /**
-     * @throws com.github.dockerjava.api.NotFoundException
+     * @throws NotFoundException
      *             No such exec instance
      */
     @Override

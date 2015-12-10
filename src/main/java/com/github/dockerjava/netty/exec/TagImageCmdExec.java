@@ -1,11 +1,11 @@
 package com.github.dockerjava.netty.exec;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.dockerjava.api.command.TagImageCmd;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.netty.WebTarget;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class TagImageCmdExec extends AbstrSyncDockerCmdExec<TagImageCmd, Void> implements TagImageCmd.Exec {
 

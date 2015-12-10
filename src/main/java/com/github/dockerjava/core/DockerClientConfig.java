@@ -1,10 +1,6 @@
 package com.github.dockerjava.core;
 
-import com.github.dockerjava.api.DockerClientException;
-import com.github.dockerjava.api.model.AuthConfig;
-import com.github.dockerjava.api.model.AuthConfigurations;
-import com.github.dockerjava.core.NameParser.HostnameReposName;
-import com.github.dockerjava.core.NameParser.ReposTag;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,7 +13,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.github.dockerjava.api.exception.DockerClientException;
+import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.api.model.AuthConfigurations;
+import com.github.dockerjava.core.NameParser.HostnameReposName;
+import com.github.dockerjava.core.NameParser.ReposTag;
 
 public class DockerClientConfig implements Serializable {
 

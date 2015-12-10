@@ -1,8 +1,5 @@
 package com.github.dockerjava.client;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,35 +12,40 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
+import org.hamcrest.FeatureMatcher;
+import org.hamcrest.Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.ITestResult;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.command.InspectContainerResponse.Mount;
+import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.Volume;
-import com.github.dockerjava.api.model.VolumeBind;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.TestDockerCmdExecFactory;
 import com.github.dockerjava.core.command.BuildImageResultCallback;
 import com.github.dockerjava.core.command.LogContainerResultCallback;
 import com.github.dockerjava.core.command.PullImageResultCallback;
-import com.google.common.base.Joiner;
 
 public abstract class AbstractDockerClientTest extends Assert {
 
     public static final Logger LOG = LoggerFactory.getLogger(AbstractDockerClientTest.class);
 
-    private String apiVersion = "1.19";
+    private String apiVersion = "1.21";
 
     protected DockerClient dockerClient;
 
-    protected TestDockerCmdExecFactory dockerCmdExecFactory = new TestDockerCmdExecFactory(
-            DockerClientBuilder.getDefaultDockerCmdExecFactory());
+    protected TestDockerCmdExecFactory dockerCmdExecFactory = initTestDockerCmdExecFactory();
+
+    protected TestDockerCmdExecFactory initTestDockerCmdExecFactory() {
+        return new TestDockerCmdExecFactory(
+                DockerClientBuilder.getDefaultDockerCmdExecFactory());
+    }
 
     public void beforeTest() throws Exception {
 
@@ -51,10 +53,13 @@ public abstract class AbstractDockerClientTest extends Assert {
         LOG.info("Connecting to Docker server");
         dockerClient = DockerClientBuilder.getInstance(config()).withDockerCmdExecFactory(dockerCmdExecFactory).build();
 
-        LOG.info("Pulling image 'busybox'");
-
-        // need to block until image is pulled completely
-        dockerClient.pullImageCmd("busybox").withTag("latest").exec(new PullImageResultCallback()).awaitSuccess();
+        try {
+            dockerClient.inspectImageCmd("busybox").exec();
+        } catch (Exception e) {
+            LOG.info("Pulling image 'busybox'");
+            // need to block until image is pulled completely
+            dockerClient.pullImageCmd("busybox").withTag("latest").exec(new PullImageResultCallback()).awaitSuccess();
+        }
 
         assertNotNull(dockerClient);
         LOG.info("======================= END OF BEFORETEST =======================\n\n");
@@ -172,20 +177,23 @@ public abstract class AbstractDockerClientTest extends Assert {
         return false;
     }
 
-    /**
-     * Asserts that {@link InspectContainerResponse#getVolumes()} (<code>.Volumes</code>) has {@link VolumeBind}s for
-     * the given {@link Volume}s
-     */
-    public static void assertContainerHasVolumes(InspectContainerResponse inspectContainerResponse,
-            Volume... expectedVolumes) {
-        VolumeBind[] volumeBinds = inspectContainerResponse.getVolumes();
-        LOG.info("Inspect .Volumes = [{}]", Joiner.on(", ").join(volumeBinds));
+    protected MountedVolumes mountedVolumes(Matcher<? super List<Volume>> subMatcher) {
+        return new MountedVolumes(subMatcher, "Mounted volumes", "mountedVolumes");
+    }
 
-        List<Volume> volumes = new ArrayList<Volume>();
-        for (VolumeBind bind : volumeBinds) {
-            volumes.add(new Volume(bind.getContainerPath()));
+    private static class MountedVolumes extends FeatureMatcher<InspectContainerResponse, List<Volume>> {
+        public MountedVolumes(Matcher<? super List<Volume>> subMatcher, String featureDescription, String featureName) {
+            super(subMatcher, featureDescription, featureName);
         }
-        assertThat(volumes, contains(expectedVolumes));
+
+        @Override
+        public List<Volume> featureValueOf(InspectContainerResponse item) {
+            List<Volume> volumes = new ArrayList<Volume>();
+            for (Mount mount : item.getMounts()) {
+                volumes.add(mount.getDestination());
+            }
+            return volumes;
+        }
     }
 
     protected String containerLog(String containerId) throws Exception {

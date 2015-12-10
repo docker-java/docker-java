@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.apache.commons.io.filefilter.AbstractFileFilter;
 
+import com.github.dockerjava.core.util.FilePathUtil;
+
 public class GoLangMatchFileFilter extends AbstractFileFilter {
 
     private final File base;

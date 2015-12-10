@@ -14,12 +14,12 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.netty.AbstractDockerClientTest;
+import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
 @Test(groups = "integration")
-public class CopyFileFromContainerCmdExecTest extends AbstractDockerClientTest {
+public class CopyFileFromContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
     @BeforeTest
     public void beforeTest() throws Exception {

@@ -16,14 +16,14 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
-import com.github.dockerjava.netty.AbstractDockerClientTest;
+import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
 @Test(groups = "integration")
-public class InspectContainerCmdExecTest extends AbstractDockerClientTest {
+public class InspectContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
     public static final Logger LOG = LoggerFactory.getLogger(InspectContainerCmdExecTest.class);
 

@@ -20,14 +20,14 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.DockerException;
-import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.Container;
-import com.github.dockerjava.netty.AbstractDockerClientTest;
+import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
 @Test(groups = "integration")
-public class RemoveImageCmdExecTest extends AbstractDockerClientTest {
+public class RemoveImageCmdExecTest extends AbstractNettyDockerClientTest {
 
     public static final Logger LOG = LoggerFactory.getLogger(RemoveImageCmdExecTest.class);
 
