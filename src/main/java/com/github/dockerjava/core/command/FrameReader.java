@@ -67,7 +67,7 @@ public class FrameReader implements AutoCloseable {
             } while (actualHeaderSize < HEADER_SIZE);
 
             // HexDump.dump(header, 0, System.err, 0);
-            
+
             StreamType streamType = streamType(header[0]);
 
             if (streamType.equals(StreamType.RAW)) {
@@ -77,8 +77,6 @@ public class FrameReader implements AutoCloseable {
 
             int payloadSize = ((header[4] & 0xff) << 24) + ((header[5] & 0xff) << 16) + ((header[6] & 0xff) << 8)
                     + (header[7] & 0xff);
-            
-            //System.out.println("payload size: " + payloadSize);
 
             byte[] payload = new byte[payloadSize];
             int actualPayloadSize = 0;

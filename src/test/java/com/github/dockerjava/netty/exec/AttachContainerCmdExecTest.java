@@ -135,8 +135,6 @@ public class AttachContainerCmdExecTest extends AbstractNettyDockerClientTest {
         dockerClient.attachContainerCmd(container.getId()).withStdErr(true).withStdOut(true).withFollowStream(true)
                 .exec(callback).awaitCompletion(10, TimeUnit.SECONDS).close();
 
-        System.out.println("log: " + callback.toString());
-
         // HexDump.dump(collectFramesCallback.toString().getBytes(), 0, System.out, 0);
 
         assertThat(callback.toString(), containsString("stdout\r\nstderr"));
