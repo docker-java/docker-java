@@ -86,7 +86,7 @@ public class InvocationBuilder {
         return this;
     }
 
-    public ResponseCallback<Void> delete() {
+    public void delete() {
 
         HttpRequestProvider requestProvider = httpDeleteRequestProvider();
 
@@ -100,7 +100,7 @@ public class InvocationBuilder {
 
         sendRequest(requestProvider, channel);
 
-        return callback;
+        callback.awaitResult();
     }
 
     public void get(ResultCallback<Frame> resultCallback) {
@@ -134,7 +134,7 @@ public class InvocationBuilder {
 
         Channel channel = getChannel();
 
-        resultCallbackOnStart(channel, resultCallback);
+        initCallback(channel, resultCallback);
 
         JsonResponseCallbackHandler<T> jsonResponseHandler = new JsonResponseCallbackHandler<T>(typeReference,
                 resultCallback);
@@ -276,7 +276,7 @@ public class InvocationBuilder {
 
         Channel channel = getChannel();
 
-        resultCallbackOnStart(channel, resultCallback);
+        initCallback(channel, resultCallback);
 
         JsonResponseCallbackHandler<T> jsonResponseHandler = new JsonResponseCallbackHandler<T>(typeReference,
                 resultCallback);
@@ -292,12 +292,11 @@ public class InvocationBuilder {
         return;
     }
 
-    private <T> void resultCallbackOnStart(final Channel channel, final ResultCallback<T> resultCallback) {
+    private <T> void initCallback(final Channel channel, final ResultCallback<T> resultCallback) {
         Closeable closeable = new Closeable() {
             @Override
             public void close() throws IOException {
                 try {
-                    System.err.println("closing channel");
                     channel.close().sync();
                 } catch (InterruptedException e) {
                     resultCallback.onError(e);
@@ -327,14 +326,14 @@ public class InvocationBuilder {
     }
 
     private HttpRequest preparePostRequest(String uri, Object entity) {
-        return prepareRequest(uri, entity, HttpMethod.POST);
+        return prepareEntityRequest(uri, entity, HttpMethod.POST);
     }
 
     private HttpRequest preparePutRequest(String uri, Object entity) {
-        return prepareRequest(uri, entity, HttpMethod.PUT);
+        return prepareEntityRequest(uri, entity, HttpMethod.PUT);
     }
 
-    private HttpRequest prepareRequest(String uri, Object entity, HttpMethod httpMethod) {
+    private HttpRequest prepareEntityRequest(String uri, Object entity, HttpMethod httpMethod) {
 
         HttpRequest request = null;
 
@@ -404,7 +403,7 @@ public class InvocationBuilder {
 
         Channel channel = getChannel();
 
-        resultCallbackOnStart(channel, resultCallback);
+        initCallback(channel, resultCallback);
 
         JsonResponseCallbackHandler<T> jsonResponseHandler = new JsonResponseCallbackHandler<T>(typeReference,
                 resultCallback);
@@ -440,7 +439,7 @@ public class InvocationBuilder {
 
         ResponseCallback<InputStream> resultCallback = new ResponseCallback<InputStream>();
 
-        resultCallbackOnStart(channel, resultCallback);
+        initCallback(channel, resultCallback);
 
         HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, resultCallback);
 
@@ -482,6 +481,5 @@ public class InvocationBuilder {
         channel.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT);
 
         resultCallback.awaitResult();
-
     };
 }

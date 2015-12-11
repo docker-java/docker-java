@@ -43,6 +43,9 @@ public interface AttachContainerCmd extends AsyncDockerCmd<AttachContainerCmd, F
     @CheckForNull
     public Boolean hasStderrEnabled();
 
+    @CheckForNull
+    public InputStream getStdin();
+
     public AttachContainerCmd withContainerId(@Nonnull String containerId);
 
     /**
@@ -57,6 +60,8 @@ public interface AttachContainerCmd extends AsyncDockerCmd<AttachContainerCmd, F
     public AttachContainerCmd withStdOut(Boolean stdout);
 
     public AttachContainerCmd withStdErr(Boolean stderr);
+
+    public AttachContainerCmd withStdIn(InputStream stdin);
 
     public AttachContainerCmd withLogs(Boolean logs);
 

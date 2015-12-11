@@ -23,7 +23,7 @@ public class RemoveImageCmdExec extends AbstrSyncDockerCmdExec<RemoveImageCmd, V
         webTarget = booleanQueryParam(webTarget, "noprune", command.hasNoPruneEnabled());
 
         LOGGER.trace("DELETE: {}", webTarget);
-        webTarget.request().delete().awaitResult();
+        webTarget.request().delete();
 
         return null;
     }

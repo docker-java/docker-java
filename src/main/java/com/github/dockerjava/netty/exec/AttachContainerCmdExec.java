@@ -26,13 +26,13 @@ public class AttachContainerCmdExec extends AbstrAsyncDockerCmdExec<AttachContai
 
         webTarget = booleanQueryParam(webTarget, "logs", command.hasLogsEnabled());
         webTarget = booleanQueryParam(webTarget, "stdout", command.hasStdoutEnabled());
-        // webTarget = booleanQueryParam(webTarget, "stdin", command.hasStdinEnabled());
         webTarget = booleanQueryParam(webTarget, "stderr", command.hasStderrEnabled());
+        webTarget = booleanQueryParam(webTarget, "stdin", command.getStdin() != null);
         webTarget = booleanQueryParam(webTarget, "stream", command.hasFollowStreamEnabled());
 
         LOGGER.trace("POST: {}", webTarget);
 
-        webTarget.request().post(null, System.in, resultCallback);
+        webTarget.request().post(null, command.getStdin(), resultCallback);
 
         return null;
     }

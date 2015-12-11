@@ -5,7 +5,9 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
@@ -102,6 +104,33 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
         // HexDump.dump(collectFramesCallback.toString().getBytes(), 0, System.out, 0);
 
         assertThat(callback.toString(), containsString("stdout\r\nstderr"));
+    }
+
+    @Test(expectedExceptions = UnsupportedOperationException.class)
+    public void attachContainerStdinUnsupported() throws Exception {
+
+        String snippet = "hello world";
+
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("echo", snippet)
+                .withTty(false).exec();
+
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+
+        dockerClient.startContainerCmd(container.getId()).exec();
+
+        AttachContainerTestCallback callback = new AttachContainerTestCallback() {
+            @Override
+            public void onNext(Frame frame) {
+                assertEquals(frame.getStreamType(), StreamType.STDOUT);
+                super.onNext(frame);
+            };
+        };
+
+        InputStream stdin = new ByteArrayInputStream("".getBytes());
+
+        dockerClient.attachContainerCmd(container.getId()).withStdErr(true).withStdOut(true).withFollowStream(true)
+                .withLogs(true).withStdIn(stdin).exec(callback).awaitCompletion(30, TimeUnit.SECONDS).close();
     }
 
     public static class AttachContainerTestCallback extends AttachContainerResultCallback {

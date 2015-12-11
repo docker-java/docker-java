@@ -26,12 +26,15 @@ public class AttachContainerCmdExec extends AbstrAsyncDockerCmdExec<AttachContai
     protected AbstractCallbackNotifier<Frame> callbackNotifier(AttachContainerCmd command,
             ResultCallback<Frame> resultCallback) {
 
+        if (command.getStdin() != null)
+            throw new UnsupportedOperationException(
+                    "Passing stdin to the container is currently not supported. Try experimental netty engine!");
+
         WebTarget webTarget = getBaseResource().path("/containers/{id}/attach").resolveTemplate("id",
                 command.getContainerId());
 
         webTarget = booleanQueryParam(webTarget, "logs", command.hasLogsEnabled());
         webTarget = booleanQueryParam(webTarget, "stdout", command.hasStdoutEnabled());
-        // webTarget = booleanQueryParam(webTarget, "stdin", command.hasStdinEnabled());
         webTarget = booleanQueryParam(webTarget, "stderr", command.hasStderrEnabled());
         webTarget = booleanQueryParam(webTarget, "stream", command.hasFollowStreamEnabled());
 
