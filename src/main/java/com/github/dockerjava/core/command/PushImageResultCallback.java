@@ -14,7 +14,7 @@ import com.github.dockerjava.core.async.ResultCallbackTemplate;
 
 /**
  *
- * @author marcus
+ * @author Marcus Linke
  *
  */
 public class PushImageResultCallback extends ResultCallbackTemplate<PushImageResultCallback, PushResponseItem> {

@@ -28,7 +28,7 @@ public class ContainerDiffCmdExec extends AbstrSyncDockerCmdExec<ContainerDiffCm
 
         LOGGER.trace("GET: {}", webResource);
         return webResource.request().accept(MediaType.APPLICATION_JSON).get(new TypeReference<List<ChangeLog>>() {
-        }).awaitResult();
+        });
     }
 
 }

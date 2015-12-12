@@ -16,7 +16,7 @@ import com.github.dockerjava.core.async.ResultCallbackTemplate;
 
 /**
  *
- * @author marcus
+ * @author Marcus Linke
  *
  */
 public class BuildImageResultCallback extends ResultCallbackTemplate<BuildImageResultCallback, BuildResponseItem> {

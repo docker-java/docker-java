@@ -12,7 +12,7 @@ import com.github.dockerjava.core.async.ResponseStreamProcessor;
 
 /**
  *
- * @author marcus
+ * @author Marcus Linke
  *
  */
 public class POSTCallbackNotifier<T> extends AbstractCallbackNotifier<T> {

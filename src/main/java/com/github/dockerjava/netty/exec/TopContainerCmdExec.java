@@ -30,7 +30,7 @@ public class TopContainerCmdExec extends AbstrSyncDockerCmdExec<TopContainerCmd,
 
         LOGGER.trace("GET: {}", webResource);
         return webResource.request().accept(MediaType.APPLICATION_JSON).get(new TypeReference<TopContainerResponse>() {
-        }).awaitResult();
+        });
     }
 
 }

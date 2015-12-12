@@ -119,13 +119,13 @@ public class InvocationBuilder {
         sendRequest(requestProvider, channel);
     }
 
-    public <T> ResponseCallback<T> get(TypeReference<T> typeReference) {
+    public <T> T get(TypeReference<T> typeReference) {
 
         ResponseCallback<T> callback = new ResponseCallback<T>();
 
         get(typeReference, callback);
 
-        return callback;
+        return callback.awaitResult();
     }
 
     public <T> void get(TypeReference<T> typeReference, ResultCallback<T> resultCallback) {
@@ -228,7 +228,7 @@ public class InvocationBuilder {
         sendRequest(requestProvider, channel);
 
         // wait for successful http upgrade procedure
-        hijackHandler.await();
+        hijackHandler.awaitUpgrade();
 
         // now we can start a new thread that reads from stdin and writes to the channel
         new Thread(new Runnable() {

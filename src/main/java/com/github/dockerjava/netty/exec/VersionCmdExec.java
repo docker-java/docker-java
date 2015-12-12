@@ -24,7 +24,7 @@ public class VersionCmdExec extends AbstrSyncDockerCmdExec<VersionCmd, Version> 
 
         LOGGER.trace("GET: {}", webResource);
         return webResource.request().accept(MediaType.APPLICATION_JSON).get(new TypeReference<Version>() {
-        }).awaitResult();
+        });
     }
 
 }

@@ -115,7 +115,7 @@ import com.github.dockerjava.netty.exec.WaitContainerCmdExec;
  * https://github.com/netty/netty/blob/master/example/src/main/java/io/netty/example/http/snoop/HttpSnoopClient.java
  * https://github.com/slandelle/netty-request-chunking/blob/master/src/test/java/slandelle/ChunkingTest.java
  *
- * @author marcus
+ * @author Marcus Linke
  *
  */
 public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
@@ -154,7 +154,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
             nettyInitializer = new InetSocketInitializer();
         }
 
-        nettyInitializer.init(bootstrap, dockerClientConfig);
+        eventLoopGroup = nettyInitializer.init(bootstrap, dockerClientConfig);
     }
 
     private Channel connect() {
@@ -169,7 +169,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         return nettyInitializer.connect(bootstrap);
     }
 
-    private static interface NettyInitializer {
+    private interface NettyInitializer {
         EventLoopGroup init(final Bootstrap bootstrap, DockerClientConfig dockerClientConfig);
 
         Channel connect(final Bootstrap bootstrap) throws InterruptedException;

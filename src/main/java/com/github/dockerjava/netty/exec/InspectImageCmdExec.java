@@ -26,7 +26,7 @@ public class InspectImageCmdExec extends AbstrSyncDockerCmdExec<InspectImageCmd,
         LOGGER.trace("GET: {}", webResource);
 
         return webResource.request().accept(MediaType.APPLICATION_JSON).get(new TypeReference<InspectImageResponse>() {
-        }).awaitResult();
+        });
     }
 
 }

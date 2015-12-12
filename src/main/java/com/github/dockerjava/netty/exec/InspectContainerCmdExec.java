@@ -27,7 +27,7 @@ public class InspectContainerCmdExec extends AbstrSyncDockerCmdExec<InspectConta
         LOGGER.debug("GET: {}", webResource);
         return webResource.request().accept(MediaType.APPLICATION_JSON)
                 .get(new TypeReference<InspectContainerResponse>() {
-                }).awaitResult();
+                });
     }
 
 }

@@ -14,7 +14,7 @@ import com.github.dockerjava.netty.WebTarget;
  * http://netty.io/wiki/native-transports.html
  * https://github.com/netty/netty/blob/master/example/src/main/java/io/netty/ example/http/snoop/HttpSnoopClient.java
  *
- * @author marcus
+ * @author Marcus Linke
  *
  */
 public class InfoCmdExec implements InfoCmd.Exec {
@@ -23,17 +23,14 @@ public class InfoCmdExec implements InfoCmd.Exec {
 
     private WebTarget webResource;
 
-    private DockerClientConfig dockerClientConfig;
-
     public InfoCmdExec(WebTarget webResource, DockerClientConfig dockerClientConfig) {
         this.webResource = webResource;
-        this.dockerClientConfig = dockerClientConfig;
     }
 
     @Override
     public Info exec(InfoCmd command) {
         return webResource.path("info").request().get(new TypeReference<Info>() {
-        }).awaitResult();
+        });
     }
 
 }

@@ -1,6 +1,3 @@
-/*
- * Created on 21.07.2015
- */
 package com.github.dockerjava.core.command;
 
 import java.io.IOException;
@@ -14,7 +11,7 @@ import com.github.dockerjava.core.async.ResultCallbackTemplate;
 
 /**
  *
- * @author marcus
+ * @author Marcus Linke
  *
  */
 public class ExecStartResultCallback extends ResultCallbackTemplate<ExecStartResultCallback, Frame> {
@@ -31,7 +28,6 @@ public class ExecStartResultCallback extends ResultCallbackTemplate<ExecStartRes
     public ExecStartResultCallback() {
         this(null, null);
     }
-
 
     @Override
     public void onNext(Frame frame) {

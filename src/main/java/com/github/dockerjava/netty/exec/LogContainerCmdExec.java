@@ -44,5 +44,4 @@ public class LogContainerCmdExec extends AbstrAsyncDockerCmdExec<LogContainerCmd
 
         return null;
     }
-
 }

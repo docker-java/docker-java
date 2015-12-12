@@ -44,7 +44,7 @@ public class ListContainersCmdExec extends AbstrSyncDockerCmdExec<ListContainers
 
         List<Container> containers = webTarget.request().accept(MediaType.APPLICATION_JSON)
                 .get(new TypeReference<List<Container>>() {
-                }).awaitResult();
+                });
 
         LOGGER.trace("Response: {}", containers);
 

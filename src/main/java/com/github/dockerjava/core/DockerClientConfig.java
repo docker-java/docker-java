@@ -346,7 +346,7 @@ public class DockerClientConfig implements Serializable {
     public static class DockerClientConfigBuilder {
         private URI uri;
 
-        private String version, username, password, email, serverAddress, dockerCfgPath, dockerCertPath;
+        private String version, username, password, email, serverAddress, dockerCfgPath;
 
         private SSLConfig sslConfig;
 
@@ -401,7 +401,6 @@ public class DockerClientConfig implements Serializable {
         public final DockerClientConfigBuilder withDockerCertPath(String dockerCertPath) {
             if (dockerCertPath != null) {
                 this.sslConfig = new LocalDirectorySSLConfig(dockerCertPath);
-                this.dockerCertPath = dockerCertPath;
             }
             return this;
         }

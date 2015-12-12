@@ -10,7 +10,7 @@ import javax.ws.rs.core.Response;
  * {@link WrappedResponseInputStream} is closed it closes the underlying {@link Response} object also to prevent
  * blocking/hanging connections.
  *
- * @author marcus
+ * @author Marcus Linke
  */
 public class WrappedResponseInputStream extends InputStream {
 

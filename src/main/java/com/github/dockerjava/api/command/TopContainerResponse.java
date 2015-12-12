@@ -6,7 +6,7 @@ import com.google.common.base.Joiner;
 
 /**
  *
- * @author marcus
+ * @author Marcus Linke
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)

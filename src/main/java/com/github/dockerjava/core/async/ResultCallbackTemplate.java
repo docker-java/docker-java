@@ -19,7 +19,7 @@ import com.google.common.base.Throwables;
 /**
  * Abstract template implementation of {@link ResultCallback}
  *
- * @author marcus
+ * @author Marcus Linke
  *
  */
 public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T>, A_RES_T> implements

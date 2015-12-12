@@ -62,10 +62,12 @@ public class FramedResponseStreamHandler extends SimpleChannelInboundHandler<Byt
             if (headerCount == 0) {
                 return null;
             }
+
             headerCnt += headerCount;
 
-            if (headerCnt < HEADER_SIZE)
+            if (headerCnt < HEADER_SIZE) {
                 return null;
+            }
 
             streamType = streamType(header[0]);
 
@@ -81,8 +83,9 @@ public class FramedResponseStreamHandler extends SimpleChannelInboundHandler<Byt
 
             int count = read(payload, payloadCnt, rawBuffer.readableBytes());
 
-            if (count == 0)
+            if (count == 0) {
                 return null;
+            }
 
             payloadCnt = 0;
 
@@ -92,18 +95,21 @@ public class FramedResponseStreamHandler extends SimpleChannelInboundHandler<Byt
             int payloadSize = ((header[4] & 0xff) << 24) + ((header[5] & 0xff) << 16) + ((header[6] & 0xff) << 8)
                     + (header[7] & 0xff);
 
-            if (payloadCnt == 0)
+            if (payloadCnt == 0) {
                 payload = new byte[payloadSize];
+            }
 
             int count = read(payload, payloadCnt, payloadSize - payloadCnt);
 
-            if (count == 0)
+            if (count == 0) {
                 return null;
+            }
 
             payloadCnt += count;
 
-            if (payloadCnt < payloadSize)
+            if (payloadCnt < payloadSize) {
                 return null;
+            }
 
             headerCnt = 0;
             payloadCnt = 0;

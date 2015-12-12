@@ -56,10 +56,12 @@ public class HttpResponseStreamHandler extends SimpleChannelInboundHandler<ByteB
         }
 
         private int readableBytes() {
-            if (current != null)
+            if (current != null) {
                 return current.readableBytes();
-            else
+            } else {
                 return 0;
+            }
+
         }
 
         @Override
@@ -68,8 +70,9 @@ public class HttpResponseStreamHandler extends SimpleChannelInboundHandler<ByteB
             poll();
 
             if (readableBytes() == 0) {
-                if (closed.get())
+                if (closed.get()) {
                     return -1;
+                }
             }
 
             if (current != null && current.readableBytes() > 0) {
@@ -77,7 +80,6 @@ public class HttpResponseStreamHandler extends SimpleChannelInboundHandler<ByteB
             } else {
                 return read();
             }
-
         }
 
         private void poll() {
@@ -89,7 +91,5 @@ public class HttpResponseStreamHandler extends SimpleChannelInboundHandler<ByteB
                 }
             }
         }
-
     }
-
 }

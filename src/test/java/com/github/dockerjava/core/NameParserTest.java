@@ -16,7 +16,7 @@ import com.github.dockerjava.core.NameParser.ReposTag;
 /**
  *
  *
- * @author marcus
+ * @author Marcus Linke
  *
  */
 public class NameParserTest {

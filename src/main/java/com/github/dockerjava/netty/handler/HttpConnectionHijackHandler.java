@@ -36,7 +36,7 @@ public class HttpConnectionHijackHandler implements HttpClientUpgradeHandler.Upg
         return "tcp";
     }
 
-    public void await() {
+    public void awaitUpgrade() {
         try {
             latch.await();
         } catch (InterruptedException e) {

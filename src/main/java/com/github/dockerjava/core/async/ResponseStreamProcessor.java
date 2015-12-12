@@ -9,7 +9,7 @@ import com.github.dockerjava.api.async.ResultCallback;
 
 /**
  *
- * @author marcus
+ * @author Marcus Linke
  *
  */
 public interface ResponseStreamProcessor<T> {
