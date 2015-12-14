@@ -24,7 +24,7 @@ import com.github.dockerjava.api.exception.UnauthorizedException;
 /**
  * This {@link ClientResponseFilter} implementation detects http status codes and throws {@link DockerException}s
  *
- * @author marcus
+ * @author Marcus Linke
  *
  */
 public class ResponseStatusExceptionFilter implements ClientResponseFilter {

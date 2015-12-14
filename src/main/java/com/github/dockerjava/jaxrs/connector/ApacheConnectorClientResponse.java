@@ -14,7 +14,7 @@ import org.glassfish.jersey.client.ClientResponse;
  * 
  * https://java.net/jira/browse/JERSEY-2852
  * 
- * @author marcus
+ * @author Marcus Linke
  *
  */
 public class ApacheConnectorClientResponse extends ClientResponse {

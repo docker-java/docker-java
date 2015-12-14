@@ -54,7 +54,8 @@ public class ExecStartCmdImplTest extends AbstractDockerClientTest {
 
         ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
                 .withAttachStdout(true).withCmd("touch", "/execStartTest.log").exec();
-        dockerClient.execStartCmd(execCreateCmdResponse.getId()).exec();
+        dockerClient.execStartCmd(execCreateCmdResponse.getId()).exec(
+                new ExecStartResultCallback(System.out, System.err));
 
         InputStream response = dockerClient.copyArchiveFromContainerCmd(container.getId(), "/execStartTest.log").exec();
         Boolean bytesAvailable = response.available() > 0;
@@ -79,7 +80,8 @@ public class ExecStartCmdImplTest extends AbstractDockerClientTest {
 
         ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
                 .withAttachStdout(true).withCmd("touch", "/execStartTest.log").exec();
-        dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false).withTty(true).exec();
+        dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false).withTty(true)
+                .exec(new ExecStartResultCallback(System.out, System.err));
 
         InputStream response = dockerClient.copyArchiveFromContainerCmd(container.getId(), "/execStartTest.log").exec();
         Boolean bytesAvailable = response.available() > 0;

@@ -10,8 +10,8 @@ import java.net.URI;
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.BuildResponseItem;
-import com.github.dockerjava.core.util.FilePathUtil;
 import com.github.dockerjava.core.dockerfile.Dockerfile;
+import com.github.dockerjava.core.util.FilePathUtil;
 
 /**
  *

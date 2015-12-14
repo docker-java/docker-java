@@ -5,12 +5,12 @@ package com.github.dockerjava.core;
 
 import java.util.regex.Pattern;
 
-import com.github.dockerjava.core.exception.InvalidRepositoryNameException;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.core.exception.InvalidRepositoryNameException;
 
 public class NameParser {
 

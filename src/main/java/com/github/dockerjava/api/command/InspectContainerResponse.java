@@ -3,7 +3,7 @@ package com.github.dockerjava.api.command;
 import java.util.List;
 import java.util.Map;
 
-import com.github.dockerjava.core.RemoteApiVersion;
+import javax.annotation.CheckForNull;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -20,8 +20,7 @@ import com.github.dockerjava.api.model.VolumeBind;
 import com.github.dockerjava.api.model.VolumeBinds;
 import com.github.dockerjava.api.model.VolumeRW;
 import com.github.dockerjava.api.model.VolumesRW;
-
-import javax.annotation.CheckForNull;
+import com.github.dockerjava.core.RemoteApiVersion;
 
 /**
  *
@@ -285,7 +284,7 @@ public class InspectContainerResponse {
 
         /**
          * <a href="https://github.com/docker/docker/pull/18127">Unclear</a>
-         * 
+         *
          * @since {@link RemoteApiVersion#UNKNOWN_VERSION}
          */
         @CheckForNull

@@ -11,7 +11,7 @@ import com.github.dockerjava.core.async.ResponseStreamProcessor;
 
 /**
  *
- * @author marcus
+ * @author Marcus Linke
  *
  */
 public class GETCallbackNotifier<T> extends AbstractCallbackNotifier<T> {

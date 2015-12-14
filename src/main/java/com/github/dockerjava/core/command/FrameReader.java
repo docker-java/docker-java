@@ -16,11 +16,12 @@ public class FrameReader implements AutoCloseable {
 
     private static final int HEADER_SIZE = 8;
 
+    private final byte[] rawBuffer = new byte[1000];
+
     private final InputStream inputStream;
 
     private Boolean rawStreamDetected = false;
 
-    private final byte[] rawBuffer = new byte[1000];
 
     public FrameReader(InputStream inputStream) {
         this.inputStream = inputStream;
@@ -64,6 +65,8 @@ public class FrameReader implements AutoCloseable {
                 }
                 actualHeaderSize += headerCount;
             } while (actualHeaderSize < HEADER_SIZE);
+
+            // HexDump.dump(header, 0, System.err, 0);
 
             StreamType streamType = streamType(header[0]);
 

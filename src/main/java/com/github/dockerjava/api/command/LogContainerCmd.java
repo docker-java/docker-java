@@ -6,6 +6,7 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.model.Frame;
 
 /**
@@ -68,6 +69,13 @@ public interface LogContainerCmd extends AsyncDockerCmd<LogContainerCmd, Frame> 
     public LogContainerCmd withTail(Integer tail);
 
     public LogContainerCmd withSince(Integer since);
+
+    /**
+     * @throws com.github.dockerjava.api.NotFoundException
+     *             No such container
+     */
+    @Override
+    public <T extends ResultCallback<Frame>> T exec(T resultCallback);
 
     public static interface Exec extends DockerCmdAsyncExec<LogContainerCmd, Frame> {
     }

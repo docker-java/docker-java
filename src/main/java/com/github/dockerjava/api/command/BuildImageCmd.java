@@ -1,14 +1,14 @@
 package com.github.dockerjava.api.command;
 
-import com.github.dockerjava.api.model.AuthConfigurations;
-import com.github.dockerjava.api.model.BuildResponseItem;
+import java.io.File;
+import java.io.InputStream;
+import java.net.URI;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-import java.io.File;
-import java.io.InputStream;
-import java.net.URI;
+import com.github.dockerjava.api.model.AuthConfigurations;
+import com.github.dockerjava.api.model.BuildResponseItem;
 
 /**
  * Build an image from Dockerfile.

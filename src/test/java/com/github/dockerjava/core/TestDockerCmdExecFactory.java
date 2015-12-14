@@ -53,7 +53,7 @@ import com.github.dockerjava.api.model.BuildResponseItem;
  * Special {@link DockerCmdExecFactory} implementation that collects container and image creations while test execution
  * for the purpose of automatically cleanup.
  *
- * @author marcus
+ * @author Marcus Linke
  */
 public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 

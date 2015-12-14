@@ -1,15 +1,17 @@
 package com.github.dockerjava.jaxrs;
 
-import com.github.dockerjava.api.command.ContainerDiffCmd;
-import com.github.dockerjava.api.model.ChangeLog;
-import com.github.dockerjava.core.DockerClientConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.List;
 
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.dockerjava.api.command.ContainerDiffCmd;
+import com.github.dockerjava.api.model.ChangeLog;
+import com.github.dockerjava.core.DockerClientConfig;
 
 public class ContainerDiffCmdExec extends AbstrSyncDockerCmdExec<ContainerDiffCmd, List<ChangeLog>> implements
         ContainerDiffCmd.Exec {

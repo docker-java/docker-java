@@ -1,13 +1,14 @@
 package com.github.dockerjava.jaxrs;
 
-import com.github.dockerjava.api.command.InfoCmd;
-import com.github.dockerjava.api.model.Info;
-import com.github.dockerjava.core.DockerClientConfig;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
+import com.github.dockerjava.api.command.InfoCmd;
+import com.github.dockerjava.api.model.Info;
+import com.github.dockerjava.core.DockerClientConfig;
 
 public class InfoCmdExec extends AbstrSyncDockerCmdExec<InfoCmd, Info> implements InfoCmd.Exec {
 

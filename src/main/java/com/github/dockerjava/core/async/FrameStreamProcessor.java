@@ -13,7 +13,7 @@ import com.github.dockerjava.core.command.FrameReader;
 /**
  *
  *
- * @author marcus
+ * @author Marcus Linke
  *
  */
 public class FrameStreamProcessor implements ResponseStreamProcessor<Frame> {

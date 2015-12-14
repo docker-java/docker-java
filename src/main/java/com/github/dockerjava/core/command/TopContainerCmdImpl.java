@@ -2,9 +2,9 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.command.TopContainerCmd;
 import com.github.dockerjava.api.command.TopContainerResponse;
+import com.github.dockerjava.api.exception.NotFoundException;
 
 /**
  * List processes running inside a container

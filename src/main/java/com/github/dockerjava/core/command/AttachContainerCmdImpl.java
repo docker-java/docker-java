@@ -2,6 +2,8 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.io.InputStream;
+
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.model.Frame;
 
@@ -17,6 +19,8 @@ import com.github.dockerjava.api.model.Frame;
  *            - true or false, includes stdout log. Defaults to false.
  * @param stderr
  *            - true or false, includes stderr log. Defaults to false.
+ * @param stdin
+ *            - null or {@link InputStream}, pass stream to stdin of the container.
  * @param timestamps
  *            - true or false, if true, print timestamps for every log line. Defaults to false.
  */
@@ -26,6 +30,8 @@ public class AttachContainerCmdImpl extends AbstrAsyncDockerCmd<AttachContainerC
     private String containerId;
 
     private Boolean logs, followStream, timestamps, stdout, stderr;
+
+    private InputStream stdin;
 
     public AttachContainerCmdImpl(AttachContainerCmd.Exec exec, String containerId) {
         super(exec);
@@ -63,6 +69,11 @@ public class AttachContainerCmdImpl extends AbstrAsyncDockerCmd<AttachContainerC
     }
 
     @Override
+    public InputStream getStdin() {
+        return stdin;
+    }
+
+    @Override
     public AttachContainerCmd withContainerId(String containerId) {
         checkNotNull(containerId, "containerId was not specified");
         this.containerId = containerId;
@@ -90,6 +101,13 @@ public class AttachContainerCmdImpl extends AbstrAsyncDockerCmd<AttachContainerC
     @Override
     public AttachContainerCmd withStdErr(Boolean stderr) {
         this.stderr = stderr;
+        return this;
+    }
+
+    @Override
+    public AttachContainerCmd withStdIn(InputStream stdin) {
+        checkNotNull(stdin, "stdin was not specified");
+        this.stdin = stdin;
         return this;
     }
 

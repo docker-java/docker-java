@@ -1,27 +1,28 @@
 package com.github.dockerjava.core.dockerfile;
 
-import com.github.dockerjava.api.exception.DockerClientException;
-import com.github.dockerjava.core.util.CompressArchiveUtil;
-import com.github.dockerjava.core.util.FilePathUtil;
-import com.github.dockerjava.core.GoLangFileMatch;
-import com.github.dockerjava.core.exception.GoLangFileMatchException;
-import com.google.common.base.Function;
-import com.google.common.base.Objects;
-import com.google.common.base.Optional;
-import com.google.common.collect.Collections2;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
-
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
+
+import com.github.dockerjava.api.exception.DockerClientException;
+import com.github.dockerjava.core.GoLangFileMatch;
+import com.github.dockerjava.core.exception.GoLangFileMatchException;
+import com.github.dockerjava.core.util.CompressArchiveUtil;
+import com.github.dockerjava.core.util.FilePathUtil;
+import com.google.common.base.Function;
+import com.google.common.base.Objects;
+import com.google.common.base.Optional;
+import com.google.common.collect.Collections2;
 
 /**
  * Parse a Dockerfile.
@@ -128,10 +129,18 @@ public class Dockerfile {
                 dockerFolderTar = CompressArchiveUtil.archiveTARFiles(directory, filesToAdd,
                         archiveNameWithOutExtension);
 
-                final InputStream tarInputStream = FileUtils.openInputStream(dockerFolderTar);
+                long length = dockerFolderTar.length();
+
+                final FileInputStream tarInputStream = FileUtils.openInputStream(dockerFolderTar);
                 final File tarFile = dockerFolderTar;
 
                 return new InputStream() {
+
+                    @Override
+                    public int available() throws IOException {
+                        return tarInputStream.available();
+                    }
+
                     @Override
                     public int read() throws IOException {
                         return tarInputStream.read();

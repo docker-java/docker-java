@@ -11,7 +11,7 @@ import com.github.dockerjava.core.async.ResultCallbackTemplate;
 
 /**
  *
- * @author marcus
+ * @author Marcus Linke
  *
  */
 public class LogContainerResultCallback extends ResultCallbackTemplate<LogContainerResultCallback, Frame> {

@@ -4,8 +4,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.InputStream;
 
-import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.command.SaveImageCmd;
+import com.github.dockerjava.api.exception.NotFoundException;
 
 public class SaveImageCmdImpl extends AbstrDockerCmd<SaveImageCmd, InputStream> implements SaveImageCmd {
     private String name;

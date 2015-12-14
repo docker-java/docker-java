@@ -11,7 +11,7 @@ import com.github.dockerjava.core.async.ResultCallbackTemplate;
 
 /**
  *
- * @author marcus
+ * @author Marcus Linke
  *
  */
 public class AttachContainerResultCallback extends ResultCallbackTemplate<AttachContainerResultCallback, Frame> {

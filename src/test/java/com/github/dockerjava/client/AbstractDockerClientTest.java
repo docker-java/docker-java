@@ -1,8 +1,5 @@
 package com.github.dockerjava.client;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +25,6 @@ import com.github.dockerjava.api.command.InspectContainerResponse.Mount;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.Volume;
-import com.github.dockerjava.api.model.VolumeBind;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.TestDockerCmdExecFactory;
@@ -44,8 +40,12 @@ public abstract class AbstractDockerClientTest extends Assert {
 
     protected DockerClient dockerClient;
 
-    protected TestDockerCmdExecFactory dockerCmdExecFactory = new TestDockerCmdExecFactory(
-            DockerClientBuilder.getDefaultDockerCmdExecFactory());
+    protected TestDockerCmdExecFactory dockerCmdExecFactory = initTestDockerCmdExecFactory();
+
+    protected TestDockerCmdExecFactory initTestDockerCmdExecFactory() {
+        return new TestDockerCmdExecFactory(
+                DockerClientBuilder.getDefaultDockerCmdExecFactory());
+    }
 
     public void beforeTest() throws Exception {
 
@@ -53,10 +53,13 @@ public abstract class AbstractDockerClientTest extends Assert {
         LOG.info("Connecting to Docker server");
         dockerClient = DockerClientBuilder.getInstance(config()).withDockerCmdExecFactory(dockerCmdExecFactory).build();
 
-        LOG.info("Pulling image 'busybox'");
-
-        // need to block until image is pulled completely
-        dockerClient.pullImageCmd("busybox").withTag("latest").exec(new PullImageResultCallback()).awaitSuccess();
+        try {
+            dockerClient.inspectImageCmd("busybox").exec();
+        } catch (Exception e) {
+            LOG.info("Pulling image 'busybox'");
+            // need to block until image is pulled completely
+            dockerClient.pullImageCmd("busybox").withTag("latest").exec(new PullImageResultCallback()).awaitSuccess();
+        }
 
         assertNotNull(dockerClient);
         LOG.info("======================= END OF BEFORETEST =======================\n\n");
@@ -204,7 +207,8 @@ public abstract class AbstractDockerClientTest extends Assert {
         @Override
         public void onNext(Frame frame) {
             log.append(new String(frame.getPayload()));
-            super.onNext(frame);
+            System.err.println("LogContainerTestCallback: " + log.toString());
+            //super.onNext(frame);
         }
 
         @Override

@@ -1,12 +1,13 @@
 package com.github.dockerjava.jaxrs;
 
-import com.github.dockerjava.api.command.UnpauseContainerCmd;
-import com.github.dockerjava.core.DockerClientConfig;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
+import com.github.dockerjava.api.command.UnpauseContainerCmd;
+import com.github.dockerjava.core.DockerClientConfig;
 
 public class UnpauseContainerCmdExec extends AbstrSyncDockerCmdExec<UnpauseContainerCmd, Void> implements
         UnpauseContainerCmd.Exec {

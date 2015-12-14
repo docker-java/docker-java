@@ -7,8 +7,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.dockerjava.core.exception.GoLangFileMatchException;
 import org.apache.commons.lang.StringUtils;
+
+import com.github.dockerjava.core.exception.GoLangFileMatchException;
 
 /**
  * Implementation of golang's file.Match

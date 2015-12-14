@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * <dd>
  * </dl>
  *
- * @author marcus
+ * @author Marcus Linke
  *
  */
 public class RestartPolicy {

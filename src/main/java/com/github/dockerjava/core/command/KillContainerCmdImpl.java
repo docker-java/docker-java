@@ -2,8 +2,8 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.command.KillContainerCmd;
+import com.github.dockerjava.api.exception.NotFoundException;
 
 /**
  * Kill a running container.

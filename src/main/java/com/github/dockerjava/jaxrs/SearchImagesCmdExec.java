@@ -1,15 +1,17 @@
 package com.github.dockerjava.jaxrs;
 
-import com.github.dockerjava.api.command.SearchImagesCmd;
-import com.github.dockerjava.api.model.SearchItem;
-import com.github.dockerjava.core.DockerClientConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.List;
 
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.dockerjava.api.command.SearchImagesCmd;
+import com.github.dockerjava.api.model.SearchItem;
+import com.github.dockerjava.core.DockerClientConfig;
 
 public class SearchImagesCmdExec extends AbstrSyncDockerCmdExec<SearchImagesCmd, List<SearchItem>> implements
         SearchImagesCmd.Exec {
