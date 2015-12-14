@@ -23,6 +23,12 @@ import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.exception.NotModifiedException;
 import com.github.dockerjava.api.exception.UnauthorizedException;
 
+/**
+ * Handler that is responsible to handle an incoming {@link HttpResponse}. It evaluates the status code and
+ * triggers the appropriate lifecycle methods at the passed {@link ResultCallback}.
+ *
+ * @author Marcus Linke
+ */
 public class HttpResponseHandler extends SimpleChannelInboundHandler<HttpObject> {
 
     private HttpResponse response;

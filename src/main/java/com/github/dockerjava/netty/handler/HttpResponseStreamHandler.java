@@ -12,6 +12,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.github.dockerjava.api.async.ResultCallback;
 
+/**
+ * Handler that converts an incoming byte stream to an {@link InputStream}.
+ *
+ * @author marcus
+ */
 public class HttpResponseStreamHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     private HttpResponseInputStream stream = new HttpResponseInputStream();

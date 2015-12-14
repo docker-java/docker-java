@@ -6,6 +6,11 @@ import io.netty.handler.codec.MessageToByteEncoder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * Handler that encodes an outgoing object to JSON.
+ *
+ * @author Marcus Linke
+ */
 public class JsonRequestHandler extends MessageToByteEncoder<Object>{
 
 	private ObjectMapper mapper = new ObjectMapper();

@@ -9,6 +9,15 @@ import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.StreamType;
 
+/**
+ * Handler that decodes a docker-raw-stream as described here:
+ *
+ * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.21/#attach-to-a-container
+ *
+ * It drives the {@link ResultCallback#onNext(Object)} method of the passed {@link ResultCallback}.
+ *
+ * @author Marcus Linke
+ */
 public class FramedResponseStreamHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     private static final int HEADER_SIZE = 8;

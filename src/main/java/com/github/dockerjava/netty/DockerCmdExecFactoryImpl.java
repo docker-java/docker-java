@@ -27,8 +27,6 @@ import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLParameters;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
@@ -70,6 +68,7 @@ import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.netty.exec.AttachContainerCmdExec;
 import com.github.dockerjava.netty.exec.AuthCmdExec;
 import com.github.dockerjava.netty.exec.BuildImageCmdExec;
@@ -110,17 +109,27 @@ import com.github.dockerjava.netty.exec.VersionCmdExec;
 import com.github.dockerjava.netty.exec.WaitContainerCmdExec;
 
 /**
- * http://stackoverflow.com/questions/33296749/netty-connect-to-unix-domain-socket-failed
- * http://netty.io/wiki/native-transports.html
- * https://github.com/netty/netty/blob/master/example/src/main/java/io/netty/example/http/snoop/HttpSnoopClient.java
- * https://github.com/slandelle/netty-request-chunking/blob/master/src/test/java/slandelle/ChunkingTest.java
+ * Experimental implementation of {@link DockerCmdExecFactory} that supports http connection hijacking that is needed to
+ * pass STDIN to the container.
+ *
+ * To use it just pass an instance via {@link DockerClientImpl#withDockerCmdExecFactory(DockerCmdExecFactory)}
+ *
+ * @see https://docs.docker.com/engine/reference/api/docker_remote_api_v1.21/#attach-to-a-container
+ * @see https://docs.docker.com/engine/reference/api/docker_remote_api_v1.21/#exec-start
+ *
  *
  * @author Marcus Linke
- *
  */
 public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DockerCmdExecFactoryImpl.class.getName());
+    /*
+     * useful links:
+     *
+     * http://stackoverflow.com/questions/33296749/netty-connect-to-unix-domain-socket-failed
+     * http://netty.io/wiki/native-transports.html
+     * https://github.com/netty/netty/blob/master/example/src/main/java/io/netty/example/http/snoop/HttpSnoopClient.java
+     * https://github.com/slandelle/netty-request-chunking/blob/master/src/test/java/slandelle/ChunkingTest.java
+     */
 
     private DockerClientConfig dockerClientConfig;
 

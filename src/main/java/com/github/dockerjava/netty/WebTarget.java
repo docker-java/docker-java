@@ -8,6 +8,12 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
+/**
+ * This class is basically a replacement of javax.ws.rs.client.WebTarget to allow simpler
+ * migration of JAX-RS code to a netty based implementation.
+ *
+ * @author Marcus Linke
+ */
 public class WebTarget {
 
     private ChannelProvider channelProvider;
