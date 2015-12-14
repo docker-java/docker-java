@@ -16,6 +16,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -133,7 +134,7 @@ public class Dockerfile {
                 dockerFolderTar = CompressArchiveUtil.archiveTARFiles(directory, filesToAdd,
                         archiveNameWithOutExtension);
 
-                final InputStream tarInputStream = FileUtils.openInputStream(dockerFolderTar);
+                final InputStream tarInputStream = new BufferedInputStream(FileUtils.openInputStream(dockerFolderTar));
                 final File tarFile = dockerFolderTar;
 
                 return new InputStream() {
