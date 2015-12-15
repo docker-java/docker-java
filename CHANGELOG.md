@@ -8,6 +8,8 @@ Notes
 * The upcoming release will contain multiple API breaking changes therefore the major version switch. It will supports a subset of v.1.21 of the docker remote API.
 
 All changes
+
+* [#396] (https://github.com/docker-java/docker-java/pull/396) Disable evaluation of http.proxy... variables when using unix socket connection 
 * [#393] (https://github.com/docker-java/docker-java/pull/392) Support ONBUILD instruction in Dockerfiles 
 * [#392] (https://github.com/docker-java/docker-java/pull/392) Introduce InspectContainerResponse.Mounts
 * [#387] (https://github.com/docker-java/docker-java/pull/387) Make ProgressDetails attributes public
@@ -17,6 +19,12 @@ All changes
 * [#357] (https://github.com/docker-java/docker-java/pull/357) Wait container command needs possibility to abort operation
 * [#347] (https://github.com/docker-java/docker-java/pull/347) Implementation of copy archive to/from container commands 
 * [#313] (https://github.com/docker-java/docker-java/pull/313) Refactor primitive type fields to be of object type in JSON objects
+
+2.1.4-SNAPSHOT
+---
+
+* [#396] (https://github.com/docker-java/docker-java/pull/396) Disable evaluation of http.proxy... variables when using unix socket connection  
+* [#359] (https://github.com/docker-java/docker-java/pull/359) Fix performance issue of build command by adding bulk-read variant of InputStream.read()
 
 v2.1.3
 ---

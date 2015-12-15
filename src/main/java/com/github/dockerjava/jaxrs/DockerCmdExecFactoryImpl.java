@@ -141,16 +141,23 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         URI originalUri = dockerClientConfig.getUri();
 
         SSLContext sslContext = null;
+        String protocol = null;
 
         if (dockerClientConfig.getSslConfig() != null) {
-            configureProxy(clientConfig, "https");
+            protocol = "https";
             try {
                 sslContext = dockerClientConfig.getSslConfig().getSSLContext();
             } catch (Exception ex) {
                 throw new DockerClientException("Error in SSL Configuration", ex);
             }
         } else {
-            configureProxy(clientConfig, "http");
+            protocol = "http";
+        }
+
+        if(originalUri.getScheme().equals("unix")) {
+            dockerClientConfig.setUri(UnixConnectionSocketFactory.sanitizeUri(originalUri));
+        } else {
+            configureProxy(clientConfig, protocol);
         }
 
         PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(getSchemeRegistry(
@@ -175,12 +182,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
         client = clientBuilder.build();
 
-        if (originalUri.getScheme().equals("unix")) {
-            dockerClientConfig.setUri(UnixConnectionSocketFactory.sanitizeUri(originalUri));
-        }
-
         baseResource = client.target(dockerClientConfig.getUri()).path(dockerClientConfig.getVersion().asWebPathPart());
-
     }
 
     private void configureProxy(ClientConfig clientConfig, String protocol) {
