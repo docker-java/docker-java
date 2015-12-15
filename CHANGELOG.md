@@ -1,6 +1,11 @@
 Change Log
 ===
-2.1.3
+
+2.1.4-SNAPSHOT
+---
+* [#359] (https://github.com/docker-java/docker-java/pull/359) Fix performance issue of build command by adding bulk-read variant of InputStream.read()
+
+v2.1.3
 ---
  
 * [#387] (https://github.com/docker-java/docker-java/pull/387) Make ProgressDetails attributes public
