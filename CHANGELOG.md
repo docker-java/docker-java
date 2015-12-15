@@ -3,6 +3,8 @@ Change Log
 
 2.1.4-SNAPSHOT
 ---
+
+* [#396] (https://github.com/docker-java/docker-java/pull/396) Disable evaluation of http.proxy... variables when using unix socket connection  
 * [#359] (https://github.com/docker-java/docker-java/pull/359) Fix performance issue of build command by adding bulk-read variant of InputStream.read()
 
 v2.1.3
