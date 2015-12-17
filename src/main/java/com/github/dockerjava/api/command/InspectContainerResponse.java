@@ -66,6 +66,9 @@ public class InspectContainerResponse {
     @JsonProperty("Name")
     private String name;
 
+    @JsonProperty("RestartCount")
+    private int restartCount;;
+
     @JsonProperty("NetworkSettings")
     private NetworkSettings networkSettings;
 
@@ -158,6 +161,10 @@ public class InspectContainerResponse {
 
     public String getName() {
         return name;
+    }
+
+    public int getRestartCount() {
+        return restartCount;
     }
 
     public String getDriver() {
