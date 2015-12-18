@@ -85,6 +85,15 @@ public interface DockerCmdExecFactory extends Closeable {
 
     public StatsCmd.Exec createStatsCmdExec();
 
+    public CreateVolumeCmd.Exec createCreateVolumeCmdExec();
+
+    public InspectVolumeCmd.Exec createInspectVolumeCmdExec();
+
+    public RemoveVolumeCmd.Exec createRemoveVolumeCmdExec();
+
+    public ListVolumesCmd.Exec createListVolumesCmdExec();
+
     @Override
     public void close() throws IOException;
+
 }

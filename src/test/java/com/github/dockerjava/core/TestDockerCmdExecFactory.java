@@ -18,6 +18,7 @@ import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.CreateImageCmd;
 import com.github.dockerjava.api.command.CreateImageResponse;
+import com.github.dockerjava.api.command.CreateVolumeCmd;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.command.ExecCreateCmd;
@@ -26,9 +27,11 @@ import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
+import com.github.dockerjava.api.command.InspectVolumeCmd;
 import com.github.dockerjava.api.command.KillContainerCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
+import com.github.dockerjava.api.command.ListVolumesCmd;
 import com.github.dockerjava.api.command.LogContainerCmd;
 import com.github.dockerjava.api.command.PauseContainerCmd;
 import com.github.dockerjava.api.command.PingCmd;
@@ -36,6 +39,7 @@ import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.command.RemoveContainerCmd;
 import com.github.dockerjava.api.command.RemoveImageCmd;
+import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
 import com.github.dockerjava.api.command.SearchImagesCmd;
@@ -308,6 +312,26 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
         return delegate.createStatsCmdExec();
     }
 
+    @Override
+    public CreateVolumeCmd.Exec createCreateVolumeCmdExec() {
+        return delegate.createCreateVolumeCmdExec();
+    }
+
+    @Override
+    public InspectVolumeCmd.Exec createInspectVolumeCmdExec() {
+        return delegate.createInspectVolumeCmdExec();
+    }
+
+    @Override
+    public RemoveVolumeCmd.Exec createRemoveVolumeCmdExec() {
+        return delegate.createRemoveVolumeCmdExec();
+    }
+
+    @Override
+    public ListVolumesCmd.Exec createListVolumesCmdExec() {
+        return delegate.createListVolumesCmdExec();
+    }
+
     public List<String> getContainerNames() {
         return new ArrayList<String>(containerNames);
     }
@@ -315,5 +339,4 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
     public List<String> getImageNames() {
         return new ArrayList<String>(imageNames);
     }
-
 }

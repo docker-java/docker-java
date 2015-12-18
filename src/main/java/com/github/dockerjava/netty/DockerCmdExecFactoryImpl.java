@@ -38,6 +38,7 @@ import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateImageCmd;
+import com.github.dockerjava.api.command.CreateVolumeCmd;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.command.ExecCreateCmd;
@@ -46,9 +47,11 @@ import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
+import com.github.dockerjava.api.command.InspectVolumeCmd;
 import com.github.dockerjava.api.command.KillContainerCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
+import com.github.dockerjava.api.command.ListVolumesCmd;
 import com.github.dockerjava.api.command.LogContainerCmd;
 import com.github.dockerjava.api.command.PauseContainerCmd;
 import com.github.dockerjava.api.command.PingCmd;
@@ -56,6 +59,7 @@ import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.command.RemoveContainerCmd;
 import com.github.dockerjava.api.command.RemoveImageCmd;
+import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
 import com.github.dockerjava.api.command.SearchImagesCmd;
@@ -79,6 +83,7 @@ import com.github.dockerjava.netty.exec.CopyArchiveToContainerCmdExec;
 import com.github.dockerjava.netty.exec.CopyFileFromContainerCmdExec;
 import com.github.dockerjava.netty.exec.CreateContainerCmdExec;
 import com.github.dockerjava.netty.exec.CreateImageCmdExec;
+import com.github.dockerjava.netty.exec.CreateVolumeCmdExec;
 import com.github.dockerjava.netty.exec.EventsCmdExec;
 import com.github.dockerjava.netty.exec.ExecCreateCmdExec;
 import com.github.dockerjava.netty.exec.ExecStartCmdExec;
@@ -86,9 +91,11 @@ import com.github.dockerjava.netty.exec.InfoCmdExec;
 import com.github.dockerjava.netty.exec.InspectContainerCmdExec;
 import com.github.dockerjava.netty.exec.InspectExecCmdExec;
 import com.github.dockerjava.netty.exec.InspectImageCmdExec;
+import com.github.dockerjava.netty.exec.InspectVolumeCmdExec;
 import com.github.dockerjava.netty.exec.KillContainerCmdExec;
 import com.github.dockerjava.netty.exec.ListContainersCmdExec;
 import com.github.dockerjava.netty.exec.ListImagesCmdExec;
+import com.github.dockerjava.netty.exec.ListVolumesCmdExec;
 import com.github.dockerjava.netty.exec.LogContainerCmdExec;
 import com.github.dockerjava.netty.exec.PauseContainerCmdExec;
 import com.github.dockerjava.netty.exec.PingCmdExec;
@@ -96,6 +103,7 @@ import com.github.dockerjava.netty.exec.PullImageCmdExec;
 import com.github.dockerjava.netty.exec.PushImageCmdExec;
 import com.github.dockerjava.netty.exec.RemoveContainerCmdExec;
 import com.github.dockerjava.netty.exec.RemoveImageCmdExec;
+import com.github.dockerjava.netty.exec.RemoveVolumeCmdExec;
 import com.github.dockerjava.netty.exec.RestartContainerCmdExec;
 import com.github.dockerjava.netty.exec.SaveImageCmdExec;
 import com.github.dockerjava.netty.exec.SearchImagesCmdExec;
@@ -475,6 +483,26 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     @Override
     public StatsCmd.Exec createStatsCmdExec() {
         return new StatsCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public CreateVolumeCmd.Exec createCreateVolumeCmdExec() {
+        return new CreateVolumeCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public InspectVolumeCmd.Exec createInspectVolumeCmdExec() {
+        return new InspectVolumeCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public RemoveVolumeCmd.Exec createRemoveVolumeCmdExec() {
+        return new RemoveVolumeCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public ListVolumesCmd.Exec createListVolumesCmdExec() {
+        return new ListVolumesCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override

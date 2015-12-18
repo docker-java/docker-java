@@ -46,8 +46,8 @@ import com.github.dockerjava.netty.handler.HttpResponseStreamHandler;
 import com.github.dockerjava.netty.handler.JsonResponseCallbackHandler;
 
 /**
- * This class is basically a replacement of javax.ws.rs.client.Invocation.Builder to allow simpler
- * migration of JAX-RS code to a netty based implementation.
+ * This class is basically a replacement of javax.ws.rs.client.Invocation.Builder to allow simpler migration of JAX-RS
+ * code to a netty based implementation.
  *
  * @author Marcus Linke
  */
@@ -236,35 +236,37 @@ public class InvocationBuilder {
         // wait for successful http upgrade procedure
         hijackHandler.awaitUpgrade();
 
-        // now we can start a new thread that reads from stdin and writes to the channel
-        new Thread(new Runnable() {
+        if (stdin != null) {
+            // now we can start a new thread that reads from stdin and writes to the channel
+            new Thread(new Runnable() {
 
-            private int read(BufferedReader reader) {
-                try {
-                    return reader.read();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            @Override
-            public void run() {
-
-                BufferedReader reader = new BufferedReader(new InputStreamReader(stdin, Charset.forName("UTF-8")));
-
-                int read = -1;
-                while ((read = read(reader)) != -1) {
-                    byte[] bytes = ByteBuffer.allocate(4).putInt(read).array();
+                private int read(BufferedReader reader) {
                     try {
-                        bytes = new String(bytes).getBytes("US-ASCII");
-                    } catch (UnsupportedEncodingException e) {
+                        return reader.read();
+                    } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-
-                    channel.writeAndFlush(Unpooled.copiedBuffer(bytes));
                 }
-            }
-        }).start();
+
+                @Override
+                public void run() {
+
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(stdin, Charset.forName("UTF-8")));
+
+                    int read = -1;
+                    while ((read = read(reader)) != -1) {
+                        byte[] bytes = ByteBuffer.allocate(4).putInt(read).array();
+                        try {
+                            bytes = new String(bytes).getBytes("US-ASCII");
+                        } catch (UnsupportedEncodingException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        channel.writeAndFlush(Unpooled.copiedBuffer(bytes));
+                    }
+                }
+            }).start();
+        }
     }
 
     public <T> T post(final Object entity, TypeReference<T> typeReference) {
@@ -402,7 +404,6 @@ public class InvocationBuilder {
 
         return callback.awaitResult();
     }
-
 
     public <T> void post(TypeReference<T> typeReference, ResultCallback<T> resultCallback, InputStream body) {
         HttpRequestProvider requestProvider = httpPostRequestProvider(null);
