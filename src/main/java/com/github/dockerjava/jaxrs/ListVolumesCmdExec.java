@@ -32,3 +32,4 @@ public class ListVolumesCmdExec extends AbstrSyncDockerCmdExec<ListVolumesCmd, L
         return webTarget.request().accept(MediaType.APPLICATION_JSON).get(ListVolumesResponse.class);
     }
 }
+

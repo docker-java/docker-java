@@ -36,5 +36,5 @@ public interface CreateVolumeCmd extends SyncDockerCmd<CreateVolumeResponse> {
 
     public static interface Exec extends DockerCmdSyncExec<CreateVolumeCmd, CreateVolumeResponse> {
     }
-
 }
+
