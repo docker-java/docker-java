@@ -378,10 +378,6 @@ public class InvocationBuilder {
         channelFuture.addListener(new ChannelFutureListener() {
             @Override
             public void operationComplete(ChannelFuture future) throws Exception {
-                if (future.isSuccess()) {
-                    System.err.println("Request success");
-                }
-
             }
         });
     }

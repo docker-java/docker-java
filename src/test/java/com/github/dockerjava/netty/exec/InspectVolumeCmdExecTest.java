@@ -15,6 +15,7 @@ import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.command.InspectVolumeResponse;
 import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
 @Test(groups = "integration")
@@ -52,5 +53,13 @@ public class InspectVolumeCmdExecTest extends AbstractNettyDockerClientTest {
         assertThat(inspectVolumeResponse.getName(), equalTo("volume1"));
         assertThat(inspectVolumeResponse.getDriver(), equalTo("local"));
         assertThat(inspectVolumeResponse.getMountpoint(), containsString("/volume1/"));
+    }
+
+    @Test(expectedExceptions = NotFoundException.class)
+    public void inspectNonExistentVolume() throws DockerException {
+
+        String volumeName = "non-existing";
+
+        dockerClient.inspectVolumeCmd(volumeName).exec();
     }
 }
