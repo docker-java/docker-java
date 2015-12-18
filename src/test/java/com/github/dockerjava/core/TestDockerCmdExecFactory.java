@@ -19,6 +19,7 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.CreateImageCmd;
 import com.github.dockerjava.api.command.CreateImageResponse;
 import com.github.dockerjava.api.command.CreateVolumeCmd;
+import com.github.dockerjava.api.command.CreateVolumeResponse;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.command.ExecCreateCmd;
@@ -64,6 +65,8 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
     private List<String> containerNames = new ArrayList<String>();
 
     private List<String> imageNames = new ArrayList<String>();
+
+    private List<String> volumeNames = new ArrayList<String>();
 
     private DockerCmdExecFactory delegate;
 
@@ -314,7 +317,14 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 
     @Override
     public CreateVolumeCmd.Exec createCreateVolumeCmdExec() {
-        return delegate.createCreateVolumeCmdExec();
+        return new CreateVolumeCmd.Exec() {
+            @Override
+            public CreateVolumeResponse exec(CreateVolumeCmd command) {
+                CreateVolumeResponse result = delegate.createCreateVolumeCmdExec().exec(command);
+                volumeNames.add(command.getName());
+                return result;
+            }
+        };
     }
 
     @Override
@@ -324,7 +334,14 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 
     @Override
     public RemoveVolumeCmd.Exec createRemoveVolumeCmdExec() {
-        return delegate.createRemoveVolumeCmdExec();
+        return new RemoveVolumeCmd.Exec() {
+            @Override
+            public Void exec(RemoveVolumeCmd command) {
+                delegate.createRemoveVolumeCmdExec().exec(command);
+                volumeNames.remove(command.getName());
+                return null;
+            }
+        };
     }
 
     @Override
@@ -338,5 +355,9 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 
     public List<String> getImageNames() {
         return new ArrayList<String>(imageNames);
+    }
+
+    public List<String> getVolumeNames() {
+        return new ArrayList<String>(volumeNames);
     }
 }

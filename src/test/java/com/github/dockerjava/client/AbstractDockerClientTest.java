@@ -109,6 +109,15 @@ public abstract class AbstractDockerClientTest extends Assert {
             }
         }
 
+        for (String volume : dockerCmdExecFactory.getVolumeNames()) {
+            LOG.info("Cleaning up temporary volume with {}", volume);
+            try {
+                dockerClient.removeVolumeCmd(volume).exec();
+            } catch (DockerException ignore) {
+                // ignore.printStackTrace();
+            }
+        }
+
         LOG.info("################################## END OF {} ##################################\n", result.getName());
     }
 

@@ -50,4 +50,24 @@ public class CreateVolumeCmdExecTest extends AbstractNettyDockerClientTest {
         assertThat(createVolumeResponse.getDriver(), equalTo("local"));
         assertThat(createVolumeResponse.getMountpoint(), containsString("/volume1/"));
     }
+
+    @Test
+    public void createVolumeWithExistingName() throws DockerException {
+
+        String volumeName = "volume1";
+
+        CreateVolumeResponse createVolumeResponse1 = dockerClient.createVolumeCmd().withName(volumeName)
+                .withDriver("local").exec();
+
+        assertThat(createVolumeResponse1.getName(), equalTo(volumeName));
+        assertThat(createVolumeResponse1.getDriver(), equalTo("local"));
+        assertThat(createVolumeResponse1.getMountpoint(), containsString("/volume1/"));
+
+        CreateVolumeResponse createVolumeResponse2 = dockerClient.createVolumeCmd().withName(volumeName)
+                .withDriver("local").exec();
+
+        assertThat(createVolumeResponse2.getName(), equalTo(volumeName));
+        assertThat(createVolumeResponse2.getDriver(), equalTo("local"));
+        assertThat(createVolumeResponse2.getMountpoint(), equalTo(createVolumeResponse1.getMountpoint()));
+    }
 }
