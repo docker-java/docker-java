@@ -271,6 +271,9 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(testregistry.getId()).exec();
 
+        // wait for registry to boot
+        Thread.sleep(3000);
+
         AuthConfig authConfig = new AuthConfig();
 
         // credentials as configured in /auth/htpasswd
