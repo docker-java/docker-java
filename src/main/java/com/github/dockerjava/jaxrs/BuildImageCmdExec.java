@@ -6,6 +6,7 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.RequestEntityProcessing;
 import org.slf4j.Logger;
@@ -20,9 +21,12 @@ import com.github.dockerjava.core.async.JsonStreamProcessor;
 import com.github.dockerjava.jaxrs.async.AbstractCallbackNotifier;
 import com.github.dockerjava.jaxrs.async.POSTCallbackNotifier;
 
+import java.io.IOException;
+
 public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, BuildResponseItem> implements
         BuildImageCmd.Exec {
     private static final Logger LOGGER = LoggerFactory.getLogger(BuildImageCmdExec.class);
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public BuildImageCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
         super(baseResource, dockerClientConfig);
@@ -86,6 +90,18 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
         }
         if (command.getCpusetcpus() != null) {
             webTarget = webTarget.queryParam("cpusetcpus", command.getCpusetcpus());
+        }
+
+        if (command.hasRemoveEnabled() == null || !command.hasRemoveEnabled()) {
+            webTarget = webTarget.queryParam("rm", "false");
+        }
+
+        if (command.getBuildArgs() != null) {
+            try {
+                webTarget = webTarget.queryParam("buildargs", MAPPER.writeValueAsString(command.getBuildArgs()));
+            } catch (IOException e) {
+                // pass
+            }
         }
 
         webTarget.property(ClientProperties.REQUEST_ENTITY_PROCESSING, RequestEntityProcessing.CHUNKED);

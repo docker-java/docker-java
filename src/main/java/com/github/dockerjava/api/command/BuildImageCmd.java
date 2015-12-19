@@ -3,6 +3,7 @@ package com.github.dockerjava.api.command;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Map;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -87,6 +88,9 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     @CheckForNull
     public String getCpusetcpus();
 
+    @CheckForNull
+    public Map<String, String> getBuildArgs();
+
     // setters
 
     public BuildImageCmd withTag(String tag);
@@ -114,6 +118,8 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     public BuildImageCmd withCpushares(String cpushares);
 
     public BuildImageCmd withCpusetcpus(String cpusetcpus);
+
+    public BuildImageCmd withBuildArg(String key, String value);
 
     // setters lib specific
 

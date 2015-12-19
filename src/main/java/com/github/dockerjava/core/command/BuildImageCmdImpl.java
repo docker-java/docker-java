@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.model.AuthConfigurations;
@@ -49,6 +51,8 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     private Long memswap;
 
     private URI remote;
+
+    private Map<String, String> buildArgs = new HashMap<String, String>();
 
     public BuildImageCmdImpl(BuildImageCmd.Exec exec) {
         super(exec);
@@ -138,6 +142,11 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
         return cpusetcpus;
     }
 
+    @Override
+    public Map<String, String> getBuildArgs() {
+        return buildArgs;
+    }
+
     // getter lib specific
 
     @Override
@@ -216,6 +225,12 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @Override
     public BuildImageCmd withCpusetcpus(String cpusetcpus) {
         this.cpusetcpus = cpusetcpus;
+        return this;
+    }
+
+    @Override
+    public BuildImageCmd withBuildArg(String key, String value) {
+        this.buildArgs.put(key, value);
         return this;
     }
 
