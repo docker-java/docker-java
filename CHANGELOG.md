@@ -5,7 +5,7 @@ Change Log
 ---
 Notes
 
-* The upcoming release will contain multiple API breaking changes therefore the major version switch. It will supports a subset of v.1.21 of the docker remote API.
+* The upcoming release will contain multiple API breaking changes therefore the major version switch. It will support a subset of v.1.21 of the docker remote API. It also includes an experimental netty based implementation of `DockerCmdExecFactory` that probably will replace the current jersey/httpclient based one in a later release.
 
 All changes
 
