@@ -67,7 +67,7 @@ public class InspectContainerResponse {
     private String name;
 
     @JsonProperty("RestartCount")
-    private int restartCount;;
+    private Integer restartCount;
 
     @JsonProperty("NetworkSettings")
     private NetworkSettings networkSettings;
@@ -163,7 +163,7 @@ public class InspectContainerResponse {
         return name;
     }
 
-    public int getRestartCount() {
+    public Integer getRestartCount() {
         return restartCount;
     }
 
