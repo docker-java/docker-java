@@ -10,6 +10,7 @@ import javax.annotation.Nonnull;
 
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.BuildResponseItem;
+import com.github.dockerjava.core.RemoteApiVersion;
 
 /**
  * Build an image from Dockerfile.
@@ -88,6 +89,9 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     @CheckForNull
     public String getCpusetcpus();
 
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_21}
+     */
     @CheckForNull
     public Map<String, String> getBuildArgs();
 
@@ -119,6 +123,9 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
 
     public BuildImageCmd withCpusetcpus(String cpusetcpus);
 
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_21}
+     */
     public BuildImageCmd withBuildArg(String key, String value);
 
     // setters lib specific
