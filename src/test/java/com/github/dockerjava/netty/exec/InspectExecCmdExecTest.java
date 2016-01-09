@@ -97,4 +97,26 @@ public class InspectExecCmdExecTest extends AbstractNettyDockerClientTest {
         assertEquals(containerInfo.getId(), container.getId());
         JSONTestHelper.testRoundTrip(containerInfo);
     }
+
+    @Test(groups = "ignoreInCircleCi")
+    public void inspectExecNetworkSettings() throws IOException {
+        String containerName = "generated_" + new SecureRandom().nextInt();
+
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
+                .withName(containerName).exec();
+        LOG.info("Created container {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+
+        dockerClient.startContainerCmd(container.getId()).exec();
+
+        ExecCreateCmdResponse exec = dockerClient.execCreateCmd(container.getId())
+                .withAttachStdout(true).withAttachStderr(true).withCmd("/bin/bash").exec();
+        LOG.info("Created exec {}", exec.toString());
+        assertThat(exec.getId(), not(isEmptyString()));
+
+        InspectExecResponse inspectExecResponse = dockerClient.inspectExecCmd(exec.getId()).exec();
+        assertThat(inspectExecResponse.getExitCode(), is(0));
+
+        assertNotNull(inspectExecResponse.getContainer().getNetworkSettings().getNetworks().get("bridge"));
+    }
 }

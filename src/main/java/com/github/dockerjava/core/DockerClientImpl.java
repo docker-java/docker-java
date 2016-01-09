@@ -12,13 +12,16 @@ import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.CommitCmd;
+import com.github.dockerjava.api.command.ConnectToNetworkCmd;
 import com.github.dockerjava.api.command.ContainerDiffCmd;
 import com.github.dockerjava.api.command.CopyArchiveFromContainerCmd;
 import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateImageCmd;
+import com.github.dockerjava.api.command.CreateNetworkCmd;
 import com.github.dockerjava.api.command.CreateVolumeCmd;
+import com.github.dockerjava.api.command.DisconnectFromNetworkCmd;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.command.ExecCreateCmd;
@@ -27,10 +30,12 @@ import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
+import com.github.dockerjava.api.command.InspectNetworkCmd;
 import com.github.dockerjava.api.command.InspectVolumeCmd;
 import com.github.dockerjava.api.command.KillContainerCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
+import com.github.dockerjava.api.command.ListNetworksCmd;
 import com.github.dockerjava.api.command.ListVolumesCmd;
 import com.github.dockerjava.api.command.LogContainerCmd;
 import com.github.dockerjava.api.command.PauseContainerCmd;
@@ -39,6 +44,7 @@ import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.command.RemoveContainerCmd;
 import com.github.dockerjava.api.command.RemoveImageCmd;
+import com.github.dockerjava.api.command.RemoveNetworkCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
@@ -57,17 +63,21 @@ import com.github.dockerjava.core.command.AttachContainerCmdImpl;
 import com.github.dockerjava.core.command.AuthCmdImpl;
 import com.github.dockerjava.core.command.BuildImageCmdImpl;
 import com.github.dockerjava.core.command.CommitCmdImpl;
+import com.github.dockerjava.core.command.ConnectToNetworkCmdImpl;
 import com.github.dockerjava.core.command.ContainerDiffCmdImpl;
 import com.github.dockerjava.core.command.CopyArchiveFromContainerCmdImpl;
 import com.github.dockerjava.core.command.CopyArchiveToContainerCmdImpl;
 import com.github.dockerjava.core.command.CopyFileFromContainerCmdImpl;
 import com.github.dockerjava.core.command.CreateContainerCmdImpl;
 import com.github.dockerjava.core.command.CreateImageCmdImpl;
+import com.github.dockerjava.core.command.CreateNetworkCmdImpl;
 import com.github.dockerjava.core.command.CreateVolumeCmdImpl;
+import com.github.dockerjava.core.command.DisconnectFromNetworkCmdImpl;
 import com.github.dockerjava.core.command.EventsCmdImpl;
 import com.github.dockerjava.core.command.ExecCreateCmdImpl;
 import com.github.dockerjava.core.command.ExecStartCmdImpl;
 import com.github.dockerjava.core.command.InfoCmdImpl;
+import com.github.dockerjava.core.command.InpectNetworkCmdImpl;
 import com.github.dockerjava.core.command.InspectContainerCmdImpl;
 import com.github.dockerjava.core.command.InspectExecCmdImpl;
 import com.github.dockerjava.core.command.InspectImageCmdImpl;
@@ -75,6 +85,7 @@ import com.github.dockerjava.core.command.InspectVolumeCmdImpl;
 import com.github.dockerjava.core.command.KillContainerCmdImpl;
 import com.github.dockerjava.core.command.ListContainersCmdImpl;
 import com.github.dockerjava.core.command.ListImagesCmdImpl;
+import com.github.dockerjava.core.command.ListNetworksCmdImpl;
 import com.github.dockerjava.core.command.ListVolumesCmdImpl;
 import com.github.dockerjava.core.command.LogContainerCmdImpl;
 import com.github.dockerjava.core.command.PauseContainerCmdImpl;
@@ -83,6 +94,7 @@ import com.github.dockerjava.core.command.PullImageCmdImpl;
 import com.github.dockerjava.core.command.PushImageCmdImpl;
 import com.github.dockerjava.core.command.RemoveContainerCmdImpl;
 import com.github.dockerjava.core.command.RemoveImageCmdImpl;
+import com.github.dockerjava.core.command.RemoveNetworkCmdImpl;
 import com.github.dockerjava.core.command.RemoveVolumeCmdImpl;
 import com.github.dockerjava.core.command.RestartContainerCmdImpl;
 import com.github.dockerjava.core.command.SaveImageCmdImpl;
@@ -415,6 +427,36 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public ListVolumesCmd listVolumesCmd() {
         return new ListVolumesCmdImpl(getDockerCmdExecFactory().createListVolumesCmdExec());
+    }
+
+    @Override
+    public ListNetworksCmd listNetworksCmd() {
+        return new ListNetworksCmdImpl(getDockerCmdExecFactory().createListNetworksCmdExec());
+    }
+
+    @Override
+    public InspectNetworkCmd inspectNetworkCmd() {
+        return new InpectNetworkCmdImpl(getDockerCmdExecFactory().createInspectNetworkCmdExec());
+    }
+
+    @Override
+    public CreateNetworkCmd createNetworkCmd() {
+        return new CreateNetworkCmdImpl(getDockerCmdExecFactory().createCreateNetworkCmdExec());
+    }
+
+    @Override
+    public RemoveNetworkCmd removeNetworkCmd(String networkId) {
+        return new RemoveNetworkCmdImpl(getDockerCmdExecFactory().createRemoveNetworkCmdExec(), networkId);
+    }
+
+    @Override
+    public ConnectToNetworkCmd connectToNetworkCmd() {
+        return new ConnectToNetworkCmdImpl(getDockerCmdExecFactory().createConnectToNetworkCmdExec());
+    }
+
+    @Override
+    public DisconnectFromNetworkCmd disconnectFromNetworkCmd() {
+        return new DisconnectFromNetworkCmdImpl(getDockerCmdExecFactory().createDisconnectFromNetworkCmdExec());
     }
 
     @Override
