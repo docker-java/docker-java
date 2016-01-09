@@ -93,6 +93,8 @@ public interface DockerCmdExecFactory extends Closeable {
 
     public ListVolumesCmd.Exec createListVolumesCmdExec();
 
+    public ListNetworksCmd.Exec createListNetworksCmdExec();
+
     @Override
     public void close() throws IOException;
 
