@@ -1,5 +1,7 @@
 package com.github.dockerjava.jaxrs;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
@@ -20,6 +22,7 @@ import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
+import com.github.dockerjava.api.command.InspectNetworkCmd;
 import com.github.dockerjava.api.command.InspectVolumeCmd;
 import com.github.dockerjava.api.command.KillContainerCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
@@ -75,10 +78,6 @@ import java.net.Proxy;
 import java.net.ProxySelector;
 import java.net.URI;
 import java.util.List;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-
-//import com.github.dockerjava.api.command.*;
 
 //import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 // see https://github.com/docker-java/docker-java/issues/196
@@ -449,6 +448,12 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     @Override
     public ListNetworksCmd.Exec createListNetworksCmdExec() {
         return new ListNetworksCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public InspectNetworkCmd.Exec createInspectNetworkCmdExec() {
+
+        return new InspectNetworkCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override

@@ -19,6 +19,7 @@ import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
+import com.github.dockerjava.api.command.InspectNetworkCmd;
 import com.github.dockerjava.api.command.InspectVolumeCmd;
 import com.github.dockerjava.api.command.KillContainerCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
@@ -64,6 +65,7 @@ import com.github.dockerjava.netty.exec.InfoCmdExec;
 import com.github.dockerjava.netty.exec.InspectContainerCmdExec;
 import com.github.dockerjava.netty.exec.InspectExecCmdExec;
 import com.github.dockerjava.netty.exec.InspectImageCmdExec;
+import com.github.dockerjava.netty.exec.InspectNetworkCmdExec;
 import com.github.dockerjava.netty.exec.InspectVolumeCmdExec;
 import com.github.dockerjava.netty.exec.KillContainerCmdExec;
 import com.github.dockerjava.netty.exec.ListContainersCmdExec;
@@ -508,6 +510,11 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     @Override
     public ListNetworksCmd.Exec createListNetworksCmdExec() {
         return new ListNetworksCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public InspectNetworkCmd.Exec createInspectNetworkCmdExec() {
+        return new InspectNetworkCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override

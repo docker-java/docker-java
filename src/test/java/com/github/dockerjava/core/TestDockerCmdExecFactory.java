@@ -310,6 +310,11 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
         return delegate.createListNetworksCmdExec();
     }
 
+    @Override
+    public InspectNetworkCmd.Exec createInspectNetworkCmdExec() {
+        return delegate.createInspectNetworkCmdExec();
+    }
+
     public List<String> getContainerNames() {
         return new ArrayList<String>(containerNames);
     }

@@ -27,6 +27,7 @@ import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
+import com.github.dockerjava.api.command.InspectNetworkCmd;
 import com.github.dockerjava.api.command.InspectVolumeCmd;
 import com.github.dockerjava.api.command.KillContainerCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
@@ -69,6 +70,7 @@ import com.github.dockerjava.core.command.EventsCmdImpl;
 import com.github.dockerjava.core.command.ExecCreateCmdImpl;
 import com.github.dockerjava.core.command.ExecStartCmdImpl;
 import com.github.dockerjava.core.command.InfoCmdImpl;
+import com.github.dockerjava.core.command.InpectNetworkCmdImpl;
 import com.github.dockerjava.core.command.InspectContainerCmdImpl;
 import com.github.dockerjava.core.command.InspectExecCmdImpl;
 import com.github.dockerjava.core.command.InspectImageCmdImpl;
@@ -422,6 +424,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public ListNetworksCmd listNetworksCmd() {
         return new ListNetworksCmdImpl(getDockerCmdExecFactory().createListNetworksCmdExec());
+    }
+
+    @Override
+    public InspectNetworkCmd inspectNetworkCmd() {
+        return new InpectNetworkCmdImpl(getDockerCmdExecFactory().createInspectNetworkCmdExec());
     }
 
     @Override

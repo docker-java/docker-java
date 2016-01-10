@@ -25,6 +25,7 @@ import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
+import com.github.dockerjava.api.command.InspectNetworkCmd;
 import com.github.dockerjava.api.command.InspectVolumeCmd;
 import com.github.dockerjava.api.command.KillContainerCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
@@ -202,6 +203,8 @@ public interface DockerClient extends Closeable {
     public ListVolumesCmd listVolumesCmd();
 
     public ListNetworksCmd listNetworksCmd();
+
+    public InspectNetworkCmd inspectNetworkCmd();
 
     @Override
     public void close() throws IOException;
