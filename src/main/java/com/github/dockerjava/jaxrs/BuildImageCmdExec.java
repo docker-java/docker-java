@@ -7,6 +7,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.RequestEntityProcessing;
 import org.slf4j.Logger;
@@ -22,10 +23,12 @@ import com.github.dockerjava.jaxrs.async.AbstractCallbackNotifier;
 import com.github.dockerjava.jaxrs.async.POSTCallbackNotifier;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, BuildResponseItem> implements
         BuildImageCmd.Exec {
     private static final Logger LOGGER = LoggerFactory.getLogger(BuildImageCmdExec.class);
+
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public BuildImageCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
@@ -96,11 +99,12 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
             webTarget = webTarget.queryParam("rm", "false");
         }
 
-        if (command.getBuildArgs() != null) {
+        if (command.getBuildArgs() != null && !command.getBuildArgs().isEmpty()) {
             try {
-                webTarget = webTarget.queryParam("buildargs", MAPPER.writeValueAsString(command.getBuildArgs()));
+                webTarget = webTarget.queryParam("buildargs",
+                        URLEncoder.encode(MAPPER.writeValueAsString(command.getBuildArgs()), "UTF-8"));
             } catch (IOException e) {
-                // pass
+                throw new RuntimeException(e);
             }
         }
 
