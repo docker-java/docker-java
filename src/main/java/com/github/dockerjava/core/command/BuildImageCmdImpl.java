@@ -52,7 +52,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     private URI remote;
 
-    private Map<String, String> buildArgs = new HashMap<String, String>();
+    private Map<String, String> buildArgs;
 
     public BuildImageCmdImpl(BuildImageCmd.Exec exec) {
         super(exec);
@@ -230,6 +230,9 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     @Override
     public BuildImageCmd withBuildArg(String key, String value) {
+        if (this.buildArgs == null) {
+            this.buildArgs = new HashMap<String, String>();
+        }
         this.buildArgs.put(key, value);
         return this;
     }
