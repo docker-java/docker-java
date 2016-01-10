@@ -5,12 +5,14 @@ Change Log
 ---
 Notes
 
-* The upcoming release will contain multiple API breaking changes therefore the major version switch. It will supports a subset of v.1.21 of the docker remote API.
+* The upcoming release will contain multiple API breaking changes therefore the major version switch. It will support a subset of v.1.21 of the docker remote API. It also includes an experimental netty based implementation of `DockerCmdExecFactory` that probably will replace the current jersey/httpclient based one in a later release.
 
 All changes
 
+* [#410] (https://github.com/docker-java/docker-java/pull/410) Support for build-args of docker build 
+* [#408] (https://github.com/docker-java/docker-java/pull/408) Support for volume API 
 * [#396] (https://github.com/docker-java/docker-java/pull/396) Disable evaluation of http.proxy... variables when using unix socket connection 
-* [#393] (https://github.com/docker-java/docker-java/pull/392) Support ONBUILD instruction in Dockerfiles 
+* [#393] (https://github.com/docker-java/docker-java/pull/393) Support ONBUILD instruction in Dockerfiles 
 * [#392] (https://github.com/docker-java/docker-java/pull/392) Introduce InspectContainerResponse.Mounts
 * [#387] (https://github.com/docker-java/docker-java/pull/387) Make ProgressDetails attributes public
 * [#386] (https://github.com/docker-java/docker-java/pull/386) Basic http proxy configuration support
