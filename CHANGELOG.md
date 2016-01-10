@@ -9,9 +9,10 @@ Notes
 
 All changes
 
+* [#410] (https://github.com/docker-java/docker-java/pull/410) Support for build-args of docker build 
 * [#408] (https://github.com/docker-java/docker-java/pull/408) Support for volume API 
 * [#396] (https://github.com/docker-java/docker-java/pull/396) Disable evaluation of http.proxy... variables when using unix socket connection 
-* [#393] (https://github.com/docker-java/docker-java/pull/392) Support ONBUILD instruction in Dockerfiles 
+* [#393] (https://github.com/docker-java/docker-java/pull/393) Support ONBUILD instruction in Dockerfiles 
 * [#392] (https://github.com/docker-java/docker-java/pull/392) Introduce InspectContainerResponse.Mounts
 * [#387] (https://github.com/docker-java/docker-java/pull/387) Make ProgressDetails attributes public
 * [#386] (https://github.com/docker-java/docker-java/pull/386) Basic http proxy configuration support
