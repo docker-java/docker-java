@@ -24,7 +24,7 @@ public class ListNetworksCmdExec extends AbstrSyncDockerCmdExec<ListNetworksCmd,
 
     @Override
     protected List<Network> execute(ListNetworksCmd command) {
-        WebTarget webTarget = getBaseResource().path("/volumes");
+        WebTarget webTarget = getBaseResource().path("/networks");
 
         if (command.getFilters() != null)
             webTarget = webTarget.queryParam("filters", urlPathSegmentEscaper().escape(command.getFilters().toString()));
