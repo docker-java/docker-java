@@ -1,5 +1,6 @@
 package com.github.dockerjava.netty.exec;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,9 +14,12 @@ import com.github.dockerjava.netty.InvocationBuilder;
 import com.github.dockerjava.netty.MediaType;
 import com.github.dockerjava.netty.WebTarget;
 
+import java.io.IOException;
+
 public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, BuildResponseItem> implements
         BuildImageCmd.Exec {
     private static final Logger LOGGER = LoggerFactory.getLogger(BuildImageCmdExec.class);
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public BuildImageCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
         super(baseResource, dockerClientConfig);
@@ -78,6 +82,14 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
         }
         if (command.getCpusetcpus() != null) {
             webTarget = webTarget.queryParam("cpusetcpus", command.getCpusetcpus());
+        }
+
+        if (command.getBuildArgs() != null) {
+            try {
+                webTarget = webTarget.queryParam("buildargs", MAPPER.writeValueAsString(command.getBuildArgs()));
+           } catch (IOException e) {
+                // pass
+           }
         }
 
         LOGGER.trace("POST: {}", webTarget);
