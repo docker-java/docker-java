@@ -29,6 +29,7 @@ import com.github.dockerjava.api.command.InspectVolumeCmd;
 import com.github.dockerjava.api.command.KillContainerCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
+import com.github.dockerjava.api.command.ListNetworksCmd;
 import com.github.dockerjava.api.command.ListVolumesCmd;
 import com.github.dockerjava.api.command.LogContainerCmd;
 import com.github.dockerjava.api.command.PauseContainerCmd;
@@ -199,6 +200,8 @@ public interface DockerClient extends Closeable {
     public RemoveVolumeCmd removeVolumeCmd(String name);
 
     public ListVolumesCmd listVolumesCmd();
+
+    public ListNetworksCmd listNetworksCmd();
 
     @Override
     public void close() throws IOException;
