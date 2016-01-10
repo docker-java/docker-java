@@ -76,10 +76,10 @@ public class Network {
         private String macAddress;
 
         @JsonProperty("IPv4Address")
-        private String ipV4Address;
+        private String ipv4Address;
 
         @JsonProperty("IPv6Address")
-        private String ipV6Address;
+        private String ipv6Address;
 
         public String getEndpointId() {
             return endpointId;
@@ -89,12 +89,12 @@ public class Network {
             return macAddress;
         }
 
-        public String getIpV4Address() {
-            return ipV4Address;
+        public String getIpv4Address() {
+            return ipv4Address;
         }
 
-        public String getIpV6Address() {
-            return ipV6Address;
+        public String getIpv6Address() {
+            return ipv6Address;
         }
 
         @Override
