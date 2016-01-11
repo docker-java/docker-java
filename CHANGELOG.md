@@ -22,7 +22,7 @@ All changes
 * [#347] (https://github.com/docker-java/docker-java/pull/347) Implementation of copy archive to/from container commands 
 * [#313] (https://github.com/docker-java/docker-java/pull/313) Refactor primitive type fields to be of object type in JSON objects
 
-2.1.4-SNAPSHOT
+v2.1.4
 ---
 
 * [#396] (https://github.com/docker-java/docker-java/pull/396) Disable evaluation of http.proxy... variables when using unix socket connection  
