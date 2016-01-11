@@ -1,7 +1,7 @@
 Change Log
 ===
 
-2.1.4-SNAPSHOT
+v2.1.4
 ---
 
 * [#396] (https://github.com/docker-java/docker-java/pull/396) Disable evaluation of http.proxy... variables when using unix socket connection  
