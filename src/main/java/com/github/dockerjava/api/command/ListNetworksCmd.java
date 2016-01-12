@@ -2,10 +2,19 @@ package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.model.Filters;
 import com.github.dockerjava.api.model.Network;
+import com.github.dockerjava.core.RemoteApiVersion;
 
 import javax.annotation.CheckForNull;
+
 import java.util.List;
 
+/**
+ * List networks.
+ *
+ * @since {@link RemoteApiVersion#VERSION_1_21}
+ *
+ * Created by andrewk on 1/10/16.
+ */
 public interface ListNetworksCmd extends SyncDockerCmd<List<Network>> {
 
     @CheckForNull
