@@ -118,6 +118,15 @@ public abstract class AbstractDockerClientTest extends Assert {
             }
         }
 
+        for (String networkId : dockerCmdExecFactory.getNetworkIds()) {
+            LOG.info("Cleaning up temporary network with {}", networkId);
+            try {
+                dockerClient.removeNetworkCmd(networkId).exec();
+            } catch (DockerException ignore) {
+                // ignore.printStackTrace();
+            }
+        }
+
         LOG.info("################################## END OF {} ##################################\n", result.getName());
     }
 
