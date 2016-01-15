@@ -41,18 +41,15 @@ public class ListNetworksCmdExecTest extends AbstractNettyDockerClientTest {
     }
 
     @Test
-    public void inspect() throws DockerException {
+    public void listNetworks() throws DockerException {
 
         List<Network> networks = dockerClient.listNetworksCmd().exec();
 
-        Network expected = findNetwork(networks, "bridge");
+        Network network = findNetwork(networks, "bridge");
 
-        Network network = dockerClient.inspectNetworkCmd().withNetworkId(expected.getId()).exec();
-
-        assertThat(network.getName(), equalTo(expected.getName()));
-        assertThat(network.getScope(), equalTo(expected.getScope()));
-        assertThat(network.getDriver(), equalTo(expected.getDriver()));
-        assertThat(network.getIpam().getConfig().get(0).getSubnet(), equalTo(expected.getIpam().getConfig().get(0).getSubnet()));
-        assertThat(network.getIpam().getDriver(), equalTo(expected.getIpam().getDriver()));
+        assertThat(network.getName(), equalTo("bridge"));
+        assertThat(network.getScope(), equalTo("local"));
+        assertThat(network.getDriver(), equalTo("bridge"));
+        assertThat(network.getIpam().getDriver(), equalTo("default"));
     }
 }

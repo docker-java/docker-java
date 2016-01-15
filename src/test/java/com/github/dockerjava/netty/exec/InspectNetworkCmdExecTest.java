@@ -40,7 +40,7 @@ public class InspectNetworkCmdExecTest extends AbstractNettyDockerClientTest {
     }
 
     @Test
-    public void inspect() throws DockerException {
+    public void inspectNetwork() throws DockerException {
 
         List<Network> networks = dockerClient.listNetworksCmd().exec();
 
