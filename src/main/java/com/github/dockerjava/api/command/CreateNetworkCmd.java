@@ -1,10 +1,13 @@
 package com.github.dockerjava.api.command;
 
-import com.github.dockerjava.api.model.Network;
-import com.github.dockerjava.core.RemoteApiVersion;
+import java.util.Map;
 
 import javax.annotation.CheckForNull;
-import java.util.Map;
+import javax.annotation.Nonnull;
+
+import com.github.dockerjava.api.model.Network;
+import com.github.dockerjava.api.model.Network.Ipam;
+import com.github.dockerjava.core.RemoteApiVersion;
 
 /**
  * Create a network.
@@ -23,13 +26,16 @@ public interface CreateNetworkCmd extends SyncDockerCmd<CreateNetworkResponse> {
     public Network.Ipam getIpam();
 
     /** The new network's name. Required. */
-    public CreateNetworkCmd withName(String name);
+    public CreateNetworkCmd withName(@Nonnull String name);
+
+    /** Optional custom IP scheme for the network. */
+    public CreateNetworkCmd withIpamConfig(Ipam.Config config);
 
     /** Name of the network driver to use. Defaults to <code>bridge</code>. */
     public CreateNetworkCmd withDriver(String driver);
 
-    /** Optional custom IP scheme for the network. */
-    public CreateNetworkCmd withIpamConfig(Map<String, String> config);
+    /** Driver specific options  */
+    public CreateNetworkCmd withOptions(Map<String, String> options);
 
     public static interface Exec extends DockerCmdSyncExec<CreateNetworkCmd, CreateNetworkResponse> {
     }

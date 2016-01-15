@@ -111,13 +111,13 @@ public class Network {
         private String driver;
 
         @JsonProperty("Config")
-        List<Map<String, String>> config = new ArrayList<>();
+        List<Config> config = new ArrayList<>();
 
         public String getDriver() {
             return driver;
         }
 
-        public List<Map<String, String>> getConfig() {
+        public List<Config> getConfig() {
             return config;
         }
 
@@ -125,5 +125,30 @@ public class Network {
         public String toString() {
             return ToStringBuilder.reflectionToString(this);
         }
+
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class Config {
+
+            @JsonProperty("Subnet")
+            private String subnet;
+
+            @JsonProperty("IPRange")
+            private String ipRange;
+
+            @JsonProperty("Gateway")
+            private String gateway;
+
+            public String getSubnet() {
+                return subnet;
+            }
+
+            public String getIpRange() {
+                return ipRange;
+            }
+
+            public String getGateway() {
+                return gateway;
+            }
+         }
     }
 }
