@@ -66,6 +66,9 @@ public class InspectContainerResponse {
     @JsonProperty("Name")
     private String name;
 
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_17}
+     */
     @JsonProperty("RestartCount")
     private Integer restartCount;
 
