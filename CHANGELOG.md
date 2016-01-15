@@ -8,10 +8,11 @@ Notes
 * The upcoming release will contain multiple API breaking changes therefore the major version switch. It will support a subset of v.1.21 of the docker remote API. It also includes an experimental netty based implementation of `DockerCmdExecFactory` that probably will replace the current jersey/httpclient based one in a later release.
 
 All changes
-
-* [#408] (https://github.com/docker-java/docker-java/pull/408) Support for volume API 
+* [#410] (https://github.com/docker-java/docker-java/pull/410) Support for build-args of docker build 
+* [#408] (https://github.com/docker-java/docker-java/pull/408) Support for volume API
+* [#406] (https://github.com/docker-java/docker-java/pull/406) Added RestartCount to InspectContainerResponse
 * [#396] (https://github.com/docker-java/docker-java/pull/396) Disable evaluation of http.proxy... variables when using unix socket connection 
-* [#393] (https://github.com/docker-java/docker-java/pull/392) Support ONBUILD instruction in Dockerfiles 
+* [#393] (https://github.com/docker-java/docker-java/pull/393) Support ONBUILD instruction in Dockerfiles 
 * [#392] (https://github.com/docker-java/docker-java/pull/392) Introduce InspectContainerResponse.Mounts
 * [#387] (https://github.com/docker-java/docker-java/pull/387) Make ProgressDetails attributes public
 * [#386] (https://github.com/docker-java/docker-java/pull/386) Basic http proxy configuration support
@@ -21,7 +22,7 @@ All changes
 * [#347] (https://github.com/docker-java/docker-java/pull/347) Implementation of copy archive to/from container commands 
 * [#313] (https://github.com/docker-java/docker-java/pull/313) Refactor primitive type fields to be of object type in JSON objects
 
-2.1.4-SNAPSHOT
+v2.1.4
 ---
 
 * [#396] (https://github.com/docker-java/docker-java/pull/396) Disable evaluation of http.proxy... variables when using unix socket connection  

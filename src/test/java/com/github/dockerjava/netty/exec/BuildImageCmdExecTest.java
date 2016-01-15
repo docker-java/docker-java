@@ -296,4 +296,18 @@ public class BuildImageCmdExecTest extends AbstractNettyDockerClientTest {
         LOG.info("Image Inspect: {}", inspectImageResponse.toString());
 
     }
+
+    @Test
+    public void testBuildArgs() throws Exception {
+        File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testBuildArgs").getFile());
+
+        String imageId = dockerClient.buildImageCmd(baseDir).withNoCache(true).withBuildArg("testArg", "abc").exec(new BuildImageResultCallback())
+                .awaitImageId();
+
+        InspectImageResponse inspectImageResponse = dockerClient.inspectImageCmd(imageId).exec();
+        assertThat(inspectImageResponse, not(nullValue()));
+        LOG.info("Image Inspect: {}", inspectImageResponse.toString());
+
+        assertThat(inspectImageResponse.getConfig().getLabels().get("test"), equalTo("abc"));
+    }
 }
