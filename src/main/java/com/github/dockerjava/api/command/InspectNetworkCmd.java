@@ -6,7 +6,7 @@ import com.github.dockerjava.api.model.Network;
 import javax.annotation.CheckForNull;
 
 /**
- * Created by andrewk on 1/10/16.
+ * Available since API v1.21.
  */
 public interface InspectNetworkCmd extends SyncDockerCmd<Network> {
 

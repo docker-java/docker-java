@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -110,7 +111,7 @@ public class Network {
         private String driver;
 
         @JsonProperty("Config")
-        List<Map<String, String>> config;
+        List<Map<String, String>> config = new ArrayList<>();
 
         public String getDriver() {
             return driver;

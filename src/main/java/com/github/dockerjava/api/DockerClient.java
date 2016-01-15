@@ -17,6 +17,7 @@ import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateImageCmd;
+import com.github.dockerjava.api.command.CreateNetworkCmd;
 import com.github.dockerjava.api.command.CreateVolumeCmd;
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.command.ExecCreateCmd;
@@ -205,6 +206,8 @@ public interface DockerClient extends Closeable {
     public ListNetworksCmd listNetworksCmd();
 
     public InspectNetworkCmd inspectNetworkCmd();
+
+    public CreateNetworkCmd createNetworkCmd();
 
     @Override
     public void close() throws IOException;

@@ -13,6 +13,7 @@ import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateImageCmd;
+import com.github.dockerjava.api.command.CreateNetworkCmd;
 import com.github.dockerjava.api.command.CreateVolumeCmd;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.api.command.EventsCmd;
@@ -454,6 +455,12 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     public InspectNetworkCmd.Exec createInspectNetworkCmdExec() {
 
         return new InspectNetworkCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public CreateNetworkCmd.Exec createCreateNetworkCmdExec() {
+
+        return new CreateNetworkCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
