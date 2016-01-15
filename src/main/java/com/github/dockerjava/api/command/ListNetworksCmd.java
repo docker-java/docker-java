@@ -12,8 +12,6 @@ import java.util.List;
  * List networks.
  *
  * @since {@link RemoteApiVersion#VERSION_1_21}
- *
- * Created by andrewk on 1/10/16.
  */
 public interface ListNetworksCmd extends SyncDockerCmd<List<Network>> {
 

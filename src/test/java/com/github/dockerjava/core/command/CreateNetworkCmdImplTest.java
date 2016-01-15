@@ -1,5 +1,6 @@
 package com.github.dockerjava.core.command;
 
+import com.github.dockerjava.api.command.CreateNetworkResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.client.AbstractDockerClientTest;
@@ -11,13 +12,9 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
-import java.util.List;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 
 @Test(groups = "integration")
-public class InspectNetworkCmdImplTest extends AbstractDockerClientTest {
+public class CreateNetworkCmdImplTest extends AbstractDockerClientTest {
 
     @BeforeTest
     public void beforeTest() throws Exception {
@@ -40,18 +37,16 @@ public class InspectNetworkCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test
-    public void inspect() throws DockerException {
+    public void createNetwork() throws DockerException {
 
-        List<Network> networks = dockerClient.listNetworksCmd().exec();
+        String networkName = "testNetwork";
 
-        Network expected = findNetwork(networks, "bridge");
+        CreateNetworkResponse createNetworkResponse = dockerClient.createNetworkCmd().withName(networkName).exec();
 
-        Network network = dockerClient.inspectNetworkCmd().withNetworkId(expected.getId()).exec();
+        assertNotNull(createNetworkResponse.getId());
 
-        assertThat(network.getName(), equalTo(expected.getName()));
-        assertThat(network.getScope(), equalTo(expected.getScope()));
-        assertThat(network.getDriver(), equalTo(expected.getDriver()));
-        assertThat(network.getIpam().getConfig().get(0).getSubnet(), equalTo(expected.getIpam().getConfig().get(0).getSubnet()));
-        assertThat(network.getIpam().getDriver(), equalTo(expected.getIpam().getDriver()));
+        Network network = dockerClient.inspectNetworkCmd().withNetworkId(createNetworkResponse.getId()).exec();
+        assertEquals(network.getName(), networkName);
+        assertEquals(network.getDriver(), "bridge");
     }
 }

@@ -10,6 +10,7 @@ import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateImageCmd;
+import com.github.dockerjava.api.command.CreateNetworkCmd;
 import com.github.dockerjava.api.command.CreateVolumeCmd;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.api.command.EventsCmd;
@@ -33,6 +34,7 @@ import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.command.RemoveContainerCmd;
 import com.github.dockerjava.api.command.RemoveImageCmd;
+import com.github.dockerjava.api.command.RemoveNetworkCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
@@ -57,6 +59,7 @@ import com.github.dockerjava.netty.exec.CopyArchiveToContainerCmdExec;
 import com.github.dockerjava.netty.exec.CopyFileFromContainerCmdExec;
 import com.github.dockerjava.netty.exec.CreateContainerCmdExec;
 import com.github.dockerjava.netty.exec.CreateImageCmdExec;
+import com.github.dockerjava.netty.exec.CreateNetworkCmdExec;
 import com.github.dockerjava.netty.exec.CreateVolumeCmdExec;
 import com.github.dockerjava.netty.exec.EventsCmdExec;
 import com.github.dockerjava.netty.exec.ExecCreateCmdExec;
@@ -79,6 +82,7 @@ import com.github.dockerjava.netty.exec.PullImageCmdExec;
 import com.github.dockerjava.netty.exec.PushImageCmdExec;
 import com.github.dockerjava.netty.exec.RemoveContainerCmdExec;
 import com.github.dockerjava.netty.exec.RemoveImageCmdExec;
+import com.github.dockerjava.netty.exec.RemoveNetworkCmdExec;
 import com.github.dockerjava.netty.exec.RemoveVolumeCmdExec;
 import com.github.dockerjava.netty.exec.RestartContainerCmdExec;
 import com.github.dockerjava.netty.exec.SaveImageCmdExec;
@@ -515,6 +519,16 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     @Override
     public InspectNetworkCmd.Exec createInspectNetworkCmdExec() {
         return new InspectNetworkCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public CreateNetworkCmd.Exec createCreateNetworkCmdExec() {
+        return new CreateNetworkCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public RemoveNetworkCmd.Exec createRemoveNetworkCmdExec() {
+        return new RemoveNetworkCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
