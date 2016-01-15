@@ -40,6 +40,7 @@ import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.command.RemoveContainerCmd;
 import com.github.dockerjava.api.command.RemoveImageCmd;
+import com.github.dockerjava.api.command.RemoveNetworkCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
@@ -208,6 +209,8 @@ public interface DockerClient extends Closeable {
     public InspectNetworkCmd inspectNetworkCmd();
 
     public CreateNetworkCmd createNetworkCmd();
+
+    public RemoveNetworkCmd removeNetworkCmd(@Nonnull String networkId);
 
     @Override
     public void close() throws IOException;

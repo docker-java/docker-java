@@ -24,7 +24,7 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 
     private List<String> volumeNames = new ArrayList<String>();
 
-    private List<String> networkNames = new ArrayList<>();
+    private List<String> networkIds = new ArrayList<>();
 
     private DockerCmdExecFactory delegate;
 
@@ -324,8 +324,20 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
             @Override
             public CreateNetworkResponse exec(CreateNetworkCmd command) {
                 CreateNetworkResponse result = delegate.createCreateNetworkCmdExec().exec(command);
-                networkNames.add(command.getName());
+                networkIds.add(result.getId());
                 return result;
+            }
+        };
+    }
+
+    @Override
+    public RemoveNetworkCmd.Exec createRemoveNetworkCmdExec() {
+        return new RemoveNetworkCmd.Exec() {
+            @Override
+            public Void exec(RemoveNetworkCmd command) {
+                delegate.createRemoveNetworkCmdExec().exec(command);
+                networkIds.remove(command.getNetworkId());
+                return null;
             }
         };
     }
@@ -342,7 +354,7 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
         return new ArrayList<String>(volumeNames);
     }
 
-    public List<String> getNetworkNames() {
-        return new ArrayList<>(networkNames);
+    public List<String> getNetworkIds() {
+        return new ArrayList<>(networkIds);
     }
 }

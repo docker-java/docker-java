@@ -42,6 +42,7 @@ import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.command.RemoveContainerCmd;
 import com.github.dockerjava.api.command.RemoveImageCmd;
+import com.github.dockerjava.api.command.RemoveNetworkCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
@@ -89,6 +90,7 @@ import com.github.dockerjava.core.command.PullImageCmdImpl;
 import com.github.dockerjava.core.command.PushImageCmdImpl;
 import com.github.dockerjava.core.command.RemoveContainerCmdImpl;
 import com.github.dockerjava.core.command.RemoveImageCmdImpl;
+import com.github.dockerjava.core.command.RemoveNetworkCmdImpl;
 import com.github.dockerjava.core.command.RemoveVolumeCmdImpl;
 import com.github.dockerjava.core.command.RestartContainerCmdImpl;
 import com.github.dockerjava.core.command.SaveImageCmdImpl;
@@ -436,6 +438,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public CreateNetworkCmd createNetworkCmd() {
         return new CreateNetworkCmdImpl(getDockerCmdExecFactory().createCreateNetworkCmdExec());
+    }
+
+    @Override
+    public RemoveNetworkCmd removeNetworkCmd(String networkId) {
+        return new RemoveNetworkCmdImpl(getDockerCmdExecFactory().createRemoveNetworkCmdExec(), networkId);
     }
 
     @Override
