@@ -1,6 +1,5 @@
 package com.github.dockerjava.netty.exec;
 
-import com.github.dockerjava.api.command.RemoveContainerCmd;
 import com.github.dockerjava.api.command.RemoveNetworkCmd;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.netty.MediaType;

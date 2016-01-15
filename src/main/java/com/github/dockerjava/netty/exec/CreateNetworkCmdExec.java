@@ -3,8 +3,6 @@ package com.github.dockerjava.netty.exec;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.dockerjava.api.command.CreateNetworkCmd;
 import com.github.dockerjava.api.command.CreateNetworkResponse;
-import com.github.dockerjava.api.command.CreateVolumeCmd;
-import com.github.dockerjava.api.command.CreateVolumeResponse;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.netty.MediaType;
 import com.github.dockerjava.netty.WebTarget;
