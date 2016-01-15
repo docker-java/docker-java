@@ -1,12 +1,15 @@
 package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.model.Network;
+import com.github.dockerjava.core.RemoteApiVersion;
 
 import javax.annotation.CheckForNull;
 import java.util.Map;
 
 /**
- * Available since API v1.21.
+ * Create a network.
+ *
+ * @since {@link RemoteApiVersion#VERSION_1_21}
  */
 public interface CreateNetworkCmd extends SyncDockerCmd<CreateNetworkResponse> {
 

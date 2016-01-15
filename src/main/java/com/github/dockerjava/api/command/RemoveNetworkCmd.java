@@ -1,12 +1,15 @@
 package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.core.RemoteApiVersion;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 /**
- * Available since API v1.21.
+ * Remove a network.
+ *
+ * @since {@link RemoteApiVersion#VERSION_1_21}
  */
 public interface RemoveNetworkCmd extends SyncDockerCmd<Void> {
 
