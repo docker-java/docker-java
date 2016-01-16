@@ -1,24 +1,25 @@
 package com.github.dockerjava.api.command;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.CheckForNull;
 
 /**
  * List volumes.
- *
  *
  * @author Marcus Linke
  */
 public interface ListVolumesCmd extends SyncDockerCmd<ListVolumesResponse> {
 
     @CheckForNull
-    public String getFilters();
+    public Map<String, List<String>> getFilters();
 
     /**
-     * @param filters
-     *            - JSON encoded value of the filters (a map[string][]string) to process on the volumes list. There is
-     *            one available filter: dangling=true
+     * @param dangling
+     *            - Show dangling volumes filter
      */
-    public ListVolumesCmd withFilters(String filters);
+    public ListVolumesCmd withDanglingFilter(Boolean dangling);
 
     public static interface Exec extends DockerCmdSyncExec<ListVolumesCmd, ListVolumesResponse> {
     }

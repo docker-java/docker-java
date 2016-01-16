@@ -1,6 +1,9 @@
-package com.github.dockerjava.api.model;
+package com.github.dockerjava.core.util;
 
+import com.github.dockerjava.core.util.
+Filters;
 import com.google.common.collect.Maps;
+
 import org.testng.annotations.Test;
 
 import java.util.Map;

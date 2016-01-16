@@ -2,9 +2,12 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.List;
+import java.util.Map;
+
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.model.Event;
-import com.github.dockerjava.api.model.Filters;
+import com.github.dockerjava.core.util.Filters;
 
 /**
  * Stream docker events
@@ -15,7 +18,7 @@ public class EventsCmdImpl extends AbstrAsyncDockerCmd<EventsCmd, Event> impleme
 
     private String until;
 
-    private Filters filters;
+    private Filters filters = new Filters();
 
     public EventsCmdImpl(EventsCmd.Exec exec) {
         super(exec);
@@ -34,9 +37,37 @@ public class EventsCmdImpl extends AbstrAsyncDockerCmd<EventsCmd, Event> impleme
     }
 
     @Override
-    public EventsCmd withFilters(Filters filters) {
-        checkNotNull(filters, "filters have not been specified");
-        this.filters = filters;
+    public EventsCmd withContainerFilter(String... container) {
+        checkNotNull(container, "container have not been specified");
+        this.filters.withContainers(container);
+        return this;
+    }
+
+    @Override
+    public EventsCmd withImageFilter(String... image) {
+        checkNotNull(image, "image have not been specified");
+        this.filters.withImages(image);
+        return this;
+    }
+
+    @Override
+    public EventsCmd withEventFilter(String... event) {
+        checkNotNull(event, "event have not been specified");
+        this.filters.withFilter("event", event);
+        return this;
+    }
+
+    @Override
+    public EventsCmd withLabelFilter(String... label) {
+        checkNotNull(label, "label have not been specified");
+        this.filters.withLabels(label);
+        return this;
+    }
+
+    @Override
+    public EventsCmd withLabelFilter(Map<String, String> labels) {
+        checkNotNull(labels, "labels have not been specified");
+        this.filters.withLabels(labels);
         return this;
     }
 
@@ -51,8 +82,8 @@ public class EventsCmdImpl extends AbstrAsyncDockerCmd<EventsCmd, Event> impleme
     }
 
     @Override
-    public Filters getFilters() {
-        return filters;
+    public Map<String, List<String>> getFilters() {
+        return filters.getFilters();
     }
 
 }

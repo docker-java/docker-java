@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.util.FiltersEncoder;
 import com.github.dockerjava.netty.MediaType;
 import com.github.dockerjava.netty.WebTarget;
 
@@ -28,8 +29,8 @@ public class ListImagesCmdExec extends AbstrSyncDockerCmdExec<ListImagesCmd, Lis
 
         webTarget = booleanQueryParam(webTarget, "all", command.hasShowAllEnabled());
 
-        if (command.getFilters() != null) {
-            webTarget = webTarget.queryParam("filters", urlPathSegmentEscaper().escape(command.getFilters()));
+        if (command.getFilters() != null && !command.getFilters().isEmpty()) {
+            webTarget = webTarget.queryParam("filters", urlPathSegmentEscaper().escape(FiltersEncoder.jsonEncode(command.getFilters())));
         }
 
         LOGGER.trace("GET: {}", webTarget);

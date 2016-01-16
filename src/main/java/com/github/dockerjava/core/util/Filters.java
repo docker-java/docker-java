@@ -1,4 +1,4 @@
-package com.github.dockerjava.api.model;
+package com.github.dockerjava.core.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,12 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.ws.rs.core.MediaType;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
-
 /**
  * Representation of Docker filters.
  *
@@ -20,9 +14,6 @@ import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
  *
  */
 public class Filters {
-
-    private static ObjectMapper OBJECT_MAPPER = new JacksonJaxbJsonProvider().locateMapper(Map.class,
-            MediaType.APPLICATION_JSON_TYPE);
 
     private Map<String, List<String>> filters = new HashMap<String, List<String>>();
 
@@ -61,7 +52,6 @@ public class Filters {
      *
      * @param labels
      *            string array in the form ["key"] or ["key=value"] or a mix of both
-     * @return
      */
     public Filters withLabels(String... labels) {
         withFilter("label", labels);
@@ -73,7 +63,6 @@ public class Filters {
      *
      * @param labels
      *            {@link Map} of labels that contains label keys and values
-     * @return
      */
     public Filters withLabels(Map<String, String> labels) {
         withFilter("label", labelsMapToList(labels).toArray(new String[labels.size()]));
@@ -110,13 +99,7 @@ public class Filters {
         return filters.hashCode();
     }
 
-    @Override
-    public String toString() {
-        try {
-            return OBJECT_MAPPER.writeValueAsString(filters);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+    public Map<String, List<String>> getFilters() {
+        return filters;
     }
-
 }

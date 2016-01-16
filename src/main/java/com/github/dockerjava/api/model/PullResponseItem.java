@@ -33,5 +33,4 @@ public class PullResponseItem extends ResponseItem {
         return (getStatus().contains(DOWNLOAD_COMPLETE) || getStatus().contains(IMAGE_UP_TO_DATE)
                 || getStatus().contains(DOWNLOADED_NEWER_IMAGE) || getStatus().contains(LEGACY_REGISTRY));
     }
-
 }
