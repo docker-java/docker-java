@@ -8,7 +8,7 @@ import java.util.Map;
 
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.model.Container;
-import com.github.dockerjava.core.util.Filters;
+import com.github.dockerjava.core.util.FiltersBuilder;
 
 /**
  * List containers.
@@ -22,7 +22,7 @@ public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, Lis
 
     private String sinceId, beforeId;
 
-    private Filters filters = new Filters();
+    private FiltersBuilder filters = new FiltersBuilder();
 
     public ListContainersCmdImpl(ListContainersCmd.Exec exec) {
         super(exec);
@@ -55,7 +55,7 @@ public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, Lis
 
     @Override
     public Map<String, List<String>> getFilters() {
-        return filters.getFilters();
+        return filters.build();
     }
 
     @Override

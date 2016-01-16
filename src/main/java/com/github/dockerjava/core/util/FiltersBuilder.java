@@ -13,14 +13,14 @@ import java.util.Map.Entry;
  * @author Carlos Sanchez <carlos@apache.org>
  *
  */
-public class Filters {
+public class FiltersBuilder {
 
     private Map<String, List<String>> filters = new HashMap<String, List<String>>();
 
-    public Filters() {
+    public FiltersBuilder() {
     }
 
-    public Filters withFilter(String key, String... value) {
+    public FiltersBuilder withFilter(String key, String... value) {
         filters.put(key, Arrays.asList(value));
         return this;
     }
@@ -29,7 +29,7 @@ public class Filters {
         return filters.get(key);
     }
 
-    public Filters withImages(String... image) {
+    public FiltersBuilder withImages(String... image) {
         withFilter("image", image);
         return this;
     }
@@ -38,7 +38,7 @@ public class Filters {
         return getFilter("image");
     }
 
-    public Filters withContainers(String... container) {
+    public FiltersBuilder withContainers(String... container) {
         withFilter("container", container);
         return this;
     }
@@ -53,7 +53,7 @@ public class Filters {
      * @param labels
      *            string array in the form ["key"] or ["key=value"] or a mix of both
      */
-    public Filters withLabels(String... labels) {
+    public FiltersBuilder withLabels(String... labels) {
         withFilter("label", labels);
         return this;
     }
@@ -64,7 +64,7 @@ public class Filters {
      * @param labels
      *            {@link Map} of labels that contains label keys and values
      */
-    public Filters withLabels(Map<String, String> labels) {
+    public FiltersBuilder withLabels(Map<String, String> labels) {
         withFilter("label", labelsMapToList(labels).toArray(new String[labels.size()]));
         return this;
     }
@@ -88,7 +88,7 @@ public class Filters {
         if (o == null || getClass() != o.getClass())
             return false;
 
-        Filters filters1 = (Filters) o;
+        FiltersBuilder filters1 = (FiltersBuilder) o;
 
         return filters.equals(filters1.filters);
 
@@ -99,7 +99,7 @@ public class Filters {
         return filters.hashCode();
     }
 
-    public Map<String, List<String>> getFilters() {
+    public Map<String, List<String>> build() {
         return filters;
     }
 }

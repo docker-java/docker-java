@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.model.Event;
-import com.github.dockerjava.core.util.Filters;
+import com.github.dockerjava.core.util.FiltersBuilder;
 
 /**
  * Stream docker events
@@ -18,7 +18,7 @@ public class EventsCmdImpl extends AbstrAsyncDockerCmd<EventsCmd, Event> impleme
 
     private String until;
 
-    private Filters filters = new Filters();
+    private FiltersBuilder filters = new FiltersBuilder();
 
     public EventsCmdImpl(EventsCmd.Exec exec) {
         super(exec);
@@ -83,7 +83,7 @@ public class EventsCmdImpl extends AbstrAsyncDockerCmd<EventsCmd, Event> impleme
 
     @Override
     public Map<String, List<String>> getFilters() {
-        return filters.getFilters();
+        return filters.build();
     }
 
 }

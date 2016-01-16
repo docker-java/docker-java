@@ -10,7 +10,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.model.Image;
-import com.github.dockerjava.core.util.Filters;
+import com.github.dockerjava.core.util.FiltersBuilder;
 
 /**
  * List images
@@ -26,7 +26,7 @@ public class ListImagesCmdImpl extends AbstrDockerCmd<ListImagesCmd, List<Image>
 
 	private Boolean showAll = false;
 
-    private Filters filters = new Filters();
+    private FiltersBuilder filters = new FiltersBuilder();
 
     public ListImagesCmdImpl(ListImagesCmd.Exec exec) {
         super(exec);
@@ -34,7 +34,7 @@ public class ListImagesCmdImpl extends AbstrDockerCmd<ListImagesCmd, List<Image>
 
     @Override
     public Map<String, List<String>> getFilters() {
-        return filters.getFilters();
+        return filters.build();
     }
 
     @Override

@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.github.dockerjava.api.command.ListVolumesCmd;
 import com.github.dockerjava.api.command.ListVolumesResponse;
-import com.github.dockerjava.core.util.Filters;
+import com.github.dockerjava.core.util.FiltersBuilder;
 
 /**
  *
@@ -16,7 +16,7 @@ import com.github.dockerjava.core.util.Filters;
  */
 public class ListVolumesCmdImpl extends AbstrDockerCmd<ListVolumesCmd, ListVolumesResponse> implements ListVolumesCmd {
 
-    private Filters filters = new Filters();
+    private FiltersBuilder filters = new FiltersBuilder();
 
     public ListVolumesCmdImpl(ListVolumesCmd.Exec exec) {
         super(exec);
@@ -24,7 +24,7 @@ public class ListVolumesCmdImpl extends AbstrDockerCmd<ListVolumesCmd, ListVolum
 
     @Override
     public Map<String, List<String>> getFilters() {
-        return filters.getFilters();
+        return filters.build();
     }
 
     @Override

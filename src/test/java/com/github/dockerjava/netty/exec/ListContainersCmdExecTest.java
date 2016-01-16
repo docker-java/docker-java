@@ -27,7 +27,7 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.core.command.PullImageResultCallback;
-import com.github.dockerjava.core.util.Filters;
+import com.github.dockerjava.core.util.FiltersBuilder;
 import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 import com.google.common.collect.ImmutableMap;
 
