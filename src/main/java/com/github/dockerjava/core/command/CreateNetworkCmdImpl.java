@@ -1,13 +1,15 @@
 package com.github.dockerjava.core.command;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.command.CreateNetworkCmd;
 import com.github.dockerjava.api.command.CreateNetworkResponse;
 import com.github.dockerjava.api.command.DockerCmdSyncExec;
 import com.github.dockerjava.api.model.Network;
-
-import java.util.Map;
+import com.github.dockerjava.api.model.Network.Ipam;
 
 public class CreateNetworkCmdImpl extends AbstrDockerCmd<CreateNetworkCmd, CreateNetworkResponse>
     implements CreateNetworkCmd {
@@ -20,6 +22,9 @@ public class CreateNetworkCmdImpl extends AbstrDockerCmd<CreateNetworkCmd, Creat
 
     @JsonProperty("IPAM")
     private Network.Ipam ipam;
+
+    @JsonProperty("Options")
+    private Map<String, String> options = new HashMap<>();
 
     public CreateNetworkCmdImpl(DockerCmdSyncExec<CreateNetworkCmd, CreateNetworkResponse> execution) {
         super(execution);
@@ -53,8 +58,14 @@ public class CreateNetworkCmdImpl extends AbstrDockerCmd<CreateNetworkCmd, Creat
     }
 
     @Override
-    public CreateNetworkCmd withIpamConfig(Map<String, String> config) {
-        ipam.getConfig().add(config);
+    public CreateNetworkCmd withIpamConfig(Ipam.Config config) {
+        this.ipam.getConfig().add(config);
+        return this;
+    }
+
+    @Override
+    public CreateNetworkCmd withOptions(Map<String, String> options) {
+        this.options = options;
         return this;
     }
 }

@@ -1,5 +1,6 @@
 package com.github.dockerjava.netty.exec;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,9 +14,13 @@ import com.github.dockerjava.netty.InvocationBuilder;
 import com.github.dockerjava.netty.MediaType;
 import com.github.dockerjava.netty.WebTarget;
 
+import java.io.IOException;
+
 public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, BuildResponseItem> implements
         BuildImageCmd.Exec {
     private static final Logger LOGGER = LoggerFactory.getLogger(BuildImageCmdExec.class);
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public BuildImageCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
         super(baseResource, dockerClientConfig);
@@ -80,10 +85,19 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
             webTarget = webTarget.queryParam("cpusetcpus", command.getCpusetcpus());
         }
 
+        if (command.getBuildArgs() != null && !command.getBuildArgs().isEmpty()) {
+            try {
+                webTarget = webTarget.queryParam("buildargs", MAPPER.writeValueAsString(command.getBuildArgs()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         LOGGER.trace("POST: {}", webTarget);
 
-        InvocationBuilder builder = resourceWithOptionalAuthConfig(command, webTarget.request()).accept(
-                MediaType.APPLICATION_JSON).header("Content-Type", "application/tar").header("encoding", "gzip");
+        InvocationBuilder builder = resourceWithOptionalAuthConfig(command, webTarget.request())
+                .accept(MediaType.APPLICATION_JSON).header("Content-Type", "application/tar")
+                .header("encoding", "gzip");
 
         builder.post(new TypeReference<BuildResponseItem>() {
         }, resultCallback, command.getTarInputStream());

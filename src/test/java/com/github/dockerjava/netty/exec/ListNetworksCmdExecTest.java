@@ -45,7 +45,7 @@ public class ListNetworksCmdExecTest extends AbstractNettyDockerClientTest {
 
         List<Network> networks = dockerClient.listNetworksCmd().exec();
 
-        Network network = networks.get(0);
+        Network network = findNetwork(networks, "bridge");
 
         assertThat(network.getName(), equalTo("bridge"));
         assertThat(network.getScope(), equalTo("local"));

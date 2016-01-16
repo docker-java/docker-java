@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.equalTo;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -52,17 +51,5 @@ public class ListNetworksCmdImplTest extends AbstractDockerClientTest {
         assertThat(network.getScope(), equalTo("local"));
         assertThat(network.getDriver(), equalTo("bridge"));
         assertThat(network.getIpam().getDriver(), equalTo("default"));
-    }
-
-    private Network findNetwork(List<Network> networks, String name) {
-
-        for (Network network : networks) {
-            if (StringUtils.equals(network.getName(), name)) {
-                return network;
-            }
-        }
-
-        fail("No bridge network found.");
-        return null;
     }
 }

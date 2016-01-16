@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
+import org.apache.commons.lang.StringUtils;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.slf4j.Logger;
@@ -24,6 +25,7 @@ import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse.Mount;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
@@ -239,6 +241,18 @@ public abstract class AbstractDockerClientTest extends Assert {
 
         return dockerClient.buildImageCmd(baseDir).withNoCache(true).exec(new BuildImageResultCallback())
                 .awaitImageId();
+    }
+
+    protected Network findNetwork(List<Network> networks, String name) {
+
+        for (Network network : networks) {
+            if (StringUtils.equals(network.getName(), name)) {
+                return network;
+            }
+        }
+
+        fail("No network found.");
+        return null;
     }
 
 }

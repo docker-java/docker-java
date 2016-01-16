@@ -1,4 +1,4 @@
-package com.github.dockerjava.netty.exec;
+package com.github.dockerjava.core.command;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -21,12 +21,12 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
+import com.github.dockerjava.client.AbstractDockerClientTest;
 
 @Test(groups = "integration")
-public class InspectContainerCmdExecTest extends AbstractNettyDockerClientTest {
+public class InspectContainerCmdImplTest extends AbstractDockerClientTest {
 
-    public static final Logger LOG = LoggerFactory.getLogger(InspectContainerCmdExecTest.class);
+    public static final Logger LOG = LoggerFactory.getLogger(InspectContainerCmdImplTest.class);
 
     @BeforeTest
     public void beforeTest() throws Exception {
