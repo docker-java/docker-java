@@ -10,6 +10,7 @@ public class DisconnectFromNetworkCmdImpl extends AbstrDockerCmd<DisconnectFromN
 
     @JsonIgnore
     private String networkId;
+
     @JsonProperty("Container")
     private String containerId;
 

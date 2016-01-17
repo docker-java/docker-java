@@ -1,10 +1,7 @@
 package com.github.dockerjava.core.command;
 
-import com.github.dockerjava.api.command.ConnectToNetworkCmd;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.CreateNetworkResponse;
-import com.github.dockerjava.api.model.Network;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import java.lang.reflect.Method;
+
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -12,7 +9,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import java.lang.reflect.Method;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.CreateNetworkResponse;
+import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.model.Network;
+import com.github.dockerjava.client.AbstractDockerClientTest;
 
 @Test(groups = "integration")
 public class ConnectToNetworkCmdImplTest extends AbstractDockerClientTest {
@@ -50,5 +51,9 @@ public class ConnectToNetworkCmdImplTest extends AbstractDockerClientTest {
         Network updatedNetwork = dockerClient.inspectNetworkCmd().withNetworkId(network.getId()).exec();
 
         assertTrue(updatedNetwork.getContainers().containsKey(container.getId()));
+
+        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+
+        assertNotNull(inspectContainerResponse.getNetworkSettings().getNetworks().get("testNetwork"));
     }
 }

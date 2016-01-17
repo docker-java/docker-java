@@ -3,6 +3,7 @@ package com.github.dockerjava.api.command;
 import com.github.dockerjava.core.RemoteApiVersion;
 
 import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 /**
  * Connects a container to a network.
@@ -17,9 +18,9 @@ public interface ConnectToNetworkCmd extends SyncDockerCmd<Void> {
     @CheckForNull
     public String getContainerId();
 
-    public ConnectToNetworkCmd withNetworkId(String networkId);
+    public ConnectToNetworkCmd withNetworkId(@Nonnull String networkId);
 
-    public ConnectToNetworkCmd withContainerId(String containerId);
+    public ConnectToNetworkCmd withContainerId(@Nonnull String containerId);
 
     public static interface Exec extends DockerCmdSyncExec<ConnectToNetworkCmd, Void> {
     }

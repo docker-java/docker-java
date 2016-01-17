@@ -9,6 +9,7 @@ public class ConnectToNetworkCmdImpl extends AbstrDockerCmd<ConnectToNetworkCmd,
 
     @JsonIgnore
     private String networkId;
+
     @JsonProperty("Container")
     private String containerId;
 

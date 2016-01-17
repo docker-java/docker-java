@@ -3,6 +3,7 @@ package com.github.dockerjava.api.command;
 import com.github.dockerjava.core.RemoteApiVersion;
 
 import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 /**
  * Disconnects a container from a network.
@@ -17,9 +18,9 @@ public interface DisconnectFromNetworkCmd extends SyncDockerCmd<Void> {
     @CheckForNull
     public String getContainerId();
 
-    public DisconnectFromNetworkCmd withNetworkId(String networkId);
+    public DisconnectFromNetworkCmd withNetworkId(@Nonnull String networkId);
 
-    public DisconnectFromNetworkCmd withContainerId(String containerId);
+    public DisconnectFromNetworkCmd withContainerId(@Nonnull String containerId);
 
     public static interface Exec extends DockerCmdSyncExec<DisconnectFromNetworkCmd, Void> {
     }
