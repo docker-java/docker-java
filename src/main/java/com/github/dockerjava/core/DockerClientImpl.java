@@ -12,6 +12,7 @@ import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.CommitCmd;
+import com.github.dockerjava.api.command.ConnectToNetworkCmd;
 import com.github.dockerjava.api.command.ContainerDiffCmd;
 import com.github.dockerjava.api.command.CopyArchiveFromContainerCmd;
 import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
@@ -20,6 +21,7 @@ import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateImageCmd;
 import com.github.dockerjava.api.command.CreateNetworkCmd;
 import com.github.dockerjava.api.command.CreateVolumeCmd;
+import com.github.dockerjava.api.command.DisconnectFromNetworkCmd;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.command.ExecCreateCmd;
@@ -61,6 +63,7 @@ import com.github.dockerjava.core.command.AttachContainerCmdImpl;
 import com.github.dockerjava.core.command.AuthCmdImpl;
 import com.github.dockerjava.core.command.BuildImageCmdImpl;
 import com.github.dockerjava.core.command.CommitCmdImpl;
+import com.github.dockerjava.core.command.ConnectToNetworkCmdImpl;
 import com.github.dockerjava.core.command.ContainerDiffCmdImpl;
 import com.github.dockerjava.core.command.CopyArchiveFromContainerCmdImpl;
 import com.github.dockerjava.core.command.CopyArchiveToContainerCmdImpl;
@@ -69,6 +72,7 @@ import com.github.dockerjava.core.command.CreateContainerCmdImpl;
 import com.github.dockerjava.core.command.CreateImageCmdImpl;
 import com.github.dockerjava.core.command.CreateNetworkCmdImpl;
 import com.github.dockerjava.core.command.CreateVolumeCmdImpl;
+import com.github.dockerjava.core.command.DisconnectFromNetworkCmdImpl;
 import com.github.dockerjava.core.command.EventsCmdImpl;
 import com.github.dockerjava.core.command.ExecCreateCmdImpl;
 import com.github.dockerjava.core.command.ExecStartCmdImpl;
@@ -443,6 +447,16 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public RemoveNetworkCmd removeNetworkCmd(String networkId) {
         return new RemoveNetworkCmdImpl(getDockerCmdExecFactory().createRemoveNetworkCmdExec(), networkId);
+    }
+
+    @Override
+    public ConnectToNetworkCmd connectToNetworkCmd() {
+        return new ConnectToNetworkCmdImpl(getDockerCmdExecFactory().createConnectToNetworkCmdExec());
+    }
+
+    @Override
+    public DisconnectFromNetworkCmd disconnectFromNetworkCmd() {
+        return new DisconnectFromNetworkCmdImpl(getDockerCmdExecFactory().createDisconnectFromNetworkCmdExec());
     }
 
     @Override

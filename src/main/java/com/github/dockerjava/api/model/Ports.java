@@ -23,7 +23,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.node.NullNode;
-import com.github.dockerjava.api.command.InspectContainerResponse.NetworkSettings;
 
 /**
  * A container for port bindings, made available as a {@link Map} via its {@link #getBindings()} method.

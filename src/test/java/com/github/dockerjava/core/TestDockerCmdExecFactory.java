@@ -342,6 +342,16 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
         };
     }
 
+    @Override
+    public ConnectToNetworkCmd.Exec createConnectToNetworkCmdExec() {
+        return delegate.createConnectToNetworkCmdExec();
+    }
+
+    @Override
+    public DisconnectFromNetworkCmd.Exec createDisconnectFromNetworkCmdExec() {
+        return delegate.createDisconnectFromNetworkCmdExec();
+    }
+
     public List<String> getContainerNames() {
         return new ArrayList<String>(containerNames);
     }
