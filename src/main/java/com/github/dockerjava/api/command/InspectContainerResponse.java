@@ -1,7 +1,6 @@
 package com.github.dockerjava.api.command;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.CheckForNull;
 
@@ -14,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.model.ContainerConfig;
 import com.github.dockerjava.api.model.HostConfig;
-import com.github.dockerjava.api.model.Ports;
+import com.github.dockerjava.api.model.NetworkSettings;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumeBind;
 import com.github.dockerjava.api.model.VolumeBinds;
@@ -203,56 +202,7 @@ public class InspectContainerResponse {
         return ToStringBuilder.reflectionToString(this);
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public class NetworkSettings {
 
-        @JsonProperty("IPAddress")
-        private String ipAddress;
-
-        @JsonProperty("IPPrefixLen")
-        private Integer ipPrefixLen;
-
-        @JsonProperty("Gateway")
-        private String gateway;
-
-        @JsonProperty("Bridge")
-        private String bridge;
-
-        @JsonProperty("PortMapping")
-        private Map<String, Map<String, String>> portMapping;
-
-        @JsonProperty("Ports")
-        private Ports ports;
-
-        public String getIpAddress() {
-            return ipAddress;
-        }
-
-        public Integer getIpPrefixLen() {
-            return ipPrefixLen;
-        }
-
-        public String getGateway() {
-            return gateway;
-        }
-
-        public String getBridge() {
-            return bridge;
-        }
-
-        public Map<String, Map<String, String>> getPortMapping() {
-            return portMapping;
-        }
-
-        public Ports getPorts() {
-            return ports;
-        }
-
-        @Override
-        public String toString() {
-            return ToStringBuilder.reflectionToString(this);
-        }
-    }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public class ContainerState {
@@ -514,7 +464,5 @@ public class InspectContainerResponse {
         public Boolean getRW() {
             return rw;
         }
-
     }
-
 }

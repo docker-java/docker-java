@@ -87,4 +87,19 @@ public class InspectContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
         assertThat(inspectContainerResponse.getRestartCount(), equalTo(0));
     }
+
+    @Test
+    public void inspectContainerNetworkSettings() throws DockerException {
+
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+                .withCmd("env").exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+
+        assertNotNull(inspectContainerResponse.getNetworkSettings().getNetworks().get("bridge"));
+    }
 }

@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.security.SecureRandom;
 
@@ -47,10 +46,10 @@ public class InspectExecCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test(groups = "ignoreInCircleCi")
-    public void inspectExecTest() throws IOException {
+    public void inspectExec() throws IOException {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("top")
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
                 .withName(containerName).exec();
         LOG.info("Created container {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
@@ -70,9 +69,8 @@ public class InspectExecCmdImplTest extends AbstractDockerClientTest {
         dockerClient.execStartCmd(container.getId())
                 .withExecId(checkFileCmdCreateResponse.getId()).exec(new ExecStartResultCallback(System.out, System.err));
 
-
         InspectExecResponse first = dockerClient.inspectExecCmd(checkFileCmdCreateResponse.getId()).exec();
-        assertThat(first.getExitCode(), is(1));
+        assertThat(first.getExitCode(), is(0));
 
         // Create the file
         dockerClient.execStartCmd(container.getId())
@@ -92,5 +90,27 @@ public class InspectExecCmdImplTest extends AbstractDockerClientTest {
         InspectContainerResponse containerInfo = dockerClient.inspectContainerCmd(container.getId()).exec();
         assertEquals(containerInfo.getId(), container.getId());
         JSONTestHelper.testRoundTrip(containerInfo);
+    }
+
+    @Test(groups = "ignoreInCircleCi")
+    public void inspectExecNetworkSettings() throws IOException {
+        String containerName = "generated_" + new SecureRandom().nextInt();
+
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
+                .withName(containerName).exec();
+        LOG.info("Created container {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+
+        dockerClient.startContainerCmd(container.getId()).exec();
+
+        ExecCreateCmdResponse exec = dockerClient.execCreateCmd(container.getId())
+                .withAttachStdout(true).withAttachStderr(true).withCmd("/bin/bash").exec();
+        LOG.info("Created exec {}", exec.toString());
+        assertThat(exec.getId(), not(isEmptyString()));
+
+        InspectExecResponse inspectExecResponse = dockerClient.inspectExecCmd(exec.getId()).exec();
+        assertThat(inspectExecResponse.getExitCode(), is(0));
+
+        assertNotNull(inspectExecResponse.getContainer().getNetworkSettings().getNetworks().get("bridge"));
     }
 }
