@@ -15,11 +15,11 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.ExecCreateCmdResponse;
+import com.github.dockerjava.api.command.CreateExecCmdResponse;
 import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
 @Test(groups = "integration")
-public class ExecCreateCmdExecTest extends AbstractNettyDockerClientTest {
+public class CreateExecCmdExecTest extends AbstractNettyDockerClientTest {
     @BeforeTest
     public void beforeTest() throws Exception {
         super.beforeTest();
@@ -53,7 +53,7 @@ public class ExecCreateCmdExecTest extends AbstractNettyDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
+        CreateExecCmdResponse execCreateCmdResponse = dockerClient.createExecCmd(container.getId())
                 .withCmd("touch", "file.log").exec();
 
         assertThat(execCreateCmdResponse.getId(), not(isEmptyString()));

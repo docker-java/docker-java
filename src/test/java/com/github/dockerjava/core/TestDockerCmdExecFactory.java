@@ -124,7 +124,7 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     @Override
-    public ExecCreateCmd.Exec createExecCmdExec() {
+    public CreateExecCmd.Exec createExecCmdExec() {
         return delegate.createExecCmdExec();
     }
 
@@ -189,7 +189,7 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     @Override
-    public ExecStartCmd.Exec createExecStartCmdExec() {
+    public StartExecCmd.Exec createExecStartCmdExec() {
         return delegate.createExecStartCmdExec();
     }
 

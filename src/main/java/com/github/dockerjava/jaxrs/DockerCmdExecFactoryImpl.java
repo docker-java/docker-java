@@ -19,8 +19,8 @@ import com.github.dockerjava.api.command.CreateVolumeCmd;
 import com.github.dockerjava.api.command.DisconnectFromNetworkCmd;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.api.command.EventsCmd;
-import com.github.dockerjava.api.command.ExecCreateCmd;
-import com.github.dockerjava.api.command.ExecStartCmd;
+import com.github.dockerjava.api.command.CreateExecCmd;
+import com.github.dockerjava.api.command.StartExecCmd;
 import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectExecCmd;
@@ -320,8 +320,8 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     }
 
     @Override
-    public ExecCreateCmd.Exec createExecCmdExec() {
-        return new ExecCreateCmdExec(getBaseResource(), getDockerClientConfig());
+    public CreateExecCmd.Exec createExecCmdExec() {
+        return new CreateExecCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
@@ -340,8 +340,8 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     }
 
     @Override
-    public ExecStartCmd.Exec createExecStartCmdExec() {
-        return new ExecStartCmdExec(getBaseResource(), getDockerClientConfig());
+    public StartExecCmd.Exec createExecStartCmdExec() {
+        return new StartExecCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override

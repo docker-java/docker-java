@@ -19,12 +19,12 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.ExecCreateCmdResponse;
-import com.github.dockerjava.core.command.ExecStartResultCallback;
+import com.github.dockerjava.api.command.CreateExecCmdResponse;
+import com.github.dockerjava.core.command.StartExecResultCallback;
 import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
 @Test(groups = "integration")
-public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
+public class StartExecCmdExecTest extends AbstractNettyDockerClientTest {
     @BeforeTest
     public void beforeTest() throws Exception {
         super.beforeTest();
@@ -56,10 +56,10 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
+        CreateExecCmdResponse execCreateCmdResponse = dockerClient.createExecCmd(container.getId())
                 .withAttachStdout(true).withCmd("touch", "/execStartTest.log").exec();
-        dockerClient.execStartCmd(execCreateCmdResponse.getId()).exec(
-                new ExecStartResultCallback(System.out, System.err));
+        dockerClient.startExecCmd(execCreateCmdResponse.getId()).exec(
+                new StartExecResultCallback(System.out, System.err));
 
         InputStream response = dockerClient.copyFileFromContainerCmd(container.getId(), "/execStartTest.log").exec();
 
@@ -83,10 +83,10 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
+        CreateExecCmdResponse execCreateCmdResponse = dockerClient.createExecCmd(container.getId())
                 .withAttachStdout(true).withCmd("touch", "/execStartTest.log").exec();
-        dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false).withTty(true)
-                .exec(new ExecStartResultCallback(System.out, System.err));
+        dockerClient.startExecCmd(execCreateCmdResponse.getId()).withDetach(false).withTty(true)
+                .exec(new StartExecResultCallback(System.out, System.err));
 
         InputStream response = dockerClient.copyFileFromContainerCmd(container.getId(), "/execStartTest.log").exec();
         Boolean bytesAvailable = response.available() > 0;
@@ -113,10 +113,10 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
 
         ByteArrayOutputStream stdout = new ByteArrayOutputStream();
 
-        ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
+        CreateExecCmdResponse execCreateCmdResponse = dockerClient.createExecCmd(container.getId())
                 .withAttachStdout(true).withAttachStdin(true).withCmd("/bin/sh").exec();
-        dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false).withTty(true).withStdIn(stdin)
-                .exec(new ExecStartResultCallback(stdout, System.err)).awaitCompletion(5, TimeUnit.SECONDS);
+        dockerClient.startExecCmd(execCreateCmdResponse.getId()).withDetach(false).withTty(true).withStdIn(stdin)
+                .exec(new StartExecResultCallback(stdout, System.err)).awaitCompletion(5, TimeUnit.SECONDS);
 
         assertEquals(stdout.toString(), "STDIN\n");
     }
@@ -136,11 +136,24 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
 
         ByteArrayOutputStream stdout = new ByteArrayOutputStream();
 
-        ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
+        CreateExecCmdResponse execCreateCmdResponse = dockerClient.createExecCmd(container.getId())
                 .withAttachStdout(true).withAttachStdin(false).withCmd("/bin/sh").exec();
-        dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false).withTty(true).withStdIn(stdin)
-                .exec(new ExecStartResultCallback(stdout, System.err)).awaitCompletion(5, TimeUnit.SECONDS);
+        dockerClient.startExecCmd(execCreateCmdResponse.getId()).withDetach(false).withTty(true).withStdIn(stdin)
+                .exec(new StartExecResultCallback(stdout, System.err)).awaitCompletion(5, TimeUnit.SECONDS);
 
         assertEquals(stdout.toString(), "");
+    }
+
+    @Test
+    public void testname() throws Exception {
+        String containerName = "testContainer";
+
+
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("top").withName(containerName).exec();
+        dockerClient.startContainerCmd(container.getId()).exec();
+        String createCmdId = dockerClient.createExecCmd(container.getId()).withAttachStderr(true).withAttachStdin(true).withAttachStdout(true).withTty(true).withCmd("touch", "/home/testfile.txt").exec().getId();
+        System.out.println(createCmdId);
+        dockerClient.startExecCmd(container.getId()).withExecId(createCmdId).withTty(true).withDetach(true).withStdIn(System.in).exec(new StartExecResultCallback(System.out, System.err));
+        Thread.sleep(100000);
     }
 }

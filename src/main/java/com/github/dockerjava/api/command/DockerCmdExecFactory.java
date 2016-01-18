@@ -15,7 +15,7 @@ public interface DockerCmdExecFactory extends Closeable {
 
     public PingCmd.Exec createPingCmdExec();
 
-    public ExecCreateCmd.Exec createExecCmdExec();
+    public CreateExecCmd.Exec createExecCmdExec();
 
     public VersionCmd.Exec createVersionCmdExec();
 
@@ -49,7 +49,7 @@ public interface DockerCmdExecFactory extends Closeable {
 
     public AttachContainerCmd.Exec createAttachContainerCmdExec();
 
-    public ExecStartCmd.Exec createExecStartCmdExec();
+    public StartExecCmd.Exec createExecStartCmdExec();
 
     public InspectExecCmd.Exec createInspectExecCmdExec();
 

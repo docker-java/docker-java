@@ -7,23 +7,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.api.async.ResultCallback;
-import com.github.dockerjava.api.command.ExecStartCmd;
+import com.github.dockerjava.api.command.StartExecCmd;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.async.FrameStreamProcessor;
 import com.github.dockerjava.jaxrs.async.AbstractCallbackNotifier;
 import com.github.dockerjava.jaxrs.async.POSTCallbackNotifier;
 
-public class ExecStartCmdExec extends AbstrAsyncDockerCmdExec<ExecStartCmd, Frame> implements ExecStartCmd.Exec {
+public class StartExecCmdExec extends AbstrAsyncDockerCmdExec<StartExecCmd, Frame> implements StartExecCmd.Exec {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ExecStartCmdExec.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(StartExecCmdExec.class);
 
-    public ExecStartCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
+    public StartExecCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
         super(baseResource, dockerClientConfig);
     }
 
     @Override
-    protected AbstractCallbackNotifier<Frame> callbackNotifier(ExecStartCmd command,
+    protected AbstractCallbackNotifier<Frame> callbackNotifier(StartExecCmd command,
             ResultCallback<Frame> resultCallback) {
         WebTarget webTarget = getBaseResource().path("/exec/{id}/start").resolveTemplate("id", command.getExecId());
 

@@ -22,8 +22,8 @@ import com.github.dockerjava.api.command.CreateNetworkCmd;
 import com.github.dockerjava.api.command.CreateVolumeCmd;
 import com.github.dockerjava.api.command.DisconnectFromNetworkCmd;
 import com.github.dockerjava.api.command.EventsCmd;
-import com.github.dockerjava.api.command.ExecCreateCmd;
-import com.github.dockerjava.api.command.ExecStartCmd;
+import com.github.dockerjava.api.command.CreateExecCmd;
+import com.github.dockerjava.api.command.StartExecCmd;
 import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectExecCmd;
@@ -118,7 +118,7 @@ public interface DockerClient extends Closeable {
      */
     public StartContainerCmd startContainerCmd(@Nonnull String containerId);
 
-    public ExecCreateCmd execCreateCmd(@Nonnull String containerId);
+    public CreateExecCmd createExecCmd(@Nonnull String containerId);
 
     public InspectContainerCmd inspectContainerCmd(@Nonnull String containerId);
 
@@ -128,7 +128,7 @@ public interface DockerClient extends Closeable {
 
     public AttachContainerCmd attachContainerCmd(@Nonnull String containerId);
 
-    public ExecStartCmd execStartCmd(@Nonnull String containerId);
+    public StartExecCmd startExecCmd(@Nonnull String execId);
 
     public InspectExecCmd inspectExecCmd(@Nonnull String execId);
 

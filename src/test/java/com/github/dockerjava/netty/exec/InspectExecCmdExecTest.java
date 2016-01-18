@@ -17,10 +17,10 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.ExecCreateCmdResponse;
+import com.github.dockerjava.api.command.CreateExecCmdResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.InspectExecResponse;
-import com.github.dockerjava.core.command.ExecStartResultCallback;
+import com.github.dockerjava.core.command.StartExecResultCallback;
 import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 import com.github.dockerjava.test.serdes.JSONTestHelper;
 
@@ -58,36 +58,36 @@ public class InspectExecCmdExecTest extends AbstractNettyDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        ExecCreateCmdResponse touchFileCmdCreateResponse = dockerClient.execCreateCmd(container.getId())
+        CreateExecCmdResponse touchFileCmdCreateResponse = dockerClient.createExecCmd(container.getId())
                 .withAttachStdout(true).withAttachStderr(true).withCmd("touch", "/marker").withTty(true).exec();
         LOG.info("Created exec {}", touchFileCmdCreateResponse.toString());
         assertThat(touchFileCmdCreateResponse.getId(), not(isEmptyString()));
-        ExecCreateCmdResponse checkFileCmdCreateResponse = dockerClient.execCreateCmd(container.getId())
+        CreateExecCmdResponse checkFileCmdCreateResponse = dockerClient.createExecCmd(container.getId())
                 .withAttachStdout(true).withAttachStderr(true).withCmd("test", "-e", "/marker").exec();
         LOG.info("Created exec {}", checkFileCmdCreateResponse.toString());
         assertThat(checkFileCmdCreateResponse.getId(), not(isEmptyString()));
 
         // Check that file does not exist
-        dockerClient.execStartCmd(container.getId()).withDetach(false).withTty(true)
+        dockerClient.startExecCmd(container.getId()).withDetach(false).withTty(true)
                 .withExecId(checkFileCmdCreateResponse.getId())
-                .exec(new ExecStartResultCallback(System.out, System.err));
+                .exec(new StartExecResultCallback(System.out, System.err));
 
         InspectExecResponse first = dockerClient.inspectExecCmd(checkFileCmdCreateResponse.getId()).exec();
         assertEquals(first.isRunning(), new Boolean(false));
         assertThat(first.getExitCode(), is(1));
 
         // Create the file
-        dockerClient.execStartCmd(container.getId()).withDetach(false).withTty(true)
+        dockerClient.startExecCmd(container.getId()).withDetach(false).withTty(true)
                 .withExecId(touchFileCmdCreateResponse.getId())
-                .exec(new ExecStartResultCallback(System.out, System.err));
+                .exec(new StartExecResultCallback(System.out, System.err));
 
         InspectExecResponse second = dockerClient.inspectExecCmd(touchFileCmdCreateResponse.getId()).exec();
         assertEquals(first.isRunning(), new Boolean(false));
         assertThat(second.getExitCode(), is(0));
 
         // Check that file does exist now
-        dockerClient.execStartCmd(container.getId()).withExecId(checkFileCmdCreateResponse.getId())
-                .exec(new ExecStartResultCallback(System.out, System.err));
+        dockerClient.startExecCmd(container.getId()).withExecId(checkFileCmdCreateResponse.getId())
+                .exec(new StartExecResultCallback(System.out, System.err));
 
         InspectExecResponse third = dockerClient.inspectExecCmd(checkFileCmdCreateResponse.getId()).exec();
         assertThat(third.getExitCode(), is(0));
@@ -109,7 +109,7 @@ public class InspectExecCmdExecTest extends AbstractNettyDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        ExecCreateCmdResponse exec = dockerClient.execCreateCmd(container.getId())
+        CreateExecCmdResponse exec = dockerClient.createExecCmd(container.getId())
                 .withAttachStdout(true).withAttachStderr(true).withCmd("/bin/bash").exec();
         LOG.info("Created exec {}", exec.toString());
         assertThat(exec.getId(), not(isEmptyString()));
