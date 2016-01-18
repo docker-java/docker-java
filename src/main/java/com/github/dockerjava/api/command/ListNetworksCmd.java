@@ -1,12 +1,12 @@
 package com.github.dockerjava.api.command;
 
-import com.github.dockerjava.api.model.Filters;
 import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.core.RemoteApiVersion;
 
 import javax.annotation.CheckForNull;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * List networks.
@@ -16,9 +16,11 @@ import java.util.List;
 public interface ListNetworksCmd extends SyncDockerCmd<List<Network>> {
 
     @CheckForNull
-    public Filters getFilters();
+    public Map<String, List<String>> getFilters();
 
-    ListNetworksCmd withFilters(Filters filters);
+    ListNetworksCmd withNameFilter(String... networkName);
+
+    ListNetworksCmd withIdFilter(String... networkId);
 
     public static interface Exec extends DockerCmdSyncExec<ListNetworksCmd, List<Network>> {
     }

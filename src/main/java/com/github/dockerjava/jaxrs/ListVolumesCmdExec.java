@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.github.dockerjava.api.command.ListVolumesCmd;
 import com.github.dockerjava.api.command.ListVolumesResponse;
 import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.util.FiltersEncoder;
 
 public class ListVolumesCmdExec extends AbstrSyncDockerCmdExec<ListVolumesCmd, ListVolumesResponse> implements ListVolumesCmd.Exec {
 
@@ -24,8 +25,8 @@ public class ListVolumesCmdExec extends AbstrSyncDockerCmdExec<ListVolumesCmd, L
     protected ListVolumesResponse execute(ListVolumesCmd command) {
         WebTarget webTarget = getBaseResource().path("/volumes");
 
-        if (command.getFilters() != null)
-            webTarget = webTarget.queryParam("filters", urlPathSegmentEscaper().escape(command.getFilters()));
+        if (command.getFilters() != null && !command.getFilters().isEmpty())
+            webTarget = webTarget.queryParam("filters", urlPathSegmentEscaper().escape(FiltersEncoder.jsonEncode(command.getFilters())));
 
         LOGGER.trace("GET: {}", webTarget);
 
