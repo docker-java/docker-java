@@ -14,11 +14,6 @@ import com.github.dockerjava.core.util.FiltersBuilder;
 
 /**
  * List images
- *
- * @param showAll
- *            - Show all images (by default filter out the intermediate images used to build)
- * @param filters
- *            - a json encoded value of the filters (a map[string][]string) to process on the images list.
  */
 public class ListImagesCmdImpl extends AbstrDockerCmd<ListImagesCmd, List<Image>> implements ListImagesCmd {
 
@@ -56,14 +51,14 @@ public class ListImagesCmdImpl extends AbstrDockerCmd<ListImagesCmd, List<Image>
     }
 
     @Override
-    public ListImagesCmd withLabelsFilter(String... labels) {
+    public ListImagesCmd withLabelFilter(String... labels) {
         checkNotNull(labels, "labels have not been specified");
         filters.withLabels(labels);
         return this;
     }
 
     @Override
-    public ListImagesCmd withLabelsFilter(Map<String, String> labels) {
+    public ListImagesCmd withLabelFilter(Map<String, String> labels) {
         checkNotNull(labels, "labels have not been specified");
         filters.withLabels(labels);
         return this;

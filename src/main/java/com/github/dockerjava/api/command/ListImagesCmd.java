@@ -36,13 +36,13 @@ public interface ListImagesCmd extends SyncDockerCmd<List<Image>> {
      * @param labels
      *            - string array in the form ["key"] or ["key=value"] or a mix of both
      */
-    public ListImagesCmd withLabelsFilter(String... labels);
+    public ListImagesCmd withLabelFilter(String... label);
 
     /**
      * @param labels
      *            - {@link Map} of labels that contains label keys and values
      */
-    public ListImagesCmd withLabelsFilter(Map<String, String> labels);
+    public ListImagesCmd withLabelFilter(Map<String, String> labels);
 
     public static interface Exec extends DockerCmdSyncExec<ListImagesCmd, List<Image>> {
     }

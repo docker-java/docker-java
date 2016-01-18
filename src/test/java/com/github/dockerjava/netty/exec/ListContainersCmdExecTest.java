@@ -153,14 +153,14 @@ public class ListContainersCmdExecTest extends AbstractNettyDockerClientTest {
         // list with filter by label
         dockerClient.createContainerCmd(testImage).withCmd("echo").withLabels(labels).exec();
         filteredContainers = dockerClient.listContainersCmd().withShowAll(true)
-                .withLabelsFilter(labels).exec();
+                .withLabelFilter(labels).exec();
         assertThat(filteredContainers.size(), is(equalTo(1)));
         Container container3 = filteredContainers.get(0);
         assertThat(container3.getCommand(), not(isEmptyString()));
         assertThat(container3.getImage(), startsWith(testImage));
 
         filteredContainers = dockerClient.listContainersCmd().withShowAll(true)
-                .withLabelsFilter("test").exec();
+                .withLabelFilter("test").exec();
         assertThat(filteredContainers.size(), is(equalTo(1)));
         container3 = filteredContainers.get(0);
         assertThat(container3.getCommand(), not(isEmptyString()));

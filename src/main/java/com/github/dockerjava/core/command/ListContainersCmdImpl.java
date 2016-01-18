@@ -93,14 +93,14 @@ public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, Lis
     }
 
     @Override
-    public ListContainersCmd withLabelsFilter(String... labels) {
+    public ListContainersCmd withLabelFilter(String... labels) {
         checkNotNull(labels, "labels was not specified");
         this.filters.withLabels(labels);
         return this;
     }
 
     @Override
-    public ListContainersCmd withLabelsFilter(Map<String, String> labels) {
+    public ListContainersCmd withLabelFilter(Map<String, String> labels) {
         checkNotNull(labels, "labels was not specified");
         this.filters.withLabels(labels);
         return this;
