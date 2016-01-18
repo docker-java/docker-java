@@ -67,8 +67,7 @@ public class ListImagesCmdExecTest extends AbstractNettyDockerClientTest {
     @Test(groups = "ignoreInCircleCi")
     public void listImagesWithDanglingFilter() throws DockerException {
         String imageId = createDanglingImage();
-        List<Image> images = dockerClient.listImagesCmd().withDanglingFilter(true).withShowAll(true)
-                .exec();
+        List<Image> images = dockerClient.listImagesCmd().withDanglingFilter(true).withShowAll(true).exec();
         assertThat(images, notNullValue());
         LOG.info("Images List: {}", images);
         assertThat(images.size(), is(greaterThan(0)));
@@ -97,4 +96,5 @@ public class ListImagesCmdExecTest extends AbstractNettyDockerClientTest {
         dockerClient.stopContainerCmd(container.getId()).exec();
         dockerClient.removeContainerCmd(container.getId()).exec();
         return imageId;
-    }}
+    }
+}
