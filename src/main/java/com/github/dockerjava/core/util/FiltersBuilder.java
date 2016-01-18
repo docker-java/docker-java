@@ -1,4 +1,4 @@
-package com.github.dockerjava.api.model;
+package com.github.dockerjava.core.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,29 +7,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.ws.rs.core.MediaType;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
-
 /**
  * Representation of Docker filters.
  *
  * @author Carlos Sanchez <carlos@apache.org>
  *
  */
-public class Filters {
-
-    private static ObjectMapper OBJECT_MAPPER = new JacksonJaxbJsonProvider().locateMapper(Map.class,
-            MediaType.APPLICATION_JSON_TYPE);
+public class FiltersBuilder {
 
     private Map<String, List<String>> filters = new HashMap<String, List<String>>();
 
-    public Filters() {
+    public FiltersBuilder() {
     }
 
-    public Filters withFilter(String key, String... value) {
+    public FiltersBuilder withFilter(String key, String... value) {
         filters.put(key, Arrays.asList(value));
         return this;
     }
@@ -38,7 +29,7 @@ public class Filters {
         return filters.get(key);
     }
 
-    public Filters withImages(String... image) {
+    public FiltersBuilder withImages(String... image) {
         withFilter("image", image);
         return this;
     }
@@ -47,7 +38,7 @@ public class Filters {
         return getFilter("image");
     }
 
-    public Filters withContainers(String... container) {
+    public FiltersBuilder withContainers(String... container) {
         withFilter("container", container);
         return this;
     }
@@ -61,9 +52,8 @@ public class Filters {
      *
      * @param labels
      *            string array in the form ["key"] or ["key=value"] or a mix of both
-     * @return
      */
-    public Filters withLabels(String... labels) {
+    public FiltersBuilder withLabels(String... labels) {
         withFilter("label", labels);
         return this;
     }
@@ -73,9 +63,8 @@ public class Filters {
      *
      * @param labels
      *            {@link Map} of labels that contains label keys and values
-     * @return
      */
-    public Filters withLabels(Map<String, String> labels) {
+    public FiltersBuilder withLabels(Map<String, String> labels) {
         withFilter("label", labelsMapToList(labels).toArray(new String[labels.size()]));
         return this;
     }
@@ -99,7 +88,7 @@ public class Filters {
         if (o == null || getClass() != o.getClass())
             return false;
 
-        Filters filters1 = (Filters) o;
+        FiltersBuilder filters1 = (FiltersBuilder) o;
 
         return filters.equals(filters1.filters);
 
@@ -110,13 +99,7 @@ public class Filters {
         return filters.hashCode();
     }
 
-    @Override
-    public String toString() {
-        try {
-            return OBJECT_MAPPER.writeValueAsString(filters);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+    public Map<String, List<String>> build() {
+        return filters;
     }
-
 }

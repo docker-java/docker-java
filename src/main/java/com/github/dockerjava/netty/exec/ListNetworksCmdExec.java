@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.dockerjava.api.command.ListNetworksCmd;
 import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.util.FiltersEncoder;
 import com.github.dockerjava.netty.MediaType;
 import com.github.dockerjava.netty.WebTarget;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,8 +28,8 @@ public class ListNetworksCmdExec extends AbstrSyncDockerCmdExec<ListNetworksCmd,
     protected List<Network> execute(ListNetworksCmd command) {
         WebTarget webTarget = getBaseResource().path("/networks");
 
-        if (command.getFilters() != null)
-            webTarget = webTarget.queryParam("filters", urlPathSegmentEscaper().escape(command.getFilters().toString()));
+        if (command.getFilters() != null && !command.getFilters().isEmpty())
+            webTarget = webTarget.queryParam("filters", urlPathSegmentEscaper().escape(FiltersEncoder.jsonEncode(command.getFilters())));
 
         LOGGER.trace("GET: {}", webTarget);
 

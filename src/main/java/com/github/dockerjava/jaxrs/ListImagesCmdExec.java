@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.util.FiltersEncoder;
 
 public class ListImagesCmdExec extends AbstrSyncDockerCmdExec<ListImagesCmd, List<Image>> implements ListImagesCmd.Exec {
 
@@ -29,8 +30,13 @@ public class ListImagesCmdExec extends AbstrSyncDockerCmdExec<ListImagesCmd, Lis
 
         webTarget = booleanQueryParam(webTarget, "all", command.hasShowAllEnabled());
 
-        if (command.getFilters() != null)
-            webTarget = webTarget.queryParam("filters", urlPathSegmentEscaper().escape(command.getFilters()));
+        if (command.getFilters() != null && !command.getFilters().isEmpty()) {
+        	webTarget = webTarget.queryParam("filters", urlPathSegmentEscaper().escape(FiltersEncoder.jsonEncode(command.getFilters())));
+        }
+
+        if (command.getImageNameFilter() != null) {
+        	webTarget = webTarget.queryParam("filter", urlPathSegmentEscaper().escape(command.getImageNameFilter()));
+        }
 
         LOGGER.trace("GET: {}", webTarget);
 
