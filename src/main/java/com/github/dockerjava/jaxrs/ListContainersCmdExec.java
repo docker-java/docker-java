@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.util.FiltersEncoder;
 
 public class ListContainersCmdExec extends AbstrSyncDockerCmdExec<ListContainersCmd, List<Container>> implements
         ListContainersCmd.Exec {
@@ -38,7 +39,7 @@ public class ListContainersCmdExec extends AbstrSyncDockerCmdExec<ListContainers
 
         if (command.getFilters() != null) {
             webTarget = webTarget
-                    .queryParam("filters", urlPathSegmentEscaper().escape(command.getFilters().toString()));
+                    .queryParam("filters", urlPathSegmentEscaper().escape(FiltersEncoder.jsonEncode(command.getFilters())));
         }
 
         LOGGER.trace("GET: {}", webTarget);
