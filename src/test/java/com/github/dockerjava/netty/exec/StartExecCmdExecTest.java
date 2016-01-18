@@ -143,17 +143,4 @@ public class StartExecCmdExecTest extends AbstractNettyDockerClientTest {
 
         assertEquals(stdout.toString(), "");
     }
-
-    @Test
-    public void testname() throws Exception {
-        String containerName = "testContainer";
-
-
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("top").withName(containerName).exec();
-        dockerClient.startContainerCmd(container.getId()).exec();
-        String createCmdId = dockerClient.createExecCmd(container.getId()).withAttachStderr(true).withAttachStdin(true).withAttachStdout(true).withTty(true).withCmd("touch", "/home/testfile.txt").exec().getId();
-        System.out.println(createCmdId);
-        dockerClient.startExecCmd(container.getId()).withExecId(createCmdId).withTty(true).withDetach(true).withStdIn(System.in).exec(new StartExecResultCallback(System.out, System.err));
-        Thread.sleep(100000);
-    }
 }
