@@ -23,6 +23,7 @@ import org.testng.ITestResult;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.DockerException;
 import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.NotFoundException;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumeBind;
@@ -51,10 +52,13 @@ public abstract class AbstractDockerClientTest extends Assert {
         LOG.info("Connecting to Docker server");
         dockerClient = DockerClientBuilder.getInstance(config()).withDockerCmdExecFactory(dockerCmdExecFactory).build();
 
-        LOG.info("Pulling image 'busybox'");
-
-        // need to block until image is pulled completely
-        dockerClient.pullImageCmd("busybox").withTag("latest").exec(new PullImageResultCallback()).awaitSuccess();
+      try {
+            dockerClient.inspectImageCmd("busybox").exec();
+        } catch (NotFoundException e) {
+            LOG.info("Pulling image 'busybox'");
+            // need to block until image is pulled completely
+            dockerClient.pullImageCmd("busybox").withTag("latest").exec(new PullImageResultCallback()).awaitSuccess();
+        }
 
         assertNotNull(dockerClient);
         LOG.info("======================= END OF BEFORETEST =======================\n\n");
