@@ -100,6 +100,6 @@ public class InspectContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-        assertNotNull(inspectContainerResponse.getNetworkSettings().getNetworks().get("bridge"));
+        assertFalse(inspectContainerResponse.getNetworkSettings().getHairpinMode());
     }
 }
