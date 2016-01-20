@@ -24,6 +24,7 @@ import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse.Mount;
 import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.api.model.Volume;
@@ -57,7 +58,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 
         try {
             dockerClient.inspectImageCmd("busybox").exec();
-        } catch (Exception e) {
+        } catch (NotFoundException e) {
             LOG.info("Pulling image 'busybox'");
             // need to block until image is pulled completely
             dockerClient.pullImageCmd("busybox").withTag("latest").exec(new PullImageResultCallback()).awaitSuccess();
