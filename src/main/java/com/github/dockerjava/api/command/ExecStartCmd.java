@@ -2,9 +2,10 @@ package com.github.dockerjava.api.command;
 
 import java.io.InputStream;
 
-import com.github.dockerjava.api.NotFoundException;
+import com.github.dockerjava.api.async.ResultCallback;
+import com.github.dockerjava.api.model.Frame;
 
-public interface ExecStartCmd extends SyncDockerCmd<InputStream> {
+public interface ExecStartCmd extends AsyncDockerCmd<ExecStartCmd, Frame> {
 
     public String getExecId();
 
@@ -29,8 +30,8 @@ public interface ExecStartCmd extends SyncDockerCmd<InputStream> {
      *             No such exec instance
      */
     @Override
-    public InputStream exec() throws NotFoundException;
+    public <T extends ResultCallback<Frame>> T exec(T resultCallback);
 
-    public static interface Exec extends DockerCmdSyncExec<ExecStartCmd, InputStream> {
+    public static interface Exec extends DockerCmdAsyncExec<ExecStartCmd, Frame> {
     }
 }
