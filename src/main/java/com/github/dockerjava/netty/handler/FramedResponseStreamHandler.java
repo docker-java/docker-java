@@ -1,5 +1,7 @@
 package com.github.dockerjava.netty.handler;
 
+import java.util.Arrays;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -74,14 +76,14 @@ public class FramedResponseStreamHandler extends SimpleChannelInboundHandler<Byt
 
             headerCnt += headerCount;
 
-            if (headerCnt < HEADER_SIZE) {
-                return null;
-            }
-
             streamType = streamType(header[0]);
 
             if (streamType.equals(StreamType.RAW)) {
-                return new Frame(streamType, header);
+                return new Frame(streamType, Arrays.copyOf(header, headerCount));
+            }
+
+            if (headerCnt < HEADER_SIZE) {
+                return null;
             }
         }
 

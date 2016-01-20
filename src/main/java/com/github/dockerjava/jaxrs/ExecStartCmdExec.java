@@ -1,5 +1,6 @@
 package com.github.dockerjava.jaxrs;
 
+import static javax.ws.rs.client.Entity.entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
@@ -30,6 +31,6 @@ public class ExecStartCmdExec extends AbstrAsyncDockerCmdExec<ExecStartCmd, Fram
         LOGGER.trace("POST: {}", webTarget);
 
         return new POSTCallbackNotifier<Frame>(new FrameStreamProcessor(), resultCallback, webTarget.request().accept(
-                MediaType.APPLICATION_JSON), null);
+                MediaType.APPLICATION_JSON), entity(command, MediaType.APPLICATION_JSON));
     }
 }
