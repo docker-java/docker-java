@@ -16,11 +16,11 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.ExecCreateCmdResponse;
+import com.github.dockerjava.api.command.CreateExecCmdResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
 @Test(groups = "integration")
-public class ExecStartCmdImplTest extends AbstractDockerClientTest {
+public class StartExecCmdImplTest extends AbstractDockerClientTest {
     @BeforeTest
     public void beforeTest() throws Exception {
         super.beforeTest();
@@ -52,10 +52,10 @@ public class ExecStartCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
+        CreateExecCmdResponse execCreateCmdResponse = dockerClient.createExecCmd(container.getId())
                 .withAttachStdout(true).withCmd("touch", "/execStartTest.log").exec();
-        dockerClient.execStartCmd(execCreateCmdResponse.getId()).exec(
-                new ExecStartResultCallback(System.out, System.err));
+        dockerClient.startExecCmd(execCreateCmdResponse.getId()).exec(
+                new StartExecResultCallback(System.out, System.err));
 
         InputStream response = dockerClient.copyArchiveFromContainerCmd(container.getId(), "/execStartTest.log").exec();
         Boolean bytesAvailable = response.available() > 0;
@@ -78,10 +78,10 @@ public class ExecStartCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
+        CreateExecCmdResponse execCreateCmdResponse = dockerClient.createExecCmd(container.getId())
                 .withAttachStdout(true).withCmd("touch", "/execStartTest.log").exec();
-        dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false).withTty(true)
-                .exec(new ExecStartResultCallback(System.out, System.err));
+        dockerClient.startExecCmd(execCreateCmdResponse.getId()).withDetach(false).withTty(true)
+                .exec(new StartExecResultCallback(System.out, System.err));
 
         InputStream response = dockerClient.copyArchiveFromContainerCmd(container.getId(), "/execStartTest.log").exec();
         Boolean bytesAvailable = response.available() > 0;

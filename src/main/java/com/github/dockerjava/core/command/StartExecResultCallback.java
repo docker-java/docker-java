@@ -14,18 +14,18 @@ import com.github.dockerjava.core.async.ResultCallbackTemplate;
  * @author Marcus Linke
  *
  */
-public class ExecStartResultCallback extends ResultCallbackTemplate<ExecStartResultCallback, Frame> {
+public class StartExecResultCallback extends ResultCallbackTemplate<StartExecResultCallback, Frame> {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(ExecStartResultCallback.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(StartExecResultCallback.class);
 
     private OutputStream stdout, stderr;
 
-    public ExecStartResultCallback(OutputStream stdout, OutputStream stderr) {
+    public StartExecResultCallback(OutputStream stdout, OutputStream stderr) {
         this.stdout = stdout;
         this.stderr = stderr;
     }
 
-    public ExecStartResultCallback() {
+    public StartExecResultCallback() {
         this(null, null);
     }
 

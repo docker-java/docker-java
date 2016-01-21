@@ -9,7 +9,7 @@ import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.Frame;
 
-public interface ExecStartCmd extends AsyncDockerCmd<ExecStartCmd, Frame> {
+public interface StartExecCmd extends AsyncDockerCmd<StartExecCmd, Frame> {
 
     @CheckForNull
     public String getExecId();
@@ -23,13 +23,13 @@ public interface ExecStartCmd extends AsyncDockerCmd<ExecStartCmd, Frame> {
     @CheckForNull
     public InputStream getStdin();
 
-    public ExecStartCmd withDetach(Boolean detach);
+    public StartExecCmd withDetach(Boolean detach);
 
-    public ExecStartCmd withExecId(@Nonnull String execId);
+    public StartExecCmd withExecId(@Nonnull String execId);
 
-    public ExecStartCmd withTty(Boolean tty);
+    public StartExecCmd withTty(Boolean tty);
 
-    public ExecStartCmd withStdIn(InputStream stdin);
+    public StartExecCmd withStdIn(InputStream stdin);
 
     /**
      *
@@ -39,7 +39,7 @@ public interface ExecStartCmd extends AsyncDockerCmd<ExecStartCmd, Frame> {
     @Override
     public <T extends ResultCallback<Frame>> T exec(T resultCallback);
 
-    public static interface Exec extends DockerCmdAsyncExec<ExecStartCmd, Frame> {
+    public static interface Exec extends DockerCmdAsyncExec<StartExecCmd, Frame> {
     }
 
 }

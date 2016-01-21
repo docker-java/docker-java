@@ -16,8 +16,8 @@ import com.github.dockerjava.api.command.CreateVolumeCmd;
 import com.github.dockerjava.api.command.DisconnectFromNetworkCmd;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.api.command.EventsCmd;
-import com.github.dockerjava.api.command.ExecCreateCmd;
-import com.github.dockerjava.api.command.ExecStartCmd;
+import com.github.dockerjava.api.command.CreateExecCmd;
+import com.github.dockerjava.api.command.StartExecCmd;
 import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectExecCmd;
@@ -66,8 +66,8 @@ import com.github.dockerjava.netty.exec.CreateNetworkCmdExec;
 import com.github.dockerjava.netty.exec.CreateVolumeCmdExec;
 import com.github.dockerjava.netty.exec.DisconnectFromNetworkCmdExec;
 import com.github.dockerjava.netty.exec.EventsCmdExec;
-import com.github.dockerjava.netty.exec.ExecCreateCmdExec;
-import com.github.dockerjava.netty.exec.ExecStartCmdExec;
+import com.github.dockerjava.netty.exec.CreateExecCmdExec;
+import com.github.dockerjava.netty.exec.StartExecCmdExec;
 import com.github.dockerjava.netty.exec.InfoCmdExec;
 import com.github.dockerjava.netty.exec.InspectContainerCmdExec;
 import com.github.dockerjava.netty.exec.InspectExecCmdExec;
@@ -396,8 +396,8 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     }
 
     @Override
-    public ExecCreateCmd.Exec createExecCmdExec() {
-        return new ExecCreateCmdExec(getBaseResource(), getDockerClientConfig());
+    public CreateExecCmd.Exec createExecCmdExec() {
+        return new CreateExecCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
@@ -416,8 +416,8 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     }
 
     @Override
-    public ExecStartCmd.Exec createExecStartCmdExec() {
-        return new ExecStartCmdExec(getBaseResource(), getDockerClientConfig());
+    public StartExecCmd.Exec createExecStartCmdExec() {
+        return new StartExecCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override

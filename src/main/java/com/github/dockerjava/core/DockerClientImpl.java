@@ -24,8 +24,8 @@ import com.github.dockerjava.api.command.CreateVolumeCmd;
 import com.github.dockerjava.api.command.DisconnectFromNetworkCmd;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.api.command.EventsCmd;
-import com.github.dockerjava.api.command.ExecCreateCmd;
-import com.github.dockerjava.api.command.ExecStartCmd;
+import com.github.dockerjava.api.command.CreateExecCmd;
+import com.github.dockerjava.api.command.StartExecCmd;
 import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectExecCmd;
@@ -74,8 +74,8 @@ import com.github.dockerjava.core.command.CreateNetworkCmdImpl;
 import com.github.dockerjava.core.command.CreateVolumeCmdImpl;
 import com.github.dockerjava.core.command.DisconnectFromNetworkCmdImpl;
 import com.github.dockerjava.core.command.EventsCmdImpl;
-import com.github.dockerjava.core.command.ExecCreateCmdImpl;
-import com.github.dockerjava.core.command.ExecStartCmdImpl;
+import com.github.dockerjava.core.command.CreateExecCmdImpl;
+import com.github.dockerjava.core.command.StartExecCmdImpl;
 import com.github.dockerjava.core.command.InfoCmdImpl;
 import com.github.dockerjava.core.command.InpectNetworkCmdImpl;
 import com.github.dockerjava.core.command.InspectContainerCmdImpl;
@@ -287,8 +287,8 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
-    public ExecCreateCmd execCreateCmd(String containerId) {
-        return new ExecCreateCmdImpl(getDockerCmdExecFactory().createExecCmdExec(), containerId);
+    public CreateExecCmd createExecCmd(String containerId) {
+        return new CreateExecCmdImpl(getDockerCmdExecFactory().createExecCmdExec(), containerId);
     }
 
     @Override
@@ -307,8 +307,8 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
-    public ExecStartCmd execStartCmd(String containerId) {
-        return new ExecStartCmdImpl(getDockerCmdExecFactory().createExecStartCmdExec(), containerId);
+    public StartExecCmd startExecCmd(String execId) {
+        return new StartExecCmdImpl(getDockerCmdExecFactory().createExecStartCmdExec(), execId);
     }
 
     @Override

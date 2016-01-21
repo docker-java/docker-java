@@ -5,12 +5,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.dockerjava.api.command.ExecCreateCmd;
-import com.github.dockerjava.api.command.ExecCreateCmdResponse;
+import com.github.dockerjava.api.command.CreateExecCmd;
+import com.github.dockerjava.api.command.CreateExecCmdResponse;
 import com.github.dockerjava.api.exception.NotFoundException;
 
 @JsonInclude(Include.NON_NULL)
-public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateCmdResponse> implements ExecCreateCmd {
+public class CreateExecCmdImpl extends AbstrDockerCmd<CreateExecCmd, CreateExecCmdResponse> implements CreateExecCmd {
 
     private String containerId;
 
@@ -29,44 +29,44 @@ public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateC
     @JsonProperty("Cmd")
     private String[] cmd;
 
-    public ExecCreateCmdImpl(ExecCreateCmd.Exec exec, String containerId) {
+    public CreateExecCmdImpl(CreateExecCmd.Exec exec, String containerId) {
         super(exec);
         withContainerId(containerId);
     }
 
     @Override
-    public ExecCreateCmd withContainerId(String containerId) {
+    public CreateExecCmd withContainerId(String containerId) {
         checkNotNull(containerId, "containerId was not specified");
         this.containerId = containerId;
         return this;
     }
 
     @Override
-    public ExecCreateCmd withAttachStdin(Boolean attachStdin) {
+    public CreateExecCmd withAttachStdin(Boolean attachStdin) {
         this.attachStdin = attachStdin;
         return this;
     }
 
     @Override
-    public ExecCreateCmd withAttachStdout(Boolean attachStdout) {
+    public CreateExecCmd withAttachStdout(Boolean attachStdout) {
         this.attachStdout = attachStdout;
         return this;
     }
 
     @Override
-    public ExecCreateCmd withAttachStderr(Boolean attachStderr) {
+    public CreateExecCmd withAttachStderr(Boolean attachStderr) {
         this.attachStderr = attachStderr;
         return this;
     }
 
     @Override
-    public ExecCreateCmd withTty(Boolean tty) {
+    public CreateExecCmd withTty(Boolean tty) {
         this.tty = tty;
         return this;
     }
 
     @Override
-    public ExecCreateCmd withCmd(String... cmd) {
+    public CreateExecCmd withCmd(String... cmd) {
         this.cmd = cmd;
         return this;
     }
@@ -101,7 +101,7 @@ public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateC
      *             No such container
      */
     @Override
-    public ExecCreateCmdResponse exec() throws NotFoundException {
+    public CreateExecCmdResponse exec() throws NotFoundException {
         return super.exec();
     }
 

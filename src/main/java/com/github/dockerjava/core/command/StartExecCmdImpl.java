@@ -6,11 +6,11 @@ import java.io.InputStream;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.dockerjava.api.async.ResultCallback;
-import com.github.dockerjava.api.command.ExecStartCmd;
+import com.github.dockerjava.api.command.StartExecCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.Frame;
 
-public class ExecStartCmdImpl extends AbstrAsyncDockerCmd<ExecStartCmd, Frame> implements ExecStartCmd {
+public class StartExecCmdImpl extends AbstrAsyncDockerCmd<StartExecCmd, Frame> implements StartExecCmd {
 
     private String execId;
 
@@ -18,7 +18,7 @@ public class ExecStartCmdImpl extends AbstrAsyncDockerCmd<ExecStartCmd, Frame> i
 
     private InputStream stdin;
 
-    public ExecStartCmdImpl(ExecStartCmd.Exec exec, String execId) {
+    public StartExecCmdImpl(StartExecCmd.Exec exec, String execId) {
         super(exec);
         withExecId(execId);
     }
@@ -29,7 +29,7 @@ public class ExecStartCmdImpl extends AbstrAsyncDockerCmd<ExecStartCmd, Frame> i
     }
 
     @Override
-    public ExecStartCmd withExecId(String execId) {
+    public StartExecCmd withExecId(String execId) {
         checkNotNull(execId, "execId was not specified");
         this.execId = execId;
         return this;
@@ -53,19 +53,19 @@ public class ExecStartCmdImpl extends AbstrAsyncDockerCmd<ExecStartCmd, Frame> i
 
 
     @Override
-    public ExecStartCmd withDetach(Boolean detach) {
+    public StartExecCmd withDetach(Boolean detach) {
         this.detach = detach;
         return this;
     }
 
     @Override
-    public ExecStartCmd withTty(Boolean tty) {
+    public StartExecCmd withTty(Boolean tty) {
         this.tty = tty;
         return this;
     }
 
     @Override
-    public ExecStartCmd withStdIn(InputStream stdin) {
+    public StartExecCmd withStdIn(InputStream stdin) {
         this.stdin = stdin;
         return this;
     }
