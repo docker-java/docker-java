@@ -35,6 +35,7 @@ public class ExecStartResultCallback extends ResultCallbackTemplate<ExecStartRes
             try {
                 switch (frame.getStreamType()) {
                 case STDOUT:
+                case RAW:
                     if (stdout != null) {
                         stdout.write(frame.getPayload());
                         stdout.flush();

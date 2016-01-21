@@ -5,17 +5,27 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.InputStream;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.ExecStartCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.Frame;
 
+@JsonInclude(Include.NON_NULL)
 public class ExecStartCmdImpl extends AbstrAsyncDockerCmd<ExecStartCmd, Frame> implements ExecStartCmd {
 
+    @JsonIgnore
     private String execId;
 
-    private Boolean detach, tty;
+    @JsonProperty("Detach")
+    private Boolean detach;
 
+    @JsonProperty("Tty")
+    private Boolean tty;
+
+    @JsonIgnore
     private InputStream stdin;
 
     public ExecStartCmdImpl(ExecStartCmd.Exec exec, String execId) {
