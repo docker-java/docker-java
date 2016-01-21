@@ -1,6 +1,11 @@
 Change Log
 ===
 
+2.2.0-SNAPSHOT
+---
+
+* [#430] (https://github.com/docker-java/docker-java/pull/430) Fix ExecStartCmd failure (backported from 3.0.0)
+
 v2.1.4
 ---
 
