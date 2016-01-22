@@ -8,6 +8,7 @@ Notes
 * The upcoming release will contain multiple API breaking changes therefore the major version switch. It will support a subset of v.1.21 of the docker remote API. It also includes an experimental netty based implementation of `DockerCmdExecFactory` that probably will replace the current jersey/httpclient based one in a later release.
 
 All changes
+* [#430] (https://github.com/docker-java/docker-java/pull/430) Fix ExecStartCmd failure 
 * [#426] (https://github.com/docker-java/docker-java/pull/426) Refactored filters API 
 * [#425] (https://github.com/docker-java/docker-java/pull/425) Implement Network API
 * [#410] (https://github.com/docker-java/docker-java/pull/410) Support for build-args of docker build 
