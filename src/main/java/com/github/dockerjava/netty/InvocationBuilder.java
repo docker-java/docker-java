@@ -18,10 +18,11 @@ import io.netty.handler.codec.http.LastHttpContent;
 import io.netty.handler.codec.json.JsonObjectDecoder;
 import io.netty.handler.stream.ChunkedStream;
 import io.netty.handler.stream.ChunkedWriteHandler;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -140,8 +141,6 @@ public class InvocationBuilder {
 
         Channel channel = getChannel();
 
-        initCallback(channel, resultCallback);
-
         JsonResponseCallbackHandler<T> jsonResponseHandler = new JsonResponseCallbackHandler<T>(typeReference,
                 resultCallback);
 
@@ -215,13 +214,21 @@ public class InvocationBuilder {
         return callback.awaitResult();
     }
 
-    public void post(final Object entity, final InputStream stdin, ResultCallback<Frame> resultCallback) {
+    public void post(final Object entity, final InputStream stdin, final ResultCallback<Frame> resultCallback) {
 
         HttpRequestProvider requestProvider = httpPostRequestProvider(entity);
 
         FramedResponseStreamHandler streamHandler = new FramedResponseStreamHandler(resultCallback);
 
         final Channel channel = getChannel();
+
+        // result callback's close() method must be called when the servers closes the connection
+        channel.closeFuture().addListener(new GenericFutureListener<Future<? super Void>>() {
+            @Override
+            public void operationComplete(Future<? super Void> future) throws Exception {
+                resultCallback.onComplete();
+            }
+        });
 
         HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, resultCallback);
 
@@ -284,8 +291,6 @@ public class InvocationBuilder {
 
         Channel channel = getChannel();
 
-        initCallback(channel, resultCallback);
-
         JsonResponseCallbackHandler<T> jsonResponseHandler = new JsonResponseCallbackHandler<T>(typeReference,
                 resultCallback);
 
@@ -298,21 +303,6 @@ public class InvocationBuilder {
         sendRequest(requestProvider, channel);
 
         return;
-    }
-
-    private <T> void initCallback(final Channel channel, final ResultCallback<T> resultCallback) {
-        Closeable closeable = new Closeable() {
-            @Override
-            public void close() throws IOException {
-                try {
-                    channel.close().sync();
-                } catch (InterruptedException e) {
-                    resultCallback.onError(e);
-                }
-            }
-        };
-
-        resultCallback.onStart(closeable);
     }
 
     private HttpRequest prepareDeleteRequest(String uri) {
@@ -406,8 +396,6 @@ public class InvocationBuilder {
 
         Channel channel = getChannel();
 
-        initCallback(channel, resultCallback);
-
         JsonResponseCallbackHandler<T> jsonResponseHandler = new JsonResponseCallbackHandler<T>(typeReference,
                 resultCallback);
 
@@ -441,8 +429,6 @@ public class InvocationBuilder {
         Channel channel = getChannel();
 
         ResponseCallback<InputStream> resultCallback = new ResponseCallback<InputStream>();
-
-        initCallback(channel, resultCallback);
 
         HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, resultCallback);
 

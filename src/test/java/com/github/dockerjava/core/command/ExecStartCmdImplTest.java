@@ -81,7 +81,7 @@ public class ExecStartCmdImplTest extends AbstractDockerClientTest {
         ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
                 .withAttachStdout(true).withCmd("touch", "/execStartTest.log").exec();
         dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false).withTty(true)
-                .exec(new ExecStartResultCallback(System.out, System.err));
+                .exec(new ExecStartResultCallback(System.out, System.err)).awaitCompletion();
 
         InputStream response = dockerClient.copyArchiveFromContainerCmd(container.getId(), "/execStartTest.log").exec();
         Boolean bytesAvailable = response.available() > 0;
