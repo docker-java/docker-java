@@ -58,11 +58,8 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
 
         ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
                 .withAttachStdout(true).withCmd("touch", "/execStartTest.log").exec();
-        dockerClient.execStartCmd(execCreateCmdResponse.getId()).exec(
-                new ExecStartResultCallback(System.out, System.err));
-
-        LOG.info("Wait for 5 seconds");
-        Thread.sleep(5000);
+        dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false)
+                .exec(new ExecStartResultCallback(System.out, System.err)).awaitCompletion();
 
         InputStream response = dockerClient.copyArchiveFromContainerCmd(container.getId(), "/execStartTest.log").exec();
 
@@ -88,8 +85,8 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
 
         ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
                 .withAttachStdout(true).withCmd("touch", "/execStartTest.log").exec();
-        dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false).withTty(true)
-                .exec(new ExecStartResultCallback(System.out, System.err));
+        dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false)
+                .exec(new ExecStartResultCallback(System.out, System.err)).awaitCompletion();
 
         InputStream response = dockerClient.copyArchiveFromContainerCmd(container.getId(), "/execStartTest.log").exec();
         Boolean bytesAvailable = response.available() > 0;
@@ -141,7 +138,7 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
 
         ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
                 .withAttachStdout(true).withAttachStdin(false).withCmd("/bin/sh").exec();
-        dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false).withTty(true).withStdIn(stdin)
+        dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false).withStdIn(stdin)
                 .exec(new ExecStartResultCallback(stdout, System.err)).awaitCompletion(5, TimeUnit.SECONDS);
 
         assertEquals(stdout.toString(), "");

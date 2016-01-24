@@ -27,6 +27,8 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ResultCallbackTemplate.class);
 
+    private final CountDownLatch started = new CountDownLatch(1);
+
     private final CountDownLatch completed = new CountDownLatch(1);
 
     private Closeable stream;
@@ -39,6 +41,7 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
     public void onStart(Closeable stream) {
         this.stream = stream;
         this.closed = false;
+        started.countDown();
     }
 
     @Override
@@ -95,6 +98,27 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
     @SuppressWarnings("unchecked")
     public RC_T awaitCompletion(long timeout, TimeUnit timeUnit) throws InterruptedException {
         completed.await(timeout, timeUnit);
+        return (RC_T) this;
+    }
+
+    /**
+     * Blocks until {@link ResultCallback#onStart()} was called. {@link ResultCallback#onStart()} is called when the
+     * request was processed on the server side and the response is incoming.
+     */
+    @SuppressWarnings("unchecked")
+    public RC_T awaitStarted() throws InterruptedException {
+        started.await();
+        return (RC_T) this;
+    }
+
+    /**
+     * Blocks until {@link ResultCallback#onStart()} was called or the given timeout occurs.
+     * {@link ResultCallback#onStart()} is called when the request was processed on the server side and the response is
+     * incoming.
+     */
+    @SuppressWarnings("unchecked")
+    public RC_T awaitStarted(long timeout, TimeUnit timeUnit) throws InterruptedException {
+        started.await(timeout, timeUnit);
         return (RC_T) this;
     }
 

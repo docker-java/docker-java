@@ -54,7 +54,7 @@ public class ExecStartResultCallback extends ResultCallbackTemplate<ExecStartRes
                 onError(e);
             }
 
+            LOGGER.debug(frame.toString());
         }
-        LOGGER.debug(frame.toString());
     }
 }

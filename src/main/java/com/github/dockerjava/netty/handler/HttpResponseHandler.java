@@ -11,6 +11,7 @@ import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.LastHttpContent;
 
+import java.io.Closeable;
 import java.nio.charset.Charset;
 
 import com.github.dockerjava.api.async.ResultCallback;
@@ -24,8 +25,8 @@ import com.github.dockerjava.api.exception.NotModifiedException;
 import com.github.dockerjava.api.exception.UnauthorizedException;
 
 /**
- * Handler that is responsible to handle an incoming {@link HttpResponse}. It evaluates the status code and
- * triggers the appropriate lifecycle methods at the passed {@link ResultCallback}.
+ * Handler that is responsible to handle an incoming {@link HttpResponse}. It evaluates the status code and triggers the
+ * appropriate lifecycle methods at the passed {@link ResultCallback}.
  *
  * @author Marcus Linke
  */
@@ -46,10 +47,18 @@ public class HttpResponseHandler extends SimpleChannelInboundHandler<HttpObject>
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, HttpObject msg) throws Exception {
+    protected void channelRead0(final ChannelHandlerContext ctx, HttpObject msg) throws Exception {
         if (msg instanceof HttpResponse) {
 
             response = (HttpResponse) msg;
+
+            resultCallback.onStart(new Closeable() {
+                @Override
+                public void close() {
+                    ctx.channel().close();
+                }
+            });
+
         } else if (msg instanceof HttpContent) {
 
             HttpContent content = (HttpContent) msg;
