@@ -140,17 +140,19 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         String container1Name = UUID.randomUUID().toString();
 
+        Bind bind1 = new Bind("/src/webapp1", volume1);
+        Bind bind2 = new Bind("/src/webapp2", volume2);
+
         // create a running container with bind mounts
         CreateContainerResponse container1 = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
                 .withName(container1Name)
-                .withBinds(new Bind("/src/webapp1", volume1), new Bind("/src/webapp2", volume2)).exec();
+                .withBinds(bind1, bind2).exec();
         LOG.info("Created container1 {}", container1.toString());
-
-        dockerClient.startContainerCmd(container1.getId()).exec();
-        LOG.info("Started container1 {}", container1.toString());
 
         InspectContainerResponse inspectContainerResponse1 = dockerClient.inspectContainerCmd(container1.getId())
                 .exec();
+
+        assertThat(Arrays.asList(inspectContainerResponse1.getHostConfig().getBinds()), containsInAnyOrder(bind1, bind2));
 
         assertThat(inspectContainerResponse1, mountedVolumes(containsInAnyOrder(volume1, volume2)));
 
