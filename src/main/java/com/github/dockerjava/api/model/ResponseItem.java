@@ -1,15 +1,14 @@
 package com.github.dockerjava.api.model;
 
-import java.io.Serializable;
-
-import javax.annotation.CheckForNull;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.core.RemoteApiVersion;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
+import javax.annotation.CheckForNull;
+import java.io.Serializable;
 
 /**
  * Represents a pull response stream item
@@ -47,6 +46,12 @@ public class ResponseItem implements Serializable {
     @Deprecated
     @JsonProperty("error")
     private String error;
+
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_22}
+     */
+    @JsonProperty("aux")
+    private AuxDetail aux;
 
     @CheckForNull
     public String getStream() {
@@ -95,6 +100,14 @@ public class ResponseItem implements Serializable {
     }
 
     /**
+     * @see #aux
+     */
+    @CheckForNull
+    public AuxDetail getAux() {
+        return aux;
+    }
+
+    /**
      * Returns whether the error field indicates an error
      *
      * @returns true: the error field indicates an error, false: the error field doesn't indicate an error
@@ -135,7 +148,7 @@ public class ResponseItem implements Serializable {
 
         @Override
         public String toString() {
-            return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE).toString();
+            return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
         }
     }
 
@@ -161,12 +174,46 @@ public class ResponseItem implements Serializable {
 
         @Override
         public String toString() {
-            return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE).toString();
+            return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        }
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class AuxDetail implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        @JsonProperty("Size")
+        private Integer size;
+
+        @JsonProperty("Tag")
+        private String tag;
+
+        @JsonProperty("Digest")
+        private String digest;
+
+        @CheckForNull
+        public Integer getSize() {
+            return size;
+        }
+
+        @CheckForNull
+        public String getTag() {
+            return tag;
+        }
+
+        @CheckForNull
+        public String getDigest() {
+            return digest;
+        }
+
+        @Override
+        public String toString() {
+            return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
         }
     }
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE).toString();
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }
