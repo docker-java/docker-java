@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 /**
  * Represents a pull response stream item
  */
-@JsonIgnoreProperties(ignoreUnknown = false)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PullResponseItem extends ResponseItem {
 
     private static final long serialVersionUID = -2575482839766823293L;

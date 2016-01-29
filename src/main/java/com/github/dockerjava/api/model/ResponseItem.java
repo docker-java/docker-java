@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Represents a pull response stream item
  */
-@JsonIgnoreProperties(ignoreUnknown = false)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ResponseItem implements Serializable {
 
     private static final long serialVersionUID = -5187169652557467828L;
@@ -105,7 +105,7 @@ public class ResponseItem implements Serializable {
         return getError() != null || getErrorDetail() != null;
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = false)
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class ProgressDetail implements Serializable {
         private static final long serialVersionUID = -1954994695645715264L;
 
@@ -139,7 +139,7 @@ public class ResponseItem implements Serializable {
         }
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = false)
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class ErrorDetail implements Serializable {
         private static final long serialVersionUID = -9136704865403084083L;
 
