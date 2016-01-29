@@ -2,6 +2,7 @@ package com.github.dockerjava.api.model;
 
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -17,7 +18,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
 public class Container {
-
     @JsonProperty("Command")
     private String command;
 
@@ -41,6 +41,11 @@ public class Container {
 
     @JsonProperty("Status")
     private String status;
+
+    @JsonIgnore
+    private String name;
+    @JsonIgnore
+    private String host;
 
     public String getId() {
         return id;
@@ -72,6 +77,39 @@ public class Container {
 
     public String[] getNames() {
         return names;
+    }
+
+    /**
+     * example for a container name in swarm could be "swarm-host-01/loving_swanson"
+     * we want only "loving_swanson"
+     * the result is cached in this.name and this.host
+     * @return String
+     */
+    @JsonIgnore
+    public String getNameInSwarm() {
+        if (name == null) {
+            String[] split = findCorrectNameInSwarm().split("/");
+            if (split.length == 3) {
+                host = split[1];
+                name = split[2];
+            } else {
+                name = split[1];
+            }
+        }
+        return name;
+    }
+
+    /**
+     * see getNameInSwarm, is splits host from containername
+     * @return String|null
+     */
+    @JsonIgnore
+    public String getSwarmHost() {
+        if (name == null) {
+            //used to split host from name and vice versa + cache the result
+            getNameInSwarm();
+        }
+        return host;
     }
 
     @Override
@@ -114,5 +152,29 @@ public class Container {
         public String toString() {
             return ToStringBuilder.reflectionToString(this);
         }
+    }
+
+    @JsonIgnore
+    private String findCorrectNameInSwarm() {
+
+        //if a container is linked to another, it has multiple names
+        //for example: "swarm-node-01/auth/etcd" and "swarm-node-01/etcd"
+        //we search for that one, that only has one / in it, thats the "root" container
+        //in our example => "etcd"
+        //all other names are the alias-names in the linked containers
+
+        //no other containers are linked to us, so just return the first one
+        if (getNames().length == 1) {
+            return getNames()[0];
+        }
+
+        for(String name: getNames()) {
+            if (name.split("/").length <= 3) {
+                return name;
+            }
+        }
+
+        //fallback
+        return getNames()[0];
     }
 }

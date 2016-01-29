@@ -13,6 +13,8 @@ import java.util.Properties;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 public class DockerClientConfigTest {
 
@@ -27,7 +29,7 @@ public class DockerClientConfigTest {
     public void string() throws Exception {
         assertEquals(
                 EXAMPLE_CONFIG.toString(),
-                "DockerClientConfig{uri=http://foo, version='{UNKNOWN_VERSION}', username='baz', password='qux', email='blam', serverAddress='wham', dockerCfgPath='flam', sslConfig='LocalDirectorySSLConfig{dockerCertPath=flim}'}");
+                "DockerClientConfig{uri=http://foo, version='{UNKNOWN_VERSION}', username='baz', password='qux', email='blam', serverAddress='wham', dockerCfgPath='flam', sslConfig='LocalDirectorySSLConfig{dockerCertPath=flim}', isSwarmEndpoint=false}");
     }
 
     @Test
@@ -49,6 +51,19 @@ public class DockerClientConfigTest {
 
         // then the URL is that value with "http" instead of "tcp"
         assertEquals(config.getUri(), URI.create("http://baz:8768"));
+    }
+
+    @Test
+    public void environmentSwarmEndpoint() throws Exception {
+        // given docker host in env
+        Map<String, String> env = new HashMap<String, String>();
+        env.put("DOCKER_SWARM", "true");
+
+        // when you build a config
+        DockerClientConfig config = buildConfig(env, new Properties());
+
+        // then the URL is that value with "http" instead of "tcp"
+        assertTrue(config.isSwarmEndpoint());
     }
 
     @Test
@@ -134,6 +149,7 @@ public class DockerClientConfigTest {
         env.put("DOCKER_CFG_PATH", "flam");
         env.put("DOCKER_READ_TIMEOUT", "877");
         env.put("DOCKER_LOGGING_FILTER_ENABLED", "false");
+        env.put("DOCKER_SWARM", "false");
 
         // when you build a config
         DockerClientConfig config = buildConfig(env, new Properties());
@@ -164,6 +180,7 @@ public class DockerClientConfigTest {
         assertEquals(config.getVersion(), RemoteApiVersion.unknown());
         assertEquals(config.getDockerCfgPath(), "someHomeDir/.dockercfg");
         assertEquals(((LocalDirectorySSLConfig) config.getSslConfig()).getDockerCertPath(), "someHomeDir/.docker");
+        assertFalse(config.isSwarmEndpoint());
     }
 
     @Test
@@ -179,6 +196,7 @@ public class DockerClientConfigTest {
         systemProperties.setProperty("docker.io.serverAddress", "wham");
         systemProperties.setProperty("docker.io.dockerCertPath", "flim");
         systemProperties.setProperty("docker.io.dockerCfgPath", "flam");
+        systemProperties.setProperty("docker.io.isSwarmEndpoint", "0");
 
         // when you build new config
         DockerClientConfig config = buildConfig(Collections.<String, String> emptyMap(), systemProperties);

@@ -3,6 +3,7 @@ package com.github.dockerjava.jaxrs;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
+import com.github.dockerjava.api.model.SwarmInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +24,9 @@ public class InfoCmdExec extends AbstrSyncDockerCmdExec<InfoCmd, Info> implement
         WebTarget webResource = getBaseResource().path("/info");
 
         LOGGER.trace("GET: {}", webResource);
+        if (isSwarmEndpoint()) {
+            return webResource.request().accept(MediaType.APPLICATION_JSON).get(SwarmInfo.class);
+        }
         return webResource.request().accept(MediaType.APPLICATION_JSON).get(Info.class);
     }
 

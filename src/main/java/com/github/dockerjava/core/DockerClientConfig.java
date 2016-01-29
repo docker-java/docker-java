@@ -45,6 +45,8 @@ public class DockerClientConfig implements Serializable {
 
     private static final String DOCKER_IO_DOCKER_CFG_PATH_PROPERTY = "docker.io.dockerCfgPath";
 
+    private static final String DOCKER_IO_IS_SWARM_ENDPOINT = "docker.io.isSwarmEndpoint";
+
     /**
      * A map from the environment name to the interval name.
      */
@@ -60,6 +62,7 @@ public class DockerClientConfig implements Serializable {
         m.put("DOCKER_SERVER_ADDRESS", DOCKER_IO_SERVER_ADDRESS_PROPERTY);
         m.put(DOCKER_CERT_PATH_PROPERTY, DOCKER_IO_DOCKER_CERT_PATH_PROPERTY);
         m.put("DOCKER_CFG_PATH", DOCKER_IO_DOCKER_CFG_PATH_PROPERTY);
+        m.put("DOCKER_SWARM", DOCKER_IO_IS_SWARM_ENDPOINT);
         ENV_NAME_TO_IO_NAME = Collections.unmodifiableMap(m);
     }
 
@@ -73,8 +76,15 @@ public class DockerClientConfig implements Serializable {
 
     private final SSLConfig sslConfig;
 
+    private final boolean isSwarmEndpoint;
+
     DockerClientConfig(URI uri, String version, String username, String password, String email, String serverAddress,
-            String dockerCfgPath, SSLConfig sslConfig) {
+                       String dockerCfgPath, SSLConfig sslConfig) {
+        this(uri, version, username, password, email, serverAddress, dockerCfgPath, sslConfig, false);
+    }
+
+    DockerClientConfig(URI uri, String version, String username, String password, String email, String serverAddress,
+            String dockerCfgPath, SSLConfig sslConfig, boolean isSwarmEndpoint) {
         this.uri = uri;
         this.version = RemoteApiVersion.parseConfigWithDefault(version);
         this.username = username;
@@ -83,6 +93,7 @@ public class DockerClientConfig implements Serializable {
         this.serverAddress = serverAddress;
         this.dockerCfgPath = dockerCfgPath;
         this.sslConfig = sslConfig;
+        this.isSwarmEndpoint = isSwarmEndpoint;
     }
 
     private static Properties loadIncludedDockerProperties(Properties systemProperties) {
@@ -181,7 +192,7 @@ public class DockerClientConfig implements Serializable {
         for (String key : new String[] { DOCKER_IO_URL_PROPERTY, DOCKER_IO_VERSION_PROPERTY,
                 DOCKER_IO_USERNAME_PROPERTY, DOCKER_IO_PASSWORD_PROPERTY, DOCKER_IO_EMAIL_PROPERTY,
                 DOCKER_IO_SERVER_ADDRESS_PROPERTY, DOCKER_IO_DOCKER_CERT_PATH_PROPERTY,
-                DOCKER_IO_DOCKER_CFG_PATH_PROPERTY, }) {
+                DOCKER_IO_DOCKER_CFG_PATH_PROPERTY, DOCKER_IO_IS_SWARM_ENDPOINT }) {
             if (systemProperties.containsKey(key)) {
                 overriddenProperties.setProperty(key, systemProperties.getProperty(key));
             }
@@ -206,6 +217,10 @@ public class DockerClientConfig implements Serializable {
 
     public URI getUri() {
         return uri;
+    }
+
+    public boolean isSwarmEndpoint() {
+        return isSwarmEndpoint;
     }
 
     public void setUri(URI uri) {
@@ -319,7 +334,9 @@ public class DockerClientConfig implements Serializable {
             return false;
         if (version != null ? !version.equals(that.version) : that.version != null)
             return false;
-
+        if (isSwarmEndpoint != that.isSwarmEndpoint) {
+            return false;
+        }
         return true;
     }
 
@@ -333,6 +350,7 @@ public class DockerClientConfig implements Serializable {
         result = 31 * result + (serverAddress != null ? serverAddress.hashCode() : 0);
         result = 31 * result + (dockerCfgPath != null ? dockerCfgPath.hashCode() : 0);
         result = 31 * result + (sslConfig != null ? sslConfig.hashCode() : 0);
+        result = 31 * result + (isSwarmEndpoint ? 1 : 0);
         return result;
     }
 
@@ -340,7 +358,8 @@ public class DockerClientConfig implements Serializable {
     public String toString() {
         return "DockerClientConfig{" + "uri=" + uri + ", version='" + version + '\'' + ", username='" + username + '\''
                 + ", password='" + password + '\'' + ", email='" + email + '\'' + ", serverAddress='" + serverAddress
-                + '\'' + ", dockerCfgPath='" + dockerCfgPath + '\'' + ", sslConfig='" + sslConfig + '\'' + '}';
+                + '\'' + ", dockerCfgPath='" + dockerCfgPath + '\'' + ", sslConfig='" + sslConfig + '\'' +
+                ", isSwarmEndpoint=" + (isSwarmEndpoint ? "true" : "false") + "}";
     }
 
     public static class DockerClientConfigBuilder {
@@ -350,6 +369,8 @@ public class DockerClientConfig implements Serializable {
 
         private SSLConfig sslConfig;
 
+        private boolean isSwarmEndpoint = false;
+
         /**
          * This will set all fields in the builder to those contained in the Properties object. The Properties object
          * should contain the following docker.io.* keys: url, version, username, password, email, dockerCertPath, and
@@ -357,6 +378,11 @@ public class DockerClientConfig implements Serializable {
          * to 1000 and true, respectively.
          */
         public DockerClientConfigBuilder withProperties(Properties p) {
+
+            String swarmProp = p.getProperty(DOCKER_IO_IS_SWARM_ENDPOINT);
+            boolean isSwarmEndpoint = swarmProp != null && (swarmProp.equalsIgnoreCase("true") || swarmProp.equalsIgnoreCase("1"));
+
+
             return withUri(p.getProperty(DOCKER_IO_URL_PROPERTY))
                     .withVersion(p.getProperty(DOCKER_IO_VERSION_PROPERTY))
                     .withUsername(p.getProperty(DOCKER_IO_USERNAME_PROPERTY))
@@ -364,13 +390,23 @@ public class DockerClientConfig implements Serializable {
                     .withEmail(p.getProperty(DOCKER_IO_EMAIL_PROPERTY))
                     .withServerAddress(p.getProperty(DOCKER_IO_SERVER_ADDRESS_PROPERTY))
                     .withDockerCertPath(p.getProperty(DOCKER_IO_DOCKER_CERT_PATH_PROPERTY))
-                    .withDockerCfgPath(p.getProperty(DOCKER_IO_DOCKER_CFG_PATH_PROPERTY));
+                    .withDockerCfgPath(p.getProperty(DOCKER_IO_DOCKER_CFG_PATH_PROPERTY))
+                    .withSwarmEndpoint(isSwarmEndpoint);
         }
 
         public final DockerClientConfigBuilder withUri(String uri) {
             checkNotNull(uri, "uri was not specified");
             this.uri = URI.create(uri);
             return this;
+        }
+
+        public final DockerClientConfigBuilder withSwarmEndpoint(boolean isSwarm) {
+            this.isSwarmEndpoint = isSwarm;
+            return this;
+        }
+
+        public final DockerClientConfigBuilder withSwarmEndpoint() {
+            return withSwarmEndpoint(true);
         }
 
         public final DockerClientConfigBuilder withVersion(String version) {
@@ -417,7 +453,7 @@ public class DockerClientConfig implements Serializable {
 
         public DockerClientConfig build() {
             return new DockerClientConfig(uri, version, username, password, email, serverAddress, dockerCfgPath,
-                    sslConfig);
+                    sslConfig, isSwarmEndpoint);
         }
     }
 

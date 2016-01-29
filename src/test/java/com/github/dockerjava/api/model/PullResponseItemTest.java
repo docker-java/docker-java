@@ -38,6 +38,14 @@ public class PullResponseItemTest {
     }
 
     @Test
+    public void pullSwarmImage() throws IOException {
+        PullResponseItem response = testRoundTrip(PullResponseJSONSamples.pullImageResponse_swarmImage,
+                PullResponseItem.class);
+        assertTrue(response.isPullSuccessIndicated());
+        assertFalse(response.isErrorIndicated());
+    }
+
+    @Test
     public void pullUpToDate() throws IOException {
         PullResponseItem response = testRoundTrip(PullResponseJSONSamples.pullImageResponse_upToDate,
                 PullResponseItem.class);

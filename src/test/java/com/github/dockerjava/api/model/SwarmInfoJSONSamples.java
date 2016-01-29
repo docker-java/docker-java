@@ -18,12 +18,12 @@ package com.github.dockerjava.api.model;
 import com.github.dockerjava.test.serdes.JSONResourceRef;
 
 /**
- * Enumeration for the available pull response statuses.
+ * Enumeration for the available info response statuses.
  *
- * @author Zach Marshall
+ * @author Michael Freund
  */
-public enum PullResponseJSONSamples implements JSONResourceRef {
-    pullImageResponse_legacy, pullImageResponse_error, pullImageResponse_newerImage, pullImageResponse_upToDate, pullImageResponse_swarmImage;
+public enum SwarmInfoJSONSamples implements JSONResourceRef {
+    infoResponse_swarm;
 
     @Override
     public String getFileName() {
@@ -32,6 +32,6 @@ public enum PullResponseJSONSamples implements JSONResourceRef {
 
     @Override
     public Class<?> getResourceClass() {
-        return PullResponseJSONSamples.class;
+        return SwarmInfoJSONSamples.class;
     }
 }

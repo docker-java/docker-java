@@ -70,4 +70,7 @@ public abstract class AbstrDockerCmdExec {
         return webTarget;
     }
 
+    protected boolean isSwarmEndpoint() {
+        return dockerClientConfig.isSwarmEndpoint();
+    }
 }
