@@ -51,6 +51,7 @@ import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
+import com.github.dockerjava.core.LocalDirectorySSLConfig;
 import com.github.dockerjava.netty.exec.AttachContainerCmdExec;
 import com.github.dockerjava.netty.exec.AuthCmdExec;
 import com.github.dockerjava.netty.exec.BuildImageCmdExec;
@@ -99,6 +100,7 @@ import com.github.dockerjava.netty.exec.TopContainerCmdExec;
 import com.github.dockerjava.netty.exec.UnpauseContainerCmdExec;
 import com.github.dockerjava.netty.exec.VersionCmdExec;
 import com.github.dockerjava.netty.exec.WaitContainerCmdExec;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -113,11 +115,13 @@ import io.netty.channel.unix.UnixChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslHandler;
+
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLParameters;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -157,6 +161,8 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
     private NettyInitializer nettyInitializer;
 
+    private SSLContext sslContext = null;
+
     private ChannelProvider channelProvider = new ChannelProvider() {
         @Override
         public Channel getChannel() {
@@ -173,11 +179,11 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
         bootstrap = new Bootstrap();
 
-        String scheme = dockerClientConfig.getUri().getScheme();
+        String scheme = dockerClientConfig.getDockerHost().getScheme();
 
         if ("unix".equals(scheme)) {
             nettyInitializer = new UnixDomainSocketInitializer();
-        } else if (scheme.startsWith("http")) {
+        } else if ("tcp".equals(scheme)) {
             nettyInitializer = new InetSocketInitializer();
         }
 
@@ -248,8 +254,8 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
         @Override
         public Channel connect(Bootstrap bootstrap) throws InterruptedException {
-            String host = dockerClientConfig.getUri().getHost();
-            int port = dockerClientConfig.getUri().getPort();
+            String host = dockerClientConfig.getDockerHost().getHost();
+            int port = dockerClientConfig.getDockerHost().getPort();
 
             if (port == -1) {
                 throw new RuntimeException("no port configured for " + host);
@@ -257,7 +263,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
             Channel channel = bootstrap.connect(host, port).sync().channel();
 
-            if ("https".equals(dockerClientConfig.getUri().getScheme())) {
+            if (dockerClientConfig.getDockerTlsVerify()) {
                 final SslHandler ssl = initSsl(dockerClientConfig);
 
                 if (ssl != null) {
@@ -272,10 +278,12 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
             SslHandler ssl = null;
 
             try {
-                String host = dockerClientConfig.getUri().getHost();
-                int port = dockerClientConfig.getUri().getPort();
+                String host = dockerClientConfig.getDockerHost().getHost();
+                int port = dockerClientConfig.getDockerHost().getPort();
 
-                SSLContext sslContext = dockerClientConfig.getSslConfig().getSSLContext();
+                if(sslContext == null) {
+                    sslContext = new LocalDirectorySSLConfig(dockerClientConfig.getDockerCertPath()).getSSLContext();
+                }
 
                 SSLEngine engine = sslContext.createSSLEngine(host, port);
                 engine.setUseClientMode(true);
@@ -551,6 +559,13 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
         eventLoopGroup.shutdownGracefully();
     }
+
+    @Override
+    public DockerCmdExecFactory withSSLContext(SSLContext sslContext) {
+        this.sslContext = sslContext;
+        return this;
+    }
+
 
     private WebTarget getBaseResource() {
         return new WebTarget(channelProvider);

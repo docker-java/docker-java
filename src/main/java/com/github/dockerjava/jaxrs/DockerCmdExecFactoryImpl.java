@@ -2,6 +2,33 @@ package com.github.dockerjava.jaxrs;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.ProxySelector;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+
+import javax.net.ssl.SSLContext;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.ClientRequestFilter;
+import javax.ws.rs.client.ClientResponseFilter;
+import javax.ws.rs.client.WebTarget;
+
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.glassfish.jersey.CommonProperties;
+import org.glassfish.jersey.apache.connector.ApacheClientProperties;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.ClientProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
@@ -54,34 +81,11 @@ import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.LocalDirectorySSLConfig;
 import com.github.dockerjava.jaxrs.connector.ApacheConnectorProvider;
 import com.github.dockerjava.jaxrs.filter.JsonClientFilter;
 import com.github.dockerjava.jaxrs.filter.ResponseStatusExceptionFilter;
 import com.github.dockerjava.jaxrs.filter.SelectiveLoggingFilter;
-import org.apache.http.config.RegistryBuilder;
-import org.apache.http.conn.socket.ConnectionSocketFactory;
-import org.apache.http.conn.socket.PlainConnectionSocketFactory;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.glassfish.jersey.CommonProperties;
-import org.glassfish.jersey.apache.connector.ApacheClientProperties;
-import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.client.ClientProperties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.net.ssl.SSLContext;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.client.ClientResponseFilter;
-import javax.ws.rs.client.WebTarget;
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.net.ProxySelector;
-import java.net.URI;
-import java.util.List;
 
 //import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 // see https://github.com/docker-java/docker-java/issues/196
@@ -107,6 +111,8 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     private ClientResponseFilter[] clientResponseFilters = null;
 
     private DockerClientConfig dockerClientConfig;
+
+    SSLContext sslContext = null;
 
     @Override
     public void init(DockerClientConfig dockerClientConfig) {
@@ -146,15 +152,20 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
             }
         }
 
-        URI originalUri = dockerClientConfig.getUri();
+        URI originalUri = dockerClientConfig.getDockerHost();
 
-        SSLContext sslContext = null;
+
         String protocol = null;
 
-        if (dockerClientConfig.getSslConfig() != null) {
+        if (dockerClientConfig.getDockerTlsVerify()) {
             protocol = "https";
+
             try {
-                sslContext = dockerClientConfig.getSslConfig().getSSLContext();
+
+                if(sslContext == null) {
+                    sslContext = new LocalDirectorySSLConfig(dockerClientConfig.getDockerCertPath()).getSSLContext();
+                }
+
             } catch (Exception ex) {
                 throw new DockerClientException("Error in SSL Configuration", ex);
             }
@@ -163,8 +174,13 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         }
 
         if (originalUri.getScheme().equals("unix")) {
-            dockerClientConfig.setUri(UnixConnectionSocketFactory.sanitizeUri(originalUri));
+            dockerClientConfig.setDockerHost(UnixConnectionSocketFactory.sanitizeUri(originalUri));
         } else {
+            try {
+                originalUri = new URI(originalUri.toString().replaceFirst("tcp", protocol));
+            } catch (URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
             configureProxy(clientConfig, protocol);
         }
 
@@ -190,12 +206,12 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
         client = clientBuilder.build();
 
-        baseResource = client.target(dockerClientConfig.getUri()).path(dockerClientConfig.getVersion().asWebPathPart());
+        baseResource = client.target(originalUri.toString()).path(dockerClientConfig.getApiVersion().asWebPathPart());
     }
 
     private void configureProxy(ClientConfig clientConfig, String protocol) {
 
-        List<Proxy> proxies = ProxySelector.getDefault().select(dockerClientConfig.getUri());
+        List<Proxy> proxies = ProxySelector.getDefault().select(dockerClientConfig.getDockerHost());
 
         for (Proxy proxy : proxies) {
             InetSocketAddress address = (InetSocketAddress) proxy.address();
@@ -488,6 +504,12 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     public void close() throws IOException {
         checkNotNull(client, "Factory not initialized. You probably forgot to call init()!");
         client.close();
+    }
+
+    @Override
+    public DockerCmdExecFactoryImpl withSSLContext(SSLContext sslContext) {
+        this.sslContext = sslContext;
+        return this;
     }
 
     public DockerCmdExecFactoryImpl withReadTimeout(Integer readTimeout) {
