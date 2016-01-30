@@ -81,7 +81,11 @@ public class ContainerConfig {
 
     @JsonIgnore
     public ExposedPort[] getExposedPorts() {
-        return exposedPorts.getExposedPorts();
+        if (exposedPorts == null) {
+            return new ExposedPort[0];
+        } else {
+            return exposedPorts.getExposedPorts();
+        }
     }
 
     public boolean isNetworkDisabled() {
