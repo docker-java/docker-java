@@ -3,6 +3,8 @@ package com.github.dockerjava.api.command;
 import java.io.Closeable;
 import java.io.IOException;
 
+import javax.net.ssl.SSLContext;
+
 import com.github.dockerjava.core.DockerClientConfig;
 
 public interface DockerCmdExecFactory extends Closeable {
@@ -104,6 +106,8 @@ public interface DockerCmdExecFactory extends Closeable {
     public ConnectToNetworkCmd.Exec createConnectToNetworkCmdExec();
 
     public DisconnectFromNetworkCmd.Exec createDisconnectFromNetworkCmdExec();
+
+    public DockerCmdExecFactory withSSLContext(SSLContext sslContext);
 
     @Override
     public void close() throws IOException;
