@@ -490,6 +490,14 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         client.close();
     }
 
+    public DockerCmdExecFactoryImpl withDockerCmdExecConfig(DockerCmdExecConfig newConfig) {
+        this.readTimeout = newConfig.getReadTimeout();
+        this.connectTimeout = newConfig.getConnectTimeout();
+        this.maxTotalConnections = newConfig.getMaxTotalConnections();
+        this.maxPerRouteConnections = newConfig.getMaxPerRouteConnections();
+        return this;
+    }
+
     public DockerCmdExecFactoryImpl withReadTimeout(Integer readTimeout) {
         this.readTimeout = readTimeout;
         return this;
