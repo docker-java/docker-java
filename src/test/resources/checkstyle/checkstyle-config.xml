@@ -155,6 +155,16 @@
         <!-- FIXME check with @marcuslinke -->
         <!--<module name="VisibilityModifier"/>-->
 
+        <!-- Miscellaneous other checks.                   -->
+        <!-- See http://checkstyle.sf.net/config_misc.html -->
+        <module name="ArrayTypeStyle"/>
+        <module name="TodoComment">
+            <property name="format" value="(TODO)|(FIXME)"/>
+            <property name="severity" value="info"/>
+        </module>
+        <!--<module name="FinalParameters"/>-->
+        <module name="UpperEll"/>
+
     </module>
 
 </module>
