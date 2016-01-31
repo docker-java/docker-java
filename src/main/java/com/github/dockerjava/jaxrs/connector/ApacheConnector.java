@@ -184,13 +184,13 @@ class ApacheConnector implements Connector {
 
     private final static Logger LOGGER = Logger.getLogger(ApacheConnector.class.getName());
 
-    private static final VersionInfo vi;
+    private static final VersionInfo VERSION_INFO;
 
-    private static final String release;
+    private static final String RELEASE;
 
     static {
-        vi = VersionInfo.loadVersionInfo("org.apache.http.client", HttpClientBuilder.class.getClassLoader());
-        release = (vi != null) ? vi.getRelease() : VersionInfo.UNAVAILABLE;
+        VERSION_INFO = VersionInfo.loadVersionInfo("org.apache.http.client", HttpClientBuilder.class.getClassLoader());
+        RELEASE = (VERSION_INFO != null) ? VERSION_INFO.getRelease() : VersionInfo.UNAVAILABLE;
     }
 
     private final CloseableHttpClient client;
@@ -507,7 +507,7 @@ class ApacheConnector implements Connector {
 
     @Override
     public String getName() {
-        return "Apache HttpClient " + release;
+        return "Apache HttpClient " + RELEASE;
     }
 
     @Override

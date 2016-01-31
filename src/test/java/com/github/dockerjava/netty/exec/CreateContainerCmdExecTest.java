@@ -32,7 +32,6 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.api.model.AccessMode;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Device;
 import com.github.dockerjava.api.model.ExposedPort;
@@ -42,7 +41,6 @@ import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.RestartPolicy;
 import com.github.dockerjava.api.model.Ulimit;
 import com.github.dockerjava.api.model.Volume;
-import com.github.dockerjava.api.model.VolumeRW;
 import com.github.dockerjava.api.model.VolumesFrom;
 import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
@@ -358,9 +356,9 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
         ExposedPort tcp23 = ExposedPort.tcp(23);
 
         Ports portBindings = new Ports();
-        portBindings.bind(tcp22, Ports.Binding(11022));
-        portBindings.bind(tcp23, Ports.Binding(11023));
-        portBindings.bind(tcp23, Ports.Binding(11024));
+        portBindings.bind(tcp22, Ports.binding(11022));
+        portBindings.bind(tcp23, Ports.binding(11023));
+        portBindings.bind(tcp23, Ports.binding(11024));
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("true")
                 .withExposedPorts(tcp22, tcp23).withPortBindings(portBindings).exec();
@@ -374,13 +372,13 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
         assertThat(Arrays.asList(inspectContainerResponse.getConfig().getExposedPorts()), contains(tcp22, tcp23));
 
         assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp22)[0],
-                is(equalTo(Ports.Binding(11022))));
+                is(equalTo(Ports.binding(11022))));
 
         assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23)[0],
-                is(equalTo(Ports.Binding(11023))));
+                is(equalTo(Ports.binding(11023))));
 
         assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23)[1],
-                is(equalTo(Ports.Binding(11024))));
+                is(equalTo(Ports.binding(11024))));
 
     }
 

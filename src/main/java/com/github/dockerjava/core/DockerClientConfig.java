@@ -270,10 +270,10 @@ public class DockerClientConfig implements Serializable {
             authConfig = authConfigFile.resolveAuthConfig(hostnameReposName.hostname);
         }
 
-        AuthConfig _authConfig = getAuthConfig();
+        AuthConfig otherAuthConfig = getAuthConfig();
 
-        if (_authConfig != null)
-            authConfig = _authConfig;
+        if (otherAuthConfig != null)
+            authConfig = otherAuthConfig;
 
         return authConfig;
     }

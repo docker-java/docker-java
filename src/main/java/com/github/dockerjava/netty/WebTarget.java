@@ -22,7 +22,7 @@ public class WebTarget {
 
     private Map<String, String> queryParams = new HashMap<String, String>();
 
-    private static String PATH_SEPARATOR = "/";
+    private static final String PATH_SEPARATOR = "/";
 
     public WebTarget(ChannelProvider channelProvider) {
         this.channelProvider = channelProvider;

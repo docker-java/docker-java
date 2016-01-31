@@ -112,14 +112,14 @@ public class Ports {
     /**
      * Creates a {@link Binding} for the given IP address and port number.
      */
-    public static Binding Binding(String hostIp, Integer hostPort) {
+    public static Binding binding(String hostIp, Integer hostPort) {
         return new Binding(hostIp, hostPort);
     }
 
     /**
      * Creates a {@link Binding} for the given port number, leaving the IP address undefined.
      */
-    public static Binding Binding(Integer hostPort) {
+    public static Binding binding(Integer hostPort) {
         return new Binding(hostPort);
     }
 

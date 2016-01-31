@@ -186,9 +186,9 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         ExposedPort tcp23 = ExposedPort.tcp(23);
 
         Ports portBindings = new Ports();
-        portBindings.bind(tcp22, Ports.Binding(11022));
-        portBindings.bind(tcp23, Ports.Binding(11023));
-        portBindings.bind(tcp23, Ports.Binding(11024));
+        portBindings.bind(tcp22, Ports.binding(11022));
+        portBindings.bind(tcp23, Ports.binding(11023));
+        portBindings.bind(tcp23, Ports.binding(11024));
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("true")
                 .withExposedPorts(tcp22, tcp23).withPortBindings(portBindings).exec();
@@ -206,13 +206,13 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(Arrays.asList(inspectContainerResponse.getConfig().getExposedPorts()), contains(tcp22, tcp23));
 
         assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp22)[0],
-                is(equalTo(Ports.Binding(11022))));
+                is(equalTo(Ports.binding(11022))));
 
         assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23)[0],
-                is(equalTo(Ports.Binding(11023))));
+                is(equalTo(Ports.binding(11023))));
 
         assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23)[1],
-                is(equalTo(Ports.Binding(11024))));
+                is(equalTo(Ports.binding(11024))));
 
     }
 
@@ -223,8 +223,8 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         ExposedPort tcp23 = ExposedPort.tcp(23);
 
         Ports portBindings = new Ports();
-        portBindings.bind(tcp22, Ports.Binding(null));
-        portBindings.bind(tcp23, Ports.Binding(null));
+        portBindings.bind(tcp22, Ports.binding(null));
+        portBindings.bind(tcp23, Ports.binding(null));
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
                 .withExposedPorts(tcp22, tcp23).withPortBindings(portBindings).withPublishAllPorts(true).exec();
@@ -254,8 +254,8 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         ExposedPort tcp23 = ExposedPort.tcp(23);
 
         Ports portBindings = new Ports();
-        portBindings.bind(tcp22, Ports.Binding(11022));
-        portBindings.bind(tcp23, Ports.Binding(11022));
+        portBindings.bind(tcp22, Ports.binding(11022));
+        portBindings.bind(tcp23, Ports.binding(11022));
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("true")
                 .withExposedPorts(tcp22, tcp23).withPortBindings(portBindings).exec();
