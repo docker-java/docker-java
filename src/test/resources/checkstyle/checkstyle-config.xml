@@ -98,17 +98,20 @@
 
         <!-- Checks for whitespace                               -->
         <!-- See http://checkstyle.sf.net/config_whitespace.html -->
-        <module name="EmptyForIteratorPad"/>
+        <!-- @KostyaSha unsure -->
+        <!--<module name="EmptyForIteratorPad"/>-->
         <module name="MethodParamPad"/>
         <module name="NoWhitespaceAfter"/>
         <module name="NoWhitespaceBefore"/>
-        <module name="OperatorWrap">
-            <property name="option" value="eol"/>
-        </module>
+        <!-- upto @marcuslinke -->
+        <!--<module name="OperatorWrap">-->
+            <!--<property name="option" value="eol"/>-->
+        <!--</module>-->
         <module name="ParenPad"/>
         <module name="TypecastParenPad"/>
         <module name="WhitespaceAfter"/>
-        <module name="WhitespaceAround"/>
+        <!-- some weirdness with logger in CommitCmdExec and CreateImageCmdExec -->
+        <!--<module name="WhitespaceAround"/>-->
 
     </module>
 

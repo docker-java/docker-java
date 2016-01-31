@@ -70,7 +70,7 @@ public class Ports {
             if (binding == null) {
                 ports.put(exposedPort, null);
             } else {
-                ports.put(exposedPort, new Binding[] { binding });
+                ports.put(exposedPort, new Binding[]{binding});
             }
         }
     }

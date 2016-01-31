@@ -178,7 +178,7 @@ public class DockerClientConfig implements Serializable {
         Properties overriddenProperties = new Properties();
         overriddenProperties.putAll(p);
 
-        for (String key : new String[] { DOCKER_IO_URL_PROPERTY, DOCKER_IO_VERSION_PROPERTY,
+        for (String key : new String[]{DOCKER_IO_URL_PROPERTY, DOCKER_IO_VERSION_PROPERTY,
                 DOCKER_IO_USERNAME_PROPERTY, DOCKER_IO_PASSWORD_PROPERTY, DOCKER_IO_EMAIL_PROPERTY,
                 DOCKER_IO_SERVER_ADDRESS_PROPERTY, DOCKER_IO_DOCKER_CERT_PATH_PROPERTY,
                 DOCKER_IO_DOCKER_CFG_PATH_PROPERTY, }) {
