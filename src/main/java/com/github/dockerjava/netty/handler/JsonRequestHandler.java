@@ -11,13 +11,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  *
  * @author Marcus Linke
  */
-public class JsonRequestHandler extends MessageToByteEncoder<Object>{
+public class JsonRequestHandler extends MessageToByteEncoder<Object> {
 
-	private ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper = new ObjectMapper();
 
-	@Override
-	protected void encode(ChannelHandlerContext ctx, Object msg, ByteBuf out) throws Exception {
-		byte[] serialized = mapper.writeValueAsBytes(msg);
-		out.writeBytes(serialized);
-	}
+    @Override
+    protected void encode(ChannelHandlerContext ctx, Object msg, ByteBuf out) throws Exception {
+        byte[] serialized = mapper.writeValueAsBytes(msg);
+        out.writeBytes(serialized);
+    }
 }
