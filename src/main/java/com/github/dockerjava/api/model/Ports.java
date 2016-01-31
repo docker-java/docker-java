@@ -33,6 +33,7 @@ import com.fasterxml.jackson.databind.node.NullNode;
  * @see HostConfig#getPortBindings()
  * @see NetworkSettings#getPorts()
  */
+@SuppressWarnings(value = "checkstyle:equalshashcode") //FIXME?
 @JsonDeserialize(using = Ports.Deserializer.class)
 @JsonSerialize(using = Ports.Serializer.class)
 public class Ports {

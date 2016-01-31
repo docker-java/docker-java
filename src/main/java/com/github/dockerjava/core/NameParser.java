@@ -12,6 +12,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.core.exception.InvalidRepositoryNameException;
 
+@SuppressWarnings(value = "checkstyle:equalshashcode")
 public class NameParser {
     //CHECKSTYLE:OFF
     private static final int RepositoryNameTotalLengthMax = 255;

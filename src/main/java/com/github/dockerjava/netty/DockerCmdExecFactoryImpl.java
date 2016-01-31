@@ -205,15 +205,15 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     private class UnixDomainSocketInitializer implements NettyInitializer {
         @Override
         public EventLoopGroup init(Bootstrap bootstrap, DockerClientConfig dockerClientConfig) {
-            EventLoopGroup eventLoopGroup = new EpollEventLoopGroup();
-            bootstrap.group(eventLoopGroup).channel(EpollDomainSocketChannel.class)
+            EventLoopGroup epollEventLoopGroup = new EpollEventLoopGroup();
+            bootstrap.group(epollEventLoopGroup).channel(EpollDomainSocketChannel.class)
                     .handler(new ChannelInitializer<UnixChannel>() {
                         @Override
                         protected void initChannel(final UnixChannel channel) throws Exception {
                             channel.pipeline().addLast(new HttpClientCodec());
                         }
                     });
-            return eventLoopGroup;
+            return epollEventLoopGroup;
         }
 
         @Override
@@ -225,7 +225,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     private class InetSocketInitializer implements NettyInitializer {
         @Override
         public EventLoopGroup init(Bootstrap bootstrap, final DockerClientConfig dockerClientConfig) {
-            EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
+            EventLoopGroup nioEventLoopGroup = new NioEventLoopGroup();
 
             InetAddress addr = InetAddress.getLoopbackAddress();
 
@@ -233,7 +233,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
             Security.addProvider(new BouncyCastleProvider());
 
-            bootstrap.group(eventLoopGroup).channel(NioSocketChannel.class)
+            bootstrap.group(nioEventLoopGroup).channel(NioSocketChannel.class)
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(final SocketChannel channel) throws Exception {
@@ -243,7 +243,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
                         }
                     });
 
-            return eventLoopGroup;
+            return nioEventLoopGroup;
         }
 
         @Override
