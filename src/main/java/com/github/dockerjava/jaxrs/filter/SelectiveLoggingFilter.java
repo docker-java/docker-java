@@ -13,9 +13,8 @@ import org.slf4j.Logger;
 
 /**
  * A version of the logging filter that will avoid trying to log entities which can cause issues with the console.
- * 
- * @author sfitts
  *
+ * @author sfitts
  */
 public class SelectiveLoggingFilter extends LoggingFilter {
 

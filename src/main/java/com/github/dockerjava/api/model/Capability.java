@@ -3,7 +3,7 @@ package com.github.dockerjava.api.model;
 /**
  * The Linux capabilities supported by Docker. The list of capabilities is defined in Docker's types.go, {@link #ALL}
  * was added manually.
- * 
+ *
  * @see <a
  *      href="http://man7.org/linux/man-pages/man7/capabilities.7.html">http://man7.org/linux/man-pages/man7/capabilities.7.html</a>
  */

@@ -65,7 +65,7 @@ public class KeystoreSSLConfig implements SSLConfig, Serializable {
 
     /**
      * Get the SSL Context out of the keystore.
-     * 
+     *
      * @return java SSLContext
      * @throws KeyManagementException
      * @throws UnrecoverableKeyException

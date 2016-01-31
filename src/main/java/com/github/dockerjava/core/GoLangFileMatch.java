@@ -26,16 +26,16 @@ import com.github.dockerjava.core.exception.GoLangFileMatchException;
  *                  character class (must be non-empty)
  *       c           matches character c (c != '*', '?', '\\', '[')
  *       '\\' c      matches character c
- * 
+ *
  *   character-range:
  *       c           matches character c (c != '\\', '-', ']')
  *       '\\' c      matches character c
  *       lo '-' hi   matches character c for lo <= c <= hi
- * 
+ *
  *  Match requires pattern to match all of name, not just a substring.
  *  The only possible returned error is ErrBadPattern, when pattern
  *  is malformed.
- * 
+ *
  * On Windows, escaping is disabled. Instead, '\\' is treated as
  *  path separator.
  * </pre>
