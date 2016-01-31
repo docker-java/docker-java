@@ -151,8 +151,9 @@ public class ExposedPort {
         if (obj instanceof ExposedPort) {
             ExposedPort other = (ExposedPort) obj;
             return new EqualsBuilder().append(protocol, other.getProtocol()).append(port, other.getPort()).isEquals();
-        } else
+        } else {
             return super.equals(obj);
+        }
     }
 
     @Override

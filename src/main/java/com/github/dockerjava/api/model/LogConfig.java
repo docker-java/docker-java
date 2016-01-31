@@ -98,8 +98,9 @@ public class LogConfig {
                 JsonNode node = oc.readTree(jsonParser);
 
                 for (LoggingType loggingType : values()) {
-                    if (loggingType.getType().equals(node.asText()))
+                    if (loggingType.getType().equals(node.asText())) {
                         return loggingType;
+                    }
                 }
 
                 throw new IllegalArgumentException("No enum constant " + LoggingType.class + "." + node.asText());

@@ -47,11 +47,11 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
     @Override
     public void onError(Throwable throwable) {
 
-        if (closed)
-            return;
+        if (closed) return;
 
-        if (this.firstError == null)
+        if (this.firstError == null) {
             this.firstError = throwable;
+        }
 
         try {
             LOGGER.error("Error during callback", throwable);
@@ -76,8 +76,9 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
     @Override
     public void close() throws IOException {
         closed = true;
-        if (stream != null)
+        if (stream != null) {
             stream.close();
+        }
         completed.countDown();
     }
 

@@ -37,8 +37,9 @@ public class Repository {
     }
 
     public String getPath() {
-        if (!name.contains("/"))
+        if (!name.contains("/")) {
             return name;
+        }
 
         return name.substring(name.indexOf("/") + 1);
     }

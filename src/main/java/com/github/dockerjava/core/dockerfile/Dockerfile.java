@@ -221,21 +221,24 @@ public class Dockerfile {
 
             List<String> matchingPattern = matchingIgnorePatterns(relativeFilename);
 
-            if (matchingPattern.isEmpty())
+            if (matchingPattern.isEmpty()) {
                 return null;
+            }
 
             String lastMatchingPattern = matchingPattern.get(matchingPattern.size() - 1);
 
             int lastMatchingPatternIndex = ignores.lastIndexOf(lastMatchingPattern);
 
-            if (lastMatchingPatternIndex == ignores.size() - 1)
+            if (lastMatchingPatternIndex == ignores.size() - 1) {
                 return lastMatchingPattern;
+            }
 
             List<String> remainingIgnorePattern = ignores.subList(lastMatchingPatternIndex + 1, ignores.size());
 
             for (String ignorePattern : remainingIgnorePattern) {
-                if (ignorePattern.equals("!" + relativeFilename))
+                if (ignorePattern.equals("!" + relativeFilename)) {
                     return null;
+                }
             }
 
             return lastMatchingPattern;

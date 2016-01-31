@@ -72,8 +72,9 @@ public class Bind {
             Bind other = (Bind) obj;
             return new EqualsBuilder().append(path, other.getPath()).append(volume, other.getVolume())
                     .append(accessMode, other.getAccessMode()).isEquals();
-        } else
+        } else {
             return super.equals(obj);
+        }
     }
 
     @Override

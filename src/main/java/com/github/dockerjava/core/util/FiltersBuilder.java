@@ -81,6 +81,7 @@ public class FiltersBuilder {
         return result;
     }
 
+    //CHECKSTYLE:OFF
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -93,6 +94,7 @@ public class FiltersBuilder {
         return filters.equals(filters1.filters);
 
     }
+    //CHECKSTYLE:ON
 
     @Override
     public int hashCode() {

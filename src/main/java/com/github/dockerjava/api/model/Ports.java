@@ -249,8 +249,9 @@ public class Ports {
                 Binding other = (Binding) obj;
                 return new EqualsBuilder().append(hostIp, other.getHostIp()).append(hostPort, other.getHostPort())
                         .isEquals();
-            } else
+            } else {
                 return super.equals(obj);
+            }
         }
     }
 

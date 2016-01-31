@@ -81,8 +81,9 @@ public class KeystoreSSLConfig implements SSLConfig, Serializable {
         String httpProtocols = System.getProperty("https.protocols");
         System.setProperty("https.protocols", "TLSv1");
 
-        if (httpProtocols != null)
+        if (httpProtocols != null) {
             System.setProperty("https.protocols", httpProtocols);
+        }
 
         final KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory
                 .getDefaultAlgorithm());

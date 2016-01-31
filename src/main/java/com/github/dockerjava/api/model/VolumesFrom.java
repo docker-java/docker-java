@@ -77,8 +77,9 @@ public class VolumesFrom {
             VolumesFrom other = (VolumesFrom) obj;
             return new EqualsBuilder().append(container, other.getContainer())
                     .append(accessMode, other.getAccessMode()).isEquals();
-        } else
+        } else {
             return super.equals(obj);
+        }
     }
 
     @Override

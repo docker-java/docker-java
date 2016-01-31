@@ -89,10 +89,14 @@ public class RestartPolicy {
         try {
             String[] parts = serialized.split(":");
             String name = parts[0];
-            if ("no".equals(name))
+            if ("no".equals(name)) {
                 return noRestart();
-            if ("always".equals(name))
+            }
+
+            if ("always".equals(name)) {
                 return alwaysRestart();
+            }
+
             if ("on-failure".equals(name)) {
                 int count = 0;
                 if (parts.length == 2) {
@@ -124,8 +128,9 @@ public class RestartPolicy {
             RestartPolicy other = (RestartPolicy) obj;
             return new EqualsBuilder().append(maximumRetryCount, other.getMaximumRetryCount())
                     .append(name, other.getName()).isEquals();
-        } else
+        } else {
             return super.equals(obj);
+        }
     }
 
     @Override

@@ -64,8 +64,9 @@ public class PortBinding {
             PortBinding other = (PortBinding) obj;
             return new EqualsBuilder().append(binding, other.getBinding()).append(exposedPort, other.getExposedPort())
                     .isEquals();
-        } else
+        } else {
             return super.equals(obj);
+        }
     }
 
     @Override

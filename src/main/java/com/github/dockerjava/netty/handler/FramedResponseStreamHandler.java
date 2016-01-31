@@ -89,8 +89,9 @@ public class FramedResponseStreamHandler extends SimpleChannelInboundHandler<Byt
 
         if (streamType.equals(StreamType.RAW)) {
 
-            if (payloadCnt == 0)
+            if (payloadCnt == 0) {
                 payload = new byte[rawBuffer.readableBytes()];
+            }
 
             int count = read(payload, payloadCnt, rawBuffer.readableBytes());
 

@@ -134,15 +134,17 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
         if (clientResponseFilters != null) {
             for (ClientResponseFilter clientResponseFilter : clientResponseFilters) {
-                if (clientResponseFilter != null)
+                if (clientResponseFilter != null) {
                     clientConfig.register(clientResponseFilter);
+                }
             }
         }
 
         if (clientRequestFilters != null) {
             for (ClientRequestFilter clientRequestFilter : clientRequestFilters) {
-                if (clientRequestFilter != null)
+                if (clientRequestFilter != null) {
                     clientConfig.register(clientRequestFilter);
+                }
             }
         }
 
@@ -171,10 +173,12 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(getSchemeRegistry(
                 originalUri, sslContext));
 
-        if (maxTotalConnections != null)
+        if (maxTotalConnections != null) {
             connManager.setMaxTotal(maxTotalConnections);
-        if (maxPerRouteConnections != null)
+        }
+        if (maxPerRouteConnections != null) {
             connManager.setDefaultMaxPerRoute(maxPerRouteConnections);
+        }
 
         clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER, connManager);
 

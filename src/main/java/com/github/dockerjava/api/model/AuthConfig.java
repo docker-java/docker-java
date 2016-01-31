@@ -79,6 +79,7 @@ public class AuthConfig {
         return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
+    //CHECKSTYLE:OFF
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -127,4 +128,5 @@ public class AuthConfig {
             return false;
         return true;
     }
+    //CHECKSTYLE:ON
 }

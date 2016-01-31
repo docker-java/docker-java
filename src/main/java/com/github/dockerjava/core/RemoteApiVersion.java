@@ -127,6 +127,7 @@ public class RemoteApiVersion implements Serializable {
         return false;
     }
 
+    //CHECKSTYLE:OFF
     @Override
     public boolean equals(final Object o) {
         if (this == o)
@@ -136,6 +137,7 @@ public class RemoteApiVersion implements Serializable {
         final RemoteApiVersion that = (RemoteApiVersion) o;
         return Objects.equal(major, that.major) && Objects.equal(minor, that.minor);
     }
+    //CHECKSTYLE:ON
 
     @Override
     public int hashCode() {

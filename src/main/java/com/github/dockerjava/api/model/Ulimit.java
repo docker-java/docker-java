@@ -45,6 +45,7 @@ public class Ulimit {
         return hard;
     }
 
+    //CHECKSTYLE:OFF
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Ulimit) {
@@ -60,4 +61,5 @@ public class Ulimit {
     public int hashCode() {
         return new HashCodeBuilder().append(name).append(soft).append(hard).toHashCode();
     }
+    //CHECKSTYLE:ON
 }

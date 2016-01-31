@@ -272,8 +272,9 @@ public class DockerClientConfig implements Serializable {
 
         AuthConfig otherAuthConfig = getAuthConfig();
 
-        if (otherAuthConfig != null)
+        if (otherAuthConfig != null) {
             authConfig = otherAuthConfig;
+        }
 
         return authConfig;
     }
@@ -294,6 +295,7 @@ public class DockerClientConfig implements Serializable {
         return new AuthConfigurations();
     }
 
+    //CHECKSTYLE:OFF
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -335,6 +337,7 @@ public class DockerClientConfig implements Serializable {
         result = 31 * result + (sslConfig != null ? sslConfig.hashCode() : 0);
         return result;
     }
+    //CHECKSTYLE:ON
 
     @Override
     public String toString() {

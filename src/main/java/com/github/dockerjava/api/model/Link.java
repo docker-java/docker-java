@@ -74,8 +74,9 @@ public class Link {
         if (obj instanceof Link) {
             final Link other = (Link) obj;
             return new EqualsBuilder().append(name, other.getName()).append(alias, other.getAlias()).isEquals();
-        } else
+        } else {
             return super.equals(obj);
+        }
     }
 
     @Override

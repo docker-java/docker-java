@@ -69,8 +69,9 @@ public class VolumeRW {
             VolumeRW other = (VolumeRW) obj;
             return new EqualsBuilder().append(getVolume(), other.getVolume()).append(accessMode, other.getAccessMode())
                     .isEquals();
-        } else
+        } else {
             return super.equals(obj);
+        }
     }
 
     @Override

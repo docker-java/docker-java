@@ -248,13 +248,16 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @Override
     public BuildImageCmdImpl withDockerfile(File dockerfile) {
         checkNotNull(dockerfile);
-        if (!dockerfile.exists())
+        if (!dockerfile.exists()) {
             throw new IllegalArgumentException("Dockerfile does not exist");
-        if (!dockerfile.isFile())
+        }
+        if (!dockerfile.isFile()) {
             throw new IllegalArgumentException("Not a directory");
+        }
 
-        if (baseDirectory == null)
+        if (baseDirectory == null) {
             withBaseDirectory(dockerfile.getParentFile());
+        }
 
         this.dockerFile = dockerfile;
 
