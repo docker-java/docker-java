@@ -26,46 +26,46 @@ import com.github.dockerjava.api.model.Frame;
 public interface AttachContainerCmd extends AsyncDockerCmd<AttachContainerCmd, Frame> {
 
     @CheckForNull
-    public String getContainerId();
+    String getContainerId();
 
     @CheckForNull
-    public Boolean hasLogsEnabled();
+    Boolean hasLogsEnabled();
 
     @CheckForNull
-    public Boolean hasFollowStreamEnabled();
+    Boolean hasFollowStreamEnabled();
 
     @CheckForNull
-    public Boolean hasTimestampsEnabled();
+    Boolean hasTimestampsEnabled();
 
     @CheckForNull
-    public Boolean hasStdoutEnabled();
+    Boolean hasStdoutEnabled();
 
     @CheckForNull
-    public Boolean hasStderrEnabled();
+    Boolean hasStderrEnabled();
 
     @CheckForNull
-    public InputStream getStdin();
+    InputStream getStdin();
 
-    public AttachContainerCmd withContainerId(@Nonnull String containerId);
+    AttachContainerCmd withContainerId(@Nonnull String containerId);
 
     /**
      * Following the stream means the resulting {@link InputStream} returned by {@link #exec()} reads infinitely. So a
      * {@link InputStream#read()} MAY BLOCK FOREVER as long as no data is streamed from the docker host to
      * {@link DockerClient}!
      */
-    public AttachContainerCmd withFollowStream(Boolean followStream);
+    AttachContainerCmd withFollowStream(Boolean followStream);
 
-    public AttachContainerCmd withTimestamps(Boolean timestamps);
+    AttachContainerCmd withTimestamps(Boolean timestamps);
 
-    public AttachContainerCmd withStdOut(Boolean stdout);
+    AttachContainerCmd withStdOut(Boolean stdout);
 
-    public AttachContainerCmd withStdErr(Boolean stderr);
+    AttachContainerCmd withStdErr(Boolean stderr);
 
-    public AttachContainerCmd withStdIn(InputStream stdin);
+    AttachContainerCmd withStdIn(InputStream stdin);
 
-    public AttachContainerCmd withLogs(Boolean logs);
+    AttachContainerCmd withLogs(Boolean logs);
 
-    public static interface Exec extends DockerCmdAsyncExec<AttachContainerCmd, Frame> {
+    interface Exec extends DockerCmdAsyncExec<AttachContainerCmd, Frame> {
     }
 
 }

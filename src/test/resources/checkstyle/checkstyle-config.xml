@@ -113,6 +113,10 @@
         <!-- some weirdness with logger in CommitCmdExec and CreateImageCmdExec -->
         <!--<module name="WhitespaceAround"/>-->
 
+        <!-- Modifier Checks                                    -->
+        <!-- Verify with @marcuslinke before. 576 violations -->
+        <!--<module name="RedundantModifier"/>-->
+
     </module>
 
 </module>
