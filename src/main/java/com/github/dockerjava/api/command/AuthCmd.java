@@ -21,7 +21,8 @@ public interface AuthCmd extends SyncDockerCmd<AuthResponse> {
 
     /**
      * @return The status. Based on it's value you may mean you need to authorise your account, e.g.:
-     *         "Account created. Please see the documentation of the registry http://localhost:5000/v1/ for instructions how to activate it."
+     *         "Account created. Please see the documentation of the registry http://localhost:5000/v1/
+     *         for instructions how to activate it."
      * @throws UnauthorizedException
      *             If you're not authorised (e.g. bad password).
      */
