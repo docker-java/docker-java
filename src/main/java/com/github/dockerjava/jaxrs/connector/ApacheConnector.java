@@ -182,7 +182,7 @@ import org.glassfish.jersey.message.internal.Statuses;
 @SuppressWarnings("deprecation")
 class ApacheConnector implements Connector {
 
-    private final static Logger LOGGER = Logger.getLogger(ApacheConnector.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ApacheConnector.class.getName());
 
     private static final VersionInfo VERSION_INFO;
 

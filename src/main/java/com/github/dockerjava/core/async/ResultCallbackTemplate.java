@@ -25,7 +25,7 @@ import com.google.common.base.Throwables;
 public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T>, A_RES_T> implements
         ResultCallback<A_RES_T> {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(ResultCallbackTemplate.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResultCallbackTemplate.class);
 
     private final CountDownLatch started = new CountDownLatch(1);
 

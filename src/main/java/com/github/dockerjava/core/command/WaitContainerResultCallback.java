@@ -21,7 +21,7 @@ import com.github.dockerjava.core.async.ResultCallbackTemplate;
  */
 public class WaitContainerResultCallback extends ResultCallbackTemplate<WaitContainerResultCallback, WaitResponse> {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(WaitContainerResultCallback.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WaitContainerResultCallback.class);
 
     @CheckForNull
     private WaitResponse waitResponse = null;

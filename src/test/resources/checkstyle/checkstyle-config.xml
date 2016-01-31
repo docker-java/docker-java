@@ -114,6 +114,8 @@
         <!--<module name="WhitespaceAround"/>-->
 
         <!-- Modifier Checks                                    -->
+        <!-- See http://checkstyle.sf.net/config_modifiers.html -->
+        <module name="ModifierOrder"/>
         <!-- Verify with @marcuslinke before. 576 violations -->
         <!--<module name="RedundantModifier"/>-->
 
