@@ -14,6 +14,9 @@ import com.github.dockerjava.core.exception.InvalidRepositoryNameException;
 
 @SuppressWarnings(value = "checkstyle:equalshashcode")
 public class NameParser {
+    private NameParser() {
+    }
+
     //CHECKSTYLE:OFF
     private static final int RepositoryNameTotalLengthMax = 255;
 

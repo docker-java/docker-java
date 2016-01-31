@@ -44,6 +44,8 @@ import com.github.dockerjava.core.exception.GoLangFileMatchException;
  *
  */
 public class GoLangFileMatch {
+    private GoLangFileMatch() {
+    }
 
     public static final boolean IS_WINDOWS = File.separatorChar == '\\';
 
