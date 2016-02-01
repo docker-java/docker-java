@@ -154,7 +154,6 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
         URI originalUri = dockerClientConfig.getDockerHost();
 
-
         String protocol = null;
 
         if (dockerClientConfig.getDockerTlsVerify()) {
@@ -162,7 +161,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
             try {
 
-                if(sslContext == null) {
+                if (sslContext == null) {
                     sslContext = new LocalDirectorySSLConfig(dockerClientConfig.getDockerCertPath()).getSSLContext();
                 }
 

@@ -14,6 +14,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.lang.BooleanUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -26,7 +27,7 @@ import com.github.dockerjava.core.NameParser.HostnameReposName;
 import com.github.dockerjava.core.NameParser.ReposTag;
 
 /**
- * Respects some of the docker cli options. See
+ * Respects some of the docker CLI options. See
  * https://docs.docker.com/engine/reference/commandline/cli/#environment-variables
  */
 public class DockerClientConfig implements Serializable {
@@ -80,15 +81,49 @@ public class DockerClientConfig implements Serializable {
     DockerClientConfig(URI dockerHost, String dockerConfig, String apiVersion, String registryUrl,
             String registryUsername, String registryPassword, String registryEmail, String dockerCertPath,
             boolean dockerTslVerify) {
-        this.dockerHost = dockerHost;
+        this.dockerHost = checkDockerHostScheme(dockerHost);
+        this.dockerTlsVerify = dockerTslVerify;
+        this.dockerCertPath = checkDockerCertPath(dockerTslVerify, dockerCertPath);
         this.dockerConfig = dockerConfig;
         this.apiVersion = RemoteApiVersion.parseConfigWithDefault(apiVersion);
         this.registryUsername = registryUsername;
         this.registryPassword = registryPassword;
         this.registryEmail = registryEmail;
         this.registryUrl = registryUrl;
-        this.dockerCertPath = dockerCertPath;
-        this.dockerTlsVerify = dockerTslVerify;
+    }
+
+    private URI checkDockerHostScheme(URI dockerHost) {
+        if ("tcp".equals(dockerHost.getScheme()) || "unix".equals(dockerHost.getScheme())) {
+            return dockerHost;
+        } else {
+            throw new DockerClientException("Unsupported protocol scheme found: '" + dockerHost
+                    + "'. Only 'tcp://' or 'unix://' supported.");
+        }
+    }
+
+    private String checkDockerCertPath(boolean dockerTlsVerify, String dockerCertPath) {
+        if (dockerTlsVerify) {
+            if (StringUtils.isEmpty(dockerCertPath)) {
+                throw new DockerClientException(
+                        "Enabled TLS verification (DOCKER_TLS_VERIFY=1) but certifate path (DOCKER_CERT_PATH) is not defined.");
+            } else {
+                File certPath = new File(dockerCertPath);
+
+                if (!certPath.exists()) {
+                    throw new DockerClientException(
+                            "Certificate path (DOCKER_CERT_PATH) '" + dockerCertPath + "' doesn't exist.");
+                }
+
+                if(certPath.isDirectory()) {
+                    return dockerCertPath;
+                } else {
+                    throw new DockerClientException(
+                            "Certificate path (DOCKER_CERT_PATH) '" + dockerCertPath + "' doesn't point to a directory.");
+                }
+            }
+        } else {
+            return dockerCertPath;
+        }
     }
 
     private static Properties loadIncludedDockerProperties(Properties systemProperties) {
@@ -258,7 +293,7 @@ public class DockerClientConfig implements Serializable {
 
         File dockerCfgFile = new File(getDockerConfig() + File.separator + DOCKER_CFG);
 
-        if (dockerCfgFile != null && dockerCfgFile.exists() && imageName != null) {
+        if (dockerCfgFile.exists() && dockerCfgFile.isFile() && imageName != null) {
             AuthConfigFile authConfigFile;
             try {
                 authConfigFile = AuthConfigFile.loadConfig(dockerCfgFile);
@@ -281,7 +316,7 @@ public class DockerClientConfig implements Serializable {
 
     public AuthConfigurations getAuthConfigurations() {
         File dockerCfgFile = new File(getDockerConfig() + File.separator + DOCKER_CFG);
-        if (dockerCfgFile.exists()) {
+        if (dockerCfgFile.exists() && dockerCfgFile.isFile()) {
             AuthConfigFile authConfigFile;
             try {
                 authConfigFile = AuthConfigFile.loadConfig(dockerCfgFile);
