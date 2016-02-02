@@ -27,6 +27,9 @@ public class DockerClientImplTest {
 
     @Test
     public void defaultInstanceAuthConfig() throws Exception {
+
+        System.setProperty("user.home", "target/test-classes/someHomeDir");
+
         // given a default client
         DockerClientImpl dockerClient = DockerClientImpl.getInstance();
 
