@@ -29,7 +29,7 @@ public class DockerClientConfigTest {
     }
 
     private static String homeDir() {
-        return "src/test/resources/someHomeDir";
+        return "target/test-classes/someHomeDir";
     }
 
     private static String dockerCertPath() {
