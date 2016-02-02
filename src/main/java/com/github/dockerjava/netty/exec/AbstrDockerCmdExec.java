@@ -45,7 +45,7 @@ public abstract class AbstrDockerCmdExec {
     protected String registryConfigs(AuthConfigurations authConfigs) {
         try {
             final String json;
-            if (dockerClientConfig.getVersion().isGreaterOrEqual(RemoteApiVersion.VERSION_1_19)) {
+            if (dockerClientConfig.getApiVersion().isGreaterOrEqual(RemoteApiVersion.VERSION_1_19)) {
                 json = new ObjectMapper().writeValueAsString(authConfigs.getConfigs());
             } else {
                 json = new ObjectMapper().writeValueAsString(authConfigs);
