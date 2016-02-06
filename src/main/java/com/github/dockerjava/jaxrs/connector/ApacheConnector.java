@@ -142,32 +142,29 @@ import org.glassfish.jersey.message.internal.Statuses;
  * <li>{@link ApacheClientProperties#SSL_CONFIG}</li>
  * </ul>
  * <p>
- * This connector uses {@link RequestEntityProcessing#CHUNKED chunked encoding} as a default setting. This can be
- * overridden by the {@link ClientProperties#REQUEST_ENTITY_PROCESSING}. By default the
- * {@link ClientProperties#CHUNKED_ENCODING_SIZE} property is only supported by using default connection manager. If
- * custom connection manager needs to be used then chunked encoding size can be set by providing a custom
- * {@link org.apache.http.HttpClientConnection} (via custom
- * {@link org.apache.http.impl.conn.ManagedHttpClientConnectionFactory}) and overriding {@code createOutputStream}
- * method.
+ * This connector uses {@link RequestEntityProcessing#CHUNKED chunked encoding} as a default setting. This can be overridden by the
+ * {@link ClientProperties#REQUEST_ENTITY_PROCESSING}. By default the {@link ClientProperties#CHUNKED_ENCODING_SIZE} property is only
+ * supported by using default connection manager. If custom connection manager needs to be used then chunked encoding size can be set by
+ * providing a custom {@link org.apache.http.HttpClientConnection} (via custom
+ * {@link org.apache.http.impl.conn.ManagedHttpClientConnectionFactory}) and overriding {@code createOutputStream} method.
  * </p>
  * <p>
- * Using of authorization is dependent on the chunk encoding setting. If the entity buffering is enabled, the entity is
- * buffered and authorization can be performed automatically in response to a 401 by sending the request again. When
- * entity buffering is disabled (chunked encoding is used) then the property
- * {@link org.glassfish.jersey.apache.connector.ApacheClientProperties#PREEMPTIVE_BASIC_AUTHENTICATION} must be set to
- * {@code true}.
+ * Using of authorization is dependent on the chunk encoding setting. If the entity buffering is enabled, the entity is buffered and
+ * authorization can be performed automatically in response to a 401 by sending the request again. When entity buffering is disabled
+ * (chunked encoding is used) then the property
+ * {@link org.glassfish.jersey.apache.connector.ApacheClientProperties#PREEMPTIVE_BASIC_AUTHENTICATION} must be set to {@code true}.
  * </p>
  * <p>
  * If a {@link org.glassfish.jersey.client.ClientResponse} is obtained and an entity is not read from the response then
- * {@link org.glassfish.jersey.client.ClientResponse#close()} MUST be called after processing the response to release
- * connection-based resources.
+ * {@link org.glassfish.jersey.client.ClientResponse#close()} MUST be called after processing the response to release connection-based
+ * resources.
  * </p>
  * <p>
  * Client operations are thread safe, the HTTP connection may be shared between different threads.
  * </p>
  * <p>
- * If a response entity is obtained that is an instance of {@link Closeable} then the instance MUST be closed after
- * processing the entity to release connection-based resources.
+ * If a response entity is obtained that is an instance of {@link Closeable} then the instance MUST be closed after processing the entity to
+ * release connection-based resources.
  * </p>
  * <p>
  * The following methods are currently supported: HEAD, GET, POST, PUT, DELETE, OPTIONS, PATCH and TRACE.
@@ -404,8 +401,7 @@ class ApacheConnector implements Connector {
     /**
      * Get the {@link CookieStore}.
      *
-     * @return the {@link CookieStore} instance or {@code null} when {@value ApacheClientProperties#DISABLE_COOKIES} set
-     *         to {@code true}.
+     * @return the {@link CookieStore} instance or {@code null} when {@value ApacheClientProperties#DISABLE_COOKIES} set to {@code true}.
      */
     public CookieStore getCookieStore() {
         return cookieStore;

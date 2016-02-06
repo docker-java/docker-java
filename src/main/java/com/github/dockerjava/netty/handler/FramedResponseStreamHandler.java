@@ -138,14 +138,14 @@ public class FramedResponseStreamHandler extends SimpleChannelInboundHandler<Byt
 
     private static StreamType streamType(byte streamType) {
         switch (streamType) {
-        case 0:
-            return StreamType.STDIN;
-        case 1:
-            return StreamType.STDOUT;
-        case 2:
-            return StreamType.STDERR;
-        default:
-            return StreamType.RAW;
+            case 0:
+                return StreamType.STDIN;
+            case 1:
+                return StreamType.STDOUT;
+            case 2:
+                return StreamType.STDERR;
+            default:
+                return StreamType.RAW;
         }
     }
 

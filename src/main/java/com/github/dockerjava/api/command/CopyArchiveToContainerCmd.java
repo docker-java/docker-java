@@ -33,8 +33,7 @@ public interface CopyArchiveToContainerCmd extends SyncDockerCmd<Void> {
     CopyArchiveToContainerCmd withHostResource(String resource);
 
     /**
-     * Set the tar input stream that will be uploaded to the container. withHostResource or withTarInputStream can be
-     * defined but not both.
+     * Set the tar input stream that will be uploaded to the container. withHostResource or withTarInputStream can be defined but not both.
      *
      * @param tarInputStream
      *            the stream to upload to the container
@@ -42,8 +41,8 @@ public interface CopyArchiveToContainerCmd extends SyncDockerCmd<Void> {
     CopyArchiveToContainerCmd withTarInputStream(InputStream tarInputStream);
 
     /**
-     * If set to true then it will be an error if unpacking the given content would cause an existing directory to be
-     * replaced with a non-directory and vice versa
+     * If set to true then it will be an error if unpacking the given content would cause an existing directory to be replaced with a
+     * non-directory and vice versa
      *
      * @param noOverwriteDirNonDir
      *            flag to know if non directory can be overwritten
@@ -51,10 +50,9 @@ public interface CopyArchiveToContainerCmd extends SyncDockerCmd<Void> {
     CopyArchiveToContainerCmd withNoOverwriteDirNonDir(boolean noOverwriteDirNonDir);
 
     /**
-     * If this flag is set to true, all children of the local directory will be copied to the remote without the root
-     * directory. For ex: if I have root/titi and root/tata and the remote path is /var/data. dirChildrenOnly = true
-     * will create /var/data/titi and /var/data/tata dirChildrenOnly = false will create /var/data/root/titi and
-     * /var/data/root/tata
+     * If this flag is set to true, all children of the local directory will be copied to the remote without the root directory. For ex: if
+     * I have root/titi and root/tata and the remote path is /var/data. dirChildrenOnly = true will create /var/data/titi and /var/data/tata
+     * dirChildrenOnly = false will create /var/data/root/titi and /var/data/root/tata
      *
      * @param dirChildrenOnly
      *            if root directory is ignored

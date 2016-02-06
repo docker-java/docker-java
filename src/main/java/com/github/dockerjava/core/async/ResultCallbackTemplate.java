@@ -103,8 +103,8 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
     }
 
     /**
-     * Blocks until {@link ResultCallback#onStart()} was called. {@link ResultCallback#onStart()} is called when the
-     * request was processed on the server side and the response is incoming.
+     * Blocks until {@link ResultCallback#onStart()} was called. {@link ResultCallback#onStart()} is called when the request was processed
+     * on the server side and the response is incoming.
      */
     @SuppressWarnings("unchecked")
     public RC_T awaitStarted() throws InterruptedException {
@@ -113,9 +113,8 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
     }
 
     /**
-     * Blocks until {@link ResultCallback#onStart()} was called or the given timeout occurs.
-     * {@link ResultCallback#onStart()} is called when the request was processed on the server side and the response is
-     * incoming.
+     * Blocks until {@link ResultCallback#onStart()} was called or the given timeout occurs. {@link ResultCallback#onStart()} is called when
+     * the request was processed on the server side and the response is incoming.
      */
     @SuppressWarnings("unchecked")
     public RC_T awaitStarted(long timeout, TimeUnit timeUnit) throws InterruptedException {

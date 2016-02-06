@@ -9,7 +9,6 @@ import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.netty.WebTarget;
 
-
 public class LogContainerCmdExec extends AbstrAsyncDockerCmdExec<LogContainerCmd, Frame> implements
         LogContainerCmd.Exec {
 

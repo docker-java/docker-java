@@ -34,7 +34,7 @@ public interface CreateNetworkCmd extends SyncDockerCmd<CreateNetworkResponse> {
     /** Name of the network driver to use. Defaults to <code>bridge</code>. */
     public CreateNetworkCmd withDriver(String driver);
 
-    /** Driver specific options  */
+    /** Driver specific options */
     public CreateNetworkCmd withOptions(Map<String, String> options);
 
     public static interface Exec extends DockerCmdSyncExec<CreateNetworkCmd, CreateNetworkResponse> {

@@ -127,8 +127,8 @@ import java.security.Security;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Experimental implementation of {@link DockerCmdExecFactory} that supports http connection hijacking that is needed to
- * pass STDIN to the container.
+ * Experimental implementation of {@link DockerCmdExecFactory} that supports http connection hijacking that is needed to pass STDIN to the
+ * container.
  *
  * To use it just pass an instance via {@link DockerClientImpl#withDockerCmdExecFactory(DockerCmdExecFactory)}
  *

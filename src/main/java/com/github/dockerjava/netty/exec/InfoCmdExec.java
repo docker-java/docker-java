@@ -10,8 +10,7 @@ import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.netty.WebTarget;
 
 /**
- * http://stackoverflow.com/questions/33296749/netty-connect-to-unix-domain- socket-failed
- * http://netty.io/wiki/native-transports.html
+ * http://stackoverflow.com/questions/33296749/netty-connect-to-unix-domain- socket-failed http://netty.io/wiki/native-transports.html
  * https://github.com/netty/netty/blob/master/example/src/main/java/io/netty/ example/http/snoop/HttpSnoopClient.java
  *
  * @author Marcus Linke

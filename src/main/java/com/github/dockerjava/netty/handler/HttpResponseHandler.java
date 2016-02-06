@@ -25,8 +25,8 @@ import com.github.dockerjava.api.exception.NotModifiedException;
 import com.github.dockerjava.api.exception.UnauthorizedException;
 
 /**
- * Handler that is responsible to handle an incoming {@link HttpResponse}. It evaluates the status code and triggers the
- * appropriate lifecycle methods at the passed {@link ResultCallback}.
+ * Handler that is responsible to handle an incoming {@link HttpResponse}. It evaluates the status code and triggers the appropriate
+ * lifecycle methods at the passed {@link ResultCallback}.
  *
  * @author Marcus Linke
  */
@@ -66,49 +66,49 @@ public class HttpResponseHandler extends SimpleChannelInboundHandler<HttpObject>
             ByteBuf byteBuf = content.content();
 
             switch (response.status().code()) {
-            case 200:
-            case 201:
-            case 204:
-                ctx.fireChannelRead(byteBuf);
-                break;
-            default:
-                errorBody.writeBytes(byteBuf);
+                case 200:
+                case 201:
+                case 204:
+                    ctx.fireChannelRead(byteBuf);
+                    break;
+                default:
+                    errorBody.writeBytes(byteBuf);
             }
 
             if (content instanceof LastHttpContent) {
                 try {
 
                     switch (response.status().code()) {
-                    case 101:
-                    case 200:
-                    case 201:
-                    case 204:
-                        break;
-                    case 301:
-                    case 302:
-                        if (response.headers().contains(HttpHeaderNames.LOCATION)) {
-                            String location = response.headers().get(HttpHeaderNames.LOCATION);
-                            HttpRequest redirected = requestProvider.getHttpRequest(location);
+                        case 101:
+                        case 200:
+                        case 201:
+                        case 204:
+                            break;
+                        case 301:
+                        case 302:
+                            if (response.headers().contains(HttpHeaderNames.LOCATION)) {
+                                String location = response.headers().get(HttpHeaderNames.LOCATION);
+                                HttpRequest redirected = requestProvider.getHttpRequest(location);
 
-                            ctx.channel().writeAndFlush(redirected);
-                        }
-                        break;
-                    case 304:
-                        throw new NotModifiedException(getBodyAsMessage(errorBody));
-                    case 400:
-                        throw new BadRequestException(getBodyAsMessage(errorBody));
-                    case 401:
-                        throw new UnauthorizedException(getBodyAsMessage(errorBody));
-                    case 404:
-                        throw new NotFoundException(getBodyAsMessage(errorBody));
-                    case 406:
-                        throw new NotAcceptableException(getBodyAsMessage(errorBody));
-                    case 409:
-                        throw new ConflictException(getBodyAsMessage(errorBody));
-                    case 500:
-                        throw new InternalServerErrorException(getBodyAsMessage(errorBody));
-                    default:
-                        throw new DockerException(getBodyAsMessage(errorBody), response.status().code());
+                                ctx.channel().writeAndFlush(redirected);
+                            }
+                            break;
+                        case 304:
+                            throw new NotModifiedException(getBodyAsMessage(errorBody));
+                        case 400:
+                            throw new BadRequestException(getBodyAsMessage(errorBody));
+                        case 401:
+                            throw new UnauthorizedException(getBodyAsMessage(errorBody));
+                        case 404:
+                            throw new NotFoundException(getBodyAsMessage(errorBody));
+                        case 406:
+                            throw new NotAcceptableException(getBodyAsMessage(errorBody));
+                        case 409:
+                            throw new ConflictException(getBodyAsMessage(errorBody));
+                        case 500:
+                            throw new InternalServerErrorException(getBodyAsMessage(errorBody));
+                        default:
+                            throw new DockerException(getBodyAsMessage(errorBody), response.status().code());
                     }
                 } catch (Throwable e) {
                     resultCallback.onError(e);

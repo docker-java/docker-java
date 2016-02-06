@@ -7,8 +7,8 @@ import java.io.Closeable;
  */
 public interface ResultCallback<A_RES_T> extends Closeable {
     /**
-     * Called when the async processing starts respectively when the response arrives from the server. The passed
-     * {@link Closeable} can be used to close/interrupt the processing.
+     * Called when the async processing starts respectively when the response arrives from the server. The passed {@link Closeable} can be
+     * used to close/interrupt the processing.
      */
     void onStart(Closeable closeable);
 

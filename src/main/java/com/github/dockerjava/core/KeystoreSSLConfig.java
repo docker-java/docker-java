@@ -88,22 +88,24 @@ public class KeystoreSSLConfig implements SSLConfig, Serializable {
         final KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory
                 .getDefaultAlgorithm());
         keyManagerFactory.init(keystore, keystorePassword.toCharArray());
-        context.init(keyManagerFactory.getKeyManagers(), new TrustManager[]{new X509TrustManager() {
-            @Override
-            public X509Certificate[] getAcceptedIssuers() {
-                return new X509Certificate[] {};
-            }
+        context.init(keyManagerFactory.getKeyManagers(), new TrustManager[] {
+                new X509TrustManager() {
+                    @Override
+                    public X509Certificate[] getAcceptedIssuers() {
+                        return new X509Certificate[] {};
+                    }
 
-            @Override
-            public void checkClientTrusted(final X509Certificate[] arg0, final String arg1) {
+                    @Override
+                    public void checkClientTrusted(final X509Certificate[] arg0, final String arg1) {
 
-            }
+                    }
 
-            @Override
-            public void checkServerTrusted(final X509Certificate[] arg0, final String arg1) {
+                    @Override
+                    public void checkServerTrusted(final X509Certificate[] arg0, final String arg1) {
 
-            }
-        } }, new SecureRandom());
+                    }
+                }
+        }, new SecureRandom());
 
         return context;
     }

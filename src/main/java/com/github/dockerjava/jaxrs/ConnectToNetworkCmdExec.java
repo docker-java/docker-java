@@ -11,7 +11,7 @@ import javax.ws.rs.core.MediaType;
 import static javax.ws.rs.client.Entity.entity;
 
 public class ConnectToNetworkCmdExec extends AbstrSyncDockerCmdExec<ConnectToNetworkCmd, Void>
-    implements ConnectToNetworkCmd.Exec {
+        implements ConnectToNetworkCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConnectToNetworkCmdExec.class);
 

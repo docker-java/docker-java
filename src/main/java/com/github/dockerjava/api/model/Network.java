@@ -149,6 +149,6 @@ public class Network {
             public String getGateway() {
                 return gateway;
             }
-         }
+        }
     }
 }

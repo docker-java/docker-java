@@ -35,13 +35,11 @@ import java.util.Queue;
 import org.newsclub.net.unix.AFUNIXSocket;
 
 /**
- * Provides a socket that wraps an org.newsclub.net.unix.AFUNIXSocket and delays setting options until the socket is
- * connected. This is necessary because the Apache HTTP client attempts to set options prior to connecting the socket,
- * which doesn't work for Unix sockets since options are being set on the underlying file descriptor. Until the socket
- * is connected, the file descriptor doesn't exist.
+ * Provides a socket that wraps an org.newsclub.net.unix.AFUNIXSocket and delays setting options until the socket is connected. This is
+ * necessary because the Apache HTTP client attempts to set options prior to connecting the socket, which doesn't work for Unix sockets
+ * since options are being set on the underlying file descriptor. Until the socket is connected, the file descriptor doesn't exist.
  *
- * This class also noop's any calls to setReuseAddress, which is called by the Apache client but isn't supported by
- * AFUnixSocket.
+ * This class also noop's any calls to setReuseAddress, which is called by the Apache client but isn't supported by AFUnixSocket.
  */
 public class ApacheUnixSocket extends Socket {
 

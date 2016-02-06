@@ -202,8 +202,6 @@ public class InspectContainerResponse {
         return ToStringBuilder.reflectionToString(this);
     }
 
-
-
     @JsonIgnoreProperties(ignoreUnknown = true)
     public class ContainerState {
 

@@ -23,8 +23,8 @@ public enum InternetProtocol {
     public static final InternetProtocol DEFAULT = TCP;
 
     /**
-     * Returns a string representation of this {@link InternetProtocol} suitable for inclusion in a JSON message. The
-     * output is the lowercased name of the Protocol, e.g. <code>tcp</code>.
+     * Returns a string representation of this {@link InternetProtocol} suitable for inclusion in a JSON message. The output is the
+     * lowercased name of the Protocol, e.g. <code>tcp</code>.
      *
      * @return a string representation of this {@link InternetProtocol}
      */

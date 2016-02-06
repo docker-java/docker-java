@@ -7,8 +7,8 @@ import org.testng.annotations.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * Compares serialization results of various {@link RestartPolicy}s with what Docker (as of 1.3.3) actually sends when
- * executing <code>docker run --restart xxx</code>.
+ * Compares serialization results of various {@link RestartPolicy}s with what Docker (as of 1.3.3) actually sends when executing
+ * <code>docker run --restart xxx</code>.
  */
 public class RestartPolicy_SerializingTest {
     private final ObjectMapper objectMapper = new ObjectMapper();

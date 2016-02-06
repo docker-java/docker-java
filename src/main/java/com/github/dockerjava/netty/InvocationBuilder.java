@@ -47,8 +47,8 @@ import com.github.dockerjava.netty.handler.HttpResponseStreamHandler;
 import com.github.dockerjava.netty.handler.JsonResponseCallbackHandler;
 
 /**
- * This class is basically a replacement of javax.ws.rs.client.Invocation.Builder to allow simpler migration of JAX-RS
- * code to a netty based implementation.
+ * This class is basically a replacement of javax.ws.rs.client.Invocation.Builder to allow simpler migration of JAX-RS code to a netty based
+ * implementation.
  *
  * @author Marcus Linke
  */
