@@ -64,6 +64,7 @@
 		<!-- test dependencies -->
 		<logback.version>1.1.0</logback.version>
 		<testng.version>6.1.1</testng.version>
+		<netty.version>4.1.0.CR2</netty.version>
 		<hamcrest.library.version>1.3</hamcrest.library.version>
 		<hamcrest.jpa-matchers>1.6</hamcrest.jpa-matchers>
 		<lambdaj.version>2.3.3</lambdaj.version>
@@ -206,22 +207,22 @@
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-codec-http</artifactId>
-			<version>4.1.0.Beta7</version>
+			<version>${netty.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-handler</artifactId>
-			<version>4.1.0.Beta7</version>
+			<version>${netty.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-handler-proxy</artifactId>
-			<version>4.1.0.Beta7</version>
+			<version>${netty.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-transport-native-epoll</artifactId>
-			<version>4.1.0.Beta7</version>
+			<version>${netty.version}</version>
 			<classifier>linux-x86_64</classifier>
 		</dependency>
 	</dependencies>
