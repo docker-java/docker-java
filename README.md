@@ -102,7 +102,7 @@ In your application, e.g.
 
     DockerClientConfig config = DockerClientConfig.createDefaultConfigBuilder()
         .withDockerHost("tcp://my-docker-host.tld:2376")
-        .withDockerTlsVerify("1")
+        .withDockerTlsVerify(true)
         .withDockerCertPath("/home/user/.docker/certs")
         .withDockerConfig("/home/user/.docker")
         .withApiVersion("1.21")
@@ -113,7 +113,7 @@ In your application, e.g.
         .build();
     DockerClient docker = DockerClientBuilder.getInstance(config).build();
 
-#### Properties
+#### Properties (docker-java.properties)
 
     DOCKER_HOST=tcp://localhost:2376
     DOCKER_TLS_VERIFY=1
