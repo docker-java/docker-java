@@ -48,17 +48,17 @@ public class AuthConfigFileTest {
 
     @Test
     public void validJson() throws IOException {
-        AuthConfig authConfig1 = new AuthConfig();
-        authConfig1.setEmail("foo@example.com");
-        authConfig1.setUsername("foo");
-        authConfig1.setPassword("bar");
-        authConfig1.setServerAddress("quay.io");
+        AuthConfig authConfig1 = new AuthConfig()
+                .withEmail("foo@example.com")
+                .withUsername("foo")
+                .withPassword("bar")
+                .withServerAddress("quay.io");
 
-        AuthConfig authConfig2 = new AuthConfig();
-        authConfig2.setEmail("moo@example.com");
-        authConfig2.setUsername("foo1");
-        authConfig2.setPassword("bar1");
-        authConfig2.setServerAddress(AuthConfig.DEFAULT_SERVER_ADDRESS);
+        AuthConfig authConfig2 = new AuthConfig()
+                .withEmail("moo@example.com")
+                .withUsername("foo1")
+                .withPassword("bar1")
+                .withServerAddress(AuthConfig.DEFAULT_SERVER_ADDRESS);
 
         AuthConfigFile expected = new AuthConfigFile();
         expected.addConfig(authConfig1);
@@ -70,11 +70,11 @@ public class AuthConfigFileTest {
 
     @Test
     public void validLegacy() throws IOException {
-        AuthConfig authConfig = new AuthConfig();
-        authConfig.setEmail("foo@example.com");
-        authConfig.setUsername("foo");
-        authConfig.setPassword("bar");
-        authConfig.setServerAddress(AuthConfig.DEFAULT_SERVER_ADDRESS);
+        AuthConfig authConfig = new AuthConfig()
+                .withEmail("foo@example.com")
+                .withUsername("foo")
+                .withPassword("bar")
+                .withServerAddress(AuthConfig.DEFAULT_SERVER_ADDRESS);
 
         AuthConfigFile expected = new AuthConfigFile();
         expected.addConfig(authConfig);

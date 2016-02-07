@@ -11,11 +11,11 @@ public class AuthConfigTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        authConfig = new AuthConfig();
-        authConfig.setEmail("foo");
-        authConfig.setPassword("bar");
-        authConfig.setServerAddress("baz");
-        authConfig.setUsername("qux");
+        authConfig = new AuthConfig()
+                .withEmail("foo")
+                .withPassword("bar")
+                .withServerAddress("baz")
+                .withUsername("qux");
     }
 
     @Test

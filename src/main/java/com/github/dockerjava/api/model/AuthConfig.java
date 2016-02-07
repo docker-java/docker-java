@@ -3,7 +3,6 @@ package com.github.dockerjava.api.model;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -30,48 +29,52 @@ public class AuthConfig {
     @JsonProperty("serveraddress")
     private String serverAddress = DEFAULT_SERVER_ADDRESS;
 
+    @JsonProperty("auth")
     private String auth;
 
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+    public AuthConfig withUsername(String username) {
         this.username = username;
+        return this;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public AuthConfig withPassword(String password) {
         this.password = password;
+        return this;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public AuthConfig withEmail(String email) {
         this.email = email;
+        return this;
     }
 
     public String getServerAddress() {
         return serverAddress;
     }
 
-    public void setServerAddress(String serverAddress) {
+    public AuthConfig withServerAddress(String serverAddress) {
         this.serverAddress = serverAddress;
+        return this;
     }
 
-    @JsonIgnore
     public String getAuth() {
         return auth;
     }
 
-    @JsonProperty("auth")
-    public void setAuth(String auth) {
+    public AuthConfig withAuth(String auth) {
         this.auth = auth;
+        return this;
     }
 
     @Override
