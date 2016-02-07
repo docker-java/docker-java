@@ -17,10 +17,11 @@ public class InspectNetworkCmdExec extends AbstrSyncDockerCmdExec<InspectNetwork
         super(baseResource, dockerClientConfig);
     }
 
-    @Override protected Network execute(InspectNetworkCmd command) {
+    @Override
+    protected Network execute(InspectNetworkCmd command) {
 
         WebTarget webResource = getBaseResource().path("/networks/{id}").resolveTemplate("id",
-            command.getNetworkId());
+                command.getNetworkId());
 
         LOGGER.debug("GET: {}", webResource);
         return webResource.request().accept(MediaType.APPLICATION_JSON).get(Network.class);

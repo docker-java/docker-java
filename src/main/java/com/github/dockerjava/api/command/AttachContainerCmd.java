@@ -50,8 +50,7 @@ public interface AttachContainerCmd extends AsyncDockerCmd<AttachContainerCmd, F
 
     /**
      * Following the stream means the resulting {@link InputStream} returned by {@link #exec()} reads infinitely. So a
-     * {@link InputStream#read()} MAY BLOCK FOREVER as long as no data is streamed from the docker host to
-     * {@link DockerClient}!
+     * {@link InputStream#read()} MAY BLOCK FOREVER as long as no data is streamed from the docker host to {@link DockerClient}!
      */
     AttachContainerCmd withFollowStream(Boolean followStream);
 

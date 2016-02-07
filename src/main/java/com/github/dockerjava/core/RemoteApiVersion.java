@@ -10,8 +10,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 
 /**
- * Bean to encapsulate the version of the <a
- * href="http://docs.docker.com/engine/reference/api/docker_remote_api/">Docker Remote (REST) API</a>
+ * Bean to encapsulate the version of the <a href="http://docs.docker.com/engine/reference/api/docker_remote_api/">Docker Remote (REST)
+ * API</a>
  * <p>
  * Contains the minor and major version of the API as well as operations to compare API versions.
  *
@@ -53,14 +53,12 @@ public class RemoteApiVersion implements Serializable {
     public static final RemoteApiVersion VERSION_1_21 = RemoteApiVersion.create(1, 21);
 
     /**
-     * @see <a href="https://github.com/docker/docker/blob/master/docs/reference/api/docker_remote_api_v1.22.md">Docker
-     *      API 1.22</a>
+     * @see <a href="https://github.com/docker/docker/blob/master/docs/reference/api/docker_remote_api_v1.22.md">Docker API 1.22</a>
      */
     public static final RemoteApiVersion VERSION_1_22 = RemoteApiVersion.create(1, 22);
 
     /**
-     * Unknown, docker doesn't reflect reality. I.e. we implemented method, but for javadoc it not clear when it was
-     * added.
+     * Unknown, docker doesn't reflect reality. I.e. we implemented method, but for javadoc it not clear when it was added.
      */
     private static final RemoteApiVersion UNKNOWN_VERSION = new RemoteApiVersion(0, 0) {
 
@@ -127,7 +125,7 @@ public class RemoteApiVersion implements Serializable {
         return false;
     }
 
-    //CHECKSTYLE:OFF
+    // CHECKSTYLE:OFF
     @Override
     public boolean equals(final Object o) {
         if (this == o)
@@ -137,7 +135,8 @@ public class RemoteApiVersion implements Serializable {
         final RemoteApiVersion that = (RemoteApiVersion) o;
         return Objects.equal(major, that.major) && Objects.equal(minor, that.minor);
     }
-    //CHECKSTYLE:ON
+
+    // CHECKSTYLE:ON
 
     @Override
     public int hashCode() {

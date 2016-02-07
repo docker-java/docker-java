@@ -36,8 +36,7 @@ public class Event {
      *            Container ID
      * @param status
      *            Status string. List of statuses is available in <a
-     *            href="https://docs.docker.com/reference/api/docker_remote_api_v1.16/#monitor-dockers-events">Docker
-     *            API v.1.16</a>
+     *            href="https://docs.docker.com/reference/api/docker_remote_api_v1.16/#monitor-dockers-events">Docker API v.1.16</a>
      * @param from
      *            Image, from which the container has been created
      * @param time
@@ -53,8 +52,7 @@ public class Event {
 
     /**
      * Status of docker image or container. List of statuses is available in <a
-     * href="https://docs.docker.com/reference/api/docker_remote_api_v1.16/#monitor-dockers-events">Docker API
-     * v.1.16</a>
+     * href="https://docs.docker.com/reference/api/docker_remote_api_v1.16/#monitor-dockers-events">Docker API v.1.16</a>
      *
      * @return Status string
      */

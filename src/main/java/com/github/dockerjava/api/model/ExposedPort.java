@@ -24,9 +24,9 @@ import com.fasterxml.jackson.databind.node.NullNode;
 import com.github.dockerjava.api.model.Ports.Binding;
 
 /**
- * Represents a container port that Docker exposes to external clients. The port is defined by its {@link #getPort()
- * port number} and an {@link InternetProtocol}. It can be published by Docker by
- * {@link Ports#bind(ExposedPort, Binding) binding} it to a host port, represented by a {@link Binding}.
+ * Represents a container port that Docker exposes to external clients. The port is defined by its {@link #getPort() port number} and an
+ * {@link InternetProtocol}. It can be published by Docker by {@link Ports#bind(ExposedPort, Binding) binding} it to a host port,
+ * represented by a {@link Binding}.
  */
 @JsonDeserialize(using = ExposedPort.Deserializer.class)
 @JsonSerialize(using = ExposedPort.Serializer.class)
@@ -123,12 +123,12 @@ public class ExposedPort {
         try {
             String[] parts = serialized.split("/");
             switch (parts.length) {
-            case 1:
-                return new ExposedPort(Integer.valueOf(parts[0]));
-            case 2:
-                return new ExposedPort(Integer.valueOf(parts[0]), InternetProtocol.parse(parts[1]));
-            default:
-                throw new IllegalArgumentException();
+                case 1:
+                    return new ExposedPort(Integer.valueOf(parts[0]));
+                case 2:
+                    return new ExposedPort(Integer.valueOf(parts[0]), InternetProtocol.parse(parts[1]));
+                default:
+                    throw new IllegalArgumentException();
             }
         } catch (Exception e) {
             throw new IllegalArgumentException("Error parsing ExposedPort '" + serialized + "'");
@@ -136,8 +136,8 @@ public class ExposedPort {
     }
 
     /**
-     * Returns a string representation of this {@link ExposedPort} suitable for inclusion in a JSON message. The format
-     * is <code>port/protocol</code>, like the argument in {@link #parse(String)}.
+     * Returns a string representation of this {@link ExposedPort} suitable for inclusion in a JSON message. The format is
+     * <code>port/protocol</code>, like the argument in {@link #parse(String)}.
      *
      * @return a string representation of this {@link ExposedPort}
      */

@@ -55,16 +55,16 @@ public class VolumesFrom {
         try {
             String[] parts = serialized.split(":");
             switch (parts.length) {
-            case 1: {
-                return new VolumesFrom(parts[0]);
-            }
-            case 2: {
-                return new VolumesFrom(parts[0], AccessMode.valueOf(parts[1]));
-            }
+                case 1: {
+                    return new VolumesFrom(parts[0]);
+                }
+                case 2: {
+                    return new VolumesFrom(parts[0], AccessMode.valueOf(parts[1]));
+                }
 
-            default: {
-                throw new IllegalArgumentException();
-            }
+                default: {
+                    throw new IllegalArgumentException();
+                }
             }
         } catch (Exception e) {
             throw new IllegalArgumentException("Error parsing Bind '" + serialized + "'");
@@ -88,8 +88,8 @@ public class VolumesFrom {
     }
 
     /**
-     * Returns a string representation of this {@link VolumesFrom} suitable for inclusion in a JSON message. The format
-     * is <code>&lt;container&gt;:&lt;access mode&gt;</code>, like the argument in {@link #parse(String)}.
+     * Returns a string representation of this {@link VolumesFrom} suitable for inclusion in a JSON message. The format is
+     * <code>&lt;container&gt;:&lt;access mode&gt;</code>, like the argument in {@link #parse(String)}.
      *
      * @return a string representation of this {@link VolumesFrom}
      */

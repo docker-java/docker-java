@@ -11,7 +11,7 @@ import javax.ws.rs.core.MediaType;
 import static javax.ws.rs.client.Entity.entity;
 
 public class DisconnectFromNetworkCmdExec extends AbstrSyncDockerCmdExec<DisconnectFromNetworkCmd, Void>
-    implements DisconnectFromNetworkCmd.Exec {
+        implements DisconnectFromNetworkCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DisconnectFromNetworkCmdExec.class);
 

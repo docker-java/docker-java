@@ -1,6 +1,5 @@
 package com.github.dockerjava.core.command;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +11,7 @@ import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.api.model.Network.Ipam;
 
 public class CreateNetworkCmdImpl extends AbstrDockerCmd<CreateNetworkCmd, CreateNetworkResponse>
-    implements CreateNetworkCmd {
+        implements CreateNetworkCmd {
 
     @JsonProperty("Name")
     private String name;

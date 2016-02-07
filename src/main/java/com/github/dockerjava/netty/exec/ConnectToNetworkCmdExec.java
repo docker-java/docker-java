@@ -6,9 +6,8 @@ import com.github.dockerjava.netty.WebTarget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class ConnectToNetworkCmdExec extends AbstrSyncDockerCmdExec<ConnectToNetworkCmd, Void>
-    implements ConnectToNetworkCmd.Exec {
+        implements ConnectToNetworkCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConnectToNetworkCmdExec.class);
 

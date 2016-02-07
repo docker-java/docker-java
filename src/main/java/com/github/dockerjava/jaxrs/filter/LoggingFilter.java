@@ -116,8 +116,8 @@ public class LoggingFilter implements ContainerRequestFilter, ClientRequestFilte
     private final int maxEntitySize;
 
     /**
-     * Create a logging filter logging the request and response to a default JDK logger, named as the fully qualified
-     * class name of this class. Entity logging is turned off by default.
+     * Create a logging filter logging the request and response to a default JDK logger, named as the fully qualified class name of this
+     * class. Entity logging is turned off by default.
      */
     public LoggingFilter() {
         this(LOGGER, false);
@@ -139,15 +139,14 @@ public class LoggingFilter implements ContainerRequestFilter, ClientRequestFilte
     }
 
     /**
-     * Creates a logging filter with custom logger and entity logging turned on, but potentially limiting the size of
-     * entity to be buffered and logged.
+     * Creates a logging filter with custom logger and entity logging turned on, but potentially limiting the size of entity to be buffered
+     * and logged.
      *
      * @param logger
      *            the logger to log requests and responses.
      * @param maxEntitySize
-     *            maximum number of entity bytes to be logged (and buffered) - if the entity is larger, logging filter
-     *            will print (and buffer in memory) only the specified number of bytes and print "...more..." string at
-     *            the end.
+     *            maximum number of entity bytes to be logged (and buffered) - if the entity is larger, logging filter will print (and
+     *            buffer in memory) only the specified number of bytes and print "...more..." string at the end.
      */
     public LoggingFilter(final Logger logger, final int maxEntitySize) {
         this.logger = logger;

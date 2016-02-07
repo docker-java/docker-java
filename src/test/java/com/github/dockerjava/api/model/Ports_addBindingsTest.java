@@ -10,9 +10,8 @@ import org.testng.annotations.Test;
 import com.github.dockerjava.api.model.Ports.Binding;
 
 /**
- * As there may be several {@link Binding}s per {@link ExposedPort}, it makes a difference if you add
- * {@link PortBinding}s for the same or different {@link ExposedPort}s to {@link Ports}. This test verifies that the Map
- * in {@link Ports} is populated correctly in both cases.
+ * As there may be several {@link Binding}s per {@link ExposedPort}, it makes a difference if you add {@link PortBinding}s for the same or
+ * different {@link ExposedPort}s to {@link Ports}. This test verifies that the Map in {@link Ports} is populated correctly in both cases.
  */
 public class Ports_addBindingsTest {
     private static final ExposedPort TCP_80 = ExposedPort.tcp(80);
@@ -37,8 +36,8 @@ public class Ports_addBindingsTest {
         Map<ExposedPort, Binding[]> bindings = ports.getBindings();
         // two keys with one value each
         assertEquals(bindings.size(), 2);
-        assertEquals(bindings.get(TCP_80), new Binding[] { BINDING_8080 });
-        assertEquals(bindings.get(TCP_90), new Binding[] { BINDING_9090 });
+        assertEquals(bindings.get(TCP_80), new Binding[] {BINDING_8080});
+        assertEquals(bindings.get(TCP_90), new Binding[] {BINDING_9090});
     }
 
     @Test
@@ -48,7 +47,7 @@ public class Ports_addBindingsTest {
         Map<ExposedPort, Binding[]> bindings = ports.getBindings();
         // one key with two values
         assertEquals(bindings.size(), 1);
-        assertEquals(bindings.get(TCP_80), new Binding[] { BINDING_8080, BINDING_9090 });
+        assertEquals(bindings.get(TCP_80), new Binding[] {BINDING_8080, BINDING_9090});
     }
 
     @Test

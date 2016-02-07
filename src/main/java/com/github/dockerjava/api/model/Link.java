@@ -4,10 +4,9 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
- * Represents a network link between two Docker containers. The container with the name {@link #getName()} is made
- * available in the target container with the aliased name {@link #getAlias()}. This involves creating an entry in
- * <code>/etc/hosts</code> and some environment variables in the target container as well as creating a network bridge
- * between both containers.
+ * Represents a network link between two Docker containers. The container with the name {@link #getName()} is made available in the target
+ * container with the aliased name {@link #getAlias()}. This involves creating an entry in <code>/etc/hosts</code> and some environment
+ * variables in the target container as well as creating a network bridge between both containers.
  */
 public class Link {
 
@@ -55,14 +54,14 @@ public class Link {
         try {
             final String[] parts = serialized.split(":");
             switch (parts.length) {
-            case 2: {
-                String[] nameSplit = parts[0].split("/");
-                String[] aliasSplit = parts[1].split("/");
-                return new Link(nameSplit[nameSplit.length - 1], aliasSplit[aliasSplit.length - 1]);
-            }
-            default: {
-                throw new IllegalArgumentException();
-            }
+                case 2: {
+                    String[] nameSplit = parts[0].split("/");
+                    String[] aliasSplit = parts[1].split("/");
+                    return new Link(nameSplit[nameSplit.length - 1], aliasSplit[aliasSplit.length - 1]);
+                }
+                default: {
+                    throw new IllegalArgumentException();
+                }
             }
         } catch (final Exception e) {
             throw new IllegalArgumentException("Error parsing Link '" + serialized + "'");
@@ -85,8 +84,8 @@ public class Link {
     }
 
     /**
-     * Returns a string representation of this {@link Link} suitable for inclusion in a JSON message. The format is
-     * <code>name:alias</code>, like the argument in {@link #parse(String)}.
+     * Returns a string representation of this {@link Link} suitable for inclusion in a JSON message. The format is <code>name:alias</code>,
+     * like the argument in {@link #parse(String)}.
      *
      * @return a string representation of this {@link Link}
      */

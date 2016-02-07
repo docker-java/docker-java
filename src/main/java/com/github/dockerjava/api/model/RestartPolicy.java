@@ -15,8 +15,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * <dd>Do not restart the container if it dies. (default)</dd>
  *
  * <dt>on-failure</dt>
- * <dd>Restart the container if it exits with a non-zero exit code. Can also accept an optional maximum restart count
- * (e.g. on-failure:5).
+ * <dd>Restart the container if it exits with a non-zero exit code. Can also accept an optional maximum restart count (e.g. on-failure:5).
  * <dd>
  *
  * <dt>always</dt>
@@ -111,8 +110,8 @@ public class RestartPolicy {
     }
 
     /**
-     * Returns a string representation of this {@link RestartPolicy}. The format is <code>name[:count]</code>, like the
-     * argument in {@link #parse(String)}.
+     * Returns a string representation of this {@link RestartPolicy}. The format is <code>name[:count]</code>, like the argument in
+     * {@link #parse(String)}.
      *
      * @return a string representation of this {@link RestartPolicy}
      */

@@ -317,8 +317,8 @@ public class StartContainerCmdExecTest extends AbstractNettyDockerClientTest {
         assertThat(inspectContainerResponse2.getId(), not(isEmptyString()));
         assertThat(inspectContainerResponse2.getHostConfig(), is(notNullValue()));
         assertThat(inspectContainerResponse2.getHostConfig().getLinks(), is(notNullValue()));
-        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] { new Link("container1",
-                "container1Link") }));
+        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] {new Link("container1",
+                "container1Link")}));
         assertThat(inspectContainerResponse2.getId(), startsWith(container2.getId()));
         assertThat(inspectContainerResponse2.getName(), equalTo("/container2"));
         assertThat(inspectContainerResponse2.getImageId(), not(isEmptyString()));
@@ -370,8 +370,8 @@ public class StartContainerCmdExecTest extends AbstractNettyDockerClientTest {
         assertThat(inspectContainerResponse2.getId(), not(isEmptyString()));
         assertThat(inspectContainerResponse2.getHostConfig(), is(notNullValue()));
         assertThat(inspectContainerResponse2.getHostConfig().getLinks(), is(notNullValue()));
-        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] { new Link("container1",
-                "container1Link") }));
+        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] {new Link("container1",
+                "container1Link")}));
         assertThat(inspectContainerResponse2.getId(), startsWith(container2.getId()));
         assertThat(inspectContainerResponse2.getName(), equalTo("/container2"));
         assertThat(inspectContainerResponse2.getImageId(), not(isEmptyString()));
@@ -383,7 +383,7 @@ public class StartContainerCmdExecTest extends AbstractNettyDockerClientTest {
     @Test
     public void startContainer() throws DockerException {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd(new String[] { "top" })
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd(new String[] {"top"})
                 .exec();
 
         LOG.info("Created container {}", container.toString());
@@ -419,11 +419,10 @@ public class StartContainerCmdExecTest extends AbstractNettyDockerClientTest {
     }
 
     /**
-     * This tests support for --net option for the docker run command: --net="bridge" Set the Network mode for the
-     * container 'bridge': creates a new network stack for the container on the docker bridge 'none': no networking for
-     * this container 'container:': reuses another container network stack 'host': use the host network stack inside the
-     * container. Note: the host mode gives the container full access to local system services such as D-bus and is
-     * therefore considered insecure.
+     * This tests support for --net option for the docker run command: --net="bridge" Set the Network mode for the container 'bridge':
+     * creates a new network stack for the container on the docker bridge 'none': no networking for this container 'container:': reuses
+     * another container network stack 'host': use the host network stack inside the container. Note: the host mode gives the container full
+     * access to local system services such as D-bus and is therefore considered insecure.
      */
     @Test
     public void startContainerWithNetworkMode() throws DockerException {

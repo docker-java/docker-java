@@ -34,21 +34,21 @@ public class ExecStartResultCallback extends ResultCallbackTemplate<ExecStartRes
         if (frame != null) {
             try {
                 switch (frame.getStreamType()) {
-                case STDOUT:
-                case RAW:
-                    if (stdout != null) {
-                        stdout.write(frame.getPayload());
-                        stdout.flush();
-                    }
-                    break;
-                case STDERR:
-                    if (stderr != null) {
-                        stderr.write(frame.getPayload());
-                        stderr.flush();
-                    }
-                    break;
-                default:
-                    LOGGER.error("unknown stream type:" + frame.getStreamType());
+                    case STDOUT:
+                    case RAW:
+                        if (stdout != null) {
+                            stdout.write(frame.getPayload());
+                            stdout.flush();
+                        }
+                        break;
+                    case STDERR:
+                        if (stderr != null) {
+                            stderr.write(frame.getPayload());
+                            stderr.flush();
+                        }
+                        break;
+                    default:
+                        LOGGER.error("unknown stream type:" + frame.getStreamType());
                 }
             } catch (IOException e) {
                 onError(e);

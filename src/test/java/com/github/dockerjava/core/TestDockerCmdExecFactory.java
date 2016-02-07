@@ -11,8 +11,8 @@ import com.github.dockerjava.api.command.AuthCmd.Exec;
 import com.github.dockerjava.api.model.BuildResponseItem;
 
 /**
- * Special {@link DockerCmdExecFactory} implementation that collects container and image creations while test execution
- * for the purpose of automatically cleanup.
+ * Special {@link DockerCmdExecFactory} implementation that collects container and image creations while test execution for the purpose of
+ * automatically cleanup.
  *
  * @author Marcus Linke
  */

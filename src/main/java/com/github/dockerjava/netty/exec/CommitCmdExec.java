@@ -28,7 +28,8 @@ public class CommitCmdExec extends AbstrSyncDockerCmdExec<CommitCmd, String> imp
 
         LOGGER.trace("POST: {}", webTarget);
         ObjectNode objectNode = webTarget.request().accept(MediaType.APPLICATION_JSON)
-                .post(command, new TypeReference<ObjectNode>() { });
+                .post(command, new TypeReference<ObjectNode>() {
+                });
 
         return objectNode.get("Id").asText();
     }

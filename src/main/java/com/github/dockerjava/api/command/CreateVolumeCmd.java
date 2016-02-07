@@ -29,12 +29,10 @@ public interface CreateVolumeCmd extends SyncDockerCmd<CreateVolumeResponse> {
 
     /**
      * @param driverOpts
-     *            - A mapping of driver options and values. These options are passed directly to the driver and are
-     *            driver specific.
+     *            - A mapping of driver options and values. These options are passed directly to the driver and are driver specific.
      */
     public CreateVolumeCmd withDriverOpts(Map<String, String> driverOpts);
 
     public static interface Exec extends DockerCmdSyncExec<CreateVolumeCmd, CreateVolumeResponse> {
     }
 }
-
