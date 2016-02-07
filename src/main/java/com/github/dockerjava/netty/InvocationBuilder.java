@@ -234,8 +234,10 @@ public class InvocationBuilder {
 
         HttpConnectionHijackHandler hijackHandler = new HttpConnectionHijackHandler(responseHandler);
 
+        HttpClientCodec httpClientCodec = channel.pipeline().get(HttpClientCodec.class);
+
         channel.pipeline().addLast(
-                new HttpClientUpgradeHandler(new HttpClientCodec(), hijackHandler, Integer.MAX_VALUE));
+                new HttpClientUpgradeHandler(httpClientCodec, hijackHandler, Integer.MAX_VALUE));
         channel.pipeline().addLast(streamHandler);
 
         sendRequest(requestProvider, channel);

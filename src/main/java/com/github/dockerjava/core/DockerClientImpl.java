@@ -132,7 +132,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     private static DockerClientConfig configWithServerUrl(String serverUrl) {
-        return DockerClientConfig.createDefaultConfigBuilder().withUri(serverUrl).build();
+        return DockerClientConfig.createDefaultConfigBuilder().withDockerHost(serverUrl).build();
     }
 
     public static DockerClientImpl getInstance() {
@@ -161,14 +161,14 @@ public class DockerClientImpl implements Closeable, DockerClient {
 
     @Override
     public AuthConfig authConfig() {
-        checkNotNull(dockerClientConfig.getUsername(), "Configured username is null.");
-        checkNotNull(dockerClientConfig.getServerAddress(), "Configured serverAddress is null.");
+        checkNotNull(dockerClientConfig.getRegistryUsername(), "Configured username is null.");
+        checkNotNull(dockerClientConfig.getRegistryUrl(), "Configured serverAddress is null.");
 
         AuthConfig authConfig = new AuthConfig();
-        authConfig.setUsername(dockerClientConfig.getUsername());
-        authConfig.setPassword(dockerClientConfig.getPassword());
-        authConfig.setEmail(dockerClientConfig.getEmail());
-        authConfig.setServerAddress(dockerClientConfig.getServerAddress());
+        authConfig.setUsername(dockerClientConfig.getRegistryUsername());
+        authConfig.setPassword(dockerClientConfig.getRegistryPassword());
+        authConfig.setEmail(dockerClientConfig.getRegistryEmail());
+        authConfig.setServerAddress(dockerClientConfig.getRegistryUrl());
 
         return authConfig;
     }
