@@ -27,8 +27,7 @@ import com.github.dockerjava.core.NameParser.HostnameReposName;
 import com.github.dockerjava.core.NameParser.ReposTag;
 
 /**
- * Respects some of the docker CLI options. See
- * https://docs.docker.com/engine/reference/commandline/cli/#environment-variables
+ * Respects some of the docker CLI options. See https://docs.docker.com/engine/reference/commandline/cli/#environment-variables
  */
 public class DockerClientConfig implements Serializable {
 
@@ -114,7 +113,7 @@ public class DockerClientConfig implements Serializable {
                             "Certificate path (DOCKER_CERT_PATH) '" + dockerCertPath + "' doesn't exist.");
                 }
 
-                if(certPath.isDirectory()) {
+                if (certPath.isDirectory()) {
                     return dockerCertPath;
                 } else {
                     throw new DockerClientException(
@@ -361,9 +360,9 @@ public class DockerClientConfig implements Serializable {
         private boolean dockerTlsVerify;
 
         /**
-         * This will set all fields in the builder to those contained in the Properties object. The Properties object
-         * should contain the following docker-java configuration keys: DOCKER_HOST, DOCKER_TLS_VERIFY, api.version,
-         * registry.username, registry.password, registry.email, DOCKER_CERT_PATH, and DOCKER_CONFIG.
+         * This will set all fields in the builder to those contained in the Properties object. The Properties object should contain the
+         * following docker-java configuration keys: DOCKER_HOST, DOCKER_TLS_VERIFY, api.version, registry.username, registry.password,
+         * registry.email, DOCKER_CERT_PATH, and DOCKER_CONFIG.
          */
         public DockerClientConfigBuilder withProperties(Properties p) {
             return withDockerHost(p.getProperty(DOCKER_HOST)).withDockerTlsVerify(p.getProperty(DOCKER_TLS_VERIFY))
@@ -418,7 +417,13 @@ public class DockerClientConfig implements Serializable {
         }
 
         public final DockerClientConfigBuilder withDockerTlsVerify(String dockerTlsVerify) {
-            this.dockerTlsVerify = BooleanUtils.toBoolean(dockerTlsVerify.trim(), "1", "0");
+            this.dockerTlsVerify = BooleanUtils.toBoolean(dockerTlsVerify.trim())
+                    || BooleanUtils.toBoolean(dockerTlsVerify.trim(), "1", "0");
+            return this;
+        }
+
+        public final DockerClientConfigBuilder withDockerTlsVerify(Boolean dockerTlsVerify) {
+            this.dockerTlsVerify = dockerTlsVerify;
             return this;
         }
 
