@@ -6,8 +6,10 @@ Change Log
 Notes
 
 * The upcoming release will contain multiple API breaking changes therefore the major version switch. It will support a subset of v.1.21 of the docker remote API. It also includes an experimental netty based implementation of `DockerCmdExecFactory` that probably will replace the current jersey/httpclient based one in a later release.
+* The configuration has been changed to better match the docker CLI configuration options. The properties file was renamed from `docker.io.properties` to `docker-java.properties`. See README.md for details.
 
 All changes
+* [#447] (https://github.com/docker-java/docker-java/pull/447) Refactoring of DockerClientConfig 
 * [#430] (https://github.com/docker-java/docker-java/pull/430) Fix ExecStartCmd failure 
 * [#426] (https://github.com/docker-java/docker-java/pull/426) Refactored filters API 
 * [#425] (https://github.com/docker-java/docker-java/pull/425) Implement Network API
