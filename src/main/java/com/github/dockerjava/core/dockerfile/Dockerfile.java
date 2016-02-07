@@ -147,7 +147,7 @@ public class Dockerfile {
                     }
 
                     @Override
-                    public int read(byte [] buff, int offset, int len) throws IOException {
+                    public int read(byte[] buff, int offset, int len) throws IOException {
                         return tarInputStream.read(buff, offset, len);
                     }
 
@@ -213,29 +213,32 @@ public class Dockerfile {
         }
 
         /**
-         * Returns the matching ignore pattern for the given file or null if it should NOT be ignored. Exception rules
-         * like "!Dockerfile" will be respected.
+         * Returns the matching ignore pattern for the given file or null if it should NOT be ignored. Exception rules like "!Dockerfile"
+         * will be respected.
          */
         private String effectiveMatchingIgnorePattern(File file) {
             String relativeFilename = FilePathUtil.relativize(getDockerFolder(), file);
 
             List<String> matchingPattern = matchingIgnorePatterns(relativeFilename);
 
-            if (matchingPattern.isEmpty())
+            if (matchingPattern.isEmpty()) {
                 return null;
+            }
 
             String lastMatchingPattern = matchingPattern.get(matchingPattern.size() - 1);
 
             int lastMatchingPatternIndex = ignores.lastIndexOf(lastMatchingPattern);
 
-            if (lastMatchingPatternIndex == ignores.size() - 1)
+            if (lastMatchingPatternIndex == ignores.size() - 1) {
                 return lastMatchingPattern;
+            }
 
             List<String> remainingIgnorePattern = ignores.subList(lastMatchingPatternIndex + 1, ignores.size());
 
             for (String ignorePattern : remainingIgnorePattern) {
-                if (ignorePattern.equals("!" + relativeFilename))
+                if (ignorePattern.equals("!" + relativeFilename)) {
                     return null;
+                }
             }
 
             return lastMatchingPattern;

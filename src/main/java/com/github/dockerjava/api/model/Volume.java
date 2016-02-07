@@ -30,8 +30,9 @@ public class Volume {
         if (obj instanceof Volume) {
             Volume other = (Volume) obj;
             return new EqualsBuilder().append(path, other.getPath()).isEquals();
-        } else
+        } else {
             return super.equals(obj);
+        }
     }
 
     @Override

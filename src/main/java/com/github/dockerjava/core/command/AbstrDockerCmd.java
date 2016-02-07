@@ -19,7 +19,7 @@ import com.github.dockerjava.api.model.AuthConfig;
 
 public abstract class AbstrDockerCmd<CMD_T extends DockerCmd<RES_T>, RES_T> implements SyncDockerCmd<RES_T> {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(AbstrDockerCmd.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstrDockerCmd.class);
 
     protected DockerCmdSyncExec<CMD_T, RES_T> execution;
 

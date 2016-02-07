@@ -54,8 +54,8 @@ public class CompressArchiveUtil {
      * @param outputPath
      *            where to put the archived file
      * @param childrenOnly
-     *            if inputPath is directory and if childrenOnly is true, the archive will contain all of its children,
-     *            else the archive contains unique entry which is the inputPath itself
+     *            if inputPath is directory and if childrenOnly is true, the archive will contain all of its children, else the archive
+     *            contains unique entry which is the inputPath itself
      * @param gZipped
      *            compress with gzip algorithm
      */

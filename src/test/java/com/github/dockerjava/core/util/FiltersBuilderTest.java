@@ -1,7 +1,6 @@
 package com.github.dockerjava.core.util;
 
-import com.github.dockerjava.core.util.
-FiltersBuilder;
+import com.github.dockerjava.core.util.FiltersBuilder;
 import com.google.common.collect.Maps;
 
 import org.testng.annotations.Test;

@@ -26,6 +26,7 @@ public class CreateImageCmdExec extends AbstrSyncDockerCmdExec<CreateImageCmd, C
 
         LOGGER.trace("POST: {}", webResource);
         return webResource.request().accept(MediaType.APPLICATION_OCTET_STREAM)
-                .post(new TypeReference<CreateImageResponse>() {}, command.getImageStream());
+                .post(new TypeReference<CreateImageResponse>() {
+                }, command.getImageStream());
     }
 }

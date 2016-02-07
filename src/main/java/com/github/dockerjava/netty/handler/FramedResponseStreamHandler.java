@@ -89,8 +89,9 @@ public class FramedResponseStreamHandler extends SimpleChannelInboundHandler<Byt
 
         if (streamType.equals(StreamType.RAW)) {
 
-            if (payloadCnt == 0)
+            if (payloadCnt == 0) {
                 payload = new byte[rawBuffer.readableBytes()];
+            }
 
             int count = read(payload, payloadCnt, rawBuffer.readableBytes());
 
@@ -137,14 +138,14 @@ public class FramedResponseStreamHandler extends SimpleChannelInboundHandler<Byt
 
     private static StreamType streamType(byte streamType) {
         switch (streamType) {
-        case 0:
-            return StreamType.STDIN;
-        case 1:
-            return StreamType.STDOUT;
-        case 2:
-            return StreamType.STDERR;
-        default:
-            return StreamType.RAW;
+            case 0:
+                return StreamType.STDIN;
+            case 1:
+                return StreamType.STDOUT;
+            case 2:
+                return StreamType.STDERR;
+            default:
+                return StreamType.RAW;
         }
     }
 

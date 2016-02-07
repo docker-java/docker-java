@@ -9,8 +9,8 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * This class is basically a replacement of javax.ws.rs.client.WebTarget to allow simpler
- * migration of JAX-RS code to a netty based implementation.
+ * This class is basically a replacement of javax.ws.rs.client.WebTarget to allow simpler migration of JAX-RS code to a netty based
+ * implementation.
  *
  * @author Marcus Linke
  */
@@ -22,7 +22,7 @@ public class WebTarget {
 
     private Map<String, String> queryParams = new HashMap<String, String>();
 
-    private static String PATH_SEPARATOR = "/";
+    private static final String PATH_SEPARATOR = "/";
 
     public WebTarget(ChannelProvider channelProvider) {
         this.channelProvider = channelProvider;

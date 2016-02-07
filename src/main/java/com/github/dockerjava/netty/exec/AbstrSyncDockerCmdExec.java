@@ -6,7 +6,6 @@ import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.netty.WebTarget;
 
-
 public abstract class AbstrSyncDockerCmdExec<CMD_T extends DockerCmd<RES_T>, RES_T> extends AbstrDockerCmdExec
         implements DockerCmdSyncExec<CMD_T, RES_T> {
 

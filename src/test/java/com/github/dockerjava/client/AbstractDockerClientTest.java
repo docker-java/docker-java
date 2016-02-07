@@ -229,7 +229,7 @@ public abstract class AbstractDockerClientTest extends Assert {
         public void onNext(Frame frame) {
             log.append(new String(frame.getPayload()));
             System.err.println("LogContainerTestCallback: " + log.toString());
-            //super.onNext(frame);
+            // super.onNext(frame);
         }
 
         @Override

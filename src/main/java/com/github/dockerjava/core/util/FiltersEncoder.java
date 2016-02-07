@@ -16,8 +16,10 @@ import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
  *
  */
 public class FiltersEncoder {
+    private FiltersEncoder() {
+    }
 
-    private static ObjectMapper OBJECT_MAPPER = new JacksonJaxbJsonProvider().locateMapper(Map.class,
+    private static final ObjectMapper OBJECT_MAPPER = new JacksonJaxbJsonProvider().locateMapper(Map.class,
             MediaType.APPLICATION_JSON_TYPE);
 
     public static String jsonEncode(Map<String, List<String>> filters) {

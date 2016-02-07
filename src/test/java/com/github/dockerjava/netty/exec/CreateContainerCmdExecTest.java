@@ -32,7 +32,6 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.api.model.AccessMode;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Device;
 import com.github.dockerjava.api.model.ExposedPort;
@@ -42,7 +41,6 @@ import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.RestartPolicy;
 import com.github.dockerjava.api.model.Ulimit;
 import com.github.dockerjava.api.model.Volume;
-import com.github.dockerjava.api.model.VolumeRW;
 import com.github.dockerjava.api.model.VolumesFrom;
 import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
@@ -261,8 +259,8 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
         InspectContainerResponse inspectContainerResponse2 = dockerClient.inspectContainerCmd(container2.getId())
                 .exec();
-        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] { new Link("container1",
-                "container1Link") }));
+        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] {new Link("container1",
+                "container1Link")}));
     }
 
     @Test
@@ -320,7 +318,7 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
     @Test
     public void createContainerWithExtraHosts() throws DockerException {
 
-        String[] extraHosts = { "dockerhost:127.0.0.1", "otherhost:10.0.0.1" };
+        String[] extraHosts = {"dockerhost:127.0.0.1", "otherhost:10.0.0.1"};
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withName("container")
                 .withExtraHosts(extraHosts).exec();
@@ -358,9 +356,9 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
         ExposedPort tcp23 = ExposedPort.tcp(23);
 
         Ports portBindings = new Ports();
-        portBindings.bind(tcp22, Ports.Binding(11022));
-        portBindings.bind(tcp23, Ports.Binding(11023));
-        portBindings.bind(tcp23, Ports.Binding(11024));
+        portBindings.bind(tcp22, Ports.binding(11022));
+        portBindings.bind(tcp23, Ports.binding(11023));
+        portBindings.bind(tcp23, Ports.binding(11024));
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("true")
                 .withExposedPorts(tcp22, tcp23).withPortBindings(portBindings).exec();
@@ -374,13 +372,13 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
         assertThat(Arrays.asList(inspectContainerResponse.getConfig().getExposedPorts()), contains(tcp22, tcp23));
 
         assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp22)[0],
-                is(equalTo(Ports.Binding(11022))));
+                is(equalTo(Ports.binding(11022))));
 
         assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23)[0],
-                is(equalTo(Ports.Binding(11023))));
+                is(equalTo(Ports.binding(11023))));
 
         assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23)[1],
-                is(equalTo(Ports.Binding(11024))));
+                is(equalTo(Ports.binding(11024))));
 
     }
 
@@ -425,8 +423,8 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
         assertThat(inspectContainerResponse2.getId(), not(isEmptyString()));
         assertThat(inspectContainerResponse2.getHostConfig(), is(notNullValue()));
         assertThat(inspectContainerResponse2.getHostConfig().getLinks(), is(notNullValue()));
-        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] { new Link("container1",
-                "container1Link") }));
+        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] {new Link("container1",
+                "container1Link")}));
         assertThat(inspectContainerResponse2.getId(), startsWith(container2.getId()));
         assertThat(inspectContainerResponse2.getName(), equalTo("/container2"));
         assertThat(inspectContainerResponse2.getImageId(), not(isEmptyString()));
@@ -466,11 +464,10 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
     }
 
     /**
-     * This tests support for --net option for the docker run command: --net="bridge" Set the Network mode for the
-     * container 'bridge': creates a new network stack for the container on the docker bridge 'none': no networking for
-     * this container 'container:': reuses another container network stack 'host': use the host network stack inside the
-     * container. Note: the host mode gives the container full access to local system services such as D-bus and is
-     * therefore considered insecure.
+     * This tests support for --net option for the docker run command: --net="bridge" Set the Network mode for the container 'bridge':
+     * creates a new network stack for the container on the docker bridge 'none': no networking for this container 'container:': reuses
+     * another container network stack 'host': use the host network stack inside the container. Note: the host mode gives the container full
+     * access to local system services such as D-bus and is therefore considered insecure.
      */
     @Test
     public void createContainerWithNetworkMode() throws DockerException {
@@ -505,7 +502,7 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
     @Test(groups = "ignoreInCircleCi")
     public void createContainerWithULimits() throws DockerException {
 
-        Ulimit[] ulimits = { new Ulimit("nproc", 709, 1026), new Ulimit("nofile", 1024, 4096) };
+        Ulimit[] ulimits = {new Ulimit("nproc", 709, 1026), new Ulimit("nofile", 1024, 4096)};
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withName("container")
                 .withUlimits(ulimits).exec();

@@ -9,7 +9,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 public class RemoveNetworkCmdExec extends AbstrSyncDockerCmdExec<RemoveNetworkCmd, Void>
-    implements RemoveNetworkCmd.Exec {
+        implements RemoveNetworkCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RemoveNetworkCmdExec.class);
 

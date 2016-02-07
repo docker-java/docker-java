@@ -25,8 +25,9 @@ public class TopContainerCmdExec extends AbstrSyncDockerCmdExec<TopContainerCmd,
         WebTarget webResource = getBaseResource().path("/containers/{id}/top").resolveTemplate("id",
                 command.getContainerId());
 
-        if (!StringUtils.isEmpty(command.getPsArgs()))
+        if (!StringUtils.isEmpty(command.getPsArgs())) {
             webResource = webResource.queryParam("ps_args", command.getPsArgs());
+        }
 
         LOGGER.trace("GET: {}", webResource);
         return webResource.request().accept(MediaType.APPLICATION_JSON).get(new TypeReference<TopContainerResponse>() {

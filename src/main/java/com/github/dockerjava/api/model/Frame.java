@@ -28,6 +28,7 @@ public class Frame {
         return String.format("%s: %s", streamType, new String(payload).trim());
     }
 
+    // CHECKSTYLE:OFF
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -47,4 +48,5 @@ public class Frame {
         result = 31 * result + Arrays.hashCode(payload);
         return result;
     }
+    // CHECKSTYLE:ON
 }

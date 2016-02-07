@@ -52,8 +52,9 @@ public class Device {
             return new EqualsBuilder().append(cGroupPermissions, other.getcGroupPermissions())
                     .append(pathInContainer, other.getPathInContainer()).append(pathOnHost, other.getPathOnHost())
                     .isEquals();
-        } else
+        } else {
             return super.equals(obj);
+        }
     }
 
     @Override

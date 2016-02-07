@@ -53,8 +53,8 @@ public class VolumeRW {
     }
 
     /**
-     * Returns a string representation of this {@link VolumeRW} suitable for inclusion in a JSON message. The returned
-     * String is simply the container path, {@link #getPath()}.
+     * Returns a string representation of this {@link VolumeRW} suitable for inclusion in a JSON message. The returned String is simply the
+     * container path, {@link #getPath()}.
      *
      * @return a string representation of this {@link VolumeRW}
      */
@@ -69,8 +69,9 @@ public class VolumeRW {
             VolumeRW other = (VolumeRW) obj;
             return new EqualsBuilder().append(getVolume(), other.getVolume()).append(accessMode, other.getAccessMode())
                     .isEquals();
-        } else
+        } else {
             return super.equals(obj);
+        }
     }
 
     @Override

@@ -65,7 +65,7 @@ public class KeystoreSSLConfig implements SSLConfig, Serializable {
 
     /**
      * Get the SSL Context out of the keystore.
-     * 
+     *
      * @return java SSLContext
      * @throws KeyManagementException
      * @throws UnrecoverableKeyException
@@ -81,28 +81,31 @@ public class KeystoreSSLConfig implements SSLConfig, Serializable {
         String httpProtocols = System.getProperty("https.protocols");
         System.setProperty("https.protocols", "TLSv1");
 
-        if (httpProtocols != null)
+        if (httpProtocols != null) {
             System.setProperty("https.protocols", httpProtocols);
+        }
 
         final KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory
                 .getDefaultAlgorithm());
         keyManagerFactory.init(keystore, keystorePassword.toCharArray());
-        context.init(keyManagerFactory.getKeyManagers(), new TrustManager[] { new X509TrustManager() {
-            @Override
-            public X509Certificate[] getAcceptedIssuers() {
-                return new X509Certificate[] {};
-            }
+        context.init(keyManagerFactory.getKeyManagers(), new TrustManager[] {
+                new X509TrustManager() {
+                    @Override
+                    public X509Certificate[] getAcceptedIssuers() {
+                        return new X509Certificate[] {};
+                    }
 
-            @Override
-            public void checkClientTrusted(final X509Certificate[] arg0, final String arg1) {
+                    @Override
+                    public void checkClientTrusted(final X509Certificate[] arg0, final String arg1) {
 
-            }
+                    }
 
-            @Override
-            public void checkServerTrusted(final X509Certificate[] arg0, final String arg1) {
+                    @Override
+                    public void checkServerTrusted(final X509Certificate[] arg0, final String arg1) {
 
-            }
-        } }, new SecureRandom());
+                    }
+                }
+        }, new SecureRandom());
 
         return context;
     }

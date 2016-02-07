@@ -63,6 +63,7 @@ public class AuthConfigFile {
         return authConfigurations;
     }
 
+    // CHECKSTYLE:OFF
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -87,6 +88,8 @@ public class AuthConfigFile {
             return false;
         return true;
     }
+
+    // CHECKSTYLE:ON
 
     @Override
     public String toString() {

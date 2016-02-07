@@ -178,10 +178,11 @@ public class DockerClientConfig implements Serializable {
         Properties overriddenProperties = new Properties();
         overriddenProperties.putAll(p);
 
-        for (String key : new String[] { DOCKER_IO_URL_PROPERTY, DOCKER_IO_VERSION_PROPERTY,
+        for (String key : new String[] {
+                DOCKER_IO_URL_PROPERTY, DOCKER_IO_VERSION_PROPERTY,
                 DOCKER_IO_USERNAME_PROPERTY, DOCKER_IO_PASSWORD_PROPERTY, DOCKER_IO_EMAIL_PROPERTY,
                 DOCKER_IO_SERVER_ADDRESS_PROPERTY, DOCKER_IO_DOCKER_CERT_PATH_PROPERTY,
-                DOCKER_IO_DOCKER_CFG_PATH_PROPERTY, }) {
+                DOCKER_IO_DOCKER_CFG_PATH_PROPERTY}) {
             if (systemProperties.containsKey(key)) {
                 overriddenProperties.setProperty(key, systemProperties.getProperty(key));
             }
@@ -270,10 +271,11 @@ public class DockerClientConfig implements Serializable {
             authConfig = authConfigFile.resolveAuthConfig(hostnameReposName.hostname);
         }
 
-        AuthConfig _authConfig = getAuthConfig();
+        AuthConfig otherAuthConfig = getAuthConfig();
 
-        if (_authConfig != null)
-            authConfig = _authConfig;
+        if (otherAuthConfig != null) {
+            authConfig = otherAuthConfig;
+        }
 
         return authConfig;
     }
@@ -294,6 +296,7 @@ public class DockerClientConfig implements Serializable {
         return new AuthConfigurations();
     }
 
+    // CHECKSTYLE:OFF
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -336,6 +339,8 @@ public class DockerClientConfig implements Serializable {
         return result;
     }
 
+    // CHECKSTYLE:ON
+
     @Override
     public String toString() {
         return "DockerClientConfig{" + "uri=" + uri + ", version='" + version + '\'' + ", username='" + username + '\''
@@ -351,10 +356,9 @@ public class DockerClientConfig implements Serializable {
         private SSLConfig sslConfig;
 
         /**
-         * This will set all fields in the builder to those contained in the Properties object. The Properties object
-         * should contain the following docker.io.* keys: url, version, username, password, email, dockerCertPath, and
-         * dockerCfgPath. If docker.io.readTimeout or docker.io.enableLoggingFilter are not contained, they will be set
-         * to 1000 and true, respectively.
+         * This will set all fields in the builder to those contained in the Properties object. The Properties object should contain the
+         * following docker.io.* keys: url, version, username, password, email, dockerCertPath, and dockerCfgPath. If docker.io.readTimeout
+         * or docker.io.enableLoggingFilter are not contained, they will be set to 1000 and true, respectively.
          */
         public DockerClientConfigBuilder withProperties(Properties p) {
             return withUri(p.getProperty(DOCKER_IO_URL_PROPERTY))

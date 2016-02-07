@@ -25,8 +25,9 @@ public class ListVolumesCmdExec extends AbstrSyncDockerCmdExec<ListVolumesCmd, L
     protected ListVolumesResponse execute(ListVolumesCmd command) {
         WebTarget webTarget = getBaseResource().path("/volumes");
 
-        if (command.getFilters() != null && !command.getFilters().isEmpty())
+        if (command.getFilters() != null && !command.getFilters().isEmpty()) {
             webTarget = webTarget.queryParam("filters", urlPathSegmentEscaper().escape(FiltersEncoder.jsonEncode(command.getFilters())));
+        }
 
         LOGGER.trace("GET: {}", webTarget);
 
