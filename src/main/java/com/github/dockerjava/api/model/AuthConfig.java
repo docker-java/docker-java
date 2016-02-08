@@ -27,7 +27,7 @@ public class AuthConfig {
     private String email;
 
     @JsonProperty("serveraddress")
-    private String serverAddress = DEFAULT_SERVER_ADDRESS;
+    private String registryAddress = DEFAULT_SERVER_ADDRESS;
 
     @JsonProperty("auth")
     private String auth;
@@ -59,12 +59,12 @@ public class AuthConfig {
         return this;
     }
 
-    public String getServerAddress() {
-        return serverAddress;
+    public String getRegistryAddress() {
+        return registryAddress;
     }
 
-    public AuthConfig withServerAddress(String serverAddress) {
-        this.serverAddress = serverAddress;
+    public AuthConfig withRegistryAddress(String registryAddress) {
+        this.registryAddress = registryAddress;
         return this;
     }
 
@@ -90,7 +90,7 @@ public class AuthConfig {
         result = prime * result + ((auth == null) ? 0 : auth.hashCode());
         result = prime * result + ((email == null) ? 0 : email.hashCode());
         result = prime * result + ((password == null) ? 0 : password.hashCode());
-        result = prime * result + ((serverAddress == null) ? 0 : serverAddress.hashCode());
+        result = prime * result + ((registryAddress == null) ? 0 : registryAddress.hashCode());
         result = prime * result + ((username == null) ? 0 : username.hashCode());
         return result;
     }
@@ -119,10 +119,10 @@ public class AuthConfig {
                 return false;
         } else if (!password.equals(other.password))
             return false;
-        if (serverAddress == null) {
-            if (other.serverAddress != null)
+        if (registryAddress == null) {
+            if (other.registryAddress != null)
                 return false;
-        } else if (!serverAddress.equals(other.serverAddress))
+        } else if (!registryAddress.equals(other.registryAddress))
             return false;
         if (username == null) {
             if (other.username != null)

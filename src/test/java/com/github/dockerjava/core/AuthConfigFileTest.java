@@ -52,13 +52,13 @@ public class AuthConfigFileTest {
                 .withEmail("foo@example.com")
                 .withUsername("foo")
                 .withPassword("bar")
-                .withServerAddress("quay.io");
+                .withRegistryAddress("quay.io");
 
         AuthConfig authConfig2 = new AuthConfig()
                 .withEmail("moo@example.com")
                 .withUsername("foo1")
                 .withPassword("bar1")
-                .withServerAddress(AuthConfig.DEFAULT_SERVER_ADDRESS);
+                .withRegistryAddress(AuthConfig.DEFAULT_SERVER_ADDRESS);
 
         AuthConfigFile expected = new AuthConfigFile();
         expected.addConfig(authConfig1);
@@ -74,7 +74,7 @@ public class AuthConfigFileTest {
                 .withEmail("foo@example.com")
                 .withUsername("foo")
                 .withPassword("bar")
-                .withServerAddress(AuthConfig.DEFAULT_SERVER_ADDRESS);
+                .withRegistryAddress(AuthConfig.DEFAULT_SERVER_ADDRESS);
 
         AuthConfigFile expected = new AuthConfigFile();
         expected.addConfig(authConfig);

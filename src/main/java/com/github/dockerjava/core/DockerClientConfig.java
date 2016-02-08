@@ -282,7 +282,7 @@ public class DockerClientConfig implements Serializable {
                     .withUsername(getRegistryUsername())
                     .withPassword(getRegistryPassword())
                     .withEmail(getRegistryEmail())
-                    .withServerAddress(getRegistryUrl());
+                    .withRegistryAddress(getRegistryUrl());
         }
         return authConfig;
     }

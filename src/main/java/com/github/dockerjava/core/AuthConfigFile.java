@@ -29,7 +29,7 @@ public class AuthConfigFile {
     }
 
     void addConfig(AuthConfig config) {
-        authConfigMap.put(config.getServerAddress(), config);
+        authConfigMap.put(config.getRegistryAddress(), config);
     }
 
     public AuthConfig resolveAuthConfig(String hostname) {
@@ -112,7 +112,7 @@ public class AuthConfigFile {
                 AuthConfig authConfig = entry.getValue();
                 decodeAuth(authConfig.getAuth(), authConfig);
                 authConfig.withAuth(null);
-                authConfig.withServerAddress(entry.getKey());
+                authConfig.withRegistryAddress(entry.getKey());
                 configFile.addConfig(authConfig);
             }
         } else {

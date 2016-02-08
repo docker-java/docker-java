@@ -279,7 +279,7 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
                 .withUsername("testuser")
                 .withPassword("testpassword")
                 .withEmail("foo@bar.de")
-                .withServerAddress("localhost:5000");
+                .withRegistryAddress("localhost:5000");
 
         dockerClient.authCmd().withAuthConfig(authConfig).exec();
         dockerClient.tagImageCmd("busybox:latest", "localhost:5000/testuser/busybox", "latest").withForce().exec();

@@ -14,12 +14,12 @@ public class AuthConfigTest {
         authConfig = new AuthConfig()
                 .withEmail("foo")
                 .withPassword("bar")
-                .withServerAddress("baz")
+                .withRegistryAddress("baz")
                 .withUsername("qux");
     }
 
     @Test
     public void defaultServerAddress() throws Exception {
-        assertEquals(new AuthConfig().getServerAddress(), "https://index.docker.io/v1/");
+        assertEquals(new AuthConfig().getRegistryAddress(), "https://index.docker.io/v1/");
     }
 }

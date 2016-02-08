@@ -168,7 +168,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
                 .withUsername(dockerClientConfig.getRegistryUsername())
                 .withPassword(dockerClientConfig.getRegistryPassword())
                 .withEmail(dockerClientConfig.getRegistryEmail())
-                .withServerAddress(dockerClientConfig.getRegistryUrl());
+                .withRegistryAddress(dockerClientConfig.getRegistryUrl());
     }
 
     /**
