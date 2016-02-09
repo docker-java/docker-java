@@ -274,13 +274,12 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
         // wait for registry to boot
         Thread.sleep(3000);
 
-        AuthConfig authConfig = new AuthConfig();
-
         // credentials as configured in /auth/htpasswd
-        authConfig.setUsername("testuser");
-        authConfig.setPassword("testpassword");
-        authConfig.setEmail("foo@bar.de");
-        authConfig.setServerAddress("localhost:5000");
+        AuthConfig authConfig = new AuthConfig()
+                .withUsername("testuser")
+                .withPassword("testpassword")
+                .withEmail("foo@bar.de")
+                .withRegistryAddress("localhost:5000");
 
         dockerClient.authCmd().withAuthConfig(authConfig).exec();
         dockerClient.tagImageCmd("busybox:latest", "localhost:5000/testuser/busybox", "latest").withForce().exec();

@@ -29,7 +29,7 @@ public class AuthConfigFile {
     }
 
     void addConfig(AuthConfig config) {
-        authConfigMap.put(config.getServerAddress(), config);
+        authConfigMap.put(config.getRegistryAddress(), config);
     }
 
     public AuthConfig resolveAuthConfig(String hostname) {
@@ -111,8 +111,8 @@ public class AuthConfigFile {
             for (Map.Entry<String, AuthConfig> entry : configMap.entrySet()) {
                 AuthConfig authConfig = entry.getValue();
                 decodeAuth(authConfig.getAuth(), authConfig);
-                authConfig.setAuth(null);
-                authConfig.setServerAddress(entry.getKey());
+                authConfig.withAuth(null);
+                authConfig.withRegistryAddress(entry.getKey());
                 configFile.addConfig(authConfig);
             }
         } else {
@@ -131,7 +131,7 @@ public class AuthConfigFile {
             if (origEmail.length != 2) {
                 throw new IOException("Invalid Auth config file");
             }
-            config.setEmail(origEmail[1]);
+            config.withEmail(origEmail[1]);
             configFile.addConfig(config);
         }
         return configFile;
@@ -144,8 +144,8 @@ public class AuthConfigFile {
         if (parts.length != 2) {
             throw new IOException("Invalid auth configuration file");
         }
-        config.setUsername(parts[0]);
-        config.setPassword(parts[1]);
+        config.withUsername(parts[0]);
+        config.withPassword(parts[1]);
     }
 
     static String convertToHostname(String server) {

@@ -3,7 +3,6 @@ package com.github.dockerjava.api.model;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -28,50 +27,54 @@ public class AuthConfig {
     private String email;
 
     @JsonProperty("serveraddress")
-    private String serverAddress = DEFAULT_SERVER_ADDRESS;
+    private String registryAddress = DEFAULT_SERVER_ADDRESS;
 
+    @JsonProperty("auth")
     private String auth;
 
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+    public AuthConfig withUsername(String username) {
         this.username = username;
+        return this;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public AuthConfig withPassword(String password) {
         this.password = password;
+        return this;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public AuthConfig withEmail(String email) {
         this.email = email;
+        return this;
     }
 
-    public String getServerAddress() {
-        return serverAddress;
+    public String getRegistryAddress() {
+        return registryAddress;
     }
 
-    public void setServerAddress(String serverAddress) {
-        this.serverAddress = serverAddress;
+    public AuthConfig withRegistryAddress(String registryAddress) {
+        this.registryAddress = registryAddress;
+        return this;
     }
 
-    @JsonIgnore
     public String getAuth() {
         return auth;
     }
 
-    @JsonProperty("auth")
-    public void setAuth(String auth) {
+    public AuthConfig withAuth(String auth) {
         this.auth = auth;
+        return this;
     }
 
     @Override
@@ -87,7 +90,7 @@ public class AuthConfig {
         result = prime * result + ((auth == null) ? 0 : auth.hashCode());
         result = prime * result + ((email == null) ? 0 : email.hashCode());
         result = prime * result + ((password == null) ? 0 : password.hashCode());
-        result = prime * result + ((serverAddress == null) ? 0 : serverAddress.hashCode());
+        result = prime * result + ((registryAddress == null) ? 0 : registryAddress.hashCode());
         result = prime * result + ((username == null) ? 0 : username.hashCode());
         return result;
     }
@@ -116,10 +119,10 @@ public class AuthConfig {
                 return false;
         } else if (!password.equals(other.password))
             return false;
-        if (serverAddress == null) {
-            if (other.serverAddress != null)
+        if (registryAddress == null) {
+            if (other.registryAddress != null)
                 return false;
-        } else if (!serverAddress.equals(other.serverAddress))
+        } else if (!registryAddress.equals(other.registryAddress))
             return false;
         if (username == null) {
             if (other.username != null)

@@ -37,7 +37,7 @@ import com.github.dockerjava.core.exception.GoLangFileMatchException;
  *  is malformed.
  *
  * On Windows, escaping is disabled. Instead, '\\' is treated as
- *  path separator.
+ AuthConfigTest *  path separator.
  * </pre>
  *
  * @author tedo
