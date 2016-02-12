@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.model.ContainerConfig;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.NetworkSettings;
+import com.github.dockerjava.api.model.Node;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumeBind;
 import com.github.dockerjava.api.model.VolumeBinds;
@@ -97,6 +98,9 @@ public class InspectContainerResponse {
 
     @JsonProperty("Mounts")
     private List<Mount> mounts;
+
+    @JsonProperty("Node")
+    private Node node;
 
     public String getId() {
         return id;
@@ -200,6 +204,10 @@ public class InspectContainerResponse {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
+    }
+
+    public Node getNode() {
+        return node;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
