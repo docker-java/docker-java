@@ -25,7 +25,7 @@ import com.google.common.base.Throwables;
 public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T>, A_RES_T> implements
         ResultCallback<A_RES_T> {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(ResultCallbackTemplate.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResultCallbackTemplate.class);
 
     private final CountDownLatch started = new CountDownLatch(1);
 
@@ -47,11 +47,11 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
     @Override
     public void onError(Throwable throwable) {
 
-        if (closed)
-            return;
+        if (closed) return;
 
-        if (this.firstError == null)
+        if (this.firstError == null) {
             this.firstError = throwable;
+        }
 
         try {
             LOGGER.error("Error during callback", throwable);
@@ -76,8 +76,9 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
     @Override
     public void close() throws IOException {
         closed = true;
-        if (stream != null)
+        if (stream != null) {
             stream.close();
+        }
         completed.countDown();
     }
 
@@ -102,8 +103,8 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
     }
 
     /**
-     * Blocks until {@link ResultCallback#onStart()} was called. {@link ResultCallback#onStart()} is called when the
-     * request was processed on the server side and the response is incoming.
+     * Blocks until {@link ResultCallback#onStart()} was called. {@link ResultCallback#onStart()} is called when the request was processed
+     * on the server side and the response is incoming.
      */
     @SuppressWarnings("unchecked")
     public RC_T awaitStarted() throws InterruptedException {
@@ -112,9 +113,8 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
     }
 
     /**
-     * Blocks until {@link ResultCallback#onStart()} was called or the given timeout occurs.
-     * {@link ResultCallback#onStart()} is called when the request was processed on the server side and the response is
-     * incoming.
+     * Blocks until {@link ResultCallback#onStart()} was called or the given timeout occurs. {@link ResultCallback#onStart()} is called when
+     * the request was processed on the server side and the response is incoming.
      */
     @SuppressWarnings("unchecked")
     public RC_T awaitStarted(long timeout, TimeUnit timeUnit) throws InterruptedException {

@@ -12,11 +12,13 @@ public class InpectNetworkCmdImpl extends AbstrDockerCmd<InspectNetworkCmd, Netw
         super(exec);
     }
 
-    @Override public String getNetworkId() {
+    @Override
+    public String getNetworkId() {
         return networkId;
     }
 
-    @Override public InspectNetworkCmd withNetworkId(String networkId) {
+    @Override
+    public InspectNetworkCmd withNetworkId(String networkId) {
 
         this.networkId = networkId;
         return this;

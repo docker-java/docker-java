@@ -132,7 +132,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     private static DockerClientConfig configWithServerUrl(String serverUrl) {
-        return DockerClientConfig.createDefaultConfigBuilder().withUri(serverUrl).build();
+        return DockerClientConfig.createDefaultConfigBuilder().withDockerHost(serverUrl).build();
     }
 
     public static DockerClientImpl getInstance() {
@@ -161,16 +161,14 @@ public class DockerClientImpl implements Closeable, DockerClient {
 
     @Override
     public AuthConfig authConfig() {
-        checkNotNull(dockerClientConfig.getUsername(), "Configured username is null.");
-        checkNotNull(dockerClientConfig.getServerAddress(), "Configured serverAddress is null.");
+        checkNotNull(dockerClientConfig.getRegistryUsername(), "Configured username is null.");
+        checkNotNull(dockerClientConfig.getRegistryUrl(), "Configured serverAddress is null.");
 
-        AuthConfig authConfig = new AuthConfig();
-        authConfig.setUsername(dockerClientConfig.getUsername());
-        authConfig.setPassword(dockerClientConfig.getPassword());
-        authConfig.setEmail(dockerClientConfig.getEmail());
-        authConfig.setServerAddress(dockerClientConfig.getServerAddress());
-
-        return authConfig;
+        return new AuthConfig()
+                .withUsername(dockerClientConfig.getRegistryUsername())
+                .withPassword(dockerClientConfig.getRegistryPassword())
+                .withEmail(dockerClientConfig.getRegistryEmail())
+                .withRegistryAddress(dockerClientConfig.getRegistryUrl());
     }
 
     /**
@@ -214,20 +212,23 @@ public class DockerClientImpl implements Closeable, DockerClient {
         PushImageCmd cmd = new PushImageCmdImpl(getDockerCmdExecFactory().createPushImageCmdExec(), name);
 
         AuthConfig cfg = dockerClientConfig.effectiveAuthConfig(name);
-        if (cfg != null)
+        if (cfg != null) {
             cmd.withAuthConfig(cfg);
+        }
         return cmd;
     }
 
     @Override
     public PushImageCmd pushImageCmd(Identifier identifier) {
         PushImageCmd cmd = pushImageCmd(identifier.repository.name);
-        if (identifier.tag.isPresent())
+        if (identifier.tag.isPresent()) {
             cmd.withTag(identifier.tag.get());
+        }
 
         AuthConfig cfg = dockerClientConfig.effectiveAuthConfig(identifier.repository.name);
-        if (cfg != null)
+        if (cfg != null) {
             cmd.withAuthConfig(cfg);
+        }
 
         return cmd;
     }

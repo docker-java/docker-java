@@ -23,8 +23,8 @@ import com.github.dockerjava.api.model.Frame;
  * @param tail
  *            - `all` or `<number>`, Output specified number of lines at the end of logs
  * @param since
- *            - UNIX timestamp (integer) to filter logs. Specifying a timestamp will only output log-entries since that
- *            timestamp. Default: 0 (unfiltered)
+ *            - UNIX timestamp (integer) to filter logs. Specifying a timestamp will only output log-entries since that timestamp. Default:
+ *            0 (unfiltered)
  */
 public interface LogContainerCmd extends AsyncDockerCmd<LogContainerCmd, Frame> {
 
@@ -53,8 +53,7 @@ public interface LogContainerCmd extends AsyncDockerCmd<LogContainerCmd, Frame> 
 
     /**
      * Following the stream means the resulting {@link InputStream} returned by {@link #exec()} reads infinitely. So a
-     * {@link InputStream#read()} MAY BLOCK FOREVER as long as no data is streamed from the docker host to
-     * {@link DockerClient}!
+     * {@link InputStream#read()} MAY BLOCK FOREVER as long as no data is streamed from the docker host to {@link DockerClient}!
      */
     public LogContainerCmd withFollowStream(Boolean followStream);
 

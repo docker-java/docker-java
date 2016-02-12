@@ -19,7 +19,7 @@ import com.github.dockerjava.core.async.ResultCallbackTemplate;
  */
 public class PullImageResultCallback extends ResultCallbackTemplate<PullImageResultCallback, PullResponseItem> {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(PullImageResultCallback.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PullImageResultCallback.class);
 
     @CheckForNull
     private PullResponseItem latestItem = null;

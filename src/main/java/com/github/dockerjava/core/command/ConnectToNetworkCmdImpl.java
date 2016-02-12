@@ -27,12 +27,14 @@ public class ConnectToNetworkCmdImpl extends AbstrDockerCmd<ConnectToNetworkCmd,
         return containerId;
     }
 
-    @Override public ConnectToNetworkCmd withNetworkId(String networkId) {
+    @Override
+    public ConnectToNetworkCmd withNetworkId(String networkId) {
         this.networkId = networkId;
         return this;
     }
 
-    @Override public ConnectToNetworkCmd withContainerId(String containerId) {
+    @Override
+    public ConnectToNetworkCmd withContainerId(String containerId) {
         this.containerId = containerId;
         return this;
     }

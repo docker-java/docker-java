@@ -22,21 +22,20 @@ public class FrameReader implements AutoCloseable {
 
     private Boolean rawStreamDetected = false;
 
-
     public FrameReader(InputStream inputStream) {
         this.inputStream = inputStream;
     }
 
     private static StreamType streamType(byte streamType) {
         switch (streamType) {
-        case 0:
-            return StreamType.STDIN;
-        case 1:
-            return StreamType.STDOUT;
-        case 2:
-            return StreamType.STDERR;
-        default:
-            return StreamType.RAW;
+            case 0:
+                return StreamType.STDIN;
+            case 1:
+                return StreamType.STDOUT;
+            case 2:
+                return StreamType.STDERR;
+            default:
+                return StreamType.RAW;
         }
     }
 

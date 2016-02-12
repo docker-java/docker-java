@@ -8,8 +8,6 @@ import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.netty.MediaType;
 import com.github.dockerjava.netty.WebTarget;
 
-
-
 public class StopContainerCmdExec extends AbstrSyncDockerCmdExec<StopContainerCmd, Void> implements
         StopContainerCmd.Exec {
 

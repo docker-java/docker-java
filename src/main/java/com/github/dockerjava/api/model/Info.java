@@ -25,7 +25,7 @@ public class Info {
     private Boolean debug;
 
     @JsonProperty("DockerRootDir")
-    private String DockerRootDir;
+    private String dockerRootDir;
 
     @JsonProperty("Driver")
     private String driver;
@@ -37,16 +37,16 @@ public class Info {
     private String executionDriver;
 
     @JsonProperty("ID")
-    private String ID;
+    private String id;
 
     @JsonProperty("IPv4Forwarding")
-    private Boolean IPv4Forwarding;
+    private Boolean ipv4Forwarding;
 
     @JsonProperty("Images")
     private Integer images;
 
     @JsonProperty("IndexServerAddress")
-    private String IndexServerAddress;
+    private String indexServerAddress;
 
     @JsonProperty("InitPath")
     private String initPath;
@@ -58,7 +58,7 @@ public class Info {
     private String kernelVersion;
 
     @JsonProperty("Labels")
-    private String[] Labels;
+    private String[] labels;
 
     @JsonProperty("MemoryLimit")
     private Boolean memoryLimit;
@@ -70,19 +70,19 @@ public class Info {
     private String name;
 
     @JsonProperty("NCPU")
-    private Integer NCPU;
+    private Integer ncpu;
 
     @JsonProperty("NEventsListener")
     private Long nEventListener;
 
     @JsonProperty("NFd")
-    private Integer NFd;
+    private Integer nfd;
 
     @JsonProperty("NGoroutines")
-    private Integer NGoroutines;
+    private Integer nGoroutines;
 
     @JsonProperty("OperatingSystem")
-    private String OperatingSystem;
+    private String operatingSystem;
 
     @JsonProperty("Sockets")
     private String[] sockets;
@@ -99,7 +99,7 @@ public class Info {
     }
 
     public String getDockerRootDir() {
-        return DockerRootDir;
+        return dockerRootDir;
     }
 
     public String getDriver() {
@@ -115,15 +115,15 @@ public class Info {
     }
 
     public String getID() {
-        return ID;
+        return id;
     }
 
     public Boolean getIPv4Forwarding() {
-        return IPv4Forwarding;
+        return ipv4Forwarding;
     }
 
     public String getIndexServerAddress() {
-        return IndexServerAddress;
+        return indexServerAddress;
     }
 
     public String getInitPath() {
@@ -139,7 +139,7 @@ public class Info {
     }
 
     public String[] getLabels() {
-        return Labels;
+        return labels;
     }
 
     public String[] getSockets() {
@@ -163,19 +163,19 @@ public class Info {
     }
 
     public Integer getNCPU() {
-        return NCPU;
+        return ncpu;
     }
 
     public Integer getNFd() {
-        return NFd;
+        return nfd;
     }
 
     public Integer getNGoroutines() {
-        return NGoroutines;
+        return nGoroutines;
     }
 
     public String getOperatingSystem() {
-        return OperatingSystem;
+        return operatingSystem;
     }
 
     public Boolean getSwapLimit() {

@@ -21,7 +21,7 @@ import com.github.dockerjava.core.async.ResultCallbackTemplate;
  */
 public class BuildImageResultCallback extends ResultCallbackTemplate<BuildImageResultCallback, BuildResponseItem> {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(BuildImageResultCallback.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BuildImageResultCallback.class);
 
     @CheckForNull
     private BuildResponseItem latestItem = null;

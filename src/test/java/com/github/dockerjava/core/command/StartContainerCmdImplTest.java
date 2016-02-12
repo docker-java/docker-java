@@ -186,9 +186,9 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         ExposedPort tcp23 = ExposedPort.tcp(23);
 
         Ports portBindings = new Ports();
-        portBindings.bind(tcp22, Ports.Binding(11022));
-        portBindings.bind(tcp23, Ports.Binding(11023));
-        portBindings.bind(tcp23, Ports.Binding(11024));
+        portBindings.bind(tcp22, Ports.binding(11022));
+        portBindings.bind(tcp23, Ports.binding(11023));
+        portBindings.bind(tcp23, Ports.binding(11024));
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("true")
                 .withExposedPorts(tcp22, tcp23).withPortBindings(portBindings).exec();
@@ -206,13 +206,13 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(Arrays.asList(inspectContainerResponse.getConfig().getExposedPorts()), contains(tcp22, tcp23));
 
         assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp22)[0],
-                is(equalTo(Ports.Binding(11022))));
+                is(equalTo(Ports.binding(11022))));
 
         assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23)[0],
-                is(equalTo(Ports.Binding(11023))));
+                is(equalTo(Ports.binding(11023))));
 
         assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23)[1],
-                is(equalTo(Ports.Binding(11024))));
+                is(equalTo(Ports.binding(11024))));
 
     }
 
@@ -223,8 +223,8 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         ExposedPort tcp23 = ExposedPort.tcp(23);
 
         Ports portBindings = new Ports();
-        portBindings.bind(tcp22, Ports.Binding(null));
-        portBindings.bind(tcp23, Ports.Binding(null));
+        portBindings.bind(tcp22, Ports.binding(null));
+        portBindings.bind(tcp23, Ports.binding(null));
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
                 .withExposedPorts(tcp22, tcp23).withPortBindings(portBindings).withPublishAllPorts(true).exec();
@@ -254,8 +254,8 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         ExposedPort tcp23 = ExposedPort.tcp(23);
 
         Ports portBindings = new Ports();
-        portBindings.bind(tcp22, Ports.Binding(11022));
-        portBindings.bind(tcp23, Ports.Binding(11022));
+        portBindings.bind(tcp22, Ports.binding(11022));
+        portBindings.bind(tcp23, Ports.binding(11022));
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("true")
                 .withExposedPorts(tcp22, tcp23).withPortBindings(portBindings).exec();
@@ -316,8 +316,8 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(inspectContainerResponse2.getId(), not(isEmptyString()));
         assertThat(inspectContainerResponse2.getHostConfig(), is(notNullValue()));
         assertThat(inspectContainerResponse2.getHostConfig().getLinks(), is(notNullValue()));
-        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] { new Link("container1",
-                "container1Link") }));
+        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] {new Link("container1",
+                "container1Link")}));
         assertThat(inspectContainerResponse2.getId(), startsWith(container2.getId()));
         assertThat(inspectContainerResponse2.getName(), equalTo("/container2"));
         assertThat(inspectContainerResponse2.getImageId(), not(isEmptyString()));
@@ -369,8 +369,8 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(inspectContainerResponse2.getId(), not(isEmptyString()));
         assertThat(inspectContainerResponse2.getHostConfig(), is(notNullValue()));
         assertThat(inspectContainerResponse2.getHostConfig().getLinks(), is(notNullValue()));
-        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] { new Link("container1",
-                "container1Link") }));
+        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] {new Link("container1",
+                "container1Link")}));
         assertThat(inspectContainerResponse2.getId(), startsWith(container2.getId()));
         assertThat(inspectContainerResponse2.getName(), equalTo("/container2"));
         assertThat(inspectContainerResponse2.getImageId(), not(isEmptyString()));
@@ -382,7 +382,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void startContainer() throws DockerException {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd(new String[] { "top" })
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd(new String[] {"top"})
                 .exec();
 
         LOG.info("Created container {}", container.toString());
@@ -418,11 +418,10 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
     }
 
     /**
-     * This tests support for --net option for the docker run command: --net="bridge" Set the Network mode for the
-     * container 'bridge': creates a new network stack for the container on the docker bridge 'none': no networking for
-     * this container 'container:': reuses another container network stack 'host': use the host network stack inside the
-     * container. Note: the host mode gives the container full access to local system services such as D-bus and is
-     * therefore considered insecure.
+     * This tests support for --net option for the docker run command: --net="bridge" Set the Network mode for the container 'bridge':
+     * creates a new network stack for the container on the docker bridge 'none': no networking for this container 'container:': reuses
+     * another container network stack 'host': use the host network stack inside the container. Note: the host mode gives the container full
+     * access to local system services such as D-bus and is therefore considered insecure.
      */
     @Test
     public void startContainerWithNetworkMode() throws DockerException {

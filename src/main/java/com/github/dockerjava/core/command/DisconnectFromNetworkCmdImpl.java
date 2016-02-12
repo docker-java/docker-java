@@ -6,7 +6,7 @@ import com.github.dockerjava.api.command.DisconnectFromNetworkCmd;
 import com.github.dockerjava.api.command.DockerCmdSyncExec;
 
 public class DisconnectFromNetworkCmdImpl extends AbstrDockerCmd<DisconnectFromNetworkCmd, Void>
-    implements DisconnectFromNetworkCmd {
+        implements DisconnectFromNetworkCmd {
 
     @JsonIgnore
     private String networkId;
@@ -28,12 +28,14 @@ public class DisconnectFromNetworkCmdImpl extends AbstrDockerCmd<DisconnectFromN
         return containerId;
     }
 
-    @Override public DisconnectFromNetworkCmd withNetworkId(String networkId) {
+    @Override
+    public DisconnectFromNetworkCmd withNetworkId(String networkId) {
         this.networkId = networkId;
         return this;
     }
 
-    @Override public DisconnectFromNetworkCmd withContainerId(String containerId) {
+    @Override
+    public DisconnectFromNetworkCmd withContainerId(String containerId) {
         this.containerId = containerId;
         return this;
     }

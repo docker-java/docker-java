@@ -61,7 +61,6 @@ public class ExecStartCmdImpl extends AbstrAsyncDockerCmd<ExecStartCmd, Frame> i
         return stdin;
     }
 
-
     @Override
     public ExecStartCmd withDetach(Boolean detach) {
         this.detach = detach;

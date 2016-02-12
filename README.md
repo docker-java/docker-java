@@ -85,13 +85,15 @@ For code examples, please look at the [Wiki](https://github.com/docker-java/dock
 
 There are a couple of configuration items, all of which have sensible defaults:
 
-* `url` The Docker URL, e.g. `https://localhost:2376` or `unix:///var/run/docker.sock`
-* `version` The API version, e.g. `1.16`.
-* `username` Your registry username (required to push containers).
-* `password` Your registry password.
-* `email` Your registry email.
-* `serverAddress` Your registry's address.
-* `dockerCertPath` Path to the docker certs.
+* `DOCKER_HOST` The Docker Host URL, e.g. `tcp://localhost:2376` or `unix:///var/run/docker.sock`
+* `DOCKER_TLS_VERIFY` enable/disable TLS verification (switch between `http` and `https` protocol)
+* `DOCKER_CERT_PATH` Path to the certificates needed for TLS verification
+* `DOCKER_CONFIG` Path for additional docker configuration files (like `.dockercfg`)
+* `api.version` The API version, e.g. `1.21`.
+* `registry.url` Your registry's address.
+* `registry.username` Your registry username (required to push containers).
+* `registry.password` Your registry password.
+* `registry.email` Your registry email.
 
 There are three ways to configure, in descending order of precedence:
 
@@ -99,42 +101,46 @@ There are three ways to configure, in descending order of precedence:
 In your application, e.g.
 
     DockerClientConfig config = DockerClientConfig.createDefaultConfigBuilder()
-        .withVersion("1.16")
-        .withUri("https://my-docker-host.tld:2376")
-        .withUsername("dockeruser")
-        .withPassword("ilovedocker")
-        .withEmail("dockeruser@github.com")
-        .withServerAddress("https://index.docker.io/v1/")
-        .withDockerCertPath("/home/user/.docker")
+        .withDockerHost("tcp://my-docker-host.tld:2376")
+        .withDockerTlsVerify(true)
+        .withDockerCertPath("/home/user/.docker/certs")
+        .withDockerConfig("/home/user/.docker")
+        .withApiVersion("1.21")
+        .withRegistryUrl("https://index.docker.io/v1/")
+        .withRegistryUsername("dockeruser")
+        .withRegistryPassword("ilovedocker")
+        .withRegistryEmail("dockeruser@github.com")
         .build();
     DockerClient docker = DockerClientBuilder.getInstance(config).build();
 
-#### Properties
+#### Properties (docker-java.properties)
 
-    docker.io.url=https://localhost:2376
-    docker.io.version=1.16
-    docker.io.username=dockeruser
-    docker.io.password=ilovedocker
-    docker.io.email=dockeruser@github.com
-    docker.io.serverAddress=https://index.docker.io/v1/
-    docker.io.dockerCertPath=/home/user/.docker
-
+    DOCKER_HOST=tcp://localhost:2376
+    DOCKER_TLS_VERIFY=1
+    DOCKER_CERT_PATH=/home/user/.docker/certs
+    DOCKER_CONFIG=/home/user/.docker
+    api.version=1.21
+    registry.url=https://index.docker.io/v1/
+    registry.username=dockeruser
+    registry.password=ilovedocker
+    registry.email=dockeruser@github.com
 
 ##### System Properties:
 
-    java -Ddocker.io.username=dockeruser pkg.Main
+    java -Dregistry.username=dockeruser pkg.Main
 
 ##### System Environment
 
-    export DOCKER_URL=http://localhost:2376
-
-Note: we also auto-detect defaults. If you use `DOCKER_HOST` we use that value, and if `DOCKER_CERT_PATH` or `DOCKER_TLS_VERIFY=1` is set, we switch to SSL.
+    export DOCKER_URL=tcp://localhost:2376
+    export DOCKER_TLS_VERIFY=1
+    export DOCKER_CERT_PATH=/home/user/.docker/certs
+    export DOCKER_CONFIG=/home/user/.docker
 
 ##### File System
 
-In `$HOME/.docker.io.properties`
+In `$HOME/.docker-java.properties`
 
 ##### Class Path
 
-In the class path at `/docker.io.properties`
+In the class path at `/docker-java.properties`
     

@@ -58,8 +58,9 @@ public abstract class AbstractCallbackNotifier<T> implements Callable<Void> {
         try {
             InputStream inputStream = new WrappedResponseInputStream(response);
 
-            if (resultCallback != null)
+            if (resultCallback != null) {
                 responseStreamProcessor.processResponseStream(inputStream, resultCallback);
+            }
 
             return null;
         } catch (Exception e) {

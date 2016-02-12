@@ -11,7 +11,7 @@ public class AuthConfigurations {
     private Map<String, AuthConfig> configs = new TreeMap<>();
 
     public void addConfig(AuthConfig authConfig) {
-        configs.put(authConfig.getServerAddress(), authConfig);
+        configs.put(authConfig.getRegistryAddress(), authConfig);
     }
 
     public Map<String, AuthConfig> getConfigs() {

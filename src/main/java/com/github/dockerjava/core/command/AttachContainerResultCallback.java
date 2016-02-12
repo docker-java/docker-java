@@ -16,7 +16,7 @@ import com.github.dockerjava.core.async.ResultCallbackTemplate;
  */
 public class AttachContainerResultCallback extends ResultCallbackTemplate<AttachContainerResultCallback, Frame> {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(AttachContainerResultCallback.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AttachContainerResultCallback.class);
 
     @Override
     public void onNext(Frame item) {

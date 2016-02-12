@@ -47,8 +47,8 @@ import com.github.dockerjava.netty.handler.HttpResponseStreamHandler;
 import com.github.dockerjava.netty.handler.JsonResponseCallbackHandler;
 
 /**
- * This class is basically a replacement of javax.ws.rs.client.Invocation.Builder to allow simpler migration of JAX-RS
- * code to a netty based implementation.
+ * This class is basically a replacement of javax.ws.rs.client.Invocation.Builder to allow simpler migration of JAX-RS code to a netty based
+ * implementation.
  *
  * @author Marcus Linke
  */
@@ -234,8 +234,10 @@ public class InvocationBuilder {
 
         HttpConnectionHijackHandler hijackHandler = new HttpConnectionHijackHandler(responseHandler);
 
+        HttpClientCodec httpClientCodec = channel.pipeline().get(HttpClientCodec.class);
+
         channel.pipeline().addLast(
-                new HttpClientUpgradeHandler(new HttpClientCodec(), hijackHandler, Integer.MAX_VALUE));
+                new HttpClientUpgradeHandler(httpClientCodec, hijackHandler, Integer.MAX_VALUE));
         channel.pipeline().addLast(streamHandler);
 
         sendRequest(requestProvider, channel);

@@ -12,14 +12,20 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.core.exception.InvalidRepositoryNameException;
 
+@SuppressWarnings(value = "checkstyle:equalshashcode")
 public class NameParser {
+    private NameParser() {
+    }
 
+    // CHECKSTYLE:OFF
     private static final int RepositoryNameTotalLengthMax = 255;
 
     private static final Pattern RepositoryNameComponentRegexp = Pattern.compile("[a-z0-9]+(?:[._-][a-z0-9]+)*");
 
     private static final Pattern RepositoryNameComponentAnchoredRegexp = Pattern.compile("^"
             + RepositoryNameComponentRegexp.pattern() + "$");
+
+    // CHECKSTYLE:ON
 
     // private static final Pattern RepositoryNameRegexp = Pattern.compile("(?:" +
     // RepositoryNameComponentRegexp.pattern()

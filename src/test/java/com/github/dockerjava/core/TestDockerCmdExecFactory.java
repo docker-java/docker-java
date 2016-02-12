@@ -5,14 +5,16 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.net.ssl.SSLContext;
+
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.command.AuthCmd.Exec;
 import com.github.dockerjava.api.model.BuildResponseItem;
 
 /**
- * Special {@link DockerCmdExecFactory} implementation that collects container and image creations while test execution
- * for the purpose of automatically cleanup.
+ * Special {@link DockerCmdExecFactory} implementation that collects container and image creations while test execution for the purpose of
+ * automatically cleanup.
  *
  * @author Marcus Linke
  */
@@ -366,5 +368,10 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 
     public List<String> getNetworkIds() {
         return new ArrayList<>(networkIds);
+    }
+
+    @Override
+    public DockerCmdExecFactory withSSLContext(SSLContext sslContext) {
+        return delegate.withSSLContext(sslContext);
     }
 }

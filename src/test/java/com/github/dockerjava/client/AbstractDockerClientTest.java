@@ -74,12 +74,12 @@ public abstract class AbstractDockerClientTest extends Assert {
 
     protected DockerClientConfig config(String password) {
         DockerClientConfig.DockerClientConfigBuilder builder = DockerClientConfig.createDefaultConfigBuilder()
-                .withServerAddress("https://index.docker.io/v1/");
+                .withRegistryUrl("https://index.docker.io/v1/");
         if (password != null) {
-            builder = builder.withPassword(password);
+            builder = builder.withRegistryPassword(password);
         }
 
-        return builder.withVersion(apiVersion).build();
+        return builder.withApiVersion(apiVersion).build();
     }
 
     public void afterTest() {
@@ -229,7 +229,7 @@ public abstract class AbstractDockerClientTest extends Assert {
         public void onNext(Frame frame) {
             log.append(new String(frame.getPayload()));
             System.err.println("LogContainerTestCallback: " + log.toString());
-            //super.onNext(frame);
+            // super.onNext(frame);
         }
 
         @Override

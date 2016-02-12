@@ -166,7 +166,7 @@ public class BuildImageCmdExecTest extends AbstractNettyDockerClientTest {
         return containerLog(container.getId());
     }
 
-    @Test(expectedExceptions = { DockerClientException.class })
+    @Test(expectedExceptions = {DockerClientException.class})
     public void testDockerfileIgnored() throws Exception {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testDockerfileIgnored")
                 .getFile());
@@ -182,7 +182,7 @@ public class BuildImageCmdExecTest extends AbstractNettyDockerClientTest {
         dockerClient.buildImageCmd(baseDir).withNoCache(true).exec(new BuildImageResultCallback()).awaitImageId();
     }
 
-    @Test(expectedExceptions = { DockerClientException.class })
+    @Test(expectedExceptions = {DockerClientException.class})
     public void testInvalidDockerIgnorePattern() throws Exception {
         File baseDir = new File(Thread.currentThread().getContextClassLoader()
                 .getResource("testInvalidDockerignorePattern").getFile());
@@ -266,13 +266,12 @@ public class BuildImageCmdExecTest extends AbstractNettyDockerClientTest {
         // wait for registry to boot
         Thread.sleep(3000);
 
-        AuthConfig authConfig = new AuthConfig();
-
         // credentials as configured in /auth/htpasswd
-        authConfig.setUsername("testuser");
-        authConfig.setPassword("testpassword");
-        authConfig.setEmail("foo@bar.de");
-        authConfig.setServerAddress("localhost:5000");
+        AuthConfig authConfig = new AuthConfig()
+                .withUsername("testuser")
+                .withPassword("testpassword")
+                .withEmail("foo@bar.de")
+                .withRegistryAddress("localhost:5000");
 
         dockerClient.authCmd().withAuthConfig(authConfig).exec();
         dockerClient.tagImageCmd("busybox:latest", "localhost:5000/testuser/busybox", "latest").withForce().exec();
@@ -301,7 +300,8 @@ public class BuildImageCmdExecTest extends AbstractNettyDockerClientTest {
     public void testBuildArgs() throws Exception {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testBuildArgs").getFile());
 
-        String imageId = dockerClient.buildImageCmd(baseDir).withNoCache(true).withBuildArg("testArg", "abc").exec(new BuildImageResultCallback())
+        String imageId = dockerClient.buildImageCmd(baseDir).withNoCache(true).withBuildArg("testArg", "abc")
+                .exec(new BuildImageResultCallback())
                 .awaitImageId();
 
         InspectImageResponse inspectImageResponse = dockerClient.inspectImageCmd(imageId).exec();

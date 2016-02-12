@@ -11,15 +11,15 @@ public class AuthConfigTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        authConfig = new AuthConfig();
-        authConfig.setEmail("foo");
-        authConfig.setPassword("bar");
-        authConfig.setServerAddress("baz");
-        authConfig.setUsername("qux");
+        authConfig = new AuthConfig()
+                .withEmail("foo")
+                .withPassword("bar")
+                .withRegistryAddress("baz")
+                .withUsername("qux");
     }
 
     @Test
     public void defaultServerAddress() throws Exception {
-        assertEquals(new AuthConfig().getServerAddress(), "https://index.docker.io/v1/");
+        assertEquals(new AuthConfig().getRegistryAddress(), "https://index.docker.io/v1/");
     }
 }

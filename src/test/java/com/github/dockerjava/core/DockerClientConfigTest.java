@@ -1,8 +1,9 @@
 package com.github.dockerjava.core;
 
-import com.github.dockerjava.api.model.AuthConfig;
-import org.apache.commons.lang.SerializationUtils;
-import org.testng.annotations.Test;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 
 import java.net.URI;
 import java.util.Collections;
@@ -10,26 +11,30 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import org.apache.commons.lang.SerializationUtils;
+import org.testng.annotations.Test;
+
+import com.github.dockerjava.api.exception.DockerClientException;
+import com.github.dockerjava.api.model.AuthConfig;
 
 public class DockerClientConfigTest {
 
     public static final DockerClientConfig EXAMPLE_CONFIG = newExampleConfig();
 
     private static DockerClientConfig newExampleConfig() {
-        return new DockerClientConfig(URI.create("http://foo"), "bar", "baz", "qux", "blam", "wham", "flam",
-                new LocalDirectorySSLConfig("flim"));
+
+        String dockerCertPath = dockerCertPath();
+
+        return new DockerClientConfig(URI.create("tcp://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
+                dockerCertPath, true, false);
     }
 
-    @Test
-    public void string() throws Exception {
-        assertEquals(
-                EXAMPLE_CONFIG.toString(),
-                "DockerClientConfig{uri=http://foo, version='{UNKNOWN_VERSION}', username='baz', password='qux', email='blam', serverAddress='wham', dockerCfgPath='flam', sslConfig='LocalDirectorySSLConfig{dockerCertPath=flim}', isSwarmEndpoint=false}");
+    private static String homeDir() {
+        return "target/test-classes/someHomeDir";
+    }
+
+    private static String dockerCertPath() {
+        return homeDir() + "/.docker";
     }
 
     @Test
@@ -42,96 +47,21 @@ public class DockerClientConfigTest {
 
         // given docker host in env
         Map<String, String> env = new HashMap<String, String>();
-        env.put("DOCKER_HOST", "tcp://baz:8768");
+        env.put(DockerClientConfig.DOCKER_HOST, "tcp://baz:8768");
         // and it looks to be SSL disabled
         env.remove("DOCKER_CERT_PATH");
 
-        // when you build a config
-        DockerClientConfig config = buildConfig(env, new Properties());
 
-        // then the URL is that value with "http" instead of "tcp"
-        assertEquals(config.getUri(), URI.create("http://baz:8768"));
-    }
 
-    @Test
-    public void environmentSwarmEndpoint() throws Exception {
-        // given docker host in env
-        Map<String, String> env = new HashMap<String, String>();
-        env.put("DOCKER_SWARM", "true");
+        // given default cert path
+        Properties systemProperties = new Properties();
+        systemProperties.setProperty("user.name", "someUserName");
+        systemProperties.setProperty("user.home", homeDir());
 
         // when you build a config
-        DockerClientConfig config = buildConfig(env, new Properties());
+        DockerClientConfig config = buildConfig(env, systemProperties);
 
-        // then the URL is that value with "http" instead of "tcp"
-        assertTrue(config.isSwarmEndpoint());
-    }
-
-    @Test
-    public void environmentDockerHostHttpsAutoDetectByCertPath() throws Exception {
-
-        // given docker host in env
-        Map<String, String> env = new HashMap<String, String>(System.getenv());
-        env.put("DOCKER_HOST", "tcp://bar:8768");
-        // and it looks to be SSL enabled
-        env.put("DOCKER_CERT_PATH", "any value");
-
-        // when you build a config
-        DockerClientConfig config = buildConfig(env, new Properties());
-
-        // then the URL is that value with "tcp" changed to "https"
-        assertEquals(config.getUri(), URI.create("https://bar:8768"));
-    }
-
-    @Test
-    public void environmentDockerHostHttpsAutoDetectByTlsVerify() throws Exception {
-
-        // given docker host in env
-        Map<String, String> env = new HashMap<String, String>(System.getenv());
-        env.put("DOCKER_HOST", "tcp://bar:8768");
-        // and it looks to be SSL enabled
-        env.put("DOCKER_TLS_VERIFY", "1");
-
-        // when you build a config
-        DockerClientConfig config = buildConfig(env, new Properties());
-
-        // then the URL is that value with "tcp" changed to "https"
-        assertEquals(config.getUri(), URI.create("https://bar:8768"));
-    }
-
-    @Test
-    public void environmentDockerHostWithInvalidTlsVerify() throws Exception {
-
-        // given docker host in env
-        Map<String, String> env = new HashMap<String, String>(System.getenv());
-        env.put("DOCKER_HOST", "tcp://bar:8768");
-        // and it looks to be SSL disabled
-        env.remove("DOCKER_CERT_PATH");
-        // and it has an invalid TLS_VERIFY value
-        env.put("DOCKER_TLS_VERIFY", "any value different from '1'");
-
-        // when you build a config
-        DockerClientConfig config = buildConfig(env, new Properties());
-
-        // then the URL is that value with "tcp" changed to "https"
-        assertEquals(config.getUri(), URI.create("http://bar:8768"));
-    }
-
-    @Test
-    public void environmentDockerHostWithInvalidTlsVerifyButWithCertPath() throws Exception {
-
-        // given docker host in env
-        Map<String, String> env = new HashMap<String, String>(System.getenv());
-        env.put("DOCKER_HOST", "tcp://bar:8768");
-        // and it looks to be SSL enabled
-        env.put("DOCKER_CERT_PATH", "any value");
-        // and it has an invalid TLS_VERIFY value
-        env.put("DOCKER_TLS_VERIFY", "any value different from '1'");
-
-        // when you build a config
-        DockerClientConfig config = buildConfig(env, new Properties());
-
-        // then the URL is that value with "tcp" changed to "https"
-        assertEquals(config.getUri(), URI.create("https://bar:8768"));
+        assertEquals(config.getDockerHost(), URI.create("tcp://baz:8768"));
     }
 
     @Test
@@ -139,17 +69,17 @@ public class DockerClientConfigTest {
 
         // given a default config in env properties
         Map<String, String> env = new HashMap<String, String>();
-        env.put("DOCKER_URL", "http://foo");
-        env.put("DOCKER_VERSION", "bar");
-        env.put("DOCKER_USERNAME", "baz");
-        env.put("DOCKER_PASSWORD", "qux");
-        env.put("DOCKER_EMAIL", "blam");
-        env.put("DOCKER_SERVER_ADDRESS", "wham");
-        env.put("DOCKER_CERT_PATH", "flim");
-        env.put("DOCKER_CFG_PATH", "flam");
-        env.put("DOCKER_READ_TIMEOUT", "877");
-        env.put("DOCKER_LOGGING_FILTER_ENABLED", "false");
-        env.put("DOCKER_SWARM", "false");
+        env.put(DockerClientConfig.DOCKER_HOST, "tcp://foo");
+        env.put(DockerClientConfig.API_VERSION, "apiVersion");
+        env.put(DockerClientConfig.REGISTRY_USERNAME, "registryUsername");
+        env.put(DockerClientConfig.REGISTRY_PASSWORD, "registryPassword");
+        env.put(DockerClientConfig.REGISTRY_EMAIL, "registryEmail");
+        env.put(DockerClientConfig.REGISTRY_URL, "registryUrl");
+        env.put(DockerClientConfig.DOCKER_CONFIG, "dockerConfig");
+        env.put(DockerClientConfig.DOCKER_CERT_PATH, dockerCertPath());
+        env.put(DockerClientConfig.DOCKER_TLS_VERIFY, "1");
+        env.put(DockerClientConfig.DOCKER_SWARM, "false");
+
 
         // when you build a config
         DockerClientConfig config = buildConfig(env, new Properties());
@@ -168,18 +98,18 @@ public class DockerClientConfigTest {
         // given default cert path
         Properties systemProperties = new Properties();
         systemProperties.setProperty("user.name", "someUserName");
-        systemProperties.setProperty("user.home", "someHomeDir");
+        systemProperties.setProperty("user.home", homeDir());
 
         // when you build config
         DockerClientConfig config = buildConfig(Collections.<String, String> emptyMap(), systemProperties);
 
         // then the cert path is as expected
-        assertEquals(config.getUri(), URI.create("https://localhost:2376"));
-        assertEquals(config.getUsername(), "someUserName");
-        assertEquals(config.getServerAddress(), AuthConfig.DEFAULT_SERVER_ADDRESS);
-        assertEquals(config.getVersion(), RemoteApiVersion.unknown());
-        assertEquals(config.getDockerCfgPath(), "someHomeDir/.dockercfg");
-        assertEquals(((LocalDirectorySSLConfig) config.getSslConfig()).getDockerCertPath(), "someHomeDir/.docker");
+        assertEquals(config.getDockerHost(), URI.create("tcp://localhost:2376"));
+        assertEquals(config.getRegistryUsername(), "someUserName");
+        assertEquals(config.getRegistryUrl(), AuthConfig.DEFAULT_SERVER_ADDRESS);
+        assertEquals(config.getApiVersion(), RemoteApiVersion.unknown());
+        assertEquals(config.getDockerConfig(), homeDir() + "/.docker");
+        assertEquals(config.getDockerCertPath(), homeDir() + "/.docker/certs");
         assertFalse(config.isSwarmEndpoint());
     }
 
@@ -188,15 +118,15 @@ public class DockerClientConfigTest {
 
         // given system properties based on the example
         Properties systemProperties = new Properties();
-        systemProperties.setProperty("docker.io.url", "http://foo");
-        systemProperties.setProperty("docker.io.version", "bar");
-        systemProperties.setProperty("docker.io.username", "baz");
-        systemProperties.setProperty("docker.io.password", "qux");
-        systemProperties.setProperty("docker.io.email", "blam");
-        systemProperties.setProperty("docker.io.serverAddress", "wham");
-        systemProperties.setProperty("docker.io.dockerCertPath", "flim");
-        systemProperties.setProperty("docker.io.dockerCfgPath", "flam");
-        systemProperties.setProperty("docker.io.isSwarmEndpoint", "0");
+        systemProperties.put(DockerClientConfig.DOCKER_HOST, "tcp://foo");
+        systemProperties.put(DockerClientConfig.API_VERSION, "apiVersion");
+        systemProperties.put(DockerClientConfig.REGISTRY_USERNAME, "registryUsername");
+        systemProperties.put(DockerClientConfig.REGISTRY_PASSWORD, "registryPassword");
+        systemProperties.put(DockerClientConfig.REGISTRY_EMAIL, "registryEmail");
+        systemProperties.put(DockerClientConfig.REGISTRY_URL, "registryUrl");
+        systemProperties.put(DockerClientConfig.DOCKER_CONFIG, "dockerConfig");
+        systemProperties.put(DockerClientConfig.DOCKER_CERT_PATH, dockerCertPath());
+        systemProperties.put(DockerClientConfig.DOCKER_TLS_VERIFY, "1");
 
         // when you build new config
         DockerClientConfig config = buildConfig(Collections.<String, String> emptyMap(), systemProperties);
@@ -212,5 +142,41 @@ public class DockerClientConfigTest {
         final DockerClientConfig deserialized = (DockerClientConfig) SerializationUtils.deserialize(serialized);
 
         assertThat("Deserialized object mush match source object", deserialized, equalTo(EXAMPLE_CONFIG));
+    }
+
+    @Test(expectedExceptions = DockerClientException.class)
+    public void testTlsVerifyAndCertPathNull() throws Exception {
+        new DockerClientConfig(URI.create("tcp://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
+                null, true);
+    }
+
+    @Test(expectedExceptions = DockerClientException.class)
+    public void testTlsVerifyAndCertPathEmpty() throws Exception {
+        new DockerClientConfig(URI.create("tcp://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
+                "", true);
+    }
+
+    @Test()
+    public void testTlsVerifyAndCertPath() throws Exception {
+        new DockerClientConfig(URI.create("tcp://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
+                dockerCertPath(), true);
+    }
+
+    @Test(expectedExceptions = DockerClientException.class)
+    public void testWrongHostScheme() throws Exception {
+        new DockerClientConfig(URI.create("http://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
+                null, false);
+    }
+
+    @Test()
+    public void testTcpHostScheme() throws Exception {
+        new DockerClientConfig(URI.create("tcp://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
+                null, false);
+    }
+
+    @Test()
+    public void testUnixHostScheme() throws Exception {
+        new DockerClientConfig(URI.create("unix://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
+                null, false);
     }
 }

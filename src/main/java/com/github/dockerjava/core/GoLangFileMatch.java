@@ -26,24 +26,26 @@ import com.github.dockerjava.core.exception.GoLangFileMatchException;
  *                  character class (must be non-empty)
  *       c           matches character c (c != '*', '?', '\\', '[')
  *       '\\' c      matches character c
- * 
+ *
  *   character-range:
  *       c           matches character c (c != '\\', '-', ']')
  *       '\\' c      matches character c
  *       lo '-' hi   matches character c for lo <= c <= hi
- * 
+ *
  *  Match requires pattern to match all of name, not just a substring.
  *  The only possible returned error is ErrBadPattern, when pattern
  *  is malformed.
- * 
+ *
  * On Windows, escaping is disabled. Instead, '\\' is treated as
- *  path separator.
+ AuthConfigTest *  path separator.
  * </pre>
  *
  * @author tedo
  *
  */
 public class GoLangFileMatch {
+    private GoLangFileMatch() {
+    }
 
     public static final boolean IS_WINDOWS = File.separatorChar == '\\';
 
@@ -114,22 +116,22 @@ public class GoLangFileMatch {
         int i;
         Scan: for (i = 0; i < pattern.length(); i++) {
             switch (pattern.charAt(i)) {
-            case '\\': {
-                if (!IS_WINDOWS && i + 1 < pattern.length()) {
-                    i++;
+                case '\\': {
+                    if (!IS_WINDOWS && i + 1 < pattern.length()) {
+                        i++;
+                    }
+                    break;
                 }
-                break;
-            }
-            case '[':
-                inRange = true;
-                break;
-            case ']':
-                inRange = false;
-                break;
-            case '*':
-                if (!inRange) {
-                    break Scan;
-                }
+                case '[':
+                    inRange = true;
+                    break;
+                case ']':
+                    inRange = false;
+                    break;
+                case '*':
+                    if (!inRange) {
+                        break Scan;
+                    }
             }
         }
         return new ScanResult(star, pattern.substring(0, i), pattern.substring(i));
@@ -146,68 +148,68 @@ public class GoLangFileMatch {
                 return null;
             }
             switch (chunk.charAt(chunkOffset)) {
-            case '[':
-                r = s.charAt(sOffset);
-                sOffset++;
-                chunkOffset++;
-                // We can't end right after '[', we're expecting at least
-                // a closing bracket and possibly a caret.
-                if (chunkOffset == chunkLength) {
-                    throw new GoLangFileMatchException();
-                }
-                // possibly negated
-                boolean negated = chunk.charAt(chunkOffset) == '^';
-                if (negated) {
+                case '[':
+                    r = s.charAt(sOffset);
+                    sOffset++;
                     chunkOffset++;
-                }
-                // parse all ranges
-                boolean match = false;
-                int nrange = 0;
-                while (true) {
-                    if (chunkOffset < chunkLength && chunk.charAt(chunkOffset) == ']' && nrange > 0) {
-                        chunkOffset++;
-                        break;
-                    }
-                    GetEscResult result = getEsc(chunk, chunkOffset, chunkLength);
-                    char lo = result.lo;
-                    char hi = lo;
-                    chunkOffset = result.chunkOffset;
-                    if (chunk.charAt(chunkOffset) == '-') {
-                        result = getEsc(chunk, ++chunkOffset, chunkLength);
-                        chunkOffset = result.chunkOffset;
-                        hi = result.lo;
-                    }
-                    if (lo <= r && r <= hi) {
-                        match = true;
-                    }
-                    nrange++;
-                }
-                if (match == negated) {
-                    return null;
-                }
-                break;
-
-            case '?':
-                if (s.charAt(sOffset) == File.separatorChar) {
-                    return null;
-                }
-                sOffset++;
-                chunkOffset++;
-                break;
-            case '\\':
-                if (!IS_WINDOWS) {
-                    chunkOffset++;
+                    // We can't end right after '[', we're expecting at least
+                    // a closing bracket and possibly a caret.
                     if (chunkOffset == chunkLength) {
                         throw new GoLangFileMatchException();
                     }
-                }
-                // fallthrough
-            default:
-                if (chunk.charAt(chunkOffset) != s.charAt(sOffset)) {
-                    return null;
-                }
-                sOffset++;
-                chunkOffset++;
+                    // possibly negated
+                    boolean negated = chunk.charAt(chunkOffset) == '^';
+                    if (negated) {
+                        chunkOffset++;
+                    }
+                    // parse all ranges
+                    boolean match = false;
+                    int nrange = 0;
+                    while (true) {
+                        if (chunkOffset < chunkLength && chunk.charAt(chunkOffset) == ']' && nrange > 0) {
+                            chunkOffset++;
+                            break;
+                        }
+                        GetEscResult result = getEsc(chunk, chunkOffset, chunkLength);
+                        char lo = result.lo;
+                        char hi = lo;
+                        chunkOffset = result.chunkOffset;
+                        if (chunk.charAt(chunkOffset) == '-') {
+                            result = getEsc(chunk, ++chunkOffset, chunkLength);
+                            chunkOffset = result.chunkOffset;
+                            hi = result.lo;
+                        }
+                        if (lo <= r && r <= hi) {
+                            match = true;
+                        }
+                        nrange++;
+                    }
+                    if (match == negated) {
+                        return null;
+                    }
+                    break;
+
+                case '?':
+                    if (s.charAt(sOffset) == File.separatorChar) {
+                        return null;
+                    }
+                    sOffset++;
+                    chunkOffset++;
+                    break;
+                case '\\':
+                    if (!IS_WINDOWS) {
+                        chunkOffset++;
+                        if (chunkOffset == chunkLength) {
+                            throw new GoLangFileMatchException();
+                        }
+                    }
+                    // fallthrough
+                default:
+                    if (chunk.charAt(chunkOffset) != s.charAt(sOffset)) {
+                        return null;
+                    }
+                    sOffset++;
+                    chunkOffset++;
             }
         }
         return s.substring(sOffset);

@@ -33,26 +33,26 @@ public class ResponseStatusExceptionFilter implements ClientResponseFilter {
     public void filter(ClientRequestContext requestContext, ClientResponseContext responseContext) throws IOException {
         int status = responseContext.getStatus();
         switch (status) {
-        case 200:
-        case 201:
-        case 204:
-            return;
-        case 304:
-            throw new NotModifiedException(getBodyAsMessage(responseContext));
-        case 400:
-            throw new BadRequestException(getBodyAsMessage(responseContext));
-        case 401:
-            throw new UnauthorizedException(getBodyAsMessage(responseContext));
-        case 404:
-            throw new NotFoundException(getBodyAsMessage(responseContext));
-        case 406:
-            throw new NotAcceptableException(getBodyAsMessage(responseContext));
-        case 409:
-            throw new ConflictException(getBodyAsMessage(responseContext));
-        case 500:
-            throw new InternalServerErrorException(getBodyAsMessage(responseContext));
-        default:
-            throw new DockerException(getBodyAsMessage(responseContext), status);
+            case 200:
+            case 201:
+            case 204:
+                return;
+            case 304:
+                throw new NotModifiedException(getBodyAsMessage(responseContext));
+            case 400:
+                throw new BadRequestException(getBodyAsMessage(responseContext));
+            case 401:
+                throw new UnauthorizedException(getBodyAsMessage(responseContext));
+            case 404:
+                throw new NotFoundException(getBodyAsMessage(responseContext));
+            case 406:
+                throw new NotAcceptableException(getBodyAsMessage(responseContext));
+            case 409:
+                throw new ConflictException(getBodyAsMessage(responseContext));
+            case 500:
+                throw new InternalServerErrorException(getBodyAsMessage(responseContext));
+            default:
+                throw new DockerException(getBodyAsMessage(responseContext), status);
         }
     }
 
