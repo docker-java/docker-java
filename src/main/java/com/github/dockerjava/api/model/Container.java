@@ -43,9 +43,10 @@ public class Container {
     private String status;
 
     @JsonIgnore
-    private String name;
+    private transient String name;
+
     @JsonIgnore
-    private String host;
+    private transient String host;
 
     public String getId() {
         return id;
