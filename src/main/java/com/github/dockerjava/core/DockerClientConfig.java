@@ -65,7 +65,7 @@ public class DockerClientConfig implements Serializable {
 
     private static final String DOCKER_IO_PROPERTIES_PROPERTY = "docker.io.properties";
 
-    private URI uri;
+    private final URI uri;
 
     private final String username, password, email, serverAddress, dockerCfgPath;
 
@@ -206,10 +206,6 @@ public class DockerClientConfig implements Serializable {
 
     public URI getUri() {
         return uri;
-    }
-
-    public void setUri(URI uri) {
-        this.uri = uri;
     }
 
     public RemoteApiVersion getVersion() {
