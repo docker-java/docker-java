@@ -14,7 +14,7 @@ public class PullResponseItem extends ResponseItem {
     private static final String DOWNLOADED_NEWER_IMAGE = "Downloaded newer image";
     private static final String IMAGE_UP_TO_DATE = "Image is up to date";
     private static final String DOWNLOAD_COMPLETE = "Download complete";
-    private static final String SWARM_DOWNLOADED = " downloaded"; //Swarm sends another text, when download is complete!
+    private static final String SWARM_DOWNLOADED = " downloaded";
 
 
     /**
