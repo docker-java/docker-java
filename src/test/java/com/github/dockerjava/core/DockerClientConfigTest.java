@@ -78,7 +78,7 @@ public class DockerClientConfigTest {
         env.put(DockerClientConfig.DOCKER_CONFIG, "dockerConfig");
         env.put(DockerClientConfig.DOCKER_CERT_PATH, dockerCertPath());
         env.put(DockerClientConfig.DOCKER_TLS_VERIFY, "1");
-        env.put(DockerClientConfig.DOCKER_SWARM, "false");
+        env.put(DockerClientConfig.DOCKER_IS_SWARM_ENDPOINT, "false");
 
 
         // when you build a config
@@ -127,6 +127,7 @@ public class DockerClientConfigTest {
         systemProperties.put(DockerClientConfig.DOCKER_CONFIG, "dockerConfig");
         systemProperties.put(DockerClientConfig.DOCKER_CERT_PATH, dockerCertPath());
         systemProperties.put(DockerClientConfig.DOCKER_TLS_VERIFY, "1");
+        systemProperties.put(DockerClientConfig.DOCKER_IS_SWARM_ENDPOINT, "false");
 
         // when you build new config
         DockerClientConfig config = buildConfig(Collections.<String, String> emptyMap(), systemProperties);
@@ -147,36 +148,36 @@ public class DockerClientConfigTest {
     @Test(expectedExceptions = DockerClientException.class)
     public void testTlsVerifyAndCertPathNull() throws Exception {
         new DockerClientConfig(URI.create("tcp://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
-                null, true);
+                null, true, false);
     }
 
     @Test(expectedExceptions = DockerClientException.class)
     public void testTlsVerifyAndCertPathEmpty() throws Exception {
         new DockerClientConfig(URI.create("tcp://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
-                "", true);
+                "", true, false);
     }
 
     @Test()
     public void testTlsVerifyAndCertPath() throws Exception {
         new DockerClientConfig(URI.create("tcp://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
-                dockerCertPath(), true);
+                dockerCertPath(), true, false);
     }
 
     @Test(expectedExceptions = DockerClientException.class)
     public void testWrongHostScheme() throws Exception {
         new DockerClientConfig(URI.create("http://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
-                null, false);
+                null, false, false);
     }
 
     @Test()
     public void testTcpHostScheme() throws Exception {
         new DockerClientConfig(URI.create("tcp://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
-                null, false);
+                null, false, false);
     }
 
     @Test()
     public void testUnixHostScheme() throws Exception {
         new DockerClientConfig(URI.create("unix://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
-                null, false);
+                null, false, false);
     }
 }

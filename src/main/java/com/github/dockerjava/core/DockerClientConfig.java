@@ -51,13 +51,13 @@ public class DockerClientConfig implements Serializable {
 
     public static final String REGISTRY_URL = "registry.url";
 
+    public static final String DOCKER_IS_SWARM_ENDPOINT = "isSwarmEndpoint";
+
     private static final String DOCKER_JAVA_PROPERTIES = "docker-java.properties";
 
     private static final String DOCKER_CFG = ".dockercfg";
 
     private static final Set<String> CONFIG_KEYS = new HashSet<String>();
-
-    private static final String DOCKER_IS_SWARM_ENDPOINT = "isSwarmEndpoint";
 
     static {
         CONFIG_KEYS.add(DOCKER_HOST);
