@@ -69,7 +69,15 @@ public class LogConfig {
     @JsonDeserialize(using = LoggingType.Deserializer.class)
     @JsonSerialize(using = LoggingType.Serializer.class)
     public static enum LoggingType {
-        DEFAULT("json-file"), JSON_FILE("json-file"), NONE("none"), SYSLOG("syslog"), JOURNALD("journald");
+        DEFAULT("json-file"),
+        JSON_FILE("json-file"),
+        NONE("none"),
+        SYSLOG("syslog"),
+        JOURNALD("journald"),
+        GELF("gelf"),
+        FLUENTD("fluentd"),
+        AWSLOGS("awslogs"),
+        SPLUNK("splunk");
 
         private String type;
 
