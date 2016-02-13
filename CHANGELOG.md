@@ -9,6 +9,7 @@ Notes
 * The configuration has been changed to better match the docker CLI configuration options. The properties file was renamed from `docker.io.properties` to `docker-java.properties`. See README.md for details.
 
 All changes
+* [#463] (https://github.com/docker-java/docker-java/pull/463) More logging drivers
 * [#447] (https://github.com/docker-java/docker-java/pull/447) Refactoring of DockerClientConfig 
 * [#430] (https://github.com/docker-java/docker-java/pull/430) Fix ExecStartCmd failure 
 * [#426] (https://github.com/docker-java/docker-java/pull/426) Refactored filters API 
