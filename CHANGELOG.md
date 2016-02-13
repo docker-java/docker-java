@@ -3,7 +3,7 @@ Change Log
 
 2.2.0-SNAPSHOT
 ---
-
+* [#457] (https://github.com/docker-java/docker-java/pull/457) Input configuration should not be altered as it breaks unix socket support 
 * [#430] (https://github.com/docker-java/docker-java/pull/430) Fix ExecStartCmd failure (backported from 3.0.0)
 
 v2.1.4
