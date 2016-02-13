@@ -69,11 +69,11 @@ public class DockerClientConfig implements Serializable {
         CONFIG_KEYS.add(REGISTRY_URL);
     }
 
-    private URI dockerHost;
+    private final URI dockerHost;
 
     private final String registryUsername, registryPassword, registryEmail, registryUrl, dockerConfig, dockerCertPath;
 
-    private boolean dockerTlsVerify;
+    private final boolean dockerTlsVerify;
 
     private final RemoteApiVersion apiVersion;
 
@@ -236,10 +236,6 @@ public class DockerClientConfig implements Serializable {
 
     public URI getDockerHost() {
         return dockerHost;
-    }
-
-    public void setDockerHost(URI dockerHost) {
-        this.dockerHost = dockerHost;
     }
 
     public RemoteApiVersion getApiVersion() {

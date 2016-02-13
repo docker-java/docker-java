@@ -174,14 +174,14 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
             protocol = "http";
         }
 
-        if (originalUri.getScheme().equals("unix")) {
-            dockerClientConfig.setDockerHost(UnixConnectionSocketFactory.sanitizeUri(originalUri));
-        } else {
+        if(!originalUri.getScheme().equals("unix")) {
+
             try {
                 originalUri = new URI(originalUri.toString().replaceFirst("tcp", protocol));
             } catch (URISyntaxException e) {
                 throw new RuntimeException(e);
             }
+
             configureProxy(clientConfig, protocol);
         }
 
@@ -209,7 +209,14 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
         client = clientBuilder.build();
 
-        baseResource = client.target(originalUri.toString()).path(dockerClientConfig.getApiVersion().asWebPathPart());
+        baseResource = client.target(sanitizeUrl(originalUri).toString()).path(dockerClientConfig.getApiVersion().asWebPathPart());
+    }
+
+    private URI sanitizeUrl(URI originalUri) {
+        if (originalUri.getScheme().equals("unix")) {
+            return UnixConnectionSocketFactory.sanitizeUri(originalUri);
+        }
+        return originalUri;
     }
 
     private void configureProxy(ClientConfig clientConfig, String protocol) {
