@@ -67,14 +67,23 @@ Run build without integration tests:
           <version>2.2.0</version>
     </dependency>
     
-### Latest SNAPSHOT version
-You can find the latest SNAPSHOT version including javadoc and source files on [Sonatypes OSS repository](https://oss.sonatype.org/content/groups/public/com/github/docker-java/docker-java/).
+### Latest release candidate
+
+    <dependency>
+          <groupId>com.github.docker-java</groupId>
+          <artifactId>docker-java</artifactId>
+          <version>3.0.0-RC1</version>
+    </dependency>
+    
+### Latest development version
+You can find the latest development version including javadoc and source files on [Sonatypes OSS repository](https://oss.sonatype.org/content/groups/public/com/github/docker-java/docker-java/).
 
     <dependency>
           <groupId>com.github.docker-java</groupId>
           <artifactId>docker-java</artifactId>
           <version>3.0.0-SNAPSHOT</version>
     </dependency>
+    
 
 ## Documentation
 
