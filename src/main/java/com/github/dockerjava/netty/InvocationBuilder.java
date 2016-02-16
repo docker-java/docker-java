@@ -22,13 +22,8 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -249,9 +244,9 @@ public class InvocationBuilder {
             // now we can start a new thread that reads from stdin and writes to the channel
             new Thread(new Runnable() {
 
-                private int read(BufferedReader reader) {
+                private int read(InputStream is, byte[] buf) {
                     try {
-                        return reader.read();
+                        return is.read(buf);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -260,19 +255,13 @@ public class InvocationBuilder {
                 @Override
                 public void run() {
 
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(stdin, Charset.forName("UTF-8")));
+                    byte[] buffer = new byte[1024];
 
-                    int read = -1;
-                    while ((read = read(reader)) != -1) {
-                        byte[] bytes = ByteBuffer.allocate(4).putInt(read).array();
-                        try {
-                            bytes = new String(bytes).getBytes("US-ASCII");
-                        } catch (UnsupportedEncodingException e) {
-                            throw new RuntimeException(e);
-                        }
-
-                        channel.writeAndFlush(Unpooled.copiedBuffer(bytes));
+                    int read;
+                    while ((read = read(stdin, buffer)) != -1) {
+                        channel.writeAndFlush(Unpooled.copiedBuffer(buffer, 0, read));
                     }
+
                 }
             }).start();
         }
