@@ -109,16 +109,16 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        InputStream stdin = new ByteArrayInputStream("echo STDIN\n".getBytes());
+        InputStream stdin = new ByteArrayInputStream("STDIN\n".getBytes("UTF-8"));
 
         ByteArrayOutputStream stdout = new ByteArrayOutputStream();
 
         ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
-                .withAttachStdout(true).withAttachStdin(true).withCmd("/bin/sh").exec();
+                .withAttachStdout(true).withAttachStdin(true).withCmd("cat").exec();
         dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false).withTty(true).withStdIn(stdin)
                 .exec(new ExecStartResultCallback(stdout, System.err)).awaitCompletion(5, TimeUnit.SECONDS);
 
-        assertEquals(stdout.toString(), "STDIN\n");
+        assertEquals(stdout.toString("UTF-8"), "STDIN\n");
     }
 
     @Test(groups = "ignoreInCircleCi")
