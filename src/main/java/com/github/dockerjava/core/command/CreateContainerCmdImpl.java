@@ -33,9 +33,8 @@ import com.github.dockerjava.api.model.Volumes;
 import com.github.dockerjava.api.model.VolumesFrom;
 
 /**
- *
  * Creates a new container.
- *
+ * `/containers/create`
  */
 @JsonInclude(Include.NON_NULL)
 public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, CreateContainerResponse> implements
@@ -99,6 +98,12 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @JsonProperty("ExposedPorts")
     private ExposedPorts exposedPorts = new ExposedPorts();
+
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_21}
+     */
+    @JsonProperty("StopSignal")
+    private String stopSignal;
 
     @JsonProperty("HostConfig")
     private HostConfig hostConfig = new HostConfig();
@@ -213,6 +218,15 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @JsonIgnore
     public ExposedPort[] getExposedPorts() {
         return exposedPorts.getExposedPorts();
+    }
+
+    /**
+     * @see #stopSignal
+     */
+    @JsonIgnore
+    @Override
+    public String getStopSignal() {
+        return stopSignal;
     }
 
     @Override
@@ -590,6 +604,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public CreateContainerCmd withExposedPorts(ExposedPort... exposedPorts) {
         checkNotNull(exposedPorts, "exposedPorts was not specified");
         this.exposedPorts = new ExposedPorts(exposedPorts);
+        return this;
+    }
+
+    @Override
+    public CreateContainerCmd withStopSignal(String stopSignal) {
+        checkNotNull(stopSignal, "stopSignal wasn't specified.");
+        this.stopSignal = stopSignal;
         return this;
     }
 

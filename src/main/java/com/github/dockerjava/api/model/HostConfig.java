@@ -1,15 +1,19 @@
 package com.github.dockerjava.api.model;
 
-import javax.annotation.CheckForNull;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.core.RemoteApiVersion;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
+import javax.annotation.CheckForNull;
+import java.util.List;
+
+/**
+ * Used in `/containers/create`.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
 public class HostConfig {
@@ -19,6 +23,42 @@ public class HostConfig {
 
     @JsonProperty("BlkioWeight")
     private Integer blkioWeight;
+
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
+     */
+    @JsonProperty("BlkioWeightDevice")
+    private List<Object> blkioWeightDevice;
+
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
+     */
+    @JsonProperty("BlkioDeviceReadBps")
+    private List<Object> blkioDeviceReadBps;
+
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
+     */
+    @JsonProperty("BlkioDeviceReadIOps")
+    private List<Object> blkioDeviceReadIOps;
+
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
+     */
+    @JsonProperty("BlkioDeviceWriteBps")
+    private List<Object> blkioDeviceWriteBps;
+
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
+     */
+    @JsonProperty("BlkioDeviceWriteIOps")
+    private List<Object> blkioDeviceWriteIOps;
+
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_20}
+     */
+    @JsonProperty("MemorySwappiness")
+    private Integer memorySwappiness;
 
     @JsonProperty("CapAdd")
     private Capability[] capAdd;
@@ -34,6 +74,12 @@ public class HostConfig {
 
     @JsonProperty("CpuShares")
     private Integer cpuShares;
+
+    /**
+     * @since ~{@link RemoteApiVersion#VERSION_1_20}
+     */
+    @JsonProperty("CpuQuota")
+    private Integer cpuQuota;
 
     @JsonProperty("CpusetCpus")
     private String cpusetCpus;
@@ -68,11 +114,29 @@ public class HostConfig {
     @JsonProperty("MemorySwap")
     private Long memorySwap;
 
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_21}
+     */
+    @JsonProperty("MemoryReservation")
+    private Long memoryReservation;
+
+     /**
+     * @since {@link RemoteApiVersion#VERSION_1_21}
+     */
+    @JsonProperty("KernelMemory")
+    private Long kernelMemory;
+
     @JsonProperty("NetworkMode")
     private String networkMode;
 
     @JsonProperty("OomKillDisable")
     private Boolean oomKillDisable;
+
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_22}
+     */
+    @JsonProperty("OomScoreAdj")
+    private Boolean oomScoreAdj;
 
     @JsonProperty("PortBindings")
     private Ports portBindings;
@@ -97,6 +161,31 @@ public class HostConfig {
 
     @JsonProperty("PidMode")
     private String pidMode;
+
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_20}
+     */
+    @JsonProperty("SecurityOpt")
+    private List<String> securityOpts;
+
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_20}
+     */
+    @JsonProperty("CgroupParent")
+    private String cgroupParent;
+
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_21}
+     */
+    @JsonProperty("VolumeDriver")
+    private String volumeDriver;
+
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_22}
+     */
+    @JsonProperty("ShmSize")
+    private String shmSize;
+
 
     @JsonIgnore
     public Bind[] getBinds() {
@@ -214,6 +303,126 @@ public class HostConfig {
         return pidMode;
     }
 
+    /**
+     * @see #blkioDeviceReadBps
+     */
+    @CheckForNull
+    public List<Object> getBlkioDeviceReadBps() {
+        return blkioDeviceReadBps;
+    }
+
+    /**
+     * @see #blkioDeviceReadIOps
+     */
+    @CheckForNull
+    public List<Object> getBlkioDeviceReadIOps() {
+        return blkioDeviceReadIOps;
+    }
+
+    /**
+     * @see #blkioDeviceWriteBps
+     */
+    @CheckForNull
+    public List<Object> getBlkioDeviceWriteBps() {
+        return blkioDeviceWriteBps;
+    }
+
+    /**
+     * @see #blkioDeviceWriteIOps
+     */
+    @CheckForNull
+    public List<Object> getBlkioDeviceWriteIOps() {
+        return blkioDeviceWriteIOps;
+    }
+
+    /**
+     * @see #blkioWeightDevice
+     */
+    @CheckForNull
+    public List<Object> getBlkioWeightDevice() {
+        return blkioWeightDevice;
+    }
+
+    /**
+     * @see #oomScoreAdj
+     */
+    @CheckForNull
+    public Boolean getOomScoreAdj() {
+        return oomScoreAdj;
+    }
+
+    /**
+     * @see #cpuQuota
+     */
+    @CheckForNull
+    public Integer getCpuQuota() {
+        return cpuQuota;
+    }
+
+    /**
+     * @see #kernelMemory
+     */
+    @CheckForNull
+    public Long getKernelMemory() {
+        return kernelMemory;
+    }
+
+    /**
+     * @see #memoryReservation
+     */
+    @CheckForNull
+    public Long getMemoryReservation() {
+        return memoryReservation;
+    }
+
+    /**
+     * @see #memorySwappiness
+     */
+    @CheckForNull
+    public Integer getMemorySwappiness() {
+        return memorySwappiness;
+    }
+
+    /**
+     * @see #oomKillDisable
+     */
+    @CheckForNull
+    public Boolean getOomKillDisable() {
+        return oomKillDisable;
+    }
+
+    /**
+     * @see #securityOpts
+     */
+    @CheckForNull
+    public List<String> getSecurityOpts() {
+        return securityOpts;
+    }
+
+    /**
+     * @see #cgroupParent
+     */
+    @CheckForNull
+    public String getCgroupParent() {
+        return cgroupParent;
+    }
+
+    /**
+     * @see #shmSize
+     */
+    @CheckForNull
+    public String getShmSize() {
+        return shmSize;
+    }
+
+    /**
+     * @see #volumeDriver
+     */
+    @CheckForNull
+    public String getVolumeDriver() {
+        return volumeDriver;
+    }
+
     @JsonIgnore
     public void setBinds(Bind... binds) {
         this.binds = new Binds(binds);
@@ -327,6 +536,76 @@ public class HostConfig {
 
     public void setPidMode(String pidMode) {
         this.pidMode = pidMode;
+    }
+
+    public HostConfig setBlkioDeviceReadBps(List<Object> blkioDeviceReadBps) {
+        this.blkioDeviceReadBps = blkioDeviceReadBps;
+        return this;
+    }
+
+    public HostConfig setBlkioDeviceReadIOps(List<Object> blkioDeviceReadIOps) {
+        this.blkioDeviceReadIOps = blkioDeviceReadIOps;
+        return this;
+    }
+
+    public HostConfig setBlkioDeviceWriteBps(List<Object> blkioDeviceWriteBps) {
+        this.blkioDeviceWriteBps = blkioDeviceWriteBps;
+        return this;
+    }
+
+    public HostConfig setBlkioDeviceWriteIOps(List<Object> blkioDeviceWriteIOps) {
+        this.blkioDeviceWriteIOps = blkioDeviceWriteIOps;
+        return this;
+    }
+
+    public HostConfig setBlkioWeightDevice(List<Object> blkioWeightDevice) {
+        this.blkioWeightDevice = blkioWeightDevice;
+        return this;
+    }
+
+    public HostConfig setCpuQuota(Integer cpuQuota) {
+        this.cpuQuota = cpuQuota;
+        return this;
+    }
+
+    public HostConfig setKernelMemory(Long kernelMemory) {
+        this.kernelMemory = kernelMemory;
+        return this;
+    }
+
+    public HostConfig setMemoryReservation(Long memoryReservation) {
+        this.memoryReservation = memoryReservation;
+        return this;
+    }
+
+    public HostConfig setMemorySwappiness(Integer memorySwappiness) {
+        this.memorySwappiness = memorySwappiness;
+        return this;
+    }
+
+    public HostConfig setOomScoreAdj(Boolean oomScoreAdj) {
+        this.oomScoreAdj = oomScoreAdj;
+        return this;
+    }
+
+    public HostConfig setSecurityOpts(List<String> securityOpts) {
+        this.securityOpts = securityOpts;
+        return this;
+    }
+
+    public HostConfig setCgroupParent(String cgroupParent) {
+        this.cgroupParent = cgroupParent;
+        return this;
+    }
+
+    public HostConfig setShmSize(String shmSize) {
+        this.shmSize = shmSize;
+        return this;
+    }
+
+    public HostConfig setVolumeDriver(String volumeDriver) {
+        this.volumeDriver = volumeDriver;
+        return this;
     }
 
     @Override
