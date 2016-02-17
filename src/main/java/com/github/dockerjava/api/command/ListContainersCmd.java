@@ -32,7 +32,7 @@ public interface ListContainersCmd extends SyncDockerCmd<List<Container>> {
     public Boolean hasShowSizeEnabled();
 
     /**
-     * @param beforeId
+     * @param before
      *            - Show only containers created before Id, include non-running ones.
      */
     public ListContainersCmd withBefore(String before);
@@ -44,7 +44,7 @@ public interface ListContainersCmd extends SyncDockerCmd<List<Container>> {
     public ListContainersCmd withExitcodeFilter(Integer exitcode);
 
     /**
-     * @param exitcode
+     * @param status
      *            - Show only containers with the passed status (created|restarting|running|paused|exited).
      */
     public ListContainersCmd withStatusFilter(String status);
@@ -80,7 +80,7 @@ public interface ListContainersCmd extends SyncDockerCmd<List<Container>> {
     public ListContainersCmd withShowSize(Boolean showSize);
 
     /**
-     * @param sinceId
+     * @param since
      *            - Show only containers created since Id, include non-running ones.
      */
     public ListContainersCmd withSince(String since);
