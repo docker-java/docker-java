@@ -43,7 +43,7 @@ public class JsonStreamProcessor<T> implements ResponseStreamProcessor<T> {
             while (!closed && nextToken != null && nextToken != JsonToken.END_OBJECT) {
                 try {
                     ObjectNode objectNode = OBJECT_MAPPER.readTree(jp);
-
+                    // exclude empty item serialization into class #461
                     if (!objectNode.isEmpty(null)) {
                         T next = OBJECT_MAPPER.treeToValue(objectNode, clazz);
                         resultCallback.onNext(next);
