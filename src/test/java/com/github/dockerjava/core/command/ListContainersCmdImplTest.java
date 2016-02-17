@@ -52,6 +52,7 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
         super.afterMethod(result);
     }
 
+    @Test
     public void testListContainers() throws Exception {
 
         String testImage = "busybox";

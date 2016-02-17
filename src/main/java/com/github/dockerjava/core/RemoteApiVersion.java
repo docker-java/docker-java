@@ -1,13 +1,13 @@
 package com.github.dockerjava.core;
 
-import java.io.Serializable;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
+
+import java.io.Serializable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Bean to encapsulate the version of the <a href="http://docs.docker.com/engine/reference/api/docker_remote_api/">Docker Remote (REST)
@@ -123,6 +123,13 @@ public class RemoteApiVersion implements Serializable {
             return true;
         }
         return false;
+    }
+
+    /**
+     * @return String representation of version. i.e. "1.22"
+     */
+    public String getVersion() {
+        return major + "." + minor;
     }
 
     // CHECKSTYLE:OFF
