@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 /**
  * Bean to encapsulate the version of the <a href="http://docs.docker.com/engine/reference/api/docker_remote_api/">Docker Remote (REST)
  * API</a>
- * <p>
+ * <p/>
  * Contains the minor and major version of the API as well as operations to compare API versions.
  *
  * @author Marcus Thiesen
