@@ -1,5 +1,36 @@
 package com.github.dockerjava.core.command;
 
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.exception.ConflictException;
+import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.model.Bind;
+import com.github.dockerjava.api.model.Device;
+import com.github.dockerjava.api.model.ExposedPort;
+import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.api.model.Link;
+import com.github.dockerjava.api.model.LogConfig;
+import com.github.dockerjava.api.model.Ports;
+import com.github.dockerjava.api.model.RestartPolicy;
+import com.github.dockerjava.api.model.Ulimit;
+import com.github.dockerjava.api.model.Volume;
+import com.github.dockerjava.api.model.VolumesFrom;
+import com.github.dockerjava.client.AbstractDockerClientTest;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+
+import java.lang.reflect.Method;
+import java.security.SecureRandom;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
 import static com.github.dockerjava.api.model.Capability.MKNOD;
 import static com.github.dockerjava.api.model.Capability.NET_ADMIN;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -14,38 +45,9 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.startsWith;
 
-import java.lang.reflect.Method;
-import java.security.SecureRandom;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.InspectContainerResponse;
-import com.github.dockerjava.api.exception.ConflictException;
-import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.api.model.Bind;
-import com.github.dockerjava.api.model.Device;
-import com.github.dockerjava.api.model.ExposedPort;
-import com.github.dockerjava.api.model.Link;
-import com.github.dockerjava.api.model.LogConfig;
-import com.github.dockerjava.api.model.Ports;
-import com.github.dockerjava.api.model.RestartPolicy;
-import com.github.dockerjava.api.model.Ulimit;
-import com.github.dockerjava.api.model.Volume;
-import com.github.dockerjava.api.model.VolumesFrom;
-import com.github.dockerjava.client.AbstractDockerClientTest;
-
 @Test(groups = "integration")
 public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
+    public static final String BUSYBOX_IMAGE = "busybox";
 
     @BeforeTest
     public void beforeTest() throws Exception {
@@ -72,7 +74,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         String containerName = "generated_" + new SecureRandom().nextInt();
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("env")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("env")
                 .withName(containerName).exec();
 
         LOG.info("Created container {}", container.toString());
@@ -80,7 +82,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(container.getId(), not(isEmptyString()));
 
         try {
-            dockerClient.createContainerCmd("busybox").withCmd("env").withName(containerName).exec();
+            dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("env").withName(containerName).exec();
             fail("expected ConflictException");
         } catch (ConflictException e) {
         }
@@ -91,7 +93,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         Volume volume = new Volume("/var/log");
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withVolumes(volume)
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withVolumes(volume)
                 .withCmd("true").exec();
 
         LOG.info("Created container {}", container.toString());
@@ -114,7 +116,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         Volume volume = new Volume("/srv/test");
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withVolumes(volume)
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withVolumes(volume)
                 .withCmd("true").exec();
 
         LOG.info("Created container {}", container.toString());
@@ -144,7 +146,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         Bind bind2 = new Bind("/src/webapp2", volume2);
 
         // create a running container with bind mounts
-        CreateContainerResponse container1 = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
+        CreateContainerResponse container1 = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("sleep", "9999")
                 .withName(container1Name)
                 .withBinds(bind1, bind2).exec();
         LOG.info("Created container1 {}", container1.toString());
@@ -157,7 +159,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(inspectContainerResponse1, mountedVolumes(containsInAnyOrder(volume1, volume2)));
 
         // create a second container with volumes from first container
-        CreateContainerResponse container2 = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
+        CreateContainerResponse container2 = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("sleep", "9999")
                 .withVolumesFrom(new VolumesFrom(container1Name)).exec();
         LOG.info("Created container2 {}", container2.toString());
 
@@ -187,7 +189,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void createContainerWithEnv() throws Exception {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withEnv("VARIABLE=success")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withEnv("VARIABLE=success")
                 .withCmd("env").exec();
 
         LOG.info("Created container {}", container.toString());
@@ -206,7 +208,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void createContainerWithHostname() throws Exception {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withHostName("docker-java")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withHostName("docker-java")
                 .withCmd("env").exec();
 
         LOG.info("Created container {}", container.toString());
@@ -225,7 +227,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void createContainerWithName() throws DockerException {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withName("container")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withName("container")
                 .withCmd("env").exec();
 
         LOG.info("Created container {}", container.toString());
@@ -237,7 +239,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(inspectContainerResponse.getName(), equalTo("/container"));
 
         try {
-            dockerClient.createContainerCmd("busybox").withName("container").withCmd("env").exec();
+            dockerClient.createContainerCmd(BUSYBOX_IMAGE).withName("container").withCmd("env").exec();
             fail("Expected ConflictException");
         } catch (ConflictException e) {
         }
@@ -247,7 +249,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void createContainerWithLink() throws DockerException {
 
-        CreateContainerResponse container1 = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
+        CreateContainerResponse container1 = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("sleep", "9999")
                 .withName("container1").exec();
         LOG.info("Created container1 {}", container1.toString());
         assertThat(container1.getId(), not(isEmptyString()));
@@ -259,21 +261,21 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         LOG.info("Container1 Inspect: {}", inspectContainerResponse1.toString());
         assertThat(inspectContainerResponse1.getState().getRunning(), is(true));
 
-        CreateContainerResponse container2 = dockerClient.createContainerCmd("busybox").withName("container2")
+        CreateContainerResponse container2 = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withName("container2")
                 .withCmd("env").withLinks(new Link("container1", "container1Link")).exec();
         LOG.info("Created container {}", container2.toString());
         assertThat(container2.getId(), not(isEmptyString()));
 
         InspectContainerResponse inspectContainerResponse2 = dockerClient.inspectContainerCmd(container2.getId())
                 .exec();
-        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] {new Link("container1",
+        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[]{new Link("container1",
                 "container1Link")}));
     }
 
     @Test
     public void createContainerWithCapAddAndCapDrop() throws DockerException {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCapAdd(NET_ADMIN)
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCapAdd(NET_ADMIN)
                 .withCapDrop(MKNOD).exec();
 
         LOG.info("Created container {}", container.toString());
@@ -293,7 +295,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         String aDnsServer = "8.8.8.8";
         String anotherDnsServer = "8.8.4.4";
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("true")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("true")
                 .withDns(aDnsServer, anotherDnsServer).exec();
 
         LOG.info("Created container {}", container.toString());
@@ -309,7 +311,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void createContainerWithEntrypoint() throws DockerException {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withName("container")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withName("container")
                 .withEntrypoint("sleep", "9999").exec();
 
         LOG.info("Created container {}", container.toString());
@@ -327,7 +329,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         String[] extraHosts = {"dockerhost:127.0.0.1", "otherhost:10.0.0.1"};
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withName("container")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withName("container")
                 .withExtraHosts(extraHosts).exec();
 
         LOG.info("Created container {}", container.toString());
@@ -343,7 +345,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void createContainerWithDevices() throws DockerException {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("sleep", "9999")
                 .withDevices(new Device("rwm", "/dev/nulo", "/dev/zero")).exec();
 
         LOG.info("Created container {}", container.toString());
@@ -367,7 +369,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         portBindings.bind(tcp23, Ports.binding(11023));
         portBindings.bind(tcp23, Ports.binding(11024));
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("true")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("true")
                 .withExposedPorts(tcp22, tcp23).withPortBindings(portBindings).exec();
 
         LOG.info("Created container {}", container.toString());
@@ -392,7 +394,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void createContainerWithLinking() throws DockerException {
 
-        CreateContainerResponse container1 = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
+        CreateContainerResponse container1 = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("sleep", "9999")
                 .withName("container1").exec();
 
         LOG.info("Created container1 {}", container1.toString());
@@ -416,7 +418,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
             assertThat(inspectContainerResponse1.getState().getExitCode(), is(equalTo(0)));
         }
 
-        CreateContainerResponse container2 = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
+        CreateContainerResponse container2 = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("sleep", "9999")
                 .withName("container2").withLinks(new Link("container1", "container1Link")).exec();
 
         LOG.info("Created container2 {}", container2.toString());
@@ -430,7 +432,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(inspectContainerResponse2.getId(), not(isEmptyString()));
         assertThat(inspectContainerResponse2.getHostConfig(), is(notNullValue()));
         assertThat(inspectContainerResponse2.getHostConfig().getLinks(), is(notNullValue()));
-        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] {new Link("container1",
+        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[]{new Link("container1",
                 "container1Link")}));
         assertThat(inspectContainerResponse2.getId(), startsWith(container2.getId()));
         assertThat(inspectContainerResponse2.getName(), equalTo("/container2"));
@@ -443,7 +445,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         RestartPolicy restartPolicy = RestartPolicy.onFailureRestart(5);
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("sleep", "9999")
                 .withRestartPolicy(restartPolicy).exec();
 
         LOG.info("Created container {}", container.toString());
@@ -458,7 +460,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void createContainerWithPidMode() throws DockerException {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("true")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("true")
                 .withPidMode("host").exec();
 
         LOG.info("Created container {}", container.toString());
@@ -479,7 +481,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void createContainerWithNetworkMode() throws DockerException {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("true")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("true")
                 .withNetworkMode("host").exec();
 
         LOG.info("Created container {}", container.toString());
@@ -494,7 +496,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void createContainerWithMacAddress() throws DockerException {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
                 .withMacAddress("00:80:41:ae:fd:7e").withCmd("true").exec();
 
         LOG.info("Created container {}", container.toString());
@@ -511,7 +513,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         Ulimit[] ulimits = {new Ulimit("nproc", 709, 1026), new Ulimit("nofile", 1024, 4096)};
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withName("container")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withName("container")
                 .withUlimits(ulimits).exec();
 
         LOG.info("Created container {}", container.toString());
@@ -532,7 +534,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         labels.put("com.github.dockerjava.null", null);
         labels.put("com.github.dockerjava.Boolean", "true");
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("sleep", "9999")
                 .withLabels(labels).exec();
 
         LOG.info("Created container {}", container.toString());
@@ -550,7 +552,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
     public void createContainerWithLogConfig() throws DockerException {
 
         LogConfig logConfig = new LogConfig(LogConfig.LoggingType.NONE, null);
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withLogConfig(logConfig).exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withLogConfig(logConfig).exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -560,5 +562,59 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         // null becomes empty string
         assertEquals(inspectContainerResponse.getHostConfig().getLogConfig().type, logConfig.type);
+    }
+
+    /**
+     * https://github.com/calavera/docker/blob/3781cde61ff10b1d9114ae5b4c5c1d1b2c20a1ee/integration-cli/docker_cli_run_unix_test.go#L319-L333
+     */
+    @Test
+    public void testWithStopSignal() throws Exception {
+        Integer signal = 10; // SIGUSR1 in busybox
+
+        CreateContainerResponse resp = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
+                .withCmd("/bin/sh", "-c", "trap 'echo \"exit trapped 10\"; exit 10' USR1; while true; do sleep 1; done")
+                .withAttachStdin(true)
+                .withTty(true)
+                .withStopSignal(signal.toString())
+                .exec();
+        final String containerId = resp.getId();
+        assertThat(containerId, not(isEmptyString()));
+        dockerClient.startContainerCmd(containerId).exec();
+
+        InspectContainerResponse inspect = dockerClient.inspectContainerCmd(containerId).exec();
+        assertThat(inspect.getState().getRunning(), is(true));
+
+        dockerClient.stopContainerCmd(containerId).exec();
+        Thread.sleep(TimeUnit.SECONDS.toMillis(3));
+
+        inspect = dockerClient.inspectContainerCmd(containerId).exec();
+        assertThat(inspect.getState().getRunning(), is(false));
+        assertThat(inspect.getState().getExitCode(), is(signal));
+
+        StringBuilder stringBuilder = new StringBuilder();
+        final StringBuilderLogReader callback = new StringBuilderLogReader(stringBuilder);
+        dockerClient.logContainerCmd(containerId)
+                .withStdErr(true)
+                .withStdOut(true)
+                .withTailAll()
+                .exec(callback)
+                .awaitCompletion();
+
+        String log = callback.builder.toString();
+        assertThat(log, is("exit trapped 10"));
+    }
+
+    private static class StringBuilderLogReader extends LogContainerResultCallback {
+        public StringBuilder builder;
+
+        public StringBuilderLogReader(StringBuilder builder) {
+            this.builder = builder;
+        }
+
+        @Override
+        public void onNext(Frame item) {
+            builder.append(new String(item.getPayload()).trim());
+            super.onNext(item);
+        }
     }
 }

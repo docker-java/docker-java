@@ -47,6 +47,7 @@ import com.github.dockerjava.api.command.StopContainerCmd;
 import com.github.dockerjava.api.command.TagImageCmd;
 import com.github.dockerjava.api.command.TopContainerCmd;
 import com.github.dockerjava.api.command.UnpauseContainerCmd;
+import com.github.dockerjava.api.command.UpdateContainerCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.core.DockerClientConfig;
@@ -98,6 +99,7 @@ import com.github.dockerjava.netty.exec.StopContainerCmdExec;
 import com.github.dockerjava.netty.exec.TagImageCmdExec;
 import com.github.dockerjava.netty.exec.TopContainerCmdExec;
 import com.github.dockerjava.netty.exec.UnpauseContainerCmdExec;
+import com.github.dockerjava.netty.exec.UpdateContainerCmdExec;
 import com.github.dockerjava.netty.exec.VersionCmdExec;
 import com.github.dockerjava.netty.exec.WaitContainerCmdExec;
 
@@ -456,6 +458,11 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     @Override
     public KillContainerCmd.Exec createKillContainerCmdExec() {
         return new KillContainerCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public UpdateContainerCmd.Exec createUpdateContainerCmdExec() {
+        return new UpdateContainerCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override

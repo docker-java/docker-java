@@ -11,6 +11,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.core.RemoteApiVersion;
 
+import javax.annotation.CheckForNull;
+
 /**
  *
  * @author Marcus Linke
@@ -208,6 +210,15 @@ public class NetworkSettings {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Network {
 
+        @JsonProperty("IPAMConfig")
+        private String ipamConfig;
+
+        /**
+         * @since {@link RemoteApiVersion#VERSION_1_22}
+         */
+        @JsonProperty("NetworkID")
+        private String networkID;
+
         @JsonProperty("EndpointID")
         private String endpointId;
 
@@ -231,6 +242,11 @@ public class NetworkSettings {
 
         @JsonProperty("MacAddress")
         private String macAddress;
+
+        @CheckForNull
+        public String getNetworkID() {
+            return networkID;
+        }
 
         public String getEndpointId() {
             return endpointId;
