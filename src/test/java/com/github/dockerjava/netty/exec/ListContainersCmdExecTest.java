@@ -54,6 +54,7 @@ public class ListContainersCmdExecTest extends AbstractNettyDockerClientTest {
         super.afterMethod(result);
     }
 
+    @Test
     public void testListContainers() throws Exception {
 
         String testImage = "busybox";
