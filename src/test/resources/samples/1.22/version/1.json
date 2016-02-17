@@ -1,0 +1,10 @@
+{
+  "Version": "1.10.1",
+  "ApiVersion": "1.22",
+  "GitCommit": "9e83765",
+  "GoVersion": "go1.5.3",
+  "Os": "linux",
+  "Arch": "amd64",
+  "KernelVersion": "4.1.17-boot2docker",
+  "BuildTime": "2016-02-11T20:39:58.688092588+00:00"
+}

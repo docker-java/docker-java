@@ -1,0 +1,37 @@
+[
+  {
+    "Id": "095351afe7b4995dfb3e965f9cfd3a07b1fe69198c50085a2cb7c2b5a5c9b62f",
+    "Names": [
+      "/drunk_golick"
+    ],
+    "Image": "busybox",
+    "ImageID": "sha256:0cb40641836c461bc97c793971d84d758371ed682042457523e4ae701efe7ec9",
+    "Command": "echo",
+    "Created": 1455662451,
+    "Ports": [],
+    "SizeRootFs": 1113554,
+    "Labels": {},
+    "Status": "Up Less than a second",
+    "HostConfig": {
+      "NetworkMode": "default"
+    },
+    "NetworkSettings": {
+      "Networks": {
+        "bridge": {
+          "IPAMConfig": null,
+          "Links": null,
+          "Aliases": null,
+          "NetworkID": "",
+          "EndpointID": "f69f5cff77b527c829bc45d71ba8c5eabca005ef3a8da8c7ee88c13ffc1ab602",
+          "Gateway": "172.17.0.1",
+          "IPAddress": "172.17.0.2",
+          "IPPrefixLen": 16,
+          "IPv6Gateway": "",
+          "GlobalIPv6Address": "",
+          "GlobalIPv6PrefixLen": 0,
+          "MacAddress": "02:42:ac:11:00:02"
+        }
+      }
+    }
+  }
+]

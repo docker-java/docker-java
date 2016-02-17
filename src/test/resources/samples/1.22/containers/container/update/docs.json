@@ -1,0 +1,12 @@
+{
+  "BlkioWeight": 300,
+  "CpuShares": 512,
+  "CpuPeriod": 100000,
+  "CpuQuota": 50000,
+  "CpusetCpus": "0,1",
+  "CpusetMems": "0",
+  "Memory": 314572800,
+  "MemorySwap": 514288000,
+  "MemoryReservation": 209715200,
+  "KernelMemory": 52428800
+}

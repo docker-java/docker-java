@@ -53,6 +53,7 @@ import com.github.dockerjava.api.command.StopContainerCmd;
 import com.github.dockerjava.api.command.TagImageCmd;
 import com.github.dockerjava.api.command.TopContainerCmd;
 import com.github.dockerjava.api.command.UnpauseContainerCmd;
+import com.github.dockerjava.api.command.UpdateContainerCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.exception.DockerException;
@@ -174,6 +175,15 @@ public interface DockerClient extends Closeable {
     public StopContainerCmd stopContainerCmd(@Nonnull String containerId);
 
     public KillContainerCmd killContainerCmd(@Nonnull String containerId);
+
+    /**
+     * Update container settings
+     *
+     * @param containerId id of the container
+     * @return command
+     * @since {@link RemoteApiVersion#VERSION_1_22}
+     */
+    public UpdateContainerCmd updateContainerCmd(@Nonnull String containerId);
 
     public RestartContainerCmd restartContainerCmd(@Nonnull String containerId);
 

@@ -81,6 +81,9 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     public ExposedPort[] getExposedPorts();
 
     @CheckForNull
+    public String getStopSignal();
+
+    @CheckForNull
     public String[] getExtraHosts();
 
     @CheckForNull
@@ -279,6 +282,8 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     public CreateContainerCmd withEnv(List<String> env);
 
     public CreateContainerCmd withExposedPorts(ExposedPort... exposedPorts);
+
+    public CreateContainerCmd withStopSignal(String stopSignal);
 
     public CreateContainerCmd withExposedPorts(List<ExposedPort> exposedPorts);
 

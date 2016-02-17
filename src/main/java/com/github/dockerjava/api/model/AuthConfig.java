@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.annotation.CheckForNull;
+
 @JsonInclude(Include.NON_NULL)
 public class AuthConfig {
 
@@ -31,6 +33,12 @@ public class AuthConfig {
 
     @JsonProperty("auth")
     private String auth;
+
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
+     */
+    @JsonProperty("registrytoken")
+    private String registrytoken;
 
     public String getUsername() {
         return username;
@@ -74,6 +82,22 @@ public class AuthConfig {
 
     public AuthConfig withAuth(String auth) {
         this.auth = auth;
+        return this;
+    }
+
+    /**
+     * @see #registrytoken
+     */
+    @CheckForNull
+    public String getRegistrytoken() {
+        return registrytoken;
+    }
+
+    /**
+     * @see #registrytoken
+     */
+    public AuthConfig withRegistrytoken(String registrytoken) {
+        this.registrytoken = registrytoken;
         return this;
     }
 

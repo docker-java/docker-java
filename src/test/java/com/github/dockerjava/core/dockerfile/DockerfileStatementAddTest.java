@@ -2,7 +2,6 @@ package com.github.dockerjava.core.dockerfile;
 
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.google.common.base.Optional;
-import junit.framework.TestCase;
 import org.hamcrest.Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +13,9 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 
-public class DockerfileStatementAddTest extends TestCase {
+public class DockerfileStatementAddTest {
 
-    private static final Logger log = LoggerFactory.getLogger(DockerfileStatementAddTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DockerfileStatementAddTest.class);
 
     @DataProvider(name = "valid scenarios")
     public Object[][] validScenarios() {

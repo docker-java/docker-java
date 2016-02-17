@@ -1,0 +1,91 @@
+{
+  "ID": "HLN2:5SBU:SRQR:CQI6:AB52:LZZ2:DED5:REDM:BU73:JFHE:R37A:5HMX",
+  "Containers": 2,
+  "ContainersRunning": 2,
+  "ContainersPaused": 10,
+  "ContainersStopped": 3,
+  "Images": 13,
+  "Driver": "aufs",
+  "DriverStatus": [
+    [
+      "Root Dir",
+      "/mnt/sda1/var/lib/docker/aufs"
+    ],
+    [
+      "Backing Filesystem",
+      "extfs"
+    ],
+    [
+      "Dirs",
+      "31"
+    ],
+    [
+      "Dirperm1 Supported",
+      "true"
+    ]
+  ],
+  "SystemStatus": null,
+  "Plugins": {
+    "Volume": [
+      "local"
+    ],
+    "Network": [
+      "bridge",
+      "null",
+      "host"
+    ],
+    "Authorization": null
+  },
+  "MemoryLimit": true,
+  "SwapLimit": true,
+  "CpuCfsPeriod": true,
+  "CpuCfsQuota": true,
+  "CPUShares": true,
+  "CPUSet": true,
+  "IPv4Forwarding": true,
+  "BridgeNfIptables": true,
+  "BridgeNfIp6tables": true,
+  "Debug": true,
+  "NFd": 24,
+  "OomKillDisable": true,
+  "NGoroutines": 40,
+  "SystemTime": "2016-02-17T14:56:35.212841831Z",
+  "ExecutionDriver": "native-0.2",
+  "LoggingDriver": "json-file",
+  "NEventsListener": 0,
+  "KernelVersion": "4.1.17-boot2docker",
+  "OperatingSystem": "Boot2Docker 1.10.1 (TCL 6.4.1); master : b03e158 - Thu Feb 11 22:34:01 UTC 2016",
+  "OSType": "linux",
+  "Architecture": "x86_64",
+  "IndexServerAddress": "https://index.docker.io/v1/",
+  "RegistryConfig": {
+    "InsecureRegistryCIDRs": [
+      "127.0.0.0/8"
+    ],
+    "IndexConfigs": {
+      "docker.io": {
+        "Name": "docker.io",
+        "Mirrors": null,
+        "Secure": true,
+        "Official": true
+      }
+    },
+    "Mirrors": null
+  },
+  "InitSha1": "",
+  "InitPath": "/usr/local/bin/docker",
+  "NCPU": 1,
+  "MemTotal": 1044574208,
+  "DockerRootDir": "/mnt/sda1/var/lib/docker",
+  "HttpProxy": "",
+  "HttpsProxy": "",
+  "NoProxy": "",
+  "Name": "docker-java",
+  "Labels": [
+    "provider=virtualbox"
+  ],
+  "ExperimentalBuild": false,
+  "ServerVersion": "1.10.1",
+  "ClusterStore": "",
+  "ClusterAdvertise": ""
+}
