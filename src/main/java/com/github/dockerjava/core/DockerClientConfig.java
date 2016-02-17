@@ -164,16 +164,11 @@ public class DockerClientConfig implements Serializable {
         Properties overriddenProperties = new Properties();
         overriddenProperties.putAll(p);
 
-        final File usersDockerPropertiesFile = new File(systemProperties.getProperty("user.home"), "."
-                + DOCKER_JAVA_PROPERTIES);
+        final File usersDockerPropertiesFile = new File(systemProperties.getProperty("user.home"),
+                "." + DOCKER_JAVA_PROPERTIES);
         if (usersDockerPropertiesFile.isFile()) {
-            try {
-                final FileInputStream in = new FileInputStream(usersDockerPropertiesFile);
-                try {
-                    overriddenProperties.load(in);
-                } finally {
-                    in.close();
-                }
+            try (FileInputStream in = new FileInputStream(usersDockerPropertiesFile)) {
+                overriddenProperties.load(in);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -378,6 +373,12 @@ public class DockerClientConfig implements Serializable {
         public final DockerClientConfigBuilder withDockerHost(String dockerHost) {
             checkNotNull(dockerHost, "uri was not specified");
             this.dockerHost = URI.create(dockerHost);
+            return this;
+        }
+
+
+        public final DockerClientConfigBuilder withApiVersion(RemoteApiVersion apiVersion) {
+            this.apiVersion = apiVersion.getVersion();
             return this;
         }
 
