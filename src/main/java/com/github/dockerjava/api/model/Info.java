@@ -20,7 +20,7 @@ import java.util.Map;
 @JsonInclude(Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Info {
-    
+
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
      */
@@ -164,6 +164,18 @@ public class Info {
      */
     @JsonProperty("OomKillDisable")
     private Boolean oomKillDisable;
+
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
+     */
+    @JsonProperty("OSType")
+    private String osType;
+
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
+     */
+    @JsonProperty("OomScoreAdj")
+    private Integer oomScoreAdj;
 
     @JsonProperty("OperatingSystem")
     private String operatingSystem;
@@ -438,6 +450,22 @@ public class Info {
     }
     // end of autogeneration
 
+    /**
+     * @see #oomScoreAdj
+     */
+    @CheckForNull
+    public Integer getOomScoreAdj() {
+        return oomScoreAdj;
+    }
+
+    /**
+     * @see #osType
+     */
+    @CheckForNull
+    public String getOsType() {
+        return osType;
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
@@ -487,6 +515,8 @@ public class Info {
                 .append(nGoroutines, info.nGoroutines)
                 .append(noProxy, info.noProxy)
                 .append(oomKillDisable, info.oomKillDisable)
+                .append(osType, info.osType)
+                .append(oomScoreAdj, info.oomScoreAdj)
                 .append(operatingSystem, info.operatingSystem)
                 .append(registryConfig, info.registryConfig)
                 .append(sockets, info.sockets)
@@ -534,6 +564,8 @@ public class Info {
                 .append(nGoroutines)
                 .append(noProxy)
                 .append(oomKillDisable)
+                .append(osType)
+                .append(oomScoreAdj)
                 .append(operatingSystem)
                 .append(registryConfig)
                 .append(sockets)
