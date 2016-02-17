@@ -10,6 +10,7 @@ import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.dockerjava.core.RemoteApiVersion;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang.StringUtils;
@@ -39,7 +40,7 @@ public abstract class AbstractDockerClientTest extends Assert {
 
     public static final Logger LOG = LoggerFactory.getLogger(AbstractDockerClientTest.class);
 
-    private String apiVersion = "1.21";
+    private RemoteApiVersion apiVersion = RemoteApiVersion.VERSION_1_22;
 
     protected DockerClient dockerClient;
 
@@ -54,7 +55,9 @@ public abstract class AbstractDockerClientTest extends Assert {
 
         LOG.info("======================= BEFORETEST =======================");
         LOG.info("Connecting to Docker server");
-        dockerClient = DockerClientBuilder.getInstance(config()).withDockerCmdExecFactory(dockerCmdExecFactory).build();
+        dockerClient = DockerClientBuilder.getInstance(config())
+                .withDockerCmdExecFactory(dockerCmdExecFactory)
+                .build();
 
         try {
             dockerClient.inspectImageCmd("busybox").exec();

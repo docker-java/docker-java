@@ -1,0 +1,18 @@
+{
+  "ID": "1ca2ca598fab202f86dd9281196c405456069013958a475396b707e85c56473b",
+  "Running": false,
+  "ExitCode": null,
+  "ProcessConfig": {
+    "tty": false,
+    "entrypoint": "/bin/bash",
+    "arguments": [],
+    "privileged": false,
+    "user": ""
+  },
+  "OpenStdin": false,
+  "OpenStderr": true,
+  "OpenStdout": true,
+  "CanRemove": false,
+  "ContainerID": "ffa39805f089af3099e36452a985481f96170a9dff40be69d34d1722c7660d38",
+  "DetachKeys": ""
+}

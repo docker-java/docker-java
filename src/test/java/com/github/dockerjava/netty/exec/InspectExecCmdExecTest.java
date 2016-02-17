@@ -1,14 +1,19 @@
 package com.github.dockerjava.netty.exec;
 
+import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_22;
+import static com.github.dockerjava.utils.TestUtils.getVersion;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.security.SecureRandom;
 
+import com.github.dockerjava.core.RemoteApiVersion;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -99,6 +104,7 @@ public class InspectExecCmdExecTest extends AbstractNettyDockerClientTest {
 
     @Test(groups = "ignoreInCircleCi")
     public void inspectExecNetworkSettings() throws IOException {
+        final RemoteApiVersion apiVersion = getVersion(dockerClient);
         String containerName = "generated_" + new SecureRandom().nextInt();
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
@@ -114,8 +120,19 @@ public class InspectExecCmdExecTest extends AbstractNettyDockerClientTest {
         assertThat(exec.getId(), not(isEmptyString()));
 
         InspectExecResponse inspectExecResponse = dockerClient.inspectExecCmd(exec.getId()).exec();
-        assertThat(inspectExecResponse.getExitCode(), is(0));
+        assertThat(inspectExecResponse.getExitCode(), is(nullValue()));
+        assertThat(inspectExecResponse.isOpenStdin(), is(false));
+        assertThat(inspectExecResponse.isOpenStdout(), is(true));
+        assertThat(inspectExecResponse.isRunning(), is(false));
+        assertThat(inspectExecResponse.getCanRemove(), is(false));
+        assertThat(inspectExecResponse.getContainerID(), is(container.getId()));
 
-        assertNotNull(inspectExecResponse.getContainer().getNetworkSettings().getNetworks().get("bridge"));
+        final InspectExecResponse.Container inspectContainer = inspectExecResponse.getContainer();
+        if (apiVersion.isGreaterOrEqual(VERSION_1_22)) {
+            assertThat(inspectContainer, nullValue());
+        } else {
+            assertThat(inspectContainer, notNullValue());
+            assertNotNull(inspectContainer.getNetworkSettings().getNetworks().get("bridge"));
+        }
     }
 }

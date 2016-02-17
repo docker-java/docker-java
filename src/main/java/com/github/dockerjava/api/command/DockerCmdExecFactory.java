@@ -69,6 +69,8 @@ public interface DockerCmdExecFactory extends Closeable {
 
     public KillContainerCmd.Exec createKillContainerCmdExec();
 
+    UpdateContainerCmd.Exec createUpdateContainerCmdExec();
+
     public RestartContainerCmd.Exec createRestartContainerCmdExec();
 
     public CommitCmd.Exec createCommitCmdExec();

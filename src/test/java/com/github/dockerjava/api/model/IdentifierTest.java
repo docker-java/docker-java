@@ -1,9 +1,14 @@
 package com.github.dockerjava.api.model;
 
-import junit.framework.TestCase;
 
-public class IdentifierTest extends TestCase {
+import org.testng.annotations.Test;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.AssertJUnit.assertTrue;
+
+public class IdentifierTest {
+
+    @Test
     public void testFromCompoundString() throws Exception {
 
         Identifier i1 = Identifier.fromCompoundString("10.0.0.1/jim");

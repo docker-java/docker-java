@@ -55,6 +55,7 @@ import com.github.dockerjava.api.command.StopContainerCmd;
 import com.github.dockerjava.api.command.TagImageCmd;
 import com.github.dockerjava.api.command.TopContainerCmd;
 import com.github.dockerjava.api.command.UnpauseContainerCmd;
+import com.github.dockerjava.api.command.UpdateContainerCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.model.AuthConfig;
@@ -105,8 +106,11 @@ import com.github.dockerjava.core.command.StopContainerCmdImpl;
 import com.github.dockerjava.core.command.TagImageCmdImpl;
 import com.github.dockerjava.core.command.TopContainerCmdImpl;
 import com.github.dockerjava.core.command.UnpauseContainerCmdImpl;
+import com.github.dockerjava.core.command.UpdateContainerCmdImpl;
 import com.github.dockerjava.core.command.VersionCmdImpl;
 import com.github.dockerjava.core.command.WaitContainerCmdImpl;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author Konstantin Pelykh (kpelykh@gmail.com)
@@ -353,6 +357,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public KillContainerCmd killContainerCmd(String containerId) {
         return new KillContainerCmdImpl(getDockerCmdExecFactory().createKillContainerCmdExec(), containerId);
+    }
+
+    @Override
+    public UpdateContainerCmd updateContainerCmd(@Nonnull String containerId) {
+        return new UpdateContainerCmdImpl(getDockerCmdExecFactory().createUpdateContainerCmdExec(), containerId);
     }
 
     @Override
