@@ -115,9 +115,10 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
 
         ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
                 .withAttachStdout(true).withAttachStdin(true).withCmd("cat").exec();
-        dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false).withTty(true).withStdIn(stdin)
+        boolean completed = dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false).withTty(true).withStdIn(stdin)
                 .exec(new ExecStartResultCallback(stdout, System.err)).awaitCompletion(5, TimeUnit.SECONDS);
 
+        assertTrue(completed, "The process was not finished.");
         assertEquals(stdout.toString("UTF-8"), "STDIN\n");
     }
 
@@ -138,9 +139,10 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
 
         ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
                 .withAttachStdout(true).withAttachStdin(false).withCmd("/bin/sh").exec();
-        dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false).withStdIn(stdin)
+        boolean completed = dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false).withStdIn(stdin)
                 .exec(new ExecStartResultCallback(stdout, System.err)).awaitCompletion(5, TimeUnit.SECONDS);
 
+        assertTrue(completed, "The process was not finished.");
         assertEquals(stdout.toString(), "");
     }
 }

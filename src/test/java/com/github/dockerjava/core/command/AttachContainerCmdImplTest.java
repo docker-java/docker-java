@@ -68,7 +68,8 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
         };
 
         dockerClient.attachContainerCmd(container.getId()).withStdErr(true).withStdOut(true).withFollowStream(true)
-                .withLogs(true).exec(callback).awaitCompletion(30, TimeUnit.SECONDS).close();
+                .withLogs(true).exec(callback).awaitCompletion(30, TimeUnit.SECONDS);
+        callback.close();
 
         assertThat(callback.toString(), containsString(snippet));
     }
@@ -97,7 +98,8 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
         };
 
         dockerClient.attachContainerCmd(container.getId()).withStdErr(true).withStdOut(true).withFollowStream(true)
-                .exec(callback).awaitCompletion(15, TimeUnit.SECONDS).close();
+                .exec(callback).awaitCompletion(15, TimeUnit.SECONDS);
+        callback.close();
 
         System.out.println("log: " + callback.toString());
 
@@ -130,7 +132,8 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
         InputStream stdin = new ByteArrayInputStream("".getBytes());
 
         dockerClient.attachContainerCmd(container.getId()).withStdErr(true).withStdOut(true).withFollowStream(true)
-                .withLogs(true).withStdIn(stdin).exec(callback).awaitCompletion(30, TimeUnit.SECONDS).close();
+                .withLogs(true).withStdIn(stdin).exec(callback).awaitCompletion(30, TimeUnit.SECONDS);
+        callback.close();
     }
 
     public static class AttachContainerTestCallback extends AttachContainerResultCallback {

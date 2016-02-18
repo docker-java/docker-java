@@ -95,11 +95,11 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
 
     /**
      * Blocks until {@link ResultCallback#onComplete()} was called or the given timeout occurs
+     * @return {@code true} if completed and {@code false} if the waiting time elapsed
+     *         before {@link ResultCallback#onComplete()} was called.
      */
-    @SuppressWarnings("unchecked")
-    public RC_T awaitCompletion(long timeout, TimeUnit timeUnit) throws InterruptedException {
-        completed.await(timeout, timeUnit);
-        return (RC_T) this;
+    public boolean awaitCompletion(long timeout, TimeUnit timeUnit) throws InterruptedException {
+        return completed.await(timeout, timeUnit);
     }
 
     /**
@@ -115,11 +115,11 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
     /**
      * Blocks until {@link ResultCallback#onStart()} was called or the given timeout occurs. {@link ResultCallback#onStart()} is called when
      * the request was processed on the server side and the response is incoming.
+     * @return {@code true} if started and {@code false} if the waiting time elapsed
+     *         before {@link ResultCallback#onStart()} was called.
      */
-    @SuppressWarnings("unchecked")
-    public RC_T awaitStarted(long timeout, TimeUnit timeUnit) throws InterruptedException {
-        started.await(timeout, timeUnit);
-        return (RC_T) this;
+    public boolean awaitStarted(long timeout, TimeUnit timeUnit) throws InterruptedException {
+        return started.await(timeout, timeUnit);
     }
 
     @CheckForNull
