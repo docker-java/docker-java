@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.dockerjava.api.async.ResultCallback;
 
 /**
@@ -41,8 +42,12 @@ public class JsonStreamProcessor<T> implements ResponseStreamProcessor<T> {
             JsonToken nextToken = jp.nextToken();
             while (!closed && nextToken != null && nextToken != JsonToken.END_OBJECT) {
                 try {
-                    T next = OBJECT_MAPPER.readValue(jp, clazz);
-                    resultCallback.onNext(next);
+                    ObjectNode objectNode = OBJECT_MAPPER.readTree(jp);
+                    // exclude empty item serialization into class #461
+                    if (!objectNode.isEmpty(null)) {
+                        T next = OBJECT_MAPPER.treeToValue(objectNode, clazz);
+                        resultCallback.onNext(next);
+                    }
                 } catch (Exception e) {
                     resultCallback.onError(e);
                 }
