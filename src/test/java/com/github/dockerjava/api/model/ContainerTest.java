@@ -38,7 +38,7 @@ public class ContainerTest {
                 equalTo("sha256:0cb40641836c461bc97c793971d84d758371ed682042457523e4ae701efe7ec9"));
         assertThat(container.getSizeRootFs(), equalTo(1113554L));
 
-        final Container.HostConfig hostConfig = container.getHostConfig();
+        final ContainerHostConfig hostConfig = container.getHostConfig();
         assertThat(hostConfig, notNullValue());
         assertThat(hostConfig.getNetworkMode(), equalTo("default"));
     }
