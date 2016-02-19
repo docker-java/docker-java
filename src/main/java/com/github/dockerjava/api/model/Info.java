@@ -265,14 +265,6 @@ public class Info {
         return images;
     }
 
-    public String getID() {
-        return id;
-    }
-
-    public Boolean getIPv4Forwarding() {
-        return ipv4Forwarding;
-    }
-
     public String getIndexServerAddress() {
         return indexServerAddress;
     }
@@ -311,14 +303,6 @@ public class Info {
 
     public String getName() {
         return name;
-    }
-
-    public Integer getNCPU() {
-        return ncpu;
-    }
-
-    public Integer getNFd() {
-        return nfd;
     }
 
     public Integer getNGoroutines() {
@@ -420,18 +404,13 @@ public class Info {
     }
 
     @CheckForNull
-    public Integer getNcpu() {
+    public Integer getNCPU() {
         return ncpu;
     }
 
     @CheckForNull
-    public Integer getNfd() {
+    public Integer getNFd() {
         return nfd;
-    }
-
-    @CheckForNull
-    public Integer getnGoroutines() {
-        return nGoroutines;
     }
 
     @CheckForNull
@@ -586,12 +565,58 @@ public class Info {
         @JsonProperty("InsecureRegistryCIDRs")
         private List<String> insecureRegistryCIDRs;
 
+        /**
+         * //FIXME unknown field
+         */
+        @JsonProperty("Mirrors")
+        private Object mirrors;
+
+        /**
+         * @see #indexConfigs
+         */
+        @CheckForNull
         public Map<String, IndexConfig> getIndexConfigs() {
             return indexConfigs;
         }
 
+        /**
+         * @see #indexConfigs
+         */
+        public RegistryConfig withIndexConfigs(Map<String, IndexConfig> indexConfigs) {
+            this.indexConfigs = indexConfigs;
+            return this;
+        }
+
+        /**
+         * @see #insecureRegistryCIDRs
+         */
+        @CheckForNull
         public List<String> getInsecureRegistryCIDRs() {
             return insecureRegistryCIDRs;
+        }
+
+        /**
+         * @see #insecureRegistryCIDRs
+         */
+        public RegistryConfig withInsecureRegistryCIDRs(List<String> insecureRegistryCIDRs) {
+            this.insecureRegistryCIDRs = insecureRegistryCIDRs;
+            return this;
+        }
+
+        /**
+         * @see #mirrors
+         */
+        @CheckForNull
+        public Object getMirrors() {
+            return mirrors;
+        }
+
+        /**
+         * @see #mirrors
+         */
+        public RegistryConfig withMirrors(Object mirrors) {
+            this.mirrors = mirrors;
+            return this;
         }
 
         @Override
@@ -599,6 +624,7 @@ public class Info {
             return new ToStringBuilder(this)
                     .append("indexConfigs", indexConfigs)
                     .append("insecureRegistryCIDRs", insecureRegistryCIDRs)
+                    .append("mirrors", mirrors)
                     .toString();
         }
 
@@ -613,6 +639,7 @@ public class Info {
             return new EqualsBuilder()
                     .append(indexConfigs, that.indexConfigs)
                     .append(insecureRegistryCIDRs, that.insecureRegistryCIDRs)
+                    .append(mirrors, that.mirrors)
                     .isEquals();
         }
 
@@ -621,6 +648,7 @@ public class Info {
             return new HashCodeBuilder(17, 37)
                     .append(indexConfigs)
                     .append(insecureRegistryCIDRs)
+                    .append(mirrors)
                     .toHashCode();
         }
 
@@ -641,24 +669,68 @@ public class Info {
             @JsonProperty("Secure")
             private Boolean secure;
 
+            /**
+             * @see #mirrors
+             */
             @CheckForNull
             public String getMirrors() {
                 return mirrors;
             }
 
+            /**
+             * @see #mirrors
+             */
+            public IndexConfig withMirrors(String mirrors) {
+                this.mirrors = mirrors;
+                return this;
+            }
+
+            /**
+             * @see #name
+             */
             @CheckForNull
             public String getName() {
                 return name;
             }
 
+            /**
+             * @see #name
+             */
+            public IndexConfig withName(String name) {
+                this.name = name;
+                return this;
+            }
+
+            /**
+             * @see #official
+             */
             @CheckForNull
             public Boolean getOfficial() {
                 return official;
             }
 
+            /**
+             * @see #official
+             */
+            public IndexConfig withOfficial(Boolean official) {
+                this.official = official;
+                return this;
+            }
+
+            /**
+             * @see #secure
+             */
             @CheckForNull
             public Boolean getSecure() {
                 return secure;
+            }
+
+            /**
+             * @see #secure
+             */
+            public IndexConfig withSecure(Boolean secure) {
+                this.secure = secure;
+                return this;
             }
 
             @Override

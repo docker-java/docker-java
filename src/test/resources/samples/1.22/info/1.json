@@ -2,8 +2,8 @@
   "ID": "HLN2:5SBU:SRQR:CQI6:AB52:LZZ2:DED5:REDM:BU73:JFHE:R37A:5HMX",
   "Containers": 2,
   "ContainersRunning": 2,
-  "ContainersPaused": 0,
-  "ContainersStopped": 0,
+  "ContainersPaused": 10,
+  "ContainersStopped": 3,
   "Images": 13,
   "Driver": "aufs",
   "DriverStatus": [

@@ -55,7 +55,7 @@ public class Container {
     private String status;
 
     /**
-     * @since > ~{@link RemoteApiVersion#VERSION_1_19}
+     * @since ~{@link RemoteApiVersion#VERSION_1_19}
      */
     @JsonProperty("SizeRw")
     private Long sizeRw;
@@ -63,11 +63,14 @@ public class Container {
     /**
      * Returns only when {@link ListContainersCmd#withShowSize(java.lang.Boolean)} set
      *
-     * @since > ~{@link RemoteApiVersion#VERSION_1_19}
+     * @since ~{@link RemoteApiVersion#VERSION_1_19}
      */
     @JsonProperty("SizeRootFs")
     private Long sizeRootFs;
 
+    /**
+     * @since ~{@link RemoteApiVersion#VERSION_1_20}
+     */
     @JsonProperty("HostConfig")
     private HostConfig hostConfig;
 
@@ -75,7 +78,7 @@ public class Container {
      * Docker API docs says "list of networks", but json names `networkSettings`.
      * So, reusing existed NetworkSettings model object.
      *
-     * @since > ~{@link RemoteApiVersion#VERSION_1_22}
+     * @since ~{@link RemoteApiVersion#VERSION_1_22}
      */
     @JsonProperty("NetworkSettings")
     private NetworkSettings networkSettings;
@@ -139,6 +142,14 @@ public class Container {
     @CheckForNull
     public NetworkSettings getNetworkSettings() {
         return networkSettings;
+    }
+
+    /**
+     * @see #hostConfig
+     */
+    @CheckForNull
+    public HostConfig getHostConfig() {
+        return hostConfig;
     }
 
     @Override
@@ -229,6 +240,7 @@ public class Container {
             /**
              * FIXME no docs, unknown field.
              * Type picked from `docker/vendor/src/github.com/docker/engine-api/types/network/network.go`
+             * @since {@link RemoteApiVersion#VERSION_1_22}
              */
             @JsonProperty("Aliases")
             private List<String> aliases;
@@ -260,51 +272,98 @@ public class Container {
             @JsonProperty("MacAddress")
             private String macAddress;
 
+            /**
+             * @see #aliases
+             */
             @CheckForNull
             public List<String> getAliases() {
                 return aliases;
             }
 
+            /**
+             * @see #endpointId
+             */
+            @CheckForNull
             public String getEndpointId() {
                 return endpointId;
             }
 
+            /**
+             * @see #gateway
+             */
+            @CheckForNull
             public String getGateway() {
                 return gateway;
             }
 
+            /**
+             * @see #globalIPv6Address
+             */
+            @CheckForNull
             public String getGlobalIPv6Address() {
                 return globalIPv6Address;
             }
 
+            /**
+             * @see #globalIPv6PrefixLen
+             */
+            @CheckForNull
             public Integer getGlobalIPv6PrefixLen() {
                 return globalIPv6PrefixLen;
             }
 
+            /**
+             * @see #ipAddress
+             */
+            @CheckForNull
             public String getIpAddress() {
                 return ipAddress;
             }
 
+            /**
+             * @see #ipamConfig
+             */
+            @CheckForNull
             public Ipam.Config getIpamConfig() {
                 return ipamConfig;
             }
 
+            /**
+             * @see #ipPrefixLen
+             */
+            @CheckForNull
             public Integer getIpPrefixLen() {
                 return ipPrefixLen;
             }
 
+            /**
+             * @see #ipV6Gateway
+             */
+            @CheckForNull
             public String getIpV6Gateway() {
                 return ipV6Gateway;
             }
 
+            /**
+             * @see #links
+             */
+            @CheckForNull
             public List<String> getLinks() {
                 return links;
             }
 
+            /**
+             * @see #macAddress
+             */
+            @CheckForNull
             public String getMacAddress() {
                 return macAddress;
             }
 
+            /**
+             * @see #networkID
+             */
+            @CheckForNull
             public String getNetworkID() {
                 return networkID;
             }
