@@ -450,14 +450,14 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withBlkioWeight(Integer blkioWeight) {
         checkNotNull(blkioWeight, "blkioWeight was not specified");
-        hostConfig.setBlkioWeight(blkioWeight);
+        hostConfig.withBlkioWeight(blkioWeight);
         return this;
     }
 
     @Override
     public CreateContainerCmd withCapAdd(Capability... capAdd) {
         checkNotNull(capAdd, "capAdd was not specified");
-        hostConfig.setCapAdd(capAdd);
+        hostConfig.withCapAdd(capAdd);
         return this;
     }
 
@@ -470,7 +470,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withCapDrop(Capability... capDrop) {
         checkNotNull(capDrop, "capDrop was not specified");
-        hostConfig.setCapDrop(capDrop);
+        hostConfig.withCapDrop(capDrop);
         return this;
     }
 
@@ -496,42 +496,42 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withContainerIDFile(String containerIDFile) {
         checkNotNull(containerIDFile, "no containerIDFile was specified");
-        hostConfig.setContainerIDFile(containerIDFile);
+        hostConfig.withContainerIDFile(containerIDFile);
         return this;
     }
 
     @Override
     public CreateContainerCmd withCpuPeriod(Integer cpuPeriod) {
         checkNotNull(cpuPeriod, "cpuPeriod was not specified");
-        hostConfig.setCpuPeriod(cpuPeriod);
+        hostConfig.withCpuPeriod(cpuPeriod);
         return this;
     }
 
     @Override
     public CreateContainerCmd withCpusetCpus(String cpusetCpus) {
         checkNotNull(cpusetCpus, "cpusetCpus was not specified");
-        hostConfig.setCpusetCpus(cpusetCpus);
+        hostConfig.withCpusetCpus(cpusetCpus);
         return this;
     }
 
     @Override
     public CreateContainerCmd withCpusetMems(String cpusetMems) {
         checkNotNull(cpusetMems, "cpusetMems was not specified");
-        hostConfig.setCpusetMems(cpusetMems);
+        hostConfig.withCpusetMems(cpusetMems);
         return this;
     }
 
     @Override
     public CreateContainerCmd withCpuShares(Integer cpuShares) {
         checkNotNull(cpuShares, "cpuShares was not specified");
-        hostConfig.setCpuShares(cpuShares);
+        hostConfig.withCpuShares(cpuShares);
         return this;
     }
 
     @Override
     public CreateContainerCmd withDevices(Device... devices) {
         checkNotNull(devices, "devices was not specified");
-        this.hostConfig.setDevices(devices);
+        this.hostConfig.withDevices(devices);
         return this;
     }
 
@@ -544,7 +544,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withDns(String... dns) {
         checkNotNull(dns, "dns was not specified");
-        this.hostConfig.setDns(dns);
+        this.hostConfig.withDns(dns);
         return this;
     }
 
@@ -557,7 +557,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withDnsSearch(String... dnsSearch) {
         checkNotNull(dnsSearch, "dnsSearch was not specified");
-        this.hostConfig.setDnsSearch(dnsSearch);
+        this.hostConfig.withDnsSearch(dnsSearch);
         return this;
     }
 
@@ -623,7 +623,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withExtraHosts(String... extraHosts) {
         checkNotNull(extraHosts, "extraHosts was not specified");
-        this.hostConfig.setExtraHosts(extraHosts);
+        this.hostConfig.withExtraHosts(extraHosts);
         return this;
     }
 
@@ -670,7 +670,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withLxcConf(LxcConf... lxcConf) {
         checkNotNull(lxcConf, "lxcConf was not specified");
-        this.hostConfig.setLxcConf(lxcConf);
+        this.hostConfig.withLxcConf(lxcConf);
         return this;
     }
 
@@ -683,7 +683,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withLogConfig(LogConfig logConfig) {
         checkNotNull(logConfig, "logConfig was not specified");
-        this.hostConfig.setLogConfig(logConfig);
+        this.hostConfig.withLogConfig(logConfig);
         return this;
     }
 
@@ -697,14 +697,14 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withMemory(Long memory) {
         checkNotNull(memory, "memory was not specified");
-        hostConfig.setMemory(memory);
+        hostConfig.withMemory(memory);
         return this;
     }
 
     @Override
     public CreateContainerCmd withMemorySwap(Long memorySwap) {
         checkNotNull(memorySwap, "memorySwap was not specified");
-        hostConfig.setMemorySwap(memorySwap);
+        hostConfig.withMemorySwap(memorySwap);
         return this;
     }
 
@@ -725,21 +725,21 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withNetworkMode(String networkMode) {
         checkNotNull(networkMode, "networkMode was not specified");
-        this.hostConfig.setNetworkMode(networkMode);
+        this.hostConfig.withNetworkMode(networkMode);
         return this;
     }
 
     @Override
     public CreateContainerCmd withOomKillDisable(Boolean oomKillDisable) {
         checkNotNull(oomKillDisable, "oomKillDisable was not specified");
-        hostConfig.setOomKillDisable(oomKillDisable);
+        hostConfig.withOomKillDisable(oomKillDisable);
         return this;
     }
 
     @Override
     public CreateContainerCmd withPortBindings(PortBinding... portBindings) {
         checkNotNull(portBindings, "portBindings was not specified");
-        this.hostConfig.setPortBindings(new Ports(portBindings));
+        this.hostConfig.withPortBindings(new Ports(portBindings));
         return this;
     }
 
@@ -752,7 +752,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withPortBindings(Ports portBindings) {
         checkNotNull(portBindings, "portBindings was not specified");
-        this.hostConfig.setPortBindings(portBindings);
+        this.hostConfig.withPortBindings(portBindings);
         return this;
     }
 
@@ -772,28 +772,28 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withPrivileged(Boolean privileged) {
         checkNotNull(privileged, "no privileged was specified");
-        this.hostConfig.setPrivileged(privileged);
+        this.hostConfig.withPrivileged(privileged);
         return this;
     }
 
     @Override
     public CreateContainerCmd withPublishAllPorts(Boolean publishAllPorts) {
         checkNotNull(publishAllPorts, "no publishAllPorts was specified");
-        this.hostConfig.setPublishAllPorts(publishAllPorts);
+        this.hostConfig.withPublishAllPorts(publishAllPorts);
         return this;
     }
 
     @Override
     public CreateContainerCmd withReadonlyRootfs(Boolean readonlyRootfs) {
         checkNotNull(readonlyRootfs, "no readonlyRootfs was specified");
-        hostConfig.setReadonlyRootfs(readonlyRootfs);
+        hostConfig.withReadonlyRootfs(readonlyRootfs);
         return this;
     }
 
     @Override
     public CreateContainerCmd withRestartPolicy(RestartPolicy restartPolicy) {
         checkNotNull(restartPolicy, "restartPolicy was not specified");
-        this.hostConfig.setRestartPolicy(restartPolicy);
+        this.hostConfig.withRestartPolicy(restartPolicy);
         return this;
     }
 
@@ -821,7 +821,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withUlimits(Ulimit... ulimits) {
         checkNotNull(ulimits, "no ulimits was specified");
-        hostConfig.setUlimits(ulimits);
+        hostConfig.withUlimits(ulimits);
         return this;
     }
 
@@ -854,7 +854,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withVolumesFrom(VolumesFrom... volumesFrom) {
         checkNotNull(volumesFrom, "volumesFrom was not specified");
-        this.hostConfig.setVolumesFrom(volumesFrom);
+        this.hostConfig.withVolumesFrom(volumesFrom);
         return this;
     }
 
@@ -874,7 +874,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withPidMode(String pidMode) {
         checkNotNull(pidMode, "pidMode was not specified");
-        this.hostConfig.setPidMode(pidMode);
+        this.hostConfig.withPidMode(pidMode);
         return this;
     }
 

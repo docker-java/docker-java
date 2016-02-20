@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.core.RemoteApiVersion;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.annotation.CheckForNull;
@@ -428,189 +430,453 @@ public class HostConfig {
         this.binds = new Binds(binds);
     }
 
-    public void setBlkioWeight(Integer blkioWeight) {
-        this.blkioWeight = blkioWeight;
-    }
-
-    public void setCpuPeriod(Integer cpuPeriod) {
-        this.cpuPeriod = cpuPeriod;
-    }
-
-    public void setCpuShares(Integer cpuShares) {
-        this.cpuShares = cpuShares;
-    }
-
-    public void setCpusetCpus(String cpusetCpus) {
-        this.cpusetCpus = cpusetCpus;
-    }
-
-    public void setCpusetMems(String cpusetMems) {
-        this.cpusetMems = cpusetMems;
-    }
-
-    public void setCapAdd(Capability[] capAdd) {
-        this.capAdd = capAdd;
-    }
-
-    public void setCapDrop(Capability[] capDrop) {
-        this.capDrop = capDrop;
-    }
-
-    public void setContainerIDFile(String containerIDFile) {
-        this.containerIDFile = containerIDFile;
-    }
-
-    public void setDevices(Device[] devices) {
-        this.devices = devices;
-    }
-
-    public void setDns(String[] dns) {
-        this.dns = dns;
-    }
-
-    public void setDnsSearch(String[] dnsSearch) {
-        this.dnsSearch = dnsSearch;
-    }
-
-    public void setExtraHosts(String[] extraHosts) {
-        this.extraHosts = extraHosts;
-    }
-
     @JsonIgnore
     public void setLinks(Link... links) {
         this.links = new Links(links);
     }
 
-    @JsonIgnore
-    public void setLogConfig(LogConfig logConfig) {
-        this.logConfig = logConfig;
+    // auto-generated builder setters
+    /**
+     * @see #binds
+     */
+    public HostConfig withBinds(Binds binds) {
+        this.binds = binds;
+        return this;
     }
 
-    public void setLxcConf(LxcConf[] lxcConf) {
-        this.lxcConf = lxcConf;
-    }
-
-    public void setMemory(Long memory) {
-        this.memory = memory;
-    }
-
-    public void setMemorySwap(Long memorySwap) {
-        this.memorySwap = memorySwap;
-    }
-
-    public void setNetworkMode(String networkMode) {
-        this.networkMode = networkMode;
-    }
-
-    public void setOomKillDisable(Boolean oomKillDisable) {
-        this.oomKillDisable = oomKillDisable;
-    }
-
-    public void setPortBindings(Ports portBindings) {
-        this.portBindings = portBindings;
-    }
-
-    public void setPrivileged(Boolean privileged) {
-        this.privileged = privileged;
-    }
-
-    public void setPublishAllPorts(Boolean publishAllPorts) {
-        this.publishAllPorts = publishAllPorts;
-    }
-
-    public void setReadonlyRootfs(Boolean readonlyRootfs) {
-        this.readonlyRootfs = readonlyRootfs;
-    }
-
-    public void setRestartPolicy(RestartPolicy restartPolicy) {
-        this.restartPolicy = restartPolicy;
-    }
-
-    public void setUlimits(Ulimit[] ulimits) {
-        this.ulimits = ulimits;
-    }
-
-    public void setVolumesFrom(VolumesFrom[] volumesFrom) {
-        this.volumesFrom = volumesFrom;
-    }
-
-    public void setPidMode(String pidMode) {
-        this.pidMode = pidMode;
-    }
-
-    public HostConfig setBlkioDeviceReadBps(List<Object> blkioDeviceReadBps) {
+    /**
+     * @see #blkioDeviceReadBps
+     */
+    public HostConfig withBlkioDeviceReadBps(List<Object> blkioDeviceReadBps) {
         this.blkioDeviceReadBps = blkioDeviceReadBps;
         return this;
     }
 
-    public HostConfig setBlkioDeviceReadIOps(List<Object> blkioDeviceReadIOps) {
+    /**
+     * @see #blkioDeviceReadIOps
+     */
+    public HostConfig withBlkioDeviceReadIOps(List<Object> blkioDeviceReadIOps) {
         this.blkioDeviceReadIOps = blkioDeviceReadIOps;
         return this;
     }
 
-    public HostConfig setBlkioDeviceWriteBps(List<Object> blkioDeviceWriteBps) {
+    /**
+     * @see #blkioDeviceWriteBps
+     */
+    public HostConfig withBlkioDeviceWriteBps(List<Object> blkioDeviceWriteBps) {
         this.blkioDeviceWriteBps = blkioDeviceWriteBps;
         return this;
     }
 
-    public HostConfig setBlkioDeviceWriteIOps(List<Object> blkioDeviceWriteIOps) {
+    /**
+     * @see #blkioDeviceWriteIOps
+     */
+    public HostConfig withBlkioDeviceWriteIOps(List<Object> blkioDeviceWriteIOps) {
         this.blkioDeviceWriteIOps = blkioDeviceWriteIOps;
         return this;
     }
 
-    public HostConfig setBlkioWeightDevice(List<Object> blkioWeightDevice) {
+    /**
+     * @see #blkioWeight
+     */
+    public HostConfig withBlkioWeight(Integer blkioWeight) {
+        this.blkioWeight = blkioWeight;
+        return this;
+    }
+
+    /**
+     * @see #blkioWeightDevice
+     */
+    public HostConfig withBlkioWeightDevice(List<Object> blkioWeightDevice) {
         this.blkioWeightDevice = blkioWeightDevice;
         return this;
     }
 
-    public HostConfig setCpuQuota(Integer cpuQuota) {
-        this.cpuQuota = cpuQuota;
+    /**
+     * @see #capAdd
+     */
+    public HostConfig withCapAdd(Capability[] capAdd) {
+        this.capAdd = capAdd;
         return this;
     }
 
-    public HostConfig setKernelMemory(Long kernelMemory) {
-        this.kernelMemory = kernelMemory;
+    /**
+     * @see #capDrop
+     */
+    public HostConfig withCapDrop(Capability[] capDrop) {
+        this.capDrop = capDrop;
         return this;
     }
 
-    public HostConfig setMemoryReservation(Long memoryReservation) {
-        this.memoryReservation = memoryReservation;
-        return this;
-    }
-
-    public HostConfig setMemorySwappiness(Integer memorySwappiness) {
-        this.memorySwappiness = memorySwappiness;
-        return this;
-    }
-
-    public HostConfig setOomScoreAdj(Boolean oomScoreAdj) {
-        this.oomScoreAdj = oomScoreAdj;
-        return this;
-    }
-
-    public HostConfig setSecurityOpts(List<String> securityOpts) {
-        this.securityOpts = securityOpts;
-        return this;
-    }
-
-    public HostConfig setCgroupParent(String cgroupParent) {
+    /**
+     * @see #cgroupParent
+     */
+    public HostConfig withCgroupParent(String cgroupParent) {
         this.cgroupParent = cgroupParent;
         return this;
     }
 
-    public HostConfig setShmSize(String shmSize) {
+    /**
+     * @see #containerIDFile
+     */
+    public HostConfig withContainerIDFile(String containerIDFile) {
+        this.containerIDFile = containerIDFile;
+        return this;
+    }
+
+    /**
+     * @see #cpuPeriod
+     */
+    public HostConfig withCpuPeriod(Integer cpuPeriod) {
+        this.cpuPeriod = cpuPeriod;
+        return this;
+    }
+
+    /**
+     * @see #cpuQuota
+     */
+    public HostConfig withCpuQuota(Integer cpuQuota) {
+        this.cpuQuota = cpuQuota;
+        return this;
+    }
+
+    /**
+     * @see #cpusetCpus
+     */
+    public HostConfig withCpusetCpus(String cpusetCpus) {
+        this.cpusetCpus = cpusetCpus;
+        return this;
+    }
+
+    /**
+     * @see #cpusetMems
+     */
+    public HostConfig withCpusetMems(String cpusetMems) {
+        this.cpusetMems = cpusetMems;
+        return this;
+    }
+
+    /**
+     * @see #cpuShares
+     */
+    public HostConfig withCpuShares(Integer cpuShares) {
+        this.cpuShares = cpuShares;
+        return this;
+    }
+
+    /**
+     * @see #devices
+     */
+    public HostConfig withDevices(Device[] devices) {
+        this.devices = devices;
+        return this;
+    }
+
+    /**
+     * @see #dns
+     */
+    public HostConfig withDns(String[] dns) {
+        this.dns = dns;
+        return this;
+    }
+
+    /**
+     * @see #dnsSearch
+     */
+    public HostConfig withDnsSearch(String[] dnsSearch) {
+        this.dnsSearch = dnsSearch;
+        return this;
+    }
+
+    /**
+     * @see #extraHosts
+     */
+    public HostConfig withExtraHosts(String[] extraHosts) {
+        this.extraHosts = extraHosts;
+        return this;
+    }
+
+    /**
+     * @see #kernelMemory
+     */
+    public HostConfig withKernelMemory(Long kernelMemory) {
+        this.kernelMemory = kernelMemory;
+        return this;
+    }
+
+    /**
+     * @see #links
+     */
+    public HostConfig withLinks(Links links) {
+        this.links = links;
+        return this;
+    }
+
+    /**
+     * @see #logConfig
+     */
+    public HostConfig withLogConfig(LogConfig logConfig) {
+        this.logConfig = logConfig;
+        return this;
+    }
+
+    /**
+     * @see #lxcConf
+     */
+    public HostConfig withLxcConf(LxcConf[] lxcConf) {
+        this.lxcConf = lxcConf;
+        return this;
+    }
+
+    /**
+     * @see #memory
+     */
+    public HostConfig withMemory(Long memory) {
+        this.memory = memory;
+        return this;
+    }
+
+    /**
+     * @see #memoryReservation
+     */
+    public HostConfig withMemoryReservation(Long memoryReservation) {
+        this.memoryReservation = memoryReservation;
+        return this;
+    }
+
+    /**
+     * @see #memorySwap
+     */
+    public HostConfig withMemorySwap(Long memorySwap) {
+        this.memorySwap = memorySwap;
+        return this;
+    }
+
+    /**
+     * @see #memorySwappiness
+     */
+    public HostConfig withMemorySwappiness(Integer memorySwappiness) {
+        this.memorySwappiness = memorySwappiness;
+        return this;
+    }
+
+    /**
+     * @see #networkMode
+     */
+    public HostConfig withNetworkMode(String networkMode) {
+        this.networkMode = networkMode;
+        return this;
+    }
+
+    /**
+     * @see #oomKillDisable
+     */
+    public HostConfig withOomKillDisable(Boolean oomKillDisable) {
+        this.oomKillDisable = oomKillDisable;
+        return this;
+    }
+
+    /**
+     * @see #oomScoreAdj
+     */
+    public HostConfig withOomScoreAdj(Boolean oomScoreAdj) {
+        this.oomScoreAdj = oomScoreAdj;
+        return this;
+    }
+
+    /**
+     * @see #pidMode
+     */
+    public HostConfig withPidMode(String pidMode) {
+        this.pidMode = pidMode;
+        return this;
+    }
+
+    /**
+     * @see #portBindings
+     */
+    public HostConfig withPortBindings(Ports portBindings) {
+        this.portBindings = portBindings;
+        return this;
+    }
+
+    /**
+     * @see #privileged
+     */
+    public HostConfig withPrivileged(Boolean privileged) {
+        this.privileged = privileged;
+        return this;
+    }
+
+    /**
+     * @see #publishAllPorts
+     */
+    public HostConfig withPublishAllPorts(Boolean publishAllPorts) {
+        this.publishAllPorts = publishAllPorts;
+        return this;
+    }
+
+    /**
+     * @see #readonlyRootfs
+     */
+    public HostConfig withReadonlyRootfs(Boolean readonlyRootfs) {
+        this.readonlyRootfs = readonlyRootfs;
+        return this;
+    }
+
+    /**
+     * @see #restartPolicy
+     */
+    public HostConfig withRestartPolicy(RestartPolicy restartPolicy) {
+        this.restartPolicy = restartPolicy;
+        return this;
+    }
+
+    /**
+     * @see #securityOpts
+     */
+    public HostConfig withSecurityOpts(List<String> securityOpts) {
+        this.securityOpts = securityOpts;
+        return this;
+    }
+
+    /**
+     * @see #shmSize
+     */
+    public HostConfig withShmSize(String shmSize) {
         this.shmSize = shmSize;
         return this;
     }
 
-    public HostConfig setVolumeDriver(String volumeDriver) {
+    /**
+     * @see #ulimits
+     */
+    public HostConfig withUlimits(Ulimit[] ulimits) {
+        this.ulimits = ulimits;
+        return this;
+    }
+
+    /**
+     * @see #volumeDriver
+     */
+    public HostConfig withVolumeDriver(String volumeDriver) {
         this.volumeDriver = volumeDriver;
         return this;
     }
+
+    /**
+     * @see #volumesFrom
+     */
+    public HostConfig withVolumesFrom(VolumesFrom[] volumesFrom) {
+        this.volumesFrom = volumesFrom;
+        return this;
+    }
+    // end of auto-generated
 
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        HostConfig that = (HostConfig) o;
+
+        return new EqualsBuilder()
+                .append(binds, that.binds)
+                .append(blkioWeight, that.blkioWeight)
+                .append(blkioWeightDevice, that.blkioWeightDevice)
+                .append(blkioDeviceReadBps, that.blkioDeviceReadBps)
+                .append(blkioDeviceReadIOps, that.blkioDeviceReadIOps)
+                .append(blkioDeviceWriteBps, that.blkioDeviceWriteBps)
+                .append(blkioDeviceWriteIOps, that.blkioDeviceWriteIOps)
+                .append(memorySwappiness, that.memorySwappiness)
+                .append(capAdd, that.capAdd)
+                .append(capDrop, that.capDrop)
+                .append(containerIDFile, that.containerIDFile)
+                .append(cpuPeriod, that.cpuPeriod)
+                .append(cpuShares, that.cpuShares)
+                .append(cpuQuota, that.cpuQuota)
+                .append(cpusetCpus, that.cpusetCpus)
+                .append(cpusetMems, that.cpusetMems)
+                .append(devices, that.devices)
+                .append(dns, that.dns)
+                .append(dnsSearch, that.dnsSearch)
+                .append(extraHosts, that.extraHosts)
+                .append(links, that.links)
+                .append(logConfig, that.logConfig)
+                .append(lxcConf, that.lxcConf)
+                .append(memory, that.memory)
+                .append(memorySwap, that.memorySwap)
+                .append(memoryReservation, that.memoryReservation)
+                .append(kernelMemory, that.kernelMemory)
+                .append(networkMode, that.networkMode)
+                .append(oomKillDisable, that.oomKillDisable)
+                .append(oomScoreAdj, that.oomScoreAdj)
+                .append(portBindings, that.portBindings)
+                .append(privileged, that.privileged)
+                .append(publishAllPorts, that.publishAllPorts)
+                .append(readonlyRootfs, that.readonlyRootfs)
+                .append(restartPolicy, that.restartPolicy)
+                .append(ulimits, that.ulimits)
+                .append(volumesFrom, that.volumesFrom)
+                .append(pidMode, that.pidMode)
+                .append(securityOpts, that.securityOpts)
+                .append(cgroupParent, that.cgroupParent)
+                .append(volumeDriver, that.volumeDriver)
+                .append(shmSize, that.shmSize)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(binds)
+                .append(blkioWeight)
+                .append(blkioWeightDevice)
+                .append(blkioDeviceReadBps)
+                .append(blkioDeviceReadIOps)
+                .append(blkioDeviceWriteBps)
+                .append(blkioDeviceWriteIOps)
+                .append(memorySwappiness)
+                .append(capAdd)
+                .append(capDrop)
+                .append(containerIDFile)
+                .append(cpuPeriod)
+                .append(cpuShares)
+                .append(cpuQuota)
+                .append(cpusetCpus)
+                .append(cpusetMems)
+                .append(devices)
+                .append(dns)
+                .append(dnsSearch)
+                .append(extraHosts)
+                .append(links)
+                .append(logConfig)
+                .append(lxcConf)
+                .append(memory)
+                .append(memorySwap)
+                .append(memoryReservation)
+                .append(kernelMemory)
+                .append(networkMode)
+                .append(oomKillDisable)
+                .append(oomScoreAdj)
+                .append(portBindings)
+                .append(privileged)
+                .append(publishAllPorts)
+                .append(readonlyRootfs)
+                .append(restartPolicy)
+                .append(ulimits)
+                .append(volumesFrom)
+                .append(pidMode)
+                .append(securityOpts)
+                .append(cgroupParent)
+                .append(volumeDriver)
+                .append(shmSize)
+                .toHashCode();
+    }
 }
