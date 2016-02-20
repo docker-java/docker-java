@@ -2,8 +2,7 @@ package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.api.model.Info.RegistryConfig;
-import com.github.dockerjava.api.model.Info.RegistryConfig.IndexConfig;
+import com.github.dockerjava.api.model.InfoRegistryConfig.IndexConfig;
 import org.hamcrest.CoreMatchers;
 import org.testng.annotations.Test;
 
@@ -69,7 +68,7 @@ public class InfoTest {
         assertThat(info.getOomKillDisable(), is(true));
         assertThat(info.getOsType(), equalTo("linux"));
 
-        final RegistryConfig registryConfig = info.getRegistryConfig();
+        final InfoRegistryConfig registryConfig = info.getRegistryConfig();
         assertThat(registryConfig, notNullValue());
         final List<String> cidRs = registryConfig.getInsecureRegistryCIDRs();
         assertThat(cidRs, notNullValue());
