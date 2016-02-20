@@ -34,7 +34,7 @@ public class JsonStreamProcessor<T> implements ResponseStreamProcessor<T> {
     public void processResponseStream(InputStream response, ResultCallback<T> resultCallback) {
 
         resultCallback.onStart(response);
-        OBJECT_MAPPER.configure(com.fasterxml.jackson.core.JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
+        OBJECT_MAPPER.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
 
         try {
             JsonParser jp = JSON_FACTORY.createParser(response);
