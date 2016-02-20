@@ -637,14 +637,14 @@ public class Info {
      * @see #ncpu
      */
     @CheckForNull
-    public Integer getNcpu() {
+    public Integer getNCPU() {
         return ncpu;
     }
 
     /**
      * @see #ncpu
      */
-    public Info withNcpu(Integer ncpu) {
+    public Info withNCPU(Integer ncpu) {
         this.ncpu = ncpu;
         return this;
     }
@@ -669,14 +669,14 @@ public class Info {
      * @see #nfd
      */
     @CheckForNull
-    public Integer getNfd() {
+    public Integer getNFd() {
         return nfd;
     }
 
     /**
      * @see #nfd
      */
-    public Info withNfd(Integer nfd) {
+    public Info withNFd(Integer nfd) {
         this.nfd = nfd;
         return this;
     }
@@ -685,7 +685,7 @@ public class Info {
      * @see #nGoroutines
      */
     @CheckForNull
-    public Integer getnGoroutines() {
+    public Integer getNGoroutines() {
         return nGoroutines;
     }
 
