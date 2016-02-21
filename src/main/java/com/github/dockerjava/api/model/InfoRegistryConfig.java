@@ -77,35 +77,17 @@ public final class InfoRegistryConfig {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("indexConfigs", indexConfigs)
-                .append("insecureRegistryCIDRs", insecureRegistryCIDRs)
-                .append("mirrors", mirrors)
-                .toString();
+        return ToStringBuilder.reflectionToString(this);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (o == null || getClass() != o.getClass()) return false;
-
-        InfoRegistryConfig that = (InfoRegistryConfig) o;
-
-        return new EqualsBuilder()
-                .append(indexConfigs, that.indexConfigs)
-                .append(insecureRegistryCIDRs, that.insecureRegistryCIDRs)
-                .append(mirrors, that.mirrors)
-                .isEquals();
+       return EqualsBuilder.reflectionEquals(this, o);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(indexConfigs)
-                .append(insecureRegistryCIDRs)
-                .append(mirrors)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     /**
@@ -191,38 +173,17 @@ public final class InfoRegistryConfig {
 
         @Override
         public String toString() {
-            return new ToStringBuilder(this)
-                    .append("mirrors", mirrors)
-                    .append("name", name)
-                    .append("official", official)
-                    .append("secure", secure)
-                    .toString();
+            return ToStringBuilder.reflectionToString(this);
         }
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-
-            if (o == null || getClass() != o.getClass()) return false;
-
-            IndexConfig that = (IndexConfig) o;
-
-            return new EqualsBuilder()
-                    .append(mirrors, that.mirrors)
-                    .append(name, that.name)
-                    .append(official, that.official)
-                    .append(secure, that.secure)
-                    .isEquals();
+            return EqualsBuilder.reflectionEquals(this, o);
         }
 
         @Override
         public int hashCode() {
-            return new HashCodeBuilder(17, 37)
-                    .append(mirrors)
-                    .append(name)
-                    .append(official)
-                    .append(secure)
-                    .toHashCode();
+            return HashCodeBuilder.reflectionHashCode(this);
         }
     }
 }

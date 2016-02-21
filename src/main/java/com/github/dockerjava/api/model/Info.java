@@ -57,8 +57,14 @@ public class Info {
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_20}
      */
-    @JsonProperty("cpuCfsQuota")
+    @JsonProperty("CpuCfsQuota")
     private Boolean cpuCfsQuota;
+
+    @JsonProperty("CPUShares")
+    private Boolean cpuShares;
+
+    @JsonProperty("CPUSet")
+    private Boolean cpuSet;
 
     @JsonProperty("Debug")
     private Boolean debug;
@@ -90,6 +96,9 @@ public class Info {
     @JsonProperty("ExecutionDriver")
     private String executionDriver;
 
+    @JsonProperty("LoggingDriver")
+    private String loggingDriver;
+
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_20}
      */
@@ -113,6 +122,12 @@ public class Info {
 
     @JsonProperty("IPv4Forwarding")
     private Boolean ipv4Forwarding;
+
+    @JsonProperty("BridgeNfIptables")
+    private Boolean bridgeNfIptables;
+
+    @JsonProperty("BridgeNfIp6tables")
+    private Boolean bridgeNfIp6tables;
 
     @JsonProperty("Images")
     private Integer images;
@@ -145,7 +160,7 @@ public class Info {
     private Integer ncpu;
 
     @JsonProperty("NEventsListener")
-    private Long nEventListener;
+    private Integer nEventsListener;
 
     @JsonProperty("NFd")
     private Integer nfd;
@@ -200,6 +215,12 @@ public class Info {
      */
     @JsonProperty("ServerVersion")
     private String serverVersion;
+
+    @JsonProperty("ClusterStore")
+    private String clusterStore;
+
+    @JsonProperty("ClusterAdvertise")
+    private String clusterAdvertise;
 
     /**
      * @see #architecture
@@ -314,6 +335,38 @@ public class Info {
     }
 
     /**
+     * @see #cpuShares
+     */
+    @CheckForNull
+    public Boolean getCpuShares() {
+        return cpuShares;
+    }
+
+    /**
+     * @see #cpuShares
+     */
+    public Info withCpuShares(Boolean cpuShares) {
+        this.cpuShares = cpuShares;
+        return this;
+    }
+
+    /**
+     * @see #cpuSet
+     */
+    @CheckForNull
+    public Boolean getCpuSet() {
+        return cpuSet;
+    }
+
+    /**
+     * @see #cpuSet
+     */
+    public Info withCpuSet(Boolean cpuSet) {
+        this.cpuSet = cpuSet;
+        return this;
+    }
+
+    /**
      * @see #debug
      */
     @CheckForNull
@@ -406,6 +459,22 @@ public class Info {
      */
     public Info withExecutionDriver(String executionDriver) {
         this.executionDriver = executionDriver;
+        return this;
+    }
+
+    /**
+     * @see #loggingDriver
+     */
+    @CheckForNull
+    public String getLoggingDriver() {
+        return loggingDriver;
+    }
+
+    /**
+     * @see #loggingDriver
+     */
+    public Info withLoggingDriver(String loggingDriver) {
+        this.loggingDriver = loggingDriver;
         return this;
     }
 
@@ -541,15 +610,47 @@ public class Info {
      * @see #ipv4Forwarding
      */
     @CheckForNull
-    public Boolean getIpv4Forwarding() {
+    public Boolean getIPv4Forwarding() {
         return ipv4Forwarding;
     }
 
     /**
      * @see #ipv4Forwarding
      */
-    public Info withIpv4Forwarding(Boolean ipv4Forwarding) {
+    public Info withIPv4Forwarding(Boolean ipv4Forwarding) {
         this.ipv4Forwarding = ipv4Forwarding;
+        return this;
+    }
+
+    /**
+     * @see #bridgeNfIptables
+     */
+    @CheckForNull
+    public Boolean getBridgeNfIptables() {
+        return bridgeNfIptables;
+    }
+
+    /**
+     * @see #bridgeNfIptables
+     */
+    public Info withBridgeNfIptables(Boolean bridgeNfIptables) {
+        this.bridgeNfIptables = bridgeNfIptables;
+        return this;
+    }
+
+    /**
+     * @see #bridgeNfIp6tables
+     */
+    @CheckForNull
+    public Boolean getBridgeNfIp6tables() {
+        return bridgeNfIp6tables;
+    }
+
+    /**
+     * @see #bridgeNfIp6tables
+     */
+    public Info withBridgeNfIp6tables(Boolean bridgeNfIp6tables) {
+        this.bridgeNfIp6tables = bridgeNfIp6tables;
         return this;
     }
 
@@ -650,18 +751,18 @@ public class Info {
     }
 
     /**
-     * @see #nEventListener
+     * @see #nEventsListener
      */
     @CheckForNull
-    public Long getnEventListener() {
-        return nEventListener;
+    public Integer getNEventsListener() {
+        return nEventsListener;
     }
 
     /**
-     * @see #nEventListener
+     * @see #nEventsListener
      */
-    public Info withnEventListener(Long nEventListener) {
-        this.nEventListener = nEventListener;
+    public Info withNEventsListener(Integer nEventListener) {
+        this.nEventsListener = nEventListener;
         return this;
     }
 
@@ -692,7 +793,7 @@ public class Info {
     /**
      * @see #nGoroutines
      */
-    public Info withnGoroutines(Integer nGoroutines) {
+    public Info withNGoroutines(Integer nGoroutines) {
         this.nGoroutines = nGoroutines;
         return this;
     }
@@ -826,6 +927,38 @@ public class Info {
     }
 
     /**
+     * @see #clusterStore
+     */
+    @CheckForNull
+    public String getClusterStore() {
+        return clusterStore;
+    }
+
+    /**
+     * @see #clusterStore
+     */
+    public Info withClusterStore(String clusterStore) {
+        this.clusterStore = clusterStore;
+        return this;
+    }
+
+    /**
+     * @see #clusterAdvertise
+     */
+    @CheckForNull
+    public String getClusterAdvertise() {
+        return clusterAdvertise;
+    }
+
+    /**
+     * @see #clusterAdvertise
+     */
+    public Info withClusterAdvertise(String clusterAdvertise) {
+        this.clusterAdvertise = clusterAdvertise;
+        return this;
+    }
+
+    /**
      * @see #sockets
      */
     @CheckForNull
@@ -896,106 +1029,11 @@ public class Info {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Info info = (Info) o;
-
-        return new EqualsBuilder()
-                .append(architecture, info.architecture)
-                .append(containers, info.containers)
-                .append(containersStopped, info.containersStopped)
-                .append(containersPaused, info.containersPaused)
-                .append(containersRunning, info.containersRunning)
-                .append(cpuCfsPeriod, info.cpuCfsPeriod)
-                .append(cpuCfsQuota, info.cpuCfsQuota)
-                .append(debug, info.debug)
-                .append(discoveryBackend, info.discoveryBackend)
-                .append(dockerRootDir, info.dockerRootDir)
-                .append(driver, info.driver)
-                .append(driverStatuses, info.driverStatuses)
-                .append(systemStatus, info.systemStatus)
-                .append(plugins, info.plugins)
-                .append(executionDriver, info.executionDriver)
-                .append(experimentalBuild, info.experimentalBuild)
-                .append(httpProxy, info.httpProxy)
-                .append(httpsProxy, info.httpsProxy)
-                .append(id, info.id)
-                .append(ipv4Forwarding, info.ipv4Forwarding)
-                .append(images, info.images)
-                .append(indexServerAddress, info.indexServerAddress)
-                .append(initPath, info.initPath)
-                .append(initSha1, info.initSha1)
-                .append(kernelVersion, info.kernelVersion)
-                .append(labels, info.labels)
-                .append(memoryLimit, info.memoryLimit)
-                .append(memTotal, info.memTotal)
-                .append(name, info.name)
-                .append(ncpu, info.ncpu)
-                .append(nEventListener, info.nEventListener)
-                .append(nfd, info.nfd)
-                .append(nGoroutines, info.nGoroutines)
-                .append(noProxy, info.noProxy)
-                .append(oomKillDisable, info.oomKillDisable)
-                .append(osType, info.osType)
-                .append(oomScoreAdj, info.oomScoreAdj)
-                .append(operatingSystem, info.operatingSystem)
-                .append(registryConfig, info.registryConfig)
-                .append(sockets, info.sockets)
-                .append(swapLimit, info.swapLimit)
-                .append(systemTime, info.systemTime)
-                .append(serverVersion, info.serverVersion)
-                .isEquals();
+        return EqualsBuilder.reflectionEquals(this, o);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(architecture)
-                .append(containers)
-                .append(containersStopped)
-                .append(containersPaused)
-                .append(containersRunning)
-                .append(cpuCfsPeriod)
-                .append(cpuCfsQuota)
-                .append(debug)
-                .append(discoveryBackend)
-                .append(dockerRootDir)
-                .append(driver)
-                .append(driverStatuses)
-                .append(systemStatus)
-                .append(plugins)
-                .append(executionDriver)
-                .append(experimentalBuild)
-                .append(httpProxy)
-                .append(httpsProxy)
-                .append(id)
-                .append(ipv4Forwarding)
-                .append(images)
-                .append(indexServerAddress)
-                .append(initPath)
-                .append(initSha1)
-                .append(kernelVersion)
-                .append(labels)
-                .append(memoryLimit)
-                .append(memTotal)
-                .append(name)
-                .append(ncpu)
-                .append(nEventListener)
-                .append(nfd)
-                .append(nGoroutines)
-                .append(noProxy)
-                .append(oomKillDisable)
-                .append(osType)
-                .append(oomScoreAdj)
-                .append(operatingSystem)
-                .append(registryConfig)
-                .append(sockets)
-                .append(swapLimit)
-                .append(systemTime)
-                .append(serverVersion)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
-
 }

@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotSame;
 
 /**
  * Samples helper
@@ -58,6 +59,7 @@ public class JSONSamples {
 
         assertEquals(json2, json1, "JSONs must be equal after the second roundtrip");
         assertEquals(deserialized2, deserialized2, "Objects must be equal after the second roundtrip");
+        assertNotSame(deserialized2, deserialized1, "Objects must be not the same");
 
         return deserialized2;
     }
