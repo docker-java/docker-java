@@ -7,6 +7,8 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
+ * Used in {@link Container}
+ *
  * @see Container
  * @author Kanstantsin Shautsou
  */
@@ -29,28 +31,16 @@ public class ContainerHostConfig {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("networkMode", networkMode)
-                .toString();
+        return ToStringBuilder.reflectionToString(this);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ContainerHostConfig that = (ContainerHostConfig) o;
-
-        return new EqualsBuilder()
-                .append(networkMode, that.networkMode)
-                .isEquals();
+        return EqualsBuilder.reflectionEquals(this, o);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(networkMode)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

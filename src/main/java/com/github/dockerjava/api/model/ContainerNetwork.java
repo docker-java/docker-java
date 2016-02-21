@@ -11,6 +11,7 @@ import javax.annotation.CheckForNull;
 import java.util.List;
 
 /**
+ * @see ContainerNetworkSettings
  * @author Kanstantsin Shautsou
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -257,61 +258,16 @@ public class ContainerNetwork {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("aliases", aliases)
-                .append("ipamConfig", ipamConfig)
-                .append("links", links)
-                .append("networkID", networkID)
-                .append("endpointId", endpointId)
-                .append("gateway", gateway)
-                .append("ipAddress", ipAddress)
-                .append("ipPrefixLen", ipPrefixLen)
-                .append("ipV6Gateway", ipV6Gateway)
-                .append("globalIPv6Address", globalIPv6Address)
-                .append("globalIPv6PrefixLen", globalIPv6PrefixLen)
-                .append("macAddress", macAddress)
-                .toString();
+        return ToStringBuilder.reflectionToString(this);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ContainerNetwork network = (ContainerNetwork) o;
-
-        return new EqualsBuilder()
-                .append(ipamConfig, network.ipamConfig)
-                .append(links, network.links)
-                .append(aliases, network.aliases)
-                .append(networkID, network.networkID)
-                .append(endpointId, network.endpointId)
-                .append(gateway, network.gateway)
-                .append(ipAddress, network.ipAddress)
-                .append(ipPrefixLen, network.ipPrefixLen)
-                .append(ipV6Gateway, network.ipV6Gateway)
-                .append(globalIPv6Address, network.globalIPv6Address)
-                .append(globalIPv6PrefixLen, network.globalIPv6PrefixLen)
-                .append(macAddress, network.macAddress)
-                .isEquals();
+        return  EqualsBuilder.reflectionEquals(this, o);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(ipamConfig)
-                .append(links)
-                .append(aliases)
-                .append(networkID)
-                .append(endpointId)
-                .append(gateway)
-                .append(ipAddress)
-                .append(ipPrefixLen)
-                .append(ipV6Gateway)
-                .append(globalIPv6Address)
-                .append(globalIPv6PrefixLen)
-                .append(macAddress)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

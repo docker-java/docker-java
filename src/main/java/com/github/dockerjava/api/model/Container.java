@@ -157,45 +157,11 @@ public class Container {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Container container = (Container) o;
-
-        return new EqualsBuilder()
-                .append(command, container.command)
-                .append(created, container.created)
-                .append(id, container.id)
-                .append(image, container.image)
-                .append(imageId, container.imageId)
-                .append(names, container.names)
-                .append(ports, container.ports)
-                .append(labels, container.labels)
-                .append(status, container.status)
-                .append(sizeRw, container.sizeRw)
-                .append(sizeRootFs, container.sizeRootFs)
-                .append(hostConfig, container.hostConfig)
-                .append(networkSettings, container.networkSettings)
-                .isEquals();
+      return EqualsBuilder.reflectionEquals(this, o);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(command)
-                .append(created)
-                .append(id)
-                .append(image)
-                .append(imageId)
-                .append(names)
-                .append(ports)
-                .append(labels)
-                .append(status)
-                .append(sizeRw)
-                .append(sizeRootFs)
-                .append(hostConfig)
-                .append(networkSettings)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }
