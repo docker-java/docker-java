@@ -9,8 +9,8 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import javax.annotation.CheckForNull;
 
 /**
- * @see Container
  * @author Kanstantsin Shautsou
+ * @see Container
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ContainerPort {
@@ -98,27 +98,11 @@ public class ContainerPort {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ContainerPort port = (ContainerPort) o;
-
-        return new EqualsBuilder()
-                .append(ip, port.ip)
-                .append(privatePort, port.privatePort)
-                .append(publicPort, port.publicPort)
-                .append(type, port.type)
-                .isEquals();
+        return EqualsBuilder.reflectionEquals(this, o);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(ip)
-                .append(privatePort)
-                .append(publicPort)
-                .append(type)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }
