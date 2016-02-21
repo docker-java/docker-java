@@ -74,7 +74,6 @@
 		<maven-release-plugin.version>2.3.1</maven-release-plugin.version>
 		<maven-surefire-plugin.version>2.17</maven-surefire-plugin.version>
 		<maven-failsafe-plugin.version>2.17</maven-failsafe-plugin.version>
-		<cobertura-maven-plugin.version>2.5.1</cobertura-maven-plugin.version>
 		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
 	</properties>
 
@@ -280,12 +279,6 @@
 				</plugin>
 
 				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>cobertura-maven-plugin</artifactId>
-					<version>${cobertura-maven-plugin.version}</version>
-				</plugin>
-
-				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-antrun-plugin</artifactId>
 					<version>${maven-antrun-plugin.version}</version>
@@ -476,6 +469,25 @@
 							<execution>
 								<goals>
 									<goal>check</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+						<version>0.7.6.201602180812</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>prepare-agent</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>report</id>
+								<phase>test</phase>
+								<goals>
+									<goal>report</goal>
 								</goals>
 							</execution>
 						</executions>
