@@ -102,37 +102,11 @@ public class Version {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Version version1 = (Version) o;
-
-        return new EqualsBuilder()
-                .append(apiVersion, version1.apiVersion)
-                .append(arch, version1.arch)
-                .append(gitCommit, version1.gitCommit)
-                .append(goVersion, version1.goVersion)
-                .append(kernelVersion, version1.kernelVersion)
-                .append(operatingSystem, version1.operatingSystem)
-                .append(version, version1.version)
-                .append(buildTime, version1.buildTime)
-                .append(experimental, version1.experimental)
-                .isEquals();
+        return  EqualsBuilder.reflectionEquals(this, o);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(apiVersion)
-                .append(arch)
-                .append(gitCommit)
-                .append(goVersion)
-                .append(kernelVersion)
-                .append(operatingSystem)
-                .append(version)
-                .append(buildTime)
-                .append(experimental)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }
