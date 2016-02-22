@@ -28,6 +28,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 /**
  * @author Kanstantsin Shautsou
  */
+@Test(groups = "integration")
 public class UpdateContainerCmdImplTest extends AbstractDockerClientTest {
 
     public static final String BUSYBOX_IMAGE = "busybox";

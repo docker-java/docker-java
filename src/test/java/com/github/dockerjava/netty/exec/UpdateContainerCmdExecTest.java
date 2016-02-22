@@ -25,6 +25,7 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 /**
  * @author Kanstantsin Shautsou
  */
+@Test(groups = "integration")
 public class UpdateContainerCmdExecTest extends AbstractNettyDockerClientTest {
     public static final Logger LOG = LoggerFactory.getLogger(UpdateContainerCmdExecTest.class);
     private static final String BUSYBOX_IMAGE = "busybox";
@@ -49,7 +50,7 @@ public class UpdateContainerCmdExecTest extends AbstractNettyDockerClientTest {
         super.afterMethod(result);
     }
 
-    @Test(groups = "ignoreInCircleCi")
+    @Test
     public void updateContainer() throws DockerException, IOException {
         CreateContainerResponse response = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
                 .withCmd("sleep", "9999")
