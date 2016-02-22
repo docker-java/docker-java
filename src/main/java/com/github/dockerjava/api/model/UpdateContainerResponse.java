@@ -8,15 +8,14 @@ import javax.annotation.CheckForNull;
 import java.util.List;
 
 /**
- * TODO update command
- *
  * @author Kanstantsin Shautsou
+ * @see com.github.dockerjava.api.command.UpdateContainerCmd
  * @see <a href="https://docs.docker.com/engine/reference/api/docker_remote_api_v1.22/">
  * https://docs.docker.com/engine/reference/api/docker_remote_api_v1.22/</a>
  * @since {@link RemoteApiVersion#VERSION_1_22}
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UpdateResponse extends ResponseItem {
+public class UpdateContainerResponse extends ResponseItem {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("Warnings")
