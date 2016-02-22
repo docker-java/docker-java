@@ -21,3 +21,5 @@
 ### Testing
   * Unit tests for serder (serialization-deserialization).
   * Integration tests for commands.
+  * If model object has builders, then fill it with data and compare by `equals()` with expected response
+  from docker daemon. If failed, then some fields mappings are wrong.
