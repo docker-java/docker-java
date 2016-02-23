@@ -31,6 +31,15 @@ Included in 3.0.0-RC1
 * [#347] (https://github.com/docker-java/docker-java/pull/347) Implementation of copy archive to/from container commands 
 * [#313] (https://github.com/docker-java/docker-java/pull/313) Refactor primitive type fields to be of object type in JSON objects
 
+v2.2.1
+---
+* [#474] (https://github.com/docker-java/docker-java/pull/474) Fix periodic pull failure (2.x)
+
+v2.2.0
+---
+* [#457] (https://github.com/docker-java/docker-java/pull/457) Input configuration should not be altered as it breaks unix socket support 
+* [#430] (https://github.com/docker-java/docker-java/pull/430) Fix ExecStartCmd failure (backported from 3.0.0)
+
 v2.1.4
 ---
 
