@@ -1,6 +1,10 @@
 Change Log
 ===
 
+2.2.1-SNAPSHOT
+---
+* [#474] (https://github.com/docker-java/docker-java/pull/474) Fix periodic pull failure (2.x)
+
 v2.2.0
 ---
 * [#457] (https://github.com/docker-java/docker-java/pull/457) Input configuration should not be altered as it breaks unix socket support 
