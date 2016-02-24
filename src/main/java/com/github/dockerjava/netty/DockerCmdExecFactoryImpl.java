@@ -102,12 +102,12 @@ import com.github.dockerjava.netty.exec.VersionCmdExec;
 import com.github.dockerjava.netty.exec.WaitContainerCmdExec;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.EpollDomainSocketChannel;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.DuplexChannel;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.channel.unix.DomainSocketAddress;
@@ -165,8 +165,8 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
     private ChannelProvider channelProvider = new ChannelProvider() {
         @Override
-        public Channel getChannel() {
-            Channel channel = connect();
+        public DuplexChannel getChannel() {
+            DuplexChannel channel = connect();
             channel.pipeline().addLast(new LoggingHandler(getClass()));
             return channel;
         }
@@ -190,7 +190,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         eventLoopGroup = nettyInitializer.init(bootstrap, dockerClientConfig);
     }
 
-    private Channel connect() {
+    private DuplexChannel connect() {
         try {
             return connect(bootstrap);
         } catch (InterruptedException e) {
@@ -198,14 +198,14 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         }
     }
 
-    private Channel connect(final Bootstrap bootstrap) throws InterruptedException {
+    private DuplexChannel connect(final Bootstrap bootstrap) throws InterruptedException {
         return nettyInitializer.connect(bootstrap);
     }
 
     private interface NettyInitializer {
         EventLoopGroup init(final Bootstrap bootstrap, DockerClientConfig dockerClientConfig);
 
-        Channel connect(final Bootstrap bootstrap) throws InterruptedException;
+        DuplexChannel connect(final Bootstrap bootstrap) throws InterruptedException;
     }
 
     private class UnixDomainSocketInitializer implements NettyInitializer {
@@ -223,8 +223,8 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         }
 
         @Override
-        public Channel connect(Bootstrap bootstrap) throws InterruptedException {
-            return bootstrap.connect(new DomainSocketAddress("/var/run/docker.sock")).sync().channel();
+        public DuplexChannel connect(Bootstrap bootstrap) throws InterruptedException {
+            return (DuplexChannel) bootstrap.connect(new DomainSocketAddress("/var/run/docker.sock")).sync().channel();
         }
     }
 
@@ -253,7 +253,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         }
 
         @Override
-        public Channel connect(Bootstrap bootstrap) throws InterruptedException {
+        public DuplexChannel connect(Bootstrap bootstrap) throws InterruptedException {
             String host = dockerClientConfig.getDockerHost().getHost();
             int port = dockerClientConfig.getDockerHost().getPort();
 
@@ -261,7 +261,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
                 throw new RuntimeException("no port configured for " + host);
             }
 
-            Channel channel = bootstrap.connect(host, port).sync().channel();
+            DuplexChannel channel = (DuplexChannel) bootstrap.connect(host, port).sync().channel();
 
             if (dockerClientConfig.getDockerTlsVerify()) {
                 final SslHandler ssl = initSsl(dockerClientConfig);

@@ -4,6 +4,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.socket.DuplexChannel;
 import io.netty.handler.codec.http.DefaultFullHttpRequest;
 import io.netty.handler.codec.http.DefaultHttpRequest;
 import io.netty.handler.codec.http.FullHttpRequest;
@@ -150,7 +151,7 @@ public class InvocationBuilder {
         return;
     }
 
-    private Channel getChannel() {
+    private DuplexChannel getChannel() {
         return channelProvider.getChannel();
     }
 
@@ -215,7 +216,7 @@ public class InvocationBuilder {
 
         FramedResponseStreamHandler streamHandler = new FramedResponseStreamHandler(resultCallback);
 
-        final Channel channel = getChannel();
+        final DuplexChannel channel = getChannel();
 
         // result callback's close() method must be called when the servers closes the connection
         channel.closeFuture().addListener(new GenericFutureListener<Future<? super Void>>() {
@@ -261,6 +262,9 @@ public class InvocationBuilder {
                     while ((read = read(stdin, buffer)) != -1) {
                         channel.writeAndFlush(Unpooled.copiedBuffer(buffer, 0, read));
                     }
+
+                    // we close the writing side of the socket, but keep the read side open to transfer stdout/stderr
+                    channel.shutdownOutput();
 
                 }
             }).start();

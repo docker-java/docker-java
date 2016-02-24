@@ -1,7 +1,7 @@
 package com.github.dockerjava.netty;
 
-import io.netty.channel.Channel;
+import io.netty.channel.socket.DuplexChannel;
 
 public interface ChannelProvider {
-    Channel getChannel();
+    DuplexChannel getChannel();
 }

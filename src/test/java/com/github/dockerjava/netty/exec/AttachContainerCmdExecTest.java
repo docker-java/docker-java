@@ -70,7 +70,8 @@ public class AttachContainerCmdExecTest extends AbstractNettyDockerClientTest {
         };
 
         dockerClient.attachContainerCmd(container.getId()).withStdErr(true).withStdOut(true).withFollowStream(true)
-                .withLogs(true).exec(callback).awaitCompletion(10, TimeUnit.SECONDS).close();
+                .withLogs(true).exec(callback).awaitCompletion(10, TimeUnit.SECONDS);
+        callback.close();
 
         assertThat(callback.toString(), containsString(snippet));
     }
@@ -104,7 +105,8 @@ public class AttachContainerCmdExecTest extends AbstractNettyDockerClientTest {
         InputStream stdin = new ByteArrayInputStream((snippet + "\n").getBytes());
 
         dockerClient.attachContainerCmd(container.getId()).withStdErr(true).withStdOut(true).withFollowStream(true)
-                .withStdIn(stdin).exec(callback).awaitCompletion(2, TimeUnit.SECONDS).close();
+                .withStdIn(stdin).exec(callback).awaitCompletion(2, TimeUnit.SECONDS);
+        callback.close();
 
         assertThat(callback.toString(), containsString(snippet));
     }
@@ -133,7 +135,8 @@ public class AttachContainerCmdExecTest extends AbstractNettyDockerClientTest {
         };
 
         dockerClient.attachContainerCmd(container.getId()).withStdErr(true).withStdOut(true).withFollowStream(true)
-                .exec(callback).awaitCompletion(10, TimeUnit.SECONDS).close();
+                .exec(callback).awaitCompletion(10, TimeUnit.SECONDS);
+        callback.close();
 
         // HexDump.dump(collectFramesCallback.toString().getBytes(), 0, System.out, 0);
 

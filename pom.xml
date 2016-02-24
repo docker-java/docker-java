@@ -63,7 +63,7 @@
 		<!-- test dependencies -->
 		<logback.version>1.1.0</logback.version>
 		<testng.version>6.1.1</testng.version>
-		<netty.version>4.1.0.CR2</netty.version>
+		<netty.version>4.1.0.CR3</netty.version>
 		<hamcrest.library.version>1.3</hamcrest.library.version>
 		<hamcrest.jpa-matchers>1.6</hamcrest.jpa-matchers>
 		<lambdaj.version>2.3.3</lambdaj.version>
