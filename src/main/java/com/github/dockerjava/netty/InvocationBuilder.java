@@ -151,7 +151,7 @@ public class InvocationBuilder {
         return;
     }
 
-    private Channel getChannel() {
+    private DuplexChannel getChannel() {
         return channelProvider.getChannel();
     }
 
@@ -216,7 +216,7 @@ public class InvocationBuilder {
 
         FramedResponseStreamHandler streamHandler = new FramedResponseStreamHandler(resultCallback);
 
-        final Channel channel = getChannel();
+        final DuplexChannel channel = getChannel();
 
         // result callback's close() method must be called when the servers closes the connection
         channel.closeFuture().addListener(new GenericFutureListener<Future<? super Void>>() {
@@ -264,9 +264,7 @@ public class InvocationBuilder {
                     }
 
                     // we close the writing side of the socket, but keep the read side open to transfer stdout/stderr
-                    if (channel instanceof DuplexChannel) {
-                        ((DuplexChannel) channel).shutdownOutput();
-                    }
+                    channel.shutdownOutput();
 
                 }
             }).start();
