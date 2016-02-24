@@ -9,6 +9,7 @@ Notes
 * The configuration has been changed to better match the docker CLI configuration options. The properties file was renamed from `docker.io.properties` to `docker-java.properties`. See README.md for details.
 
 All changes
+* [#472] (https://github.com/docker-java/docker-java/pull/472) Exec start command: detect end of STDIN stream 
 * [#466] (https://github.com/docker-java/docker-java/pull/466) Fix exec start stdin encoding 
 
 Included in 3.0.0-RC1
