@@ -1,10 +1,18 @@
 package com.github.dockerjava.core.command;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.testng.annotations.AfterTest;
@@ -39,18 +47,17 @@ public class FrameReaderITest {
 
     @Test
     public void canCloseFrameReaderAndReadExpectedLines() throws Exception {
-
         // wait for the container to be successfully executed
         int exitCode = dockerClient.waitContainerCmd(dockerfileFixture.getContainerId())
                 .exec(new WaitContainerResultCallback()).awaitStatusCode();
         assertEquals(0, exitCode);
 
-        Iterator<Frame> response = getLoggingFrames().iterator();
-
-        assertEquals(response.next(), new Frame(StreamType.STDOUT, "to stdout\n".getBytes()));
-        assertEquals(response.next(), new Frame(StreamType.STDERR, "to stderr\n".getBytes()));
-        assertFalse(response.hasNext());
-
+        final List<Frame> loggingFrames = getLoggingFrames();
+        final Frame outFrame = new Frame(StreamType.STDOUT, "to stdout\n".getBytes());
+        final Frame errFrame = new Frame(StreamType.STDERR, "to stderr\n".getBytes());
+        
+        assertThat(loggingFrames, containsInAnyOrder(outFrame, errFrame));
+        assertThat(loggingFrames, hasSize(2));
     }
 
     private List<Frame> getLoggingFrames() throws Exception {
