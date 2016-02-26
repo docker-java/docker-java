@@ -40,6 +40,10 @@ public class InspectExecResponse {
     @JsonProperty("ProcessConfig")
     private ProcessConfig processConfig;
 
+    /**
+     * @deprecated @since {@link RemoteApiVersion#VERSION_1_22}
+     */
+    @Deprecated
     @JsonProperty("Container")
     private Container container;
 
@@ -83,6 +87,10 @@ public class InspectExecResponse {
         return processConfig;
     }
 
+    /**
+     * @see #container
+     */
+    @Deprecated
     public Container getContainer() {
         return container;
     }
