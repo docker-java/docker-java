@@ -3,6 +3,7 @@ package com.github.dockerjava.netty.exec;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.containsString;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -120,6 +121,39 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
 
         assertTrue(completed, "The process was not finished.");
         assertEquals(stdout.toString("UTF-8"), "STDIN\n");
+    }
+
+    public void execStartAttachStdinToShell() throws Exception {
+        String containerName = "generated_" + new SecureRandom().nextInt();
+
+        CreateContainerResponse container = dockerClient
+                .createContainerCmd("busybox")
+                .withCmd("sleep", "9999")
+                .withName(containerName)
+                .exec();
+
+        LOG.info("Created container {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+
+        dockerClient.startContainerCmd(container.getId()).exec();
+
+        InputStream stdin = new ByteArrayInputStream("ls\n".getBytes());
+
+        ByteArrayOutputStream stdout = new ByteArrayOutputStream();
+
+        ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
+                .withAttachStdout(true)
+                .withAttachStdin(true)
+                .withTty(false)
+                .withCmd("/bin/sh").exec();
+
+        dockerClient.execStartCmd(execCreateCmdResponse.getId())
+                .withDetach(false)
+                .withStdIn(stdin)
+                .exec(new ExecStartResultCallback(stdout, System.err))
+                .awaitCompletion();
+
+        assertThat(stdout.toString(), containsString("etc\n"));
     }
 
     @Test(groups = "ignoreInCircleCi")
