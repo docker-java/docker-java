@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -114,8 +115,15 @@ public class InspectExecCmdExecTest extends AbstractNettyDockerClientTest {
         assertThat(exec.getId(), not(isEmptyString()));
 
         InspectExecResponse inspectExecResponse = dockerClient.inspectExecCmd(exec.getId()).exec();
-        assertThat(inspectExecResponse.getExitCode(), is(0));
+        assertThat(inspectExecResponse.getExitCode(), is(nullValue()));
+        assertThat(inspectExecResponse.isOpenStdin(), is(false));
+        assertThat(inspectExecResponse.isOpenStdout(), is(true));
+        assertThat(inspectExecResponse.isRunning(), is(false));
+        assertThat(inspectExecResponse.getCanRemove(), is(false));
+        assertThat(inspectExecResponse.getContainerID(), is(container.getId()));
 
-        assertNotNull(inspectExecResponse.getContainer().getNetworkSettings().getNetworks().get("bridge"));
+        // 1.22 doesn't return it
+        // TODO conditional it against docker connection somehow
+//        assertNotNull(inspectExecResponse.getContainer().getNetworkSettings().getNetworks().get("bridge"));
     }
 }

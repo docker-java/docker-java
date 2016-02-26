@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.model.NetworkSettings;
 import com.github.dockerjava.core.RemoteApiVersion;
 
+import javax.annotation.CheckForNull;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InspectExecResponse {
     @JsonProperty("ID")
@@ -26,6 +28,12 @@ public class InspectExecResponse {
     @JsonProperty("Running")
     private Boolean running;
 
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_22}
+     */
+    @JsonProperty("CanRemove")
+    private Boolean canRemove;
+
     @JsonProperty("ExitCode")
     private Integer exitCode;
 
@@ -34,6 +42,18 @@ public class InspectExecResponse {
 
     @JsonProperty("Container")
     private Container container;
+
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_22}
+     */
+    @JsonProperty("ContainerID")
+    private String containerID;
+
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_22}
+     */
+    @JsonProperty("DetachKeys")
+    private String detachKeys;
 
     public String getId() {
         return id;
@@ -65,6 +85,30 @@ public class InspectExecResponse {
 
     public Container getContainer() {
         return container;
+    }
+
+    /**
+     * @see #canRemove
+     */
+    @CheckForNull
+    public Boolean getCanRemove() {
+        return canRemove;
+    }
+
+    /**
+     * @see #containerID
+     */
+    @CheckForNull
+    public String getContainerID() {
+        return containerID;
+    }
+
+    /**
+     * @see #detachKeys
+     */
+    @CheckForNull
+    public String getDetachKeys() {
+        return detachKeys;
     }
 
     @Override
