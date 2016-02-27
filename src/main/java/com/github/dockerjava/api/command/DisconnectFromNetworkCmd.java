@@ -18,9 +18,14 @@ public interface DisconnectFromNetworkCmd extends SyncDockerCmd<Void> {
     @CheckForNull
     String getContainerId();
 
+    @CheckForNull
+    Boolean getForce();
+
     DisconnectFromNetworkCmd withNetworkId(@Nonnull String networkId);
 
     DisconnectFromNetworkCmd withContainerId(@Nonnull String containerId);
+
+    DisconnectFromNetworkCmd withForce(@Nonnull Boolean force);
 
     interface Exec extends DockerCmdSyncExec<DisconnectFromNetworkCmd, Void> {
     }
