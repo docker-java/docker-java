@@ -1,7 +1,7 @@
 Change Log
 ===
 
-2.2.2-SNAPSHOT
+v2.2.2
 ---
 * [#478] (https://github.com/docker-java/docker-java/pull/478) Remove debug println
 
