@@ -1,6 +1,10 @@
 Change Log
 ===
 
+2.2.2-SNAPSHOT
+---
+* [#478] (https://github.com/docker-java/docker-java/pull/478) Remove debug println
+
 v2.2.1
 ---
 * [#474] (https://github.com/docker-java/docker-java/pull/474) Fix periodic pull failure (2.x)
