@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.core.RemoteApiVersion;
@@ -28,6 +29,16 @@ public class ContainerNetworkSettings {
      */
     public Map<String, ContainerNetwork> getNetworks() {
         return networks;
+    }
+
+    @JsonIgnore
+    public ContainerNetwork getOrCreateNetwork(String name) {
+        ContainerNetwork containerNetwork = networks.get(name);
+        if (containerNetwork == null) {
+            containerNetwork = new ContainerNetwork();
+            networks.put(name, containerNetwork);
+        }
+        return containerNetwork;
     }
 
     /**

@@ -1,12 +1,5 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -17,6 +10,7 @@ import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Capability;
+import com.github.dockerjava.api.model.ContainerNetwork;
 import com.github.dockerjava.api.model.Device;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.ExposedPorts;
@@ -31,6 +25,14 @@ import com.github.dockerjava.api.model.Ulimit;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.Volumes;
 import com.github.dockerjava.api.model.VolumesFrom;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Collections.singletonMap;
 
 /**
  * Creates a new container.
@@ -111,6 +113,18 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @JsonProperty("Labels")
     private Map<String, String> labels;
 
+    @JsonProperty("NetworkingConfig")
+    private NetworkingConfig networkingConfig;
+
+    @JsonIgnore
+    private String ipv4Address = null;
+
+    @JsonIgnore
+    private String ipv6Address = null;
+
+    @JsonIgnore
+    private List<String> aliases = null;
+
     public CreateContainerCmdImpl(CreateContainerCmd.Exec exec, String image) {
         super(exec);
         checkNotNull(image, "image was not specified");
@@ -125,7 +139,46 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
      */
     @Override
     public CreateContainerResponse exec() throws NotFoundException, ConflictException {
+        //code flow taken from https://github.com/docker/docker/blob/master/runconfig/opts/parse.go
+        ContainerNetwork containerNetwork = null;
+
+        if (ipv4Address != null || ipv6Address != null) {
+            containerNetwork = new ContainerNetwork()
+                    .withIpamConfig(new ContainerNetwork.Ipam()
+                            .withIpv4Address(ipv4Address)
+                            .withIpv6Address(ipv6Address)
+                    );
+
+        }
+
+        if (hostConfig.isUserDefinedNetwork() && hostConfig.getLinks().length > 0) {
+            if (containerNetwork == null) {
+                containerNetwork = new ContainerNetwork();
+            }
+
+            containerNetwork.withLinks(hostConfig.getLinks());
+        }
+
+        if (aliases != null) {
+            if (containerNetwork == null) {
+                containerNetwork = new ContainerNetwork();
+            }
+
+            containerNetwork.withAliases(aliases);
+        }
+
+        if (containerNetwork != null) {
+            networkingConfig = new NetworkingConfig()
+                    .withEndpointsConfig(singletonMap(hostConfig.getNetworkMode(), containerNetwork));
+        }
+
         return super.exec();
+    }
+
+    @Override
+    @JsonIgnore
+    public List<String> getAliases() {
+        return aliases;
     }
 
     @Override
@@ -243,6 +296,16 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public String getImage() {
         return image;
+    }
+
+    @Override
+    public String getIpv4Address() {
+        return ipv4Address;
+    }
+
+    @Override
+    public String getIpv6Address() {
+        return ipv6Address;
     }
 
     @Override
@@ -411,6 +474,19 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public String toString() {
         return new ToStringBuilder(this).append("create container ").append(name != null ? "name=" + name + " " : "")
                 .append(this).toString();
+    }
+
+    @Override
+    public CreateContainerCmd withAliases(String... aliases) {
+        this.aliases = Arrays.asList(aliases);
+        return this;
+    }
+
+    @Override
+    public CreateContainerCmd withAliases(List<String> aliases) {
+        checkNotNull(aliases, "aliases was not specified");
+        this.aliases = aliases;
+        return this;
     }
 
     @Override
@@ -648,6 +724,20 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
+    public CreateContainerCmd withIpv4Address(String ipv4Address) {
+        checkNotNull(ipv4Address, "no ipv4Address was specified");
+        this.ipv4Address = ipv4Address;
+        return this;
+    }
+
+    @Override
+    public CreateContainerCmd withIpv6Address(String ipv6Address) {
+        checkNotNull(ipv6Address, "no ipv6Address was specified");
+        this.ipv6Address = ipv6Address;
+        return this;
+    }
+
+    @Override
     public CreateContainerCmd withLabels(Map<String, String> labels) {
         checkNotNull(labels, "labels was not specified");
         this.labels = labels;
@@ -878,4 +968,17 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         return this;
     }
 
+    public static class NetworkingConfig {
+        @JsonProperty("EndpointsConfig")
+        public Map<String, ContainerNetwork> endpointsConfig;
+
+        public Map<String, ContainerNetwork> getEndpointsConfig() {
+            return endpointsConfig;
+        }
+
+        public NetworkingConfig withEndpointsConfig(Map<String, ContainerNetwork> endpointsConfig) {
+            this.endpointsConfig = endpointsConfig;
+            return this;
+        }
+    }
 }
