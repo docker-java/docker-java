@@ -7,6 +7,8 @@ import java.util.Arrays;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.StreamType;
 
+import javax.annotation.CheckForNull;
+
 /**
  * Breaks the input into frame. Similar to how a buffered reader would readLies.
  * <p/>
@@ -42,14 +44,16 @@ public class FrameReader implements AutoCloseable {
     /**
      * @return A frame, or null if no more frames.
      */
+    @CheckForNull
     public Frame readFrame() throws IOException {
 
         if (rawStreamDetected) {
-
             int read = inputStream.read(rawBuffer);
+            if (read == -1) {
+                return null;
+            }
 
             return new Frame(StreamType.RAW, Arrays.copyOf(rawBuffer, read));
-
         } else {
 
             byte[] header = new byte[HEADER_SIZE];
