@@ -597,9 +597,8 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
                 .withStdErr(true)
                 .withStdOut(true)
                 .withTailAll()
-                .exec(callback);
-//                .awaitCompletion(); FIXME https://github.com/docker-java/docker-java/issues/476
-        Thread.sleep(TimeUnit.SECONDS.toMillis(5));
+                .exec(callback)
+                .awaitCompletion();
 
         String log = callback.builder.toString();
         assertThat(log, is("exit trapped 10"));
