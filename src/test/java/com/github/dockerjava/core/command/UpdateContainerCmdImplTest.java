@@ -10,6 +10,7 @@ import com.github.dockerjava.api.model.UpdateContainerResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.testng.ITestResult;
+import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 
 import static com.github.dockerjava.test.serdes.JSONSamples.testRoundTrip;
+import static com.github.dockerjava.utils.TestUtils.getVersion;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -55,6 +57,12 @@ public class UpdateContainerCmdImplTest extends AbstractDockerClientTest {
 
     @Test(groups = "ignoreInCircleCi")
     public void updateContainer() throws DockerException, IOException {
+        final RemoteApiVersion apiVersion = getVersion(dockerClient);
+
+        if (!apiVersion.isGreaterOrEqual(RemoteApiVersion.VERSION_1_22)) {
+            throw new SkipException("API version should be >= 1.22");
+        }
+
         CreateContainerResponse response = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
                 .withCmd("sleep", "9999")
                 .exec();
@@ -62,7 +70,6 @@ public class UpdateContainerCmdImplTest extends AbstractDockerClientTest {
         dockerClient.startContainerCmd(containerId).exec();
 
         InspectContainerResponse inspectBefore = dockerClient.inspectContainerCmd(containerId).exec();
-        final HostConfig beforeHostConfig = inspectBefore.getHostConfig();
 
         final UpdateContainerResponse updateResponse = dockerClient.updateContainerCmd(containerId)
                 .withBlkioWeight(300)
