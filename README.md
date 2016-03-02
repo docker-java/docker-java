@@ -72,7 +72,7 @@ Run build without integration tests:
     <dependency>
           <groupId>com.github.docker-java</groupId>
           <artifactId>docker-java</artifactId>
-          <version>3.0.0-RC1</version>
+          <version>3.0.0-RC2</version>
     </dependency>
     
 ### Latest development version
