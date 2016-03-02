@@ -5,10 +5,12 @@ import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.UpdateContainerResponse;
+import com.github.dockerjava.core.RemoteApiVersion;
 import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
+import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
@@ -18,6 +20,7 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
+import static com.github.dockerjava.utils.TestUtils.getVersion;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -52,6 +55,12 @@ public class UpdateContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
     @Test
     public void updateContainer() throws DockerException, IOException {
+        final RemoteApiVersion apiVersion = getVersion(dockerClient);
+
+        if (!apiVersion.isGreaterOrEqual(RemoteApiVersion.VERSION_1_22)) {
+            throw new SkipException("API version should be >= 1.22");
+        }
+
         CreateContainerResponse response = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
                 .withCmd("sleep", "9999")
                 .exec();
