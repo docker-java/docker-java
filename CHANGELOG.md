@@ -9,6 +9,8 @@ Notes
 * The configuration has been changed to better match the docker CLI configuration options. The properties file was renamed from `docker.io.properties` to `docker-java.properties`. See README.md for details.
 
 All changes
+
+Included in 3.0.0-RC2
 * [#486] (https://github.com/docker-java/docker-java/pull/486) Fix NegativeArraySizeException in awaitCompletion()
 * [#472] (https://github.com/docker-java/docker-java/pull/472) Exec start command: detect end of STDIN stream 
 * [#466] (https://github.com/docker-java/docker-java/pull/466) Fix exec start stdin encoding 
