@@ -17,6 +17,7 @@ import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.client.ClientResponseFilter;
 import javax.ws.rs.client.WebTarget;
 
+import com.github.dockerjava.api.command.UpdateContainerCmd;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
@@ -408,6 +409,12 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     @Override
     public KillContainerCmd.Exec createKillContainerCmdExec() {
         return new KillContainerCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+
+    @Override
+    public UpdateContainerCmd.Exec createUpdateContainerCmdExec() {
+        return new UpdateContainerCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
