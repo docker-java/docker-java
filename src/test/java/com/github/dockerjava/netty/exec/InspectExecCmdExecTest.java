@@ -120,12 +120,19 @@ public class InspectExecCmdExecTest extends AbstractNettyDockerClientTest {
         assertThat(exec.getId(), not(isEmptyString()));
 
         InspectExecResponse inspectExecResponse = dockerClient.inspectExecCmd(exec.getId()).exec();
-        assertThat(inspectExecResponse.getExitCode(), is(nullValue()));
+
+        if (apiVersion.isGreaterOrEqual(RemoteApiVersion.VERSION_1_22)) {
+            assertThat(inspectExecResponse.getExitCode(), is(nullValue()));
+            assertThat(inspectExecResponse.getCanRemove(), is(false));
+            assertThat(inspectExecResponse.getContainerID(), is(container.getId()));
+        } else {
+            assertThat(inspectExecResponse.getExitCode(), is(0));
+            assertNotNull(inspectExecResponse.getContainer().getNetworkSettings().getNetworks().get("bridge"));
+        }
+
         assertThat(inspectExecResponse.isOpenStdin(), is(false));
         assertThat(inspectExecResponse.isOpenStdout(), is(true));
         assertThat(inspectExecResponse.isRunning(), is(false));
-        assertThat(inspectExecResponse.getCanRemove(), is(false));
-        assertThat(inspectExecResponse.getContainerID(), is(container.getId()));
 
         final InspectExecResponse.Container inspectContainer = inspectExecResponse.getContainer();
         if (apiVersion.isGreaterOrEqual(VERSION_1_22)) {
