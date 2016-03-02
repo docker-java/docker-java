@@ -9,6 +9,7 @@ Notes
 * The configuration has been changed to better match the docker CLI configuration options. The properties file was renamed from `docker.io.properties` to `docker-java.properties`. See README.md for details.
 
 All changes
+* [#486] (https://github.com/docker-java/docker-java/pull/486) Fix NegativeArraySizeException in awaitCompletion()
 * [#472] (https://github.com/docker-java/docker-java/pull/472) Exec start command: detect end of STDIN stream 
 * [#466] (https://github.com/docker-java/docker-java/pull/466) Fix exec start stdin encoding 
 
@@ -31,6 +32,10 @@ Included in 3.0.0-RC1
 * [#357] (https://github.com/docker-java/docker-java/pull/357) Wait container command needs possibility to abort operation
 * [#347] (https://github.com/docker-java/docker-java/pull/347) Implementation of copy archive to/from container commands 
 * [#313] (https://github.com/docker-java/docker-java/pull/313) Refactor primitive type fields to be of object type in JSON objects
+
+v2.2.3
+---
+* [#487] (https://github.com/docker-java/docker-java/pull/487) Fix NegativeArraySizeException in awaitCompletion() 
 
 v2.2.2
 ---
