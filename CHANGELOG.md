@@ -1,6 +1,10 @@
 Change Log
 ===
 
+2.2.3-SNAPSHOT
+---
+* [#487] (https://github.com/docker-java/docker-java/pull/487) Fix NegativeArraySizeException in awaitCompletion() 
+
 v2.2.2
 ---
 * [#478] (https://github.com/docker-java/docker-java/pull/478) Remove debug println
