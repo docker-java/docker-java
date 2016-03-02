@@ -1,11 +1,14 @@
 package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.model.UpdateContainerResponse;
+import com.github.dockerjava.core.RemoteApiVersion;
 
 import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author Kanstantsin Shautsou
+ * @since {@link RemoteApiVersion#VERSION_1_22}
  */
 public interface UpdateContainerCmd extends SyncDockerCmd<UpdateContainerResponse> {
     @CheckForNull
@@ -16,7 +19,7 @@ public interface UpdateContainerCmd extends SyncDockerCmd<UpdateContainerRespons
 
     public UpdateContainerCmd withBlkioWeight(Integer blkioWeight);
 
-    public UpdateContainerCmd withContainerId(String containerId);
+    public UpdateContainerCmd withContainerId(@Nonnull String containerId);
 
     @CheckForNull
     public Integer getCpuPeriod();

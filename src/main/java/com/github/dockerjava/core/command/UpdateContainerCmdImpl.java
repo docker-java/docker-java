@@ -11,6 +11,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author Kanstantsin Shautsou
@@ -90,7 +91,7 @@ public class UpdateContainerCmdImpl extends AbstrDockerCmd<UpdateContainerCmd, U
     /**
      * @see #containerId
      */
-    public UpdateContainerCmd withContainerId(String containerId) {
+    public UpdateContainerCmd withContainerId(@Nonnull String containerId) {
         this.containerId = containerId;
         return this;
     }
