@@ -7,6 +7,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
@@ -15,6 +16,7 @@ import static org.hamcrest.Matchers.startsWith;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import org.testng.ITestResult;
@@ -92,15 +94,16 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         assertThat(inspectContainerResponse, mountedVolumes(containsInAnyOrder(volume1, volume2)));
 
-        assertThat(inspectContainerResponse.getMounts().size(), equalTo(2));
+        final List<InspectContainerResponse.Mount> mounts = inspectContainerResponse.getMounts();
 
-        assertThat(inspectContainerResponse.getMounts().get(0).getDestination(), equalTo(volume1));
-        assertThat(inspectContainerResponse.getMounts().get(0).getMode(), equalTo("ro"));
-        assertThat(inspectContainerResponse.getMounts().get(0).getRW(), equalTo(Boolean.FALSE));
+        assertThat(mounts, hasSize(2));
 
-        assertThat(inspectContainerResponse.getMounts().get(1).getDestination(), equalTo(volume2));
-        assertThat(inspectContainerResponse.getMounts().get(1).getMode(), equalTo("rw"));
-        assertThat(inspectContainerResponse.getMounts().get(1).getRW(), equalTo(Boolean.TRUE));
+        final InspectContainerResponse.Mount mount1 = new InspectContainerResponse.Mount()
+                .withRw(false).withMode("ro").withDestination(volume1).withSource("/src/webapp1");
+        final InspectContainerResponse.Mount mount2 = new InspectContainerResponse.Mount()
+                .withRw(true).withMode("rw").withDestination(volume2).withSource("/src/webapp2");
+
+        assertThat(mounts, containsInAnyOrder(mount1, mount2));
     }
 
     @Test
