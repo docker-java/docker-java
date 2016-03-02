@@ -10,7 +10,6 @@ import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.dockerjava.core.RemoteApiVersion;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang.StringUtils;
@@ -39,8 +38,6 @@ import com.github.dockerjava.core.command.PullImageResultCallback;
 public abstract class AbstractDockerClientTest extends Assert {
 
     public static final Logger LOG = LoggerFactory.getLogger(AbstractDockerClientTest.class);
-
-    private RemoteApiVersion apiVersion = RemoteApiVersion.VERSION_1_22;
 
     protected DockerClient dockerClient;
 
@@ -82,7 +79,7 @@ public abstract class AbstractDockerClientTest extends Assert {
             builder = builder.withRegistryPassword(password);
         }
 
-        return builder.withApiVersion(apiVersion).build();
+        return builder.build();
     }
 
     public void afterTest() {
