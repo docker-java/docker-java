@@ -64,7 +64,7 @@ Run build without integration tests:
     <dependency>
           <groupId>com.github.docker-java</groupId>
           <artifactId>docker-java</artifactId>
-          <version>2.2.1</version>
+          <version>2.2.3</version>
     </dependency>
     
 ### Latest release candidate
@@ -72,7 +72,7 @@ Run build without integration tests:
     <dependency>
           <groupId>com.github.docker-java</groupId>
           <artifactId>docker-java</artifactId>
-          <version>3.0.0-RC2</version>
+          <version>3.0.0-RC3</version>
     </dependency>
     
 ### Latest development version
