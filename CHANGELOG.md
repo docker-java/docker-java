@@ -10,6 +10,7 @@ Notes
 
 All changes
 
+Included in 3.0.0-RC3
 * [#488] (https://github.com/docker-java/docker-java/pull/488) Support remote API 1.22 subset
 
 Included in 3.0.0-RC2
