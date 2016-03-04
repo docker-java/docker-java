@@ -1,9 +1,12 @@
 package com.github.dockerjava.netty.exec;
 
+import static com.github.dockerjava.core.RemoteApiVersion.UNKNOWN_VERSION;
+import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_19;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.codec.binary.Base64;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,10 +48,18 @@ public abstract class AbstrDockerCmdExec {
     protected String registryConfigs(AuthConfigurations authConfigs) {
         try {
             final String json;
-            if (dockerClientConfig.getApiVersion().isGreaterOrEqual(RemoteApiVersion.VERSION_1_19)) {
-                json = new ObjectMapper().writeValueAsString(authConfigs.getConfigs());
+            final ObjectMapper objectMapper = new ObjectMapper();
+            final RemoteApiVersion apiVersion = dockerClientConfig.getApiVersion();
+
+            if (apiVersion.equals(UNKNOWN_VERSION)) {
+                ObjectNode rootNode = objectMapper.valueToTree(authConfigs.getConfigs()); // all registries
+                final ObjectNode authNodes = objectMapper.valueToTree(authConfigs); // wrapped in "configs":{}
+                rootNode.setAll(authNodes); // merge 2 variants
+                json = rootNode.toString();
+            } else if (apiVersion.isGreaterOrEqual(VERSION_1_19)) {
+                json = objectMapper.writeValueAsString(authConfigs.getConfigs());
             } else {
-                json = new ObjectMapper().writeValueAsString(authConfigs);
+                json = objectMapper.writeValueAsString(authConfigs);
             }
 
             return Base64.encodeBase64String(json.getBytes());

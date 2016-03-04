@@ -28,7 +28,7 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
 
     private InvocationBuilder resourceWithOptionalAuthConfig(BuildImageCmd command, InvocationBuilder request) {
         final AuthConfigurations authConfigs = firstNonNull(command.getBuildAuthConfigs(), getBuildAuthConfigs());
-        if (authConfigs != null) {
+        if (authConfigs != null && !authConfigs.getConfigs().isEmpty()) {
             request = request.header("X-Registry-Config", registryConfigs(authConfigs));
         }
         return request;
@@ -96,7 +96,8 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
         LOGGER.trace("POST: {}", webTarget);
 
         InvocationBuilder builder = resourceWithOptionalAuthConfig(command, webTarget.request())
-                .accept(MediaType.APPLICATION_JSON).header("Content-Type", "application/tar")
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Content-Type", "application/tar")
                 .header("encoding", "gzip");
 
         builder.post(new TypeReference<BuildResponseItem>() {
