@@ -4,8 +4,6 @@
 
 Java API client for [Docker](http://docs.docker.io/ "Docker")
 
-Supports a subset of the Docker Remote API [v1.19](https://github.com/docker/docker/blob/master/docs/reference/api/docker_remote_api_v1.19.md), Docker Server version 1.7.x
-
 <b>The current implementation is based on Jersey 2.x and therefore classpath incompatible with older Jersey 1.x dependent libraries!</b>
 
 Developer forum for [docker-java](https://groups.google.com/forum/?#!forum/docker-java-dev "docker-java")
@@ -16,7 +14,6 @@ Developer forum for [docker-java](https://groups.google.com/forum/?#!forum/docke
 
 * Java 1.7
 * Maven 3.0.5
-* Docker 1.7.x
 
 If you need SSL, then you'll need to put your `*.pem` file into `~/.docker/`, if you're using boot2docker, do this: 
  
@@ -60,6 +57,7 @@ Run build without integration tests:
 ## Docker-Java maven dependencies
 
 ### Latest release version
+Supports a subset of the Docker Remote API [v1.19](https://github.com/docker/docker/blob/master/docs/reference/api/docker_remote_api_v1.19.md), Docker Server version 1.7.x
 
     <dependency>
           <groupId>com.github.docker-java</groupId>
@@ -68,6 +66,7 @@ Run build without integration tests:
     </dependency>
     
 ### Latest release candidate
+Supports a subset of the Docker Remote API [v1.22](https://github.com/docker/docker/blob/master/docs/reference/api/docker_remote_api_v1.22.md), Docker Server version 1.10.x
 
     <dependency>
           <groupId>com.github.docker-java</groupId>
@@ -76,6 +75,8 @@ Run build without integration tests:
     </dependency>
     
 ### Latest development version
+Supports a subset of the Docker Remote API [v1.22](https://github.com/docker/docker/blob/master/docs/reference/api/docker_remote_api_v1.22.md), Docker Server version 1.10.x
+
 You can find the latest development version including javadoc and source files on [Sonatypes OSS repository](https://oss.sonatype.org/content/groups/public/com/github/docker-java/docker-java/).
 
     <dependency>
