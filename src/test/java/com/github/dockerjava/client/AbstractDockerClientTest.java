@@ -39,8 +39,6 @@ public abstract class AbstractDockerClientTest extends Assert {
 
     public static final Logger LOG = LoggerFactory.getLogger(AbstractDockerClientTest.class);
 
-    private String apiVersion = "1.21";
-
     protected DockerClient dockerClient;
 
     protected TestDockerCmdExecFactory dockerCmdExecFactory = initTestDockerCmdExecFactory();
@@ -54,7 +52,9 @@ public abstract class AbstractDockerClientTest extends Assert {
 
         LOG.info("======================= BEFORETEST =======================");
         LOG.info("Connecting to Docker server");
-        dockerClient = DockerClientBuilder.getInstance(config()).withDockerCmdExecFactory(dockerCmdExecFactory).build();
+        dockerClient = DockerClientBuilder.getInstance(config())
+                .withDockerCmdExecFactory(dockerCmdExecFactory)
+                .build();
 
         try {
             dockerClient.inspectImageCmd("busybox").exec();
@@ -79,7 +79,7 @@ public abstract class AbstractDockerClientTest extends Assert {
             builder = builder.withRegistryPassword(password);
         }
 
-        return builder.withApiVersion(apiVersion).build();
+        return builder.build();
     }
 
     public void afterTest() {

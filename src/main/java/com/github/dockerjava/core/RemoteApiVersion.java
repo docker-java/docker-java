@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 /**
  * Bean to encapsulate the version of the <a href="http://docs.docker.com/engine/reference/api/docker_remote_api/">Docker Remote (REST)
  * API</a>
- * <p>
+ * <p/>
  * Contains the minor and major version of the API as well as operations to compare API versions.
  *
  * @author Marcus Thiesen
@@ -60,7 +60,7 @@ public class RemoteApiVersion implements Serializable {
     /**
      * Unknown, docker doesn't reflect reality. I.e. we implemented method, but for javadoc it not clear when it was added.
      */
-    private static final RemoteApiVersion UNKNOWN_VERSION = new RemoteApiVersion(0, 0) {
+    public static final RemoteApiVersion UNKNOWN_VERSION = new RemoteApiVersion(0, 0) {
 
         @Override
         public boolean isGreaterOrEqual(final RemoteApiVersion other) {

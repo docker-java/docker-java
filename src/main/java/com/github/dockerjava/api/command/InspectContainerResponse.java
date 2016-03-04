@@ -462,5 +462,68 @@ public class InspectContainerResponse {
         public Boolean getRW() {
             return rw;
         }
+
+        /**
+         * @see #destination
+         */
+        public Mount withDestination(Volume destination) {
+            this.destination = destination;
+            return this;
+        }
+
+        /**
+         * @see #driver
+         */
+        public Mount withDriver(String driver) {
+            this.driver = driver;
+            return this;
+        }
+
+        /**
+         * @see #mode
+         */
+        public Mount withMode(String mode) {
+            this.mode = mode;
+            return this;
+        }
+
+        /**
+         * @see #name
+         */
+        public Mount withName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        /**
+         * @see #rw
+         */
+        public Mount withRw(Boolean rw) {
+            this.rw = rw;
+            return this;
+        }
+
+        /**
+         * @see #source
+         */
+        public Mount withSource(String source) {
+            this.source = source;
+            return this;
+        }
+
+        @Override
+        public String toString() {
+            return ToStringBuilder.reflectionToString(this);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return EqualsBuilder.reflectionEquals(this, o);
+        }
+
+        @Override
+        public int hashCode() {
+            return HashCodeBuilder.reflectionHashCode(this);
+        }
     }
 }

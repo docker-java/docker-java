@@ -287,8 +287,11 @@ public class BuildImageCmdExecTest extends AbstractNettyDockerClientTest {
         AuthConfigurations authConfigurations = new AuthConfigurations();
         authConfigurations.addConfig(authConfig);
 
-        imageId = dockerClient.buildImageCmd(baseDir).withNoCache(true).withBuildAuthConfigs(authConfigurations)
-                .exec(new BuildImageResultCallback()).awaitImageId();
+        imageId = dockerClient.buildImageCmd(baseDir)
+                .withNoCache(true)
+                .withBuildAuthConfigs(authConfigurations)
+                .exec(new BuildImageResultCallback())
+                .awaitImageId();
 
         inspectImageResponse = dockerClient.inspectImageCmd(imageId).exec();
         assertThat(inspectImageResponse, not(nullValue()));
