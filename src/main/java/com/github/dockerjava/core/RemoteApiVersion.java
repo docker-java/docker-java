@@ -60,7 +60,7 @@ public class RemoteApiVersion implements Serializable {
     /**
      * Unknown, docker doesn't reflect reality. I.e. we implemented method, but for javadoc it not clear when it was added.
      */
-    private static final RemoteApiVersion UNKNOWN_VERSION = new RemoteApiVersion(0, 0) {
+    public static final RemoteApiVersion UNKNOWN_VERSION = new RemoteApiVersion(0, 0) {
 
         @Override
         public boolean isGreaterOrEqual(final RemoteApiVersion other) {
