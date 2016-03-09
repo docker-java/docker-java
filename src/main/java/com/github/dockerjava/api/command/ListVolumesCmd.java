@@ -13,14 +13,14 @@ import javax.annotation.CheckForNull;
 public interface ListVolumesCmd extends SyncDockerCmd<ListVolumesResponse> {
 
     @CheckForNull
-    public Map<String, List<String>> getFilters();
+    Map<String, List<String>> getFilters();
 
     /**
      * @param dangling
      *            - Show dangling volumes filter
      */
-    public ListVolumesCmd withDanglingFilter(Boolean dangling);
+    ListVolumesCmd withDanglingFilter(Boolean dangling);
 
-    public static interface Exec extends DockerCmdSyncExec<ListVolumesCmd, ListVolumesResponse> {
+    interface Exec extends DockerCmdSyncExec<ListVolumesCmd, ListVolumesResponse> {
     }
 }

@@ -9,109 +9,109 @@ import com.github.dockerjava.core.DockerClientConfig;
 
 public interface DockerCmdExecFactory extends Closeable {
 
-    public void init(DockerClientConfig dockerClientConfig);
+    void init(DockerClientConfig dockerClientConfig);
 
-    public AuthCmd.Exec createAuthCmdExec();
+    AuthCmd.Exec createAuthCmdExec();
 
-    public InfoCmd.Exec createInfoCmdExec();
+    InfoCmd.Exec createInfoCmdExec();
 
-    public PingCmd.Exec createPingCmdExec();
+    PingCmd.Exec createPingCmdExec();
 
-    public ExecCreateCmd.Exec createExecCmdExec();
+    ExecCreateCmd.Exec createExecCmdExec();
 
-    public VersionCmd.Exec createVersionCmdExec();
+    VersionCmd.Exec createVersionCmdExec();
 
-    public PullImageCmd.Exec createPullImageCmdExec();
+    PullImageCmd.Exec createPullImageCmdExec();
 
-    public PushImageCmd.Exec createPushImageCmdExec();
+    PushImageCmd.Exec createPushImageCmdExec();
 
-    public SaveImageCmd.Exec createSaveImageCmdExec();
+    SaveImageCmd.Exec createSaveImageCmdExec();
 
-    public CreateImageCmd.Exec createCreateImageCmdExec();
+    CreateImageCmd.Exec createCreateImageCmdExec();
 
-    public SearchImagesCmd.Exec createSearchImagesCmdExec();
+    SearchImagesCmd.Exec createSearchImagesCmdExec();
 
-    public RemoveImageCmd.Exec createRemoveImageCmdExec();
+    RemoveImageCmd.Exec createRemoveImageCmdExec();
 
-    public ListImagesCmd.Exec createListImagesCmdExec();
+    ListImagesCmd.Exec createListImagesCmdExec();
 
-    public InspectImageCmd.Exec createInspectImageCmdExec();
+    InspectImageCmd.Exec createInspectImageCmdExec();
 
-    public ListContainersCmd.Exec createListContainersCmdExec();
+    ListContainersCmd.Exec createListContainersCmdExec();
 
-    public CreateContainerCmd.Exec createCreateContainerCmdExec();
+    CreateContainerCmd.Exec createCreateContainerCmdExec();
 
-    public StartContainerCmd.Exec createStartContainerCmdExec();
+    StartContainerCmd.Exec createStartContainerCmdExec();
 
-    public InspectContainerCmd.Exec createInspectContainerCmdExec();
+    InspectContainerCmd.Exec createInspectContainerCmdExec();
 
-    public RemoveContainerCmd.Exec createRemoveContainerCmdExec();
+    RemoveContainerCmd.Exec createRemoveContainerCmdExec();
 
-    public WaitContainerCmd.Exec createWaitContainerCmdExec();
+    WaitContainerCmd.Exec createWaitContainerCmdExec();
 
-    public AttachContainerCmd.Exec createAttachContainerCmdExec();
+    AttachContainerCmd.Exec createAttachContainerCmdExec();
 
-    public ExecStartCmd.Exec createExecStartCmdExec();
+    ExecStartCmd.Exec createExecStartCmdExec();
 
-    public InspectExecCmd.Exec createInspectExecCmdExec();
+    InspectExecCmd.Exec createInspectExecCmdExec();
 
-    public LogContainerCmd.Exec createLogContainerCmdExec();
+    LogContainerCmd.Exec createLogContainerCmdExec();
 
-    public CopyFileFromContainerCmd.Exec createCopyFileFromContainerCmdExec();
+    CopyFileFromContainerCmd.Exec createCopyFileFromContainerCmdExec();
 
-    public CopyArchiveFromContainerCmd.Exec createCopyArchiveFromContainerCmdExec();
+    CopyArchiveFromContainerCmd.Exec createCopyArchiveFromContainerCmdExec();
 
-    public CopyArchiveToContainerCmd.Exec createCopyArchiveToContainerCmdExec();
+    CopyArchiveToContainerCmd.Exec createCopyArchiveToContainerCmdExec();
 
-    public StopContainerCmd.Exec createStopContainerCmdExec();
+    StopContainerCmd.Exec createStopContainerCmdExec();
 
-    public ContainerDiffCmd.Exec createContainerDiffCmdExec();
+    ContainerDiffCmd.Exec createContainerDiffCmdExec();
 
-    public KillContainerCmd.Exec createKillContainerCmdExec();
+    KillContainerCmd.Exec createKillContainerCmdExec();
 
     UpdateContainerCmd.Exec createUpdateContainerCmdExec();
 
-    public RestartContainerCmd.Exec createRestartContainerCmdExec();
+    RestartContainerCmd.Exec createRestartContainerCmdExec();
 
-    public CommitCmd.Exec createCommitCmdExec();
+    CommitCmd.Exec createCommitCmdExec();
 
-    public BuildImageCmd.Exec createBuildImageCmdExec();
+    BuildImageCmd.Exec createBuildImageCmdExec();
 
-    public TopContainerCmd.Exec createTopContainerCmdExec();
+    TopContainerCmd.Exec createTopContainerCmdExec();
 
-    public TagImageCmd.Exec createTagImageCmdExec();
+    TagImageCmd.Exec createTagImageCmdExec();
 
-    public PauseContainerCmd.Exec createPauseContainerCmdExec();
+    PauseContainerCmd.Exec createPauseContainerCmdExec();
 
-    public UnpauseContainerCmd.Exec createUnpauseContainerCmdExec();
+    UnpauseContainerCmd.Exec createUnpauseContainerCmdExec();
 
-    public EventsCmd.Exec createEventsCmdExec();
+    EventsCmd.Exec createEventsCmdExec();
 
-    public StatsCmd.Exec createStatsCmdExec();
+    StatsCmd.Exec createStatsCmdExec();
 
-    public CreateVolumeCmd.Exec createCreateVolumeCmdExec();
+    CreateVolumeCmd.Exec createCreateVolumeCmdExec();
 
-    public InspectVolumeCmd.Exec createInspectVolumeCmdExec();
+    InspectVolumeCmd.Exec createInspectVolumeCmdExec();
 
-    public RemoveVolumeCmd.Exec createRemoveVolumeCmdExec();
+    RemoveVolumeCmd.Exec createRemoveVolumeCmdExec();
 
-    public ListVolumesCmd.Exec createListVolumesCmdExec();
+    ListVolumesCmd.Exec createListVolumesCmdExec();
 
-    public ListNetworksCmd.Exec createListNetworksCmdExec();
+    ListNetworksCmd.Exec createListNetworksCmdExec();
 
-    public InspectNetworkCmd.Exec createInspectNetworkCmdExec();
+    InspectNetworkCmd.Exec createInspectNetworkCmdExec();
 
-    public CreateNetworkCmd.Exec createCreateNetworkCmdExec();
+    CreateNetworkCmd.Exec createCreateNetworkCmdExec();
 
-    public RemoveNetworkCmd.Exec createRemoveNetworkCmdExec();
+    RemoveNetworkCmd.Exec createRemoveNetworkCmdExec();
 
-    public ConnectToNetworkCmd.Exec createConnectToNetworkCmdExec();
+    ConnectToNetworkCmd.Exec createConnectToNetworkCmdExec();
 
-    public DisconnectFromNetworkCmd.Exec createDisconnectFromNetworkCmdExec();
+    DisconnectFromNetworkCmd.Exec createDisconnectFromNetworkCmdExec();
 
-    public DockerCmdExecFactory withSSLContext(SSLContext sslContext);
+    DockerCmdExecFactory withSSLContext(SSLContext sslContext);
 
     @Override
-    public void close() throws IOException;
+    void close() throws IOException;
 
 }

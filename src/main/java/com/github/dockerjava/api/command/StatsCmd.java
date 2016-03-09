@@ -12,10 +12,10 @@ import com.github.dockerjava.api.model.Statistics;
 public interface StatsCmd extends AsyncDockerCmd<StatsCmd, Statistics> {
 
     @CheckForNull
-    public String getContainerId();
+    String getContainerId();
 
-    public StatsCmd withContainerId(@Nonnull String containerId);
+    StatsCmd withContainerId(@Nonnull String containerId);
 
-    public static interface Exec extends DockerCmdAsyncExec<StatsCmd, Statistics> {
+    interface Exec extends DockerCmdAsyncExec<StatsCmd, Statistics> {
     }
 }

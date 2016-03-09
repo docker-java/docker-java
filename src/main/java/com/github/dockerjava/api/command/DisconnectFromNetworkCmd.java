@@ -13,15 +13,15 @@ import javax.annotation.Nonnull;
 public interface DisconnectFromNetworkCmd extends SyncDockerCmd<Void> {
 
     @CheckForNull
-    public String getNetworkId();
+    String getNetworkId();
 
     @CheckForNull
-    public String getContainerId();
+    String getContainerId();
 
-    public DisconnectFromNetworkCmd withNetworkId(@Nonnull String networkId);
+    DisconnectFromNetworkCmd withNetworkId(@Nonnull String networkId);
 
-    public DisconnectFromNetworkCmd withContainerId(@Nonnull String containerId);
+    DisconnectFromNetworkCmd withContainerId(@Nonnull String containerId);
 
-    public static interface Exec extends DockerCmdSyncExec<DisconnectFromNetworkCmd, Void> {
+    interface Exec extends DockerCmdSyncExec<DisconnectFromNetworkCmd, Void> {
     }
 }

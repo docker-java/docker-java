@@ -15,51 +15,51 @@ public interface UpdateContainerCmd extends SyncDockerCmd<UpdateContainerRespons
     String getContainerId();
 
     @CheckForNull
-    public Integer getBlkioWeight();
+    Integer getBlkioWeight();
 
-    public UpdateContainerCmd withBlkioWeight(Integer blkioWeight);
+    UpdateContainerCmd withBlkioWeight(Integer blkioWeight);
 
-    public UpdateContainerCmd withContainerId(@Nonnull String containerId);
-
-    @CheckForNull
-    public Integer getCpuPeriod();
-
-    public UpdateContainerCmd withCpuPeriod(Integer cpuPeriod);
+    UpdateContainerCmd withContainerId(@Nonnull String containerId);
 
     @CheckForNull
-    public Integer getCpuQuota();
+    Integer getCpuPeriod();
 
-    public UpdateContainerCmd withCpuQuota(Integer cpuQuota);
-
-    @CheckForNull
-    public String getCpusetCpus();
-
-    public UpdateContainerCmd withCpusetCpus(String cpusetCpus);
+    UpdateContainerCmd withCpuPeriod(Integer cpuPeriod);
 
     @CheckForNull
-    public String getCpusetMems();
+    Integer getCpuQuota();
 
-    public UpdateContainerCmd withCpusetMems(String cpusetMems);
-
-    @CheckForNull
-    public Integer getCpuShares();
-
-    public UpdateContainerCmd withCpuShares(Integer cpuShares);
+    UpdateContainerCmd withCpuQuota(Integer cpuQuota);
 
     @CheckForNull
-    public Long getKernelMemory();
+    String getCpusetCpus();
 
-    public UpdateContainerCmd withKernelMemory(Long kernelMemory);
-
-    @CheckForNull
-    public Long getMemory();
-
-    public UpdateContainerCmd withMemory(Long memory);
+    UpdateContainerCmd withCpusetCpus(String cpusetCpus);
 
     @CheckForNull
-    public Long getMemoryReservation();
+    String getCpusetMems();
 
-    public UpdateContainerCmd withMemoryReservation(Long memoryReservation);
+    UpdateContainerCmd withCpusetMems(String cpusetMems);
+
+    @CheckForNull
+    Integer getCpuShares();
+
+    UpdateContainerCmd withCpuShares(Integer cpuShares);
+
+    @CheckForNull
+    Long getKernelMemory();
+
+    UpdateContainerCmd withKernelMemory(Long kernelMemory);
+
+    @CheckForNull
+    Long getMemory();
+
+    UpdateContainerCmd withMemory(Long memory);
+
+    @CheckForNull
+    Long getMemoryReservation();
+
+    UpdateContainerCmd withMemoryReservation(Long memoryReservation);
 
     @CheckForNull
     Long getMemorySwap();

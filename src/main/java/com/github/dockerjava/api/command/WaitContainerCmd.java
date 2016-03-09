@@ -15,18 +15,18 @@ import com.github.dockerjava.api.model.WaitResponse;
 public interface WaitContainerCmd extends AsyncDockerCmd<WaitContainerCmd, WaitResponse> {
 
     @CheckForNull
-    public String getContainerId();
+    String getContainerId();
 
-    public WaitContainerCmd withContainerId(@Nonnull String containerId);
+    WaitContainerCmd withContainerId(@Nonnull String containerId);
 
     /**
      * @throws NotFoundException
      *             container not found
      */
     @Override
-    public <T extends ResultCallback<WaitResponse>> T exec(T resultCallback);
+    <T extends ResultCallback<WaitResponse>> T exec(T resultCallback);
 
-    public static interface Exec extends DockerCmdAsyncExec<WaitContainerCmd, WaitResponse> {
+    interface Exec extends DockerCmdAsyncExec<WaitContainerCmd, WaitResponse> {
     }
 
 }

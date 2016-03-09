@@ -17,28 +17,28 @@ import javax.annotation.Nonnull;
 public interface TagImageCmd extends SyncDockerCmd<Void> {
 
     @CheckForNull
-    public String getImageId();
+    String getImageId();
 
     @CheckForNull
-    public String getRepository();
+    String getRepository();
 
     @CheckForNull
-    public String getTag();
+    String getTag();
 
     @CheckForNull
-    public Boolean hasForceEnabled();
+    Boolean hasForceEnabled();
 
-    public TagImageCmd withImageId(@Nonnull String imageId);
+    TagImageCmd withImageId(@Nonnull String imageId);
 
-    public TagImageCmd withRepository(String repository);
+    TagImageCmd withRepository(String repository);
 
-    public TagImageCmd withTag(String tag);
+    TagImageCmd withTag(String tag);
 
-    public TagImageCmd withForce();
+    TagImageCmd withForce();
 
-    public TagImageCmd withForce(Boolean force);
+    TagImageCmd withForce(Boolean force);
 
-    public static interface Exec extends DockerCmdSyncExec<TagImageCmd, Void> {
+    interface Exec extends DockerCmdSyncExec<TagImageCmd, Void> {
     }
 
 }

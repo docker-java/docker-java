@@ -68,7 +68,7 @@ public class LogConfig {
 
     @JsonDeserialize(using = LoggingType.Deserializer.class)
     @JsonSerialize(using = LoggingType.Serializer.class)
-    public static enum LoggingType {
+    public enum LoggingType {
         DEFAULT("json-file"),
         JSON_FILE("json-file"),
         NONE("none"),
@@ -81,7 +81,7 @@ public class LogConfig {
 
         private String type;
 
-        private LoggingType(String type) {
+        LoggingType(String type) {
             this.type = type;
         }
 

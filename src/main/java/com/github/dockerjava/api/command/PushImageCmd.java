@@ -17,35 +17,35 @@ import com.github.dockerjava.api.model.PushResponseItem;
 public interface PushImageCmd extends AsyncDockerCmd<PushImageCmd, PushResponseItem> {
 
     @CheckForNull
-    public AuthConfig getAuthConfig();
+    AuthConfig getAuthConfig();
 
     @CheckForNull
-    public String getName();
+    String getName();
 
     @CheckForNull
-    public String getTag();
+    String getTag();
 
     /**
      * @param name
      *            The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
      */
-    public PushImageCmd withName(@Nonnull String name);
+    PushImageCmd withName(@Nonnull String name);
 
     /**
      * @param tag
      *            The image's tag. Not null.
      */
-    public PushImageCmd withTag(String tag);
+    PushImageCmd withTag(String tag);
 
-    public PushImageCmd withAuthConfig(AuthConfig authConfig);
+    PushImageCmd withAuthConfig(AuthConfig authConfig);
 
     /**
      * @throws NotFoundException
      *             No such image
      */
     @Override
-    public <T extends ResultCallback<PushResponseItem>> T exec(T resultCallback);
+    <T extends ResultCallback<PushResponseItem>> T exec(T resultCallback);
 
-    public static interface Exec extends DockerCmdAsyncExec<PushImageCmd, PushResponseItem> {
+    interface Exec extends DockerCmdAsyncExec<PushImageCmd, PushResponseItem> {
     }
 }

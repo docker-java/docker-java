@@ -11,18 +11,18 @@ import com.github.dockerjava.api.exception.NotFoundException;
 public interface InspectImageCmd extends SyncDockerCmd<InspectImageResponse> {
 
     @CheckForNull
-    public String getImageId();
+    String getImageId();
 
-    public InspectImageCmd withImageId(@Nonnull String imageId);
+    InspectImageCmd withImageId(@Nonnull String imageId);
 
     /**
      * @throws NotFoundException
      *             No such image
      */
     @Override
-    public InspectImageResponse exec() throws NotFoundException;
+    InspectImageResponse exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdSyncExec<InspectImageCmd, InspectImageResponse> {
+    interface Exec extends DockerCmdSyncExec<InspectImageCmd, InspectImageResponse> {
     }
 
 }

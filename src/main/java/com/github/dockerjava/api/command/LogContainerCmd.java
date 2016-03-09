@@ -29,54 +29,54 @@ import com.github.dockerjava.api.model.Frame;
 public interface LogContainerCmd extends AsyncDockerCmd<LogContainerCmd, Frame> {
 
     @CheckForNull
-    public String getContainerId();
+    String getContainerId();
 
     @CheckForNull
-    public Integer getTail();
+    Integer getTail();
 
     @CheckForNull
-    public Boolean hasFollowStreamEnabled();
+    Boolean hasFollowStreamEnabled();
 
     @CheckForNull
-    public Boolean hasTimestampsEnabled();
+    Boolean hasTimestampsEnabled();
 
     @CheckForNull
-    public Boolean hasStdoutEnabled();
+    Boolean hasStdoutEnabled();
 
     @CheckForNull
-    public Boolean hasStderrEnabled();
+    Boolean hasStderrEnabled();
 
     @CheckForNull
-    public Integer getSince();
+    Integer getSince();
 
-    public LogContainerCmd withContainerId(@Nonnull String containerId);
+    LogContainerCmd withContainerId(@Nonnull String containerId);
 
     /**
      * Following the stream means the resulting {@link InputStream} returned by {@link #exec()} reads infinitely. So a
      * {@link InputStream#read()} MAY BLOCK FOREVER as long as no data is streamed from the docker host to {@link DockerClient}!
      */
-    public LogContainerCmd withFollowStream(Boolean followStream);
+    LogContainerCmd withFollowStream(Boolean followStream);
 
-    public LogContainerCmd withTimestamps(Boolean timestamps);
+    LogContainerCmd withTimestamps(Boolean timestamps);
 
-    public LogContainerCmd withStdOut(Boolean stdout);
+    LogContainerCmd withStdOut(Boolean stdout);
 
-    public LogContainerCmd withStdErr(Boolean stderr);
+    LogContainerCmd withStdErr(Boolean stderr);
 
-    public LogContainerCmd withTailAll();
+    LogContainerCmd withTailAll();
 
-    public LogContainerCmd withTail(Integer tail);
+    LogContainerCmd withTail(Integer tail);
 
-    public LogContainerCmd withSince(Integer since);
+    LogContainerCmd withSince(Integer since);
 
     /**
      * @throws com.github.dockerjava.api.NotFoundException
      *             No such container
      */
     @Override
-    public <T extends ResultCallback<Frame>> T exec(T resultCallback);
+    <T extends ResultCallback<Frame>> T exec(T resultCallback);
 
-    public static interface Exec extends DockerCmdAsyncExec<LogContainerCmd, Frame> {
+    interface Exec extends DockerCmdAsyncExec<LogContainerCmd, Frame> {
     }
 
 }

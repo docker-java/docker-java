@@ -14,24 +14,24 @@ import com.github.dockerjava.api.model.PullResponseItem;
 public interface PullImageCmd extends AsyncDockerCmd<PullImageCmd, PullResponseItem> {
 
     @CheckForNull
-    public String getRepository();
+    String getRepository();
 
     @CheckForNull
-    public String getTag();
+    String getTag();
 
     @CheckForNull
-    public String getRegistry();
+    String getRegistry();
 
-    public AuthConfig getAuthConfig();
+    AuthConfig getAuthConfig();
 
-    public PullImageCmd withRepository(@Nonnull String repository);
+    PullImageCmd withRepository(@Nonnull String repository);
 
-    public PullImageCmd withTag(String tag);
+    PullImageCmd withTag(String tag);
 
-    public PullImageCmd withRegistry(String registry);
+    PullImageCmd withRegistry(String registry);
 
-    public PullImageCmd withAuthConfig(AuthConfig authConfig);
+    PullImageCmd withAuthConfig(AuthConfig authConfig);
 
-    public static interface Exec extends DockerCmdAsyncExec<PullImageCmd, PullResponseItem> {
+    interface Exec extends DockerCmdAsyncExec<PullImageCmd, PullResponseItem> {
     }
 }

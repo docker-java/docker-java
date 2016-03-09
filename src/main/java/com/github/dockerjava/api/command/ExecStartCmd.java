@@ -12,24 +12,24 @@ import com.github.dockerjava.api.model.Frame;
 public interface ExecStartCmd extends AsyncDockerCmd<ExecStartCmd, Frame> {
 
     @CheckForNull
-    public String getExecId();
+    String getExecId();
 
     @CheckForNull
-    public Boolean hasDetachEnabled();
+    Boolean hasDetachEnabled();
 
     @CheckForNull
-    public Boolean hasTtyEnabled();
+    Boolean hasTtyEnabled();
 
     @CheckForNull
-    public InputStream getStdin();
+    InputStream getStdin();
 
-    public ExecStartCmd withDetach(Boolean detach);
+    ExecStartCmd withDetach(Boolean detach);
 
-    public ExecStartCmd withExecId(@Nonnull String execId);
+    ExecStartCmd withExecId(@Nonnull String execId);
 
-    public ExecStartCmd withTty(Boolean tty);
+    ExecStartCmd withTty(Boolean tty);
 
-    public ExecStartCmd withStdIn(InputStream stdin);
+    ExecStartCmd withStdIn(InputStream stdin);
 
     /**
      *
@@ -37,9 +37,9 @@ public interface ExecStartCmd extends AsyncDockerCmd<ExecStartCmd, Frame> {
      *             No such exec instance
      */
     @Override
-    public <T extends ResultCallback<Frame>> T exec(T resultCallback);
+    <T extends ResultCallback<Frame>> T exec(T resultCallback);
 
-    public static interface Exec extends DockerCmdAsyncExec<ExecStartCmd, Frame> {
+    interface Exec extends DockerCmdAsyncExec<ExecStartCmd, Frame> {
     }
 
 }

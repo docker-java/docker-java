@@ -11,23 +11,23 @@ import com.github.dockerjava.api.exception.NotFoundException;
 public interface KillContainerCmd extends SyncDockerCmd<Void> {
 
     @CheckForNull
-    public String getContainerId();
+    String getContainerId();
 
     @CheckForNull
-    public String getSignal();
+    String getSignal();
 
-    public KillContainerCmd withContainerId(@Nonnull String containerId);
+    KillContainerCmd withContainerId(@Nonnull String containerId);
 
-    public KillContainerCmd withSignal(String signal);
+    KillContainerCmd withSignal(String signal);
 
     /**
      * @throws NotFoundException
      *             No such container
      */
     @Override
-    public Void exec() throws NotFoundException;
+    Void exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdSyncExec<KillContainerCmd, Void> {
+    interface Exec extends DockerCmdSyncExec<KillContainerCmd, Void> {
     }
 
 }

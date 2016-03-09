@@ -12,9 +12,9 @@ import com.github.dockerjava.api.exception.NotFoundException;
  */
 public interface RemoveVolumeCmd extends SyncDockerCmd<Void> {
 
-    public String getName();
+    String getName();
 
-    public RemoveVolumeCmd withName(@Nonnull String name);
+    RemoveVolumeCmd withName(@Nonnull String name);
 
     /**
      * @throws NotFoundException
@@ -23,8 +23,8 @@ public interface RemoveVolumeCmd extends SyncDockerCmd<Void> {
      *             Volume is in use and cannot be removed
      */
     @Override
-    public Void exec() throws NotFoundException;
+    Void exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdSyncExec<RemoveVolumeCmd, Void> {
+    interface Exec extends DockerCmdSyncExec<RemoveVolumeCmd, Void> {
     }
 }

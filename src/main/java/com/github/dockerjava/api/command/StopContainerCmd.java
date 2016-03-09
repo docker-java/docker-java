@@ -18,14 +18,14 @@ import com.github.dockerjava.api.exception.NotModifiedException;
 public interface StopContainerCmd extends SyncDockerCmd<Void> {
 
     @CheckForNull
-    public String getContainerId();
+    String getContainerId();
 
     @CheckForNull
-    public Integer getTimeout();
+    Integer getTimeout();
 
-    public StopContainerCmd withContainerId(@Nonnull String containerId);
+    StopContainerCmd withContainerId(@Nonnull String containerId);
 
-    public StopContainerCmd withTimeout(Integer timeout);
+    StopContainerCmd withTimeout(Integer timeout);
 
     /**
      * @throws NotFoundException
@@ -34,9 +34,9 @@ public interface StopContainerCmd extends SyncDockerCmd<Void> {
      *             Container already stopped
      */
     @Override
-    public Void exec() throws NotFoundException, NotModifiedException;
+    Void exec() throws NotFoundException, NotModifiedException;
 
-    public static interface Exec extends DockerCmdSyncExec<StopContainerCmd, Void> {
+    interface Exec extends DockerCmdSyncExec<StopContainerCmd, Void> {
     }
 
 }

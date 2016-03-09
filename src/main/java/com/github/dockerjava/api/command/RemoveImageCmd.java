@@ -13,35 +13,35 @@ import com.github.dockerjava.api.exception.NotFoundException;
 public interface RemoveImageCmd extends SyncDockerCmd<Void> {
 
     @CheckForNull
-    public String getImageId();
+    String getImageId();
 
     @CheckForNull
-    public Boolean hasForceEnabled();
+    Boolean hasForceEnabled();
 
     @CheckForNull
-    public Boolean hasNoPruneEnabled();
+    Boolean hasNoPruneEnabled();
 
-    public RemoveImageCmd withImageId(@Nonnull String imageId);
+    RemoveImageCmd withImageId(@Nonnull String imageId);
 
     /**
      * force parameter to force delete of an image, even if it's tagged in multiple repositories
      */
-    public RemoveImageCmd withForce(Boolean force);
+    RemoveImageCmd withForce(Boolean force);
 
     /**
      * noprune parameter to prevent the deletion of parent images
      *
      */
-    public RemoveImageCmd withNoPrune(Boolean noPrune);
+    RemoveImageCmd withNoPrune(Boolean noPrune);
 
     /**
      * @throws NotFoundException
      *             No such image
      */
     @Override
-    public Void exec() throws NotFoundException;
+    Void exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdSyncExec<RemoveImageCmd, Void> {
+    interface Exec extends DockerCmdSyncExec<RemoveImageCmd, Void> {
     }
 
 }

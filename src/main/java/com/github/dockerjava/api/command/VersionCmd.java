@@ -7,7 +7,7 @@ import com.github.dockerjava.api.model.Version;
  */
 public interface VersionCmd extends SyncDockerCmd<Version> {
 
-    public static interface Exec extends DockerCmdSyncExec<VersionCmd, Version> {
+    interface Exec extends DockerCmdSyncExec<VersionCmd, Version> {
     }
 
 }
