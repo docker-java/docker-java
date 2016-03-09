@@ -11,23 +11,23 @@ import com.github.dockerjava.api.exception.NotFoundException;
 public interface TopContainerCmd extends SyncDockerCmd<TopContainerResponse> {
 
     @CheckForNull
-    public String getContainerId();
+    String getContainerId();
 
     @CheckForNull
-    public String getPsArgs();
+    String getPsArgs();
 
-    public TopContainerCmd withContainerId(@Nonnull String containerId);
+    TopContainerCmd withContainerId(@Nonnull String containerId);
 
-    public TopContainerCmd withPsArgs(String psArgs);
+    TopContainerCmd withPsArgs(String psArgs);
 
     /**
      * @throws NotFoundException
      *             No such container
      */
     @Override
-    public TopContainerResponse exec() throws NotFoundException;
+    TopContainerResponse exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdSyncExec<TopContainerCmd, TopContainerResponse> {
+    interface Exec extends DockerCmdSyncExec<TopContainerCmd, TopContainerResponse> {
     }
 
 }

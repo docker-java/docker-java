@@ -10,14 +10,14 @@ import javax.annotation.Nonnull;
  */
 public interface InspectVolumeCmd extends SyncDockerCmd<InspectVolumeResponse> {
 
-    public String getName();
+    String getName();
 
     /**
      * @param name
      *            - The volume’s name.
      */
-    public InspectVolumeCmd withName(@Nonnull String name);
+    InspectVolumeCmd withName(@Nonnull String name);
 
-    public static interface Exec extends DockerCmdSyncExec<InspectVolumeCmd, InspectVolumeResponse> {
+    interface Exec extends DockerCmdSyncExec<InspectVolumeCmd, InspectVolumeResponse> {
     }
 }

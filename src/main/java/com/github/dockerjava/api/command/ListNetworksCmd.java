@@ -16,12 +16,12 @@ import java.util.Map;
 public interface ListNetworksCmd extends SyncDockerCmd<List<Network>> {
 
     @CheckForNull
-    public Map<String, List<String>> getFilters();
+    Map<String, List<String>> getFilters();
 
     ListNetworksCmd withNameFilter(String... networkName);
 
     ListNetworksCmd withIdFilter(String... networkId);
 
-    public static interface Exec extends DockerCmdSyncExec<ListNetworksCmd, List<Network>> {
+    interface Exec extends DockerCmdSyncExec<ListNetworksCmd, List<Network>> {
     }
 }

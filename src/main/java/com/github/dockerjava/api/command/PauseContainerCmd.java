@@ -15,18 +15,18 @@ import com.github.dockerjava.api.exception.NotFoundException;
 public interface PauseContainerCmd extends SyncDockerCmd<Void> {
 
     @CheckForNull
-    public String getContainerId();
+    String getContainerId();
 
-    public PauseContainerCmd withContainerId(@Nonnull String containerId);
+    PauseContainerCmd withContainerId(@Nonnull String containerId);
 
     /**
      * @throws NotFoundException
      *             No such container
      */
     @Override
-    public Void exec() throws NotFoundException;
+    Void exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdSyncExec<PauseContainerCmd, Void> {
+    interface Exec extends DockerCmdSyncExec<PauseContainerCmd, Void> {
     }
 
 }

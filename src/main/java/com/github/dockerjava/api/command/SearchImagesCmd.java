@@ -17,11 +17,11 @@ import com.github.dockerjava.api.model.SearchItem;
 public interface SearchImagesCmd extends SyncDockerCmd<List<SearchItem>> {
 
     @CheckForNull
-    public String getTerm();
+    String getTerm();
 
-    public SearchImagesCmd withTerm(@Nonnull String term);
+    SearchImagesCmd withTerm(@Nonnull String term);
 
-    public static interface Exec extends DockerCmdSyncExec<SearchImagesCmd, List<SearchItem>> {
+    interface Exec extends DockerCmdSyncExec<SearchImagesCmd, List<SearchItem>> {
     }
 
 }

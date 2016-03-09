@@ -64,48 +64,48 @@ import com.github.dockerjava.core.RemoteApiVersion;
 // https://godoc.org/github.com/fsouza/go-dockerclient
 public interface DockerClient extends Closeable {
 
-    public AuthConfig authConfig() throws DockerException;
+    AuthConfig authConfig() throws DockerException;
 
     /**
      * Authenticate with the server, useful for checking authentication.
      */
-    public AuthCmd authCmd();
+    AuthCmd authCmd();
 
-    public InfoCmd infoCmd();
+    InfoCmd infoCmd();
 
-    public PingCmd pingCmd();
+    PingCmd pingCmd();
 
-    public VersionCmd versionCmd();
+    VersionCmd versionCmd();
 
     /**
      * * IMAGE API *
      */
 
-    public PullImageCmd pullImageCmd(@Nonnull String repository);
+    PullImageCmd pullImageCmd(@Nonnull String repository);
 
-    public PushImageCmd pushImageCmd(@Nonnull String name);
+    PushImageCmd pushImageCmd(@Nonnull String name);
 
-    public PushImageCmd pushImageCmd(@Nonnull Identifier identifier);
+    PushImageCmd pushImageCmd(@Nonnull Identifier identifier);
 
-    public CreateImageCmd createImageCmd(@Nonnull String repository, @Nonnull InputStream imageStream);
+    CreateImageCmd createImageCmd(@Nonnull String repository, @Nonnull InputStream imageStream);
 
-    public SearchImagesCmd searchImagesCmd(@Nonnull String term);
+    SearchImagesCmd searchImagesCmd(@Nonnull String term);
 
-    public RemoveImageCmd removeImageCmd(@Nonnull String imageId);
+    RemoveImageCmd removeImageCmd(@Nonnull String imageId);
 
-    public ListImagesCmd listImagesCmd();
+    ListImagesCmd listImagesCmd();
 
-    public InspectImageCmd inspectImageCmd(@Nonnull String imageId);
+    InspectImageCmd inspectImageCmd(@Nonnull String imageId);
 
-    public SaveImageCmd saveImageCmd(@Nonnull String name);
+    SaveImageCmd saveImageCmd(@Nonnull String name);
 
     /**
      * * CONTAINER API *
      */
 
-    public ListContainersCmd listContainersCmd();
+    ListContainersCmd listContainersCmd();
 
-    public CreateContainerCmd createContainerCmd(@Nonnull String image);
+    CreateContainerCmd createContainerCmd(@Nonnull String image);
 
     /**
      * Creates a new {@link StartContainerCmd} for the container with the given ID. The command can then be further customized by using
@@ -116,23 +116,23 @@ public interface DockerClient extends Closeable {
      * <p>
      * This command corresponds to the <code>/containers/{id}/start</code> endpoint of the Docker Remote API.
      */
-    public StartContainerCmd startContainerCmd(@Nonnull String containerId);
+    StartContainerCmd startContainerCmd(@Nonnull String containerId);
 
-    public ExecCreateCmd execCreateCmd(@Nonnull String containerId);
+    ExecCreateCmd execCreateCmd(@Nonnull String containerId);
 
-    public InspectContainerCmd inspectContainerCmd(@Nonnull String containerId);
+    InspectContainerCmd inspectContainerCmd(@Nonnull String containerId);
 
-    public RemoveContainerCmd removeContainerCmd(@Nonnull String containerId);
+    RemoveContainerCmd removeContainerCmd(@Nonnull String containerId);
 
-    public WaitContainerCmd waitContainerCmd(@Nonnull String containerId);
+    WaitContainerCmd waitContainerCmd(@Nonnull String containerId);
 
-    public AttachContainerCmd attachContainerCmd(@Nonnull String containerId);
+    AttachContainerCmd attachContainerCmd(@Nonnull String containerId);
 
-    public ExecStartCmd execStartCmd(@Nonnull String containerId);
+    ExecStartCmd execStartCmd(@Nonnull String containerId);
 
-    public InspectExecCmd inspectExecCmd(@Nonnull String execId);
+    InspectExecCmd inspectExecCmd(@Nonnull String execId);
 
-    public LogContainerCmd logContainerCmd(@Nonnull String containerId);
+    LogContainerCmd logContainerCmd(@Nonnull String containerId);
 
     /**
      * Copy resource from container to local machine.
@@ -144,7 +144,7 @@ public interface DockerClient extends Closeable {
      * @return created command
      * @since {@link RemoteApiVersion#VERSION_1_20}
      */
-    public CopyArchiveFromContainerCmd copyArchiveFromContainerCmd(@Nonnull String containerId, @Nonnull String resource);
+    CopyArchiveFromContainerCmd copyArchiveFromContainerCmd(@Nonnull String containerId, @Nonnull String resource);
 
     /**
      * Copy resource from container to local machine.
@@ -158,7 +158,7 @@ public interface DockerClient extends Closeable {
      * @deprecated since docker API version 1.20, replaced by {@link #copyArchiveFromContainerCmd(String, String)}
      */
     @Deprecated
-    public CopyFileFromContainerCmd copyFileFromContainerCmd(@Nonnull String containerId, @Nonnull String resource);
+    CopyFileFromContainerCmd copyFileFromContainerCmd(@Nonnull String containerId, @Nonnull String resource);
 
     /**
      * Copy archive from local machine to remote container
@@ -168,13 +168,13 @@ public interface DockerClient extends Closeable {
      * @return created command
      * @since {@link RemoteApiVersion#VERSION_1_20}
      */
-    public CopyArchiveToContainerCmd copyArchiveToContainerCmd(@Nonnull String containerId);
+    CopyArchiveToContainerCmd copyArchiveToContainerCmd(@Nonnull String containerId);
 
-    public ContainerDiffCmd containerDiffCmd(@Nonnull String containerId);
+    ContainerDiffCmd containerDiffCmd(@Nonnull String containerId);
 
-    public StopContainerCmd stopContainerCmd(@Nonnull String containerId);
+    StopContainerCmd stopContainerCmd(@Nonnull String containerId);
 
-    public KillContainerCmd killContainerCmd(@Nonnull String containerId);
+    KillContainerCmd killContainerCmd(@Nonnull String containerId);
 
     /**
      * Update container settings
@@ -183,51 +183,51 @@ public interface DockerClient extends Closeable {
      * @return command
      * @since {@link RemoteApiVersion#VERSION_1_22}
      */
-    public UpdateContainerCmd updateContainerCmd(@Nonnull String containerId);
+    UpdateContainerCmd updateContainerCmd(@Nonnull String containerId);
 
-    public RestartContainerCmd restartContainerCmd(@Nonnull String containerId);
+    RestartContainerCmd restartContainerCmd(@Nonnull String containerId);
 
-    public CommitCmd commitCmd(@Nonnull String containerId);
+    CommitCmd commitCmd(@Nonnull String containerId);
 
-    public BuildImageCmd buildImageCmd();
+    BuildImageCmd buildImageCmd();
 
-    public BuildImageCmd buildImageCmd(File dockerFileOrFolder);
+    BuildImageCmd buildImageCmd(File dockerFileOrFolder);
 
-    public BuildImageCmd buildImageCmd(InputStream tarInputStream);
+    BuildImageCmd buildImageCmd(InputStream tarInputStream);
 
-    public TopContainerCmd topContainerCmd(String containerId);
+    TopContainerCmd topContainerCmd(String containerId);
 
-    public TagImageCmd tagImageCmd(String imageId, String repository, String tag);
+    TagImageCmd tagImageCmd(String imageId, String repository, String tag);
 
-    public PauseContainerCmd pauseContainerCmd(String containerId);
+    PauseContainerCmd pauseContainerCmd(String containerId);
 
-    public UnpauseContainerCmd unpauseContainerCmd(String containerId);
+    UnpauseContainerCmd unpauseContainerCmd(String containerId);
 
-    public EventsCmd eventsCmd();
+    EventsCmd eventsCmd();
 
-    public StatsCmd statsCmd(String containerId);
+    StatsCmd statsCmd(String containerId);
 
-    public CreateVolumeCmd createVolumeCmd();
+    CreateVolumeCmd createVolumeCmd();
 
-    public InspectVolumeCmd inspectVolumeCmd(String name);
+    InspectVolumeCmd inspectVolumeCmd(String name);
 
-    public RemoveVolumeCmd removeVolumeCmd(String name);
+    RemoveVolumeCmd removeVolumeCmd(String name);
 
-    public ListVolumesCmd listVolumesCmd();
+    ListVolumesCmd listVolumesCmd();
 
-    public ListNetworksCmd listNetworksCmd();
+    ListNetworksCmd listNetworksCmd();
 
-    public InspectNetworkCmd inspectNetworkCmd();
+    InspectNetworkCmd inspectNetworkCmd();
 
-    public CreateNetworkCmd createNetworkCmd();
+    CreateNetworkCmd createNetworkCmd();
 
-    public RemoveNetworkCmd removeNetworkCmd(@Nonnull String networkId);
+    RemoveNetworkCmd removeNetworkCmd(@Nonnull String networkId);
 
-    public ConnectToNetworkCmd connectToNetworkCmd();
+    ConnectToNetworkCmd connectToNetworkCmd();
 
-    public DisconnectFromNetworkCmd disconnectFromNetworkCmd();
+    DisconnectFromNetworkCmd disconnectFromNetworkCmd();
 
     @Override
-    public void close() throws IOException;
+    void close() throws IOException;
 
 }

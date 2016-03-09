@@ -245,7 +245,7 @@ public class GoLangFileMatch {
 
         public String pattern;
 
-        public ScanResult(boolean star, String chunk, String pattern) {
+        ScanResult(boolean star, String chunk, String pattern) {
             this.star = star;
             this.chunk = chunk;
             this.pattern = pattern;
@@ -257,7 +257,7 @@ public class GoLangFileMatch {
 
         public int chunkOffset;
 
-        public GetEscResult(char lo, int chunkOffset) {
+        GetEscResult(char lo, int chunkOffset) {
             this.lo = lo;
             this.chunkOffset = chunkOffset;
         }

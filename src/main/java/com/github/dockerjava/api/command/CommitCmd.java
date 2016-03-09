@@ -15,112 +15,112 @@ import com.github.dockerjava.api.model.Volumes;
 public interface CommitCmd extends SyncDockerCmd<String> {
 
     @CheckForNull
-    public String getAuthor();
+    String getAuthor();
 
     @CheckForNull
-    public String getContainerId();
+    String getContainerId();
 
     @CheckForNull
-    public String[] getEnv();
+    String[] getEnv();
 
     @CheckForNull
-    public ExposedPorts getExposedPorts();
+    ExposedPorts getExposedPorts();
 
     @CheckForNull
-    public String getHostname();
+    String getHostname();
 
     @CheckForNull
-    public Integer getMemory();
+    Integer getMemory();
 
     @CheckForNull
-    public Integer getMemorySwap();
+    Integer getMemorySwap();
 
     @CheckForNull
-    public String getMessage();
+    String getMessage();
 
     @CheckForNull
-    public String[] getPortSpecs();
+    String[] getPortSpecs();
 
     @CheckForNull
-    public String getRepository();
+    String getRepository();
 
     @CheckForNull
-    public String getTag();
+    String getTag();
 
     @CheckForNull
-    public String getUser();
+    String getUser();
 
     @CheckForNull
-    public Volumes getVolumes();
+    Volumes getVolumes();
 
     @CheckForNull
-    public String getWorkingDir();
+    String getWorkingDir();
 
     @CheckForNull
-    public Boolean hasPauseEnabled();
+    Boolean hasPauseEnabled();
 
     @CheckForNull
-    public Boolean isOpenStdin();
+    Boolean isOpenStdin();
 
     @CheckForNull
-    public Boolean isStdinOnce();
+    Boolean isStdinOnce();
 
     @CheckForNull
-    public Boolean isTty();
+    Boolean isTty();
 
-    public CommitCmd withAttachStderr(Boolean attachStderr);
+    CommitCmd withAttachStderr(Boolean attachStderr);
 
-    public CommitCmd withAttachStdin(Boolean attachStdin);
+    CommitCmd withAttachStdin(Boolean attachStdin);
 
-    public CommitCmd withAttachStdout(Boolean attachStdout);
+    CommitCmd withAttachStdout(Boolean attachStdout);
 
-    public CommitCmd withAuthor(String author);
+    CommitCmd withAuthor(String author);
 
-    public CommitCmd withCmd(String... cmd);
+    CommitCmd withCmd(String... cmd);
 
-    public CommitCmd withContainerId(@Nonnull String containerId);
+    CommitCmd withContainerId(@Nonnull String containerId);
 
-    public CommitCmd withDisableNetwork(Boolean disableNetwork);
+    CommitCmd withDisableNetwork(Boolean disableNetwork);
 
-    public CommitCmd withEnv(String... env);
+    CommitCmd withEnv(String... env);
 
-    public CommitCmd withExposedPorts(ExposedPorts exposedPorts);
+    CommitCmd withExposedPorts(ExposedPorts exposedPorts);
 
-    public CommitCmd withHostname(String hostname);
+    CommitCmd withHostname(String hostname);
 
-    public CommitCmd withMemory(Integer memory);
+    CommitCmd withMemory(Integer memory);
 
-    public CommitCmd withMemorySwap(Integer memorySwap);
+    CommitCmd withMemorySwap(Integer memorySwap);
 
-    public CommitCmd withMessage(String message);
+    CommitCmd withMessage(String message);
 
-    public CommitCmd withOpenStdin(Boolean openStdin);
+    CommitCmd withOpenStdin(Boolean openStdin);
 
-    public CommitCmd withPause(Boolean pause);
+    CommitCmd withPause(Boolean pause);
 
-    public CommitCmd withPortSpecs(String... portSpecs);
+    CommitCmd withPortSpecs(String... portSpecs);
 
-    public CommitCmd withRepository(String repository);
+    CommitCmd withRepository(String repository);
 
-    public CommitCmd withStdinOnce(Boolean stdinOnce);
+    CommitCmd withStdinOnce(Boolean stdinOnce);
 
-    public CommitCmd withTag(String tag);
+    CommitCmd withTag(String tag);
 
-    public CommitCmd withTty(Boolean tty);
+    CommitCmd withTty(Boolean tty);
 
-    public CommitCmd withUser(String user);
+    CommitCmd withUser(String user);
 
-    public CommitCmd withVolumes(Volumes volumes);
+    CommitCmd withVolumes(Volumes volumes);
 
-    public CommitCmd withWorkingDir(String workingDir);
+    CommitCmd withWorkingDir(String workingDir);
 
     /**
      * @throws NotFoundException
      *             No such container
      */
     @Override
-    public String exec() throws NotFoundException;
+    String exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdSyncExec<CommitCmd, String> {
+    interface Exec extends DockerCmdSyncExec<CommitCmd, String> {
     }
 }

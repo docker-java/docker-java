@@ -24,8 +24,8 @@ public interface StartContainerCmd extends SyncDockerCmd<Void> {
      *             Container already started
      */
     @Override
-    public Void exec() throws NotFoundException, NotModifiedException;
+    Void exec() throws NotFoundException, NotModifiedException;
 
-    public static interface Exec extends DockerCmdSyncExec<StartContainerCmd, Void> {
+    interface Exec extends DockerCmdSyncExec<StartContainerCmd, Void> {
     }
 }

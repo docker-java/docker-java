@@ -15,17 +15,17 @@ import javax.annotation.Nonnull;
 public interface InspectNetworkCmd extends SyncDockerCmd<Network> {
 
     @CheckForNull
-    public String getNetworkId();
+    String getNetworkId();
 
-    public InspectNetworkCmd withNetworkId(@Nonnull String networkId);
+    InspectNetworkCmd withNetworkId(@Nonnull String networkId);
 
     /**
      * @throws NotFoundException
      *             No such network
      */
     @Override
-    public Network exec() throws NotFoundException;
+    Network exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdSyncExec<InspectNetworkCmd, Network> {
+    interface Exec extends DockerCmdSyncExec<InspectNetworkCmd, Network> {
     }
 }

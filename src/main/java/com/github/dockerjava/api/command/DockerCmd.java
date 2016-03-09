@@ -5,6 +5,6 @@ import java.io.Closeable;
 public interface DockerCmd<RES_T> extends Closeable {
 
     @Override
-    public void close();
+    void close();
 
 }

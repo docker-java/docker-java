@@ -15,9 +15,9 @@ import com.github.dockerjava.api.model.AuthResponse;
 public interface AuthCmd extends SyncDockerCmd<AuthResponse> {
 
     @CheckForNull
-    public AuthConfig getAuthConfig();
+    AuthConfig getAuthConfig();
 
-    public AuthCmd withAuthConfig(@Nonnull AuthConfig authConfig);
+    AuthCmd withAuthConfig(@Nonnull AuthConfig authConfig);
 
     /**
      * @return The status. Based on it's value you may mean you need to authorise your account, e.g.: "Account created. Please see the
@@ -26,9 +26,9 @@ public interface AuthCmd extends SyncDockerCmd<AuthResponse> {
      *             If you're not authorised (e.g. bad password).
      */
     @Override
-    public AuthResponse exec() throws UnauthorizedException;
+    AuthResponse exec() throws UnauthorizedException;
 
-    public static interface Exec extends DockerCmdSyncExec<AuthCmd, AuthResponse> {
+    interface Exec extends DockerCmdSyncExec<AuthCmd, AuthResponse> {
     }
 
 }

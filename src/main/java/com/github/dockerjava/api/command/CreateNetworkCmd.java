@@ -17,26 +17,26 @@ import com.github.dockerjava.core.RemoteApiVersion;
 public interface CreateNetworkCmd extends SyncDockerCmd<CreateNetworkResponse> {
 
     @CheckForNull
-    public String getName();
+    String getName();
 
     @CheckForNull
-    public String getDriver();
+    String getDriver();
 
     @CheckForNull
-    public Network.Ipam getIpam();
+    Network.Ipam getIpam();
 
     /** The new network's name. Required. */
-    public CreateNetworkCmd withName(@Nonnull String name);
+    CreateNetworkCmd withName(@Nonnull String name);
 
     /** Optional custom IP scheme for the network. */
-    public CreateNetworkCmd withIpamConfig(Ipam.Config config);
+    CreateNetworkCmd withIpamConfig(Ipam.Config config);
 
     /** Name of the network driver to use. Defaults to <code>bridge</code>. */
-    public CreateNetworkCmd withDriver(String driver);
+    CreateNetworkCmd withDriver(String driver);
 
     /** Driver specific options */
-    public CreateNetworkCmd withOptions(Map<String, String> options);
+    CreateNetworkCmd withOptions(Map<String, String> options);
 
-    public static interface Exec extends DockerCmdSyncExec<CreateNetworkCmd, CreateNetworkResponse> {
+    interface Exec extends DockerCmdSyncExec<CreateNetworkCmd, CreateNetworkResponse> {
     }
 }

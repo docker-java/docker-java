@@ -13,12 +13,12 @@ import com.github.dockerjava.api.model.ChangeLog;
 public interface ContainerDiffCmd extends SyncDockerCmd<List<ChangeLog>> {
 
     @CheckForNull
-    public String getContainerId();
+    String getContainerId();
 
-    public ContainerDiffCmd withContainerId(@Nonnull String containerId);
+    ContainerDiffCmd withContainerId(@Nonnull String containerId);
 
     @Override
-    public String toString();
+    String toString();
 
     /**
      * @throws NotFoundException
@@ -29,9 +29,9 @@ public interface ContainerDiffCmd extends SyncDockerCmd<List<ChangeLog>> {
      *             unexpected http status code
      */
     @Override
-    public List<ChangeLog> exec() throws NotFoundException;
+    List<ChangeLog> exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdSyncExec<ContainerDiffCmd, List<ChangeLog>> {
+    interface Exec extends DockerCmdSyncExec<ContainerDiffCmd, List<ChangeLog>> {
     }
 
 }

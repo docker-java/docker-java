@@ -4,6 +4,6 @@ import com.github.dockerjava.api.async.ResultCallback;
 
 public interface DockerCmdAsyncExec<CMD_T extends DockerCmd<Void>, A_RES_T> {
 
-    public Void exec(CMD_T command, ResultCallback<A_RES_T> resultCallback);
+    Void exec(CMD_T command, ResultCallback<A_RES_T> resultCallback);
 
 }

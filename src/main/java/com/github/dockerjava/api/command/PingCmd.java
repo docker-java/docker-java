@@ -6,7 +6,7 @@ package com.github.dockerjava.api.command;
  */
 public interface PingCmd extends SyncDockerCmd<Void> {
 
-    public static interface Exec extends DockerCmdSyncExec<PingCmd, Void> {
+    interface Exec extends DockerCmdSyncExec<PingCmd, Void> {
     }
 
 }

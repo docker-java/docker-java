@@ -16,28 +16,28 @@ import com.github.dockerjava.api.exception.NotFoundException;
 public interface RemoveContainerCmd extends SyncDockerCmd<Void> {
 
     @CheckForNull
-    public String getContainerId();
+    String getContainerId();
 
     @CheckForNull
-    public Boolean hasRemoveVolumesEnabled();
+    Boolean hasRemoveVolumesEnabled();
 
     @CheckForNull
-    public Boolean hasForceEnabled();
+    Boolean hasForceEnabled();
 
-    public RemoveContainerCmd withContainerId(@Nonnull String containerId);
+    RemoveContainerCmd withContainerId(@Nonnull String containerId);
 
-    public RemoveContainerCmd withRemoveVolumes(Boolean removeVolumes);
+    RemoveContainerCmd withRemoveVolumes(Boolean removeVolumes);
 
-    public RemoveContainerCmd withForce(Boolean force);
+    RemoveContainerCmd withForce(Boolean force);
 
     /**
      * @throws NotFoundException
      *             No such container
      */
     @Override
-    public Void exec() throws NotFoundException;
+    Void exec() throws NotFoundException;
 
-    public static interface Exec extends DockerCmdSyncExec<RemoveContainerCmd, Void> {
+    interface Exec extends DockerCmdSyncExec<RemoveContainerCmd, Void> {
     }
 
 }

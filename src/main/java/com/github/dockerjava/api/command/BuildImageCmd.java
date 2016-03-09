@@ -25,10 +25,10 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     // lib specific
 
     @CheckForNull
-    public InputStream getTarInputStream();
+    InputStream getTarInputStream();
 
     @CheckForNull
-    public AuthConfigurations getBuildAuthConfigs();
+    AuthConfigurations getBuildAuthConfigs();
 
     // getters
 
@@ -36,105 +36,105 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
      * "t" in API
      */
     @CheckForNull
-    public String getTag();
+    String getTag();
 
     /**
      * "remote" in API
      */
     @CheckForNull
-    public URI getRemote();
+    URI getRemote();
 
     /**
      * "nocache" in API
      */
     @CheckForNull
-    public Boolean hasNoCacheEnabled();
+    Boolean hasNoCacheEnabled();
 
     /**
      * "rm" in API
      */
     @CheckForNull
-    public Boolean hasRemoveEnabled();
+    Boolean hasRemoveEnabled();
 
     /**
      * "forcerm" in API
      */
     @CheckForNull
-    public Boolean isForcerm();
+    Boolean isForcerm();
 
     /**
      * "q" in API
      */
     @CheckForNull
-    public Boolean isQuiet();
+    Boolean isQuiet();
 
     /**
      * "pull" in API
      */
     @CheckForNull
-    public Boolean hasPullEnabled();
+    Boolean hasPullEnabled();
 
     @CheckForNull
-    public String getPathToDockerfile();
+    String getPathToDockerfile();
 
     @CheckForNull
-    public Long getMemory();
+    Long getMemory();
 
     @CheckForNull
-    public Long getMemswap();
+    Long getMemswap();
 
     @CheckForNull
-    public String getCpushares();
+    String getCpushares();
 
     @CheckForNull
-    public String getCpusetcpus();
+    String getCpusetcpus();
 
     /**
      * @since {@link RemoteApiVersion#VERSION_1_21}
      */
     @CheckForNull
-    public Map<String, String> getBuildArgs();
+    Map<String, String> getBuildArgs();
 
     // setters
 
-    public BuildImageCmd withTag(String tag);
+    BuildImageCmd withTag(String tag);
 
-    public BuildImageCmd withRemote(URI remote);
+    BuildImageCmd withRemote(URI remote);
 
-    public BuildImageCmd withBaseDirectory(File baseDirectory);
+    BuildImageCmd withBaseDirectory(File baseDirectory);
 
-    public BuildImageCmd withDockerfile(File dockerfile);
+    BuildImageCmd withDockerfile(File dockerfile);
 
-    public BuildImageCmd withNoCache(Boolean noCache);
+    BuildImageCmd withNoCache(Boolean noCache);
 
-    public BuildImageCmd withRemove(Boolean rm);
+    BuildImageCmd withRemove(Boolean rm);
 
-    public BuildImageCmd withForcerm(Boolean forcerm);
+    BuildImageCmd withForcerm(Boolean forcerm);
 
-    public BuildImageCmd withQuiet(Boolean quiet);
+    BuildImageCmd withQuiet(Boolean quiet);
 
-    public BuildImageCmd withPull(Boolean pull);
+    BuildImageCmd withPull(Boolean pull);
 
-    public BuildImageCmd withMemory(Long memory);
+    BuildImageCmd withMemory(Long memory);
 
-    public BuildImageCmd withMemswap(Long memswap);
+    BuildImageCmd withMemswap(Long memswap);
 
-    public BuildImageCmd withCpushares(String cpushares);
+    BuildImageCmd withCpushares(String cpushares);
 
-    public BuildImageCmd withCpusetcpus(String cpusetcpus);
+    BuildImageCmd withCpusetcpus(String cpusetcpus);
 
     /**
      * @since {@link RemoteApiVersion#VERSION_1_21}
      */
-    public BuildImageCmd withBuildArg(String key, String value);
+    BuildImageCmd withBuildArg(String key, String value);
 
     // setters lib specific
 
-    public BuildImageCmd withBuildAuthConfigs(AuthConfigurations authConfig);
+    BuildImageCmd withBuildAuthConfigs(AuthConfigurations authConfig);
 
-    public BuildImageCmd withTarInputStream(@Nonnull InputStream tarInputStream);
+    BuildImageCmd withTarInputStream(@Nonnull InputStream tarInputStream);
 
-    public static interface Exec extends DockerCmdAsyncExec<BuildImageCmd, BuildResponseItem> {
+    interface Exec extends DockerCmdAsyncExec<BuildImageCmd, BuildResponseItem> {
     }
 
 }

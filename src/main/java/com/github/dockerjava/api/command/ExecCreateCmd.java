@@ -6,33 +6,33 @@ import javax.annotation.Nonnull;
 public interface ExecCreateCmd extends SyncDockerCmd<ExecCreateCmdResponse> {
 
     @CheckForNull
-    public String getContainerId();
+    String getContainerId();
 
     @CheckForNull
-    public Boolean hasAttachStderrEnabled();
+    Boolean hasAttachStderrEnabled();
 
     @CheckForNull
-    public Boolean hasAttachStdinEnabled();
+    Boolean hasAttachStdinEnabled();
 
     @CheckForNull
-    public Boolean hasAttachStdoutEnabled();
+    Boolean hasAttachStdoutEnabled();
 
     @CheckForNull
-    public Boolean hasTtyEnabled();
+    Boolean hasTtyEnabled();
 
-    public ExecCreateCmd withAttachStderr(Boolean attachStderr);
+    ExecCreateCmd withAttachStderr(Boolean attachStderr);
 
-    public ExecCreateCmd withAttachStdin(Boolean attachStdin);
+    ExecCreateCmd withAttachStdin(Boolean attachStdin);
 
-    public ExecCreateCmd withAttachStdout(Boolean attachStdout);
+    ExecCreateCmd withAttachStdout(Boolean attachStdout);
 
-    public ExecCreateCmd withCmd(String... cmd);
+    ExecCreateCmd withCmd(String... cmd);
 
-    public ExecCreateCmd withContainerId(@Nonnull String containerId);
+    ExecCreateCmd withContainerId(@Nonnull String containerId);
 
-    public ExecCreateCmd withTty(Boolean tty);
+    ExecCreateCmd withTty(Boolean tty);
 
-    public static interface Exec extends DockerCmdSyncExec<ExecCreateCmd, ExecCreateCmdResponse> {
+    interface Exec extends DockerCmdSyncExec<ExecCreateCmd, ExecCreateCmdResponse> {
     }
 
 }

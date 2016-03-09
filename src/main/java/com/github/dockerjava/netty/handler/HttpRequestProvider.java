@@ -4,5 +4,5 @@ import io.netty.handler.codec.http.HttpRequest;
 
 public interface HttpRequestProvider {
 
-    public HttpRequest getHttpRequest(String uri);
+    HttpRequest getHttpRequest(String uri);
 }

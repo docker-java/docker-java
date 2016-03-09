@@ -13,38 +13,38 @@ import com.github.dockerjava.api.model.Image;
 public interface ListImagesCmd extends SyncDockerCmd<List<Image>> {
 
     @CheckForNull
-    public Map<String, List<String>> getFilters();
+    Map<String, List<String>> getFilters();
 
-    public String getImageNameFilter();
+    String getImageNameFilter();
 
     @CheckForNull
-    public Boolean hasShowAllEnabled();
+    Boolean hasShowAllEnabled();
 
     /**
      * Show all images (by default filter out the intermediate images used to build)
      */
-    public ListImagesCmd withShowAll(Boolean showAll);
+    ListImagesCmd withShowAll(Boolean showAll);
 
-    public ListImagesCmd withImageNameFilter(String imageName);
+    ListImagesCmd withImageNameFilter(String imageName);
 
     /**
      * Filter dangling images
      */
-    public ListImagesCmd withDanglingFilter(Boolean dangling);
+    ListImagesCmd withDanglingFilter(Boolean dangling);
 
     /**
      * @param labels
      *            - string array in the form ["key"] or ["key=value"] or a mix of both
      */
-    public ListImagesCmd withLabelFilter(String... label);
+    ListImagesCmd withLabelFilter(String... label);
 
     /**
      * @param labels
      *            - {@link Map} of labels that contains label keys and values
      */
-    public ListImagesCmd withLabelFilter(Map<String, String> labels);
+    ListImagesCmd withLabelFilter(Map<String, String> labels);
 
-    public static interface Exec extends DockerCmdSyncExec<ListImagesCmd, List<Image>> {
+    interface Exec extends DockerCmdSyncExec<ListImagesCmd, List<Image>> {
     }
 
 }
