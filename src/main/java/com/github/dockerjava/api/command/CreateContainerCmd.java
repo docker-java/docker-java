@@ -180,6 +180,9 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     String getPidMode();
 
     @CheckForNull
+    String getCgroupParent();
+
+    @CheckForNull
     Boolean isTty();
 
     CreateContainerCmd withAttachStderr(Boolean attachStderr);
@@ -401,6 +404,8 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     CreateContainerCmd withVolumesFrom(List<VolumesFrom> volumesFrom);
 
     CreateContainerCmd withWorkingDir(String workingDir);
+
+    CreateContainerCmd withCgroupParent(String cgroupParent);
 
     /**
      * Set the PID (Process) Namespace mode for the container, 'host': use the host's PID namespace inside the container
