@@ -408,6 +408,11 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
+    public String getCgroupParent() {
+        return hostConfig.getCgroupParent();
+    }
+
+    @Override
     public String toString() {
         return new ToStringBuilder(this).append("create container ").append(name != null ? "name=" + name + " " : "")
                 .append(this).toString();
@@ -868,6 +873,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public CreateContainerCmd withWorkingDir(String workingDir) {
         checkNotNull(workingDir, "workingDir was not specified");
         this.workingDir = workingDir;
+        return this;
+    }
+
+    @Override
+    public CreateContainerCmd withCgroupParent(final String cgroupParent) {
+        checkNotNull(cgroupParent, "cgroupParent was not specified");
+        this.hostConfig.withCgroupParent(cgroupParent);
         return this;
     }
 
