@@ -50,20 +50,26 @@ public class DockerClientTest extends AbstractDockerClientTest {
     @Test
     public void testRunShlex() throws DockerException {
 
-        String[] commands = new String[] {"true",
+        String[] commands = new String[] {
+                "true",
                 "echo \"The Young Descendant of Tepes & Septette for the Dead Princess\"",
                 "echo -n 'The Young Descendant of Tepes & Septette for the Dead Princess'",
                 "/bin/sh -c echo Hello World", "/bin/sh -c echo 'Hello World'", "echo 'Night of Nights'",
-                "true && echo 'Night of Nights'"};
+                "true && echo 'Night of Nights'"
+        };
 
         for (String command : commands) {
             LOG.info("Running command: [{}]", command);
 
-            CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd(commands).exec();
+            CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+                    .withCmd(command)
+                    .exec();
             dockerClient.startContainerCmd(container.getId());
 
-            int exitcode = dockerClient.waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback())
+            int exitcode = dockerClient.waitContainerCmd(container.getId())
+                    .exec(new WaitContainerResultCallback())
                     .awaitStatusCode();
+
             assertThat(exitcode, equalTo(0));
         }
     }
