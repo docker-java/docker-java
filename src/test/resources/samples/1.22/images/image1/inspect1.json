@@ -1,0 +1,69 @@
+{
+  "Id": "sha256:ee45fe0d1fcdf1a0f9c2d1e36c6f4b3202bbb2032f14d7c9312b27bfcf6aee24",
+  "RepoTags": [
+    "hackmann/empty:latest"
+  ],
+  "RepoDigests": [],
+  "Parent": "",
+  "Comment": "",
+  "Created": "2014-04-29T19:59:10.84997669Z",
+  "Container": "aee9ba801acca0e648ffd91df204ba82ae85d97608a4864a019e2004d7e1b133",
+  "ContainerConfig": {
+    "Hostname": "aee9ba801acc",
+    "Domainname": "",
+    "User": "",
+    "AttachStdin": false,
+    "AttachStdout": false,
+    "AttachStderr": false,
+    "Tty": false,
+    "OpenStdin": false,
+    "StdinOnce": false,
+    "Env": [
+      "HOME=/",
+      "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    ],
+    "Cmd": [
+      "/bin/sh",
+      "-c",
+      "#(nop) MAINTAINER hack@worldticket.net"
+    ],
+    "Image": "511136ea3c5a64f264b78b5433614aec563103b4d4702f3ba7d4d2698e22c158",
+    "Volumes": null,
+    "WorkingDir": "",
+    "Entrypoint": null,
+    "OnBuild": [],
+    "Labels": null
+  },
+  "DockerVersion": "0.8.1",
+  "Author": "hack@worldticket.net",
+  "Config": {
+    "Hostname": "aee9ba801acc",
+    "Domainname": "",
+    "User": "",
+    "AttachStdin": false,
+    "AttachStdout": false,
+    "AttachStderr": false,
+    "Tty": false,
+    "OpenStdin": false,
+    "StdinOnce": false,
+    "Env": [
+      "HOME=/",
+      "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    ],
+    "Cmd": null,
+    "Image": "511136ea3c5a64f264b78b5433614aec563103b4d4702f3ba7d4d2698e22c158",
+    "Volumes": null,
+    "WorkingDir": "",
+    "Entrypoint": null,
+    "OnBuild": [],
+    "Labels": null
+  },
+  "Architecture": "amd64",
+  "Os": "linux",
+  "Size": 0,
+  "VirtualSize": 0,
+  "GraphDriver": {
+    "Name": "aufs",
+    "Data": null
+  }
+}
