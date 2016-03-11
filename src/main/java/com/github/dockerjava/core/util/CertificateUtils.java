@@ -5,21 +5,19 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.security.KeyFactory;
-import java.security.KeyPair;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.openssl.PEMKeyPair;
@@ -42,13 +40,13 @@ public class CertificateUtils {
 
     public static KeyStore createKeyStore(final String dockerCertPath) throws NoSuchAlgorithmException,
             InvalidKeySpecException, IOException, CertificateException, KeyStoreException {
-        KeyPair keyPair = loadPrivateKey(dockerCertPath);
+        PrivateKey privateKey = loadPrivateKey(dockerCertPath);
         List<Certificate> privateCertificates = loadCertificates(dockerCertPath);
 
         KeyStore keyStore = KeyStore.getInstance("JKS");
         keyStore.load(null);
 
-        keyStore.setKeyEntry("docker", keyPair.getPrivate(), "docker".toCharArray(),
+        keyStore.setKeyEntry("docker", privateKey, "docker".toCharArray(),
                 privateCertificates.toArray(new Certificate[privateCertificates.size()]));
         return keyStore;
     }
@@ -114,7 +112,7 @@ public class CertificateUtils {
 
     }
 
-    private static KeyPair loadPrivateKey(final String dockerCertPath) throws IOException, NoSuchAlgorithmException,
+    private static PrivateKey loadPrivateKey(final String dockerCertPath) throws IOException, NoSuchAlgorithmException,
             InvalidKeySpecException {
         File certificate = new File(dockerCertPath, "key.pem");
         BufferedReader reader = new BufferedReader(new FileReader(certificate));
@@ -123,21 +121,20 @@ public class CertificateUtils {
 
         try {
             pemParser = new PEMParser(reader);
+            Object parsedObject = pemParser.readObject();
+            PrivateKeyInfo privateKeyInfo;
 
-            PEMKeyPair pemKeyPair = (PEMKeyPair) pemParser.readObject();
+            if (parsedObject instanceof PEMKeyPair) {
+                privateKeyInfo = ((PEMKeyPair) parsedObject).getPrivateKeyInfo();
+            } else {
+                privateKeyInfo = (PrivateKeyInfo) parsedObject;
+            }
 
-            byte[] pemPrivateKeyEncoded = pemKeyPair.getPrivateKeyInfo().getEncoded();
-            byte[] pemPublicKeyEncoded = pemKeyPair.getPublicKeyInfo().getEncoded();
-
+            byte[] pemPrivateKeyEncoded = privateKeyInfo.getEncoded();
             KeyFactory factory = KeyFactory.getInstance("RSA");
-
-            X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(pemPublicKeyEncoded);
-            PublicKey publicKey = factory.generatePublic(publicKeySpec);
-
             PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(pemPrivateKeyEncoded);
-            PrivateKey privateKey = factory.generatePrivate(privateKeySpec);
 
-            return new KeyPair(publicKey, privateKey);
+            return factory.generatePrivate(privateKeySpec);
 
         } finally {
             if (pemParser != null) {
