@@ -64,10 +64,10 @@ public class Bind {
                 return new Bind(parts[0], new Volume(parts[1]));
             }
             case 3: {
-                parts = parts[2].split(",");
+                String[] flags = parts[2].split(",");
                 AccessMode accessMode = AccessMode.DEFAULT;
                 SELContext seMode = SELContext.DEFAULT;
-                for (String p : parts) {
+                for (String p : flags) {
                     if (p.length() == 2) {
                         accessMode = AccessMode.valueOf(p.toLowerCase());
                     } else {
@@ -82,7 +82,7 @@ public class Bind {
             }
             }
         } catch (Exception e) {
-            throw new IllegalArgumentException("Error parsing Bind '" + serialized + "'");
+            throw new IllegalArgumentException("Error parsing Bind '" + serialized + "'", e);
         }
     }
 
