@@ -9,7 +9,6 @@ import javax.annotation.Nonnull;
 /**
  * rename a container.
  *
- * Created by lujian on 16/3/16.
  * @since {@link RemoteApiVersion#VERSION_1_22}
  */
 public interface RenameContainerCmd extends SyncDockerCmd<Void> {

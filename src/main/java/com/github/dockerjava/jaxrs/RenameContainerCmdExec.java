@@ -8,9 +8,6 @@ import com.github.dockerjava.core.DockerClientConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Created by lujian on 16/3/17.
- */
 public class RenameContainerCmdExec extends AbstrSyncDockerCmdExec<RenameContainerCmd, Void> implements RenameContainerCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RenameContainerCmdExec.class);

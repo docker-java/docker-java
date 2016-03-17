@@ -13,9 +13,6 @@ import java.lang.reflect.Method;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-/**
- * Created by lujian on 16/3/17.
- */
 @Test(groups = "integration")
 public class RenameContainerCmdImplTest extends AbstractDockerClientTest {
     @BeforeTest

@@ -8,7 +8,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * rename a container.
- * Created by lujian on 16/3/16.
  */
 public class RenameContainerCmdImpl  extends AbstrDockerCmd<RenameContainerCmd, Void> implements RenameContainerCmd {
 

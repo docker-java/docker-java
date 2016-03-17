@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * rename a container.
- * Created by lujian on 16/3/17.
  */
 public class RenameContainerCmdExec extends AbstrSyncDockerCmdExec<RenameContainerCmd, Void> implements RenameContainerCmd.Exec {
 
