@@ -66,7 +66,7 @@ public class RenameContainerCmdExecTest  extends AbstractNettyDockerClientTest {
     @Test
     public void renameNonExistingContainer() throws DockerException, InterruptedException {
         try {
-            dockerClient.restartContainerCmd("non-existing").exec();
+            dockerClient.renameContainerCmd("non-existing").withName(String.valueOf(System.currentTimeMillis())+String.valueOf(System.nanoTime())).exec();
             fail("expected NotFoundException");
         } catch (NotFoundException e) {
         }
