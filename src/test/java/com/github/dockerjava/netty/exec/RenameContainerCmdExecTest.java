@@ -40,7 +40,7 @@ public class RenameContainerCmdExecTest  extends AbstractNettyDockerClientTest {
     }
 
     @Test
-    public void restartContainer() throws DockerException {
+    public void renameContainer() throws DockerException {
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
@@ -64,7 +64,7 @@ public class RenameContainerCmdExecTest  extends AbstractNettyDockerClientTest {
     }
 
     @Test
-    public void restartNonExistingContainer() throws DockerException, InterruptedException {
+    public void renameNonExistingContainer() throws DockerException, InterruptedException {
         try {
             dockerClient.restartContainerCmd("non-existing").exec();
             fail("expected NotFoundException");
