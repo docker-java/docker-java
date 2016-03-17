@@ -1,0 +1,76 @@
+package com.github.dockerjava.netty.exec;
+
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
+import org.testng.ITestResult;
+import org.testng.annotations.*;
+
+import java.lang.reflect.Method;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+
+/**
+ * Created by lujian on 16/3/17.
+ */
+@Test(groups = "integration")
+public class RenameContainerCmdExecTest  extends AbstractNettyDockerClientTest {
+
+    @BeforeTest
+    public void beforeTest() throws Exception {
+        super.beforeTest();
+    }
+
+    @AfterTest
+    public void afterTest() {
+        super.afterTest();
+    }
+
+    @BeforeMethod
+    public void beforeMethod(Method method) {
+        super.beforeMethod(method);
+    }
+
+    @AfterMethod
+    public void afterMethod(ITestResult result) {
+        super.afterMethod(result);
+    }
+
+    @Test
+    public void restartContainer() throws DockerException {
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+        dockerClient.startContainerCmd(container.getId()).exec();
+
+        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+        LOG.info("Container Inspect: {}", inspectContainerResponse.toString());
+
+        String name1 = inspectContainerResponse.getName();
+
+        dockerClient.renameContainerCmd(container.getId()).withName(String.valueOf(System.currentTimeMillis())+String.valueOf(System.nanoTime())).exec();
+
+        InspectContainerResponse inspectContainerResponse2 = dockerClient.inspectContainerCmd(container.getId()).exec();
+        LOG.info("Container Inspect After Rename: {}", inspectContainerResponse2.toString());
+
+        String name2 = inspectContainerResponse2.getName();
+
+        assertNotEquals(name1, name2);
+
+        dockerClient.killContainerCmd(container.getId()).exec();
+    }
+
+    @Test
+    public void restartNonExistingContainer() throws DockerException, InterruptedException {
+        try {
+            dockerClient.restartContainerCmd("non-existing").exec();
+            fail("expected NotFoundException");
+        } catch (NotFoundException e) {
+        }
+
+    }
+
+}
