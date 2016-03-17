@@ -50,6 +50,7 @@ import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.UpdateContainerCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
+import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.core.LocalDirectorySSLConfig;
@@ -102,6 +103,7 @@ import com.github.dockerjava.netty.exec.UnpauseContainerCmdExec;
 import com.github.dockerjava.netty.exec.UpdateContainerCmdExec;
 import com.github.dockerjava.netty.exec.VersionCmdExec;
 import com.github.dockerjava.netty.exec.WaitContainerCmdExec;
+import com.github.dockerjava.netty.exec.RenameContainerCmdExec;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelInitializer;
@@ -463,6 +465,11 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     @Override
     public UpdateContainerCmd.Exec createUpdateContainerCmdExec() {
         return new UpdateContainerCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public RenameContainerCmd.Exec createRenameContainerCmdExec() {
+        return new RenameContainerCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
