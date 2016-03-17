@@ -56,6 +56,7 @@ import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.UpdateContainerCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
+import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Identifier;
@@ -184,6 +185,15 @@ public interface DockerClient extends Closeable {
      * @since {@link RemoteApiVersion#VERSION_1_22}
      */
     UpdateContainerCmd updateContainerCmd(@Nonnull String containerId);
+
+    /**
+     * Rename container.
+     *
+     * @param containerId id of the container
+     * @return command
+     * @since {@link RemoteApiVersion#VERSION_1_17}
+     */
+    RenameContainerCmd renameContainerCmd(@Nonnull String containerId);
 
     RestartContainerCmd restartContainerCmd(@Nonnull String containerId);
 
