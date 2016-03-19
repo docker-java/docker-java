@@ -1,16 +1,18 @@
 package com.github.dockerjava.netty.handler;
 
-import com.github.dockerjava.core.async.ResultCallbackTemplate;
+import static org.testng.Assert.assertTrue;
+
+import java.io.InputStream;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import org.apache.commons.io.IOUtils;
 import org.mockito.Mockito;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
+import com.github.dockerjava.core.async.ResultCallbackTemplate;
 
 /**
  * @author Alexander Koshevoy
@@ -25,7 +27,7 @@ public class HttpResponseStreamHandlerTest {
         streamHandler.channelRead0(ctx, buffer);
         streamHandler.channelReadComplete(ctx);
 
-        Assert.assertTrue(IOUtils.contentEquals(callback.getInputStream(), new ByteBufInputStream(buffer)));
+        assertTrue(IOUtils.contentEquals(callback.getInputStream(), new ByteBufInputStream(buffer)));
     }
 
     private ByteBuf generateByteBuf() {
