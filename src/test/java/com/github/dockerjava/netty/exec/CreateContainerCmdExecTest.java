@@ -67,7 +67,7 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
         super.afterMethod(result);
     }
 
-    @Test
+    @Test(expectedExceptions = ConflictException.class)
     public void createContainerWithExistingName() throws DockerException {
 
         String containerName = "generated_" + new SecureRandom().nextInt();
@@ -79,11 +79,7 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
         assertThat(container.getId(), not(isEmptyString()));
 
-        try {
-            dockerClient.createContainerCmd("busybox").withCmd("env").withName(containerName).exec();
-            fail("expected ConflictException");
-        } catch (ConflictException e) {
-        }
+        dockerClient.createContainerCmd("busybox").withCmd("env").withName(containerName).exec();
     }
 
     @Test

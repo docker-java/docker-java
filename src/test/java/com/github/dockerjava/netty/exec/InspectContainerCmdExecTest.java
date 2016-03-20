@@ -63,14 +63,9 @@ public class InspectContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
     }
 
-    @Test
+    @Test(expectedExceptions = NotFoundException.class)
     public void inspectNonExistingContainer() throws DockerException {
-
-        try {
-            dockerClient.inspectContainerCmd("non-existing").exec();
-            fail("expected NotFoundException");
-        } catch (NotFoundException e) {
-        }
+        dockerClient.inspectContainerCmd("non-existing").exec();
     }
 
     @Test

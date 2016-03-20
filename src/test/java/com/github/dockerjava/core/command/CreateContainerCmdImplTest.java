@@ -69,7 +69,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         super.afterMethod(result);
     }
 
-    @Test
+    @Test(expectedExceptions = ConflictException.class)
     public void createContainerWithExistingName() throws DockerException {
 
         String containerName = "generated_" + new SecureRandom().nextInt();
@@ -81,11 +81,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         assertThat(container.getId(), not(isEmptyString()));
 
-        try {
-            dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("env").withName(containerName).exec();
-            fail("expected ConflictException");
-        } catch (ConflictException e) {
-        }
+        dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("env").withName(containerName).exec();
     }
 
     @Test
