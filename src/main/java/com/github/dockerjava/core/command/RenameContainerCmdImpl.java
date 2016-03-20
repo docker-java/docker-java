@@ -6,10 +6,7 @@ import com.github.dockerjava.api.exception.NotFoundException;
 import javax.annotation.Nonnull;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * rename a container.
- */
-public class RenameContainerCmdImpl  extends AbstrDockerCmd<RenameContainerCmd, Void> implements RenameContainerCmd {
+public class RenameContainerCmdImpl extends AbstrDockerCmd<RenameContainerCmd, Void> implements RenameContainerCmd {
 
     private String containerId;
 

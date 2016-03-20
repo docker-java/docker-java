@@ -48,7 +48,9 @@ public class RenameContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
         String name1 = inspectContainerResponse.getName();
 
-        dockerClient.renameContainerCmd(container.getId()).withName(String.valueOf(System.currentTimeMillis())+String.valueOf(System.nanoTime())).exec();
+        dockerClient.renameContainerCmd(container.getId())
+                .withName(getClass().getCanonicalName() + "renameContainer")
+                .exec();
 
         InspectContainerResponse inspectContainerResponse2 = dockerClient.inspectContainerCmd(container.getId()).exec();
         LOG.info("Container Inspect After Rename: {}", inspectContainerResponse2.toString());
@@ -60,14 +62,10 @@ public class RenameContainerCmdExecTest extends AbstractNettyDockerClientTest {
         dockerClient.killContainerCmd(container.getId()).exec();
     }
 
-    @Test
+    @Test(expectedExceptions = NotFoundException.class)
     public void renameNonExistingContainer() throws DockerException, InterruptedException {
-        try {
-            dockerClient.renameContainerCmd("non-existing").withName(String.valueOf(System.currentTimeMillis())+String.valueOf(System.nanoTime())).exec();
-            fail("expected NotFoundException");
-        } catch (NotFoundException e) {
-        }
-
+        dockerClient.renameContainerCmd("non-existing")
+                .withName(getClass().getCanonicalName() + "renameExistingContainer")
+                .exec();
     }
-
 }

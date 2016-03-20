@@ -186,6 +186,13 @@ public interface DockerClient extends Closeable {
      */
     UpdateContainerCmd updateContainerCmd(@Nonnull String containerId);
 
+    /**
+     * Rename container.
+     *
+     * @param containerId id of the container
+     * @return command
+     * @since {@link RemoteApiVersion#VERSION_1_22}
+     */
     RenameContainerCmd renameContainerCmd(@Nonnull String containerId);
 
     RestartContainerCmd restartContainerCmd(@Nonnull String containerId);

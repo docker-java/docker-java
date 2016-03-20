@@ -6,6 +6,7 @@ import java.io.IOException;
 import javax.net.ssl.SSLContext;
 
 import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.RemoteApiVersion;
 
 public interface DockerCmdExecFactory extends Closeable {
 
@@ -71,6 +72,11 @@ public interface DockerCmdExecFactory extends Closeable {
 
     UpdateContainerCmd.Exec createUpdateContainerCmdExec();
 
+    /**
+     * Rename container.
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_22}
+     */
     RenameContainerCmd.Exec createRenameContainerCmdExec();
 
     RestartContainerCmd.Exec createRestartContainerCmdExec();

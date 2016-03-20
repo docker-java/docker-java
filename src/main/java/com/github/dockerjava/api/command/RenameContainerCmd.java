@@ -7,7 +7,7 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 /**
- * rename a container.
+ * Rename a container.
  *
  * @since {@link RemoteApiVersion#VERSION_1_22}
  */
@@ -22,7 +22,6 @@ public interface RenameContainerCmd extends SyncDockerCmd<Void> {
     String getName();
 
     RenameContainerCmd withName(@Nonnull String name);
-
 
     /**
      * @throws com.github.dockerjava.api.exception.NotFoundException No such container
