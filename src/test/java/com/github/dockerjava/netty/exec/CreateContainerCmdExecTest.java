@@ -67,7 +67,7 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
         super.afterMethod(result);
     }
 
-    @Test
+    @Test(expectedExceptions = ConflictException.class)
     public void createContainerWithExistingName() throws DockerException {
 
         String containerName = "generated_" + new SecureRandom().nextInt();
@@ -79,11 +79,7 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
         assertThat(container.getId(), not(isEmptyString()));
 
-        try {
-            dockerClient.createContainerCmd("busybox").withCmd("env").withName(containerName).exec();
-            fail("expected ConflictException");
-        } catch (ConflictException e) {
-        }
+        dockerClient.createContainerCmd("busybox").withCmd("env").withName(containerName).exec();
     }
 
     @Test
@@ -553,5 +549,19 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
         // null becomes empty string
         assertEquals(inspectContainerResponse.getHostConfig().getLogConfig().type, logConfig.type);
+    }
+
+    @Test(groups = "ignoreInCircleCi")
+    public void createContainerWithCgroupParent() throws DockerException {
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+                .withCgroupParent("/parent").exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainer = dockerClient.inspectContainerCmd(container.getId()).exec();
+
+        assertThat(inspectContainer.getHostConfig().getCgroupParent(), is("/parent"));
     }
 }
