@@ -58,6 +58,7 @@ import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.UpdateContainerCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
+import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Identifier;
 import com.github.dockerjava.core.command.AttachContainerCmdImpl;
@@ -109,6 +110,7 @@ import com.github.dockerjava.core.command.UnpauseContainerCmdImpl;
 import com.github.dockerjava.core.command.UpdateContainerCmdImpl;
 import com.github.dockerjava.core.command.VersionCmdImpl;
 import com.github.dockerjava.core.command.WaitContainerCmdImpl;
+import com.github.dockerjava.core.command.RenameContainerCmdImpl;
 
 import javax.annotation.Nonnull;
 
@@ -362,6 +364,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public UpdateContainerCmd updateContainerCmd(@Nonnull String containerId) {
         return new UpdateContainerCmdImpl(getDockerCmdExecFactory().createUpdateContainerCmdExec(), containerId);
+    }
+
+    @Override
+    public RenameContainerCmd renameContainerCmd(@Nonnull String containerId) {
+        return new RenameContainerCmdImpl(getDockerCmdExecFactory().createRenameContainerCmdExec(), containerId);
     }
 
     @Override

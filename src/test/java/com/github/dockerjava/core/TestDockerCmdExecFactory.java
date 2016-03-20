@@ -241,6 +241,11 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     @Override
+    public RenameContainerCmd.Exec createRenameContainerCmdExec(){
+        return delegate.createRenameContainerCmdExec();
+    }
+
+    @Override
     public RestartContainerCmd.Exec createRestartContainerCmdExec() {
         return delegate.createRestartContainerCmdExec();
     }
