@@ -10,6 +10,12 @@ Notes
 
 All changes
 
+Included in 3.0.0-RC4
+* [#495] (https://github.com/docker-java/docker-java/pull/495) Add CgroupParent option for create cmd
+* [#504] (https://github.com/docker-java/docker-java/pull/504) Rename container cmd
+* [#500] (https://github.com/docker-java/docker-java/pull/500) Add aux to ResponseItem
+* [#498] (https://github.com/docker-java/docker-java/issues/493) Expose RepoTags from inspect image command
+
 Included in 3.0.0-RC3
 * [#488] (https://github.com/docker-java/docker-java/pull/488) Support remote API 1.22 subset
 
