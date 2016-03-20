@@ -5,6 +5,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -410,12 +412,6 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public String getCgroupParent() {
         return hostConfig.getCgroupParent();
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append("create container ").append(name != null ? "name=" + name + " " : "")
-                .append(this).toString();
     }
 
     @Override
@@ -890,4 +886,18 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         return this;
     }
 
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return EqualsBuilder.reflectionEquals(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
 }
