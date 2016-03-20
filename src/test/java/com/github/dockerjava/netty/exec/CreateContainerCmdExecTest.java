@@ -550,4 +550,18 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
         // null becomes empty string
         assertEquals(inspectContainerResponse.getHostConfig().getLogConfig().type, logConfig.type);
     }
+
+    @Test(groups = "ignoreInCircleCi")
+    public void createContainerWithCgroupParent() throws DockerException {
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+                .withCgroupParent("/parent").exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainer = dockerClient.inspectContainerCmd(container.getId()).exec();
+
+        assertThat(inspectContainer.getHostConfig().getCgroupParent(), is("/parent"));
+    }
 }
