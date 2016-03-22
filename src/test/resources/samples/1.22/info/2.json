@@ -1,0 +1,165 @@
+{
+   "ID":"H52J:52LG:YP4W:EHKY:SRK5:RYG6:ETWR:7AR3:MTFJ:PC6C:4YF2:NTN2",
+   "Containers":2,
+   "ContainersRunning":0,
+   "ContainersPaused":0,
+   "ContainersStopped":2,
+   "Images":55,
+   "Driver":"devicemapper",
+   "DriverStatus":[
+      [
+         "Pool Name",
+         "docker-253:2-17567992-pool"
+      ],
+      [
+         "Pool Blocksize",
+         "65.54 kB"
+      ],
+      [
+         "Base Device Size",
+         "107.4 GB"
+      ],
+      [
+         "Backing Filesystem",
+         "ext4"
+      ],
+      [
+         "Data file",
+         "/dev/loop0"
+      ],
+      [
+         "Metadata file",
+         "/dev/loop1"
+      ],
+      [
+         "Data Space Used",
+         "3.89 GB"
+      ],
+      [
+         "Data Space Total",
+         "107.4 GB"
+      ],
+      [
+         "Data Space Available",
+         "103.5 GB"
+      ],
+      [
+         "Metadata Space Used",
+         "5.46 MB"
+      ],
+      [
+         "Metadata Space Total",
+         "2.147 GB"
+      ],
+      [
+         "Metadata Space Available",
+         "2.142 GB"
+      ],
+      [
+         "Udev Sync Supported",
+         "true"
+      ],
+      [
+         "Deferred Removal Enabled",
+         "false"
+      ],
+      [
+         "Deferred Deletion Enabled",
+         "false"
+      ],
+      [
+         "Deferred Deleted Device Count",
+         "0"
+      ],
+      [
+         "Data loop file",
+         "/var/lib/docker/devicemapper/devicemapper/data"
+      ],
+      [
+         "Metadata loop file",
+         "/var/lib/docker/devicemapper/devicemapper/metadata"
+      ],
+      [
+         "Library Version",
+         "1.02.107-RHEL7 (2015-12-01)"
+      ]
+   ],
+   "SystemStatus":null,
+   "Plugins":{
+      "Volume":[
+         "local"
+      ],
+      "Network":[
+         "null",
+         "host",
+         "bridge"
+      ],
+      "Authorization":null
+   },
+   "MemoryLimit":true,
+   "SwapLimit":true,
+   "CpuCfsPeriod":true,
+   "CpuCfsQuota":true,
+   "CPUShares":true,
+   "CPUSet":true,
+   "IPv4Forwarding":true,
+   "BridgeNfIptables":false,
+   "BridgeNfIp6tables":false,
+   "Debug":false,
+   "NFd":13,
+   "OomKillDisable":true,
+   "NGoroutines":30,
+   "SystemTime":"2016-03-20T17:32:06.598846244+01:00",
+   "ExecutionDriver":"native-0.2",
+   "LoggingDriver":"json-file",
+   "NEventsListener":0,
+   "KernelVersion":"3.10.0-327.10.1.el7.x86_64",
+   "PkgVersion":"docker-1.10.2-6.git0f5ac89.el7.x86_64",
+   "OperatingSystem":"Red Hat Enterprise Linux Workstation 7.2 (Maipo)",
+   "OSType":"linux",
+   "Architecture":"x86_64",
+   "IndexServerAddress":"https://index.docker.io/v1/",
+   "IndexServerName":"docker.io",
+   "RegistryConfig":{
+      "InsecureRegistryCIDRs":[
+         "127.0.0.0/8"
+      ],
+      "IndexConfigs":{
+         "docker.io":{
+            "Name":"docker.io",
+            "Mirrors":null,
+            "Secure":true,
+            "Official":true
+         },
+         "somehost:80":{
+            "Name":"somehost:80",
+            "Mirrors":[
+
+            ],
+            "Secure":false,
+            "Official":false
+         }
+      },
+      "Mirrors":null
+   },
+   "InitSha1":"672d65f3cf8816fbda421afeed7e52c0ca17d5e7",
+   "InitPath":"/usr/libexec/docker/dockerinit",
+   "NCPU":8,
+   "MemTotal":33350918144,
+   "DockerRootDir":"/var/lib/docker",
+   "HttpProxy":"",
+   "HttpsProxy":"",
+   "NoProxy":"",
+   "Name":"somename",
+   "Labels":null,
+   "ExperimentalBuild":false,
+   "ServerVersion":"1.10.2",
+   "ClusterStore":"",
+   "ClusterAdvertise":"",
+   "Registries":[
+      {
+         "Name":"docker.io",
+         "Secure":true
+      }
+   ]
+}
