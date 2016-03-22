@@ -32,12 +32,13 @@ public class CertificateUtils {
 
     public static boolean verifyCertificatesExist(String dockerCertPath) {
         String[] files = {"ca.pem", "cert.pem", "key.pem"};
+        boolean result = true;
         for (String file : files) {
             File path = new File(dockerCertPath, file);
-            return path.exists();
+            result &= path.exists();
         }
 
-        return true;
+        return result;
     }
 
     public static KeyStore createKeyStore(final String dockerCertPath) throws NoSuchAlgorithmException,
