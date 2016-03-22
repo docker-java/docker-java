@@ -96,7 +96,7 @@ public final class InfoRegistryConfig {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class IndexConfig {
         @JsonProperty("Mirrors")
-        private String mirrors;
+        private List<String> mirrors;
 
         @JsonProperty("Name")
         private String name;
@@ -111,14 +111,14 @@ public final class InfoRegistryConfig {
          * @see #mirrors
          */
         @CheckForNull
-        public String getMirrors() {
+        public List<String> getMirrors() {
             return mirrors;
         }
 
         /**
          * @see #mirrors
          */
-        public IndexConfig withMirrors(String mirrors) {
+        public IndexConfig withMirrors(List<String> mirrors) {
             this.mirrors = mirrors;
             return this;
         }
