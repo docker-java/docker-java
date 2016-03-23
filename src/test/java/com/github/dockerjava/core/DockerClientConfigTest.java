@@ -176,4 +176,15 @@ public class DockerClientConfigTest {
         new DockerClientConfig(URI.create("unix://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
                 null, false);
     }
+
+    @Test
+    public void withDockerTlsVerify() throws Exception {
+        DockerClientConfig.DockerClientConfigBuilder builder = new DockerClientConfig.DockerClientConfigBuilder();
+        builder.withDockerTlsVerify("");
+        builder.withDockerTlsVerify("false");
+        builder.withDockerTlsVerify("true");
+        builder.withDockerTlsVerify("0");
+        builder.withDockerTlsVerify("1");
+    }
+
 }

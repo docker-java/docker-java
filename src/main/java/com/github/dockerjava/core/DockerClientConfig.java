@@ -418,8 +418,8 @@ public class DockerClientConfig implements Serializable {
         }
 
         public final DockerClientConfigBuilder withDockerTlsVerify(String dockerTlsVerify) {
-            this.dockerTlsVerify = BooleanUtils.toBoolean(dockerTlsVerify.trim())
-                    || BooleanUtils.toBoolean(dockerTlsVerify.trim(), "1", "0");
+            String trimmed = dockerTlsVerify.trim();
+            this.dockerTlsVerify = "true".equals(trimmed) || "1".equals(trimmed);
             return this;
         }
 
