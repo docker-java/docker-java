@@ -2,7 +2,11 @@ package com.github.dockerjava.core;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
 import java.net.URI;
 import java.util.HashSet;
 import java.util.Map;
