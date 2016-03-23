@@ -1,5 +1,7 @@
 package com.github.dockerjava.api.model;
 
+import java.util.regex.Pattern;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -15,6 +17,9 @@ public class Bind {
 
     private AccessMode accessMode;
 
+    /**
+     * @since 1.17
+     */
     private SELContext secMode;
 
     public Bind(String path, Volume volume) {
@@ -24,6 +29,7 @@ public class Bind {
     public Bind(String path, Volume volume, AccessMode accessMode) {
         this(path, volume, accessMode, SELContext.DEFAULT);
     }
+    
     public Bind(String path, Volume volume, AccessMode accessMode, SELContext secMode) {
         this.path = path;
         this.volume = volume;
@@ -56,6 +62,36 @@ public class Bind {
      * @throws IllegalArgumentException
      *             if the specification cannot be parsed
      */
+    public static Bind parse(String serialized) {
+        try {
+            String[] parts = serialized.split(":");
+            switch (parts.length) {
+            case 2: {
+                return new Bind(parts[0], new Volume(parts[1]));
+            }
+            case 3: {
+                String[] flags = parts[2].split(",");
+                AccessMode accessMode = AccessMode.DEFAULT;
+                SELContext seMode = SELContext.DEFAULT;
+                for (String p : flags) {
+                    if (p.length() == 2) {
+                        accessMode = AccessMode.valueOf(p.toLowerCase());
+                    } else {
+                        seMode = SELContext.fromString(p);
+                    }
+                }
+
+                return new Bind(parts[0], new Volume(parts[1]), accessMode, seMode);
+            }
+            default: {
+                throw new IllegalArgumentException();
+            }
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error parsing Bind '" + serialized + "'", e);
+        }
+    }
+
     public static Bind parse(String serialized) {
         try {
             String[] parts = serialized.split(":");

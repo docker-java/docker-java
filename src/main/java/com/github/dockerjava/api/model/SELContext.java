@@ -5,6 +5,7 @@ package com.github.dockerjava.api.model;
  * Host path <code>shared</code> - can be used by all containers, <code>private</code> - by only this container
  *
  * @see http://www.projectatomic.io/blog/2015/06/using-volumes-with-docker-can-cause-problems-with-selinux/
+ * @since 1.17
  */
 public enum SELContext {
     /** no selinux */
