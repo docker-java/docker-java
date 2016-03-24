@@ -23,14 +23,12 @@ public class SaveImageCmdExec extends AbstrSyncDockerCmdExec<SaveImageCmd, Input
 
     @Override
     protected InputStream execute(SaveImageCmd command) {
-    	
-    	// If tag is present, only tar the specific image 
-    	// else tar all the images with the same name
-    	String name = command.getName();
-    	if(!Strings.isNullOrEmpty(command.getTag())) {
-    		name += ":" + command.getTag();
-    	}
-    	
+        // If tag is present, only tar the specific image
+        // else tar all the images with the same name
+        String name = command.getName();
+        if (!Strings.isNullOrEmpty(command.getTag())) {
+            name += ":" + command.getTag();
+        }
         WebTarget webResource = getBaseResource().path("/images/" + name + "/get");
 
         LOGGER.trace("GET: {}", webResource);

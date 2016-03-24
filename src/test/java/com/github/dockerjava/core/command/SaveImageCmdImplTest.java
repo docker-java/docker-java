@@ -49,6 +49,8 @@ public class SaveImageCmdImplTest extends AbstractDockerClientTest {
 
         InputStream image = IOUtils.toBufferedInputStream(dockerClient.saveImageCmd("busybox").exec());
         assertThat(image.available(), greaterThan(0));
+        InputStream image2 = IOUtils.toBufferedInputStream(dockerClient.saveImageCmd("busybox").withTag("latest").exec());
+        assertThat(image2.available(), greaterThan(0));
 
     }
 
