@@ -129,7 +129,7 @@ public interface DockerClient extends Closeable {
 
     AttachContainerCmd attachContainerCmd(@Nonnull String containerId);
 
-    ExecStartCmd execStartCmd(@Nonnull String containerId);
+    ExecStartCmd execStartCmd(@Nonnull String execId);
 
     InspectExecCmd inspectExecCmd(@Nonnull String execId);
 
