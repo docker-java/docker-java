@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -418,8 +417,8 @@ public class DockerClientConfig implements Serializable {
         }
 
         public final DockerClientConfigBuilder withDockerTlsVerify(String dockerTlsVerify) {
-            this.dockerTlsVerify = BooleanUtils.toBoolean(dockerTlsVerify.trim())
-                    || BooleanUtils.toBoolean(dockerTlsVerify.trim(), "1", "0");
+            String trimmed = dockerTlsVerify.trim();
+            this.dockerTlsVerify = "true".equalsIgnoreCase(trimmed) || "1".equals(trimmed);
             return this;
         }
 
