@@ -3,7 +3,10 @@ package com.github.dockerjava.core;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
+import java.lang.reflect.Field;
 import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
@@ -176,4 +179,23 @@ public class DockerClientConfigTest {
         new DockerClientConfig(URI.create("unix://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
                 null, false);
     }
+
+    @Test
+    public void withDockerTlsVerify() throws Exception {
+        DockerClientConfig.DockerClientConfigBuilder builder = new DockerClientConfig.DockerClientConfigBuilder();
+        Field field = builder.getClass().getDeclaredField("dockerTlsVerify");
+        field.setAccessible(true);
+
+        builder.withDockerTlsVerify("");
+        assertFalse(field.getBoolean(builder));
+        builder.withDockerTlsVerify("false");
+        assertFalse(field.getBoolean(builder));
+        builder.withDockerTlsVerify("true");
+        assertTrue(field.getBoolean(builder));
+        builder.withDockerTlsVerify("0");
+        assertFalse(field.getBoolean(builder));
+        builder.withDockerTlsVerify("1");
+        assertTrue(field.getBoolean(builder));
+    }
+
 }
