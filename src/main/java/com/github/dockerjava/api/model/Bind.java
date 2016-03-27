@@ -15,14 +15,24 @@ public class Bind {
 
     private AccessMode accessMode;
 
+    /**
+     * @since 1.17
+     */
+    private SELContext secMode;
+
     public Bind(String path, Volume volume) {
-        this(path, volume, AccessMode.DEFAULT);
+        this(path, volume, AccessMode.DEFAULT, SELContext.DEFAULT);
     }
 
     public Bind(String path, Volume volume, AccessMode accessMode) {
+        this(path, volume, accessMode, SELContext.DEFAULT);
+    }
+
+    public Bind(String path, Volume volume, AccessMode accessMode, SELContext secMode) {
         this.path = path;
         this.volume = volume;
         this.accessMode = accessMode;
+        this.secMode = secMode;
     }
 
     public String getPath() {
@@ -35,6 +45,10 @@ public class Bind {
 
     public AccessMode getAccessMode() {
         return accessMode;
+    }
+
+    public SELContext getSecMode() {
+        return secMode;
     }
 
     /**
@@ -50,19 +64,29 @@ public class Bind {
         try {
             String[] parts = serialized.split(":");
             switch (parts.length) {
-                case 2: {
-                    return new Bind(parts[0], new Volume(parts[1]));
+            case 2: {
+                return new Bind(parts[0], new Volume(parts[1]));
+            }
+            case 3: {
+                String[] flags = parts[2].split(",");
+                AccessMode accessMode = AccessMode.DEFAULT;
+                SELContext seMode = SELContext.DEFAULT;
+                for (String p : flags) {
+                    if (p.length() == 2) {
+                        accessMode = AccessMode.valueOf(p.toLowerCase());
+                    } else {
+                        seMode = SELContext.fromString(p);
+                    }
                 }
-                case 3: {
-                    AccessMode accessMode = AccessMode.valueOf(parts[2].toLowerCase());
-                    return new Bind(parts[0], new Volume(parts[1]), accessMode);
-                }
-                default: {
-                    throw new IllegalArgumentException();
-                }
+
+                return new Bind(parts[0], new Volume(parts[1]), accessMode, seMode);
+            }
+            default: {
+                throw new IllegalArgumentException();
+            }
             }
         } catch (Exception e) {
-            throw new IllegalArgumentException("Error parsing Bind '" + serialized + "'");
+            throw new IllegalArgumentException("Error parsing Bind '" + serialized + "'", e);
         }
     }
 
@@ -90,7 +114,7 @@ public class Bind {
      */
     @Override
     public String toString() {
-        return path + ":" + volume.getPath() + ":" + accessMode.toString();
+        return path + ":" + volume.getPath() + ":" + accessMode.toString() + (secMode != SELContext.none ? "," + secMode.toString() : "");
     }
 
 }
