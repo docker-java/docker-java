@@ -81,7 +81,7 @@ public class HttpResponseStreamHandler extends SimpleChannelInboundHandler<ByteB
             }
 
             if (current != null && current.readableBytes() > 0) {
-                return current.readByte();
+                return current.readByte() & 0xff;
             } else {
                 return read();
             }
