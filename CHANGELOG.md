@@ -13,6 +13,7 @@ All changes
 Included in 3.0.0-RC4
 * [#510] (https://github.com/docker-java/docker-java/pull/510) Add CgroupParent option for create cmd
 * [#509] (https://github.com/docker-java/docker-java/pull/509) Implement container rename api 
+* [#501] (https://github.com/docker-java/docker-java/pull/501) Fix execution of copy file/archive command skips 0xFF bytes 
 * [#500] (https://github.com/docker-java/docker-java/pull/500) Add aux to ResponseItem
 * [#498] (https://github.com/docker-java/docker-java/issues/498) Update image inspect response
 
