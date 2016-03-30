@@ -95,6 +95,9 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     @CheckForNull
     Map<String, String> getBuildArgs();
 
+    @CheckForNull
+    long getShmsize();
+
     // setters
 
     BuildImageCmd withTag(String tag);
@@ -133,6 +136,8 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     BuildImageCmd withBuildAuthConfigs(AuthConfigurations authConfig);
 
     BuildImageCmd withTarInputStream(@Nonnull InputStream tarInputStream);
+
+    BuildImageCmd withShmsize(long shmsize);
 
     interface Exec extends DockerCmdAsyncExec<BuildImageCmd, BuildResponseItem> {
     }
