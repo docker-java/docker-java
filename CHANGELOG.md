@@ -11,6 +11,8 @@ Notes
 All changes
 
 Included in 3.0.0-RC4
+* [#528] (https://github.com/docker-java/docker-java/pull/528) Fix DOCKER_TLS_VERIFY cannot be 'false' or empty
+* [#527] (https://github.com/docker-java/docker-java/pull/527) Fix `mirrors` field is list and not a single string #527 
 * [#510] (https://github.com/docker-java/docker-java/pull/510) Add CgroupParent option for create cmd
 * [#509] (https://github.com/docker-java/docker-java/pull/509) Implement container rename api 
 * [#501] (https://github.com/docker-java/docker-java/pull/501) Fix execution of copy file/archive command skips 0xFF bytes 
