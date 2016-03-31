@@ -71,7 +71,7 @@ Supports a subset of the Docker Remote API [v1.22](https://github.com/docker/doc
     <dependency>
           <groupId>com.github.docker-java</groupId>
           <artifactId>docker-java</artifactId>
-          <version>3.0.0-RC3</version>
+          <version>3.0.0-RC4</version>
     </dependency>
     
 ### Latest development version
