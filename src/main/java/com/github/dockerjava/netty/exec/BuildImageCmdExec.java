@@ -93,7 +93,7 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
             }
         }
 
-        if (command.getShmsize() != 0) {
+        if (command.getShmsize() != null) {
             webTarget = webTarget.queryParam("shmsize", command.getShmsize());
         }
 
