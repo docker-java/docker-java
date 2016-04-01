@@ -61,6 +61,7 @@ public class CreateVolumeCmdImpl extends AbstrDockerCmd<CreateVolumeCmd, CreateV
     @Override
     public CreateVolumeCmd withDriverOpts(Map<String, String> driverOpts) {
         checkNotNull(driverOpts, "driverOpts was not specified");
+        this.driverOpts = driverOpts;
         return this;
     }
 }
