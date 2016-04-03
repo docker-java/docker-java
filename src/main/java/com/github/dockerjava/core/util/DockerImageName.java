@@ -21,8 +21,9 @@ import java.util.Map;
 /**
  * Written to construct and validate docker image names, and their respective parts:
  * [REGISTRY/][NAMESPACE/]REPOSITORY[:TAG]
- *
+ * <p>
  * Based on Docker v1.5 source
+ *
  * @author jgriffiths 08/04/2015
  */
 public class DockerImageName {
@@ -36,25 +37,26 @@ public class DockerImageName {
 
     /**
      * Constructor, de-constructs given image name into relevant objects
+     *
      * @param imageName Full image name for docker image
      */
-    public DockerImageName(String imageName) throws DockerImageNameException{
+    public DockerImageName(String imageName) throws DockerImageNameException {
         this.imageName = imageName;
         // If we have a string to construct with
-        if( imageName != null && !imageName.equals("") ) {
+        if (imageName != null && !imageName.equals("")) {
             // Split the name into a map and construct the image name parts
             // This action will throw an exception if the name contains too many parts
             Map<String, String> nameMap = splitImageName(imageName);
-            if( nameMap.containsKey("registry") ) {
+            if (nameMap.containsKey("registry")) {
                 this.registry = new RegistryNamePart(nameMap.get("registry"));
             }
-            if( nameMap.containsKey("namespace") ) {
+            if (nameMap.containsKey("namespace")) {
                 this.namespace = new NamespaceNamePart(nameMap.get("namespace"));
             }
-            if( nameMap.containsKey("repository") ) {
+            if (nameMap.containsKey("repository")) {
                 this.repository = new RepositoryNamePart(nameMap.get("repository"));
             }
-            if( nameMap.containsKey("tag") ) {
+            if (nameMap.containsKey("tag")) {
                 this.tag = new TagNamePart(nameMap.get("tag"));
             }
         }
@@ -83,16 +85,16 @@ public class DockerImageName {
 
     private String joinParts() {
         String allParts = "";
-        if( registry != null ) {
+        if (registry != null) {
             allParts += (registry + "/");
         }
-        if( namespace != null ) {
+        if (namespace != null) {
             allParts += (namespace + "/");
         }
-        if( repository != null ) {
+        if (repository != null) {
             allParts += repository;
         }
-        if( tag != null ) {
+        if (tag != null) {
             allParts += (":" + tag);
         }
         return allParts;
@@ -106,22 +108,23 @@ public class DockerImageName {
     }
 
     public void makeValid() {
-        if( registry != null ) {
+        if (registry != null) {
             registry.makeValid();
         }
-        if( namespace != null ) {
+        if (namespace != null) {
             namespace.makeValid();
         }
-        if( repository != null ) {
+        if (repository != null) {
             repository.makeValid();
         }
-        if( tag != null ) {
+        if (tag != null) {
             tag.makeValid();
         }
     }
 
     /**
      * Splits image name into name parts
+     *
      * @param imageName Full docker image name
      * @return Map of image name parts
      * @throws DockerImageException
@@ -129,29 +132,29 @@ public class DockerImageName {
     private static Map<String, String> splitImageName(String imageName) throws DockerImageNameException {
         String[] nameParts = imageName.split("/");
         // Image names are a maximum of 3 parts (separated by '/')
-        if( nameParts.length > 3 ) {
+        if (nameParts.length > 3) {
             throw new DockerImageNameException("Too many name parts in image name");
         }
-        if( nameParts.length == 0 ) {
+        if (nameParts.length == 0) {
             throw new DockerImageNameException("Cannot parse empty image name");
         }
         Map<String, String> nameMap = new HashMap<>();
 
         // Must be only a repository name
-        if( nameParts.length == 1 ) {
+        if (nameParts.length == 1) {
             nameMap.put("repository", nameParts[0]);
             // May be namespace/repository or registry/repository
-        } else if( nameParts.length == 2 ) {
+        } else if (nameParts.length == 2) {
             nameMap.put("repository", nameParts[1]);
             // Docker will think this is a registry
-            if( nameParts[0].contains(".") || nameParts[0].contains(":") || nameParts[0].equals("localhost") ) {
+            if (nameParts[0].contains(".") || nameParts[0].contains(":") || nameParts[0].equals("localhost")) {
                 nameMap.put("registry", nameParts[0]);
                 // Must be a namespace
             } else {
                 nameMap.put("namespace", nameParts[0]);
             }
             // Full 3-part repository name
-        } else if( nameParts.length == 3 ) {
+        } else if (nameParts.length == 3) {
             nameMap.put("registry", nameParts[0]);
             nameMap.put("namespace", nameParts[1]);
             nameMap.put("repository", nameParts[2]);
@@ -159,7 +162,7 @@ public class DockerImageName {
         // Split the last tag from the repository if exists
         int lastColonOccurrance = nameMap.get("repository").lastIndexOf(":");
         // If the first char is a ':', treat it as the repository and we'll validate it later
-        if( lastColonOccurrance > 0 ) {
+        if (lastColonOccurrance > 0) {
             String repository = nameMap.get("repository").substring(0, lastColonOccurrance);
             String tag = nameMap.get("repository").substring(lastColonOccurrance + 1); // Add one to remove the colon
             nameMap.replace("repository", repository);
@@ -171,7 +174,7 @@ public class DockerImageName {
     /**
      * Abstract class for each image name part to extend
      */
-    private static abstract class AbstractDockerImageNamePart {
+    private abstract static class AbstractDockerImageNamePart {
 
         protected String imageNamePart;
         protected String imageNamePartRegexp; // For matching
@@ -179,10 +182,11 @@ public class DockerImageName {
 
         /**
          * Abstract class constructor for use in subclasses
+         *
          * @param namePart
          */
-        public AbstractDockerImageNamePart(String namePart) {
-            if( namePart == null || namePart.isEmpty() ) {
+        AbstractDockerImageNamePart(String namePart) {
+            if (namePart == null || namePart.isEmpty()) {
                 throw new IllegalArgumentException("Illegal use of empty/null name part");
             }
             imageNamePart = namePart;
@@ -200,6 +204,7 @@ public class DockerImageName {
 
         /**
          * Checks whether the image name part is valid
+         *
          * @return whether image name part is valid
          */
         public abstract boolean isValid();
@@ -218,6 +223,7 @@ public class DockerImageName {
 
         /**
          * Calls constructor on abstract to set namePart
+         *
          * @param namePart Part of image name
          */
         public RegistryNamePart(String namePart) {
@@ -226,7 +232,7 @@ public class DockerImageName {
 
         @Override
         public void validate() {
-            if( imageNamePart.contains("://") ) {
+            if (imageNamePart.contains("://")) {
                 throw new DockerImageNameException("Invalid registry: Registry must not contain a schema");
             }
         }
@@ -238,14 +244,14 @@ public class DockerImageName {
 
         @Override
         public void makeValid() {
-            if( !isValid() ) {
+            if (!isValid()) {
                 removeSchema();
             }
         }
 
         private void removeSchema() {
             int lastSchemaInstance = imageNamePart.lastIndexOf("://");
-            if( lastSchemaInstance > -1 ) {
+            if (lastSchemaInstance > -1) {
                 imageNamePart = imageNamePart.substring(lastSchemaInstance, 3);  // Remove the 3 schema chars too.
             }
         }
@@ -255,6 +261,7 @@ public class DockerImageName {
 
         /**
          * Calls constructor on abstract to set namePart
+         *
          * @param namePart Part of image name
          */
         public NamespaceNamePart(String namePart) {
@@ -265,16 +272,16 @@ public class DockerImageName {
 
         @Override
         public void validate() {
-            if( imageNamePart.length() < 2 ||imageNamePart.length() > 255 ) {
+            if (imageNamePart.length() < 2 || imageNamePart.length() > 255) {
                 throw new DockerImageNameException("Invalid namespace: Namespace must be between 2 and 255 characters");
             }
-            if( imageNamePart.startsWith("-") || imageNamePart.endsWith("-") ) {
+            if (imageNamePart.startsWith("-") || imageNamePart.endsWith("-")) {
                 throw new DockerImageNameException("Invalid namespace: Namespace must not begin or end with a hyphon");
             }
-            if( imageNamePart.contains("--") ) {
+            if (imageNamePart.contains("--")) {
                 throw new DockerImageNameException("Invalid namespace: Namespace must not contain consecutive hyphons");
             }
-            if( !imageNamePart.matches(imageNamePartRegexp) ) {
+            if (!imageNamePart.matches(imageNamePartRegexp)) {
                 throw new DockerImageNameException("Invalid namespace: Namespace must match [a-z0-9_-]");
             }
         }
@@ -288,19 +295,19 @@ public class DockerImageName {
 
         @Override
         public void makeValid() {
-            if( imageNamePart.length() > 255 ) {
+            if (imageNamePart.length() > 255) {
                 imageNamePart = imageNamePart.substring(0, 255);
             }
-            if( !imageNamePart.matches(imageNamePartRegexp) ) {
+            if (!imageNamePart.matches(imageNamePartRegexp)) {
                 imageNamePart = spacesToHyphens(imageNamePart)
                         .toLowerCase()
                         .replaceAll(imageNamePartInvertedRegexp, "");
             }
-            while( imageNamePart.contains("--") ) {
+            while (imageNamePart.contains("--")) {
                 imageNamePart = imageNamePart.replaceAll("--", "-");
             }
             imageNamePart = imageNamePart.replaceAll("^-", "").replaceAll("-$", "");
-            while( imageNamePart.length() < 2 ) {
+            while (imageNamePart.length() < 2) {
                 imageNamePart += "0";
             }
         }
@@ -310,6 +317,7 @@ public class DockerImageName {
 
         /**
          * Calls constructor on abstract to set namePart
+         *
          * @param namePart Part of image name
          */
         public RepositoryNamePart(String namePart) {
@@ -320,7 +328,7 @@ public class DockerImageName {
 
         @Override
         public void validate() {
-            if( !imageNamePart.matches(imageNamePartRegexp) ) {
+            if (!imageNamePart.matches(imageNamePartRegexp)) {
                 throw new DockerImageNameException("Invalid registry: Registry must match [a-z0-9_.-]");
             }
         }
@@ -332,7 +340,7 @@ public class DockerImageName {
 
         @Override
         public void makeValid() {
-            if( !isValid() ) {
+            if (!isValid()) {
                 imageNamePart = spacesToHyphens(imageNamePart)
                         .toLowerCase()
                         .replaceAll(imageNamePartInvertedRegexp, "");
@@ -344,6 +352,7 @@ public class DockerImageName {
 
         /**
          * Calls constructor on abstract to set namePart
+         *
          * @param namePart Part of image name
          */
         public TagNamePart(String namePart) {
@@ -354,10 +363,10 @@ public class DockerImageName {
 
         @Override
         public void validate() {
-            if( !imageNamePart.matches(imageNamePartRegexp) ) {
+            if (!imageNamePart.matches(imageNamePartRegexp)) {
                 throw new DockerImageNameException("Invalid tag: Tag must match [a-zA-Z0-9][a-zA-Z0-9_.-]*");
             }
-            if( imageNamePart.length() > 128 ) {
+            if (imageNamePart.length() > 128) {
                 throw new DockerImageNameException("Invalid tag: Tag must be between 1 and 128 characters");
             }
         }
@@ -369,10 +378,10 @@ public class DockerImageName {
 
         @Override
         public void makeValid() {
-            if( imageNamePart.length() > 128 ) {
+            if (imageNamePart.length() > 128) {
                 imageNamePart = imageNamePart.substring(0, 128);
             }
-            if( !imageNamePart.matches(imageNamePartRegexp) ) {
+            if (!imageNamePart.matches(imageNamePartRegexp)) {
                 imageNamePart = spacesToHyphens(imageNamePart)
                         .replaceAll(imageNamePartInvertedRegexp, "");
             }

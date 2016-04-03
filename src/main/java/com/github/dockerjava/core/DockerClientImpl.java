@@ -60,7 +60,6 @@ import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.api.model.AuthConfig;
-import com.github.dockerjava.api.model.Identifier;
 import com.github.dockerjava.core.command.AttachContainerCmdImpl;
 import com.github.dockerjava.core.command.AuthCmdImpl;
 import com.github.dockerjava.core.command.BuildImageCmdImpl;
@@ -111,6 +110,7 @@ import com.github.dockerjava.core.command.UpdateContainerCmdImpl;
 import com.github.dockerjava.core.command.VersionCmdImpl;
 import com.github.dockerjava.core.command.WaitContainerCmdImpl;
 import com.github.dockerjava.core.command.RenameContainerCmdImpl;
+import com.github.dockerjava.core.util.DockerImageName;
 
 import javax.annotation.Nonnull;
 
@@ -225,13 +225,13 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
-    public PushImageCmd pushImageCmd(Identifier identifier) {
-        PushImageCmd cmd = pushImageCmd(identifier.repository.name);
-        if (identifier.tag.isPresent()) {
-            cmd.withTag(identifier.tag.get());
+    public PushImageCmd pushImageCmd(DockerImageName dockerImageName) {
+        PushImageCmd cmd = pushImageCmd(dockerImageName.getRepository().toString());
+        if (dockerImageName.getTag() != null) {
+            cmd.withTag(dockerImageName.getTag().toString());
         }
 
-        AuthConfig cfg = dockerClientConfig.effectiveAuthConfig(identifier.repository.name);
+        AuthConfig cfg = dockerClientConfig.effectiveAuthConfig(dockerImageName.getRepository().toString());
         if (cfg != null) {
             cmd.withAuthConfig(cfg);
         }

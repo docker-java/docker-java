@@ -59,8 +59,8 @@ import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.AuthConfig;
-import com.github.dockerjava.api.model.Identifier;
 import com.github.dockerjava.core.RemoteApiVersion;
+import com.github.dockerjava.core.util.DockerImageName;
 
 // https://godoc.org/github.com/fsouza/go-dockerclient
 public interface DockerClient extends Closeable {
@@ -86,7 +86,7 @@ public interface DockerClient extends Closeable {
 
     PushImageCmd pushImageCmd(@Nonnull String name);
 
-    PushImageCmd pushImageCmd(@Nonnull Identifier identifier);
+    PushImageCmd pushImageCmd(@Nonnull DockerImageName dockerImageName);
 
     CreateImageCmd createImageCmd(@Nonnull String repository, @Nonnull InputStream imageStream);
 
