@@ -67,6 +67,10 @@ public class DockerImageName {
         return joinParts();
     }
 
+    public String toStringWithoutTag() {
+        return joinPartsWithoutTag();
+    }
+
     public TagNamePart getTag() {
         return tag;
     }
@@ -83,21 +87,30 @@ public class DockerImageName {
         return registry;
     }
 
-    private String joinParts() {
-        String allParts = "";
+    private String joinPartsWithoutTag() {
+
+        StringBuilder allParts = new StringBuilder();
         if (registry != null) {
-            allParts += (registry + "/");
+            allParts.append(registry);
+            allParts.append("/");
         }
         if (namespace != null) {
-            allParts += (namespace + "/");
+            allParts.append(namespace);
+            allParts.append("/");
         }
         if (repository != null) {
-            allParts += repository;
+            allParts.append(repository);
         }
+
+        return allParts.toString();
+    }
+
+    private String joinParts() {
+        String name = joinPartsWithoutTag();
         if (tag != null) {
-            allParts += (":" + tag);
+            name +=  ":" + tag;
         }
-        return allParts;
+        return name;
     }
 
     public boolean isValid() {
