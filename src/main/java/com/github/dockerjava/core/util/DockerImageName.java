@@ -178,7 +178,7 @@ public class DockerImageName {
         if (lastColonOccurrance > 0) {
             String repository = nameMap.get("repository").substring(0, lastColonOccurrance);
             String tag = nameMap.get("repository").substring(lastColonOccurrance + 1); // Add one to remove the colon
-            nameMap.replace("repository", repository);
+            nameMap.put("repository", repository);
             nameMap.put("tag", tag);
         }
         return nameMap;
