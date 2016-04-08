@@ -366,26 +366,26 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     @JsonIgnore
-    public Boolean isOomKillDisable() {
-        return hostConfig.isOomKillDisable();
+    public Boolean getOomKillDisable() {
+        return hostConfig.getOomKillDisable();
     }
 
     @Override
     @JsonIgnore
-    public Boolean isPrivileged() {
-        return hostConfig.isPrivileged();
+    public Boolean getPrivileged() {
+        return hostConfig.getPrivileged();
     }
 
     @Override
     @JsonIgnore
-    public Boolean isPublishAllPorts() {
-        return hostConfig.isPublishAllPorts();
+    public Boolean getPublishAllPorts() {
+        return hostConfig.getPublishAllPorts();
     }
 
     @Override
     @JsonIgnore
-    public Boolean isReadonlyRootfs() {
-        return hostConfig.isReadonlyRootfs();
+    public Boolean getReadonlyRootfs() {
+        return hostConfig.getReadonlyRootfs();
     }
 
     @Override
