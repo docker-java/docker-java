@@ -1,0 +1,150 @@
+{
+  "Id": "d2cc496561d6d520cbc0236b4ba88c362c446a7619992123f11c809cded25b47",
+  "Created": "2015-06-08T16:18:02.505155285Z",
+  "Path": "bash",
+  "Args": [],
+  "State": {
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2015-06-08T16:18:03.643865954Z",
+    "FinishedAt": "2015-06-08T16:57:06.448552862Z"
+  },
+  "Image": "ded7cd95e059788f2586a51c275a4f151653779d6a7f4dad77c2bd34601d94e4",
+  "NetworkSettings": {
+    "Bridge": "",
+    "SandboxID": "6b4851d1903e16dd6a567bd526553a86664361f31036eaaa2f8454d6f4611f6f",
+    "HairpinMode": false,
+    "LinkLocalIPv6Address": "",
+    "LinkLocalIPv6PrefixLen": 0,
+    "Ports": {},
+    "SandboxKey": "/var/run/docker/netns/6b4851d1903e",
+    "SecondaryIPAddresses": null,
+    "SecondaryIPv6Addresses": null,
+    "EndpointID": "7587b82f0dada3656fda26588aee72630c6fab1536d36e394b2bfbcf898c971d",
+    "Gateway": "172.17.0.1",
+    "GlobalIPv6Address": "",
+    "GlobalIPv6PrefixLen": 0,
+    "IPAddress": "172.17.0.2",
+    "IPPrefixLen": 16,
+    "IPv6Gateway": "",
+    "MacAddress": "02:42:ac:12:00:02",
+    "Networks": {
+      "bridge": {
+        "NetworkID": "7ea29fc1412292a2d7bba362f9253545fecdfa8ce9a6e37dd10ba8bee7129812",
+        "EndpointID": "7587b82f0dada3656fda26588aee72630c6fab1536d36e394b2bfbcf898c971d",
+        "Gateway": "172.17.0.1",
+        "IPAddress": "172.17.0.2",
+        "IPPrefixLen": 16,
+        "IPv6Gateway": "",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "MacAddress": "02:42:ac:12:00:02"
+      }
+    }
+  },
+  "ResolvConfPath": "/var/lib/docker/containers/d2cc496561d6d520cbc0236b4ba88c362c446a7619992123f11c809cded25b47/resolv.conf",
+  "HostnamePath": "/var/lib/docker/containers/d2cc496561d6d520cbc0236b4ba88c362c446a7619992123f11c809cded25b47/hostname",
+  "HostsPath": "/var/lib/docker/containers/d2cc496561d6d520cbc0236b4ba88c362c446a7619992123f11c809cded25b47/hosts",
+  "LogPath": "/var/lib/docker/containers/d2cc496561d6d520cbc0236b4ba88c362c446a7619992123f11c809cded25b47/d2cc496561d6d520cbc0236b4ba88c362c446a7619992123f11c809cded25b47-json.log",
+  "Name": "/adoring_wozniak",
+  "RestartCount": 0,
+  "Driver": "devicemapper",
+  "MountLabel": "",
+  "ProcessLabel": "",
+  "Mounts": [
+    {
+      "Source": "/data",
+      "Destination": "/data",
+      "Mode": "ro,Z",
+      "RW": false,
+      "Propagation": ""
+    }
+  ],
+  "AppArmorProfile": "",
+  "ExecIDs": null,
+  "HostConfig": {
+    "Binds": null,
+    "ContainerIDFile": "",
+    "Memory": 0,
+    "MemorySwap": 0,
+    "CpuShares": 0,
+    "CpuPeriod": 0,
+    "CpusetCpus": "",
+    "CpusetMems": "",
+    "CpuQuota": 0,
+    "BlkioWeight": 0,
+    "OomKillDisable": false,
+    "Privileged": false,
+    "PortBindings": {},
+    "Links": null,
+    "PublishAllPorts": false,
+    "Dns": null,
+    "DnsSearch": null,
+    "DnsOptions": null,
+    "ExtraHosts": null,
+    "VolumesFrom": null,
+    "Devices": [],
+    "NetworkMode": "bridge",
+    "IpcMode": "",
+    "PidMode": "",
+    "UTSMode": "",
+    "CapAdd": null,
+    "CapDrop": null,
+    "RestartPolicy": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    },
+    "SecurityOpt": null,
+    "ReadonlyRootfs": false,
+    "Ulimits": null,
+    "LogConfig": {
+      "Type": "json-file",
+      "Config": {}
+    },
+    "CgroupParent": ""
+  },
+  "GraphDriver": {
+    "Name": "devicemapper",
+    "Data": {
+      "DeviceId": "5",
+      "DeviceName": "docker-253:1-2763198-d2cc496561d6d520cbc0236b4ba88c362c446a7619992123f11c809cded25b47",
+      "DeviceSize": "171798691840"
+    }
+  },
+  "Config": {
+    "Hostname": "d2cc496561d6",
+    "Domainname": "",
+    "User": "",
+    "AttachStdin": true,
+    "AttachStdout": true,
+    "AttachStderr": true,
+    "ExposedPorts": null,
+    "Tty": true,
+    "OpenStdin": true,
+    "StdinOnce": true,
+    "Env": null,
+    "Cmd": [
+      "bash"
+    ],
+    "Image": "fedora",
+    "Volumes": null,
+    "VolumeDriver": "",
+    "WorkingDir": "",
+    "Entrypoint": null,
+    "NetworkDisabled": false,
+    "MacAddress": "",
+    "OnBuild": null,
+    "Labels": {},
+    "Memory": 0,
+    "MemorySwap": 0,
+    "CpuShares": 0,
+    "Cpuset": "",
+    "StopSignal": "SIGTERM"
+  }
+}

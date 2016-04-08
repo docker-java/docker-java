@@ -160,4 +160,33 @@ public class InspectImageResponseTest {
                 "example:stable"
         ));
     }
+
+    @Test
+    public void serder1_22_inspect_doc() throws IOException {
+        final ObjectMapper mapper = new ObjectMapper();
+        final JavaType type = mapper.getTypeFactory().constructType(InspectImageResponse.class);
+
+        final InspectImageResponse inspectImage = testRoundTrip(VERSION_1_22,
+                "images/docImage/inspect_doc.json",
+                type
+        );
+
+        GraphData newGraphData = new GraphData()
+                .withDeviceId("5")
+                .withDeviceName("docker-253:1-2763198-d2cc496561d6d520cbc0236b4ba88c362c446a7619992123f11c809cded25b47")
+                .withDeviceSize("171798691840");
+
+        assertThat(inspectImage, notNullValue());
+        GraphDriver graphDriver = inspectImage.getGraphDriver();
+        assertThat(graphDriver, notNullValue());
+        GraphData data = graphDriver.getData();
+
+        assertThat(data, is(newGraphData));
+
+        assertThat(data.getDeviceId(), is("5"));
+        assertThat(data.getDeviceName(),
+                is("docker-253:1-2763198-d2cc496561d6d520cbc0236b4ba88c362c446a7619992123f11c809cded25b47"));
+        assertThat(data.getDeviceSize(),
+                is("171798691840"));
+    }
 }
