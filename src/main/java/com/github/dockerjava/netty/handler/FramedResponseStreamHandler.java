@@ -62,6 +62,7 @@ public class FramedResponseStreamHandler extends SimpleChannelInboundHandler<Byt
     private int read(byte[] buf, int offset, int length) {
         length = Math.min(rawBuffer.readableBytes(), length);
         rawBuffer.readBytes(buf, offset, length);
+        rawBuffer.discardReadBytes();
         return length;
     }
 
