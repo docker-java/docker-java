@@ -50,6 +50,8 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     private Long memswap;
 
+    private Long shmsize;
+
     private URI remote;
 
     private Map<String, String> buildArgs;
@@ -157,6 +159,14 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @Override
     public InputStream getTarInputStream() {
         return tarInputStream;
+    }
+
+    /**
+     * @see #shmsize
+     */
+    @Override
+    public Long getShmsize() {
+        return shmsize;
     }
 
     // setters
@@ -284,6 +294,15 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
         return this;
     }
 
+    /**
+     * @see #shmsize
+     */
+    @Override
+    public BuildImageCmd withShmsize(Long shmsize) {
+        this.shmsize = shmsize;
+        return this;
+    }
+
     @Override
     public void close() {
         super.close();
@@ -294,4 +313,5 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
             throw new RuntimeException(e);
         }
     }
+
 }
