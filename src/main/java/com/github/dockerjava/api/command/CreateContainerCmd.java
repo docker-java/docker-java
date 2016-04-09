@@ -159,16 +159,16 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
      * @since 1.19
      */
     @CheckForNull
-    Boolean isOomKillDisable();
+    Boolean getOomKillDisable();
 
     @CheckForNull
-    Boolean isPrivileged();
+    Boolean getPrivileged();
 
     @CheckForNull
-    Boolean isPublishAllPorts();
+    Boolean getPublishAllPorts();
 
     @CheckForNull
-    Boolean isReadonlyRootfs();
+    Boolean getReadonlyRootfs();
 
     @CheckForNull
     Boolean isStdInOnce();
