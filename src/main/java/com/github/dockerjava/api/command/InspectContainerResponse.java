@@ -98,6 +98,9 @@ public class InspectContainerResponse {
     @JsonProperty("Mounts")
     private List<Mount> mounts;
 
+    @JsonProperty("Node")
+    private SwarmNode swarmNode;
+
     public String getId() {
         return id;
     }
@@ -509,6 +512,88 @@ public class InspectContainerResponse {
         public Mount withSource(String source) {
             this.source = source;
             return this;
+        }
+
+        @Override
+        public String toString() {
+            return ToStringBuilder.reflectionToString(this);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return EqualsBuilder.reflectionEquals(this, o);
+        }
+
+        @Override
+        public int hashCode() {
+            return HashCodeBuilder.reflectionHashCode(this);
+        }
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public class SwarmNode {
+
+        @CheckForNull
+        @JsonProperty("ID")
+        private String id;
+
+        @CheckForNull
+        @JsonProperty("IP")
+        private String ip;
+
+        @CheckForNull
+        @JsonProperty("Addr")
+        private String addr;
+
+        @CheckForNull
+        @JsonProperty("Name")
+        private String name;
+
+        @CheckForNull
+        @JsonProperty("Cpus")
+        private Integer cpus;
+
+        @CheckForNull
+        @JsonProperty("Memory")
+        private String memory;
+
+        @CheckForNull
+        @JsonProperty("Labels")
+        private SwarmLabel labels;
+
+        @CheckForNull
+        public String getId() {
+            return id;
+        }
+
+        @CheckForNull
+        public String getIp() {
+            return ip;
+        }
+
+        @CheckForNull
+        public String getAddr() {
+            return addr;
+        }
+
+        @CheckForNull
+        public String getName() {
+            return name;
+        }
+
+        @CheckForNull
+        public Integer getCpus() {
+            return cpus;
+        }
+
+        @CheckForNull
+        public String getMemory() {
+            return memory;
+        }
+
+        @CheckForNull
+        public SwarmLabel getLabels() {
+            return labels;
         }
 
         @Override
