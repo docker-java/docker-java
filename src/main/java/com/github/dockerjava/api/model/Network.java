@@ -149,6 +149,18 @@ public class Network {
             public String getGateway() {
                 return gateway;
             }
+
+            public void setSubnet(String subnet) {
+                this.subnet = subnet;
+            }
+
+            public void setIpRange(String ipRange) {
+                this.ipRange = ipRange;
+            }
+
+            public void setGateway(String gateway) {
+                this.gateway = gateway;
+            }
         }
     }
 }
