@@ -285,22 +285,6 @@ public class HostConfig {
         return volumesFrom;
     }
 
-    public Boolean isOomKillDisable() {
-        return oomKillDisable;
-    }
-
-    public Boolean isPrivileged() {
-        return privileged;
-    }
-
-    public Boolean isPublishAllPorts() {
-        return publishAllPorts;
-    }
-
-    public Boolean isReadonlyRootfs() {
-        return readonlyRootfs;
-    }
-
     @CheckForNull
     public String getPidMode() {
         return pidMode;
@@ -704,6 +688,14 @@ public class HostConfig {
     /**
      * @see #privileged
      */
+    @CheckForNull
+    public Boolean getPrivileged() {
+        return privileged;
+    }
+
+    /**
+     * @see #privileged
+     */
     public HostConfig withPrivileged(Boolean privileged) {
         this.privileged = privileged;
         return this;
@@ -712,9 +704,25 @@ public class HostConfig {
     /**
      * @see #publishAllPorts
      */
+    @CheckForNull
+    public Boolean getPublishAllPorts() {
+        return publishAllPorts;
+    }
+
+    /**
+     * @see #publishAllPorts
+     */
     public HostConfig withPublishAllPorts(Boolean publishAllPorts) {
         this.publishAllPorts = publishAllPorts;
         return this;
+    }
+
+    /**
+     * @see #readonlyRootfs
+     */
+    @CheckForNull
+    public Boolean getReadonlyRootfs() {
+        return readonlyRootfs;
     }
 
     /**

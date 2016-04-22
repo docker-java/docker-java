@@ -24,21 +24,21 @@ public class GraphDriver {
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_21}
      */
     @JsonProperty("Data")
-    private String data;
+    private GraphData data;
 
 
     /**
      * @see #data
      */
     @CheckForNull
-    public String getData() {
+    public GraphData getData() {
         return data;
     }
 
     /**
      * @see #data
      */
-    public GraphDriver withData(String data) {
+    public GraphDriver withData(GraphData data) {
         this.data = data;
         return this;
     }

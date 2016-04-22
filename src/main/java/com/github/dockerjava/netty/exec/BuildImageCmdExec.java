@@ -93,6 +93,10 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
             }
         }
 
+        if (command.getShmsize() != null) {
+            webTarget = webTarget.queryParam("shmsize", command.getShmsize());
+        }
+
         LOGGER.trace("POST: {}", webTarget);
 
         InvocationBuilder builder = resourceWithOptionalAuthConfig(command, webTarget.request())

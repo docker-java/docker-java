@@ -10,6 +10,11 @@ Notes
 
 All changes
 
+* [#542] (https://github.com/docker-java/docker-java/pull/542) Fix large volumes of output from "docker exec" trigger out of memory error
+* [#541] (https://github.com/docker-java/docker-java/pull/541) ImageInspectResponse.GraphDriver.Data is more complex structure 
+* [#534] (https://github.com/docker-java/docker-java/pull/534) Fix create volume command doesn't assign passed in volume driverOpts to field
+* [#533] (https://github.com/docker-java/docker-java/pull/533) Added shmsize build option 
+
 Included in 3.0.0-RC4
 * [#528] (https://github.com/docker-java/docker-java/pull/528) Fix DOCKER_TLS_VERIFY cannot be 'false' or empty
 * [#527] (https://github.com/docker-java/docker-java/pull/527) Fix `mirrors` field is list and not a single string #527 
