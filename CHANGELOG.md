@@ -10,6 +10,8 @@ Notes
 
 All changes
 
+Included in 3.0.0-RC5
+
 * [#542] (https://github.com/docker-java/docker-java/pull/542) Fix large volumes of output from "docker exec" trigger out of memory error
 * [#541] (https://github.com/docker-java/docker-java/pull/541) ImageInspectResponse.GraphDriver.Data is more complex structure 
 * [#534] (https://github.com/docker-java/docker-java/pull/534) Fix create volume command doesn't assign passed in volume driverOpts to field
