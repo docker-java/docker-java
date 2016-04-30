@@ -119,6 +119,7 @@ import io.netty.channel.unix.UnixChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslHandler;
+import io.netty.util.concurrent.DefaultThreadFactory;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
@@ -147,6 +148,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Marcus Linke
  */
 public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
+
+    private static String threadPrefix = "dockerjava-netty";
 
     /*
      * useful links:
@@ -215,7 +218,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     private class UnixDomainSocketInitializer implements NettyInitializer {
         @Override
         public EventLoopGroup init(Bootstrap bootstrap, DockerClientConfig dockerClientConfig) {
-            EventLoopGroup epollEventLoopGroup = new EpollEventLoopGroup();
+            EventLoopGroup epollEventLoopGroup = new EpollEventLoopGroup(0, new DefaultThreadFactory(threadPrefix));
             bootstrap.group(epollEventLoopGroup).channel(EpollDomainSocketChannel.class)
                     .handler(new ChannelInitializer<UnixChannel>() {
                         @Override
@@ -235,7 +238,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     private class InetSocketInitializer implements NettyInitializer {
         @Override
         public EventLoopGroup init(Bootstrap bootstrap, final DockerClientConfig dockerClientConfig) {
-            EventLoopGroup nioEventLoopGroup = new NioEventLoopGroup();
+            EventLoopGroup nioEventLoopGroup = new NioEventLoopGroup(0, new DefaultThreadFactory(threadPrefix));
 
             InetAddress addr = InetAddress.getLoopbackAddress();
 
