@@ -1,16 +1,5 @@
 package com.github.dockerjava.api.model;
 
-import static org.apache.commons.lang.StringUtils.isEmpty;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.builder.EqualsBuilder;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -23,6 +12,16 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.node.NullNode;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.builder.EqualsBuilder;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import static org.apache.commons.lang.StringUtils.isEmpty;
 
 /**
  * A container for port bindings, made available as a {@link Map} via its {@link #getBindings()} method.
@@ -111,15 +110,15 @@ public class Ports {
     /**
      * Creates a {@link Binding} for the given IP address and port number.
      */
-    public static Binding binding(String hostIp, Integer hostPort) {
+    public static Binding binding(String hostIp, String hostPort) {
         return new Binding(hostIp, hostPort);
     }
 
     /**
      * Creates a {@link Binding} for the given port number, leaving the IP address undefined.
      */
-    public static Binding binding(Integer hostPort) {
-        return new Binding(hostPort);
+    public static Binding binding(String hostPort) {
+        return new Binding(null, hostPort);
     }
 
     /**
@@ -132,9 +131,28 @@ public class Ports {
      */
     public static class Binding {
 
+        /**
+         * Creates a {@link Binding} for the given {@link #getHostPort() port number or range}, leaving the {@link #getHostIp() IP address}
+         * undefined.
+         *
+         * @see Ports#bind(ExposedPort, Binding)
+         * @see ExposedPort
+         */
+        public static Binding forPort(String port) {
+            return new Binding(null, port);
+        }
+
+        /**
+         * Creates a {@link Binding} for the given {@link #getHostIp() IP address}, leaving the {@link #getHostPort() port number}
+         * undefined.
+         */
+        public static Binding forIp(String hostIp) {
+            return new Binding(hostIp, null);
+        }
+
         private final String hostIp;
 
-        private final Integer hostPort;
+        private final String hostPort;
 
         /**
          * Creates a {@link Binding} for the given {@link #getHostIp() IP address} and {@link #getHostPort() port number}.
@@ -142,28 +160,9 @@ public class Ports {
          * @see Ports#bind(ExposedPort, Binding)
          * @see ExposedPort
          */
-        public Binding(String hostIp, Integer hostPort) {
+        public Binding(String hostIp, String hostPort) {
             this.hostIp = isEmpty(hostIp) ? null : hostIp;
             this.hostPort = hostPort;
-        }
-
-        /**
-         * Creates a {@link Binding} for the given {@link #getHostPort() port number}, leaving the {@link #getHostIp() IP address}
-         * undefined.
-         *
-         * @see Ports#bind(ExposedPort, Binding)
-         * @see ExposedPort
-         */
-        public Binding(Integer hostPort) {
-            this(null, hostPort);
-        }
-
-        /**
-         * Creates a {@link Binding} for the given {@link #getHostIp() IP address}, leaving the {@link #getHostPort() port number}
-         * undefined.
-         */
-        public Binding(String hostIp) {
-            this(hostIp, null);
         }
 
         /**
@@ -184,7 +183,7 @@ public class Ports {
         /**
          * @return the port number on the Docker host. May be <code>null</code>, in which case Docker will dynamically assign a port.
          */
-        public Integer getHostPort() {
+        public String getHostPort() {
             return hostPort;
         }
 
@@ -208,10 +207,10 @@ public class Ports {
                 String[] parts = serialized.split(":");
                 switch (parts.length) {
                     case 2: {
-                        return new Binding(parts[0], Integer.valueOf(parts[1]));
+                        return new Binding(parts[0], parts[1]);
                     }
                     case 1: {
-                        return parts[0].contains(".") ? new Binding(parts[0]) : new Binding(Integer.valueOf(parts[0]));
+                        return parts[0].contains(".") ? Binding.forIp(parts[0]) : Binding.forPort(parts[0]);
                     }
                     default: {
                         throw new IllegalArgumentException();
@@ -231,7 +230,7 @@ public class Ports {
         @Override
         public String toString() {
             if (isEmpty(hostIp)) {
-                return Integer.toString(hostPort);
+                return hostPort;
             } else if (hostPort == null) {
                 return hostIp;
             } else {
@@ -270,7 +269,7 @@ public class Ports {
                         JsonNode bindingNode = bindingsArray.get(i);
                         if (!bindingNode.equals(NullNode.getInstance())) {
                             String hostIp = bindingNode.get("HostIp").textValue();
-                            int hostPort = bindingNode.get("HostPort").asInt();
+                            String hostPort = bindingNode.get("HostPort").textValue();
                             out.bind(ExposedPort.parse(portNode.getKey()), new Binding(hostIp, hostPort));
                         }
                     }
@@ -294,8 +293,7 @@ public class Ports {
                     for (Binding binding : entry.getValue()) {
                         jsonGen.writeStartObject();
                         jsonGen.writeStringField("HostIp", binding.getHostIp() == null ? "" : binding.getHostIp());
-                        jsonGen.writeStringField("HostPort", binding.getHostPort() == null ? "" : binding.getHostPort()
-                                .toString());
+                        jsonGen.writeStringField("HostPort", binding.getHostPort() == null ? "" : binding.getHostPort());
                         jsonGen.writeEndObject();
                     }
                     jsonGen.writeEndArray();
