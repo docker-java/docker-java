@@ -1,26 +1,29 @@
 package com.github.dockerjava.api.model;
 
-import static org.testng.Assert.assertEquals;
-
-import java.util.Map;
-
+import com.github.dockerjava.api.model.Ports.Binding;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.model.Ports.Binding;
+import java.util.Map;
+
+import static org.testng.Assert.assertEquals;
 
 /**
  * As there may be several {@link Binding}s per {@link ExposedPort}, it makes a difference if you add {@link PortBinding}s for the same or
  * different {@link ExposedPort}s to {@link Ports}. This test verifies that the Map in {@link Ports} is populated correctly in both cases.
  */
 public class Ports_addBindingsTest {
-    private static final ExposedPort TCP_80 = ExposedPort.tcp(80);
+    private static final ExposedPort TCP_80 = ExposedPort.tcp("80");
 
-    private static final ExposedPort TCP_90 = ExposedPort.tcp(90);
+    private static final ExposedPort TCP_90 = ExposedPort.tcp("90");
 
-    private static final Binding BINDING_8080 = Ports.binding(8080);
+    private static final ExposedPort TCP_8080_9000 = ExposedPort.tcp("8080-9000");
 
-    private static final Binding BINDING_9090 = Ports.binding(9090);
+    private static final Binding BINDING_8080 = Ports.binding("8080");
+
+    private static final Binding BINDING_9090 = Ports.binding("9090");
+
+    private static final Binding BINDING_8080_9000 = Ports.binding("8080-9000");
 
     private Ports ports;
 
@@ -57,5 +60,14 @@ public class Ports_addBindingsTest {
         // one key with two values
         assertEquals(bindings.size(), 1);
         assertEquals(bindings.get(TCP_80), null);
+    }
+
+    @Test
+    public void addRangeBindings() {
+        ports.add(new PortBinding(null, TCP_8080_9000));
+        Map<ExposedPort, Binding[]> bindings = ports.getBindings();
+        // one key with two values
+        assertEquals(bindings.size(), 1);
+        assertEquals(bindings.get(TCP_8080_9000), null);
     }
 }
