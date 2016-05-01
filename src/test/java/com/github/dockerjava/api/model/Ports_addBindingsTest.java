@@ -1,13 +1,12 @@
 package com.github.dockerjava.api.model;
 
-import static org.testng.Assert.assertEquals;
-
-import java.util.Map;
-
+import com.github.dockerjava.api.model.Ports.Binding;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.model.Ports.Binding;
+import java.util.Map;
+
+import static org.testng.Assert.assertEquals;
 
 /**
  * As there may be several {@link Binding}s per {@link ExposedPort}, it makes a difference if you add {@link PortBinding}s for the same or
@@ -18,9 +17,9 @@ public class Ports_addBindingsTest {
 
     private static final ExposedPort TCP_90 = ExposedPort.tcp(90);
 
-    private static final Binding BINDING_8080 = Ports.binding(8080);
+    private static final Binding BINDING_8080 = Ports.binding("8080");
 
-    private static final Binding BINDING_9090 = Ports.binding(9090);
+    private static final Binding BINDING_9090 = Ports.binding("9090");
 
     private Ports ports;
 

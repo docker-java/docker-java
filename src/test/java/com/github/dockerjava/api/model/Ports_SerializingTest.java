@@ -1,13 +1,12 @@
 package com.github.dockerjava.api.model;
 
-import static org.testng.Assert.assertEquals;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dockerjava.api.model.Ports.Binding;
+import org.testng.annotations.Test;
 
 import java.util.Map;
 
-import org.testng.annotations.Test;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.api.model.Ports.Binding;
+import static org.testng.Assert.assertEquals;
 
 public class Ports_SerializingTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -24,15 +23,15 @@ public class Ports_SerializingTest {
 
         Binding[] bindings = map.get(ExposedPort.tcp(80));
         assertEquals(bindings.length, 2);
-        assertEquals(bindings[0], new Binding("10.0.0.1", 80));
-        assertEquals(bindings[1], new Binding("10.0.0.2", 80));
+        assertEquals(bindings[0], new Binding("10.0.0.1", "80"));
+        assertEquals(bindings[1], new Binding("10.0.0.2", "80"));
     }
 
     @Test
     public void serializingPortWithMultipleBindings() throws Exception {
         Ports ports = new Ports();
-        ports.bind(ExposedPort.tcp(80), new Binding("10.0.0.1", 80));
-        ports.bind(ExposedPort.tcp(80), new Binding("10.0.0.2", 80));
+        ports.bind(ExposedPort.tcp(80), new Binding("10.0.0.1", "80"));
+        ports.bind(ExposedPort.tcp(80), new Binding("10.0.0.2", "80"));
         assertEquals(objectMapper.writeValueAsString(ports), jsonWithDoubleBindingForOnePort);
     }
 
