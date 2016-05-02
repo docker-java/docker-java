@@ -120,6 +120,9 @@ public class HttpResponseHandler extends SimpleChannelInboundHandler<HttpObject>
     }
 
     private String getBodyAsMessage(ByteBuf body) {
-        return body.readBytes(body.readableBytes()).toString(Charset.forName("UTF-8"));
+        String result = body.readBytes(body.readableBytes()).toString(Charset.forName("UTF-8"));
+        body.discardReadBytes();
+        body.release();
+        return result;
     }
 }
