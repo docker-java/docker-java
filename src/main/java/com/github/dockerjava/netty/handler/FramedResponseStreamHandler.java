@@ -45,7 +45,7 @@ public class FramedResponseStreamHandler extends SimpleChannelInboundHandler<Byt
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
 
-        rawBuffer.writeBytes(msg.copy(), 0, msg.readableBytes());
+        rawBuffer.writeBytes(msg, 0, msg.readableBytes());
 
         Frame frame = null;
 
