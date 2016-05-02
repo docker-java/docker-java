@@ -10,6 +10,8 @@ Notes
 
 All changes
 
+* [#563] (https://github.com/docker-java/docker-java/pull/563) Fix memory leak in netty implementation of DockerCmdExecFactory
+
 Included in 3.0.0-RC5
 
 * [#542] (https://github.com/docker-java/docker-java/pull/542) Fix large volumes of output from "docker exec" trigger out of memory error
