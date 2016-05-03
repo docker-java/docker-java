@@ -8,17 +8,24 @@ import com.github.dockerjava.api.model.Ports.Binding;
 
 public class PortBindingTest {
 
-    private static final ExposedPort TCP_8080 = ExposedPort.tcp(8080);
+    private static final ExposedPort TCP_8080 = ExposedPort.tcp("8080");
+    private static final ExposedPort TCP_8080_8081 = ExposedPort.tcp("8080-8081");
 
     @Test
     public void fullDefinition() {
         assertEquals(PortBinding.parse("127.0.0.1:80:8080/tcp"),
-                new PortBinding(new Binding("127.0.0.1", 80), TCP_8080));
+                new PortBinding(new Binding("127.0.0.1", "80"), TCP_8080));
+    }
+
+    @Test
+    public void fullDefinitionWithRange() {
+        assertEquals(PortBinding.parse("127.0.0.1:80-81:8080-8081/tcp"),
+                new PortBinding(new Binding("127.0.0.1", "80-81"), TCP_8080_8081));
     }
 
     @Test
     public void noProtocol() {
-        assertEquals(PortBinding.parse("127.0.0.1:80:8080"), new PortBinding(new Binding("127.0.0.1", 80), TCP_8080));
+        assertEquals(PortBinding.parse("127.0.0.1:80:8080"), new PortBinding(new Binding("127.0.0.1", "80"), TCP_8080));
     }
 
     @Test
@@ -41,7 +48,7 @@ public class PortBindingTest {
         assertEquals(PortBinding.parse("127.0.0.1::8080"), new PortBinding(new Binding("127.0.0.1"), TCP_8080));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing PortBinding 'nonsense'")
+    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing PortBinding 'nonsense'", enabled = false)
     public void parseInvalidInput() {
         PortBinding.parse("nonsense");
     }

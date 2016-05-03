@@ -34,7 +34,7 @@ public class ExposedPort {
 
     private final InternetProtocol protocol;
 
-    private final int port;
+    private final String port;
 
     /**
      * Creates an {@link ExposedPort} for the given parameters.
@@ -44,7 +44,7 @@ public class ExposedPort {
      * @param protocol
      *            the {@link InternetProtocol}
      */
-    public ExposedPort(int port, InternetProtocol protocol) {
+    public ExposedPort(String port, InternetProtocol protocol) {
         this.port = port;
         this.protocol = protocol;
     }
@@ -55,7 +55,7 @@ public class ExposedPort {
      * @param port
      *            the {@link #getPort() port number}
      */
-    public ExposedPort(int port) {
+    public ExposedPort(String port) {
         this(port, InternetProtocol.DEFAULT);
     }
 
@@ -65,11 +65,11 @@ public class ExposedPort {
      * @param scheme
      *            the {@link #getScheme() scheme}, <code>tcp</code> or <code>udp</code>
      * @param port
-     *            the {@link #getPort() port number}
-     * @deprecated use {@link #ExposedPort(int, InternetProtocol)}
+     *            the {@link #getPort() port number or port range}
+     * @deprecated use {@link #ExposedPort(String, InternetProtocol)}
      */
     @Deprecated
-    public ExposedPort(String scheme, int port) {
+    public ExposedPort(String scheme, String port) {
         this(port, InternetProtocol.valueOf(scheme));
     }
 
@@ -90,7 +90,7 @@ public class ExposedPort {
     }
 
     /** @return the port number that the container exposes */
-    public int getPort() {
+    public String getPort() {
         return port;
     }
 
@@ -98,7 +98,7 @@ public class ExposedPort {
      * Creates an {@link ExposedPort} for {@link InternetProtocol#TCP}. This is a shortcut for
      * <code>new ExposedPort(port, {@link InternetProtocol#TCP})</code>
      */
-    public static ExposedPort tcp(int port) {
+    public static ExposedPort tcp(String port) {
         return new ExposedPort(port, TCP);
     }
 
@@ -106,7 +106,7 @@ public class ExposedPort {
      * Creates an {@link ExposedPort} for {@link InternetProtocol#UDP}. This is a shortcut for
      * <code>new ExposedPort(port, {@link InternetProtocol#UDP})</code>
      */
-    public static ExposedPort udp(int port) {
+    public static ExposedPort udp(String port) {
         return new ExposedPort(port, UDP);
     }
 
@@ -124,9 +124,9 @@ public class ExposedPort {
             String[] parts = serialized.split("/");
             switch (parts.length) {
                 case 1:
-                    return new ExposedPort(Integer.valueOf(parts[0]));
+                    return new ExposedPort(parts[0]);
                 case 2:
-                    return new ExposedPort(Integer.valueOf(parts[0]), InternetProtocol.parse(parts[1]));
+                    return new ExposedPort(parts[0], InternetProtocol.parse(parts[1]));
                 default:
                     throw new IllegalArgumentException();
             }

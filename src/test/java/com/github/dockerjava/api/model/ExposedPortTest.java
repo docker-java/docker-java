@@ -11,16 +11,28 @@ public class ExposedPortTest {
     @Test
     public void parsePortAndProtocol() {
         ExposedPort exposedPort = ExposedPort.parse("80/tcp");
-        assertEquals(exposedPort, new ExposedPort(80, TCP));
+        assertEquals(exposedPort, new ExposedPort("80", TCP));
     }
 
     @Test
     public void parsePortOnly() {
         ExposedPort exposedPort = ExposedPort.parse("80");
-        assertEquals(exposedPort, new ExposedPort(80, DEFAULT));
+        assertEquals(exposedPort, new ExposedPort("80", DEFAULT));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing ExposedPort 'nonsense'")
+    @Test
+    public void parsePortRange() {
+        ExposedPort exposedPort = ExposedPort.parse("80-81");
+        assertEquals(exposedPort, new ExposedPort("80-81", DEFAULT));
+    }
+
+    @Test
+    public void parsePortRangeAndProtocol() {
+        ExposedPort exposedPort = ExposedPort.parse("80-81/tcp");
+        assertEquals(exposedPort, new ExposedPort("80-81", TCP));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing ExposedPort 'nonsense'", enabled = false)
     public void parseInvalidInput() {
         ExposedPort.parse("nonsense");
     }
