@@ -30,6 +30,7 @@ public class JsonResponseCallbackHandler<T> extends SimpleChannelInboundHandler<
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
         byte[] buffer = new byte[msg.readableBytes()];
         msg.readBytes(buffer);
+        msg.discardReadBytes();
 
         T object = null;
 

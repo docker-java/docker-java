@@ -36,7 +36,7 @@ public class ListContainersCmdExec extends AbstrSyncDockerCmdExec<ListContainers
             webTarget = webTarget.queryParam("limit", String.valueOf(command.getLimit()));
         }
 
-        if (command.getFilters() != null) {
+        if (command.getFilters() != null && !command.getFilters().isEmpty()) {
             webTarget = webTarget
                     .queryParam("filters", urlPathSegmentEscaper().escape(FiltersEncoder.jsonEncode(command.getFilters())));
         }
