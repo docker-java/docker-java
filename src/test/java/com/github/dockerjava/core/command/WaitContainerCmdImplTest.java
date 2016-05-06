@@ -106,7 +106,7 @@ public class WaitContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void testWaitContainerTimeout() throws Exception {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "10").exec();
 
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
@@ -121,12 +121,5 @@ public class WaitContainerCmdImplTest extends AbstractDockerClientTest {
         } catch(DockerClientException e){
             LOG.info(e.getMessage());
         }
-
-        dockerClient.killContainerCmd(container.getId()).exec();
-
-        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
-        LOG.info("Container Inspect: {}", inspectContainerResponse.toString());
-
-        assertThat(inspectContainerResponse.getState().getRunning(), is(equalTo(false)));
     }
 }
