@@ -56,7 +56,9 @@ public class WaitContainerResultCallback extends ResultCallbackTemplate<WaitCont
      */
     public Integer awaitStatusCode(long timeout, TimeUnit timeUnit) {
         try {
-            awaitCompletion(timeout, timeUnit);
+            if (!awaitCompletion(timeout, timeUnit)) {
+                throw new DockerClientException("Awaiting status code timeout.");
+            }
         } catch (InterruptedException e) {
             throw new DockerClientException("Awaiting status code interrupted: ", e);
         }
