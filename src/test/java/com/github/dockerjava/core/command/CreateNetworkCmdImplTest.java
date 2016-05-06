@@ -51,7 +51,7 @@ public class CreateNetworkCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test
-    public void createNetworkWithCustomConfig() throws DockerException {
+    public void createNetworkWithIpamConfig() throws DockerException {
 
         String networkName = "testNetwork";
         Network.Ipam.Config config = new Network.Ipam.Config();
