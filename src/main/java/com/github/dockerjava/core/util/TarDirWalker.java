@@ -26,6 +26,7 @@ public class TarDirWalker extends SimpleFileVisitor<Path> {
     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
         if (!dir.equals(basePath)) {
             tarArchiveOutputStream.putArchiveEntry(new TarArchiveEntry(FilePathUtil.relativize(basePath, dir)));
+            tarArchiveOutputStream.closeArchiveEntry();
         }
         return FileVisitResult.CONTINUE;
     }
