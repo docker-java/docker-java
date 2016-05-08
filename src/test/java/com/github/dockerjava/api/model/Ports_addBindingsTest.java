@@ -17,9 +17,9 @@ public class Ports_addBindingsTest {
 
     private static final ExposedPort TCP_90 = ExposedPort.tcp(90);
 
-    private static final Binding BINDING_8080 = Ports.binding("8080");
+    private static final Binding BINDING_8080 = Binding.bindPort(8080);
 
-    private static final Binding BINDING_9090 = Ports.binding("9090");
+    private static final Binding BINDING_9090 = Binding.bindPort(9090);
 
     private Ports ports;
 

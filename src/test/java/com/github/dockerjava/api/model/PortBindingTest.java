@@ -13,32 +13,32 @@ public class PortBindingTest {
     @Test
     public void fullDefinition() {
         assertEquals(PortBinding.parse("127.0.0.1:80:8080/tcp"),
-                new PortBinding(new Binding("127.0.0.1", "80"), TCP_8080));
+                new PortBinding(Binding.bindIpAndPort("127.0.0.1", 80), TCP_8080));
     }
 
     @Test
     public void noProtocol() {
-        assertEquals(PortBinding.parse("127.0.0.1:80:8080"), new PortBinding(new Binding("127.0.0.1", "80"), TCP_8080));
+        assertEquals(PortBinding.parse("127.0.0.1:80:8080"), new PortBinding(Binding.bindIpAndPort("127.0.0.1", 80), TCP_8080));
     }
 
     @Test
     public void noHostIp() {
-        assertEquals(PortBinding.parse("80:8080/tcp"), new PortBinding(Binding.forPort("80"), TCP_8080));
+        assertEquals(PortBinding.parse("80:8080/tcp"), new PortBinding(Binding.bindPort(80), TCP_8080));
     }
 
     @Test
     public void portsOnly() {
-        assertEquals(PortBinding.parse("80:8080"), new PortBinding(Binding.forPort("80"), TCP_8080));
+        assertEquals(PortBinding.parse("80:8080"), new PortBinding(Binding.bindPort(80), TCP_8080));
     }
 
     @Test
     public void exposedPortOnly() {
-        assertEquals(PortBinding.parse("8080"), new PortBinding(new Binding(), TCP_8080));
+        assertEquals(PortBinding.parse("8080"), new PortBinding(Binding.empty(), TCP_8080));
     }
 
     @Test
     public void dynamicHostPort() {
-        assertEquals(PortBinding.parse("127.0.0.1::8080"), new PortBinding(Binding.forIp("127.0.0.1"), TCP_8080));
+        assertEquals(PortBinding.parse("127.0.0.1::8080"), new PortBinding(Binding.bindIp("127.0.0.1"), TCP_8080));
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing PortBinding 'nonsense'", enabled = false)

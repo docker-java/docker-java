@@ -34,6 +34,7 @@ import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
+import com.github.dockerjava.api.model.Ports.Binding;
 import com.github.dockerjava.core.command.BuildImageResultCallback;
 import com.github.dockerjava.core.command.PushImageResultCallback;
 import com.github.dockerjava.core.command.WaitContainerResultCallback;
@@ -255,7 +256,7 @@ public class BuildImageCmdExecTest extends AbstractNettyDockerClientTest {
         CreateContainerResponse testregistry = dockerClient
                 .createContainerCmd("testregistry:2")
                 .withName("registry")
-                .withPortBindings(new PortBinding(Ports.Binding.forPort("5000"), ExposedPort.tcp(5000)))
+                .withPortBindings(new PortBinding(Binding.bindPort(5000), ExposedPort.tcp(5000)))
                 .withEnv("REGISTRY_AUTH=htpasswd", "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm",
                         "REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd", "REGISTRY_LOG_LEVEL=debug",
                         "REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt", "REGISTRY_HTTP_TLS_KEY=/certs/domain.key")

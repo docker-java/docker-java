@@ -108,23 +108,9 @@ public class Ports {
     // }
 
     /**
-     * Creates a {@link Binding} for the given IP address and port number.
-     */
-    public static Binding binding(String hostIp, String hostPort) {
-        return new Binding(hostIp, hostPort);
-    }
-
-    /**
-     * Creates a {@link Binding} for the given port number, leaving the IP address undefined.
-     */
-    public static Binding binding(String hostPort) {
-        return new Binding(null, hostPort);
-    }
-
-    /**
      * A {@link Binding} represents a socket on the Docker host that is used in a {@link PortBinding}. It is characterized by an
-     * {@link #getHostIp() IP address} and a {@link #getHostPort() port number}. Both properties may be <code>null</code> in order to let
-     * Docker assign them dynamically/using defaults.
+     * {@link #getHostIp() IP address} and a {@link #getHostPortSpec() port spec}. Both properties may be <code>null</code> in order to
+     * let Docker assign them dynamically/using defaults.
      *
      * @see Ports#bind(ExposedPort, Binding)
      * @see ExposedPort
@@ -132,44 +118,74 @@ public class Ports {
     public static class Binding {
 
         /**
-         * Creates a {@link Binding} for the given {@link #getHostPort() port number or range}, leaving the {@link #getHostIp() IP address}
+         * Creates a {@link Binding} for the given {@link #getHostPortSpec() port spec}, leaving the {@link #getHostIp() IP address}
          * undefined.
          *
          * @see Ports#bind(ExposedPort, Binding)
          * @see ExposedPort
          */
-        public static Binding forPort(String port) {
-            return new Binding(null, port);
+        public static Binding bindPortSpec(String portSpec) {
+            return new Binding(null, portSpec);
         }
 
         /**
-         * Creates a {@link Binding} for the given {@link #getHostIp() IP address}, leaving the {@link #getHostPort() port number}
+         * Creates a {@link Binding} for the given {@link #getHostIp() IP address}, leaving the {@link #getHostPortSpec() port spec}
          * undefined.
          */
-        public static Binding forIp(String hostIp) {
+        public static Binding bindIp(String hostIp) {
             return new Binding(hostIp, null);
+        }
+
+        /**
+         * Creates a {@link Binding} for the given {@link #getHostIp() IP address} and port number.
+         */
+        public static Binding bindIpAndPort(String hostIp, int port) {
+            return new Binding(hostIp, "" + port);
+        }
+
+        /**
+         * Creates a {@link Binding} for the given {@link #getHostIp() IP address} and port range.
+         */
+        public static Binding bindIpAndPortRange(String hostIp, int lowPort, int highPort) {
+            return new Binding(hostIp, lowPort + "-" + highPort);
+        }
+
+        /**
+         * Creates a {@link Binding} for the given port range, leaving the {@link #getHostIp() IP address}
+         * undefined.
+         */
+        public static Binding bindPortRange(int lowPort, int highPort) {
+            return bindIpAndPortRange(null, lowPort, highPort);
+        }
+
+        /**
+         * Creates a {@link Binding} for the given port leaving the {@link #getHostIp() IP address}
+         * undefined.
+         */
+        public static Binding bindPort(int port) {
+            return bindIpAndPort(null, port);
+        }
+
+        /**
+         * Creates an empty {@link Binding}.
+         */
+        public static Binding empty() {
+            return new Binding(null, null);
         }
 
         private final String hostIp;
 
-        private final String hostPort;
+        private final String hostPortSpec;
 
         /**
-         * Creates a {@link Binding} for the given {@link #getHostIp() IP address} and {@link #getHostPort() port number}.
+         * Creates a {@link Binding} for the given {@link #getHostIp() host IP address} and {@link #getHostPortSpec() host port spec}.
          *
          * @see Ports#bind(ExposedPort, Binding)
          * @see ExposedPort
          */
-        public Binding(String hostIp, String hostPort) {
+        public Binding(String hostIp, String hostPortSpec) {
             this.hostIp = isEmpty(hostIp) ? null : hostIp;
-            this.hostPort = hostPort;
-        }
-
-        /**
-         * Creates a {@link Binding} with both {@link #getHostIp() IP address} and {@link #getHostPort() port number} undefined.
-         */
-        public Binding() {
-            this(null, null);
+            this.hostPortSpec = hostPortSpec;
         }
 
         /**
@@ -181,16 +197,17 @@ public class Ports {
         }
 
         /**
-         * @return the port number on the Docker host. May be <code>null</code>, in which case Docker will dynamically assign a port.
+         * @return the port spec for the binding on the Docker host. May reference a single port ("1234"), a port range ("1234-2345") or
+         *         <code>null</code>, in which case Docker will dynamically assign a port.
          */
-        public String getHostPort() {
-            return hostPort;
+        public String getHostPortSpec() {
+            return hostPortSpec;
         }
 
         /**
          * Parses a textual host and port specification (as used by the Docker CLI) to a {@link Binding}.
          * <p>
-         * Legal syntax: <code>IP|IP:port|port</code>
+         * Legal syntax: <code>IP|IP:portSpec|portSpec</code> where <code>portSpec</code> is either a single port or a port range
          *
          * @param serialized
          *            serialized the specification, e.g. <code>127.0.0.1:80</code>
@@ -201,7 +218,7 @@ public class Ports {
         public static Binding parse(String serialized) throws IllegalArgumentException {
             try {
                 if (serialized.isEmpty()) {
-                    return new Binding();
+                    return Binding.empty();
                 }
 
                 String[] parts = serialized.split(":");
@@ -210,7 +227,7 @@ public class Ports {
                         return new Binding(parts[0], parts[1]);
                     }
                     case 1: {
-                        return parts[0].contains(".") ? Binding.forIp(parts[0]) : Binding.forPort(parts[0]);
+                        return parts[0].contains(".") ? Binding.bindIp(parts[0]) : Binding.bindPortSpec(parts[0]);
                     }
                     default: {
                         throw new IllegalArgumentException();
@@ -230,11 +247,11 @@ public class Ports {
         @Override
         public String toString() {
             if (isEmpty(hostIp)) {
-                return hostPort;
-            } else if (hostPort == null) {
+                return hostPortSpec;
+            } else if (hostPortSpec == null) {
                 return hostIp;
             } else {
-                return hostIp + ":" + hostPort;
+                return hostIp + ":" + hostPortSpec;
             }
         }
 
@@ -242,7 +259,7 @@ public class Ports {
         public boolean equals(Object obj) {
             if (obj instanceof Binding) {
                 Binding other = (Binding) obj;
-                return new EqualsBuilder().append(hostIp, other.getHostIp()).append(hostPort, other.getHostPort())
+                return new EqualsBuilder().append(hostIp, other.getHostIp()).append(hostPortSpec, other.getHostPortSpec())
                         .isEquals();
             } else {
                 return super.equals(obj);
@@ -293,7 +310,7 @@ public class Ports {
                     for (Binding binding : entry.getValue()) {
                         jsonGen.writeStartObject();
                         jsonGen.writeStringField("HostIp", binding.getHostIp() == null ? "" : binding.getHostIp());
-                        jsonGen.writeStringField("HostPort", binding.getHostPort() == null ? "" : binding.getHostPort());
+                        jsonGen.writeStringField("HostPort", binding.getHostPortSpec() == null ? "" : binding.getHostPortSpec());
                         jsonGen.writeEndObject();
                     }
                     jsonGen.writeEndArray();
