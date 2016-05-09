@@ -11,6 +11,7 @@ Notes
 All changes
 
 * [#575] (https://github.com/docker-java/docker-java/pull/575) Support binding of port ranges
+* [#574] (https://github.com/docker-java/docker-java/pull/574) Fix for copyArchiveToContainerCmd bug
 * [#563] (https://github.com/docker-java/docker-java/pull/563) Fix memory leak in netty implementation of DockerCmdExecFactory
 
 Included in 3.0.0-RC5
