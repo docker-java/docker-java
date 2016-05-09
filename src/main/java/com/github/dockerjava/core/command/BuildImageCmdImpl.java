@@ -286,7 +286,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
         this.dockerFile = dockerfile;
 
         try {
-            withTarInputStream(new Dockerfile(dockerfile).parse().buildDockerFolderTar(baseDirectory));
+            withTarInputStream(new Dockerfile(dockerfile, baseDirectory).parse().buildDockerFolderTar());
         } catch (IOException e) {
             // we just created the file this should never happen.
             throw new RuntimeException(e);

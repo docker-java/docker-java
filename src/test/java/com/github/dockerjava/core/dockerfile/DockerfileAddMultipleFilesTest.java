@@ -29,7 +29,7 @@ public class DockerfileAddMultipleFilesTest extends TestCase {
     public void testAddMultipleFiles() throws IOException {
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testAddMultipleFiles")
                 .getFile());
-        Dockerfile dockerfile = new Dockerfile(new File(baseDir, "Dockerfile"));
+        Dockerfile dockerfile = new Dockerfile(new File(baseDir, "Dockerfile"), baseDir);
         Dockerfile.ScannedResult result = dockerfile.parse();
         Collection<String> filesToAdd = transform(result.filesToAdd, TO_FILE_NAMES);
 
