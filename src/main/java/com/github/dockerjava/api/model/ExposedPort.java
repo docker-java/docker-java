@@ -124,9 +124,9 @@ public class ExposedPort {
             String[] parts = serialized.split("/");
             switch (parts.length) {
                 case 1:
-                    return new ExposedPort(Integer.valueOf(parts[0]));
+                    return new ExposedPort(Integer.parseInt(parts[0]));
                 case 2:
-                    return new ExposedPort(Integer.valueOf(parts[0]), InternetProtocol.parse(parts[1]));
+                    return new ExposedPort(Integer.parseInt(parts[0]), InternetProtocol.parse(parts[1]));
                 default:
                     throw new IllegalArgumentException();
             }

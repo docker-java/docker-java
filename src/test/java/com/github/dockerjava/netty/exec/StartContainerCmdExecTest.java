@@ -1,31 +1,5 @@
 package com.github.dockerjava.netty.exec;
 
-import static com.github.dockerjava.api.model.AccessMode.ro;
-import static com.github.dockerjava.api.model.Capability.MKNOD;
-import static com.github.dockerjava.api.model.Capability.NET_ADMIN;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.startsWith;
-
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
@@ -41,8 +15,35 @@ import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.RestartPolicy;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
+import com.github.dockerjava.api.model.Ports.Binding;
 import com.github.dockerjava.core.command.WaitContainerResultCallback;
 import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
+
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+
+import static com.github.dockerjava.api.model.AccessMode.ro;
+import static com.github.dockerjava.api.model.Capability.MKNOD;
+import static com.github.dockerjava.api.model.Capability.NET_ADMIN;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.startsWith;
 
 @Test(groups = "integration")
 public class StartContainerCmdExecTest extends AbstractNettyDockerClientTest {
@@ -192,9 +193,9 @@ public class StartContainerCmdExecTest extends AbstractNettyDockerClientTest {
         ExposedPort tcp23 = ExposedPort.tcp(23);
 
         Ports portBindings = new Ports();
-        portBindings.bind(tcp22, Ports.binding(11022));
-        portBindings.bind(tcp23, Ports.binding(11023));
-        portBindings.bind(tcp23, Ports.binding(11024));
+        portBindings.bind(tcp22, Binding.bindPort(11022));
+        portBindings.bind(tcp23, Binding.bindPort(11023));
+        portBindings.bind(tcp23, Binding.bindPort(11024));
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("true")
                 .withExposedPorts(tcp22, tcp23).withPortBindings(portBindings).exec();
@@ -212,13 +213,13 @@ public class StartContainerCmdExecTest extends AbstractNettyDockerClientTest {
         assertThat(Arrays.asList(inspectContainerResponse.getConfig().getExposedPorts()), contains(tcp22, tcp23));
 
         assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp22)[0],
-                is(equalTo(Ports.binding(11022))));
+                is(equalTo(Binding.bindPort(11022))));
 
         assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23)[0],
-                is(equalTo(Ports.binding(11023))));
+                is(equalTo(Binding.bindPort(11023))));
 
         assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23)[1],
-                is(equalTo(Ports.binding(11024))));
+                is(equalTo(Binding.bindPort(11024))));
 
     }
 
@@ -229,8 +230,8 @@ public class StartContainerCmdExecTest extends AbstractNettyDockerClientTest {
         ExposedPort tcp23 = ExposedPort.tcp(23);
 
         Ports portBindings = new Ports();
-        portBindings.bind(tcp22, Ports.binding(null));
-        portBindings.bind(tcp23, Ports.binding(null));
+        portBindings.bind(tcp22, Binding.empty());
+        portBindings.bind(tcp23, Binding.empty());
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
                 .withExposedPorts(tcp22, tcp23).withPortBindings(portBindings).withPublishAllPorts(true).exec();
@@ -245,11 +246,11 @@ public class StartContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
         assertThat(Arrays.asList(inspectContainerResponse.getConfig().getExposedPorts()), contains(tcp22, tcp23));
 
-        assertThat(inspectContainerResponse.getNetworkSettings().getPorts().getBindings().get(tcp22)[0].getHostPort(),
-                is(not(equalTo(tcp22.getPort()))));
+        assertThat(inspectContainerResponse.getNetworkSettings().getPorts().getBindings().get(tcp22)[0].getHostPortSpec(),
+                is(not(equalTo(String.valueOf(tcp22.getPort())))));
 
-        assertThat(inspectContainerResponse.getNetworkSettings().getPorts().getBindings().get(tcp23)[0].getHostPort(),
-                is(not(equalTo(tcp23.getPort()))));
+        assertThat(inspectContainerResponse.getNetworkSettings().getPorts().getBindings().get(tcp23)[0].getHostPortSpec(),
+                is(not(equalTo(String.valueOf(tcp23.getPort())))));
 
     }
 
@@ -260,8 +261,8 @@ public class StartContainerCmdExecTest extends AbstractNettyDockerClientTest {
         ExposedPort tcp23 = ExposedPort.tcp(23);
 
         Ports portBindings = new Ports();
-        portBindings.bind(tcp22, Ports.binding(11022));
-        portBindings.bind(tcp23, Ports.binding(11022));
+        portBindings.bind(tcp22, Binding.bindPort(11022));
+        portBindings.bind(tcp23, Binding.bindPort(11022));
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("true")
                 .withExposedPorts(tcp22, tcp23).withPortBindings(portBindings).exec();

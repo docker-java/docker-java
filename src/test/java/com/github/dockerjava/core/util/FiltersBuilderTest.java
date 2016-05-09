@@ -1,13 +1,12 @@
 package com.github.dockerjava.core.util;
 
-import com.github.dockerjava.core.util.FiltersBuilder;
 import com.google.common.collect.Maps;
-
 import org.testng.annotations.Test;
 
 import java.util.Map;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotEquals;
 
 /**
  * @author Vincent Latombe <vincent@latombe.net>
