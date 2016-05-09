@@ -90,5 +90,32 @@ public class CopyArchiveToContainerCmdImplTest extends AbstractDockerClientTest 
         } catch (NotFoundException ignored) {
         }
     }
+    
+    @Test 
+    public void copyDirWithLastAddedTarEnryEmptyDir() throws Exception{
+        // create a temp dir
+        Path localDir = Files.createTempDirectory("");
+        localDir.toFile().deleteOnExit();
+        // create sub-dir with name b
+        Path emptyDir = Files.createTempDirectory(localDir.resolve("b"), "");
+        emptyDir.toFile().deleteOnExit();
+        // creaet sub-dir with name a
+        Path dirWithFile = Files.createTempDirectory(localDir.resolve("a"), "");
+        dirWithFile.toFile().deleteOnExit();
+        // create file in sub-dir b, name or conter are irrelevant
+        Path file = Files.createTempFile(dirWithFile.resolve("file"), "", "");
+        file.toFile().deleteOnExit();
+        
+        // create a test container
+        CreateContainerResponse container = dockerClient.createContainerCmd("progrium/busybox:latest")
+                .withCmd("/bin/sh", "-c", "while true; do sleep 9999; done")
+                .exec();
+        // start the container
+        dockerClient.startContainerCmd(container.getId()).exec();
+        // copy data from local dir to container 
+        dockerClient.copyArchiveToContainerCmd(container.getId())
+                .withHostResource(localDir.toString())
+                .exec();
+    }
 
 }
