@@ -63,6 +63,21 @@ public class InspectContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
     }
 
+    @Test()
+    public void inspectContainerWithSize() throws DockerException {
+
+        String containerName = "generated_" + new SecureRandom().nextInt();
+
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("top")
+                .withName(containerName).exec();
+        LOG.info("Created container {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse containerInfo = dockerClient.inspectContainerCmd(container.getId()).exec();
+        assertEquals(containerInfo.getId(), container.getId());
+        assertNotNull(containerInfo.getSizeRootFs());
+    }
+
     @Test(expectedExceptions = NotFoundException.class)
     public void inspectNonExistingContainer() throws DockerException {
         dockerClient.inspectContainerCmd("non-existing").exec();
