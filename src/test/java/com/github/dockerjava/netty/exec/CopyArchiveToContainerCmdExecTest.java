@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.apache.commons.io.FileUtils;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -89,6 +90,33 @@ public class CopyArchiveToContainerCmdExecTest extends AbstractNettyDockerClient
             fail("expected NotFoundException");
         } catch (NotFoundException ignored) {
         }
+    }
+
+    @Test
+    public void copyDirWithLastAddedTarEntryEmptyDir() throws Exception{
+        // create a temp dir
+        Path localDir = Files.createTempDirectory(null);
+        localDir.toFile().deleteOnExit();
+        // create empty sub-dir with name b
+        Files.createDirectory(localDir.resolve("b"));
+        // create sub-dir with name a
+        Path dirWithFile = Files.createDirectory(localDir.resolve("a"));
+        // create file in sub-dir b, name or conter are irrelevant
+        Files.createFile(dirWithFile.resolve("file"));
+
+        // create a test container
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+                .withCmd("sleep", "9999")
+                .exec();
+        // start the container
+        dockerClient.startContainerCmd(container.getId()).exec();
+        // copy data from local dir to container
+        dockerClient.copyArchiveToContainerCmd(container.getId())
+                .withHostResource(localDir.toString())
+                .exec();
+
+        // cleanup dir
+        FileUtils.deleteDirectory(localDir.toFile());
     }
 
 }
