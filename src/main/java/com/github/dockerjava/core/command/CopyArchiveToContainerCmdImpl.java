@@ -12,7 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
-import com.github.dockerjava.api.exception.BadRequestException;
+import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.core.util.CompressArchiveUtil;
 
@@ -127,7 +127,7 @@ public class CopyArchiveToContainerCmdImpl extends AbstrDockerCmd<CopyArchiveToC
         if (StringUtils.isNotEmpty(this.hostResource)) {
             // User set host resource and not directly a stream
             if (this.tarInputStream != null) {
-                throw new BadRequestException(
+                throw new DockerClientException(
                         "Only one of host resource or tar input stream should be defined to perform the copy, not both");
             }
             // We compress the given path, call exec so that the stream is consumed and then close it our self
@@ -135,10 +135,10 @@ public class CopyArchiveToContainerCmdImpl extends AbstrDockerCmd<CopyArchiveToC
                 this.tarInputStream = uploadStream;
                 return super.exec();
             } catch (IOException e) {
-                throw new BadRequestException("Unable to perform tar on host resource " + this.hostResource);
+                throw new DockerClientException("Unable to perform tar on host resource " + this.hostResource, e);
             }
         } else if (this.tarInputStream == null) {
-            throw new BadRequestException(
+            throw new DockerClientException(
                     "One of host resource or tar input stream must be defined to perform the copy");
         }
         // User set a stream, so we will just consume it and let the user close it by him self
