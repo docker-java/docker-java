@@ -65,7 +65,7 @@ public class ExposedPort {
      * @param scheme
      *            the {@link #getScheme() scheme}, <code>tcp</code> or <code>udp</code>
      * @param port
-     *            the {@link #getPort() port number or port range}
+     *            the {@link #getPort() port number}
      * @deprecated use {@link #ExposedPort(int, InternetProtocol)}
      */
     @Deprecated
