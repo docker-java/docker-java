@@ -26,7 +26,7 @@ public class DockerfileTest extends TestCase {
 
         for (File child : root.listFiles()) {
             if (new File(child, "Dockerfile").exists()) {
-                Dockerfile dockerfile = new Dockerfile(new File(child, "Dockerfile"));
+                Dockerfile dockerfile = new Dockerfile(new File(child, "Dockerfile"), baseDir);
                 dockerfiles.put(child.getName(), dockerfile);
             }
         }

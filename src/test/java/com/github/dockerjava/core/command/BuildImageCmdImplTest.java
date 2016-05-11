@@ -24,16 +24,15 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.InspectImageResponse;
+import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.PortBinding;
-import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.Ports.Binding;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.core.util.CompressArchiveUtil;
@@ -318,5 +317,21 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
         LOG.info("Image Inspect: {}", inspectImageResponse.toString());
 
         assertThat(inspectImageResponse.getConfig().getLabels().get("test"), equalTo("abc"));
+    }
+
+    public void testDockerfileNotInBaseDirectory() throws Exception {
+        File baseDirectory = getResource("testDockerfileNotInBaseDirectory");
+        File dockerfile = getResource("testDockerfileNotInBaseDirectory/dockerfileFolder/Dockerfile");
+        BuildImageCmd command = dockerClient.buildImageCmd()
+                .withBaseDirectory(baseDirectory)
+                .withDockerfile(dockerfile);
+
+        String response = execBuild(command);
+
+        assertThat(response, containsString("Successfully executed testrun.sh"));
+    }
+
+    private File getResource(String path) {
+        return new File(Thread.currentThread().getContextClassLoader().getResource(path).getFile());
     }
 }
