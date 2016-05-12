@@ -39,7 +39,7 @@ public class InspectContainerCmdImpl extends AbstrDockerCmd<InspectContainerCmd,
     }
 
     @Override
-    public boolean getSize() {
+    public Boolean getSize() {
         return size;
     }
 

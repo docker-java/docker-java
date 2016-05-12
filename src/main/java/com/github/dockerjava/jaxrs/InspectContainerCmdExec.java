@@ -22,8 +22,9 @@ public class InspectContainerCmdExec extends AbstrSyncDockerCmdExec<InspectConta
     @Override
     protected InspectContainerResponse execute(InspectContainerCmd command) {
         WebTarget webResource = getBaseResource().path("/containers/{id}/json")
-                                                 .queryParam("size", command.getSize())
                                                  .resolveTemplate("id", command.getContainerId());
+
+        webResource = booleanQueryParam(webResource, "size", command.getSize());
 
         LOGGER.debug("GET: {}", webResource);
         return webResource.request().accept(MediaType.APPLICATION_JSON).get(InspectContainerResponse.class);
