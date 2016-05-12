@@ -31,8 +31,9 @@ public class Dockerfile {
 
     public final File dockerFile;
 
-    public Dockerfile(File dockerFile) {
+    private final File baseDirectory;
 
+    public Dockerfile(File dockerFile, File baseDirectory) {
         if (!dockerFile.exists()) {
             throw new IllegalStateException(String.format("Dockerfile %s does not exist", dockerFile.getAbsolutePath()));
         }
@@ -43,6 +44,15 @@ public class Dockerfile {
 
         this.dockerFile = dockerFile;
 
+        if (!baseDirectory.exists()) {
+            throw new IllegalStateException(String.format("Base directory %s does not exist", baseDirectory.getAbsolutePath()));
+        }
+
+        if (!baseDirectory.isDirectory()) {
+            throw new IllegalStateException(String.format("Base directory %s is not a directory", baseDirectory.getAbsolutePath()));
+        }
+
+        this.baseDirectory = baseDirectory;
     }
 
     private static class LineTransformer implements Function<String, Optional<? extends DockerfileStatement>> {
@@ -76,7 +86,7 @@ public class Dockerfile {
 
     public List<String> getIgnores() throws IOException {
         List<String> ignores = new ArrayList<String>();
-        File dockerIgnoreFile = new File(getDockerFolder(), ".dockerignore");
+        File dockerIgnoreFile = new File(baseDirectory, ".dockerignore");
         if (dockerIgnoreFile.exists()) {
             int lineNumber = 0;
             List<String> dockerIgnoreFileContent = FileUtils.readLines(dockerIgnoreFile);
@@ -102,10 +112,6 @@ public class Dockerfile {
         return new ScannedResult();
     }
 
-    public File getDockerFolder() {
-        return dockerFile.getParentFile();
-    }
-
     /**
      * Result of scanning / parsing a docker file.
      */
@@ -116,7 +122,7 @@ public class Dockerfile {
         final List<File> filesToAdd = new ArrayList<File>();
 
         public InputStream buildDockerFolderTar() {
-            return buildDockerFolderTar(getDockerFolder());
+            return buildDockerFolderTar(baseDirectory);
         }
 
         public InputStream buildDockerFolderTar(File directory) {
@@ -180,7 +186,7 @@ public class Dockerfile {
                         "Dockerfile is excluded by pattern '%s' in .dockerignore file", matchingIgnorePattern));
             }
 
-            Collection<File> filesInBuildContext = FileUtils.listFiles(getDockerFolder(), TrueFileFilter.INSTANCE,
+            Collection<File> filesInBuildContext = FileUtils.listFiles(baseDirectory, TrueFileFilter.INSTANCE,
                     TrueFileFilter.INSTANCE);
 
             for (File f : filesInBuildContext) {
@@ -217,7 +223,7 @@ public class Dockerfile {
          * will be respected.
          */
         private String effectiveMatchingIgnorePattern(File file) {
-            String relativeFilename = FilePathUtil.relativize(getDockerFolder(), file);
+            String relativeFilename = FilePathUtil.relativize(baseDirectory, file);
 
             List<String> matchingPattern = matchingIgnorePatterns(relativeFilename);
 
@@ -242,6 +248,6 @@ public class Dockerfile {
             }
 
             return lastMatchingPattern;
-        }
+         }
     }
 }
