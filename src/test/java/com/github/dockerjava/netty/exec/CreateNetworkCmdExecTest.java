@@ -49,4 +49,20 @@ public class CreateNetworkCmdExecTest extends AbstractNettyDockerClientTest {
         assertEquals(network.getName(), networkName);
         assertEquals(network.getDriver(), "bridge");
     }
+
+    @Test
+    public void createNetworkWithIpamConfig() throws DockerException {
+
+        String networkName = "testNetwork";
+        Network.Ipam.Config config = new Network.Ipam.Config();
+        config.setSubnet("10.67.79.0/24");
+        CreateNetworkResponse createNetworkResponse = dockerClient.createNetworkCmd().withName(networkName).withIpamConfig(config).exec();
+
+        assertNotNull(createNetworkResponse.getId());
+
+        Network network = dockerClient.inspectNetworkCmd().withNetworkId(createNetworkResponse.getId()).exec();
+        assertEquals(network.getName(), networkName);
+        assertEquals(network.getDriver(), "bridge");
+        assertEquals("10.67.79.0/24", network.getIpam().getConfig().iterator().next().getSubnet());
+    }
 }
