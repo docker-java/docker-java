@@ -75,6 +75,18 @@ public class ListImagesCmdExecTest extends AbstractNettyDockerClientTest {
         assertTrue(imageInFilteredList);
     }
 
+    @Test
+    public void listImagesWithNameFilter() throws DockerException {
+        String imageId = createDanglingImage();
+        dockerClient.tagImageCmd(imageId, "test_repository", "latest").exec();
+        List<Image> images = dockerClient.listImagesCmd().withImageNameFilter("test_repository:latest").exec();
+        assertThat(images, notNullValue());
+        LOG.info("Images List: {}", images);
+        assertThat(images.size(), is(equalTo(1)));
+        Boolean imageInFilteredList = isImageInFilteredList(images, imageId);
+        assertTrue(imageInFilteredList);
+    }
+
     private boolean isImageInFilteredList(List<Image> images, String expectedImageId) {
         for (Image image : images) {
             if (expectedImageId.equals(image.getId())) {
