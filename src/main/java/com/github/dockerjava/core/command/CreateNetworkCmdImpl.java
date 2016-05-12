@@ -58,6 +58,9 @@ public class CreateNetworkCmdImpl extends AbstrDockerCmd<CreateNetworkCmd, Creat
 
     @Override
     public CreateNetworkCmd withIpamConfig(Ipam.Config config) {
+        if (this.ipam == null) {
+            this.ipam = new Ipam();
+        }
         this.ipam.getConfig().add(config);
         return this;
     }
