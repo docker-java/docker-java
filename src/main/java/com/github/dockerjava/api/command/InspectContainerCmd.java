@@ -12,6 +12,10 @@ public interface InspectContainerCmd extends SyncDockerCmd<InspectContainerRespo
 
     InspectContainerCmd withContainerId(@Nonnull String containerId);
 
+    InspectContainerCmd withSize(Boolean showSize);
+
+    Boolean getSize();
+
     /**
      * @throws NotFoundException
      *             No such container
