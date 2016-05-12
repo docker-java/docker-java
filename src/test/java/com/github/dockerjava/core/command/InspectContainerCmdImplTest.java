@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.not;
 import java.lang.reflect.Method;
 import java.security.SecureRandom;
 
+import com.github.dockerjava.api.command.InspectContainerCmd;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
@@ -61,6 +62,24 @@ public class InspectContainerCmdImplTest extends AbstractDockerClientTest {
         InspectContainerResponse containerInfo = dockerClient.inspectContainerCmd(container.getId()).exec();
         assertEquals(containerInfo.getId(), container.getId());
 
+    }
+
+    @Test()
+    public void inspectContainerWithSize() throws DockerException {
+
+        String containerName = "generated_" + new SecureRandom().nextInt();
+
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("top")
+                .withName(containerName).exec();
+        LOG.info("Created container {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerCmd command = dockerClient.inspectContainerCmd(container.getId()).withSize(true);
+        assertTrue(command.getSize());
+        InspectContainerResponse containerInfo  = command.exec();
+        assertEquals(containerInfo.getId(), container.getId());
+        assertNotNull(containerInfo.getSizeRootFs());
+        assertTrue(containerInfo.getSizeRootFs().intValue() > 0 );
     }
 
     @Test(expectedExceptions = NotFoundException.class)

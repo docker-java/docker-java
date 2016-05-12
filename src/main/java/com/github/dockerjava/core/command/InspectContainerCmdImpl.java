@@ -13,6 +13,7 @@ public class InspectContainerCmdImpl extends AbstrDockerCmd<InspectContainerCmd,
         InspectContainerCmd {
 
     private String containerId;
+    private boolean size;
 
     public InspectContainerCmdImpl(InspectContainerCmd.Exec exec, String containerId) {
         super(exec);
@@ -29,6 +30,17 @@ public class InspectContainerCmdImpl extends AbstrDockerCmd<InspectContainerCmd,
         checkNotNull(containerId, "containerId was not specified");
         this.containerId = containerId;
         return this;
+    }
+
+    @Override
+    public InspectContainerCmd withSize(Boolean showSize) {
+        this.size = showSize;
+        return this;
+    }
+
+    @Override
+    public boolean getSize() {
+        return size;
     }
 
     /**
