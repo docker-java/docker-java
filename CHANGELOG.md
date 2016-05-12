@@ -10,9 +10,10 @@ Notes
 
 All changes
 
-* [#578] (https://github.com/docker-java/docker-java/pull/578)  Fix error during image build when Dockerfile in subdirectory of build context
+* [#578] (https://github.com/docker-java/docker-java/pull/578) Fix error during image build when Dockerfile in subdirectory of build context
 * [#575] (https://github.com/docker-java/docker-java/pull/575) Support binding of port ranges
 * [#574] (https://github.com/docker-java/docker-java/pull/574) Fix for copyArchiveToContainerCmd bug
+* [#572] (https://github.com/docker-java/docker-java/pull/572) Inspect container command now shows sizes if requested 
 * [#563] (https://github.com/docker-java/docker-java/pull/563) Fix memory leak in netty implementation of DockerCmdExecFactory
 
 Included in 3.0.0-RC5
