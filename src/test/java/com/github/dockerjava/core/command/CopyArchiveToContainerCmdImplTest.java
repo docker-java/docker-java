@@ -122,7 +122,7 @@ public class CopyArchiveToContainerCmdImplTest extends AbstractDockerClientTest 
     @Test
     public void copyFileWithExecutePermission() throws Exception {
         // create script file, add permission to execute
-        scriptPath = Files.createTempFile("run", ".sh");
+        Path scriptPath = Files.createTempFile("run", ".sh");
         boolean executable = scriptPath.toFile().setExecutable(true, false);
         if (!executable){
             throw new Exception("Execute permission on file not set!");
