@@ -34,7 +34,7 @@ public class TarDirWalker extends SimpleFileVisitor<Path> {
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
         TarArchiveEntry tarEntry = new TarArchiveEntry(FilePathUtil.relativize(basePath, file));
-        if (filePath.toFile().canExecute()) {
+        if (file.toFile().canExecute()) {
                 tarEntry.setMode(tarEntry.getMode() | 0755);
         }
         CompressArchiveUtil.putTarEntry(tarArchiveOutputStream, tarEntry, file);
