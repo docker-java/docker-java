@@ -199,7 +199,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
                 String hostname = address.getHostName();
                 int port = address.getPort();
 
-                clientConfig.property(ClientProperties.PROXY_URI, protocol + "://" + hostname + ":" + port);
+                clientConfig.property(ClientProperties.PROXY_URI, "http://" + hostname + ":" + port);
 
                 String httpProxyUser = System.getProperty(protocol + ".proxyUser");
                 if (httpProxyUser != null) {
