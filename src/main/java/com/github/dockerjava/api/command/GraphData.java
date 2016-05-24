@@ -34,7 +34,7 @@ public class GraphData {
     }
 
     /**
-     * @see #deviceId
+     * @see #rootDir
      */
     public GraphData withRootDir(String rootDir) {
         this.rootDir = rootDir;
