@@ -1,16 +1,14 @@
 package com.github.dockerjava.api.command;
 
-import javax.annotation.CheckForNull;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.annotation.CheckForNull;
 
 /**
  * part of {@link GraphDriver}
- *
  * @author Kanstantsin Shautsou
  */
 public class GraphData {
