@@ -3,6 +3,7 @@ package com.github.dockerjava.core.command;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.equalTo;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -117,6 +118,40 @@ public class CopyArchiveToContainerCmdImplTest extends AbstractDockerClientTest 
 
         // cleanup dir
         FileUtils.deleteDirectory(localDir.toFile());
+    }
+    
+    @Test
+    public void copyFileWithExecutePermission() throws Exception {
+        // create script file, add permission to execute
+        Path scriptPath = Files.createTempFile("run", ".sh");
+        boolean executable = scriptPath.toFile().setExecutable(true, false);
+        if (!executable){
+            throw new Exception("Execute permission on file not set!");
+        }
+        String snippet = "Running script with execute permission.";
+        String scriptTextStr = "#!/bin/sh\necho \"" + snippet + "\"";
+        // write content for created script
+        Files.write(scriptPath, scriptTextStr.getBytes());
+        // create a test container which starts and waits 3 seconds for the
+        // script to be copied to the container's home dir and then executes it
+        String containerCmd = "sleep 3; /home/" + scriptPath.getFileName().toString();
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+                .withName("test")
+                .withCmd("/bin/sh", "-c", containerCmd)
+                .exec();
+        // start the container
+        dockerClient.startContainerCmd(container.getId()).exec();
+        // copy script to container home dir
+        dockerClient.copyArchiveToContainerCmd(container.getId())
+                .withRemotePath("/home")
+                .withHostResource(scriptPath.toString())
+                .exec();
+        // await exid code
+        int exitCode = dockerClient.waitContainerCmd(container.getId())
+                .exec(new WaitContainerResultCallback())
+                .awaitStatusCode();
+        // check result
+        assertThat(exitCode, equalTo(0));
     }
 
 }
