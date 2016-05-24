@@ -34,51 +34,49 @@ public class InspectImageResponseTest {
 
         final InspectImageResponse inspectImage = testRoundTrip(VERSION_1_22, "images/image1/inspect1.json", type);
 
-        final ContainerConfig config = new ContainerConfig().withAttachStderr(false)
-                                                            .withAttachStdin(false)
-                                                            .withAttachStdout(false)
-                                                            .withCmd(null)
-                                                            .withDomainName("")
-                                                            .withEntrypoint(null)
-                                                            .withEnv(new String[] { "HOME=/",
-                                                                                    "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" })
-                                                            .withExposedPorts(null)
-                                                            .withHostName("aee9ba801acc")
-                                                            .withImage("511136ea3c5a64f264b78b5433614aec563103b4d4702f3ba7d4d2698e22c158")
-                                                            .withLabels(null)
-                                                            .withMacAddress(null)
-                                                            .withNetworkDisabled(null)
-                                                            .withOnBuild(new String[] {})
-                                                            .withStdinOpen(false)
-                                                            .withPortSpecs(null)
-                                                            .withStdInOnce(false)
-                                                            .withTty(false)
-                                                            .withUser("")
-                                                            .withVolumes(null)
-                                                            .withWorkingDir("");
+        final ContainerConfig config = new ContainerConfig().withAttachStdout(false)
+                .withCmd(null)
+                .withDomainName("")
+                .withEntrypoint(null)
+                .withEnv(new String[] {"HOME=/",
+                        "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"})
+                .withExposedPorts(null)
+                .withHostName("aee9ba801acc")
+                .withImage("511136ea3c5a64f264b78b5433614aec563103b4d4702f3ba7d4d2698e22c158")
+                .withLabels(null)
+                .withMacAddress(null)
+                .withNetworkDisabled(null)
+                .withOnBuild(new String[] {})
+                .withStdinOpen(false)
+                .withPortSpecs(null)
+                .withStdInOnce(false)
+                .withTty(false)
+                .withUser("")
+                .withVolumes(null)
+                .withWorkingDir("");
 
         final ContainerConfig containerConfig = new ContainerConfig().withAttachStderr(false)
-                                                                     .withAttachStdin(false)
-                                                                     .withAttachStdout(false)
-                                                                     .withCmd(new String[] { "/bin/sh", "-c", "#(nop) MAINTAINER hack@worldticket.net" })
-                                                                     .withDomainName("")
-                                                                     .withEntrypoint(null)
-                                                                     .withEnv(new String[] { "HOME=/",
-                                                                                             "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" })
-                                                                     .withExposedPorts(null)
-                                                                     .withHostName("aee9ba801acc")
-                                                                     .withImage("511136ea3c5a64f264b78b5433614aec563103b4d4702f3ba7d4d2698e22c158")
-                                                                     .withLabels(null)
-                                                                     .withMacAddress(null)
-                                                                     .withNetworkDisabled(null)
-                                                                     .withOnBuild(new String[] {})
-                                                                     .withStdinOpen(false)
-                                                                     .withPortSpecs(null)
-                                                                     .withStdInOnce(false)
-                                                                     .withTty(false)
-                                                                     .withUser("")
-                                                                     .withVolumes(null)
-                                                                     .withWorkingDir("");
+                .withAttachStdin(false)
+                .withAttachStdout(false)
+                .withCmd(new String[] {"/bin/sh", "-c", "#(nop) MAINTAINER hack@worldticket.net"})
+                .withDomainName("")
+                .withEntrypoint(null)
+                .withEnv(new String[] {"HOME=/",
+                        "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"})
+                .withExposedPorts(null)
+                .withHostName("aee9ba801acc")
+                .withImage("511136ea3c5a64f264b78b5433614aec563103b4d4702f3ba7d4d2698e22c158")
+                .withLabels(null)
+                .withMacAddress(null)
+                .withNetworkDisabled(null)
+                .withOnBuild(new String[] {})
+                .withStdinOpen(false)
+                .withPortSpecs(null)
+                .withStdInOnce(false)
+                .withTty(false)
+                .withUser("")
+                .withVolumes(null)
+                .withWorkingDir("");
 
         assertThat(inspectImage, notNullValue());
         assertThat(inspectImage.getArch(), is("amd64"));
@@ -113,21 +111,21 @@ public class InspectImageResponseTest {
         assertThat(inspectImage.getVirtualSize(), is(0L));
 
         final InspectImageResponse inspectImageResponse = new InspectImageResponse().withArch("amd64")
-                                                                                    .withAuthor("hack@worldticket.net")
-                                                                                    .withComment("")
-                                                                                    .withConfig(config)
-                                                                                    .withContainer("aee9ba801acca0e648ffd91df204ba82ae85d97608a4864a019e2004d7e1b133")
-                                                                                    .withContainerConfig(containerConfig)
-                                                                                    .withCreated("2014-04-29T19:59:10.84997669Z")
-                                                                                    .withDockerVersion("0.8.1")
-                                                                                    .withId("sha256:ee45fe0d1fcdf1a0f9c2d1e36c6f4b3202bbb2032f14d7c9312b27bfcf6aee24")
-                                                                                    .withOs("linux")
-                                                                                    .withParent("")
-                                                                                    .withSize(0L)
-                                                                                    .withRepoTags(Collections.singletonList("hackmann/empty:latest"))
-                                                                                    .withRepoDigests(Collections.<String> emptyList())
-                                                                                    .withVirtualSize(0L)
-                                                                                    .withGraphDriver(aufsGraphDriver);
+                .withAuthor("hack@worldticket.net")
+                .withComment("")
+                .withConfig(config)
+                .withContainer("aee9ba801acca0e648ffd91df204ba82ae85d97608a4864a019e2004d7e1b133")
+                .withContainerConfig(containerConfig)
+                .withCreated("2014-04-29T19:59:10.84997669Z")
+                .withDockerVersion("0.8.1")
+                .withId("sha256:ee45fe0d1fcdf1a0f9c2d1e36c6f4b3202bbb2032f14d7c9312b27bfcf6aee24")
+                .withOs("linux")
+                .withParent("")
+                .withSize(0L)
+                .withRepoTags(Collections.singletonList("hackmann/empty:latest"))
+                .withRepoDigests(Collections.<String> emptyList())
+                .withVirtualSize(0L)
+                .withGraphDriver(aufsGraphDriver);
 
         assertThat(inspectImage, equalTo(inspectImageResponse));
     }
@@ -143,7 +141,9 @@ public class InspectImageResponseTest {
 
         assertThat(inspectImage.getRepoDigests(), hasSize(1));
         assertThat(inspectImage.getRepoDigests(),
-                   contains("localhost:5000/test/busybox/example@" + "sha256:cbbf2f9a99b47fc460d422812b6a5adff7dfee951d8fa2e4a98caa0382cfbdbf"));
+
+                contains("localhost:5000/test/busybox/example@"
+                        + "sha256:cbbf2f9a99b47fc460d422812b6a5adff7dfee951d8fa2e4a98caa0382cfbdbf"));
 
         assertThat(inspectImage.getRepoTags(), hasSize(3));
         assertThat(inspectImage.getRepoTags(), containsInAnyOrder("example:1.0", "example:latest", "example:stable"));
@@ -157,9 +157,8 @@ public class InspectImageResponseTest {
         final InspectImageResponse inspectImage = testRoundTrip(VERSION_1_22, "images/docImage/inspect_doc.json", type);
 
         GraphData newGraphData = new GraphData().withDeviceId("5")
-                                                .withDeviceName("docker-253:1-2763198-d2cc496561d6d520cbc0236b4ba88c362c446a7619992123f11c809cded25b47")
-                                                .withDeviceSize("171798691840");
-
+                .withDeviceName("docker-253:1-2763198-d2cc496561d6d520cbc0236b4ba88c362c446a7619992123f11c809cded25b47")
+                .withDeviceSize("171798691840");
         assertThat(inspectImage, notNullValue());
         GraphDriver graphDriver = inspectImage.getGraphDriver();
         assertThat(graphDriver, notNullValue());
@@ -179,7 +178,8 @@ public class InspectImageResponseTest {
 
         final InspectImageResponse inspectImage = testRoundTrip(VERSION_1_22, "images/overlay/inspectOverlay.json", type);
 
-        final GraphData overlayGraphData = new GraphData().withRootDir("/var/lib/docker/overlay/7e8d362d6b78d47eafe4863fd129cbcada35dbd419d7188cc1dbf1233d505576/root");
+        final GraphData overlayGraphData = new GraphData()
+                .withRootDir("/var/lib/docker/overlay/7e8d362d6b78d47eafe4863fd129cbcada35dbd419d7188cc1dbf1233d505576/root");
         final GraphDriver overlayGraphDriver = new GraphDriver().withName("overlay").withData(overlayGraphData);
         final GraphDriver graphDriver = inspectImage.getGraphDriver();
         assertThat(graphDriver, notNullValue());
