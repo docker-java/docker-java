@@ -67,7 +67,11 @@ public class CompressArchiveUtil {
 
         try (TarArchiveOutputStream tarArchiveOutputStream = buildTarStream(outputPath, gZipped)) {
             if (!Files.isDirectory(inputPath)) {
-                putTarEntry(tarArchiveOutputStream, new TarArchiveEntry(inputPath.getFileName().toString()), inputPath);
+                TarArchiveEntry tarEntry = new TarArchiveEntry(inputPath.getFileName().toString());
+                if (inputPath.toFile().canExecute()) {
+                    tarEntry.setMode(tarEntry.getMode() | 0755);
+                }
+                putTarEntry(tarArchiveOutputStream, tarEntry, inputPath);
             } else {
                 Path sourcePath = inputPath;
                 if (!childrenOnly) {
