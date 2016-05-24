@@ -1,17 +1,23 @@
 package com.github.dockerjava.api.command;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.annotation.CheckForNull;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import javax.annotation.CheckForNull;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * part of {@link GraphDriver}
+ *
  * @author Kanstantsin Shautsou
  */
 public class GraphData {
+
+    @JsonProperty("RootDir")
+    private String rootDir;
+
     @JsonProperty("DeviceId")
     private String deviceId;
 
@@ -20,6 +26,22 @@ public class GraphData {
 
     @JsonProperty("DeviceSize")
     private String deviceSize;
+
+    /**
+     * @see #rootDir
+     */
+    @CheckForNull
+    public String getRootDir() {
+        return rootDir;
+    }
+
+    /**
+     * @see #deviceId
+     */
+    public GraphData withRootDir(String rootDir) {
+        this.rootDir = rootDir;
+        return this;
+    }
 
     /**
      * @see #deviceId
