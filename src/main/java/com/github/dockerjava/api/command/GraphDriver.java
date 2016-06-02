@@ -1,6 +1,8 @@
 package com.github.dockerjava.api.command;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -13,6 +15,7 @@ import javax.annotation.CheckForNull;
  * @author Kanstantsin Shautsou
  * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_21}
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GraphDriver {
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_21}
