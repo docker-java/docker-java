@@ -56,4 +56,26 @@ public class DisconnectFromNetworkCmdImplTest extends AbstractDockerClientTest {
 
         assertFalse(updatedNetwork.getContainers().containsKey(container.getId()));
     }
+
+    @Test
+    public void forceDisconnectFromNetwork() throws InterruptedException {
+
+        CreateNetworkResponse network = dockerClient.createNetworkCmd().withName("testNetwork").exec();
+
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+                .withNetworkMode("testNetwork")
+                .withCmd("sleep", "9999")
+                .exec();
+
+        dockerClient.startContainerCmd(container.getId()).exec();
+
+        dockerClient.disconnectFromNetworkCmd()
+                .withNetworkId(network.getId())
+                .withContainerId(container.getId())
+                .withForce(true)
+                .exec();
+
+        Network updatedNetwork = dockerClient.inspectNetworkCmd().withNetworkId(network.getId()).exec();
+        assertFalse(updatedNetwork.getContainers().containsKey(container.getId()));
+    }
 }

@@ -4,6 +4,7 @@ import com.github.dockerjava.api.command.CreateNetworkResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
+
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -54,9 +55,8 @@ public class CreateNetworkCmdExecTest extends AbstractNettyDockerClientTest {
     public void createNetworkWithIpamConfig() throws DockerException {
 
         String networkName = "testNetwork";
-        Network.Ipam.Config config = new Network.Ipam.Config();
-        config.setSubnet("10.67.79.0/24");
-        CreateNetworkResponse createNetworkResponse = dockerClient.createNetworkCmd().withName(networkName).withIpamConfig(config).exec();
+        Network.Ipam ipam = new Network.Ipam().withConfig(new Network.Ipam.Config().withSubnet("10.67.79.0/24"));
+        CreateNetworkResponse createNetworkResponse = dockerClient.createNetworkCmd().withName(networkName).withIpam(ipam).exec();
 
         assertNotNull(createNetworkResponse.getId());
 

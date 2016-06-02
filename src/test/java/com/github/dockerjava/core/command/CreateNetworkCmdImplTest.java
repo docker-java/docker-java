@@ -54,9 +54,8 @@ public class CreateNetworkCmdImplTest extends AbstractDockerClientTest {
     public void createNetworkWithIpamConfig() throws DockerException {
 
         String networkName = "testNetwork";
-        Network.Ipam.Config config = new Network.Ipam.Config();
-        config.setSubnet("10.67.79.0/24");
-        CreateNetworkResponse createNetworkResponse = dockerClient.createNetworkCmd().withName(networkName).withIpamConfig(config).exec();
+        Network.Ipam ipam = new Network.Ipam().withConfig(new Network.Ipam.Config().withSubnet("10.67.79.0/24"));
+        CreateNetworkResponse createNetworkResponse = dockerClient.createNetworkCmd().withName(networkName).withIpam(ipam).exec();
 
         assertNotNull(createNetworkResponse.getId());
 

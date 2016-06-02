@@ -14,7 +14,6 @@ public class RemoveNetworkCmdImpl extends AbstrDockerCmd<RemoveNetworkCmd, Void>
 
     @Override
     public String getNetworkId() {
-
         return networkId;
     }
 

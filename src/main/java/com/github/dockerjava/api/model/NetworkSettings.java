@@ -3,15 +3,12 @@
  */
 package com.github.dockerjava.api.model;
 
-import java.util.Map;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.core.RemoteApiVersion;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
-import javax.annotation.CheckForNull;
+import java.util.Map;
 
 /**
  *
@@ -76,7 +73,7 @@ public class NetworkSettings {
     private String macAddress;
 
     @JsonProperty("Networks")
-    private Map<String, Network> networks;
+    private Map<String, ContainerNetwork> networks;
 
     /**
      * @deprecated since {@link RemoteApiVersion#VERSION_1_21}
@@ -135,7 +132,7 @@ public class NetworkSettings {
     /**
      * @since {@link RemoteApiVersion#VERSION_1_21}
      */
-    public Map<String, Network> getNetworks() {
+    public Map<String, ContainerNetwork> getNetworks() {
         return networks;
     }
 
@@ -205,84 +202,5 @@ public class NetworkSettings {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
-    }
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Network {
-
-        @JsonProperty("IPAMConfig")
-        private String ipamConfig;
-
-        /**
-         * @since {@link RemoteApiVersion#VERSION_1_22}
-         */
-        @JsonProperty("NetworkID")
-        private String networkID;
-
-        @JsonProperty("EndpointID")
-        private String endpointId;
-
-        @JsonProperty("Gateway")
-        private String gateway;
-
-        @JsonProperty("IPAddress")
-        private String ipAddress;
-
-        @JsonProperty("IPPrefixLen")
-        private Integer ipPrefixLen;
-
-        @JsonProperty("IPv6Gateway")
-        private String ipV6Gateway;
-
-        @JsonProperty("GlobalIPv6Address")
-        private String globalIPv6Address;
-
-        @JsonProperty("GlobalIPv6PrefixLen")
-        private Integer globalIPv6PrefixLen;
-
-        @JsonProperty("MacAddress")
-        private String macAddress;
-
-        @CheckForNull
-        public String getNetworkID() {
-            return networkID;
-        }
-
-        public String getEndpointId() {
-            return endpointId;
-        }
-
-        public String getGateway() {
-            return gateway;
-        }
-
-        public String getIpAddress() {
-            return ipAddress;
-        }
-
-        public Integer getIpPrefixLen() {
-            return ipPrefixLen;
-        }
-
-        public String getIpV6Gateway() {
-            return ipV6Gateway;
-        }
-
-        public String getGlobalIPv6Address() {
-            return globalIPv6Address;
-        }
-
-        public Integer getGlobalIPv6PrefixLen() {
-            return globalIPv6PrefixLen;
-        }
-
-        public String getMacAddress() {
-            return macAddress;
-        }
-
-        @Override
-        public String toString() {
-            return ToStringBuilder.reflectionToString(this);
-        }
     }
 }

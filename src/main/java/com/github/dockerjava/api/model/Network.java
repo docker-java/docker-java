@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -111,14 +112,31 @@ public class Network {
         private String driver;
 
         @JsonProperty("Config")
-        List<Config> config = new ArrayList<>();
+        private List<Config> config = new ArrayList<>();
+
+        @JsonProperty("Options")
+        private Map<String, String> options = null;
 
         public String getDriver() {
             return driver;
         }
 
+        public Map<String, String> getOptions() {
+            return options;
+        }
+
         public List<Config> getConfig() {
             return config;
+        }
+
+        public Ipam withConfig(List<Config> ipamConfigs) {
+            config = ipamConfigs;
+            return this;
+        }
+
+        public Ipam withConfig(Config... ipamConfigs) {
+            config = Arrays.asList(ipamConfigs);
+            return this;
         }
 
         @Override
@@ -150,16 +168,19 @@ public class Network {
                 return gateway;
             }
 
-            public void setSubnet(String subnet) {
+            public Config withSubnet(String subnet) {
                 this.subnet = subnet;
+                return this;
             }
 
-            public void setIpRange(String ipRange) {
+            public Config withIpRange(String ipRange) {
                 this.ipRange = ipRange;
+                return this;
             }
 
-            public void setGateway(String gateway) {
+            public Config withGateway(String gateway) {
                 this.gateway = gateway;
+                return this;
             }
         }
     }
