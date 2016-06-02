@@ -10,6 +10,7 @@ Notes
 
 All changes
 
+* [#585] (https://github.com/docker-java/docker-java/pull/585) Add RootDir property to GraphData
 * [#580] (https://github.com/docker-java/docker-java/pull/580) Fixes execute permissions for files when copied to container 
 * [#579] (https://github.com/docker-java/docker-java/pull/579) Adds missing name filter evaluation to netty version of ListImagesCmdExec 
 * [#578] (https://github.com/docker-java/docker-java/pull/578) Fix error during image build when Dockerfile in subdirectory of build context
