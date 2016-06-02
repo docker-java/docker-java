@@ -18,7 +18,8 @@ All changes
 * [#574] (https://github.com/docker-java/docker-java/pull/574) Fix for copyArchiveToContainerCmd bug
 * [#572] (https://github.com/docker-java/docker-java/pull/572) Inspect container command now shows sizes if requested 
 * [#563] (https://github.com/docker-java/docker-java/pull/563) Fix memory leak in netty implementation of DockerCmdExecFactory
-* [#550] (https://github.com/docker-java/docker-java/pull/550) Add ability to configure IPAM config for CreateNetworkCmd 
+* [#550] (https://github.com/docker-java/docker-java/pull/550) Add ability to configure IPAM config for CreateNetworkCmd
+* [#484] (https://github.com/docker-java/docker-java/pull/484) Implement missing network api options for v1.22
 
 Included in 3.0.0-RC5
 
