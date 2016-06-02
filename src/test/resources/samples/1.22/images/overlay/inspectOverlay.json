@@ -1,0 +1,93 @@
+{
+  "Id": "sha256:0ac989a7cba2ce7f5fbe5d520b338e780055ec251371ee35f7462ae9944696c5",
+  "RepoTags": [
+    "test-image:latest"
+  ],
+  "RepoDigests": [],
+  "Parent": "",
+  "Comment": "",
+  "Created": "2016-05-24T19:25:01.31608131Z",
+  "Container": "221f000eccdec85b74cd4f4f37c7c0392d0f620bee45e9618cac3e57409a6d2c",
+  "ContainerConfig": {
+    "Hostname": "6ea525e7ec5c",
+    "Domainname": "",
+    "User": "",
+    "AttachStdin": false,
+    "AttachStdout": false,
+    "AttachStderr": false,
+    "Tty": false,
+    "OpenStdin": false,
+    "StdinOnce": false,
+    "Env": [
+      "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    ],
+    "Cmd": [
+      "/bin/sh",
+      "-c",
+      "#(nop) ENTRYPOINT [\"bin/run.sh\"]"
+    ],
+    "Image": "sha256:f8321fac5b5484874c1c5c02719905ec815c8ad20c2bc66222cfde19cd0491b7",
+    "Volumes": {
+      "/var/lib/docker": {}
+    },
+    "WorkingDir": "/opt",
+    "Entrypoint": [
+      "bin/run.sh"
+    ],
+    "OnBuild": [],
+    "Labels": {}
+  },
+  "DockerVersion": "1.11.1",
+  "Author": "",
+  "Config": {
+    "Hostname": "6ea525e7ec5c",
+    "Domainname": "",
+    "User": "",
+    "AttachStdin": false,
+    "AttachStdout": false,
+    "AttachStderr": false,
+    "Tty": false,
+    "OpenStdin": false,
+    "StdinOnce": false,
+    "Env": [
+      "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    ],
+    "Cmd": null,
+    "Image": "sha256:f8321fac5b5484874c1c5c02719905ec815c8ad20c2bc66222cfde19cd0491b7",
+    "Volumes": {
+      "/var/lib/docker": {}
+    },
+    "WorkingDir": "/opt",
+    "Entrypoint": [
+      "bin/run.sh"
+    ],
+    "OnBuild": [],
+    "Labels": {}
+  },
+  "Architecture": "amd64",
+  "Os": "linux",
+  "Size": 345943268,
+  "VirtualSize": 345943268,
+  "GraphDriver": {
+    "Name": "overlay",
+    "Data": {
+      "RootDir": "/var/lib/docker/overlay/7e8d362d6b78d47eafe4863fd129cbcada35dbd419d7188cc1dbf1233d505576/root"
+    }
+  },
+  "RootFS": {
+    "Type": "layers",
+    "Layers": [
+      "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+      "sha256:bd8153423e4131205018c431283e0a08298b291838db9bc6c19620523f5a818c",
+      "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+      "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+      "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+      "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+      "sha256:bb0716c3f5f5be1e5ee6912f7e9f44193898e0b3ed9031a0416f8ca262e89975",
+      "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+      "sha256:58845ae9bfa7659900a9b30abb2c96330eff09bfbc6521ea77937ba60f8cc131",
+      "sha256:8c22161a61c24eb6f7aa130d45189354fd8dbe9467e5b2debf828908113eacb0",
+      "sha256:0c0c9045d2542e7845a2bdd8ead0e0fb2722be2c07c5553838dd61ffe051d672"
+    ]
+  }
+}

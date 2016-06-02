@@ -189,4 +189,21 @@ public class InspectImageResponseTest {
         assertThat(data.getDeviceSize(),
                 is("171798691840"));
     }
+
+    @Test
+    private void testOverlayNetworkRootDir() throws IOException {
+        final ObjectMapper mapper = new ObjectMapper();
+        final JavaType type = mapper.getTypeFactory().constructType(InspectImageResponse.class);
+
+        final InspectImageResponse inspectImage = testRoundTrip(VERSION_1_22, "images/overlay/inspectOverlay.json", type);
+
+        final GraphData overlayGraphData = new GraphData()
+                .withRootDir("/var/lib/docker/overlay/7e8d362d6b78d47eafe4863fd129cbcada35dbd419d7188cc1dbf1233d505576/root");
+        final GraphDriver overlayGraphDriver = new GraphDriver().withName("overlay").withData(overlayGraphData);
+        final GraphDriver graphDriver = inspectImage.getGraphDriver();
+        assertThat(graphDriver, notNullValue());
+        assertThat(graphDriver, equalTo(overlayGraphDriver));
+        assertThat(graphDriver.getName(), is("overlay"));
+        assertThat(graphDriver.getData(), equalTo(overlayGraphData));
+    }
 }

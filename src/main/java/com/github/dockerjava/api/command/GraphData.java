@@ -12,6 +12,10 @@ import javax.annotation.CheckForNull;
  * @author Kanstantsin Shautsou
  */
 public class GraphData {
+
+    @JsonProperty("RootDir")
+    private String rootDir;
+
     @JsonProperty("DeviceId")
     private String deviceId;
 
@@ -20,6 +24,22 @@ public class GraphData {
 
     @JsonProperty("DeviceSize")
     private String deviceSize;
+
+    /**
+     * @see #rootDir
+     */
+    @CheckForNull
+    public String getRootDir() {
+        return rootDir;
+    }
+
+    /**
+     * @see #rootDir
+     */
+    public GraphData withRootDir(String rootDir) {
+        this.rootDir = rootDir;
+        return this;
+    }
 
     /**
      * @see #deviceId
