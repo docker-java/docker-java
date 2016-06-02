@@ -4,8 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.assertNull;
 
 import java.lang.reflect.Field;
 import java.net.URI;
@@ -54,8 +53,6 @@ public class DockerClientConfigTest {
         // and it looks to be SSL disabled
         env.remove("DOCKER_CERT_PATH");
 
-
-
         // given default cert path
         Properties systemProperties = new Properties();
         systemProperties.setProperty("user.name", "someUserName");
@@ -82,7 +79,6 @@ public class DockerClientConfigTest {
         env.put(DockerClientConfig.DOCKER_CERT_PATH, dockerCertPath());
         env.put(DockerClientConfig.DOCKER_TLS_VERIFY, "1");
 
-
         // when you build a config
         DockerClientConfig config = buildConfig(env, new Properties());
 
@@ -106,12 +102,12 @@ public class DockerClientConfigTest {
         DockerClientConfig config = buildConfig(Collections.<String, String> emptyMap(), systemProperties);
 
         // then the cert path is as expected
-        assertEquals(config.getDockerHost(), URI.create("tcp://localhost:2376"));
+        assertEquals(config.getDockerHost(), URI.create("unix:///var/run/docker.sock"));
         assertEquals(config.getRegistryUsername(), "someUserName");
         assertEquals(config.getRegistryUrl(), AuthConfig.DEFAULT_SERVER_ADDRESS);
         assertEquals(config.getApiVersion(), RemoteApiVersion.unknown());
         assertEquals(config.getDockerConfig(), homeDir() + "/.docker");
-        assertEquals(config.getDockerCertPath(), homeDir() + "/.docker/certs");
+        assertNull(config.getDockerCertPath());
     }
 
     @Test

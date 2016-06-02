@@ -109,14 +109,16 @@ public class DockerClientConfig implements Serializable {
 
                 if (!certPath.exists()) {
                     throw new DockerClientException(
-                            "Certificate path (DOCKER_CERT_PATH) '" + dockerCertPath + "' doesn't exist.");
+                            "Enabled TLS verification (DOCKER_TLS_VERIFY=1) but certificate path (DOCKER_CERT_PATH) '" + dockerCertPath
+                                    + "' doesn't exist.");
                 }
 
                 if (certPath.isDirectory()) {
                     return dockerCertPath;
                 } else {
                     throw new DockerClientException(
-                            "Certificate path (DOCKER_CERT_PATH) '" + dockerCertPath + "' doesn't point to a directory.");
+                            "Enabled TLS verification (DOCKER_TLS_VERIFY=1) but certificate path (DOCKER_CERT_PATH) '" + dockerCertPath
+                                    + "' doesn't point to a directory.");
                 }
             }
         } else {
@@ -375,7 +377,6 @@ public class DockerClientConfig implements Serializable {
             return this;
         }
 
-
         public final DockerClientConfigBuilder withApiVersion(RemoteApiVersion apiVersion) {
             this.apiVersion = apiVersion.getVersion();
             return this;
@@ -417,8 +418,12 @@ public class DockerClientConfig implements Serializable {
         }
 
         public final DockerClientConfigBuilder withDockerTlsVerify(String dockerTlsVerify) {
-            String trimmed = dockerTlsVerify.trim();
-            this.dockerTlsVerify = "true".equalsIgnoreCase(trimmed) || "1".equals(trimmed);
+            if (dockerTlsVerify != null) {
+                String trimmed = dockerTlsVerify.trim();
+                this.dockerTlsVerify = "true".equalsIgnoreCase(trimmed) || "1".equals(trimmed);
+            } else {
+                this.dockerTlsVerify = false;
+            }
             return this;
         }
 
@@ -433,4 +438,3 @@ public class DockerClientConfig implements Serializable {
         }
     }
 }
-
