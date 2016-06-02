@@ -1,11 +1,12 @@
-package com.github.dockerjava.core.command;
+package com.github.dockerjava.netty.exec;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.CreateNetworkResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.ContainerNetwork;
 import com.github.dockerjava.api.model.Network;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
+
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -17,7 +18,7 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 
 @Test(groups = "integration")
-public class ConnectToNetworkCmdImplTest extends AbstractDockerClientTest {
+public class ConnectToNetworkCmdExecTest extends AbstractNettyDockerClientTest {
 
     @BeforeTest
     public void beforeTest() throws Exception {

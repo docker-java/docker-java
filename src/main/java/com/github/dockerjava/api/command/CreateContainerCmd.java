@@ -1,10 +1,5 @@
 package com.github.dockerjava.api.command;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.CheckForNull;
-
 import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.Bind;
@@ -21,7 +16,14 @@ import com.github.dockerjava.api.model.Ulimit;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
 
+import javax.annotation.CheckForNull;
+import java.util.List;
+import java.util.Map;
+
 public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerResponse> {
+
+    @CheckForNull
+    List<String> getAliases();
 
     @CheckForNull
     Bind[] getBinds();
@@ -91,6 +93,12 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     @CheckForNull
     String getImage();
+
+    @CheckForNull
+    String getIpv4Address();
+
+    @CheckForNull
+    String getIpv6Address();
 
     @CheckForNull
     Map<String, String> getLabels();
@@ -184,6 +192,18 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     @CheckForNull
     Boolean isTty();
+
+    /**
+     * Add network-scoped alias for the container
+     * @param aliases on ore more aliases
+     */
+    CreateContainerCmd withAliases(String... aliases);
+
+    /**
+     * Add network-scoped alias for the container
+     * @param aliases on ore more aliases
+     */
+    CreateContainerCmd withAliases(List<String> aliases);
 
     CreateContainerCmd withAttachStderr(Boolean attachStderr);
 
@@ -303,6 +323,10 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     CreateContainerCmd withHostName(String hostName);
 
     CreateContainerCmd withImage(String image);
+
+    CreateContainerCmd withIpv4Address(String ipv4Address);
+
+    CreateContainerCmd withIpv6Address(String ipv6Address);
 
     CreateContainerCmd withLabels(Map<String, String> labels);
 

@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.core.RemoteApiVersion;
@@ -8,9 +9,14 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.annotation.CheckForNull;
+import java.util.Arrays;
 import java.util.List;
 
 /**
+ * Types taken form
+ * {@see https://github.com/docker/engine-api/blob/release/1.10/types/network/network.go}
+ * Docker named it EndpointSettings
+ *
  * @see ContainerNetworkSettings
  * @author Kanstantsin Shautsou
  */
@@ -20,16 +26,16 @@ public class ContainerNetwork {
      * FIXME verify
      */
     @JsonProperty("IPAMConfig")
-    private Network.Ipam.Config ipamConfig;
+    private Ipam ipamConfig;
 
     /**
      * FIXME verify
      */
     @JsonProperty("Links")
-    private List<String> links;
+    private Links links;
 
     /**
-     * FIXME no docs, unknown field.
+     * Add network-scoped alias for the container
      * Type picked from `docker/vendor/src/github.com/docker/engine-api/types/network/network.go`
      *
      * @since {@link RemoteApiVersion#VERSION_1_22}
@@ -77,6 +83,14 @@ public class ContainerNetwork {
      */
     public ContainerNetwork withAliases(List<String> aliases) {
         this.aliases = aliases;
+        return this;
+    }
+
+    /**
+     * @see #aliases
+     */
+    public ContainerNetwork withAliases(String... aliases) {
+        this.aliases = Arrays.asList(aliases);
         return this;
     }
 
@@ -155,7 +169,7 @@ public class ContainerNetwork {
     /**
      * @see #ipAddress
      */
-    public ContainerNetwork withIpAddress(String ipAddress) {
+    public ContainerNetwork withIpv4Address(String ipAddress) {
         this.ipAddress = ipAddress;
         return this;
     }
@@ -164,14 +178,14 @@ public class ContainerNetwork {
      * @see #ipamConfig
      */
     @CheckForNull
-    public Network.Ipam.Config getIpamConfig() {
+    public Ipam getIpamConfig() {
         return ipamConfig;
     }
 
     /**
      * @see #ipamConfig
      */
-    public ContainerNetwork withIpamConfig(Network.Ipam.Config ipamConfig) {
+    public ContainerNetwork withIpamConfig(Ipam ipamConfig) {
         this.ipamConfig = ipamConfig;
         return this;
     }
@@ -212,15 +226,24 @@ public class ContainerNetwork {
      * @see #links
      */
     @CheckForNull
-    public List<String> getLinks() {
-        return links;
+    @JsonIgnore
+    public Link[] getLinks() {
+        return links == null ? new Link[0] : links.getLinks();
     }
 
     /**
      * @see #links
      */
-    public ContainerNetwork withLinks(List<String> links) {
-        this.links = links;
+    public ContainerNetwork withLinks(List<Link> links) {
+        this.links = new Links(links);
+        return this;
+    }
+
+    /**
+     * @see #links
+     */
+    public ContainerNetwork withLinks(Link... links) {
+        this.links = new Links(links);
         return this;
     }
 
@@ -269,5 +292,35 @@ public class ContainerNetwork {
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    /**
+     * Docker named it EndpointIPAMConfig
+     */
+    public static class Ipam {
+
+        @JsonProperty("IPv4Address")
+        private String ipv4Address;
+
+        @JsonProperty("IPv6Address")
+        private String ipv6Address;
+
+        public String getIpv4Address() {
+            return ipv4Address;
+        }
+
+        public String getIpv6Address() {
+            return ipv6Address;
+        }
+
+        public Ipam withIpv4Address(String ipv4Address) {
+            this.ipv4Address = ipv4Address;
+            return this;
+        }
+
+        public Ipam withIpv6Address(String ipv6Address) {
+            this.ipv6Address = ipv6Address;
+            return this;
+        }
     }
 }

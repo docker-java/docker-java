@@ -1,14 +1,17 @@
 package com.github.dockerjava.netty.exec;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.CreateNetworkResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.Bind;
+import com.github.dockerjava.api.model.ContainerNetwork;
 import com.github.dockerjava.api.model.Device;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.LogConfig;
+import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.Ports.Binding;
 import com.github.dockerjava.api.model.RestartPolicy;
@@ -23,10 +26,12 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+import org.testng.internal.junit.ArrayAsserts;
 
 import java.lang.reflect.Method;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -47,6 +52,7 @@ import static org.hamcrest.Matchers.startsWith;
 
 @Test(groups = "integration")
 public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
+    public static final String BUSYBOX_IMAGE = "busybox";
 
     @BeforeTest
     public void beforeTest() throws Exception {
@@ -258,6 +264,107 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
                 .exec();
         assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] {new Link("container1",
                 "container1Link")}));
+    }
+
+    @Test
+    public void createContainerWithLinkInCustomNetwork() throws DockerException {
+
+        CreateNetworkResponse createNetworkResponse = dockerClient.createNetworkCmd()
+                .withName("linkNet")
+                .exec();
+
+        assertNotNull(createNetworkResponse.getId());
+
+        CreateContainerResponse container1 = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
+                .withNetworkMode("linkNet")
+                .withCmd("sleep", "9999")
+                .withName("container1")
+                .exec();
+
+        assertThat(container1.getId(), not(isEmptyString()));
+
+        dockerClient.startContainerCmd(container1.getId()).exec();
+
+        InspectContainerResponse inspectContainerResponse1 = dockerClient.inspectContainerCmd(container1.getId())
+                .exec();
+        LOG.info("Container1 Inspect: {}", inspectContainerResponse1.toString());
+        assertThat(inspectContainerResponse1.getState().getRunning(), is(true));
+
+        CreateContainerResponse container2 = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
+                .withNetworkMode("linkNet")
+                .withName("container2")
+                .withCmd("env")
+                .withLinks(new Link("container1", "container1Link"))
+                .exec();
+
+        LOG.info("Created container {}", container2.toString());
+        assertThat(container2.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainerResponse2 = dockerClient.inspectContainerCmd(container2.getId())
+                .exec();
+
+        ContainerNetwork linkNet = inspectContainerResponse2.getNetworkSettings().getNetworks().get("linkNet");
+        assertNotNull(linkNet);
+        ArrayAsserts.assertArrayEquals(new Link[]{ new Link("container1", "container1Link")}, linkNet.getLinks());
+    }
+
+    @Test
+    public void createContainerWithCustomIp() throws DockerException {
+
+        CreateNetworkResponse createNetworkResponse = dockerClient.createNetworkCmd()
+                .withIpam(new Network.Ipam()
+                        .withConfig(new Network.Ipam.Config()
+                                .withSubnet("10.100.101.0/24")))
+                .withName("customIpNet")
+                .exec();
+
+        assertNotNull(createNetworkResponse.getId());
+
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
+                .withNetworkMode("customIpNet")
+                .withCmd("sleep", "9999")
+                .withName("container")
+                .withIpv4Address("10.100.101.100")
+                .exec();
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        dockerClient.startContainerCmd(container.getId()).exec();
+
+        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId())
+                .exec();
+
+        ContainerNetwork customIpNet = inspectContainerResponse.getNetworkSettings().getNetworks().get("customIpNet");
+        assertNotNull(customIpNet);
+        assertEquals(customIpNet.getGateway(), "10.100.101.1");
+        assertEquals(customIpNet.getIpAddress(), "10.100.101.100");
+    }
+
+    @Test
+    public void createContainerWithAlias() throws DockerException {
+
+        CreateNetworkResponse createNetworkResponse = dockerClient.createNetworkCmd()
+                .withName("aliasNet")
+                .exec();
+
+        assertNotNull(createNetworkResponse.getId());
+
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
+                .withNetworkMode("aliasNet")
+                .withCmd("sleep", "9999")
+                .withName("container")
+                .withAliases("server")
+                .exec();
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        dockerClient.startContainerCmd(container.getId()).exec();
+
+        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId())
+                .exec();
+
+        ContainerNetwork aliasNet = inspectContainerResponse.getNetworkSettings().getNetworks().get("aliasNet");
+        assertEquals(aliasNet.getAliases(), Collections.singletonList("server"));
     }
 
     @Test

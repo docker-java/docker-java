@@ -14,6 +14,9 @@ public class DisconnectFromNetworkCmdImpl extends AbstrDockerCmd<DisconnectFromN
     @JsonProperty("Container")
     private String containerId;
 
+    @JsonProperty("Force")
+    private Boolean force;
+
     public DisconnectFromNetworkCmdImpl(DockerCmdSyncExec<DisconnectFromNetworkCmd, Void> execution) {
         super(execution);
     }
@@ -29,6 +32,11 @@ public class DisconnectFromNetworkCmdImpl extends AbstrDockerCmd<DisconnectFromN
     }
 
     @Override
+    public Boolean getForce() {
+        return force;
+    }
+
+    @Override
     public DisconnectFromNetworkCmd withNetworkId(String networkId) {
         this.networkId = networkId;
         return this;
@@ -37,6 +45,12 @@ public class DisconnectFromNetworkCmdImpl extends AbstrDockerCmd<DisconnectFromN
     @Override
     public DisconnectFromNetworkCmd withContainerId(String containerId) {
         this.containerId = containerId;
+        return this;
+    }
+
+    @Override
+    public DisconnectFromNetworkCmd withForce(Boolean force) {
+        this.force = force;
         return this;
     }
 }
