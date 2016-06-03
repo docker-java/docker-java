@@ -8,16 +8,15 @@ Java API client for [Docker](http://docs.docker.io/ "Docker")
 
 Developer forum for [docker-java](https://groups.google.com/forum/?#!forum/docker-java-dev "docker-java")
 
+[Changelog](https://github.com/docker-java/docker-java/blob/master/CHANGELOG.md)<br/>
+[Wiki](https://github.com/docker-java/docker-java/wiki)
+
 ## Build with Maven
 
 ###### Prerequisites:
 
 * Java 1.7
 * Maven 3.0.5
-
-If you need SSL, then you'll need to put your `*.pem` file into `~/.docker/`, if you're using boot2docker, do this: 
- 
-    $ ln -s /Users/alex.collins/.boot2docker/certs/boot2docker-vm .docker
 
 Build and run integration tests as follows:
 
@@ -27,35 +26,22 @@ If you do not have access to a Docker server or just want to execute the build q
 
     $ mvn clean install -DskipITs
 
-By default Docker server is using UNIX sockets for communication with the Docker client, however docker-java
-client uses TCP/IP to connect to the Docker server by default, so you will need to make sure that your Docker server is
-listening on TCP port. To allow Docker server to use TCP add the following line to /etc/default/docker
+By default the docker engine is using local UNIX sockets for communication with the docker CLI so docker-java
+client also uses UNIX domain sockets to connect to the docker daemon by default. To make the docker daemon listening on a TCP (http/https) port you have to configure it by setting the DOCKER_OPTS environment variable to something like the following: 
 
     DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock"
-
-However you can force docker-java to use UNIX socket communication by configure the following (see [Configuration](.#Configuration) for details):
-
-    DOCKER_HOST=unix:///var/run/docker.sock
-    DOCKER_TLS_VERIFY=0
-
+    
 More details about setting up Docker server can be found in official documentation: http://docs.docker.io/en/latest/use/basics/
 
-Now make sure that docker is up:
+To force docker-java to use TCP (http) configure the following (see [Configuration](https://github.com/docker-java/docker-java#configuration) for details):
 
-    $ docker -H tcp://127.0.0.1:2375 version
+    DOCKER_HOST=tcp://127.0.0.1:2375
+    
+For secure tls (https) communication:   
 
-    Client version: 0.8.0
-	Go version (client): go1.2
-	Git commit (client): cc3a8c8
-	Server version: 1.2.0
-	Git commit (server): fa7b24f
-	Go version (server): go1.3.1
-
-Run build without integration tests:
-
-    $ mvn clean install -DskipITs
-
-## Docker-Java maven dependencies
+    DOCKER_HOST=tcp://127.0.0.1:2376
+    DOCKER_TLS_VERIFY=1
+    DOCKER_CERT_PATH=/Users/marcus/.docker/machine/machines/docker-1.10.2
 
 ### Latest release version
 Supports a subset of the Docker Remote API [v1.22](https://github.com/docker/docker/blob/master/docs/reference/api/docker_remote_api_v1.22.md), Docker Server version 1.10.x
@@ -128,11 +114,11 @@ In your application, e.g.
 
 ##### System Properties:
 
-    java -Dregistry.username=dockeruser pkg.Main
+    java -DDOCKER_HOST=tcp://localhost:2375 -Dregistry.username=dockeruser pkg.Main
 
 ##### System Environment
 
-    export DOCKER_URL=tcp://localhost:2376
+    export DOCKER_HOST=tcp://localhost:2376
     export DOCKER_TLS_VERIFY=1
     export DOCKER_CERT_PATH=/home/user/.docker/certs
     export DOCKER_CONFIG=/home/user/.docker
