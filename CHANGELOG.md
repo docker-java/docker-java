@@ -9,7 +9,7 @@ Notes
 * The configuration has been changed to better match the docker CLI configuration options. The properties file was renamed from `docker.io.properties` to `docker-java.properties`. See README.md for details.
 
 All changes
-
+* [#590] (https://github.com/docker-java/docker-java/pull/590) Fix default docker.properties to match with docker CLI defaults 
 * [#585] (https://github.com/docker-java/docker-java/pull/585) Add RootDir property to GraphData
 * [#580] (https://github.com/docker-java/docker-java/pull/580) Fixes execute permissions for files when copied to container 
 * [#579] (https://github.com/docker-java/docker-java/pull/579) Adds missing name filter evaluation to netty version of ListImagesCmdExec 
