@@ -1,11 +1,11 @@
 Change Log
 ===
 
-3.0.0-SNAPSHOT
+v3.0.0
 ---
 Notes
 
-* The upcoming release will contain multiple API breaking changes therefore the major version switch. It will support a subset of v.1.22 of the docker remote API. It also includes an experimental netty based implementation of `DockerCmdExecFactory` that probably will replace the current jersey/httpclient based one in a later release.
+* The 3.0.0 release contains multiple API breaking changes compared to 2.x therefore the major version switch. It supports a subset of v.1.22 of the docker remote API. It also includes an experimental netty based implementation of `DockerCmdExecFactory` that probably will replace the current jersey/httpclient based one in a later release. Take a look at the [Wiki](https://github.com/docker-java/docker-java/wiki#intialize-docker-client-advanced) how to use it.
 * The configuration has been changed to better match the docker CLI configuration options. The properties file was renamed from `docker.io.properties` to `docker-java.properties`. See README.md for details.
 
 All changes
