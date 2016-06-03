@@ -58,21 +58,12 @@ Run build without integration tests:
 ## Docker-Java maven dependencies
 
 ### Latest release version
-Supports a subset of the Docker Remote API [v1.19](https://github.com/docker/docker/blob/master/docs/reference/api/docker_remote_api_v1.19.md), Docker Server version 1.7.x
-
-    <dependency>
-          <groupId>com.github.docker-java</groupId>
-          <artifactId>docker-java</artifactId>
-          <version>2.2.3</version>
-    </dependency>
-    
-### Latest release candidate
 Supports a subset of the Docker Remote API [v1.22](https://github.com/docker/docker/blob/master/docs/reference/api/docker_remote_api_v1.22.md), Docker Server version 1.10.x
 
     <dependency>
           <groupId>com.github.docker-java</groupId>
           <artifactId>docker-java</artifactId>
-          <version>3.0.0-RC5</version>
+          <version>3.0.0</version>
     </dependency>
     
 ### Latest development version
@@ -83,7 +74,7 @@ You can find the latest development version including javadoc and source files o
     <dependency>
           <groupId>com.github.docker-java</groupId>
           <artifactId>docker-java</artifactId>
-          <version>3.0.0-SNAPSHOT</version>
+          <version>3.0.1-SNAPSHOT</version>
     </dependency>
     
 
