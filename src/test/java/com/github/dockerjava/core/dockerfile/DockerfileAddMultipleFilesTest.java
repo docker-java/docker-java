@@ -1,7 +1,7 @@
 package com.github.dockerjava.core.dockerfile;
 
 import com.google.common.base.Function;
-import junit.framework.TestCase;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
@@ -14,7 +14,7 @@ import static com.google.common.collect.Collections2.transform;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
-public class DockerfileAddMultipleFilesTest extends TestCase {
+public class DockerfileAddMultipleFilesTest  {
 
     private static final Logger log = LoggerFactory.getLogger(DockerfileAddMultipleFilesTest.class);
 
@@ -26,13 +26,17 @@ public class DockerfileAddMultipleFilesTest extends TestCase {
     };
 
     @Test
-    public void testAddMultipleFiles() throws IOException {
-        File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("testAddMultipleFiles")
-                .getFile());
+    public void addFiles() throws IOException {
+        File baseDir = fileFromBuildTestResource("ADD/files");
         Dockerfile dockerfile = new Dockerfile(new File(baseDir, "Dockerfile"), baseDir);
         Dockerfile.ScannedResult result = dockerfile.parse();
         Collection<String> filesToAdd = transform(result.filesToAdd, TO_FILE_NAMES);
 
         assertThat(filesToAdd, containsInAnyOrder("Dockerfile", "src1", "src2"));
+    }
+
+    private File fileFromBuildTestResource(String resource) {
+        return new File(Thread.currentThread().getContextClassLoader()
+                .getResource("buildTests/" + resource).getFile());
     }
 }
