@@ -583,6 +583,11 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         return this;
     }
 
+    @Override
+    public SSLContext getSSLContext() {
+        return sslContext;
+    }
+
     private WebTarget getBaseResource() {
         return new WebTarget(channelProvider);
     }

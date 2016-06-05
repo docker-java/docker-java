@@ -535,6 +535,11 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         return this;
     }
 
+    @Override
+    public SSLContext getSSLContext() {
+        return sslContext;
+    }
+
     public DockerCmdExecFactoryImpl withReadTimeout(Integer readTimeout) {
         this.readTimeout = readTimeout;
         return this;
