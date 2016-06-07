@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 @JsonInclude(Include.NON_NULL)
 public class Device {
@@ -59,10 +60,16 @@ public class Device {
         String src = "";
         String dst = "";
         String permissions = "rwm";
-        final String[] arr = deviceStr.split(":");
-        switch (arr.length) {
+        final String[] arr = deviceStr.trim().split(":");
+        // java String.split() returns wrong length, use tokenizer instead
+        switch (new StringTokenizer(deviceStr, ":").countTokens()) {
             case 3: {
-                permissions = arr[2];
+                // Mismatches docker code logic. While there is no validations after parsing, checking heregit
+                if (validDeviceMode(arr[2])) {
+                    permissions = arr[2];
+                } else {
+                    throw new IllegalArgumentException("Invalid device specification: " + deviceStr);
+                }
             }
             case 2: {
                 if (validDeviceMode(arr[1])) {
@@ -76,7 +83,7 @@ public class Device {
                 break;
             }
             default: {
-                throw new IllegalArgumentException("invalid device specification: " + deviceStr);
+                throw new IllegalArgumentException("Invalid device specification: " + deviceStr);
             }
         }
 
