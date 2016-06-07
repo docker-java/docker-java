@@ -2,7 +2,10 @@ package com.github.dockerjava.core;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.io.File;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.Security;
 
 import javax.net.ssl.SSLContext;
@@ -50,9 +53,17 @@ public class LocalDirectorySSLConfig implements SSLConfig, Serializable {
                     System.setProperty("https.protocols", httpProtocols);
                 }
 
-                sslConfig.keyStore(CertificateUtils.createKeyStore(dockerCertPath));
+                String caPemPath = dockerCertPath + File.separator + "ca.pem";
+                String keyPemPath = dockerCertPath + File.separator + "key.pem";
+                String certPemPath = dockerCertPath + File.separator + "cert.pem";
+
+                String keypem = new String(Files.readAllBytes(Paths.get(keyPemPath)));
+                String certpem = new String(Files.readAllBytes(Paths.get(certPemPath)));
+                String capem = new String(Files.readAllBytes(Paths.get(caPemPath)));
+
+                sslConfig.keyStore(CertificateUtils.createKeyStore(keypem, certpem));
                 sslConfig.keyStorePassword("docker");
-                sslConfig.trustStore(CertificateUtils.createTrustStore(dockerCertPath));
+                sslConfig.trustStore(CertificateUtils.createTrustStore(capem));
 
                 return sslConfig.createSSLContext();
 
