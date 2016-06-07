@@ -1,7 +1,7 @@
 Change Log
 ===
 
-3.0.0-SNAPSHOT
+3.0.1-SNAPSHOT
 ---
 
 All changes
