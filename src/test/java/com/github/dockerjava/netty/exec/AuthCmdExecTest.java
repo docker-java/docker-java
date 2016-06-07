@@ -44,14 +44,8 @@ public class AuthCmdExecTest extends AbstractNettyDockerClientTest {
         assertEquals(response.getStatus(), "Login Succeeded");
     }
 
-    @Test()
+    @Test(expectedExceptions = UnauthorizedException.class)
     public void testAuthInvalid() throws Exception {
-
-        try {
-            DockerClientBuilder.getInstance(config("garbage")).build().authCmd().exec();
-            fail("Expected a UnauthorizedException caused by a bad password.");
-        } catch (UnauthorizedException e) {
-            assertEquals(e.getMessage(), "Wrong login/password, please try again\n");
-        }
+        DockerClientBuilder.getInstance(config("garbage")).build().authCmd().exec();
     }
 }
