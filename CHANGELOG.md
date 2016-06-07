@@ -1,6 +1,12 @@
 Change Log
 ===
 
+3.0.0-SNAPSHOT
+---
+
+All changes
+* [#529] (https://github.com/docker-java/docker-java/pull/529) Refactor CertUtils. Support ECDSA and PrivateKey 
+
 v3.0.0
 ---
 Notes
