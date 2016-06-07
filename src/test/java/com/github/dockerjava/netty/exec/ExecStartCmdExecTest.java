@@ -46,7 +46,7 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
         super.afterMethod(result);
     }
 
-    @Test(groups = "ignoreInCircleCi")
+    @Test()
     public void execStart() throws Exception {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
@@ -58,9 +58,14 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
         dockerClient.startContainerCmd(container.getId()).exec();
 
         ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
-                .withAttachStdout(true).withCmd("touch", "/execStartTest.log").exec();
-        dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false)
-                .exec(new ExecStartResultCallback(System.out, System.err)).awaitCompletion();
+                .withAttachStdout(true)
+                .withCmd("touch", "/execStartTest.log")
+                .exec();
+
+        dockerClient.execStartCmd(execCreateCmdResponse.getId())
+                .withDetach(false)
+                .exec(new ExecStartResultCallback(System.out, System.err))
+                .awaitCompletion();
 
         InputStream response = dockerClient.copyArchiveFromContainerCmd(container.getId(), "/execStartTest.log").exec();
 
@@ -73,7 +78,7 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
         assertTrue(responseAsString.length() > 0);
     }
 
-    @Test(groups = "ignoreInCircleCi")
+    @Test()
     public void execStartAttached() throws Exception {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
@@ -85,9 +90,14 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
         dockerClient.startContainerCmd(container.getId()).exec();
 
         ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
-                .withAttachStdout(true).withCmd("touch", "/execStartTest.log").exec();
-        dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false)
-                .exec(new ExecStartResultCallback(System.out, System.err)).awaitCompletion();
+                .withAttachStdout(true)
+                .withCmd("touch", "/execStartTest.log")
+                .exec();
+
+        dockerClient.execStartCmd(execCreateCmdResponse.getId())
+                .withDetach(false)
+                .exec(new ExecStartResultCallback(System.out, System.err))
+                .awaitCompletion();
 
         InputStream response = dockerClient.copyArchiveFromContainerCmd(container.getId(), "/execStartTest.log").exec();
         Boolean bytesAvailable = response.available() > 0;
@@ -99,7 +109,7 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
         assertTrue(responseAsString.length() > 0);
     }
 
-    @Test(groups = "ignoreInCircleCi")
+    @Test()
     public void execStartAttachStdin() throws Exception {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
@@ -115,14 +125,23 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
         ByteArrayOutputStream stdout = new ByteArrayOutputStream();
 
         ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
-                .withAttachStdout(true).withAttachStdin(true).withCmd("cat").exec();
-        boolean completed = dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false).withTty(true).withStdIn(stdin)
-                .exec(new ExecStartResultCallback(stdout, System.err)).awaitCompletion(5, TimeUnit.SECONDS);
+                .withAttachStdout(true)
+                .withAttachStdin(true)
+                .withCmd("cat")
+                .exec();
+
+        boolean completed = dockerClient.execStartCmd(execCreateCmdResponse.getId())
+                .withDetach(false)
+                .withTty(true)
+                .withStdIn(stdin)
+                .exec(new ExecStartResultCallback(stdout, System.err))
+                .awaitCompletion(5, TimeUnit.SECONDS);
 
         assertTrue(completed, "The process was not finished.");
         assertEquals(stdout.toString("UTF-8"), "STDIN\n");
     }
 
+    @Test()
     public void execStartAttachStdinToShell() throws Exception {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
@@ -156,7 +175,7 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
         assertThat(stdout.toString(), containsString("etc\n"));
     }
 
-    @Test(groups = "ignoreInCircleCi")
+    @Test()
     public void execStartNotAttachedStdin() throws Exception {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
@@ -172,11 +191,18 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
         ByteArrayOutputStream stdout = new ByteArrayOutputStream();
 
         ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
-                .withAttachStdout(true).withAttachStdin(false).withCmd("/bin/sh").exec();
-        boolean completed = dockerClient.execStartCmd(execCreateCmdResponse.getId()).withDetach(false).withStdIn(stdin)
-                .exec(new ExecStartResultCallback(stdout, System.err)).awaitCompletion(5, TimeUnit.SECONDS);
+                .withAttachStdout(true)
+                .withAttachStdin(false)
+                .withCmd("/bin/sh").exec();
 
-        assertTrue(completed, "The process was not finished.");
+        boolean completed = dockerClient.execStartCmd(execCreateCmdResponse.getId())
+                .withDetach(false)
+                .withStdIn(stdin)
+                .exec(new ExecStartResultCallback(stdout, System.err))
+                .awaitCompletion(5, TimeUnit.SECONDS);
+
+        // with v1.22 of the remote api the server closed the connection when no stdin was attached while exec create, so completed was true
+        assertFalse(completed, "The process was not finished.");
         assertEquals(stdout.toString(), "");
     }
 }
