@@ -58,6 +58,7 @@ import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.model.BuildResponseItem;
 
+import javax.annotation.CheckForNull;
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -435,5 +436,11 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
     @Override
     public DockerCmdExecFactory withSSLContext(SSLContext sslContext) {
         return delegate.withSSLContext(sslContext);
+    }
+
+    @CheckForNull
+    @Override
+    public SSLContext getSSLContext() {
+        return delegate.getSSLContext();
     }
 }
