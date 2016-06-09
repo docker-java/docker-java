@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.containsString;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.concurrent.TimeUnit;
 
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -17,6 +18,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.api.model.StreamType;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
@@ -44,31 +46,65 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test
-    public void asyncLogContainer() throws Exception {
+    public void asyncLogContainerWithTtyEnabled() throws Exception {
 
-        String snippet = "hello world";
-
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("/bin/echo", snippet)
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+                .withCmd("/bin/sh", "-c", "while true; do echo hello; sleep 1; done")
+                .withTty(true)
                 .exec();
 
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
 
-        dockerClient.startContainerCmd(container.getId()).exec();
+        dockerClient.startContainerCmd(container.getId())
+            .exec();
 
-        int exitCode = dockerClient.waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback())
-                .awaitStatusCode();
-
-        assertThat(exitCode, equalTo(0));
-
-        LogContainerTestCallback loggingCallback = new LogContainerTestCallback();
+        LogContainerTestCallback loggingCallback = new LogContainerTestCallback(true);
 
         // this essentially test the since=0 case
-        dockerClient.logContainerCmd(container.getId()).withStdErr(true).withStdOut(true).exec(loggingCallback);
+        dockerClient.logContainerCmd(container.getId())
+            .withStdErr(true)
+            .withStdOut(true)
+            .withFollowStream(true)
+            .withTailAll()
+            .exec(loggingCallback);
 
-        loggingCallback.awaitCompletion();
+        loggingCallback.awaitCompletion(3, TimeUnit.SECONDS);
 
-        assertTrue(loggingCallback.toString().contains(snippet));
+        assertTrue(loggingCallback.toString().contains("hello"));
+
+        assertEquals(loggingCallback.getCollectedFrames().get(0).getStreamType(), StreamType.RAW);
+    }
+
+    @Test
+    public void asyncLogContainerWithTtyDisabled() throws Exception {
+
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+                .withCmd("/bin/sh", "-c", "while true; do echo hello; sleep 1; done")
+                .withTty(false)
+                .exec();
+
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+
+        dockerClient.startContainerCmd(container.getId())
+            .exec();
+
+        LogContainerTestCallback loggingCallback = new LogContainerTestCallback(true);
+
+        // this essentially test the since=0 case
+        dockerClient.logContainerCmd(container.getId())
+            .withStdErr(true)
+            .withStdOut(true)
+            .withFollowStream(true)
+            .withTailAll()
+            .exec(loggingCallback);
+
+        loggingCallback.awaitCompletion(3, TimeUnit.SECONDS);
+
+        assertTrue(loggingCallback.toString().contains("hello"));
+
+        assertEquals(loggingCallback.getCollectedFrames().get(0).getStreamType(), StreamType.STDOUT);
     }
 
     @Test
@@ -105,7 +141,8 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
         String snippet = "hello world";
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("/bin/echo", snippet)
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+                .withCmd("/bin/echo", snippet)
                 .exec();
 
         LOG.info("Created container: {}", container.toString());
@@ -113,26 +150,36 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        int exitCode = dockerClient.waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback())
+        int exitCode = dockerClient.waitContainerCmd(container.getId())
+                .exec(new WaitContainerResultCallback())
                 .awaitStatusCode();
 
         assertThat(exitCode, equalTo(0));
 
         LogContainerTestCallback loggingCallback = new LogContainerTestCallback();
 
-        dockerClient.logContainerCmd(container.getId()).withStdErr(true).withStdOut(true).exec(loggingCallback);
+        dockerClient.logContainerCmd(container.getId())
+                .withStdErr(true)
+                .withStdOut(true)
+                .exec(loggingCallback);
 
         loggingCallback.close();
 
         loggingCallback = new LogContainerTestCallback();
 
-        dockerClient.logContainerCmd(container.getId()).withStdErr(true).withStdOut(true).exec(loggingCallback);
+        dockerClient.logContainerCmd(container.getId())
+                .withStdErr(true)
+                .withStdOut(true)
+                .exec(loggingCallback);
 
         loggingCallback.close();
 
         loggingCallback = new LogContainerTestCallback();
 
-        dockerClient.logContainerCmd(container.getId()).withStdErr(true).withStdOut(true).exec(loggingCallback);
+        dockerClient.logContainerCmd(container.getId())
+                .withStdErr(true)
+                .withStdOut(true)
+                .exec(loggingCallback);
 
         loggingCallback.awaitCompletion();
 
@@ -143,7 +190,8 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
     public void asyncLogContainerWithSince() throws Exception {
         String snippet = "hello world";
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("/bin/echo", snippet)
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+                .withCmd("/bin/echo", snippet)
                 .exec();
 
         LOG.info("Created container: {}", container.toString());
@@ -153,19 +201,22 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        int exitCode = dockerClient.waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback())
+        int exitCode = dockerClient.waitContainerCmd(container.getId())
+                .exec(new WaitContainerResultCallback())
                 .awaitStatusCode();
 
         assertThat(exitCode, equalTo(0));
 
         LogContainerTestCallback loggingCallback = new LogContainerTestCallback();
 
-        dockerClient.logContainerCmd(container.getId()).withStdErr(true).withStdOut(true).withSince(timestamp)
+        dockerClient.logContainerCmd(container.getId())
+                .withStdErr(true)
+                .withStdOut(true)
+                .withSince(timestamp)
                 .exec(loggingCallback);
 
         loggingCallback.awaitCompletion();
 
         assertThat(loggingCallback.toString(), containsString(snippet));
     }
-
 }
