@@ -125,7 +125,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
     private DockerCmdExecFactory dockerCmdExecFactory;
 
     private DockerClientImpl() {
-        this(DockerClientConfig.createDefaultConfigBuilder().build());
+        this(DefaultDockerClientConfig.createDefaultConfigBuilder().build());
     }
 
     private DockerClientImpl(String serverUrl) {
@@ -138,7 +138,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     private static DockerClientConfig configWithServerUrl(String serverUrl) {
-        return DockerClientConfig.createDefaultConfigBuilder().withDockerHost(serverUrl).build();
+        return DefaultDockerClientConfig.createDefaultConfigBuilder().withDockerHost(serverUrl).build();
     }
 
     public static DockerClientImpl getInstance() {

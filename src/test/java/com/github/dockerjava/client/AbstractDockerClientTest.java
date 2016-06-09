@@ -29,7 +29,7 @@ import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.core.DockerClientBuilder;
-import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.TestDockerCmdExecFactory;
 import com.github.dockerjava.core.command.BuildImageResultCallback;
 import com.github.dockerjava.core.command.LogContainerResultCallback;
@@ -68,12 +68,12 @@ public abstract class AbstractDockerClientTest extends Assert {
         LOG.info("======================= END OF BEFORETEST =======================\n\n");
     }
 
-    private DockerClientConfig config() {
+    private DefaultDockerClientConfig config() {
         return config(null);
     }
 
-    protected DockerClientConfig config(String password) {
-        DockerClientConfig.DockerClientConfigBuilder builder = DockerClientConfig.createDefaultConfigBuilder()
+    protected DefaultDockerClientConfig config(String password) {
+        DefaultDockerClientConfig.Builder builder = DefaultDockerClientConfig.createDefaultConfigBuilder()
                 .withRegistryUrl("https://index.docker.io/v1/");
         if (password != null) {
             builder = builder.withRegistryPassword(password);
