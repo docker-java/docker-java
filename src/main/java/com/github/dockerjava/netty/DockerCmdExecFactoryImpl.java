@@ -53,6 +53,7 @@ import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
+import com.github.dockerjava.core.SSLConfig;
 import com.github.dockerjava.netty.exec.AttachContainerCmdExec;
 import com.github.dockerjava.netty.exec.AuthCmdExec;
 import com.github.dockerjava.netty.exec.BuildImageCmdExec;
@@ -122,7 +123,6 @@ import io.netty.util.concurrent.DefaultThreadFactory;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLParameters;
 
@@ -283,11 +283,11 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
                 String host = dockerClientConfig.getDockerHost().getHost();
                 int port = dockerClientConfig.getDockerHost().getPort();
 
-                SSLContext sslContext = dockerClientConfig.getSSLConfig().getSSLContext();
+                final SSLConfig sslConfig = dockerClientConfig.getSSLConfig();
 
-                if (sslContext != null) {
+                if (sslConfig != null && sslConfig.getSSLContext() != null) {
 
-                    SSLEngine engine = sslContext.createSSLEngine(host, port);
+                    SSLEngine engine = sslConfig.getSSLContext().createSSLEngine(host, port);
                     engine.setUseClientMode(true);
                     engine.setSSLParameters(enableHostNameVerification(engine.getSSLParameters()));
 
