@@ -283,7 +283,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
                 String host = dockerClientConfig.getDockerHost().getHost();
                 int port = dockerClientConfig.getDockerHost().getPort();
 
-                SSLContext sslContext = dockerClientConfig.getSSLContext();
+                SSLContext sslContext = dockerClientConfig.getSSLConfig().getSSLContext();
 
                 if (sslContext != null) {
 

@@ -28,7 +28,7 @@ public class DefaultDockerClientConfigTest {
         String dockerCertPath = dockerCertPath();
 
         return new DefaultDockerClientConfig(URI.create("tcp://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
-                new LocalDirectorySSLConfig(dockerCertPath).getSSLContext());
+                new LocalDirectorySSLConfig(dockerCertPath));
     }
 
     private static String homeDir() {
@@ -107,7 +107,7 @@ public class DefaultDockerClientConfigTest {
         assertEquals(config.getRegistryUrl(), AuthConfig.DEFAULT_SERVER_ADDRESS);
         assertEquals(config.getApiVersion(), RemoteApiVersion.unknown());
         assertEquals(config.getDockerConfig(), homeDir() + "/.docker");
-        assertNull(config.getSSLContext());
+        assertNull(config.getSSLConfig());
     }
 
     @Test
@@ -152,7 +152,7 @@ public class DefaultDockerClientConfigTest {
     @Test()
     public void testTlsVerifyAndCertPath() throws Exception {
         new DefaultDockerClientConfig(URI.create("tcp://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
-                new LocalDirectorySSLConfig(dockerCertPath()).getSSLContext());
+                new LocalDirectorySSLConfig(dockerCertPath()));
     }
 
     @Test(expectedExceptions = DockerClientException.class)

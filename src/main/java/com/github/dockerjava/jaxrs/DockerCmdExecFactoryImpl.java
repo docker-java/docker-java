@@ -161,7 +161,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         SSLContext sslContext = null;
 
         try {
-            sslContext = dockerClientConfig.getSSLContext();
+            sslContext = dockerClientConfig.getSSLConfig().getSSLContext();
         } catch (Exception ex) {
             throw new DockerClientException("Error in SSL Configuration", ex);
         }

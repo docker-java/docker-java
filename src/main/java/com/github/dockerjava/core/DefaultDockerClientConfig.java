@@ -13,8 +13,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.net.ssl.SSLContext;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -74,16 +72,16 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
     private final String registryUsername, registryPassword, registryEmail, registryUrl, dockerConfig;
 
-    private final SSLContext sslContext;
+    private final SSLConfig sslConfig;
 
     private final RemoteApiVersion apiVersion;
 
     DefaultDockerClientConfig(URI dockerHost, String dockerConfig, String apiVersion, String registryUrl,
-            String registryUsername, String registryPassword, String registryEmail, SSLContext sslContext) {
+            String registryUsername, String registryPassword, String registryEmail, SSLConfig sslConfig) {
         this.dockerHost = checkDockerHostScheme(dockerHost);
         this.dockerConfig = dockerConfig;
         this.apiVersion = RemoteApiVersion.parseConfigWithDefault(apiVersion);
-        this.sslContext = sslContext;
+        this.sslConfig = sslConfig;
         this.registryUsername = registryUsername;
         this.registryPassword = registryPassword;
         this.registryEmail = registryEmail;
@@ -296,8 +294,8 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
     }
 
     @Override
-    public SSLContext getSSLContext() {
-        return sslContext;
+    public SSLConfig getSSLConfig() {
+        return sslConfig;
     }
 
     // CHECKSTYLE:OFF
@@ -333,7 +331,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
         private boolean dockerTlsVerify;
 
-        private SSLContext customSslContext = null;
+        private SSLConfig customSslConfig = null;
 
         /**
          * This will set all fields in the builder to those contained in the Properties object. The Properties object should contain the
@@ -413,30 +411,30 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
         }
 
         /**
-         * Overrides the default {@link SSLContext} that is used when calling {@link Builder#withDockerTlsVerify(true)} and
-         * {@link Builder#withDockerCertPath(String)}. This way it is possible to pass a custom {@link SSLContext} to the resulting
+         * Overrides the default {@link SSLConfig} that is used when calling {@link Builder#withDockerTlsVerify(java.lang.Boolean)} and
+         * {@link Builder#withDockerCertPath(String)}. This way it is possible to pass a custom {@link SSLConfig} to the resulting
          * {@link DockerClientConfig} that may be created by other means than the local file system.
          */
-        public final Builder withCustomSslContext(SSLContext customSslContext) {
-            this.customSslContext = customSslContext;
+        public final Builder withCustomSslConfig(SSLConfig customSslConfig) {
+            this.customSslConfig = customSslConfig;
             return this;
         }
 
         public DefaultDockerClientConfig build() {
 
-            SSLContext sslContext = null;
+            SSLConfig sslConfig = null;
 
-            if (customSslContext == null) {
+            if (customSslConfig == null) {
                 if (dockerTlsVerify) {
                     dockerCertPath = checkDockerCertPath(dockerCertPath);
-                    sslContext = new LocalDirectorySSLConfig(dockerCertPath).getSSLContext();
+                    sslConfig = new LocalDirectorySSLConfig(dockerCertPath);
                 }
             } else {
-                sslContext = customSslContext;
+                sslConfig = customSslConfig;
             }
 
             return new DefaultDockerClientConfig(dockerHost, dockerConfig, apiVersion, registryUrl, registryUsername,
-                    registryPassword, registryEmail, sslContext);
+                    registryPassword, registryEmail, sslConfig);
         }
 
         private String checkDockerCertPath(String dockerCertPath) {

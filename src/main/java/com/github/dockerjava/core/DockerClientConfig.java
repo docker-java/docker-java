@@ -5,8 +5,6 @@ package com.github.dockerjava.core;
 
 import java.net.URI;
 
-import javax.net.ssl.SSLContext;
-
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
 
@@ -35,8 +33,8 @@ public interface DockerClientConfig {
     AuthConfigurations getAuthConfigurations();
 
     /**
-     * Returns an {@link SSLContext} when secure connection is configured or null if not.
+     * Returns an {@link SSLConfig} when secure connection is configured or null if not.
      */
-    SSLContext getSSLContext();
+    SSLConfig getSSLConfig();
 
 }
