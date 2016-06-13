@@ -298,25 +298,15 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
         return sslConfig;
     }
 
-    // CHECKSTYLE:OFF
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-
-        DefaultDockerClientConfig that = (DefaultDockerClientConfig) o;
-
-        return EqualsBuilder.reflectionEquals(this, that);
+        return EqualsBuilder.reflectionEquals(this, o);
     }
 
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
     }
-
-    // CHECKSTYLE:ON
 
     @Override
     public String toString() {
@@ -339,11 +329,15 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
          * registry.email, DOCKER_CERT_PATH, and DOCKER_CONFIG.
          */
         public Builder withProperties(Properties p) {
-            return withDockerHost(p.getProperty(DOCKER_HOST)).withDockerTlsVerify(p.getProperty(DOCKER_TLS_VERIFY))
-                    .withDockerConfig(p.getProperty(DOCKER_CONFIG)).withDockerCertPath(p.getProperty(DOCKER_CERT_PATH))
-                    .withApiVersion(p.getProperty(API_VERSION)).withRegistryUsername(p.getProperty(REGISTRY_USERNAME))
+            return withDockerHost(p.getProperty(DOCKER_HOST))
+                    .withDockerTlsVerify(p.getProperty(DOCKER_TLS_VERIFY))
+                    .withDockerConfig(p.getProperty(DOCKER_CONFIG))
+                    .withDockerCertPath(p.getProperty(DOCKER_CERT_PATH))
+                    .withApiVersion(p.getProperty(API_VERSION))
+                    .withRegistryUsername(p.getProperty(REGISTRY_USERNAME))
                     .withRegistryPassword(p.getProperty(REGISTRY_PASSWORD))
-                    .withRegistryEmail(p.getProperty(REGISTRY_EMAIL)).withRegistryUrl(p.getProperty(REGISTRY_URL));
+                    .withRegistryEmail(p.getProperty(REGISTRY_EMAIL))
+                    .withRegistryUrl(p.getProperty(REGISTRY_URL));
         }
 
         /**
@@ -438,28 +432,24 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
         }
 
         private String checkDockerCertPath(String dockerCertPath) {
-
             if (StringUtils.isEmpty(dockerCertPath)) {
                 throw new DockerClientException(
                         "Enabled TLS verification (DOCKER_TLS_VERIFY=1) but certifate path (DOCKER_CERT_PATH) is not defined.");
-            } else {
-                File certPath = new File(dockerCertPath);
-
-                if (!certPath.exists()) {
-                    throw new DockerClientException(
-                            "Enabled TLS verification (DOCKER_TLS_VERIFY=1) but certificate path (DOCKER_CERT_PATH) '" + dockerCertPath
-                                    + "' doesn't exist.");
-                }
-
-                if (certPath.isDirectory()) {
-                    return dockerCertPath;
-                } else {
-                    throw new DockerClientException(
-                            "Enabled TLS verification (DOCKER_TLS_VERIFY=1) but certificate path (DOCKER_CERT_PATH) '" + dockerCertPath
-                                    + "' doesn't point to a directory.");
-                }
             }
 
+            File certPath = new File(dockerCertPath);
+
+            if (!certPath.exists()) {
+                throw new DockerClientException(
+                        "Enabled TLS verification (DOCKER_TLS_VERIFY=1) but certificate path (DOCKER_CERT_PATH) '"
+                                + dockerCertPath + "' doesn't exist.");
+            } else if (!certPath.isDirectory()) {
+                throw new DockerClientException(
+                        "Enabled TLS verification (DOCKER_TLS_VERIFY=1) but certificate path (DOCKER_CERT_PATH) '"
+                                + dockerCertPath + "' doesn't point to a directory.");
+            }
+
+            return dockerCertPath;
         }
     }
 }
