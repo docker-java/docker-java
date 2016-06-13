@@ -53,7 +53,7 @@ import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
-import com.github.dockerjava.core.LocalDirectorySSLConfig;
+import com.github.dockerjava.core.SSLConfig;
 import com.github.dockerjava.netty.exec.AttachContainerCmdExec;
 import com.github.dockerjava.netty.exec.AuthCmdExec;
 import com.github.dockerjava.netty.exec.BuildImageCmdExec;
@@ -123,7 +123,6 @@ import io.netty.util.concurrent.DefaultThreadFactory;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLParameters;
 
@@ -167,8 +166,6 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     private EventLoopGroup eventLoopGroup;
 
     private NettyInitializer nettyInitializer;
-
-    private SSLContext sslContext = null;
 
     private ChannelProvider channelProvider = new ChannelProvider() {
         @Override
@@ -270,12 +267,10 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
             DuplexChannel channel = (DuplexChannel) bootstrap.connect(host, port).sync().channel();
 
-            if (dockerClientConfig.getDockerTlsVerify()) {
-                final SslHandler ssl = initSsl(dockerClientConfig);
+            final SslHandler ssl = initSsl(dockerClientConfig);
 
-                if (ssl != null) {
-                    channel.pipeline().addFirst(ssl);
-                }
+            if (ssl != null) {
+                channel.pipeline().addFirst(ssl);
             }
 
             return channel;
@@ -288,18 +283,19 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
                 String host = dockerClientConfig.getDockerHost().getHost();
                 int port = dockerClientConfig.getDockerHost().getPort();
 
-                if (sslContext == null) {
-                    sslContext = new LocalDirectorySSLConfig(dockerClientConfig.getDockerCertPath()).getSSLContext();
+                final SSLConfig sslConfig = dockerClientConfig.getSSLConfig();
+
+                if (sslConfig != null && sslConfig.getSSLContext() != null) {
+
+                    SSLEngine engine = sslConfig.getSSLContext().createSSLEngine(host, port);
+                    engine.setUseClientMode(true);
+                    engine.setSSLParameters(enableHostNameVerification(engine.getSSLParameters()));
+
+                    // in the future we may use HostnameVerifier like here:
+                    // https://github.com/AsyncHttpClient/async-http-client/blob/1.8.x/src/main/java/com/ning/http/client/providers/netty/NettyConnectListener.java#L76
+
+                    ssl = new SslHandler(engine);
                 }
-
-                SSLEngine engine = sslContext.createSSLEngine(host, port);
-                engine.setUseClientMode(true);
-                engine.setSSLParameters(enableHostNameVerification(engine.getSSLParameters()));
-
-                // in the future we may use HostnameVerifier like here:
-                // https://github.com/AsyncHttpClient/async-http-client/blob/1.8.x/src/main/java/com/ning/http/client/providers/netty/NettyConnectListener.java#L76
-
-                ssl = new SslHandler(engine);
 
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -575,12 +571,6 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         checkNotNull(eventLoopGroup, "Factory not initialized. You probably forgot to call init()!");
 
         eventLoopGroup.shutdownGracefully();
-    }
-
-    @Override
-    public DockerCmdExecFactory withSSLContext(SSLContext sslContext) {
-        this.sslContext = sslContext;
-        return this;
     }
 
     private WebTarget getBaseResource() {

@@ -10,7 +10,7 @@
 	<groupId>com.github.docker-java</groupId>
 	<artifactId>docker-java</artifactId>
 	<packaging>jar</packaging>
-	<version>3.0.1-SNAPSHOT</version>
+	<version>3.0.0-kostyasha-3</version>
 
 	<name>docker-java</name>
 	<url>https://github.com/docker-java/docker-java</url>

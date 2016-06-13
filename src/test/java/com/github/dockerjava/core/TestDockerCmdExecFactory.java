@@ -58,7 +58,6 @@ import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.model.BuildResponseItem;
 
-import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -430,10 +429,5 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 
     public List<String> getNetworkIds() {
         return new ArrayList<>(networkIds);
-    }
-
-    @Override
-    public DockerCmdExecFactory withSSLContext(SSLContext sslContext) {
-        return delegate.withSSLContext(sslContext);
     }
 }

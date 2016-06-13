@@ -19,16 +19,16 @@ import org.testng.annotations.Test;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.AuthConfig;
 
-public class DockerClientConfigTest {
+public class DefaultDockerClientConfigTest {
 
-    public static final DockerClientConfig EXAMPLE_CONFIG = newExampleConfig();
+    public static final DefaultDockerClientConfig EXAMPLE_CONFIG = newExampleConfig();
 
-    private static DockerClientConfig newExampleConfig() {
+    private static DefaultDockerClientConfig newExampleConfig() {
 
         String dockerCertPath = dockerCertPath();
 
-        return new DockerClientConfig(URI.create("tcp://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
-                dockerCertPath, true);
+        return new DefaultDockerClientConfig(URI.create("tcp://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
+                new LocalDirectorySSLConfig(dockerCertPath));
     }
 
     private static String homeDir() {
@@ -49,7 +49,7 @@ public class DockerClientConfigTest {
 
         // given docker host in env
         Map<String, String> env = new HashMap<String, String>();
-        env.put(DockerClientConfig.DOCKER_HOST, "tcp://baz:8768");
+        env.put(DefaultDockerClientConfig.DOCKER_HOST, "tcp://baz:8768");
         // and it looks to be SSL disabled
         env.remove("DOCKER_CERT_PATH");
 
@@ -59,7 +59,7 @@ public class DockerClientConfigTest {
         systemProperties.setProperty("user.home", homeDir());
 
         // when you build a config
-        DockerClientConfig config = buildConfig(env, systemProperties);
+        DefaultDockerClientConfig config = buildConfig(env, systemProperties);
 
         assertEquals(config.getDockerHost(), URI.create("tcp://baz:8768"));
     }
@@ -69,25 +69,25 @@ public class DockerClientConfigTest {
 
         // given a default config in env properties
         Map<String, String> env = new HashMap<String, String>();
-        env.put(DockerClientConfig.DOCKER_HOST, "tcp://foo");
-        env.put(DockerClientConfig.API_VERSION, "apiVersion");
-        env.put(DockerClientConfig.REGISTRY_USERNAME, "registryUsername");
-        env.put(DockerClientConfig.REGISTRY_PASSWORD, "registryPassword");
-        env.put(DockerClientConfig.REGISTRY_EMAIL, "registryEmail");
-        env.put(DockerClientConfig.REGISTRY_URL, "registryUrl");
-        env.put(DockerClientConfig.DOCKER_CONFIG, "dockerConfig");
-        env.put(DockerClientConfig.DOCKER_CERT_PATH, dockerCertPath());
-        env.put(DockerClientConfig.DOCKER_TLS_VERIFY, "1");
+        env.put(DefaultDockerClientConfig.DOCKER_HOST, "tcp://foo");
+        env.put(DefaultDockerClientConfig.API_VERSION, "apiVersion");
+        env.put(DefaultDockerClientConfig.REGISTRY_USERNAME, "registryUsername");
+        env.put(DefaultDockerClientConfig.REGISTRY_PASSWORD, "registryPassword");
+        env.put(DefaultDockerClientConfig.REGISTRY_EMAIL, "registryEmail");
+        env.put(DefaultDockerClientConfig.REGISTRY_URL, "registryUrl");
+        env.put(DefaultDockerClientConfig.DOCKER_CONFIG, "dockerConfig");
+        env.put(DefaultDockerClientConfig.DOCKER_CERT_PATH, dockerCertPath());
+        env.put(DefaultDockerClientConfig.DOCKER_TLS_VERIFY, "1");
 
         // when you build a config
-        DockerClientConfig config = buildConfig(env, new Properties());
+        DefaultDockerClientConfig config = buildConfig(env, new Properties());
 
         // then we get the example object
         assertEquals(config, EXAMPLE_CONFIG);
     }
 
-    private DockerClientConfig buildConfig(Map<String, String> env, Properties systemProperties) {
-        return DockerClientConfig.createDefaultConfigBuilder(env, systemProperties).build();
+    private DefaultDockerClientConfig buildConfig(Map<String, String> env, Properties systemProperties) {
+        return DefaultDockerClientConfig.createDefaultConfigBuilder(env, systemProperties).build();
     }
 
     @Test
@@ -99,7 +99,7 @@ public class DockerClientConfigTest {
         systemProperties.setProperty("user.home", homeDir());
 
         // when you build config
-        DockerClientConfig config = buildConfig(Collections.<String, String> emptyMap(), systemProperties);
+        DefaultDockerClientConfig config = buildConfig(Collections.<String, String> emptyMap(), systemProperties);
 
         // then the cert path is as expected
         assertEquals(config.getDockerHost(), URI.create("unix:///var/run/docker.sock"));
@@ -107,7 +107,7 @@ public class DockerClientConfigTest {
         assertEquals(config.getRegistryUrl(), AuthConfig.DEFAULT_SERVER_ADDRESS);
         assertEquals(config.getApiVersion(), RemoteApiVersion.unknown());
         assertEquals(config.getDockerConfig(), homeDir() + "/.docker");
-        assertNull(config.getDockerCertPath());
+        assertNull(config.getSSLConfig());
     }
 
     @Test
@@ -115,18 +115,18 @@ public class DockerClientConfigTest {
 
         // given system properties based on the example
         Properties systemProperties = new Properties();
-        systemProperties.put(DockerClientConfig.DOCKER_HOST, "tcp://foo");
-        systemProperties.put(DockerClientConfig.API_VERSION, "apiVersion");
-        systemProperties.put(DockerClientConfig.REGISTRY_USERNAME, "registryUsername");
-        systemProperties.put(DockerClientConfig.REGISTRY_PASSWORD, "registryPassword");
-        systemProperties.put(DockerClientConfig.REGISTRY_EMAIL, "registryEmail");
-        systemProperties.put(DockerClientConfig.REGISTRY_URL, "registryUrl");
-        systemProperties.put(DockerClientConfig.DOCKER_CONFIG, "dockerConfig");
-        systemProperties.put(DockerClientConfig.DOCKER_CERT_PATH, dockerCertPath());
-        systemProperties.put(DockerClientConfig.DOCKER_TLS_VERIFY, "1");
+        systemProperties.put(DefaultDockerClientConfig.DOCKER_HOST, "tcp://foo");
+        systemProperties.put(DefaultDockerClientConfig.API_VERSION, "apiVersion");
+        systemProperties.put(DefaultDockerClientConfig.REGISTRY_USERNAME, "registryUsername");
+        systemProperties.put(DefaultDockerClientConfig.REGISTRY_PASSWORD, "registryPassword");
+        systemProperties.put(DefaultDockerClientConfig.REGISTRY_EMAIL, "registryEmail");
+        systemProperties.put(DefaultDockerClientConfig.REGISTRY_URL, "registryUrl");
+        systemProperties.put(DefaultDockerClientConfig.DOCKER_CONFIG, "dockerConfig");
+        systemProperties.put(DefaultDockerClientConfig.DOCKER_CERT_PATH, dockerCertPath());
+        systemProperties.put(DefaultDockerClientConfig.DOCKER_TLS_VERIFY, "1");
 
         // when you build new config
-        DockerClientConfig config = buildConfig(Collections.<String, String> emptyMap(), systemProperties);
+        DefaultDockerClientConfig config = buildConfig(Collections.<String, String> emptyMap(), systemProperties);
 
         // then it is the same as the example
         assertEquals(config, EXAMPLE_CONFIG);
@@ -136,50 +136,46 @@ public class DockerClientConfigTest {
     @Test
     public void serializableTest() {
         final byte[] serialized = SerializationUtils.serialize(EXAMPLE_CONFIG);
-        final DockerClientConfig deserialized = (DockerClientConfig) SerializationUtils.deserialize(serialized);
+        final DefaultDockerClientConfig deserialized = (DefaultDockerClientConfig) SerializationUtils.deserialize(serialized);
 
         assertThat("Deserialized object mush match source object", deserialized, equalTo(EXAMPLE_CONFIG));
     }
 
-    @Test(expectedExceptions = DockerClientException.class)
-    public void testTlsVerifyAndCertPathNull() throws Exception {
-        new DockerClientConfig(URI.create("tcp://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
-                null, true);
+    @Test()
+    public void testSslContextEmpty() throws Exception {
+        new DefaultDockerClientConfig(URI.create("tcp://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
+                null);
     }
 
-    @Test(expectedExceptions = DockerClientException.class)
-    public void testTlsVerifyAndCertPathEmpty() throws Exception {
-        new DockerClientConfig(URI.create("tcp://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
-                "", true);
-    }
+
 
     @Test()
     public void testTlsVerifyAndCertPath() throws Exception {
-        new DockerClientConfig(URI.create("tcp://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
-                dockerCertPath(), true);
+        new DefaultDockerClientConfig(URI.create("tcp://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
+                new LocalDirectorySSLConfig(dockerCertPath()));
     }
 
     @Test(expectedExceptions = DockerClientException.class)
     public void testWrongHostScheme() throws Exception {
-        new DockerClientConfig(URI.create("http://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
-                null, false);
+        new DefaultDockerClientConfig(URI.create("http://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
+                null);
     }
 
     @Test()
     public void testTcpHostScheme() throws Exception {
-        new DockerClientConfig(URI.create("tcp://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
-                null, false);
+        new DefaultDockerClientConfig(URI.create("tcp://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
+                null);
     }
 
     @Test()
     public void testUnixHostScheme() throws Exception {
-        new DockerClientConfig(URI.create("unix://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
-                null, false);
+        new DefaultDockerClientConfig(URI.create("unix://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
+                null);
     }
 
     @Test
     public void withDockerTlsVerify() throws Exception {
-        DockerClientConfig.DockerClientConfigBuilder builder = new DockerClientConfig.DockerClientConfigBuilder();
+        DefaultDockerClientConfig.Builder builder = new DefaultDockerClientConfig.Builder();
         Field field = builder.getClass().getDeclaredField("dockerTlsVerify");
         field.setAccessible(true);
 

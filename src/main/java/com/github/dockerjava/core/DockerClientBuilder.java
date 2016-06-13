@@ -2,7 +2,7 @@ package com.github.dockerjava.core;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
-import com.github.dockerjava.core.DockerClientConfig.DockerClientConfigBuilder;
+import com.github.dockerjava.core.DefaultDockerClientConfig.Builder;
 import com.github.dockerjava.jaxrs.DockerCmdExecFactoryImpl;
 
 public class DockerClientBuilder {
@@ -19,7 +19,7 @@ public class DockerClientBuilder {
         return new DockerClientBuilder(DockerClientImpl.getInstance());
     }
 
-    public static DockerClientBuilder getInstance(DockerClientConfigBuilder dockerClientConfigBuilder) {
+    public static DockerClientBuilder getInstance(Builder dockerClientConfigBuilder) {
         return getInstance(dockerClientConfigBuilder.build());
     }
 

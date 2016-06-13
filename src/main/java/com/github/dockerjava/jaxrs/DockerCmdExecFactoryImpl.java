@@ -18,6 +18,7 @@ import javax.ws.rs.client.ClientResponseFilter;
 import javax.ws.rs.client.WebTarget;
 
 import com.github.dockerjava.api.command.UpdateContainerCmd;
+
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
@@ -83,7 +84,6 @@ import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.LocalDirectorySSLConfig;
 import com.github.dockerjava.jaxrs.connector.ApacheConnectorProvider;
 import com.github.dockerjava.jaxrs.filter.JsonClientFilter;
 import com.github.dockerjava.jaxrs.filter.ResponseStatusExceptionFilter;
@@ -113,8 +113,6 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     private ClientResponseFilter[] clientResponseFilters = null;
 
     private DockerClientConfig dockerClientConfig;
-
-    SSLContext sslContext = null;
 
     @Override
     public void init(DockerClientConfig dockerClientConfig) {
@@ -160,18 +158,16 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
         String protocol = null;
 
-        if (dockerClientConfig.getDockerTlsVerify()) {
+        SSLContext sslContext = null;
+
+        try {
+            sslContext = dockerClientConfig.getSSLConfig().getSSLContext();
+        } catch (Exception ex) {
+            throw new DockerClientException("Error in SSL Configuration", ex);
+        }
+
+        if (sslContext != null) {
             protocol = "https";
-
-            try {
-
-                if (sslContext == null) {
-                    sslContext = new LocalDirectorySSLConfig(dockerClientConfig.getDockerCertPath()).getSSLContext();
-                }
-
-            } catch (Exception ex) {
-                throw new DockerClientException("Error in SSL Configuration", ex);
-            }
         } else {
             protocol = "http";
         }
@@ -527,12 +523,6 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     public void close() throws IOException {
         checkNotNull(client, "Factory not initialized. You probably forgot to call init()!");
         client.close();
-    }
-
-    @Override
-    public DockerCmdExecFactoryImpl withSSLContext(SSLContext sslContext) {
-        this.sslContext = sslContext;
-        return this;
     }
 
     public DockerCmdExecFactoryImpl withReadTimeout(Integer readTimeout) {
