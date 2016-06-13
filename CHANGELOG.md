@@ -7,6 +7,7 @@ Change Log
 All changes
 * [#596] (https://github.com/docker-java/docker-java/pull/596) Refactor configuration of SSL to allow override with custom config 
 * [#529] (https://github.com/docker-java/docker-java/pull/529) Refactor CertUtils. Support ECDSA and PrivateKey 
+* [#593] (https://github.com/docker-java/docker-java/pull/593) Added Device.parse() method with simple verification.
 
 v3.0.0
 ---
