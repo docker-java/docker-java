@@ -1,6 +1,7 @@
 package com.github.dockerjava.core;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.apache.commons.lang.BooleanUtils.isTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -319,7 +320,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
         private String apiVersion, registryUsername, registryPassword, registryEmail, registryUrl, dockerConfig,
                 dockerCertPath;
 
-        private boolean dockerTlsVerify;
+        private Boolean dockerTlsVerify;
 
         private SSLConfig customSslConfig = null;
 
@@ -419,7 +420,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             SSLConfig sslConfig = null;
 
             if (customSslConfig == null) {
-                if (dockerTlsVerify) {
+                if (isTrue(dockerTlsVerify)) {
                     dockerCertPath = checkDockerCertPath(dockerCertPath);
                     sslConfig = new LocalDirectorySSLConfig(dockerCertPath);
                 }
