@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+env
+sudo ss -antpl
+sudo ps aufx
 set -exu
 
 pip install --user codecov
