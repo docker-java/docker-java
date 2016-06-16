@@ -1,7 +1,30 @@
+sudo: required
+dist: trusty
 language: java
+
+services:
+  - docker
+
 jdk:
  - oraclejdk7
+
+env:
+  matrix:
+    - DIND_IMAGE=kostysha/dind:fedora23-1.11
+#      DOCKER_DAEMON_ARGS="-D"
+
 before_install:
  - pip install --user codecov
+ - docker pull "$DIND_IMAGE"
+ - docker run --privileged -d -p 4444 -e PORT=4444 --net=host --pid=host "$DIND_IMAGE"
+ - docker version
+ - docker info
+ - DOCKER_HOST="tcp://localhost:4444" DOCKER_TLS_VERIFY=0 docker info
+
+script: mvn test
+
 after_success:
  - ./travis-after-success.sh
+
+after_script:
+  - sudo cat /var/log/upstart/docker.log
