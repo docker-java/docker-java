@@ -17,7 +17,7 @@ sudo apt-get install -q -y wget
 # sudo dpkg -i "$(ls *${DOCKER_VERSION}*)"
 #popd
 
-echo 'DOCKER_OPTS="-H=unix:///var/run/docker.sock -H=tcp://127.0.0.1:2375"'
+echo 'DOCKER_OPTS="-H=unix:///var/run/docker.sock -H=tcp://127.0.0.1:2375"' | sudo tee -a /etc/default/docker
 sudo restart docker
 sleep 10
 docker version
