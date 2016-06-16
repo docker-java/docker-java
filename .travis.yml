@@ -27,7 +27,7 @@ before_install:
   - docker version
   - ./travis-before-install.sh
 
-script: mvn test
+script: mvn verify
 
 after_success:
   - ./travis-after-success.sh
