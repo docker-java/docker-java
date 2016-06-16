@@ -10,7 +10,7 @@ jdk:
 
 env:
   global:
-    - DOCKER_TLS_VERIFY=0
+    - DOCKER_TLS_VERIFY=""
 
   matrix:
     - DOCKER_VERSION="1.11.2-0~trusty" DOCKER_HOST="tcp://127.0.0.1:2375"
