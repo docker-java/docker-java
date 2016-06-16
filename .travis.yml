@@ -10,8 +10,8 @@ jdk:
 
 env:
   matrix:
-    - DOCKER_VERSION="1.11.2"
-    - DOCKER_VERSION="1.10.3"
+    - DOCKER_VERSION="1.11.2-0~trusty"
+    - DOCKER_VERSION="1.10.3-0~trusty"
 
 before_install:
   - pip install --user codecov
