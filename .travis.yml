@@ -10,9 +10,14 @@ jdk:
 
 env:
   matrix:
-    - DIND_IMAGE=kostyasha/dind:fedora23-1.11
+    - DOCKER_VERSION="1.11.2"
+    - DOCKER_VERSION="1.10.3"
 
 before_install:
+  - pip install --user codecov
+  - docker info
+  - docker version
+  - ./get-docker-com.sh
   - ./travis-before-install.sh
 
 script: mvn test
