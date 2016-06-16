@@ -10,7 +10,7 @@ jdk:
 
 env:
   matrix:
-    - DIND_IMAGE=kostysha/dind:fedora23-1.11
+    - DIND_IMAGE=kostyasha/dind:fedora23-1.11
 #      DOCKER_DAEMON_ARGS="-D"
 
 before_install:
