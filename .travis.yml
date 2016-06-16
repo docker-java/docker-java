@@ -13,11 +13,14 @@ env:
     - DOCKER_VERSION="1.11.2-0~trusty"
     - DOCKER_VERSION="1.10.3-0~trusty"
 
+cache:
+  directories:
+  - $HOME/.cache
+
 before_install:
   - pip install --user codecov
   - docker info
   - docker version
-  - ./get-docker-com.sh
   - ./travis-before-install.sh
 
 script: mvn test

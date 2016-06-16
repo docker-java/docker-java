@@ -248,79 +248,9 @@ do_install() {
 
 	esac
 
-	# Check if this is a forked Linux distro
-	check_forked
 
 	# Run setup for each distro accordingly
 	case "$lsb_dist" in
-		amzn)
-			(
-			set -x
-			$sh_c 'sleep 3; yum -y -q install docker'
-			)
-			echo_docker_as_nonroot
-			exit 0
-			;;
-
-		'opensuse project'|opensuse)
-			echo 'Going to perform the following operations:'
-			if [ "$repo" != 'main' ]; then
-				echo '  * add repository obs://Virtualization:containers'
-			fi
-			echo '  * install Docker'
-			$sh_c 'echo "Press CTRL-C to abort"; sleep 3'
-
-			if [ "$repo" != 'main' ]; then
-				# install experimental packages from OBS://Virtualization:containers
-				(
-					set -x
-					zypper -n ar -f obs://Virtualization:containers Virtualization:containers
-					rpm_import_repository_key 55A0B34D49501BB7CA474F5AA193FBB572174FC2
-				)
-			fi
-			(
-				set -x
-				zypper -n install docker
-			)
-			echo_docker_as_nonroot
-			exit 0
-			;;
-		'suse linux'|sle[sd])
-			echo 'Going to perform the following operations:'
-			if [ "$repo" != 'main' ]; then
-				echo '  * add repository obs://Virtualization:containers'
-				echo '  * install experimental Docker using packages NOT supported by SUSE'
-			else
-				echo '  * add the "Containers" module'
-				echo '  * install Docker using packages supported by SUSE'
-			fi
-			$sh_c 'echo "Press CTRL-C to abort"; sleep 3'
-
-			if [ "$repo" != 'main' ]; then
-				# install experimental packages from OBS://Virtualization:containers
-				echo >&2 'Warning: installing experimental packages from OBS, these packages are NOT supported by SUSE'
-				(
-					set -x
-					zypper -n ar -f obs://Virtualization:containers/SLE_12 Virtualization:containers
-					rpm_import_repository_key 55A0B34D49501BB7CA474F5AA193FBB572174FC2
-				)
-			else
-				# Add the containers module
-				# Note well-1: the SLE machine must already be registered against SUSE Customer Center
-				# Note well-2: the `-r ""` is required to workaround a known issue of SUSEConnect
-				(
-					set -x
-					SUSEConnect -p sle-module-containers/12/x86_64 -r ""
-				)
-			fi
-			(
-				set -x
-				zypper -n install docker
-			)
-			echo_docker_as_nonroot
-			exit 0
-			;;
-
 		ubuntu|debian)
 			export DEBIAN_FRONTEND=noninteractive
 
