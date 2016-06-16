@@ -19,7 +19,7 @@ env:
 
 cache:
   directories:
-  - $HOME/.cache
+  - $HOME/.travis_cache
 
 before_install:
   - pip install --user codecov
