@@ -9,8 +9,12 @@ jdk:
  - oraclejdk7
 
 env:
+  global:
+    - DOCKER_TLS_VERIFY=0
+
   matrix:
-    - DOCKER_VERSION="1.11.2-0~trusty"
+    - DOCKER_VERSION="1.11.2-0~trusty" DOCKER_HOST="tcp://127.0.0.1:2375"
+    - DOCKER_VERSION="1.11.2-0~trusty" DOCKER_HOST="unix:///var/run/docker.sock"
     - DOCKER_VERSION="1.10.3-0~trusty"
 
 cache:
