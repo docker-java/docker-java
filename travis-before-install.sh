@@ -19,6 +19,6 @@ sudo apt-get install -q -y wget
 
 echo 'DOCKER_OPTS="-H=unix:///var/run/docker.sock -H=tcp://127.0.0.1:2375"'
 sudo restart docker
-
+sleep 10
 docker version
 docker info
