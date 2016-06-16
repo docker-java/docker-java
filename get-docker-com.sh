@@ -386,7 +386,7 @@ do_install() {
 			if [ -z "$DOCKER_VERSION" ]; then
 			    $sh_c 'apt-get install -y -q docker-engine'
 			else
-			    $sh_c "apt-get install -y -q docker-engine=$DOCKER_VERSION"
+			    $sh_c "apt-get -o Dpkg::Options::=\"--force-confnew\" install -y -q docker-engine=$DOCKER_VERSION"
 			fi
 			)
 			echo_docker_as_nonroot
