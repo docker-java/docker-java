@@ -240,7 +240,6 @@ do_install() {
 			    $sh_c "apt-get -o Dpkg::Options::=\"--force-confnew\" install -y -q docker-engine=$DOCKER_VERSION"
 			fi
 			)
-			echo_docker_as_nonroot
 			exit 0
 			;;
 
@@ -264,7 +263,6 @@ do_install() {
 					$sh_c 'sleep 3; yum -y -q install docker-engine'
 				)
 			fi
-			echo_docker_as_nonroot
 			exit 0
 			;;
 		gentoo)
