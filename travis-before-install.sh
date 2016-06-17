@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 
-env
-sudo ss -antpl
-sudo ps aufx
 set -exu
 
-sudo apt-get update
-sudo apt-get install -q -y wget
-
+sudo -E apt-get update
+sudo -E apt-get install -q -y wget
+sudo -E apt-get -q -y purge docker-engine
+sudo -E apt-cache policy docker-engine
 
 ./get-docker-com.sh
 #mkdir "${HOME}/.cache" || :
@@ -20,7 +18,7 @@ sudo apt-get install -q -y wget
 mv "src/test/resources/travis-logback.xml" "src/test/resources/logback.xml"
 
 echo 'DOCKER_OPTS="-H=unix:///var/run/docker.sock -H=tcp://127.0.0.1:2375"' | sudo tee -a /etc/default/docker
-sudo restart docker
+sudo -E restart docker
 sleep 10
 docker version
 docker info
