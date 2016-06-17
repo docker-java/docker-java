@@ -4,7 +4,7 @@ set -exu
 
 sudo -E apt-get update
 sudo -E apt-get install -q -y wget
-sudo -E apt-get -q -y purge docker-engine
+sudo -E apt-get -q -y --purge remove docker-engine
 sudo -E apt-cache policy docker-engine
 
 ./get-docker-com.sh
