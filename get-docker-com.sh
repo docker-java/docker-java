@@ -235,7 +235,7 @@ do_install() {
 			$sh_c "echo deb [arch=$(dpkg --print-architecture)] ${apt_url}/repo ${lsb_dist}-${dist_version} ${repo} > /etc/apt/sources.list.d/docker.list"
 			$sh_c 'sleep 3; apt-get update'
 			if [ -z "$DOCKER_VERSION" ]; then
-			    $sh_c 'apt-get install -y -q docker-engine'
+			    $sh_c 'apt-get -o Dpkg::Options::=\"--force-confnew\" install -y -q docker-engine'
 			else
 			    $sh_c "apt-get -o Dpkg::Options::=\"--force-confnew\" install -y -q docker-engine=$DOCKER_VERSION"
 			fi
