@@ -237,7 +237,8 @@ do_install() {
 			if [ -z "$DOCKER_VERSION" ]; then
 			    $sh_c 'apt-get -o Dpkg::Options::=\"--force-confnew\" -o Dpkg::Options::="--force-confdef" install -y -q docker-engine'
 			else
-			    $sh_c "apt-get -o Dpkg::Options::=\"--force-confnew\" -o Dpkg::Options::=\"--force-confdef\" install -y -q docker-engine=$DOCKER_VERSION"
+			    $shc_c 'echo $DEBIAN_FRONTEND'
+			    $sh_c "DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::=\"--force-confnew\" install -y -q docker-engine=$DOCKER_VERSION"
 			fi
 			)
 			exit 0
