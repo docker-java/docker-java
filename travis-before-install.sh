@@ -23,6 +23,8 @@ sleep 10
 docker version
 docker info
 
+set +u
+
 cat << EOF > "${HOME}/.docker-java.properties"
 registry.username=${registry_username}
 registry.password=${registry_password}
