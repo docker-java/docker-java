@@ -33,7 +33,7 @@ before_install:
   - docker version
   - ./travis-before-install.sh
 
-script: if [ "${COMPILE_ONLY}" == true ]; then mvn compile ; else mvn verify; fi
+script: if [ "${COMPILE_ONLY}" == true ]; then mvn package ; else mvn verify; fi
 
 after_success:
   - ./travis-after-success.sh
