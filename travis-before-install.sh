@@ -25,7 +25,7 @@ docker info
 
 set +u
 
-cat << EOF > "${HOME}/.docker-java.properties"
+cat <<EOF > "${HOME}/.docker-java.properties"
 registry.username=${registry_username}
 registry.password=${registry_password}
 registry.email=${registry_email}
