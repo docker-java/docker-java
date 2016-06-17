@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  *
  * @author Marcus Thiesen
  */
-public class RemoteApiVersion {
+public class RemoteApiVersion implements java.io.Serializable {
 
     public static final RemoteApiVersion VERSION_1_19 = RemoteApiVersion.create(1, 19);
 
