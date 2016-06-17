@@ -22,3 +22,10 @@ sudo -E restart docker
 sleep 10
 docker version
 docker info
+
+cat << EOF > "${HOME}/.docker-java.properties"
+registry.username=${registry_username}
+registry.password=${registry_password}
+registry.email=${registry_email}
+
+EOF

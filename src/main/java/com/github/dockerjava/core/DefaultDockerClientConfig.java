@@ -42,13 +42,13 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
     public static final String API_VERSION = "api.version";
 
-    public static final String REGISTRY_USERNAME = "registry.username";
+    public static final String REGISTRY_USERNAME = "registry_username";
 
-    public static final String REGISTRY_PASSWORD = "registry.password";
+    public static final String REGISTRY_PASSWORD = "registry_password";
 
-    public static final String REGISTRY_EMAIL = "registry.email";
+    public static final String REGISTRY_EMAIL = "registry_email";
 
-    public static final String REGISTRY_URL = "registry.url";
+    public static final String REGISTRY_URL = "registry_url";
 
     private static final String DOCKER_JAVA_PROPERTIES = "docker-java.properties";
 
