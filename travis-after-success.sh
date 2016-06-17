@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
+
 codecov
-if [[ $TRAVIS_BRANCH == "master" ]] && [[ $TRAVIS_PULL_REQUEST == "false" ]];
+if [[ $TRAVIS_BRANCH == "master" ]] && [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $DEPLOY == "true" ]];
 then
-    cat << EOF >> ~/settings.xml
+    cat <<EOF >> ~/settings.xml
 <settings>
  <servers>
    <server>

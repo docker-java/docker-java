@@ -19,6 +19,7 @@ import javax.ws.rs.client.WebTarget;
 
 import com.github.dockerjava.api.command.UpdateContainerCmd;
 
+import com.github.dockerjava.core.SSLConfig;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
@@ -161,7 +162,10 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         SSLContext sslContext = null;
 
         try {
-            sslContext = dockerClientConfig.getSSLConfig().getSSLContext();
+            final SSLConfig sslConfig = dockerClientConfig.getSSLConfig();
+            if (sslConfig != null) {
+                sslContext = sslConfig.getSSLContext();
+            }
         } catch (Exception ex) {
             throw new DockerClientException("Error in SSL Configuration", ex);
         }
