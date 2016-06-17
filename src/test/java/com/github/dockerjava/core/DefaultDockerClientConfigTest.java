@@ -180,25 +180,25 @@ public class DefaultDockerClientConfigTest {
         field.setAccessible(true);
 
         builder.withDockerTlsVerify("");
-        assertThat(field.getBoolean(builder), is(false));
+        assertThat((Boolean) field.get(builder), is(false));
 
         builder.withDockerTlsVerify("false");
-        assertThat(field.getBoolean(builder), is(false));
+        assertThat((Boolean) field.get(builder), is(false));
 
         builder.withDockerTlsVerify("FALSE");
-        assertThat(field.getBoolean(builder), is(false));
+        assertThat((Boolean) field.get(builder), is(false));
 
         builder.withDockerTlsVerify("true");
-        assertThat(field.getBoolean(builder), is(true));
+        assertThat((Boolean) field.get(builder), is(true));
 
         builder.withDockerTlsVerify("TRUE");
-        assertThat(field.getBoolean(builder), is(true));
+        assertThat((Boolean) field.get(builder), is(true));
 
         builder.withDockerTlsVerify("0");
-        assertThat(field.getBoolean(builder), is(false));
+        assertThat((Boolean) field.get(builder), is(false));
 
         builder.withDockerTlsVerify("1");
-        assertThat(field.getBoolean(builder), is(true));
+        assertThat((Boolean) field.get(builder), is(true));
     }
 
 }
