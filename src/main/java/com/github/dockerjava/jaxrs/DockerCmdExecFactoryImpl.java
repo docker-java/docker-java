@@ -58,6 +58,7 @@ import org.glassfish.jersey.client.ClientProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -176,7 +177,8 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         if (sslContext != null) {
             clientBuilder.sslContext(sslContext);
         }
-
+        HostnameVerifier verifier = SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
+        clientBuilder.hostnameVerifier(verifier);
         client = clientBuilder.build();
 
         baseResource = client.target(sanitizeUrl(dockerClientConfig.getUri())).path(dockerClientConfig.getVersion().asWebPathPart());
@@ -218,7 +220,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         RegistryBuilder<ConnectionSocketFactory> registryBuilder = RegistryBuilder.create();
         registryBuilder.register("http", PlainConnectionSocketFactory.getSocketFactory());
         if (sslContext != null) {
-            registryBuilder.register("https", new SSLConnectionSocketFactory(sslContext));
+            registryBuilder.register("https", new SSLConnectionSocketFactory(sslContext,SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
         }
         registryBuilder.register("unix", new UnixConnectionSocketFactory(originalUri));
         return registryBuilder.build();
