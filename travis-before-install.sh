@@ -7,6 +7,9 @@ if [ "$COMPILE_ONLY" == true ]; then
     exit 0
 fi
 
+docker info
+docker version
+
 sudo -E apt-get update
 sudo -E apt-get install -q -y wget
 sudo -E apt-get -q -y --purge remove docker-engine

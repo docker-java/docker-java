@@ -29,8 +29,6 @@ cache:
 
 before_install:
   - pip install --user codecov
-  - docker info
-  - docker version
   - ./travis-before-install.sh
 
 script: if [ "${MAIN_BUILD}" == true ]; then mvn package ; else mvn verify; fi
