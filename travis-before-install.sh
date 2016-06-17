@@ -2,7 +2,7 @@
 
 set -exu
 
-if [ "$COMPILE_ONLY" == true ]; then
+if [ "$FAST_BUILD" == true ]; then
     echo "compile only"
     exit 0
 fi

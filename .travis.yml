@@ -13,9 +13,9 @@ env:
     - DOCKER_TLS_VERIFY=""
 
   matrix:
-    - MAIN_BUILD=true repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="1.11.2-0~trusty"
+    - repo="main"  DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="1.11.2-0~trusty" FAST_BUILD=true
     - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="1.11.2-0~trusty"
-    - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="1.11.2-0~trusty"
+    - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="1.11.2-0~trusty" DEPLOY=true
     - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="1.10.3-0~trusty"
     - repo="testing" DOCKER_HOST="tcp://127.0.0.1:2375"
     - repo="testing" DOCKER_HOST="unix:///var/run/docker.sock"
@@ -31,7 +31,7 @@ before_install:
   - pip install --user codecov
   - ./travis-before-install.sh
 
-script: if [ "${MAIN_BUILD}" == true ]; then mvn package ; else mvn verify; fi
+script: if [ "${FAST_BUILD}" == true ]; then mvn package ; else mvn verify; fi
 
 after_success:
   - ./travis-after-success.sh
