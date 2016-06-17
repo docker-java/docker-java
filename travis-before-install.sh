@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
-set -exu
 
 if [ "$FAST_BUILD" == true ]; then
-    echo "compile only"
+    echo "Fast build, skipping docker installations."
     exit 0
 fi
+
+set -exu
 
 docker info
 docker version
