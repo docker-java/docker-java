@@ -1,0 +1,19 @@
+<configuration debug="true"> <!-- This will give you some valuable info about logback config upon runtime. Remove this for production. -->
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--<logger name="com.github.dockerjava" level="DEBUG"/>-->
+    <!--<logger name="com.github.dockerjava.jaxrs" level="DEBUG"/>-->
+    <!--<logger name="com.github.dockerjava.netty" level="DEBUG"/>-->
+    <!--<logger name="org.apache.http.impl.conn" level="DEBUG"/>-->
+
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>

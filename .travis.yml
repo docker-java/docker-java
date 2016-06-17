@@ -1,7 +1,42 @@
+sudo: required
+dist: trusty
 language: java
+
+services:
+  - docker
+
 jdk:
  - oraclejdk7
+
+env:
+  global:
+    - DOCKER_TLS_VERIFY=""
+
+  matrix:
+    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="1.11.2-0~trusty" COMPILE_ONLY=true
+    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="1.11.2-0~trusty"
+    - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="1.11.2-0~trusty"
+    - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="1.10.3-0~trusty"
+    - repo="testing" DOCKER_HOST="tcp://127.0.0.1:2375"
+    - repo="testing" DOCKER_HOST="unix:///var/run/docker.sock"
+    - repo="experimental" DOCKER_HOST="tcp://127.0.0.1:2375"
+    - repo="experimental" DOCKER_HOST="unix:///var/run/docker.sock"
+
+cache:
+  directories:
+  - $HOME/.travis_cache
+  - $HOME/.m2
+
 before_install:
- - pip install --user codecov
+  - pip install --user codecov
+  - docker info
+  - docker version
+  - ./travis-before-install.sh
+
+script: [ "${COMPILE_ONLY}" == true ] && mvn compile || mvn verify
+
 after_success:
- - ./travis-after-success.sh
+  - ./travis-after-success.sh
+
+after_script:
+  - sudo cat /var/log/upstart/docker.log

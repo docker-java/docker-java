@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+
 codecov
 if [[ $TRAVIS_BRANCH == "master" ]] && [[ $TRAVIS_PULL_REQUEST == "false" ]];
 then
