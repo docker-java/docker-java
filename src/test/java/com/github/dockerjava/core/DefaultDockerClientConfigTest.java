@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import com.github.dockerjava.core.DefaultDockerClientConfig.Builder;
 import org.apache.commons.lang.SerializationUtils;
 import org.testng.annotations.Test;
 
@@ -100,9 +99,7 @@ public class DefaultDockerClientConfigTest {
         systemProperties.setProperty("user.home", homeDir());
 
         // when you build config
-        DefaultDockerClientConfig config = new Builder()
-                .withProperties(systemProperties)
-                .build();
+        DefaultDockerClientConfig config = buildConfig(Collections.<String, String> emptyMap(), systemProperties);
 
         // then the cert path is as expected
         assertEquals(config.getDockerHost(), URI.create("unix:///var/run/docker.sock"));
@@ -178,7 +175,7 @@ public class DefaultDockerClientConfigTest {
 
     @Test
     public void withDockerTlsVerify() throws Exception {
-        Builder builder = new Builder();
+        DefaultDockerClientConfig.Builder builder = new DefaultDockerClientConfig.Builder();
         Field field = builder.getClass().getDeclaredField("dockerTlsVerify");
         field.setAccessible(true);
 
