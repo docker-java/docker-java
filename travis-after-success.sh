@@ -2,7 +2,7 @@
 
 
 codecov
-if [[ $TRAVIS_BRANCH == "master" ]] && [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $COMPILE_ONLY == "true" ]];
+if [[ $TRAVIS_BRANCH == "master" ]] && [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $MAIN_BUILD == "true" ]];
 then
     cat <<EOF >> ~/settings.xml
 <settings>
