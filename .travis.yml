@@ -25,7 +25,7 @@ env:
 cache:
   directories:
   - $HOME/.travis_cache
-  - $HOME/.m2
+#  - $HOME/.m2 install would pollute it
 
 before_install:
   - pip install --user codecov
