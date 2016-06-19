@@ -8,7 +8,7 @@ if [ "${FAST_BUILD}" == true ]; then
         mvn package
     fi
 else
-    if [ "$COVERITY" == true ]; then
+    if [ "$COVERITY" == true ] && [ "${TRAVIS_PULL_REQUEST}" != "true" ]; then
         COVERITY_SCAN_BUILD_COMMAND="mvn verify"
         curl -s "https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh" | bash
     else
