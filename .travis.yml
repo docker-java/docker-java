@@ -8,6 +8,8 @@ services:
 jdk:
  - oraclejdk7
 
+install: true
+
 env:
   global:
     - DOCKER_TLS_VERIFY=""
