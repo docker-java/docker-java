@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-if [ "$COVERITY_ADDON" != "true" ] && [ -n "$COVERITY_SCAN_TOKEN" ]; then
-    echo "Skipping run from non coverity addon with non zero COVERITY_SCAN_TOKEN."
-    exit 0
-fi
-
 if [ "${FAST_BUILD}" == true ]; then
     if [ "$COVERITY" == true ]; then
         export COVERITY_SCAN_BUILD_COMMAND="mvn package"
