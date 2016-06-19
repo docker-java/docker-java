@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -ex
+
 if [ "${FAST_BUILD}" == true ]; then
     if [ "$COVERITY" == true ]; then
         export COVERITY_SCAN_BUILD_COMMAND="mvn package"
