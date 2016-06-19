@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.CheckForNull;
 
+import com.github.dockerjava.api.model.Node;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -101,6 +102,9 @@ public class InspectContainerResponse {
     @JsonProperty("Mounts")
     private List<Mount> mounts;
 
+    @JsonProperty("Node")
+    private Node node;
+
     public String getId() {
         return id;
     }
@@ -139,6 +143,10 @@ public class InspectContainerResponse {
 
     public NetworkSettings getNetworkSettings() {
         return networkSettings;
+    }
+
+    public Node getNode() {
+        return node;
     }
 
     public String getResolvConfPath() {
@@ -208,6 +216,8 @@ public class InspectContainerResponse {
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
     }
+
+
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public class ContainerState {
