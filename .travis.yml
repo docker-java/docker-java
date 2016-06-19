@@ -11,16 +11,19 @@ jdk:
 env:
   global:
     - DOCKER_TLS_VERIFY=""
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "GonzmzvnXsTNQV+6sKtBSSPiwbpMZjxumNt5LFp1g77/afLxw9kl2EQOXbUe308vFOwRVqeY7drBvNJa8aJkTUClfMaGRjfZ9DUwm6doMKMUYrdEkYoQTcH7yDX5K5w9MT6m+Izj+BK2gB7nK3yFlYG6COeXCdFbQ4/cf3/xfRc="
 
   matrix:
-    - repo="main"  DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="1.11.2-0~trusty" FAST_BUILD=true
-    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="1.11.2-0~trusty"
-    - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="1.11.2-0~trusty" DEPLOY=true
-    - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="1.10.3-0~trusty"
-    - repo="testing" DOCKER_HOST="tcp://127.0.0.1:2375"
-    - repo="testing" DOCKER_HOST="unix:///var/run/docker.sock"
-    - repo="experimental" DOCKER_HOST="tcp://127.0.0.1:2375"
-    - repo="experimental" DOCKER_HOST="unix:///var/run/docker.sock"
+    - repo="main"  DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="1.11.2-0~trusty" DEPLOY=true FAST_BUILD=true
+    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="1.11.2-0~trusty" COVERITY_SCAN_TOKEN=""
+    - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="1.11.2-0~trusty" COVERITY_SCAN_TOKEN=""
+    - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="1.10.3-0~trusty" COVERITY_SCAN_TOKEN=""
+    - repo="testing" DOCKER_HOST="tcp://127.0.0.1:2375" COVERITY_SCAN_TOKEN=""
+    - repo="testing" DOCKER_HOST="unix:///var/run/docker.sock" COVERITY_SCAN_TOKEN=""
+    - repo="experimental" DOCKER_HOST="tcp://127.0.0.1:2375" COVERITY_SCAN_TOKEN=""
+    - repo="experimental" DOCKER_HOST="unix:///var/run/docker.sock" COVERITY_SCAN_TOKEN=""
 
 cache:
   directories:
@@ -31,10 +34,21 @@ before_install:
   - pip install --user codecov
   - ./travis-before-install.sh
 
-script: if [ "${FAST_BUILD}" == true ]; then mvn package ; else mvn verify; fi
+script:
+  - ./travis-script.sh
 
 after_success:
   - ./travis-after-success.sh
 
 after_script:
   - sudo cat /var/log/upstart/docker.log
+
+addons:
+  coverity_scan:
+    project:
+      name: "docker-java/docker-java"
+      description: "Build submitted via Travis CI"
+    notification_email: kanstantsin.sha@gmail.com
+    build_command_prepend: "mvn clean"
+    build_command: COVERITY_ADDON=true ./travis-script.sh
+#    branch_pattern: coverity_scan
