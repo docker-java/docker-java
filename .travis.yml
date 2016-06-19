@@ -11,9 +11,12 @@ jdk:
 env:
   global:
     - DOCKER_TLS_VERIFY=""
-   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
-   #   via the "travis encrypt" command using the project repo's public key
-   - secure: "GonzmzvnXsTNQV+6sKtBSSPiwbpMZjxumNt5LFp1g77/afLxw9kl2EQOXbUe308vFOwRVqeY7drBvNJa8aJkTUClfMaGRjfZ9DUwm6doMKMUYrdEkYoQTcH7yDX5K5w9MT6m+Izj+BK2gB7nK3yFlYG6COeXCdFbQ4/cf3/xfRc="
+    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+    #   via the "travis encrypt" command using the project repo's public key
+    - secure: "GonzmzvnXsTNQV+6sKtBSSPiwbpMZjxumNt5LFp1g77/afLxw9kl2EQOXbUe308vFOwRVqeY7drBvNJa8aJkTUClfMaGRjfZ9DUwm6doMKMUYrdEkYoQTcH7yDX5K5w9MT6m+Izj+BK2gB7nK3yFlYG6COeXCdFbQ4/cf3/xfRc="
+    - COVERITY_SCAN_PROJECT_NAME="docker-java/docker-java"
+#    - COVERITY_SCAN_BRANCH_PATTERN="XXX"
+    - COVERITY_SCAN_NOTIFICATION_EMAIL="kanstantsin.sha@gmail.com"
 
   matrix:
     - repo="main"  DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="1.11.2-0~trusty" DEPLOY=true FAST_BUILD=true
@@ -42,13 +45,3 @@ after_success:
 
 after_script:
   - sudo cat /var/log/upstart/docker.log
-
-addons:
-  coverity_scan:
-    project:
-      name: "docker-java/docker-java"
-      description: "Build submitted via Travis CI"
-    notification_email: kanstantsin.sha@gmail.com
-    build_command_prepend: "mvn clean"
-    build_command: COVERITY_ADDON=true ./travis-script.sh
-#    branch_pattern: coverity_scan

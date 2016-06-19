@@ -6,9 +6,17 @@ if [ "$COVERITY_ADDON" != "true" ] && [ -n "$COVERITY_SCAN_TOKEN" ]; then
 fi
 
 if [ "${FAST_BUILD}" == true ]; then
-    if [ -z "$COVERITY_SCAN_TOKEN" ]; then
+    if [ "$COVERITY" == true ]; then
+        export COVERITY_SCAN_BUILD_COMMAND="mvn package"
+        curl -s "https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh" | bash
+    else
         mvn package
     fi
 else
-    mvn verify;
+    if [ "$COVERITY" == true ]; then
+        COVERITY_SCAN_BUILD_COMMAND="mvn verify"
+        curl -s "https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh" | bash
+    else
+        mvn verify
+    fi
 fi
