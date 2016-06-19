@@ -17,7 +17,7 @@ env:
     #   via the "travis encrypt" command using the project repo's public key
     - secure: "GonzmzvnXsTNQV+6sKtBSSPiwbpMZjxumNt5LFp1g77/afLxw9kl2EQOXbUe308vFOwRVqeY7drBvNJa8aJkTUClfMaGRjfZ9DUwm6doMKMUYrdEkYoQTcH7yDX5K5w9MT6m+Izj+BK2gB7nK3yFlYG6COeXCdFbQ4/cf3/xfRc="
     - COVERITY_SCAN_PROJECT_NAME="docker-java/docker-java"
-#    - COVERITY_SCAN_BRANCH_PATTERN="XXX"
+    - COVERITY_SCAN_BRANCH_PATTERN="coverity"
     - COVERITY_SCAN_NOTIFICATION_EMAIL="kanstantsin.sha@gmail.com"
 
   matrix:
