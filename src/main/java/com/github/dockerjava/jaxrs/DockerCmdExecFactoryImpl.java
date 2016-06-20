@@ -18,8 +18,8 @@ import javax.ws.rs.client.ClientResponseFilter;
 import javax.ws.rs.client.WebTarget;
 
 import com.github.dockerjava.api.command.UpdateContainerCmd;
-
 import com.github.dockerjava.core.SSLConfig;
+
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
@@ -27,6 +27,7 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.glassfish.jersey.CommonProperties;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
+import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.slf4j.Logger;
@@ -85,7 +86,6 @@ import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.jaxrs.connector.ApacheConnectorProvider;
 import com.github.dockerjava.jaxrs.filter.JsonClientFilter;
 import com.github.dockerjava.jaxrs.filter.ResponseStatusExceptionFilter;
 import com.github.dockerjava.jaxrs.filter.SelectiveLoggingFilter;
@@ -114,6 +114,8 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     private ClientResponseFilter[] clientResponseFilters = null;
 
     private DockerClientConfig dockerClientConfig;
+
+    private PoolingHttpClientConnectionManager connManager = null;
 
     @Override
     public void init(DockerClientConfig dockerClientConfig) {
@@ -187,8 +189,21 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
             configureProxy(clientConfig, protocol);
         }
 
-        PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(getSchemeRegistry(
-                originalUri, sslContext));
+        connManager = new PoolingHttpClientConnectionManager(getSchemeRegistry(
+                originalUri, sslContext)) {
+
+            @Override
+            public void close() {
+                super.shutdown();
+            }
+
+            @Override
+            public void shutdown() {
+                // Disable shutdown of the pool. This will be done later, when this factory is closed
+                // This is a workaround for finalize method on jerseys ClientRuntime which
+                // closes the client and shuts down the connection pool when it is garbage collected
+            }
+        };
 
         if (maxTotalConnections != null) {
             connManager.setMaxTotal(maxTotalConnections);
@@ -412,7 +427,6 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         return new KillContainerCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
-
     @Override
     public UpdateContainerCmd.Exec createUpdateContainerCmdExec() {
         return new UpdateContainerCmdExec(getBaseResource(), getDockerClientConfig());
@@ -527,6 +541,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     public void close() throws IOException {
         checkNotNull(client, "Factory not initialized. You probably forgot to call init()!");
         client.close();
+        connManager.close();
     }
 
     public DockerCmdExecFactoryImpl withReadTimeout(Integer readTimeout) {

@@ -134,8 +134,12 @@ public class AttachContainerCmdExecTest extends AbstractNettyDockerClientTest {
             };
         };
 
-        dockerClient.attachContainerCmd(container.getId()).withStdErr(true).withStdOut(true).withFollowStream(true)
-                .exec(callback).awaitCompletion(10, TimeUnit.SECONDS);
+        dockerClient.attachContainerCmd(container.getId())
+                .withStdErr(true)
+                .withStdOut(true)
+                .withFollowStream(true)
+                .exec(callback)
+                .awaitCompletion(10, TimeUnit.SECONDS);
         callback.close();
 
         // HexDump.dump(collectFramesCallback.toString().getBytes(), 0, System.out, 0);
