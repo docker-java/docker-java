@@ -8,14 +8,22 @@ services:
 jdk:
  - oraclejdk7
 
+install: true
+
 env:
   global:
     - DOCKER_TLS_VERIFY=""
+    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+    #   via the "travis encrypt" command using the project repo's public key
+    - secure: "GonzmzvnXsTNQV+6sKtBSSPiwbpMZjxumNt5LFp1g77/afLxw9kl2EQOXbUe308vFOwRVqeY7drBvNJa8aJkTUClfMaGRjfZ9DUwm6doMKMUYrdEkYoQTcH7yDX5K5w9MT6m+Izj+BK2gB7nK3yFlYG6COeXCdFbQ4/cf3/xfRc="
+    - COVERITY_SCAN_PROJECT_NAME="docker-java/docker-java"
+    - COVERITY_SCAN_BRANCH_PATTERN="master"
+    - COVERITY_SCAN_NOTIFICATION_EMAIL="kanstantsin.sha@gmail.com"
 
   matrix:
-    - repo="main"  DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="1.11.2-0~trusty" FAST_BUILD=true
+    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="1.11.2-0~trusty" DEPLOY=true FAST_BUILD=true COVERITY=true
     - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="1.11.2-0~trusty"
-    - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="1.11.2-0~trusty" DEPLOY=true
+    - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="1.11.2-0~trusty"
     - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="1.10.3-0~trusty"
     - repo="testing" DOCKER_HOST="tcp://127.0.0.1:2375"
     - repo="testing" DOCKER_HOST="unix:///var/run/docker.sock"
@@ -31,7 +39,8 @@ before_install:
   - pip install --user codecov
   - ./travis-before-install.sh
 
-script: if [ "${FAST_BUILD}" == true ]; then mvn package ; else mvn verify; fi
+script:
+  - ./travis-script.sh
 
 after_success:
   - ./travis-after-success.sh
