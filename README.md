@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/docker-java/docker-java.svg?branch=master)](https://travis-ci.org/docker-java/docker-java)
+[![Coverity Scan Build Status](https://scan.coverity.com/projects/9177/badge.svg?flat=1)](https://scan.coverity.com/projects/9177)
+[![codecov.io](http://codecov.io/github/docker-java/docker-java/coverage.svg?branch=master)](http://codecov.io/github/docker-java/docker-java?branch=master)
 <!--[![Circle CI](https://circleci.com/gh/docker-java/docker-java.svg?style=svg)](https://circleci.com/gh/docker-java/docker-java)-->
 # docker-java 
 
