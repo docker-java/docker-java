@@ -125,6 +125,8 @@ import io.netty.util.concurrent.DefaultThreadFactory;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import unisockets.Addr;
+
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLParameters;
@@ -254,7 +256,10 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
         @Override
         public DuplexChannel connect(Bootstrap bootstrap) throws InterruptedException {
-            return (DuplexChannel) bootstrap.connect(new DomainSocketAddress("/var/run/docker.sock")).sync().channel();
+
+            Addr addr = Addr.apply(new java.io.File("/var/run/docker.sock"));
+
+            return (DuplexChannel) bootstrap.connect(addr).sync().channel();
         }
     }
 
