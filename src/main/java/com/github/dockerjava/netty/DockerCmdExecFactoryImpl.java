@@ -106,6 +106,8 @@ import com.github.dockerjava.netty.exec.WaitContainerCmdExec;
 import com.github.dockerjava.netty.exec.RenameContainerCmdExec;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFactory;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.EpollDomainSocketChannel;
@@ -131,8 +133,14 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
 import java.security.Security;
 
+import jnr.enxio.channels.NativeSelectorProvider;
+import jnr.unixsocket.UnixServerSocketChannel;
+import jnr.unixsocket.UnixSocketAddress;
+import jnr.unixsocket.UnixSocketChannel;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -216,17 +224,32 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     }
 
     private class UnixDomainSocketInitializer implements NettyInitializer {
+
+        final java.io.File path = new java.io.File("/var/run/docker.sock");
+
         @Override
         public EventLoopGroup init(Bootstrap bootstrap, DockerClientConfig dockerClientConfig) {
-            EventLoopGroup epollEventLoopGroup = new EpollEventLoopGroup(0, new DefaultThreadFactory(threadPrefix));
-            bootstrap.group(epollEventLoopGroup).channel(EpollDomainSocketChannel.class)
-                    .handler(new ChannelInitializer<UnixChannel>() {
+
+            EventLoopGroup nioEventLoopGroup = new NioEventLoopGroup(0, new DefaultThreadFactory(threadPrefix), NativeSelectorProvider.getInstance());
+
+            ChannelFactory<NioSocketChannel> factory = new ChannelFactory<NioSocketChannel>() {
+
+                @Override
+                public NioSocketChannel newChannel() {
+                    unisockets.SocketChannel socketChannel = unisockets.SocketChannel.open(path);
+                    return new NioSocketChannel(socketChannel);
+                }
+            };
+
+            bootstrap.group(nioEventLoopGroup).channelFactory(factory)
+                    .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
-                        protected void initChannel(final UnixChannel channel) throws Exception {
+                        protected void initChannel(final SocketChannel channel) throws Exception {
                             channel.pipeline().addLast(new HttpClientCodec());
                         }
                     });
-            return epollEventLoopGroup;
+
+            return nioEventLoopGroup;
         }
 
         @Override
