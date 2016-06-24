@@ -1,5 +1,19 @@
 package com.github.dockerjava.netty;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.nio.channels.spi.SelectorProvider;
+import java.security.Security;
+
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.SSLParameters;
+
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
 import com.github.dockerjava.api.command.BuildImageCmd;
@@ -39,6 +53,7 @@ import com.github.dockerjava.api.command.RemoveContainerCmd;
 import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.command.RemoveNetworkCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
+import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
 import com.github.dockerjava.api.command.SearchImagesCmd;
@@ -51,7 +66,6 @@ import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.UpdateContainerCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
-import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.core.SSLConfig;
@@ -93,6 +107,7 @@ import com.github.dockerjava.netty.exec.RemoveContainerCmdExec;
 import com.github.dockerjava.netty.exec.RemoveImageCmdExec;
 import com.github.dockerjava.netty.exec.RemoveNetworkCmdExec;
 import com.github.dockerjava.netty.exec.RemoveVolumeCmdExec;
+import com.github.dockerjava.netty.exec.RenameContainerCmdExec;
 import com.github.dockerjava.netty.exec.RestartContainerCmdExec;
 import com.github.dockerjava.netty.exec.SaveImageCmdExec;
 import com.github.dockerjava.netty.exec.SearchImagesCmdExec;
@@ -105,36 +120,22 @@ import com.github.dockerjava.netty.exec.UnpauseContainerCmdExec;
 import com.github.dockerjava.netty.exec.UpdateContainerCmdExec;
 import com.github.dockerjava.netty.exec.VersionCmdExec;
 import com.github.dockerjava.netty.exec.WaitContainerCmdExec;
-import com.github.dockerjava.netty.exec.RenameContainerCmdExec;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.ChannelFactory;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
-import io.netty.channel.epoll.EpollDomainSocketChannel;
-import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.DuplexChannel;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.channel.unix.DomainSocketAddress;
-import io.netty.channel.unix.UnixChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslHandler;
 import io.netty.util.concurrent.DefaultThreadFactory;
-
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
-import javax.net.ssl.SSLEngine;
-import javax.net.ssl.SSLParameters;
-
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.security.Security;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import jnr.enxio.channels.NativeSelectorProvider;
+import jnr.unixsocket.UnixSocketAddress;
+import jnr.unixsocket.UnixSocketChannel;
 
 /**
  * Experimental implementation of {@link DockerCmdExecFactory} that supports http connection hijacking that is needed to pass STDIN to the
@@ -215,22 +216,50 @@ public class NettyDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     private class UnixDomainSocketInitializer implements NettyInitializer {
+
+        final java.io.File path = new java.io.File("/var/run/docker.sock");
+
         @Override
         public EventLoopGroup init(Bootstrap bootstrap, DockerClientConfig dockerClientConfig) {
-            EventLoopGroup epollEventLoopGroup = new EpollEventLoopGroup(0, new DefaultThreadFactory(threadPrefix));
-            bootstrap.group(epollEventLoopGroup).channel(EpollDomainSocketChannel.class)
-                    .handler(new ChannelInitializer<UnixChannel>() {
+            final SelectorProvider nativeSelectorProvider = NativeSelectorProvider.getInstance();
+
+            EventLoopGroup nioEventLoopGroup = new NioEventLoopGroup(0,
+                new DefaultThreadFactory(threadPrefix), nativeSelectorProvider);
+
+            ChannelFactory<NioSocketChannel> factory = new ChannelFactory<NioSocketChannel>() {
+
+                @Override
+                public NioSocketChannel newChannel() {
+                    try {
+                      return new NioSocketChannel(UnixSocketChannel.create());
+                    } catch (IOException e) {
+                      throw new RuntimeException();
+                    }
+                }
+            };
+
+            bootstrap.group(nioEventLoopGroup).channelFactory(factory)
+                    .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
-                        protected void initChannel(final UnixChannel channel) throws Exception {
+                        protected void initChannel(final SocketChannel channel) throws Exception {
+                            channel.pipeline().addLast(new LoggingHandler(getClass()));
                             channel.pipeline().addLast(new HttpClientCodec());
                         }
                     });
-            return epollEventLoopGroup;
+
+            return nioEventLoopGroup;
         }
 
         @Override
         public DuplexChannel connect(Bootstrap bootstrap) throws InterruptedException {
-            return (DuplexChannel) bootstrap.connect(new DomainSocketAddress("/var/run/docker.sock")).sync().channel();
+
+            if (!path.exists()) {
+                throw new RuntimeException("socket not found: " + path);
+            }
+
+            UnixSocketAddress address = new UnixSocketAddress(path);
+
+            return (DuplexChannel) bootstrap.connect(address).sync().channel();
         }
     }
 

@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -252,6 +253,16 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>		
+			<groupId>com.github.jnr</groupId>
+			<artifactId>jnr-unixsocket</artifactId>
+			<version>0.12</version>
+		</dependency>
+		<dependency>
+			<groupId>me.lessis</groupId>
+			<artifactId>unisockets-core_2.11</artifactId>
+			<version>0.1.0</version>
+		</dependency>
 	</dependencies>
 
 	<distributionManagement>
@@ -266,13 +277,13 @@
 	</distributionManagement>
 
 	<build>
-<!-- 		<extensions> -->
-<!-- 			<extension> -->
-<!-- 				<groupId>kr.motd.maven</groupId> -->
-<!-- 				<artifactId>os-maven-plugin</artifactId> -->
-<!-- 				<version>1.2.3.Final</version> -->
-<!-- 			</extension> -->
-<!-- 		</extensions> -->
+		<!-- <extensions> -->
+		<!-- <extension> -->
+		<!-- <groupId>kr.motd.maven</groupId> -->
+		<!-- <artifactId>os-maven-plugin</artifactId> -->
+		<!-- <version>1.2.3.Final</version> -->
+		<!-- </extension> -->
+		<!-- </extensions> -->
 		<pluginManagement>
 			<plugins>
 
@@ -421,7 +432,7 @@
 							<groups>integration</groups>
  							<excludedGroups>integration-auth</excludedGroups>
 							<includes>
-								<include>**/*Test.java</include>
+								<include>**/*ExecTest.java</include>
 							</includes>
 						</configuration>
 					</execution>
@@ -483,7 +494,8 @@
 							<failOnViolation>true</failOnViolation>
 							<logViolationsToConsole>true</logViolationsToConsole>
 							<linkXRef>false</linkXRef>
-							<!-- if some IDE has integration and requires other place, propose it -->
+							<!-- if some IDE has integration and requires other place, propose
+								it -->
 							<configLocation>
 								src/test/resources/checkstyle/checkstyle-config.xml
 							</configLocation>

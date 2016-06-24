@@ -1,6 +1,5 @@
 package com.github.dockerjava.netty.exec;
 
-import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_22;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_23;
 import static com.github.dockerjava.utils.TestUtils.getVersion;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -15,7 +14,6 @@ import java.lang.reflect.Method;
 import java.security.SecureRandom;
 import java.util.concurrent.TimeUnit;
 
-import com.github.dockerjava.core.RemoteApiVersion;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -141,8 +139,9 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
                 .exec(new ExecStartResultCallback(stdout, System.err))
                 .awaitCompletion(5, TimeUnit.SECONDS);
 
-        assertTrue(completed, "The process was not finished.");
         assertEquals(stdout.toString("UTF-8"), "STDIN\n");
+        assertTrue(completed, "The process was not finished.");
+        
     }
 
     @Test()
@@ -160,7 +159,7 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        InputStream stdin = new ByteArrayInputStream("ls\n".getBytes());
+        InputStream stdin = new ByteArrayInputStream("ls\nexit\n".getBytes());
 
         ByteArrayOutputStream stdout = new ByteArrayOutputStream();
 

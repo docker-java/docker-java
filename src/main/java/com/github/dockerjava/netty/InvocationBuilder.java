@@ -322,6 +322,7 @@ public class InvocationBuilder {
                     }
 
                     // we close the writing side of the socket, but keep the read side open to transfer stdout/stderr
+                    System.out.println("shutdownOutput");
                     channel.shutdownOutput();
 
                 }
