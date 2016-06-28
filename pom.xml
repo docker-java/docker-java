@@ -99,10 +99,20 @@
 			<artifactId>jersey-client</artifactId>
 			<version>${jersey.version}</version>
 		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>de.gesellix</groupId>-->
+			<!--<artifactId>unix-socket-factory</artifactId>-->
+			<!--<version>${unix-socket-factory.version}</version>-->
+		<!--</dependency>-->
 		<dependency>
-			<groupId>de.gesellix</groupId>
-			<artifactId>unix-socket-factory</artifactId>
-			<version>${unix-socket-factory.version}</version>
+			<groupId>com.kohlschutter.junixsocket</groupId>
+			<artifactId>junixsocket-common</artifactId>
+			<version>2.0.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.kohlschutter.junixsocket</groupId>
+			<artifactId>junixsocket-native-common</artifactId>
+			<version>2.0.4</version>
 		</dependency>
 
 		<dependency>
