@@ -60,6 +60,7 @@ import java.util.logging.Logger;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.ws.rs.ProcessingException;
+import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedMap;
@@ -110,7 +111,6 @@ import org.apache.http.impl.io.ChunkedOutputStream;
 import org.apache.http.io.SessionOutputBuffer;
 import org.apache.http.util.TextUtils;
 import org.apache.http.util.VersionInfo;
-import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
 import org.glassfish.jersey.apache.connector.LocalizationMessages;
 import org.glassfish.jersey.client.ClientProperties;
@@ -139,7 +139,6 @@ import org.glassfish.jersey.message.internal.Statuses;
  * <li>{@link ClientProperties#PROXY_PASSWORD}</li>
  * <li>{@link ClientProperties#REQUEST_ENTITY_PROCESSING} - default value is {@link RequestEntityProcessing#CHUNKED}</li>
  * <li>{@link ApacheClientProperties#PREEMPTIVE_BASIC_AUTHENTICATION}</li>
- * <li>{@link ApacheClientProperties#SSL_CONFIG}</li>
  * </ul>
  * <p>
  * This connector uses {@link RequestEntityProcessing#CHUNKED chunked encoding} as a default setting. This can be overridden by the
@@ -204,30 +203,34 @@ class ApacheConnector implements Connector {
      * @param config
      *            client configuration.
      */
-    ApacheConnector(Configuration config) {
+    ApacheConnector(Client client, Configuration config) {
         Object reqConfig = null;
 
         if (config != null) {
             final Object connectionManager = config.getProperties().get(ApacheClientProperties.CONNECTION_MANAGER);
 
             if (connectionManager != null && !(connectionManager instanceof HttpClientConnectionManager)) {
-                LOGGER.log(Level.WARNING, LocalizationMessages.IGNORING_VALUE_OF_PROPERTY(
-                        ApacheClientProperties.CONNECTION_MANAGER, connectionManager.getClass().getName(),
-                        HttpClientConnectionManager.class.getName()));
+                LOGGER.log(Level.WARNING,
+                        LocalizationMessages.IGNORING_VALUE_OF_PROPERTY(
+                                ApacheClientProperties.CONNECTION_MANAGER,
+                                connectionManager.getClass().getName(),
+                                HttpClientConnectionManager.class.getName())
+                );
             }
 
             reqConfig = config.getProperties().get(ApacheClientProperties.REQUEST_CONFIG);
-            if (reqConfig != null) {
-                if (!(reqConfig instanceof RequestConfig)) {
-                    LOGGER.log(Level.WARNING, LocalizationMessages.IGNORING_VALUE_OF_PROPERTY(
-                            ApacheClientProperties.REQUEST_CONFIG, reqConfig.getClass().getName(),
-                            RequestConfig.class.getName()));
-                    reqConfig = null;
-                }
+            if (reqConfig != null && !(reqConfig instanceof RequestConfig)) {
+                LOGGER.log(Level.WARNING,
+                        LocalizationMessages.IGNORING_VALUE_OF_PROPERTY(
+                                ApacheClientProperties.REQUEST_CONFIG,
+                                reqConfig.getClass().getName(),
+                                RequestConfig.class.getName())
+                );
+                reqConfig = null;
             }
         }
 
-        final SSLContext sslContext = getSslContext(config);
+        final SSLContext sslContext = client.getSslContext();
         final HttpClientBuilder clientBuilder = HttpClientBuilder.create();
 
         clientBuilder.setConnectionManager(getConnectionManager(config, sslContext));
@@ -307,13 +310,6 @@ class ApacheConnector implements Connector {
         }
         clientBuilder.setDefaultRequestConfig(requestConfig);
         this.client = clientBuilder.build();
-    }
-
-    private SSLContext getSslContext(final Configuration config) {
-        final SslConfigurator sslConfigurator = ApacheClientProperties.getValue(config.getProperties(),
-                ApacheClientProperties.SSL_CONFIG, SslConfigurator.class);
-
-        return sslConfigurator != null ? sslConfigurator.createSSLContext() : null;
     }
 
     HttpClientConnectionManager getConnectionManager(final Configuration config, final SSLContext sslContext) {
@@ -492,8 +488,6 @@ class ApacheConnector implements Connector {
             public void run() {
                 try {
                     callback.response(apply(request));
-                } catch (final ProcessingException ex) {
-                    callback.failure(ex);
                 } catch (final Throwable t) {
                     callback.failure(t);
                 }

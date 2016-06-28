@@ -66,7 +66,6 @@ import org.glassfish.jersey.client.spi.ConnectorProvider;
  * <li>{@link org.glassfish.jersey.client.ClientProperties#REQUEST_ENTITY_PROCESSING} - default value is
  * {@link org.glassfish.jersey.client.RequestEntityProcessing#CHUNKED}</li>
  * <li>{@link ApacheClientProperties#PREEMPTIVE_BASIC_AUTHENTICATION}</li>
- * <li>{@link ApacheClientProperties#SSL_CONFIG}</li>
  * </ul>
  * </p>
  * <p>
@@ -108,7 +107,7 @@ public class ApacheConnectorProvider implements ConnectorProvider {
 
     @Override
     public Connector getConnector(Client client, Configuration runtimeConfig) {
-        return new ApacheConnector(runtimeConfig);
+        return new ApacheConnector(client, runtimeConfig);
     }
 
     /**
