@@ -34,6 +34,7 @@ import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -45,7 +46,9 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItemInArray;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
@@ -191,9 +194,12 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
     @Test
     public void createContainerWithEnv() throws Exception {
+        final String testVariable = "VARIABLE=success";
 
-        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withEnv("VARIABLE=success")
-                .withCmd("env").exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
+                .withEnv(testVariable)
+                .withCmd("env")
+                .exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -201,11 +207,11 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-        assertThat(Arrays.asList(inspectContainerResponse.getConfig().getEnv()), containsInAnyOrder("VARIABLE=success"));
+        assertThat(Arrays.asList(inspectContainerResponse.getConfig().getEnv()), hasItem("VARIABLE=success"));
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        assertThat(containerLog(container.getId()), containsString("VARIABLE=success"));
+        assertThat(containerLog(container.getId()), containsString(testVariable));
     }
 
     @Test
