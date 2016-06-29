@@ -46,6 +46,3 @@ registry.email=${registry_email}
 registry.url=https://index.docker.io/v1/
 
 EOF
-
-
-cat "${HOME}/.docker-java.properties"
