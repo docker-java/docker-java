@@ -84,10 +84,10 @@ public class UpdateContainerCmdImplTest extends AbstractDockerClientTest {
 //                .withKernelMemory(52428800) Can not update kernel memory to a running container, please stop it first.
                 .exec();
 
-        // docker toolbox 1.10.1
-        assertThat(updateResponse.getWarnings(), hasSize(1));
-        assertThat(updateResponse.getWarnings().get(0),
-                is("Your kernel does not support Block I/O weight. Weight discarded."));
+        // true only on docker toolbox (1.10.1)
+//        assertThat(updateResponse.getWarnings(), hasSize(1));
+//        assertThat(updateResponse.getWarnings().get(0),
+//                is("Your kernel does not support Block I/O weight. Weight discarded."));
 
         InspectContainerResponse inspectAfter = dockerClient.inspectContainerCmd(containerId).exec();
         final HostConfig afterHostConfig = inspectAfter.getHostConfig();
