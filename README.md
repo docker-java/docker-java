@@ -2,7 +2,7 @@
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/9177/badge.svg?flat=1)](https://scan.coverity.com/projects/9177)
 [![codecov.io](http://codecov.io/github/docker-java/docker-java/coverage.svg?branch=master)](http://codecov.io/github/docker-java/docker-java?branch=master)
 [![Reference Status](https://www.versioneye.com/java/com.github.docker-java:docker-java/reference_badge.svg?style=flat-square)](https://www.versioneye.com/java/com.github.docker-java:docker-java/references)
-![License](http://img.shields.io/:license-apache-blue.svg?style=flat-square)](https://github.com/docker-java/docker-java/blob/master/LICENSE)
+[![License](http://img.shields.io/:license-apache-blue.svg?style=flat-square)](https://github.com/docker-java/docker-java/blob/master/LICENSE)
 
 <!--[![Circle CI](https://circleci.com/gh/docker-java/docker-java.svg?style=svg)](https://circleci.com/gh/docker-java/docker-java)-->
 # docker-java 
