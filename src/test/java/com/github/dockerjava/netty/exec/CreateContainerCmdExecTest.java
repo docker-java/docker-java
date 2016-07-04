@@ -43,6 +43,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItemInArray;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
@@ -189,9 +190,12 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
     @Test
     public void createContainerWithEnv() throws Exception {
+        final String testVariable = "VARIABLE=success";
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withEnv("VARIABLE=success")
-                .withCmd("env").exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+                .withEnv(testVariable)
+                .withCmd("env")
+                .exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -199,11 +203,11 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-        assertThat(Arrays.asList(inspectContainerResponse.getConfig().getEnv()), containsInAnyOrder("VARIABLE=success"));
+        assertThat(Arrays.asList(inspectContainerResponse.getConfig().getEnv()), hasItem(testVariable));
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        assertThat(containerLog(container.getId()), containsString("VARIABLE=success"));
+        assertThat(containerLog(container.getId()), containsString(testVariable));
     }
 
     @Test
