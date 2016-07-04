@@ -37,13 +37,13 @@ cache:
 
 before_install:
   - pip install --user codecov
-  - ./travis-before-install.sh
+  - ./.travis/travis-before-install.sh
 
 script:
-  - ./travis-script.sh
+  - ./.travis/travis-script.sh
 
 after_success:
-  - ./travis-after-success.sh
+  - ./.travis/travis-after-success.sh
 
 after_script:
   - sudo cat /var/log/upstart/docker.log
