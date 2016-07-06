@@ -35,6 +35,7 @@ import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.ListNetworksCmd;
 import com.github.dockerjava.api.command.ListVolumesCmd;
+import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.api.command.LogContainerCmd;
 import com.github.dockerjava.api.command.PauseContainerCmd;
 import com.github.dockerjava.api.command.PingCmd;
@@ -89,6 +90,18 @@ public interface DockerClient extends Closeable {
     PushImageCmd pushImageCmd(@Nonnull Identifier identifier);
 
     CreateImageCmd createImageCmd(@Nonnull String repository, @Nonnull InputStream imageStream);
+
+    /**
+     * Loads a tarball with a set of images and tags into a Docker repository.
+     *
+     * Corresponds to POST /images/load API endpoint.
+     *
+     * @param imageStream
+     *            stream of the tarball file
+     * @return created command
+     * @since {@link RemoteApiVersion#VERSION_1_7}
+     */
+    LoadImageCmd loadImageCmd(@Nonnull InputStream imageStream);
 
     SearchImagesCmd searchImagesCmd(@Nonnull String term);
 
