@@ -29,6 +29,7 @@ import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.ListNetworksCmd;
 import com.github.dockerjava.api.command.ListVolumesCmd;
+import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.api.command.LogContainerCmd;
 import com.github.dockerjava.api.command.PauseContainerCmd;
 import com.github.dockerjava.api.command.PingCmd;
@@ -82,6 +83,7 @@ import com.github.dockerjava.netty.exec.ListContainersCmdExec;
 import com.github.dockerjava.netty.exec.ListImagesCmdExec;
 import com.github.dockerjava.netty.exec.ListNetworksCmdExec;
 import com.github.dockerjava.netty.exec.ListVolumesCmdExec;
+import com.github.dockerjava.netty.exec.LoadImageCmdExec;
 import com.github.dockerjava.netty.exec.LogContainerCmdExec;
 import com.github.dockerjava.netty.exec.PauseContainerCmdExec;
 import com.github.dockerjava.netty.exec.PingCmdExec;
@@ -364,6 +366,11 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     @Override
     public CreateImageCmd.Exec createCreateImageCmdExec() {
         return new CreateImageCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public LoadImageCmd.Exec createLoadImageCmdExec() {
+        return new LoadImageCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
