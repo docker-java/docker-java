@@ -21,7 +21,7 @@ import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.core.command.PushImageResultCallback;
 import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
-@Test(groups = "integration-auth")
+@Test(groups = {"integration", "integration-auth"})
 public class PushImageCmdExecTest extends AbstractNettyDockerClientTest {
 
     public static final Logger LOG = LoggerFactory.getLogger(PushImageCmdExecTest.class);

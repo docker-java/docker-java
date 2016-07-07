@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
+if [[ $CODECOV == "true" ]]; then
+    codecov
+fi
 
-codecov
 if [[ $TRAVIS_BRANCH == "master" ]] && [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $DEPLOY == "true" ]];
 then
     cat <<EOF >> ~/settings.xml

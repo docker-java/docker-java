@@ -21,8 +21,7 @@ env:
     - COVERITY_SCAN_NOTIFICATION_EMAIL="kanstantsin.sha@gmail.com"
 
   matrix:
-    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="1.11.2-0~trusty" DEPLOY=true FAST_BUILD=true COVERITY=true
-    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="1.11.2-0~trusty"
+    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="1.11.2-0~trusty" DEPLOY=true COVERITY=true CODECOV=true
     - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="1.11.2-0~trusty"
     - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="1.10.3-0~trusty"
 #    - repo="testing" DOCKER_HOST="tcp://127.0.0.1:2375"
