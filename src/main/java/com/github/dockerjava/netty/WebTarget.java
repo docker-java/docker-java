@@ -82,16 +82,22 @@ public class WebTarget {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         WebTarget webTarget = (WebTarget) o;
 
-        if (channelProvider != null ? !channelProvider.equals(webTarget.channelProvider) : webTarget.channelProvider != null)
+        if (channelProvider != null ? !channelProvider.equals(webTarget.channelProvider) : webTarget.channelProvider != null) {
             return false;
-        if (path != null ? !path.equals(webTarget.path) : webTarget.path != null) return false;
+        }
+        if (path != null ? !path.equals(webTarget.path) : webTarget.path != null) {
+            return false;
+        }
         return queryParams != null ? queryParams.equals(webTarget.queryParams) : webTarget.queryParams == null;
-
     }
 
     @Override
