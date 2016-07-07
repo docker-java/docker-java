@@ -28,7 +28,8 @@ sudo -E apt-cache policy docker-engine
 # sudo apt-get -f install
 # sudo dpkg -i "$(ls *${DOCKER_VERSION}*)"
 #popd
-
+#rm -f "src/test/resources/logback.xml"
+mv "src/test/resources/travis-logback.xml" "src/test/resources/logback.xml"
 
 echo 'DOCKER_OPTS="-H=unix:///var/run/docker.sock -H=tcp://127.0.0.1:2375"' | sudo tee -a /etc/default/docker
 sudo -E restart docker
