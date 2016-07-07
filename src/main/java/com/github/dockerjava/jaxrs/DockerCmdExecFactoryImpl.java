@@ -18,8 +18,8 @@ import javax.ws.rs.client.ClientResponseFilter;
 import javax.ws.rs.client.WebTarget;
 
 import com.github.dockerjava.api.command.UpdateContainerCmd;
-
 import com.github.dockerjava.core.SSLConfig;
+
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
@@ -115,6 +115,8 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
     private DockerClientConfig dockerClientConfig;
 
+    private PoolingHttpClientConnectionManager connManager = null;
+
     @Override
     public void init(DockerClientConfig dockerClientConfig) {
         checkNotNull(dockerClientConfig, "config was not specified");
@@ -187,8 +189,21 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
             configureProxy(clientConfig, protocol);
         }
 
-        PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(getSchemeRegistry(
-                originalUri, sslContext));
+        connManager = new PoolingHttpClientConnectionManager(getSchemeRegistry(
+                originalUri, sslContext)) {
+
+            @Override
+            public void close() {
+                super.shutdown();
+            }
+
+            @Override
+            public void shutdown() {
+                // Disable shutdown of the pool. This will be done later, when this factory is closed
+                // This is a workaround for finalize method on jerseys ClientRuntime which
+                // closes the client and shuts down the connection pool when it is garbage collected
+            }
+        };
 
         if (maxTotalConnections != null) {
             connManager.setMaxTotal(maxTotalConnections);
@@ -412,7 +427,6 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         return new KillContainerCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
-
     @Override
     public UpdateContainerCmd.Exec createUpdateContainerCmdExec() {
         return new UpdateContainerCmdExec(getBaseResource(), getDockerClientConfig());
@@ -527,6 +541,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
     public void close() throws IOException {
         checkNotNull(client, "Factory not initialized. You probably forgot to call init()!");
         client.close();
+        connManager.close();
     }
 
     public DockerCmdExecFactoryImpl withReadTimeout(Integer readTimeout) {
