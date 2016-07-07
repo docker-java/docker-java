@@ -105,7 +105,9 @@ public class AttachContainerCmdExecTest extends AbstractNettyDockerClientTest {
         InputStream stdin = new ByteArrayInputStream((snippet + "\n").getBytes());
 
         dockerClient.attachContainerCmd(container.getId()).withStdErr(true).withStdOut(true).withFollowStream(true)
-                .withStdIn(stdin).exec(callback).awaitCompletion(2, TimeUnit.SECONDS);
+                .withStdIn(stdin)
+                .exec(callback)
+                .awaitCompletion(5, TimeUnit.SECONDS);
         callback.close();
 
         assertThat(callback.toString(), containsString(snippet));
