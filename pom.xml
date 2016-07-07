@@ -57,7 +57,7 @@
 		<slf4j-api.version>1.7.21</slf4j-api.version>
 
 		<bouncycastle.version>1.54</bouncycastle.version>
-		<unix-socket-factory.version>2016-04-06T22-21-19</unix-socket-factory.version>
+		<unix-socket-factory.version>2015-01-27T15-02-14</unix-socket-factory.version>
 		<guava.version>19.0</guava.version>
 
 		<!-- test dependencies -->
@@ -104,20 +104,10 @@
 			<artifactId>jersey-client</artifactId>
 			<version>${jersey.version}</version>
 		</dependency>
-		<!--<dependency>-->
-			<!--<groupId>de.gesellix</groupId>-->
-			<!--<artifactId>unix-socket-factory</artifactId>-->
-			<!--<version>${unix-socket-factory.version}</version>-->
-		<!--</dependency>-->
 		<dependency>
-			<groupId>com.kohlschutter.junixsocket</groupId>
-			<artifactId>junixsocket-common</artifactId>
-			<version>2.0.4</version>
-		</dependency>
-		<dependency>
-			<groupId>com.kohlschutter.junixsocket</groupId>
-			<artifactId>junixsocket-native-common</artifactId>
-			<version>2.0.4</version>
+			<groupId>de.gesellix</groupId>
+			<artifactId>unix-socket-factory</artifactId>
+			<version>${unix-socket-factory.version}</version>
 		</dependency>
 
 		<dependency>

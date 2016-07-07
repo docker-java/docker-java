@@ -77,7 +77,7 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(callback.toString(), containsString(snippet));
     }
 
-    @Test(groups = "badTests", enabled = false)
+    @Test
     public void attachContainerWithTTY() throws Exception {
 
         File baseDir = new File(Thread.currentThread().getContextClassLoader()
@@ -105,19 +105,12 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
                 .withStdOut(true)
                 .withFollowStream(true)
                 .exec(callback)
-                .awaitCompletion();
-//                .awaitCompletion(15, TimeUnit.SECONDS);
+                .awaitCompletion(15, TimeUnit.SECONDS);
         callback.close();
-
-        dockerClient.close();
 
         System.out.println("log: " + callback.toString());
 
         // HexDump.dump(collectFramesCallback.toString().getBytes(), 0, System.out, 0);
-        RuntimeException firstError = callback.getFirstError();
-        if (isEmpty(callback.toString())) {
-            throw new SkipException("com.github.dockerjava.api.exception.InternalServerErrorException: http: Hijack is incompatible with use of CloseNotifier");
-        }
         assertThat(callback.toString(), containsString("stdout\r\nstderr"));
     }
 
