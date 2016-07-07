@@ -19,7 +19,7 @@ import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
-@Test(groups = "integration")
+@Test(groups = "integration-auth")
 public class PushImageCmdImplTest extends AbstractDockerClientTest {
 
     public static final Logger LOG = LoggerFactory.getLogger(PushImageCmdImplTest.class);

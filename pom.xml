@@ -388,6 +388,7 @@
 				<version>${maven-surefire-plugin.version}</version>
 				<configuration>
 					<excludedGroups>integration</excludedGroups>
+					<excludedGroups>integration-auth</excludedGroups>
 				</configuration>
 			</plugin>
 
@@ -403,7 +404,7 @@
 						</goals>
 						<configuration>
 							<groups>integration</groups>
-<!-- 							<excludedGroups>ignoreInCircleCi</excludedGroups> -->
+ 							<excludedGroups>integration-auth</excludedGroups>
 							<includes>
 								<include>**/*Test.java</include>
 							</includes>
