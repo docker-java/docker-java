@@ -53,6 +53,21 @@ public class HttpResponseStreamHandler extends SimpleChannelInboundHandler<ByteB
         }
 
         @Override
+        public void close() throws IOException {
+            releaseCurrent();
+            releaseQueued();
+            super.close();
+        }
+
+        private void releaseQueued() {
+            ByteBuf byteBuf = queue.poll();
+            while (byteBuf != null) {
+                byteBuf.release();
+                byteBuf = queue.poll();
+            }
+        }
+
+        @Override
         public int available() throws IOException {
             poll();
             return readableBytes();
@@ -88,10 +103,18 @@ public class HttpResponseStreamHandler extends SimpleChannelInboundHandler<ByteB
         private void poll() {
             if (readableBytes() == 0) {
                 try {
+                    releaseCurrent();
                     current = queue.poll(50, TimeUnit.MILLISECONDS);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
+            }
+        }
+
+        private void releaseCurrent() {
+            if (current != null) {
+                current.release();
+                current = null;
             }
         }
     }
