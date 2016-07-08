@@ -32,13 +32,13 @@ public class HttpResponseStreamHandler extends SimpleChannelInboundHandler<ByteB
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        stream.close();
+        stream.writeComplete();
         super.channelReadComplete(ctx);
     }
 
     public static class HttpResponseInputStream extends InputStream {
 
-        private AtomicBoolean closed = new AtomicBoolean(false);
+        private AtomicBoolean writeCompleted = new AtomicBoolean(false);
 
         private LinkedTransferQueue<ByteBuf> queue = new LinkedTransferQueue<ByteBuf>();
 
@@ -48,10 +48,8 @@ public class HttpResponseStreamHandler extends SimpleChannelInboundHandler<ByteB
             queue.put(byteBuf);
         }
 
-        @Override
-        public void close() throws IOException {
-            closed.set(true);
-            super.close();
+        public void writeComplete() {
+            writeCompleted.set(true);
         }
 
         @Override
@@ -75,7 +73,7 @@ public class HttpResponseStreamHandler extends SimpleChannelInboundHandler<ByteB
             poll();
 
             if (readableBytes() == 0) {
-                if (closed.get()) {
+                if (writeCompleted.get()) {
                     return -1;
                 }
             }
