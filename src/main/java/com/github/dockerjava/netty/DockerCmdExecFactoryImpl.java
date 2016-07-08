@@ -5,8 +5,18 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.ProtocolFamily;
 import java.net.SocketAddress;
+import java.nio.channels.DatagramChannel;
+import java.nio.channels.Pipe;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.spi.AbstractSelectableChannel;
+import java.nio.channels.spi.AbstractSelector;
+import java.nio.channels.spi.SelectorProvider;
 import java.security.Security;
+import java.util.Set;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
@@ -132,6 +142,8 @@ import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslHandler;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import jnr.enxio.channels.NativeSelectorProvider;
+import jnr.unixsocket.UnixSocketAddress;
+import jnr.unixsocket.UnixSocketChannel;
 import unisockets.Addr;
 
 /**
@@ -220,16 +232,20 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
         @Override
         public EventLoopGroup init(Bootstrap bootstrap, DockerClientConfig dockerClientConfig) {
-
+        	final SelectorProvider nativeSelectorProvider = NativeSelectorProvider.getInstance();
+         	
             EventLoopGroup nioEventLoopGroup = new NioEventLoopGroup(0,
-                new DefaultThreadFactory(threadPrefix), NativeSelectorProvider.getInstance());
+                new DefaultThreadFactory(threadPrefix), nativeSelectorProvider);
 
             ChannelFactory<NioSocketChannel> factory = new ChannelFactory<NioSocketChannel>() {
 
                 @Override
                 public NioSocketChannel newChannel() {
-                    unisockets.SocketChannel socketChannel = unisockets.SocketChannel.open(path);
-                    return new NioSocketChannel(socketChannel);
+                    try {
+						return new NioSocketChannel(UnixSocketChannel.create());
+					} catch (IOException e) {
+						throw new RuntimeException();
+					}
                 }
             };
 
@@ -247,9 +263,13 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         @Override
         public DuplexChannel connect(Bootstrap bootstrap) throws InterruptedException {
 
-            Addr addr = Addr.apply(new java.io.File("/var/run/docker.sock"));
+            if(!path.exists()) {
+            	throw new RuntimeException("socket not found: " + path);
+            }
+            
+            UnixSocketAddress socket = new UnixSocketAddress(path);
 
-            return (DuplexChannel) bootstrap.connect(addr).sync().channel();
+            return (DuplexChannel) bootstrap.connect(socket).sync().channel();
         }
     }
 
