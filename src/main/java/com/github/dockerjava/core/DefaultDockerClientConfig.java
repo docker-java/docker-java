@@ -31,7 +31,7 @@ import com.github.dockerjava.core.NameParser.ReposTag;
  */
 public class DefaultDockerClientConfig implements Serializable, DockerClientConfig {
 
-    private static final long serialVersionUID = -4307357472441531489L;
+    private static final long serialVersionUID = 1L;
 
     public static final String DOCKER_HOST = "DOCKER_HOST";
 
