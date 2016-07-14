@@ -5,7 +5,8 @@ Change Log
 ---
 
 All changes
-* [#630 ] (https://github.com/docker-java/docker-java/pull/630) Fix: Second execution of a docker command in Netty implementation always fails 
+* [#627] (https://github.com/docker-java/docker-java/pull/627) Implementation of POST /images/load endpoint 
+* [#630] (https://github.com/docker-java/docker-java/pull/630) Fix: Second execution of a docker command in Netty implementation always fails 
 * [#596] (https://github.com/docker-java/docker-java/pull/596) Refactor configuration of SSL to allow override with custom config 
 * [#529] (https://github.com/docker-java/docker-java/pull/529) Refactor CertUtils. Support ECDSA and PrivateKey 
 * [#593] (https://github.com/docker-java/docker-java/pull/593) Added Device.parse() method with simple verification.
