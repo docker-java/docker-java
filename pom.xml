@@ -412,7 +412,7 @@
 					<properties>
 						<property>
 							<name>listener</name>
-							<value>com.github.dockerjava.TestStatusReporter,com.github.dockerjava.MakeTestsAlwaysHaveTimeout</value>
+							<value>com.github.dockerjava.TestStatusReporter,com.github.dockerjava.MakeTestsAlwaysHaveTimeout,com.github.dockerjava.DisableAuthTests</value>
 						</property>
 					</properties>
 				</configuration>
