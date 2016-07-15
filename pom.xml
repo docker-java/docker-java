@@ -386,6 +386,14 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>${maven-surefire-plugin.version}</version>
+				<configuration>
+					<properties>
+						<property>
+							<name>listener</name>
+							<value>com.github.dockerjava.TestStatusReporter</value>
+						</property>
+					</properties>
+				</configuration>
 			</plugin>
 
 			<plugin>
