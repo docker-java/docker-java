@@ -1,29 +1,20 @@
 package com.github.dockerjava;
 
-import org.testng.IClass;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
 public class TestStatusReporter implements ITestListener {
-    private IClass testClass;
     private int successes, failures, errors, skipped;
     private long startTime;
 
     @Override
     public void onTestStart(ITestResult result) {
-        IClass testClass = result.getTestClass();
-        if (!testClass.equals(this.testClass)) {
-            if (this.testClass != null) {
-                printReport();
-            }
-            System.out.println("Running " + testClass.getName());
-            reset(testClass);
-        }
+        reset();
+        System.out.printf("Running %s#%s%n", result.getTestClass().getName(), result.getMethod().getMethodName());
     }
 
-    private void reset(IClass testClass) {
-        this.testClass = testClass;
+    private void reset() {
         this.startTime = System.currentTimeMillis();
         this.successes = 0;
         this.failures = 0;
@@ -46,21 +37,25 @@ public class TestStatusReporter implements ITestListener {
     @Override
     public void onTestSuccess(ITestResult result) {
         successes++;
+        printReport();
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
         failures++;
+        printReport();
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
         skipped++;
+        printReport();
     }
 
     @Override
     public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
         failures++;
+        printReport();
     }
 
     @Override
@@ -69,6 +64,5 @@ public class TestStatusReporter implements ITestListener {
 
     @Override
     public void onFinish(ITestContext context) {
-        printReport();
     }
 }
