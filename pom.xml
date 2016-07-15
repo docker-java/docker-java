@@ -408,6 +408,14 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<properties>
+						<property>
+							<name>listener</name>
+							<value>com.github.dockerjava.TestStatusReporter</value>
+						</property>
+					</properties>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
