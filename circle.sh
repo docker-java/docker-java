@@ -28,7 +28,7 @@ case "$1" in
         ;;
 
     test)
-        mvn clean test
+        mvn clean verify
         ;;
 
     collect_artifacts)
