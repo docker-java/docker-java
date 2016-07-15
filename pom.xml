@@ -386,10 +386,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>${maven-surefire-plugin.version}</version>
-				<configuration>
-					<excludedGroups>integration</excludedGroups>
-					<excludedGroups>integration-auth</excludedGroups>
-				</configuration>
 			</plugin>
 
 			<plugin>
@@ -402,13 +398,6 @@
 							<goal>integration-test</goal>
 							<goal>verify</goal>
 						</goals>
-						<configuration>
-							<groups>integration</groups>
- 							<excludedGroups>integration-auth</excludedGroups>
-							<includes>
-								<include>**/*Test.java</include>
-							</includes>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
