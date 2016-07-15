@@ -39,6 +39,7 @@ case "$1" in
             mvn surefire-report:failsafe-report-only
             cp -R target/failsafe-reports $CIRCLE_TEST_REPORTS
         fi
+        mvn site:site
         cp -R target/site $CIRCLE_TEST_REPORTS
         ;;
 esac
