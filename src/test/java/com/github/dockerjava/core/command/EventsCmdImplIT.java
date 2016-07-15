@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-@Test(groups = {"integration", "slow"})
+@Test(groups = {"integration", "slow"}, enabled = false)
 public class EventsCmdImplIT extends AbstractDockerClientIT {
 
     private static int KNOWN_NUM_EVENTS = 4;
