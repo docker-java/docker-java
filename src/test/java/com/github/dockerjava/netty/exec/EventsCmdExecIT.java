@@ -1,25 +1,20 @@
 package com.github.dockerjava.netty.exec;
 
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.model.Event;
+import com.github.dockerjava.core.command.EventsResultCallback;
+import com.github.dockerjava.core.command.PullImageResultCallback;
+import com.github.dockerjava.netty.AbstractNettyDockerClientIT;
+import org.testng.ITestResult;
+import org.testng.annotations.*;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.model.Event;
-import com.github.dockerjava.core.command.EventsResultCallback;
-import com.github.dockerjava.core.command.PullImageResultCallback;
-import com.github.dockerjava.netty.AbstractNettyDockerClientIT;
-
-@Test(groups = "integration")
+@Test(groups = {"integration", "slow"}, enabled = false)
 public class EventsCmdExecIT extends AbstractNettyDockerClientIT {
 
     private static int KNOWN_NUM_EVENTS = 4;
