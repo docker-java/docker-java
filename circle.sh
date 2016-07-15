@@ -38,10 +38,8 @@ case "$1" in
 
     collect_test_reports)
         mkdir -p $CIRCLE_TEST_REPORTS/surefire
+        mkdir -p $CIRCLE_TEST_REPORTS/failsafe
         cp target/surefire-reports/TEST-*.xml $CIRCLE_TEST_REPORTS/surefire
-        if [ -e target/failsafe-reports ] ; then
-            mkdir -p $CIRCLE_TEST_REPORTS/failsafe
-            cp target/failsafe-reports/TEST-*.xml $CIRCLE_TEST_REPORTS/failsafe
-        fi
+        cp target/failsafe-reports/TEST-*.xml $CIRCLE_TEST_REPORTS/failsafe
         ;;
 esac
