@@ -31,10 +31,6 @@ case "$1" in
         mvn clean test
         ;;
 
-    collect_artifacts)
-        # collect artifacts into the artifacts dir
-        cp target/*.jar $CIRCLE_ARTIFACTS
-        ;;
 
     collect_test_reports)
         mkdir -p $CIRCLE_TEST_REPORTS/surefire
