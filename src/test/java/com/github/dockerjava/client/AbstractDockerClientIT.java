@@ -49,8 +49,8 @@ public abstract class AbstractDockerClientIT extends Assert {
 
     public void beforeTest() throws Exception {
 
-        LOG.info("=== BEFORETEST {} ===", getClass());
-        LOG.info("Connecting to Docker server");
+        LOG.debug("=== BEFORETEST {} ===", getClass());
+        LOG.debug("Connecting to Docker server");
         dockerClient = DockerClientBuilder.getInstance(config())
                 .withDockerCmdExecFactory(dockerCmdExecFactory)
                 .build();
@@ -58,13 +58,13 @@ public abstract class AbstractDockerClientIT extends Assert {
         try {
             dockerClient.inspectImageCmd("busybox").exec();
         } catch (NotFoundException e) {
-            LOG.info("Pulling image 'busybox'");
+            LOG.debug("Pulling image 'busybox'");
             // need to block until image is pulled completely
             dockerClient.pullImageCmd("busybox").withTag("latest").exec(new PullImageResultCallback()).awaitSuccess();
         }
 
         assertNotNull(dockerClient);
-        LOG.info("=== END OF BEFORETEST ===\n\n");
+        LOG.debug("=== END OF BEFORETEST ===\n\n");
     }
 
     private DefaultDockerClientConfig config() {
@@ -82,18 +82,18 @@ public abstract class AbstractDockerClientIT extends Assert {
     }
 
     public void afterTest() {
-        LOG.info("=== END OF AFTERTEST {} ===", getClass());
+        LOG.debug("=== END OF AFTERTEST {} ===", getClass());
     }
 
     public void beforeMethod(Method method) {
-        LOG.info(String.format("################################## STARTING %s ##################################",
+        LOG.debug(String.format("################################## STARTING %s ##################################",
                 method.getName()));
     }
 
     public void afterMethod(ITestResult result) {
 
         for (String container : dockerCmdExecFactory.getContainerNames()) {
-            LOG.info("Cleaning up temporary container {}", container);
+            LOG.debug("Cleaning up temporary container {}", container);
 
             try {
                 dockerClient.removeContainerCmd(container).withForce(true).exec();
@@ -103,7 +103,7 @@ public abstract class AbstractDockerClientIT extends Assert {
         }
 
         for (String image : dockerCmdExecFactory.getImageNames()) {
-            LOG.info("Cleaning up temporary image with {}", image);
+            LOG.debug("Cleaning up temporary image with {}", image);
             try {
                 dockerClient.removeImageCmd(image).withForce(true).exec();
             } catch (DockerException ignore) {
@@ -112,7 +112,7 @@ public abstract class AbstractDockerClientIT extends Assert {
         }
 
         for (String volume : dockerCmdExecFactory.getVolumeNames()) {
-            LOG.info("Cleaning up temporary volume with {}", volume);
+            LOG.debug("Cleaning up temporary volume with {}", volume);
             try {
                 dockerClient.removeVolumeCmd(volume).exec();
             } catch (DockerException ignore) {
@@ -121,7 +121,7 @@ public abstract class AbstractDockerClientIT extends Assert {
         }
 
         for (String networkId : dockerCmdExecFactory.getNetworkIds()) {
-            LOG.info("Cleaning up temporary network with {}", networkId);
+            LOG.debug("Cleaning up temporary network with {}", networkId);
             try {
                 dockerClient.removeNetworkCmd(networkId).exec();
             } catch (DockerException ignore) {
@@ -129,7 +129,7 @@ public abstract class AbstractDockerClientIT extends Assert {
             }
         }
 
-        LOG.info("################################## END OF {} ##################################\n", result.getName());
+        LOG.debug("################################## END OF {} ##################################\n", result.getName());
     }
 
     protected String asString(InputStream response) {
@@ -146,7 +146,7 @@ public abstract class AbstractDockerClientIT extends Assert {
             while (itr.hasNext()) {
                 String line = itr.next();
                 logwriter.write(line + (itr.hasNext() ? "\n" : ""));
-                LOG.info("line: " + line);
+                LOG.debug("line: " + line);
             }
             response.close();
 
