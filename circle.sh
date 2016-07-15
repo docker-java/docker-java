@@ -24,22 +24,22 @@ case "$1" in
         ;;
 
     dependencies)
-        mvn clean install -T 2 -Dmaven.javadoc.skip=true -DskipTests=true -B -V
+        mvn dependency:resolve
         ;;
 
     test)
         mvn clean verify
         ;;
 
-    collect_artifacts)
-        # collect artifacts into the artifacts dir
-        cp target/*.jar $CIRCLE_ARTIFACTS
-        ;;
 
     collect_test_reports)
-        mkdir -p $CIRCLE_TEST_REPORTS/surefire
-        mkdir -p $CIRCLE_TEST_REPORTS/failsafe
-        cp target/surefire-reports/TEST-*.xml $CIRCLE_TEST_REPORTS/surefire
-        cp target/failsafe-reports/TEST-*.xml $CIRCLE_TEST_REPORTS/failsafe
+        mvn surefire-report:report-only
+        cp -R target/surefire-reports $CIRCLE_TEST_REPORTS
+        if [ -e target/failsafe-reports ] ; then
+            mvn surefire-report:failsafe-report-only
+            cp -R target/failsafe-reports $CIRCLE_TEST_REPORTS
+        fi
+        mvn site:site
+        cp -R target/site $CIRCLE_TEST_REPORTS
         ;;
 esac

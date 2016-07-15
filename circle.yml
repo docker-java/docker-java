@@ -4,9 +4,9 @@ dependencies:
 
 test:
   override:
-    - ./circle.sh test
+    - ./circle.sh test:
+        timeout: 3600
   post:
-    - ./circle.sh collect_artifacts
     - ./circle.sh collect_test_reports
 
 machine:
