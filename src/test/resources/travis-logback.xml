@@ -6,10 +6,10 @@
         </encoder>
     </appender>
 
-    <logger name="com.github.dockerjava" level="DEBUG"/>
-    <logger name="com.github.dockerjava.jaxrs" level="DEBUG"/>
-    <logger name="com.github.dockerjava.netty" level="DEBUG"/>
-    <logger name="org.apache.http.impl.conn" level="DEBUG"/>
+    <!--<logger name="com.github.dockerjava" level="DEBUG"/>-->
+    <!--<logger name="com.github.dockerjava.jaxrs" level="DEBUG"/>-->
+    <!--<logger name="com.github.dockerjava.netty" level="DEBUG"/>-->
+    <!--<logger name="org.apache.http.impl.conn" level="DEBUG"/>-->
 
 
     <root level="INFO">
