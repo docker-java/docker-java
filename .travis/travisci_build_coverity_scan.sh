@@ -52,6 +52,8 @@ fi
 mkdir -p /tmp/coverity-cache || :
 
 if [ ! -d $TOOL_BASE ]; then
+  file $TOOL_ARCHIVE | grep HTML && rm -f $TOOL_ARCHIVE || echo "$TOOL_ARCHIVE not html"
+
   # Download Coverity Scan Analysis Tool
   if [ ! -e $TOOL_ARCHIVE ]; then
     echo -e "\033[33;1mDownloading Coverity Scan Analysis Tool...\033[0m"
