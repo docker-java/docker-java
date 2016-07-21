@@ -405,7 +405,7 @@
 							<groups>integration</groups>
  							<excludedGroups>integration-auth</excludedGroups>
 							<includes>
-								<include>**/*Test.java</include>
+								<include>**/AttachContainerCmdExecTest.java</include>
 							</includes>
 						</configuration>
 					</execution>
