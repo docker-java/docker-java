@@ -1,5 +1,6 @@
 package com.github.dockerjava.netty.exec;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.isEmptyString;
@@ -70,7 +71,7 @@ public class AttachContainerCmdExecTest extends AbstractNettyDockerClientTest {
         };
 
         dockerClient.attachContainerCmd(container.getId()).withStdErr(true).withStdOut(true).withFollowStream(true)
-                .withLogs(true).exec(callback).awaitCompletion(10, TimeUnit.SECONDS);
+                .withLogs(true).exec(callback).awaitCompletion(10, SECONDS);
         callback.close();
 
         assertThat(callback.toString(), containsString(snippet));
@@ -81,33 +82,40 @@ public class AttachContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
         String snippet = "hello world";
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("/bin/sh", "-c", "read line && echo $line")
-                .withTty(false).withStdinOpen(true).exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+                .withCmd("/bin/sh", "-c", "sleep 1 && read line && echo $line")
+                .withTty(false)
+                .withStdinOpen(true)
+                .exec();
 
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
+        Thread.sleep(SECONDS.toMillis(3)); //wait bash initialisation
+
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
         assertTrue(inspectContainerResponse.getState().getRunning());
 
         AttachContainerTestCallback callback = new AttachContainerTestCallback() {
-
             @Override
             public void onNext(Frame frame) {
                 assertEquals(frame.getStreamType(), StreamType.STDOUT);
                 super.onNext(frame);
-            };
+            }
         };
 
         InputStream stdin = new ByteArrayInputStream((snippet + "\n").getBytes());
 
-        dockerClient.attachContainerCmd(container.getId()).withStdErr(true).withStdOut(true).withFollowStream(true)
+        dockerClient.attachContainerCmd(container.getId())
+                .withStdErr(true)
+                .withStdOut(true)
+                .withFollowStream(true)
                 .withStdIn(stdin)
                 .exec(callback)
-                .awaitCompletion(5, TimeUnit.SECONDS);
+                .awaitCompletion(15, SECONDS);
         callback.close();
 
         assertThat(callback.toString(), containsString(snippet));
@@ -141,7 +149,7 @@ public class AttachContainerCmdExecTest extends AbstractNettyDockerClientTest {
                 .withStdOut(true)
                 .withFollowStream(true)
                 .exec(callback)
-                .awaitCompletion(10, TimeUnit.SECONDS);
+                .awaitCompletion(10, SECONDS);
         callback.close();
 
         // HexDump.dump(collectFramesCallback.toString().getBytes(), 0, System.out, 0);
