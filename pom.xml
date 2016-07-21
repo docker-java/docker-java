@@ -387,8 +387,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>${maven-surefire-plugin.version}</version>
 				<configuration>
-					<excludedGroups>integration</excludedGroups>
-					<excludedGroups>integration-auth</excludedGroups>
+					<excludedGroups>integration,integration-auth</excludedGroups>
 				</configuration>
 			</plugin>
 
