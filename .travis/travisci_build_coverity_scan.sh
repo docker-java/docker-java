@@ -52,6 +52,13 @@ fi
 mkdir -p /tmp/coverity-cache || :
 
 if [ ! -d $TOOL_BASE ]; then
+
+  # verify that binary is right
+  if file $TOOL_ARCHIVE | grep HTML ; then
+    echo "Removing $TOOL_ARCHIVE"
+    rm -f $TOOL_ARCHIVE
+  fi
+  
   # Download Coverity Scan Analysis Tool
   if [ ! -e $TOOL_ARCHIVE ]; then
     echo -e "\033[33;1mDownloading Coverity Scan Analysis Tool...\033[0m"
