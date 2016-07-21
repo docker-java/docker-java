@@ -64,6 +64,7 @@ if [ ! -d $TOOL_BASE ]; then
   pushd $TOOL_BASE
     du -sh $TOOL_ARCHIVE
     file $TOOL_ARCHIVE
+    file $TOOL_ARCHIVE | grep HTML && cat $TOOL_ARCHIVE || :
     ls -la $TOOL_ARCHIVE
     tar -xf $TOOL_ARCHIVE
   popd
