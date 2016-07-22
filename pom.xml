@@ -402,6 +402,9 @@
 							<goal>verify</goal>
 						</goals>
 						<configuration>
+							<useUnlimitedThreads>true</useUnlimitedThreads>
+							<perCoreThreadCount>true</perCoreThreadCount>
+							<threadCount>1</threadCount>
 							<groups>integration</groups>
  							<excludedGroups>integration-auth</excludedGroups>
 							<includes>
