@@ -1,5 +1,8 @@
 package com.github.dockerjava.netty.exec;
 
+import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_22;
+import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_23;
+import static com.github.dockerjava.utils.TestUtils.getVersion;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
@@ -12,6 +15,7 @@ import java.lang.reflect.Method;
 import java.security.SecureRandom;
 import java.util.concurrent.TimeUnit;
 
+import com.github.dockerjava.core.RemoteApiVersion;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -193,7 +197,8 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
         ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
                 .withAttachStdout(true)
                 .withAttachStdin(false)
-                .withCmd("/bin/sh").exec();
+                .withCmd("/bin/sh")
+                .exec();
 
         boolean completed = dockerClient.execStartCmd(execCreateCmdResponse.getId())
                 .withDetach(false)
@@ -201,8 +206,13 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
                 .exec(new ExecStartResultCallback(stdout, System.err))
                 .awaitCompletion(5, TimeUnit.SECONDS);
 
-        // with v1.22 of the remote api the server closed the connection when no stdin was attached while exec create, so completed was true
-        assertFalse(completed, "The process was not finished.");
         assertEquals(stdout.toString(), "");
+
+        if (getVersion(dockerClient).isGreaterOrEqual(VERSION_1_23)) {
+            assertFalse(completed, "The process was not finished.");
+        } else {
+            assertTrue(completed, "with v1.22 of the remote api the server closed the connection when no stdin " +
+                    "was attached while exec create, so completed was true");
+        }
     }
 }
