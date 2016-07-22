@@ -5,5 +5,5 @@ package com.github.dockerjava.jaxrs;
  * @deprecated clashes with netty impl.
  */
 @Deprecated
-public class DockerCmdExecFactoryImpl extends JerseyDockerCmdExecFactoryImpl {
+public class DockerCmdExecFactoryImpl extends JerseyDockerCmdExecFactory {
 }

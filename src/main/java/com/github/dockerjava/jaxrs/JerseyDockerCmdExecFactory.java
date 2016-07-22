@@ -94,9 +94,9 @@ import com.github.dockerjava.jaxrs.filter.SelectiveLoggingFilter;
 //import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 // see https://github.com/docker-java/docker-java/issues/196
 
-public class JerseyDockerCmdExecFactoryImpl implements DockerCmdExecFactory {
+public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JerseyDockerCmdExecFactoryImpl.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(JerseyDockerCmdExecFactory.class.getName());
 
     private Client client;
 
@@ -550,32 +550,32 @@ public class JerseyDockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         connManager.close();
     }
 
-    public JerseyDockerCmdExecFactoryImpl withReadTimeout(Integer readTimeout) {
+    public JerseyDockerCmdExecFactory withReadTimeout(Integer readTimeout) {
         this.readTimeout = readTimeout;
         return this;
     }
 
-    public JerseyDockerCmdExecFactoryImpl withConnectTimeout(Integer connectTimeout) {
+    public JerseyDockerCmdExecFactory withConnectTimeout(Integer connectTimeout) {
         this.connectTimeout = connectTimeout;
         return this;
     }
 
-    public JerseyDockerCmdExecFactoryImpl withMaxTotalConnections(Integer maxTotalConnections) {
+    public JerseyDockerCmdExecFactory withMaxTotalConnections(Integer maxTotalConnections) {
         this.maxTotalConnections = maxTotalConnections;
         return this;
     }
 
-    public JerseyDockerCmdExecFactoryImpl withMaxPerRouteConnections(Integer maxPerRouteConnections) {
+    public JerseyDockerCmdExecFactory withMaxPerRouteConnections(Integer maxPerRouteConnections) {
         this.maxPerRouteConnections = maxPerRouteConnections;
         return this;
     }
 
-    public JerseyDockerCmdExecFactoryImpl withClientResponseFilters(ClientResponseFilter... clientResponseFilter) {
+    public JerseyDockerCmdExecFactory withClientResponseFilters(ClientResponseFilter... clientResponseFilter) {
         this.clientResponseFilters = clientResponseFilter;
         return this;
     }
 
-    public JerseyDockerCmdExecFactoryImpl withClientRequestFilters(ClientRequestFilter... clientRequestFilters) {
+    public JerseyDockerCmdExecFactory withClientRequestFilters(ClientRequestFilter... clientRequestFilters) {
         this.clientRequestFilters = clientRequestFilters;
         return this;
     }

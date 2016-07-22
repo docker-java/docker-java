@@ -5,5 +5,5 @@ package com.github.dockerjava.netty;
  * @deprecated old clashing name
  */
 @Deprecated
-public class DockerCmdExecFactoryImpl extends NettyDockerCmdExecFactoryImpl {
+public class DockerCmdExecFactoryImpl extends NettyDockerCmdExecFactory {
 }

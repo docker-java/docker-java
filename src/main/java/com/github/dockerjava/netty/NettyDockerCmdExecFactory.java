@@ -148,7 +148,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author Marcus Linke
  */
-public class NettyDockerCmdExecFactoryImpl implements DockerCmdExecFactory {
+public class NettyDockerCmdExecFactory implements DockerCmdExecFactory {
 
     private static String threadPrefix = "dockerjava-netty";
 
