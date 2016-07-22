@@ -402,6 +402,8 @@
 							<goal>verify</goal>
 						</goals>
 						<configuration>
+							<parallel>methods</parallel>
+							<threadCount>6</threadCount>
 							<groups>integration</groups>
  							<excludedGroups>integration-auth</excludedGroups>
 							<includes>
