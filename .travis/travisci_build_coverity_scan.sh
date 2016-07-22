@@ -73,7 +73,7 @@ if [ ! -d $TOOL_BASE ]; then
     file $TOOL_ARCHIVE
     file $TOOL_ARCHIVE | grep HTML && cat $TOOL_ARCHIVE || :
     ls -la $TOOL_ARCHIVE
-    tar -xf $TOOL_ARCHIVE |& grep -v "Ignoring unknown extended header keyword"
+    tar -xf $TOOL_ARCHIVE #|& grep -v "Ignoring unknown extended header keyword"
   popd
 fi
 
