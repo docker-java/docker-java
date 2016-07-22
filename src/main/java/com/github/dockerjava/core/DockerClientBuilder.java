@@ -3,7 +3,7 @@ package com.github.dockerjava.core;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.core.DefaultDockerClientConfig.Builder;
-import com.github.dockerjava.jaxrs.DockerCmdExecFactoryImpl;
+import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory;
 
 public class DockerClientBuilder {
 
@@ -32,7 +32,7 @@ public class DockerClientBuilder {
     }
 
     public static DockerCmdExecFactory getDefaultDockerCmdExecFactory() {
-        return new DockerCmdExecFactoryImpl();
+        return new JerseyDockerCmdExecFactory();
     }
 
     public DockerClientBuilder withDockerCmdExecFactory(DockerCmdExecFactory dockerCmdExecFactory) {
