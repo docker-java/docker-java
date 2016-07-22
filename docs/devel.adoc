@@ -23,3 +23,11 @@
   * Integration tests for commands.
   * If model object has builders, then fill it with data and compare by `equals()` with expected response
   from docker daemon. If failed, then some fields mappings are wrong.
+
+### Debug
+  * When there are unreproducible Travis errors:
+  ** Try locally run test 10-20 times in IDE against the same docker daemon version.
+  ** Limit `.travis.yml` to single run (to not consume their resources with matrix run).
+  ** Remove `travis-logback.xml` replacement (build can't output everything in every run because travis has log limitation).
+  ** Set single test in `pom.xml` `for maven-failsafe-plugin`
+  ** Make PR or if you are maintainer push to branch, catch log and fix.
