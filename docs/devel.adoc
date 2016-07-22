@@ -26,7 +26,7 @@
 
 ### Debug
   * When there are unreproducible Travis errors:
-  ** Try locally run test 10-20 times in IDE against the same docker daemon version.
+  ** Try locally run test 10-20 times in IDE against the same docker daemon version and same connection type (tcp or socket).
   ** Limit `.travis.yml` to single run (to not consume their resources with matrix run).
   ** Remove `travis-logback.xml` replacement (build can't output everything in every run because travis has log limitation).
   ** Set single test in `pom.xml` `for maven-failsafe-plugin`
