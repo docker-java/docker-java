@@ -12,6 +12,6 @@ public abstract class AbstractNettyDockerClientTest extends AbstractDockerClient
 
     @Override
     protected TestDockerCmdExecFactory initTestDockerCmdExecFactory() {
-        return new TestDockerCmdExecFactory(new DockerCmdExecFactoryImpl());
+        return new TestDockerCmdExecFactory(new NettyDockerCmdExecFactoryImpl());
     }
 }
