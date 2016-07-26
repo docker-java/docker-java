@@ -43,7 +43,7 @@ public class RenameContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void renameContainer() throws DockerException {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("sleep", "9999").exec();
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
         dockerClient.startContainerCmd(container.getId()).exec();

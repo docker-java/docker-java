@@ -50,7 +50,7 @@ public class PushImageCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void pushLatest() throws Exception {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("true").exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("true").exec();
 
         LOG.info("Created container {}", container.toString());
 

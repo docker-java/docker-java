@@ -48,7 +48,7 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void asyncLogContainerWithTtyEnabled() throws Exception {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
                 .withCmd("/bin/sh", "-c", "while true; do echo hello; sleep 1; done")
                 .withTty(true)
                 .exec();
@@ -79,7 +79,7 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void asyncLogContainerWithTtyDisabled() throws Exception {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
                 .withCmd("/bin/sh", "-c", "while true; do echo hello; sleep 1; done")
                 .withTty(false)
                 .exec();
@@ -141,7 +141,7 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
 
         String snippet = "hello world";
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
                 .withCmd("/bin/echo", snippet)
                 .exec();
 
@@ -190,7 +190,7 @@ public class LogContainerCmdImplTest extends AbstractDockerClientTest {
     public void asyncLogContainerWithSince() throws Exception {
         String snippet = "hello world";
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
                 .withCmd("/bin/echo", snippet)
                 .exec();
 

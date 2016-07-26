@@ -33,8 +33,6 @@ import static org.hamcrest.core.IsNull.notNullValue;
 @Test(groups = "integration")
 public class UpdateContainerCmdImplTest extends AbstractDockerClientTest {
 
-    public static final String BUSYBOX_IMAGE = "busybox";
-
     @BeforeTest
     public void beforeTest() throws Exception {
         super.beforeTest();

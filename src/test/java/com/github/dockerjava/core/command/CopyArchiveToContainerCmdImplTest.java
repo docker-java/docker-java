@@ -1,9 +1,12 @@
 package com.github.dockerjava.core.command;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.equalTo;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.core.util.CompressArchiveUtil;
+import org.apache.commons.io.FileUtils;
+import org.testng.ITestResult;
+import org.testng.annotations.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,18 +15,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.apache.commons.io.FileUtils;
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.github.dockerjava.core.util.CompressArchiveUtil;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 @Test(groups = "integration")
 public class CopyArchiveToContainerCmdImplTest extends AbstractDockerClientTest {
@@ -67,7 +60,7 @@ public class CopyArchiveToContainerCmdImplTest extends AbstractDockerClientTest 
     }
 
     private CreateContainerResponse prepareContainerForCopy() {
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
                 .withName("docker-java-itest-copyToContainer").exec();
         LOG.info("Created container: {}", container);
         assertThat(container.getId(), not(isEmptyOrNullString()));
@@ -83,14 +76,10 @@ public class CopyArchiveToContainerCmdImplTest extends AbstractDockerClientTest 
         }
     }
 
-    @Test
+    @Test(expectedExceptions = NotFoundException.class)
     public void copyToNonExistingContainer() throws Exception {
-        try {
-            dockerClient.copyArchiveToContainerCmd("non-existing").withHostResource("src/test/resources/testReadFile")
-                    .exec();
-            fail("expected NotFoundException");
-        } catch (NotFoundException ignored) {
-        }
+
+        dockerClient.copyArchiveToContainerCmd("non-existing").withHostResource("src/test/resources/testReadFile").exec();
     }
 
     @Test
@@ -106,7 +95,7 @@ public class CopyArchiveToContainerCmdImplTest extends AbstractDockerClientTest 
         Files.createFile(dirWithFile.resolve("file"));
 
         // create a test container
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
                 .withCmd("sleep", "9999")
                 .exec();
         // start the container
@@ -135,7 +124,7 @@ public class CopyArchiveToContainerCmdImplTest extends AbstractDockerClientTest 
         // create a test container which starts and waits 3 seconds for the
         // script to be copied to the container's home dir and then executes it
         String containerCmd = "sleep 3; /home/" + scriptPath.getFileName().toString();
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
                 .withName("test")
                 .withCmd("/bin/sh", "-c", containerCmd)
                 .exec();

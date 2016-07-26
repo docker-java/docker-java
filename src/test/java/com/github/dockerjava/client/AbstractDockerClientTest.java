@@ -38,6 +38,7 @@ import com.github.dockerjava.core.command.PullImageResultCallback;
 public abstract class AbstractDockerClientTest extends Assert {
 
     public static final Logger LOG = LoggerFactory.getLogger(AbstractDockerClientTest.class);
+    public static final String BUSYBOX_IMAGE = "busybox";
 
     protected DockerClient dockerClient;
 

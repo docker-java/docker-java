@@ -1,22 +1,17 @@
 package com.github.dockerjava.core.command;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
-
-import java.lang.reflect.Method;
-
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
 import com.github.dockerjava.api.command.CreateVolumeResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.client.AbstractDockerClientTest;
+import org.testng.ITestResult;
+import org.testng.annotations.*;
+
+import java.lang.reflect.Method;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 
 @Test(groups = "integration")
 public class RemoveVolumeCmdImplTest extends AbstractDockerClientTest {
@@ -41,7 +36,7 @@ public class RemoveVolumeCmdImplTest extends AbstractDockerClientTest {
         super.afterMethod(result);
     }
 
-    @Test
+    @Test(expectedExceptions = NotFoundException.class)
     public void removeVolume() throws DockerException {
 
         String volumeName = "volume1";
@@ -55,11 +50,6 @@ public class RemoveVolumeCmdImplTest extends AbstractDockerClientTest {
 
         dockerClient.removeVolumeCmd(volumeName).exec();
 
-        try {
-            dockerClient.inspectVolumeCmd(volumeName).exec();
-            fail("Expected NotFoundException");
-        } catch (NotFoundException e) {
-            // just ignore
-        }
+        dockerClient.inspectVolumeCmd(volumeName).exec();
     }
 }

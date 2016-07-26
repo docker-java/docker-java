@@ -1,9 +1,13 @@
 package com.github.dockerjava.netty.exec;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.hamcrest.Matchers.not;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.core.command.WaitContainerResultCallback;
+import com.github.dockerjava.core.util.CompressArchiveUtil;
+import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
+import org.apache.commons.io.FileUtils;
+import org.testng.ITestResult;
+import org.testng.annotations.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,19 +16,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.apache.commons.io.FileUtils;
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.core.command.WaitContainerResultCallback;
-import com.github.dockerjava.core.util.CompressArchiveUtil;
-import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 @Test(groups = "integration")
 public class CopyArchiveToContainerCmdExecTest extends AbstractNettyDockerClientTest {
@@ -84,14 +77,10 @@ public class CopyArchiveToContainerCmdExecTest extends AbstractNettyDockerClient
         }
     }
 
-    @Test
+    @Test(expectedExceptions = NotFoundException.class)
     public void copyToNonExistingContainer() throws Exception {
-        try {
-            dockerClient.copyArchiveToContainerCmd("non-existing").withHostResource("src/test/resources/testReadFile")
-                    .exec();
-            fail("expected NotFoundException");
-        } catch (NotFoundException ignored) {
-        }
+
+        dockerClient.copyArchiveToContainerCmd("non-existing").withHostResource("src/test/resources/testReadFile").exec();
     }
 
     @Test

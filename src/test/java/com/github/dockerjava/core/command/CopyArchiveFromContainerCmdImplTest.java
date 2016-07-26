@@ -1,8 +1,14 @@
 package com.github.dockerjava.core.command;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.hamcrest.Matchers.not;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.core.util.CompressArchiveUtil;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.io.IOUtils;
+import org.testng.ITestResult;
+import org.testng.annotations.*;
 
 import java.io.InputStream;
 import java.lang.reflect.Method;
@@ -11,20 +17,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
-import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
-import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
-import org.apache.commons.io.IOUtils;
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
-import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.github.dockerjava.core.util.CompressArchiveUtil;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.not;
 
 @Test(groups = "integration")
 public class CopyArchiveFromContainerCmdImplTest extends AbstractDockerClientTest {
@@ -52,7 +47,7 @@ public class CopyArchiveFromContainerCmdImplTest extends AbstractDockerClientTes
     @Test
     public void copyFromContainer() throws Exception {
         // TODO extract this into a shared method
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
                 .withName("docker-java-itest-copyFromContainer").withCmd("touch", "/copyFromContainer").exec();
 
         LOG.info("Created container: {}", container);
@@ -70,18 +65,15 @@ public class CopyArchiveFromContainerCmdImplTest extends AbstractDockerClientTes
         assertTrue(responseAsString.length() > 0);
     }
 
-    @Test
+    @Test(expectedExceptions = NotFoundException.class)
     public void copyFromNonExistingContainer() throws Exception {
-        try {
-            dockerClient.copyArchiveFromContainerCmd("non-existing", "/test").exec();
-            fail("expected NotFoundException");
-        } catch (NotFoundException ignored) {
-        }
+
+        dockerClient.copyArchiveFromContainerCmd("non-existing", "/test").exec();
     }
 
     @Test
     public void copyFromContainerBinaryFile() throws Exception {
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
                 .withName("docker-java-itest-copyFromContainerBinaryFile").exec();
 
         LOG.info("Created container: {}", container);

@@ -2,8 +2,6 @@ package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
-import com.github.dockerjava.api.exception.ConflictException;
-import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.InternalServerErrorException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.client.AbstractDockerClientTest;
@@ -15,12 +13,14 @@ import org.testng.annotations.*;
 import java.lang.reflect.Method;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
 
 @Test(groups = "integration")
-public class KillContainerCmdImplTest extends AbstractDockerClientTest {
+public class PauseCmdImplTest extends AbstractDockerClientTest {
 
-    public static final Logger LOG = LoggerFactory.getLogger(KillContainerCmdImplTest.class);
+    public static final Logger LOG = LoggerFactory.getLogger(PauseCmdImplTest.class);
 
     @BeforeTest
     public void beforeTest() throws Exception {
@@ -43,51 +43,8 @@ public class KillContainerCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test(groups = "ignoreInCircleCi")
-    public void killContainer() throws DockerException {
+    public void pauseRunningContainer(){
 
-        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("sleep", "9999").exec();
-        LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
-        dockerClient.startContainerCmd(container.getId()).exec();
-
-        LOG.info("Killing container: {}", container.getId());
-        dockerClient.killContainerCmd(container.getId()).exec();
-
-        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
-        LOG.info("Container Inspect: {}", inspectContainerResponse.toString());
-
-        assertThat(inspectContainerResponse.getState().getRunning(), is(equalTo(false)));
-        assertThat(inspectContainerResponse.getState().getExitCode(), not(equalTo(0)));
-
-    }
-
-    @Test(expectedExceptions = NotFoundException.class)
-    public void killNonExistingContainer() throws DockerException {
-        dockerClient.killContainerCmd("non-existing").exec();
-    }
-
-    @Test(groups = "ignoreInCircleCi", expectedExceptions = InternalServerErrorException.class)
-    public void killStoppedContainer() {
-        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("sleep", "9999").exec();
-        LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
-
-        dockerClient.startContainerCmd(container.getId()).exec();
-
-        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
-        assertThat(inspectContainerResponse.getState().getRunning(), is(true));
-
-        dockerClient.stopContainerCmd(container.getId()).exec();
-
-        InspectContainerResponse inspectContainerResponse1 = dockerClient.inspectContainerCmd(container.getId()).exec();
-        assertThat(inspectContainerResponse1.getState().getRunning(), is(false));
-
-        dockerClient.killContainerCmd(container.getId()).exec();
-
-    }
-
-    @Test(groups = "ignoreInCircleCi", expectedExceptions = InternalServerErrorException.class)
-    public void killPausedContainer() {
         CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("sleep", "9999").exec();
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
@@ -101,16 +58,58 @@ public class KillContainerCmdImplTest extends AbstractDockerClientTest {
         InspectContainerResponse inspectContainerResponse1 = dockerClient.inspectContainerCmd(container.getId()).exec();
         assertThat(inspectContainerResponse1.getState().getPaused(), is(true));
 
-        dockerClient.killContainerCmd(container.getId()).exec();
+    }
+
+    @Test(groups = "ignoreInCircleCi", expectedExceptions = NotFoundException.class)
+    public void pauseNonExistingContainer(){
+        dockerClient.pauseContainerCmd("non-existing").exec();
     }
 
     @Test(groups = "ignoreInCircleCi", expectedExceptions = InternalServerErrorException.class)
-    public void killJustCreatedContainer() {
+    public void pauseStoppedContainer(){
+
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("sleep", "9999").exec();
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+        dockerClient.startContainerCmd(container.getId()).exec();
+
+        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+        assertThat(inspectContainerResponse.getState().getRunning(), is(true));
+
+        dockerClient.stopContainerCmd(container.getId()).exec();
+        InspectContainerResponse inspectContainerResponse1 = dockerClient.inspectContainerCmd(container.getId()).exec();
+        assertThat(inspectContainerResponse1.getState().getRunning(), is(false));
+
+        dockerClient.pauseContainerCmd(container.getId()).exec();
+    }
+
+    @Test(groups = "ignoreInCircleCi", expectedExceptions = InternalServerErrorException.class)
+    public void pausePausedContainer(){
+
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("sleep", "9999").exec();
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+        dockerClient.startContainerCmd(container.getId()).exec();
+
+        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+        assertThat(inspectContainerResponse.getState().getRunning(), is(true));
+
+        dockerClient.pauseContainerCmd(container.getId()).exec();
+        InspectContainerResponse inspectContainerResponse1 = dockerClient.inspectContainerCmd(container.getId()).exec();
+        assertThat(inspectContainerResponse1.getState().getPaused(), is(true));
+
+        dockerClient.pauseContainerCmd(container.getId()).exec();
+    }
+
+    @Test(groups = "ignoreInCircleCi", expectedExceptions = InternalServerErrorException.class)
+    public void pauseCreatedContainer(){
+
         CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("sleep", "9999").exec();
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
 
-        dockerClient.killContainerCmd(container.getId()).exec();
+        dockerClient.pauseContainerCmd(container.getId()).exec();
     }
+
 
 }

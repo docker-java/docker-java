@@ -54,7 +54,7 @@ public class InspectContainerCmdImplTest extends AbstractDockerClientTest {
 
         String containerName = "generated_" + new SecureRandom().nextInt();
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("top")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("top")
                 .withName(containerName).exec();
         LOG.info("Created container {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
@@ -69,7 +69,7 @@ public class InspectContainerCmdImplTest extends AbstractDockerClientTest {
 
         String containerName = "generated_" + new SecureRandom().nextInt();
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("top")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("top")
                 .withName(containerName).exec();
         LOG.info("Created container {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
@@ -90,7 +90,7 @@ public class InspectContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void inspectContainerRestartCount() throws DockerException {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
                 .withCmd("env").exec();
 
         LOG.info("Created container {}", container.toString());
@@ -105,7 +105,7 @@ public class InspectContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void inspectContainerNetworkSettings() throws DockerException {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
                 .withCmd("env").exec();
 
         LOG.info("Created container {}", container.toString());

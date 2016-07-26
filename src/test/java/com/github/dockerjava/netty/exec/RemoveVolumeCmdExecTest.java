@@ -41,7 +41,7 @@ public class RemoveVolumeCmdExecTest extends AbstractNettyDockerClientTest {
         super.afterMethod(result);
     }
 
-    @Test
+    @Test(expectedExceptions = NotFoundException.class)
     public void removeVolume() throws DockerException {
 
         String volumeName = "volume1";
@@ -55,11 +55,6 @@ public class RemoveVolumeCmdExecTest extends AbstractNettyDockerClientTest {
 
         dockerClient.removeVolumeCmd(volumeName).exec();
 
-        try {
-            dockerClient.inspectVolumeCmd(volumeName).exec();
-            fail("Expected NotFoundException");
-        } catch (NotFoundException e) {
-            // just ignore
-        }
+        dockerClient.inspectVolumeCmd(volumeName).exec();
     }
 }

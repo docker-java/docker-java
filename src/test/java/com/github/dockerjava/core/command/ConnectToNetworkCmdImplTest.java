@@ -42,7 +42,7 @@ public class ConnectToNetworkCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void connectToNetwork() throws InterruptedException {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("sleep", "9999").exec();
         dockerClient.startContainerCmd(container.getId()).exec();
 
         CreateNetworkResponse network = dockerClient.createNetworkCmd().withName("testNetwork").exec();
@@ -61,7 +61,7 @@ public class ConnectToNetworkCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void connectToNetworkWithContainerNetwork() throws InterruptedException {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("sleep", "9999").exec();
         dockerClient.startContainerCmd(container.getId()).exec();
 
         CreateNetworkResponse network = dockerClient.createNetworkCmd()

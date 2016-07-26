@@ -64,13 +64,10 @@ public class RemoveNetworkCmdImplTest extends AbstractDockerClientTest {
 
     }
 
-    @Test
+    @Test(expectedExceptions = NotFoundException.class)
     public void removeNonExistingContainer() throws DockerException {
-        try {
-            dockerClient.removeNetworkCmd("non-existing").exec();
-            fail("expected NotFoundException");
-        } catch (NotFoundException e) {
-        }
+
+        dockerClient.removeNetworkCmd("non-existing").exec();
     }
 
 }
