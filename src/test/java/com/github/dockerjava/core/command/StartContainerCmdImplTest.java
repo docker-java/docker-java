@@ -7,11 +7,22 @@ import com.github.dockerjava.api.command.StartContainerCmd;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.InternalServerErrorException;
 import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.api.model.*;
+import com.github.dockerjava.api.model.Bind;
+import com.github.dockerjava.api.model.Device;
+import com.github.dockerjava.api.model.ExposedPort;
+import com.github.dockerjava.api.model.Link;
+import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.Ports.Binding;
+import com.github.dockerjava.api.model.RestartPolicy;
+import com.github.dockerjava.api.model.Volume;
+import com.github.dockerjava.api.model.VolumesFrom;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import org.testng.ITestResult;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -22,7 +33,15 @@ import static com.github.dockerjava.api.model.AccessMode.ro;
 import static com.github.dockerjava.api.model.Capability.MKNOD;
 import static com.github.dockerjava.api.model.Capability.NET_ADMIN;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.startsWith;
 
 @Test(groups = "integration")
 public class StartContainerCmdImplTest extends AbstractDockerClientTest {
@@ -295,7 +314,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(inspectContainerResponse2.getId(), not(isEmptyString()));
         assertThat(inspectContainerResponse2.getHostConfig(), is(notNullValue()));
         assertThat(inspectContainerResponse2.getHostConfig().getLinks(), is(notNullValue()));
-        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] {new Link("container1",
+        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[]{new Link("container1",
                 "container1Link")}));
         assertThat(inspectContainerResponse2.getId(), startsWith(container2.getId()));
         assertThat(inspectContainerResponse2.getName(), equalTo("/container2"));
@@ -348,7 +367,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(inspectContainerResponse2.getId(), not(isEmptyString()));
         assertThat(inspectContainerResponse2.getHostConfig(), is(notNullValue()));
         assertThat(inspectContainerResponse2.getHostConfig().getLinks(), is(notNullValue()));
-        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] {new Link("container1",
+        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[]{new Link("container1",
                 "container1Link")}));
         assertThat(inspectContainerResponse2.getId(), startsWith(container2.getId()));
         assertThat(inspectContainerResponse2.getName(), equalTo("/container2"));
@@ -361,7 +380,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void startContainer() throws DockerException {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd(new String[] {"top"})
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd(new String[]{"top"})
                 .exec();
 
         LOG.info("Created container {}", container.toString());

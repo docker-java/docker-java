@@ -5,24 +5,54 @@ import com.github.dockerjava.api.command.CreateNetworkResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.api.model.*;
+import com.github.dockerjava.api.model.Bind;
+import com.github.dockerjava.api.model.ContainerNetwork;
+import com.github.dockerjava.api.model.Device;
+import com.github.dockerjava.api.model.ExposedPort;
+import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.api.model.Link;
+import com.github.dockerjava.api.model.LogConfig;
+import com.github.dockerjava.api.model.Network;
+import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.Ports.Binding;
+import com.github.dockerjava.api.model.RestartPolicy;
+import com.github.dockerjava.api.model.Ulimit;
+import com.github.dockerjava.api.model.Volume;
+import com.github.dockerjava.api.model.VolumesFrom;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 import org.testng.internal.junit.ArrayAsserts;
 
 import java.lang.reflect.Method;
 import java.security.SecureRandom;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.dockerjava.api.model.Capability.MKNOD;
 import static com.github.dockerjava.api.model.Capability.NET_ADMIN;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasItemInArray;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.startsWith;
 
 @Test(groups = "integration")
 public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
@@ -680,20 +710,6 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(log, is("exit trapped 10"));
     }
 
-    private static class StringBuilderLogReader extends LogContainerResultCallback {
-        public StringBuilder builder;
-
-        public StringBuilderLogReader(StringBuilder builder) {
-            this.builder = builder;
-        }
-
-        @Override
-        public void onNext(Frame item) {
-            builder.append(new String(item.getPayload()).trim());
-            super.onNext(item);
-        }
-    }
-
     @Test(groups = "ignoreInCircleCi")
     public void createContainerWithCgroupParent() throws DockerException {
         CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
@@ -706,5 +722,19 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         InspectContainerResponse inspectContainer = dockerClient.inspectContainerCmd(container.getId()).exec();
 
         assertThat(inspectContainer.getHostConfig().getCgroupParent(), is("/parent"));
+    }
+
+    private static class StringBuilderLogReader extends LogContainerResultCallback {
+        public StringBuilder builder;
+
+        public StringBuilderLogReader(StringBuilder builder) {
+            this.builder = builder;
+        }
+
+        @Override
+        public void onNext(Frame item) {
+            builder.append(new String(item.getPayload()).trim());
+            super.onNext(item);
+        }
     }
 }

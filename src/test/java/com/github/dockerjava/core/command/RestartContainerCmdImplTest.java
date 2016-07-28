@@ -7,14 +7,21 @@ import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.testng.ITestResult;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
 
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_22;
 import static com.github.dockerjava.utils.TestUtils.getVersion;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
 
 @Test(groups = "integration")
 public class RestartContainerCmdImplTest extends AbstractDockerClientTest {
