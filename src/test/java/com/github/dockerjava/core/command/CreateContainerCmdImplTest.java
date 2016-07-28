@@ -14,13 +14,14 @@ import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.LogConfig;
 import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.api.model.Ports;
+import com.github.dockerjava.api.model.Ports.Binding;
 import com.github.dockerjava.api.model.RestartPolicy;
 import com.github.dockerjava.api.model.Ulimit;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
-import com.github.dockerjava.api.model.Ports.Binding;
 import com.github.dockerjava.client.AbstractDockerClientTest;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -55,7 +56,8 @@ import static org.hamcrest.Matchers.startsWith;
 
 @Test(groups = "integration")
 public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
-    public static final String BUSYBOX_IMAGE = "busybox";
+
+    public static final Logger LOG = LoggerFactory.getLogger(CreateContainerCmdImplTest.class);
 
     @BeforeTest
     public void beforeTest() throws Exception {
@@ -231,7 +233,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(containerLog(container.getId()), containsString("HOSTNAME=docker-java"));
     }
 
-    @Test
+    @Test(expectedExceptions = ConflictException.class)
     public void createContainerWithName() throws DockerException {
 
         CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withName("container")
@@ -245,11 +247,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         assertThat(inspectContainerResponse.getName(), equalTo("/container"));
 
-        try {
-            dockerClient.createContainerCmd(BUSYBOX_IMAGE).withName("container").withCmd("env").exec();
-            fail("Expected ConflictException");
-        } catch (ConflictException e) {
-        }
+        dockerClient.createContainerCmd(BUSYBOX_IMAGE).withName("container").withCmd("env").exec();
 
     }
 
@@ -318,7 +316,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         ContainerNetwork linkNet = inspectContainerResponse2.getNetworkSettings().getNetworks().get("linkNet");
         assertNotNull(linkNet);
-        ArrayAsserts.assertArrayEquals(new Link[]{ new Link("container1", "container1Link")}, linkNet.getLinks());
+        ArrayAsserts.assertArrayEquals(new Link[]{new Link("container1", "container1Link")}, linkNet.getLinks());
     }
 
     @Test
@@ -712,6 +710,20 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(log, is("exit trapped 10"));
     }
 
+    @Test(groups = "ignoreInCircleCi")
+    public void createContainerWithCgroupParent() throws DockerException {
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
+                .withCgroupParent("/parent").exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainer = dockerClient.inspectContainerCmd(container.getId()).exec();
+
+        assertThat(inspectContainer.getHostConfig().getCgroupParent(), is("/parent"));
+    }
+
     private static class StringBuilderLogReader extends LogContainerResultCallback {
         public StringBuilder builder;
 
@@ -724,19 +736,5 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
             builder.append(new String(item.getPayload()).trim());
             super.onNext(item);
         }
-    }
-
-    @Test(groups = "ignoreInCircleCi")
-    public void createContainerWithCgroupParent() throws DockerException {
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
-                .withCgroupParent("/parent").exec();
-
-        LOG.info("Created container {}", container.toString());
-
-        assertThat(container.getId(), not(isEmptyString()));
-
-        InspectContainerResponse inspectContainer = dockerClient.inspectContainerCmd(container.getId()).exec();
-
-        assertThat(inspectContainer.getHostConfig().getCgroupParent(), is("/parent"));
     }
 }

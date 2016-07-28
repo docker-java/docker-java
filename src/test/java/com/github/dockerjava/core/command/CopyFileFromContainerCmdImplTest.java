@@ -1,12 +1,8 @@
 package com.github.dockerjava.core.command;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.hamcrest.Matchers.not;
-
-import java.io.InputStream;
-import java.lang.reflect.Method;
-
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.client.AbstractDockerClientTest;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -14,9 +10,12 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import java.io.InputStream;
+import java.lang.reflect.Method;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.not;
 
 @Test(groups = "integration")
 public class CopyFileFromContainerCmdImplTest extends AbstractDockerClientTest {
@@ -44,7 +43,7 @@ public class CopyFileFromContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void copyFromContainer() throws Exception {
         // TODO extract this into a shared method
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
                 .withName("docker-java-itest-copyFromContainer").withCmd("touch", "/copyFromContainer").exec();
 
         LOG.info("Created container: {}", container);
@@ -62,12 +61,9 @@ public class CopyFileFromContainerCmdImplTest extends AbstractDockerClientTest {
         assertTrue(responseAsString.length() > 0);
     }
 
-    @Test
+    @Test(expectedExceptions = NotFoundException.class)
     public void copyFromNonExistingContainer() throws Exception {
-        try {
-            dockerClient.copyFileFromContainerCmd("non-existing", "/test").exec();
-            fail("expected NotFoundException");
-        } catch (NotFoundException ignored) {
-        }
+
+        dockerClient.copyFileFromContainerCmd("non-existing", "/test").exec();
     }
 }

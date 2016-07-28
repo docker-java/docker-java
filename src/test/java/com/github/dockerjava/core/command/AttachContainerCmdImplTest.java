@@ -54,7 +54,7 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
 
         String snippet = "hello world";
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("echo", snippet)
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("echo", snippet)
                 .withTty(false).exec();
 
         LOG.info("Created container: {}", container.toString());
@@ -119,7 +119,7 @@ public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
 
         String snippet = "hello world";
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("echo", snippet)
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("echo", snippet)
                 .withTty(false).exec();
 
         LOG.info("Created container: {}", container.toString());

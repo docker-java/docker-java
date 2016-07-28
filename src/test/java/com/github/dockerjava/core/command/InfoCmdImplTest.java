@@ -46,7 +46,7 @@ public class InfoCmdImplTest extends AbstractDockerClientTest {
         // Make sure that there is at least one container for the assertion
         // TODO extract this into a shared method
         if (dockerClient.listContainersCmd().withShowAll(true).exec().size() == 0) {
-            CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+            CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
                     .withName("docker-java-itest-info").withCmd("touch", "/test").exec();
 
             LOG.info("Created container: {}", container);

@@ -19,7 +19,11 @@ import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
+
 
 @Test(groups = "integration")
 public class WaitContainerCmdExecTest extends AbstractNettyDockerClientTest {
@@ -106,7 +110,7 @@ public class WaitContainerCmdExecTest extends AbstractNettyDockerClientTest {
         assertThat(inspectContainerResponse.getState().getRunning(), is(equalTo(false)));
     }
 
-    @Test
+    @Test(expectedExceptions = DockerClientException.class)
     public void testWaitContainerTimeout() throws Exception {
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "10").exec();
@@ -118,11 +122,7 @@ public class WaitContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
         WaitContainerResultCallback callback = dockerClient.waitContainerCmd(container.getId()).exec(
                 new WaitContainerResultCallback());
-        try {
-            callback.awaitStatusCode(100, TimeUnit.MILLISECONDS);
-            fail("Should throw exception on timeout.");
-        } catch(DockerClientException e){
-            LOG.info(e.getMessage());
-        }
+
+        callback.awaitStatusCode(100, TimeUnit.MILLISECONDS);
     }
 }

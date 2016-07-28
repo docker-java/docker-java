@@ -39,7 +39,7 @@ public class DisconnectFromNetworkCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void disconnectFromNetwork() throws InterruptedException {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("sleep", "9999").exec();
         dockerClient.startContainerCmd(container.getId()).exec();
 
         CreateNetworkResponse network = dockerClient.createNetworkCmd().withName("testNetwork").exec();
@@ -62,7 +62,7 @@ public class DisconnectFromNetworkCmdImplTest extends AbstractDockerClientTest {
 
         CreateNetworkResponse network = dockerClient.createNetworkCmd().withName("testNetwork").exec();
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
                 .withNetworkMode("testNetwork")
                 .withCmd("sleep", "9999")
                 .exec();

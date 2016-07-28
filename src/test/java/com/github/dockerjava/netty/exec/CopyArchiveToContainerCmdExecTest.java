@@ -1,17 +1,10 @@
 package com.github.dockerjava.netty.exec;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.hamcrest.Matchers.not;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Method;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.core.command.WaitContainerResultCallback;
+import com.github.dockerjava.core.util.CompressArchiveUtil;
+import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 import org.apache.commons.io.FileUtils;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -20,11 +13,17 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.core.command.WaitContainerResultCallback;
-import com.github.dockerjava.core.util.CompressArchiveUtil;
-import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.not;
 
 @Test(groups = "integration")
 public class CopyArchiveToContainerCmdExecTest extends AbstractNettyDockerClientTest {
@@ -84,18 +83,14 @@ public class CopyArchiveToContainerCmdExecTest extends AbstractNettyDockerClient
         }
     }
 
-    @Test
+    @Test(expectedExceptions = NotFoundException.class)
     public void copyToNonExistingContainer() throws Exception {
-        try {
-            dockerClient.copyArchiveToContainerCmd("non-existing").withHostResource("src/test/resources/testReadFile")
-                    .exec();
-            fail("expected NotFoundException");
-        } catch (NotFoundException ignored) {
-        }
+
+        dockerClient.copyArchiveToContainerCmd("non-existing").withHostResource("src/test/resources/testReadFile").exec();
     }
 
     @Test
-    public void copyDirWithLastAddedTarEntryEmptyDir() throws Exception{
+    public void copyDirWithLastAddedTarEntryEmptyDir() throws Exception {
         // create a temp dir
         Path localDir = Files.createTempDirectory(null);
         localDir.toFile().deleteOnExit();
@@ -126,7 +121,7 @@ public class CopyArchiveToContainerCmdExecTest extends AbstractNettyDockerClient
         // create script file, add permission to execute
         Path scriptPath = Files.createTempFile("run", ".sh");
         boolean executable = scriptPath.toFile().setExecutable(true, false);
-        if (!executable){
+        if (!executable) {
             throw new Exception("Execute permission on file not set!");
         }
         String snippet = "Running script with execute permission.";

@@ -126,11 +126,9 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
      * This method generates {#link KNOWN_NUM_EVENTS} events
      */
     private int generateEvents() throws Exception {
-        String testImage = "busybox";
+        dockerClient.pullImageCmd(BUSYBOX_IMAGE).exec(new PullImageResultCallback()).awaitSuccess();
 
-        dockerClient.pullImageCmd(testImage).exec(new PullImageResultCallback()).awaitSuccess();
-
-        CreateContainerResponse container = dockerClient.createContainerCmd(testImage).withCmd("sleep", "9999").exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("sleep", "9999").exec();
         dockerClient.startContainerCmd(container.getId()).exec();
         dockerClient.stopContainerCmd(container.getId()).exec();
         return KNOWN_NUM_EVENTS;

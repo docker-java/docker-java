@@ -69,13 +69,10 @@ public class RemoveContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
     }
 
-    @Test
+    @Test(expectedExceptions = NotFoundException.class)
     public void removeNonExistingContainer() throws DockerException {
-        try {
-            dockerClient.removeContainerCmd("non-existing").exec();
-            fail("expected NotFoundException");
-        } catch (NotFoundException e) {
-        }
+
+        dockerClient.removeContainerCmd("non-existing").exec();
     }
 
 }

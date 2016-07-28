@@ -47,13 +47,13 @@ public class SearchImagesCmdImplTest extends AbstractDockerClientTest {
 
     @Test
     public void searchImages() throws DockerException {
-        List<SearchItem> dockerSearch = dockerClient.searchImagesCmd("busybox").exec();
+        List<SearchItem> dockerSearch = dockerClient.searchImagesCmd(BUSYBOX_IMAGE).exec();
         LOG.info("Search returned {}", dockerSearch.toString());
 
-        Matcher matcher = hasItem(hasField("name", equalTo("busybox")));
+        Matcher matcher = hasItem(hasField("name", equalTo(BUSYBOX_IMAGE)));
         assertThat(dockerSearch, matcher);
 
-        assertThat(filter(hasField("name", is("busybox")), dockerSearch).size(), equalTo(1));
+        assertThat(filter(hasField("name", is(BUSYBOX_IMAGE)), dockerSearch).size(), equalTo(1));
     }
 
 }

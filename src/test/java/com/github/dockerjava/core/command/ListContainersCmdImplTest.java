@@ -55,10 +55,8 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void testListContainers() throws Exception {
 
-        String testImage = "busybox";
-
         // need to block until image is pulled completely
-        dockerClient.pullImageCmd(testImage).exec(new PullImageResultCallback()).awaitSuccess();
+        dockerClient.pullImageCmd(BUSYBOX_IMAGE).exec(new PullImageResultCallback()).awaitSuccess();
 
         List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
         assertThat(containers, notNullValue());
@@ -66,13 +64,13 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
 
         int size = containers.size();
 
-        CreateContainerResponse container1 = dockerClient.createContainerCmd(testImage).withCmd("echo").exec();
+        CreateContainerResponse container1 = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("echo").exec();
 
         assertThat(container1.getId(), not(isEmptyString()));
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container1.getId()).exec();
 
-        assertThat(inspectContainerResponse.getConfig().getImage(), is(equalTo(testImage)));
+        assertThat(inspectContainerResponse.getConfig().getImage(), is(equalTo(BUSYBOX_IMAGE)));
 
         dockerClient.startContainerCmd(container1.getId()).exec();
 
@@ -97,16 +95,14 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
 
         Container container2 = filteredContainers.get(0);
         assertThat(container2.getCommand(), not(isEmptyString()));
-        assertThat(container2.getImage(), startsWith(testImage));
+        assertThat(container2.getImage(), startsWith(BUSYBOX_IMAGE));
     }
 
     @Test
     public void testListContainersWithLabelsFilter() throws Exception {
 
-        String testImage = "busybox";
-
         // need to block until image is pulled completely
-        dockerClient.pullImageCmd(testImage).exec(new PullImageResultCallback()).awaitCompletion();
+        dockerClient.pullImageCmd(BUSYBOX_IMAGE).exec(new PullImageResultCallback()).awaitCompletion();
 
         List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
         assertThat(containers, notNullValue());
@@ -114,13 +110,13 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
 
         int size = containers.size();
 
-        CreateContainerResponse container1 = dockerClient.createContainerCmd(testImage).withCmd("echo").exec();
+        CreateContainerResponse container1 = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("echo").exec();
 
         assertThat(container1.getId(), not(isEmptyString()));
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container1.getId()).exec();
 
-        assertThat(inspectContainerResponse.getConfig().getImage(), is(equalTo(testImage)));
+        assertThat(inspectContainerResponse.getConfig().getImage(), is(equalTo(BUSYBOX_IMAGE)));
 
         dockerClient.startContainerCmd(container1.getId()).exec();
 
@@ -145,25 +141,25 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
 
         Container container2 = filteredContainers.get(0);
         assertThat(container2.getCommand(), not(isEmptyString()));
-        assertThat(container2.getImage(), startsWith(testImage));
+        assertThat(container2.getImage(), startsWith(BUSYBOX_IMAGE));
 
         Map<String, String> labels = ImmutableMap.of("test", "docker-java");
 
         // list with filter by label
-        dockerClient.createContainerCmd(testImage).withCmd("echo").withLabels(labels).exec();
+        dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("echo").withLabels(labels).exec();
         filteredContainers = dockerClient.listContainersCmd().withShowAll(true)
                 .withLabelFilter(labels).exec();
         assertThat(filteredContainers.size(), is(equalTo(1)));
         Container container3 = filteredContainers.get(0);
         assertThat(container3.getCommand(), not(isEmptyString()));
-        assertThat(container3.getImage(), startsWith(testImage));
+        assertThat(container3.getImage(), startsWith(BUSYBOX_IMAGE));
 
         filteredContainers = dockerClient.listContainersCmd().withShowAll(true)
                 .withLabelFilter("test").exec();
         assertThat(filteredContainers.size(), is(equalTo(1)));
         container3 = filteredContainers.get(0);
         assertThat(container3.getCommand(), not(isEmptyString()));
-        assertThat(container3.getImage(), startsWith(testImage));
+        assertThat(container3.getImage(), startsWith(BUSYBOX_IMAGE));
         assertEquals(container3.getLabels(), labels);
     }
 

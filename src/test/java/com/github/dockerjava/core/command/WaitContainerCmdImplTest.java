@@ -18,7 +18,10 @@ import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
 
 @Test(groups = "integration")
 public class WaitContainerCmdImplTest extends AbstractDockerClientTest {
@@ -46,7 +49,7 @@ public class WaitContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void testWaitContainer() throws DockerException {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("true").exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("true").exec();
 
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
@@ -81,7 +84,7 @@ public class WaitContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void testWaitContainerAbort() throws Exception {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("sleep", "9999").exec();
 
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
@@ -103,10 +106,10 @@ public class WaitContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(inspectContainerResponse.getState().getRunning(), is(equalTo(false)));
     }
 
-    @Test
+    @Test(expectedExceptions = DockerClientException.class)
     public void testWaitContainerTimeout() throws Exception {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "10").exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("sleep", "10").exec();
 
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
@@ -115,11 +118,7 @@ public class WaitContainerCmdImplTest extends AbstractDockerClientTest {
 
         WaitContainerResultCallback callback = dockerClient.waitContainerCmd(container.getId()).exec(
                 new WaitContainerResultCallback());
-        try {
-            callback.awaitStatusCode(100, TimeUnit.MILLISECONDS);
-            fail("Should throw exception on timeout.");
-        } catch(DockerClientException e){
-            LOG.info(e.getMessage());
-        }
+
+        callback.awaitStatusCode(100, TimeUnit.MILLISECONDS);
     }
 }

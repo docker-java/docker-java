@@ -86,7 +86,7 @@ public class ListImagesCmdImplTest extends AbstractDockerClientTest {
     }
 
     private String createDanglingImage() {
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("sleep", "9999").exec();
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
         dockerClient.startContainerCmd(container.getId()).exec();
