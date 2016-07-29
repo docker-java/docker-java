@@ -1,9 +1,9 @@
-package com.github.dockerjava.core.command;
+package com.github.dockerjava.netty.exec;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.InternalServerErrorException;
 import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 import com.github.dockerjava.utils.ContainerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 
 @Test(groups = {"integration", "ignoreInCircleCi"})
-public class PauseCmdImplTest extends AbstractDockerClientTest {
+public class PauseCmdImplTest extends AbstractNettyDockerClientTest {
 
     public static final Logger LOG = LoggerFactory.getLogger(PauseCmdImplTest.class);
 

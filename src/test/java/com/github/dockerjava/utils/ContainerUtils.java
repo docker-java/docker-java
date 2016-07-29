@@ -16,7 +16,7 @@ public class ContainerUtils {
     }
 
     /**
-     * Start specified container
+     * Starts container and ensures that it running
      *
      * @param dockerClient docker client
      * @param container    container
@@ -29,7 +29,7 @@ public class ContainerUtils {
     }
 
     /**
-     * Pause specified container
+     * Pauses container and ensures that it paused
      *
      * @param dockerClient docker client
      * @param container    container
@@ -42,7 +42,7 @@ public class ContainerUtils {
     }
 
     /**
-     * Stop specified container
+     * Stops container and ensures that it stopped
      *
      * @param dockerClient docker client
      * @param container    container
@@ -55,7 +55,7 @@ public class ContainerUtils {
     }
 
     /**
-     * Unpause specified container
+     * Unpauses container and ensures that it unpaused (running)
      *
      * @param dockerClient docker client
      * @param container    container

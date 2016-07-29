@@ -1,9 +1,9 @@
-package com.github.dockerjava.core.command;
+package com.github.dockerjava.netty.exec;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.InternalServerErrorException;
 import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 import com.github.dockerjava.utils.ContainerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +21,9 @@ import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 
 @Test(groups = {"integration", "ignoreInCircleCi"})
-public class PauseCmdImplTest extends AbstractDockerClientTest {
+public class UnpauseCmdImplTest extends AbstractNettyDockerClientTest {
 
-    public static final Logger LOG = LoggerFactory.getLogger(PauseCmdImplTest.class);
+    public static final Logger LOG = LoggerFactory.getLogger(UnpauseCmdImplTest.class);
 
     @BeforeTest
     public void beforeTest() throws Exception {
@@ -46,7 +46,7 @@ public class PauseCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test
-    public void pauseRunningContainer() {
+    public void unpausePausedContainer() {
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
         LOG.info("Created container: {}", container.toString());
@@ -55,16 +55,24 @@ public class PauseCmdImplTest extends AbstractDockerClientTest {
         ContainerUtils.startContainer(dockerClient, container);
 
         ContainerUtils.pauseContainer(dockerClient, container);
-    }
 
-    @Test(expectedExceptions = NotFoundException.class)
-    public void pauseNonExistingContainer() {
-
-        dockerClient.pauseContainerCmd("non-existing").exec();
+        ContainerUtils.unpaseContainer(dockerClient, container);
     }
 
     @Test(expectedExceptions = InternalServerErrorException.class)
-    public void pauseStoppedContainer() {
+    public void unpauseRunningContainer() {
+
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+
+        ContainerUtils.startContainer(dockerClient, container);
+
+        dockerClient.unpauseContainerCmd(container.getId()).exec();
+    }
+
+    @Test(expectedExceptions = InternalServerErrorException.class)
+    public void unpauseStoppedContainer() {
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
         LOG.info("Created container: {}", container.toString());
@@ -74,11 +82,27 @@ public class PauseCmdImplTest extends AbstractDockerClientTest {
 
         ContainerUtils.stopContainer(dockerClient, container);
 
-        dockerClient.pauseContainerCmd(container.getId()).exec();
+        dockerClient.unpauseContainerCmd(container.getId()).exec();
+    }
+
+    @Test(expectedExceptions = NotFoundException.class)
+    public void unpauseNonExistingContainer() {
+
+        dockerClient.unpauseContainerCmd("non-existing").exec();
     }
 
     @Test(expectedExceptions = InternalServerErrorException.class)
-    public void pausePausedContainer() {
+    public void unpauseCreatedContainer() {
+
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+
+        dockerClient.unpauseContainerCmd(container.getId()).exec();
+    }
+
+    @Test(expectedExceptions = InternalServerErrorException.class)
+    public void unpauseUnpausedContainer() {
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
         LOG.info("Created container: {}", container.toString());
@@ -88,16 +112,7 @@ public class PauseCmdImplTest extends AbstractDockerClientTest {
 
         ContainerUtils.pauseContainer(dockerClient, container);
 
-        dockerClient.pauseContainerCmd(container.getId()).exec();
-    }
-
-    @Test(expectedExceptions = InternalServerErrorException.class)
-    public void pauseCreatedContainer() {
-
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
-        LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
-
-        dockerClient.pauseContainerCmd(container.getId()).exec();
+        dockerClient.unpauseContainerCmd(container.getId()).exec();
+        dockerClient.unpauseContainerCmd(container.getId()).exec();
     }
 }

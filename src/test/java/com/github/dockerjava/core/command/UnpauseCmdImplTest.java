@@ -20,7 +20,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 
-@Test(groups = "integration")
+@Test(groups = {"integration", "ignoreInCircleCi"})
 public class UnpauseCmdImplTest extends AbstractDockerClientTest {
 
     public static final Logger LOG = LoggerFactory.getLogger(UnpauseCmdImplTest.class);
@@ -45,7 +45,7 @@ public class UnpauseCmdImplTest extends AbstractDockerClientTest {
         super.afterMethod(result);
     }
 
-    @Test(groups = "ignoreInCircleCi")
+    @Test
     public void unpausePausedContainer() {
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
@@ -59,7 +59,7 @@ public class UnpauseCmdImplTest extends AbstractDockerClientTest {
         ContainerUtils.unpaseContainer(dockerClient, container);
     }
 
-    @Test(groups = "ignoreInCircleCi", expectedExceptions = InternalServerErrorException.class)
+    @Test(expectedExceptions = InternalServerErrorException.class)
     public void unpauseRunningContainer() {
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
@@ -71,7 +71,7 @@ public class UnpauseCmdImplTest extends AbstractDockerClientTest {
         dockerClient.unpauseContainerCmd(container.getId()).exec();
     }
 
-    @Test(groups = "ignoreInCircleCi", expectedExceptions = InternalServerErrorException.class)
+    @Test(expectedExceptions = InternalServerErrorException.class)
     public void unpauseStoppedContainer() {
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
@@ -85,13 +85,13 @@ public class UnpauseCmdImplTest extends AbstractDockerClientTest {
         dockerClient.unpauseContainerCmd(container.getId()).exec();
     }
 
-    @Test(groups = "ignoreInCircleCi", expectedExceptions = NotFoundException.class)
+    @Test(expectedExceptions = NotFoundException.class)
     public void unpauseNonExistingContainer() {
 
         dockerClient.unpauseContainerCmd("non-existing").exec();
     }
 
-    @Test(groups = "ignoreInCircleCi", expectedExceptions = InternalServerErrorException.class)
+    @Test(expectedExceptions = InternalServerErrorException.class)
     public void unpauseCreatedContainer() {
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
@@ -101,7 +101,7 @@ public class UnpauseCmdImplTest extends AbstractDockerClientTest {
         dockerClient.unpauseContainerCmd(container.getId()).exec();
     }
 
-    @Test(groups = "ignoreInCircleCi", expectedExceptions = InternalServerErrorException.class)
+    @Test(expectedExceptions = InternalServerErrorException.class)
     public void unpauseUnpausedContainer() {
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
