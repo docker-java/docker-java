@@ -1,0 +1,5 @@
+**/*.txt
+parent/*/grandChild/README*.md
+parent/anotherChild/README*.md
+!parent/anotherChild/*/*.md
+!parent/child
