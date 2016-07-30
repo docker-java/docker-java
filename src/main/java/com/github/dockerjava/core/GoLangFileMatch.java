@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.github.dockerjava.core.exception.GoLangFileMatchException;
 
 /**
@@ -48,6 +50,8 @@ public class GoLangFileMatch {
 
     public static final boolean IS_WINDOWS = File.separatorChar == '\\';
 
+    private static final String PATTERN_CHARS_TO_ESCAPE = "\\.[]{}()*+-?^$|";
+
     public static boolean match(List<String> patterns, File file) {
         return !match(patterns, file.getPath()).isEmpty();
     }
@@ -87,15 +91,19 @@ public class GoLangFileMatch {
     }
 
     private static String quote(char separatorChar) {
-        return Pattern.quote("" + separatorChar);
+        if (StringUtils.contains(PATTERN_CHARS_TO_ESCAPE, separatorChar)) {
+            return "\\" + separatorChar;
+        } else {
+            return String.valueOf(separatorChar);
+        }
     }
 
     private static String appendChunkPattern(StringBuilder patternStringBuilder, String pattern) {
         if (pattern.equals("**") || pattern.startsWith("**" + File.separator)) {
             patternStringBuilder.append("(")
-                    .append("[^").append(File.separatorChar).append("]*")
+                    .append("[^").append(quote(File.separatorChar)).append("]*")
                     .append("(")
-                    .append(quote(File.separatorChar)).append("[^").append(File.separatorChar).append("]*")
+                    .append(quote(File.separatorChar)).append("[^").append(quote(File.separatorChar)).append("]*")
                     .append(")*").append(")?");
             return pattern.substring(pattern.length() == 2 ? 2 : 3);
         }
@@ -185,7 +193,7 @@ public class GoLangFileMatch {
                 case '*':
                     if (!inRange) {
                         if (!isEsc) {
-                            patternStringBuilder.append("[^").append(File.separatorChar).append("]*");
+                            patternStringBuilder.append("[^").append(quote(File.separatorChar)).append("]*");
                         } else {
                             patternStringBuilder.append(quote(c));
                         }
@@ -197,7 +205,7 @@ public class GoLangFileMatch {
                 case '?':
                     if (!inRange) {
                         if (!isEsc) {
-                            patternStringBuilder.append("[^").append(File.separatorChar).append("]");
+                            patternStringBuilder.append("[^").append(quote(File.separatorChar)).append("]");
                         } else {
                             patternStringBuilder.append(quote(c));
                         }
