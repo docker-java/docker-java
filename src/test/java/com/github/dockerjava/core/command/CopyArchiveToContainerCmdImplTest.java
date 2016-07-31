@@ -83,14 +83,10 @@ public class CopyArchiveToContainerCmdImplTest extends AbstractDockerClientTest 
         }
     }
 
-    @Test
+    @Test(expectedExceptions = NotFoundException.class)
     public void copyToNonExistingContainer() throws Exception {
-        try {
-            dockerClient.copyArchiveToContainerCmd("non-existing").withHostResource("src/test/resources/testReadFile")
-                    .exec();
-            fail("expected NotFoundException");
-        } catch (NotFoundException ignored) {
-        }
+
+        dockerClient.copyArchiveToContainerCmd("non-existing").withHostResource("src/test/resources/testReadFile").exec();
     }
 
     @Test

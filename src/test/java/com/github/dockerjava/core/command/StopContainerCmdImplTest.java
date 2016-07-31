@@ -76,14 +76,10 @@ public class StopContainerCmdImplTest extends AbstractDockerClientTest {
         }
     }
 
-    @Test
+    @Test(expectedExceptions = NotFoundException.class)
     public void testStopNonExistingContainer() throws DockerException {
-        try {
-            dockerClient.stopContainerCmd("non-existing").withTimeout(2).exec();
-            fail("expected NotFoundException");
-        } catch (NotFoundException e) {
 
-        }
+        dockerClient.stopContainerCmd("non-existing").withTimeout(2).exec();
     }
 
 }

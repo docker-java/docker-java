@@ -71,14 +71,9 @@ public class RestartContainerCmdImplTest extends AbstractDockerClientTest {
         dockerClient.killContainerCmd(container.getId()).exec();
     }
 
-    @Test
+    @Test(expectedExceptions = NotFoundException.class)
     public void restartNonExistingContainer() throws DockerException, InterruptedException {
-        try {
-            dockerClient.restartContainerCmd("non-existing").exec();
-            fail("expected NotFoundException");
-        } catch (NotFoundException e) {
-        }
 
+        dockerClient.restartContainerCmd("non-existing").exec();
     }
-
 }

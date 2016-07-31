@@ -67,14 +67,10 @@ public class KillContainerCmdImplTest extends AbstractDockerClientTest {
 
     }
 
-    @Test
+    @Test(expectedExceptions = NotFoundException.class)
     public void killNonExistingContainer() throws DockerException {
 
-        try {
-            dockerClient.killContainerCmd("non-existing").exec();
-            fail("expected NotFoundException");
-        } catch (NotFoundException e) {
-        }
+        dockerClient.killContainerCmd("non-existing").exec();
     }
 
 }

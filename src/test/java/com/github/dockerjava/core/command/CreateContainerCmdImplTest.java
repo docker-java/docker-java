@@ -231,7 +231,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(containerLog(container.getId()), containsString("HOSTNAME=docker-java"));
     }
 
-    @Test
+    @Test(expectedExceptions = ConflictException.class)
     public void createContainerWithName() throws DockerException {
 
         CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withName("container")
@@ -245,12 +245,8 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         assertThat(inspectContainerResponse.getName(), equalTo("/container"));
 
-        try {
-            dockerClient.createContainerCmd(BUSYBOX_IMAGE).withName("container").withCmd("env").exec();
-            fail("Expected ConflictException");
-        } catch (ConflictException e) {
-        }
 
+        dockerClient.createContainerCmd(BUSYBOX_IMAGE).withName("container").withCmd("env").exec();
     }
 
     @Test

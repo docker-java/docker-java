@@ -251,7 +251,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
     }
 
-    @Test
+    @Test(expectedExceptions = InternalServerErrorException.class)
     public void startContainerWithConflictingPortBindings() throws DockerException {
 
         ExposedPort tcp22 = ExposedPort.tcp(22);
@@ -268,13 +268,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         assertThat(container.getId(), not(isEmptyString()));
 
-        try {
-            dockerClient.startContainerCmd(container.getId()).exec();
-            fail("expected InternalServerErrorException");
-        } catch (InternalServerErrorException e) {
-
-        }
-
+        dockerClient.startContainerCmd(container.getId()).exec();
     }
 
     @Test
@@ -412,13 +406,10 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
         }
     }
 
-    @Test
+    @Test(expectedExceptions = NotFoundException.class)
     public void testStartNonExistingContainer() throws DockerException {
-        try {
+
             dockerClient.startContainerCmd("non-existing").exec();
-            fail("expected NotFoundException");
-        } catch (NotFoundException e) {
-        }
     }
 
     /**
