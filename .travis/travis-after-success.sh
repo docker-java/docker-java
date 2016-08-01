@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 if [[ $CODECOV == "true" ]]; then
-    find /home/travis/build/docker-java/docker-java -type f -name '*.gcno'
     codecov
 fi
 
