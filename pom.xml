@@ -508,11 +508,26 @@
 									<goal>prepare-agent</goal>
 								</goals>
 							</execution>
+
 							<execution>
-								<id>report</id>
+								<id>post-unit-test</id>
 								<phase>test</phase>
 								<goals>
 									<goal>report</goal>
+								</goals>
+							</execution>
+
+							<execution>
+								<id>pre-integration-test</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>prepare-agent-integration</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>report-integration</id>
+								<goals>
+									<goal>report-integration</goal>
 								</goals>
 							</execution>
 						</executions>
