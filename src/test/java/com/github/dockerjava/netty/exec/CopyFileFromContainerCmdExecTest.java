@@ -62,12 +62,9 @@ public class CopyFileFromContainerCmdExecTest extends AbstractNettyDockerClientT
         assertTrue(responseAsString.length() > 0);
     }
 
-    @Test
+    @Test(expectedExceptions = NotFoundException.class)
     public void copyFromNonExistingContainer() throws Exception {
-        try {
-            dockerClient.copyFileFromContainerCmd("non-existing", "/test").exec();
-            fail("expected NotFoundException");
-        } catch (NotFoundException ignored) {
-        }
+
+        dockerClient.copyFileFromContainerCmd("non-existing", "/test").exec();
     }
 }

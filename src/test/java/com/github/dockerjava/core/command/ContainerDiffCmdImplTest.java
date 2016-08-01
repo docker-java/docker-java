@@ -67,13 +67,9 @@ public class ContainerDiffCmdImplTest extends AbstractDockerClientTest {
         assertThat(testChangeLog, hasField("kind", equalTo(1)));
     }
 
-    @Test
+    @Test(expectedExceptions = NotFoundException.class)
     public void testContainerDiffWithNonExistingContainer() throws DockerException {
-        try {
-            dockerClient.containerDiffCmd("non-existing").exec();
-            fail("expected NotFoundException");
-        } catch (NotFoundException e) {
-        }
-    }
 
+        dockerClient.containerDiffCmd("non-existing").exec();
+    }
 }

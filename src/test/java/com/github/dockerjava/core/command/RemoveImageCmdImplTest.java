@@ -74,14 +74,10 @@ public class RemoveImageCmdImplTest extends AbstractDockerClientTest {
         assertThat(containers, matcher);
     }
 
-    @Test
+    @Test(expectedExceptions = NotFoundException.class)
     public void removeNonExistingImage() throws DockerException, InterruptedException {
-        try {
-            dockerClient.removeImageCmd("non-existing").exec();
-            fail("expected NotFoundException");
-        } catch (NotFoundException e) {
-        }
 
+        dockerClient.removeImageCmd("non-existing").exec();
     }
 
 }

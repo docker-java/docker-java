@@ -68,13 +68,10 @@ public class CommitCmdExecTest extends AbstractNettyDockerClientTest {
         assertThat(inspectImageResponse.getParent(), equalTo(busyboxImg.getId()));
     }
 
-    @Test
+    @Test(expectedExceptions = NotFoundException.class)
     public void commitNonExistingContainer() throws DockerException {
-        try {
-            dockerClient.commitCmd("non-existent").exec();
-            fail("expected NotFoundException");
-        } catch (NotFoundException e) {
-        }
+
+        dockerClient.commitCmd("non-existent").exec();
     }
 
 }

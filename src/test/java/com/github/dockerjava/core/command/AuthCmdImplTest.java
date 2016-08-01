@@ -45,14 +45,9 @@ public class AuthCmdImplTest extends AbstractDockerClientTest {
     }
 
     // Disabled because of 500/InternalServerException
-    @Test(enabled = false)
+    @Test(enabled = false, expectedExceptions = UnauthorizedException.class, expectedExceptionsMessageRegExp = "Wrong login/password, please try again")
     public void testAuthInvalid() throws Exception {
 
-        try {
-            DockerClientBuilder.getInstance(config("garbage")).build().authCmd().exec();
-            fail("Expected a UnauthorizedException caused by a bad password.");
-        } catch (UnauthorizedException e) {
-            assertEquals(e.getMessage(), "Wrong login/password, please try again\n");
-        }
+        DockerClientBuilder.getInstance(config("garbage")).build().authCmd().exec();
     }
 }

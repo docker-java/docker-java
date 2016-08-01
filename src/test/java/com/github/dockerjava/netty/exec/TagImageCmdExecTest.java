@@ -49,15 +49,11 @@ public class TagImageCmdExecTest extends AbstractNettyDockerClientTest {
         dockerClient.removeImageCmd("docker-java/busybox:" + tag).exec();
     }
 
-    @Test
+    @Test(expectedExceptions = NotFoundException.class)
     public void tagNonExistingImage() throws Exception {
-        String tag = "" + RandomUtils.nextInt(Integer.MAX_VALUE);
 
-        try {
-            dockerClient.tagImageCmd("non-existing", "docker-java/busybox", tag).exec();
-            fail("expected NotFoundException");
-        } catch (NotFoundException e) {
-        }
+        String tag = "" + RandomUtils.nextInt(Integer.MAX_VALUE);
+        dockerClient.tagImageCmd("non-existing", "docker-java/busybox", tag).exec();
     }
 
 }
