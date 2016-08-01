@@ -6,6 +6,7 @@ package com.github.dockerjava.core;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -49,6 +50,8 @@ public class GoLangFileMatch {
 
     public static final boolean IS_WINDOWS = File.separatorChar == '\\';
 
+    private static final String PATTERN_CHARS_TO_ESCAPE = "\\.[]{}()*+-?^$|";
+
     public static boolean match(List<String> patterns, File file) {
         return !match(patterns, file.getPath()).isEmpty();
     }
@@ -71,196 +74,194 @@ public class GoLangFileMatch {
     }
 
     public static boolean match(String pattern, String name) {
-        Pattern: while (!pattern.isEmpty()) {
-            ScanResult scanResult = scanChunk(pattern);
-            pattern = scanResult.pattern;
-            if (scanResult.star && StringUtils.isEmpty(scanResult.chunk)) {
-                // Trailing * matches rest of string unless it has a /.
-                return name.indexOf(File.separatorChar) < 0;
-            }
-            // Look for match at current position.
-            String matchResult = matchChunk(scanResult.chunk, name);
-
-            // if we're the last chunk, make sure we've exhausted the name
-            // otherwise we'll give a false result even if we could still match
-            // using the star
-            if (matchResult != null && (matchResult.isEmpty() || !pattern.isEmpty())) {
-                name = matchResult;
-                continue;
-            }
-            if (scanResult.star) {
-                for (int i = 0; i < name.length() && name.charAt(i) != File.separatorChar; i++) {
-                    matchResult = matchChunk(scanResult.chunk, name.substring(i + 1));
-                    if (matchResult != null) {
-                        // if we're the last chunk, make sure we exhausted the name
-                        if (pattern.isEmpty() && !matchResult.isEmpty()) {
-                            continue;
-                        }
-                        name = matchResult;
-                        continue Pattern;
-                    }
-                }
-            }
-            return false;
-        }
-        return name.isEmpty();
+        return buildPattern(pattern).matcher(name).matches();
     }
 
-    static ScanResult scanChunk(String pattern) {
-        boolean star = false;
-        if (!pattern.isEmpty() && pattern.charAt(0) == '*') {
-            pattern = pattern.substring(1);
-            star = true;
+    private static Pattern buildPattern(String pattern) {
+        StringBuilder patternStringBuilder = new StringBuilder("^");
+        while (!pattern.isEmpty()) {
+            pattern = appendChunkPattern(patternStringBuilder, pattern);
+
+            if (!pattern.isEmpty()) {
+                patternStringBuilder.append(quote(File.separatorChar));
+            }
         }
+        patternStringBuilder.append("(").append(quote(File.separatorChar)).append(".*").append(")?");
+        return Pattern.compile(patternStringBuilder.toString());
+    }
+
+    private static String quote(char separatorChar) {
+        if (StringUtils.contains(PATTERN_CHARS_TO_ESCAPE, separatorChar)) {
+            return "\\" + separatorChar;
+        } else {
+            return String.valueOf(separatorChar);
+        }
+    }
+
+    private static String appendChunkPattern(StringBuilder patternStringBuilder, String pattern) {
+        if (pattern.equals("**") || pattern.startsWith("**" + File.separator)) {
+            patternStringBuilder.append("(")
+                    .append("[^").append(quote(File.separatorChar)).append("]*")
+                    .append("(")
+                    .append(quote(File.separatorChar)).append("[^").append(quote(File.separatorChar)).append("]*")
+                    .append(")*").append(")?");
+            return pattern.substring(pattern.length() == 2 ? 2 : 3);
+        }
+
         boolean inRange = false;
+        int rangeFrom = 0;
+        RangeParseState rangeParseState = RangeParseState.CHAR_EXPECTED;
+        boolean isEsc = false;
         int i;
-        Scan: for (i = 0; i < pattern.length(); i++) {
-            switch (pattern.charAt(i)) {
-                case '\\': {
-                    if (!IS_WINDOWS && i + 1 < pattern.length()) {
-                        i++;
+        for (i = 0; i < pattern.length(); i++) {
+            char c = pattern.charAt(i);
+            switch (c) {
+                case '/':
+                    if (!inRange) {
+                        if (!IS_WINDOWS && !isEsc) {
+                            // end of chunk
+                            return pattern.substring(i + 1);
+                        } else {
+                            patternStringBuilder.append(quote(c));
+                        }
+                    } else {
+                        rangeParseState = nextStateAfterChar(rangeParseState);
+                    }
+                    isEsc = false;
+                    break;
+                case '\\':
+                    if (!inRange) {
+                        if (!IS_WINDOWS) {
+                            if (isEsc) {
+                                patternStringBuilder.append(quote(c));
+                                isEsc = false;
+                            } else {
+                                isEsc = true;
+                            }
+                        } else {
+                            // end of chunk
+                            return pattern.substring(i + 1);
+                        }
+                    } else {
+                        if (IS_WINDOWS || isEsc) {
+                            rangeParseState = nextStateAfterChar(rangeParseState);
+                            isEsc = false;
+                        } else {
+                            isEsc = true;
+                        }
                     }
                     break;
-                }
                 case '[':
-                    inRange = true;
+                    if (!isEsc) {
+                        if (inRange) {
+                            //"[ is not expected, ] had not reached"
+                            throw new GoLangFileMatchException();
+                        }
+                        rangeFrom = i;
+                        rangeParseState = RangeParseState.CHAR_EXPECTED;
+                        inRange = true;
+                    } else {
+                        if (!inRange) {
+                            patternStringBuilder.append(c);
+                        } else {
+                            rangeParseState = nextStateAfterChar(rangeParseState);
+                        }
+                    }
+                    isEsc = false;
                     break;
                 case ']':
-                    inRange = false;
+                    if (!isEsc) {
+                        if (!inRange) {
+                            //"] is not expected, [ was not met"
+                            throw new GoLangFileMatchException();
+                        }
+                        if (rangeParseState == RangeParseState.CHAR_EXPECTED_AFTER_DASH) {
+                            // character range not finished
+                            throw new GoLangFileMatchException();
+                        }
+                        patternStringBuilder.append(pattern.substring(rangeFrom, i + 1));
+                        inRange = false;
+                    } else {
+                        if (!inRange) {
+                            patternStringBuilder.append(c);
+                        } else {
+                            rangeParseState = nextStateAfterChar(rangeParseState);
+                        }
+                    }
+                    isEsc = false;
                     break;
                 case '*':
                     if (!inRange) {
-                        break Scan;
-                    }
-            }
-        }
-        return new ScanResult(star, pattern.substring(0, i), pattern.substring(i));
-    }
-
-    static String matchChunk(String chunk, String s) {
-        int chunkLength = chunk.length();
-        int chunkOffset = 0;
-        int sLength = s.length();
-        int sOffset = 0;
-        char r;
-        while (chunkOffset < chunkLength) {
-            if (sOffset == sLength) {
-                return null;
-            }
-            switch (chunk.charAt(chunkOffset)) {
-                case '[':
-                    r = s.charAt(sOffset);
-                    sOffset++;
-                    chunkOffset++;
-                    // We can't end right after '[', we're expecting at least
-                    // a closing bracket and possibly a caret.
-                    if (chunkOffset == chunkLength) {
-                        throw new GoLangFileMatchException();
-                    }
-                    // possibly negated
-                    boolean negated = chunk.charAt(chunkOffset) == '^';
-                    if (negated) {
-                        chunkOffset++;
-                    }
-                    // parse all ranges
-                    boolean match = false;
-                    int nrange = 0;
-                    while (true) {
-                        if (chunkOffset < chunkLength && chunk.charAt(chunkOffset) == ']' && nrange > 0) {
-                            chunkOffset++;
-                            break;
+                        if (!isEsc) {
+                            patternStringBuilder.append("[^").append(quote(File.separatorChar)).append("]*");
+                        } else {
+                            patternStringBuilder.append(quote(c));
                         }
-                        GetEscResult result = getEsc(chunk, chunkOffset, chunkLength);
-                        char lo = result.lo;
-                        char hi = lo;
-                        chunkOffset = result.chunkOffset;
-                        if (chunk.charAt(chunkOffset) == '-') {
-                            result = getEsc(chunk, ++chunkOffset, chunkLength);
-                            chunkOffset = result.chunkOffset;
-                            hi = result.lo;
-                        }
-                        if (lo <= r && r <= hi) {
-                            match = true;
-                        }
-                        nrange++;
+                    } else {
+                        rangeParseState = nextStateAfterChar(rangeParseState);
                     }
-                    if (match == negated) {
-                        return null;
-                    }
+                    isEsc = false;
                     break;
-
                 case '?':
-                    if (s.charAt(sOffset) == File.separatorChar) {
-                        return null;
+                    if (!inRange) {
+                        if (!isEsc) {
+                            patternStringBuilder.append("[^").append(quote(File.separatorChar)).append("]");
+                        } else {
+                            patternStringBuilder.append(quote(c));
+                        }
+                    } else {
+                        rangeParseState = nextStateAfterChar(rangeParseState);
                     }
-                    sOffset++;
-                    chunkOffset++;
+                    isEsc = false;
                     break;
-                case '\\':
-                    if (!IS_WINDOWS) {
-                        chunkOffset++;
-                        if (chunkOffset == chunkLength) {
-                            throw new GoLangFileMatchException();
+                case '-':
+                    if (!inRange) {
+                        patternStringBuilder.append(quote(c));
+                    } else {
+                        if (!isEsc) {
+                            if (rangeParseState != RangeParseState.CHAR_OR_DASH_EXPECTED) {
+                                // - not expected
+                                throw new GoLangFileMatchException();
+                            }
+                            rangeParseState = RangeParseState.CHAR_EXPECTED_AFTER_DASH;
+                        } else {
+                            rangeParseState = nextStateAfterChar(rangeParseState);
                         }
                     }
-                    // fallthrough
+                    isEsc = false;
+                    break;
                 default:
-                    if (chunk.charAt(chunkOffset) != s.charAt(sOffset)) {
-                        return null;
+                    if (!inRange) {
+                        patternStringBuilder.append(quote(c));
+                    } else {
+                        rangeParseState = nextStateAfterChar(rangeParseState);
                     }
-                    sOffset++;
-                    chunkOffset++;
+                    isEsc = false;
             }
         }
-        return s.substring(sOffset);
+        if (isEsc) {
+            // "Escaped character missing"
+            throw new GoLangFileMatchException();
+        }
+        if (inRange) {
+            // "Character range not finished"
+            throw new GoLangFileMatchException();
+        }
+        return "";
     }
 
-    static GetEscResult getEsc(String chunk, int chunkOffset, int chunkLength) {
-        if (chunkOffset == chunkLength) {
-            throw new GoLangFileMatchException();
-        }
-        char r = chunk.charAt(chunkOffset);
-        if (r == '-' || r == ']') {
-            throw new GoLangFileMatchException();
-        }
-        if (r == '\\' && !IS_WINDOWS) {
-            chunkOffset++;
-            if (chunkOffset == chunkLength) {
-                throw new GoLangFileMatchException();
-            }
-
-        }
-        r = chunk.charAt(chunkOffset);
-        chunkOffset++;
-        if (chunkOffset == chunkLength) {
-            throw new GoLangFileMatchException();
-        }
-        return new GetEscResult(r, chunkOffset);
-    }
-
-    private static final class ScanResult {
-        public boolean star;
-
-        public String chunk;
-
-        public String pattern;
-
-        ScanResult(boolean star, String chunk, String pattern) {
-            this.star = star;
-            this.chunk = chunk;
-            this.pattern = pattern;
+    private static RangeParseState nextStateAfterChar(RangeParseState currentState) {
+        if (currentState == RangeParseState.CHAR_EXPECTED_AFTER_DASH) {
+            return RangeParseState.CHAR_EXPECTED;
+        } else {
+            return RangeParseState.CHAR_OR_DASH_EXPECTED;
         }
     }
 
-    private static final class GetEscResult {
-        public char lo;
-
-        public int chunkOffset;
-
-        GetEscResult(char lo, int chunkOffset) {
-            this.lo = lo;
-            this.chunkOffset = chunkOffset;
-        }
+    private enum RangeParseState {
+        CHAR_EXPECTED,
+        CHAR_OR_DASH_EXPECTED,
+        CHAR_EXPECTED_AFTER_DASH
     }
 
 }

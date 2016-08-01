@@ -204,9 +204,10 @@ public class Dockerfile {
 
             int lineNumber = 0;
             for (String pattern : ignores) {
+                String goLangPattern = pattern.startsWith("!") ? pattern.substring(1) : pattern;
                 lineNumber++;
                 try {
-                    if (GoLangFileMatch.match(pattern, fileName)) {
+                    if (GoLangFileMatch.match(goLangPattern, fileName)) {
                         matches.add(pattern);
                     }
                 } catch (GoLangFileMatchException e) {
@@ -233,21 +234,7 @@ public class Dockerfile {
 
             String lastMatchingPattern = matchingPattern.get(matchingPattern.size() - 1);
 
-            int lastMatchingPatternIndex = ignores.lastIndexOf(lastMatchingPattern);
-
-            if (lastMatchingPatternIndex == ignores.size() - 1) {
-                return lastMatchingPattern;
-            }
-
-            List<String> remainingIgnorePattern = ignores.subList(lastMatchingPatternIndex + 1, ignores.size());
-
-            for (String ignorePattern : remainingIgnorePattern) {
-                if (ignorePattern.equals("!" + relativeFilename)) {
-                    return null;
-                }
-            }
-
-            return lastMatchingPattern;
+            return !lastMatchingPattern.startsWith("!") ? lastMatchingPattern : null;
          }
     }
 }
