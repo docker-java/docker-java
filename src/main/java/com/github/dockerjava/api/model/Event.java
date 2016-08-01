@@ -23,6 +23,9 @@ public class Event {
     @JsonIgnoreProperties
     private Node node;
 
+    @JsonProperty("Type")
+    private String type;
+
     /**
      * Default constructor for the deserialization.
      */
@@ -92,6 +95,11 @@ public class Event {
      */
     public Node getNode() {
         return node;
+    }
+
+    @JsonProperty("Type")
+    public String getType() {
+        return type;
     }
 
     @Override
