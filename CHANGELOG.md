@@ -5,6 +5,8 @@ Change Log
 ---
 
 All changes
+* Updated all dependencies
+* [#643] (https://github.com/docker-java/docker-java/pull/643) Fixes for .dockerignore filtering 
 * [#627] (https://github.com/docker-java/docker-java/pull/627) Implementation of POST /images/load endpoint 
 * [#630] (https://github.com/docker-java/docker-java/pull/630) Fix: Second execution of a docker command in Netty implementation always fails 
 * [#596] (https://github.com/docker-java/docker-java/pull/596) Refactor configuration of SSL to allow override with custom config 
