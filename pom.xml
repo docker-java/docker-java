@@ -507,9 +507,6 @@
 								<goals>
 									<goal>prepare-agent</goal>
 								</goals>
-								<configuration>
-									<propertyName>surefireArgLine</propertyName>
-								</configuration>
 							</execution>
 
 							<execution>
@@ -526,9 +523,6 @@
 								<goals>
 									<goal>prepare-agent-integration</goal>
 								</goals>
-								<configuration>
-									<propertyName>failsafeArgLine</propertyName>
-								</configuration>
 							</execution>
 							<execution>
 								<id>report-integration</id>
