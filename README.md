@@ -93,7 +93,7 @@ There are three ways to configure, in descending order of precedence:
 #### Programmatic:
 In your application, e.g.
 
-    DockerClientConfig config = DockerClientConfig.createDefaultConfigBuilder()
+    DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder()
         .withDockerHost("tcp://my-docker-host.tld:2376")
         .withDockerTlsVerify(true)
         .withDockerCertPath("/home/user/.docker/certs")
