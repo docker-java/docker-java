@@ -154,8 +154,7 @@ public class GoLangFileMatch {
                 case '[':
                     if (!isEsc) {
                         if (inRange) {
-                            //"[ is not expected, ] had not reached"
-                            throw new GoLangFileMatchException();
+                            throw new GoLangFileMatchException("[ not expected, closing bracket ] not yet reached");
                         }
                         rangeFrom = i;
                         rangeParseState = RangeParseState.CHAR_EXPECTED;
@@ -172,12 +171,10 @@ public class GoLangFileMatch {
                 case ']':
                     if (!isEsc) {
                         if (!inRange) {
-                            //"] is not expected, [ was not met"
-                            throw new GoLangFileMatchException();
+                            throw new GoLangFileMatchException("] is not expected, [ was not met");
                         }
                         if (rangeParseState == RangeParseState.CHAR_EXPECTED_AFTER_DASH) {
-                            // character range not finished
-                            throw new GoLangFileMatchException();
+                            throw new GoLangFileMatchException("Character range not finished");
                         }
                         patternStringBuilder.append(pattern.substring(rangeFrom, i + 1));
                         inRange = false;
@@ -220,8 +217,7 @@ public class GoLangFileMatch {
                     } else {
                         if (!isEsc) {
                             if (rangeParseState != RangeParseState.CHAR_OR_DASH_EXPECTED) {
-                                // - not expected
-                                throw new GoLangFileMatchException();
+                                throw new GoLangFileMatchException("- character not expected");
                             }
                             rangeParseState = RangeParseState.CHAR_EXPECTED_AFTER_DASH;
                         } else {
@@ -240,12 +236,10 @@ public class GoLangFileMatch {
             }
         }
         if (isEsc) {
-            // "Escaped character missing"
-            throw new GoLangFileMatchException();
+            throw new GoLangFileMatchException("Escaped character missing");
         }
         if (inRange) {
-            // "Character range not finished"
-            throw new GoLangFileMatchException();
+            throw new GoLangFileMatchException("Character range not finished");
         }
         return "";
     }
