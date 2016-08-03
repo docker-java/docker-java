@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.annotation.CheckForNull;
+
 /**
  * Representation of a Docker event.
  */
@@ -101,7 +103,12 @@ public class Event {
         return node;
     }
 
-    @JsonProperty("Type")
+    /*
+     * Get type of event.
+     *
+     * @return type of event
+     */
+    @CheckForNull
     public String getType() {
         return type;
     }
