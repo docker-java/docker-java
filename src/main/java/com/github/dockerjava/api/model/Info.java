@@ -222,6 +222,8 @@ public class Info {
     @JsonProperty("ClusterAdvertise")
     private String clusterAdvertise;
 
+    @JsonProperty("Nodes")
+    private List<Node> nodes;
     /**
      * @see #architecture
      */
@@ -1035,5 +1037,9 @@ public class Info {
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    public List<Node> getNodes() {
+        return nodes;
     }
 }
