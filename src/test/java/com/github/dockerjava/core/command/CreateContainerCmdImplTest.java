@@ -735,4 +735,19 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         assertThat(inspectContainer.getHostConfig().getCgroupParent(), is("/parent"));
     }
+
+    @Test
+    public void createContainerWithShmSize() throws DockerException {
+
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
+            .withShmSize("128M").withCmd("true").exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+
+        assertEquals(inspectContainerResponse.getHostConfig().getShmSize(), "128M");
+    }
 }

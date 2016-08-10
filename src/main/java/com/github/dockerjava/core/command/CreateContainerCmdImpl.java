@@ -473,6 +473,12 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
+    @JsonIgnore
+    public String getShmSize() {
+        return hostConfig.getShmSize();
+    }
+
+    @Override
     public String getCgroupParent() {
         return hostConfig.getCgroupParent();
     }
@@ -973,6 +979,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public CreateContainerCmd withPidMode(String pidMode) {
         checkNotNull(pidMode, "pidMode was not specified");
         this.hostConfig.withPidMode(pidMode);
+        return this;
+    }
+
+    @Override
+    public CreateContainerCmd withShmSize(String shmSize) {
+        checkNotNull(shmSize, "shmSize was not specified");
+        this.hostConfig.withShmSize(shmSize);
         return this;
     }
 

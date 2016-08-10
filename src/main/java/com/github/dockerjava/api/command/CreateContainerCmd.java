@@ -188,6 +188,9 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     String getPidMode();
 
     @CheckForNull
+    String getShmSize();
+
+    @CheckForNull
     String getCgroupParent();
 
     @CheckForNull
@@ -435,6 +438,8 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
      * Set the PID (Process) Namespace mode for the container, 'host': use the host's PID namespace inside the container
      */
     CreateContainerCmd withPidMode(String pidMode);
+
+    CreateContainerCmd withShmSize(String shmSize);
 
     /**
      * @throws NotFoundException
