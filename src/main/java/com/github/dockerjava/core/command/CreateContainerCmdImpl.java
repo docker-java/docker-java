@@ -473,6 +473,11 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
+    public HostConfig getHostConfig() {
+        return hostConfig;
+    }
+
+    @Override
     public String getCgroupParent() {
         return hostConfig.getCgroupParent();
     }
@@ -973,6 +978,12 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public CreateContainerCmd withPidMode(String pidMode) {
         checkNotNull(pidMode, "pidMode was not specified");
         this.hostConfig.withPidMode(pidMode);
+        return this;
+    }
+
+    @Override
+    public CreateContainerCmd withHostConfig(HostConfig hostConfig) {
+        this.hostConfig = hostConfig;
         return this;
     }
 
