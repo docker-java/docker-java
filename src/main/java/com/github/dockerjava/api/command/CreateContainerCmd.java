@@ -188,7 +188,7 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     String getPidMode();
 
     @CheckForNull
-    String getShmSize();
+    Long getShmSize();
 
     @CheckForNull
     String getCgroupParent();
@@ -439,7 +439,7 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
      */
     CreateContainerCmd withPidMode(String pidMode);
 
-    CreateContainerCmd withShmSize(String shmSize);
+    CreateContainerCmd withShmSize(Long shmSize);
 
     /**
      * @throws NotFoundException

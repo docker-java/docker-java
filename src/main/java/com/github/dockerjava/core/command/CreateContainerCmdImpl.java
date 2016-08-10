@@ -474,7 +474,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     @JsonIgnore
-    public String getShmSize() {
+    public Long getShmSize() {
         return hostConfig.getShmSize();
     }
 
@@ -983,7 +983,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
-    public CreateContainerCmd withShmSize(String shmSize) {
+    public CreateContainerCmd withShmSize(Long shmSize) {
         checkNotNull(shmSize, "shmSize was not specified");
         this.hostConfig.withShmSize(shmSize);
         return this;

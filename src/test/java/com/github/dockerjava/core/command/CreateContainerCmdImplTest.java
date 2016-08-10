@@ -21,6 +21,7 @@ import com.github.dockerjava.api.model.VolumesFrom;
 import com.github.dockerjava.api.model.Ports.Binding;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
+import org.apache.commons.io.FileUtils;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -739,8 +740,9 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void createContainerWithShmSize() throws DockerException {
 
+        Long shmSize = 96 * FileUtils.ONE_MB;
         CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
-            .withShmSize("128M").withCmd("true").exec();
+            .withShmSize(shmSize).withCmd("true").exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -748,6 +750,6 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-        assertEquals(inspectContainerResponse.getHostConfig().getShmSize(), "128M");
+        assertEquals(inspectContainerResponse.getHostConfig().getShmSize(), shmSize);
     }
 }
