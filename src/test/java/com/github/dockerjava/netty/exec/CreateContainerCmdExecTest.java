@@ -9,6 +9,7 @@ import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.ContainerNetwork;
 import com.github.dockerjava.api.model.Device;
 import com.github.dockerjava.api.model.ExposedPort;
+import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.LogConfig;
 import com.github.dockerjava.api.model.Network;
@@ -20,6 +21,7 @@ import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
 import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
+import org.apache.commons.io.FileUtils;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -675,5 +677,21 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
         InspectContainerResponse inspectContainer = dockerClient.inspectContainerCmd(container.getId()).exec();
 
         assertThat(inspectContainer.getHostConfig().getCgroupParent(), is("/parent"));
+    }
+
+    @SuppressWarnings("Duplicates")
+    @Test
+    public void createContainerWithShmSize() throws DockerException {
+        HostConfig hostConfig = new HostConfig().withShmSize(96 * FileUtils.ONE_MB);
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
+            .withHostConfig(hostConfig).withCmd("true").exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+
+        assertEquals(inspectContainerResponse.getHostConfig().getShmSize(), hostConfig.getShmSize());
     }
 }

@@ -10,6 +10,7 @@ import com.github.dockerjava.api.model.ContainerNetwork;
 import com.github.dockerjava.api.model.Device;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.LogConfig;
 import com.github.dockerjava.api.model.Network;
@@ -737,12 +738,12 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(inspectContainer.getHostConfig().getCgroupParent(), is("/parent"));
     }
 
+    @SuppressWarnings("Duplicates")
     @Test
     public void createContainerWithShmSize() throws DockerException {
-
-        Long shmSize = 96 * FileUtils.ONE_MB;
+        HostConfig hostConfig = new HostConfig().withShmSize(96 * FileUtils.ONE_MB);
         CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
-            .withShmSize(shmSize).withCmd("true").exec();
+            .withHostConfig(hostConfig).withCmd("true").exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -750,6 +751,6 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-        assertEquals(inspectContainerResponse.getHostConfig().getShmSize(), shmSize);
+        assertEquals(inspectContainerResponse.getHostConfig().getShmSize(), hostConfig.getShmSize());
     }
 }
