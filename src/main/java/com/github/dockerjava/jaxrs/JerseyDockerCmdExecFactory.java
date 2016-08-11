@@ -23,6 +23,7 @@ import com.github.dockerjava.core.SSLConfig;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.DefaultHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.glassfish.jersey.CommonProperties;
@@ -266,7 +267,7 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
         RegistryBuilder<ConnectionSocketFactory> registryBuilder = RegistryBuilder.create();
         registryBuilder.register("http", PlainConnectionSocketFactory.getSocketFactory());
         if (sslContext != null) {
-            registryBuilder.register("https", new SSLConnectionSocketFactory(sslContext));
+            registryBuilder.register("https", new SSLConnectionSocketFactory(sslContext, new DefaultHostnameVerifier()));
         }
         registryBuilder.register("unix", new UnixConnectionSocketFactory(originalUri));
         return registryBuilder.build();
