@@ -1,8 +1,15 @@
 Change Log
 ===
 
-3.0.1-SNAPSHOT
----
+## 3.0.3-SNAPSHOT
+
+
+## 3.0.2
+ * Enhanced Dockerignore filtering.
+ * Added shmsize for hostconfig.
+ * Exposed HostConfig instead of spaghetty calls.
+
+## 3.0.1
 
 All changes
 * Updated all dependencies
