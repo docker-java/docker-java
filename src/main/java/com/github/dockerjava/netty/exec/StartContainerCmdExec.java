@@ -23,7 +23,9 @@ public class StartContainerCmdExec extends AbstrSyncDockerCmdExec<StartContainer
                 command.getContainerId());
 
         LOGGER.trace("POST: {}", webResource);
-        webResource.request().accept(MediaType.APPLICATION_JSON).post(command);
+        webResource.request()
+                .accept(MediaType.APPLICATION_JSON)
+                .post(command);
 
         return null;
     }
