@@ -1,5 +1,6 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.utils.TestUtils.getVersion;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
@@ -7,7 +8,10 @@ import static org.hamcrest.Matchers.not;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 
+import com.github.dockerjava.core.RemoteApiVersion;
+import com.github.dockerjava.utils.TestUtils;
 import org.testng.ITestResult;
+import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
@@ -43,6 +47,10 @@ public class CopyFileFromContainerCmdImplTest extends AbstractDockerClientTest {
 
     @Test
     public void copyFromContainer() throws Exception {
+        if (getVersion(dockerClient).isGreaterOrEqual(RemoteApiVersion.VERSION_1_24)) {
+            throw new SkipException("Doesn't work since 1.24");
+        }
+
         // TODO extract this into a shared method
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
                 .withName("docker-java-itest-copyFromContainer").withCmd("touch", "/copyFromContainer").exec();

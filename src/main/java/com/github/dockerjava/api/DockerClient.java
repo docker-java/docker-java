@@ -170,6 +170,7 @@ public interface DockerClient extends Closeable {
      * @return created command
      * @see #copyArchiveFromContainerCmd(String, String)
      * @deprecated since docker API version 1.20, replaced by {@link #copyArchiveFromContainerCmd(String, String)}
+     * since 1.24 fails.
      */
     @Deprecated
     CopyFileFromContainerCmd copyFileFromContainerCmd(@Nonnull String containerId, @Nonnull String resource);
