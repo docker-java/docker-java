@@ -58,6 +58,8 @@ import com.github.dockerjava.api.command.UpdateContainerCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.model.BuildResponseItem;
+import com.github.dockerjava.api.model.LoadImageResponseItem;
+import com.github.dockerjava.core.command.LoadImageCallback;
 
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -136,8 +138,8 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
     public LoadImageCmd.Exec createLoadImageCmdExec() {
         return new LoadImageCmd.Exec() {
             @Override
-            public Void exec(LoadImageCmd command) {
-                delegate.createLoadImageCmdExec().exec(command);
+            public Void exec(LoadImageCmd command, ResultCallback<LoadImageResponseItem> resultCallback) {
+                delegate.createLoadImageCmdExec().exec(command, new LoadImageCallback());
                 return null;
             }
         };

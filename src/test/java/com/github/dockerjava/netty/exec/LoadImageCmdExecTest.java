@@ -2,6 +2,7 @@ package com.github.dockerjava.netty.exec;
 
 import com.github.dockerjava.api.model.Image;
 
+import com.github.dockerjava.core.command.LoadImageCallback;
 import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 import com.github.dockerjava.utils.TestResources;
 import org.testng.ITestResult;
@@ -55,7 +56,7 @@ public class LoadImageCmdExecTest extends AbstractNettyDockerClientTest {
     @Test
     public void loadImageFromTar() throws Exception {
         try (InputStream uploadStream = Files.newInputStream(TestResources.getApiImagesLoadTestTarball())) {
-            dockerClient.loadImageCmd(uploadStream).exec();
+            dockerClient.loadImageCmd(uploadStream).exec(new LoadImageCallback()).awaitSuccess();
         }
 
         final Image image = findImageWithId(expectedImageId, dockerClient.listImagesCmd().exec());

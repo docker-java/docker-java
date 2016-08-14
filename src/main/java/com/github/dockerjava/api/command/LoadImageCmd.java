@@ -1,11 +1,13 @@
 package com.github.dockerjava.api.command;
 
+import com.github.dockerjava.api.model.LoadImageResponseItem;
+
 import java.io.InputStream;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public interface LoadImageCmd extends SyncDockerCmd<Void> {
+public interface LoadImageCmd extends AsyncDockerCmd<LoadImageCmd, LoadImageResponseItem> {
 
     @CheckForNull
     InputStream getImageStream();
@@ -16,6 +18,11 @@ public interface LoadImageCmd extends SyncDockerCmd<Void> {
      */
     LoadImageCmd withImageStream(@Nonnull InputStream imageStream);
 
-    interface Exec extends DockerCmdSyncExec<LoadImageCmd, Void> {
+    @CheckForNull
+    Boolean getQuiet();
+
+    LoadImageCmd withQuiet(Boolean quiet);
+
+    interface Exec extends DockerCmdAsyncExec<LoadImageCmd, LoadImageResponseItem> {
     }
 }

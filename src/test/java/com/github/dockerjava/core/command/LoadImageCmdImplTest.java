@@ -55,7 +55,7 @@ public class LoadImageCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void loadImageFromTar() throws Exception {
         try (InputStream uploadStream = Files.newInputStream(TestResources.getApiImagesLoadTestTarball())) {
-            dockerClient.loadImageCmd(uploadStream).exec();
+            dockerClient.loadImageCmd(uploadStream).exec(new LoadImageCallback()).awaitSuccess();
         }
 
         final Image image = findImageWithId(expectedImageId, dockerClient.listImagesCmd().exec());

@@ -3,6 +3,8 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.annotation.CheckForNull;
+
 /**
  * Represents a build response stream item
  */
@@ -25,6 +27,7 @@ public class BuildResponseItem extends ResponseItem {
         return getStream().contains(BUILD_SUCCESS);
     }
 
+    @CheckForNull
     @JsonIgnore
     public String getImageId() {
         if (!isBuildSuccessIndicated()) {

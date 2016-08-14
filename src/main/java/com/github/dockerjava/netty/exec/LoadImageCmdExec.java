@@ -1,5 +1,9 @@
 package com.github.dockerjava.netty.exec;
 
+import com.github.dockerjava.api.async.ResultCallback;
+import com.github.dockerjava.api.model.LoadImageResponseItem;
+import com.github.dockerjava.netty.InvocationBuilder;
+import com.github.dockerjava.netty.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,7 +12,7 @@ import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.netty.WebTarget;
 
-public class LoadImageCmdExec extends AbstrSyncDockerCmdExec<LoadImageCmd, Void> implements
+public class LoadImageCmdExec extends AbstrAsyncDockerCmdExec<LoadImageCmd, LoadImageResponseItem> implements
         LoadImageCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoadImageCmdExec.class);
@@ -18,12 +22,22 @@ public class LoadImageCmdExec extends AbstrSyncDockerCmdExec<LoadImageCmd, Void>
     }
 
     @Override
-    protected Void execute(LoadImageCmd command) {
+    protected Void execute0(LoadImageCmd command, ResultCallback<LoadImageResponseItem> resultCallback) {
         WebTarget webResource = getBaseResource().path("/images/load");
 
+        if (command.getQuiet() != null) {
+            webResource = webResource.queryParam("quiet", command.getQuiet());
+        }
+
         LOGGER.trace("POST: {}", webResource);
-        return webResource.request()
-                .post(new TypeReference<Void>() {
-                }, command.getImageStream());
+        final InvocationBuilder builder = webResource.request()
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Content-Type", "application/tar")
+                .header("encoding", "gzip");
+
+        builder.post(new TypeReference<LoadImageResponseItem>() {
+        }, resultCallback, command.getImageStream());
+
+        return null;
     }
 }
