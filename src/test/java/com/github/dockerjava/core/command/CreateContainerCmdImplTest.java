@@ -375,7 +375,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
                 .exec();
 
         ContainerNetwork aliasNet = inspectContainerResponse.getNetworkSettings().getNetworks().get("aliasNet");
-        assertEquals(aliasNet.getAliases(), Collections.singletonList("server"));
+        assertThat(aliasNet.getAliases(), hasItem("server"));
     }
 
     @Test

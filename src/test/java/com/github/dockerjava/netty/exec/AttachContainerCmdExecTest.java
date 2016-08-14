@@ -93,7 +93,7 @@ public class AttachContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        Thread.sleep(SECONDS.toMillis(3)); //wait bash initialisation
+        Thread.sleep(SECONDS.toMillis(10)); //wait bash initialisation
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 

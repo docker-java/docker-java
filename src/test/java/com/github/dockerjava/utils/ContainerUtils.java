@@ -60,7 +60,7 @@ public class ContainerUtils {
      * @param dockerClient docker client
      * @param container    container
      */
-    public static void unpaseContainer(DockerClient dockerClient, CreateContainerResponse container) {
+    public static void unpauseContainer(DockerClient dockerClient, CreateContainerResponse container) {
         dockerClient.unpauseContainerCmd(container.getId()).exec();
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
