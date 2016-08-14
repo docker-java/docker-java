@@ -56,7 +56,7 @@ public class UnpauseCmdImplTest extends AbstractNettyDockerClientTest {
 
         ContainerUtils.pauseContainer(dockerClient, container);
 
-        ContainerUtils.unpaseContainer(dockerClient, container);
+        ContainerUtils.unpauseContainer(dockerClient, container);
     }
 
     @Test(expectedExceptions = InternalServerErrorException.class)
