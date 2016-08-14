@@ -370,7 +370,7 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
                 .exec();
 
         ContainerNetwork aliasNet = inspectContainerResponse.getNetworkSettings().getNetworks().get("aliasNet");
-        assertEquals(aliasNet.getAliases(), Collections.singletonList("server"));
+        assertThat(aliasNet.getAliases(), hasItem("server"));
     }
 
     @Test
