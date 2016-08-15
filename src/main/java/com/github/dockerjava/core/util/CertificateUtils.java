@@ -72,7 +72,7 @@ public class CertificateUtils {
     /**
      * from "cert.pem" String
      */
-    private static List<Certificate> loadCertificates(final String certpem) throws IOException,
+    public static List<Certificate> loadCertificates(final String certpem) throws IOException,
             CertificateException {
         final StringReader certReader = new StringReader(certpem);
         try (BufferedReader reader = new BufferedReader(certReader)) {
@@ -83,7 +83,7 @@ public class CertificateUtils {
     /**
      * "cert.pem" from reader
      */
-    private static List<Certificate> loadCertificates(final Reader reader) throws IOException,
+    public static List<Certificate> loadCertificates(final Reader reader) throws IOException,
             CertificateException {
         try (PEMParser pemParser = new PEMParser(reader)) {
             List<Certificate> certificates = new ArrayList<>();
@@ -105,7 +105,7 @@ public class CertificateUtils {
      * Return private key ("key.pem") from Reader
      */
     @CheckForNull
-    private static PrivateKey loadPrivateKey(final Reader reader) throws IOException, NoSuchAlgorithmException,
+    public static PrivateKey loadPrivateKey(final Reader reader) throws IOException, NoSuchAlgorithmException,
             InvalidKeySpecException {
         try (PEMParser pemParser = new PEMParser(reader)) {
             Object readObject = pemParser.readObject();
@@ -138,7 +138,7 @@ public class CertificateUtils {
     }
 
     @CheckForNull
-    private static PrivateKey guessKey(byte[] encodedKey) throws NoSuchAlgorithmException {
+    public static PrivateKey guessKey(byte[] encodedKey) throws NoSuchAlgorithmException {
         //no way to know, so iterate
         for (String guessFactory : new String[]{"RSA", "ECDSA"}) {
             try {
@@ -157,7 +157,7 @@ public class CertificateUtils {
      * Return KeyPair from "key.pem"
      */
     @CheckForNull
-    private static PrivateKey loadPrivateKey(final String keypem) throws IOException, NoSuchAlgorithmException,
+    public static PrivateKey loadPrivateKey(final String keypem) throws IOException, NoSuchAlgorithmException,
             InvalidKeySpecException {
         try (StringReader certReader = new StringReader(keypem);
              BufferedReader reader = new BufferedReader(certReader)) {
