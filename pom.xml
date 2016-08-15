@@ -33,6 +33,16 @@
 
 	<developers>
 		<developer>
+			<id>marcuslinke</id>
+			<name>Marcus Linke</name>
+			<email>marcus.linke@gmx.de</email>
+		</developer>
+		<developer>
+			<id>kostyasha</id>
+			<name>Kanstantsin Shautsou</name>
+			<email>kanstantsin.sha@gmail.com</email>
+		</developer>
+		<developer>
 			<id>kpelykh</id>
 			<name>Konstantin Pelykh</name>
 			<email>kpelykh@gmail.com</email>
