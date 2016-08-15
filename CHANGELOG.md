@@ -2,6 +2,9 @@ Change Log
 ===
 ## Next
 
+## 3.0.4
+ * Make cert util methods public.
+
 ## 3.0.3
  * [JERSEY] Don't send body for start container request.
 
