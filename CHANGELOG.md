@@ -1,8 +1,9 @@
 Change Log
 ===
+## Next
 
-## 3.0.3-SNAPSHOT
-
+## 3.0.3
+ * [JERSEY] Don't send body for start container request.
 
 ## 3.0.2
  * Enhanced Dockerignore filtering.
