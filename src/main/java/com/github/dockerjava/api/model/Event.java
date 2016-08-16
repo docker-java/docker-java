@@ -5,6 +5,9 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import javax.annotation.CheckForNull;
 
 /**
  * Representation of a Docker event.
@@ -22,6 +25,12 @@ public class Event {
 
     @JsonIgnoreProperties
     private Node node;
+
+    /*
+     * @since API Version 1.24
+     */
+    @JsonProperty("Type")
+    private String type;
 
     /**
      * Default constructor for the deserialization.
@@ -92,6 +101,16 @@ public class Event {
      */
     public Node getNode() {
         return node;
+    }
+
+    /*
+     * Get type of event.
+     *
+     * @return type of event
+     */
+    @CheckForNull
+    public String getType() {
+        return type;
     }
 
     @Override
