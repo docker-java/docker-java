@@ -7,13 +7,15 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.annotation.CheckForNull;
+import java.io.Serializable;
 
 /**
  * @author Kanstantsin Shautsou
  * @see Container
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ContainerPort {
+public class ContainerPort implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @JsonProperty("IP")
     private String ip;

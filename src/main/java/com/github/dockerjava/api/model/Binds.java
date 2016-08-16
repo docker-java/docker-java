@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.model;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -19,7 +20,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @JsonSerialize(using = Binds.Serializer.class)
 @JsonDeserialize(using = Binds.Deserializer.class)
-public class Binds {
+public class Binds implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private Bind[] binds;
 

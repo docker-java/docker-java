@@ -7,6 +7,8 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
+
 /**
  * Container restart policy
  *
@@ -26,7 +28,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author Marcus Linke
  *
  */
-public class RestartPolicy {
+public class RestartPolicy implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @JsonProperty("MaximumRetryCount")
     private Integer maximumRetryCount = 0;

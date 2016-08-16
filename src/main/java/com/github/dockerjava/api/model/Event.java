@@ -13,12 +13,15 @@ import javax.annotation.CheckForNull;
 
 import static org.apache.commons.lang.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 
+import java.io.Serializable;
+
 /**
  * Representation of a Docker event.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
-public class Event {
+public class Event implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     /**
      * @since 1.16

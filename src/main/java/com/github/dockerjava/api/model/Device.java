@@ -12,12 +12,14 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.annotation.Nonnull;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
 @JsonInclude(Include.NON_NULL)
-public class Device {
+public class Device implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @JsonProperty("CgroupPermissions")
     private String cGroupPermissions = "";

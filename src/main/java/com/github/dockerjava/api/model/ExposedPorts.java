@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.model;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -21,7 +22,8 @@ import com.fasterxml.jackson.databind.node.NullNode;
 
 @JsonSerialize(using = ExposedPorts.Serializer.class)
 @JsonDeserialize(using = ExposedPorts.Deserializer.class)
-public class ExposedPorts {
+public class ExposedPorts implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private ExposedPort[] exposedPorts;
 

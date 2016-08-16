@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BuildResponseItem extends ResponseItem {
-
     private static final long serialVersionUID = -1252904184236343612L;
 
     private static final String BUILD_SUCCESS = "Successfully built";

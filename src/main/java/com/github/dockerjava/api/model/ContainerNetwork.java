@@ -9,6 +9,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.annotation.CheckForNull;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,7 +22,9 @@ import java.util.List;
  * @author Kanstantsin Shautsou
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ContainerNetwork {
+public class ContainerNetwork implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     /**
      * FIXME verify
      */

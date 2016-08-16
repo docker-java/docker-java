@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -16,7 +17,8 @@ import java.util.Map;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class NetworkSettings {
+public class NetworkSettings implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @JsonProperty("Bridge")
     private String bridge;

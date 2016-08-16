@@ -7,6 +7,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -16,7 +17,9 @@ import java.util.Map;
  * @since {@link RemoteApiVersion#VERSION_1_22}
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ContainerNetworkSettings {
+public class ContainerNetworkSettings implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     /**
      * @since {@link RemoteApiVersion#VERSION_1_22}
      */

@@ -3,12 +3,15 @@ package com.github.dockerjava.api.model;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import java.io.Serializable;
+
 /**
  * Represents a bind mounted volume in a Docker container.
  *
  * @see Bind
  */
-public class Volume {
+public class Volume implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private String path;
 

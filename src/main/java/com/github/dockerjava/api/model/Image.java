@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Konstantin Pelykh (kpelykh@gmail.com)
@@ -14,7 +16,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
-public class Image {
+public class Image implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @JsonProperty("Created")
     private Long created;

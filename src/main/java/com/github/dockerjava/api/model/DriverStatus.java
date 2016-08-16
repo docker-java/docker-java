@@ -7,12 +7,15 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
+
 /**
- * Created by ben on 12/12/13.
+ * @author ben
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
-public class DriverStatus {
+public class DriverStatus implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @JsonProperty("Root Dir")
     private String rootDir;

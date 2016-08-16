@@ -1,11 +1,14 @@
 package com.github.dockerjava.api.model;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
  * Represents a logging frame.
  */
-public class Frame {
+public class Frame implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final StreamType streamType;
 
     private final byte[] payload;

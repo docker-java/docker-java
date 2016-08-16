@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.model;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import javax.annotation.CheckForNull;
@@ -16,7 +17,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
-public class Statistics {
+public class Statistics implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @JsonProperty("read")
     private String read;

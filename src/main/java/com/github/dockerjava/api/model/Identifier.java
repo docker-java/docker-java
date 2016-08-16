@@ -3,10 +3,14 @@ package com.github.dockerjava.api.model;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 
+import java.io.Serializable;
+
 /**
- * Created by magnayn on 22/07/2014.
+ * @author magnayn
  */
-public class Identifier {
+public class Identifier implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     public final Repository repository;
 
     public final Optional<String> tag;
