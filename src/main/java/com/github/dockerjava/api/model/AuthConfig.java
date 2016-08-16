@@ -8,9 +8,10 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.annotation.CheckForNull;
+import java.io.Serializable;
 
 @JsonInclude(Include.NON_NULL)
-public class AuthConfig {
+public class AuthConfig implements Serializable {
 
     /**
      * For backwards compatibility. Make sure you update the properties if you change this.
