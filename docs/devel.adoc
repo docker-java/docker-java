@@ -13,6 +13,7 @@
   ** Provide full information on field:
   *** For models define API version with `@since {@link RemoteApiVersion#VERSION_1_X}`.
   ** getters/setters should refernce to field `@see #$field`.
+  * If it is `Serializable` it shall have a `serialVersionUID` field. Unless code has shipped to users, the initial value of the `serialVersionUID` field shall be `1L`.
 
 ### Coding style
   * TBD, some initial styling already enforced with checkstyle.
