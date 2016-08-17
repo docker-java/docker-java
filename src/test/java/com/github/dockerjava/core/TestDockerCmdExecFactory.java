@@ -30,6 +30,7 @@ import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
 import com.github.dockerjava.api.command.InspectNetworkCmd;
 import com.github.dockerjava.api.command.InspectSwarmCmd;
+import com.github.dockerjava.api.command.InspectSwarmNodeCmd;
 import com.github.dockerjava.api.command.InspectVolumeCmd;
 import com.github.dockerjava.api.command.JoinSwarmCmd;
 import com.github.dockerjava.api.command.KillContainerCmd;
@@ -37,6 +38,7 @@ import com.github.dockerjava.api.command.LeaveSwarmCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.ListNetworksCmd;
+import com.github.dockerjava.api.command.ListSwarmNodesCmd;
 import com.github.dockerjava.api.command.ListVolumesCmd;
 import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.api.command.LogContainerCmd;
@@ -47,6 +49,7 @@ import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.command.RemoveContainerCmd;
 import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.command.RemoveNetworkCmd;
+import com.github.dockerjava.api.command.RemoveSwarmNodeCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
@@ -60,6 +63,7 @@ import com.github.dockerjava.api.command.TopContainerCmd;
 import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.UpdateContainerCmd;
 import com.github.dockerjava.api.command.UpdateSwarmCmd;
+import com.github.dockerjava.api.command.UpdateSwarmNodeCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.model.BuildResponseItem;
@@ -432,6 +436,7 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
         return delegate.createDisconnectFromNetworkCmdExec();
     }
 
+    // swarm
     @Override
     public InitializeSwarmCmd.Exec createInitializeSwarmCmdExec() {
         return delegate.createInitializeSwarmCmdExec();
@@ -456,6 +461,28 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
     public UpdateSwarmCmd.Exec createUpdateSwarmCmdExec() {
         return delegate.createUpdateSwarmCmdExec();
     }
+
+    // nodes
+    @Override
+    public ListSwarmNodesCmd.Exec listSwarmNodeCmdExec() {
+        return delegate.listSwarmNodeCmdExec();
+    }
+
+    @Override
+    public InspectSwarmNodeCmd.Exec inspectSwarmNodeCmdExec() {
+        return delegate.inspectSwarmNodeCmdExec();
+    }
+
+    @Override
+    public RemoveSwarmNodeCmd.Exec removeSwarmNodeCmdExec() {
+        return delegate.removeSwarmNodeCmdExec();
+    }
+
+    @Override
+    public UpdateSwarmNodeCmd.Exec updateSwarmNodeCmdExec() {
+        return delegate.updateSwarmNodeCmdExec();
+    }
+
 
     public List<String> getContainerNames() {
         return new ArrayList<String>(containerNames);
