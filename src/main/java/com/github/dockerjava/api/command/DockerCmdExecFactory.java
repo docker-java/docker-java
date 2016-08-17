@@ -128,7 +128,43 @@ public interface DockerCmdExecFactory extends Closeable {
 
     UpdateSwarmCmd.Exec createUpdateSwarmCmdExec();
 
+    /**
+     * Command to list all services in a docker swarm. Only applicable if docker runs in swarm mode.
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_24}
+     */
+    ListServicesCmd.Exec createListServicesCmdExec();
+
+    /**
+     * Command to create a new service in a docker swarm. Only applicable if docker runs in swarm mode.
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_24}
+     */
+    CreateServiceCmd.Exec createCreateServiceCmdExec();
+
+    /**
+     * Command to inspect a service in a docker swarm. Only applicable if docker runs in swarm mode.
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_24}
+     */
+    InspectServiceCmd.Exec createInspectServiceCmdExec();
+
+    /**
+     * Command to update a service specification in a docker swarm. Only applicable if docker runs in swarm mode.
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_24}
+     */
+    UpdateServiceCmd.Exec createUpdateServiceCmdExec();
+
+    /**
+     * Command to remove a service in a docker swarm. Only applicable if docker runs in swarm mode.
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_24}
+     */
+    RemoveServiceCmd.Exec createRemoveServiceCmdExec();
+
     // nodes
+
     /**
      * List all nodes. Node operations require the engine to be part of a swarm
      *
@@ -156,8 +192,6 @@ public interface DockerCmdExecFactory extends Closeable {
      * @since {@link RemoteApiVersion#VERSION_1_24}
      */
     UpdateSwarmNodeCmd.Exec updateSwarmNodeCmdExec();
-
-
 
 
     @Override
