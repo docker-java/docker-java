@@ -1,40 +1,70 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * A node as returned by the /events API, for instance, when Swarm is used.
+ * Used for Listing containers.
+ *
+ * @author Martin Root
  */
-@JsonInclude(Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Node {
-
-    @JsonProperty("Name")
-    private String name;
-
     @JsonProperty("Id")
     private String id;
 
-    @JsonProperty("Addr")
-    private String addr;
+    @JsonProperty("Version")
+    private String[] version;
 
-    @JsonProperty("Ip")
-    private String ip;
+    @JsonProperty("CreatedAt")
+    private String createdAt;
 
-    public String getName() {
-        return name;
-    }
+    @JsonProperty("UpdatedAt")
+    private String updatedAt;
+
+    @JsonProperty("Spec")
+    private NodeSpec spec;
+
+    @JsonProperty("Description")
+    private NodeDescription description;
+
+    @JsonProperty("Status")
+    private NodeStatus status;
+
+    @JsonProperty("ManagerStatus")
+    private NodeManagerStatus managerStatus;
 
     public String getId() {
         return id;
     }
 
-    public String getAddr() {
-        return addr;
+    public String[] getVersion() {
+        return version;
     }
 
-    public String getIp() {
-        return ip;
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public NodeSpec getSpec() {
+        return spec;
+    }
+
+    public NodeDescription getDescription() {
+        return description;
+    }
+
+    public NodeStatus getStatus() {
+        return status;
+    }
+
+    public NodeManagerStatus getManagerStatus() {
+        return managerStatus;
     }
 }
