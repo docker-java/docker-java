@@ -28,6 +28,7 @@ import com.github.dockerjava.api.command.KillContainerCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.ListNetworksCmd;
+import com.github.dockerjava.api.command.ListServicesCmd;
 import com.github.dockerjava.api.command.ListVolumesCmd;
 import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.api.command.LogContainerCmd;
@@ -82,6 +83,7 @@ import com.github.dockerjava.netty.exec.KillContainerCmdExec;
 import com.github.dockerjava.netty.exec.ListContainersCmdExec;
 import com.github.dockerjava.netty.exec.ListImagesCmdExec;
 import com.github.dockerjava.netty.exec.ListNetworksCmdExec;
+import com.github.dockerjava.netty.exec.ListServicesCmdExec;
 import com.github.dockerjava.netty.exec.ListVolumesCmdExec;
 import com.github.dockerjava.netty.exec.LoadImageCmdExec;
 import com.github.dockerjava.netty.exec.LogContainerCmdExec;
@@ -571,6 +573,11 @@ public class NettyDockerCmdExecFactory implements DockerCmdExecFactory {
     @Override
     public DisconnectFromNetworkCmd.Exec createDisconnectFromNetworkCmdExec() {
         return new DisconnectFromNetworkCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public ListServicesCmd.Exec createListServicesCmdExec() {
+        return new ListServicesCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override

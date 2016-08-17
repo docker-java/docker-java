@@ -17,6 +17,7 @@ import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.client.ClientResponseFilter;
 import javax.ws.rs.client.WebTarget;
 
+import com.github.dockerjava.api.command.ListServicesCmd;
 import com.github.dockerjava.api.command.UpdateContainerCmd;
 import com.github.dockerjava.core.SSLConfig;
 
@@ -541,6 +542,10 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
     public DisconnectFromNetworkCmd.Exec createDisconnectFromNetworkCmdExec() {
 
         return new DisconnectFromNetworkCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override public ListServicesCmd.Exec createListServicesCmdExec() {
+        return new ListServicesCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override

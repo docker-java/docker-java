@@ -34,6 +34,7 @@ import com.github.dockerjava.api.command.KillContainerCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.ListNetworksCmd;
+import com.github.dockerjava.api.command.ListServicesCmd;
 import com.github.dockerjava.api.command.ListVolumesCmd;
 import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.api.command.LogContainerCmd;
@@ -250,6 +251,8 @@ public interface DockerClient extends Closeable {
     ConnectToNetworkCmd connectToNetworkCmd();
 
     DisconnectFromNetworkCmd disconnectFromNetworkCmd();
+
+    ListServicesCmd listServicesCmd();
 
     @Override
     void close() throws IOException;

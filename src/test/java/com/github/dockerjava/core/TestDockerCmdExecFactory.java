@@ -33,6 +33,7 @@ import com.github.dockerjava.api.command.KillContainerCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.ListNetworksCmd;
+import com.github.dockerjava.api.command.ListServicesCmd;
 import com.github.dockerjava.api.command.ListVolumesCmd;
 import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.api.command.LogContainerCmd;
@@ -58,6 +59,7 @@ import com.github.dockerjava.api.command.UpdateContainerCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.model.BuildResponseItem;
+import com.github.dockerjava.jaxrs.ListServicesCmdExec;
 
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -425,6 +427,11 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
     @Override
     public DisconnectFromNetworkCmd.Exec createDisconnectFromNetworkCmdExec() {
         return delegate.createDisconnectFromNetworkCmdExec();
+    }
+
+    @Override
+    public ListServicesCmd.Exec createListServicesCmdExec() {
+        return delegate.createListServicesCmdExec();
     }
 
     public List<String> getContainerNames() {
