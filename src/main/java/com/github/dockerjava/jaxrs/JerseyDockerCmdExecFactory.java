@@ -13,6 +13,7 @@ import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateImageCmd;
 import com.github.dockerjava.api.command.CreateNetworkCmd;
+import com.github.dockerjava.api.command.CreateServiceCmd;
 import com.github.dockerjava.api.command.CreateVolumeCmd;
 import com.github.dockerjava.api.command.DisconnectFromNetworkCmd;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
@@ -25,6 +26,7 @@ import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
 import com.github.dockerjava.api.command.InspectNetworkCmd;
+import com.github.dockerjava.api.command.InspectServiceCmd;
 import com.github.dockerjava.api.command.InspectSwarmCmd;
 import com.github.dockerjava.api.command.InspectVolumeCmd;
 import com.github.dockerjava.api.command.JoinSwarmCmd;
@@ -33,6 +35,7 @@ import com.github.dockerjava.api.command.LeaveSwarmCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.ListNetworksCmd;
+import com.github.dockerjava.api.command.ListServicesCmd;
 import com.github.dockerjava.api.command.ListVolumesCmd;
 import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.api.command.LogContainerCmd;
@@ -43,6 +46,7 @@ import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.command.RemoveContainerCmd;
 import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.command.RemoveNetworkCmd;
+import com.github.dockerjava.api.command.RemoveServiceCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
@@ -54,6 +58,8 @@ import com.github.dockerjava.api.command.StopContainerCmd;
 import com.github.dockerjava.api.command.TagImageCmd;
 import com.github.dockerjava.api.command.TopContainerCmd;
 import com.github.dockerjava.api.command.UnpauseContainerCmd;
+import com.github.dockerjava.api.command.UpdateContainerCmd;
+import com.github.dockerjava.api.command.UpdateServiceCmd;
 import com.github.dockerjava.api.command.UpdateContainerCmd;
 import com.github.dockerjava.api.command.UpdateSwarmCmd;
 import com.github.dockerjava.api.command.VersionCmd;
@@ -573,6 +579,30 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
     public UpdateSwarmCmd.Exec createUpdateSwarmCmdExec() {
         return new UpdateSwarmCmdExec(getBaseResource(), getDockerClientConfig());
     }
+    @Override public ListServicesCmd.Exec createListServicesCmdExec() {
+        return new ListServicesCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public CreateServiceCmd.Exec createCreateServiceCmdExec() {
+        return new CreateServiceCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public InspectServiceCmd.Exec createInspectServiceCmdExec() {
+        return new InspectServiceCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public UpdateServiceCmd.Exec createUpdateServiceCmdExec() {
+        return new UpdateServiceCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public RemoveServiceCmd.Exec createRemoveServiceCmdExec() {
+        return new RemoveServiceCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
     @Override
     public void close() throws IOException {
         checkNotNull(client, "Factory not initialized. You probably forgot to call init()!");
