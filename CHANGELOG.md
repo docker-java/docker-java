@@ -2,6 +2,9 @@ Change Log
 ===
 ## Next
 
+## 3.0.5
+ * Events updated to 1.24 API model.
+
 ## 3.0.4
  * Make cert util methods public.
 
