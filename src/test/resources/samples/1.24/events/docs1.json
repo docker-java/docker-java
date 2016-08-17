@@ -1,0 +1,17 @@
+{
+  "status": "create",
+  "id": "ede54ee1afda366ab42f824e8a5ffd195155d853ceaec74a927f249ea270c743",
+  "from": "alpine",
+  "Type": "container",
+  "Action": "create",
+  "Actor": {
+    "ID": "ede54ee1afda366ab42f824e8a5ffd195155d853ceaec74a927f249ea270c743",
+    "Attributes": {
+      "com.example.some-label": "some-label-value",
+      "image": "alpine",
+      "name": "my-container"
+    }
+  },
+  "time": 1461943101,
+  "timeNano": 1461943101381709551
+}
