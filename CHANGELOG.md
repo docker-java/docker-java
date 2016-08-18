@@ -2,7 +2,7 @@ Change Log
 ===
 ## Next
 
-## 3.0.7
+## 3.0.6
  * Make all models Serializable
 
 ## 3.0.5
