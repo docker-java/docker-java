@@ -1,4 +1,4 @@
-[![Maven Central](https://img.shields.io/maven-central/v/com.github.docker-java/docker-java.svg)]()
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.docker-java/docker-java.svg)](https://mvnrepository.com/artifact/com.github.docker-java/docker-java)
 [![Bintray](https://api.bintray.com/packages/kostyasha/maven/com.github.docker-java%3Adocker-java/images/download.svg)](https://bintray.com/kostyasha/maven/com.github.docker-java%3Adocker-java/_latestVersion) 
 [![Reference Status](https://www.versioneye.com/java/com.github.docker-java:docker-java/reference_badge.svg?style=flat)](https://www.versioneye.com/java/com.github.docker-java:docker-java/references)
 [![Build Status](https://travis-ci.org/docker-java/docker-java.svg?branch=master)](https://travis-ci.org/docker-java/docker-java)
