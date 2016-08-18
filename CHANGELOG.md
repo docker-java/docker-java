@@ -2,6 +2,9 @@ Change Log
 ===
 ## Next
 
+## 3.0.7
+ * Make all models Serializable
+
 ## 3.0.5
  * Events updated to 1.24 API model.
 
