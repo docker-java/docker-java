@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.model;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -29,7 +30,8 @@ import com.github.dockerjava.core.RemoteApiVersion;
 @JsonDeserialize(using = VolumeRW.Deserializer.class)
 @JsonSerialize(using = VolumeRW.Serializer.class)
 @Deprecated
-public class VolumeRW {
+public class VolumeRW implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private Volume volume;
 

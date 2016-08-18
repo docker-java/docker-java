@@ -4,6 +4,7 @@ import static com.github.dockerjava.api.model.InternetProtocol.TCP;
 import static com.github.dockerjava.api.model.InternetProtocol.UDP;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -30,7 +31,8 @@ import com.github.dockerjava.api.model.Ports.Binding;
  */
 @JsonDeserialize(using = ExposedPort.Deserializer.class)
 @JsonSerialize(using = ExposedPort.Serializer.class)
-public class ExposedPort {
+public class ExposedPort implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private final InternetProtocol protocol;
 

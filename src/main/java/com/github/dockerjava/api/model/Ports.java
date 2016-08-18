@@ -16,6 +16,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -35,7 +36,8 @@ import static org.apache.commons.lang.StringUtils.isEmpty;
 @SuppressWarnings(value = "checkstyle:equalshashcode")
 @JsonDeserialize(using = Ports.Deserializer.class)
 @JsonSerialize(using = Ports.Serializer.class)
-public class Ports {
+public class Ports implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private final Map<ExposedPort, Binding[]> ports = new HashMap<ExposedPort, Binding[]>();
 

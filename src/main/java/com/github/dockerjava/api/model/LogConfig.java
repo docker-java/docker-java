@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.model;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -26,7 +27,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
  * docker will ignore them. In most cases setting the config option to null will suffice. Consult the docker remote API for a more detailed
  * and up-to-date explanation of the available types and their options.
  */
-public class LogConfig {
+public class LogConfig implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @JsonProperty("Type")
     public LoggingType type = null;

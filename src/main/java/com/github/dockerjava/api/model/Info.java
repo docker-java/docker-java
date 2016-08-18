@@ -9,6 +9,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.annotation.CheckForNull;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +20,8 @@ import java.util.Map;
  */
 @JsonInclude(Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Info {
+public class Info implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}

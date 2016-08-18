@@ -11,6 +11,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.annotation.CheckForNull;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,7 +21,8 @@ import java.util.List;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
-public class HostConfig {
+public class HostConfig implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private static final List<String> PREDEFINED_NETWORKS = Arrays.asList("bridge", "host", "none");
 

@@ -6,6 +6,8 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.github.dockerjava.api.model.Ports.Binding;
 
+import java.io.Serializable;
+
 /**
  * In a {@link PortBinding}, a network socket on the Docker host, expressed as a {@link Binding}, is bound to an {@link ExposedPort} of a
  * container. A {@link PortBinding} corresponds to the <code>--publish</code> (<code>-p</code>) option of the <code>docker run</code> (and
@@ -15,7 +17,9 @@ import com.github.dockerjava.api.model.Ports.Binding;
  * existing port bindings from a container configuration in {@link NetworkSettings#getPorts()} and {@link HostConfig#getPortBindings()}. In
  * that context, a <code>Map&lt;ExposedPort, Binding[]&gt;</code> is used.</i>
  */
-public class PortBinding {
+public class PortBinding implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final Binding binding;
 
     private final ExposedPort exposedPort;

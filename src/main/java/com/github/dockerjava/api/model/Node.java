@@ -4,11 +4,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
+
 /**
  * A node as returned by the /events API, for instance, when Swarm is used.
  */
 @JsonInclude(Include.NON_NULL)
-public class Node {
+public class Node implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @JsonProperty("Name")
     private String name;

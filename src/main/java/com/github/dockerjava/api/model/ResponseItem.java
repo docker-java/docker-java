@@ -15,7 +15,6 @@ import java.io.Serializable;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ResponseItem implements Serializable {
-
     private static final long serialVersionUID = -5187169652557467828L;
 
     @JsonProperty("stream")

@@ -8,6 +8,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.annotation.CheckForNull;
+import java.io.Serializable;
 
 /**
  * Used for `/version`
@@ -16,7 +17,8 @@ import javax.annotation.CheckForNull;
  * @see VersionCmd
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Version {
+public class Version implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @JsonProperty("ApiVersion")
     private String apiVersion;

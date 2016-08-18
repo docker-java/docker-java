@@ -7,6 +7,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.annotation.CheckForNull;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +15,9 @@ import java.util.Map;
  * @since ~{@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_20}
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public final class InfoRegistryConfig {
+public final class InfoRegistryConfig implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @JsonProperty("IndexConfigs")
     private Map<String, IndexConfig> indexConfigs;
 

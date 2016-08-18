@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.model;
 
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -8,7 +9,9 @@ import com.google.common.base.Objects;
 /**
  * A repository or image name.
  */
-public class Repository {
+public class Repository implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     public final String name;
 
     /**

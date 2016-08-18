@@ -1,6 +1,10 @@
 package com.github.dockerjava.api.model;
 
-public class VolumeBind {
+import java.io.Serializable;
+
+public class VolumeBind implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final String hostPath;
 
     private final String containerPath;

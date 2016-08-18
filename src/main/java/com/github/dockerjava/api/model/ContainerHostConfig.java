@@ -6,6 +6,8 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import java.io.Serializable;
+
 /**
  * Used in {@link Container}
  *
@@ -13,7 +15,9 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @author Kanstantsin Shautsou
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ContainerHostConfig {
+public class ContainerHostConfig implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @JsonProperty("NetworkMode")
     private String networkMode;
 

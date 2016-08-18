@@ -7,10 +7,13 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
+
 /**
  * @author Vangie Du (duwan@live.com)
  */
-public class Ulimit {
+public class Ulimit implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @JsonProperty("Name")
     private String name;

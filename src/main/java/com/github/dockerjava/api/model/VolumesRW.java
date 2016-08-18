@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.model;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -22,7 +23,9 @@ import com.fasterxml.jackson.databind.node.NullNode;
 // This is not going to be serialized
 @JsonSerialize(using = VolumesRW.Serializer.class)
 @JsonDeserialize(using = VolumesRW.Deserializer.class)
-public class VolumesRW {
+public class VolumesRW implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final VolumeRW[] volumesRW;
 
     public VolumesRW(VolumeRW... binds) {
