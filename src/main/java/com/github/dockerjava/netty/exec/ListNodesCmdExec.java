@@ -39,7 +39,7 @@ public class ListNodesCmdExec extends AbstrSyncDockerCmdExec<ListNodesCmd, List<
                 .get(new TypeReference<List<SwarmNode>>() {
                 });
 
-        LOGGER.trace("Response: {}", services);
+        LOGGER.trace("Response: {}", nodes);
 
         return nodes;
     }
