@@ -37,4 +37,20 @@ public class NodeSpec {
     public Map<String, String> getLabels() {
         return labels;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setAvailability(String availability) {
+        this.availability = availability;
+    }
+
+    public void setLabels(Map<String, String> labels) {
+        this.labels = labels;
+    }
 }

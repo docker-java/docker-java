@@ -30,4 +30,16 @@ public class NodeManagerStatus {
     public String getAddr() {
         return addr;
     }
+
+    public void setLeader(boolean leader) {
+        this.leader = leader;
+    }
+
+    public void setReachability(String reachability) {
+        this.reachability = reachability;
+    }
+
+    public void setAddr(String addr) {
+        this.addr = addr;
+    }
 }

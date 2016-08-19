@@ -10,4 +10,12 @@ public class NodePlatform {
 
     @JsonProperty("OS")
     private String os;
+
+    public void setArchitecture(String architecture) {
+        this.architecture = architecture;
+    }
+
+    public void setOs(String os) {
+        this.os = os;
+    }
 }
