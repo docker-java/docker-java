@@ -23,4 +23,12 @@ public class NodeResources {
     public Long getMemoryBytes() {
         return memoryBytes;
     }
+
+    public void setNanoCPUs(Long nanoCPUs) {
+        this.nanoCPUs = nanoCPUs;
+    }
+
+    public void setMemoryBytes(Long memoryBytes) {
+        this.memoryBytes = memoryBytes;
+    }
 }

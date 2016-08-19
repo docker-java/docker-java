@@ -35,4 +35,20 @@ public class NodeDescription {
     public NodeEngine getEngine() {
         return engine;
     }
+
+    public void setHostname(String hostname) {
+        this.hostname = hostname;
+    }
+
+    public void setPlatform(NodePlatform platform) {
+        this.platform = platform;
+    }
+
+    public void setResources(NodeResources resources) {
+        this.resources = resources;
+    }
+
+    public void setEngine(NodeEngine engine) {
+        this.engine = engine;
+    }
 }

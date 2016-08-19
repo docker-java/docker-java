@@ -32,4 +32,16 @@ public class NodeEngine {
     public NodePlugin[] getPlugins() {
         return plugins;
     }
+
+    public void setEngineVersion(String engineVersion) {
+        this.engineVersion = engineVersion;
+    }
+
+    public void setLabels(Map<String, String> labels) {
+        this.labels = labels;
+    }
+
+    public void setPlugins(NodePlugin[] plugins) {
+        this.plugins = plugins;
+    }
 }

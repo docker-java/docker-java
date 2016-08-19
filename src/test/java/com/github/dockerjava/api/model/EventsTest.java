@@ -37,7 +37,7 @@ public class EventsTest {
         assertThat(event.getId(), is("ede54ee1afda366ab42f824e8a5ffd195155d853ceaec74a927f249ea270c743"));
         assertThat(event.getFrom(), is("alpine"));
         assertThat(event.getTime(), is(1461943101L));
-        assertThat(event.getEventNode(), nullValue());
+        assertThat(event.getNode(), nullValue());
         assertThat(event.getTimeNano(), is(1461943101381709551L));
 
         final HashMap<String, String> attributes = new HashMap<>();

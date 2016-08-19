@@ -41,8 +41,8 @@ public class Event {
     /**
      * ??
      */
-    @JsonProperty("eventNode")
-    private EventNode eventNode;
+    @JsonProperty("node")
+    private Node node;
 
     /*
      * @since 1.
@@ -183,17 +183,17 @@ public class Event {
     }
 
     /**
-     * Returns the eventNode when working against docker swarm
+     * Returns the node when working against docker swarm
      */
-    public EventNode getEventNode() {
-        return eventNode;
+    public Node getNode() {
+        return node;
     }
 
     /**
-     * @see #eventNode
+     * @see #node
      */
-    public Event withNode(EventNode eventNode) {
-        this.eventNode = eventNode;
+    public Event withNode(Node node) {
+        this.node = node;
         return this;
     }
 

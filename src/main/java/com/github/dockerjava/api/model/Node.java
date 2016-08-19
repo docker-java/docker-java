@@ -1,70 +1,74 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
- * Used for Listing containers.
- *
- * @author Martin Root
+ * A node as returned by the /events API, for instance, when Swarm is used.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(Include.NON_NULL)
 public class Node {
+
+    @JsonProperty("Name")
+    private String name;
+
     @JsonProperty("Id")
     private String id;
 
-    @JsonProperty("Version")
-    private String[] version;
+    @JsonProperty("Addr")
+    private String addr;
 
-    @JsonProperty("CreatedAt")
-    private String createdAt;
+    @JsonProperty("Ip")
+    private String ip;
 
-    @JsonProperty("UpdatedAt")
-    private String updatedAt;
+    public String getName() {
+        return name;
+    }
 
-    @JsonProperty("Spec")
-    private NodeSpec spec;
-
-    @JsonProperty("Description")
-    private NodeDescription description;
-
-    @JsonProperty("Status")
-    private NodeStatus status;
-
-    @JsonProperty("ManagerStatus")
-    private NodeManagerStatus managerStatus;
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getId() {
         return id;
     }
 
-    public String[] getVersion() {
-        return version;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
+    public String getAddr() {
+        return addr;
     }
 
-    public String getUpdatedAt() {
-        return updatedAt;
+    public void setAddr(String addr) {
+        this.addr = addr;
     }
 
-    public NodeSpec getSpec() {
-        return spec;
+    public String getIp() {
+        return ip;
     }
 
-    public NodeDescription getDescription() {
-        return description;
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 
-    public NodeStatus getStatus() {
-        return status;
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 
-    public NodeManagerStatus getManagerStatus() {
-        return managerStatus;
+    @Override
+    public boolean equals(Object o) {
+        return EqualsBuilder.reflectionEquals(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }
