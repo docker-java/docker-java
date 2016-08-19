@@ -1,9 +1,9 @@
 package com.github.dockerjava.core.command;
 
 
-import com.github.dockerjava.api.command.ListNodesCmd;
+import com.github.dockerjava.api.command.ListSwarmNodesCmd;
 import com.github.dockerjava.api.model.SwarmNode;
-import com.github.dockerjava.core.util.ServiceFiltersBuilder;
+import com.github.dockerjava.core.util.SwarmNodesFiltersBuilder;
 
 import java.util.List;
 import java.util.Map;
@@ -13,12 +13,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * List SwarmNodes
  */
-public class ListNodesCmdImpl extends AbstrDockerCmd<ListNodesCmd, List<SwarmNode>> implements
-        ListNodesCmd  {
+public class ListSwarmNodesCmdImpl extends AbstrDockerCmd<ListSwarmNodesCmd, List<SwarmNode>> implements
+        ListSwarmNodesCmd {
 
-    private ServiceFiltersBuilder filters = new ServiceFiltersBuilder();
+    private SwarmNodesFiltersBuilder filters = new SwarmNodesFiltersBuilder();
 
-    public ListNodesCmdImpl(Exec exec) {
+    public ListSwarmNodesCmdImpl(Exec exec) {
         super(exec);
     }
 
@@ -28,14 +28,14 @@ public class ListNodesCmdImpl extends AbstrDockerCmd<ListNodesCmd, List<SwarmNod
     }
 
     @Override
-    public ListNodesCmd withIdFilter(List<String> ids) {
+    public ListSwarmNodesCmd withIdFilter(List<String> ids) {
         checkNotNull(ids, "ids was not specified");
         this.filters.withIds(ids);
         return this;
     }
 
     @Override
-    public ListNodesCmd withNameFilter(List<String> names) {
+    public ListSwarmNodesCmd withNameFilter(List<String> names) {
         checkNotNull(names, "names was not specified");
         this.filters.withNames(names);
         return this;

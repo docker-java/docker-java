@@ -3,10 +3,15 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
+import static org.apache.commons.lang.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 
 /**
- * Used for Listing containers.
- *
+ * Used for Listing SwarmNodes.
+ * @since 1.24
  * @author Martin Root
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -25,16 +30,16 @@ public class SwarmNode {
     private String updatedAt;
 
     @JsonProperty("Spec")
-    private NodeSpec spec;
+    private SwarmNodeSpec spec;
 
     @JsonProperty("Description")
-    private NodeDescription description;
+    private SwarmNodeDescription description;
 
     @JsonProperty("Status")
-    private NodeStatus status;
+    private SwarmNodeStatus status;
 
     @JsonProperty("ManagerStatus")
-    private NodeManagerStatus managerStatus;
+    private SwarmNodeManagerStatus managerStatus;
 
     public String getId() {
         return id;
@@ -52,19 +57,19 @@ public class SwarmNode {
         return updatedAt;
     }
 
-    public NodeSpec getSpec() {
+    public SwarmNodeSpec getSpec() {
         return spec;
     }
 
-    public NodeDescription getDescription() {
+    public SwarmNodeDescription getDescription() {
         return description;
     }
 
-    public NodeStatus getStatus() {
+    public SwarmNodeStatus getStatus() {
         return status;
     }
 
-    public NodeManagerStatus getManagerStatus() {
+    public SwarmNodeManagerStatus getManagerStatus() {
         return managerStatus;
     }
 
@@ -84,19 +89,34 @@ public class SwarmNode {
         this.updatedAt = updatedAt;
     }
 
-    public void setSpec(NodeSpec spec) {
+    public void setSpec(SwarmNodeSpec spec) {
         this.spec = spec;
     }
 
-    public void setDescription(NodeDescription description) {
+    public void setDescription(SwarmNodeDescription description) {
         this.description = description;
     }
 
-    public void setStatus(NodeStatus status) {
+    public void setStatus(SwarmNodeStatus status) {
         this.status = status;
     }
 
-    public void setManagerStatus(NodeManagerStatus managerStatus) {
+    public void setManagerStatus(SwarmNodeManagerStatus managerStatus) {
         this.managerStatus = managerStatus;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, SHORT_PREFIX_STYLE);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return EqualsBuilder.reflectionEquals(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

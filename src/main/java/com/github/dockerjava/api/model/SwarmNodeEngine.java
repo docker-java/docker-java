@@ -4,13 +4,18 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.Map;
+
+import static org.apache.commons.lang.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class NodeEngine {
+public class SwarmNodeEngine {
 
     @JsonProperty("EngineVersion")
     private String engineVersion;
@@ -19,7 +24,7 @@ public class NodeEngine {
     private Map<String,String> labels;
 
     @JsonProperty("Plugins")
-    private NodePlugin[] plugins;
+    private SwarmNodePlugin[] plugins;
 
     public String getEngineVersion() {
         return engineVersion;
@@ -29,7 +34,7 @@ public class NodeEngine {
         return labels;
     }
 
-    public NodePlugin[] getPlugins() {
+    public SwarmNodePlugin[] getPlugins() {
         return plugins;
     }
 
@@ -41,7 +46,22 @@ public class NodeEngine {
         this.labels = labels;
     }
 
-    public void setPlugins(NodePlugin[] plugins) {
+    public void setPlugins(SwarmNodePlugin[] plugins) {
         this.plugins = plugins;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, SHORT_PREFIX_STYLE);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return EqualsBuilder.reflectionEquals(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

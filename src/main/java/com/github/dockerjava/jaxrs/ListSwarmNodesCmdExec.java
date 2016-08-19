@@ -1,6 +1,6 @@
 package com.github.dockerjava.jaxrs;
 
-import com.github.dockerjava.api.command.ListNodesCmd;
+import com.github.dockerjava.api.command.ListSwarmNodesCmd;
 import com.github.dockerjava.api.model.SwarmNode;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.util.FiltersEncoder;
@@ -14,16 +14,16 @@ import java.util.List;
 
 import static com.google.common.net.UrlEscapers.urlPathSegmentEscaper;
 
-public class ListNodesCmdExec extends AbstrSyncDockerCmdExec<ListNodesCmd, List<SwarmNode>> implements
-        ListNodesCmd.Exec {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ListNodesCmdExec.class);
+public class ListSwarmNodesCmdExec extends AbstrSyncDockerCmdExec<ListSwarmNodesCmd, List<SwarmNode>> implements
+        ListSwarmNodesCmd.Exec {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ListSwarmNodesCmdExec.class);
 
-    public ListNodesCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
+    public ListSwarmNodesCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
         super(baseResource, dockerClientConfig);
     }
 
     @Override
-    protected List<SwarmNode> execute(ListNodesCmd command) {
+    protected List<SwarmNode> execute(ListSwarmNodesCmd command) {
         WebTarget webTarget = getBaseResource().path("/nodes");
 
         if (command.getFilters() != null && !command.getFilters().isEmpty()) {
