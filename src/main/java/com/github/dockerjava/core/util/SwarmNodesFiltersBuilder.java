@@ -37,12 +37,30 @@ public class SwarmNodesFiltersBuilder {
     }
 
     public List<String> getIds() {
-        return getFilter("name");
+        return getFilter("id");
     }
 
     public SwarmNodesFiltersBuilder withNames(List<String> names) {
         withFilter("name", names);
         return this;
+    }
+
+    public SwarmNodesFiltersBuilder withMemberships(List<String> memberships) {
+        withFilter("membership", memberships);
+        return this;
+    }
+
+    public List<String> getMemberships() {
+        return getFilter("membership");
+    }
+
+    public SwarmNodesFiltersBuilder withRoles(List<String> roles) {
+        withFilter("role", roles);
+        return this;
+    }
+
+    public List<String> getRoles() {
+        return getFilter("role");
     }
 
     public List<String> getNames() {

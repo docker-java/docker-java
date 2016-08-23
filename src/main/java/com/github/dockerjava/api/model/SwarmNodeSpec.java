@@ -4,64 +4,115 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.core.RemoteApiVersion;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
+import javax.annotation.CheckForNull;
+import java.io.Serializable;
 import java.util.Map;
 
-import static org.apache.commons.lang.builder.ToStringStyle.SHORT_PREFIX_STYLE;
-
+/**
+ * @since {@link RemoteApiVersion#VERSION_1_24}
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SwarmNodeSpec {
+public class SwarmNodeSpec implements Serializable {
+    public static final Long serialVersionUID = 1L;
+
+    /**
+     * @since 1.24
+     */
     @JsonProperty("Name")
     private String name;
 
+    /**
+     * @since 1.24
+     */
     @JsonProperty("Role")
     private String id;
 
+    /**
+     * @since 1.24
+     */
     @JsonProperty("Availability")
     private String availability;
 
+    /**
+     * @since 1.24
+     */
     @JsonProperty("Labels")
     public Map<String, String> labels;
 
+    /**
+     * @see #name
+     */
+    @CheckForNull
     public String getName() {
         return name;
     }
 
+    /**
+     * @see #name
+     */
+    public SwarmNodeSpec withName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    /**
+     * @see #id
+     */
+    @CheckForNull
     public String getId() {
         return id;
     }
 
+    /**
+     * @see #id
+     */
+    public SwarmNodeSpec withId(String id) {
+        this.id = id;
+        return this;
+    }
+
+    /**
+     * @see #availability
+     */
+    @CheckForNull
     public String getAvailability() {
         return availability;
     }
 
+    /**
+     * @see #availability
+     */
+    public SwarmNodeSpec withAvailability(String availability) {
+        this.availability = availability;
+        return this;
+    }
+
+    /**
+     * @see #labels
+     */
+    @CheckForNull
     public Map<String, String> getLabels() {
         return labels;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setAvailability(String availability) {
-        this.availability = availability;
-    }
-
-    public void setLabels(Map<String, String> labels) {
+    /**
+     * @see #labels
+     */
+    public SwarmNodeSpec withLabels(Map<String, String> labels) {
         this.labels = labels;
+        return this;
     }
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, SHORT_PREFIX_STYLE);
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
     @Override

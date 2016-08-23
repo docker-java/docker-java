@@ -24,6 +24,16 @@ public interface ListSwarmNodesCmd extends SyncDockerCmd<List<SwarmNode>> {
      */
     ListSwarmNodesCmd withNameFilter(List<String> names);
 
+    /**
+     * @param memberships - Show only swarmNodes with the given memberships
+     */
+    ListSwarmNodesCmd withMembershipFilter(List<String> memberships);
+
+    /**
+     * @param roles - Show only swarmNodes with the given roles
+     */
+    ListSwarmNodesCmd withRoleFilter(List<String> roles);
+
     interface Exec extends DockerCmdSyncExec<ListSwarmNodesCmd, List<SwarmNode>> {
     }
 
