@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.model.SwarmNode;
+import com.github.dockerjava.core.RemoteApiVersion;
 
 import javax.annotation.CheckForNull;
 import java.util.List;
@@ -8,6 +9,8 @@ import java.util.Map;
 
 /**
  * List SwarmNodes
+ *
+ * @since {@link RemoteApiVersion#VERSION_1_24}
  */
 public interface ListSwarmNodesCmd extends SyncDockerCmd<List<SwarmNode>> {
 

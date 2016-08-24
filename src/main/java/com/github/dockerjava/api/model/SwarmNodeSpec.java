@@ -32,7 +32,7 @@ public class SwarmNodeSpec implements Serializable {
      * @since 1.24
      */
     @JsonProperty("Role")
-    private String id;
+    private String role;
 
     /**
      * @since 1.24
@@ -63,18 +63,18 @@ public class SwarmNodeSpec implements Serializable {
     }
 
     /**
-     * @see #id
+     * @see #role
      */
     @CheckForNull
-    public String getId() {
-        return id;
+    public String getRole() {
+        return role;
     }
 
     /**
-     * @see #id
+     * @see #role
      */
-    public SwarmNodeSpec withId(String id) {
-        this.id = id;
+    public SwarmNodeSpec withRole(String role) {
+        this.role = role;
         return this;
     }
 
