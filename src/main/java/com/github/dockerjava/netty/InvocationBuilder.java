@@ -34,6 +34,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.core.async.AsyncResultCallbackTemplate;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
 import com.github.dockerjava.netty.handler.FramedResponseStreamHandler;
 import com.github.dockerjava.netty.handler.HttpConnectionHijackHandler;
@@ -423,7 +424,7 @@ public class InvocationBuilder {
 
         Channel channel = getChannel();
 
-        ResponseCallback<InputStream> resultCallback = new ResponseCallback<InputStream>();
+        AsyncResultCallbackTemplate<InputStream> resultCallback = new AsyncResultCallbackTemplate<>();
 
         HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, resultCallback);
 

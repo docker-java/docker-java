@@ -19,15 +19,25 @@ import com.github.dockerjava.api.async.ResultCallback;
  */
 public class HttpResponseStreamHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
-    private HttpResponseInputStream stream = new HttpResponseInputStream();
+    private final HttpResponseInputStream stream = new HttpResponseInputStream();
+    private ResultCallback<InputStream> resultCallback;
 
     public HttpResponseStreamHandler(ResultCallback<InputStream> resultCallback) {
-        resultCallback.onNext(stream);
+        this.resultCallback = resultCallback;
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
+        invokeCallbackOnFirstRead();
+
         stream.write(msg.copy());
+    }
+
+    private void invokeCallbackOnFirstRead() {
+        if (resultCallback != null) {
+            resultCallback.onNext(stream);
+            resultCallback = null;
+        }
     }
 
     @Override
@@ -40,7 +50,7 @@ public class HttpResponseStreamHandler extends SimpleChannelInboundHandler<ByteB
 
         private AtomicBoolean writeCompleted = new AtomicBoolean(false);
 
-        private LinkedTransferQueue<ByteBuf> queue = new LinkedTransferQueue<ByteBuf>();
+        private LinkedTransferQueue<ByteBuf> queue = new LinkedTransferQueue<>();
 
         private ByteBuf current = null;
 
@@ -104,7 +114,7 @@ public class HttpResponseStreamHandler extends SimpleChannelInboundHandler<ByteB
             if (readableBytes() == 0) {
                 try {
                     releaseCurrent();
-                    current = queue.poll(50, TimeUnit.MILLISECONDS);
+                    current = queue.poll(500, TimeUnit.MILLISECONDS);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
