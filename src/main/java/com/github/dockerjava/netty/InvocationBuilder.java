@@ -391,15 +391,18 @@ public class InvocationBuilder {
 
         Channel channel = getChannel();
 
-        JsonResponseCallbackHandler<T> jsonResponseHandler = new JsonResponseCallbackHandler<T>(typeReference,
-                resultCallback);
-
         HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, resultCallback);
 
         channel.pipeline().addLast(new ChunkedWriteHandler());
         channel.pipeline().addLast(responseHandler);
-        channel.pipeline().addLast(new JsonObjectDecoder());
-        channel.pipeline().addLast(jsonResponseHandler);
+
+        if (!Void.class.equals(typeReference.getType())) {
+            JsonResponseCallbackHandler<T> jsonResponseHandler = new JsonResponseCallbackHandler<T>(typeReference,
+                    resultCallback);
+
+            channel.pipeline().addLast(new JsonObjectDecoder());
+            channel.pipeline().addLast(jsonResponseHandler);
+        }
 
         HttpRequest request = requestProvider.getHttpRequest(resource);
 
