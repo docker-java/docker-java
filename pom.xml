@@ -77,6 +77,7 @@
 		<hamcrest.jpa-matchers>1.8</hamcrest.jpa-matchers>
 		<lambdaj.version>2.3.3</lambdaj.version>
 		<mockito.version>1.10.19</mockito.version>
+		<junixsocket.version>2.0.4</junixsocket.version>
 
 
 		<maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
@@ -116,7 +117,7 @@
 		<dependency>
 			<groupId>com.kohlschutter.junixsocket</groupId>
 			<artifactId>junixsocket-common</artifactId>
-			<version>2.0.4</version>
+			<version>${junixsocket.version}</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>log4j</artifactId>
@@ -127,7 +128,7 @@
 		<dependency>
 			<groupId>com.kohlschutter.junixsocket</groupId>
 			<artifactId>junixsocket-native-common</artifactId>
-			<version>2.0.4</version>
+			<version>${junixsocket.version}</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>log4j</artifactId>
