@@ -1,12 +1,5 @@
 package com.github.dockerjava.core;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.io.Closeable;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
@@ -27,12 +20,16 @@ import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.command.ExecCreateCmd;
 import com.github.dockerjava.api.command.ExecStartCmd;
 import com.github.dockerjava.api.command.InfoCmd;
+import com.github.dockerjava.api.command.InitializeSwarmCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
 import com.github.dockerjava.api.command.InspectNetworkCmd;
+import com.github.dockerjava.api.command.InspectSwarmCmd;
 import com.github.dockerjava.api.command.InspectVolumeCmd;
+import com.github.dockerjava.api.command.JoinSwarmCmd;
 import com.github.dockerjava.api.command.KillContainerCmd;
+import com.github.dockerjava.api.command.LeaveSwarmCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.ListNetworksCmd;
@@ -47,6 +44,7 @@ import com.github.dockerjava.api.command.RemoveContainerCmd;
 import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.command.RemoveNetworkCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
+import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
 import com.github.dockerjava.api.command.SearchImagesCmd;
@@ -57,11 +55,12 @@ import com.github.dockerjava.api.command.TagImageCmd;
 import com.github.dockerjava.api.command.TopContainerCmd;
 import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.UpdateContainerCmd;
+import com.github.dockerjava.api.command.UpdateSwarmCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
-import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Identifier;
+import com.github.dockerjava.api.model.SwarmSpec;
 import com.github.dockerjava.core.command.AttachContainerCmdImpl;
 import com.github.dockerjava.core.command.AuthCmdImpl;
 import com.github.dockerjava.core.command.BuildImageCmdImpl;
@@ -80,12 +79,16 @@ import com.github.dockerjava.core.command.EventsCmdImpl;
 import com.github.dockerjava.core.command.ExecCreateCmdImpl;
 import com.github.dockerjava.core.command.ExecStartCmdImpl;
 import com.github.dockerjava.core.command.InfoCmdImpl;
+import com.github.dockerjava.core.command.InitializeSwarmCmdImpl;
 import com.github.dockerjava.core.command.InpectNetworkCmdImpl;
 import com.github.dockerjava.core.command.InspectContainerCmdImpl;
 import com.github.dockerjava.core.command.InspectExecCmdImpl;
 import com.github.dockerjava.core.command.InspectImageCmdImpl;
+import com.github.dockerjava.core.command.InspectSwarmCmdImpl;
 import com.github.dockerjava.core.command.InspectVolumeCmdImpl;
+import com.github.dockerjava.core.command.JoinSwarmCmdImpl;
 import com.github.dockerjava.core.command.KillContainerCmdImpl;
+import com.github.dockerjava.core.command.LeaveSwarmCmdImpl;
 import com.github.dockerjava.core.command.ListContainersCmdImpl;
 import com.github.dockerjava.core.command.ListImagesCmdImpl;
 import com.github.dockerjava.core.command.ListNetworksCmdImpl;
@@ -100,6 +103,7 @@ import com.github.dockerjava.core.command.RemoveContainerCmdImpl;
 import com.github.dockerjava.core.command.RemoveImageCmdImpl;
 import com.github.dockerjava.core.command.RemoveNetworkCmdImpl;
 import com.github.dockerjava.core.command.RemoveVolumeCmdImpl;
+import com.github.dockerjava.core.command.RenameContainerCmdImpl;
 import com.github.dockerjava.core.command.RestartContainerCmdImpl;
 import com.github.dockerjava.core.command.SaveImageCmdImpl;
 import com.github.dockerjava.core.command.SearchImagesCmdImpl;
@@ -110,11 +114,17 @@ import com.github.dockerjava.core.command.TagImageCmdImpl;
 import com.github.dockerjava.core.command.TopContainerCmdImpl;
 import com.github.dockerjava.core.command.UnpauseContainerCmdImpl;
 import com.github.dockerjava.core.command.UpdateContainerCmdImpl;
+import com.github.dockerjava.core.command.UpdateSwarmCmdImpl;
 import com.github.dockerjava.core.command.VersionCmdImpl;
 import com.github.dockerjava.core.command.WaitContainerCmdImpl;
-import com.github.dockerjava.core.command.RenameContainerCmdImpl;
 
 import javax.annotation.Nonnull;
+import java.io.Closeable;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * @author Konstantin Pelykh (kpelykh@gmail.com)
@@ -481,6 +491,31 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public DisconnectFromNetworkCmd disconnectFromNetworkCmd() {
         return new DisconnectFromNetworkCmdImpl(getDockerCmdExecFactory().createDisconnectFromNetworkCmdExec());
+    }
+
+    @Override
+    public InitializeSwarmCmd initializeSwarmCmd(SwarmSpec swarmSpec) {
+        return new InitializeSwarmCmdImpl(getDockerCmdExecFactory().createInitializeSwarmCmdExec(), swarmSpec);
+    }
+
+    @Override
+    public InspectSwarmCmd inspectSwarmCmd() {
+        return new InspectSwarmCmdImpl(getDockerCmdExecFactory().createInspectSwarmCmdExec());
+    }
+
+    @Override
+    public JoinSwarmCmd joinSwarmCmd() {
+        return new JoinSwarmCmdImpl(getDockerCmdExecFactory().createJoinSwarmCmdExec());
+    }
+
+    @Override
+    public LeaveSwarmCmd leaveSwarmCmd() {
+        return new LeaveSwarmCmdImpl(getDockerCmdExecFactory().createLeaveSwarmCmdExec());
+    }
+
+    @Override
+    public UpdateSwarmCmd updateSwarmCmd(SwarmSpec swarmSpec) {
+        return new UpdateSwarmCmdImpl(getDockerCmdExecFactory().createUpdateSwarmCmdExec(), swarmSpec);
     }
 
     @Override
