@@ -10,7 +10,7 @@ import com.google.common.base.Throwables;
 /**
  * Implementation of {@link ResultCallback} with the single result event expected.
  */
-public class AsyncResultCallbackTemplate<A_RES_T> implements ResultCallback<A_RES_T> {
+public class AsyncResultCallback<A_RES_T> implements ResultCallback<A_RES_T> {
 
     private A_RES_T result = null;
 
