@@ -25,7 +25,7 @@ public class AsyncResultCallbackTemplate<A_RES_T> implements ResultCallback<A_RE
     @Override
     public void onStart(Closeable stream) {
         this.stream = stream;
-        this.closed = false;
+        closed = false;
     }
 
     @Override
@@ -49,8 +49,8 @@ public class AsyncResultCallbackTemplate<A_RES_T> implements ResultCallback<A_RE
     public void onError(Throwable throwable) {
         if (closed) return;
 
-        if (this.firstError == null) {
-            this.firstError = throwable;
+        if (firstError == null) {
+            firstError = throwable;
         }
 
         try {
