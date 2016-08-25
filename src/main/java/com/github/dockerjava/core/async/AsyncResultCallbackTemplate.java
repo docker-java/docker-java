@@ -34,6 +34,10 @@ public class AsyncResultCallbackTemplate<A_RES_T> implements ResultCallback<A_RE
     }
 
     private void onResult(A_RES_T object) {
+        if (resultReady.getCount() == 0) {
+            throw new IllegalStateException("Result has already been set");
+        }
+
         try {
             result = object;
         } finally {
