@@ -117,7 +117,16 @@ public interface DockerCmdExecFactory extends Closeable {
 
     DisconnectFromNetworkCmd.Exec createDisconnectFromNetworkCmdExec();
 
+    InitializeSwarmCmd.Exec createInitializeSwarmCmdExec();
+
+    InspectSwarmCmd.Exec createInspectSwarmCmdExec();
+
+    JoinSwarmCmd.Exec createJoinSwarmCmdExec();
+
+    LeaveSwarmCmd.Exec createLeaveSwarmCmdExec();
+
+    UpdateSwarmCmd.Exec createUpdateSwarmCmdExec();
+
     @Override
     void close() throws IOException;
-
 }
