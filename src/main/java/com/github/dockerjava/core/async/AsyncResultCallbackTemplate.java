@@ -8,7 +8,7 @@ import com.github.dockerjava.api.async.ResultCallback;
 import com.google.common.base.Throwables;
 
 /**
- * Abstract async template implementation of {@link ResultCallback}
+ * Implementation of {@link ResultCallback} with the single result event expected.
  */
 public class AsyncResultCallbackTemplate<A_RES_T> implements ResultCallback<A_RES_T> {
 
@@ -82,7 +82,7 @@ public class AsyncResultCallbackTemplate<A_RES_T> implements ResultCallback<A_RE
     }
 
     /**
-     * Blocks until {@link ResultCallback#onComplete()} was called
+     * Blocks until {@link ResultCallback#onNext(Object)} was called for the first time
      */
     @SuppressWarnings("unchecked")
     public A_RES_T awaitResult() {
