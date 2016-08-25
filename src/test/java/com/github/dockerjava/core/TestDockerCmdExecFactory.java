@@ -24,12 +24,16 @@ import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.command.ExecCreateCmd;
 import com.github.dockerjava.api.command.ExecStartCmd;
 import com.github.dockerjava.api.command.InfoCmd;
+import com.github.dockerjava.api.command.InitializeSwarmCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
 import com.github.dockerjava.api.command.InspectNetworkCmd;
+import com.github.dockerjava.api.command.InspectSwarmCmd;
 import com.github.dockerjava.api.command.InspectVolumeCmd;
+import com.github.dockerjava.api.command.JoinSwarmCmd;
 import com.github.dockerjava.api.command.KillContainerCmd;
+import com.github.dockerjava.api.command.LeaveSwarmCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.ListNetworksCmd;
@@ -55,6 +59,7 @@ import com.github.dockerjava.api.command.TagImageCmd;
 import com.github.dockerjava.api.command.TopContainerCmd;
 import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.UpdateContainerCmd;
+import com.github.dockerjava.api.command.UpdateSwarmCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.model.BuildResponseItem;
@@ -425,6 +430,31 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
     @Override
     public DisconnectFromNetworkCmd.Exec createDisconnectFromNetworkCmdExec() {
         return delegate.createDisconnectFromNetworkCmdExec();
+    }
+
+    @Override
+    public InitializeSwarmCmd.Exec createInitializeSwarmCmdExec() {
+        return delegate.createInitializeSwarmCmdExec();
+    }
+
+    @Override
+    public InspectSwarmCmd.Exec createInspectSwarmCmdExec() {
+        return delegate.createInspectSwarmCmdExec();
+    }
+
+    @Override
+    public JoinSwarmCmd.Exec createJoinSwarmCmdExec() {
+        return delegate.createJoinSwarmCmdExec();
+    }
+
+    @Override
+    public LeaveSwarmCmd.Exec createLeaveSwarmCmdExec() {
+        return delegate.createLeaveSwarmCmdExec();
+    }
+
+    @Override
+    public UpdateSwarmCmd.Exec createUpdateSwarmCmdExec() {
+        return delegate.createUpdateSwarmCmdExec();
     }
 
     public List<String> getContainerNames() {
