@@ -53,6 +53,9 @@ public class InspectContainerResponse {
     @JsonProperty("HostsPath")
     private String hostsPath;
 
+    @JsonProperty("LogPath")
+    private String logPath;
+
     @JsonProperty("Id")
     private String id;
 
@@ -166,6 +169,10 @@ public class InspectContainerResponse {
 
     public String getHostsPath() {
         return hostsPath;
+    }
+
+    public String getLogPath() {
+        return logPath;
     }
 
     public String getName() {
