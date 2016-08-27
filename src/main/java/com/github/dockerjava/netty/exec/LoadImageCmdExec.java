@@ -3,7 +3,6 @@ package com.github.dockerjava.netty.exec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.netty.WebTarget;
@@ -22,8 +21,8 @@ public class LoadImageCmdExec extends AbstrSyncDockerCmdExec<LoadImageCmd, Void>
         WebTarget webResource = getBaseResource().path("/images/load");
 
         LOGGER.trace("POST: {}", webResource);
-        return webResource.request()
-                .post(new TypeReference<Void>() {
-                }, command.getImageStream());
+        webResource.request().postStream(command.getImageStream());
+
+        return null;
     }
 }
