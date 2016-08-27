@@ -51,6 +51,7 @@ public class InspectContainerResponseTest {
         assertEquals(response.getVolumesRW()[1].getVolume().getPath(), "/bar/foo/myvol2");
         assertFalse(response.getVolumesRW()[1].getAccessMode().toBoolean());
         assertTrue(response.getVolumesRW()[0].getAccessMode().toBoolean());
+        assertEquals(response.getLogPath(), "/mnt/sda1/var/lib/docker/containers/469e5edd8d5b33e3c905a7ffc97360ec6ee211d6782815fbcd144568045819e1/469e5edd8d5b33e3c905a7ffc97360ec6ee211d6782815fbcd144568045819e1-json.log");
     }
 
     @Test

@@ -171,6 +171,7 @@ public class InspectContainerResponse {
         return hostsPath;
     }
 
+    @CheckForNull
     public String getLogPath() {
         return logPath;
     }
