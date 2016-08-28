@@ -3,7 +3,9 @@ Change Log
 ## Next
 
 ## 3.0.6
- * Make all models Serializable
+ * Make all models Serializable.
+ * [NETTY] Fix loadImage responce on 1.24 API.
+ * LogPath field for inspect container.
 
 ## 3.0.5
  * Events updated to 1.24 API model.
