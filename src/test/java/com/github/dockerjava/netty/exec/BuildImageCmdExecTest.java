@@ -1,5 +1,6 @@
 package com.github.dockerjava.netty.exec;
 
+import static com.github.dockerjava.utils.TestUtils.getVersion;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
@@ -17,6 +18,7 @@ import java.util.UUID;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.testng.ITestResult;
+import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
@@ -34,6 +36,7 @@ import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.Ports.Binding;
+import com.github.dockerjava.core.RemoteApiVersion;
 import com.github.dockerjava.core.command.BuildImageResultCallback;
 import com.github.dockerjava.core.command.PushImageResultCallback;
 import com.github.dockerjava.core.command.WaitContainerResultCallback;
@@ -257,6 +260,10 @@ public class BuildImageCmdExecTest extends AbstractNettyDockerClientTest {
 
     @Test
     public void labels() throws Exception {
+        if (!getVersion(dockerClient).isGreaterOrEqual(RemoteApiVersion.VERSION_1_23)) {
+            throw new SkipException("API version should be >= 1.23");
+        }
+
         File baseDir = fileFromBuildTestResource("labels");
 
         String imageId = dockerClient.buildImageCmd(baseDir).withNoCache(true).withLabel("test", "abc")
