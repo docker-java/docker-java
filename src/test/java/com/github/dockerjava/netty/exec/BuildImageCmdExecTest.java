@@ -255,6 +255,21 @@ public class BuildImageCmdExecTest extends AbstractNettyDockerClientTest {
         assertThat(inspectImageResponse.getConfig().getLabels().get("test"), equalTo("abc"));
     }
 
+    @Test
+    public void labels() throws Exception {
+        File baseDir = fileFromBuildTestResource("labels");
+
+        String imageId = dockerClient.buildImageCmd(baseDir).withNoCache(true).withLabel("test", "abc")
+                .exec(new BuildImageResultCallback())
+                .awaitImageId();
+
+        InspectImageResponse inspectImageResponse = dockerClient.inspectImageCmd(imageId).exec();
+        assertThat(inspectImageResponse, not(nullValue()));
+        LOG.info("Image Inspect: {}", inspectImageResponse.toString());
+
+        assertThat(inspectImageResponse.getConfig().getLabels().get("test"), equalTo("abc"));
+    }
+
     public void dockerfileNotInBaseDirectory() throws Exception {
         File baseDirectory = fileFromBuildTestResource("dockerfileNotInBaseDirectory");
         File dockerfile = fileFromBuildTestResource("dockerfileNotInBaseDirectory/dockerfileFolder/Dockerfile");

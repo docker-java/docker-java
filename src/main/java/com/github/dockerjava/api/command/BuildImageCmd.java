@@ -101,6 +101,12 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     @CheckForNull
     Long getShmsize();
 
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_23}
+     */
+    @CheckForNull
+    Map<String, String> getLabels();
+
     // setters
 
     BuildImageCmd withTag(String tag);
@@ -144,6 +150,11 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     *@since {@link RemoteApiVersion#VERSION_1_22}
     */
     BuildImageCmd withShmsize(Long shmsize);
+
+    /**
+    *@since {@link RemoteApiVersion#VERSION_1_23}
+    */
+    BuildImageCmd withLabel(String key, String value);
 
     interface Exec extends DockerCmdAsyncExec<BuildImageCmd, BuildResponseItem> {
     }
