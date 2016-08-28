@@ -315,10 +315,10 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
      */
     @Override
     public BuildImageCmd withLabel(String key, String value) {
-        if (this.labels == null) {
-            this.labels = new HashMap<String, String>();
+        if (labels == null) {
+            labels = new HashMap<>();
         }
-        this.labels.put(key, value);
+        labels.put(key, value);
         return this;
     }
 
