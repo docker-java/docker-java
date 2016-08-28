@@ -115,7 +115,7 @@ public class AttachContainerCmdExecTest extends AbstractNettyDockerClientTest {
                 .withFollowStream(true)
                 .withStdIn(stdin)
                 .exec(callback)
-                .awaitCompletion(15, SECONDS);
+                .awaitCompletion(30, SECONDS);
         callback.close();
 
         assertThat(callback.toString(), containsString(snippet));
