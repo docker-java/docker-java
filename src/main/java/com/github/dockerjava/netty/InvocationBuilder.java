@@ -69,6 +69,12 @@ public class InvocationBuilder {
         }
     }
 
+    public class SkipResultCallback extends ResultCallbackTemplate<ResponseCallback<Void>, Void> {
+        @Override
+        public void onNext(Void object) {
+        }
+    }
+
     private ChannelProvider channelProvider;
 
     private String resource;
@@ -401,6 +407,31 @@ public class InvocationBuilder {
         channel.pipeline().addLast(new JsonObjectDecoder());
         channel.pipeline().addLast(jsonResponseHandler);
 
+        postChunkedStreamRequest(requestProvider, channel, body);
+    }
+
+    public void postStream(InputStream body) {
+        SkipResultCallback resultCallback = new SkipResultCallback();
+
+        HttpRequestProvider requestProvider = httpPostRequestProvider(null);
+
+        Channel channel = getChannel();
+
+        HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, resultCallback);
+
+        channel.pipeline().addLast(new ChunkedWriteHandler());
+        channel.pipeline().addLast(responseHandler);
+
+        postChunkedStreamRequest(requestProvider, channel, body);
+
+        try {
+            resultCallback.awaitCompletion();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void postChunkedStreamRequest(HttpRequestProvider requestProvider, Channel channel, InputStream body) {
         HttpRequest request = requestProvider.getHttpRequest(resource);
 
         // don't accept FullHttpRequest here
