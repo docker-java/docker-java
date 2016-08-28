@@ -53,6 +53,12 @@ public class InspectContainerResponse {
     @JsonProperty("HostsPath")
     private String hostsPath;
 
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_17}
+     */
+    @JsonProperty("LogPath")
+    private String logPath;
+
     @JsonProperty("Id")
     private String id;
 
@@ -166,6 +172,11 @@ public class InspectContainerResponse {
 
     public String getHostsPath() {
         return hostsPath;
+    }
+
+    @CheckForNull
+    public String getLogPath() {
+        return logPath;
     }
 
     public String getName() {
