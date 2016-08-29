@@ -154,7 +154,7 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     /**
     *@since {@link RemoteApiVersion#VERSION_1_23}
     */
-    BuildImageCmd withLabel(String key, String value);
+    BuildImageCmd withLabels(Map<String, String> labels);
 
     interface Exec extends DockerCmdAsyncExec<BuildImageCmd, BuildResponseItem> {
     }

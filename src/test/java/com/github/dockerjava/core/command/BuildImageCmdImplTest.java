@@ -13,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
@@ -261,7 +262,8 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
 
         File baseDir = fileFromBuildTestResource("labels");
 
-        String imageId = dockerClient.buildImageCmd(baseDir).withNoCache(true).withLabel("test", "abc")
+        String imageId = dockerClient.buildImageCmd(baseDir).withNoCache(true)
+                .withLabels(Collections.singletonMap("test", "abc"))
                 .exec(new BuildImageResultCallback())
                 .awaitImageId();
 
