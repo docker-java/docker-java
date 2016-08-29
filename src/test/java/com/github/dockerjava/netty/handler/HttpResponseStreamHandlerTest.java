@@ -25,7 +25,7 @@ public class HttpResponseStreamHandlerTest {
         ChannelHandlerContext ctx = Mockito.mock(ChannelHandlerContext.class);
         ByteBuf buffer = generateByteBuf();
         streamHandler.channelRead0(ctx, buffer);
-        streamHandler.channelReadComplete(ctx);
+        streamHandler.channelInactive(ctx);
 
         assertTrue(IOUtils.contentEquals(callback.getInputStream(), new ByteBufInputStream(buffer)));
     }
