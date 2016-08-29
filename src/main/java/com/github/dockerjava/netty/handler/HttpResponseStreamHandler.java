@@ -6,9 +6,6 @@ import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.LinkedTransferQueue;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.github.dockerjava.api.async.ResultCallback;
 
@@ -19,58 +16,87 @@ import com.github.dockerjava.api.async.ResultCallback;
  */
 public class HttpResponseStreamHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
-    private HttpResponseInputStream stream = new HttpResponseInputStream();
+    private ResultCallback<InputStream> resultCallback;
+
+    private final HttpResponseInputStream stream = new HttpResponseInputStream();
 
     public HttpResponseStreamHandler(ResultCallback<InputStream> resultCallback) {
-        resultCallback.onNext(stream);
+        this.resultCallback = resultCallback;
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
+        invokeCallbackOnFirstRead();
+
         stream.write(msg.copy());
     }
 
+    private void invokeCallbackOnFirstRead() {
+        if (resultCallback != null) {
+            resultCallback.onNext(stream);
+            resultCallback = null;
+        }
+    }
+
     @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         stream.writeComplete();
-        super.channelReadComplete(ctx);
+
+        super.channelInactive(ctx);
     }
 
     public static class HttpResponseInputStream extends InputStream {
 
-        private AtomicBoolean writeCompleted = new AtomicBoolean(false);
+        private boolean writeCompleted = false;
 
-        private LinkedTransferQueue<ByteBuf> queue = new LinkedTransferQueue<ByteBuf>();
+        private boolean closed = false;
 
         private ByteBuf current = null;
 
-        public void write(ByteBuf byteBuf) {
-            queue.put(byteBuf);
+        private final Object lock = new Object();
+
+        public void write(ByteBuf byteBuf) throws InterruptedException {
+            synchronized (lock) {
+                if (closed) {
+                    return;
+                }
+                while (current != null) {
+                    lock.wait();
+
+                    if (closed) {
+                        return;
+                    }
+                }
+                current = byteBuf;
+
+                lock.notifyAll();
+            }
         }
 
         public void writeComplete() {
-            writeCompleted.set(true);
+            synchronized (lock) {
+                writeCompleted = true;
+
+                lock.notifyAll();
+            }
         }
 
         @Override
         public void close() throws IOException {
-            releaseCurrent();
-            releaseQueued();
-            super.close();
-        }
+            synchronized (lock) {
+                closed = true;
+                releaseCurrent();
 
-        private void releaseQueued() {
-            ByteBuf byteBuf = queue.poll();
-            while (byteBuf != null) {
-                byteBuf.release();
-                byteBuf = queue.poll();
+                lock.notifyAll();
             }
         }
 
         @Override
         public int available() throws IOException {
-            poll();
-            return readableBytes();
+            synchronized (lock) {
+                poll(0);
+                return readableBytes();
+            }
         }
 
         private int readableBytes() {
@@ -79,42 +105,72 @@ public class HttpResponseStreamHandler extends SimpleChannelInboundHandler<ByteB
             } else {
                 return 0;
             }
-
         }
 
         @Override
         public int read() throws IOException {
+            byte[] b = new byte[1];
+            int n = read(b, 0, 1);
+            return n != -1 ? b[0] : -1;
+        }
 
-            poll();
+        @Override
+        public int read(byte[] b, int off, int len) throws IOException {
+            synchronized (lock) {
+                off = poll(off);
 
-            if (readableBytes() == 0) {
-                if (writeCompleted.get()) {
+                if (closed) {
+                    throw new IOException("Stream closed");
+                }
+
+                if (current == null) {
                     return -1;
-                }
-            }
-
-            if (current != null && current.readableBytes() > 0) {
-                return current.readByte() & 0xff;
-            } else {
-                return read();
-            }
-        }
-
-        private void poll() {
-            if (readableBytes() == 0) {
-                try {
-                    releaseCurrent();
-                    current = queue.poll(50, TimeUnit.MILLISECONDS);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                } else {
+                    int availableBytes = Math.min(len, current.readableBytes() - off);
+                    current.readBytes(b, off, availableBytes);
+                    return availableBytes;
                 }
             }
         }
 
-        private void releaseCurrent() {
-            if (current != null) {
-                current.release();
-                current = null;
+        private int poll(int off) {
+            synchronized (lock) {
+                while (readableBytes() <= off) {
+                    try {
+                        off -= releaseCurrent();
+                        if (writeCompleted) {
+                            return off;
+                        }
+                        while (current == null) {
+                            lock.wait();
+
+                            if (closed) {
+                                return off;
+                            }
+                            if (writeCompleted && current == null) {
+                                return off;
+                            }
+                        }
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                return off;
+            }
+        }
+
+        private int releaseCurrent() {
+            synchronized (lock) {
+                if (current != null) {
+                    int n = current.readableBytes();
+                    current.release();
+                    current = null;
+
+                    lock.notifyAll();
+
+                    return n;
+                }
+                return 0;
             }
         }
     }
