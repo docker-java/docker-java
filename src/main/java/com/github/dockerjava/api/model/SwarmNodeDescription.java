@@ -42,7 +42,7 @@ public class SwarmNodeDescription implements Serializable {
      * @since 1.24
      */
     @JsonProperty("Engine")
-    private SwarmNodeEngine engine;
+    private SwarmNodeEngineDescription engine;
 
     /**
      * @see #hostname
@@ -96,14 +96,14 @@ public class SwarmNodeDescription implements Serializable {
      * @see #engine
      */
     @CheckForNull
-    public SwarmNodeEngine getEngine() {
+    public SwarmNodeEngineDescription getEngine() {
         return engine;
     }
 
     /**
      * @see #engine
      */
-    public SwarmNodeDescription withEngine(SwarmNodeEngine engine) {
+    public SwarmNodeDescription withEngine(SwarmNodeEngineDescription engine) {
         this.engine = engine;
         return this;
     }

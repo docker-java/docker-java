@@ -12,56 +12,79 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SwarmNodePlugin implements Serializable {
+public class SwarmNodeEngineDescription implements Serializable {
     public static final Long serialVersionUID = 1L;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("Type")
-    private String type;
+    @JsonProperty("EngineVersion")
+    private String engineVersion;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("Name")
-    private String name;
+    @JsonProperty("Labels")
+    private Map<String,String> labels;
 
     /**
-     * @see #type
+     * @since 1.24
+     */
+    @JsonProperty("Plugins")
+    private SwarmNodePluginDescription[] plugins;
+
+    /**
+     * @see #engineVersion
      */
     @CheckForNull
-    public String getType() {
-        return type;
+    public String getEngineVersion() {
+        return engineVersion;
     }
 
     /**
-     * @see #type
+     * @see #engineVersion
      */
-    public SwarmNodePlugin withType(String type) {
-        this.type = type;
+    public SwarmNodeEngineDescription withEngineVersion(String engineVersion) {
+        this.engineVersion = engineVersion;
         return this;
     }
 
     /**
-     * @see #name
+     * @see #labels
      */
     @CheckForNull
-    public String getName() {
-        return name;
+    public Map<String, String> getLabels() {
+        return labels;
     }
 
     /**
-     * @see #name
+     * @see #labels
      */
-    public SwarmNodePlugin withName(String name) {
-        this.name = name;
+    public SwarmNodeEngineDescription withLabels(Map<String, String> labels) {
+        this.labels = labels;
+        return this;
+    }
+
+    /**
+     * @see #plugins
+     */
+    @CheckForNull
+    public SwarmNodePluginDescription[] getPlugins() {
+        return plugins;
+    }
+
+    /**
+     * @see #plugins
+     */
+    public SwarmNodeEngineDescription withPlugins(SwarmNodePluginDescription[] plugins) {
+        this.plugins = plugins;
         return this;
     }
 

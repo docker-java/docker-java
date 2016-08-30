@@ -32,13 +32,13 @@ public class SwarmNodeSpec implements Serializable {
      * @since 1.24
      */
     @JsonProperty("Role")
-    private String role;
+    private SwarmNodeRole role;
 
     /**
      * @since 1.24
      */
     @JsonProperty("Availability")
-    private String availability;
+    private SwarmNodeAvailability availability;
 
     /**
      * @since 1.24
@@ -66,14 +66,14 @@ public class SwarmNodeSpec implements Serializable {
      * @see #role
      */
     @CheckForNull
-    public String getRole() {
+    public SwarmNodeRole getRole() {
         return role;
     }
 
     /**
      * @see #role
      */
-    public SwarmNodeSpec withRole(String role) {
+    public SwarmNodeSpec withRole(SwarmNodeRole role) {
         this.role = role;
         return this;
     }
@@ -82,14 +82,14 @@ public class SwarmNodeSpec implements Serializable {
      * @see #availability
      */
     @CheckForNull
-    public String getAvailability() {
+    public SwarmNodeAvailability getAvailability() {
         return availability;
     }
 
     /**
      * @see #availability
      */
-    public SwarmNodeSpec withAvailability(String availability) {
+    public SwarmNodeSpec withAvailability(SwarmNodeAvailability availability) {
         this.availability = availability;
         return this;
     }

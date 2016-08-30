@@ -25,20 +25,20 @@ public class SwarmNodeStatus implements Serializable {
      * @since 1.24
      */
     @JsonProperty("State")
-    private String state;
+    private SwarmNodeState state;
 
     /**
      * @see #state
      */
     @CheckForNull
-    public String getState() {
+    public SwarmNodeState getState() {
         return state;
     }
 
     /**
      * @see #state
      */
-    public SwarmNodeStatus withState(String state) {
+    public SwarmNodeStatus withState(SwarmNodeState state) {
         this.state = state;
         return this;
     }

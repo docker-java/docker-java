@@ -31,7 +31,7 @@ public class SwarmNodeManagerStatus implements Serializable {
      * @since 1.24
      */
     @JsonProperty("Reachability")
-    private String reachability;
+    private Reachability reachability;
 
     /**
      * @since 1.24
@@ -59,14 +59,14 @@ public class SwarmNodeManagerStatus implements Serializable {
      * @see #reachability
      */
     @CheckForNull
-    public String getReachability() {
+    public Reachability getReachability() {
         return reachability;
     }
 
     /**
      * @see #reachability
      */
-    public SwarmNodeManagerStatus withReachability(String reachability) {
+    public SwarmNodeManagerStatus withReachability(Reachability reachability) {
         this.reachability = reachability;
         return this;
     }

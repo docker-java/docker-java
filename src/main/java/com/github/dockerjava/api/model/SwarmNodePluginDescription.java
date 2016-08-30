@@ -12,79 +12,56 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
-import java.util.Map;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SwarmNodeEngine implements Serializable {
+public class SwarmNodePluginDescription implements Serializable {
     public static final Long serialVersionUID = 1L;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("EngineVersion")
-    private String engineVersion;
+    @JsonProperty("Type")
+    private String type;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("Labels")
-    private Map<String,String> labels;
+    @JsonProperty("Name")
+    private String name;
 
     /**
-     * @since 1.24
-     */
-    @JsonProperty("Plugins")
-    private SwarmNodePlugin[] plugins;
-
-    /**
-     * @see #engineVersion
+     * @see #type
      */
     @CheckForNull
-    public String getEngineVersion() {
-        return engineVersion;
+    public String getType() {
+        return type;
     }
 
     /**
-     * @see #engineVersion
+     * @see #type
      */
-    public SwarmNodeEngine withEngineVersion(String engineVersion) {
-        this.engineVersion = engineVersion;
+    public SwarmNodePluginDescription withType(String type) {
+        this.type = type;
         return this;
     }
 
     /**
-     * @see #labels
+     * @see #name
      */
     @CheckForNull
-    public Map<String, String> getLabels() {
-        return labels;
+    public String getName() {
+        return name;
     }
 
     /**
-     * @see #labels
+     * @see #name
      */
-    public SwarmNodeEngine withLabels(Map<String, String> labels) {
-        this.labels = labels;
-        return this;
-    }
-
-    /**
-     * @see #plugins
-     */
-    @CheckForNull
-    public SwarmNodePlugin[] getPlugins() {
-        return plugins;
-    }
-
-    /**
-     * @see #plugins
-     */
-    public SwarmNodeEngine withPlugins(SwarmNodePlugin[] plugins) {
-        this.plugins = plugins;
+    public SwarmNodePluginDescription withName(String name) {
+        this.name = name;
         return this;
     }
 
