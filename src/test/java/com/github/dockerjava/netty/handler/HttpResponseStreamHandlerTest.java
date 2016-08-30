@@ -1,13 +1,15 @@
 package com.github.dockerjava.netty.handler;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
-
-import java.io.InputStream;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
+
+import java.io.InputStream;
+
 import org.apache.commons.io.IOUtils;
 import org.mockito.Mockito;
 import org.testng.annotations.Test;
@@ -27,7 +29,27 @@ public class HttpResponseStreamHandlerTest {
         streamHandler.channelRead0(ctx, buffer);
         streamHandler.channelInactive(ctx);
 
-        assertTrue(IOUtils.contentEquals(callback.getInputStream(), new ByteBufInputStream(buffer)));
+        try (InputStream inputStream = callback.getInputStream()) {
+            assertTrue(IOUtils.contentEquals(inputStream, new ByteBufInputStream(buffer)));
+        }
+    }
+
+    @Test
+    public void testReadByteByByte() throws Exception {
+        ResultCallbackTest callback = new ResultCallbackTest();
+        HttpResponseStreamHandler streamHandler = new HttpResponseStreamHandler(callback);
+        ChannelHandlerContext ctx = Mockito.mock(ChannelHandlerContext.class);
+        ByteBuf buffer = generateByteBuf();
+        streamHandler.channelRead0(ctx, buffer);
+        streamHandler.channelInactive(ctx);
+
+        try (InputStream inputStream = callback.getInputStream()) {
+            for (int i = 0; i < buffer.readableBytes(); i++) {
+                int b = inputStream.read();
+                assertEquals(b, buffer.getByte(i));
+            }
+            assertTrue(inputStream.read() == -1);
+        }
     }
 
     private ByteBuf generateByteBuf() {
@@ -46,7 +68,7 @@ public class HttpResponseStreamHandlerTest {
             this.stream = stream;
         }
 
-        public InputStream getInputStream() {
+        private InputStream getInputStream() {
             return stream;
         }
     }
