@@ -119,10 +119,6 @@ public class HttpResponseStreamHandler extends SimpleChannelInboundHandler<ByteB
             synchronized (lock) {
                 off = poll(off);
 
-                if (closed) {
-                    throw new IOException("Stream closed");
-                }
-
                 if (current == null) {
                     return -1;
                 } else {
@@ -133,10 +129,14 @@ public class HttpResponseStreamHandler extends SimpleChannelInboundHandler<ByteB
             }
         }
 
-        private int poll(int off) {
+        private int poll(int off) throws IOException {
             synchronized (lock) {
                 while (readableBytes() <= off) {
                     try {
+                        if (closed) {
+                            throw new IOException("Stream closed");
+                        }
+
                         off -= releaseCurrent();
                         if (writeCompleted) {
                             return off;
@@ -145,7 +145,7 @@ public class HttpResponseStreamHandler extends SimpleChannelInboundHandler<ByteB
                             lock.wait();
 
                             if (closed) {
-                                return off;
+                                throw new IOException("Stream closed");
                             }
                             if (writeCompleted && current == null) {
                                 return off;

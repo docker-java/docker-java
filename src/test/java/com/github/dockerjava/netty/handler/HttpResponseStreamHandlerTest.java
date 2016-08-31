@@ -1,5 +1,6 @@
 package com.github.dockerjava.netty.handler;
 
+import static com.github.dockerjava.netty.handler.HttpResponseStreamHandler.HttpResponseInputStream;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -8,6 +9,7 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
@@ -50,6 +52,16 @@ public class HttpResponseStreamHandlerTest {
             }
             assertTrue(inputStream.read() == -1);
         }
+    }
+
+    @Test(expectedExceptions = IOException.class)
+    public void testReadClosedResponseStream() throws Exception {
+        HttpResponseInputStream inputStream = new HttpResponseInputStream();
+        ByteBuf buffer = generateByteBuf();
+
+        inputStream.write(buffer);
+        inputStream.close();
+        inputStream.read();
     }
 
     private ByteBuf generateByteBuf() {
