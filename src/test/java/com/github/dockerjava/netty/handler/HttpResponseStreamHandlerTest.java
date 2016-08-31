@@ -11,6 +11,10 @@ import io.netty.channel.ChannelHandlerContext;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.apache.commons.io.IOUtils;
 import org.mockito.Mockito;
@@ -52,6 +56,48 @@ public class HttpResponseStreamHandlerTest {
             }
             assertTrue(inputStream.read() == -1);
         }
+    }
+
+    @Test
+    public void testCloseResponseStreamBeforeWrite() throws Exception {
+        HttpResponseInputStream inputStream = new HttpResponseInputStream();
+        ByteBuf buffer = generateByteBuf();
+
+        inputStream.write(buffer);
+        inputStream.close();
+        inputStream.write(buffer);
+    }
+
+    @Test
+    public void testCloseResponseStreamOnWrite() throws Exception {
+        final HttpResponseInputStream inputStream = new HttpResponseInputStream();
+
+        final ByteBuf buffer = generateByteBuf();
+
+        final CountDownLatch firstWrite = new CountDownLatch(1);
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<?> submit = executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    inputStream.write(buffer);
+                    firstWrite.countDown();
+                    inputStream.write(buffer);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        firstWrite.await();
+        assertTrue(inputStream.available() > 0);
+
+        // second write should have started
+        Thread.sleep(500L);
+        inputStream.close();
+
+        submit.get();
     }
 
     @Test(expectedExceptions = IOException.class)
