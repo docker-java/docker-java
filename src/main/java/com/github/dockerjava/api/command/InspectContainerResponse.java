@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.command;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.CheckForNull;
 
@@ -106,6 +107,9 @@ public class InspectContainerResponse {
 
     @JsonProperty("Mounts")
     private List<Mount> mounts;
+    
+    @JsonProperty("Node")
+    private SwarmNode node;
 
     public String getId() {
         return id;
@@ -215,7 +219,11 @@ public class InspectContainerResponse {
         return execIds;
     }
 
-    @Override
+    public SwarmNode getNode() {
+		return node;
+	}
+
+	@Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
     }
@@ -544,4 +552,68 @@ public class InspectContainerResponse {
             return HashCodeBuilder.reflectionHashCode(this);
         }
     }
+    
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class SwarmNode {
+
+        @JsonProperty("Name")
+        private String name;
+
+        @JsonProperty("ID")
+        private String id;
+
+        @JsonProperty("Addr")
+        private String addr;
+
+        @JsonProperty("IP")
+        private String ip;
+        
+        @JsonProperty("Cpus")
+        private Integer cpus;
+        
+        @JsonProperty("Memory")
+        private Long memory;
+        
+        @JsonProperty("Labels")
+        private Map<String, String> labels;
+        
+        @JsonProperty("Version")
+        private String version;
+        
+
+        public String getName() {
+            return name;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getAddr() {
+            return addr;
+        }
+
+        public String getIp() {
+            return ip;
+        }
+
+    	public Integer getCpus() {
+    		return cpus;
+    	}
+
+    	public Long getMemory() {
+    		return memory;
+    	}
+
+    	public Map<String, String> getLabels() {
+    		return labels;
+    	}
+
+    	public String getVersion() {
+    		return version;
+    	}
+        
+        
+    }
+
 }
