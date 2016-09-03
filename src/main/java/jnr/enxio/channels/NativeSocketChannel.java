@@ -26,7 +26,6 @@ import java.nio.channels.ByteChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
 
-import io.netty.buffer.ByteBufUtil;
 import jnr.constants.platform.Errno;
 import jnr.constants.platform.Shutdown;
 
@@ -130,65 +129,63 @@ public abstract class NativeSocketChannel extends SocketChannel implements ByteC
 
     private static final int SHUT_RD = Shutdown.SHUT_RD.intValue();
     private static final int SHUT_WR = Shutdown.SHUT_WR.intValue();
-    
-    public static String hexDump (ByteBuffer buf, String prefix)
-    {
+
+    public static String hexDump(ByteBuffer buf, String prefix) {
       buf = buf.duplicate();
-      StringWriter str = new StringWriter ();
-      PrintWriter out = new PrintWriter (str);
+      StringWriter str = new StringWriter();
+      PrintWriter out = new PrintWriter(str);
       int i = 0;
       int len = buf.remaining();
       byte[] line = new byte[16];
-      while (i < len)
-        {
-          if (prefix != null)
+      while (i < len) {
+          if (prefix != null) {
             out.print(prefix);
-          out.print(formatInt (i, 16, 8));
+          }
+          out.print(formatInt(i, 16, 8));
           out.print("  ");
           int l = Math.min(16, len - i);
           buf.get(line, 0, l);
           String s = toHexString(line, 0, l, ' ');
           out.print(s);
-          for (int j = s.length(); j < 49; j++)
+          for (int j = s.length(); j < 49; j++) {
             out.print(' ');
-          for (int j = 0; j < l; j++)
-            {
+          }
+          for (int j = 0; j < l; j++) {
               int c = line[j] & 0xFF;
-              if (c < 0x20 || c > 0x7E)
+              if (c < 0x20 || c > 0x7E) {
                 out.print('.');
-              else
+              } else {
                 out.print((char) c);
+              }
             }
           out.println();
           i += 16;
         }
       return str.toString();
     }
-    
-    public static String formatInt(int i, int radix, int len)
-    {
+
+    public static String formatInt(int i, int radix, int len) {
       String s = Integer.toString(i, radix);
       StringBuffer buf = new StringBuffer();
-      for (int j = 0; j < len - s.length(); j++)
+      for (int j = 0; j < len - s.length(); j++) {
         buf.append("0");
+      }
       buf.append(s);
       return buf.toString();
     }
-    
-    public static String toHexString(byte[] buf, int off, int len, char sep)
-    {
+
+    public static String toHexString(byte[] buf, int off, int len, char sep) {
       StringBuffer str = new StringBuffer();
-      for (int i = 0; i < len; i++)
-        {
-          str.append(HEX.charAt(buf[i+off] >>> 4 & 0x0F));
-          str.append(HEX.charAt(buf[i+off] & 0x0F));
-          if (i < len - 1)
+      for (int i = 0; i < len; i++) {
+          str.append(HEX.charAt(buf[i + off] >>> 4 & 0x0F));
+          str.append(HEX.charAt(buf[i + off] & 0x0F));
+          if (i < len - 1) {
             str.append(sep);
+          }
         }
       return str.toString();
     }
 
-    
     static final String HEX = "0123456789abcdef";
 
 
