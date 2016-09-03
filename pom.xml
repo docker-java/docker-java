@@ -405,7 +405,7 @@
 							<groups>integration</groups>
 							<!-- <excludedGroups>ignoreInCircleCi</excludedGroups> -->
 							<includes>
-								<include>**/*Test.java</include>
+								<include>**/*ExecTest.java</include>
 							</includes>
 						</configuration>
 					</execution>

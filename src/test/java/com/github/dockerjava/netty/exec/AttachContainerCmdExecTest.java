@@ -79,9 +79,9 @@ public class AttachContainerCmdExecTest extends AbstractNettyDockerClientTest {
     @Test
     public void attachContainerWithStdin() throws Exception {
 
-        String snippet = "hello world";
-
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("/bin/sh", "-c", "read line && echo $line")
+        String snippet = "hello world!";
+        
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("/bin/sh", "-c", "echo running >> /tmp/attach && read line && echo $line > /tmp/attach && sleep 9999")
                 .withTty(false).withStdinOpen(true).exec();
 
         LOG.info("Created container: {}", container.toString());
@@ -105,7 +105,7 @@ public class AttachContainerCmdExecTest extends AbstractNettyDockerClientTest {
         InputStream stdin = new ByteArrayInputStream((snippet + "\n").getBytes());
 
         dockerClient.attachContainerCmd(container.getId()).withStdErr(true).withStdOut(true).withFollowStream(true)
-                .withStdIn(stdin).exec(callback).awaitCompletion(2, TimeUnit.SECONDS);
+                .withStdIn(stdin).exec(callback).awaitCompletion(5, TimeUnit.MINUTES);
         callback.close();
 
         assertThat(callback.toString(), containsString(snippet));

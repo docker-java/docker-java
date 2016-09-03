@@ -286,6 +286,7 @@ public class UnixSocketChannel extends NativeSocketChannel {
 
     @Override
     public long read(ByteBuffer[] dsts, int offset, int length) throws IOException {
+        System.err.println("read unsupported");
         throw new UnsupportedOperationException("read");
     }
 
@@ -303,12 +304,45 @@ public class UnixSocketChannel extends NativeSocketChannel {
 
     @Override
     public long write(ByteBuffer[] srcs, int offset, int length) throws IOException {
-        throw new UnsupportedOperationException("write");
+        System.out.println("write buffers: " + srcs.length + " offset: " + offset + " length: " + length);
+
+        if (state == State.CONNECTED) {
+            long result = 0;
+            int index = 0;
+            int remaining = 0;
+
+            for (index = offset; index < length; index++) {
+                remaining += srcs[index].remaining();
+                System.out.println("index: " + index + " remaining: " + remaining);
+            }
+
+            System.out.println("remaining: " + remaining);
+
+
+            ByteBuffer buffer = ByteBuffer.allocate(remaining);
+
+            for (index = offset; index < length; index++) {
+                buffer.put(srcs[index]);
+            }
+
+            buffer.position(0);
+
+            System.out.println("buffer.remaining: " + buffer.remaining());
+
+            result = write(buffer);
+            System.out.println("finally written: " + result);
+
+            return result;
+        } else if (state == State.IDLE) {
+            return 0;
+        } else {
+            throw new ClosedChannelException();
+        }
     }
 
     @Override
     public int read(ByteBuffer dst) throws IOException {
-        System.out.println("state: " + state);
+        System.out.println("read state: " + state);
 
         if (state == State.CONNECTED) {
             return super.read(dst);
@@ -317,6 +351,20 @@ public class UnixSocketChannel extends NativeSocketChannel {
         } else {
             throw new ClosedChannelException();
         }
+    }
 
+    @Override
+    public int write(ByteBuffer src) throws IOException {
+        System.out.println("write state: " + state);
+
+        if (state == State.CONNECTED) {
+            int written = super.write(src);
+            System.out.println("finally written: " + written);
+            return written;
+        } else if (state == State.IDLE) {
+            return 0;
+        } else {
+            throw new ClosedChannelException();
+        }
     }
 }
