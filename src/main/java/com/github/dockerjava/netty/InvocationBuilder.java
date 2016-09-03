@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -34,7 +35,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.Frame;
-import com.github.dockerjava.core.async.AsyncResultCallback;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
 import com.github.dockerjava.netty.handler.FramedResponseStreamHandler;
 import com.github.dockerjava.netty.handler.HttpConnectionHijackHandler;
@@ -73,6 +73,57 @@ public class InvocationBuilder {
     public class SkipResultCallback extends ResultCallbackTemplate<ResponseCallback<Void>, Void> {
         @Override
         public void onNext(Void object) {
+        }
+    }
+
+    /**
+     * Implementation of {@link ResultCallback} with the single result event expected.
+     */
+    public static class AsyncResultCallback<A_RES_T>
+            extends ResultCallbackTemplate<AsyncResultCallback<A_RES_T>, A_RES_T> {
+
+        private A_RES_T result = null;
+
+        private final CountDownLatch resultReady = new CountDownLatch(1);
+
+        @Override
+        public void onNext(A_RES_T object) {
+            onResult(object);
+        }
+
+        private void onResult(A_RES_T object) {
+            if (resultReady.getCount() == 0) {
+                throw new IllegalStateException("Result has already been set");
+            }
+
+            try {
+                result = object;
+            } finally {
+                resultReady.countDown();
+            }
+        }
+
+        @Override
+        public void close() throws IOException {
+            try {
+                super.close();
+            } finally {
+                resultReady.countDown();
+            }
+        }
+
+        /**
+         * Blocks until {@link ResultCallback#onNext(Object)} was called for the first time
+         */
+        @SuppressWarnings("unchecked")
+        public A_RES_T awaitResult() {
+            try {
+                resultReady.await();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            getFirstError();
+            return result;
         }
     }
 
