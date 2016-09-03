@@ -55,7 +55,9 @@ public class InfoCmdExecTest extends AbstractNettyDockerClientTest {
             dockerClient.startContainerCmd(container.getId()).exec();
         }
 
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>");
         Info dockerInfo = dockerClient.infoCmd().exec();
+        System.out.println("<<<<<<<<<<<<<<<<<<<<<");
         LOG.info(dockerInfo.toString());
 
         assertTrue(dockerInfo.toString().contains("containers"));
@@ -67,5 +69,7 @@ public class InfoCmdExecTest extends AbstractNettyDockerClientTest {
         assertTrue(dockerInfo.getNFd() > 0);
         assertTrue(dockerInfo.getNGoroutines() > 0);
         assertTrue(dockerInfo.getNCPU() > 0);
+        
+        System.out.println("test finished");
     }
 }

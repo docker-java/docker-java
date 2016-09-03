@@ -3,20 +3,8 @@ package com.github.dockerjava.netty;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.ProtocolFamily;
-import java.net.SocketAddress;
-import java.nio.channels.DatagramChannel;
-import java.nio.channels.Pipe;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.spi.AbstractSelectableChannel;
-import java.nio.channels.spi.AbstractSelector;
 import java.nio.channels.spi.SelectorProvider;
 import java.security.Security;
-import java.util.Set;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
@@ -144,7 +132,6 @@ import io.netty.util.concurrent.DefaultThreadFactory;
 import jnr.enxio.channels.NativeSelectorProvider;
 import jnr.unixsocket.UnixSocketAddress;
 import jnr.unixsocket.UnixSocketChannel;
-import unisockets.Addr;
 
 /**
  * Experimental implementation of {@link DockerCmdExecFactory} that supports http connection hijacking that is needed to pass STDIN to the
@@ -232,8 +219,8 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
 
         @Override
         public EventLoopGroup init(Bootstrap bootstrap, DockerClientConfig dockerClientConfig) {
-        	final SelectorProvider nativeSelectorProvider = NativeSelectorProvider.getInstance();
-         	
+            final SelectorProvider nativeSelectorProvider = NativeSelectorProvider.getInstance();
+
             EventLoopGroup nioEventLoopGroup = new NioEventLoopGroup(0,
                 new DefaultThreadFactory(threadPrefix), nativeSelectorProvider);
 
@@ -242,10 +229,10 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
                 @Override
                 public NioSocketChannel newChannel() {
                     try {
-						return new NioSocketChannel(UnixSocketChannel.create());
-					} catch (IOException e) {
-						throw new RuntimeException();
-					}
+                      return new NioSocketChannel(UnixSocketChannel.create());
+                    } catch (IOException e) {
+                      throw new RuntimeException();
+                    }
                 }
             };
 
@@ -253,6 +240,7 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(final SocketChannel channel) throws Exception {
+                            channel.pipeline().addLast(new LoggingHandler(getClass()));
                             channel.pipeline().addLast(new HttpClientCodec());
                         }
                     });
@@ -263,13 +251,13 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         @Override
         public DuplexChannel connect(Bootstrap bootstrap) throws InterruptedException {
 
-            if(!path.exists()) {
-            	throw new RuntimeException("socket not found: " + path);
+            if (!path.exists()) {
+                throw new RuntimeException("socket not found: " + path);
             }
-            
-            UnixSocketAddress socket = new UnixSocketAddress(path);
 
-            return (DuplexChannel) bootstrap.connect(socket).sync().channel();
+            UnixSocketAddress address = new UnixSocketAddress(path);
+
+            return (DuplexChannel) bootstrap.connect(address).sync().channel();
         }
     }
 
@@ -278,9 +266,9 @@ public class DockerCmdExecFactoryImpl implements DockerCmdExecFactory {
         public EventLoopGroup init(Bootstrap bootstrap, final DockerClientConfig dockerClientConfig) {
             EventLoopGroup nioEventLoopGroup = new NioEventLoopGroup(0, new DefaultThreadFactory(threadPrefix));
 
-            InetAddress addr = InetAddress.getLoopbackAddress();
+            //InetAddress addr = InetAddress.getLoopbackAddress();
 
-            final SocketAddress proxyAddress = new InetSocketAddress(addr, 8008);
+            //final SocketAddress proxyAddress = new InetSocketAddress(addr, 8008);
 
             Security.addProvider(new BouncyCastleProvider());
 

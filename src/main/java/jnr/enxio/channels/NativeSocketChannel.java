@@ -24,17 +24,17 @@ import java.nio.channels.ByteChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
 
+import jnr.constants.platform.Errno;
 import jnr.constants.platform.Shutdown;
 
-public abstract class NativeSocketChannel extends SocketChannel
-        implements ByteChannel, NativeSelectableChannel {
+public abstract class NativeSocketChannel extends SocketChannel implements ByteChannel, NativeSelectableChannel {
 
     private int fd = -1;
 
     public NativeSocketChannel(int fd) {
         this(NativeSelectorProvider.getInstance(), fd);
     }
-    
+
     public NativeSocketChannel() {
         super(NativeSelectorProvider.getInstance());
     }
@@ -43,43 +43,55 @@ public abstract class NativeSocketChannel extends SocketChannel
         super(provider);
         this.fd = fd;
     }
-    
+
     public void setFD(int fd) {
-		this.fd = fd;
-	}
+        this.fd = fd;
+    }
 
     @Override
     protected void implCloseSelectableChannel() throws IOException {
-       Native.close(fd);
+        Native.close(fd);
     }
 
     @Override
     protected void implConfigureBlocking(boolean block) throws IOException {
         Native.setBlocking(fd, block);
     }
-    
+
     public final int getFD() {
         return fd;
     }
 
     public int read(ByteBuffer dst) throws IOException {
-        int n = Native.read(fd, dst);
+        // System.out.println("dst.remaining: " + dst.remaining());
+        // System.out.println("dst.limit: " + dst.limit());
+
+        ByteBuffer buffer = ByteBuffer.allocate(dst.remaining());
+
+        int n = Native.read(fd, buffer);
+        System.out.println("n: " + n);
+
+        dst.put(buffer.array());
+
         switch (n) {
-            case 0:
-                return -1;
+        case 0:
+            return -1;
 
-            case -1:
-                switch (Native.getLastError()) {
-                    case EAGAIN:
-                    case EWOULDBLOCK:
-                        return 0;
-
-                    default:
-                        throw new IOException(Native.getLastErrorString());
-                }
+        case -1:
+            Errno lastError = Native.getLastError();
+            switch (lastError) {
+            case EAGAIN:
+            case EWOULDBLOCK:
+                return 0;
 
             default:
-                return n;
+                throw new IOException(Native.getLastErrorString());
+            }
+
+        default: {
+
+            return n;
+        }
         }
     }
 
@@ -91,25 +103,23 @@ public abstract class NativeSocketChannel extends SocketChannel
 
         return n;
     }
-    
-    protected void _shutdownInput() throws IOException {
+
+    public SocketChannel shutdownInput() throws IOException {
         int n = Native.shutdown(fd, SHUT_RD);
         if (n < 0) {
             throw new IOException(Native.getLastErrorString());
         }
+        return this;
     }
-    
-    
-    
-    protected void _shutdownOutput() throws IOException {
+
+    public SocketChannel shutdownOutput() throws IOException {
         int n = Native.shutdown(fd, SHUT_WR);
         if (n < 0) {
             throw new IOException(Native.getLastErrorString());
         }
+        return this;
     }
-    
-    private final static int SHUT_RD = Shutdown.SHUT_RD.intValue();
-    private final static int SHUT_WR = Shutdown.SHUT_WR.intValue();
 
-	
+    private static final int SHUT_RD = Shutdown.SHUT_RD.intValue();
+    private static final int SHUT_WR = Shutdown.SHUT_WR.intValue();
 }
