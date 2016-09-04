@@ -69,7 +69,7 @@ public class UnixSocketChannel extends NativeSocketChannel {
     public static final UnixSocketChannel create() throws IOException {
         UnixSocketChannel channel = new UnixSocketChannel();
         // channel.configureBlocking(true);
-        // channel.socket().setKeepAlive(true);
+        //channel.socket().setKeepAlive(true);
         return channel;
     }
 
@@ -140,7 +140,7 @@ public class UnixSocketChannel extends NativeSocketChannel {
     }
 
     public boolean isConnected() {
-        System.out.println("isConnected: " + state);
+        //System.out.println("isConnected: " + state);
         return state == State.CONNECTED;
     }
 
@@ -257,16 +257,19 @@ public class UnixSocketChannel extends NativeSocketChannel {
 
     @Override
     public <T> T getOption(java.net.SocketOption<T> arg0) throws IOException {
+        System.err.println("getOption unsupported");
         throw new UnsupportedOperationException("getOption");
     }
 
     @Override
     public Set<java.net.SocketOption<?>> supportedOptions() {
+        System.err.println("supportedOptions unsupported");
         throw new UnsupportedOperationException("supportedOptions");
     }
 
     @Override
     public SocketChannel bind(SocketAddress local) throws IOException {
+        System.err.println("bind unsupported");
         throw new UnsupportedOperationException("bind");
     }
 
@@ -292,6 +295,7 @@ public class UnixSocketChannel extends NativeSocketChannel {
 
     @Override
     public <T> SocketChannel setOption(java.net.SocketOption<T> name, T value) throws IOException {
+        System.err.println("setOption unsupported");
         throw new UnsupportedOperationException("setOption");
     }
 
@@ -319,17 +323,18 @@ public class UnixSocketChannel extends NativeSocketChannel {
             System.out.println("remaining: " + remaining);
 
 
-            ByteBuffer buffer = ByteBuffer.allocate(remaining);
+            //ByteBuffer buffer = ByteBuffer.allocate(remaining);
 
             for (index = offset; index < length; index++) {
-                buffer.put(srcs[index]);
+                //buffer.put(srcs[index]);
+                System.err.println("bulk write: " + index);
+                //System.err.println(hexDump(srcs[index], ""));
+                result += write(srcs[index]);
             }
 
-            buffer.position(0);
+            //buffer.position(0);
 
-            System.out.println("buffer.remaining: " + buffer.remaining());
-
-            result = write(buffer);
+            //result = write(buffer);
             System.out.println("finally written: " + result);
 
             return result;

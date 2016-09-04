@@ -52,11 +52,13 @@ public abstract class NativeSocketChannel extends SocketChannel implements ByteC
 
     @Override
     protected void implCloseSelectableChannel() throws IOException {
+        System.out.println("implCloseSelectableChannel");
         Native.close(fd);
     }
 
     @Override
     protected void implConfigureBlocking(boolean block) throws IOException {
+        System.out.println("implConfigureBlocking: " + block);
         Native.setBlocking(fd, block);
     }
 
@@ -99,10 +101,21 @@ public abstract class NativeSocketChannel extends SocketChannel implements ByteC
 
     public int write(ByteBuffer src) throws IOException {
 
-        System.out.println("write: " + hexDump(src, ""));
+        System.err.println("write:");
+        //System.err.println(hexDump(src, ""));
 
-        int n = Native.write(fd, src);
+        ByteBuffer buffer = ByteBuffer.allocate(src.remaining());
+
+        buffer.put(src);
+
+        buffer.position(0);
+
+        int n = Native.write(fd, buffer);
+
+        System.err.println(Native.getLastErrorString());
+
         if (n < 0) {
+            System.err.println("write error");
             throw new IOException(Native.getLastErrorString());
         }
 

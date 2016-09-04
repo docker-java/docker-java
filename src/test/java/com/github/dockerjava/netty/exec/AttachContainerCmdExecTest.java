@@ -81,7 +81,7 @@ public class AttachContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
         String snippet = "hello world!";
         
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("/bin/sh", "-c", "echo running >> /tmp/attach && read line && echo $line > /tmp/attach && sleep 9999")
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("/bin/sh", "-c", "read line && echo $line && sleep 9999")
                 .withTty(false).withStdinOpen(true).exec();
 
         LOG.info("Created container: {}", container.toString());
@@ -102,10 +102,10 @@ public class AttachContainerCmdExecTest extends AbstractNettyDockerClientTest {
             };
         };
 
-        InputStream stdin = new ByteArrayInputStream((snippet + "\n").getBytes());
+        InputStream stdin = new ByteArrayInputStream((snippet + "\n\r").getBytes());
 
         dockerClient.attachContainerCmd(container.getId()).withStdErr(true).withStdOut(true).withFollowStream(true)
-                .withStdIn(stdin).exec(callback).awaitCompletion(5, TimeUnit.MINUTES);
+                .withStdIn(stdin).exec(callback).awaitCompletion(5, TimeUnit.SECONDS);
         callback.close();
 
         assertThat(callback.toString(), containsString(snippet));
