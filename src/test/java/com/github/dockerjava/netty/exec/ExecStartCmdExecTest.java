@@ -137,8 +137,9 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
                 .exec(new ExecStartResultCallback(stdout, System.err))
                 .awaitCompletion(5, TimeUnit.SECONDS);
 
-        assertTrue(completed, "The process was not finished.");
         assertEquals(stdout.toString("UTF-8"), "STDIN\n");
+        assertTrue(completed, "The process was not finished.");
+        
     }
 
     @Test()
@@ -156,7 +157,7 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        InputStream stdin = new ByteArrayInputStream("ls\n".getBytes());
+        InputStream stdin = new ByteArrayInputStream("ls\nexit\n".getBytes());
 
         ByteArrayOutputStream stdout = new ByteArrayOutputStream();
 
@@ -201,8 +202,9 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
                 .exec(new ExecStartResultCallback(stdout, System.err))
                 .awaitCompletion(5, TimeUnit.SECONDS);
 
+        assertEquals(stdout.toString(), "");
         // with v1.22 of the remote api the server closed the connection when no stdin was attached while exec create, so completed was true
         assertFalse(completed, "The process was not finished.");
-        assertEquals(stdout.toString(), "");
+        
     }
 }
