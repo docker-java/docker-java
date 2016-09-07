@@ -53,9 +53,12 @@ public class WrappedResponseInputStream extends InputStream {
     }
 
     public void close() throws IOException {
+        if (closed) {
+            return;
+        }
         closed = true;
-        response.close();
         delegate.close();
+        response.close();
     }
 
     public void mark(int readlimit) {
