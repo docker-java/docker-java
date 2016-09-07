@@ -3,6 +3,7 @@ package com.github.dockerjava.api.model;
 import static com.github.dockerjava.api.model.AccessMode.ro;
 import static com.github.dockerjava.api.model.AccessMode.rw;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 
 import org.testng.annotations.Test;
@@ -16,6 +17,7 @@ public class BindTest {
         assertThat(bind.getVolume().getPath(), is("/container"));
         assertThat(bind.getAccessMode(), is(AccessMode.DEFAULT));
         assertThat(bind.getSecMode(), is(SELContext.none));
+        assertThat(bind.getNoCopy(), nullValue());
     }
 
     @Test
@@ -25,6 +27,17 @@ public class BindTest {
         assertThat(bind.getVolume().getPath(), is("/container"));
         assertThat(bind.getAccessMode(), is(rw));
         assertThat(bind.getSecMode(), is(SELContext.none));
+        assertThat(bind.getNoCopy(), nullValue());
+    }
+    
+    @Test
+    public void parseReadWriteNoCopy() {
+        Bind bind = Bind.parse("/host:/container:rw,nocopy");
+        assertThat(bind.getPath(), is("/host"));
+        assertThat(bind.getVolume().getPath(), is("/container"));
+        assertThat(bind.getAccessMode(), is(rw));
+        assertThat(bind.getSecMode(), is(SELContext.none));
+        assertThat(bind.getNoCopy(), is(true));
     }
 
     @Test
@@ -34,6 +47,7 @@ public class BindTest {
         assertThat(bind.getVolume().getPath(), is("/container"));
         assertThat(bind.getAccessMode(), is(ro));
         assertThat(bind.getSecMode(), is(SELContext.none));
+        assertThat(bind.getNoCopy(), nullValue());
     }
 
     @Test
@@ -43,12 +57,14 @@ public class BindTest {
         assertThat(bind.getVolume().getPath(), is("/container"));
         assertThat(bind.getAccessMode(), is(AccessMode.DEFAULT));
         assertThat(bind.getSecMode(), is(SELContext.single));
+        assertThat(bind.getNoCopy(), nullValue());
 
         bind = Bind.parse("/host:/container:z");
         assertThat(bind.getPath(), is("/host"));
         assertThat(bind.getVolume().getPath(), is("/container"));
         assertThat(bind.getAccessMode(), is(AccessMode.DEFAULT));
         assertThat(bind.getSecMode(), is(SELContext.shared));
+        assertThat(bind.getNoCopy(), nullValue());
     }
 
     @Test
@@ -58,6 +74,7 @@ public class BindTest {
         assertThat(bind.getVolume().getPath(), is("/container"));
         assertThat(bind.getAccessMode(), is(rw));
         assertThat(bind.getSecMode(), is(SELContext.single));
+        assertThat(bind.getNoCopy(), nullValue());
     }
 
     @Test
@@ -67,6 +84,7 @@ public class BindTest {
         assertThat(bind.getVolume().getPath(), is("/container"));
         assertThat(bind.getAccessMode(), is(ro));
         assertThat(bind.getSecMode(), is(SELContext.shared));
+        assertThat(bind.getNoCopy(), nullValue());
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing Bind.*")
@@ -92,6 +110,11 @@ public class BindTest {
     @Test
     public void toStringReadWrite() {
         assertThat(Bind.parse("/host:/container:rw").toString(), is("/host:/container:rw"));
+    }
+    
+    @Test
+    public void toStringReadWriteNoCopy() {
+        assertThat(Bind.parse("/host:/container:rw,nocopy").toString(), is("/host:/container:rw,nocopy"));
     }
 
     @Test
