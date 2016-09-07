@@ -117,6 +117,37 @@ public interface DockerCmdExecFactory extends Closeable {
 
     DisconnectFromNetworkCmd.Exec createDisconnectFromNetworkCmdExec();
 
+    /**
+     * List all nodes. Node operations require the engine to be part of a swarm
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_24}
+     */
+    ListSwarmNodesCmd.Exec listSwarmNodeCmdExec();
+
+    /**
+     * Return low-level information on the node. Node operations require the engine to be part of a swarm
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_24}
+     */
+    InspectSwarmNodeCmd.Exec inspectSwarmNodeCmdExec();
+
+    /**
+     * Remove a node from the swarm. Node operations require the engine to be part of a swarm
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_24}
+     */
+    RemoveSwarmNodeCmd.Exec removeSwarmNodeCmdExec();
+
+    /**
+     * Update a node. Node operations require the engine to be part of a swarm
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_24}
+     */
+    UpdateSwarmNodeCmd.Exec updateSwarmNodeCmdExec();
+
+
+
+
     @Override
     void close() throws IOException;
 
