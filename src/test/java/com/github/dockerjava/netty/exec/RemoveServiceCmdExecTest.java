@@ -7,6 +7,7 @@ import com.github.dockerjava.api.model.ServiceSpec;
 import com.github.dockerjava.api.model.SwarmSpec;
 import com.github.dockerjava.api.model.TaskSpec;
 import com.github.dockerjava.core.command.AbstractSwarmDockerClientTest;
+import com.github.dockerjava.netty.AbstractNettySwarmDockerClientTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
@@ -24,7 +25,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 
 @Test(groups = "swarm-integration")
-public class RemoveServiceCmdExecTest extends AbstractSwarmDockerClientTest {
+public class RemoveServiceCmdExecTest extends AbstractNettySwarmDockerClientTest {
 
     public static final Logger LOG = LoggerFactory.getLogger(RemoveServiceCmdExecTest.class);
     private static final String SERVICE_NAME = "theservice";

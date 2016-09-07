@@ -74,7 +74,7 @@ public class CreateServiceCmdExecTest extends AbstractSwarmDockerClientTest {
 
         assertThat(services, hasSize(1));
 
-        dockerClient.removeServiceCmd(SERVICE_NAME);
+        dockerClient.removeServiceCmd(SERVICE_NAME).exec();
     }
 
 }
