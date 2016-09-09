@@ -99,7 +99,9 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
      *         before {@link ResultCallback#onComplete()} was called.
      */
     public boolean awaitCompletion(long timeout, TimeUnit timeUnit) throws InterruptedException {
-        return completed.await(timeout, timeUnit);
+        boolean result = completed.await(timeout, timeUnit);
+        getFirstError();
+        return result;
     }
 
     /**
