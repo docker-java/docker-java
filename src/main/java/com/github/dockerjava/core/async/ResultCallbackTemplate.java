@@ -101,7 +101,7 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
     public boolean awaitCompletion(long timeout, TimeUnit timeUnit) throws InterruptedException {
     	boolean result = completed.await(timeout, timeUnit);
     	getFirstError();
-        return result;
+    	return result;
     }
 
     /**
