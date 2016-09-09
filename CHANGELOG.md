@@ -6,6 +6,7 @@ Change Log
  * Make all models Serializable.
  * [NETTY] Fix loadImage responce on 1.24 API.
  * LogPath field for inspect container.
+ * [#700] (https://github.com/docker-java/docker-java/pull/700) Bugfix:donot throw RuntimeException when a error occured in awaitCompletion(long,TimeUnit)
 
 ## 3.0.5
  * Events updated to 1.24 API model.
