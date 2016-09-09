@@ -67,7 +67,6 @@
 		<slf4j-api.version>1.7.21</slf4j-api.version>
 
 		<bouncycastle.version>1.54</bouncycastle.version>
-		<unix-socket-factory.version>2015-01-27T15-02-14</unix-socket-factory.version>
 		<guava.version>19.0</guava.version>
 
 		<!-- test dependencies -->
@@ -78,6 +77,7 @@
 		<hamcrest.jpa-matchers>1.8</hamcrest.jpa-matchers>
 		<lambdaj.version>2.3.3</lambdaj.version>
 		<mockito.version>1.10.19</mockito.version>
+		<junixsocket.version>2.0.4</junixsocket.version>
 
 
 		<maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
@@ -115,9 +115,26 @@
 			<version>${jersey.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>de.gesellix</groupId>
-			<artifactId>unix-socket-factory</artifactId>
-			<version>${unix-socket-factory.version}</version>
+			<groupId>com.kohlschutter.junixsocket</groupId>
+			<artifactId>junixsocket-common</artifactId>
+			<version>${junixsocket.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>log4j</artifactId>
+					<groupId>log4j</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.kohlschutter.junixsocket</groupId>
+			<artifactId>junixsocket-native-common</artifactId>
+			<version>${junixsocket.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>log4j</artifactId>
+					<groupId>log4j</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
