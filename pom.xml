@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -67,7 +68,7 @@
 		<slf4j-api.version>1.7.21</slf4j-api.version>
 
 		<bouncycastle.version>1.54</bouncycastle.version>
-		<unix-socket-factory.version>2015-01-27T15-02-14</unix-socket-factory.version>
+		<junixsocket.version>2.0.4</junixsocket.version>
 		<guava.version>19.0</guava.version>
 
 		<!-- test dependencies -->
@@ -115,11 +116,15 @@
 			<version>${jersey.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>de.gesellix</groupId>
-			<artifactId>unix-socket-factory</artifactId>
-			<version>${unix-socket-factory.version}</version>
+			<groupId>com.kohlschutter.junixsocket</groupId>
+			<artifactId>junixsocket-common</artifactId>
+			<version>${junixsocket.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.kohlschutter.junixsocket</groupId>
+			<artifactId>junixsocket-native-common</artifactId>
+			<version>${junixsocket.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-compress</artifactId>
@@ -266,13 +271,6 @@
 	</distributionManagement>
 
 	<build>
-<!-- 		<extensions> -->
-<!-- 			<extension> -->
-<!-- 				<groupId>kr.motd.maven</groupId> -->
-<!-- 				<artifactId>os-maven-plugin</artifactId> -->
-<!-- 				<version>1.2.3.Final</version> -->
-<!-- 			</extension> -->
-<!-- 		</extensions> -->
 		<pluginManagement>
 			<plugins>
 
@@ -419,7 +417,7 @@
 							<perCoreThreadCount>true</perCoreThreadCount>
 							<threadCount>1</threadCount>
 							<groups>integration</groups>
- 							<excludedGroups>integration-auth</excludedGroups>
+							<excludedGroups>integration-auth</excludedGroups>
 							<includes>
 								<include>**/*Test.java</include>
 							</includes>
@@ -483,7 +481,8 @@
 							<failOnViolation>true</failOnViolation>
 							<logViolationsToConsole>true</logViolationsToConsole>
 							<linkXRef>false</linkXRef>
-							<!-- if some IDE has integration and requires other place, propose it -->
+							<!-- if some IDE has integration and requires other place, propose 
+								it -->
 							<configLocation>
 								src/test/resources/checkstyle/checkstyle-config.xml
 							</configLocation>

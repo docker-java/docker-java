@@ -69,11 +69,9 @@ public class StopContainerCmdImplTest extends AbstractDockerClientTest {
         assertThat(inspectContainerResponse.getState().getRunning(), is(equalTo(false)));
 
         final Integer exitCode = inspectContainerResponse.getState().getExitCode();
-        if (apiVersion.equals(VERSION_1_22)) {
-            assertThat(exitCode, is(0));
-        } else {
-            assertThat(exitCode, not(0));
-        }
+        
+        assertThat(exitCode, is(137));
+        
     }
 
     @Test(expectedExceptions = NotFoundException.class)
