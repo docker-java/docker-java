@@ -20,6 +20,7 @@ import javax.ws.rs.client.WebTarget;
 import com.github.dockerjava.api.command.UpdateContainerCmd;
 import com.github.dockerjava.core.SSLConfig;
 
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
@@ -109,6 +110,8 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
     private Integer maxTotalConnections = null;
 
     private Integer maxPerRouteConnections = null;
+
+    private Integer connectionRequestTimeout = null;
 
     private ClientRequestFilter[] clientRequestFilters = null;
 
@@ -216,9 +219,10 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
         clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER, connManager);
 
         // Configure connection pool timeout
-        // clientConfig.property(ApacheClientProperties.REQUEST_CONFIG, RequestConfig.custom()
-        // .setConnectionRequestTimeout(1000).build());
-
+        if (connectionRequestTimeout != null) {
+            clientConfig.property(ApacheClientProperties.REQUEST_CONFIG, RequestConfig.custom()
+                    .setConnectionRequestTimeout(connectionRequestTimeout).build());
+        }
         ClientBuilder clientBuilder = ClientBuilder.newBuilder().withConfig(clientConfig);
 
         if (sslContext != null) {
@@ -567,6 +571,11 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
 
     public JerseyDockerCmdExecFactory withMaxPerRouteConnections(Integer maxPerRouteConnections) {
         this.maxPerRouteConnections = maxPerRouteConnections;
+        return this;
+    }
+
+    public JerseyDockerCmdExecFactory withConnectionRequestTimeout(Integer connectionRequestTimeout) {
+        this.connectionRequestTimeout = connectionRequestTimeout;
         return this;
     }
 
