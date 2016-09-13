@@ -3,6 +3,8 @@ Change Log
 ## Next
 
 ## 3.0.6
+ * Fixed issue with jersey and unix domain sockets.
+ * [#703](https://github.com/docker-java/docker-java/pull/703) Allow to configure connection pool timeout.
  * Make all models Serializable.
  * [NETTY] Fix loadImage responce on 1.24 API.
  * LogPath field for inspect container.
