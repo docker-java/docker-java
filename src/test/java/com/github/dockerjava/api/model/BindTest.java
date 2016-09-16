@@ -18,6 +18,7 @@ public class BindTest {
         assertThat(bind.getAccessMode(), is(AccessMode.DEFAULT));
         assertThat(bind.getSecMode(), is(SELContext.none));
         assertThat(bind.getNoCopy(), nullValue());
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT));
     }
 
     @Test
@@ -28,8 +29,9 @@ public class BindTest {
         assertThat(bind.getAccessMode(), is(rw));
         assertThat(bind.getSecMode(), is(SELContext.none));
         assertThat(bind.getNoCopy(), nullValue());
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT));
     }
-    
+
     @Test
     public void parseReadWriteNoCopy() {
         Bind bind = Bind.parse("/host:/container:rw,nocopy");
@@ -38,6 +40,40 @@ public class BindTest {
         assertThat(bind.getAccessMode(), is(rw));
         assertThat(bind.getSecMode(), is(SELContext.none));
         assertThat(bind.getNoCopy(), is(true));
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT));
+    }
+
+    @Test
+    public void parseReadWriteShared() {
+        Bind bind = Bind.parse("/host:/container:rw,shared");
+        assertThat(bind.getPath(), is("/host"));
+        assertThat(bind.getVolume().getPath(), is("/container"));
+        assertThat(bind.getAccessMode(), is(rw));
+        assertThat(bind.getSecMode(), is(SELContext.none));
+        assertThat(bind.getNoCopy(), nullValue());
+        assertThat(bind.getPropagationMode(), is(PropagationMode.mount_shared));
+    }
+
+    @Test
+    public void parseReadWriteSlave() {
+        Bind bind = Bind.parse("/host:/container:rw,slave");
+        assertThat(bind.getPath(), is("/host"));
+        assertThat(bind.getVolume().getPath(), is("/container"));
+        assertThat(bind.getAccessMode(), is(rw));
+        assertThat(bind.getSecMode(), is(SELContext.none));
+        assertThat(bind.getNoCopy(), nullValue());
+        assertThat(bind.getPropagationMode(), is(PropagationMode.mount_slave));
+    }
+
+    @Test
+    public void parseReadWritePrivate() {
+        Bind bind = Bind.parse("/host:/container:rw,private");
+        assertThat(bind.getPath(), is("/host"));
+        assertThat(bind.getVolume().getPath(), is("/container"));
+        assertThat(bind.getAccessMode(), is(rw));
+        assertThat(bind.getSecMode(), is(SELContext.none));
+        assertThat(bind.getNoCopy(), nullValue());
+        assertThat(bind.getPropagationMode(), is(PropagationMode.mount_private));
     }
 
     @Test
@@ -48,6 +84,7 @@ public class BindTest {
         assertThat(bind.getAccessMode(), is(ro));
         assertThat(bind.getSecMode(), is(SELContext.none));
         assertThat(bind.getNoCopy(), nullValue());
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT));
     }
 
     @Test
@@ -58,6 +95,7 @@ public class BindTest {
         assertThat(bind.getAccessMode(), is(AccessMode.DEFAULT));
         assertThat(bind.getSecMode(), is(SELContext.single));
         assertThat(bind.getNoCopy(), nullValue());
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT));
 
         bind = Bind.parse("/host:/container:z");
         assertThat(bind.getPath(), is("/host"));
@@ -65,6 +103,7 @@ public class BindTest {
         assertThat(bind.getAccessMode(), is(AccessMode.DEFAULT));
         assertThat(bind.getSecMode(), is(SELContext.shared));
         assertThat(bind.getNoCopy(), nullValue());
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT));
     }
 
     @Test
@@ -75,6 +114,7 @@ public class BindTest {
         assertThat(bind.getAccessMode(), is(rw));
         assertThat(bind.getSecMode(), is(SELContext.single));
         assertThat(bind.getNoCopy(), nullValue());
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT));
     }
 
     @Test
@@ -85,6 +125,7 @@ public class BindTest {
         assertThat(bind.getAccessMode(), is(ro));
         assertThat(bind.getSecMode(), is(SELContext.shared));
         assertThat(bind.getNoCopy(), nullValue());
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT));
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing Bind.*")
@@ -111,10 +152,25 @@ public class BindTest {
     public void toStringReadWrite() {
         assertThat(Bind.parse("/host:/container:rw").toString(), is("/host:/container:rw"));
     }
-    
+
     @Test
     public void toStringReadWriteNoCopy() {
         assertThat(Bind.parse("/host:/container:rw,nocopy").toString(), is("/host:/container:rw,nocopy"));
+    }
+
+    @Test
+    public void toStringReadWriteShared() {
+        assertThat(Bind.parse("/host:/container:rw,shared").toString(), is("/host:/container:rw,shared"));
+    }
+
+    @Test
+    public void toStringReadWriteSlave() {
+        assertThat(Bind.parse("/host:/container:rw,slave").toString(), is("/host:/container:rw,slave"));
+    }
+
+    @Test
+    public void toStringReadWritePrivate() {
+        assertThat(Bind.parse("/host:/container:rw,private").toString(), is("/host:/container:rw,private"));
     }
 
     @Test

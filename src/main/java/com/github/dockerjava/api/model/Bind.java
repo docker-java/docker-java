@@ -28,6 +28,11 @@ public class Bind implements Serializable {
      */
     private SELContext secMode;
 
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
+     */
+    private PropagationMode propagationMode;
+
     public Bind(String path, Volume volume) {
         this(path, volume, AccessMode.DEFAULT, SELContext.DEFAULT);
     }
@@ -45,11 +50,16 @@ public class Bind implements Serializable {
     }
 
     public Bind(String path, Volume volume, AccessMode accessMode, SELContext secMode, Boolean noCopy) {
+        this(path, volume, accessMode, secMode, noCopy, PropagationMode.DEFAULT);
+    }
+
+    public Bind(String path, Volume volume, AccessMode accessMode, SELContext secMode, Boolean noCopy, PropagationMode propagationMode) {
         this.path = path;
         this.volume = volume;
         this.accessMode = accessMode;
         this.secMode = secMode;
         this.noCopy = noCopy;
+        this.propagationMode = propagationMode;
     }
 
     public String getPath() {
@@ -70,6 +80,10 @@ public class Bind implements Serializable {
 
     public Boolean getNoCopy() {
         return noCopy;
+    }
+
+    public PropagationMode getPropagationMode() {
+        return propagationMode;
     }
 
     /**
@@ -93,17 +107,24 @@ public class Bind implements Serializable {
                 AccessMode accessMode = AccessMode.DEFAULT;
                 SELContext seMode = SELContext.DEFAULT;
                 Boolean nocopy = null;
+                PropagationMode propagationMode = PropagationMode.DEFAULT;
                 for (String p : flags) {
                     if (p.length() == 2) {
                         accessMode = AccessMode.valueOf(p.toLowerCase());
                     } else if ("nocopy".equals(p)) {
                         nocopy = true;
+                    } else if (PropagationMode.mount_shared.toString().equals(p)) {
+                        propagationMode = PropagationMode.mount_shared;
+                    } else if (PropagationMode.mount_slave.toString().equals(p)) {
+                        propagationMode = PropagationMode.mount_slave;
+                    } else if (PropagationMode.mount_private.toString().equals(p)) {
+                        propagationMode = PropagationMode.mount_private;
                     } else {
                         seMode = SELContext.fromString(p);
                     }
                 }
 
-                return new Bind(parts[0], new Volume(parts[1]), accessMode, seMode, nocopy);
+                return new Bind(parts[0], new Volume(parts[1]), accessMode, seMode, nocopy, propagationMode);
             }
             default: {
                 throw new IllegalArgumentException();
@@ -124,6 +145,7 @@ public class Bind implements Serializable {
                     .append(accessMode, other.getAccessMode())
                     .append(secMode, other.getSecMode())
                     .append(noCopy, other.getNoCopy())
+                    .append(propagationMode, other.getPropagationMode())
                     .isEquals();
         } else {
             return super.equals(obj);
@@ -138,6 +160,7 @@ public class Bind implements Serializable {
                 .append(accessMode)
                 .append(secMode)
                 .append(noCopy)
+                .append(propagationMode)
                 .toHashCode();
     }
 
@@ -150,11 +173,12 @@ public class Bind implements Serializable {
      */
     @Override
     public String toString() {
-        return String.format("%s:%s:%s%s%s",
+        return String.format("%s:%s:%s%s%s%s",
                 path,
                 volume.getPath(),
                 accessMode.toString(),
                 secMode != SELContext.none ? "," + secMode.toString() : "",
-                noCopy != null ? ",nocopy" : "");
+                noCopy != null ? ",nocopy" : "",
+                propagationMode != PropagationMode.mount_default ? "," + propagationMode.toString() : "");
     }
 }
