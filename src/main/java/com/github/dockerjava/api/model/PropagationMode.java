@@ -8,21 +8,21 @@ package com.github.dockerjava.api.model;
  */
 public enum PropagationMode {
     /** default */
-    mount_default(""),
+    DEFAULT(""),
 
     /** shared */
-    mount_shared("shared"),
+    SHARED("shared"),
 
     /** slave */
-    mount_slave("slave"),
+    SLAVE("slave"),
 
     /** private */
-    mount_private("private");
+    PRIVATE("private");
 
     /**
-     * The default {@link PropagationMode}: {@link #mount_default}
+     * The default {@link PropagationMode}: {@link #DEFAULT}
      */
-    public static final PropagationMode DEFAULT = mount_default;
+    public static final PropagationMode DEFAULT_MODE = DEFAULT;
 
     private String value;
 
@@ -38,12 +38,13 @@ public enum PropagationMode {
     public static PropagationMode fromString(String v) {
         switch (v) {
         case "shared":
-            return mount_shared;
+            return SHARED;
         case "slave":
-            return mount_slave;
+            return SLAVE;
         case "private":
-            return mount_private;
+            return PRIVATE;
+        default:
+            return DEFAULT;
         }
-        return mount_default;
     }
 }

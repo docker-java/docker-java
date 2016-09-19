@@ -50,7 +50,7 @@ public class Bind implements Serializable {
     }
 
     public Bind(String path, Volume volume, AccessMode accessMode, SELContext secMode, Boolean noCopy) {
-        this(path, volume, accessMode, secMode, noCopy, PropagationMode.DEFAULT);
+        this(path, volume, accessMode, secMode, noCopy, PropagationMode.DEFAULT_MODE);
     }
 
     public Bind(String path, Volume volume, AccessMode accessMode, SELContext secMode, Boolean noCopy, PropagationMode propagationMode) {
@@ -107,18 +107,18 @@ public class Bind implements Serializable {
                 AccessMode accessMode = AccessMode.DEFAULT;
                 SELContext seMode = SELContext.DEFAULT;
                 Boolean nocopy = null;
-                PropagationMode propagationMode = PropagationMode.DEFAULT;
+                PropagationMode propagationMode = PropagationMode.DEFAULT_MODE;
                 for (String p : flags) {
                     if (p.length() == 2) {
                         accessMode = AccessMode.valueOf(p.toLowerCase());
                     } else if ("nocopy".equals(p)) {
                         nocopy = true;
-                    } else if (PropagationMode.mount_shared.toString().equals(p)) {
-                        propagationMode = PropagationMode.mount_shared;
-                    } else if (PropagationMode.mount_slave.toString().equals(p)) {
-                        propagationMode = PropagationMode.mount_slave;
-                    } else if (PropagationMode.mount_private.toString().equals(p)) {
-                        propagationMode = PropagationMode.mount_private;
+                    } else if (PropagationMode.SHARED.toString().equals(p)) {
+                        propagationMode = PropagationMode.SHARED;
+                    } else if (PropagationMode.SLAVE.toString().equals(p)) {
+                        propagationMode = PropagationMode.SLAVE;
+                    } else if (PropagationMode.PRIVATE.toString().equals(p)) {
+                        propagationMode = PropagationMode.PRIVATE;
                     } else {
                         seMode = SELContext.fromString(p);
                     }
@@ -179,6 +179,6 @@ public class Bind implements Serializable {
                 accessMode.toString(),
                 secMode != SELContext.none ? "," + secMode.toString() : "",
                 noCopy != null ? ",nocopy" : "",
-                propagationMode != PropagationMode.mount_default ? "," + propagationMode.toString() : "");
+                propagationMode != PropagationMode.DEFAULT_MODE ? "," + propagationMode.toString() : "");
     }
 }

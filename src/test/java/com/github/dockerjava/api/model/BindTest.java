@@ -18,7 +18,7 @@ public class BindTest {
         assertThat(bind.getAccessMode(), is(AccessMode.DEFAULT));
         assertThat(bind.getSecMode(), is(SELContext.none));
         assertThat(bind.getNoCopy(), nullValue());
-        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT));
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT_MODE));
     }
 
     @Test
@@ -29,7 +29,7 @@ public class BindTest {
         assertThat(bind.getAccessMode(), is(rw));
         assertThat(bind.getSecMode(), is(SELContext.none));
         assertThat(bind.getNoCopy(), nullValue());
-        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT));
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT_MODE));
     }
 
     @Test
@@ -40,7 +40,7 @@ public class BindTest {
         assertThat(bind.getAccessMode(), is(rw));
         assertThat(bind.getSecMode(), is(SELContext.none));
         assertThat(bind.getNoCopy(), is(true));
-        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT));
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT_MODE));
     }
 
     @Test
@@ -51,7 +51,7 @@ public class BindTest {
         assertThat(bind.getAccessMode(), is(rw));
         assertThat(bind.getSecMode(), is(SELContext.none));
         assertThat(bind.getNoCopy(), nullValue());
-        assertThat(bind.getPropagationMode(), is(PropagationMode.mount_shared));
+        assertThat(bind.getPropagationMode(), is(PropagationMode.SHARED));
     }
 
     @Test
@@ -62,7 +62,7 @@ public class BindTest {
         assertThat(bind.getAccessMode(), is(rw));
         assertThat(bind.getSecMode(), is(SELContext.none));
         assertThat(bind.getNoCopy(), nullValue());
-        assertThat(bind.getPropagationMode(), is(PropagationMode.mount_slave));
+        assertThat(bind.getPropagationMode(), is(PropagationMode.SLAVE));
     }
 
     @Test
@@ -73,7 +73,7 @@ public class BindTest {
         assertThat(bind.getAccessMode(), is(rw));
         assertThat(bind.getSecMode(), is(SELContext.none));
         assertThat(bind.getNoCopy(), nullValue());
-        assertThat(bind.getPropagationMode(), is(PropagationMode.mount_private));
+        assertThat(bind.getPropagationMode(), is(PropagationMode.PRIVATE));
     }
 
     @Test
@@ -84,7 +84,7 @@ public class BindTest {
         assertThat(bind.getAccessMode(), is(ro));
         assertThat(bind.getSecMode(), is(SELContext.none));
         assertThat(bind.getNoCopy(), nullValue());
-        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT));
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT_MODE));
     }
 
     @Test
@@ -95,7 +95,7 @@ public class BindTest {
         assertThat(bind.getAccessMode(), is(AccessMode.DEFAULT));
         assertThat(bind.getSecMode(), is(SELContext.single));
         assertThat(bind.getNoCopy(), nullValue());
-        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT));
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT_MODE));
 
         bind = Bind.parse("/host:/container:z");
         assertThat(bind.getPath(), is("/host"));
@@ -103,7 +103,7 @@ public class BindTest {
         assertThat(bind.getAccessMode(), is(AccessMode.DEFAULT));
         assertThat(bind.getSecMode(), is(SELContext.shared));
         assertThat(bind.getNoCopy(), nullValue());
-        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT));
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT_MODE));
     }
 
     @Test
@@ -114,7 +114,7 @@ public class BindTest {
         assertThat(bind.getAccessMode(), is(rw));
         assertThat(bind.getSecMode(), is(SELContext.single));
         assertThat(bind.getNoCopy(), nullValue());
-        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT));
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT_MODE));
     }
 
     @Test
@@ -125,7 +125,7 @@ public class BindTest {
         assertThat(bind.getAccessMode(), is(ro));
         assertThat(bind.getSecMode(), is(SELContext.shared));
         assertThat(bind.getNoCopy(), nullValue());
-        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT));
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT_MODE));
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing Bind.*")
