@@ -20,6 +20,9 @@ public interface ExecCreateCmd extends SyncDockerCmd<ExecCreateCmdResponse> {
     @CheckForNull
     Boolean hasTtyEnabled();
 
+    @CheckForNull
+    String getUser();
+
     ExecCreateCmd withAttachStderr(Boolean attachStderr);
 
     ExecCreateCmd withAttachStdin(Boolean attachStdin);
@@ -31,6 +34,8 @@ public interface ExecCreateCmd extends SyncDockerCmd<ExecCreateCmdResponse> {
     ExecCreateCmd withContainerId(@Nonnull String containerId);
 
     ExecCreateCmd withTty(Boolean tty);
+
+    ExecCreateCmd withUser(String user);
 
     interface Exec extends DockerCmdSyncExec<ExecCreateCmd, ExecCreateCmdResponse> {
     }

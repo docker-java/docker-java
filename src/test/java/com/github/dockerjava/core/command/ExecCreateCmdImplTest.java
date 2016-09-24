@@ -44,7 +44,7 @@ public class ExecCreateCmdImplTest extends AbstractDockerClientTest {
     public void execCreateTest() {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("top")
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withUser("root").withCmd("top")
                 .withName(containerName).exec();
 
         LOG.info("Created container {}", container.toString());
