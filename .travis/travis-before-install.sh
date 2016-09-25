@@ -135,6 +135,7 @@ if [ -n "SWARM_VERSION" ]; then
     NODES=$(docker info | grep "Nodes:" | awk '{ print $2 }')
     if [[ $NODES == "0" ]]; then
         echo "Swarm didn't connect"
+        export DOCKER_HOST="tcp://127.0.0.1:${HOST_PORT}"
         docker logs swarm_join
         docker logs swarm_manager
         exit 1
