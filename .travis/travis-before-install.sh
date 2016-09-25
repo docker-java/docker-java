@@ -109,7 +109,8 @@ if [ -n "SWARM_VERSION" ]; then
         -d \
         -it \
         --name=swarm_manager \
-        -p ${SWARM_PORT}:${SWARM_PORT} \
+#        -p ${SWARM_PORT}:${SWARM_PORT} \
+        --network="host" \
         "swarm:${SWARM_VERSION}" \
         manage -H tcp://0.0.0.0:${SWARM_PORT} token://${SWARM_TOKEN}
 
@@ -138,6 +139,9 @@ if [ -n "SWARM_VERSION" ]; then
         export DOCKER_HOST="tcp://127.0.0.1:${HOST_PORT}"
         docker logs swarm_join
         docker logs swarm_manager
+        sudo ip a ls
+        sudo ip r ls
+        sudo ss -antpl
         exit 1
     fi
 fi
