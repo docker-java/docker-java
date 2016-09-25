@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
 
-
+## fix coverity issue
 sudo apt-get install -y -q ca-certificates
+echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-certificates.crt
+##
+
+if [ "$FAST_BUILD" == true ]; then
+    echo "Fast build, skipping docker installations."
+    exit 0
+fi
 
 set -exu
 
@@ -10,17 +17,11 @@ ip r ls
 
 export HOST_PORT="${DOCKER_HOST##*:}"
 export HOST_IP="$(ip a show dev eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)"
-export PRE_DOCKER_HOST="$DOCKER_HOST"
 # because of swarm use docker-engine directly
+export PRE_DOCKER_HOST="$DOCKER_HOST"
 export DOCKER_HOST="tcp://${HOST_IP}:${HOST_PORT}"
 
-echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-certificates.crt
 
-
-if [ "$FAST_BUILD" == true ]; then
-    echo "Fast build, skipping docker installations."
-    exit 0
-fi
 
 
 docker info
