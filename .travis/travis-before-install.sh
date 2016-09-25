@@ -20,7 +20,7 @@ export HOST_PORT="2375"
 export HOST_IP="$(ip a show dev eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)"
 # because of swarm use docker-engine directly
 export PRE_DOCKER_HOST="$DOCKER_HOST"
-export DOCKER_HOST="tcp://${HOST_IP}:${HOST_PORT}"
+export DOCKER_HOST="tcp://127.0.0.1:${HOST_PORT}"
 
 
 
