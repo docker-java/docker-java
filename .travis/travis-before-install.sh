@@ -123,6 +123,8 @@ if [ -n "SWARM_VERSION" ]; then
 
     docker run --rm "swarm:${SWARM_VERSION}" list "token://${SWARM_TOKEN}"
 
+    docker ps -a
+
     DOCKER_HOST="$PRE_DOCKER_HOST"
 
     sleep 10
@@ -133,8 +135,8 @@ if [ -n "SWARM_VERSION" ]; then
     NODES=$(docker info | grep "Nodes:" | awk '{ print $2 }')
     if [[ $NODES == "0" ]]; then
         echo "Swarm didn't connect"
-        docker logs swarm_manager
         docker logs swarm_join
+        docker logs swarm_manager
         exit 1
     fi
 fi
