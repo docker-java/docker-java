@@ -23,8 +23,6 @@ export PRE_DOCKER_HOST="$DOCKER_HOST"
 export DOCKER_HOST="tcp://127.0.0.1:${HOST_PORT}"
 
 
-
-
 docker info
 docker version
 
@@ -127,7 +125,12 @@ if [ -n "SWARM_VERSION" ]; then
 
     DOCKER_HOST="$PRE_DOCKER_HOST"
 
-    sleep 6
+    sleep 10
+    NODES=$(docker info | grep "Nodes:" | awk '{ print $2 }')
+    if [[ $NODES == "0" ]]; then
+        echo "Swarm didn't connect"
+        exit 1
+    fi
 
     docker version
     docker info
