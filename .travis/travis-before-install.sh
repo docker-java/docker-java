@@ -4,9 +4,10 @@
 sudo apt-get install -y -q ca-certificates
 
 ip a ls
+ip r ls
 
-export HOST_PORT=2375
-export HOST_IP="$(ip a show dev eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)"
+export HOST_PORT="${DOCKER_HOST#*:}"
+export HOST_IP="$(ip a show dev docker0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)"
 export PRE_DOCKER_HOST="$DOCKER_HOST"
 # because of swarm use docker-engine directly
 DOCKER_HOST="tcp://localhost:${HOST_PORT}"
