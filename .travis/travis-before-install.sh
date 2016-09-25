@@ -4,6 +4,7 @@
 sudo apt-get install -y -q ca-certificates
 
 export HOST_PORT=2375
+export HOST_IP="$(ip a show dev eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)"
 echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-certificates.crt
 
 
@@ -89,3 +90,13 @@ registry.email=${registry_email}
 registry.url=https://index.docker.io/v1/
 
 EOF
+
+docker pull swarm
+SWARM_TOKEN=$(docker run swarm c)
+
+docker run -d -it --name=swarm_manager swarm manage -H tcp://0.0.0.0:2377 token://${SWARM_TOKEN}
+
+# connect engine to swarm
+docker run -d -it --name=swarm_join swarm join --advertise=${HOST_IP}:${HOST_PORT} token://${SWARM_TOKEN}
+
+docker run swarm list token://${SWARM_TOKEN}
