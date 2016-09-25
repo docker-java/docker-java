@@ -121,7 +121,7 @@ if [ -n "SWARM_VERSION" ]; then
         -it \
         "--name=swarm_join" \
         "swarm:${SWARM_VERSION}" \
-        join --advertise="${HOST_IP}:${HOST_PORT}" --delay="0s" --heartbeat "5s" "token://${SWARM_TOKEN}"
+        join --advertise="127.0.0.1:${HOST_PORT}" --delay="0s" --heartbeat "5s" "token://${SWARM_TOKEN}"
 
     docker run --rm "swarm:${SWARM_VERSION}" list "token://${SWARM_TOKEN}"
 
