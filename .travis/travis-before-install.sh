@@ -109,11 +109,10 @@ if [ -n "SWARM_VERSION" ]; then
         -d \
         -it \
         --name=swarm_manager \
-        --network="host" \
+        -p ${SWARM_PORT}:2375 \
         "swarm:${SWARM_VERSION}" \
-        manage -H tcp://0.0.0.0:${SWARM_PORT} token://${SWARM_TOKEN}
-
-#        -p ${SWARM_PORT}:${SWARM_PORT} \
+        manage token://${SWARM_TOKEN}
+#        --network="host" \
 
     # connect engine to swarm
     docker run \
@@ -121,7 +120,7 @@ if [ -n "SWARM_VERSION" ]; then
         -it \
         "--name=swarm_join" \
         "swarm:${SWARM_VERSION}" \
-        join --advertise="127.0.0.1:${HOST_PORT}" --delay="0s" --heartbeat "5s" "token://${SWARM_TOKEN}"
+        join --advertise="${HOST_IP}:${HOST_PORT}" --delay="0s" --heartbeat "5s" "token://${SWARM_TOKEN}"
 
     docker run --rm "swarm:${SWARM_VERSION}" list "token://${SWARM_TOKEN}"
 
