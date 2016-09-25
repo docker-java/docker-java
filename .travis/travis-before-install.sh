@@ -116,12 +116,17 @@ if [ -n "SWARM_VERSION" ]; then
         -d \
         -it \
         "--name=swarm_join" \
+        --delay="0s" \
+        --heartbeat "5s" \
         "swarm:${SWARM_VERSION}" \
         join "--advertise=${HOST_IP}:${HOST_PORT}" "token://${SWARM_TOKEN}"
 
     docker run --rm "swarm:${SWARM_VERSION}" list "token://${SWARM_TOKEN}"
 
     DOCKER_HOST="$PRE_DOCKER_HOST"
+
+    sleep 6
+
     docker version
     docker info
 
