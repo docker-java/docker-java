@@ -126,13 +126,13 @@ if [ -n "SWARM_VERSION" ]; then
     DOCKER_HOST="$PRE_DOCKER_HOST"
 
     sleep 10
+
+    docker version
+    docker info
+
     NODES=$(docker info | grep "Nodes:" | awk '{ print $2 }')
     if [[ $NODES == "0" ]]; then
         echo "Swarm didn't connect"
         exit 1
     fi
-
-    docker version
-    docker info
-
 fi
