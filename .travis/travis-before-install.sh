@@ -15,7 +15,7 @@ set -exu
 ip a ls
 ip r ls
 
-export HOST_PORT="${DOCKER_HOST##*:}"
+export HOST_PORT="2375"
 export HOST_IP="$(ip a show dev eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)"
 # because of swarm use docker-engine directly
 export PRE_DOCKER_HOST="$DOCKER_HOST"
