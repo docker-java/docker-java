@@ -109,10 +109,11 @@ if [ -n "SWARM_VERSION" ]; then
         -d \
         -it \
         --name=swarm_manager \
-#        -p ${SWARM_PORT}:${SWARM_PORT} \
         --network="host" \
         "swarm:${SWARM_VERSION}" \
         manage -H tcp://0.0.0.0:${SWARM_PORT} token://${SWARM_TOKEN}
+
+#        -p ${SWARM_PORT}:${SWARM_PORT} \
 
     # connect engine to swarm
     docker run \
