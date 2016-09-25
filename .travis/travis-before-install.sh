@@ -133,6 +133,8 @@ if [ -n "SWARM_VERSION" ]; then
     NODES=$(docker info | grep "Nodes:" | awk '{ print $2 }')
     if [[ $NODES == "0" ]]; then
         echo "Swarm didn't connect"
+        docker logs swarm_manager
+        docker logs swarm_join
         exit 1
     fi
 fi
