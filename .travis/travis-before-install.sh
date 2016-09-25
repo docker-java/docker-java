@@ -12,8 +12,9 @@ fi
 
 set -exu
 
-ip a ls
-ip r ls
+sudo ip a ls
+sudo ip r ls
+sudo ss -antpl
 
 export HOST_PORT="2375"
 export HOST_IP="$(ip a show dev eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)"
