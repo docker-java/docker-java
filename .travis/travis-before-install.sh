@@ -98,6 +98,8 @@ registry.url=https://index.docker.io/v1/
 EOF
 
 if [ -n "SWARM_VERSION" ]; then
+    export SWARM_PORT="${PRE_DOCKER_HOST##*:}"
+
     docker pull swarm
     SWARM_TOKEN=$(docker run swarm c)
 
@@ -105,8 +107,9 @@ if [ -n "SWARM_VERSION" ]; then
         -d \
         -it \
         --name=swarm_manager \
+        -p ${SWARM_PORT}:${SWARM_PORT} \
         "swarm:${SWARM_VERSION}" \
-        manage -H tcp://0.0.0.0:2377 token://${SWARM_TOKEN}
+        manage -H tcp://0.0.0.0:${SWARM_PORT} token://${SWARM_TOKEN}
 
     # connect engine to swarm
     docker run \
