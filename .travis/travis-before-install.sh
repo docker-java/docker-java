@@ -3,11 +3,13 @@
 
 sudo apt-get install -y -q ca-certificates
 
+ip a ls
+
 export HOST_PORT=2375
 export HOST_IP="$(ip a show dev eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)"
 export PRE_DOCKER_HOST="$DOCKER_HOST"
 # because of swarm use docker-engine directly
-DOCKER_HOST="tcp://${HOST_IP}:${HOST_PORT}"
+DOCKER_HOST="tcp://localhost:${HOST_PORT}"
 
 echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-certificates.crt
 
