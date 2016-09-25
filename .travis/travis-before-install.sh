@@ -3,6 +3,8 @@
 
 sudo apt-get install -y -q ca-certificates
 
+set -exu
+
 ip a ls
 ip r ls
 
@@ -10,7 +12,7 @@ export HOST_PORT="${DOCKER_HOST##*:}"
 export HOST_IP="$(ip a show dev eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)"
 export PRE_DOCKER_HOST="$DOCKER_HOST"
 # because of swarm use docker-engine directly
-DOCKER_HOST="tcp://localhost:${HOST_PORT}"
+export DOCKER_HOST="tcp://$DOCKER_HOST:${HOST_PORT}"
 
 echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-certificates.crt
 
@@ -20,7 +22,6 @@ if [ "$FAST_BUILD" == true ]; then
     exit 0
 fi
 
-set -exu
 
 docker info
 docker version
