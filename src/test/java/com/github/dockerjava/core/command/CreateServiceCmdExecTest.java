@@ -1,17 +1,14 @@
 package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.api.exception.NotAcceptableException;
 import com.github.dockerjava.api.model.ContainerSpec;
+import com.github.dockerjava.api.model.Network;
+import com.github.dockerjava.api.model.NetworkAttachmentConfig;
 import com.github.dockerjava.api.model.Service;
+import com.github.dockerjava.api.model.ServiceModeConfig;
+import com.github.dockerjava.api.model.ServiceReplicatedModeOptions;
 import com.github.dockerjava.api.model.ServiceSpec;
-import com.github.dockerjava.api.model.Swarm;
-import com.github.dockerjava.api.model.SwarmCAConfig;
-import com.github.dockerjava.api.model.SwarmDispatcherConfig;
-import com.github.dockerjava.api.model.SwarmOrchestration;
-import com.github.dockerjava.api.model.SwarmRaftConfig;
 import com.github.dockerjava.api.model.SwarmSpec;
-import com.github.dockerjava.api.model.TaskDefaults;
 import com.github.dockerjava.api.model.TaskSpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +24,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
@@ -58,8 +54,11 @@ public class CreateServiceCmdExecTest extends AbstractSwarmDockerClientTest {
     }
 
     @Test
-    public void initializeSwarm() throws DockerException {
-        dockerClient.initializeSwarmCmd(new SwarmSpec()).withListenAddr("127.0.0.1").exec();
+    public void testCreateService() throws DockerException {
+        dockerClient.initializeSwarmCmd(new SwarmSpec())
+                .withListenAddr("127.0.0.1")
+                .withAdvertiseAddr("127.0.0.1")
+                .exec();
 
         dockerClient.createServiceCmd(new ServiceSpec()
                 .withName(SERVICE_NAME)
@@ -73,6 +72,48 @@ public class CreateServiceCmdExecTest extends AbstractSwarmDockerClientTest {
                 .exec();
 
         assertThat(services, hasSize(1));
+
+        dockerClient.removeServiceCmd(SERVICE_NAME).exec();
+    }
+
+    @Test
+    public void testCreateServiceWithNetworks() {
+        dockerClient.initializeSwarmCmd(new SwarmSpec())
+                .withListenAddr("127.0.0.1")
+                .withAdvertiseAddr("127.0.0.1")
+                .exec();
+
+        String networkId = dockerClient.createNetworkCmd().withName("networkname")
+                .withDriver("overlay")
+                .withIpam(new Network.Ipam()
+                        .withDriver("default"))
+                .exec().getId();
+
+        ServiceSpec spec = new ServiceSpec()
+                .withName(SERVICE_NAME)
+                .withTaskTemplate(new TaskSpec()
+                        .withContainerSpec(new ContainerSpec()
+                                .withImage("busybox"))
+                )
+                .withNetworks(Lists.newArrayList(
+                        new NetworkAttachmentConfig()
+                                .withTarget(networkId)
+                                .withAliases(Lists.<String>newArrayList("alias1", "alias2"))
+                ))
+                .withMode(new ServiceModeConfig().withReplicated(
+                        new ServiceReplicatedModeOptions()
+                                .withReplicas(1)
+                ));
+
+        dockerClient.createServiceCmd(spec).exec();
+
+        List<Service> services = dockerClient.listServicesCmd()
+                .withNameFilter(Lists.newArrayList(SERVICE_NAME))
+                .exec();
+
+        assertThat(services, hasSize(1));
+
+        assertThat(services.get(0).getSpec(), is(spec));
 
         dockerClient.removeServiceCmd(SERVICE_NAME).exec();
     }
