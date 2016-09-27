@@ -126,13 +126,15 @@ if [ -n "SWARM_VERSION" ]; then
 
     docker ps -a
     sudo ss -antpl
+
+    sleep 70
+
     docker logs swarm_join
     docker logs swarm_manager
 
     # switch to swarm connection
     DOCKER_HOST="$PRE_DOCKER_HOST"
 
-    sleep 70
 
     docker version
     docker info
