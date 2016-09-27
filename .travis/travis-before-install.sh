@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 
+SWARM_VERSION="${SWARM_VERSION:-}"
+FAST_BUILD="${FAST_BUILD:-}"
+
 ## fix coverity issue
 sudo apt-get install -y -q ca-certificates
 echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-certificates.crt
 ##
 
-if [ "$FAST_BUILD" == true ]; then
+if [ "$FAST_BUILD" == "true" ]; then
     echo "Fast build, skipping docker installations."
     exit 0
 fi
