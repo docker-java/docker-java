@@ -102,7 +102,7 @@ registry.url=https://index.docker.io/v1/
 
 EOF
 
-if [ -n "SWARM_VERSION" ]; then
+if [[ -n $SWARM_VERSION ]]; then
     export SWARM_PORT="${PRE_DOCKER_HOST##*:}"
 
     docker pull swarm
