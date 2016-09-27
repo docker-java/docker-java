@@ -142,4 +142,7 @@ if [ -n "SWARM_VERSION" ]; then
         echo "Swarm didn't connect"
         exit 1
     fi
+
+    # test via swarm
+    docker pull busybox
 fi
