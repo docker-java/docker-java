@@ -128,7 +128,7 @@ if [ -n "SWARM_VERSION" ]; then
 
     DOCKER_HOST="$PRE_DOCKER_HOST"
 
-    sleep 10
+    sleep 70
 
     docker version
     docker info
