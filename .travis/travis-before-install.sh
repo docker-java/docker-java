@@ -20,6 +20,7 @@ sudo ip r ls
 sudo ss -antpl
 
 export HOST_PORT="2375"
+export SWARM_PORT="2377"
 export HOST_IP="$(ip a show dev eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)"
 # because of swarm use docker-engine directly
 export PRE_DOCKER_HOST="$DOCKER_HOST"
@@ -103,7 +104,7 @@ registry.url=https://index.docker.io/v1/
 EOF
 
 if [[ -n $SWARM_VERSION ]]; then
-    export SWARM_PORT="${PRE_DOCKER_HOST##*:}"
+#    export SWARM_PORT="${PRE_DOCKER_HOST##*:}"
 
     docker pull swarm
     SWARM_TOKEN=$(docker run swarm c)
@@ -137,7 +138,6 @@ if [[ -n $SWARM_VERSION ]]; then
 
     # switch to swarm connection
     DOCKER_HOST="$PRE_DOCKER_HOST"
-
 
     docker version
     docker info
