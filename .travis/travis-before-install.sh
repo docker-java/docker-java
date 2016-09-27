@@ -114,7 +114,7 @@ if [ -n "SWARM_VERSION" ]; then
         manage token://${SWARM_TOKEN}
 #        --network="host" \
 
-    # connect engine to swarm
+    # join engine to swarm
     docker run \
         -d \
         -it \
@@ -125,7 +125,11 @@ if [ -n "SWARM_VERSION" ]; then
     docker run --rm "swarm:${SWARM_VERSION}" list "token://${SWARM_TOKEN}"
 
     docker ps -a
+    sudo ss -antpl
+    docker logs swarm_join
+    docker logs swarm_manager
 
+    # switch to swarm connection
     DOCKER_HOST="$PRE_DOCKER_HOST"
 
     sleep 70
@@ -134,14 +138,8 @@ if [ -n "SWARM_VERSION" ]; then
     docker info
 
     NODES=$(docker info | grep "Nodes:" | awk '{ print $2 }')
-    if [[ $NODES == "0" ]]; then
+    if [[ $NODES -eq "0" ]]; then
         echo "Swarm didn't connect"
-        export DOCKER_HOST="tcp://127.0.0.1:${HOST_PORT}"
-        docker logs swarm_join
-        docker logs swarm_manager
-        sudo ip a ls
-        sudo ip r ls
-        sudo ss -antpl
         exit 1
     fi
 fi
