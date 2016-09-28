@@ -23,6 +23,7 @@ import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
 import org.apache.commons.io.FileUtils;
 import org.testng.ITestResult;
+import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
@@ -40,6 +41,7 @@ import java.util.UUID;
 
 import static com.github.dockerjava.api.model.Capability.MKNOD;
 import static com.github.dockerjava.api.model.Capability.NET_ADMIN;
+import static com.github.dockerjava.utils.TestUtils.isSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -274,6 +276,7 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
     @Test
     public void createContainerWithLinkInCustomNetwork() throws DockerException {
+        if (isSwarm(dockerClient)) throw new SkipException("Swarm has no network");
 
         CreateNetworkResponse createNetworkResponse = dockerClient.createNetworkCmd()
                 .withName("linkNet")
@@ -316,6 +319,7 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
     @Test
     public void createContainerWithCustomIp() throws DockerException {
+        if (isSwarm(dockerClient)) throw new SkipException("Swarm has no network");
 
         CreateNetworkResponse createNetworkResponse = dockerClient.createNetworkCmd()
                 .withIpam(new Network.Ipam()
@@ -348,6 +352,7 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
     @Test
     public void createContainerWithAlias() throws DockerException {
+        if (isSwarm(dockerClient)) throw new SkipException("Swarm has no network");
 
         CreateNetworkResponse createNetworkResponse = dockerClient.createNetworkCmd()
                 .withName("aliasNet")

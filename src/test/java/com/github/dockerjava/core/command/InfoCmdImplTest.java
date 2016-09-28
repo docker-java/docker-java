@@ -1,5 +1,6 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.utils.TestUtils.isSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
@@ -64,7 +65,11 @@ public class InfoCmdImplTest extends AbstractDockerClientTest {
 
         assertTrue(dockerInfo.getContainers() > 0);
         assertTrue(dockerInfo.getImages() > 0);
-        assertTrue(dockerInfo.getNFd() > 0);
+
+        if (!isSwarm(dockerClient)) {
+            assertTrue(dockerInfo.getNFd() > 0);
+        }
+
         assertTrue(dockerInfo.getNGoroutines() > 0);
         assertTrue(dockerInfo.getNCPU() > 0);
     }

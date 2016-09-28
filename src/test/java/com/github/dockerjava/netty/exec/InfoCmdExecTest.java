@@ -1,5 +1,6 @@
 package com.github.dockerjava.netty.exec;
 
+import static com.github.dockerjava.utils.TestUtils.isSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
@@ -7,6 +8,7 @@ import static org.hamcrest.Matchers.not;
 import java.lang.reflect.Method;
 
 import org.testng.ITestResult;
+import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
@@ -64,7 +66,11 @@ public class InfoCmdExecTest extends AbstractNettyDockerClientTest {
 
         assertTrue(dockerInfo.getContainers() > 0);
         assertTrue(dockerInfo.getImages() > 0);
-        assertTrue(dockerInfo.getNFd() > 0);
+
+        if (!isSwarm(dockerClient)) {
+            assertTrue(dockerInfo.getNFd() > 0);
+        }
+
         assertTrue(dockerInfo.getNGoroutines() > 0);
         assertTrue(dockerInfo.getNCPU() > 0);
     }
