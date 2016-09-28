@@ -148,6 +148,7 @@ if [[ -n $SWARM_VERSION ]]; then
 
     docker logs swarm_join
     docker logs swarm_manager
+    docker logs consul
 
     # switch to swarm connection
     DOCKER_HOST="$PRE_DOCKER_HOST"
