@@ -108,14 +108,14 @@ if [[ -n $SWARM_VERSION ]]; then
 
     docker pull swarm
 
-    # kv store https://docs.docker.com/v1.11/engine/userguide/networking/get-started-overlay/
-    docker run -d \
-        -p "8500:8500" \
-        -h "consul" \
-        --name=consul \
-        progrium/consul -server -bootstrap
-
-    sleep 5
+#    # kv store https://docs.docker.com/v1.11/engine/userguide/networking/get-started-overlay/
+#    docker run -d \
+#        -p "8500:8500" \
+#        -h "consul" \
+#        --name=consul \
+#        progrium/consul -server -bootstrap
+#
+#    sleep 5
 
 #    SWARM_TOKEN=$(docker run swarm c)
 
@@ -130,18 +130,19 @@ if [[ -n $SWARM_VERSION ]]; then
         -d \
         -p ${SWARM_PORT}:2375 \
         --name=swarm_manager \
-        swarm manage --engine-refresh-min-interval "3s" --engine-refresh-max-interval "6s" "consul://${HOST_IP}:8500"
+        swarm manage --engine-refresh-min-interval "3s" --engine-refresh-max-interval "6s" "nodes://${HOST_IP}:${HOST_PORT}"
+#        swarm manage --engine-refresh-min-interval "3s" --engine-refresh-max-interval "6s" "consul://${HOST_IP}:8500"
 
     # join engine to swarm
     docker run \
         -d \
         "--name=swarm_join" \
         "swarm:${SWARM_VERSION}" \
-        join --advertise="${HOST_IP}:${HOST_PORT}" --delay="0s" --heartbeat "5s" "consul://${HOST_IP}:8500"
+        join --advertise="${HOST_IP}:${HOST_PORT}" --delay="0s" --heartbeat "5s" "nodes://${HOST_IP}:${HOST_PORT}"
 #        join --advertise="${HOST_IP}:${HOST_PORT}" --delay="0s" --heartbeat "5s" "token://${SWARM_TOKEN}"
 
     docker run --rm \
-        "swarm:${SWARM_VERSION}" list "consul://${HOST_IP}:8500"
+        "swarm:${SWARM_VERSION}" list "nodes://${HOST_IP}:${HOST_PORT}"
 
     docker ps -a
     sudo ss -antpl
