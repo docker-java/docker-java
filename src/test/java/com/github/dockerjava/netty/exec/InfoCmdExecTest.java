@@ -67,9 +67,8 @@ public class InfoCmdExecTest extends AbstractNettyDockerClientTest {
 
         if (isNotSwarm(dockerClient)) {
             assertTrue(dockerInfo.getNFd() > 0);
+            assertTrue(dockerInfo.getNGoroutines() > 0);
+            assertTrue(dockerInfo.getNCPU() > 0);
         }
-
-        assertTrue(dockerInfo.getNGoroutines() > 0);
-        assertTrue(dockerInfo.getNCPU() > 0);
     }
 }
