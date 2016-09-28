@@ -133,18 +133,18 @@ if [[ -n $SWARM_VERSION ]]; then
     # join engine to swarm
     docker run \
         -d \
-        -it \
         "--name=swarm_join" \
         "swarm:${SWARM_VERSION}" \
         join --advertise="${HOST_IP}:${HOST_PORT}" --delay="0s" --heartbeat "5s" "consul://${HOST_IP}:8500"
 #        join --advertise="${HOST_IP}:${HOST_PORT}" --delay="0s" --heartbeat "5s" "token://${SWARM_TOKEN}"
 
-    docker run --rm "swarm:${SWARM_VERSION}" list "token://${SWARM_TOKEN}"
+    docker run --rm \
+        "swarm:${SWARM_VERSION}" list "consul://${HOST_IP}:8500"
 
     docker ps -a
     sudo ss -antpl
 
-    sleep 70
+    sleep 30
 
     docker logs swarm_join
     docker logs swarm_manager
