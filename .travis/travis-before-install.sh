@@ -115,7 +115,9 @@ if [[ -n $SWARM_VERSION ]]; then
         --name=consul \
         progrium/consul -server -bootstrap
 
-    SWARM_TOKEN=$(docker run swarm c)
+    sleep 10
+
+#    SWARM_TOKEN=$(docker run swarm c)
 
 #    docker run \
 #        -d \
