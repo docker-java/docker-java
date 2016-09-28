@@ -1,24 +1,22 @@
 package com.github.dockerjava.netty.exec;
 
-import static com.github.dockerjava.utils.TestUtils.isSwarm;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.hamcrest.Matchers.not;
-
-import java.lang.reflect.Method;
-
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.model.Info;
+import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 import org.testng.ITestResult;
-import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.api.model.Info;
-import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
+import java.lang.reflect.Method;
+
+import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.not;
 
 @Test(groups = "integration")
 public class InfoCmdExecTest extends AbstractNettyDockerClientTest {
@@ -67,7 +65,7 @@ public class InfoCmdExecTest extends AbstractNettyDockerClientTest {
         assertTrue(dockerInfo.getContainers() > 0);
         assertTrue(dockerInfo.getImages() > 0);
 
-        if (!isSwarm(dockerClient)) {
+        if (isNotSwarm(dockerClient)) {
             assertTrue(dockerInfo.getNFd() > 0);
         }
 

@@ -1,5 +1,6 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
 import static com.github.dockerjava.utils.TestUtils.isSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyArray;
@@ -56,7 +57,7 @@ public class ListImagesCmdImplTest extends AbstractDockerClientTest {
         LOG.info("Images List: {}", images);
         Info info = dockerClient.infoCmd().exec();
 
-        if (!isSwarm(dockerClient)) {
+        if (isNotSwarm(dockerClient)) {
             assertThat(images.size(), equalTo(info.getImages()));
         }
 

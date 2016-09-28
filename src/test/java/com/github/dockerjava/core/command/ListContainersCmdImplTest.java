@@ -1,6 +1,7 @@
 package com.github.dockerjava.core.command;
 
 import static ch.lambdaj.Lambda.filter;
+import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
@@ -164,7 +165,9 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
         container3 = filteredContainers.get(0);
         assertThat(container3.getCommand(), not(isEmptyString()));
         assertThat(container3.getImage(), startsWith(testImage));
-        assertEquals(container3.getLabels(), labels);
+        if (isNotSwarm(dockerClient)) {
+            assertEquals(container3.getLabels(), labels);
+        }
     }
 
 }
