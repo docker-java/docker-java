@@ -16,7 +16,7 @@ public class TestUtils {
     }
 
     public static boolean isSwarm(DockerClient client) {
-        final String serverVersion = client.versionCmd().exec().getApiVersion();
+        final String serverVersion = client.versionCmd().exec().getVersion();
         return serverVersion.startsWith("swarm/");
     }
 }
