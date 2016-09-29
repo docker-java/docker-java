@@ -56,6 +56,8 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     private Map<String, String> buildArgs;
 
+    private Map<String, String> labels;
+
     public BuildImageCmdImpl(BuildImageCmd.Exec exec) {
         super(exec);
     }
@@ -147,6 +149,11 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @Override
     public Map<String, String> getBuildArgs() {
         return buildArgs;
+    }
+
+    @Override
+    public Map<String, String> getLabels() {
+        return labels;
     }
 
     // getter lib specific
@@ -300,6 +307,15 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @Override
     public BuildImageCmd withShmsize(Long shmsize) {
         this.shmsize = shmsize;
+        return this;
+    }
+
+    /**
+     * @see #labels
+     */
+    @Override
+    public BuildImageCmd withLabels(Map<String, String> labels) {
+        this.labels = labels;
         return this;
     }
 
