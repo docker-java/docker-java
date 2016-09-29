@@ -46,7 +46,7 @@ public class ExecStartCmdImplTest extends AbstractDockerClientTest {
     @Test(groups = "ignoreInCircleCi")
     public void execStart() throws Exception {
         //FIXME swarm
-        if (isSwarm(dockerClient)) throw new SkipException("Swarm");
+        if (isSwarm(dockerClient)) throw new SkipException("FIXME Swarm");
 
         String containerName = "generated_" + new SecureRandom().nextInt();
 
