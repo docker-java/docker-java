@@ -1,6 +1,7 @@
 Change Log
 ===
-## Next
+## Next 3.0.7
+ * Label image during build
 
 ## 3.0.6
  * Fixed issue with jersey and unix domain sockets.
