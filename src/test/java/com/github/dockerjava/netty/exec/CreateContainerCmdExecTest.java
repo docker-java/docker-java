@@ -23,6 +23,7 @@ import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
 import org.apache.commons.io.FileUtils;
 import org.testng.ITestResult;
+import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
@@ -40,11 +41,14 @@ import java.util.UUID;
 
 import static com.github.dockerjava.api.model.Capability.MKNOD;
 import static com.github.dockerjava.api.model.Capability.NET_ADMIN;
+import static com.github.dockerjava.utils.TestUtils.isSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItemInArray;
 import static org.hamcrest.Matchers.is;
@@ -268,12 +272,13 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
         InspectContainerResponse inspectContainerResponse2 = dockerClient.inspectContainerCmd(container2.getId())
                 .exec();
-        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] {new Link("container1",
+        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[]{new Link("container1",
                 "container1Link")}));
     }
 
     @Test
     public void createContainerWithLinkInCustomNetwork() throws DockerException {
+        if (isSwarm(dockerClient)) throw new SkipException("Swarm has no network");
 
         CreateNetworkResponse createNetworkResponse = dockerClient.createNetworkCmd()
                 .withName("linkNet")
@@ -311,11 +316,12 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
         ContainerNetwork linkNet = inspectContainerResponse2.getNetworkSettings().getNetworks().get("linkNet");
         assertNotNull(linkNet);
-        ArrayAsserts.assertArrayEquals(new Link[]{ new Link("container1", "container1Link")}, linkNet.getLinks());
+        ArrayAsserts.assertArrayEquals(new Link[]{new Link("container1", "container1Link")}, linkNet.getLinks());
     }
 
     @Test
     public void createContainerWithCustomIp() throws DockerException {
+        if (isSwarm(dockerClient)) throw new SkipException("Swarm has no network");
 
         CreateNetworkResponse createNetworkResponse = dockerClient.createNetworkCmd()
                 .withIpam(new Network.Ipam()
@@ -348,6 +354,7 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
     @Test
     public void createContainerWithAlias() throws DockerException {
+        if (isSwarm(dockerClient)) throw new SkipException("Swarm has no network");
 
         CreateNetworkResponse createNetworkResponse = dockerClient.createNetworkCmd()
                 .withName("aliasNet")
@@ -533,7 +540,7 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
         assertThat(inspectContainerResponse2.getId(), not(isEmptyString()));
         assertThat(inspectContainerResponse2.getHostConfig(), is(notNullValue()));
         assertThat(inspectContainerResponse2.getHostConfig().getLinks(), is(notNullValue()));
-        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] {new Link("container1",
+        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[]{new Link("container1",
                 "container1Link")}));
         assertThat(inspectContainerResponse2.getId(), startsWith(container2.getId()));
         assertThat(inspectContainerResponse2.getName(), equalTo("/container2"));
@@ -646,7 +653,12 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
         // null becomes empty string
         labels.put("com.github.dockerjava.null", "");
-        assertThat(inspectContainerResponse.getConfig().getLabels(), is(equalTo(labels)));
+
+        // swarm adds 3d label
+        assertThat(inspectContainerResponse.getConfig().getLabels(), allOf(
+                hasEntry("com.github.dockerjava.null", ""),
+                hasEntry("com.github.dockerjava.Boolean", "true")
+        ));
     }
 
     @Test(groups = "ignoreInCircleCi")
@@ -684,7 +696,7 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
     public void createContainerWithShmSize() throws DockerException {
         HostConfig hostConfig = new HostConfig().withShmSize(96 * FileUtils.ONE_MB);
         CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
-            .withHostConfig(hostConfig).withCmd("true").exec();
+                .withHostConfig(hostConfig).withCmd("true").exec();
 
         LOG.info("Created container {}", container.toString());
 

@@ -7,6 +7,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import org.testng.ITestResult;
+import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
@@ -16,6 +17,8 @@ import org.testng.annotations.Test;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Event;
 import com.github.dockerjava.client.AbstractDockerClientTest;
+
+import static com.github.dockerjava.utils.TestUtils.isSwarm;
 
 /*
  * NOTE: These tests may fail if there is a difference between local and daemon time
@@ -51,6 +54,8 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 
     @Test
     public void testEventStreamTimeBound() throws Exception {
+        if (isSwarm(dockerClient)) throw new SkipException("FIXME Swarm");
+
         // Don't include other tests events
         TimeUnit.SECONDS.sleep(1);
 
@@ -95,6 +100,8 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 
     
     public void testEventStreamingWithFilter() throws Exception {
+        if (isSwarm(dockerClient)) throw new SkipException("FIXME Swarm");
+
         // Don't include other tests events
         TimeUnit.SECONDS.sleep(1);
         

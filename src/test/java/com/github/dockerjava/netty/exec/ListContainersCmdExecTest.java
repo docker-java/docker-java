@@ -1,6 +1,8 @@
 package com.github.dockerjava.netty.exec;
 
 import static ch.lambdaj.Lambda.filter;
+import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
+import static com.github.dockerjava.utils.TestUtils.isSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
@@ -166,7 +168,9 @@ public class ListContainersCmdExecTest extends AbstractNettyDockerClientTest {
         container3 = filteredContainers.get(0);
         assertThat(container3.getCommand(), not(isEmptyString()));
         assertThat(container3.getImage(), startsWith(testImage));
-        assertEquals(container3.getLabels(), labels);
+        if (isNotSwarm(dockerClient)) {
+            assertEquals(container3.getLabels(), labels);
+        }
     }
 
 }

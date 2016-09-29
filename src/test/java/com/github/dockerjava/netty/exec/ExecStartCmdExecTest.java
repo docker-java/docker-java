@@ -3,6 +3,7 @@ package com.github.dockerjava.netty.exec;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_22;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_23;
 import static com.github.dockerjava.utils.TestUtils.getVersion;
+import static com.github.dockerjava.utils.TestUtils.isSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
@@ -17,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.testng.ITestResult;
+import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
@@ -115,6 +117,9 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
 
     @Test()
     public void execStartAttachStdin() throws Exception {
+        //FIXME swarm
+        if (isSwarm(dockerClient)) throw new SkipException("Swarm");
+
         String containerName = "generated_" + new SecureRandom().nextInt();
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
@@ -147,6 +152,9 @@ public class ExecStartCmdExecTest extends AbstractNettyDockerClientTest {
 
     @Test()
     public void execStartAttachStdinToShell() throws Exception {
+        //FIXME swarm
+        if (isSwarm(dockerClient)) throw new SkipException("FIXME Swarm");
+
         String containerName = "generated_" + new SecureRandom().nextInt();
 
         CreateContainerResponse container = dockerClient

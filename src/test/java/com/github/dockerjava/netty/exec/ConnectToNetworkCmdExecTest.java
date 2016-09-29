@@ -10,6 +10,7 @@ import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
 import org.testng.ITestResult;
+import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
@@ -19,6 +20,7 @@ import org.testng.annotations.Test;
 import java.lang.reflect.Method;
 import java.util.Collections;
 
+import static com.github.dockerjava.utils.TestUtils.isSwarm;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -48,6 +50,7 @@ public class ConnectToNetworkCmdExecTest extends AbstractNettyDockerClientTest {
 
     @Test
     public void connectToNetwork() throws InterruptedException {
+        if (isSwarm(dockerClient)) throw new SkipException("Swarm has no network");
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
         dockerClient.startContainerCmd(container.getId()).exec();
@@ -67,6 +70,8 @@ public class ConnectToNetworkCmdExecTest extends AbstractNettyDockerClientTest {
 
     @Test
     public void connectToNetworkWithContainerNetwork() throws InterruptedException {
+        if (isSwarm(dockerClient)) throw new SkipException("Swarm has no network");
+
         final String NETWORK_SUBNET = "10.100.101.0/24";
         final String NETWORK_NAME = "nettyTestNetwork";
         final String CONTAINER_IP = "10.100.101.100";
