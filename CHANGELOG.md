@@ -2,6 +2,7 @@ Change Log
 ===
 ## Next 3.0.7
  * Label image during build
+ * Expose 'User' property on ExecCreateCmd #707 #708
 
 ## 3.0.6
  * Fixed issue with jersey and unix domain sockets.
