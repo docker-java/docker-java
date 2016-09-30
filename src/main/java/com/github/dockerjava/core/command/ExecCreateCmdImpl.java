@@ -26,6 +26,9 @@ public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateC
     @JsonProperty("Tty")
     private Boolean tty;
 
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_19}
+     */
     @JsonProperty("User")
     private String user;
 
