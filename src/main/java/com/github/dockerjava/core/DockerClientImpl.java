@@ -1,12 +1,5 @@
 package com.github.dockerjava.core;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.io.Closeable;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
@@ -34,6 +27,7 @@ import com.github.dockerjava.api.command.InspectNetworkCmd;
 import com.github.dockerjava.api.command.InspectVolumeCmd;
 import com.github.dockerjava.api.command.KillContainerCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
+import com.github.dockerjava.api.command.ListImageHistoryCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.ListNetworksCmd;
 import com.github.dockerjava.api.command.ListVolumesCmd;
@@ -47,6 +41,7 @@ import com.github.dockerjava.api.command.RemoveContainerCmd;
 import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.command.RemoveNetworkCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
+import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
 import com.github.dockerjava.api.command.SearchImagesCmd;
@@ -59,7 +54,6 @@ import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.UpdateContainerCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
-import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Identifier;
 import com.github.dockerjava.core.command.AttachContainerCmdImpl;
@@ -87,6 +81,7 @@ import com.github.dockerjava.core.command.InspectImageCmdImpl;
 import com.github.dockerjava.core.command.InspectVolumeCmdImpl;
 import com.github.dockerjava.core.command.KillContainerCmdImpl;
 import com.github.dockerjava.core.command.ListContainersCmdImpl;
+import com.github.dockerjava.core.command.ListImageHistoryCmdImpl;
 import com.github.dockerjava.core.command.ListImagesCmdImpl;
 import com.github.dockerjava.core.command.ListNetworksCmdImpl;
 import com.github.dockerjava.core.command.ListVolumesCmdImpl;
@@ -100,6 +95,7 @@ import com.github.dockerjava.core.command.RemoveContainerCmdImpl;
 import com.github.dockerjava.core.command.RemoveImageCmdImpl;
 import com.github.dockerjava.core.command.RemoveNetworkCmdImpl;
 import com.github.dockerjava.core.command.RemoveVolumeCmdImpl;
+import com.github.dockerjava.core.command.RenameContainerCmdImpl;
 import com.github.dockerjava.core.command.RestartContainerCmdImpl;
 import com.github.dockerjava.core.command.SaveImageCmdImpl;
 import com.github.dockerjava.core.command.SearchImagesCmdImpl;
@@ -112,9 +108,14 @@ import com.github.dockerjava.core.command.UnpauseContainerCmdImpl;
 import com.github.dockerjava.core.command.UpdateContainerCmdImpl;
 import com.github.dockerjava.core.command.VersionCmdImpl;
 import com.github.dockerjava.core.command.WaitContainerCmdImpl;
-import com.github.dockerjava.core.command.RenameContainerCmdImpl;
 
 import javax.annotation.Nonnull;
+import java.io.Closeable;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * @author Konstantin Pelykh (kpelykh@gmail.com)
@@ -269,6 +270,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public ListImagesCmd listImagesCmd() {
         return new ListImagesCmdImpl(getDockerCmdExecFactory().createListImagesCmdExec());
+    }
+
+    @Override
+    public ListImageHistoryCmd listImageHistoryCmd(String imageId) {
+        return new ListImageHistoryCmdImpl(getDockerCmdExecFactory().createListImageHistoryCmdExec(), imageId);
     }
 
     @Override
