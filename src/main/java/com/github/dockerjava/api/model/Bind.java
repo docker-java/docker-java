@@ -29,7 +29,7 @@ public class Bind implements Serializable {
     private SELContext secMode;
 
     /**
-     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_2}
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
      */
     private PropagationMode propagationMode;
 
