@@ -86,7 +86,7 @@ public class GoLangFileMatch {
                 patternStringBuilder.append(quote(File.separatorChar));
             }
         }
-        patternStringBuilder.append("(").append(quote(File.separatorChar)).append(".*").append(")?");
+        patternStringBuilder.append("(").append("[\\|/]").append(".*").append(")?");
         return Pattern.compile(patternStringBuilder.toString());
     }
 
