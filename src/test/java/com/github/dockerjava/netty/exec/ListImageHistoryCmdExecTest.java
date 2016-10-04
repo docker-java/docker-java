@@ -1,6 +1,7 @@
 package com.github.dockerjava.netty.exec;
 
 import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.History;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
@@ -39,6 +40,7 @@ public class ListImageHistoryCmdExecTest extends AbstractNettyDockerClientTest {
 
     @Test
     public void listImageHistory() throws DockerException {
+
         List<Image> images = dockerClient.listImagesCmd().withShowAll(true).exec();
         assertThat(images, notNullValue());
         assertThat(images, hasSize(greaterThanOrEqualTo(1)));
@@ -51,4 +53,9 @@ public class ListImageHistoryCmdExecTest extends AbstractNettyDockerClientTest {
         assertThat(history, notNullValue());
     }
 
+    @Test(expectedExceptions = NotFoundException.class)
+    public void listImageHistoryOfNonExistingImage(){
+
+        List<History> history = dockerClient.listImageHistoryCmd("non-existing").exec();
+    }
 }

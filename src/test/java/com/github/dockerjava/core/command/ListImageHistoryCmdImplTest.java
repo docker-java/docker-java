@@ -1,5 +1,6 @@
 package com.github.dockerjava.core.command;
 
+import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.History;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.client.AbstractDockerClientTest;
@@ -37,7 +38,7 @@ public class ListImageHistoryCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test
-    public void testListHistoryEntries() throws Exception {
+    public void testListHistory() throws Exception {
 
         List<Image> images = dockerClient.listImagesCmd().withShowAll(true).exec();
         assertThat(images, notNullValue());
@@ -49,5 +50,11 @@ public class ListImageHistoryCmdImplTest extends AbstractDockerClientTest {
         List<History> history = dockerClient.listImageHistoryCmd(imageId).exec();
 
         assertThat(history, notNullValue());
+    }
+
+    @Test(expectedExceptions = NotFoundException.class)
+    public void testListHistoryOfNonExistingImage(){
+
+        List<History> history = dockerClient.listImageHistoryCmd("non-existing").exec();
     }
 }

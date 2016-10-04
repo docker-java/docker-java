@@ -10,6 +10,9 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+/**
+ * List history entries of an image.
+ */
 public class ListImageHistoryCmdImpl extends AbstrDockerCmd<ListImageHistoryCmd, List<History>> implements
         ListImageHistoryCmd {
 

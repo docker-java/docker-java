@@ -3,10 +3,14 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.core.RemoteApiVersion;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.io.Serializable;
 
+/**
+ * Represents a history entry in the history of an image.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class History implements Serializable {
@@ -21,12 +25,21 @@ public class History implements Serializable {
     @JsonProperty("CreatedBy")
     private String createdBy;
 
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_19}
+     */
     @JsonProperty("Tags")
     private String[] tags;
 
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_19}
+     */
     @JsonProperty("Size")
     private Long size;
 
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_19}
+     */
     @JsonProperty("Comment")
     private String comment;
 
