@@ -193,6 +193,9 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     @CheckForNull
     Boolean isTty();
 
+    @CheckForNull
+    String[] getSecurityOpt();
+
     /**
      * Add network-scoped alias for the container
      * @param aliases on ore more aliases
@@ -435,6 +438,10 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
      * Set the PID (Process) Namespace mode for the container, 'host': use the host's PID namespace inside the container
      */
     CreateContainerCmd withPidMode(String pidMode);
+
+    CreateContainerCmd withSecurityOpt(String... securityOpt);
+
+    CreateContainerCmd withSecurityOpt(List<String> securityOpt);
 
     /**
      * @throws NotFoundException
