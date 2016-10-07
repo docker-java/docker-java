@@ -19,12 +19,26 @@ public class Bind implements Serializable {
     private AccessMode accessMode;
 
     /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_23}
+     */
+    private Boolean noCopy;
+
+    /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_17}
      */
     private SELContext secMode;
 
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
+     */
+    private PropagationMode propagationMode;
+
     public Bind(String path, Volume volume) {
         this(path, volume, AccessMode.DEFAULT, SELContext.DEFAULT);
+    }
+
+    public Bind(String path, Volume volume, Boolean noCopy) {
+        this(path, volume, AccessMode.DEFAULT, SELContext.DEFAULT, noCopy);
     }
 
     public Bind(String path, Volume volume, AccessMode accessMode) {
@@ -32,10 +46,20 @@ public class Bind implements Serializable {
     }
 
     public Bind(String path, Volume volume, AccessMode accessMode, SELContext secMode) {
+        this(path, volume, accessMode, secMode, null);
+    }
+
+    public Bind(String path, Volume volume, AccessMode accessMode, SELContext secMode, Boolean noCopy) {
+        this(path, volume, accessMode, secMode, noCopy, PropagationMode.DEFAULT_MODE);
+    }
+
+    public Bind(String path, Volume volume, AccessMode accessMode, SELContext secMode, Boolean noCopy, PropagationMode propagationMode) {
         this.path = path;
         this.volume = volume;
         this.accessMode = accessMode;
         this.secMode = secMode;
+        this.noCopy = noCopy;
+        this.propagationMode = propagationMode;
     }
 
     public String getPath() {
@@ -52,6 +76,14 @@ public class Bind implements Serializable {
 
     public SELContext getSecMode() {
         return secMode;
+    }
+
+    public Boolean getNoCopy() {
+        return noCopy;
+    }
+
+    public PropagationMode getPropagationMode() {
+        return propagationMode;
     }
 
     /**
@@ -74,15 +106,25 @@ public class Bind implements Serializable {
                 String[] flags = parts[2].split(",");
                 AccessMode accessMode = AccessMode.DEFAULT;
                 SELContext seMode = SELContext.DEFAULT;
+                Boolean nocopy = null;
+                PropagationMode propagationMode = PropagationMode.DEFAULT_MODE;
                 for (String p : flags) {
                     if (p.length() == 2) {
                         accessMode = AccessMode.valueOf(p.toLowerCase());
+                    } else if ("nocopy".equals(p)) {
+                        nocopy = true;
+                    } else if (PropagationMode.SHARED.toString().equals(p)) {
+                        propagationMode = PropagationMode.SHARED;
+                    } else if (PropagationMode.SLAVE.toString().equals(p)) {
+                        propagationMode = PropagationMode.SLAVE;
+                    } else if (PropagationMode.PRIVATE.toString().equals(p)) {
+                        propagationMode = PropagationMode.PRIVATE;
                     } else {
                         seMode = SELContext.fromString(p);
                     }
                 }
 
-                return new Bind(parts[0], new Volume(parts[1]), accessMode, seMode);
+                return new Bind(parts[0], new Volume(parts[1]), accessMode, seMode, nocopy, propagationMode);
             }
             default: {
                 throw new IllegalArgumentException();
@@ -102,6 +144,8 @@ public class Bind implements Serializable {
                     .append(volume, other.getVolume())
                     .append(accessMode, other.getAccessMode())
                     .append(secMode, other.getSecMode())
+                    .append(noCopy, other.getNoCopy())
+                    .append(propagationMode, other.getPropagationMode())
                     .isEquals();
         } else {
             return super.equals(obj);
@@ -115,6 +159,8 @@ public class Bind implements Serializable {
                 .append(volume)
                 .append(accessMode)
                 .append(secMode)
+                .append(noCopy)
+                .append(propagationMode)
                 .toHashCode();
     }
 
@@ -127,10 +173,12 @@ public class Bind implements Serializable {
      */
     @Override
     public String toString() {
-        return String.format("%s:%s:%s%s",
+        return String.format("%s:%s:%s%s%s%s",
                 path,
                 volume.getPath(),
                 accessMode.toString(),
-                secMode != SELContext.none ? "," + secMode.toString() : "");
+                secMode != SELContext.none ? "," + secMode.toString() : "",
+                noCopy != null ? ",nocopy" : "",
+                propagationMode != PropagationMode.DEFAULT_MODE ? "," + propagationMode.toString() : "");
     }
 }
