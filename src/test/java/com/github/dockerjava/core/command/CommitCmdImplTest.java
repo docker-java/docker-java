@@ -1,10 +1,7 @@
 package com.github.dockerjava.core.command;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.startsWith;
+import static org.hamcrest.Matchers.*;
 import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
 
 import java.lang.reflect.Method;
@@ -66,6 +63,20 @@ public class CommitCmdImplTest extends AbstractDockerClientTest {
         InspectImageResponse busyboxImg = dockerClient.inspectImageCmd("busybox").exec();
 
         assertThat(inspectImageResponse.getParent(), equalTo(busyboxImg.getId()));
+    }
+
+    @Test
+    public void commitWithCommitMessage() throws DockerException {
+
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("touch", "/test").exec();
+
+        String commitMessage = "my test commit message";
+        String imageId = dockerClient.commitCmd(container.getId())
+                .withMessage(commitMessage)
+                .exec();
+
+        InspectImageResponse inspectImageResponse = dockerClient.inspectImageCmd(imageId).exec();
+        assertThat(inspectImageResponse.getComment(), equalToIgnoringCase(commitMessage));
     }
 
     @Test(expectedExceptions = NotFoundException.class)
