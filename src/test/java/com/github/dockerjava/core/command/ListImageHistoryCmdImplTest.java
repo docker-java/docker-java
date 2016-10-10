@@ -101,9 +101,9 @@ public class ListImageHistoryCmdImplTest extends AbstractDockerClientTest {
 
             final Long oneMegaByteInBytes = 1024L * 1024L;
             assertThat(latestFromDockerfile.getSize(), greaterThanOrEqualTo(oneMegaByteInBytes));
-            final String[] tags = latestFromDockerfile.getTags();
+            final List<String> tags = latestFromDockerfile.getTags();
             assertThat(tags, notNullValue());
-            assertThat(tags[0], containsString(tag + ":latest"));
+            assertThat(tags.get(0), containsString(tag + ":latest"));
             assertThat(latestFromDockerfile.getComment(), isEmptyString());
 
             final History commit = imageHistory.get(0);

@@ -7,6 +7,7 @@ import com.github.dockerjava.core.RemoteApiVersion;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Represents a history entry in the history of an image.
@@ -29,7 +30,7 @@ public class History implements Serializable {
      * @since {@link RemoteApiVersion#VERSION_1_19}
      */
     @JsonProperty("Tags")
-    private String[] tags;
+    private List<String> tags;
 
     /**
      * @since {@link RemoteApiVersion#VERSION_1_19}
@@ -55,7 +56,7 @@ public class History implements Serializable {
         return createdBy;
     }
 
-    public String[] getTags() {
+    public List<String> getTags() {
         return tags;
     }
 
