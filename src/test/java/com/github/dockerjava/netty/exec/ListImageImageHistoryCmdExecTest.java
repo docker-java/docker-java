@@ -2,7 +2,7 @@ package com.github.dockerjava.netty.exec;
 
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.api.model.History;
+import com.github.dockerjava.api.model.ImageHistory;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 import org.testng.ITestResult;
@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 
-public class ListImageHistoryCmdExecTest extends AbstractNettyDockerClientTest {
+public class ListImageImageHistoryCmdExecTest extends AbstractNettyDockerClientTest {
 
     @BeforeTest
     public void beforeTest() throws Exception {
@@ -48,14 +48,14 @@ public class ListImageHistoryCmdExecTest extends AbstractNettyDockerClientTest {
 
         String imageId = images.get(0).getId();
 
-        List<History> history = dockerClient.listImageHistoryCmd(imageId).exec();
+        List<ImageHistory> imageHistory = dockerClient.listImageHistoryCmd(imageId).exec();
 
-        assertThat(history, notNullValue());
+        assertThat(imageHistory, notNullValue());
     }
 
     @Test(expectedExceptions = NotFoundException.class)
     public void listImageHistoryOfNonExistingImage(){
 
-        List<History> history = dockerClient.listImageHistoryCmd("non-existing").exec();
+        List<ImageHistory> imageHistory = dockerClient.listImageHistoryCmd("non-existing").exec();
     }
 }

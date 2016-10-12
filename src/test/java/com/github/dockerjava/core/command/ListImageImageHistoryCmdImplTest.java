@@ -2,7 +2,7 @@ package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.api.model.History;
+import com.github.dockerjava.api.model.ImageHistory;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.testng.ITestResult;
@@ -32,7 +32,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
 @Test(groups = "integration")
-public class ListImageHistoryCmdImplTest extends AbstractDockerClientTest {
+public class ListImageImageHistoryCmdImplTest extends AbstractDockerClientTest {
 
     @BeforeTest
     public void beforeTest() throws Exception {
@@ -71,26 +71,26 @@ public class ListImageHistoryCmdImplTest extends AbstractDockerClientTest {
         final String comment = "my comment";
         final String imageIdCommit = dockerClient.commitCmd(createContainerResponse.getId()).withMessage(comment).exec();
 
-        final List<History> imageHistory = dockerClient.listImageHistoryCmd(imageIdCommit).exec();
+        final List<ImageHistory> history = dockerClient.listImageHistoryCmd(imageIdCommit).exec();
 
-        assertThat(imageHistory, notNullValue());
+        assertThat(history, notNullValue());
 
         Long creationTimeStamp = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
-        for(History history : imageHistory){
+        for(ImageHistory entry : history){
 
             // history is ordered by creation timestamp descending
-            Long currentCreationTimestamp = history.getCreated();
+            Long currentCreationTimestamp = entry.getCreated();
             assertThat(currentCreationTimestamp, lessThanOrEqualTo(creationTimeStamp));
             creationTimeStamp = currentCreationTimestamp;
 
-            assertThat(history.getId(), not(isEmptyOrNullString()));
-            assertThat(history.getCreatedBy(), not(isEmptyOrNullString()));
+            assertThat(entry.getId(), not(isEmptyOrNullString()));
+            assertThat(entry.getCreatedBy(), not(isEmptyOrNullString()));
         }
 
-        final History secondToLatestDockerfile = imageHistory.get(2); // LABEL testLabel myTestLabel
+        final ImageHistory secondToLatestDockerfile = history.get(2); // LABEL testLabel myTestLabel
         assertThat(secondToLatestDockerfile.getCreatedBy(), both(containsString("#(nop)")).and(containsString("testLabel=myTestLabel")));
 
-        final History latestFromDockerfile = imageHistory.get(1); // RUN dd if=/dev/zero of=/myLargeFile bs=1M count=1
+        final ImageHistory latestFromDockerfile = history.get(1); // RUN dd if=/dev/zero of=/myLargeFile bs=1M count=1
         assertThat(latestFromDockerfile.getCreatedBy(), containsString("dd if=/dev/zero of=/myLargeFile bs=1M count=1"));
 
         if (!getVersion(dockerClient).isGreaterOrEqual(RemoteApiVersion.VERSION_1_19)) {
@@ -106,7 +106,7 @@ public class ListImageHistoryCmdImplTest extends AbstractDockerClientTest {
             assertThat(tags.get(0), containsString(tag + ":latest"));
             assertThat(latestFromDockerfile.getComment(), isEmptyString());
 
-            final History commit = imageHistory.get(0);
+            final ImageHistory commit = history.get(0);
             assertThat(commit.getSize(), is(0L));
             assertThat(commit.getComment(), equalToIgnoringCase(comment));
         }

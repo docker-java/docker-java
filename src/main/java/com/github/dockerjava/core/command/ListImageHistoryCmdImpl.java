@@ -1,7 +1,7 @@
 package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.command.ListImageHistoryCmd;
-import com.github.dockerjava.api.model.History;
+import com.github.dockerjava.api.model.ImageHistory;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -13,7 +13,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * List history entries of an image.
  */
-public class ListImageHistoryCmdImpl extends AbstrDockerCmd<ListImageHistoryCmd, List<History>> implements
+public class ListImageHistoryCmdImpl extends AbstrDockerCmd<ListImageHistoryCmd, List<ImageHistory>> implements
         ListImageHistoryCmd {
 
     private String imageId;

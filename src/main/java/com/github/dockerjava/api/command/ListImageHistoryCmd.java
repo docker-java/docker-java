@@ -1,7 +1,7 @@
 package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.api.model.History;
+import com.github.dockerjava.api.model.ImageHistory;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * List history of an image.
  */
-public interface ListImageHistoryCmd extends SyncDockerCmd<List<History>> {
+public interface ListImageHistoryCmd extends SyncDockerCmd<List<ImageHistory>> {
 
     @CheckForNull
     String getImageId();
@@ -22,9 +22,9 @@ public interface ListImageHistoryCmd extends SyncDockerCmd<List<History>> {
      *             No such image
      */
     @Override
-    List<History> exec() throws NotFoundException;
+    List<ImageHistory> exec() throws NotFoundException;
 
-    interface Exec extends DockerCmdSyncExec<ListImageHistoryCmd, List<History>> {
+    interface Exec extends DockerCmdSyncExec<ListImageHistoryCmd, List<ImageHistory>> {
     }
 
 }

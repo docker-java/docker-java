@@ -16,7 +16,7 @@ import java.util.List;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class History implements Serializable {
+public class ImageHistory implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("Id")
