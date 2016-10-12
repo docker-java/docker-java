@@ -70,6 +70,36 @@ public class ImageHistory implements Serializable {
         return comment;
     }
 
+    public ImageHistory withId(String id) {
+        this.id = id;
+        return this;
+    }
+
+    public ImageHistory withCreated(Long created) {
+        this.created = created;
+        return this;
+    }
+
+    public ImageHistory withCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    public ImageHistory withTags(List<String> tags) {
+        this.tags = tags;
+        return this;
+    }
+
+    public ImageHistory withSize(Long size) {
+        this.size = size;
+        return this;
+    }
+
+    public ImageHistory withComment(String comment) {
+        this.comment = comment;
+        return this;
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
