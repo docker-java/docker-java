@@ -32,7 +32,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
 @Test(groups = "integration")
-public class ListImageImageHistoryCmdImplTest extends AbstractDockerClientTest {
+public class ListImageHistoryCmdImplTest extends AbstractDockerClientTest {
 
     @BeforeTest
     public void beforeTest() throws Exception {
