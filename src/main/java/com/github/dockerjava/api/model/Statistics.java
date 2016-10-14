@@ -76,7 +76,7 @@ public class Statistics implements Serializable {
      * The cpu statistic of last read, which is used for calculating the cpu usage percent.
      * It is not the exact copy of the {@link #getCpuStats()}.
      */
-    public Map<String, Object> getPreviousCpuStats() {
+    public Map<String, Object> getPrecpuStats() {
         return precpuStats;
     }
 
