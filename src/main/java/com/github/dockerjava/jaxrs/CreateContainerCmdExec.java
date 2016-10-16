@@ -1,16 +1,17 @@
 package com.github.dockerjava.jaxrs;
 
-import static javax.ws.rs.client.Entity.entity;
-
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-
+import com.github.dockerjava.api.command.CreateContainerCmd;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.core.DockerClientConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.api.command.CreateContainerCmd;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.core.DockerClientConfig;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+
+import static javax.ws.rs.client.Entity.entity;
 
 public class CreateContainerCmdExec extends AbstrSyncDockerCmdExec<CreateContainerCmd, CreateContainerResponse>
         implements CreateContainerCmd.Exec {
@@ -19,6 +20,14 @@ public class CreateContainerCmdExec extends AbstrSyncDockerCmdExec<CreateContain
 
     public CreateContainerCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
         super(baseResource, dockerClientConfig);
+    }
+
+    private Invocation.Builder resourceWithOptionalAuthConfig(CreateContainerCmd command, Invocation.Builder request) {
+        AuthConfig authConfig = command.getAuthConfig();
+        if (authConfig != null) {
+            request = request.header("X-Registry-Auth", registryAuth(authConfig));
+        }
+        return request;
     }
 
     @Override
@@ -30,7 +39,7 @@ public class CreateContainerCmdExec extends AbstrSyncDockerCmdExec<CreateContain
         }
 
         LOGGER.trace("POST: {} ", webResource);
-        return webResource.request().accept(MediaType.APPLICATION_JSON)
+        return resourceWithOptionalAuthConfig(command, webResource.request()).accept(MediaType.APPLICATION_JSON)
                 .post(entity(command, MediaType.APPLICATION_JSON), CreateContainerResponse.class);
     }
 

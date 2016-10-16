@@ -308,7 +308,8 @@ public class DockerClientImpl implements Closeable, DockerClient {
 
     @Override
     public CreateContainerCmd createContainerCmd(String image) {
-        return new CreateContainerCmdImpl(getDockerCmdExecFactory().createCreateContainerCmdExec(), image);
+        return new CreateContainerCmdImpl(getDockerCmdExecFactory()
+                .createCreateContainerCmdExec(), dockerClientConfig.effectiveAuthConfig(image), image);
     }
 
     @Override
