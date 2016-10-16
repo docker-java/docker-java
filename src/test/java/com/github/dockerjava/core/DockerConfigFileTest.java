@@ -3,15 +3,14 @@
  */
 package com.github.dockerjava.core;
 
-import java.io.File;
-import java.io.IOException;
-
+import com.github.dockerjava.api.model.AuthConfig;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.model.AuthConfig;
+import java.io.File;
+import java.io.IOException;
 
-public class AuthConfigFileTest {
+public class DockerConfigFileTest {
 
     private final File FILESROOT = new File(Thread.currentThread().getContextClassLoader()
             .getResource("testAuthConfigFile").getFile());
@@ -60,9 +59,9 @@ public class AuthConfigFileTest {
                 .withPassword("bar1")
                 .withRegistryAddress(AuthConfig.DEFAULT_SERVER_ADDRESS);
 
-        AuthConfigFile expected = new AuthConfigFile();
-        expected.addConfig(authConfig1);
-        expected.addConfig(authConfig2);
+        DockerConfigFile expected = new DockerConfigFile();
+        expected.addAuthConfig(authConfig1);
+        expected.addAuthConfig(authConfig2);
 
         Assert.assertEquals(runTest("validJson"), expected);
 
@@ -76,20 +75,41 @@ public class AuthConfigFileTest {
                 .withPassword("bar")
                 .withRegistryAddress(AuthConfig.DEFAULT_SERVER_ADDRESS);
 
-        AuthConfigFile expected = new AuthConfigFile();
-        expected.addConfig(authConfig);
+        DockerConfigFile expected = new DockerConfigFile();
+        expected.addAuthConfig(authConfig);
 
         Assert.assertEquals(runTest("validLegacy"), expected);
     }
 
     @Test
+    public void validDockerConfig() throws IOException {
+        AuthConfig authConfig1 = new AuthConfig()
+                .withEmail("foo@example.com")
+                .withUsername("foo")
+                .withPassword("bar")
+                .withRegistryAddress("quay.io");
+
+        AuthConfig authConfig2 = new AuthConfig()
+                .withEmail("moo@example.com")
+                .withUsername("foo1")
+                .withPassword("bar1")
+                .withRegistryAddress(AuthConfig.DEFAULT_SERVER_ADDRESS);
+
+        DockerConfigFile expected = new DockerConfigFile();
+        expected.addAuthConfig(authConfig1);
+        expected.addAuthConfig(authConfig2);
+
+        Assert.assertEquals(runTest("validDockerConfig"), expected);
+    }
+
+    @Test
     public void nonExistent() throws IOException {
-        AuthConfigFile expected = new AuthConfigFile();
+        DockerConfigFile expected = new DockerConfigFile();
         Assert.assertEquals(runTest("idontexist"), expected);
     }
 
-    private AuthConfigFile runTest(String testFileName) throws IOException {
-        return AuthConfigFile.loadConfig(new File(FILESROOT, testFileName));
+    private DockerConfigFile runTest(String testFileName) throws IOException {
+        return DockerConfigFile.loadConfig(new File(FILESROOT, testFileName));
     }
 
 }

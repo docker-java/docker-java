@@ -1,16 +1,15 @@
 package com.github.dockerjava.jaxrs;
 
-import static javax.ws.rs.client.Entity.entity;
+import com.github.dockerjava.api.command.CreateImageCmd;
+import com.github.dockerjava.api.command.CreateImageResponse;
+import com.github.dockerjava.core.DockerClientConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.github.dockerjava.api.command.CreateImageCmd;
-import com.github.dockerjava.api.command.CreateImageResponse;
-import com.github.dockerjava.core.DockerClientConfig;
+import static javax.ws.rs.client.Entity.entity;
 
 public class CreateImageCmdExec extends AbstrSyncDockerCmdExec<CreateImageCmd, CreateImageResponse> implements
         CreateImageCmd.Exec {

@@ -1,10 +1,9 @@
 package com.github.dockerjava.core;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.core.Is.is;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
+import com.github.dockerjava.api.exception.DockerClientException;
+import com.github.dockerjava.api.model.AuthConfig;
+import org.apache.commons.lang.SerializationUtils;
+import org.testng.annotations.Test;
 
 import java.lang.reflect.Field;
 import java.net.URI;
@@ -13,11 +12,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.lang.SerializationUtils;
-import org.testng.annotations.Test;
-
-import com.github.dockerjava.api.exception.DockerClientException;
-import com.github.dockerjava.api.model.AuthConfig;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.core.Is.is;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
 
 public class DefaultDockerClientConfigTest {
 
@@ -106,7 +105,7 @@ public class DefaultDockerClientConfigTest {
         assertEquals(config.getRegistryUsername(), "someUserName");
         assertEquals(config.getRegistryUrl(), AuthConfig.DEFAULT_SERVER_ADDRESS);
         assertEquals(config.getApiVersion(), RemoteApiVersion.unknown());
-        assertEquals(config.getDockerConfig(), homeDir() + "/.docker");
+        assertEquals(config.getDockerConfigPath(), homeDir() + "/.docker");
         assertNull(config.getSSLConfig());
     }
 
