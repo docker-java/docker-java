@@ -2,6 +2,7 @@ package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Capability;
 import com.github.dockerjava.api.model.Device;
@@ -22,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerResponse> {
+
+    AuthConfig getAuthConfig();
 
     @CheckForNull
     List<String> getAliases();
@@ -196,6 +199,8 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     @CheckForNull
     Boolean isTty();
+
+    CreateContainerCmd withAuthConfig(AuthConfig authConfig);
 
     /**
      * Add network-scoped alias for the container

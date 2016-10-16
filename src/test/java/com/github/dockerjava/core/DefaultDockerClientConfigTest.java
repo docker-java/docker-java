@@ -110,7 +110,7 @@ public class DefaultDockerClientConfigTest {
         assertEquals(config.getRegistryUsername(), "someUserName");
         assertEquals(config.getRegistryUrl(), AuthConfig.DEFAULT_SERVER_ADDRESS);
         assertEquals(config.getApiVersion(), RemoteApiVersion.unknown());
-        assertEquals(config.getDockerConfig(), homeDir() + "/.docker");
+        assertEquals(config.getDockerConfigPath(), homeDir() + "/.docker");
         assertNull(config.getSSLConfig());
     }
 
