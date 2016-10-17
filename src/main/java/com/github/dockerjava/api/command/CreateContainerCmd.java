@@ -194,7 +194,7 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     Boolean isTty();
 
     @CheckForNull
-    String[] getSecurityOpt();
+    String[] getSecurityOpts();
 
     /**
      * Add network-scoped alias for the container
@@ -439,9 +439,9 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
      */
     CreateContainerCmd withPidMode(String pidMode);
 
-    CreateContainerCmd withSecurityOpt(String... securityOpt);
+    CreateContainerCmd withSecurityOpts(String... securityOpt);
 
-    CreateContainerCmd withSecurityOpt(List<String> securityOpt);
+    CreateContainerCmd withSecurityOpts(List<String> securityOpt);
 
     /**
      * @throws NotFoundException

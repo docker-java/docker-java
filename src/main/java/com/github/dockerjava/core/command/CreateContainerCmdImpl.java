@@ -118,9 +118,6 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @JsonProperty("NetworkingConfig")
     private NetworkingConfig networkingConfig;
 
-    @JsonProperty("SecurityOpt")
-    private String[] securityOpt;
-
     @JsonIgnore
     private String ipv4Address = null;
 
@@ -481,8 +478,9 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
-    public String[] getSecurityOpt() {
-        return securityOpt;
+    @JsonIgnore
+    public String[] getSecurityOpts() {
+        return hostConfig.getSecurityOpts();
     }
 
     @Override
@@ -985,15 +983,15 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
-    public CreateContainerCmd withSecurityOpt(String... securityOpt) {
-        this.securityOpt = securityOpt;
+    public CreateContainerCmd withSecurityOpts(String... securityOpt) {
+        this.hostConfig.withSecurityOpts(securityOpt);
         return this;
     }
 
     @Override
-    public CreateContainerCmd withSecurityOpt(List<String> securityOpt) {
+    public CreateContainerCmd withSecurityOpts(List<String> securityOpt) {
         checkNotNull(securityOpt, "security_opt was not specified");
-        return withSecurityOpt(securityOpt.toArray(new String[securityOpt.size()]));
+        return withSecurityOpts(securityOpt.toArray(new String[securityOpt.size()]));
     }
 
     @Override
