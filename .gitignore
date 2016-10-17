@@ -22,3 +22,4 @@ target
 
 #Ignore Test Output
 test-output
+/.checkstyle

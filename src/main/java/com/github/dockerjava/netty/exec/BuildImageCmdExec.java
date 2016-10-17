@@ -15,6 +15,7 @@ import com.github.dockerjava.netty.MediaType;
 import com.github.dockerjava.netty.WebTarget;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, BuildResponseItem> implements
         BuildImageCmd.Exec {
@@ -85,17 +86,13 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
             webTarget = webTarget.queryParam("cpusetcpus", command.getCpusetcpus());
         }
 
-        if (command.getBuildArgs() != null && !command.getBuildArgs().isEmpty()) {
-            try {
-                webTarget = webTarget.queryParam("buildargs", MAPPER.writeValueAsString(command.getBuildArgs()));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        webTarget = writeMap(webTarget, "buildargs", command.getBuildArgs());
 
         if (command.getShmsize() != null) {
             webTarget = webTarget.queryParam("shmsize", command.getShmsize());
         }
+
+        webTarget = writeMap(webTarget, "labels", command.getLabels());
 
         LOGGER.trace("POST: {}", webTarget);
 
@@ -108,5 +105,17 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
         }, resultCallback, command.getTarInputStream());
 
         return null;
+    }
+
+    private WebTarget writeMap(WebTarget webTarget, String name, Map<String, String> value) {
+        if (value != null && !value.isEmpty()) {
+            try {
+                return webTarget.queryParam(name, MAPPER.writeValueAsString(value));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            return webTarget;
+        }
     }
 }

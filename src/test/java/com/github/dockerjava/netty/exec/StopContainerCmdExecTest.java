@@ -61,7 +61,7 @@ public class StopContainerCmdExecTest extends AbstractNettyDockerClientTest {
         dockerClient.startContainerCmd(container.getId()).exec();
 
         LOG.info("Stopping container: {}", container.getId());
-        dockerClient.stopContainerCmd(container.getId()).withTimeout(2).exec();
+        dockerClient.stopContainerCmd(container.getId()).withTimeout(10).exec();
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
         LOG.info("Container Inspect: {}", inspectContainerResponse.toString());
@@ -69,17 +69,15 @@ public class StopContainerCmdExecTest extends AbstractNettyDockerClientTest {
         assertThat(inspectContainerResponse.getState().getRunning(), is(equalTo(false)));
 
         final Integer exitCode = inspectContainerResponse.getState().getExitCode();
-        if (apiVersion.equals(VERSION_1_22)) {
-            assertThat(exitCode, is(0));
-        } else {
-            assertThat(exitCode, not(0));
-        }
+        
+        assertThat(exitCode, is(137));
+        
     }
 
     @Test(expectedExceptions = NotFoundException.class)
     public void testStopNonExistingContainer() throws DockerException {
 
-        dockerClient.stopContainerCmd("non-existing").withTimeout(2).exec();
+        dockerClient.stopContainerCmd("non-existing").withTimeout(10).exec();
     }
 
 }

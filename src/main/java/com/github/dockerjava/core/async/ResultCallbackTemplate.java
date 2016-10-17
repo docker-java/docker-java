@@ -75,11 +75,13 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
 
     @Override
     public void close() throws IOException {
-        closed = true;
-        if (stream != null) {
-            stream.close();
+        if (!closed) {
+           closed = true;
+           if (stream != null) {
+               stream.close();
+           }
+           completed.countDown();
         }
-        completed.countDown();
     }
 
     /**
@@ -99,7 +101,9 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
      *         before {@link ResultCallback#onComplete()} was called.
      */
     public boolean awaitCompletion(long timeout, TimeUnit timeUnit) throws InterruptedException {
-        return completed.await(timeout, timeUnit);
+        boolean result = completed.await(timeout, timeUnit);
+        getFirstError();
+        return result;
     }
 
     /**

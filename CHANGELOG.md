@@ -1,11 +1,16 @@
 Change Log
 ===
-## Next
+## Next 3.0.7
+ * Label image during build
+ * Expose 'User' property on ExecCreateCmd #707 #708
 
 ## 3.0.6
+ * Fixed issue with jersey and unix domain sockets.
+ * [#703](https://github.com/docker-java/docker-java/pull/703) Allow to configure connection pool timeout.
  * Make all models Serializable.
  * [NETTY] Fix loadImage responce on 1.24 API.
  * LogPath field for inspect container.
+ * [#700] (https://github.com/docker-java/docker-java/pull/700) Bugfix:donot throw RuntimeException when a error occured in awaitCompletion(long,TimeUnit)
 
 ## 3.0.5
  * Events updated to 1.24 API model.
