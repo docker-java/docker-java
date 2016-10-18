@@ -19,6 +19,8 @@ import com.github.dockerjava.core.RemoteApiVersion;
 
 public abstract class AbstrDockerCmdExec {
 
+    public static final String EMPTY_JSON = "{}";
+
     private final DockerClientConfig dockerClientConfig;
 
     private final WebTarget baseResource;
@@ -40,7 +42,7 @@ public abstract class AbstrDockerCmdExec {
 
     protected String registryAuth(AuthConfig authConfig) {
         try {
-            String json = authConfig == null ? "{}" : new ObjectMapper().writeValueAsString(authConfig);
+            String json = authConfig == null ? EMPTY_JSON : new ObjectMapper().writeValueAsString(authConfig);
             return Base64.encodeBase64String(json.getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
