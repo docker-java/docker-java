@@ -1,6 +1,7 @@
 package com.github.dockerjava.core.command;
 
 import static ch.lambdaj.Lambda.filter;
+import static com.github.dockerjava.utils.TestUtils.getVersion;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
@@ -15,6 +16,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
+import com.github.dockerjava.core.RemoteApiVersion;
 import org.hamcrest.Matcher;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -54,7 +56,7 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
 
     @Test
     public void testListContainers() throws Exception {
-
+        final RemoteApiVersion apiVersion = getVersion(dockerClient);
         String testImage = "busybox";
 
         // need to block until image is pulled completely
@@ -98,6 +100,9 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
         Container container2 = filteredContainers.get(0);
         assertThat(container2.getCommand(), not(isEmptyString()));
         assertThat(container2.getImage(), startsWith(testImage));
+
+        if (apiVersion.isGreaterOrEqual(RemoteApiVersion.VERSION_1_23))
+            assertThat(container2.getState(), equalTo("running"));
     }
 
     @Test
