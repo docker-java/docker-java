@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -51,6 +52,13 @@ public class Container implements Serializable {
     @JsonProperty("Labels")
     public Map<String, String> labels;
 
+    /**
+     * The containers status state can be one of created, restarting, running, paused, exited or dead
+     * @since ~{@link RemoteApiVersion#VERSION_1_23}
+     */
+    @JsonProperty("State")
+    private String state;
+
     @JsonProperty("Status")
     private String status;
 
@@ -73,6 +81,12 @@ public class Container implements Serializable {
      */
     @JsonProperty("HostConfig")
     private ContainerHostConfig hostConfig;
+
+    /**
+     * @since ~{@link RemoteApiVersion#VERSION_1_23}
+     */
+    @JsonProperty("Mounts")
+    private InspectContainerResponse.Mount mounts;
 
     /**
      * Docker API docs says "list of networks", but json names `networkSettings`.
@@ -102,6 +116,10 @@ public class Container implements Serializable {
 
     public Long getCreated() {
         return created;
+    }
+
+    public String getState() {
+        return state;
     }
 
     public String getStatus() {
@@ -150,6 +168,10 @@ public class Container implements Serializable {
     @CheckForNull
     public ContainerHostConfig getHostConfig() {
         return hostConfig;
+    }
+
+    public InspectContainerResponse.Mount getMounts() {
+        return mounts;
     }
 
     @Override
