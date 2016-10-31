@@ -3,17 +3,19 @@ package com.github.dockerjava.cmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Container;
+import com.github.dockerjava.core.RemoteApiVersion;
 import com.google.common.collect.ImmutableMap;
 import org.hamcrest.Matcher;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import static ch.lambdaj.Lambda.filter;
+import static com.github.dockerjava.utils.TestUtils.getVersion;
 import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -29,32 +31,38 @@ import static org.testinfected.hamcrest.jpa.PersistenceMatchers.hasField;
 public class ListContainersCmdIT extends CmdIT {
     private static final Logger LOG = LoggerFactory.getLogger(ListContainersCmdIT.class);
 
-    @Ignore("can't work in parallel and second test seems cover this")
     @Test
     public void testListContainers() throws Exception {
+        Map<String, String> testLabel = Collections.singletonMap("test", "testListContainers");
 
+        final RemoteApiVersion apiVersion = getVersion(dockerRule.getClient());
         String testImage = "busybox";
 
-        List<Container> containers = dockerRule.getClient().listContainersCmd().withShowAll(true).exec();
+        List<Container> containers = dockerRule.getClient().listContainersCmd()
+                .withLabelFilter(testLabel)
+                .withShowAll(true)
+                .exec();
         assertThat(containers, notNullValue());
         LOG.info("Container List: {}", containers);
 
         int size = containers.size();
 
-        CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd(testImage).withCmd("echo").exec();
-
+        CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd(testImage)
+                .withLabels(testLabel)
+                .withCmd("echo")
+                .exec();
         assertThat(container1.getId(), not(isEmptyString()));
 
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container1.getId()).exec();
-
         assertThat(inspectContainerResponse.getConfig().getImage(), is(equalTo(testImage)));
 
         dockerRule.getClient().startContainerCmd(container1.getId()).exec();
-
         LOG.info("container id: " + container1.getId());
 
-        List<Container> containers2 = dockerRule.getClient().listContainersCmd().withShowAll(true).exec();
-
+        List<Container> containers2 = dockerRule.getClient().listContainersCmd()
+                .withLabelFilter(testLabel)
+                .withShowAll(true)
+                .exec();
         for (Container container : containers2) {
             LOG.info("listContainer: id=" + container.getId() + " image=" + container.getImage());
         }
@@ -73,6 +81,10 @@ public class ListContainersCmdIT extends CmdIT {
         Container container2 = filteredContainers.get(0);
         assertThat(container2.getCommand(), not(isEmptyString()));
         assertThat(container2.getImage(), startsWith(testImage));
+
+        if (apiVersion.isGreaterOrEqual(RemoteApiVersion.VERSION_1_23)) {
+            assertThat(container2.getState(), equalTo("running"));
+        }
     }
 
     @Test
