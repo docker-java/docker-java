@@ -17,7 +17,10 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_19;
 import static com.github.dockerjava.utils.TestUtils.getVersion;
+import static java.lang.System.currentTimeMillis;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.both;
 import static org.hamcrest.Matchers.containsString;
@@ -66,16 +69,19 @@ public class ListImageHistoryCmdImplTest extends AbstractDockerClientTest {
                 .exec(new BuildImageResultCallback())
                 .awaitImageId();
 
-        final CreateContainerResponse createContainerResponse = dockerClient.createContainerCmd(imageIdDockerfile).exec();
+        final String containerId = dockerClient
+                .createContainerCmd(imageIdDockerfile)
+                .exec()
+                .getId();
 
         final String comment = "my comment";
-        final String imageIdCommit = dockerClient.commitCmd(createContainerResponse.getId()).withMessage(comment).exec();
+        final String imageIdCommit = dockerClient.commitCmd(containerId).withMessage(comment).exec();
 
         final List<ImageHistory> history = dockerClient.listImageHistoryCmd(imageIdCommit).exec();
 
         assertThat(history, notNullValue());
 
-        Long creationTimeStamp = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+        Long creationTimeStamp = MILLISECONDS.toSeconds(currentTimeMillis());
         for(ImageHistory entry : history){
 
             // history is ordered by creation timestamp descending
@@ -87,28 +93,28 @@ public class ListImageHistoryCmdImplTest extends AbstractDockerClientTest {
             assertThat(entry.getCreatedBy(), not(isEmptyOrNullString()));
         }
 
-        final ImageHistory secondToLatestDockerfile = history.get(2); // LABEL testLabel myTestLabel
-        assertThat(secondToLatestDockerfile.getCreatedBy(), both(containsString("#(nop)")).and(containsString("testLabel=myTestLabel")));
+        final ImageHistory entryWithoutSizeTagsOrComment = history.get(2); // LABEL testLabel myTestLabel
+        assertThat(entryWithoutSizeTagsOrComment.getCreatedBy(), both(containsString("#(nop)")).and(containsString("testLabel=myTestLabel")));
 
-        final ImageHistory latestFromDockerfile = history.get(1); // RUN dd if=/dev/zero of=/myLargeFile bs=1M count=1
-        assertThat(latestFromDockerfile.getCreatedBy(), containsString("dd if=/dev/zero of=/myLargeFile bs=1M count=1"));
+        final ImageHistory entryWithSizeAndTag = history.get(1); // RUN dd if=/dev/zero of=/myLargeFile bs=1M count=1
+        assertThat(entryWithSizeAndTag.getCreatedBy(), containsString("dd if=/dev/zero of=/myLargeFile bs=1M count=1"));
 
-        if (!getVersion(dockerClient).isGreaterOrEqual(RemoteApiVersion.VERSION_1_19)) {
+        if (!getVersion(dockerClient).isGreaterOrEqual(VERSION_1_19)) {
 
-            assertThat(secondToLatestDockerfile.getSize(), is(0L));
-            assertThat(secondToLatestDockerfile.getTags(), nullValue());
-            assertThat(secondToLatestDockerfile.getComment(), isEmptyString());
+            assertThat(entryWithoutSizeTagsOrComment.getSize(), is(0L));
+            assertThat(entryWithoutSizeTagsOrComment.getTags(), nullValue());
+            assertThat(entryWithoutSizeTagsOrComment.getComment(), isEmptyString());
 
             final Long oneMegaByteInBytes = 1024L * 1024L;
-            assertThat(latestFromDockerfile.getSize(), greaterThanOrEqualTo(oneMegaByteInBytes));
-            final List<String> tags = latestFromDockerfile.getTags();
+            assertThat(entryWithSizeAndTag.getSize(), greaterThanOrEqualTo(oneMegaByteInBytes));
+            final List<String> tags = entryWithSizeAndTag.getTags();
             assertThat(tags, notNullValue());
             assertThat(tags.get(0), containsString(tag + ":latest"));
-            assertThat(latestFromDockerfile.getComment(), isEmptyString());
+            assertThat(entryWithSizeAndTag.getComment(), isEmptyString());
 
-            final ImageHistory commit = history.get(0);
-            assertThat(commit.getSize(), is(0L));
-            assertThat(commit.getComment(), equalToIgnoringCase(comment));
+            final ImageHistory entryWithComment = history.get(0);
+            assertThat(entryWithComment.getSize(), is(0L));
+            assertThat(entryWithComment.getComment(), equalToIgnoringCase(comment));
         }
     }
 
