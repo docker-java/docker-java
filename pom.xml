@@ -74,7 +74,7 @@
 		<!-- test dependencies -->
 		<logback.version>1.1.7</logback.version>
 		<testng.version>6.9.10</testng.version>
-		<netty.version>4.1.3.Final</netty.version>
+		<netty.version>4.1.7.Final-SNAPSHOT</netty.version>
 		<hamcrest.library.version>1.3</hamcrest.library.version>
 		<hamcrest.jpa-matchers>1.8</hamcrest.jpa-matchers>
 		<lambdaj.version>2.3.3</lambdaj.version>
@@ -87,6 +87,9 @@
 		<maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
 		<maven-failsafe-plugin.version>2.19.1</maven-failsafe-plugin.version>
 		<maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
+
+		<epoll.classifier>macos-x86_64</epoll.classifier>
+
 	</properties>
 
 	<dependencies>
@@ -246,6 +249,30 @@
 			<artifactId>netty-transport-native-epoll</artifactId>
 			<version>${netty.version}</version>
 			<classifier>linux-x86_64</classifier>
+			<exclusions>
+				<exclusion>
+					<groupId>io.netty</groupId>
+					<artifactId>netty-transport-native-unix-common</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-transport-native-kqueue</artifactId>
+			<version>${netty.version}</version>
+			<classifier>osx-x86_64</classifier>
+			<exclusions>
+				<exclusion>
+					<groupId>io.netty</groupId>
+					<artifactId>netty-transport-native-unix-common</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-transport-native-unix-common</artifactId>
+			<version>${netty.version}</version>
+			<classifier>osx-x86_64</classifier>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -253,7 +280,7 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>		
+		<dependency>
 			<groupId>com.github.jnr</groupId>
 			<artifactId>jnr-unixsocket</artifactId>
 			<version>0.12</version>
@@ -277,13 +304,13 @@
 	</distributionManagement>
 
 	<build>
-		<!-- <extensions> -->
-		<!-- <extension> -->
-		<!-- <groupId>kr.motd.maven</groupId> -->
-		<!-- <artifactId>os-maven-plugin</artifactId> -->
-		<!-- <version>1.2.3.Final</version> -->
-		<!-- </extension> -->
-		<!-- </extensions> -->
+		<extensions>
+			<extension>
+				<groupId>kr.motd.maven</groupId>
+				<artifactId>os-maven-plugin</artifactId>
+				<version>1.4.0.Final</version>
+			</extension>
+		</extensions>
 		<pluginManagement>
 			<plugins>
 
@@ -430,7 +457,7 @@
 							<perCoreThreadCount>true</perCoreThreadCount>
 							<threadCount>1</threadCount>
 							<groups>integration</groups>
- 							<excludedGroups>integration-auth</excludedGroups>
+							<excludedGroups>integration-auth</excludedGroups>
 							<includes>
 								<include>**/*ExecTest.java</include>
 							</includes>
@@ -494,7 +521,7 @@
 							<failOnViolation>true</failOnViolation>
 							<logViolationsToConsole>true</logViolationsToConsole>
 							<linkXRef>false</linkXRef>
-							<!-- if some IDE has integration and requires other place, propose
+							<!-- if some IDE has integration and requires other place, propose 
 								it -->
 							<configLocation>
 								src/test/resources/checkstyle/checkstyle-config.xml

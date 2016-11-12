@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.nio.channels.spi.SelectorProvider;
 import java.security.Security;
 
 import javax.net.ssl.SSLEngine;
@@ -122,20 +121,19 @@ import com.github.dockerjava.netty.exec.VersionCmdExec;
 import com.github.dockerjava.netty.exec.WaitContainerCmdExec;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.ChannelFactory;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
+import io.netty.channel.kqueue.KQueueDomainSocketChannel;
+import io.netty.channel.kqueue.KQueueEventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.DuplexChannel;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.channel.unix.DomainSocketAddress;
 import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslHandler;
 import io.netty.util.concurrent.DefaultThreadFactory;
-import jnr.enxio.channels.NativeSelectorProvider;
-import jnr.unixsocket.UnixSocketAddress;
-import jnr.unixsocket.UnixSocketChannel;
 
 /**
  * Experimental implementation of {@link DockerCmdExecFactory} that supports http connection hijacking that is needed to pass STDIN to the
@@ -221,24 +219,11 @@ public class NettyDockerCmdExecFactory implements DockerCmdExecFactory {
 
         @Override
         public EventLoopGroup init(Bootstrap bootstrap, DockerClientConfig dockerClientConfig) {
-            final SelectorProvider nativeSelectorProvider = NativeSelectorProvider.getInstance();
 
-            EventLoopGroup nioEventLoopGroup = new NioEventLoopGroup(0,
-                new DefaultThreadFactory(threadPrefix), nativeSelectorProvider);
+            EventLoopGroup nioEventLoopGroup = new KQueueEventLoopGroup(0,
+                new DefaultThreadFactory(threadPrefix));
 
-            ChannelFactory<NioSocketChannel> factory = new ChannelFactory<NioSocketChannel>() {
-
-                @Override
-                public NioSocketChannel newChannel() {
-                    try {
-                      return new NioSocketChannel(UnixSocketChannel.create());
-                    } catch (IOException e) {
-                      throw new RuntimeException();
-                    }
-                }
-            };
-
-            bootstrap.group(nioEventLoopGroup).channelFactory(factory)
+            bootstrap.group(nioEventLoopGroup).channel(KQueueDomainSocketChannel.class)
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(final SocketChannel channel) throws Exception {
@@ -257,7 +242,7 @@ public class NettyDockerCmdExecFactory implements DockerCmdExecFactory {
                 throw new RuntimeException("socket not found: " + path);
             }
 
-            UnixSocketAddress address = new UnixSocketAddress(path);
+            DomainSocketAddress address = new DomainSocketAddress(path);
 
             return (DuplexChannel) bootstrap.connect(address).sync().channel();
         }
