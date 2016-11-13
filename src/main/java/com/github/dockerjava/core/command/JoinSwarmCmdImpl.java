@@ -9,6 +9,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.annotation.CheckForNull;
+import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class JoinSwarmCmdImpl extends AbstrDockerCmd<JoinSwarmCmd, Void> implements
@@ -21,7 +22,7 @@ public class JoinSwarmCmdImpl extends AbstrDockerCmd<JoinSwarmCmd, Void> impleme
     private String advertiseAddr;
 
     @JsonProperty("RemoteAddrs")
-    private String[] remoteAddrs;
+    private List<String> remoteAddrs;
 
     @JsonProperty("JoinToken")
     private String joinToken;
@@ -56,12 +57,12 @@ public class JoinSwarmCmdImpl extends AbstrDockerCmd<JoinSwarmCmd, Void> impleme
 
     @Override
     @CheckForNull
-    public String[] getRemoteAddrs() {
+    public List<String> getRemoteAddrs() {
         return remoteAddrs;
     }
 
     @Override
-    public JoinSwarmCmd withRemoteAddrs(String[] remoteAddrs) {
+    public JoinSwarmCmd withRemoteAddrs(List<String> remoteAddrs) {
         this.remoteAddrs = remoteAddrs;
         return this;
     }

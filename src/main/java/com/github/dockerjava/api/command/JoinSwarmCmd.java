@@ -2,6 +2,7 @@ package com.github.dockerjava.api.command;
 
 
 import javax.annotation.CheckForNull;
+import java.util.List;
 
 public interface JoinSwarmCmd extends SyncDockerCmd<Void> {
 
@@ -16,9 +17,9 @@ public interface JoinSwarmCmd extends SyncDockerCmd<Void> {
     JoinSwarmCmd withAdvertiseAddr(String advertiseAddr);
 
     @CheckForNull
-    String[] getRemoteAddrs();
+    List<String> getRemoteAddrs();
 
-    JoinSwarmCmd withRemoteAddrs(String[] remoteAddrs);
+    JoinSwarmCmd withRemoteAddrs(List<String> remoteAddrs);
 
     @CheckForNull
     String getJoinToken();

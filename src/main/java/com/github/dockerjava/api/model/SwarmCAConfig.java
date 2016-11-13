@@ -11,6 +11,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
@@ -27,8 +28,11 @@ public class SwarmCAConfig implements Serializable {
     @JsonProperty("NodeCertExpiry")
     private Long nodeCertExpiry;
 
+    /**
+     * @since 1.24
+     */
     @JsonProperty("ExternalCAs")
-    private ExternalCA[] externalCA;
+    private List<ExternalCA> externalCA;
 
     /**
      * @see #nodeCertExpiry
@@ -43,6 +47,22 @@ public class SwarmCAConfig implements Serializable {
      */
     public SwarmCAConfig withNodeCertExpiry(Long nodeCertExpiry) {
         this.nodeCertExpiry = nodeCertExpiry;
+        return this;
+    }
+
+    /**
+     * @see #externalCA
+     */
+    @CheckForNull
+    public List<ExternalCA> getExternalCA() {
+        return externalCA;
+    }
+
+    /**
+     * @see #externalCA
+     */
+    public SwarmCAConfig withExternalCA(List<ExternalCA> externalCA) {
+        this.externalCA = externalCA;
         return this;
     }
 
