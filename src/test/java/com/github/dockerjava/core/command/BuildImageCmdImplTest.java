@@ -7,13 +7,16 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
@@ -272,6 +275,28 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
         LOG.info("Image Inspect: {}", inspectImageResponse.toString());
 
         assertThat(inspectImageResponse.getConfig().getLabels().get("test"), equalTo("abc"));
+    }
+
+    @Test
+    public void multipleTags() throws Exception {
+        if (!getVersion(dockerClient).isGreaterOrEqual(RemoteApiVersion.VERSION_1_21)) {
+            throw new SkipException("API version should be >= 1.21");
+        }
+
+        File baseDir = fileFromBuildTestResource("labels");
+
+        String imageId = dockerClient.buildImageCmd(baseDir).withNoCache(true)
+                .withTag("fallback-when-withTags-not-called")
+                .withTags(new HashSet<>(Arrays.asList("docker-java-test:tag1", "docker-java-test:tag2")))
+                .exec(new BuildImageResultCallback())
+                .awaitImageId();
+
+        InspectImageResponse inspectImageResponse = dockerClient.inspectImageCmd(imageId).exec();
+        assertThat(inspectImageResponse, not(nullValue()));
+        LOG.info("Image Inspect: {}", inspectImageResponse.toString());
+
+        assertThat(inspectImageResponse.getRepoTags().size(), equalTo(2));
+        assertThat(inspectImageResponse.getRepoTags(), containsInAnyOrder("docker-java-test:tag1", "docker-java-test:tag2"));
     }
 
     public void dockerfileNotInBaseDirectory() throws Exception {
