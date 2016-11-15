@@ -8,6 +8,7 @@ import com.github.dockerjava.api.model.LocalNodeState;
 import com.github.dockerjava.api.model.Swarm;
 import com.github.dockerjava.api.model.SwarmJoinTokens;
 import com.github.dockerjava.api.model.SwarmSpec;
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
@@ -69,7 +70,7 @@ public class JoinSwarmCmdExecTest extends AbstractSwarmDockerClientTest {
         SwarmJoinTokens tokens = initSwarmOnDocker(docker1);
 
         docker2.joinSwarmCmd()
-                .withRemoteAddrs(new String[] { "docker1" })
+                .withRemoteAddrs(Lists.newArrayList("docker1"))
                 .withJoinToken(tokens.getWorker())
                 .exec();
         LOG.info("docker2 joined docker1's swarm");
@@ -87,7 +88,7 @@ public class JoinSwarmCmdExecTest extends AbstractSwarmDockerClientTest {
         SwarmJoinTokens tokens = initSwarmOnDocker(docker1);
 
         docker2.joinSwarmCmd()
-                .withRemoteAddrs(new String[] { "docker1" })
+                .withRemoteAddrs(Lists.newArrayList("docker1"))
                 .withJoinToken(tokens.getManager())
                 .exec();
         LOG.info("docker2 joined docker1's swarm");
@@ -107,7 +108,7 @@ public class JoinSwarmCmdExecTest extends AbstractSwarmDockerClientTest {
         initSwarmOnDocker(docker2);
 
         docker2.joinSwarmCmd()
-                .withRemoteAddrs(new String[] { "docker1" })
+                .withRemoteAddrs(Lists.newArrayList("docker1"))
                 .withJoinToken(tokens.getWorker())
                 .exec();
     }
