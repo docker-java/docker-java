@@ -1,16 +1,16 @@
 package com.github.dockerjava.api.command;
 
+import com.github.dockerjava.api.model.AuthConfigurations;
+import com.github.dockerjava.api.model.BuildResponseItem;
+import com.github.dockerjava.core.RemoteApiVersion;
+
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.Map;
-
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
-
-import com.github.dockerjava.api.model.AuthConfigurations;
-import com.github.dockerjava.api.model.BuildResponseItem;
-import com.github.dockerjava.core.RemoteApiVersion;
+import java.util.Set;
 
 /**
  * Build an image from Dockerfile.
@@ -34,7 +34,11 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
 
     /**
      * "t" in API
+     *
+     * @deprecated since docker API version 1.21 there can be multiple tags
+     * specified so use {@link #getTags()}
      */
+    @Deprecated()
     @CheckForNull
     String getTag();
 
@@ -106,6 +110,12 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
      */
     @CheckForNull
     Map<String, String> getLabels();
+
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_21}
+     */
+    @CheckForNull
+    Set<String> getTags();
 
     // setters
 

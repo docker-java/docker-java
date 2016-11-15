@@ -279,6 +279,28 @@ public class BuildImageCmdExecTest extends AbstractNettyDockerClientTest {
         assertThat(inspectImageResponse.getConfig().getLabels().get("test"), equalTo("abc"));
     }
 
+    @Test
+    public void multipleTags() throws Exception {
+        if (!getVersion(dockerClient).isGreaterOrEqual(RemoteApiVersion.VERSION_1_21)) {
+            throw new SkipException("API version should be >= 1.21");
+        }
+
+        File baseDir = fileFromBuildTestResource("labels");
+
+        String imageId = dockerClient.buildImageCmd(baseDir).withNoCache(true)
+                .withTag("docker-java-test:tag1").withTag("docker-java-test:tag2")
+                .exec(new BuildImageResultCallback())
+                .awaitImageId();
+
+        InspectImageResponse inspectImageResponse = dockerClient.inspectImageCmd(imageId).exec();
+        assertThat(inspectImageResponse, not(nullValue()));
+        LOG.info("Image Inspect: {}", inspectImageResponse.toString());
+
+        assertThat(inspectImageResponse.getRepoTags().size(), equalTo(2));
+        assertThat(inspectImageResponse.getRepoTags().contains("docker-java-test:tag1"), equalTo(true));
+        assertThat(inspectImageResponse.getRepoTags().contains("docker-java-test:tag2"), equalTo(true));
+    }
+
     public void dockerfileNotInBaseDirectory() throws Exception {
         File baseDirectory = fileFromBuildTestResource("dockerfileNotInBaseDirectory");
         File dockerfile = fileFromBuildTestResource("dockerfileNotInBaseDirectory/dockerfileFolder/Dockerfile");

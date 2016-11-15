@@ -22,17 +22,17 @@ public class WebTarget {
 
     private final ImmutableList<String> path;
 
-    private final ImmutableMap<String, String> queryParams;
+    private final ImmutableMap<String, Object> queryParams;
 
     private static final String PATH_SEPARATOR = "/";
 
     public WebTarget(ChannelProvider channelProvider) {
-        this(channelProvider, ImmutableList.<String>of(), ImmutableMap.<String, String>of());
+        this(channelProvider, ImmutableList.<String>of(), ImmutableMap.<String, Object>of());
     }
 
     private WebTarget(ChannelProvider channelProvider,
                       ImmutableList<String> path,
-                      ImmutableMap<String, String> queryParams) {
+                      ImmutableMap<String, Object> queryParams) {
         this.channelProvider = channelProvider;
         this.path = path;
         this.queryParams = queryParams;
@@ -52,8 +52,14 @@ public class WebTarget {
         String resource = PATH_SEPARATOR + StringUtils.join(path, PATH_SEPARATOR);
 
         List<String> params = new ArrayList<>();
-        for (Map.Entry<String, String> entry : queryParams.entrySet()) {
-            params.add(entry.getKey() + "=" + entry.getValue());
+        for (Map.Entry<String, Object> entry : queryParams.entrySet()) {
+            if (entry.getValue() instanceof Iterable) {
+                for (Object i : (Iterable) entry.getValue()) {
+                    params.add(entry.getKey() + "=" + i.toString());
+                }
+            } else {
+                params.add(entry.getKey() + "=" + entry.getValue().toString());
+            }
         }
 
         if (!params.isEmpty()) {
@@ -73,9 +79,9 @@ public class WebTarget {
     }
 
     public WebTarget queryParam(String name, Object value) {
-        ImmutableMap.Builder<String, String> builder = ImmutableMap.<String, String>builder().putAll(queryParams);
+        ImmutableMap.Builder<String, Object> builder = ImmutableMap.<String, Object>builder().putAll(queryParams);
         if (value != null) {
-            builder.put(name, value.toString());
+            builder.put(name, value);
         }
         return new WebTarget(channelProvider, path, builder.build());
     }
