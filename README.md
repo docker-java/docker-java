@@ -98,8 +98,7 @@ In your application, e.g.
         .withDockerHost("tcp://my-docker-host.tld:2376")
         .withDockerTlsVerify(true)
         .withDockerCertPath("/home/user/.docker/certs")
-        .withDockerConfig("/home/user/.docker/config.json")    
-        //.withDockerConfig("/home/user/.docker/.dockercfg")   Your docker auth configuration file
+        .withDockerConfig("/home/user/.docker")
         .withApiVersion("1.23")
         .withRegistryUrl("https://index.docker.io/v1/")
         .withRegistryUsername("dockeruser")

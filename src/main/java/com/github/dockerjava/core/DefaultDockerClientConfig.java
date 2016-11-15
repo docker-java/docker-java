@@ -279,7 +279,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
     @Override
     public AuthConfigurations getAuthConfigurations() {
-        File dockerCfgFile = new File(getDockerConfig());
+        File dockerCfgFile = new File(getDockerConfig() + File.separator + DOCKER_CFG);
         if (dockerCfgFile.exists() && dockerCfgFile.isFile()) {
             AuthConfigFile authConfigFile;
             try {
