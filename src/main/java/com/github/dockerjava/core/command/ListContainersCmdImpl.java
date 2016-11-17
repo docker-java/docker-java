@@ -93,6 +93,41 @@ public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, Lis
     }
 
     @Override
+    public ListContainersCmd withNameFilter(String... name) {
+        checkNotNull(name, "name was not specified");
+        this.filters.withFilter("name", name);
+        return this;
+    }
+
+    @Override
+    public ListContainersCmd withIdFilter(String... id) {
+        checkNotNull(id, "id was not specified");
+        this.filters.withFilter("id", id);
+        return this;
+    }
+
+    @Override
+    public ListContainersCmd withAncestorFilter(String... ancestor) {
+        checkNotNull(ancestor, "ancestor was not specified");
+        this.filters.withFilter("ancestor", ancestor);
+        return this;
+    }
+
+    @Override
+    public ListContainersCmd withVolumeFilter(String... volume) {
+        checkNotNull(volume, "volume was not specified");
+        this.filters.withFilter("volume", volume);
+        return this;
+    }
+
+    @Override
+    public ListContainersCmd withNetworkFilter(String... network) {
+        checkNotNull(network, "network was not specified");
+        this.filters.withFilter("network", network);
+        return this;
+    }
+
+    @Override
     public ListContainersCmd withLabelFilter(String... labels) {
         checkNotNull(labels, "labels was not specified");
         this.filters.withLabels(labels);
@@ -107,14 +142,14 @@ public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, Lis
     }
 
     @Override
-    public ListContainersCmd withExitcodeFilter(Integer exitcode) {
-        checkNotNull(exitcode, "exitcode was not specified");
-        this.filters.withFilter("exitcode", exitcode.toString());
+    public ListContainersCmd withExitedFilter(Integer exited) {
+        checkNotNull(exited, "exitcode was not specified");
+        this.filters.withFilter("exited", exited.toString());
         return this;
     }
 
     @Override
-    public ListContainersCmd withStatusFilter(String status) {
+    public ListContainersCmd withStatusFilter(String... status) {
         checkNotNull(status, "status was not specified");
         this.filters.withFilter("status", status);
         return this;

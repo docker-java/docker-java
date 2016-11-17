@@ -38,16 +38,46 @@ public interface ListContainersCmd extends SyncDockerCmd<List<Container>> {
     ListContainersCmd withBefore(String before);
 
     /**
-     * @param exitcode
+     * @param name
+     *            - Show only containers that has the container's name
+     */
+    ListContainersCmd withNameFilter(String... name);
+
+    /**
+     * @param id
+     *            - Show only containers that has the container's id
+     */
+    ListContainersCmd withIdFilter(String... id);
+
+    /**
+     * @param ancestor
+     *            - Show only containers created from an image or a descendant.
+     */
+    ListContainersCmd withAncestorFilter(String... ancestor);
+
+    /**
+     * @param volume
+     *            - Show only containers with volume name or mount point destination
+     */
+    ListContainersCmd withVolumeFilter(String... volume);
+
+    /**
+     * @param network
+     *            - Show only containers with network id or network name
+     */
+    ListContainersCmd withNetworkFilter(String... network);
+
+    /**
+     * @param exited
      *            - Show only containers that exited with the passed exitcode.
      */
-    ListContainersCmd withExitcodeFilter(Integer exitcode);
+    ListContainersCmd withExitedFilter(Integer exited);
 
     /**
      * @param status
      *            - Show only containers with the passed status (created|restarting|running|paused|exited).
      */
-    ListContainersCmd withStatusFilter(String status);
+    ListContainersCmd withStatusFilter(String... status);
 
     /**
      * @param labels
