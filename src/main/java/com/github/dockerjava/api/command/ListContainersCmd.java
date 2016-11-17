@@ -1,11 +1,10 @@
 package com.github.dockerjava.api.command;
 
-import java.util.List;
-import java.util.Map;
+import com.github.dockerjava.api.model.Container;
 
 import javax.annotation.CheckForNull;
-
-import com.github.dockerjava.api.model.Container;
+import java.util.List;
+import java.util.Map;
 
 /**
  * List containers
@@ -38,16 +37,54 @@ public interface ListContainersCmd extends SyncDockerCmd<List<Container>> {
     ListContainersCmd withBefore(String before);
 
     /**
+     * @param name
+     *            - Show only containers that has the container's name
+     */
+    ListContainersCmd withNameFilter(String... name);
+
+    /**
+     * @param id
+     *            - Show only containers that has the container's id
+     */
+    ListContainersCmd withIdFilter(String... id);
+
+    /**
+     * @param ancestor
+     *            - Show only containers created from an image or a descendant.
+     */
+    ListContainersCmd withAncestorFilter(String... ancestor);
+
+    /**
+     * @param volume
+     *            - Show only containers with volume name or mount point destination
+     */
+    ListContainersCmd withVolumeFilter(String... volume);
+
+    /**
+     * @param network
+     *            - Show only containers with network id or network name
+     */
+    ListContainersCmd withNetworkFilter(String... network);
+
+    /**
+     * @param exited
+     *            - Show only containers that exited with the passed exitcode.
+     */
+    ListContainersCmd withExitedFilter(Integer exited);
+
+    /**
+     * Use {@link #withExitedFilter(Integer)} instead
      * @param exitcode
      *            - Show only containers that exited with the passed exitcode.
      */
+    @Deprecated
     ListContainersCmd withExitcodeFilter(Integer exitcode);
 
     /**
      * @param status
      *            - Show only containers with the passed status (created|restarting|running|paused|exited).
      */
-    ListContainersCmd withStatusFilter(String status);
+    ListContainersCmd withStatusFilter(String... status);
 
     /**
      * @param labels
@@ -84,6 +121,13 @@ public interface ListContainersCmd extends SyncDockerCmd<List<Container>> {
      *            - Show only containers created since Id, include non-running ones.
      */
     ListContainersCmd withSince(String since);
+
+    /**
+     * @param filterName
+     * @param filterValues
+     *            - Show only containers where the filter matches the given values
+     */
+    ListContainersCmd withFilter(String filterName, String... filterValues);
 
     interface Exec extends DockerCmdSyncExec<ListContainersCmd, List<Container>> {
     }
