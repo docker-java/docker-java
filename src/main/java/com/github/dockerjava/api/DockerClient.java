@@ -111,6 +111,10 @@ public interface DockerClient extends Closeable {
 
     InspectImageCmd inspectImageCmd(@Nonnull String imageId);
 
+    /**
+     * @param name
+     *            The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
+     */
     SaveImageCmd saveImageCmd(@Nonnull String name);
 
     /**
