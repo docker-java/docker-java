@@ -36,6 +36,12 @@ public interface CreateNetworkCmd extends SyncDockerCmd<CreateNetworkResponse> {
     @CheckForNull
     Boolean getEnableIPv6();
 
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_23}
+     */
+    @CheckForNull
+    Map<String, String> getLabels();
+
     /** The new network's name. Required. */
     CreateNetworkCmd withName(@Nonnull String name);
 
@@ -51,6 +57,11 @@ public interface CreateNetworkCmd extends SyncDockerCmd<CreateNetworkResponse> {
     CreateNetworkCmd withCheckDuplicate(boolean checkForDuplicate);
 
     CreateNetworkCmd withInternal(boolean internal);
+
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_23}
+     */
+    CreateNetworkCmd withLabels(Map<String, String> labels);
 
     CreateNetworkCmd withEnableIpv6(boolean enableIpv6);
 

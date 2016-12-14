@@ -12,6 +12,10 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
+import java.util.Collections;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 @Test(groups = "integration")
 public class CreateNetworkCmdImplTest extends AbstractDockerClientTest {
@@ -64,4 +68,21 @@ public class CreateNetworkCmdImplTest extends AbstractDockerClientTest {
         assertEquals(network.getDriver(), "bridge");
         assertEquals("10.67.79.0/24", network.getIpam().getConfig().iterator().next().getSubnet());
     }
+
+
+    @Test
+    public void createNetworkWithLabels() throws DockerException {
+
+        String networkName = "testNetwork";
+        CreateNetworkResponse createNetworkResponse = dockerClient.createNetworkCmd()
+            .withName(networkName).withLabels(Collections.singletonMap("test", "abc")).exec();
+
+        assertNotNull(createNetworkResponse.getId());
+
+        Network network = dockerClient.inspectNetworkCmd().withNetworkId(createNetworkResponse.getId()).exec();
+        assertEquals(network.getName(), networkName);
+        assertThat(network.getLabels().get("test"), equalTo("abc"));
+        assertEquals(network.getDriver(), "bridge");
+    }
+
 }

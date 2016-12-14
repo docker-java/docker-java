@@ -34,6 +34,9 @@ public class Network implements Serializable {
     @JsonProperty("Containers")
     private Map<String, ContainerNetworkConfig> containers;
 
+    @JsonProperty("Labels")
+    private Map<String, String> labels;
+
     @JsonProperty("Options")
     private Map<String, String> options;
 
@@ -52,6 +55,12 @@ public class Network implements Serializable {
     public String getDriver() {
         return driver;
     }
+
+
+    public Map<String, String> getLabels() {
+        return labels;
+    }
+
 
     public Ipam getIpam() {
         return ipam;

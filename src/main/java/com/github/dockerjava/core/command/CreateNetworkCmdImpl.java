@@ -1,14 +1,14 @@
 package com.github.dockerjava.core.command;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.command.CreateNetworkCmd;
 import com.github.dockerjava.api.command.CreateNetworkResponse;
 import com.github.dockerjava.api.command.DockerCmdSyncExec;
 import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.api.model.Network.Ipam;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CreateNetworkCmdImpl extends AbstrDockerCmd<CreateNetworkCmd, CreateNetworkResponse>
         implements CreateNetworkCmd {
@@ -27,6 +27,9 @@ public class CreateNetworkCmdImpl extends AbstrDockerCmd<CreateNetworkCmd, Creat
 
     @JsonProperty("CheckDuplicate")
     private Boolean checkDuplicate;
+
+    @JsonProperty("Labels")
+    private Map<String, String> labels;
 
     @JsonProperty("Internal")
     private Boolean internal;
@@ -74,6 +77,12 @@ public class CreateNetworkCmdImpl extends AbstrDockerCmd<CreateNetworkCmd, Creat
     }
 
     @Override
+    public Map<String, String> getLabels() {
+        return labels;
+    }
+
+
+    @Override
     public CreateNetworkCmd withName(String name) {
         this.name = name;
         return this;
@@ -106,6 +115,12 @@ public class CreateNetworkCmdImpl extends AbstrDockerCmd<CreateNetworkCmd, Creat
     @Override
     public CreateNetworkCmd withInternal(boolean internal) {
         this.internal = internal;
+        return this;
+    }
+
+    @Override
+    public CreateNetworkCmd withLabels(Map<String, String> labels) {
+        this.labels = labels;
         return this;
     }
 
