@@ -46,6 +46,7 @@ public class AuthCmdExecTest extends AbstractNettyDockerClientTest {
 
     @Test(expectedExceptions = UnauthorizedException.class)
     public void testAuthInvalid() throws Exception {
-        DockerClientBuilder.getInstance(config("garbage")).build().authCmd().exec();
+        DockerClientBuilder.getInstance(config("garbage")).withDockerCmdExecFactory(dockerCmdExecFactory)
+                .build().authCmd().exec();
     }
 }

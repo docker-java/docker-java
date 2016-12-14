@@ -224,9 +224,9 @@ public class NettyDockerCmdExecFactory implements DockerCmdExecFactory {
                 new DefaultThreadFactory(threadPrefix));
 
             bootstrap.group(nioEventLoopGroup).channel(KQueueDomainSocketChannel.class)
-                    .handler(new ChannelInitializer<SocketChannel>() {
+                    .handler(new ChannelInitializer<KQueueDomainSocketChannel>() {
                         @Override
-                        protected void initChannel(final SocketChannel channel) throws Exception {
+                        protected void initChannel(final KQueueDomainSocketChannel channel) throws Exception {
                             channel.pipeline().addLast(new LoggingHandler(getClass()));
                             channel.pipeline().addLast(new HttpClientCodec());
                         }

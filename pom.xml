@@ -244,18 +244,12 @@
 			<artifactId>netty-handler-proxy</artifactId>
 			<version>${netty.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>io.netty</groupId>
-			<artifactId>netty-transport-native-epoll</artifactId>
-			<version>${netty.version}</version>
-			<classifier>linux-x86_64</classifier>
-			<exclusions>
-				<exclusion>
-					<groupId>io.netty</groupId>
-					<artifactId>netty-transport-native-unix-common</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>io.netty</groupId> -->
+<!-- 			<artifactId>netty-transport-native-epoll</artifactId> -->
+<!-- 			<version>${netty.version}</version> -->
+<!-- 			<classifier>linux-x86_64</classifier> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-transport-native-kqueue</artifactId>
@@ -304,13 +298,13 @@
 	</distributionManagement>
 
 	<build>
-		<extensions>
-			<extension>
-				<groupId>kr.motd.maven</groupId>
-				<artifactId>os-maven-plugin</artifactId>
-				<version>1.4.0.Final</version>
-			</extension>
-		</extensions>
+<!-- 		<extensions> -->
+<!-- 			<extension> -->
+<!-- 				<groupId>kr.motd.maven</groupId> -->
+<!-- 				<artifactId>os-maven-plugin</artifactId> -->
+<!-- 				<version>1.5.0.Final</version> -->
+<!-- 			</extension> -->
+<!-- 		</extensions> -->
 		<pluginManagement>
 			<plugins>
 
