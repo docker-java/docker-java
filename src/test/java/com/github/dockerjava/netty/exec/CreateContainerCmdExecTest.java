@@ -36,7 +36,6 @@ import org.testng.internal.junit.ArrayAsserts;
 import java.lang.reflect.Method;
 import java.security.SecureRandom;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -730,5 +729,27 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
         assertEquals(inspectContainerResponse.getHostConfig().getShmSize(), hostConfig.getShmSize());
+    }
+
+    @SuppressWarnings("Duplicates")
+    @Test
+    public void createContainerWithShmPidsLimit() throws DockerException {
+        final RemoteApiVersion apiVersion = getVersion(dockerClient);
+
+        if (!apiVersion.isGreaterOrEqual(RemoteApiVersion.VERSION_1_23)) {
+            throw new SkipException("API version should be >= 1.23");
+        }
+
+        HostConfig hostConfig = new HostConfig().withPidsLimit(2L);
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
+                                                        .withHostConfig(hostConfig).withCmd("true").exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+
+        assertEquals(inspectContainerResponse.getHostConfig().getPidsLimit(), hostConfig.getPidsLimit());
     }
 }

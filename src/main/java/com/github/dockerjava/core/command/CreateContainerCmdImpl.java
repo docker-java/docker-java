@@ -611,6 +611,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
+    public CreateContainerCmd withPidsLimit(Long pidsLimit) {
+        checkNotNull(pidsLimit, "pidsLimit was not specified");
+        hostConfig.withPidsLimit(pidsLimit);
+        return this;
+    }
+
+    @Override
     public CreateContainerCmd withDevices(Device... devices) {
         checkNotNull(devices, "devices was not specified");
         this.hostConfig.withDevices(devices);
