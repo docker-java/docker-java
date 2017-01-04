@@ -188,7 +188,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
     }
 
     public static Builder createDefaultConfigBuilder() {
-        return createDefaultConfigBuilder(System.getenv(), System.getProperties());
+        return createDefaultConfigBuilder(System.getenv(), (Properties) System.getProperties().clone());
     }
 
     /**
