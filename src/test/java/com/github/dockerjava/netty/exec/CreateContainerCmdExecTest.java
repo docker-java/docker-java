@@ -728,7 +728,7 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-        assertEquals(inspectContainerResponse.getHostConfig().getShmSize(), hostConfig.getShmSize());
+        assertThat(inspectContainerResponse.getHostConfig().getShmSize(), is(hostConfig.getShmSize()));
     }
 
     @SuppressWarnings("Duplicates")
@@ -750,6 +750,6 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-        assertEquals(inspectContainerResponse.getHostConfig().getPidsLimit(), hostConfig.getPidsLimit());
+        assertThat(inspectContainerResponse.getHostConfig().getPidsLimit(), is(hostConfig.getPidsLimit()));
     }
 }
