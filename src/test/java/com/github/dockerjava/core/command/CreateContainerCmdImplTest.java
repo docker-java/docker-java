@@ -584,9 +584,9 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void createContainerWithPidsLimit() throws DockerException {
 
-        HostConfig hostConfig = new HostConfig().withCmd("true").withPidsLimit(1024);
+        HostConfig hostConfig = new HostConfig().withPidsLimit(1024);
 
-        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withHostConfig(hostConfig).exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withHostConfig(hostConfig).withCmd("true").exec();
 
         LOG.info("Created container {}", container.toString());
 
