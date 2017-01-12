@@ -19,8 +19,13 @@ import com.github.dockerjava.api.model.AuthConfigurations;
 public class AuthConfigFile {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    private static final TypeReference<Map<String, AuthConfig>> CONFIG_MAP_TYPE = new TypeReference<Map<String, AuthConfig>>() {
-    };
+    private static final TypeReference<Map<String, AuthConfig>> CONFIG_CFG_MAP_TYPE =
+        new TypeReference<Map<String, AuthConfig>>() {
+        };
+
+    private static final TypeReference<Map<String, Map<String, AuthConfig>>> CONFIG_JSON_MAP_TYPE =
+        new TypeReference<Map<String, Map<String, AuthConfig>>>() {
+        };
 
     private final Map<String, AuthConfig> authConfigMap;
 
@@ -101,12 +106,27 @@ public class AuthConfigFile {
         if (!confFile.exists()) {
             return new AuthConfigFile();
         }
+
         Map<String, AuthConfig> configMap = null;
+        /*
+        Registry v2 expects config expects config.json while v2 expects .dockercfg
+        The only difference between them is that config.json wraps "auths" around the AuthConfig
+         */
         try {
-            configMap = MAPPER.readValue(confFile, CONFIG_MAP_TYPE);
-        } catch (IOException e) {
-            // pass
+            // try registry version 2
+            Map<String, Map<String, AuthConfig>>  configJson = MAPPER.readValue(confFile, CONFIG_JSON_MAP_TYPE);
+            if (configJson != null) {
+                configMap = configJson.get("auths");
+            }
+        } catch (IOException e1) {
+            try {
+                // try registry version 1
+                configMap = MAPPER.readValue(confFile, CONFIG_CFG_MAP_TYPE);
+            } catch (IOException e2) {
+                // pass
+            }
         }
+
         if (configMap != null) {
             for (Map.Entry<String, AuthConfig> entry : configMap.entrySet()) {
                 AuthConfig authConfig = entry.getValue();
