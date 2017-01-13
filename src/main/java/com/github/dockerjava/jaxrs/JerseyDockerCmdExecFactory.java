@@ -190,7 +190,7 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
                 throw new RuntimeException(e);
             }
 
-            configureProxy(clientConfig, protocol);
+            configureProxy(clientConfig, originalUri, protocol);
         }
 
         connManager = new PoolingHttpClientConnectionManager(getSchemeRegistry(
@@ -241,9 +241,9 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
         return originalUri;
     }
 
-    private void configureProxy(ClientConfig clientConfig, String protocol) {
+    private void configureProxy(ClientConfig clientConfig, URI originalUri, String protocol) {
 
-        List<Proxy> proxies = ProxySelector.getDefault().select(dockerClientConfig.getDockerHost());
+        List<Proxy> proxies = ProxySelector.getDefault().select(originalUri);
 
         for (Proxy proxy : proxies) {
             InetSocketAddress address = (InetSocketAddress) proxy.address();
