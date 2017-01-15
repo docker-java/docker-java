@@ -269,11 +269,6 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     CreateContainerCmd withCpuShares(Integer cpuShares);
 
     /**
-     * @since 1.23
-     */
-    CreateContainerCmd withPidsLimit(Long pidsLimit);
-
-    /**
      * Add host devices to the container
      */
     CreateContainerCmd withDevices(Device... devices);
