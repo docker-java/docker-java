@@ -742,7 +742,7 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
         HostConfig hostConfig = new HostConfig().withPidsLimit(2L);
         CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE)
-                                                        .withHostConfig(hostConfig).withCmd("true").exec();
+            .withHostConfig(hostConfig).withCmd("true").exec();
 
         LOG.info("Created container {}", container.toString());
 
