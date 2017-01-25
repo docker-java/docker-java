@@ -141,6 +141,11 @@ public class Network implements Serializable {
             return this;
         }
 
+        public Ipam withDriver(String driver) {
+            this.driver = driver;
+            return this;
+        }
+
         @Override
         public String toString() {
             return ToStringBuilder.reflectionToString(this);
