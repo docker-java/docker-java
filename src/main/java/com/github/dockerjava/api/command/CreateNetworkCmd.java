@@ -16,6 +16,9 @@ import java.util.Map;
 public interface CreateNetworkCmd extends SyncDockerCmd<CreateNetworkResponse> {
 
     @CheckForNull
+    Boolean getAttachable();
+
+    @CheckForNull
     String getName();
 
     @CheckForNull
@@ -35,6 +38,9 @@ public interface CreateNetworkCmd extends SyncDockerCmd<CreateNetworkResponse> {
 
     @CheckForNull
     Boolean getEnableIPv6();
+
+    /** The attachable flag. */
+    CreateNetworkCmd withAttachable(boolean attachable);
 
     /** The new network's name. Required. */
     CreateNetworkCmd withName(@Nonnull String name);
