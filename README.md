@@ -38,7 +38,7 @@ client also uses UNIX domain sockets to connect to the docker daemon by default.
 
     DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock"
     
-More details about setting up Docker server can be found in official documentation: http://docs.docker.io/en/latest/use/basics/
+More details about setting up Docker Engine can be found in the official documentation: https://docs.docker.com/engine/admin/
 
 To force docker-java to use TCP (http) configure the following (see [Configuration](https://github.com/docker-java/docker-java#configuration) for details):
 
