@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
@@ -54,6 +57,8 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
     private static final String DOCKER_JAVA_PROPERTIES = "docker-java.properties";
 
     private static final String DOCKER_CFG = ".dockercfg";
+
+    private static final String CONFIG_JSON = "config.json";
 
     private static final Set<String> CONFIG_KEYS = new HashSet<String>();
 
@@ -188,7 +193,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
     }
 
     public static Builder createDefaultConfigBuilder() {
-        return createDefaultConfigBuilder(System.getenv(), System.getProperties());
+        return createDefaultConfigBuilder(System.getenv(), (Properties) System.getProperties().clone());
     }
 
     /**
@@ -253,9 +258,9 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
     public AuthConfig effectiveAuthConfig(String imageName) {
         AuthConfig authConfig = null;
 
-        File dockerCfgFile = new File(getDockerConfig() + File.separator + DOCKER_CFG);
+        File dockerCfgFile = getDockerConfigFile();
 
-        if (dockerCfgFile.exists() && dockerCfgFile.isFile() && imageName != null) {
+        if (dockerCfgFile != null) {
             AuthConfigFile authConfigFile;
             try {
                 authConfigFile = AuthConfigFile.loadConfig(dockerCfgFile);
@@ -279,19 +284,34 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
     @Override
     public AuthConfigurations getAuthConfigurations() {
-        File dockerCfgFile = new File(getDockerConfig() + File.separator + DOCKER_CFG);
-        if (dockerCfgFile.exists() && dockerCfgFile.isFile()) {
+        File dockerCfgFile = getDockerConfigFile();
+
+        if (dockerCfgFile != null) {
             AuthConfigFile authConfigFile;
             try {
                 authConfigFile = AuthConfigFile.loadConfig(dockerCfgFile);
             } catch (IOException e) {
-                throw new DockerClientException("Failed to parse dockerCfgFile", e);
+                throw new DockerClientException("Failed to parse dockerCfgFile: " +
+                    dockerCfgFile.getAbsolutePath(), e);
             }
 
             return authConfigFile.getAuthConfigurations();
         }
 
         return new AuthConfigurations();
+    }
+
+    private File getDockerConfigFile() {
+        final Path configJson = Paths.get(getDockerConfig(), CONFIG_JSON);
+        final Path dockerCfg = Paths.get(getDockerConfig(), DOCKER_CFG);
+
+        if (Files.exists(configJson)) {
+            return configJson.toFile();
+        } else if (Files.exists(dockerCfg)) {
+            return dockerCfg.toFile();
+        } else {
+            return null;
+        }
     }
 
     @Override

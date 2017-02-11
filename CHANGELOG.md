@@ -1,6 +1,12 @@
 Change Log
 ===
-## Next 3.0.7
+## (dev) 3.1.0 (reserverd for swarm features)
+ 
+## next...
+
+## 3.0.7
+ * https://github.com/docker-java/docker-java/milestone/17?closed=1
+ * HostConfig pidLimits
  * Label image during build
  * Expose 'User' property on ExecCreateCmd #707 #708
 
