@@ -7,6 +7,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import org.testng.ITestResult;
+import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
@@ -18,6 +19,8 @@ import com.github.dockerjava.api.model.Event;
 import com.github.dockerjava.core.command.EventsResultCallback;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
+
+import static com.github.dockerjava.utils.TestUtils.isSwarm;
 
 @Test(groups = "integration")
 public class EventsCmdExecTest extends AbstractNettyDockerClientTest {
@@ -48,6 +51,8 @@ public class EventsCmdExecTest extends AbstractNettyDockerClientTest {
 
     @Test
     public void testEventStreamTimeBound() throws Exception {
+        if (isSwarm(dockerClient)) throw new SkipException("FIXME Swarm");
+
         // Don't include other tests events
         TimeUnit.SECONDS.sleep(1);
 
@@ -92,6 +97,9 @@ public class EventsCmdExecTest extends AbstractNettyDockerClientTest {
 
     
     public void testEventStreamingWithFilter() throws Exception {
+        //FIXME swarm
+        if (isSwarm(dockerClient)) throw new SkipException("FIXME Swarm");
+
         // Don't include other tests events
         TimeUnit.SECONDS.sleep(1);
         

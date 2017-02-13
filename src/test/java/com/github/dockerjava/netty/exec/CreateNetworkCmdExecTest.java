@@ -6,6 +6,7 @@ import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
 import org.testng.ITestResult;
+import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
@@ -13,6 +14,8 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
+
+import static com.github.dockerjava.utils.TestUtils.isSwarm;
 
 @Test(groups = "integration")
 public class CreateNetworkCmdExecTest extends AbstractNettyDockerClientTest {
@@ -39,6 +42,7 @@ public class CreateNetworkCmdExecTest extends AbstractNettyDockerClientTest {
 
     @Test
     public void createNetwork() throws DockerException {
+        if (isSwarm(dockerClient)) throw new SkipException("Swarm has no network");
 
         String networkName = "testNetwork";
 
@@ -53,6 +57,7 @@ public class CreateNetworkCmdExecTest extends AbstractNettyDockerClientTest {
 
     @Test
     public void createNetworkWithIpamConfig() throws DockerException {
+        if (isSwarm(dockerClient)) throw new SkipException("Swarm has no network");
 
         String networkName = "testNetwork";
         Network.Ipam ipam = new Network.Ipam().withConfig(new Network.Ipam.Config().withSubnet("10.67.79.0/24"));
