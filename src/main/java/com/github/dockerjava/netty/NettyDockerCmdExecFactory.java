@@ -12,6 +12,7 @@ import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateImageCmd;
 import com.github.dockerjava.api.command.CreateNetworkCmd;
+import com.github.dockerjava.api.command.CreateServiceCmd;
 import com.github.dockerjava.api.command.CreateVolumeCmd;
 import com.github.dockerjava.api.command.DisconnectFromNetworkCmd;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
@@ -19,15 +20,21 @@ import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.command.ExecCreateCmd;
 import com.github.dockerjava.api.command.ExecStartCmd;
 import com.github.dockerjava.api.command.InfoCmd;
+import com.github.dockerjava.api.command.InitializeSwarmCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
 import com.github.dockerjava.api.command.InspectNetworkCmd;
+import com.github.dockerjava.api.command.InspectServiceCmd;
+import com.github.dockerjava.api.command.InspectSwarmCmd;
 import com.github.dockerjava.api.command.InspectVolumeCmd;
+import com.github.dockerjava.api.command.JoinSwarmCmd;
 import com.github.dockerjava.api.command.KillContainerCmd;
+import com.github.dockerjava.api.command.LeaveSwarmCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.ListNetworksCmd;
+import com.github.dockerjava.api.command.ListServicesCmd;
 import com.github.dockerjava.api.command.ListVolumesCmd;
 import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.api.command.LogContainerCmd;
@@ -38,7 +45,9 @@ import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.command.RemoveContainerCmd;
 import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.command.RemoveNetworkCmd;
+import com.github.dockerjava.api.command.RemoveServiceCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
+import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
 import com.github.dockerjava.api.command.SearchImagesCmd;
@@ -49,9 +58,10 @@ import com.github.dockerjava.api.command.TagImageCmd;
 import com.github.dockerjava.api.command.TopContainerCmd;
 import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.UpdateContainerCmd;
+import com.github.dockerjava.api.command.UpdateServiceCmd;
+import com.github.dockerjava.api.command.UpdateSwarmCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
-import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.core.SSLConfig;
@@ -67,21 +77,28 @@ import com.github.dockerjava.netty.exec.CopyFileFromContainerCmdExec;
 import com.github.dockerjava.netty.exec.CreateContainerCmdExec;
 import com.github.dockerjava.netty.exec.CreateImageCmdExec;
 import com.github.dockerjava.netty.exec.CreateNetworkCmdExec;
+import com.github.dockerjava.netty.exec.CreateServiceCmdExec;
 import com.github.dockerjava.netty.exec.CreateVolumeCmdExec;
 import com.github.dockerjava.netty.exec.DisconnectFromNetworkCmdExec;
 import com.github.dockerjava.netty.exec.EventsCmdExec;
 import com.github.dockerjava.netty.exec.ExecCreateCmdExec;
 import com.github.dockerjava.netty.exec.ExecStartCmdExec;
 import com.github.dockerjava.netty.exec.InfoCmdExec;
+import com.github.dockerjava.netty.exec.InitializeSwarmCmdExec;
 import com.github.dockerjava.netty.exec.InspectContainerCmdExec;
 import com.github.dockerjava.netty.exec.InspectExecCmdExec;
 import com.github.dockerjava.netty.exec.InspectImageCmdExec;
 import com.github.dockerjava.netty.exec.InspectNetworkCmdExec;
+import com.github.dockerjava.netty.exec.InspectServiceCmdExec;
+import com.github.dockerjava.netty.exec.InspectSwarmCmdExec;
 import com.github.dockerjava.netty.exec.InspectVolumeCmdExec;
+import com.github.dockerjava.netty.exec.JoinSwarmCmdExec;
 import com.github.dockerjava.netty.exec.KillContainerCmdExec;
+import com.github.dockerjava.netty.exec.LeaveSwarmCmdExec;
 import com.github.dockerjava.netty.exec.ListContainersCmdExec;
 import com.github.dockerjava.netty.exec.ListImagesCmdExec;
 import com.github.dockerjava.netty.exec.ListNetworksCmdExec;
+import com.github.dockerjava.netty.exec.ListServicesCmdExec;
 import com.github.dockerjava.netty.exec.ListVolumesCmdExec;
 import com.github.dockerjava.netty.exec.LoadImageCmdExec;
 import com.github.dockerjava.netty.exec.LogContainerCmdExec;
@@ -92,7 +109,9 @@ import com.github.dockerjava.netty.exec.PushImageCmdExec;
 import com.github.dockerjava.netty.exec.RemoveContainerCmdExec;
 import com.github.dockerjava.netty.exec.RemoveImageCmdExec;
 import com.github.dockerjava.netty.exec.RemoveNetworkCmdExec;
+import com.github.dockerjava.netty.exec.RemoveServiceCmdExec;
 import com.github.dockerjava.netty.exec.RemoveVolumeCmdExec;
+import com.github.dockerjava.netty.exec.RenameContainerCmdExec;
 import com.github.dockerjava.netty.exec.RestartContainerCmdExec;
 import com.github.dockerjava.netty.exec.SaveImageCmdExec;
 import com.github.dockerjava.netty.exec.SearchImagesCmdExec;
@@ -103,10 +122,10 @@ import com.github.dockerjava.netty.exec.TagImageCmdExec;
 import com.github.dockerjava.netty.exec.TopContainerCmdExec;
 import com.github.dockerjava.netty.exec.UnpauseContainerCmdExec;
 import com.github.dockerjava.netty.exec.UpdateContainerCmdExec;
+import com.github.dockerjava.netty.exec.UpdateServiceCmdExec;
+import com.github.dockerjava.netty.exec.UpdateSwarmCmdExec;
 import com.github.dockerjava.netty.exec.VersionCmdExec;
 import com.github.dockerjava.netty.exec.WaitContainerCmdExec;
-import com.github.dockerjava.netty.exec.RenameContainerCmdExec;
-
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelConfig;
@@ -125,12 +144,10 @@ import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslHandler;
 import io.netty.util.concurrent.DefaultThreadFactory;
-
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLParameters;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -591,6 +608,56 @@ public class NettyDockerCmdExecFactory implements DockerCmdExecFactory {
     @Override
     public DisconnectFromNetworkCmd.Exec createDisconnectFromNetworkCmdExec() {
         return new DisconnectFromNetworkCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public InitializeSwarmCmd.Exec createInitializeSwarmCmdExec() {
+        return new InitializeSwarmCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public InspectSwarmCmd.Exec createInspectSwarmCmdExec() {
+        return new InspectSwarmCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public JoinSwarmCmd.Exec createJoinSwarmCmdExec() {
+        return new JoinSwarmCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public LeaveSwarmCmd.Exec createLeaveSwarmCmdExec() {
+        return new LeaveSwarmCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public UpdateSwarmCmd.Exec createUpdateSwarmCmdExec() {
+        return new UpdateSwarmCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public ListServicesCmd.Exec createListServicesCmdExec() {
+        return new ListServicesCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public CreateServiceCmd.Exec createCreateServiceCmdExec() {
+        return new CreateServiceCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public InspectServiceCmd.Exec createInspectServiceCmdExec() {
+        return new InspectServiceCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public UpdateServiceCmd.Exec createUpdateServiceCmdExec() {
+        return new UpdateServiceCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public RemoveServiceCmd.Exec createRemoveServiceCmdExec() {
+        return new RemoveServiceCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override

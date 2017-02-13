@@ -1,25 +1,77 @@
 package com.github.dockerjava.jaxrs;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.net.ProxySelector;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-
-import javax.net.ssl.SSLContext;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.client.ClientResponseFilter;
-import javax.ws.rs.client.WebTarget;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+import com.github.dockerjava.api.command.AttachContainerCmd;
+import com.github.dockerjava.api.command.AuthCmd;
+import com.github.dockerjava.api.command.BuildImageCmd;
+import com.github.dockerjava.api.command.CommitCmd;
+import com.github.dockerjava.api.command.ConnectToNetworkCmd;
+import com.github.dockerjava.api.command.ContainerDiffCmd;
+import com.github.dockerjava.api.command.CopyArchiveFromContainerCmd;
+import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
+import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
+import com.github.dockerjava.api.command.CreateContainerCmd;
+import com.github.dockerjava.api.command.CreateImageCmd;
+import com.github.dockerjava.api.command.CreateNetworkCmd;
+import com.github.dockerjava.api.command.CreateServiceCmd;
+import com.github.dockerjava.api.command.CreateVolumeCmd;
+import com.github.dockerjava.api.command.DisconnectFromNetworkCmd;
+import com.github.dockerjava.api.command.DockerCmdExecFactory;
+import com.github.dockerjava.api.command.EventsCmd;
+import com.github.dockerjava.api.command.ExecCreateCmd;
+import com.github.dockerjava.api.command.ExecStartCmd;
+import com.github.dockerjava.api.command.InfoCmd;
+import com.github.dockerjava.api.command.InitializeSwarmCmd;
+import com.github.dockerjava.api.command.InspectContainerCmd;
+import com.github.dockerjava.api.command.InspectExecCmd;
+import com.github.dockerjava.api.command.InspectImageCmd;
+import com.github.dockerjava.api.command.InspectNetworkCmd;
+import com.github.dockerjava.api.command.InspectServiceCmd;
+import com.github.dockerjava.api.command.InspectSwarmCmd;
+import com.github.dockerjava.api.command.InspectVolumeCmd;
+import com.github.dockerjava.api.command.JoinSwarmCmd;
+import com.github.dockerjava.api.command.KillContainerCmd;
+import com.github.dockerjava.api.command.LeaveSwarmCmd;
+import com.github.dockerjava.api.command.ListContainersCmd;
+import com.github.dockerjava.api.command.ListImagesCmd;
+import com.github.dockerjava.api.command.ListNetworksCmd;
+import com.github.dockerjava.api.command.ListServicesCmd;
+import com.github.dockerjava.api.command.ListVolumesCmd;
+import com.github.dockerjava.api.command.LoadImageCmd;
+import com.github.dockerjava.api.command.LogContainerCmd;
+import com.github.dockerjava.api.command.PauseContainerCmd;
+import com.github.dockerjava.api.command.PingCmd;
+import com.github.dockerjava.api.command.PullImageCmd;
+import com.github.dockerjava.api.command.PushImageCmd;
+import com.github.dockerjava.api.command.RemoveContainerCmd;
+import com.github.dockerjava.api.command.RemoveImageCmd;
+import com.github.dockerjava.api.command.RemoveNetworkCmd;
+import com.github.dockerjava.api.command.RemoveServiceCmd;
+import com.github.dockerjava.api.command.RemoveVolumeCmd;
+import com.github.dockerjava.api.command.RenameContainerCmd;
+import com.github.dockerjava.api.command.RestartContainerCmd;
+import com.github.dockerjava.api.command.SaveImageCmd;
+import com.github.dockerjava.api.command.SearchImagesCmd;
+import com.github.dockerjava.api.command.StartContainerCmd;
+import com.github.dockerjava.api.command.StatsCmd;
+import com.github.dockerjava.api.command.StopContainerCmd;
+import com.github.dockerjava.api.command.TagImageCmd;
+import com.github.dockerjava.api.command.TopContainerCmd;
+import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.UpdateContainerCmd;
+import com.github.dockerjava.api.command.UpdateServiceCmd;
+import com.github.dockerjava.api.command.UpdateContainerCmd;
+import com.github.dockerjava.api.command.UpdateSwarmCmd;
+import com.github.dockerjava.api.command.VersionCmd;
+import com.github.dockerjava.api.command.WaitContainerCmd;
+import com.github.dockerjava.api.exception.DockerClientException;
+import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.SSLConfig;
-
+import com.github.dockerjava.jaxrs.filter.JsonClientFilter;
+import com.github.dockerjava.jaxrs.filter.ResponseStatusExceptionFilter;
+import com.github.dockerjava.jaxrs.filter.SelectiveLoggingFilter;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
@@ -34,63 +86,21 @@ import org.glassfish.jersey.client.ClientProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
-import com.github.dockerjava.api.command.AttachContainerCmd;
-import com.github.dockerjava.api.command.AuthCmd;
-import com.github.dockerjava.api.command.BuildImageCmd;
-import com.github.dockerjava.api.command.CommitCmd;
-import com.github.dockerjava.api.command.ConnectToNetworkCmd;
-import com.github.dockerjava.api.command.ContainerDiffCmd;
-import com.github.dockerjava.api.command.CopyArchiveFromContainerCmd;
-import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
-import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
-import com.github.dockerjava.api.command.CreateContainerCmd;
-import com.github.dockerjava.api.command.CreateImageCmd;
-import com.github.dockerjava.api.command.CreateNetworkCmd;
-import com.github.dockerjava.api.command.CreateVolumeCmd;
-import com.github.dockerjava.api.command.DisconnectFromNetworkCmd;
-import com.github.dockerjava.api.command.DockerCmdExecFactory;
-import com.github.dockerjava.api.command.EventsCmd;
-import com.github.dockerjava.api.command.ExecCreateCmd;
-import com.github.dockerjava.api.command.ExecStartCmd;
-import com.github.dockerjava.api.command.InfoCmd;
-import com.github.dockerjava.api.command.InspectContainerCmd;
-import com.github.dockerjava.api.command.InspectExecCmd;
-import com.github.dockerjava.api.command.InspectImageCmd;
-import com.github.dockerjava.api.command.InspectNetworkCmd;
-import com.github.dockerjava.api.command.InspectVolumeCmd;
-import com.github.dockerjava.api.command.KillContainerCmd;
-import com.github.dockerjava.api.command.ListContainersCmd;
-import com.github.dockerjava.api.command.ListImagesCmd;
-import com.github.dockerjava.api.command.ListNetworksCmd;
-import com.github.dockerjava.api.command.ListVolumesCmd;
-import com.github.dockerjava.api.command.LoadImageCmd;
-import com.github.dockerjava.api.command.LogContainerCmd;
-import com.github.dockerjava.api.command.PauseContainerCmd;
-import com.github.dockerjava.api.command.PingCmd;
-import com.github.dockerjava.api.command.PullImageCmd;
-import com.github.dockerjava.api.command.PushImageCmd;
-import com.github.dockerjava.api.command.RemoveContainerCmd;
-import com.github.dockerjava.api.command.RemoveImageCmd;
-import com.github.dockerjava.api.command.RemoveNetworkCmd;
-import com.github.dockerjava.api.command.RemoveVolumeCmd;
-import com.github.dockerjava.api.command.RestartContainerCmd;
-import com.github.dockerjava.api.command.SaveImageCmd;
-import com.github.dockerjava.api.command.SearchImagesCmd;
-import com.github.dockerjava.api.command.StartContainerCmd;
-import com.github.dockerjava.api.command.StatsCmd;
-import com.github.dockerjava.api.command.StopContainerCmd;
-import com.github.dockerjava.api.command.TagImageCmd;
-import com.github.dockerjava.api.command.TopContainerCmd;
-import com.github.dockerjava.api.command.UnpauseContainerCmd;
-import com.github.dockerjava.api.command.VersionCmd;
-import com.github.dockerjava.api.command.WaitContainerCmd;
-import com.github.dockerjava.api.command.RenameContainerCmd;
-import com.github.dockerjava.api.exception.DockerClientException;
-import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.jaxrs.filter.JsonClientFilter;
-import com.github.dockerjava.jaxrs.filter.ResponseStatusExceptionFilter;
-import com.github.dockerjava.jaxrs.filter.SelectiveLoggingFilter;
+import javax.net.ssl.SSLContext;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.ClientRequestFilter;
+import javax.ws.rs.client.ClientResponseFilter;
+import javax.ws.rs.client.WebTarget;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.ProxySelector;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 //import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 // see https://github.com/docker-java/docker-java/issues/196
@@ -132,7 +142,10 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
 
         clientConfig.register(ResponseStatusExceptionFilter.class);
         clientConfig.register(JsonClientFilter.class);
-        clientConfig.register(JacksonJsonProvider.class);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        clientConfig.register(new JacksonJsonProvider(objectMapper));
 
         // logging may disabled via log level
         clientConfig.register(new SelectiveLoggingFilter(LOGGER, true));
@@ -545,6 +558,54 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
     public DisconnectFromNetworkCmd.Exec createDisconnectFromNetworkCmdExec() {
 
         return new DisconnectFromNetworkCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public InitializeSwarmCmd.Exec createInitializeSwarmCmdExec() {
+        return new InitializeSwarmCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public InspectSwarmCmd.Exec createInspectSwarmCmdExec() {
+        return new InspectSwarmCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public JoinSwarmCmd.Exec createJoinSwarmCmdExec() {
+        return new JoinSwarmCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public LeaveSwarmCmd.Exec createLeaveSwarmCmdExec() {
+        return new LeaveSwarmCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public UpdateSwarmCmd.Exec createUpdateSwarmCmdExec() {
+        return new UpdateSwarmCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+    @Override public ListServicesCmd.Exec createListServicesCmdExec() {
+        return new ListServicesCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public CreateServiceCmd.Exec createCreateServiceCmdExec() {
+        return new CreateServiceCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public InspectServiceCmd.Exec createInspectServiceCmdExec() {
+        return new InspectServiceCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public UpdateServiceCmd.Exec createUpdateServiceCmdExec() {
+        return new UpdateServiceCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public RemoveServiceCmd.Exec createRemoveServiceCmdExec() {
+        return new RemoveServiceCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.github.dockerjava.netty.handler;
 
+import com.fasterxml.jackson.databind.SerializationFeature;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -24,6 +25,7 @@ public class JsonResponseCallbackHandler<T> extends SimpleChannelInboundHandler<
     public JsonResponseCallbackHandler(TypeReference<T> typeReference, ResultCallback<T> callback) {
         this.typeReference = typeReference;
         this.callback = callback;
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     }
 
     @Override
