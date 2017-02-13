@@ -1,5 +1,6 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.utils.TestUtils.isSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyString;
@@ -12,6 +13,7 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 import org.testng.ITestResult;
+import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
@@ -49,6 +51,8 @@ public class CommitCmdImplTest extends AbstractDockerClientTest {
 
     @Test
     public void commit() throws DockerException {
+        //FIXME swarm
+        if (isSwarm(dockerClient)) throw new SkipException("FIXME Swarm");
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("touch", "/test").exec();
 

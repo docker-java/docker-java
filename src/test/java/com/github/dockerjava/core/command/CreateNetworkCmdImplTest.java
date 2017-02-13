@@ -19,6 +19,8 @@ import java.util.Map;
 
 import static com.github.dockerjava.utils.TestUtils.getVersion;
 
+import static com.github.dockerjava.utils.TestUtils.isSwarm;
+
 @Test(groups = "integration")
 public class CreateNetworkCmdImplTest extends AbstractDockerClientTest {
 
@@ -44,6 +46,7 @@ public class CreateNetworkCmdImplTest extends AbstractDockerClientTest {
 
     @Test
     public void createNetwork() throws DockerException {
+        if (isSwarm(dockerClient)) throw new SkipException("Swarm has no network");
 
         String networkName = "testNetwork";
 
@@ -58,6 +61,7 @@ public class CreateNetworkCmdImplTest extends AbstractDockerClientTest {
 
     @Test
     public void createNetworkWithIpamConfig() throws DockerException {
+        if (isSwarm(dockerClient)) throw new SkipException("Swarm has no network");
 
         String networkName = "testNetwork";
         Network.Ipam ipam = new Network.Ipam().withConfig(new Network.Ipam.Config().withSubnet("10.67.79.0/24"));

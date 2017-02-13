@@ -1,5 +1,21 @@
 package com.github.dockerjava.netty.exec;
 
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.model.Image;
+import com.github.dockerjava.api.model.Info;
+import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+
+import java.lang.reflect.Method;
+import java.util.List;
+
+import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyArray;
 import static org.hamcrest.Matchers.equalTo;
@@ -8,22 +24,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
-
-import java.lang.reflect.Method;
-import java.util.List;
-
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.api.model.Image;
-import com.github.dockerjava.api.model.Info;
-import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
 @Test(groups = "integration")
 public class ListImagesCmdExecTest extends AbstractNettyDockerClientTest {
@@ -55,7 +55,9 @@ public class ListImagesCmdExecTest extends AbstractNettyDockerClientTest {
         LOG.info("Images List: {}", images);
         Info info = dockerClient.infoCmd().exec();
 
-        assertThat(images.size(), equalTo(info.getImages()));
+        if (isNotSwarm(dockerClient)) {
+            assertThat(images.size(), equalTo(info.getImages()));
+        }
 
         Image img = images.get(0);
         assertThat(img.getCreated(), is(greaterThan(0L)));

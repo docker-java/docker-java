@@ -6,6 +6,7 @@ import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 
 import org.testng.ITestResult;
+import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
@@ -13,6 +14,8 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
+
+import static com.github.dockerjava.utils.TestUtils.isSwarm;
 
 @Test(groups = "integration")
 public class DisconnectFromNetworkCmdExecTest extends AbstractNettyDockerClientTest {
@@ -39,6 +42,7 @@ public class DisconnectFromNetworkCmdExecTest extends AbstractNettyDockerClientT
 
     @Test
     public void disconnectFromNetwork() throws InterruptedException {
+        if (isSwarm(dockerClient)) throw new SkipException("Swarm has no network");
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
         dockerClient.startContainerCmd(container.getId()).exec();
@@ -60,6 +64,7 @@ public class DisconnectFromNetworkCmdExecTest extends AbstractNettyDockerClientT
 
     @Test
     public void forceDisconnectFromNetwork() throws InterruptedException {
+        if (isSwarm(dockerClient)) throw new SkipException("Swarm has no network");
 
         CreateNetworkResponse network = dockerClient.createNetworkCmd().withName("testNetwork").exec();
 

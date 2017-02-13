@@ -1,5 +1,6 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.utils.TestUtils.isSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -7,6 +8,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.testng.ITestResult;
+import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
@@ -42,6 +44,7 @@ public class ListNetworksCmdImplTest extends AbstractDockerClientTest {
 
     @Test
     public void listNetworks() throws DockerException {
+        if (isSwarm(dockerClient)) throw new SkipException("Swarm has no network");
 
         List<Network> networks = dockerClient.listNetworksCmd().exec();
 
