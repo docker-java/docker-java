@@ -1,5 +1,6 @@
 package com.github.dockerjava.core.command;
 
+import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyString;
@@ -76,10 +77,14 @@ public class InspectContainerCmdImplTest extends AbstractDockerClientTest {
 
         InspectContainerCmd command = dockerClient.inspectContainerCmd(container.getId()).withSize(true);
         assertTrue(command.getSize());
-        InspectContainerResponse containerInfo  = command.exec();
+        InspectContainerResponse containerInfo = command.exec();
         assertEquals(containerInfo.getId(), container.getId());
-        assertNotNull(containerInfo.getSizeRootFs());
-        assertTrue(containerInfo.getSizeRootFs().intValue() > 0 );
+
+        // TODO check swarm
+        if (isNotSwarm(dockerClient)) {
+            assertNotNull(containerInfo.getSizeRootFs());
+            assertTrue(containerInfo.getSizeRootFs().intValue() > 0);
+        }
     }
 
     @Test(expectedExceptions = NotFoundException.class)
