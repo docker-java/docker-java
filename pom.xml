@@ -86,6 +86,8 @@
 		<maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
 		<maven-failsafe-plugin.version>2.19.1</maven-failsafe-plugin.version>
 		<maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
+		<maven-bundlor-plugin.version>1.1.2.RELEASE</maven-bundlor-plugin.version>
+		<maven-build-helper-plugin.version>3.0.0</maven-build-helper-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -269,6 +271,19 @@
 		</repository>
 	</distributionManagement>
 
+	<pluginRepositories>
+		<pluginRepository>
+			<id>eclipse.virgo.build.bundles.release</id>
+			<name>Eclipse Virgo Build</name>
+			<url>http://build.eclipse.org/rt/virgo/maven/bundles/release</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>com.springsource.repository.bundles.external</id>
+			<name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
+			<url>http://repository.springsource.com/maven/bundles/external</url>
+		</pluginRepository>
+	</pluginRepositories>
+
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -295,6 +310,11 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
 					<version>${maven-jar-plugin.version}</version>
+					<configuration>
+						<archive>
+							<manifestFile>target/classes/META-INF/MANIFEST.MF</manifestFile>
+						</archive>
+					</configuration>
 					<executions>
 						<execution>
 							<goals>
@@ -429,6 +449,37 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.virgo.bundlor</groupId>
+				<artifactId>org.eclipse.virgo.bundlor.maven</artifactId>
+				<version>${maven-bundlor-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>bundlor</id>
+						<goals>
+							<goal>bundlor</goal>
+						</goals>
+						<configuration>
+							<failOnWarnings>true</failOnWarnings>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>${maven-build-helper-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>parse-version</id>
+						<goals>
+							<goal>parse-version</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
