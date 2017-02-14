@@ -397,6 +397,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>${maven-surefire-plugin.version}</version>
 				<configuration>
+					<rerunFailingTestsCount>3</rerunFailingTestsCount>
 					<excludedGroups>integration,integration-auth</excludedGroups>
 				</configuration>
 			</plugin>
@@ -412,6 +413,7 @@
 							<goal>verify</goal>
 						</goals>
 						<configuration>
+							<rerunFailingTestsCount>3</rerunFailingTestsCount>
 							<useUnlimitedThreads>true</useUnlimitedThreads>
 							<perCoreThreadCount>true</perCoreThreadCount>
 							<threadCount>1</threadCount>
