@@ -50,7 +50,7 @@ public class Statistics implements Serializable {
      * @since Docker Remote API 1.19
      */
     @JsonProperty("precpu_stats")
-    private Map<String, Object> precpuStats;
+    private Map<String, Object> preCpuStats;
 
     /**
      * @since Docker Remote API 1.21
@@ -76,8 +76,8 @@ public class Statistics implements Serializable {
      * The cpu statistic of last read, which is used for calculating the cpu usage percent.
      * It is not the exact copy of the {@link #getCpuStats()}.
      */
-    public Map<String, Object> getPrecpuStats() {
-        return precpuStats;
+    public Map<String, Object> getPreCpuStats() {
+        return preCpuStats;
     }
 
     public Map<String, Object> getMemoryStats() {
