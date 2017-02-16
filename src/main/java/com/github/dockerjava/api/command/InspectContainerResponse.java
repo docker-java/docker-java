@@ -1,12 +1,7 @@
 package com.github.dockerjava.api.command;
 
-import java.util.List;
-
 import javax.annotation.CheckForNull;
-
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -20,11 +15,12 @@ import com.github.dockerjava.api.model.VolumeBinds;
 import com.github.dockerjava.api.model.VolumeRW;
 import com.github.dockerjava.api.model.VolumesRW;
 import com.github.dockerjava.core.RemoteApiVersion;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
- *
  * @author Konstantin Pelykh (kpelykh@gmail.com)
- *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InspectContainerResponse {
@@ -112,7 +108,7 @@ public class InspectContainerResponse {
     }
 
     public Integer getSizeRootFs() {
-        return  sizeRootFs;
+        return sizeRootFs;
     }
 
     public String getCreated() {
@@ -215,195 +211,36 @@ public class InspectContainerResponse {
         return execIds;
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public class ContainerState {
+    public static class HealthState {
 
-        /**
-         * @since {@link RemoteApiVersion#VERSION_1_20}
-         */
-        @CheckForNull
         @JsonProperty("Status")
         private String status;
 
-        /**
-         * @since < {@link RemoteApiVersion#VERSION_1_16}
-         */
-        @CheckForNull
-        @JsonProperty("Running")
-        private Boolean running;
+        @JsonProperty("FailingStreak")
+        private Integer failingStreak;
 
-        /**
-         * @since {@link RemoteApiVersion#VERSION_1_17}
-         */
-        @CheckForNull
-        @JsonProperty("Paused")
-        private Boolean paused;
+        @JsonProperty("Log")
+        private String[] log;
 
-        /**
-         * @since {@link RemoteApiVersion#VERSION_1_17}
-         */
-        @CheckForNull
-        @JsonProperty("Restarting")
-        private Boolean restarting;
-
-        /**
-         * @since {@link RemoteApiVersion#VERSION_1_17}
-         */
-        @CheckForNull
-        @JsonProperty("OOMKilled")
-        private Boolean oomKilled;
-
-        /**
-         * <a href="https://github.com/docker/docker/pull/18127">Unclear</a>
-         *
-         * @since {@link RemoteApiVersion#UNKNOWN_VERSION}
-         */
-        @CheckForNull
-        @JsonProperty("Dead")
-        private Boolean dead;
-
-        /**
-         * @since < {@link RemoteApiVersion#VERSION_1_16}
-         */
-        @CheckForNull
-        @JsonProperty("Pid")
-        private Integer pid;
-
-        /**
-         * @since < {@link RemoteApiVersion#VERSION_1_16}
-         */
-        @CheckForNull
-        @JsonProperty("ExitCode")
-        private Integer exitCode;
-
-        /**
-         * @since {@link RemoteApiVersion#VERSION_1_17}
-         */
-        @CheckForNull
-        @JsonProperty("Error")
-        private String error;
-
-        /**
-         * @since < {@link RemoteApiVersion#VERSION_1_16}
-         */
-        @CheckForNull
-        @JsonProperty("StartedAt")
-        private String startedAt;
-
-        /**
-         * @since {@link RemoteApiVersion#VERSION_1_17}
-         */
-        @CheckForNull
-        @JsonProperty("FinishedAt")
-        private String finishedAt;
-
-        /**
-         * See {@link #status}
-         */
-        @CheckForNull
         public String getStatus() {
             return status;
         }
 
-        /**
-         * See {@link #running}
-         */
-        @CheckForNull
-        public Boolean getRunning() {
-            return running;
+        public Integer getFailingStreak() {
+            return failingStreak;
         }
 
-        /**
-         * See {@link #paused}
-         */
-        @CheckForNull
-        public Boolean getPaused() {
-            return paused;
+        public String[] getLog() {
+            return log;
         }
+    }
 
-        /**
-         * See {@link #restarting}
-         */
-        @CheckForNull
-        public Boolean getRestarting() {
-            return restarting;
-        }
 
-        /**
-         * See {@link #oomKilled}
-         */
-        @CheckForNull
-        public Boolean getOOMKilled() {
-            return oomKilled;
-        }
 
-        /**
-         * See {@link #dead}
-         */
-        @CheckForNull
-        public Boolean getDead() {
-            return dead;
-        }
-
-        /**
-         * See {@link #pid}
-         */
-        @CheckForNull
-        public Integer getPid() {
-            return pid;
-        }
-
-        /**
-         * See {@link #exitCode}
-         */
-        @CheckForNull
-        public Integer getExitCode() {
-            return exitCode;
-        }
-
-        /**
-         * See {@link #error}
-         */
-        @CheckForNull
-        public String getError() {
-            return error;
-        }
-
-        /**
-         * See {@link #startedAt}
-         */
-        @CheckForNull
-        public String getStartedAt() {
-            return startedAt;
-        }
-
-        /**
-         * See {@link #finishedAt}
-         */
-        @CheckForNull
-        public String getFinishedAt() {
-            return finishedAt;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            return EqualsBuilder.reflectionEquals(this, o);
-        }
-
-        @Override
-        public int hashCode() {
-            return HashCodeBuilder.reflectionHashCode(this);
-        }
-
-        @Override
-        public String toString() {
-            return ToStringBuilder.reflectionToString(this);
-        }
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -544,4 +381,203 @@ public class InspectContainerResponse {
             return HashCodeBuilder.reflectionHashCode(this);
         }
     }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public class ContainerState {
+
+        /**
+         * @since {@link RemoteApiVersion#VERSION_1_20}
+         */
+        @CheckForNull
+        @JsonProperty("Status")
+        private String status;
+
+        /**
+         * @since < {@link RemoteApiVersion#VERSION_1_16}
+         */
+        @CheckForNull
+        @JsonProperty("Running")
+        private Boolean running;
+
+        /**
+         * @since {@link RemoteApiVersion#VERSION_1_17}
+         */
+        @CheckForNull
+        @JsonProperty("Paused")
+        private Boolean paused;
+
+        /**
+         * @since {@link RemoteApiVersion#VERSION_1_17}
+         */
+        @CheckForNull
+        @JsonProperty("Restarting")
+        private Boolean restarting;
+
+        /**
+         * @since {@link RemoteApiVersion#VERSION_1_17}
+         */
+        @CheckForNull
+        @JsonProperty("OOMKilled")
+        private Boolean oomKilled;
+
+        /**
+         * <a href="https://github.com/docker/docker/pull/18127">Unclear</a>
+         *
+         * @since {@link RemoteApiVersion#UNKNOWN_VERSION}
+         */
+        @CheckForNull
+        @JsonProperty("Dead")
+        private Boolean dead;
+
+        /**
+         * @since < {@link RemoteApiVersion#VERSION_1_16}
+         */
+        @CheckForNull
+        @JsonProperty("Pid")
+        private Integer pid;
+
+        /**
+         * @since < {@link RemoteApiVersion#VERSION_1_16}
+         */
+        @CheckForNull
+        @JsonProperty("ExitCode")
+        private Integer exitCode;
+
+        /**
+         * @since {@link RemoteApiVersion#VERSION_1_17}
+         */
+        @CheckForNull
+        @JsonProperty("Error")
+        private String error;
+
+        /**
+         * @since < {@link RemoteApiVersion#VERSION_1_16}
+         */
+        @CheckForNull
+        @JsonProperty("StartedAt")
+        private String startedAt;
+
+        /**
+         * @since {@link RemoteApiVersion#VERSION_1_17}
+         */
+        @CheckForNull
+        @JsonProperty("FinishedAt")
+        private String finishedAt;
+
+
+        /**
+         * @since Docker version 1.12
+         */
+        @JsonProperty("Health")
+        private HealthState health;
+
+        /**
+         * See {@link #status}
+         */
+        @CheckForNull
+        public String getStatus() {
+            return status;
+        }
+
+        /**
+         * See {@link #running}
+         */
+        @CheckForNull
+        public Boolean getRunning() {
+            return running;
+        }
+
+        /**
+         * See {@link #paused}
+         */
+        @CheckForNull
+        public Boolean getPaused() {
+            return paused;
+        }
+
+        /**
+         * See {@link #restarting}
+         */
+        @CheckForNull
+        public Boolean getRestarting() {
+            return restarting;
+        }
+
+        /**
+         * See {@link #oomKilled}
+         */
+        @CheckForNull
+        public Boolean getOOMKilled() {
+            return oomKilled;
+        }
+
+        /**
+         * See {@link #dead}
+         */
+        @CheckForNull
+        public Boolean getDead() {
+            return dead;
+        }
+
+        /**
+         * See {@link #pid}
+         */
+        @CheckForNull
+        public Integer getPid() {
+            return pid;
+        }
+
+        /**
+         * See {@link #exitCode}
+         */
+        @CheckForNull
+        public Integer getExitCode() {
+            return exitCode;
+        }
+
+        /**
+         * See {@link #error}
+         */
+        @CheckForNull
+        public String getError() {
+            return error;
+        }
+
+        /**
+         * See {@link #startedAt}
+         */
+        @CheckForNull
+        public String getStartedAt() {
+            return startedAt;
+        }
+
+        /**
+         * See {@link #finishedAt}
+         */
+        @CheckForNull
+        public String getFinishedAt() {
+            return finishedAt;
+        }
+
+        public HealthState getHealth() {
+            return health;
+        }
+
+        @Override
+        public int hashCode() {
+            return HashCodeBuilder.reflectionHashCode(this);
+        }        @Override
+        public boolean equals(Object o) {
+            return EqualsBuilder.reflectionEquals(this, o);
+        }
+
+
+
+        @Override
+        public String toString() {
+            return ToStringBuilder.reflectionToString(this);
+        }
+    }
+
+
 }

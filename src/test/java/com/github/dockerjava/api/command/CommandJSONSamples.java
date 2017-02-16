@@ -24,7 +24,7 @@ import com.github.dockerjava.test.serdes.JSONResourceRef;
  */
 public enum CommandJSONSamples implements JSONResourceRef {
 
-    inspectContainerResponse_full, inspectContainerResponse_full_1_21, inspectContainerResponse_empty;
+    inspectContainerResponse_full, inspectContainerResponse_full_1_21, inspectContainerResponse_empty, inspectContainerResponse_full_healthcheck;
 
     @Override
     public String getFileName() {

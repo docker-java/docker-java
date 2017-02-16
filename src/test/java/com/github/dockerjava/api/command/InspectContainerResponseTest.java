@@ -15,9 +15,9 @@
  */
 package com.github.dockerjava.api.command;
 
-import org.testng.annotations.Test;
-
 import java.io.IOException;
+
+import org.testng.annotations.Test;
 
 import static com.github.dockerjava.test.serdes.JSONTestHelper.testRoundTrip;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -53,6 +53,18 @@ public class InspectContainerResponseTest {
         assertFalse(response.getVolumesRW()[1].getAccessMode().toBoolean());
         assertTrue(response.getVolumesRW()[0].getAccessMode().toBoolean());
         assertThat(response.getLogPath(), is("/mnt/sda1/var/lib/docker/containers/469e5edd8d5b33e3c905a7ffc97360ec6ee211d6782815fbcd144568045819e1/469e5edd8d5b33e3c905a7ffc97360ec6ee211d6782815fbcd144568045819e1-json.log"));
+    }
+
+    @Test
+    public void roundTrip_full_healthcheck() throws IOException {
+        InspectContainerResponse[] responses = testRoundTrip(CommandJSONSamples.inspectContainerResponse_full_healthcheck,
+                InspectContainerResponse[].class);
+        assertEquals(1, responses.length);
+        final InspectContainerResponse response = responses[0];
+
+        assertEquals(response.getState().getHealth().getStatus(), "starting");
+        assertEquals(response.getState().getHealth().getFailingStreak(), new Integer(0));
+        assertEquals(response.getState().getHealth().getLog(), new String[0]);
     }
 
     @Test
