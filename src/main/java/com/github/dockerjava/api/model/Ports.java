@@ -269,16 +269,21 @@ public class Ports implements Serializable {
         }
     }
 
+    
+
     public static class Deserializer extends JsonDeserializer<Ports> {
+        
         @Override
         public Ports deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-                throws IOException, JsonProcessingException {
-
+        throws IOException, JsonProcessingException {
+            
             Ports out = new Ports();
-            ObjectCodec oc = jsonParser.getCodec();
-            JsonNode node = oc.readTree(jsonParser);
-            for (Iterator<Map.Entry<String, JsonNode>> it = node.fields(); it.hasNext();) {
-
+            //YD - stubbed out deserializtion  - broken at runtime with Bluemix
+            /*
+             ObjectCodec oc = jsonParser.getCodec();
+             JsonNode node = oc.readTree(jsonParser);
+             for (Iterator<Map.Entry<String, JsonNode>> it = node.fields(); it.hasNext();) {
+             
                 Map.Entry<String, JsonNode> portNode = it.next();
                 JsonNode bindingsArray = portNode.getValue();
                 if (bindingsArray.equals(NullNode.getInstance())) {
@@ -293,7 +298,10 @@ public class Ports implements Serializable {
                         }
                     }
                 }
-            }
+             }             
+             */
+            //YD hard code SSH port instead
+            out.bind(new ExposedPort(22), new Binding(null,"22"));
             return out;
         }
     }
@@ -311,8 +319,13 @@ public class Ports implements Serializable {
                     jsonGen.writeStartArray();
                     for (Binding binding : entry.getValue()) {
                         jsonGen.writeStartObject();
-                        jsonGen.writeStringField("HostIp", binding.getHostIp() == null ? "" : binding.getHostIp());
+            //YD runtime errors
+/*                        jsonGen.writeStringField("HostIp", binding.getHostIp() == null ? "" : binding.getHostIp());
                         jsonGen.writeStringField("HostPort", binding.getHostPortSpec() == null ? "" : binding.getHostPortSpec());
+*/
+                        String bluemixIP = System.getProperty("bluemix.ip");
+                        jsonGen.writeStringField("HostIp", bluemixIP);
+                        jsonGen.writeStringField("HostPort", "22");
                         jsonGen.writeEndObject();
                     }
                     jsonGen.writeEndArray();

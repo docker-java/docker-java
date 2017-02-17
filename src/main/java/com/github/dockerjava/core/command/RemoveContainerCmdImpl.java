@@ -62,8 +62,12 @@ public class RemoveContainerCmdImpl extends AbstrDockerCmd<RemoveContainerCmd, V
      * @throws NotFoundException
      *             No such container
      */
+
+    //YD - use with force by default
     @Override
     public Void exec() throws NotFoundException {
+        //YD - force removal of a running container when Jenkins master is done with it
+        this.force = true;
         return super.exec();
     }
 }

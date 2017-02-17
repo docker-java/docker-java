@@ -68,8 +68,9 @@ public class ContainerConfig implements Serializable {
     @JsonProperty("OpenStdin")
     private Boolean stdinOpen;
 
+    //YD - switched from String[] to String, BMX returns empty string "" which causes runtime error
     @JsonProperty("PortSpecs")
-    private String[] portSpecs;
+    private String portSpecs;
 
     @JsonProperty("StdinOnce")
     private Boolean stdInOnce;
@@ -311,14 +312,14 @@ public class ContainerConfig implements Serializable {
      * @see #portSpecs
      */
     @CheckForNull
-    public String[] getPortSpecs() {
+    public String getPortSpecs() {
         return portSpecs;
     }
 
     /**
      * @see #portSpecs
      */
-    public ContainerConfig withPortSpecs(String[] portSpecs) {
+    public ContainerConfig withPortSpecs(String portSpecs) {
         this.portSpecs = portSpecs;
         return this;
     }
