@@ -15,6 +15,11 @@
  */
 package com.github.dockerjava.api.command;
 
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dockerjava.api.model.Event;
+import com.github.dockerjava.core.RemoteApiVersion;
+import static com.github.dockerjava.test.serdes.JSONSamples.testRoundTrip;
 import java.io.IOException;
 
 import org.testng.annotations.Test;
@@ -57,14 +62,20 @@ public class InspectContainerResponseTest {
 
     @Test
     public void roundTrip_full_healthcheck() throws IOException {
-        InspectContainerResponse[] responses = testRoundTrip(CommandJSONSamples.inspectContainerResponse_full_healthcheck,
-                InspectContainerResponse[].class);
-        assertEquals(1, responses.length);
-        final InspectContainerResponse response = responses[0];
 
-        assertEquals(response.getState().getHealth().getStatus(), "starting");
+        final ObjectMapper mapper = new ObjectMapper();
+        final JavaType type = mapper.getTypeFactory().uncheckedSimpleType(InspectContainerResponse.class);
+
+        final InspectContainerResponse response = testRoundTrip(RemoteApiVersion.VERSION_1_24,
+                "/containers/inspect/1.json",
+                type
+        );
+        
+        assertEquals(response.getState().getHealth().getStatus(), "healthy");
         assertEquals(response.getState().getHealth().getFailingStreak(), new Integer(0));
-        assertEquals(response.getState().getHealth().getLog(), new String[0]);
+        assertEquals(response.getState().getHealth().getLog().size(), 2);
+        assertEquals(response.getState().getHealth().getLog().get(0).getOutput(), "Hello");
+        assertEquals(response.getState().getHealth().getLog().get(1).getOutput(), "World");
     }
 
     @Test

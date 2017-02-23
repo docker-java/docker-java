@@ -1,7 +1,12 @@
 package com.github.dockerjava.api.command;
 
-import javax.annotation.CheckForNull;
 import java.util.List;
+
+import javax.annotation.CheckForNull;
+
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -15,12 +20,11 @@ import com.github.dockerjava.api.model.VolumeBinds;
 import com.github.dockerjava.api.model.VolumeRW;
 import com.github.dockerjava.api.model.VolumesRW;
 import com.github.dockerjava.core.RemoteApiVersion;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
+ *
  * @author Konstantin Pelykh (kpelykh@gmail.com)
+ *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InspectContainerResponse {
@@ -211,175 +215,9 @@ public class InspectContainerResponse {
         return execIds;
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class HealthState {
-
-        @JsonProperty("Status")
-        private String status;
-
-        @JsonProperty("FailingStreak")
-        private Integer failingStreak;
-
-        @JsonProperty("Log")
-        private String[] log;
-
-        public String getStatus() {
-            return status;
-        }
-
-        public Integer getFailingStreak() {
-            return failingStreak;
-        }
-
-        public String[] getLog() {
-            return log;
-        }
-    }
-
-
-
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
-    }
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Mount {
-
-        /**
-         * @since {@link RemoteApiVersion#VERSION_1_20}
-         */
-        @CheckForNull
-        @JsonProperty("Name")
-        private String name;
-
-        /**
-         * @since {@link RemoteApiVersion#VERSION_1_20}
-         */
-        @CheckForNull
-        @JsonProperty("Source")
-        private String source;
-
-        /**
-         * @since {@link RemoteApiVersion#VERSION_1_20}
-         */
-        @CheckForNull
-        @JsonProperty("Destination")
-        private Volume destination;
-
-        /**
-         * @since {@link RemoteApiVersion#VERSION_1_20}
-         */
-        @CheckForNull
-        @JsonProperty("Driver")
-        private String driver;
-
-        /**
-         * @since {@link RemoteApiVersion#VERSION_1_20}
-         */
-        @CheckForNull
-        @JsonProperty("Mode")
-        private String mode;
-
-        /**
-         * @since {@link RemoteApiVersion#VERSION_1_20}
-         */
-        @CheckForNull
-        @JsonProperty("RW")
-        private Boolean rw;
-
-        @CheckForNull
-        public String getName() {
-            return name;
-        }
-
-        @CheckForNull
-        public String getSource() {
-            return source;
-        }
-
-        @CheckForNull
-        public Volume getDestination() {
-            return destination;
-        }
-
-        @CheckForNull
-        public String getDriver() {
-            return driver;
-        }
-
-        @CheckForNull
-        public String getMode() {
-            return mode;
-        }
-
-        @CheckForNull
-        public Boolean getRW() {
-            return rw;
-        }
-
-        /**
-         * @see #destination
-         */
-        public Mount withDestination(Volume destination) {
-            this.destination = destination;
-            return this;
-        }
-
-        /**
-         * @see #driver
-         */
-        public Mount withDriver(String driver) {
-            this.driver = driver;
-            return this;
-        }
-
-        /**
-         * @see #mode
-         */
-        public Mount withMode(String mode) {
-            this.mode = mode;
-            return this;
-        }
-
-        /**
-         * @see #name
-         */
-        public Mount withName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        /**
-         * @see #rw
-         */
-        public Mount withRw(Boolean rw) {
-            this.rw = rw;
-            return this;
-        }
-
-        /**
-         * @see #source
-         */
-        public Mount withSource(String source) {
-            this.source = source;
-            return this;
-        }
-
-        @Override
-        public String toString() {
-            return ToStringBuilder.reflectionToString(this);
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            return EqualsBuilder.reflectionEquals(this, o);
-        }
-
-        @Override
-        public int hashCode() {
-            return HashCodeBuilder.reflectionHashCode(this);
-        }
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -564,14 +402,14 @@ public class InspectContainerResponse {
         }
 
         @Override
-        public int hashCode() {
-            return HashCodeBuilder.reflectionHashCode(this);
-        }        @Override
         public boolean equals(Object o) {
             return EqualsBuilder.reflectionEquals(this, o);
         }
 
-
+        @Override
+        public int hashCode() {
+            return HashCodeBuilder.reflectionHashCode(this);
+        }
 
         @Override
         public String toString() {
@@ -579,5 +417,142 @@ public class InspectContainerResponse {
         }
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Mount {
 
+        /**
+         * @since {@link RemoteApiVersion#VERSION_1_20}
+         */
+        @CheckForNull
+        @JsonProperty("Name")
+        private String name;
+
+        /**
+         * @since {@link RemoteApiVersion#VERSION_1_20}
+         */
+        @CheckForNull
+        @JsonProperty("Source")
+        private String source;
+
+        /**
+         * @since {@link RemoteApiVersion#VERSION_1_20}
+         */
+        @CheckForNull
+        @JsonProperty("Destination")
+        private Volume destination;
+
+        /**
+         * @since {@link RemoteApiVersion#VERSION_1_20}
+         */
+        @CheckForNull
+        @JsonProperty("Driver")
+        private String driver;
+
+        /**
+         * @since {@link RemoteApiVersion#VERSION_1_20}
+         */
+        @CheckForNull
+        @JsonProperty("Mode")
+        private String mode;
+
+        /**
+         * @since {@link RemoteApiVersion#VERSION_1_20}
+         */
+        @CheckForNull
+        @JsonProperty("RW")
+        private Boolean rw;
+
+        @CheckForNull
+        public String getName() {
+            return name;
+        }
+
+        @CheckForNull
+        public String getSource() {
+            return source;
+        }
+
+        @CheckForNull
+        public Volume getDestination() {
+            return destination;
+        }
+
+        @CheckForNull
+        public String getDriver() {
+            return driver;
+        }
+
+        @CheckForNull
+        public String getMode() {
+            return mode;
+        }
+
+        @CheckForNull
+        public Boolean getRW() {
+            return rw;
+        }
+
+        /**
+         * @see #destination
+         */
+        public Mount withDestination(Volume destination) {
+            this.destination = destination;
+            return this;
+        }
+
+        /**
+         * @see #driver
+         */
+        public Mount withDriver(String driver) {
+            this.driver = driver;
+            return this;
+        }
+
+        /**
+         * @see #mode
+         */
+        public Mount withMode(String mode) {
+            this.mode = mode;
+            return this;
+        }
+
+        /**
+         * @see #name
+         */
+        public Mount withName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        /**
+         * @see #rw
+         */
+        public Mount withRw(Boolean rw) {
+            this.rw = rw;
+            return this;
+        }
+
+        /**
+         * @see #source
+         */
+        public Mount withSource(String source) {
+            this.source = source;
+            return this;
+        }
+
+        @Override
+        public String toString() {
+            return ToStringBuilder.reflectionToString(this);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return EqualsBuilder.reflectionEquals(this, o);
+        }
+
+        @Override
+        public int hashCode() {
+            return HashCodeBuilder.reflectionHashCode(this);
+        }
+    }
 }

@@ -1,9 +1,5 @@
 package com.github.dockerjava.api.model;
 
-import javax.annotation.CheckForNull;
-import java.io.Serializable;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -12,6 +8,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
+
+import javax.annotation.CheckForNull;
+import java.io.Serializable;
+import java.util.Map;
 
 /**
  * Used as part of 'images/IMAGE/someimage' response.
@@ -87,7 +87,7 @@ public class ContainerConfig implements Serializable {
     private String workingDir;
 
     @JsonProperty("Healthcheck")
-    private Healthcheck healthcheck;
+    private HealthCheck healthCheck;
 
     @JsonIgnore
     public ExposedPort[] getExposedPorts() {
@@ -414,8 +414,12 @@ public class ContainerConfig implements Serializable {
         return workingDir;
     }
 
-    public Healthcheck getHealthcheck() {
-        return healthcheck;
+    /**
+     * @see #healthCheck
+     */
+    @CheckForNull
+    public HealthCheck getHealthcheck() {
+        return healthCheck;
     }
 
     /**
@@ -427,8 +431,8 @@ public class ContainerConfig implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 
     @Override
@@ -437,28 +441,7 @@ public class ContainerConfig implements Serializable {
     }
 
     @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    @JsonInclude(Include.NON_NULL)
-    public static class Healthcheck {
-
-        @JsonProperty("Interval")
-        private Long interval;
-
-        @JsonProperty("Timeout")
-        private Long timeout;
-
-        public Long getInterval() {
-            return interval;
-        }
-
-        public Long getTimeout() {
-            return timeout;
-        }
-    }
-
-
 }
