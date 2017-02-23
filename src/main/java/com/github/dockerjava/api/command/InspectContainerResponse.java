@@ -211,33 +211,6 @@ public class InspectContainerResponse {
         return execIds;
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class HealthState {
-
-        @JsonProperty("Status")
-        private String status;
-
-        @JsonProperty("FailingStreak")
-        private Integer failingStreak;
-
-        @JsonProperty("Log")
-        private String[] log;
-
-        public String getStatus() {
-            return status;
-        }
-
-        public Integer getFailingStreak() {
-            return failingStreak;
-        }
-
-        public String[] getLog() {
-            return log;
-        }
-    }
-
-
-
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);

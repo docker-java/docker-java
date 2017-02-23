@@ -87,7 +87,7 @@ public class ContainerConfig implements Serializable {
     private String workingDir;
 
     @JsonProperty("Healthcheck")
-    private Healthcheck healthcheck;
+    private HealthCheck healthCheck;
 
     @JsonIgnore
     public ExposedPort[] getExposedPorts() {
@@ -414,8 +414,12 @@ public class ContainerConfig implements Serializable {
         return workingDir;
     }
 
-    public Healthcheck getHealthcheck() {
-        return healthcheck;
+    /**
+     * @see #healthCheck
+     */
+    @CheckForNull
+    public HealthCheck getHealthcheck() {
+        return healthCheck;
     }
 
     /**
@@ -440,25 +444,4 @@ public class ContainerConfig implements Serializable {
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
     }
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    @JsonInclude(Include.NON_NULL)
-    public static class Healthcheck {
-
-        @JsonProperty("Interval")
-        private Long interval;
-
-        @JsonProperty("Timeout")
-        private Long timeout;
-
-        public Long getInterval() {
-            return interval;
-        }
-
-        public Long getTimeout() {
-            return timeout;
-        }
-    }
-
-
 }
