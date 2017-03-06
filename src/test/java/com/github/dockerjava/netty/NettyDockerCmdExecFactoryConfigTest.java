@@ -23,6 +23,8 @@ import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.util.CharsetUtil;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,16 +39,18 @@ public class NettyDockerCmdExecFactoryConfigTest {
 
     @Test
     public void testNettyDockerCmdExecFactoryConfigWithApiVersion() throws Exception {
+        int dockerPort = getFreePort();
+
         NettyDockerCmdExecFactory factory = new NettyDockerCmdExecFactory();
         Builder configBuilder = DefaultDockerClientConfig.createDefaultConfigBuilder()
-            .withDockerHost("tcp://localhost:2378")
+            .withDockerHost("tcp://localhost:" + dockerPort)
             .withApiVersion("1.23");
 
         DockerClient client = DockerClientBuilder.getInstance(configBuilder)
                 .withDockerCmdExecFactory(factory)
                 .build();
 
-        FakeDockerServer server = new FakeDockerServer(2378);
+        FakeDockerServer server = new FakeDockerServer(dockerPort);
         server.start();
         try {
             client.versionCmd().exec();
@@ -62,14 +66,16 @@ public class NettyDockerCmdExecFactoryConfigTest {
 
     @Test
     public void testNettyDockerCmdExecFactoryConfigWithoutApiVersion() throws Exception {
+        int dockerPort = getFreePort();
+
         NettyDockerCmdExecFactory factory = new NettyDockerCmdExecFactory();
-        Builder configBuilder = DefaultDockerClientConfig.createDefaultConfigBuilder().withDockerHost("tcp://localhost:2378");
+        Builder configBuilder = DefaultDockerClientConfig.createDefaultConfigBuilder().withDockerHost("tcp://localhost:" + dockerPort);
 
         DockerClient client = DockerClientBuilder.getInstance(configBuilder)
             .withDockerCmdExecFactory(factory)
             .build();
 
-        FakeDockerServer server = new FakeDockerServer(2378);
+        FakeDockerServer server = new FakeDockerServer(dockerPort);
         server.start();
         try {
             client.versionCmd().exec();
@@ -81,6 +87,13 @@ public class NettyDockerCmdExecFactoryConfigTest {
         } finally {
             server.stop();
         }
+    }
+
+    private int getFreePort() throws IOException {
+        ServerSocket socket = new ServerSocket(0);
+        int freePort = socket.getLocalPort();
+        socket.close();
+        return freePort;
     }
 
     private class FakeDockerServer {
