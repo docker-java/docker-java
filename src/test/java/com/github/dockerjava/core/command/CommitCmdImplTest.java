@@ -5,6 +5,12 @@ import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.client.AbstractDockerClientTest;
+
+import java.lang.reflect.Method;
+import java.util.Map;
+
+import com.google.common.collect.ImmutableMap;
+
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -14,6 +20,12 @@ import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.startsWith;
+import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
@@ -54,7 +66,7 @@ public class CommitCmdImplTest extends AbstractDockerClientTest {
         assertThat(container.getId(), not(isEmptyString()));
         dockerClient.startContainerCmd(container.getId()).exec();
 
-        LOG.info("Commiting container: {}", container.toString());
+        LOG.info("Committing container: {}", container.toString());
         String imageId = dockerClient.commitCmd(container.getId()).exec();
 
         InspectImageResponse inspectImageResponse = dockerClient.inspectImageCmd(imageId).exec();
@@ -80,6 +92,26 @@ public class CommitCmdImplTest extends AbstractDockerClientTest {
 
         InspectImageResponse inspectImageResponse = dockerClient.inspectImageCmd(imageId).exec();
         assertThat(inspectImageResponse.getComment(), equalToIgnoringCase(commitMessage));
+    }
+
+    @Test
+    public void commitWithLabels() throws DockerException {
+
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("touch", "/test").exec();
+
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+        dockerClient.startContainerCmd(container.getId()).exec();
+
+        LOG.info("Committing container: {}", container.toString());
+        Map<String, String> labels = ImmutableMap.of("label1", "abc", "label2", "123");
+        String imageId = dockerClient.commitCmd(container.getId()).withLabels(labels).exec();
+
+        InspectImageResponse inspectImageResponse = dockerClient.inspectImageCmd(imageId).exec();
+        LOG.info("Image Inspect: {}", inspectImageResponse.toString());
+        Map<String, String> responseLabels = inspectImageResponse.getContainerConfig().getLabels();
+        assertThat(responseLabels.get("label1"), equalTo("abc"));
+        assertThat(responseLabels.get("label2"), equalTo("123"));
     }
 
     @Test(expectedExceptions = NotFoundException.class)

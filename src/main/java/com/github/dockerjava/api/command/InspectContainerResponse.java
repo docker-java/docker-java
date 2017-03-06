@@ -112,7 +112,7 @@ public class InspectContainerResponse {
     }
 
     public Integer getSizeRootFs() {
-        return  sizeRootFs;
+        return sizeRootFs;
     }
 
     public String getCreated() {
@@ -302,6 +302,13 @@ public class InspectContainerResponse {
         @JsonProperty("FinishedAt")
         private String finishedAt;
 
+
+        /**
+         * @since Docker version 1.12
+         */
+        @JsonProperty("Health")
+        private HealthState health;
+
         /**
          * See {@link #status}
          */
@@ -388,6 +395,10 @@ public class InspectContainerResponse {
         @CheckForNull
         public String getFinishedAt() {
             return finishedAt;
+        }
+
+        public HealthState getHealth() {
+            return health;
         }
 
         @Override
