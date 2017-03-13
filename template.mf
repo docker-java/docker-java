@@ -23,7 +23,6 @@ Import-Template:
 Excluded-Exports:
  org.apache.http.impl.io,
  org.newsclub.net.unix,
- com.github.dockerjava.core.*,
  com.github.dockerjava.jaxrs.*,
  com.github.dockerjava.netty.*
 Excluded-Imports:
