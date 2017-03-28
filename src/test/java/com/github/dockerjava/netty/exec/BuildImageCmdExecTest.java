@@ -7,13 +7,16 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
@@ -288,7 +291,8 @@ public class BuildImageCmdExecTest extends AbstractNettyDockerClientTest {
         File baseDir = fileFromBuildTestResource("labels");
 
         String imageId = dockerClient.buildImageCmd(baseDir).withNoCache(true)
-                .withTag("docker-java-test:tag1").withTag("docker-java-test:tag2")
+                .withTag("fallback-when-withTags-not-called")
+                .withTags(new HashSet<>(Arrays.asList("docker-java-test:tag1", "docker-java-test:tag2")))
                 .exec(new BuildImageResultCallback())
                 .awaitImageId();
 
@@ -297,8 +301,7 @@ public class BuildImageCmdExecTest extends AbstractNettyDockerClientTest {
         LOG.info("Image Inspect: {}", inspectImageResponse.toString());
 
         assertThat(inspectImageResponse.getRepoTags().size(), equalTo(2));
-        assertThat(inspectImageResponse.getRepoTags().contains("docker-java-test:tag1"), equalTo(true));
-        assertThat(inspectImageResponse.getRepoTags().contains("docker-java-test:tag2"), equalTo(true));
+        assertThat(inspectImageResponse.getRepoTags(), containsInAnyOrder("docker-java-test:tag1", "docker-java-test:tag2"));
     }
 
     public void dockerfileNotInBaseDirectory() throws Exception {

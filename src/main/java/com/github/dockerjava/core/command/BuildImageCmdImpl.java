@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,6 +22,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildResponseItem> implements BuildImageCmd {
 
     private InputStream tarInputStream;
+
+    private String tag;
 
     private Set<String> tags;
 
@@ -84,11 +85,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     @Override
     public String getTag() {
-        if (tags == null || tags.isEmpty()) {
-            return null;
-        }
-        // return first tag to be backward compatible
-        return tags.iterator().next();
+        return tag;
     }
 
     @Override
@@ -190,10 +187,13 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @Override
     public BuildImageCmdImpl withTag(String tag) {
         checkNotNull(tag, "Tag is null");
-        if (this.tags == null) {
-            this.tags = new HashSet<>(4);
-        }
-        this.tags.add(tag);
+        this.tag = tag;
+        return this;
+    }
+
+    @Override
+    public BuildImageCmd withTags(Set<String> tags) {
+        this.tags = tags;
         return this;
     }
 

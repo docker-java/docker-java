@@ -38,7 +38,7 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
      * @deprecated since docker API version 1.21 there can be multiple tags
      * specified so use {@link #getTags()}
      */
-    @Deprecated()
+    @Deprecated
     @CheckForNull
     String getTag();
 
@@ -119,7 +119,16 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
 
     // setters
 
+    /**
+     * @deprecated since docker API version 1.21 there can be multiple tags
+     * specified so use {@link #withTags(Set<String>)}
+     * @param tag
+     * @return
+     */
+    @Deprecated
     BuildImageCmd withTag(String tag);
+
+    BuildImageCmd withTags(Set<String> tags);
 
     BuildImageCmd withRemote(URI remote);
 
