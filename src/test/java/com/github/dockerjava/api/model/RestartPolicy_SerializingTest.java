@@ -28,6 +28,13 @@ public class RestartPolicy_SerializingTest {
     }
 
     @Test
+    // --restart unless-stopped
+    public void unlessStoppedRestart() throws Exception {
+        String json = objectMapper.writeValueAsString(RestartPolicy.unlessStoppedRestart());
+        assertEquals(json, "{\"MaximumRetryCount\":0,\"Name\":\"unless-stopped\"}");
+    }
+
+    @Test
     // --restart on-failure
     public void onFailureRestart() throws Exception {
         String json = objectMapper.writeValueAsString(RestartPolicy.onFailureRestart(0));
