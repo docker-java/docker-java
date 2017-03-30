@@ -70,6 +70,13 @@ public class RestartPolicy implements Serializable {
         return new RestartPolicy(maximumRetryCount, "on-failure");
     }
 
+    /**
+     * Restart the container unless it has been stopped
+     */
+    public static RestartPolicy unlessStoppedRestart() {
+        return new RestartPolicy(0, "unless-stopped");
+    }
+
     public Integer getMaximumRetryCount() {
         return maximumRetryCount;
     }
@@ -97,6 +104,10 @@ public class RestartPolicy implements Serializable {
 
             if ("always".equals(name)) {
                 return alwaysRestart();
+            }
+
+            if ("unless-stopped".equals(name)) {
+                return unlessStoppedRestart();
             }
 
             if ("on-failure".equals(name)) {
