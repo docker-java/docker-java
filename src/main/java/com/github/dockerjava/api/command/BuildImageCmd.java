@@ -117,6 +117,8 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
 
     BuildImageCmd withDockerfile(File dockerfile);
 
+    BuildImageCmd withDockerfilePath(String dockerfilePath);
+
     BuildImageCmd withNoCache(Boolean noCache);
 
     BuildImageCmd withRemove(Boolean rm);
