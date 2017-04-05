@@ -72,6 +72,9 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     String[] getDnsSearch();
 
     @CheckForNull
+    String[] getDnsOptions();
+
+    @CheckForNull
     String getDomainName();
 
     @CheckForNull
@@ -297,6 +300,10 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
      * Set custom DNS search domains
      */
     CreateContainerCmd withDnsSearch(List<String> dnsSearch);
+
+    CreateContainerCmd withDnsOptions(String... dnsOptions);
+
+    CreateContainerCmd withDnsOptions(List<String> dnsOptions);
 
     CreateContainerCmd withDomainName(String domainName);
 

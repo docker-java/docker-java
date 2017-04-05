@@ -187,6 +187,27 @@ public class StartContainerCmdExecTest extends AbstractNettyDockerClientTest {
     }
 
     @Test
+    public void startContainerWithDnsOptions() throws DockerException {
+
+        String dnsOption = "inet6";
+
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("true")
+                .withDnsOptions(dnsOption).exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+
+        dockerClient.startContainerCmd(container.getId()).exec();
+
+        inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+
+        assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getDnsOptions()), contains(dnsOption));
+    }
+
+    @Test
     public void startContainerWithPortBindings() throws DockerException {
 
         ExposedPort tcp22 = ExposedPort.tcp(22);

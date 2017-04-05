@@ -104,6 +104,9 @@ public class HostConfig implements Serializable {
     @JsonProperty("DnsSearch")
     private String[] dnsSearch;
 
+    @JsonProperty("DnsOptions")
+    private String[] dnsOptions;
+
     @JsonProperty("ExtraHosts")
     private String[] extraHosts;
 
@@ -248,6 +251,10 @@ public class HostConfig implements Serializable {
 
     public String[] getDnsSearch() {
         return dnsSearch;
+    }
+
+    public String[] getDnsOptions() {
+        return dnsOptions;
     }
 
     public String[] getExtraHosts() {
@@ -598,6 +605,14 @@ public class HostConfig implements Serializable {
      */
     public HostConfig withDnsSearch(String[] dnsSearch) {
         this.dnsSearch = dnsSearch;
+        return this;
+    }
+
+    /**
+     * @see #dnsOptions
+     */
+    public HostConfig withDnsOptions(String[] dnsOptions) {
+        this.dnsOptions = dnsOptions;
         return this;
     }
 
