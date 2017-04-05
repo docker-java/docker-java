@@ -256,7 +256,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     @JsonIgnore
-    public String[] getDnsOptions() {
+    public List<String> getDnsOptions() {
         return hostConfig.getDnsOptions();
     }
 
@@ -658,14 +658,14 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withDnsOptions(String... dnsOptions) {
         checkNotNull(dnsOptions, "dnsOptions was not specified");
-        this.hostConfig.withDnsOptions(dnsOptions);
+        this.hostConfig.withDnsOptions(Arrays.asList(dnsOptions));
         return this;
     }
 
     @Override
     public CreateContainerCmd withDnsOptions(List<String> dnsOptions) {
         checkNotNull(dnsOptions, "dnsOptions was not specified");
-        return withDnsOptions(dnsOptions.toArray(new String[0]));
+        return withDnsOptions(dnsOptions);
     }
 
     @Override

@@ -201,7 +201,7 @@ public class StartContainerCmdImplTest extends AbstractDockerClientTest {
 
         inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
-        assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getDnsOptions()), contains(dnsOption));
+        assertThat(inspectContainerResponse.getHostConfig().getDnsOptions(), contains(dnsOption));
     }
 
     @Test

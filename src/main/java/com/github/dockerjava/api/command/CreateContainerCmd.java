@@ -72,7 +72,7 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     String[] getDnsSearch();
 
     @CheckForNull
-    String[] getDnsOptions();
+    List<String> getDnsOptions();
 
     @CheckForNull
     String getDomainName();
