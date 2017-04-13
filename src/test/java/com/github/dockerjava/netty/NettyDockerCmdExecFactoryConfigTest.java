@@ -42,7 +42,8 @@ public class NettyDockerCmdExecFactoryConfigTest {
         int dockerPort = getFreePort();
 
         NettyDockerCmdExecFactory factory = new NettyDockerCmdExecFactory();
-        Builder configBuilder = DefaultDockerClientConfig.createDefaultConfigBuilder()
+        Builder configBuilder = new DefaultDockerClientConfig.Builder()
+            .withDockerTlsVerify(false)
             .withDockerHost("tcp://localhost:" + dockerPort)
             .withApiVersion("1.23");
 
@@ -69,7 +70,9 @@ public class NettyDockerCmdExecFactoryConfigTest {
         int dockerPort = getFreePort();
 
         NettyDockerCmdExecFactory factory = new NettyDockerCmdExecFactory();
-        Builder configBuilder = DefaultDockerClientConfig.createDefaultConfigBuilder().withDockerHost("tcp://localhost:" + dockerPort);
+        Builder configBuilder = new DefaultDockerClientConfig.Builder()
+            .withDockerTlsVerify(false)
+            .withDockerHost("tcp://localhost:" + dockerPort);
 
         DockerClient client = DockerClientBuilder.getInstance(configBuilder)
             .withDockerCmdExecFactory(factory)
