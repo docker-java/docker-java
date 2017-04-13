@@ -2,6 +2,12 @@ Change Log
 ===
 ## (dev) 3.1.0 (reserverd for swarm features)
  
+## 3.0.9
+- NettyDockerCmdExecFactory ignores API version 
+- exclude commons-logging from httpclient since docker-java uses slf4j/logback
+- Generate OSGi compliant manifest
+- AuthResponse may contains token.
+
 ## 3.0.8
  - Use TLSv1.2 by default
  - Health api
