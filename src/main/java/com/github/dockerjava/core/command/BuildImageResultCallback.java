@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.BuildResponseItem;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
-import com.google.common.collect.EvictingQueue;
 
 /**
  *
@@ -22,12 +21,17 @@ public class BuildImageResultCallback extends ResultCallbackTemplate<BuildImageR
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BuildImageResultCallback.class);
 
-    //  Keep last few items for more detailed analysis
-    private EvictingQueue<BuildResponseItem> latestItems = EvictingQueue.create(2);
+    private String imageId;
+
+    private String error;
 
     @Override
     public void onNext(BuildResponseItem item) {
-        latestItems.add(item);
+        if (item.isBuildSuccessIndicated()) {
+            this.imageId = item.getImageId();
+        } else if (item.isErrorIndicated()) {
+            this.error = item.getError();
+        }
         LOGGER.debug(item.toString());
     }
 
@@ -64,37 +68,14 @@ public class BuildImageResultCallback extends ResultCallbackTemplate<BuildImageR
     }
 
     private String getImageId() {
-        BuildResponseItem buildSuccessItem = findBuildSuccessItem();
-
-        if (buildSuccessItem == null) {
-            BuildResponseItem errorItem = findErrorItem();
-            if (errorItem == null) {
-                throw new DockerClientException("Could not build image");
-            } else {
-                throw new DockerClientException("Could not build image: " + errorItem.getError());
-            }
+        if (imageId != null) {
+            return imageId;
         }
 
-        return buildSuccessItem.getImageId();
-    }
-
-    private BuildResponseItem findBuildSuccessItem() {
-        for (BuildResponseItem item : latestItems) {
-            if (item.isBuildSuccessIndicated()) {
-                return item;
-            }
+        if (error == null) {
+            throw new DockerClientException("Could not build image");
         }
 
-        return null;
-    }
-
-    private BuildResponseItem findErrorItem() {
-        for (BuildResponseItem item : latestItems) {
-            if (item.isErrorIndicated()) {
-                return item;
-            }
-        }
-
-        return null;
+        throw new DockerClientException("Could not build image: " + error);
     }
 }
