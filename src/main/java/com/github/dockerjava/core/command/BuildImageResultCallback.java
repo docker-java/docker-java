@@ -5,14 +5,13 @@ package com.github.dockerjava.core.command;
 
 import java.util.concurrent.TimeUnit;
 
-import javax.annotation.CheckForNull;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.BuildResponseItem;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
+import com.google.common.collect.EvictingQueue;
 
 /**
  *
@@ -23,12 +22,12 @@ public class BuildImageResultCallback extends ResultCallbackTemplate<BuildImageR
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BuildImageResultCallback.class);
 
-    @CheckForNull
-    private BuildResponseItem latestItem = null;
+    //  Keep last few items for more detailed analysis
+    private EvictingQueue<BuildResponseItem> latestItems = EvictingQueue.create(2);
 
     @Override
     public void onNext(BuildResponseItem item) {
-        this.latestItem = item;
+        latestItems.add(item);
         LOGGER.debug(item.toString());
     }
 
@@ -65,13 +64,37 @@ public class BuildImageResultCallback extends ResultCallbackTemplate<BuildImageR
     }
 
     private String getImageId() {
-        if (latestItem == null) {
-            throw new DockerClientException("Could not build image");
-        } else if (!latestItem.isBuildSuccessIndicated()) {
-            throw new DockerClientException("Could not build image: " + latestItem.getError());
-        } else {
-            return latestItem.getImageId();
+        BuildResponseItem buildSuccessItem = findBuildSuccessItem();
+
+        if (buildSuccessItem == null) {
+            BuildResponseItem errorItem = findErrorItem();
+            if (errorItem == null) {
+                throw new DockerClientException("Could not build image");
+            } else {
+                throw new DockerClientException("Could not build image: " + errorItem.getError());
+            }
         }
+
+        return buildSuccessItem.getImageId();
     }
 
+    private BuildResponseItem findBuildSuccessItem() {
+        for (BuildResponseItem item : latestItems) {
+            if (item.isBuildSuccessIndicated()) {
+                return item;
+            }
+        }
+
+        return null;
+    }
+
+    private BuildResponseItem findErrorItem() {
+        for (BuildResponseItem item : latestItems) {
+            if (item.isErrorIndicated()) {
+                return item;
+            }
+        }
+
+        return null;
+    }
 }
