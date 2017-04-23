@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.github.dockerjava.api.command.BuildImageCmd;
@@ -14,6 +15,8 @@ import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.BuildResponseItem;
 import com.github.dockerjava.core.dockerfile.Dockerfile;
 import com.github.dockerjava.core.util.FilePathUtil;
+
+import javax.annotation.CheckForNull;
 
 /**
  *
@@ -24,7 +27,10 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     private InputStream tarInputStream;
 
+    @Deprecated
     private String tag;
+
+    private List<String> tags;
 
     private Boolean noCache;
 
@@ -82,9 +88,15 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     // getters API
 
+    @Deprecated
     @Override
     public String getTag() {
         return tag;
+    }
+
+    @CheckForNull
+    public List<String> getTags() {
+        return tags;
     }
 
     @Override
@@ -178,10 +190,20 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     // setters
 
+    /**
+     * @deprecated use #withTags()
+     */
+    @Deprecated
     @Override
     public BuildImageCmdImpl withTag(String tag) {
         checkNotNull(tag, "Tag is null");
         this.tag = tag;
+        return this;
+    }
+
+    @Override
+    public BuildImageCmdImpl withTags(List<String> tags) {
+        this.tags = tags;
         return this;
     }
 

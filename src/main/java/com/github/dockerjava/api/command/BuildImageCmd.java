@@ -3,6 +3,7 @@ package com.github.dockerjava.api.command;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.CheckForNull;
@@ -34,9 +35,17 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
 
     /**
      * "t" in API
+     * @deprecated use {@link #getTags()}
      */
     @CheckForNull
+    @Deprecated
     String getTag();
+
+    /**
+     * Multple "t" tags.
+     */
+    @CheckForNull
+    List<String> getTags();
 
     /**
      * "remote" in API
@@ -109,7 +118,13 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
 
     // setters
 
+    /**
+     * @deprecated use #withTags()
+     */
+    @Deprecated
     BuildImageCmd withTag(String tag);
+
+    BuildImageCmd withTags(List<String> tags);
 
     BuildImageCmd withRemote(URI remote);
 
