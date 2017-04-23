@@ -38,6 +38,8 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     private File dockerFile;
 
+    private String dockerFilePath;
+
     private File baseDirectory;
 
     private String cpusetcpus;
@@ -119,7 +121,9 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     @Override
     public String getPathToDockerfile() {
-        if (baseDirectory != null && dockerFile != null) {
+        if (dockerFilePath != null) {
+            return dockerFilePath;
+        } else if (baseDirectory != null && dockerFile != null) {
             return FilePathUtil.relativize(baseDirectory, dockerFile);
         } else {
             return null;
@@ -284,6 +288,13 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
             // we just created the file this should never happen.
             throw new RuntimeException(e);
         }
+        return this;
+    }
+
+    @Override
+    public BuildImageCmd withDockerfilePath(String dockerfilePath) {
+        checkNotNull(dockerfilePath, "dockerfilePath is null");
+        this.dockerFilePath = dockerfilePath;
         return this;
     }
 

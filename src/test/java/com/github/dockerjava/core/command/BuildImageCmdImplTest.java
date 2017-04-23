@@ -84,6 +84,15 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
     }
 
     @Test
+    public void buildImageFromTarWithDockerfileNotInBaseDirectory() throws Exception {
+        File baseDir = fileFromBuildTestResource("dockerfileNotInBaseDirectory");
+        Collection<File> files = FileUtils.listFiles(baseDir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+        File tarFile = CompressArchiveUtil.archiveTARFiles(baseDir, files, UUID.randomUUID().toString());
+        String response = dockerfileBuild(new FileInputStream(tarFile), "dockerfileFolder/Dockerfile");
+        assertThat(response, containsString("Successfully executed testrun.sh"));
+    }
+
+    @Test
     public void onBuild() throws Exception {
         File baseDir = fileFromBuildTestResource("ONBUILD/parent");
 
@@ -121,6 +130,11 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
         File baseDir = fileFromBuildTestResource("ADD/folder");
         String response = dockerfileBuild(baseDir);
         assertThat(response, containsString("Successfully executed testAddFolder.sh"));
+    }
+
+    private String dockerfileBuild(InputStream tarInputStream, String dockerFilePath) throws Exception {
+
+        return execBuild(dockerClient.buildImageCmd().withTarInputStream(tarInputStream).withDockerfilePath(dockerFilePath));
     }
 
     private String dockerfileBuild(InputStream tarInputStream) throws Exception {
