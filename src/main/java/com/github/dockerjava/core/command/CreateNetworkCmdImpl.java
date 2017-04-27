@@ -31,6 +31,9 @@ public class CreateNetworkCmdImpl extends AbstrDockerCmd<CreateNetworkCmd, Creat
     @JsonProperty("Internal")
     private Boolean internal;
 
+    @JsonProperty("Attachable")
+    private Boolean attachable;
+
     @JsonProperty("EnableIPv6")
     private Boolean enableIpv6;
 
@@ -74,6 +77,11 @@ public class CreateNetworkCmdImpl extends AbstrDockerCmd<CreateNetworkCmd, Creat
     }
 
     @Override
+    public Boolean getAttachable() {
+        return attachable;
+    }
+
+    @Override
     public CreateNetworkCmd withName(String name) {
         this.name = name;
         return this;
@@ -112,6 +120,12 @@ public class CreateNetworkCmdImpl extends AbstrDockerCmd<CreateNetworkCmd, Creat
     @Override
     public CreateNetworkCmd withEnableIpv6(boolean enableIpv6) {
         this.enableIpv6 = enableIpv6;
+        return this;
+    }
+
+    @Override
+    public CreateNetworkCmd withAttachable(boolean attachable) {
+        this.attachable = attachable;
         return this;
     }
 }
