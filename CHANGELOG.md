@@ -2,6 +2,12 @@ Change Log
 ===
 ## (dev) 3.1.0 (reserverd for swarm features)
  
+ 
+## 3.0.10
+- Custom `db` logging type 
+- Allow an explicit Dockerfile location string to be specified to theuild command
+- Fix image build for docker 17 with 'tagged' word.
+ 
 ## 3.0.9
 - NettyDockerCmdExecFactory ignores API version 
 - exclude commons-logging from httpclient since docker-java uses slf4j/logback
