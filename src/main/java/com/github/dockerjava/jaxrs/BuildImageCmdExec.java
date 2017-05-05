@@ -1,6 +1,7 @@
 package com.github.dockerjava.jaxrs;
 
 import static javax.ws.rs.client.Entity.entity;
+import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
@@ -65,9 +66,15 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
         if (dockerFilePath != null && command.getRemote() == null && !"Dockerfile".equals(dockerFilePath)) {
             webTarget = webTarget.queryParam("dockerfile", dockerFilePath);
         }
-        if (command.getTag() != null) {
+
+        if (command.getTags() != null && !command.getTags().isEmpty()) {
+            for (String t : command.getTags()) {
+                webTarget = webTarget.queryParam("t", t);
+            }
+        } else if (isNotBlank(command.getTag())) {
             webTarget = webTarget.queryParam("t", command.getTag());
         }
+
         if (command.getRemote() != null) {
             webTarget = webTarget.queryParam("remote", command.getRemote().toString());
         }
