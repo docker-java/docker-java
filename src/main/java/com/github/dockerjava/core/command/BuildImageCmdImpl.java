@@ -1,6 +1,10 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.github.dockerjava.api.command.BuildImageCmd;
+import com.github.dockerjava.api.model.AuthConfigurations;
+import com.github.dockerjava.api.model.BuildResponseItem;
+import com.github.dockerjava.core.dockerfile.Dockerfile;
+import com.github.dockerjava.core.util.FilePathUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,23 +12,20 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
-import com.github.dockerjava.api.command.BuildImageCmd;
-import com.github.dockerjava.api.model.AuthConfigurations;
-import com.github.dockerjava.api.model.BuildResponseItem;
-import com.github.dockerjava.core.dockerfile.Dockerfile;
-import com.github.dockerjava.core.util.FilePathUtil;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- *
  * Build an image from Dockerfile.
- *
  */
 public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildResponseItem> implements BuildImageCmd {
 
     private InputStream tarInputStream;
 
     private String tag;
+
+    private Set<String> tags;
 
     private Boolean noCache;
 
@@ -160,6 +161,11 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
         return labels;
     }
 
+    @Override
+    public Set<String> getTags() {
+        return tags;
+    }
+
     // getter lib specific
 
     @Override
@@ -186,6 +192,12 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     public BuildImageCmdImpl withTag(String tag) {
         checkNotNull(tag, "Tag is null");
         this.tag = tag;
+        return this;
+    }
+
+    @Override
+    public BuildImageCmd withTags(Set<String> tags) {
+        this.tags = tags;
         return this;
     }
 
