@@ -312,6 +312,30 @@ public class BuildImageCmdImplTest extends AbstractDockerClientTest {
         assertThat(inspectImageResponse.getRepoTags().size(), equalTo(2));
         assertThat(inspectImageResponse.getRepoTags(), containsInAnyOrder("docker-java-test:tag1", "docker-java-test:tag2"));
     }
+    
+    @Test
+    public void cacheFrom() throws Exception {
+    	if (!getVersion(dockerClient).isGreaterOrEqual(RemoteApiVersion.VERSION_1_25)) {
+    		throw new SkipException("API version should be >= 1.25");
+    	}
+    	File baseDir1 = fileFromBuildTestResource("CacheFrom/test1");
+    	String imageId1 = dockerClient.buildImageCmd(baseDir1)
+    			.exec(new BuildImageResultCallback())
+    			.awaitImageId();
+    	InspectImageResponse inspectImageResponse1 = dockerClient.inspectImageCmd(imageId1).exec();
+    	assertThat(inspectImageResponse1, not(nullValue()));
+    	
+    	File baseDir2 = fileFromBuildTestResource("CacheFrom/test2");
+    	String imageId2 = dockerClient.buildImageCmd(baseDir2).withCacheFrom(new HashSet<>(Arrays.asList(imageId1)))
+    			.exec(new BuildImageResultCallback())
+    			.awaitImageId();
+    	InspectImageResponse inspectImageResponse2 = dockerClient.inspectImageCmd(imageId2).exec();
+    	assertThat(inspectImageResponse2, not(nullValue()));
+    	
+    	// Compare whether the image2's parent layer is from image1 so that cache is used
+    	assertThat(inspectImageResponse2.getParent(), equalTo(inspectImageResponse1.getId()));
+    			
+    }
 
     public void dockerfileNotInBaseDirectory() throws Exception {
         File baseDirectory = fileFromBuildTestResource("dockerfileNotInBaseDirectory");

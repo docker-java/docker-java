@@ -30,6 +30,8 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     private Set<String> tags;
 
+    private Set<String> cacheFrom;
+
     private Boolean noCache;
 
     private Boolean remove = true;
@@ -97,6 +99,11 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @CheckForNull
     public Set<String> getTags() {
         return tags;
+    }
+
+    @CheckForNull
+    public Set<String> getCacheFrom() {
+       return cacheFrom;
     }
 
     @Override
@@ -206,6 +213,12 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @Override
     public BuildImageCmd withTags(Set<String> tags) {
         this.tags = tags;
+        return this;
+    }
+
+    @Override
+    public BuildImageCmd withCacheFrom(Set<String> cacheFrom) {
+        this.cacheFrom = cacheFrom;
         return this;
     }
 
