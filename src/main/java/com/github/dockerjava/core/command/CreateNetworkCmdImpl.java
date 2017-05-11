@@ -13,6 +13,9 @@ import com.github.dockerjava.api.model.Network.Ipam;
 public class CreateNetworkCmdImpl extends AbstrDockerCmd<CreateNetworkCmd, CreateNetworkResponse>
         implements CreateNetworkCmd {
 
+    @JsonProperty("Attachable")
+    private Boolean attachable;
+
     @JsonProperty("Name")
     private String name;
 
@@ -36,6 +39,11 @@ public class CreateNetworkCmdImpl extends AbstrDockerCmd<CreateNetworkCmd, Creat
 
     public CreateNetworkCmdImpl(DockerCmdSyncExec<CreateNetworkCmd, CreateNetworkResponse> execution) {
         super(execution);
+    }
+
+    @Override
+    public Boolean getAttachable() {
+        return attachable;
     }
 
     @Override
@@ -71,6 +79,12 @@ public class CreateNetworkCmdImpl extends AbstrDockerCmd<CreateNetworkCmd, Creat
     @Override
     public Boolean getEnableIPv6() {
         return enableIpv6;
+    }
+
+    @Override
+    public CreateNetworkCmd withAttachable(boolean attachable) {
+        this.attachable = attachable;
+        return this;
     }
 
     @Override
