@@ -124,7 +124,7 @@ public class CreateNetworkCmdImpl extends AbstrDockerCmd<CreateNetworkCmd, Creat
     }
 
     @Override
-    public CreateNetworkCmd withAttachable(boolean attachable) {
+    public CreateNetworkCmd withAttachable(Boolean attachable) {
         this.attachable = attachable;
         return this;
     }

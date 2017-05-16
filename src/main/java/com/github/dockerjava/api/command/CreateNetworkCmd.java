@@ -57,7 +57,12 @@ public interface CreateNetworkCmd extends SyncDockerCmd<CreateNetworkResponse> {
 
     CreateNetworkCmd withEnableIpv6(boolean enableIpv6);
 
-    CreateNetworkCmd withAttachable(boolean attachable);
+    /**
+     * Make network attachable
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_16}
+     */
+    CreateNetworkCmd withAttachable(Boolean attachable);
 
     interface Exec extends DockerCmdSyncExec<CreateNetworkCmd, CreateNetworkResponse> {
     }
