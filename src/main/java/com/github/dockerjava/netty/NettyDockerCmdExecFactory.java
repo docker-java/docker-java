@@ -218,9 +218,9 @@ public class NettyDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     private interface NettyInitializer {
-        EventLoopGroup init(final Bootstrap bootstrap, DockerClientConfig dockerClientConfig);
+        EventLoopGroup init(Bootstrap bootstrap, DockerClientConfig dockerClientConfig);
 
-        DuplexChannel connect(final Bootstrap bootstrap) throws InterruptedException;
+        DuplexChannel connect(Bootstrap bootstrap) throws InterruptedException;
     }
 
     private class UnixDomainSocketInitializer implements NettyInitializer {
