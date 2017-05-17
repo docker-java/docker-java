@@ -4,6 +4,8 @@ Change Log
  
  
 ## 3.0.10
+- Support for cache-from in build image command
+- Allow multiple tags in build image command 
 - Custom `db` logging type 
 - Allow an explicit Dockerfile location string to be specified to theuild command
 - Fix image build for docker 17 with 'tagged' word.
