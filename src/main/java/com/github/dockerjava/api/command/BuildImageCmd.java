@@ -51,6 +51,12 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     Set<String> getTags();
 
     /**
+     * "Cache-from" in API
+     */
+    @CheckForNull
+    Set<String> getCacheFrom();
+
+    /**
      * "remote" in API
      */
     @CheckForNull
@@ -129,6 +135,11 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     BuildImageCmd withTag(String tag);
 
     BuildImageCmd withTags(Set<String> tags);
+
+    /*
+     * @since {@link RemoteApiVersion#VERSION_1_25}
+     */
+    BuildImageCmd withCacheFrom(Set<String> cacheFrom);
 
     BuildImageCmd withRemote(URI remote);
 

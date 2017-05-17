@@ -72,6 +72,12 @@ public class RemoteApiVersion implements Serializable {
      */
     public static final RemoteApiVersion VERSION_1_24 = RemoteApiVersion.create(1, 24);
 
+    /*
+     * @see <a href="https://docs.docker.com/engine/api/v1.25/">Docker API 1.25</a>
+     */
+    public static final RemoteApiVersion VERSION_1_25 = RemoteApiVersion.create(1, 25);
+
+
     /**
      * Unknown, docker doesn't reflect reality. I.e. we implemented method, but for javadoc it not clear when it was added.
      */
