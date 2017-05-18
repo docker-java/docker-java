@@ -777,4 +777,28 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
 
         assertThat(inspectContainerResponse.getHostConfig().getPidsLimit(), is(hostConfig.getPidsLimit()));
     }
+
+    @Test
+    public void createContainerWithNetworkID() {
+        final RemoteApiVersion apiVersion = getVersion(dockerClient);
+        if (!apiVersion.isGreaterOrEqual(RemoteApiVersion.VERSION_1_24)) {
+            throw new SkipException("API version should be >= 1.24");
+        }
+        String networkName = "net-" + UUID.randomUUID().toString();
+        Map<String,String> labels=new HashMap<>();
+        labels.put("com.example.label","test");
+        CreateNetworkResponse createNetworkResponse = dockerClient.createNetworkCmd().withName(networkName)
+                .withLabels(labels).withAttachable(true).exec();
+        String networkId = createNetworkResponse.getId();
+        CreateContainerResponse createContainerResponse = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withLabels(labels).withCmd("true").exec();
+        String containerId = createContainerResponse.getId();
+        dockerClient.connectToNetworkCmd().withContainerId(containerId).withNetworkId(networkId).exec();
+        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(containerId).exec();
+        ContainerNetwork containerNetwork = inspectContainerResponse.getNetworkSettings().getNetworks().get(networkName);
+        if(containerNetwork==null){
+            // swarm node used network id
+            containerNetwork = inspectContainerResponse.getNetworkSettings().getNetworks().get(networkId);
+        }
+        assertThat(containerNetwork, notNullValue());
+    }
 }
