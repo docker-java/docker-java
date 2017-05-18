@@ -10,6 +10,8 @@ import com.github.dockerjava.api.command.DockerCmdSyncExec;
 import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.api.model.Network.Ipam;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class CreateNetworkCmdImpl extends AbstrDockerCmd<CreateNetworkCmd, CreateNetworkResponse>
         implements CreateNetworkCmd {
 
@@ -33,6 +35,12 @@ public class CreateNetworkCmdImpl extends AbstrDockerCmd<CreateNetworkCmd, Creat
 
     @JsonProperty("EnableIPv6")
     private Boolean enableIpv6;
+
+    @JsonProperty("Attachable")
+    private Boolean attachable;
+
+    @JsonProperty("Labels")
+    private Map<String, String> labels;
 
     public CreateNetworkCmdImpl(DockerCmdSyncExec<CreateNetworkCmd, CreateNetworkResponse> execution) {
         super(execution);
@@ -112,6 +120,35 @@ public class CreateNetworkCmdImpl extends AbstrDockerCmd<CreateNetworkCmd, Creat
     @Override
     public CreateNetworkCmd withEnableIpv6(boolean enableIpv6) {
         this.enableIpv6 = enableIpv6;
+        return this;
+    }
+
+    @Override
+    public Boolean getAttachable() {
+        return this.attachable;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CreateNetworkCmd withAttachable(Boolean attachable) {
+        this.attachable = attachable;
+        return this;
+    }
+
+    @Override
+    public Map<String, String> getLabels() {
+        return labels;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CreateNetworkCmd withLabels(Map<String, String> labels) {
+        checkNotNull(labels, "labels was not specified");
+        this.labels = labels;
         return this;
     }
 }
