@@ -51,6 +51,9 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     Integer getCpuPeriod();
 
     @CheckForNull
+    Integer getCpuQuota();
+
+    @CheckForNull
     String getCpusetCpus();
 
     /**
@@ -258,6 +261,8 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
      * @since 1.19
      */
     CreateContainerCmd withCpuPeriod(Integer cpuPeriod);
+
+    CreateContainerCmd withCpuQuota(Integer cpuQuota);
 
     CreateContainerCmd withCpusetCpus(String cpusetCpus);
 
