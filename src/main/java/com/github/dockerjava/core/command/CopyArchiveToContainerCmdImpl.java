@@ -112,12 +112,6 @@ public class CopyArchiveToContainerCmdImpl extends AbstrDockerCmd<CopyArchiveToC
                 .append(remotePath).toString();
     }
 
-    private InputStream buildUploadStream(String hostResource, boolean dirChildrenOnly) throws IOException {
-        Path toUpload = Files.createTempFile("docker-java", ".tar.gz");
-        CompressArchiveUtil.tar(Paths.get(hostResource), toUpload, true, dirChildrenOnly);
-        return Files.newInputStream(toUpload);
-    }
-
     /**
      * @throws com.github.dockerjava.api.exception.NotFoundException
      *             No such container
@@ -131,11 +125,18 @@ public class CopyArchiveToContainerCmdImpl extends AbstrDockerCmd<CopyArchiveToC
                         "Only one of host resource or tar input stream should be defined to perform the copy, not both");
             }
             // We compress the given path, call exec so that the stream is consumed and then close it our self
-            try (InputStream uploadStream = buildUploadStream(this.hostResource, this.dirChildrenOnly)) {
-                this.tarInputStream = uploadStream;
+            Path toUpload = null;
+            try {
+                toUpload = Files.createTempFile("docker-java", ".tar.gz");
+                CompressArchiveUtil.tar(Paths.get(hostResource), toUpload, true, dirChildrenOnly);
+                this.tarInputStream = Files.newInputStream(toUpload);
                 return super.exec();
             } catch (IOException e) {
                 throw new DockerClientException("Unable to perform tar on host resource " + this.hostResource, e);
+            } finally {
+                if (toUpload != null) {
+                    toUpload.toFile().delete();
+                }
             }
         } else if (this.tarInputStream == null) {
             throw new DockerClientException(
