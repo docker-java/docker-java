@@ -125,11 +125,15 @@ public class CopyArchiveToContainerCmdImpl extends AbstrDockerCmd<CopyArchiveToC
                         "Only one of host resource or tar input stream should be defined to perform the copy, not both");
             }
             // We compress the given path, call exec so that the stream is consumed and then close it our self
-            Path toUpload;
+            Path toUpload = null;
             try {
                 toUpload = Files.createTempFile("docker-java", ".tar.gz");
                 CompressArchiveUtil.tar(Paths.get(hostResource), toUpload, true, dirChildrenOnly);
             } catch (IOException createFileIOException) {
+                if (toUpload != null) {
+                    // remove tmp docker-javaxxx.tar.gz
+                    toUpload.toFile().delete();
+                }
                 throw new DockerClientException("Unable to perform tar on host resource " + this.hostResource, createFileIOException);
             }
             try (InputStream uploadStream = Files.newInputStream(toUpload)) {
