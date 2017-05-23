@@ -112,12 +112,6 @@ public class CopyArchiveToContainerCmdImpl extends AbstrDockerCmd<CopyArchiveToC
                 .append(remotePath).toString();
     }
 
-    private InputStream buildUploadStream(String hostResource, boolean dirChildrenOnly) throws IOException {
-        Path toUpload = Files.createTempFile("docker-java", ".tar.gz");
-        CompressArchiveUtil.tar(Paths.get(hostResource), toUpload, true, dirChildrenOnly);
-        return Files.newInputStream(toUpload);
-    }
-
     /**
      * @throws com.github.dockerjava.api.exception.NotFoundException
      *             No such container
@@ -131,11 +125,27 @@ public class CopyArchiveToContainerCmdImpl extends AbstrDockerCmd<CopyArchiveToC
                         "Only one of host resource or tar input stream should be defined to perform the copy, not both");
             }
             // We compress the given path, call exec so that the stream is consumed and then close it our self
-            try (InputStream uploadStream = buildUploadStream(this.hostResource, this.dirChildrenOnly)) {
+            Path toUpload = null;
+            try {
+                toUpload = Files.createTempFile("docker-java", ".tar.gz");
+                CompressArchiveUtil.tar(Paths.get(hostResource), toUpload, true, dirChildrenOnly);
+            } catch (IOException createFileIOException) {
+                if (toUpload != null) {
+                    // remove tmp docker-javaxxx.tar.gz
+                    toUpload.toFile().delete();
+                }
+                throw new DockerClientException(
+                        "Unable to perform tar on host resource " + this.hostResource, createFileIOException);
+            }
+            try (InputStream uploadStream = Files.newInputStream(toUpload)) {
                 this.tarInputStream = uploadStream;
                 return super.exec();
             } catch (IOException e) {
-                throw new DockerClientException("Unable to perform tar on host resource " + this.hostResource, e);
+                throw new DockerClientException(
+                        "Unable to read temp file " + toUpload.toFile().getAbsolutePath(), e);
+            } finally {
+                // remove tmp docker-javaxxx.tar.gz
+                toUpload.toFile().delete();
             }
         } else if (this.tarInputStream == null) {
             throw new DockerClientException(
