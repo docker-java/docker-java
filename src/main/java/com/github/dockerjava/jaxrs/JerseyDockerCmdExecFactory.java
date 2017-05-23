@@ -9,6 +9,7 @@ import java.net.ProxySelector;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
 import javax.ws.rs.client.Client;
@@ -266,7 +267,7 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     private org.apache.http.config.Registry<ConnectionSocketFactory> getSchemeRegistry(final URI originalUri,
-            SSLContext sslContext) {
+                                                                                       SSLContext sslContext) {
         RegistryBuilder<ConnectionSocketFactory> registryBuilder = RegistryBuilder.create();
         registryBuilder.register("http", PlainConnectionSocketFactory.getSocketFactory());
         if (sslContext != null) {
@@ -589,4 +590,14 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
         return this;
     }
 
+
+    /**
+     * release connections from the pool
+     *
+     * @param idleSeconds idle seconds, longer than the configured value will be evicted
+     */
+    public void releaseConnection(long idleSeconds) {
+        this.connManager.closeExpiredConnections();
+        this.connManager.closeIdleConnections(idleSeconds, TimeUnit.SECONDS);
+    }
 }
