@@ -13,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
 
@@ -26,11 +27,12 @@ public class AuthConfigFile {
     private static final TypeReference<Map<String, Map<String, AuthConfig>>> CONFIG_JSON_MAP_TYPE =
         new TypeReference<Map<String, Map<String, AuthConfig>>>() {
         };
+    private static final String AUTHS_PROPERTY = "auths";
 
     private final Map<String, AuthConfig> authConfigMap;
 
     public AuthConfigFile() {
-        authConfigMap = new HashMap<String, AuthConfig>();
+        authConfigMap = new HashMap<>();
     }
 
     void addConfig(AuthConfig config) {
@@ -114,10 +116,12 @@ public class AuthConfigFile {
          */
         try {
             // try registry version 2
-            Map<String, Map<String, AuthConfig>>  configJson = MAPPER.readValue(confFile, CONFIG_JSON_MAP_TYPE);
-            if (configJson != null) {
-                configMap = configJson.get("auths");
+            final ObjectNode node = filterNonAuthsFromJSON(confFile);
+            Map<String, Map<String, AuthConfig>>  configJson = MAPPER.convertValue(node, CONFIG_JSON_MAP_TYPE);
+            if (configJson != null && !configJson.isEmpty()) {
+                configMap = configJson.get(AUTHS_PROPERTY);
             }
+
         } catch (IOException e1) {
             try {
                 // try registry version 1
@@ -130,7 +134,10 @@ public class AuthConfigFile {
         if (configMap != null) {
             for (Map.Entry<String, AuthConfig> entry : configMap.entrySet()) {
                 AuthConfig authConfig = entry.getValue();
-                decodeAuth(authConfig.getAuth(), authConfig);
+                final String auth = authConfig.getAuth();
+                if (auth == null) continue;
+
+                decodeAuth(auth, authConfig);
                 authConfig.withAuth(null);
                 authConfig.withRegistryAddress(entry.getKey());
                 configFile.addConfig(authConfig);
@@ -156,6 +163,15 @@ public class AuthConfigFile {
         }
         return configFile;
 
+    }
+
+    private static ObjectNode filterNonAuthsFromJSON(final File confFile) throws IOException {
+        final ObjectNode node = MAPPER.readValue(confFile, ObjectNode.class);
+        if (!node.has(AUTHS_PROPERTY)) {
+            throw new IOException("No Auth Config contained");
+        }
+        node.retain(AUTHS_PROPERTY);
+        return node;
     }
 
     static void decodeAuth(String auth, AuthConfig config) throws IOException {
