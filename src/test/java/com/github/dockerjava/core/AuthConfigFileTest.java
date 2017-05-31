@@ -69,6 +69,19 @@ public class AuthConfigFileTest {
     }
 
     @Test
+    public void validJsonWithUnknown() throws IOException {
+        AuthConfig authConfig1 = new AuthConfig()
+                .withEmail("foo@example.com")
+                .withUsername("foo")
+                .withPassword("bar")
+                .withRegistryAddress("quay.io");
+
+        AuthConfigFile expected = new AuthConfigFile();
+        expected.addConfig(authConfig1);
+        runTest("validJsonWithUnknown.json");
+    }
+
+    @Test
     public void validLegacy() throws IOException {
         AuthConfig authConfig = new AuthConfig()
                 .withEmail("foo@example.com")
