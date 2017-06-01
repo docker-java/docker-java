@@ -581,6 +581,25 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
     }
 
     /**
+     * This test is intended to test the pidLimit option that will help prevent fork bombs and will prevent one container from taking the rest
+     */
+    @Test
+    public void createContainerWithPidsLimit() throws DockerException {
+
+        HostConfig hostConfig = new HostConfig().withPidsLimit(1024);
+
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withHostConfig(hostConfig).withCmd("true").exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+
+        assertThat(inspectContainerResponse.getHostConfig().getPidsLimit(), is(equalTo(1024)));
+    }
+
+    /**
      * This tests support for --net option for the docker run command: --net="bridge" Set the Network mode for the container 'bridge':
      * creates a new network stack for the container on the docker bridge 'none': no networking for this container 'container:': reuses
      * another container network stack 'host': use the host network stack inside the container. Note: the host mode gives the container full

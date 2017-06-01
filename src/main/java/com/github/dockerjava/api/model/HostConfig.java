@@ -170,6 +170,9 @@ public class HostConfig implements Serializable {
     @JsonProperty("PidMode")
     private String pidMode;
 
+    @JsonProperty("PidsLimit")
+    private Integer pidsLimit;
+
     /**
      * @since {@link RemoteApiVersion#VERSION_1_20}
      */
@@ -299,6 +302,11 @@ public class HostConfig implements Serializable {
     @CheckForNull
     public String getPidMode() {
         return pidMode;
+    }
+
+    @CheckForNull
+    public Integer getPidsLimit() {
+        return pidsLimit;
     }
 
     /**
@@ -702,6 +710,14 @@ public class HostConfig implements Serializable {
      */
     public HostConfig withPidMode(String pidMode) {
         this.pidMode = pidMode;
+        return this;
+    }
+
+     /**
+      * @see #pidsLimit
+      */
+    public HostConfig withPidsLimit(Integer pidsLimit) {
+        this.pidsLimit = pidsLimit;
         return this;
     }
 
