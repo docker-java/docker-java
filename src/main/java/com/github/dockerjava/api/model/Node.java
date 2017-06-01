@@ -1,5 +1,7 @@
 package com.github.dockerjava.api.model;
 
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -16,14 +18,23 @@ public class Node implements Serializable {
     @JsonProperty("Name")
     private String name;
 
-    @JsonProperty("Id")
+    @JsonProperty("ID")
     private String id;
 
     @JsonProperty("Addr")
     private String addr;
 
-    @JsonProperty("Ip")
+    @JsonProperty("IP")
     private String ip;
+
+    @JsonProperty("Labels")
+    private Map<String, String> labels;
+
+    @JsonProperty("Cpus")
+    private int cpus;
+
+    @JsonProperty("Memory")
+    private int memory;
 
     public String getName() {
         return name;
@@ -40,4 +51,17 @@ public class Node implements Serializable {
     public String getIp() {
         return ip;
     }
+
+    public Map<String, String> getLabels() {
+        return labels;
+    }
+
+    public int getCpus() {
+        return cpus;
+    }
+
+    public int getMemory() {
+        return memory;
+    }
+
 }
