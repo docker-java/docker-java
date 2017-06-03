@@ -134,15 +134,17 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
         clientConfig.register(ResponseStatusExceptionFilter.class);
         clientConfig.register(JsonClientFilter.class);
         clientConfig.register(JacksonJsonProvider.class);
-
+        RequestConfig.Builder requestConfigBuilder = RequestConfig.custom();
         // logging may disabled via log level
         clientConfig.register(new SelectiveLoggingFilter(LOGGER, true));
 
         if (readTimeout != null) {
+            requestConfigBuilder.setSocketTimeout(readTimeout);
             clientConfig.property(ClientProperties.READ_TIMEOUT, readTimeout);
         }
 
         if (connectTimeout != null) {
+            requestConfigBuilder.setConnectTimeout(connectTimeout);
             clientConfig.property(ClientProperties.CONNECT_TIMEOUT, connectTimeout);
         }
 
@@ -221,9 +223,9 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
 
         // Configure connection pool timeout
         if (connectionRequestTimeout != null) {
-            clientConfig.property(ApacheClientProperties.REQUEST_CONFIG, RequestConfig.custom()
-                    .setConnectionRequestTimeout(connectionRequestTimeout).build());
+            requestConfigBuilder.setConnectionRequestTimeout(connectionRequestTimeout);
         }
+        clientConfig.property(ApacheClientProperties.REQUEST_CONFIG, requestConfigBuilder.build());
         ClientBuilder clientBuilder = ClientBuilder.newBuilder().withConfig(clientConfig);
 
         if (sslContext != null) {
