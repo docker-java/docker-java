@@ -36,6 +36,12 @@ public interface CreateNetworkCmd extends SyncDockerCmd<CreateNetworkResponse> {
     @CheckForNull
     Boolean getEnableIPv6();
 
+    @CheckForNull
+    Boolean getAttachable();
+
+    @CheckForNull
+    Map<String, String> getLabels();
+
     /** The new network's name. Required. */
     CreateNetworkCmd withName(@Nonnull String name);
 
@@ -53,6 +59,20 @@ public interface CreateNetworkCmd extends SyncDockerCmd<CreateNetworkResponse> {
     CreateNetworkCmd withInternal(boolean internal);
 
     CreateNetworkCmd withEnableIpv6(boolean enableIpv6);
+
+    /**
+     * If enabled, and the network is in the global scope,  non-service containers on worker nodes will be able to connect to the network.
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_21}
+     */
+    CreateNetworkCmd withAttachable(Boolean attachable);
+
+    /**
+     * Add label for network
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_24}
+     */
+    CreateNetworkCmd withLabels(Map<String, String> labels);
 
     interface Exec extends DockerCmdSyncExec<CreateNetworkCmd, CreateNetworkResponse> {
     }
