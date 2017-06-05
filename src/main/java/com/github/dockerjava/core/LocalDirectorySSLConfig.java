@@ -1,20 +1,15 @@
 package com.github.dockerjava.core;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.io.File;
-import java.io.Serializable;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.security.Security;
-
 import javax.net.ssl.SSLContext;
-
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.glassfish.jersey.SslConfigurator;
+import java.io.Serializable;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.core.util.CertificateUtils;
+import org.glassfish.jersey.SslConfigurator;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * SSL Config from local files.
@@ -43,21 +38,17 @@ public class LocalDirectorySSLConfig implements SSLConfig, Serializable {
 
             try {
 
-                Security.addProvider(new BouncyCastleProvider());
+                Path basePath = Paths.get(dockerCertPath);
 
-                String caPemPath = dockerCertPath + File.separator + "ca.pem";
-                String keyPemPath = dockerCertPath + File.separator + "key.pem";
-                String certPemPath = dockerCertPath + File.separator + "cert.pem";
-
-                String keypem = new String(Files.readAllBytes(Paths.get(keyPemPath)));
-                String certpem = new String(Files.readAllBytes(Paths.get(certPemPath)));
-                String capem = new String(Files.readAllBytes(Paths.get(caPemPath)));
+                Path caPemPath = basePath.resolve("ca.pem");
+                Path keyPemPath = basePath.resolve("key.pem");
+                Path certPemPath = basePath.resolve("cert.pem");
 
                 SslConfigurator sslConfig = SslConfigurator.newInstance(true);
                 sslConfig.securityProtocol("TLSv1.2");
-                sslConfig.keyStore(CertificateUtils.createKeyStore(keypem, certpem));
+                sslConfig.keyStore(CertificateUtils.createKeyStore(keyPemPath, certPemPath));
                 sslConfig.keyStorePassword("docker");
-                sslConfig.trustStore(CertificateUtils.createTrustStore(capem));
+                sslConfig.trustStore(CertificateUtils.createTrustStore(caPemPath));
 
                 return sslConfig.createSSLContext();
 
