@@ -236,7 +236,7 @@ public class NettyDockerCmdExecFactory implements DockerCmdExecFactory {
             }
             throw new RuntimeException("Unspported OS");
         }
-        
+
         public EventLoopGroup epollGroup() {
             EventLoopGroup epollEventLoopGroup = new EpollEventLoopGroup(0, new DefaultThreadFactory(threadPrefix));
 
