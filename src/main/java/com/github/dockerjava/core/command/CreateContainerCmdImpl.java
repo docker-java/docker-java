@@ -220,6 +220,12 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     @JsonIgnore
+    public Integer getCpuQuota() {
+        return hostConfig.getCpuQuota();
+    }
+
+    @Override
+    @JsonIgnore
     public String getCpusetCpus() {
         return hostConfig.getCpusetCpus();
     }
@@ -579,6 +585,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public CreateContainerCmd withContainerIDFile(String containerIDFile) {
         checkNotNull(containerIDFile, "no containerIDFile was specified");
         hostConfig.withContainerIDFile(containerIDFile);
+        return this;
+    }
+
+    @Override
+    public CreateContainerCmd withCpuQuota(Integer cpuQuota) {
+        checkNotNull(cpuQuota, "cpuQuota was not specified");
+        hostConfig.withCpuQuota(cpuQuota);
         return this;
     }
 

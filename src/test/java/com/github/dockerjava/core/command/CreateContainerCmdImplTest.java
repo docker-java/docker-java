@@ -801,4 +801,18 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
         }
         assertThat(containerNetwork, notNullValue());
     }
+
+    public void createContainerWithCpuQuota() throws DockerException {
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withName("container")
+                .withCpuQuota(50000)
+                .exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+
+        assertEquals(Integer.valueOf(50000), inspectContainerResponse.getHostConfig().getCpuQuota());
+    }
 }
