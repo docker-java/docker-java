@@ -2,6 +2,13 @@ Change Log
 ===
 ## (dev) 3.1.0 (reserverd for swarm features)
  
+## 3.0.11
+- Add labels and attachable properties to network.
+- Set default socket timeout for RequestConfig.
+- Netty skip instead of throw error on non-linux os.
+- Clean tmp file after upload.
+- Filters ignore application/x-tar.
+- Allow user to call connectionManager's closeIdleConnections.
  
 ## 3.0.10
 - Support for cache-from in build image command
