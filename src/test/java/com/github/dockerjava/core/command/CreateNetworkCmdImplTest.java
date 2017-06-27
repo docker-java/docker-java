@@ -91,9 +91,10 @@ public class CreateNetworkCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void createNetworkWithLabel() throws DockerException {
         final RemoteApiVersion apiVersion = getVersion(dockerClient);
-        if (!apiVersion.isGreaterOrEqual(RemoteApiVersion.VERSION_1_21)) {
+        if (!apiVersion.isGreaterOrEqual(RemoteApiVersion.VERSION_1_21) || isSwarm(dockerClient)) {
             throw new SkipException("API version should be >= 1.21");
         }
+
         String networkName = "createNetworkWithLabel";
         Map<String,String> labels=new HashMap<>();
         labels.put("com.example.usage","test");

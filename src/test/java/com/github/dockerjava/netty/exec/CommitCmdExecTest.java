@@ -75,6 +75,7 @@ public class CommitCmdExecTest extends AbstractNettyDockerClientTest {
 
     @Test
     public void commitWithLabels() throws DockerException {
+        if (isSwarm(dockerClient)) throw new SkipException("FIXME Swarm");
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
                 .withCmd("touch", "/test")
