@@ -73,21 +73,23 @@ public class CommitCmdExecTest extends AbstractNettyDockerClientTest {
     @Test
     public void commitWithLabels() throws DockerException {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("touch", "/test").exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+                .withCmd("touch", "/test")
+                .exec();
 
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
         dockerClient.startContainerCmd(container.getId()).exec();
 
         LOG.info("Committing container: {}", container.toString());
-        Map<String, String> labels = ImmutableMap.of("label1", "abc", "label2", "123");
+        Map<String, String> labels = ImmutableMap.of("nettyLabel1", "abc", "nettyLabel2", "123");
         String imageId = dockerClient.commitCmd(container.getId()).withLabels(labels).exec();
 
         InspectImageResponse inspectImageResponse = dockerClient.inspectImageCmd(imageId).exec();
         LOG.info("Image Inspect: {}", inspectImageResponse.toString());
         Map<String, String> responseLabels = inspectImageResponse.getContainerConfig().getLabels();
-        assertThat(responseLabels.get("label1"), equalTo("abc"));
-        assertThat(responseLabels.get("label2"), equalTo("123"));
+        assertThat(responseLabels.get("nettyLabel1"), equalTo("abc"));
+        assertThat(responseLabels.get("nettyLabel2"), equalTo("123"));
     }
 
     @Test(expectedExceptions = NotFoundException.class)
