@@ -1,7 +1,5 @@
 package com.github.dockerjava.netty.exec;
 
-import static com.google.common.net.UrlEscapers.urlPathSegmentEscaper;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +27,7 @@ public class EventsCmdExec extends AbstrAsyncDockerCmdExec<EventsCmd, Event> imp
 
         if (command.getFilters() != null && !command.getFilters().isEmpty()) {
             webTarget = webTarget
-                    .queryParam("filters", urlPathSegmentEscaper().escape(FiltersEncoder.jsonEncode(command.getFilters())));
+                    .queryParam("filters", FiltersEncoder.jsonEncode(command.getFilters()));
         }
 
         LOGGER.trace("GET: {}", webTarget);

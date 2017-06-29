@@ -1,0 +1,12 @@
+{
+  "auths": {
+    "192.168.99.100:32768": {},
+    "https://index.docker.io/v1/": {
+      "auth": "Zm9vOmJhcg==",
+      "email": "foo@example.com"
+    }
+  },
+  "HttpHeaders": {
+    "User-Agent": "user agent"
+  }
+}

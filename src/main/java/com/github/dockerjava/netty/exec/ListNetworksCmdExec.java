@@ -13,8 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-import static com.google.common.net.UrlEscapers.urlPathSegmentEscaper;
-
 public class ListNetworksCmdExec extends AbstrSyncDockerCmdExec<ListNetworksCmd, List<Network>> implements
         ListNetworksCmd.Exec {
 
@@ -29,7 +27,7 @@ public class ListNetworksCmdExec extends AbstrSyncDockerCmdExec<ListNetworksCmd,
         WebTarget webTarget = getBaseResource().path("/networks");
 
         if (command.getFilters() != null && !command.getFilters().isEmpty()) {
-            webTarget = webTarget.queryParam("filters", urlPathSegmentEscaper().escape(FiltersEncoder.jsonEncode(command.getFilters())));
+            webTarget = webTarget.queryParam("filters", FiltersEncoder.jsonEncode(command.getFilters()));
         }
 
         LOGGER.trace("GET: {}", webTarget);

@@ -1,7 +1,5 @@
 package com.github.dockerjava.netty.exec;
 
-import static com.google.common.net.UrlEscapers.urlPathSegmentEscaper;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +25,7 @@ public class ListVolumesCmdExec extends AbstrSyncDockerCmdExec<ListVolumesCmd, L
         WebTarget webTarget = getBaseResource().path("/volumes");
 
         if (command.getFilters() != null && !command.getFilters().isEmpty()) {
-            webTarget = webTarget.queryParam("filters", urlPathSegmentEscaper().escape(FiltersEncoder.jsonEncode(command.getFilters())));
+            webTarget = webTarget.queryParam("filters", FiltersEncoder.jsonEncode(command.getFilters()));
         }
 
         LOGGER.trace("GET: {}", webTarget);

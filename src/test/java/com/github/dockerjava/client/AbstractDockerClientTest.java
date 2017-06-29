@@ -83,11 +83,11 @@ public abstract class AbstractDockerClientTest extends Assert {
     }
 
     public void afterTest() {
-        LOG.info("======================= END OF AFTERTEST =======================");
+        LOG.debug("======================= END OF AFTERTEST =======================");
     }
 
     public void beforeMethod(Method method) {
-        LOG.info(String.format("################################## STARTING %s ##################################",
+        LOG.debug(String.format("################################## STARTING %s ##################################",
                 method.getName()));
     }
 
