@@ -78,6 +78,8 @@ public class EventsCmdImplTest extends AbstractDockerClientTest {
 
     @Test
     public void testEventStreaming() throws Exception {
+        if (isSwarm(dockerClient)) throw new SkipException("FIXME Swarm");
+
         // Don't include other tests events
         TimeUnit.SECONDS.sleep(1);
         
