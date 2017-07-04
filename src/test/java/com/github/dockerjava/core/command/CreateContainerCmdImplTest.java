@@ -23,6 +23,8 @@ import com.github.dockerjava.api.model.Ports.Binding;
 import com.github.dockerjava.client.AbstractDockerClientTest;
 
 import com.github.dockerjava.core.RemoteApiVersion;
+import com.google.common.collect.ImmutableMap;
+
 import org.apache.commons.io.FileUtils;
 import org.testng.ITestResult;
 import org.testng.SkipException;
@@ -800,5 +802,20 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
             containerNetwork = inspectContainerResponse.getNetworkSettings().getNetworks().get(networkId);
         }
         assertThat(containerNetwork, notNullValue());
+    }
+
+    @Test
+    public void createContainerWithTmpFs() throws DockerException {
+
+        CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("sleep", "9999")
+                .withTmpFs(ImmutableMap.of("/tmp", "rw,noexec,nosuid,size=50m")).exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+
+        assertThat(inspectContainerResponse.getHostConfig().getTmpFs().keySet(), contains("/tmp"));
     }
 }
