@@ -22,6 +22,7 @@ import com.github.dockerjava.api.model.Ulimit;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
 import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
+import com.google.common.collect.ImmutableMap;
 
 import org.apache.commons.io.FileUtils;
 import org.testng.ITestResult;
@@ -751,5 +752,19 @@ public class CreateContainerCmdExecTest extends AbstractNettyDockerClientTest {
         InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
 
         assertThat(inspectContainerResponse.getHostConfig().getPidsLimit(), is(hostConfig.getPidsLimit()));
+    }
+    
+    public void createContainerWithTmpFs() throws DockerException {
+
+        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+                .withHostConfig(new HostConfig().withTmpFs(ImmutableMap.of("/tmp", "rw,noexec,nosuid,size=50m"))).exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
+
+        assertThat(inspectContainerResponse.getHostConfig().getTmpFs().keySet(), contains("/tmp"));
     }
 }

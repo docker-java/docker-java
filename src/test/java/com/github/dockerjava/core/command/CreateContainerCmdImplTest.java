@@ -808,7 +808,7 @@ public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
     public void createContainerWithTmpFs() throws DockerException {
 
         CreateContainerResponse container = dockerClient.createContainerCmd(BUSYBOX_IMAGE).withCmd("sleep", "9999")
-                .withTmpFs(ImmutableMap.of("/tmp", "rw,noexec,nosuid,size=50m")).exec();
+                .withHostConfig(new HostConfig().withTmpFs(ImmutableMap.of("/tmp", "rw,noexec,nosuid,size=50m"))).exec();
 
         LOG.info("Created container {}", container.toString());
 
