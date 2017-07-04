@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -866,4 +867,18 @@ public class CreateContainerCmdIT extends CmdIT {
                 .exec();
     }
 
+    @Test
+    public void createContainerWithTmpFs() throws DockerException {
+
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("sleep", "9999")
+                .withTmpFs(Collections.singletonMap("/tmp", "rw,noexec,nosuid,size=50m")).exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
+
+        assertThat(inspectContainerResponse.getHostConfig().getTmpFs().keySet(), contains("/tmp"));
+    }
 }

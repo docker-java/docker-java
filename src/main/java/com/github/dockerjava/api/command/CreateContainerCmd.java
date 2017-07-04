@@ -429,6 +429,8 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     CreateContainerCmd withTty(Boolean tty);
 
+    CreateContainerCmd withTmpFs(Map<String, String> tmpFs);
+
     CreateContainerCmd withUlimits(Ulimit... ulimits);
 
     CreateContainerCmd withUlimits(List<Ulimit> ulimits);
