@@ -921,13 +921,6 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
-    public CreateContainerCmd withTmpFs(Map<String, String> tmpFs) {
-        checkNotNull(tmpFs, "no tmpFs was specified");
-        this.hostConfig.withTmpFs(tmpFs);
-        return this;
-    }
-
-    @Override
     public CreateContainerCmd withTty(Boolean tty) {
         checkNotNull(tty, "no tty was specified");
         this.tty = tty;

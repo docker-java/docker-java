@@ -871,7 +871,7 @@ public class CreateContainerCmdIT extends CmdIT {
     public void createContainerWithTmpFs() throws DockerException {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("sleep", "9999")
-                .withTmpFs(Collections.singletonMap("/tmp", "rw,noexec,nosuid,size=50m")).exec();
+                .withHostConfig(new HostConfig().withTmpFs(Collections.singletonMap("/tmp", "rw,noexec,nosuid,size=50m"))).exec();
 
         LOG.info("Created container {}", container.toString());
 
