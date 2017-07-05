@@ -430,7 +430,7 @@
 				<version>${maven-surefire-plugin.version}</version>
 				<configuration>
 					<rerunFailingTestsCount>3</rerunFailingTestsCount>
-					<excludedGroups>integration,integration-auth</excludedGroups>
+					<excludedGroups>integration,integration-auth,swarm-integration</excludedGroups>
 				</configuration>
 			</plugin>
 
@@ -450,7 +450,7 @@
 							<perCoreThreadCount>true</perCoreThreadCount>
 							<threadCount>1</threadCount>
 							<groups>integration</groups>
-							<excludedGroups>integration-auth</excludedGroups>
+							<excludedGroups>integration-auth,swarm-integration</excludedGroups>
 							<includes>
 								<include>**/*Test.java</include>
 							</includes>

@@ -117,6 +117,83 @@ public interface DockerCmdExecFactory extends Closeable {
 
     DisconnectFromNetworkCmd.Exec createDisconnectFromNetworkCmdExec();
 
+    // swarm
+    InitializeSwarmCmd.Exec createInitializeSwarmCmdExec();
+
+    InspectSwarmCmd.Exec createInspectSwarmCmdExec();
+
+    JoinSwarmCmd.Exec createJoinSwarmCmdExec();
+
+    LeaveSwarmCmd.Exec createLeaveSwarmCmdExec();
+
+    UpdateSwarmCmd.Exec createUpdateSwarmCmdExec();
+
+    /**
+     * Command to list all services in a docker swarm. Only applicable if docker runs in swarm mode.
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_24}
+     */
+    ListServicesCmd.Exec createListServicesCmdExec();
+
+    /**
+     * Command to create a new service in a docker swarm. Only applicable if docker runs in swarm mode.
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_24}
+     */
+    CreateServiceCmd.Exec createCreateServiceCmdExec();
+
+    /**
+     * Command to inspect a service in a docker swarm. Only applicable if docker runs in swarm mode.
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_24}
+     */
+    InspectServiceCmd.Exec createInspectServiceCmdExec();
+
+    /**
+     * Command to update a service specification in a docker swarm. Only applicable if docker runs in swarm mode.
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_24}
+     */
+    UpdateServiceCmd.Exec createUpdateServiceCmdExec();
+
+    /**
+     * Command to remove a service in a docker swarm. Only applicable if docker runs in swarm mode.
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_24}
+     */
+    RemoveServiceCmd.Exec createRemoveServiceCmdExec();
+
+    // nodes
+
+    /**
+     * List all nodes. Node operations require the engine to be part of a swarm
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_24}
+     */
+    ListSwarmNodesCmd.Exec listSwarmNodeCmdExec();
+
+    /**
+     * Return low-level information on the node. Node operations require the engine to be part of a swarm
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_24}
+     */
+    InspectSwarmNodeCmd.Exec inspectSwarmNodeCmdExec();
+
+    /**
+     * Remove a node from the swarm. Node operations require the engine to be part of a swarm
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_24}
+     */
+    RemoveSwarmNodeCmd.Exec removeSwarmNodeCmdExec();
+
+    /**
+     * Update a node. Node operations require the engine to be part of a swarm
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_24}
+     */
+    UpdateSwarmNodeCmd.Exec updateSwarmNodeCmdExec();
+
+
     @Override
     void close() throws IOException;
 

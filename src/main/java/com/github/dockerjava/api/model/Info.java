@@ -225,6 +225,12 @@ public class Info implements Serializable {
     private String clusterAdvertise;
 
     /**
+     * @since 1.24
+     */
+    @JsonProperty("Swarm")
+    private SwarmInfo swarm;
+
+    /**
      * @see #architecture
      */
     @CheckForNull
@@ -1021,6 +1027,22 @@ public class Info implements Serializable {
      */
     public Info withSystemTime(String systemTime) {
         this.systemTime = systemTime;
+        return this;
+    }
+
+    /**
+     * @see #swarm
+     */
+    @CheckForNull
+    public SwarmInfo getSwarm() {
+        return swarm;
+    }
+
+    /**
+     * @see #swarm
+     */
+    public Info withSwarm(SwarmInfo swarm) {
+        this.swarm = swarm;
         return this;
     }
 
