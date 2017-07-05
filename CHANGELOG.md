@@ -1,7 +1,8 @@
 Change Log
 ===
-## (dev) 3.1.0 (reserverd for swarm features)
- 
+## 3.1.0 WIP
+- Swarm Mode support.
+- Classic swarm support.
  
 ## 3.0.12
 - Make NettyDockerCmdExecFactory has compatibility both Linux and OSX automatically
