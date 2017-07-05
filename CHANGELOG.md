@@ -2,6 +2,12 @@ Change Log
 ===
 ## (dev) 3.1.0 (reserverd for swarm features)
  
+ 
+## 3.0.12
+- Make NettyDockerCmdExecFactory has compatibility both Linux and OSX automatically
+- Fix double encoding for netty.
+- filter config.json before unmarshalling (creds/auth)
+
 ## 3.0.11
 - Add labels and attachable properties to network.
 - Set default socket timeout for RequestConfig.
