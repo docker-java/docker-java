@@ -1,5 +1,19 @@
 package com.github.dockerjava.netty;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.security.Security;
+
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.SSLParameters;
+
+import org.apache.commons.lang.SystemUtils;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
 import com.github.dockerjava.api.command.BuildImageCmd;
@@ -39,6 +53,7 @@ import com.github.dockerjava.api.command.RemoveContainerCmd;
 import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.command.RemoveNetworkCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
+import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
 import com.github.dockerjava.api.command.SearchImagesCmd;
@@ -51,7 +66,6 @@ import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.UpdateContainerCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
-import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.core.SSLConfig;
@@ -93,6 +107,7 @@ import com.github.dockerjava.netty.exec.RemoveContainerCmdExec;
 import com.github.dockerjava.netty.exec.RemoveImageCmdExec;
 import com.github.dockerjava.netty.exec.RemoveNetworkCmdExec;
 import com.github.dockerjava.netty.exec.RemoveVolumeCmdExec;
+import com.github.dockerjava.netty.exec.RenameContainerCmdExec;
 import com.github.dockerjava.netty.exec.RestartContainerCmdExec;
 import com.github.dockerjava.netty.exec.SaveImageCmdExec;
 import com.github.dockerjava.netty.exec.SearchImagesCmdExec;
@@ -105,7 +120,6 @@ import com.github.dockerjava.netty.exec.UnpauseContainerCmdExec;
 import com.github.dockerjava.netty.exec.UpdateContainerCmdExec;
 import com.github.dockerjava.netty.exec.VersionCmdExec;
 import com.github.dockerjava.netty.exec.WaitContainerCmdExec;
-import com.github.dockerjava.netty.exec.RenameContainerCmdExec;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -115,6 +129,8 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.EpollDomainSocketChannel;
 import io.netty.channel.epoll.EpollEventLoopGroup;
+import io.netty.channel.kqueue.KQueueDomainSocketChannel;
+import io.netty.channel.kqueue.KQueueEventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.DuplexChannel;
 import io.netty.channel.socket.SocketChannel;
@@ -125,19 +141,6 @@ import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslHandler;
 import io.netty.util.concurrent.DefaultThreadFactory;
-
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
-import javax.net.ssl.SSLEngine;
-import javax.net.ssl.SSLParameters;
-
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.security.Security;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Experimental implementation of {@link DockerCmdExecFactory} that supports http connection hijacking that is needed to pass STDIN to the
@@ -226,6 +229,15 @@ public class NettyDockerCmdExecFactory implements DockerCmdExecFactory {
     private class UnixDomainSocketInitializer implements NettyInitializer {
         @Override
         public EventLoopGroup init(Bootstrap bootstrap, DockerClientConfig dockerClientConfig) {
+            if (SystemUtils.IS_OS_LINUX) {
+                return epollGroup();
+            } else if (SystemUtils.IS_OS_MAC_OSX) {
+                return kqueueGroup();
+            }
+            throw new RuntimeException("Unspported OS");
+        }
+
+        public EventLoopGroup epollGroup() {
             EventLoopGroup epollEventLoopGroup = new EpollEventLoopGroup(0, new DefaultThreadFactory(threadPrefix));
 
             ChannelFactory<EpollDomainSocketChannel> factory = new ChannelFactory<EpollDomainSocketChannel>() {
@@ -235,14 +247,28 @@ public class NettyDockerCmdExecFactory implements DockerCmdExecFactory {
                 }
             };
 
-            bootstrap.group(epollEventLoopGroup).channelFactory(factory)
-                    .handler(new ChannelInitializer<UnixChannel>() {
+            bootstrap.group(epollEventLoopGroup).channelFactory(factory).handler(new ChannelInitializer<UnixChannel>() {
+                @Override
+                protected void initChannel(final UnixChannel channel) throws Exception {
+                    channel.pipeline().addLast(new HttpClientCodec());
+                }
+            });
+            return epollEventLoopGroup;
+        }
+
+        public EventLoopGroup kqueueGroup() {
+            EventLoopGroup nioEventLoopGroup = new KQueueEventLoopGroup(0, new DefaultThreadFactory(threadPrefix));
+
+            bootstrap.group(nioEventLoopGroup).channel(KQueueDomainSocketChannel.class)
+                    .handler(new ChannelInitializer<KQueueDomainSocketChannel>() {
                         @Override
-                        protected void initChannel(final UnixChannel channel) throws Exception {
+                        protected void initChannel(final KQueueDomainSocketChannel channel) throws Exception {
+                            channel.pipeline().addLast(new LoggingHandler(getClass()));
                             channel.pipeline().addLast(new HttpClientCodec());
                         }
                     });
-            return epollEventLoopGroup;
+
+            return nioEventLoopGroup;
         }
 
         @Override
