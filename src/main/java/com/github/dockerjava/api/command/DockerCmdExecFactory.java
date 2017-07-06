@@ -52,7 +52,11 @@ public interface DockerCmdExecFactory extends Closeable {
 
     AttachContainerCmd.Exec createAttachContainerCmdExec();
 
+    ResizeContainerCmd.Exec createResizeContainerCmdExec();
+
     ExecStartCmd.Exec createExecStartCmdExec();
+
+    ResizeExecCmd.Exec createResizeExecCmdExec();
 
     InspectExecCmd.Exec createInspectExecCmdExec();
 
@@ -129,35 +133,40 @@ public interface DockerCmdExecFactory extends Closeable {
     UpdateSwarmCmd.Exec createUpdateSwarmCmdExec();
 
     /**
-     * Command to list all services in a docker swarm. Only applicable if docker runs in swarm mode.
+     * Command to list all services in a docker swarm. Only applicable if docker
+     * runs in swarm mode.
      *
      * @since {@link RemoteApiVersion#VERSION_1_24}
      */
     ListServicesCmd.Exec createListServicesCmdExec();
 
     /**
-     * Command to create a new service in a docker swarm. Only applicable if docker runs in swarm mode.
+     * Command to create a new service in a docker swarm. Only applicable if
+     * docker runs in swarm mode.
      *
      * @since {@link RemoteApiVersion#VERSION_1_24}
      */
     CreateServiceCmd.Exec createCreateServiceCmdExec();
 
     /**
-     * Command to inspect a service in a docker swarm. Only applicable if docker runs in swarm mode.
+     * Command to inspect a service in a docker swarm. Only applicable if docker
+     * runs in swarm mode.
      *
      * @since {@link RemoteApiVersion#VERSION_1_24}
      */
     InspectServiceCmd.Exec createInspectServiceCmdExec();
 
     /**
-     * Command to update a service specification in a docker swarm. Only applicable if docker runs in swarm mode.
+     * Command to update a service specification in a docker swarm. Only
+     * applicable if docker runs in swarm mode.
      *
      * @since {@link RemoteApiVersion#VERSION_1_24}
      */
     UpdateServiceCmd.Exec createUpdateServiceCmdExec();
 
     /**
-     * Command to remove a service in a docker swarm. Only applicable if docker runs in swarm mode.
+     * Command to remove a service in a docker swarm. Only applicable if docker
+     * runs in swarm mode.
      *
      * @since {@link RemoteApiVersion#VERSION_1_24}
      */
@@ -173,14 +182,16 @@ public interface DockerCmdExecFactory extends Closeable {
     ListSwarmNodesCmd.Exec listSwarmNodeCmdExec();
 
     /**
-     * Return low-level information on the node. Node operations require the engine to be part of a swarm
+     * Return low-level information on the node. Node operations require the
+     * engine to be part of a swarm
      *
      * @since {@link RemoteApiVersion#VERSION_1_24}
      */
     InspectSwarmNodeCmd.Exec inspectSwarmNodeCmdExec();
 
     /**
-     * Remove a node from the swarm. Node operations require the engine to be part of a swarm
+     * Remove a node from the swarm. Node operations require the engine to be
+     * part of a swarm
      *
      * @since {@link RemoteApiVersion#VERSION_1_24}
      */
@@ -192,7 +203,6 @@ public interface DockerCmdExecFactory extends Closeable {
      * @since {@link RemoteApiVersion#VERSION_1_24}
      */
     UpdateSwarmNodeCmd.Exec updateSwarmNodeCmdExec();
-
 
     @Override
     void close() throws IOException;

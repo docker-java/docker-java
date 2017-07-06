@@ -1,5 +1,10 @@
 package com.github.dockerjava.core;
 
+import java.io.IOException;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd.Exec;
@@ -56,6 +61,8 @@ import com.github.dockerjava.api.command.RemoveServiceCmd;
 import com.github.dockerjava.api.command.RemoveSwarmNodeCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
+import com.github.dockerjava.api.command.ResizeContainerCmd;
+import com.github.dockerjava.api.command.ResizeExecCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
 import com.github.dockerjava.api.command.SearchImagesCmd;
@@ -73,14 +80,10 @@ import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.model.BuildResponseItem;
 
-import java.io.IOException;
-import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Special {@link DockerCmdExecFactory} implementation that collects container and image creations while test execution for the purpose of
- * automatically cleanup.
+ * Special {@link DockerCmdExecFactory} implementation that collects container
+ * and image creations while test execution for the purpose of automatically
+ * cleanup.
  *
  * @author Marcus Linke
  */
@@ -268,8 +271,18 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     @Override
+    public ResizeContainerCmd.Exec createResizeContainerCmdExec() {
+        return delegate.createResizeContainerCmdExec();
+    }
+
+    @Override
     public ExecStartCmd.Exec createExecStartCmdExec() {
         return delegate.createExecStartCmdExec();
+    }
+
+    @Override
+    public ResizeExecCmd.Exec createResizeExecCmdExec() {
+        return delegate.createResizeExecCmdExec();
     }
 
     @Override

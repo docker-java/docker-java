@@ -1,5 +1,37 @@
 package com.github.dockerjava.jaxrs;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.ProxySelector;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.SSLContext;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.ClientRequestFilter;
+import javax.ws.rs.client.ClientResponseFilter;
+import javax.ws.rs.client.WebTarget;
+
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.glassfish.jersey.CommonProperties;
+import org.glassfish.jersey.apache.connector.ApacheClientProperties;
+import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.ClientProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
@@ -54,6 +86,8 @@ import com.github.dockerjava.api.command.RemoveServiceCmd;
 import com.github.dockerjava.api.command.RemoveSwarmNodeCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
+import com.github.dockerjava.api.command.ResizeContainerCmd.Exec;
+import com.github.dockerjava.api.command.ResizeExecCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
 import com.github.dockerjava.api.command.SearchImagesCmd;
@@ -75,36 +109,6 @@ import com.github.dockerjava.core.SSLConfig;
 import com.github.dockerjava.jaxrs.filter.JsonClientFilter;
 import com.github.dockerjava.jaxrs.filter.ResponseStatusExceptionFilter;
 import com.github.dockerjava.jaxrs.filter.SelectiveLoggingFilter;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.config.RegistryBuilder;
-import org.apache.http.conn.socket.ConnectionSocketFactory;
-import org.apache.http.conn.socket.PlainConnectionSocketFactory;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.glassfish.jersey.CommonProperties;
-import org.glassfish.jersey.apache.connector.ApacheClientProperties;
-import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
-import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.client.ClientProperties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.net.ssl.SSLContext;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.client.ClientResponseFilter;
-import javax.ws.rs.client.WebTarget;
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.net.ProxySelector;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 //import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 // see https://github.com/docker-java/docker-java/issues/196
@@ -214,8 +218,7 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
             configureProxy(clientConfig, originalUri, protocol);
         }
 
-        connManager = new PoolingHttpClientConnectionManager(getSchemeRegistry(
-                originalUri, sslContext)) {
+        connManager = new PoolingHttpClientConnectionManager(getSchemeRegistry(originalUri, sslContext)) {
 
             @Override
             public void close() {
@@ -224,9 +227,12 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
 
             @Override
             public void shutdown() {
-                // Disable shutdown of the pool. This will be done later, when this factory is closed
-                // This is a workaround for finalize method on jerseys ClientRuntime which
-                // closes the client and shuts down the connection pool when it is garbage collected
+                // Disable shutdown of the pool. This will be done later, when
+                // this factory is closed
+                // This is a workaround for finalize method on jerseys
+                // ClientRuntime which
+                // closes the client and shuts down the connection pool when it
+                // is garbage collected
             }
         };
 
@@ -252,7 +258,8 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
 
         client = clientBuilder.build();
 
-        baseResource = client.target(sanitizeUrl(originalUri).toString()).path(dockerClientConfig.getApiVersion().asWebPathPart());
+        baseResource = client.target(sanitizeUrl(originalUri).toString())
+                .path(dockerClientConfig.getApiVersion().asWebPathPart());
     }
 
     private URI sanitizeUrl(URI originalUri) {
@@ -287,7 +294,7 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     private org.apache.http.config.Registry<ConnectionSocketFactory> getSchemeRegistry(final URI originalUri,
-                                                                                       SSLContext sslContext) {
+            SSLContext sslContext) {
         RegistryBuilder<ConnectionSocketFactory> registryBuilder = RegistryBuilder.create();
         registryBuilder.register("http", PlainConnectionSocketFactory.getSocketFactory());
         if (sslContext != null) {
@@ -298,7 +305,8 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     protected WebTarget getBaseResource() {
-        checkNotNull(baseResource, "Factory not initialized, baseResource not set. You probably forgot to call init()!");
+        checkNotNull(baseResource,
+                "Factory not initialized, baseResource not set. You probably forgot to call init()!");
         return baseResource;
     }
 
@@ -414,8 +422,18 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     @Override
+    public Exec createResizeContainerCmdExec() {
+        return new ResizeContainerCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
     public ExecStartCmd.Exec createExecStartCmdExec() {
         return new ExecStartCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public ResizeExecCmd.Exec createResizeExecCmdExec() {
+        return new ResizeExecCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
@@ -619,7 +637,7 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
         return new RemoveServiceCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
-    //node
+    // node
     @Override
     public ListSwarmNodesCmd.Exec listSwarmNodeCmdExec() {
         return new ListSwarmNodesCmdExec(getBaseResource(), getDockerClientConfig());
@@ -682,11 +700,11 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
         return this;
     }
 
-
     /**
      * release connections from the pool
      *
-     * @param idleSeconds idle seconds, longer than the configured value will be evicted
+     * @param idleSeconds
+     *            idle seconds, longer than the configured value will be evicted
      */
     public void releaseConnection(long idleSeconds) {
         this.connManager.closeExpiredConnections();

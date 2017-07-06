@@ -1,5 +1,12 @@
 package com.github.dockerjava.api;
 
+import java.io.Closeable;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.annotation.Nonnull;
+
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
 import com.github.dockerjava.api.command.BuildImageCmd;
@@ -47,6 +54,8 @@ import com.github.dockerjava.api.command.RemoveNetworkCmd;
 import com.github.dockerjava.api.command.RemoveServiceCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
+import com.github.dockerjava.api.command.ResizeContainerCmd;
+import com.github.dockerjava.api.command.ResizeExecCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
 import com.github.dockerjava.api.command.SearchImagesCmd;
@@ -67,12 +76,6 @@ import com.github.dockerjava.api.model.Identifier;
 import com.github.dockerjava.api.model.ServiceSpec;
 import com.github.dockerjava.api.model.SwarmSpec;
 import com.github.dockerjava.core.RemoteApiVersion;
-
-import javax.annotation.Nonnull;
-import java.io.Closeable;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 
 // https://godoc.org/github.com/fsouza/go-dockerclient
 public interface DockerClient extends Closeable {
@@ -124,7 +127,8 @@ public interface DockerClient extends Closeable {
 
     /**
      * @param name
-     *            The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
+     *            The name, e.g. "alexec/busybox" or just "busybox" if you want
+     *            to default. Not null.
      */
     SaveImageCmd saveImageCmd(@Nonnull String name);
 
@@ -137,15 +141,21 @@ public interface DockerClient extends Closeable {
     CreateContainerCmd createContainerCmd(@Nonnull String image);
 
     /**
-     * Creates a new {@link StartContainerCmd} for the container with the given ID. The command can then be further customized by using
-     * builder methods on it like {@link StartContainerCmd#withDns(String...)}.
+     * Creates a new {@link StartContainerCmd} for the container with the given
+     * ID. The command can then be further customized by using builder methods
+     * on it like {@link StartContainerCmd#withDns(String...)}.
      * <p>
-     * <b>If you customize the command, any existing configuration of the target container will get reset to its default before applying the
-     * new configuration. To preserve the existing configuration, use an unconfigured {@link StartContainerCmd}.</b>
+     * <b>If you customize the command, any existing configuration of the target
+     * container will get reset to its default before applying the new
+     * configuration. To preserve the existing configuration, use an
+     * unconfigured {@link StartContainerCmd}.</b>
      * <p>
-     * This command corresponds to the <code>/containers/{id}/start</code> endpoint of the Docker Remote API.
+     * This command corresponds to the <code>/containers/{id}/start</code>
+     * endpoint of the Docker Remote API.
      */
     StartContainerCmd startContainerCmd(@Nonnull String containerId);
+
+    ResizeContainerCmd resizeContainerCmd(@Nonnull String containerId);
 
     ExecCreateCmd execCreateCmd(@Nonnull String containerId);
 
@@ -158,6 +168,8 @@ public interface DockerClient extends Closeable {
     AttachContainerCmd attachContainerCmd(@Nonnull String containerId);
 
     ExecStartCmd execStartCmd(@Nonnull String execId);
+
+    ResizeExecCmd resizeExecCmd(@Nonnull String execId);
 
     InspectExecCmd inspectExecCmd(@Nonnull String execId);
 
@@ -184,8 +196,9 @@ public interface DockerClient extends Closeable {
      *            path to container's resource
      * @return created command
      * @see #copyArchiveFromContainerCmd(String, String)
-     * @deprecated since docker API version 1.20, replaced by {@link #copyArchiveFromContainerCmd(String, String)}
-     * since 1.24 fails.
+     * @deprecated since docker API version 1.20, replaced by
+     *             {@link #copyArchiveFromContainerCmd(String, String)} since
+     *             1.24 fails.
      */
     @Deprecated
     CopyFileFromContainerCmd copyFileFromContainerCmd(@Nonnull String containerId, @Nonnull String resource);
@@ -209,7 +222,8 @@ public interface DockerClient extends Closeable {
     /**
      * Update container settings
      *
-     * @param containerId id of the container
+     * @param containerId
+     *            id of the container
      * @return command
      * @since {@link RemoteApiVersion#VERSION_1_22}
      */
@@ -218,7 +232,8 @@ public interface DockerClient extends Closeable {
     /**
      * Rename container.
      *
-     * @param containerId id of the container
+     * @param containerId
+     *            id of the container
      * @return command
      * @since {@link RemoteApiVersion#VERSION_1_17}
      */
@@ -270,7 +285,8 @@ public interface DockerClient extends Closeable {
      * Enables swarm mode for the docker engine and creates a new swarm cluster
      *
      * @since 1.24
-     * @param swarmSpec the specification for the swarm
+     * @param swarmSpec
+     *            the specification for the swarm
      * @return the command
      */
     InitializeSwarmCmd initializeSwarmCmd(SwarmSpec swarmSpec);
@@ -284,7 +300,8 @@ public interface DockerClient extends Closeable {
     InspectSwarmCmd inspectSwarmCmd();
 
     /**
-     * Enables swarm mode for the docker engine and joins an existing swarm cluster
+     * Enables swarm mode for the docker engine and joins an existing swarm
+     * cluster
      *
      * @since 1.24
      * @return the command
@@ -303,13 +320,15 @@ public interface DockerClient extends Closeable {
      * Updates the swarm specification
      *
      * @since 1.24
-     * @param swarmSpec the specification for the swarm
+     * @param swarmSpec
+     *            the specification for the swarm
      * @return the command
      */
     UpdateSwarmCmd updateSwarmCmd(SwarmSpec swarmSpec);
 
     /**
-     * Command to list all services in a docker swarm. Only applicable if docker runs in swarm mode.
+     * Command to list all services in a docker swarm. Only applicable if docker
+     * runs in swarm mode.
      *
      * @since {@link RemoteApiVersion#VERSION_1_24}
      * @return command
@@ -317,32 +336,41 @@ public interface DockerClient extends Closeable {
     ListServicesCmd listServicesCmd();
 
     /**
-     * Command to create a service in a docker swarm. Only applicable if docker runs in swarm mode.
+     * Command to create a service in a docker swarm. Only applicable if docker
+     * runs in swarm mode.
      *
      * @since {@link RemoteApiVersion#VERSION_1_24}
-     * @param serviceSpec the service specification
+     * @param serviceSpec
+     *            the service specification
      * @return command
      */
     CreateServiceCmd createServiceCmd(ServiceSpec serviceSpec);
 
     /**
      * Command to inspect a service
-     * @param serviceId service id or service name
+     *
+     * @param serviceId
+     *            service id or service name
      * @return command
      */
     InspectServiceCmd inspectServiceCmd(String serviceId);
 
     /**
      * Command to update a service specification
-     * @param serviceId service id
-     * @param serviceSpec the new service specification
+     *
+     * @param serviceId
+     *            service id
+     * @param serviceSpec
+     *            the new service specification
      * @return command
      */
     UpdateServiceCmd updateServiceCmd(String serviceId, ServiceSpec serviceSpec);
 
     /**
      * Command to remove a service
-     * @param serviceId service id or service name
+     *
+     * @param serviceId
+     *            service id or service name
      * @return command
      */
     RemoveServiceCmd removeServiceCmd(String serviceId);

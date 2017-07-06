@@ -1,5 +1,14 @@
 package com.github.dockerjava.core;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.io.Closeable;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.annotation.Nonnull;
+
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
@@ -49,6 +58,8 @@ import com.github.dockerjava.api.command.RemoveNetworkCmd;
 import com.github.dockerjava.api.command.RemoveServiceCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
+import com.github.dockerjava.api.command.ResizeContainerCmd;
+import com.github.dockerjava.api.command.ResizeExecCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
 import com.github.dockerjava.api.command.SearchImagesCmd;
@@ -114,6 +125,8 @@ import com.github.dockerjava.core.command.RemoveNetworkCmdImpl;
 import com.github.dockerjava.core.command.RemoveServiceCmdImpl;
 import com.github.dockerjava.core.command.RemoveVolumeCmdImpl;
 import com.github.dockerjava.core.command.RenameContainerCmdImpl;
+import com.github.dockerjava.core.command.ResizeContainerCmdImpl;
+import com.github.dockerjava.core.command.ResizeExecCmdImpl;
 import com.github.dockerjava.core.command.RestartContainerCmdImpl;
 import com.github.dockerjava.core.command.SaveImageCmdImpl;
 import com.github.dockerjava.core.command.SearchImagesCmdImpl;
@@ -128,14 +141,6 @@ import com.github.dockerjava.core.command.UpdateServiceCmdImpl;
 import com.github.dockerjava.core.command.UpdateSwarmCmdImpl;
 import com.github.dockerjava.core.command.VersionCmdImpl;
 import com.github.dockerjava.core.command.WaitContainerCmdImpl;
-
-import javax.annotation.Nonnull;
-import java.io.Closeable;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * @author Konstantin Pelykh (kpelykh@gmail.com)
@@ -193,10 +198,8 @@ public class DockerClientImpl implements Closeable, DockerClient {
         checkNotNull(dockerClientConfig.getRegistryUsername(), "Configured username is null.");
         checkNotNull(dockerClientConfig.getRegistryUrl(), "Configured serverAddress is null.");
 
-        return new AuthConfig()
-                .withUsername(dockerClientConfig.getRegistryUsername())
-                .withPassword(dockerClientConfig.getRegistryPassword())
-                .withEmail(dockerClientConfig.getRegistryEmail())
+        return new AuthConfig().withUsername(dockerClientConfig.getRegistryUsername())
+                .withPassword(dockerClientConfig.getRegistryPassword()).withEmail(dockerClientConfig.getRegistryEmail())
                 .withRegistryAddress(dockerClientConfig.getRegistryUrl());
     }
 
@@ -342,8 +345,18 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
+    public ResizeContainerCmd resizeContainerCmd(String containerId) {
+        return new ResizeContainerCmdImpl(getDockerCmdExecFactory().createResizeContainerCmdExec(), containerId);
+    }
+
+    @Override
     public ExecStartCmd execStartCmd(String execId) {
         return new ExecStartCmdImpl(getDockerCmdExecFactory().createExecStartCmdExec(), execId);
+    }
+
+    @Override
+    public ResizeExecCmd resizeExecCmd(String execId) {
+        return new ResizeExecCmdImpl(getDockerCmdExecFactory().createResizeExecCmdExec(), execId);
     }
 
     @Override
@@ -529,7 +542,8 @@ public class DockerClientImpl implements Closeable, DockerClient {
         return new UpdateSwarmCmdImpl(getDockerCmdExecFactory().createUpdateSwarmCmdExec(), swarmSpec);
     }
 
-    @Override public ListServicesCmd listServicesCmd() {
+    @Override
+    public ListServicesCmd listServicesCmd() {
         return new ListServicesCmdImpl(getDockerCmdExecFactory().createListServicesCmdExec());
     }
 
