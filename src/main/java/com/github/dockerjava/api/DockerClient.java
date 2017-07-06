@@ -54,6 +54,8 @@ import com.github.dockerjava.api.command.RemoveSecretCmd;
 import com.github.dockerjava.api.command.RemoveServiceCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
+import com.github.dockerjava.api.command.ResizeContainerCmd;
+import com.github.dockerjava.api.command.ResizeExecCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
 import com.github.dockerjava.api.command.SearchImagesCmd;
@@ -157,6 +159,8 @@ public interface DockerClient extends Closeable {
      */
     StartContainerCmd startContainerCmd(@Nonnull String containerId);
 
+    ResizeContainerCmd resizeContainerCmd(@Nonnull String containerId);
+
     ExecCreateCmd execCreateCmd(@Nonnull String containerId);
 
     InspectContainerCmd inspectContainerCmd(@Nonnull String containerId);
@@ -168,6 +172,8 @@ public interface DockerClient extends Closeable {
     AttachContainerCmd attachContainerCmd(@Nonnull String containerId);
 
     ExecStartCmd execStartCmd(@Nonnull String execId);
+
+    ResizeExecCmd resizeExecCmd(@Nonnull String execId);
 
     InspectExecCmd inspectExecCmd(@Nonnull String execId);
 

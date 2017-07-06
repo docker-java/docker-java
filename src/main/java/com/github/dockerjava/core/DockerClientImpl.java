@@ -56,6 +56,8 @@ import com.github.dockerjava.api.command.RemoveSecretCmd;
 import com.github.dockerjava.api.command.RemoveServiceCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
+import com.github.dockerjava.api.command.ResizeContainerCmd;
+import com.github.dockerjava.api.command.ResizeExecCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
 import com.github.dockerjava.api.command.SearchImagesCmd;
@@ -131,6 +133,8 @@ import com.github.dockerjava.core.command.RemoveSecretCmdImpl;
 import com.github.dockerjava.core.command.RemoveServiceCmdImpl;
 import com.github.dockerjava.core.command.RemoveVolumeCmdImpl;
 import com.github.dockerjava.core.command.RenameContainerCmdImpl;
+import com.github.dockerjava.core.command.ResizeContainerCmdImpl;
+import com.github.dockerjava.core.command.ResizeExecCmdImpl;
 import com.github.dockerjava.core.command.RestartContainerCmdImpl;
 import com.github.dockerjava.core.command.SaveImageCmdImpl;
 import com.github.dockerjava.core.command.SearchImagesCmdImpl;
@@ -357,8 +361,18 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
+    public ResizeContainerCmd resizeContainerCmd(String containerId) {
+        return new ResizeContainerCmdImpl(getDockerCmdExecFactory().createResizeContainerCmdExec(), containerId);
+    }
+
+    @Override
     public ExecStartCmd execStartCmd(String execId) {
         return new ExecStartCmdImpl(getDockerCmdExecFactory().createExecStartCmdExec(), execId);
+    }
+
+    @Override
+    public ResizeExecCmd resizeExecCmd(String execId) {
+        return new ResizeExecCmdImpl(getDockerCmdExecFactory().createResizeExecCmdExec(), execId);
     }
 
     @Override

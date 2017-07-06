@@ -17,6 +17,10 @@ import com.github.dockerjava.core.AbstractDockerCmdExecFactory;
 import com.github.dockerjava.core.WebTarget;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import com.github.dockerjava.api.command.ResizeContainerCmd;
+import com.github.dockerjava.api.command.ResizeExecCmd;
+import com.github.dockerjava.netty.exec.ResizeContainerCmdExec;
+import com.github.dockerjava.netty.exec.ResizeExecCmdExec;
 import org.apache.commons.lang.SystemUtils;
 
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
@@ -117,7 +121,6 @@ public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory impl
 
         baseResource = new NettyWebTarget(channelProvider, host).path(dockerClientConfig.getApiVersion().asWebPathPart());
     }
-
 
     private DuplexChannel connect() {
         try {
