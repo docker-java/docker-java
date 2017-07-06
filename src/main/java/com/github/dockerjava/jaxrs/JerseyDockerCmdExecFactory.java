@@ -54,6 +54,8 @@ import com.github.dockerjava.api.command.RemoveServiceCmd;
 import com.github.dockerjava.api.command.RemoveSwarmNodeCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
+import com.github.dockerjava.api.command.ResizeContainerCmd.Exec;
+import com.github.dockerjava.api.command.ResizeExecCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
 import com.github.dockerjava.api.command.SearchImagesCmd;
@@ -414,8 +416,18 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     @Override
+    public Exec createResizeContainerCmdExec() {
+        return new ResizeContainerCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
     public ExecStartCmd.Exec createExecStartCmdExec() {
         return new ExecStartCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public ResizeExecCmd.Exec createResizeExecCmdExec() {
+        return new ResizeExecCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
