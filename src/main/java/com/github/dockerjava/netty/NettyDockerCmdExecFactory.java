@@ -1,18 +1,6 @@
 package com.github.dockerjava.netty;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.security.Security;
-
-import javax.net.ssl.SSLEngine;
-import javax.net.ssl.SSLParameters;
-
 import org.apache.commons.lang.SystemUtils;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
