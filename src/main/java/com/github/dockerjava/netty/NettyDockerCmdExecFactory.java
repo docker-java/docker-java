@@ -12,7 +12,6 @@ import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLParameters;
 
 import org.apache.commons.lang.SystemUtils;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
@@ -170,15 +169,6 @@ import io.netty.handler.ssl.SslHandler;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import javax.net.ssl.SSLEngine;
-import javax.net.ssl.SSLParameters;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.security.Security;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Experimental implementation of {@link DockerCmdExecFactory} that supports http connection hijacking that is needed to pass STDIN to the
