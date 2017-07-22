@@ -1,6 +1,7 @@
 package com.github.dockerjava.netty.exec;
 
 import static ch.lambdaj.Lambda.filter;
+import static com.github.dockerjava.utils.TestUtils.getVersion;
 import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
 import static com.github.dockerjava.utils.TestUtils.isSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -17,6 +18,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
+import com.github.dockerjava.core.RemoteApiVersion;
 import org.hamcrest.Matcher;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -28,8 +30,6 @@ import org.testng.annotations.Test;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Container;
-import com.github.dockerjava.core.command.PullImageResultCallback;
-import com.github.dockerjava.core.util.FiltersBuilder;
 import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 import com.google.common.collect.ImmutableMap;
 
@@ -58,7 +58,7 @@ public class ListContainersCmdExecTest extends AbstractNettyDockerClientTest {
 
     @Test
     public void testListContainers() throws Exception {
-
+        final RemoteApiVersion apiVersion = getVersion(dockerClient);
         String testImage = "busybox";
 
         List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
@@ -99,6 +99,10 @@ public class ListContainersCmdExecTest extends AbstractNettyDockerClientTest {
         Container container2 = filteredContainers.get(0);
         assertThat(container2.getCommand(), not(isEmptyString()));
         assertThat(container2.getImage(), startsWith(testImage));
+
+        if (apiVersion.isGreaterOrEqual(RemoteApiVersion.VERSION_1_23)) {
+            assertThat(container2.getState(), equalTo("running"));
+        }
     }
 
     @Test

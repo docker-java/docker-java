@@ -1,6 +1,7 @@
 package com.github.dockerjava.core.command;
 
 import static ch.lambdaj.Lambda.filter;
+import static com.github.dockerjava.utils.TestUtils.getVersion;
 import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -98,8 +99,9 @@ public class ListContainersCmdImplTest extends AbstractDockerClientTest {
         assertThat(container2.getCommand(), not(isEmptyString()));
         assertThat(container2.getImage(), startsWith(testImage));
 
-        if (apiVersion.isGreaterOrEqual(RemoteApiVersion.VERSION_1_23))
+        if (apiVersion.isGreaterOrEqual(RemoteApiVersion.VERSION_1_23)) {
             assertThat(container2.getState(), equalTo("running"));
+        }
     }
 
     @Test
