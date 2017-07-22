@@ -4,7 +4,9 @@ import com.github.dockerjava.api.command.CreateNetworkResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.core.RemoteApiVersion;
 import org.testng.ITestResult;
+import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
@@ -12,6 +14,12 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.github.dockerjava.utils.TestUtils.getVersion;
+
+import static com.github.dockerjava.utils.TestUtils.isSwarm;
 
 @Test(groups = "integration")
 public class CreateNetworkCmdImplTest extends AbstractDockerClientTest {
@@ -38,6 +46,7 @@ public class CreateNetworkCmdImplTest extends AbstractDockerClientTest {
 
     @Test
     public void createNetwork() throws DockerException {
+        if (isSwarm(dockerClient)) throw new SkipException("Swarm has no network");
 
         String networkName = "testNetwork";
 
@@ -52,6 +61,7 @@ public class CreateNetworkCmdImplTest extends AbstractDockerClientTest {
 
     @Test
     public void createNetworkWithIpamConfig() throws DockerException {
+        if (isSwarm(dockerClient)) throw new SkipException("Swarm has no network");
 
         String networkName = "testNetwork";
         Network.Ipam ipam = new Network.Ipam().withConfig(new Network.Ipam.Config().withSubnet("10.67.79.0/24"));
@@ -63,5 +73,34 @@ public class CreateNetworkCmdImplTest extends AbstractDockerClientTest {
         assertEquals(network.getName(), networkName);
         assertEquals(network.getDriver(), "bridge");
         assertEquals("10.67.79.0/24", network.getIpam().getConfig().iterator().next().getSubnet());
+    }
+
+    @Test
+    public void createAttachableNetwork() throws DockerException {
+        final RemoteApiVersion apiVersion = getVersion(dockerClient);
+        if (!apiVersion.isGreaterOrEqual(RemoteApiVersion.VERSION_1_24)) {
+            throw new SkipException("API version should be >= 1.24");
+        }
+        String networkName = "createAttachableNetwork";
+        CreateNetworkResponse createNetworkResponse = dockerClient.createNetworkCmd().withName(networkName).withAttachable(true).exec();
+        assertNotNull(createNetworkResponse.getId());
+        Network network = dockerClient.inspectNetworkCmd().withNetworkId(createNetworkResponse.getId()).exec();
+        assertTrue(network.isAttachable());
+    }
+
+    @Test
+    public void createNetworkWithLabel() throws DockerException {
+        final RemoteApiVersion apiVersion = getVersion(dockerClient);
+        if (!apiVersion.isGreaterOrEqual(RemoteApiVersion.VERSION_1_21) || isSwarm(dockerClient)) {
+            throw new SkipException("API version should be >= 1.21");
+        }
+
+        String networkName = "createNetworkWithLabel";
+        Map<String,String> labels=new HashMap<>();
+        labels.put("com.example.usage","test");
+        CreateNetworkResponse createNetworkResponse = dockerClient.createNetworkCmd().withName(networkName).withLabels(labels).exec();
+        assertNotNull(createNetworkResponse.getId());
+        Network network = dockerClient.inspectNetworkCmd().withNetworkId(createNetworkResponse.getId()).exec();
+        assertEquals(network.getLabels(), labels);
     }
 }

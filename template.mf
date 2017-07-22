@@ -1,0 +1,31 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: com.github.docker-java
+Bundle-Version: ${parsedVersion.osgiVersion}
+Bundle-Name: ${project.name}
+Version-Patterns:
+ default;pattern="[=.=.=, =.+1.0)",
+ short;pattern="[=.=,+1.0)"
+Import-Template:
+ com.fasterxml.jackson.*;version="${jackson-jaxrs.version}",
+ com.google.common.*;version="${guava.version:short}",
+ io.netty.*;version="${netty.version:default}";resolution:=optional,
+ javax.ws.rs.*;version="[2.0.0, 2.1.0)",
+ org.apache.commons.codec.*;version="${commons-codec.version:short}",
+ org.apache.commons.compress.*;version="${commons-compress.version:short}",
+ org.apache.commons.io.*;version="${commons-io.version:short}",
+ org.apache.commons.lang.*;version="${commons-lang.version:short}",
+ org.apache.http.*;version="[4.4.0, 4.6.0)",
+ org.bouncycastle.*;version="${bouncycastle.version:short}",
+ org.glassfish.jersey.*;version="${jersey.version:default}",
+ org.slf4j.*;version="[1.7.0, 1.8.0)",
+ org.newsclub.net.unix;version="${junixsocket.version:default}";resolution:=optional
+Excluded-Exports:
+ org.apache.http.impl.io,
+ org.newsclub.net.unix,
+ com.github.dockerjava.jaxrs.*,
+ com.github.dockerjava.netty.*
+Excluded-Imports:
+ javax.annotation,
+ javax.net.ssl,
+ edu.umd.cs.findbugs.annotations

@@ -17,6 +17,11 @@ public class RestartPolicy_ParsingTest {
     }
 
     @Test
+    public void unlessStoppedRestart() throws Exception {
+        assertEquals(RestartPolicy.parse("unless-stopped"), RestartPolicy.unlessStoppedRestart());
+    }
+
+    @Test
     public void onFailureRestart() throws Exception {
         assertEquals(RestartPolicy.parse("on-failure"), RestartPolicy.onFailureRestart(0));
     }

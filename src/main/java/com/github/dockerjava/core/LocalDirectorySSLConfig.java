@@ -45,14 +45,6 @@ public class LocalDirectorySSLConfig implements SSLConfig, Serializable {
 
                 Security.addProvider(new BouncyCastleProvider());
 
-                // properties acrobatics not needed for java > 1.6
-                String httpProtocols = System.getProperty("https.protocols");
-                System.setProperty("https.protocols", "TLSv1");
-                SslConfigurator sslConfig = SslConfigurator.newInstance(true);
-                if (httpProtocols != null) {
-                    System.setProperty("https.protocols", httpProtocols);
-                }
-
                 String caPemPath = dockerCertPath + File.separator + "ca.pem";
                 String keyPemPath = dockerCertPath + File.separator + "key.pem";
                 String certPemPath = dockerCertPath + File.separator + "cert.pem";
@@ -61,6 +53,8 @@ public class LocalDirectorySSLConfig implements SSLConfig, Serializable {
                 String certpem = new String(Files.readAllBytes(Paths.get(certPemPath)));
                 String capem = new String(Files.readAllBytes(Paths.get(caPemPath)));
 
+                SslConfigurator sslConfig = SslConfigurator.newInstance(true);
+                sslConfig.securityProtocol("TLSv1.2");
                 sslConfig.keyStore(CertificateUtils.createKeyStore(keypem, certpem));
                 sslConfig.keyStorePassword("docker");
                 sslConfig.trustStore(CertificateUtils.createTrustStore(capem));

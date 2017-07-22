@@ -37,6 +37,12 @@ public class Network implements Serializable {
     @JsonProperty("Options")
     private Map<String, String> options;
 
+    @JsonProperty("Attachable")
+    private Boolean attachable;
+
+    @JsonProperty("Labels")
+    public Map<String, String> labels;
+
     public String getId() {
         return id;
     }
@@ -63,6 +69,14 @@ public class Network implements Serializable {
 
     public Map<String, String> getOptions() {
         return options;
+    }
+
+    public Boolean isAttachable() {
+        return attachable;
+    }
+
+    public Map<String, String> getLabels() {
+        return labels;
     }
 
     @Override
@@ -141,6 +155,11 @@ public class Network implements Serializable {
             return this;
         }
 
+        public Ipam withDriver(String driver) {
+            this.driver = driver;
+            return this;
+        }
+
         @Override
         public String toString() {
             return ToStringBuilder.reflectionToString(this);
@@ -157,6 +176,9 @@ public class Network implements Serializable {
 
             @JsonProperty("Gateway")
             private String gateway;
+
+            @JsonProperty("NetworkID")
+            private String networkID;
 
             public String getSubnet() {
                 return subnet;
@@ -183,6 +205,14 @@ public class Network implements Serializable {
             public Config withGateway(String gateway) {
                 this.gateway = gateway;
                 return this;
+            }
+
+            public String getNetworkID() {
+                return networkID;
+            }
+
+            public void setNetworkID(String networkID) {
+                this.networkID = networkID;
             }
         }
     }

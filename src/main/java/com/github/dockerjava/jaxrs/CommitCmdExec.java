@@ -22,9 +22,12 @@ public class CommitCmdExec extends AbstrSyncDockerCmdExec<CommitCmd, String> imp
 
     @Override
     protected String execute(CommitCmd command) {
-        WebTarget webTarget = getBaseResource().path("/commit").queryParam("container", command.getContainerId())
-                .queryParam("repo", command.getRepository()).queryParam("tag", command.getTag())
-                .queryParam("m", command.getMessage()).queryParam("author", command.getAuthor());
+        WebTarget webTarget = getBaseResource().path("/commit")
+                .queryParam("container", command.getContainerId())
+                .queryParam("repo", command.getRepository())
+                .queryParam("tag", command.getTag())
+                .queryParam("m", command.getMessage())
+                .queryParam("author", command.getAuthor());
 
         webTarget = booleanQueryParam(webTarget, "pause", command.hasPauseEnabled());
 

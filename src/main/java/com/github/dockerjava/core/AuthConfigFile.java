@@ -13,19 +13,26 @@ import org.apache.commons.lang.StringUtils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
 
 public class AuthConfigFile {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    private static final TypeReference<Map<String, AuthConfig>> CONFIG_MAP_TYPE = new TypeReference<Map<String, AuthConfig>>() {
-    };
+    private static final TypeReference<Map<String, AuthConfig>> CONFIG_CFG_MAP_TYPE =
+        new TypeReference<Map<String, AuthConfig>>() {
+        };
+
+    private static final TypeReference<Map<String, Map<String, AuthConfig>>> CONFIG_JSON_MAP_TYPE =
+        new TypeReference<Map<String, Map<String, AuthConfig>>>() {
+        };
+    private static final String AUTHS_PROPERTY = "auths";
 
     private final Map<String, AuthConfig> authConfigMap;
 
     public AuthConfigFile() {
-        authConfigMap = new HashMap<String, AuthConfig>();
+        authConfigMap = new HashMap<>();
     }
 
     void addConfig(AuthConfig config) {
@@ -101,16 +108,36 @@ public class AuthConfigFile {
         if (!confFile.exists()) {
             return new AuthConfigFile();
         }
+
         Map<String, AuthConfig> configMap = null;
+        /*
+        Registry v2 expects config expects config.json while v2 expects .dockercfg
+        The only difference between them is that config.json wraps "auths" around the AuthConfig
+         */
         try {
-            configMap = MAPPER.readValue(confFile, CONFIG_MAP_TYPE);
-        } catch (IOException e) {
-            // pass
+            // try registry version 2
+            final ObjectNode node = filterNonAuthsFromJSON(confFile);
+            Map<String, Map<String, AuthConfig>>  configJson = MAPPER.convertValue(node, CONFIG_JSON_MAP_TYPE);
+            if (configJson != null && !configJson.isEmpty()) {
+                configMap = configJson.get(AUTHS_PROPERTY);
+            }
+
+        } catch (IOException e1) {
+            try {
+                // try registry version 1
+                configMap = MAPPER.readValue(confFile, CONFIG_CFG_MAP_TYPE);
+            } catch (IOException e2) {
+                // pass
+            }
         }
+
         if (configMap != null) {
             for (Map.Entry<String, AuthConfig> entry : configMap.entrySet()) {
                 AuthConfig authConfig = entry.getValue();
-                decodeAuth(authConfig.getAuth(), authConfig);
+                final String auth = authConfig.getAuth();
+                if (auth == null) continue;
+
+                decodeAuth(auth, authConfig);
                 authConfig.withAuth(null);
                 authConfig.withRegistryAddress(entry.getKey());
                 configFile.addConfig(authConfig);
@@ -136,6 +163,15 @@ public class AuthConfigFile {
         }
         return configFile;
 
+    }
+
+    private static ObjectNode filterNonAuthsFromJSON(final File confFile) throws IOException {
+        final ObjectNode node = MAPPER.readValue(confFile, ObjectNode.class);
+        if (!node.has(AUTHS_PROPERTY)) {
+            throw new IOException("No Auth Config contained");
+        }
+        node.retain(AUTHS_PROPERTY);
+        return node;
     }
 
     static void decodeAuth(String auth, AuthConfig config) throws IOException {

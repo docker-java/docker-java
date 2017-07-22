@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.model.AuthConfigurations;
@@ -15,16 +16,21 @@ import com.github.dockerjava.api.model.BuildResponseItem;
 import com.github.dockerjava.core.dockerfile.Dockerfile;
 import com.github.dockerjava.core.util.FilePathUtil;
 
+import javax.annotation.CheckForNull;
+
 /**
- *
  * Build an image from Dockerfile.
- *
  */
 public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildResponseItem> implements BuildImageCmd {
 
     private InputStream tarInputStream;
 
+    @Deprecated
     private String tag;
+
+    private Set<String> tags;
+
+    private Set<String> cacheFrom;
 
     private Boolean noCache;
 
@@ -37,6 +43,8 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     private AuthConfigurations buildAuthConfigs;
 
     private File dockerFile;
+
+    private String dockerFilePath;
 
     private File baseDirectory;
 
@@ -82,9 +90,20 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     // getters API
 
+    @Deprecated
     @Override
     public String getTag() {
         return tag;
+    }
+
+    @CheckForNull
+    public Set<String> getTags() {
+        return tags;
+    }
+
+    @CheckForNull
+    public Set<String> getCacheFrom() {
+       return cacheFrom;
     }
 
     @Override
@@ -119,7 +138,9 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     @Override
     public String getPathToDockerfile() {
-        if (baseDirectory != null && dockerFile != null) {
+        if (dockerFilePath != null) {
+            return dockerFilePath;
+        } else if (baseDirectory != null && dockerFile != null) {
             return FilePathUtil.relativize(baseDirectory, dockerFile);
         } else {
             return null;
@@ -178,10 +199,26 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     // setters
 
+    /**
+     * @deprecated use #withTags()
+     */
+    @Deprecated
     @Override
     public BuildImageCmdImpl withTag(String tag) {
         checkNotNull(tag, "Tag is null");
         this.tag = tag;
+        return this;
+    }
+
+    @Override
+    public BuildImageCmd withTags(Set<String> tags) {
+        this.tags = tags;
+        return this;
+    }
+
+    @Override
+    public BuildImageCmd withCacheFrom(Set<String> cacheFrom) {
+        this.cacheFrom = cacheFrom;
         return this;
     }
 
@@ -284,6 +321,13 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
             // we just created the file this should never happen.
             throw new RuntimeException(e);
         }
+        return this;
+    }
+
+    @Override
+    public BuildImageCmd withDockerfilePath(String dockerfilePath) {
+        checkNotNull(dockerfilePath, "dockerfilePath is null");
+        this.dockerFilePath = dockerfilePath;
         return this;
     }
 

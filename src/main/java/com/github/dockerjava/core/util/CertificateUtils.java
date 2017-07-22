@@ -18,11 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
 import org.slf4j.Logger;
@@ -88,7 +88,8 @@ public class CertificateUtils {
         try (PEMParser pemParser = new PEMParser(reader)) {
             List<Certificate> certificates = new ArrayList<>();
 
-            JcaX509CertificateConverter certificateConverter = new JcaX509CertificateConverter().setProvider("BC");
+            JcaX509CertificateConverter certificateConverter = new JcaX509CertificateConverter()
+                    .setProvider(BouncyCastleProvider.PROVIDER_NAME);
             Object certObj = pemParser.readObject();
 
             if (certObj instanceof X509CertificateHolder) {
@@ -181,14 +182,20 @@ public class CertificateUtils {
     public static KeyStore createTrustStore(final Reader certReader) throws IOException, CertificateException,
             KeyStoreException, NoSuchAlgorithmException {
         try (PEMParser pemParser = new PEMParser(certReader)) {
-            X509CertificateHolder certificateHolder = (X509CertificateHolder) pemParser.readObject();
-            Certificate caCertificate = new JcaX509CertificateConverter()
-                    .setProvider("BC")
-                    .getCertificate(certificateHolder);
 
             KeyStore trustStore = KeyStore.getInstance("JKS");
             trustStore.load(null);
-            trustStore.setCertificateEntry("ca", caCertificate);
+
+            int index = 1;
+            Object pemCert;
+
+            while ((pemCert = pemParser.readObject()) != null) {
+                Certificate caCertificate = new JcaX509CertificateConverter()
+                        .setProvider(BouncyCastleProvider.PROVIDER_NAME)
+                        .getCertificate((X509CertificateHolder) pemCert);
+                trustStore.setCertificateEntry("ca-" + index, caCertificate);
+                index++;
+            }
 
             return trustStore;
         }

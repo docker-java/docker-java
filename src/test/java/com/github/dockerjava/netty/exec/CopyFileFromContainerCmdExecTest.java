@@ -1,6 +1,7 @@
 package com.github.dockerjava.netty.exec;
 
 import static com.github.dockerjava.utils.TestUtils.getVersion;
+import static com.github.dockerjava.utils.TestUtils.isSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
@@ -49,6 +50,7 @@ public class CopyFileFromContainerCmdExecTest extends AbstractNettyDockerClientT
         if (getVersion(dockerClient).isGreaterOrEqual(RemoteApiVersion.VERSION_1_24)) {
             throw new SkipException("Doesn't work since 1.24");
         }
+        if (isSwarm(dockerClient)) throw new SkipException("FIXME Swarm");
 
         // TODO extract this into a shared method
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
