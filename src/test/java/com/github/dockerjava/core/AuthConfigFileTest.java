@@ -82,6 +82,13 @@ public class AuthConfigFileTest {
     }
 
     @Test
+    public void validJsonWithOnlyUnknown() throws IOException {
+        AuthConfigFile expected = new AuthConfigFile();
+        AuthConfigFile actual = runTest("validJsonWithOnlyUnknown.json");
+        Assert.assertEquals(actual, expected);
+    }
+
+    @Test
     public void validLegacy() throws IOException {
         AuthConfig authConfig = new AuthConfig()
                 .withEmail("foo@example.com")
