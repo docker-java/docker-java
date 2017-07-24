@@ -1,14 +1,5 @@
 package com.github.dockerjava.core;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.io.Closeable;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.annotation.Nonnull;
-
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
@@ -142,6 +133,14 @@ import com.github.dockerjava.core.command.UpdateSwarmCmdImpl;
 import com.github.dockerjava.core.command.VersionCmdImpl;
 import com.github.dockerjava.core.command.WaitContainerCmdImpl;
 
+import javax.annotation.Nonnull;
+import java.io.Closeable;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  * @see "https://github.com/docker/docker/blob/master/api/client/commands.go"
@@ -198,8 +197,10 @@ public class DockerClientImpl implements Closeable, DockerClient {
         checkNotNull(dockerClientConfig.getRegistryUsername(), "Configured username is null.");
         checkNotNull(dockerClientConfig.getRegistryUrl(), "Configured serverAddress is null.");
 
-        return new AuthConfig().withUsername(dockerClientConfig.getRegistryUsername())
-                .withPassword(dockerClientConfig.getRegistryPassword()).withEmail(dockerClientConfig.getRegistryEmail())
+        return new AuthConfig()
+                .withUsername(dockerClientConfig.getRegistryUsername())
+                .withPassword(dockerClientConfig.getRegistryPassword())
+                .withEmail(dockerClientConfig.getRegistryEmail())
                 .withRegistryAddress(dockerClientConfig.getRegistryUrl());
     }
 
@@ -542,8 +543,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
         return new UpdateSwarmCmdImpl(getDockerCmdExecFactory().createUpdateSwarmCmdExec(), swarmSpec);
     }
 
-    @Override
-    public ListServicesCmd listServicesCmd() {
+    @Override public ListServicesCmd listServicesCmd() {
         return new ListServicesCmdImpl(getDockerCmdExecFactory().createListServicesCmdExec());
     }
 

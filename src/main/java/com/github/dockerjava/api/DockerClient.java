@@ -1,12 +1,5 @@
 package com.github.dockerjava.api;
 
-import java.io.Closeable;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.annotation.Nonnull;
-
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
 import com.github.dockerjava.api.command.BuildImageCmd;
@@ -76,6 +69,12 @@ import com.github.dockerjava.api.model.Identifier;
 import com.github.dockerjava.api.model.ServiceSpec;
 import com.github.dockerjava.api.model.SwarmSpec;
 import com.github.dockerjava.core.RemoteApiVersion;
+
+import javax.annotation.Nonnull;
+import java.io.Closeable;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 // https://godoc.org/github.com/fsouza/go-dockerclient
 public interface DockerClient extends Closeable {
@@ -324,12 +323,10 @@ public interface DockerClient extends Closeable {
     ListServicesCmd listServicesCmd();
 
     /**
-     * Command to create a service in a docker swarm. Only applicable if docker
-     * runs in swarm mode.
+     * Command to create a service in a docker swarm. Only applicable if docker runs in swarm mode.
      *
      * @since {@link RemoteApiVersion#VERSION_1_24}
-     * @param serviceSpec
-     *            the service specification
+     * @param serviceSpec the service specification
      * @return command
      */
     CreateServiceCmd createServiceCmd(ServiceSpec serviceSpec);
