@@ -177,8 +177,7 @@ public interface DockerCmdExecFactory extends Closeable {
     ListSwarmNodesCmd.Exec listSwarmNodeCmdExec();
 
     /**
-     * Return low-level information on the node. Node operations require the
-     * engine to be part of a swarm
+     * Return low-level information on the node. Node operations require the engine to be part of a swarm
      *
      * @since {@link RemoteApiVersion#VERSION_1_24}
      */
