@@ -152,7 +152,6 @@ import com.github.dockerjava.netty.exec.UpdateSwarmCmdExec;
 import com.github.dockerjava.netty.exec.UpdateSwarmNodeCmdExec;
 import com.github.dockerjava.netty.exec.VersionCmdExec;
 import com.github.dockerjava.netty.exec.WaitContainerCmdExec;
-
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelConfig;
@@ -173,13 +172,23 @@ import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslHandler;
 import io.netty.util.concurrent.DefaultThreadFactory;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.SSLParameters;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.security.Security;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Experimental implementation of {@link DockerCmdExecFactory} that supports
- * http connection hijacking that is needed to pass STDIN to the container.
+ * Experimental implementation of {@link DockerCmdExecFactory} that supports http connection hijacking that is needed to pass STDIN to the
+ * container.
  * <p>
- * To use it just pass an instance via
- * {@link DockerClientImpl#withDockerCmdExecFactory(DockerCmdExecFactory)}
+ * To use it just pass an instance via {@link DockerClientImpl#withDockerCmdExecFactory(DockerCmdExecFactory)}
  *
  * @author Marcus Linke
  * @see https://docs.docker.com/engine/reference/api/docker_remote_api_v1.21/#attach-to-a-container
@@ -192,12 +201,10 @@ public class NettyDockerCmdExecFactory implements DockerCmdExecFactory {
     /*
      * useful links:
      *
-     * http://stackoverflow.com/questions/33296749/netty-connect-to-unix-domain-
-     * socket-failed http://netty.io/wiki/native-transports.html
-     * https://github.com/netty/netty/blob/master/example/src/main/java/io/netty
-     * /example/http/snoop/HttpSnoopClient.java
-     * https://github.com/slandelle/netty-request-chunking/blob/master/src/test/
-     * java/slandelle/ChunkingTest.java
+     * http://stackoverflow.com/questions/33296749/netty-connect-to-unix-domain-socket-failed
+     * http://netty.io/wiki/native-transports.html
+     * https://github.com/netty/netty/blob/master/example/src/main/java/io/netty/example/http/snoop/HttpSnoopClient.java
+     * https://github.com/slandelle/netty-request-chunking/blob/master/src/test/java/slandelle/ChunkingTest.java
      */
 
     private DockerClientConfig dockerClientConfig;
@@ -328,14 +335,15 @@ public class NettyDockerCmdExecFactory implements DockerCmdExecFactory {
                 }
             };
 
-            bootstrap.group(nioEventLoopGroup).channelFactory(factory).handler(new ChannelInitializer<SocketChannel>() {
-                @Override
-                protected void initChannel(final SocketChannel channel) throws Exception {
-                    // channel.pipeline().addLast(new
-                    // HttpProxyHandler(proxyAddress));
-                    channel.pipeline().addLast(new HttpClientCodec());
-                }
-            });
+            bootstrap.group(nioEventLoopGroup).channelFactory(factory)
+                    .handler(new ChannelInitializer<SocketChannel>() {
+                        @Override
+                        protected void initChannel(final SocketChannel channel) throws Exception {
+                            // channel.pipeline().addLast(new
+                            // HttpProxyHandler(proxyAddress));
+                            channel.pipeline().addLast(new HttpClientCodec());
+                        }
+                    });
 
             return nioEventLoopGroup;
         }
@@ -764,8 +772,7 @@ public class NettyDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     private WebTarget getBaseResource() {
-        checkNotNull(baseResource,
-                "Factory not initialized, baseResource not set. You probably forgot to call init()!");
+        checkNotNull(baseResource, "Factory not initialized, baseResource not set. You probably forgot to call init()!");
         return baseResource;
     }
 }
