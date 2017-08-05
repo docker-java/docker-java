@@ -747,7 +747,7 @@ public class NettyDockerCmdExecFactory implements DockerCmdExecFactory {
         return channel;
     }
 
-    private WebTarget getBaseResource() {
+    protected WebTarget getBaseResource() {
         checkNotNull(baseResource, "Factory not initialized, baseResource not set. You probably forgot to call init()!");
         return baseResource;
     }
