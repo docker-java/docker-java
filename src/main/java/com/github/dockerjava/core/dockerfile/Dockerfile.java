@@ -12,7 +12,6 @@ import java.util.UUID;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
 
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.core.GoLangFileMatch;
@@ -186,14 +185,43 @@ public class Dockerfile {
                         "Dockerfile is excluded by pattern '%s' in .dockerignore file", matchingIgnorePattern));
             }
 
-            Collection<File> filesInBuildContext = FileUtils.listFiles(baseDirectory, TrueFileFilter.INSTANCE,
-                    TrueFileFilter.INSTANCE);
+            addFilesInDirectory(baseDirectory);
+        }
 
-            for (File f : filesInBuildContext) {
-                if (effectiveMatchingIgnorePattern(f) == null) {
-                    filesToAdd.add(f);
-                }
+        /**
+         * Adds all files found in <code>directory</code> and subdirectories to
+         * <code>filesToAdd</code> collection. It also adds any empty directories
+         * if found.
+         *
+         * @param directory directory
+         * @throws DockerClientException when IO error occurs
+         */
+        private void addFilesInDirectory(File directory) {
+            File[] files = directory.listFiles();
+
+            if (files == null) {
+                throw new DockerClientException("Failed to read build context directory: " + baseDirectory.getAbsolutePath());
             }
+
+            if (files.length != 0) {
+                for (File f : files) {
+                    if (effectiveMatchingIgnorePattern(f) == null) {
+                        if (f.isDirectory()) {
+                            addFilesInDirectory(f);
+                        } else {
+                            filesToAdd.add(f);
+                        }
+                    }
+                }
+                // base directory should at least contains Dockerfile, but better check
+            } else if (!isBaseDirectory(directory)) {
+                // add empty directory
+                filesToAdd.add(directory);
+            }
+        }
+
+        private boolean isBaseDirectory(File directory) {
+            return directory.compareTo(baseDirectory) == 0;
         }
 
         /**
