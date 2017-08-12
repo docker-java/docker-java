@@ -9,6 +9,8 @@ import com.github.dockerjava.api.command.ExecCreateCmd;
 import com.github.dockerjava.api.command.ExecCreateCmdResponse;
 import com.github.dockerjava.api.exception.NotFoundException;
 
+import java.util.List;
+
 @JsonInclude(Include.NON_NULL)
 public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateCmdResponse> implements ExecCreateCmd {
 
@@ -22,6 +24,9 @@ public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateC
 
     @JsonProperty("AttachStderr")
     private Boolean attachStderr;
+
+    @JsonProperty("Env")
+    private String[] env;
 
     @JsonProperty("Tty")
     private Boolean tty;
@@ -84,8 +89,26 @@ public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateC
     }
 
     @Override
+    public ExecCreateCmd withEnv(String... env) {
+        checkNotNull(env, "env was not specified");
+        this.env = env;
+        return this;
+    }
+
+    @Override
+    public ExecCreateCmd withEnv(List<String> env) {
+        checkNotNull(env, "env was not specified");
+        return withEnv(env.toArray(new String[env.size()]));
+    }
+
+    @Override
     public String getContainerId() {
         return containerId;
+    }
+
+    @Override
+    public String[] getEnv() {
+        return env;
     }
 
     @Override
