@@ -252,7 +252,8 @@ public class Dockerfile {
          * will be respected.
          */
         private String effectiveMatchingIgnorePattern(File file) {
-            String relativeFilename = FilePathUtil.relativize(baseDirectory, file);
+            // normalize path to replace '/' to '\' on Windows
+            String relativeFilename = FilenameUtils.normalize(FilePathUtil.relativize(baseDirectory, file));
 
             List<String> matchingPattern = matchingIgnorePatterns(relativeFilename);
 
