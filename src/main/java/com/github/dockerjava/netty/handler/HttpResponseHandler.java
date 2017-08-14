@@ -12,6 +12,7 @@ import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.LastHttpContent;
 
 import java.io.Closeable;
+import java.net.SocketTimeoutException;
 import java.nio.charset.Charset;
 
 import com.github.dockerjava.api.async.ResultCallback;
@@ -23,6 +24,7 @@ import com.github.dockerjava.api.exception.NotAcceptableException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.exception.NotModifiedException;
 import com.github.dockerjava.api.exception.UnauthorizedException;
+import io.netty.handler.timeout.TimeoutException;
 
 /**
  * Handler that is responsible to handle an incoming {@link HttpResponse}. It evaluates the status code and triggers the appropriate
@@ -51,13 +53,6 @@ public class HttpResponseHandler extends SimpleChannelInboundHandler<HttpObject>
         if (msg instanceof HttpResponse) {
 
             response = (HttpResponse) msg;
-
-            resultCallback.onStart(new Closeable() {
-                @Override
-                public void close() {
-                    ctx.channel().close();
-                }
-            });
 
         } else if (msg instanceof HttpContent) {
 
@@ -124,5 +119,26 @@ public class HttpResponseHandler extends SimpleChannelInboundHandler<HttpObject>
         body.discardReadBytes();
         body.release();
         return result;
+    }
+
+    @Override
+    public void channelRegistered(final ChannelHandlerContext ctx) throws Exception {
+        resultCallback.onStart(new Closeable() {
+            @Override
+            public void close() {
+                ctx.channel().close();
+            }
+        });
+        super.channelRegistered(ctx);
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        if (cause instanceof TimeoutException) {
+            resultCallback.onError(new SocketTimeoutException("Channel was inactive and closed by ReadTimeoutHandler"));
+        } else {
+            resultCallback.onError(cause);
+            super.exceptionCaught(ctx, cause);
+        }
     }
 }

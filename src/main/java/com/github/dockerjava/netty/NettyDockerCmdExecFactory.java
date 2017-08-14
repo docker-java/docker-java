@@ -7,10 +7,13 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.security.Security;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLParameters;
 
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.timeout.ReadTimeoutHandler;
 import org.apache.commons.lang.SystemUtils;
 
 import com.github.dockerjava.api.command.AttachContainerCmd;
@@ -213,7 +216,7 @@ public class NettyDockerCmdExecFactory implements DockerCmdExecFactory {
     };
 
     private Integer connectTimeout = null;
-
+    private Integer readTimeout = null;
     @Override
     public void init(DockerClientConfig dockerClientConfig) {
         checkNotNull(dockerClientConfig, "config was not specified");
@@ -325,8 +328,11 @@ public class NettyDockerCmdExecFactory implements DockerCmdExecFactory {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(final SocketChannel channel) throws Exception {
-                            // channel.pipeline().addLast(new
-                            // HttpProxyHandler(proxyAddress));
+                            channel.pipeline().addLast(new LoggingHandler(NettyDockerCmdExecFactory.class.getName(), LogLevel.TRACE));
+                            if (readTimeout != null) {
+                                channel.pipeline().addLast("readTimeoutHandler",
+                                        new ReadTimeoutHandler(readTimeout, TimeUnit.MILLISECONDS));
+                            }
                             channel.pipeline().addLast(new HttpClientCodec());
                         }
                     });
@@ -734,6 +740,26 @@ public class NettyDockerCmdExecFactory implements DockerCmdExecFactory {
      */
     public NettyDockerCmdExecFactory withConnectTimeout(Integer connectTimeout) {
         this.connectTimeout = connectTimeout;
+        return this;
+    }
+
+    /**
+     * Configure read timeout in milliseconds. You may need handle <code>java.net.SocketTimeoutException</code> in Callback handler,
+     * for example:
+     * <pre>{@code
+     * LogContainerTestCallback loggingCallback = new LogContainerTestCallback(){
+     *     @Override
+     *     public void onError(Throwable throwable) {
+     *       if (throwable instanceof SocketTimeoutException) {
+     *           //handle read timeout
+     *       }
+     *     }
+     * };
+     * dockerClient.logContainerCmd(id)).exec(loggingCallback);
+     * }</pre>
+     */
+    public NettyDockerCmdExecFactory withReadTimeout(Integer readTimeoutMilliseconds) {
+        this.readTimeout = readTimeoutMilliseconds;
         return this;
     }
 
