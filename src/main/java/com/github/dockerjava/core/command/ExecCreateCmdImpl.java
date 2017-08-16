@@ -26,6 +26,9 @@ public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateC
     @JsonProperty("Tty")
     private Boolean tty;
 
+    @JsonProperty("Privileged")
+    private Boolean isPrivileged;
+
     /**
      * @since {@link RemoteApiVersion#VERSION_1_19}
      */
@@ -84,6 +87,12 @@ public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateC
     }
 
     @Override
+    public ExecCreateCmd withPrivileged(Boolean isPrivileged) {
+        this.isPrivileged = isPrivileged;
+        return this;
+    }
+
+    @Override
     public String getContainerId() {
         return containerId;
     }
@@ -106,6 +115,11 @@ public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateC
     @Override
     public Boolean hasTtyEnabled() {
         return tty;
+    }
+
+    @Override
+    public Boolean isPrivileged() {
+        return isPrivileged;
     }
 
     @Override
