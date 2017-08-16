@@ -10,10 +10,12 @@ import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Method;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.ExecCreateCmd;
+import com.github.dockerjava.api.command.ExecStartCmd;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -70,7 +72,7 @@ public class ExecCreateCmdImplTest extends AbstractDockerClientTest {
     @Test
     public void execCreateTestWithEnv() throws Exception {
         String containerName = "generated_" + new SecureRandom().nextInt();
-        final String testVariable = "VARIABLE=success";
+        final List<String> testVariable = Arrays.asList("VARIABLE=dockerJavaTestSuccess");
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withUser("root").withCmd("top")
                 .withName(containerName).exec();
@@ -83,19 +85,23 @@ public class ExecCreateCmdImplTest extends AbstractDockerClientTest {
 
         ExecCreateCmdResponse execCreateCmdResponse = dockerClient.execCreateCmd(container.getId())
                 .withEnv(testVariable)
-                .withCmd("/bin/sh", "-c", "\"env | grep BASE_DIR\"").exec();
+                .withAttachStdout(true)
+                .withAttachStderr(true)
+                .withCmd("/bin/sh", "-c", "env | grep dockerJavaTestSuccess").exec();
 
         assertThat(execCreateCmdResponse.getId(), not(isEmptyString()));
 
         ByteArrayOutputStream stdout = new ByteArrayOutputStream();
+        ExecStartResultCallback callback = new ExecStartResultCallback(stdout, stdout);
 
-        dockerClient.execStartCmd(execCreateCmdResponse.getId())
+        dockerClient
+                .execStartCmd(execCreateCmdResponse.getId())
                 .withDetach(false)
-                .exec(new ExecStartResultCallback(stdout, System.err))
+                .exec(callback)
                 .awaitCompletion();
 
         stdout.close();
 
-        assertEquals(stdout.toString(), testVariable);
+        assertTrue(stdout.toString().startsWith(testVariable.get(0)));
     }
 }
