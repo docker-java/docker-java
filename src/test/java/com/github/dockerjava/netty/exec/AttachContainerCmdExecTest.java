@@ -10,10 +10,8 @@ import java.io.File;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.lang.reflect.Method;
-import java.util.Locale;
 
 import org.testng.ITestResult;
-import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
@@ -32,10 +30,6 @@ public class AttachContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
     @BeforeTest
     public void beforeTest() throws Exception {
-        // io.netty.channel.epollNative#loadNativeLibrary only support Linux
-        if (!System.getProperty("os.name").toLowerCase(Locale.UK).trim().startsWith("linux")) {
-            throw new SkipException("only support Linux");
-        }
         super.beforeTest();
     }
 
