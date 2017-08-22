@@ -16,6 +16,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import io.netty.util.ReferenceCountUtil;
 import org.apache.commons.io.IOUtils;
 import org.mockito.Mockito;
 import org.testng.annotations.Test;
@@ -32,12 +33,15 @@ public class HttpResponseStreamHandlerTest {
         HttpResponseStreamHandler streamHandler = new HttpResponseStreamHandler(callback);
         ChannelHandlerContext ctx = Mockito.mock(ChannelHandlerContext.class);
         ByteBuf buffer = generateByteBuf();
-        streamHandler.channelRead0(ctx, buffer);
+        ByteBuf readBuffer = buffer.copy();
+        assertEquals(buffer.refCnt(), 1);
+        streamHandler.channelRead(ctx, buffer);
         streamHandler.channelInactive(ctx);
-
+        assertEquals(buffer.refCnt(), 0);
         try (InputStream inputStream = callback.getInputStream()) {
-            assertTrue(IOUtils.contentEquals(inputStream, new ByteBufInputStream(buffer)));
+            assertTrue(IOUtils.contentEquals(inputStream, new ByteBufInputStream(readBuffer)));
         }
+        ReferenceCountUtil.release(readBuffer);
     }
 
     @Test
@@ -46,16 +50,19 @@ public class HttpResponseStreamHandlerTest {
         HttpResponseStreamHandler streamHandler = new HttpResponseStreamHandler(callback);
         ChannelHandlerContext ctx = Mockito.mock(ChannelHandlerContext.class);
         ByteBuf buffer = generateByteBuf();
-        streamHandler.channelRead0(ctx, buffer);
+        ByteBuf readBuffer = buffer.copy();
+        assertEquals(buffer.refCnt(), 1);
+        streamHandler.channelRead(ctx, buffer);
         streamHandler.channelInactive(ctx);
-
+        assertEquals(buffer.refCnt(), 0);
         try (InputStream inputStream = callback.getInputStream()) {
-            for (int i = 0; i < buffer.readableBytes(); i++) {
+            for (int i = 0; i < readBuffer.readableBytes(); i++) {
                 int b = inputStream.read();
-                assertEquals(b, buffer.getByte(i));
+                assertEquals(b, readBuffer.getByte(i));
             }
             assertTrue(inputStream.read() == -1);
         }
+        ReferenceCountUtil.release(readBuffer);
     }
 
     @Test
