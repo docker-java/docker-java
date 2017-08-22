@@ -39,6 +39,7 @@ public class HttpResponseHandler extends SimpleChannelInboundHandler<HttpObject>
     private HttpRequestProvider requestProvider;
 
     private ResultCallback<?> resultCallback;
+    private boolean registered = false;
 
     public HttpResponseHandler(HttpRequestProvider requestProvider, ResultCallback<?> resultCallback) {
         super(false);
@@ -49,15 +50,9 @@ public class HttpResponseHandler extends SimpleChannelInboundHandler<HttpObject>
     @Override
     protected void channelRead0(final ChannelHandlerContext ctx, HttpObject msg) throws Exception {
         if (msg instanceof HttpResponse) {
-
+            //can be called from HttpConnectionHijackHandler.upgradeTo
+            saveContextForClose(ctx);
             response = (HttpResponse) msg;
-
-            resultCallback.onStart(new Closeable() {
-                @Override
-                public void close() {
-                    ctx.channel().close();
-                }
-            });
 
         } else if (msg instanceof HttpContent) {
 
@@ -124,5 +119,30 @@ public class HttpResponseHandler extends SimpleChannelInboundHandler<HttpObject>
         body.discardReadBytes();
         body.release();
         return result;
+    }
+
+    @Override
+    public void channelActive(final ChannelHandlerContext ctx) throws Exception {
+        saveContextForClose(ctx);
+        super.channelActive(ctx);
+    }
+
+    private void saveContextForClose(final ChannelHandlerContext ctx) {
+        if (registered) {
+            return;
+        }
+        resultCallback.onStart(new Closeable() {
+            @Override
+            public void close() {
+                ctx.channel().close();
+            }
+        });
+        registered = true;
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        super.exceptionCaught(ctx, cause);
+        resultCallback.onError(cause);
     }
 }
