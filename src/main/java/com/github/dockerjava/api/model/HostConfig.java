@@ -201,6 +201,9 @@ public class HostConfig implements Serializable {
     @JsonProperty("PidsLimit")
     private Long pidsLimit;
 
+    /**
+     * @since ~{@link RemoteApiVersion#VERSION_1_22}
+     */
     @JsonProperty("Tmpfs")
     private Map<String, String> tmpFs;
 
