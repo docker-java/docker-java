@@ -14,6 +14,7 @@ import javax.annotation.CheckForNull;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Used in `/containers/create`, and in inspect container.
@@ -200,6 +201,11 @@ public class HostConfig implements Serializable {
     @JsonProperty("PidsLimit")
     private Long pidsLimit;
 
+    /**
+     * @since ~{@link RemoteApiVersion#VERSION_1_22}
+     */
+    @JsonProperty("Tmpfs")
+    private Map<String, String> tmpFs;
 
     @JsonIgnore
     public Bind[] getBinds() {
@@ -427,6 +433,14 @@ public class HostConfig implements Serializable {
     @CheckForNull
     public Long getPidsLimit() {
         return pidsLimit;
+    }
+
+    /**
+     * @see #tmpFs
+     */
+    @CheckForNull
+    public Map<String, String> getTmpFs() {
+        return tmpFs;
     }
 
     /**
@@ -816,6 +830,15 @@ public class HostConfig implements Serializable {
         this.pidsLimit = pidsLimit;
         return this;
     }
+
+    /**
+     * @see #tmpFs
+     */
+    public HostConfig withTmpFs(Map<String, String> tmpFs) {
+        this.tmpFs = tmpFs;
+        return this;
+    }
+
     // end of auto-generated
 
     @Override
