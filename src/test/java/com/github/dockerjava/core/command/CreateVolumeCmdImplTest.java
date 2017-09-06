@@ -1,11 +1,8 @@
 package com.github.dockerjava.core.command;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
-
-import java.lang.reflect.Method;
-
+import com.github.dockerjava.api.command.CreateVolumeResponse;
+import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -13,12 +10,14 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.command.CreateVolumeResponse;
-import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import java.lang.reflect.Method;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 
 @Test(groups = "integration")
-public class CreateVolumeCmdImplTest extends AbstractDockerClientTest {
+public class CreateVolumeCmdImplTest extends AbstractJerseyDockerClientTest {
 
     @BeforeTest
     public void beforeTest() throws Exception {

@@ -12,12 +12,11 @@ import com.github.dockerjava.api.model.Device;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.Ports;
+import com.github.dockerjava.api.model.Ports.Binding;
 import com.github.dockerjava.api.model.RestartPolicy;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
-import com.github.dockerjava.api.model.Ports.Binding;
-import com.github.dockerjava.client.AbstractDockerClientTest;
-
+import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -45,7 +44,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.startsWith;
 
 @Test(groups = "integration")
-public class StartContainerCmdImplTest extends AbstractDockerClientTest {
+public class StartContainerCmdImplTest extends AbstractJerseyDockerClientTest {
 
     @BeforeTest
     public void beforeTest() throws Exception {

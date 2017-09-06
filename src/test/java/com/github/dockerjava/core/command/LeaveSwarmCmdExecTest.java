@@ -17,7 +17,6 @@ import org.testng.annotations.Test;
 import java.lang.reflect.Method;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 @Test(groups = "swarm-integration")

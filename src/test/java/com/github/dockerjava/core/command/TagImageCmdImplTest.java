@@ -1,7 +1,7 @@
 package com.github.dockerjava.core.command;
 
-import java.lang.reflect.Method;
-
+import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
 import org.apache.commons.lang.math.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,11 +12,10 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import java.lang.reflect.Method;
 
 @Test(groups = "integration")
-public class TagImageCmdImplTest extends AbstractDockerClientTest {
+public class TagImageCmdImplTest extends AbstractJerseyDockerClientTest {
 
     public static final Logger LOG = LoggerFactory.getLogger(TagImageCmdImplTest.class);
 

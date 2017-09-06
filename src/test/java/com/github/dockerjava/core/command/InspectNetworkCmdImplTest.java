@@ -2,7 +2,7 @@ package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.Network;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
 import org.testng.ITestResult;
 import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
@@ -19,7 +19,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 @Test(groups = "integration")
-public class InspectNetworkCmdImplTest extends AbstractDockerClientTest {
+public class InspectNetworkCmdImplTest extends AbstractJerseyDockerClientTest {
 
     @BeforeTest
     public void beforeTest() throws Exception {

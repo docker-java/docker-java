@@ -1,11 +1,6 @@
 package com.github.dockerjava.core.command;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-
-import java.io.InputStream;
-import java.lang.reflect.Method;
-
+import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,10 +11,14 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import java.io.InputStream;
+import java.lang.reflect.Method;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 
 @Test(groups = "integration")
-public class SaveImageCmdImplTest extends AbstractDockerClientTest {
+public class SaveImageCmdImplTest extends AbstractJerseyDockerClientTest {
     public static final Logger LOG = LoggerFactory.getLogger(SaveImageCmdImplTest.class);
 
     String username;

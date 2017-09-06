@@ -1,13 +1,26 @@
 package com.github.dockerjava.core.command;
 
-import static com.github.dockerjava.utils.TestUtils.getVersion;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.Matchers.containsInAnyOrder;
+import com.github.dockerjava.api.command.BuildImageCmd;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.InspectImageResponse;
+import com.github.dockerjava.api.exception.DockerClientException;
+import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.api.model.AuthConfigurations;
+import com.github.dockerjava.api.model.ExposedPort;
+import com.github.dockerjava.api.model.PortBinding;
+import com.github.dockerjava.api.model.Ports.Binding;
+import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
+import com.github.dockerjava.core.RemoteApiVersion;
+import com.github.dockerjava.core.util.CompressArchiveUtil;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.testng.ITestResult;
+import org.testng.SkipException;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,31 +32,17 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.UUID;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.testng.ITestResult;
-import org.testng.SkipException;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
-import com.github.dockerjava.api.command.BuildImageCmd;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.InspectImageResponse;
-import com.github.dockerjava.api.exception.DockerClientException;
-import com.github.dockerjava.api.model.AuthConfig;
-import com.github.dockerjava.api.model.AuthConfigurations;
-import com.github.dockerjava.api.model.ExposedPort;
-import com.github.dockerjava.api.model.PortBinding;
-import com.github.dockerjava.api.model.Ports.Binding;
-import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.github.dockerjava.core.RemoteApiVersion;
-import com.github.dockerjava.core.util.CompressArchiveUtil;
+import static com.github.dockerjava.utils.TestUtils.getVersion;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 
 @Test(groups = "integration")
-public class BuildImageCmdImplTest extends AbstractDockerClientTest {
+public class BuildImageCmdImplTest extends AbstractJerseyDockerClientTest {
 
     @BeforeTest
     public void beforeTest() throws Exception {

@@ -1,17 +1,16 @@
 package com.github.dockerjava.core.command;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
+import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.api.model.StreamType;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.testng.annotations.Test;
-
-import com.github.dockerjava.api.model.Frame;
-import com.github.dockerjava.api.model.StreamType;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
 
 public class FrameReaderTest {
     public static final int HEADER_SIZE = 8;

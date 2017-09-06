@@ -4,7 +4,7 @@ import com.github.dockerjava.api.command.CreateNetworkResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.Network;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
 import org.hamcrest.Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,7 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
 
 @Test(groups = "integration")
-public class RemoveNetworkCmdImplTest extends AbstractDockerClientTest {
+public class RemoveNetworkCmdImplTest extends AbstractJerseyDockerClientTest {
 
     public static final Logger LOG = LoggerFactory.getLogger(RemoveNetworkCmdImplTest.class);
 

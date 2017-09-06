@@ -28,16 +28,6 @@ import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 @Test(groups = "integration")
 public class AttachContainerCmdExecTest extends AbstractNettyDockerClientTest {
 
-    @BeforeTest
-    public void beforeTest() throws Exception {
-        super.beforeTest();
-    }
-
-    @AfterTest
-    public void afterTest() {
-        super.afterTest();
-    }
-
     @BeforeMethod
     public void beforeMethod(Method method) {
         super.beforeMethod(method);

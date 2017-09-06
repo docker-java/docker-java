@@ -1,17 +1,9 @@
 package com.github.dockerjava.core.command;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.equalTo;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Method;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
+import com.github.dockerjava.core.util.CompressArchiveUtil;
 import org.apache.commons.io.FileUtils;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -20,13 +12,20 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.github.dockerjava.core.util.CompressArchiveUtil;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.not;
 
 @Test(groups = "integration")
-public class CopyArchiveToContainerCmdImplTest extends AbstractDockerClientTest {
+public class CopyArchiveToContainerCmdImplTest extends AbstractJerseyDockerClientTest {
     @BeforeTest
     public void beforeTest() throws Exception {
         super.beforeTest();

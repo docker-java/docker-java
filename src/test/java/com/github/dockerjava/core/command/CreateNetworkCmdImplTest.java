@@ -3,7 +3,7 @@ package com.github.dockerjava.core.command;
 import com.github.dockerjava.api.command.CreateNetworkResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.Network;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.testng.ITestResult;
 import org.testng.SkipException;
@@ -18,11 +18,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.github.dockerjava.utils.TestUtils.getVersion;
-
 import static com.github.dockerjava.utils.TestUtils.isSwarm;
 
 @Test(groups = "integration")
-public class CreateNetworkCmdImplTest extends AbstractDockerClientTest {
+public class CreateNetworkCmdImplTest extends AbstractJerseyDockerClientTest {
 
     @BeforeTest
     public void beforeTest() throws Exception {

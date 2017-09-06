@@ -55,7 +55,6 @@ public class BuildImageCmdExecTest extends AbstractNettyDockerClientTest {
         super.beforeTest();
     }
 
-    @AfterTest
     public void afterTest() {
         super.afterTest();
     }

@@ -1,15 +1,10 @@
 package com.github.dockerjava.core.command;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.startsWith;
-import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
-
-import java.lang.reflect.Method;
-import java.util.List;
-
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.api.model.Container;
+import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
 import org.hamcrest.Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,14 +15,18 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.model.Container;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import java.lang.reflect.Method;
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.startsWith;
+import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
 
 @Test(groups = "integration")
-public class RemoveImageCmdImplTest extends AbstractDockerClientTest {
+public class RemoveImageCmdImplTest extends AbstractJerseyDockerClientTest {
 
     public static final Logger LOG = LoggerFactory.getLogger(RemoveImageCmdImplTest.class);
 

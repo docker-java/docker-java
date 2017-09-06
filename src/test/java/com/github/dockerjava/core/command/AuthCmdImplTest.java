@@ -1,7 +1,9 @@
 package com.github.dockerjava.core.command;
 
-import java.lang.reflect.Method;
-
+import com.github.dockerjava.api.exception.UnauthorizedException;
+import com.github.dockerjava.api.model.AuthResponse;
+import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
+import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.testng.ITestResult;
 import org.testng.SkipException;
@@ -11,15 +13,12 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.exception.UnauthorizedException;
-import com.github.dockerjava.api.model.AuthResponse;
-import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.github.dockerjava.core.DockerClientBuilder;
+import java.lang.reflect.Method;
 
 import static com.github.dockerjava.utils.TestUtils.getVersion;
 
 @Test(groups = "integration")
-public class AuthCmdImplTest extends AbstractDockerClientTest {
+public class AuthCmdImplTest extends AbstractJerseyDockerClientTest {
 
     @BeforeTest
     public void beforeTest() throws Exception {

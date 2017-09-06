@@ -3,7 +3,7 @@ package com.github.dockerjava.core.command;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.CreateNetworkResponse;
 import com.github.dockerjava.api.model.Network;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
 import org.testng.ITestResult;
 import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
@@ -17,7 +17,7 @@ import java.lang.reflect.Method;
 import static com.github.dockerjava.utils.TestUtils.isSwarm;
 
 @Test(groups = "integration")
-public class DisconnectFromNetworkCmdImplTest extends AbstractDockerClientTest {
+public class DisconnectFromNetworkCmdImplTest extends AbstractJerseyDockerClientTest {
 
     @BeforeTest
     public void beforeTest() throws Exception {

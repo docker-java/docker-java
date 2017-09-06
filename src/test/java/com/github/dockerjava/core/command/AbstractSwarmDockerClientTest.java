@@ -8,7 +8,7 @@ import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.RemoteApiVersion;
@@ -19,7 +19,7 @@ import java.lang.reflect.Method;
 
 import static com.github.dockerjava.utils.TestUtils.getVersion;
 
-public abstract class AbstractSwarmDockerClientTest extends AbstractDockerClientTest {
+public abstract class AbstractSwarmDockerClientTest extends AbstractJerseyDockerClientTest {
     protected DockerClient secondDockerClient;
     private int numberOfDockersInDocker = 0;
 

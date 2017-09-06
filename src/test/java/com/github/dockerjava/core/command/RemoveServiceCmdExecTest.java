@@ -20,9 +20,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 
 @Test(groups = "swarm-integration")
 public class RemoveServiceCmdExecTest extends AbstractSwarmDockerClientTest {

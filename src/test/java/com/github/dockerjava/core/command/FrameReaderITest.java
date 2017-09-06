@@ -1,31 +1,23 @@
 package com.github.dockerjava.core.command;
 
-import static com.github.dockerjava.utils.TestUtils.isSwarm;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.hasEntry;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
-
+import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.api.model.StreamType;
+import com.github.dockerjava.core.DockerClientBuilder;
 import org.testng.SkipException;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.model.Frame;
-import com.github.dockerjava.api.model.StreamType;
-import com.github.dockerjava.client.AbstractDockerClientTest;
-import com.github.dockerjava.core.DockerClientBuilder;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import static com.github.dockerjava.utils.TestUtils.isSwarm;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasSize;
+import static org.testng.Assert.assertEquals;
 
 @Test(groups = "integration")
 public class FrameReaderITest {

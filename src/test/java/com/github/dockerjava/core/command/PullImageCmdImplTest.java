@@ -1,11 +1,12 @@
 package com.github.dockerjava.core.command;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.lessThanOrEqualTo;
-import static org.hamcrest.Matchers.notNullValue;
-
-import java.lang.reflect.Method;
-
+import com.github.dockerjava.api.async.ResultCallback;
+import com.github.dockerjava.api.command.InspectImageResponse;
+import com.github.dockerjava.api.command.PullImageCmd;
+import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.api.model.Info;
+import com.github.dockerjava.api.model.PullResponseItem;
+import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -13,16 +14,14 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.api.async.ResultCallback;
-import com.github.dockerjava.api.command.InspectImageResponse;
-import com.github.dockerjava.api.command.PullImageCmd;
-import com.github.dockerjava.api.model.Info;
-import com.github.dockerjava.api.model.PullResponseItem;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import java.lang.reflect.Method;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
+import static org.hamcrest.Matchers.notNullValue;
 
 @Test(groups = "integration")
-public class PullImageCmdImplTest extends AbstractDockerClientTest {
+public class PullImageCmdImplTest extends AbstractJerseyDockerClientTest {
 
     private static final PullImageCmd.Exec NOP_EXEC = new PullImageCmd.Exec() {
         public Void exec(PullImageCmd command, ResultCallback<PullResponseItem> resultCallback) {

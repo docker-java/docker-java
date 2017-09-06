@@ -34,6 +34,10 @@ import com.github.dockerjava.core.TestDockerCmdExecFactory;
 import com.github.dockerjava.core.command.BuildImageResultCallback;
 import com.github.dockerjava.core.command.LogContainerResultCallback;
 import com.github.dockerjava.core.command.PullImageResultCallback;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
 
 public abstract class AbstractDockerClientTest extends Assert {
 
@@ -48,6 +52,7 @@ public abstract class AbstractDockerClientTest extends Assert {
                 DockerClientBuilder.getDefaultDockerCmdExecFactory());
     }
 
+    @BeforeTest
     public void beforeTest() throws Exception {
 
         LOG.info("======================= BEFORETEST =======================");
@@ -82,15 +87,18 @@ public abstract class AbstractDockerClientTest extends Assert {
         return builder.build();
     }
 
+    @AfterTest
     public void afterTest() {
         LOG.debug("======================= END OF AFTERTEST =======================");
     }
 
+    @BeforeMethod
     public void beforeMethod(Method method) {
         LOG.debug(String.format("################################## STARTING %s ##################################",
                 method.getName()));
     }
 
+    @AfterMethod
     public void afterMethod(ITestResult result) {
 
         for (String container : dockerCmdExecFactory.getContainerNames()) {

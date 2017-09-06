@@ -6,7 +6,7 @@ import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.WaitResponse;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -18,10 +18,13 @@ import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
 
 @Test(groups = "integration")
-public class WaitContainerCmdImplTest extends AbstractDockerClientTest {
+public class WaitContainerCmdImplTest extends AbstractJerseyDockerClientTest {
 
     @BeforeTest
     public void beforeTest() throws Exception {
@@ -118,7 +121,7 @@ public class WaitContainerCmdImplTest extends AbstractDockerClientTest {
         try {
             callback.awaitStatusCode(100, TimeUnit.MILLISECONDS);
             fail("Should throw exception on timeout.");
-        } catch(DockerClientException e){
+        } catch (DockerClientException e) {
             LOG.info(e.getMessage());
         }
     }

@@ -1,15 +1,11 @@
 package com.github.dockerjava.core.command;
 
-import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
-
-import java.lang.reflect.Method;
-import java.security.SecureRandom;
-
+import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerCmd;
+import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
@@ -19,14 +15,17 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.InspectContainerResponse;
-import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import java.lang.reflect.Method;
+import java.security.SecureRandom;
+
+import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
 
 @Test(groups = "integration")
-public class InspectContainerCmdImplTest extends AbstractDockerClientTest {
+public class InspectContainerCmdImplTest extends AbstractJerseyDockerClientTest {
 
     public static final Logger LOG = LoggerFactory.getLogger(InspectContainerCmdImplTest.class);
 

@@ -1,10 +1,15 @@
 package com.github.dockerjava.core.command;
 
-import static org.apache.commons.lang.StringUtils.isEmpty;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.api.model.StreamType;
+import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -12,22 +17,13 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.codec.binary.StringUtils;
-import org.testng.ITestResult;
-import org.testng.SkipException;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.model.Frame;
-import com.github.dockerjava.api.model.StreamType;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
 
 @Test(groups = "integration")
-public class AttachContainerCmdImplTest extends AbstractDockerClientTest {
+public class AttachContainerCmdImplTest extends AbstractJerseyDockerClientTest {
 
     @BeforeTest
     public void beforeTest() throws Exception {

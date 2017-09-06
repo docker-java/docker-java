@@ -1,8 +1,7 @@
 package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.model.Image;
-import com.github.dockerjava.client.AbstractDockerClientTest;
-
+import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
 import com.github.dockerjava.utils.TestResources;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -19,11 +18,11 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsNull.notNullValue;
 
 @Test(groups = "integration")
-public class LoadImageCmdImplTest extends AbstractDockerClientTest {
+public class LoadImageCmdImplTest extends AbstractJerseyDockerClientTest {
 
     private String expectedImageId;
 

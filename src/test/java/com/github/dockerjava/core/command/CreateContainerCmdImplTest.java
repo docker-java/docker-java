@@ -15,13 +15,12 @@ import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.LogConfig;
 import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.api.model.Ports;
+import com.github.dockerjava.api.model.Ports.Binding;
 import com.github.dockerjava.api.model.RestartPolicy;
 import com.github.dockerjava.api.model.Ulimit;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
-import com.github.dockerjava.api.model.Ports.Binding;
-import com.github.dockerjava.client.AbstractDockerClientTest;
-
+import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.apache.commons.io.FileUtils;
 import org.testng.ITestResult;
@@ -43,8 +42,8 @@ import java.util.concurrent.TimeUnit;
 
 import static com.github.dockerjava.api.model.Capability.MKNOD;
 import static com.github.dockerjava.api.model.Capability.NET_ADMIN;
-import static com.github.dockerjava.utils.TestUtils.isSwarm;
 import static com.github.dockerjava.utils.TestUtils.getVersion;
+import static com.github.dockerjava.utils.TestUtils.isSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.contains;
@@ -54,7 +53,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItemInArray;
-import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
@@ -62,7 +60,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.startsWith;
 
 @Test(groups = "integration")
-public class CreateContainerCmdImplTest extends AbstractDockerClientTest {
+public class CreateContainerCmdImplTest extends AbstractJerseyDockerClientTest {
     public static final String BUSYBOX_IMAGE = "busybox";
 
     @BeforeTest

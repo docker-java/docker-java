@@ -1,15 +1,9 @@
 package com.github.dockerjava.core.command;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.containsString;
-
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.concurrent.TimeUnit;
-
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.api.model.StreamType;
+import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
@@ -17,13 +11,18 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.api.model.StreamType;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.concurrent.TimeUnit;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
 
 @Test(groups = "integration")
-public class LogContainerCmdImplTest extends AbstractDockerClientTest {
+public class LogContainerCmdImplTest extends AbstractJerseyDockerClientTest {
 
     @BeforeTest
     public void beforeTest() throws Exception {

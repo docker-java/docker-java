@@ -7,7 +7,7 @@ import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.UpdateContainerResponse;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.testng.ITestResult;
 import org.testng.SkipException;
@@ -24,14 +24,13 @@ import static com.github.dockerjava.test.serdes.JSONSamples.testRoundTrip;
 import static com.github.dockerjava.utils.TestUtils.getVersion;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.IsNull.notNullValue;
 
 /**
  * @author Kanstantsin Shautsou
  */
 @Test(groups = "integration")
-public class UpdateContainerCmdImplTest extends AbstractDockerClientTest {
+public class UpdateContainerCmdImplTest extends AbstractJerseyDockerClientTest {
 
     public static final String BUSYBOX_IMAGE = "busybox";
 

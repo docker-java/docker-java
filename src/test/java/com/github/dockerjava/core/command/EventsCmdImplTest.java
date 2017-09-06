@@ -1,11 +1,8 @@
 package com.github.dockerjava.core.command;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.model.Event;
+import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
 import org.testng.ITestResult;
 import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
@@ -14,9 +11,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.model.Event;
-import com.github.dockerjava.client.AbstractDockerClientTest;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import static com.github.dockerjava.utils.TestUtils.isSwarm;
 
@@ -26,7 +25,7 @@ import static com.github.dockerjava.utils.TestUtils.isSwarm;
  * with the virtualbox host system)
  */
 @Test(groups = "integration")
-public class EventsCmdImplTest extends AbstractDockerClientTest {
+public class EventsCmdImplTest extends AbstractJerseyDockerClientTest {
 
     private static String getEpochTime() {
         return String.valueOf(System.currentTimeMillis() / 1000);
