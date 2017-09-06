@@ -72,7 +72,7 @@
 
 		<!-- test dependencies -->
 		<logback.version>1.1.7</logback.version>
-		<testng.version>6.9.10</testng.version>
+		<junit.version>4.12</junit.version>
 		<netty.version>4.1.14.Final</netty.version>
 		<hamcrest.library.version>1.3</hamcrest.library.version>
 		<hamcrest.jpa-matchers>1.8</hamcrest.jpa-matchers>
@@ -83,8 +83,8 @@
 		<maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
 		<maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
 		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>
-		<maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
-		<maven-failsafe-plugin.version>2.19.1</maven-failsafe-plugin.version>
+		<maven-surefire-plugin.version>2.20</maven-surefire-plugin.version>
+		<maven-failsafe-plugin.version>2.20</maven-failsafe-plugin.version>
 		<maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
 		<maven-bundlor-plugin.version>1.1.2.RELEASE</maven-bundlor-plugin.version>
 		<maven-build-helper-plugin.version>3.0.0</maven-build-helper-plugin.version>
@@ -190,9 +190,15 @@
 		</dependency>
 
 		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
-			<version>${testng.version}</version>
+			<version>6.11</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -428,10 +434,17 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>${maven-surefire-plugin.version}</version>
-				<configuration>
-					<rerunFailingTestsCount>3</rerunFailingTestsCount>
-					<excludedGroups>integration,integration-auth,swarm-integration</excludedGroups>
-				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.surefire</groupId>
+						<artifactId>surefire-junit47</artifactId>
+						<version>${maven-surefire-plugin.version}</version>
+					</dependency>
+				</dependencies>
+				<!--<configuration>-->
+					<!--<rerunFailingTestsCount>3</rerunFailingTestsCount>-->
+					<!--<excludedGroups>integration,integration-auth,swarm-integration</excludedGroups>-->
+				<!--</configuration>-->
 			</plugin>
 
 			<plugin>

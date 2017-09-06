@@ -5,12 +5,15 @@ import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
+import com.github.dockerjava.core.command.BuildImageResultCallback;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import org.junit.rules.ExternalResource;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -20,7 +23,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
  */
 public class DockerRule extends ExternalResource {
     public static final Logger LOG = LoggerFactory.getLogger(DockerRule.class);
-    public static final String DEFAULT_IMAGE = "busubox:latest";
+    public static final String DEFAULT_IMAGE = "busybox:latest";
 
     private DockerCmdExecFactory cmdExecFactory;
     private DockerClient client;
@@ -45,7 +48,6 @@ public class DockerRule extends ExternalResource {
 
     @Override
     protected void before() throws Throwable {
-
         LOG.info("======================= BEFORETEST =======================");
         LOG.info("Connecting to Docker server");
         client = DockerClientBuilder.getInstance(config())
@@ -53,7 +55,7 @@ public class DockerRule extends ExternalResource {
                 .build();
 
         try {
-            client.inspectImageCmd("busybox").exec();
+            client.inspectImageCmd(DEFAULT_IMAGE).exec();
         } catch (NotFoundException e) {
             LOG.info("Pulling image 'busybox'");
             // need to block until image is pulled completely
@@ -81,5 +83,12 @@ public class DockerRule extends ExternalResource {
         }
 
         return builder.build();
+    }
+
+    public String buildImage(File baseDir) throws Exception {
+        return client.buildImageCmd(baseDir)
+                .withNoCache(true)
+                .exec(new BuildImageResultCallback())
+                .awaitImageId();
     }
 }
