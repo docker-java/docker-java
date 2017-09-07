@@ -6,8 +6,11 @@ import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.StreamType;
 import com.github.dockerjava.core.command.AttachContainerResultCallback;
+import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory;
 import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +39,9 @@ import static org.junit.Assume.assumeThat;
 public class AttachContainerCmdTest extends CmdTest {
     private static final Logger LOG = LoggerFactory.getLogger(AttachContainerCmdTest.class);
 
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     @Test
     public void attachContainerWithStdin() throws Exception {
@@ -161,9 +167,13 @@ public class AttachContainerCmdTest extends CmdTest {
         assertThat(callback.toString(), containsString("stdout\r\nstderr"));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void attachContainerStdinUnsupported() throws Exception {
+
         DockerClient dockerClient = dockerRule.getClient();
+        if (dockerRule.getCmdExecFactory() instanceof JerseyDockerCmdExecFactory) {
+            expectedException.expect(UnsupportedOperationException.class);
+        }
 
         String snippet = "hello world";
 
