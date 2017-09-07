@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM busybox:latest
 
 RUN echo "Step 1"
 

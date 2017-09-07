@@ -2,15 +2,9 @@ package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.Info;
-import com.github.dockerjava.junit.DockerRule;
-import com.github.dockerjava.junit.IntegrationTestSuite;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -89,6 +89,11 @@ public class RemoteApiVersion implements Serializable {
         }
 
         @Override
+        public boolean isGreater(RemoteApiVersion other) {
+            return false;
+        }
+
+        @Override
         public String toString() {
             return MoreObjects.toStringHelper(this).addValue("UNKNOWN_VERSION").toString();
         }
@@ -146,6 +151,11 @@ public class RemoteApiVersion implements Serializable {
         return false;
     }
 
+    public boolean isGreater(final RemoteApiVersion other) {
+        return major > other.major || (major == other.major && minor > other.minor);
+
+    }
+
     /**
      * @return String representation of version. i.e. "1.22"
      */
@@ -179,4 +189,5 @@ public class RemoteApiVersion implements Serializable {
     public String asWebPathPart() {
         return "v" + major + "." + minor;
     }
+
 }
