@@ -18,13 +18,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
-import static junit.framework.TestCase.assertNull;
-import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class CopyArchiveFromContainerCmdTest extends CmdTest {
     public static final Logger LOG = LoggerFactory.getLogger(CopyArchiveFromContainerCmdTest.class);

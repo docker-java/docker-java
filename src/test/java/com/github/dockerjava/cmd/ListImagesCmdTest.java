@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
-import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyArray;
 import static org.hamcrest.Matchers.equalTo;
@@ -20,6 +19,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertTrue;
 
 public class ListImagesCmdTest extends CmdTest {
     public static final Logger LOG = LoggerFactory.getLogger(ListImagesCmdTest.class);

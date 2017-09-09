@@ -3,16 +3,14 @@
  */
 package com.github.dockerjava.core;
 
-import java.io.IOException;
-
+import com.github.dockerjava.core.exception.GoLangFileMatchException;
+import junit.framework.Assert;
 import org.apache.commons.io.FilenameUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import com.github.dockerjava.core.exception.GoLangFileMatchException;
-
-import junit.framework.Assert;
+import java.io.IOException;
 
 @RunWith(Parameterized.class)
 public class GoLangFileMatchTest {

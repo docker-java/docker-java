@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import java.security.SecureRandom;
 
 import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
-import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyString;
@@ -20,6 +19,7 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class InspectContainerCmdTest extends CmdTest {
 

@@ -6,8 +6,8 @@ import com.github.dockerjava.api.model.Network;
 import org.junit.Test;
 
 import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
-import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class DisconnectFromNetworkCmdTest extends CmdTest {
 

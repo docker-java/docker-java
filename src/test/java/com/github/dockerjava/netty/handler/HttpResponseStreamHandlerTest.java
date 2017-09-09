@@ -1,13 +1,14 @@
 package com.github.dockerjava.netty.handler;
 
-import static com.github.dockerjava.netty.handler.HttpResponseStreamHandler.HttpResponseInputStream;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
+import com.github.dockerjava.core.async.ResultCallbackTemplate;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.ReferenceCountUtil;
+import org.apache.commons.io.IOUtils;
+import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,12 +17,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import io.netty.util.ReferenceCountUtil;
-import org.apache.commons.io.IOUtils;
-import org.junit.Test;
-import org.mockito.Mockito;
-
-import com.github.dockerjava.core.async.ResultCallbackTemplate;
+import static com.github.dockerjava.netty.handler.HttpResponseStreamHandler.HttpResponseInputStream;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Alexander Koshevoy

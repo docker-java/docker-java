@@ -3,12 +3,11 @@
  */
 package com.github.dockerjava.core;
 
-import com.github.dockerjava.core.exception.InvalidRepositoryNameException;
-import org.apache.commons.lang.StringUtils;
-
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.core.NameParser.HostnameReposName;
 import com.github.dockerjava.core.NameParser.ReposTag;
+import com.github.dockerjava.core.exception.InvalidRepositoryNameException;
+import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

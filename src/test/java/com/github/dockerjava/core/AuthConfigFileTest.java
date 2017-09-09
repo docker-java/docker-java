@@ -3,14 +3,13 @@
  */
 package com.github.dockerjava.core;
 
-import java.io.File;
-import java.io.IOException;
-
-
 import com.github.dockerjava.api.model.AuthConfig;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import java.io.File;
+import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
