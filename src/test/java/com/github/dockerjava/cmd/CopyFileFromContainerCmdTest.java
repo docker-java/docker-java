@@ -11,7 +11,7 @@ import java.io.InputStream;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_24;
 import static com.github.dockerjava.junit.DockerMatchers.isGreaterOrEqual;
 import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
-import static com.github.dockerjava.junit.TestUtils.asString;
+import static com.github.dockerjava.utils.TestUtils.asString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;

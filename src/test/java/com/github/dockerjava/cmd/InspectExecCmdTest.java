@@ -1,21 +1,17 @@
-package com.github.dockerjava.core.command;
+package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.ExecCreateCmdResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.InspectExecResponse;
-import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
 import com.github.dockerjava.core.RemoteApiVersion;
+import com.github.dockerjava.core.command.ExecStartResultCallback;
 import com.github.dockerjava.test.serdes.JSONTestHelper;
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.security.SecureRandom;
 
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_22;
@@ -26,98 +22,81 @@ import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-@Test(groups = "integration")
-public class InspectExecCmdImplTest extends AbstractJerseyDockerClientTest {
-    @BeforeTest
-    public void beforeTest() throws Exception {
-        super.beforeTest();
-    }
+public class InspectExecCmdTest extends CmdTest {
+    public static final Logger LOG = LoggerFactory.getLogger(InspectExecCmdTest.class);
 
-    @AfterTest
-    public void afterTest() {
-        super.afterTest();
-    }
-
-    @BeforeMethod
-    public void beforeMethod(Method method) {
-        super.beforeMethod(method);
-    }
-
-    @AfterMethod
-    public void afterMethod(ITestResult result) {
-        super.afterMethod(result);
-    }
-
-    @Test(groups = "ignoreInCircleCi")
+    @Test
     public void inspectExec() throws Exception {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999")
                 .withName(containerName).exec();
         LOG.info("Created container {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
 
-        dockerClient.startContainerCmd(container.getId()).exec();
+        dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         // Check that file does not exist
-        ExecCreateCmdResponse checkFileExec1 = dockerClient.execCreateCmd(container.getId()).withAttachStdout(true)
+        ExecCreateCmdResponse checkFileExec1 = dockerRule.getClient().execCreateCmd(container.getId()).withAttachStdout(true)
                 .withAttachStderr(true).withCmd("test", "-e", "/marker").exec();
         LOG.info("Created exec {}", checkFileExec1.toString());
         assertThat(checkFileExec1.getId(), not(isEmptyString()));
-        dockerClient.execStartCmd(checkFileExec1.getId()).withDetach(false)
+        dockerRule.getClient().execStartCmd(checkFileExec1.getId()).withDetach(false)
                 .exec(new ExecStartResultCallback(System.out, System.err)).awaitCompletion();
-        InspectExecResponse first = dockerClient.inspectExecCmd(checkFileExec1.getId()).exec();
+        InspectExecResponse first = dockerRule.getClient().inspectExecCmd(checkFileExec1.getId()).exec();
         assertThat(first.isRunning(), is(false));
         assertThat(first.getExitCode(), is(1));
 
         // Create the file
-        ExecCreateCmdResponse touchFileExec = dockerClient.execCreateCmd(container.getId()).withAttachStdout(true)
+        ExecCreateCmdResponse touchFileExec = dockerRule.getClient().execCreateCmd(container.getId()).withAttachStdout(true)
                 .withAttachStderr(true).withCmd("touch", "/marker").exec();
         LOG.info("Created exec {}", touchFileExec.toString());
         assertThat(touchFileExec.getId(), not(isEmptyString()));
-        dockerClient.execStartCmd(touchFileExec.getId()).withDetach(false)
+        dockerRule.getClient().execStartCmd(touchFileExec.getId()).withDetach(false)
                 .exec(new ExecStartResultCallback(System.out, System.err)).awaitCompletion();
-        InspectExecResponse second = dockerClient.inspectExecCmd(touchFileExec.getId()).exec();
+        InspectExecResponse second = dockerRule.getClient().inspectExecCmd(touchFileExec.getId()).exec();
         assertThat(second.isRunning(), is(false));
         assertThat(second.getExitCode(), is(0));
 
         // Check that file does exist now
-        ExecCreateCmdResponse checkFileExec2 = dockerClient.execCreateCmd(container.getId()).withAttachStdout(true)
+        ExecCreateCmdResponse checkFileExec2 = dockerRule.getClient().execCreateCmd(container.getId()).withAttachStdout(true)
                 .withAttachStderr(true).withCmd("test", "-e", "/marker").exec();
         LOG.info("Created exec {}", checkFileExec2.toString());
         assertThat(checkFileExec2.getId(), not(isEmptyString()));
-        dockerClient.execStartCmd(checkFileExec2.getId()).withDetach(false)
+        dockerRule.getClient().execStartCmd(checkFileExec2.getId()).withDetach(false)
                 .exec(new ExecStartResultCallback(System.out, System.err)).awaitCompletion();
-        InspectExecResponse third = dockerClient.inspectExecCmd(checkFileExec2.getId()).exec();
+        InspectExecResponse third = dockerRule.getClient().inspectExecCmd(checkFileExec2.getId()).exec();
         assertThat(third.isRunning(), is(false));
         assertThat(third.getExitCode(), is(0));
 
         // Get container info and check its roundtrip to ensure the consistency
-        InspectContainerResponse containerInfo = dockerClient.inspectContainerCmd(container.getId()).exec();
+        InspectContainerResponse containerInfo = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
         assertEquals(containerInfo.getId(), container.getId());
         JSONTestHelper.testRoundTrip(containerInfo);
     }
 
-    @Test(groups = "ignoreInCircleCi")
+    @Test
     public void inspectExecNetworkSettings() throws IOException {
-        final RemoteApiVersion apiVersion = getVersion(dockerClient);
+        final RemoteApiVersion apiVersion = getVersion(dockerRule.getClient());
 
         String containerName = "generated_" + new SecureRandom().nextInt();
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999")
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999")
                 .withName(containerName).exec();
         LOG.info("Created container {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
 
-        dockerClient.startContainerCmd(container.getId()).exec();
+        dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
-        ExecCreateCmdResponse exec = dockerClient.execCreateCmd(container.getId()).withAttachStdout(true)
+        ExecCreateCmdResponse exec = dockerRule.getClient().execCreateCmd(container.getId()).withAttachStdout(true)
                 .withAttachStderr(true).withCmd("/bin/bash").exec();
         LOG.info("Created exec {}", exec.toString());
         assertThat(exec.getId(), not(isEmptyString()));
 
-        InspectExecResponse inspectExecResponse = dockerClient.inspectExecCmd(exec.getId()).exec();
+        InspectExecResponse inspectExecResponse = dockerRule.getClient().inspectExecCmd(exec.getId()).exec();
 
         if (apiVersion.isGreaterOrEqual(RemoteApiVersion.VERSION_1_22)) {
             assertThat(inspectExecResponse.getExitCode(), is(nullValue()));

@@ -12,7 +12,7 @@ import java.io.InputStream;
 import java.security.SecureRandom;
 
 import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
-import static com.github.dockerjava.junit.TestUtils.asString;
+import static com.github.dockerjava.utils.TestUtils.asString;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyString;

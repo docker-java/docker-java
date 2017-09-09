@@ -42,9 +42,9 @@ public class DockerClientBuilder {
 
     public DockerClient build() {
         if (dockerCmdExecFactory != null) {
-            dockerRule.getClient().withDockerCmdExecFactory(dockerCmdExecFactory);
+            dockerClient.withDockerCmdExecFactory(dockerCmdExecFactory);
         } else {
-            dockerRule.getClient().withDockerCmdExecFactory(getDefaultDockerCmdExecFactory());
+            dockerClient.withDockerCmdExecFactory(getDefaultDockerCmdExecFactory());
         }
 
         return dockerClient;
