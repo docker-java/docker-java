@@ -2,7 +2,6 @@ package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
 import com.github.dockerjava.core.util.CompressArchiveUtil;
 import com.github.dockerjava.utils.TestUtils;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
