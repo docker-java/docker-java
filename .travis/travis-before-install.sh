@@ -46,6 +46,7 @@ sudo -E stop docker
 # sudo dpkg -i "$(ls *${DOCKER_VERSION}*)"
 #popd
 rm -f "src/test/resources/logback.xml"
+rm -f "src/test/resources/travis-logback.xml"
 #mv "src/test/resources/travis-logback.xml" "src/test/resources/logback.xml"
 
 # https://github.com/docker/docker/issues/18113
