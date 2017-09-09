@@ -2,7 +2,7 @@ package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.Network;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import java.util.List;
 
@@ -12,7 +12,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 public class InspectNetworkCmdTest extends CmdTest {
-
 
     @Test
     public void inspectNetwork() throws DockerException {

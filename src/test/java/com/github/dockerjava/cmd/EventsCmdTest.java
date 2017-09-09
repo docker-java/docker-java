@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.testng.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 /*
  * NOTE: These tests may fail if there is a difference between local and daemon time
@@ -51,7 +51,7 @@ public class EventsCmdTest extends CmdTest {
         List<Event> events = eventCallback.awaitExpectedEvents(3, TimeUnit.MINUTES);
 
         // we may receive more events as expected
-        assertTrue(events.size() >= expectedEvents, "Received events: " + events);
+        assertTrue("Received events: " + events, events.size() >= expectedEvents);
     }
 
     @Test
@@ -75,7 +75,7 @@ public class EventsCmdTest extends CmdTest {
         List<Event> events = eventCallback.awaitExpectedEvents(3, TimeUnit.MINUTES);
 
         // we may receive more events as expected
-        assertTrue(events.size() >= expectedEvents, "Received events: " + events);
+        assertTrue("Received events: " + events, events.size() >= expectedEvents);
     }
 
 

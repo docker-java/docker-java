@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import static com.github.dockerjava.api.model.AccessMode.rw;
-import static org.testng.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 
 public class AccessModeTest {

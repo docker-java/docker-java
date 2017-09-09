@@ -6,9 +6,9 @@ import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.google.common.collect.ImmutableMap;
 import org.hamcrest.Matcher;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.Map;

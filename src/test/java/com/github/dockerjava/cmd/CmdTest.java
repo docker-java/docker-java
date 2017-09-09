@@ -4,7 +4,7 @@ import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory;
 import com.github.dockerjava.junit.DockerRule;
 import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
-import org.junit.Rule;
+import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
@@ -26,7 +26,7 @@ public abstract class CmdTest {
     @Parameterized.Parameter
     public static DockerCmdExecFactory cmdExecFactory;
 
-    @Rule
-    public DockerRule dockerRule = new DockerRule(cmdExecFactory);
+    @ClassRule
+    public static DockerRule dockerRule = new DockerRule(cmdExecFactory);
 
 }

@@ -1,10 +1,10 @@
 package com.github.dockerjava.api.model;
 
-import static org.testng.Assert.assertEquals;
-
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
 public class RestartPolicyToStringTest {

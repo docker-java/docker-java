@@ -1,11 +1,11 @@
 package com.github.dockerjava.core;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.AssertJUnit.fail;
+import org.junit.Test;
 
 import java.net.URI;
 
-import org.testng.annotations.Test;
+import static org.junit.Assert.assertEquals;
+
 
 public class DockerClientImplTest {
 
@@ -18,7 +18,7 @@ public class DockerClientImplTest {
         // when we get the auth config
         try {
             dockerClient.authConfig();
-            fail();
+            throw new AssertionError();
         } catch (NullPointerException e) {
             // then we get a NPE with expected message
             assertEquals(e.getMessage(), "Configured serverAddress is null.");

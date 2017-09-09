@@ -23,7 +23,11 @@ public class DockerAssume {
     }
 
     public static void assumeNotSwarm(String message, DockerRule dockerRule) {
-        assumeFalse(message, isSwarm(dockerRule.getClient()));
+        assumeNotSwarm(message, dockerRule.getClient());
+    }
+
+    public static void assumeNotSwarm(String message, DockerClient client) {
+        assumeFalse(message, isSwarm(client));
     }
 
 }

@@ -15,13 +15,13 @@
  */
 package com.github.dockerjava.api.model;
 
-import static com.github.dockerjava.test.serdes.JSONTestHelper.testRoundTrip;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import org.junit.Test;
 
 import java.io.IOException;
 
-import org.junit.Test;
+import static com.github.dockerjava.test.serdes.JSONTestHelper.testRoundTrip;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests logic of PullResponseItem's error/success handling by simulating a JSON response.

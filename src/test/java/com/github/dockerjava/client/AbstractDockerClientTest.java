@@ -15,10 +15,13 @@ import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang.StringUtils;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.Assert;
-import org.testng.ITestResult;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.InspectContainerResponse;
@@ -34,10 +37,6 @@ import com.github.dockerjava.core.TestDockerCmdExecFactory;
 import com.github.dockerjava.core.command.BuildImageResultCallback;
 import com.github.dockerjava.core.command.LogContainerResultCallback;
 import com.github.dockerjava.core.command.PullImageResultCallback;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
 
 public abstract class AbstractDockerClientTest extends Assert {
 
@@ -52,7 +51,7 @@ public abstract class AbstractDockerClientTest extends Assert {
                 DockerClientBuilder.getDefaultDockerCmdExecFactory());
     }
 
-    @BeforeTest
+    @BeforeClass
     public void beforeTest() throws Exception {
 
         LOG.info("======================= BEFORETEST =======================");
@@ -87,19 +86,19 @@ public abstract class AbstractDockerClientTest extends Assert {
         return builder.build();
     }
 
-    @AfterTest
+    @AfterClass
     public void afterTest() {
         LOG.debug("======================= END OF AFTERTEST =======================");
     }
 
-    @BeforeMethod
+    @Before
     public void beforeMethod(Method method) {
         LOG.debug(String.format("################################## STARTING %s ##################################",
                 method.getName()));
     }
 
-    @AfterMethod
-    public void afterMethod(ITestResult result) {
+    @After
+    public void afterMethod() {
 
         for (String container : dockerCmdExecFactory.getContainerNames()) {
             LOG.info("Cleaning up temporary container {}", container);
@@ -138,7 +137,7 @@ public abstract class AbstractDockerClientTest extends Assert {
             }
         }
 
-        LOG.info("################################## END OF {} ##################################\n", result.getName());
+        LOG.info("################################## END OF {} ##################################\n");
     }
 
     protected String asString(InputStream response) {

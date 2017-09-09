@@ -9,7 +9,6 @@ import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
-
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,7 +16,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
 
@@ -36,7 +34,7 @@ public class CopyArchiveFromContainerCmdTest extends AbstractJerseyDockerClientT
 
         InputStream response = dockerClient.copyArchiveFromContainerCmd(container.getId(), "/copyFromContainer").exec();
         Boolean bytesAvailable = response.available() > 0;
-        assertTrue(bytesAvailable, "The file was not copied from the container.");
+        assertTrue("The file was not copied from the container.", bytesAvailable );
 
         // read the stream fully. Otherwise, the underlying stream will not be closed.
         String responseAsString = asString(response);
@@ -68,7 +66,7 @@ public class CopyArchiveFromContainerCmdTest extends AbstractJerseyDockerClientT
 
         InputStream response = dockerClient.copyArchiveFromContainerCmd(container.getId(), "/binary.dat").exec();
         Boolean bytesAvailable = response.available() > 0;
-        assertTrue(bytesAvailable, "The file was not copied from the container.");
+        assertTrue("The file was not copied from the container.", bytesAvailable);
 
         try (TarArchiveInputStream tarInputStream = new TarArchiveInputStream(response)) {
             TarArchiveEntry nextTarEntry = tarInputStream.getNextTarEntry();
@@ -78,7 +76,7 @@ public class CopyArchiveFromContainerCmdTest extends AbstractJerseyDockerClientT
                 assertTrue(IOUtils.contentEquals(binaryFileInputStream, tarInputStream));
             }
 
-            assertNull(tarInputStream.getNextTarEntry(), "Nothing except binary.dat is expected to be copied.");
+            assertNull("Nothing except binary.dat is expected to be copied.", tarInputStream.getNextTarEntry());
         }
     }
 }

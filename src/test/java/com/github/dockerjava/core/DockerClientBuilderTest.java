@@ -1,8 +1,5 @@
 package com.github.dockerjava.core;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,9 +7,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.testng.annotations.Test;
 
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 public class DockerClientBuilderTest {
     // Amount of instances created in test

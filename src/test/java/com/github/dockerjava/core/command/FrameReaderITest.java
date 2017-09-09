@@ -4,36 +4,34 @@ import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.StreamType;
 import com.github.dockerjava.core.DockerClientBuilder;
-import org.testng.SkipException;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static com.github.dockerjava.utils.TestUtils.isSwarm;
+import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
-import static org.testng.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
-@Test(groups = "integration")
 public class FrameReaderITest {
 
     private DockerClient dockerClient;
 
     private DockerfileFixture dockerfileFixture;
 
-    @BeforeTest
+    @Before
     public void beforeTest() throws Exception {
         dockerClient = DockerClientBuilder.getInstance().build();
         dockerfileFixture = new DockerfileFixture(dockerClient, "frameReaderDockerfile");
         dockerfileFixture.open();
     }
 
-    @AfterTest
+    @After
     public void deleteDockerContainerImage() throws Exception {
         dockerfileFixture.close();
         dockerClient.close();
@@ -41,7 +39,7 @@ public class FrameReaderITest {
 
     @Test
     public void canCloseFrameReaderAndReadExpectedLines() throws Exception {
-        if (isSwarm(dockerClient)) throw new SkipException("FIXME Swarm");
+        assumeNotSwarm("", dockerClient);
 
         // wait for the container to be successfully executed
         int exitCode = dockerClient.waitContainerCmd(dockerfileFixture.getContainerId())

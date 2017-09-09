@@ -1,10 +1,9 @@
 package com.github.dockerjava.api.model;
 
-import static org.testng.Assert.assertEquals;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Compares serialization results of various {@link RestartPolicy}s with what Docker (as of 1.3.3) actually sends when executing

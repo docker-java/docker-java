@@ -1,8 +1,8 @@
 package com.github.dockerjava.netty.handler;
 
 import static com.github.dockerjava.netty.handler.HttpResponseStreamHandler.HttpResponseInputStream;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
@@ -18,8 +18,8 @@ import java.util.concurrent.Future;
 
 import io.netty.util.ReferenceCountUtil;
 import org.apache.commons.io.IOUtils;
+import org.junit.Test;
 import org.mockito.Mockito;
-import org.testng.annotations.Test;
 
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
 
@@ -107,7 +107,7 @@ public class HttpResponseStreamHandlerTest {
         submit.get();
     }
 
-    @Test(expectedExceptions = IOException.class)
+    @Test(expected = IOException.class)
     public void testReadClosedResponseStream() throws Exception {
         HttpResponseInputStream inputStream = new HttpResponseInputStream();
         ByteBuf buffer = generateByteBuf();

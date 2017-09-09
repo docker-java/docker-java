@@ -15,16 +15,15 @@
  */
 package com.github.dockerjava.test.serdes;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.io.IOUtils;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Provides helper methods for serialization-deserialization tests.
@@ -135,7 +134,7 @@ public class JSONTestHelper {
         JsonNode json2 = mapper.readTree(serialized2);
         TClass deserialized2 = mapper.readValue(serialized2, asclass);
 
-        assertEquals(json2, json1, "JSONs must be equal after the second roundtrip");
+        assertEquals("JSONs must be equal after the second roundtrip", json2, json1);
         return deserialized2;
     }
 }

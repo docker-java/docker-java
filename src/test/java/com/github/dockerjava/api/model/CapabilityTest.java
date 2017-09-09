@@ -1,11 +1,10 @@
 package com.github.dockerjava.api.model;
 
-import static org.testng.Assert.assertEquals;
-
-import org.junit.Test;
-
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class CapabilityTest {
     private final ObjectMapper objectMapper = new ObjectMapper();

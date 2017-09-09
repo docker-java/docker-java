@@ -1,13 +1,12 @@
 package com.github.dockerjava.api.model;
 
-import static org.testng.Assert.assertEquals;
-
+import com.github.dockerjava.api.model.Ports.Binding;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-
-import com.github.dockerjava.api.model.Ports.Binding;
 import org.junit.rules.ExpectedException;
+
+import static org.junit.Assert.assertEquals;
 
 public class PortBindingTest {
 

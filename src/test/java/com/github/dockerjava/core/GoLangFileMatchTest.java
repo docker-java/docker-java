@@ -6,42 +6,20 @@ package com.github.dockerjava.core;
 import java.io.IOException;
 
 import org.apache.commons.io.FilenameUtils;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import com.github.dockerjava.core.exception.GoLangFileMatchException;
 
 import junit.framework.Assert;
 
+@RunWith(Parameterized.class)
 public class GoLangFileMatchTest {
 
-    @Test(dataProvider = "getTestData")
-    public void testMatch(MatchTestCase testCase) throws IOException {
-        String pattern = testCase.pattern;
-        String s = testCase.s;
-        if (GoLangFileMatch.IS_WINDOWS) {
-            if (pattern.indexOf('\\') >= 0) {
-                // no escape allowed on windows.
-                return;
-            }
-            pattern = FilenameUtils.normalize(pattern);
-            s = FilenameUtils.normalize(s);
-        }
-        try {
-            Boolean matched = GoLangFileMatch.match(pattern, s);
-            if (testCase.expectException) {
-                Assert.fail("Expected GoFileMatchException");
-            }
-            Assert.assertEquals(testCase.toString(), testCase.matches, matched);
-        } catch (GoLangFileMatchException e) {
-            if (!testCase.expectException) {
-                throw e;
-            }
-        }
-    }
 
-    @DataProvider
-    public Object[][] getTestData() {
+    @Parameterized.Parameters
+    public static Object[][] getTestData() {
         return new Object[][] {new Object[] {new MatchTestCase("", "abc", false, false)},
                 new Object[] {new MatchTestCase("abc", "abc", true, false)},
                 new Object[] {new MatchTestCase("*", "abc", true, false)},
@@ -103,7 +81,35 @@ public class GoLangFileMatchTest {
                 new Object[] {new MatchTestCase("**/c", "a/b/c", true, false)}};
     }
 
-    private final class MatchTestCase {
+    @Parameterized.Parameter
+    public MatchTestCase testCase;
+
+    @Test
+    public void testMatch() throws IOException {
+        String pattern = testCase.pattern;
+        String s = testCase.s;
+        if (GoLangFileMatch.IS_WINDOWS) {
+            if (pattern.indexOf('\\') >= 0) {
+                // no escape allowed on windows.
+                return;
+            }
+            pattern = FilenameUtils.normalize(pattern);
+            s = FilenameUtils.normalize(s);
+        }
+        try {
+            Boolean matched = GoLangFileMatch.match(pattern, s);
+            if (testCase.expectException) {
+                Assert.fail("Expected GoFileMatchException");
+            }
+            Assert.assertEquals(testCase.toString(), testCase.matches, matched);
+        } catch (GoLangFileMatchException e) {
+            if (!testCase.expectException) {
+                throw e;
+            }
+        }
+    }
+
+    private final static class MatchTestCase {
         private final String pattern;
 
         private final String s;

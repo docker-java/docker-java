@@ -2,7 +2,7 @@ package com.github.dockerjava.api.model;
 
 import static com.github.dockerjava.api.model.InternetProtocol.DEFAULT;
 import static com.github.dockerjava.api.model.InternetProtocol.TCP;
-import static org.testng.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Rule;
 import org.junit.Test;
