@@ -1,7 +1,7 @@
 package com.github.dockerjava.core.util;
 
 import com.google.common.collect.Maps;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import java.util.Map;
 

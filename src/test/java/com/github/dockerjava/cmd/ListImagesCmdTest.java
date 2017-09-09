@@ -1,21 +1,17 @@
-package com.github.dockerjava.core.command;
+package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.api.model.Info;
-import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyArray;
 import static org.hamcrest.Matchers.equalTo;
@@ -25,37 +21,17 @@ import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 
-@Test(groups = "integration")
-public class ListImagesCmdImplTest extends AbstractJerseyDockerClientTest {
-
-    @BeforeTest
-    public void beforeTest() throws Exception {
-        super.beforeTest();
-    }
-
-    @AfterTest
-    public void afterTest() {
-        super.afterTest();
-    }
-
-    @BeforeMethod
-    public void beforeMethod(Method method) {
-        super.beforeMethod(method);
-    }
-
-    @AfterMethod
-    public void afterMethod(ITestResult result) {
-        super.afterMethod(result);
-    }
+public class ListImagesCmdTest extends CmdTest {
+    public static final Logger LOG = LoggerFactory.getLogger(ListImagesCmdTest.class);
 
     @Test
     public void listImages() throws DockerException {
-        List<Image> images = dockerClient.listImagesCmd().withShowAll(true).exec();
+        List<Image> images = dockerRule.getClient().listImagesCmd().withShowAll(true).exec();
         assertThat(images, notNullValue());
         LOG.info("Images List: {}", images);
-        Info info = dockerClient.infoCmd().exec();
+        Info info = dockerRule.getClient().infoCmd().exec();
 
-        if (isNotSwarm(dockerClient)) {
+        if (isNotSwarm(dockerRule.getClient())) {
             assertThat(images.size(), equalTo(info.getImages()));
         }
 
@@ -66,10 +42,10 @@ public class ListImagesCmdImplTest extends AbstractJerseyDockerClientTest {
         assertThat(img.getRepoTags(), not(emptyArray()));
     }
 
-    @Test(groups = "ignoreInCircleCi")
+    @Test
     public void listImagesWithDanglingFilter() throws DockerException {
         String imageId = createDanglingImage();
-        List<Image> images = dockerClient.listImagesCmd().withDanglingFilter(true).withShowAll(true)
+        List<Image> images = dockerRule.getClient().listImagesCmd().withDanglingFilter(true).withShowAll(true)
                 .exec();
         assertThat(images, notNullValue());
         LOG.info("Images List: {}", images);
@@ -88,16 +64,16 @@ public class ListImagesCmdImplTest extends AbstractJerseyDockerClientTest {
     }
 
     private String createDanglingImage() {
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox").withCmd("sleep", "9999").exec();
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999").exec();
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
-        dockerClient.startContainerCmd(container.getId()).exec();
+        dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         LOG.info("Committing container {}", container.toString());
-        String imageId = dockerClient.commitCmd(container.getId()).exec();
+        String imageId = dockerRule.getClient().commitCmd(container.getId()).exec();
 
-        dockerClient.stopContainerCmd(container.getId()).exec();
-        dockerClient.removeContainerCmd(container.getId()).exec();
+        dockerRule.getClient().stopContainerCmd(container.getId()).exec();
+        dockerRule.getClient().removeContainerCmd(container.getId()).exec();
         return imageId;
     }
 }

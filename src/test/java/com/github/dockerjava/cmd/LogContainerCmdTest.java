@@ -1,53 +1,33 @@
-package com.github.dockerjava.core.command;
+package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.StreamType;
-import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import com.github.dockerjava.core.command.WaitContainerResultCallback;
+import com.github.dockerjava.utils.LogContainerTestCallback;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
 
-@Test(groups = "integration")
-public class LogContainerCmdImplTest extends AbstractJerseyDockerClientTest {
-
-    @BeforeTest
-    public void beforeTest() throws Exception {
-        super.beforeTest();
-    }
-
-    @AfterTest
-    public void afterTest() {
-        super.afterTest();
-    }
-
-    @BeforeMethod
-    public void beforeMethod(Method method) {
-        super.beforeMethod(method);
-    }
-
-    @AfterMethod
-    public void afterMethod(ITestResult result) {
-        super.afterMethod(result);
-    }
+public class LogContainerCmdTest extends CmdTest {
+    private static final Logger LOG = LoggerFactory.getLogger(LogContainerCmdTest.class);
 
     @Test
     public void asyncLogContainerWithTtyEnabled() throws Exception {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
                 .withCmd("/bin/sh", "-c", "while true; do echo hello; sleep 1; done")
                 .withTty(true)
                 .exec();
@@ -55,13 +35,13 @@ public class LogContainerCmdImplTest extends AbstractJerseyDockerClientTest {
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
 
-        dockerClient.startContainerCmd(container.getId())
+        dockerRule.getClient().startContainerCmd(container.getId())
             .exec();
 
         LogContainerTestCallback loggingCallback = new LogContainerTestCallback(true);
 
         // this essentially test the since=0 case
-        dockerClient.logContainerCmd(container.getId())
+        dockerRule.getClient().logContainerCmd(container.getId())
             .withStdErr(true)
             .withStdOut(true)
             .withFollowStream(true)
@@ -78,7 +58,7 @@ public class LogContainerCmdImplTest extends AbstractJerseyDockerClientTest {
     @Test
     public void asyncLogContainerWithTtyDisabled() throws Exception {
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
                 .withCmd("/bin/sh", "-c", "while true; do echo hello; sleep 1; done")
                 .withTty(false)
                 .exec();
@@ -86,13 +66,13 @@ public class LogContainerCmdImplTest extends AbstractJerseyDockerClientTest {
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
 
-        dockerClient.startContainerCmd(container.getId())
+        dockerRule.getClient().startContainerCmd(container.getId())
             .exec();
 
         LogContainerTestCallback loggingCallback = new LogContainerTestCallback(true);
 
         // this essentially test the since=0 case
-        dockerClient.logContainerCmd(container.getId())
+        dockerRule.getClient().logContainerCmd(container.getId())
             .withStdErr(true)
             .withStdOut(true)
             .withFollowStream(true)
@@ -127,11 +107,11 @@ public class LogContainerCmdImplTest extends AbstractJerseyDockerClientTest {
 
             public void onComplete() {
                 super.onComplete();
-                fail("expected NotFoundException");
+                throw new AssertionError("expected NotFoundException");
             };
         };
 
-        dockerClient.logContainerCmd("non-existing").withStdErr(true).withStdOut(true).exec(loggingCallback)
+        dockerRule.getClient().logContainerCmd("non-existing").withStdErr(true).withStdOut(true).exec(loggingCallback)
                 .awaitCompletion();
     }
 
@@ -140,16 +120,16 @@ public class LogContainerCmdImplTest extends AbstractJerseyDockerClientTest {
 
         String snippet = "hello world";
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
                 .withCmd("/bin/echo", snippet)
                 .exec();
 
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
 
-        dockerClient.startContainerCmd(container.getId()).exec();
+        dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
-        int exitCode = dockerClient.waitContainerCmd(container.getId())
+        int exitCode = dockerRule.getClient().waitContainerCmd(container.getId())
                 .exec(new WaitContainerResultCallback())
                 .awaitStatusCode();
 
@@ -157,7 +137,7 @@ public class LogContainerCmdImplTest extends AbstractJerseyDockerClientTest {
 
         LogContainerTestCallback loggingCallback = new LogContainerTestCallback();
 
-        dockerClient.logContainerCmd(container.getId())
+        dockerRule.getClient().logContainerCmd(container.getId())
                 .withStdErr(true)
                 .withStdOut(true)
                 .exec(loggingCallback);
@@ -166,7 +146,7 @@ public class LogContainerCmdImplTest extends AbstractJerseyDockerClientTest {
 
         loggingCallback = new LogContainerTestCallback();
 
-        dockerClient.logContainerCmd(container.getId())
+        dockerRule.getClient().logContainerCmd(container.getId())
                 .withStdErr(true)
                 .withStdOut(true)
                 .exec(loggingCallback);
@@ -175,7 +155,7 @@ public class LogContainerCmdImplTest extends AbstractJerseyDockerClientTest {
 
         loggingCallback = new LogContainerTestCallback();
 
-        dockerClient.logContainerCmd(container.getId())
+        dockerRule.getClient().logContainerCmd(container.getId())
                 .withStdErr(true)
                 .withStdOut(true)
                 .exec(loggingCallback);
@@ -189,7 +169,7 @@ public class LogContainerCmdImplTest extends AbstractJerseyDockerClientTest {
     public void asyncLogContainerWithSince() throws Exception {
         String snippet = "hello world";
 
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
                 .withCmd("/bin/echo", snippet)
                 .exec();
 
@@ -198,9 +178,9 @@ public class LogContainerCmdImplTest extends AbstractJerseyDockerClientTest {
 
         int timestamp = (int) (System.currentTimeMillis() / 1000);
 
-        dockerClient.startContainerCmd(container.getId()).exec();
+        dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
-        int exitCode = dockerClient.waitContainerCmd(container.getId())
+        int exitCode = dockerRule.getClient().waitContainerCmd(container.getId())
                 .exec(new WaitContainerResultCallback())
                 .awaitStatusCode();
 
@@ -208,7 +188,7 @@ public class LogContainerCmdImplTest extends AbstractJerseyDockerClientTest {
 
         LogContainerTestCallback loggingCallback = new LogContainerTestCallback();
 
-        dockerClient.logContainerCmd(container.getId())
+        dockerRule.getClient().logContainerCmd(container.getId())
                 .withStdErr(true)
                 .withStdOut(true)
                 .withSince(timestamp)

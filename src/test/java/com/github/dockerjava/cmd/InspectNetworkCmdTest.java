@@ -11,7 +11,7 @@ import static com.github.dockerjava.utils.TestUtils.findNetwork;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-public class InspectNetworkCmdImplTest extends CmdTest {
+public class InspectNetworkCmdTest extends CmdTest {
 
 
     @Test

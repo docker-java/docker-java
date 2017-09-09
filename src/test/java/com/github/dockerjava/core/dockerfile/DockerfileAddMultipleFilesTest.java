@@ -8,15 +8,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.annotations.Test;
 
 import com.google.common.base.Function;
 
 public class DockerfileAddMultipleFilesTest {
 
-    private static final Logger log = LoggerFactory.getLogger(DockerfileAddMultipleFilesTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DockerfileAddMultipleFilesTest.class);
 
     private static final Function<File, String> TO_FILE_NAMES = new Function<File, String>() {
         @Override

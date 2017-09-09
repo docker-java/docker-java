@@ -21,7 +21,7 @@ import static org.testng.Assert.assertTrue;
 
 import java.io.IOException;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 /**
  * Tests logic of PullResponseItem's error/success handling by simulating a JSON response.

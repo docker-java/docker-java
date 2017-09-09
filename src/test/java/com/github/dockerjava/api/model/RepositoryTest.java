@@ -1,8 +1,11 @@
 package com.github.dockerjava.api.model;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class RepositoryTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class RepositoryTest {
+    @Test
     public void testRepository() throws Exception {
 
         Repository repo = new Repository("10.0.0.1/jim");

@@ -4,9 +4,14 @@ import static com.github.dockerjava.api.model.InternetProtocol.DEFAULT;
 import static com.github.dockerjava.api.model.InternetProtocol.TCP;
 import static org.testng.Assert.assertEquals;
 
-import org.testng.annotations.Test;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class ExposedPortTest {
+
+    @Rule
+    public ExpectedException expectedEx = ExpectedException.none();
 
     @Test
     public void parsePortAndProtocol() {
@@ -20,13 +25,19 @@ public class ExposedPortTest {
         assertEquals(exposedPort, new ExposedPort(80, DEFAULT));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing ExposedPort 'nonsense'")
+    @Test
     public void parseInvalidInput() {
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("Error parsing ExposedPort 'nonsense'");
+
         ExposedPort.parse("nonsense");
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing ExposedPort 'null'")
+    @Test
     public void parseNull() {
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("Error parsing ExposedPort 'null'");
+
         ExposedPort.parse(null);
     }
 

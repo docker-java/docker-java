@@ -2,7 +2,7 @@ package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.model.Ports.Binding;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import java.util.Map;
 

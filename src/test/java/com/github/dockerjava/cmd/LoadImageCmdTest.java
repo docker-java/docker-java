@@ -1,17 +1,12 @@
-package com.github.dockerjava.core.command;
+package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.model.Image;
-import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
 import com.github.dockerjava.utils.TestResources;
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.util.List;
 
@@ -21,43 +16,30 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
 
-@Test(groups = "integration")
-public class LoadImageCmdImplTest extends AbstractJerseyDockerClientTest {
+public class LoadImageCmdTest extends CmdTest {
 
     private String expectedImageId;
-
-    @BeforeTest
-    public void beforeTest() throws Exception {
-        super.beforeTest();
-    }
-
-    @AfterTest
-    public void afterTest() {
-        super.afterTest();
-    }
-
-    @BeforeMethod
-    public void beforeMethod(Method method) {
-        super.beforeMethod(method);
+    
+    @Before
+    public void beforeMethod() {
         expectedImageId = "sha256:56031f66eb0cef2e2e5cb2d1dabafaa0ebcd0a18a507d313b5bdb8c0472c5eba";
-        if (findImageWithId(expectedImageId, dockerClient.listImagesCmd().exec()) != null) {
-            dockerClient.removeImageCmd(expectedImageId).exec();
+        if (findImageWithId(expectedImageId, dockerRule.getClient().listImagesCmd().exec()) != null) {
+            dockerRule.getClient().removeImageCmd(expectedImageId).exec();
         }
     }
 
-    @AfterMethod
-    public void afterMethod(ITestResult result) {
-        dockerClient.removeImageCmd(expectedImageId).exec();
-        super.afterMethod(result);
+    @After
+    public void afterMethod() {
+        dockerRule.getClient().removeImageCmd(expectedImageId).exec();
     }
 
     @Test
     public void loadImageFromTar() throws Exception {
         try (InputStream uploadStream = Files.newInputStream(TestResources.getApiImagesLoadTestTarball())) {
-            dockerClient.loadImageCmd(uploadStream).exec();
+            dockerRule.getClient().loadImageCmd(uploadStream).exec();
         }
 
-        final Image image = findImageWithId(expectedImageId, dockerClient.listImagesCmd().exec());
+        final Image image = findImageWithId(expectedImageId, dockerRule.getClient().listImagesCmd().exec());
 
         assertThat("Can't find expected image after loading from a tar archive!", image, notNullValue());
         assertThat("Image after loading from a tar archive has wrong tags!",

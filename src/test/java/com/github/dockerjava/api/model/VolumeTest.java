@@ -2,7 +2,7 @@ package com.github.dockerjava.api.model;
 
 import static org.testng.Assert.assertEquals;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 public class VolumeTest {
     @Test

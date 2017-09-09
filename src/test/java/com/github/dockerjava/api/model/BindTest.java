@@ -1,14 +1,19 @@
 package com.github.dockerjava.api.model;
 
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
 import static com.github.dockerjava.api.model.AccessMode.ro;
 import static com.github.dockerjava.api.model.AccessMode.rw;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 
-import org.testng.annotations.Test;
-
 public class BindTest {
+
+    @Rule
+    public ExpectedException expectedEx = ExpectedException.none();
 
     @Test
     public void parseUsingDefaultAccessMode() {
@@ -128,18 +133,27 @@ public class BindTest {
         assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT_MODE));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing Bind.*")
+    @Test
     public void parseInvalidAccessMode() {
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage( "Error parsing Bind");
+
         Bind.parse("/host:/container:xx");
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing Bind 'nonsense'")
+    @Test
     public void parseInvalidInput() {
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("Error parsing Bind 'nonsense'");
+
         Bind.parse("nonsense");
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing Bind 'null'")
+    @Test
     public void parseNull() {
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("Error parsing Bind 'null'");
+
         Bind.parse(null);
     }
 

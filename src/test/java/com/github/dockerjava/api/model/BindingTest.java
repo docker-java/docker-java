@@ -1,12 +1,17 @@
 package com.github.dockerjava.api.model;
 
+import com.github.dockerjava.api.model.Ports.Binding;
+import org.junit.Ignore;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
 import static org.testng.Assert.assertEquals;
 
-import org.testng.annotations.Test;
-
-import com.github.dockerjava.api.model.Ports.Binding;
-
 public class BindingTest {
+
+    @Rule
+    public ExpectedException expectedEx = ExpectedException.none();
 
     @Test
     public void parseIpAndPort() {
@@ -29,13 +34,20 @@ public class BindingTest {
     }
 
     // Strings can be used since it can be a range. Let the docker daemon do the validation.
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing Binding 'nonsense'", enabled = false)
+    @Test
+    @Ignore
     public void parseInvalidInput() {
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("Error parsing Binding 'nonsense'");
+
         Binding.parse("nonsense");
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing Binding 'null'")
+    @Test
     public void parseNull() {
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("Error parsing Binding 'null'");
+
         Binding.parse(null);
     }
 

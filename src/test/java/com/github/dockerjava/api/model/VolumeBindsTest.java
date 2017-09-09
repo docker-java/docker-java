@@ -4,7 +4,7 @@ import static org.testng.Assert.assertEquals;
 
 import java.io.IOException;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,7 +21,7 @@ public class VolumeBindsTest {
         assertEquals(binds[0].getContainerPath(), "/data");
     }
 
-    @Test(expectedExceptions = JsonMappingException.class)
+    @Test(expected = JsonMappingException.class)
     public void t1() throws IOException {
         String s = "{\"/data\": {} }";
         ObjectMapper objectMapper = new ObjectMapper();

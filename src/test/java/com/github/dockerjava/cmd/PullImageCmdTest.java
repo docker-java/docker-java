@@ -1,4 +1,4 @@
-package com.github.dockerjava.core.command;
+package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.InspectImageResponse;
@@ -6,22 +6,19 @@ import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.api.model.PullResponseItem;
-import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
-import java.lang.reflect.Method;
+import com.github.dockerjava.core.command.PullImageCmdImpl;
+import com.github.dockerjava.core.command.PullImageResultCallback;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertEquals;
 
-@Test(groups = "integration")
-public class PullImageCmdImplTest extends AbstractJerseyDockerClientTest {
+public class PullImageCmdTest extends CmdTest {
+    private static final Logger LOG = LoggerFactory.getLogger(PullImageCmdTest.class);
 
     private static final PullImageCmd.Exec NOP_EXEC = new PullImageCmd.Exec() {
         public Void exec(PullImageCmd command, ResultCallback<PullResponseItem> resultCallback) {
@@ -29,32 +26,12 @@ public class PullImageCmdImplTest extends AbstractJerseyDockerClientTest {
         };
     };
 
-    @BeforeTest
-    public void beforeTest() throws Exception {
-        super.beforeTest();
-    }
-
-    @AfterTest
-    public void afterTest() {
-        super.afterTest();
-    }
-
-    @BeforeMethod
-    public void beforeMethod(Method method) {
-        super.beforeMethod(method);
-    }
-
-    @AfterMethod
-    public void afterMethod(ITestResult result) {
-        super.afterMethod(result);
-    }
-
     @Test
     public void nullAuthConfig() throws Exception {
         PullImageCmdImpl pullImageCmd = new PullImageCmdImpl(NOP_EXEC, null, "");
         try {
             pullImageCmd.withAuthConfig(null);
-            fail();
+            throw new AssertionError();
         } catch (Exception e) {
             assertEquals(e.getMessage(), "authConfig was not specified");
         } finally {
@@ -64,7 +41,7 @@ public class PullImageCmdImplTest extends AbstractJerseyDockerClientTest {
 
     @Test
     public void testPullImage() throws Exception {
-        Info info = dockerClient.infoCmd().exec();
+        Info info = dockerRule.getClient().infoCmd().exec();
         LOG.info("Client info: {}", info.toString());
 
         int imgCount = info.getImages();
@@ -80,12 +57,12 @@ public class PullImageCmdImplTest extends AbstractJerseyDockerClientTest {
         LOG.info("Removing image: {}", testImage);
 
         try {
-            dockerClient.removeImageCmd(testImage).withForce(true).exec();
+            dockerRule.getClient().removeImageCmd(testImage).withForce(true).exec();
         } catch (NotFoundException e) {
             // just ignore if not exist
         }
 
-        info = dockerClient.infoCmd().exec();
+        info = dockerRule.getClient().infoCmd().exec();
         LOG.info("Client info: {}", info.toString());
 
         imgCount = info.getImages();
@@ -93,14 +70,14 @@ public class PullImageCmdImplTest extends AbstractJerseyDockerClientTest {
 
         LOG.info("Pulling image: {}", testImage);
 
-        dockerClient.pullImageCmd(testImage).exec(new PullImageResultCallback()).awaitSuccess();
+        dockerRule.getClient().pullImageCmd(testImage).exec(new PullImageResultCallback()).awaitSuccess();
 
-        info = dockerClient.infoCmd().exec();
+        info = dockerRule.getClient().infoCmd().exec();
         LOG.info("Client info after pull, {}", info.toString());
 
         assertThat(imgCount, lessThanOrEqualTo(info.getImages()));
 
-        InspectImageResponse inspectImageResponse = dockerClient.inspectImageCmd(testImage).exec();
+        InspectImageResponse inspectImageResponse = dockerRule.getClient().inspectImageCmd(testImage).exec();
         LOG.info("Image Inspect: {}", inspectImageResponse.toString());
         assertThat(inspectImageResponse, notNullValue());
     }
@@ -110,7 +87,7 @@ public class PullImageCmdImplTest extends AbstractJerseyDockerClientTest {
 
         // does not throw an exception
         // stream needs to be fully read in order to close the underlying connection
-        dockerClient.pullImageCmd("xvxcv/foo").exec(new PullImageResultCallback()).awaitCompletion();
+        dockerRule.getClient().pullImageCmd("xvxcv/foo").exec(new PullImageResultCallback()).awaitCompletion();
     }
 
 }

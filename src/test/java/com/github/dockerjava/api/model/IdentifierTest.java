@@ -1,7 +1,7 @@
 package com.github.dockerjava.api.model;
 
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;

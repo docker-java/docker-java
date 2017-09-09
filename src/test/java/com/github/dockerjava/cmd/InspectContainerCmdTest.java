@@ -21,9 +21,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
-public class InspectContainerCmdImplTest extends CmdTest {
+public class InspectContainerCmdTest extends CmdTest {
 
-    public static final Logger LOG = LoggerFactory.getLogger(InspectContainerCmdImplTest.class);
+    public static final Logger LOG = LoggerFactory.getLogger(InspectContainerCmdTest.class);
 
     @Test
     public void inspectContainer() throws DockerException {

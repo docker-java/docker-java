@@ -2,7 +2,7 @@ package com.github.dockerjava.api.model;
 
 import static org.testng.Assert.assertEquals;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,7 +22,7 @@ public class CapabilityTest {
         assertEquals(capability, Capability.ALL);
     }
 
-    @Test(expectedExceptions = JsonMappingException.class)
+    @Test(expected = JsonMappingException.class)
     public void deserializeInvalidCapability() throws Exception {
         objectMapper.readValue("\"nonsense\"", Capability.class);
     }

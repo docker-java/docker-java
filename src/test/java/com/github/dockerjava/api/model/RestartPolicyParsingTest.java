@@ -2,9 +2,15 @@ package com.github.dockerjava.api.model;
 
 import static org.testng.Assert.assertEquals;
 
-import org.testng.annotations.Test;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
-public class RestartPolicy_ParsingTest {
+public class RestartPolicyParsingTest {
+
+    @Rule
+    public ExpectedException expectedEx = ExpectedException.none();
+
 
     @Test
     public void noRestart() throws Exception {
@@ -31,13 +37,19 @@ public class RestartPolicy_ParsingTest {
         assertEquals(RestartPolicy.parse("on-failure:2"), RestartPolicy.onFailureRestart(2));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing RestartPolicy 'nonsense'")
+    @Test
     public void illegalSyntax() throws Exception {
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("Error parsing RestartPolicy 'nonsense'");
+
         RestartPolicy.parse("nonsense");
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing RestartPolicy 'on-failure:X'")
+    @Test
     public void illegalRetryCount() throws Exception {
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("Error parsing RestartPolicy 'on-failure:X'");
+
         RestartPolicy.parse("on-failure:X");
     }
 }

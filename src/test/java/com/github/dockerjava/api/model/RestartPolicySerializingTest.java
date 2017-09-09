@@ -2,7 +2,7 @@ package com.github.dockerjava.api.model;
 
 import static org.testng.Assert.assertEquals;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Compares serialization results of various {@link RestartPolicy}s with what Docker (as of 1.3.3) actually sends when executing
  * <code>docker run --restart xxx</code>.
  */
-public class RestartPolicy_SerializingTest {
+public class RestartPolicySerializingTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test

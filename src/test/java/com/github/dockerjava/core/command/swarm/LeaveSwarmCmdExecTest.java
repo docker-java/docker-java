@@ -1,11 +1,10 @@
-package com.github.dockerjava.core.command;
+package com.github.dockerjava.core.command.swarm;
 
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotAcceptableException;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.api.model.LocalNodeState;
 import com.github.dockerjava.api.model.SwarmSpec;
-import com.github.dockerjava.core.command.swarm.AbstractSwarmDockerClientTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
