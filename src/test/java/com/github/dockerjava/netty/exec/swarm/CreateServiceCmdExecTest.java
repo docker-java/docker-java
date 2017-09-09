@@ -1,4 +1,4 @@
-package com.github.dockerjava.netty.exec;
+package com.github.dockerjava.netty.exec.swarm;
 
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.ContainerSpec;

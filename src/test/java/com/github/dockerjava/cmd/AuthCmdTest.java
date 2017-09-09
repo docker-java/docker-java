@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_22;
-import static com.github.dockerjava.junit.DockerAPIVersionMatchers.apiVersionGreater;
+import static com.github.dockerjava.junit.DockerMatchers.apiVersionGreater;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assume.assumeThat;

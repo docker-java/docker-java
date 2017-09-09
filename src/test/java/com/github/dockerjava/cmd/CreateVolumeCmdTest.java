@@ -1,50 +1,21 @@
-package com.github.dockerjava.core.command;
+package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.command.CreateVolumeResponse;
 import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
-import java.lang.reflect.Method;
+import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 
-@Test(groups = "integration")
-public class CreateVolumeCmdImplTest extends AbstractJerseyDockerClientTest {
-
-    @BeforeTest
-    public void beforeTest() throws Exception {
-        super.beforeTest();
-    }
-
-    @AfterTest
-    public void afterTest() {
-        super.afterTest();
-    }
-
-    @BeforeMethod
-    public void beforeMethod(Method method) {
-        super.beforeMethod(method);
-    }
-
-    @AfterMethod
-    public void afterMethod(ITestResult result) {
-        super.afterMethod(result);
-    }
+public class CreateVolumeCmdTest extends CmdTest {
 
     @Test
     public void createVolume() throws DockerException {
 
         String volumeName = "volume1";
 
-        CreateVolumeResponse createVolumeResponse = dockerClient.createVolumeCmd().withName(volumeName)
+        CreateVolumeResponse createVolumeResponse = dockerRule.getClient().createVolumeCmd().withName(volumeName)
                 .withDriver("local").exec();
 
         assertThat(createVolumeResponse.getName(), equalTo(volumeName));
@@ -57,14 +28,14 @@ public class CreateVolumeCmdImplTest extends AbstractJerseyDockerClientTest {
 
         String volumeName = "volume1";
 
-        CreateVolumeResponse createVolumeResponse1 = dockerClient.createVolumeCmd().withName(volumeName)
+        CreateVolumeResponse createVolumeResponse1 = dockerRule.getClient().createVolumeCmd().withName(volumeName)
                 .withDriver("local").exec();
 
         assertThat(createVolumeResponse1.getName(), equalTo(volumeName));
         assertThat(createVolumeResponse1.getDriver(), equalTo("local"));
         assertThat(createVolumeResponse1.getMountpoint(), containsString("/volume1/"));
 
-        CreateVolumeResponse createVolumeResponse2 = dockerClient.createVolumeCmd().withName(volumeName)
+        CreateVolumeResponse createVolumeResponse2 = dockerRule.getClient().createVolumeCmd().withName(volumeName)
                 .withDriver("local").exec();
 
         assertThat(createVolumeResponse2.getName(), equalTo(volumeName));

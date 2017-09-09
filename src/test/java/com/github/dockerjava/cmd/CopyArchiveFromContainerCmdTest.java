@@ -1,58 +1,32 @@
-package com.github.dockerjava.netty.exec;
+package com.github.dockerjava.cmd;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.hamcrest.Matchers.not;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
+import com.github.dockerjava.core.util.CompressArchiveUtil;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.io.IOUtils;
+import org.junit.Test;
+
 
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
-import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
-import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
-import org.apache.commons.io.IOUtils;
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.not;
 
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.core.util.CompressArchiveUtil;
-import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
-
-@Test(groups = "integration")
-public class CopyArchiveFromContainerCmdExecTest extends AbstractNettyDockerClientTest {
-
-    @BeforeTest
-    public void beforeTest() throws Exception {
-        super.beforeTest();
-    }
-
-    @AfterTest
-    public void afterTest() {
-        super.afterTest();
-    }
-
-    @BeforeMethod
-    public void beforeMethod(Method method) {
-        super.beforeMethod(method);
-    }
-
-    @AfterMethod
-    public void afterMethod(ITestResult result) {
-        super.afterMethod(result);
-    }
+public class CopyArchiveFromContainerCmdTest extends AbstractJerseyDockerClientTest {
 
     @Test
     public void copyFromContainer() throws Exception {
         // TODO extract this into a shared method
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+        CreateContainerResponse container = dockerClient.createContainerCmd(DEFAULT_IMAGE)
                 .withName("docker-java-itest-copyFromContainer").withCmd("touch", "/copyFromContainer").exec();
 
         LOG.info("Created container: {}", container);
@@ -70,7 +44,7 @@ public class CopyArchiveFromContainerCmdExecTest extends AbstractNettyDockerClie
         assertTrue(responseAsString.length() > 0);
     }
 
-    @Test(expectedExceptions = NotFoundException.class)
+    @Test(expected = NotFoundException.class)
     public void copyFromNonExistingContainer() throws Exception {
 
         dockerClient.copyArchiveFromContainerCmd("non-existing", "/test").exec();
@@ -78,7 +52,7 @@ public class CopyArchiveFromContainerCmdExecTest extends AbstractNettyDockerClie
 
     @Test
     public void copyFromContainerBinaryFile() throws Exception {
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+        CreateContainerResponse container = dockerClient.createContainerCmd(DEFAULT_IMAGE)
                 .withName("docker-java-itest-copyFromContainerBinaryFile").exec();
 
         LOG.info("Created container: {}", container);

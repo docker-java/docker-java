@@ -1,4 +1,4 @@
-package com.github.dockerjava.netty.exec;
+package com.github.dockerjava.core.command.swarm;
 
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotAcceptableException;
@@ -9,7 +9,6 @@ import com.github.dockerjava.api.model.SwarmOrchestration;
 import com.github.dockerjava.api.model.SwarmRaftConfig;
 import com.github.dockerjava.api.model.SwarmSpec;
 import com.github.dockerjava.api.model.TaskDefaults;
-import com.github.dockerjava.netty.AbstractNettySwarmDockerClientTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
@@ -26,7 +25,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 @Test(groups = "swarm-integration")
-public class InitializeSwarmCmdExecTest extends AbstractNettySwarmDockerClientTest {
+public class InitializeSwarmCmdExecTest extends AbstractSwarmDockerClientTest {
 
     public static final Logger LOG = LoggerFactory.getLogger(InitializeSwarmCmdExecTest.class);
 
@@ -50,6 +49,7 @@ public class InitializeSwarmCmdExecTest extends AbstractNettySwarmDockerClientTe
         super.afterMethod(result);
     }
 
+    @Test
     public void initializeSwarm() throws DockerException {
         SwarmSpec swarmSpec = new SwarmSpec()
                 .withName("swarm")

@@ -1,20 +1,17 @@
-package com.github.dockerjava.core.command;
+package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
+import com.github.dockerjava.core.command.WaitContainerResultCallback;
 import com.github.dockerjava.core.util.CompressArchiveUtil;
 import org.apache.commons.io.FileUtils;
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,28 +20,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertTrue;
 
-@Test(groups = "integration")
-public class CopyArchiveToContainerCmdImplTest extends AbstractJerseyDockerClientTest {
-    @BeforeTest
-    public void beforeTest() throws Exception {
-        super.beforeTest();
-    }
-
-    @AfterTest
-    public void afterTest() {
-        super.afterTest();
-    }
-
-    @BeforeMethod
-    public void beforeMethod(Method method) {
-        super.beforeMethod(method);
-    }
-
-    @AfterMethod
-    public void afterMethod(ITestResult result) {
-        super.afterMethod(result);
-    }
+public class CopyArchiveToContainerCmdTest extends CmdTest {
+    public static final Logger LOG = LoggerFactory.getLogger(CopyArchiveToContainerCmdTest.class);
 
     @Test
     public void copyFileToContainer() throws Exception {
@@ -52,7 +31,7 @@ public class CopyArchiveToContainerCmdImplTest extends AbstractJerseyDockerClien
         Path temp = Files.createTempFile("", ".tar.gz");
         CompressArchiveUtil.tar(Paths.get("src/test/resources/testReadFile"), temp, true, false);
         try (InputStream uploadStream = Files.newInputStream(temp)) {
-            dockerClient.copyArchiveToContainerCmd(container.getId()).withTarInputStream(uploadStream).exec();
+            dockerRule.getClient().copyArchiveToContainerCmd(container.getId()).withTarInputStream(uploadStream).exec();
             assertFileCopied(container);
         }
     }
@@ -60,32 +39,32 @@ public class CopyArchiveToContainerCmdImplTest extends AbstractJerseyDockerClien
     @Test
     public void copyStreamToContainer() throws Exception {
         CreateContainerResponse container = prepareContainerForCopy();
-        dockerClient.copyArchiveToContainerCmd(container.getId()).withHostResource("src/test/resources/testReadFile")
+        dockerRule.getClient().copyArchiveToContainerCmd(container.getId()).withHostResource("src/test/resources/testReadFile")
                 .exec();
         assertFileCopied(container);
     }
 
     private CreateContainerResponse prepareContainerForCopy() {
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
                 .withName("docker-java-itest-copyToContainer").exec();
         LOG.info("Created container: {}", container);
         assertThat(container.getId(), not(isEmptyOrNullString()));
-        dockerClient.startContainerCmd(container.getId()).exec();
+        dockerRule.getClient().startContainerCmd(container.getId()).exec();
         // Copy a folder to the container
         return container;
     }
 
     private void assertFileCopied(CreateContainerResponse container) throws IOException {
-        try (InputStream response = dockerClient.copyArchiveFromContainerCmd(container.getId(), "testReadFile").exec()) {
+        try (InputStream response = dockerRule.getClient().copyArchiveFromContainerCmd(container.getId(), "testReadFile").exec()) {
             boolean bytesAvailable = response.available() > 0;
-            assertTrue(bytesAvailable, "The file was not copied to the container.");
+            assertTrue( "The file was not copied to the container.", bytesAvailable);
         }
     }
 
-    @Test(expectedExceptions = NotFoundException.class)
+    @Test(expected = NotFoundException.class)
     public void copyToNonExistingContainer() throws Exception {
 
-        dockerClient.copyArchiveToContainerCmd("non-existing").withHostResource("src/test/resources/testReadFile").exec();
+        dockerRule.getClient().copyArchiveToContainerCmd("non-existing").withHostResource("src/test/resources/testReadFile").exec();
     }
 
     @Test
@@ -101,13 +80,13 @@ public class CopyArchiveToContainerCmdImplTest extends AbstractJerseyDockerClien
         Files.createFile(dirWithFile.resolve("file"));
 
         // create a test container
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
                 .withCmd("sleep", "9999")
                 .exec();
         // start the container
-        dockerClient.startContainerCmd(container.getId()).exec();
+        dockerRule.getClient().startContainerCmd(container.getId()).exec();
         // copy data from local dir to container
-        dockerClient.copyArchiveToContainerCmd(container.getId())
+        dockerRule.getClient().copyArchiveToContainerCmd(container.getId())
                 .withHostResource(localDir.toString())
                 .exec();
 
@@ -130,19 +109,19 @@ public class CopyArchiveToContainerCmdImplTest extends AbstractJerseyDockerClien
         // create a test container which starts and waits 3 seconds for the
         // script to be copied to the container's home dir and then executes it
         String containerCmd = "sleep 3; /home/" + scriptPath.getFileName().toString();
-        CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
                 .withName("test")
                 .withCmd("/bin/sh", "-c", containerCmd)
                 .exec();
         // start the container
-        dockerClient.startContainerCmd(container.getId()).exec();
+        dockerRule.getClient().startContainerCmd(container.getId()).exec();
         // copy script to container home dir
-        dockerClient.copyArchiveToContainerCmd(container.getId())
+        dockerRule.getClient().copyArchiveToContainerCmd(container.getId())
                 .withRemotePath("/home")
                 .withHostResource(scriptPath.toString())
                 .exec();
         // await exid code
-        int exitCode = dockerClient.waitContainerCmd(container.getId())
+        int exitCode = dockerRule.getClient().waitContainerCmd(container.getId())
                 .exec(new WaitContainerResultCallback())
                 .awaitStatusCode();
         // check result

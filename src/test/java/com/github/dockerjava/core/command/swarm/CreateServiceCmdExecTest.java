@@ -1,4 +1,4 @@
-package com.github.dockerjava.core.command;
+package com.github.dockerjava.core.command.swarm;
 
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.ContainerSpec;

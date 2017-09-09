@@ -1,4 +1,4 @@
-package com.github.dockerjava.core.command;
+package com.github.dockerjava.core.command.swarm;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
@@ -12,6 +12,7 @@ import com.github.dockerjava.core.AbstractJerseyDockerClientTest;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.RemoteApiVersion;
+import com.github.dockerjava.core.command.PullImageResultCallback;
 import org.testng.ITestResult;
 import org.testng.SkipException;
 

@@ -8,6 +8,7 @@ import com.github.dockerjava.api.model.LocalNodeState;
 import com.github.dockerjava.api.model.Swarm;
 import com.github.dockerjava.api.model.SwarmJoinTokens;
 import com.github.dockerjava.api.model.SwarmSpec;
+import com.github.dockerjava.core.command.swarm.AbstractSwarmDockerClientTest;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
