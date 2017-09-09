@@ -30,7 +30,7 @@ public class RenameContainerCmdTest extends CmdTest {
         String name1 = inspectContainerResponse.getName();
 
         dockerRule.getClient().renameContainerCmd(container.getId())
-                .withName(getClass().getCanonicalName() + "renameContainer")
+                .withName(dockerRule.getKind() + "renameContainer")
                 .exec();
 
         InspectContainerResponse inspectContainerResponse2 = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
@@ -46,7 +46,7 @@ public class RenameContainerCmdTest extends CmdTest {
     @Test(expected = NotFoundException.class)
     public void renameExistingContainer() throws DockerException, InterruptedException {
         dockerRule.getClient().renameContainerCmd("non-existing")
-                .withName(getClass().getCanonicalName() + "renameExistingContainer")
+                .withName(dockerRule.getKind() + "renameExistingContainer")
                 .exec();
     }
 }

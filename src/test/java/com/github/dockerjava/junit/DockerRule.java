@@ -7,6 +7,8 @@ import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.command.BuildImageResultCallback;
 import com.github.dockerjava.core.command.PullImageResultCallback;
+import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory;
+import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
 import com.github.dockerjava.utils.LogContainerTestCallback;
 import org.junit.rules.ExternalResource;
 import org.junit.runner.Description;
@@ -102,6 +104,16 @@ public class DockerRule extends ExternalResource {
                 .exec(new LogContainerTestCallback())
                 .awaitCompletion()
                 .toString();
+    }
+
+    public String getKind() {
+        if (cmdExecFactory instanceof NettyDockerCmdExecFactory) {
+            return "netty";
+        } else if (cmdExecFactory instanceof JerseyDockerCmdExecFactory) {
+            return "jersey";
+        }
+
+        return "default";
     }
 
 }

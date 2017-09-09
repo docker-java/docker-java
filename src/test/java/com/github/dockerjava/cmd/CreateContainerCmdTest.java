@@ -81,7 +81,8 @@ public class CreateContainerCmdTest extends CmdTest {
 
         Volume volume = new Volume("/var/log");
 
-        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withVolumes(volume)
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+                .withVolumes(volume)
                 .withCmd("true").exec();
 
         LOG.info("Created container {}", container.toString());
@@ -217,8 +218,10 @@ public class CreateContainerCmdTest extends CmdTest {
 
     @Test(expected = ConflictException.class)
     public void createContainerWithName() throws DockerException {
+        String containerName = "container_" + dockerRule.getKind();
 
-        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withName("container")
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+                .withName(containerName)
                 .withCmd("env").exec();
 
         LOG.info("Created container {}", container.toString());
@@ -230,14 +233,16 @@ public class CreateContainerCmdTest extends CmdTest {
         assertThat(inspectContainerResponse.getName(), equalTo("/container"));
 
 
-        dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withName("container").withCmd("env").exec();
+        dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withName(containerName).withCmd("env").exec();
     }
 
     @Test
     public void createContainerWithLink() throws DockerException {
+        String containerName1 = "containerlink_" + dockerRule.getKind();
+        String containerName2 = "container2link_" + dockerRule.getKind();
 
         CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("sleep", "9999")
-                .withName("container1").exec();
+                .withName(containerName1).exec();
         LOG.info("Created container1 {}", container1.toString());
         assertThat(container1.getId(), not(isEmptyString()));
 
@@ -248,31 +253,33 @@ public class CreateContainerCmdTest extends CmdTest {
         LOG.info("Container1 Inspect: {}", inspectContainerResponse1.toString());
         assertThat(inspectContainerResponse1.getState().getRunning(), is(true));
 
-        CreateContainerResponse container2 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withName("container2")
-                .withCmd("env").withLinks(new Link("container1", "container1Link")).exec();
+        CreateContainerResponse container2 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withName(containerName2)
+                .withCmd("env").withLinks(new Link(containerName1, "container1Link")).exec();
         LOG.info("Created container {}", container2.toString());
         assertThat(container2.getId(), not(isEmptyString()));
 
         InspectContainerResponse inspectContainerResponse2 = dockerRule.getClient().inspectContainerCmd(container2.getId())
                 .exec();
-        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[]{new Link("container1",
+        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[]{new Link(containerName1,
                 "container1Link")}));
     }
 
     @Test
     public void createContainerWithLinkInCustomNetwork() throws DockerException {
         assumeNotSwarm("no network in swarm", dockerRule);
+        String containerName1 = "containerlink_" + dockerRule.getKind();
+        String networkName = "linkNetcustom" + dockerRule.getKind();
 
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd()
-                .withName("linkNet")
+                .withName(networkName)
                 .exec();
 
         assertNotNull(createNetworkResponse.getId());
 
         CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withNetworkMode("linkNet")
+                .withNetworkMode(networkName)
                 .withCmd("sleep", "9999")
-                .withName("container1")
+                .withName(containerName1)
                 .exec();
 
         assertThat(container1.getId(), not(isEmptyString()));
@@ -285,10 +292,10 @@ public class CreateContainerCmdTest extends CmdTest {
         assertThat(inspectContainerResponse1.getState().getRunning(), is(true));
 
         CreateContainerResponse container2 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withNetworkMode("linkNet")
+                .withNetworkMode(networkName)
                 .withName("container2")
                 .withCmd("env")
-                .withLinks(new Link("container1", "container1Link"))
+                .withLinks(new Link(containerName1, "container1Link"))
                 .exec();
 
         LOG.info("Created container {}", container2.toString());
@@ -297,9 +304,9 @@ public class CreateContainerCmdTest extends CmdTest {
         InspectContainerResponse inspectContainerResponse2 = dockerRule.getClient().inspectContainerCmd(container2.getId())
                 .exec();
 
-        ContainerNetwork linkNet = inspectContainerResponse2.getNetworkSettings().getNetworks().get("linkNet");
+        ContainerNetwork linkNet = inspectContainerResponse2.getNetworkSettings().getNetworks().get(networkName);
         assertNotNull(linkNet);
-        assertThat(linkNet.getLinks(), equalTo(new Link[]{new Link("container1", "container1Link")}));
+        assertThat(linkNet.getLinks(), equalTo(new Link[]{new Link(containerName1, "container1Link")}));
     }
 
     @Test
