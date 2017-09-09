@@ -12,7 +12,7 @@
     <!--<logger name="org.apache.http.impl.conn" level="DEBUG"/>-->
 
 
-    <root level="INFO">
+    <root level="error">
         <appender-ref ref="STDOUT" />
     </root>
 
