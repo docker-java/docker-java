@@ -16,8 +16,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
-import java.lang.reflect.Method;
-
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_24;
 import static com.github.dockerjava.junit.DockerMatchers.isGreaterOrEqual;
 import static org.junit.Assume.assumeThat;
@@ -40,7 +38,7 @@ public abstract class SwarmCmdTest extends CmdTest {
     }
 
     @Before
-    public void beforeMethod(Method method) {
+    public void beforeMethod() {
         leaveIfInSwarm();
     }
 

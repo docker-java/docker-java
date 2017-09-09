@@ -92,9 +92,8 @@ public abstract class AbstractDockerClientTest extends Assert {
     }
 
     @Before
-    public void beforeMethod(Method method) {
-        LOG.debug(String.format("################################## STARTING %s ##################################",
-                method.getName()));
+    public void beforeMethod() {
+        LOG.debug(String.format("################################## STARTING %s ##################################"));
     }
 
     @After

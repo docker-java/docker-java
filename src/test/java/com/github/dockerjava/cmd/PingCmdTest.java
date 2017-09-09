@@ -1,14 +1,13 @@
 package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.netty.AbstractNettyDockerClientTest;
 import org.junit.Test;
 
-public class PingCmdTest extends AbstractNettyDockerClientTest {
+public class PingCmdTest extends CmdTest {
 
     @Test
     public void ping() throws DockerException {
-        dockerClient.pingCmd().exec();
+        dockerRule.getClient().pingCmd().exec();
     }
 
 }
