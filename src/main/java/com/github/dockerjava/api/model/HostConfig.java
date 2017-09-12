@@ -144,7 +144,7 @@ public class HostConfig implements Serializable {
      * @since {@link RemoteApiVersion#VERSION_1_22}
      */
     @JsonProperty("OomScoreAdj")
-    private Boolean oomScoreAdj;
+    private Integer oomScoreAdj;
 
     @JsonProperty("PortBindings")
     private Ports portBindings;
@@ -345,7 +345,7 @@ public class HostConfig implements Serializable {
      * @see #oomScoreAdj
      */
     @CheckForNull
-    public Boolean getOomScoreAdj() {
+    public Integer getOomScoreAdj() {
         return oomScoreAdj;
     }
 
@@ -692,7 +692,7 @@ public class HostConfig implements Serializable {
     /**
      * @see #oomScoreAdj
      */
-    public HostConfig withOomScoreAdj(Boolean oomScoreAdj) {
+    public HostConfig withOomScoreAdj(Integer oomScoreAdj) {
         this.oomScoreAdj = oomScoreAdj;
         return this;
     }

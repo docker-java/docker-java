@@ -41,6 +41,7 @@ import java.util.concurrent.TimeUnit;
 import static com.github.dockerjava.api.model.Capability.MKNOD;
 import static com.github.dockerjava.api.model.Capability.NET_ADMIN;
 import static com.github.dockerjava.cmd.CmdIT.FactoryType.JERSEY;
+import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_22;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_23;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_24;
 import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
@@ -826,5 +827,21 @@ public class CreateContainerCmdIT extends CmdIT {
             containerNetwork = inspectContainerResponse.getNetworkSettings().getNetworks().get(networkId);
         }
         assertThat(containerNetwork, notNullValue());
+    }
+
+    @Test
+    public void createContainerWithOomScoreAdj() {
+        assumeThat("API version should be >= 1.22", dockerRule, isGreaterOrEqual(VERSION_1_22));
+
+        Integer oomScoreAdj = 100;
+        HostConfig hostConfig = new HostConfig().withOomScoreAdj(oomScoreAdj);
+        CreateContainerResponse createResponse = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+                .withHostConfig(hostConfig)
+                .withCmd("true")
+                .exec();
+        String containerId = createResponse.getId();
+        InspectContainerResponse inspectResponse = dockerRule.getClient().inspectContainerCmd(containerId).exec();
+        Integer oomScoreAdjResult = inspectResponse.getHostConfig().getOomScoreAdj();
+        assertThat(oomScoreAdjResult, equalTo(oomScoreAdj));
     }
 }
