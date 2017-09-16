@@ -3,6 +3,7 @@ package com.github.dockerjava.junit;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.cmd.CmdTest;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.command.BuildImageResultCallback;
@@ -18,6 +19,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
+import static com.github.dockerjava.cmd.CmdTest.FactoryType.JERSEY;
+import static com.github.dockerjava.cmd.CmdTest.FactoryType.NETTY;
+import static java.util.Objects.isNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
 
@@ -28,20 +32,34 @@ public class DockerRule extends ExternalResource {
     public static final Logger LOG = LoggerFactory.getLogger(DockerRule.class);
     public static final String DEFAULT_IMAGE = "busybox:latest";
 
-    private DockerCmdExecFactory cmdExecFactory;
-    private DockerClient client;
+    private DockerClient nettyClient;
+    private DockerClient jerseyClient;
+
+    private CmdTest cmdTest;
+    private Object cmdExecFactory;
 
 
-    public DockerRule(DockerCmdExecFactory cmdExecFactory) {
-        this.cmdExecFactory = cmdExecFactory;
+    public DockerRule(CmdTest cmdTest) {
+        this.cmdTest = cmdTest;
     }
 
-    public DockerCmdExecFactory getCmdExecFactory() {
-        return cmdExecFactory;
-    }
 
     public DockerClient getClient() {
-        return client;
+        if (cmdTest.getFactoryType() == NETTY) {
+            if (jerseyClient == null) {
+                nettyClient = DockerClientBuilder.getInstance(config())
+                        .withDockerCmdExecFactory(new NettyDockerCmdExecFactory())
+                        .build();
+                return nettyClient;
+            }
+        } else if (cmdTest.getFactoryType() == JERSEY) {
+            jerseyClient = DockerClientBuilder.getInstance(config())
+                    .withDockerCmdExecFactory(new JerseyDockerCmdExecFactory())
+                    .build();
+            return jerseyClient;
+        }
+
+        throw new IllegalStateException("Why factory type is not set?");
     }
 
     @Override
@@ -53,22 +71,20 @@ public class DockerRule extends ExternalResource {
     protected void before() throws Throwable {
 //        LOG.info("======================= BEFORETEST =======================");
         LOG.info("Connecting to Docker server");
-        client = DockerClientBuilder.getInstance(config())
-                .withDockerCmdExecFactory(getCmdExecFactory())
-                .build();
+
 
         try {
-            client.inspectImageCmd(DEFAULT_IMAGE).exec();
+            getClient().inspectImageCmd(DEFAULT_IMAGE).exec();
         } catch (NotFoundException e) {
             LOG.info("Pulling image 'busybox'");
             // need to block until image is pulled completely
-            client.pullImageCmd("busybox")
+            getClient().pullImageCmd("busybox")
                     .withTag("latest")
                     .exec(new PullImageResultCallback())
                     .awaitSuccess();
         }
 
-        assertThat(client, notNullValue());
+        assertThat(getClient(), notNullValue());
 //        LOG.info("======================= END OF BEFORETEST =======================\n\n");
     }
 
@@ -77,11 +93,11 @@ public class DockerRule extends ExternalResource {
 //        LOG.debug("======================= END OF AFTERTEST =======================");
     }
 
-    private DefaultDockerClientConfig config() {
+    private static DefaultDockerClientConfig config() {
         return config(null);
     }
 
-    public DefaultDockerClientConfig config(String password) {
+    public static DefaultDockerClientConfig config(String password) {
         DefaultDockerClientConfig.Builder builder = DefaultDockerClientConfig.createDefaultConfigBuilder()
                 .withRegistryUrl("https://index.docker.io/v1/");
         if (password != null) {
@@ -92,7 +108,7 @@ public class DockerRule extends ExternalResource {
     }
 
     public String buildImage(File baseDir) throws Exception {
-        return client.buildImageCmd(baseDir)
+        return getClient().buildImageCmd(baseDir)
                 .withNoCache(true)
                 .exec(new BuildImageResultCallback())
                 .awaitImageId();
@@ -107,9 +123,9 @@ public class DockerRule extends ExternalResource {
     }
 
     public String getKind() {
-        if (cmdExecFactory instanceof NettyDockerCmdExecFactory) {
+        if (cmdTest.getFactoryType() == NETTY) {
             return "netty";
-        } else if (cmdExecFactory instanceof JerseyDockerCmdExecFactory) {
+        } else if (cmdTest.getFactoryType() == JERSEY) {
             return "jersey";
         }
 

@@ -47,7 +47,7 @@ public class AttachContainerCmdTest extends CmdTest {
     public void attachContainerWithStdin() throws Exception {
         DockerClient dockerClient = dockerRule.getClient();
 
-        assumeThat(dockerRule.getCmdExecFactory(), instanceOf(NettyDockerCmdExecFactory.class));
+        assumeThat(getFactoryType(), is(FactoryType.NETTY));
 
         String snippet = "hello world";
 
@@ -171,7 +171,7 @@ public class AttachContainerCmdTest extends CmdTest {
     public void attachContainerStdinUnsupported() throws Exception {
 
         DockerClient dockerClient = dockerRule.getClient();
-        if (dockerRule.getCmdExecFactory() instanceof JerseyDockerCmdExecFactory) {
+        if (getFactoryType() == FactoryType.JERSEY) {
             expectedException.expect(UnsupportedOperationException.class);
         }
 

@@ -12,6 +12,8 @@ import com.github.dockerjava.cmd.CmdTest;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.command.PullImageResultCallback;
+import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory;
+import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -113,7 +115,7 @@ public abstract class SwarmCmdTest extends CmdTest {
                 .withRegistryUrl("https://index.docker.io/v1/")
                 .withDockerHost("tcp://localhost:" + port).build();
         return DockerClientBuilder.getInstance(config)
-                .withDockerCmdExecFactory(cmdExecFactory)
+                .withDockerCmdExecFactory(getFactoryType() == FactoryType.NETTY ? new NettyDockerCmdExecFactory() : new JerseyDockerCmdExecFactory())
                 .build();
     }
 
