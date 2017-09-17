@@ -22,6 +22,7 @@ import java.io.File;
 import static com.github.dockerjava.cmd.CmdTest.FactoryType.JERSEY;
 import static com.github.dockerjava.cmd.CmdTest.FactoryType.NETTY;
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
 
@@ -46,7 +47,7 @@ public class DockerRule extends ExternalResource {
 
     public DockerClient getClient() {
         if (cmdTest.getFactoryType() == NETTY) {
-            if (jerseyClient == null) {
+            if (nettyClient == null) {
                 nettyClient = DockerClientBuilder.getInstance(config())
                         .withDockerCmdExecFactory(new NettyDockerCmdExecFactory())
                         .build();
@@ -70,7 +71,7 @@ public class DockerRule extends ExternalResource {
     @Override
     protected void before() throws Throwable {
 //        LOG.info("======================= BEFORETEST =======================");
-        LOG.info("Connecting to Docker server");
+        LOG.debug("Connecting to Docker server");
 
 
         try {
