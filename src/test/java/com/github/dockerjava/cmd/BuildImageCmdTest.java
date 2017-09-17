@@ -196,12 +196,13 @@ public class BuildImageCmdTest extends CmdTest {
         assertThat(inspectImageResponse, not(nullValue()));
         LOG.info("Image Inspect: {}", inspectImageResponse.toString());
 
-        dockerRule.getClient().tagImageCmd(imageId, "testregistryy", "2").withForce().exec();
+        dockerRule.getClient().tagImageCmd(imageId, "testregistryy" + dockerRule.getKind(), "2")
+                .withForce().exec();
 
         // see https://github.com/docker/distribution/blob/master/docs/deploying.md#native-basic-auth
         CreateContainerResponse testregistry = dockerRule.getClient()
-                .createContainerCmd("testregistryy:2")
-                .withName("registryy")
+                .createContainerCmd("testregistryy" +dockerRule.getKind() + ":2")
+                .withName("registryy" + dockerRule.getKind())
                 .withPortBindings(new PortBinding(Ports.Binding.bindPort(5000), ExposedPort.tcp(5000)))
                 .withEnv("REGISTRY_AUTH=htpasswd", "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm",
                         "REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd", "REGISTRY_LOG_LEVEL=debug",
@@ -233,8 +234,11 @@ public class BuildImageCmdTest extends CmdTest {
         AuthConfigurations authConfigurations = new AuthConfigurations();
         authConfigurations.addConfig(authConfig);
 
-        imageId = dockerRule.getClient().buildImageCmd(baseDir).withNoCache(true).withBuildAuthConfigs(authConfigurations)
-                .exec(new BuildImageResultCallback()).awaitImageId();
+        imageId = dockerRule.getClient().buildImageCmd(baseDir).
+                withNoCache(true)
+                .withBuildAuthConfigs(authConfigurations)
+                .exec(new BuildImageResultCallback())
+                .awaitImageId();
 
         inspectImageResponse = dockerRule.getClient().inspectImageCmd(imageId).exec();
         assertThat(inspectImageResponse, not(nullValue()));

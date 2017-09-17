@@ -33,7 +33,9 @@ public class CopyArchiveFromContainerCmdTest extends CmdTest {
     public void copyFromContainer() throws Exception {
         // TODO extract this into a shared method
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withName("docker-java-itest-copyFromContainer").withCmd("touch", "/copyFromContainer").exec();
+                .withName("docker-java-itest-copyFromContainer" + dockerRule.getKind())
+                .withCmd("touch", "/copyFromContainer")
+                .exec();
 
         LOG.info("Created container: {}", container);
         assertThat(container.getId(), not(isEmptyOrNullString()));
@@ -59,7 +61,8 @@ public class CopyArchiveFromContainerCmdTest extends CmdTest {
     @Test
     public void copyFromContainerBinaryFile() throws Exception {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withName("docker-java-itest-copyFromContainerBinaryFile").exec();
+                .withName("docker-java-itest-copyFromContainerBinaryFile" + dockerRule.getKind())
+                .exec();
 
         LOG.info("Created container: {}", container);
         assertThat(container.getId(), not(isEmptyOrNullString()));
