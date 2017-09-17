@@ -1,4 +1,4 @@
-package com.github.dockerjava.junit;
+package com.github.dockerjava.junit.suite;
 
 import com.github.dockerjava.cmd.AttachContainerCmdTest;
 import com.github.dockerjava.cmd.AuthCmdTest;

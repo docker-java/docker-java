@@ -422,7 +422,7 @@
 				<version>${maven-surefire-plugin.version}</version>
 				<configuration>
 					<rerunFailingTestsCount>3</rerunFailingTestsCount>
-					<!--<excludedGroups>integration,integration-auth,swarm-integration</excludedGroups>-->
+					<excludedGroups>com.github.dockerjava.junit.category.Integration</excludedGroups>
 				</configuration>
 			</plugin>
 
@@ -430,25 +430,25 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<version>${maven-failsafe-plugin.version}</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>integration-test</goal>
-							<goal>verify</goal>
-						</goals>
-						<configuration>
-							<rerunFailingTestsCount>3</rerunFailingTestsCount>
-							<useUnlimitedThreads>true</useUnlimitedThreads>
-							<perCoreThreadCount>true</perCoreThreadCount>
-							<threadCount>1</threadCount>
-							<groups>integration</groups>
-							<excludedGroups>integration-auth,swarm-integration</excludedGroups>
-							<includes>
-								<include>**/*Test.java</include>
-							</includes>
-						</configuration>
-					</execution>
-				</executions>
+				<!--<executions>-->
+					<!--<execution>-->
+						<!--<goals>-->
+							<!--<goal>integration-test</goal>-->
+							<!--<goal>verify</goal>-->
+						<!--</goals>-->
+					<!--</execution>-->
+				<!--</executions>-->
+				<configuration>
+					<rerunFailingTestsCount>3</rerunFailingTestsCount>
+					<!--<useUnlimitedThreads>true</useUnlimitedThreads>-->
+					<!--<perCoreThreadCount>true</perCoreThreadCount>-->
+					<!--<threadCount>1</threadCount>-->
+					<groups>com.github.dockerjava.junit.category.Integration</groups>
+					<excludedGroups>com.github.dockerjava.junit.category.SwarmIntegration</excludedGroups>
+					<!--<includes>-->
+					<!--<include>**/*Test.java</include>-->
+					<!--</includes>-->
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

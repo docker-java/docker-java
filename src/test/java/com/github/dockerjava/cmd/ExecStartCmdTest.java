@@ -36,9 +36,13 @@ public class ExecStartCmdTest extends CmdTest {
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         ExecCreateCmdResponse execCreateCmdResponse = dockerRule.getClient().execCreateCmd(container.getId())
-                .withAttachStdout(true).withCmd("touch", "/execStartTest.log").withUser("root").exec();
-        dockerRule.getClient().execStartCmd(execCreateCmdResponse.getId()).exec(
-                new ExecStartResultCallback(System.out, System.err)).awaitCompletion();
+                .withAttachStdout(true)
+                .withCmd("touch", "/execStartTest.log")
+                .withUser("root")
+                .exec();
+        dockerRule.getClient().execStartCmd(execCreateCmdResponse.getId())
+                .exec(new ExecStartResultCallback(System.out, System.err))
+                .awaitCompletion();
 
         InputStream response = dockerRule.getClient().copyArchiveFromContainerCmd(container.getId(), "/execStartTest.log").exec();
         Boolean bytesAvailable = response.available() > 0;

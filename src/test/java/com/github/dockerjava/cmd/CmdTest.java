@@ -3,9 +3,11 @@ package com.github.dockerjava.cmd;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory;
 import com.github.dockerjava.junit.DockerRule;
+import com.github.dockerjava.junit.category.Integration;
 import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
 import org.junit.ClassRule;
 import org.junit.Rule;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
@@ -17,6 +19,7 @@ import static com.github.dockerjava.cmd.CmdTest.FactoryType.NETTY;
 /**
  * @author Kanstantsin Shautsou
  */
+@Category(Integration.class)
 @RunWith(Parameterized.class)
 public abstract class CmdTest {
     public enum FactoryType {
