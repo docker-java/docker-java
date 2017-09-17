@@ -67,7 +67,9 @@ public class CommitCmdTest extends CmdTest {
 
         LOG.info("Committing container: {}", container.toString());
         Map<String, String> labels = ImmutableMap.of("label1", "abc", "label2", "123");
-        String imageId = dockerRule.getClient().commitCmd(container.getId()).withLabels(labels).exec();
+        String imageId = dockerRule.getClient().commitCmd(container.getId())
+                .withLabels(labels)
+                .exec();
 
         InspectImageResponse inspectImageResponse = dockerRule.getClient().inspectImageCmd(imageId).exec();
         LOG.info("Image Inspect: {}", inspectImageResponse.toString());

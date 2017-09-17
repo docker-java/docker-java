@@ -30,7 +30,9 @@ public class CopyFileFromContainerCmdTest extends CmdTest {
 
         // TODO extract this into a shared method
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withName("docker-java-itest-copyFromContainer").withCmd("touch", "/copyFromContainer").exec();
+                .withName("docker-java-itest-copyFromContainer" + dockerRule.getKind())
+                .withCmd("touch", "/copyFromContainer")
+                .exec();
 
         LOG.info("Created container: {}", container);
         assertThat(container.getId(), not(isEmptyOrNullString()));
