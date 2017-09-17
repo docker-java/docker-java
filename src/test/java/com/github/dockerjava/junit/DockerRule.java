@@ -51,12 +51,15 @@ public class DockerRule extends ExternalResource {
                 nettyClient = DockerClientBuilder.getInstance(config())
                         .withDockerCmdExecFactory(new NettyDockerCmdExecFactory())
                         .build();
-                return nettyClient;
             }
+
+            return nettyClient;
         } else if (cmdTest.getFactoryType() == JERSEY) {
-            jerseyClient = DockerClientBuilder.getInstance(config())
-                    .withDockerCmdExecFactory(new JerseyDockerCmdExecFactory())
-                    .build();
+            if (jerseyClient == null) {
+                jerseyClient = DockerClientBuilder.getInstance(config())
+                        .withDockerCmdExecFactory(new JerseyDockerCmdExecFactory())
+                        .build();
+            }
             return jerseyClient;
         }
 
@@ -85,7 +88,7 @@ public class DockerRule extends ExternalResource {
                     .awaitSuccess();
         }
 
-        assertThat(getClient(), notNullValue());
+//        assertThat(getClient(), notNullValue());
 //        LOG.info("======================= END OF BEFORETEST =======================\n\n");
     }
 
