@@ -26,26 +26,31 @@ public class CopyArchiveToContainerCmdTest extends CmdTest {
 
     @Test
     public void copyFileToContainer() throws Exception {
-        CreateContainerResponse container = prepareContainerForCopy();
+        CreateContainerResponse container = prepareContainerForCopy("1");
         Path temp = Files.createTempFile("", ".tar.gz");
         CompressArchiveUtil.tar(Paths.get("src/test/resources/testReadFile"), temp, true, false);
         try (InputStream uploadStream = Files.newInputStream(temp)) {
-            dockerRule.getClient().copyArchiveToContainerCmd(container.getId()).withTarInputStream(uploadStream).exec();
+            dockerRule.getClient()
+                    .copyArchiveToContainerCmd(container.getId())
+                    .withTarInputStream(uploadStream)
+                    .exec();
             assertFileCopied(container);
         }
     }
 
     @Test
     public void copyStreamToContainer() throws Exception {
-        CreateContainerResponse container = prepareContainerForCopy();
-        dockerRule.getClient().copyArchiveToContainerCmd(container.getId()).withHostResource("src/test/resources/testReadFile")
+        CreateContainerResponse container = prepareContainerForCopy("2");
+        dockerRule.getClient().copyArchiveToContainerCmd(container.getId())
+                .withHostResource("src/test/resources/testReadFile")
                 .exec();
         assertFileCopied(container);
     }
 
-    private CreateContainerResponse prepareContainerForCopy() {
+    private CreateContainerResponse prepareContainerForCopy(String method) {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withName("docker-java-itest-copyToContainer").exec();
+                .withName("docker-java-itest-copyToContainer" + method + dockerRule.getKind())
+                .exec();
         LOG.info("Created container: {}", container);
         assertThat(container.getId(), not(isEmptyOrNullString()));
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
@@ -109,7 +114,7 @@ public class CopyArchiveToContainerCmdTest extends CmdTest {
         // script to be copied to the container's home dir and then executes it
         String containerCmd = "sleep 3; /home/" + scriptPath.getFileName().toString();
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withName("test")
+                .withName("copyFileWithExecutivePerm" + dockerRule.getKind())
                 .withCmd("/bin/sh", "-c", containerCmd)
                 .exec();
         // start the container
