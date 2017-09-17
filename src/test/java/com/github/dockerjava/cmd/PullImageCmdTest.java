@@ -82,12 +82,16 @@ public class PullImageCmdTest extends CmdTest {
         assertThat(inspectImageResponse, notNullValue());
     }
 
-    @Test
+
+
+    @Test(expected = NotFoundException.class)
     public void testPullNonExistingImage() throws Exception {
 
         // does not throw an exception
         // stream needs to be fully read in order to close the underlying connection
-        dockerRule.getClient().pullImageCmd("xvxcv/foo").exec(new PullImageResultCallback()).awaitCompletion();
+        dockerRule.getClient().pullImageCmd("xvxcv/foo")
+                .exec(new PullImageResultCallback())
+                .awaitCompletion();
     }
 
 }
