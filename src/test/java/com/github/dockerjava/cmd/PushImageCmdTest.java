@@ -4,8 +4,10 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.core.command.PushImageResultCallback;
+import com.github.dockerjava.junit.category.AuthIntegration;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +25,8 @@ public class PushImageCmdTest extends CmdTest {
     public void beforeTest() throws Exception {
         username = dockerRule.getClient().authConfig().getUsername();
     }
-    
+
+    @Category(AuthIntegration.class)
     @Test
     public void pushLatest() throws Exception {
 
