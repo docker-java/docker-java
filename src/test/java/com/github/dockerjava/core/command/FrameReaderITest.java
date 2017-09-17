@@ -4,9 +4,11 @@ import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.StreamType;
 import com.github.dockerjava.core.DockerClientBuilder;
+import com.github.dockerjava.junit.category.Integration;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -18,6 +20,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
 
+@Category(Integration.class)
 public class FrameReaderITest {
 
     private DockerClient dockerClient;
@@ -74,7 +77,6 @@ public class FrameReaderITest {
             @Override
             public void run() {
                 try {
-
                     Iterator<Frame> frames = getLoggingFrames().iterator();
 
                     while (frames.hasNext()) {
