@@ -99,7 +99,7 @@ public class FrameReaderITest {
 
     public static class FrameReaderITestCallback extends LogContainerResultCallback {
 
-        public List<Frame> frames = new ArrayList<Frame>();
+        public List<Frame> frames = new ArrayList<>();
 
         @Override
         public void onNext(Frame item) {

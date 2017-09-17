@@ -444,7 +444,7 @@
 					<!--<perCoreThreadCount>true</perCoreThreadCount>-->
 					<!--<threadCount>1</threadCount>-->
 					<groups>com.github.dockerjava.junit.category.Integration</groups>
-					<excludedGroups>com.github.dockerjava.junit.category.SwarmIntegration</excludedGroups>
+					<excludedGroups>com.github.dockerjava.junit.category.SwarmModeIntegration</excludedGroups>
 					<!--<includes>-->
 					<!--<include>**/*Test.java</include>-->
 					<!--</includes>-->

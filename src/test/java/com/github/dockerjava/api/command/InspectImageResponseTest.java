@@ -191,7 +191,7 @@ public class InspectImageResponseTest {
     }
 
     @Test
-    private void testOverlayNetworkRootDir() throws IOException {
+    public void testOverlayNetworkRootDir() throws IOException {
         final ObjectMapper mapper = new ObjectMapper();
         final JavaType type = mapper.getTypeFactory().constructType(InspectImageResponse.class);
 

@@ -14,7 +14,7 @@ import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory;
 import com.github.dockerjava.junit.category.Integration;
-import com.github.dockerjava.junit.category.SwarmIntegration;
+import com.github.dockerjava.junit.category.SwarmModeIntegration;
 import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
 import org.junit.After;
 import org.junit.Before;
@@ -25,7 +25,7 @@ import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_24;
 import static com.github.dockerjava.junit.DockerMatchers.isGreaterOrEqual;
 import static org.junit.Assume.assumeThat;
 
-@Category({SwarmIntegration.class, Integration.class})
+@Category({SwarmModeIntegration.class, Integration.class})
 public abstract class SwarmCmdTest extends CmdTest {
     protected DockerClient secondDockerClient;
     private int numberOfDockersInDocker = 0;

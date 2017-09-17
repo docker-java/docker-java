@@ -34,7 +34,7 @@ public class InternetProtocolTest {
     @Test
     public void parseInvalidInput() {
         expectedEx.expect(IllegalArgumentException.class);
-        expectedEx.expectMessage("Error parsing Protocol 'null'");
+        expectedEx.expectMessage("Error parsing Protocol 'xx'");
 
         InternetProtocol.parse("xx");
     }
