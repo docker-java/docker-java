@@ -47,7 +47,7 @@ sudo -E stop docker
 #popd
 rm -f "src/test/resources/logback.xml"
 #rm -f "src/test/resources/travis-logback.xml"
-#mv "src/test/resources/travis-logback.xml" "src/test/resources/logback-test.xml"
+mv "src/test/resources/travis-logback.xml" "src/test/resources/logback-test.xml"
 
 # https://github.com/docker/docker/issues/18113
 sudo rm /var/lib/docker/network/files/local-kv.db
