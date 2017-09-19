@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.concurrent.NotThreadSafe;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -40,6 +41,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.startsWith;
 
+@NotThreadSafe
 public class StartContainerCmdTest extends CmdTest {
     public static final Logger LOG = LoggerFactory.getLogger(StartContainerCmdTest.class);
 
@@ -250,8 +252,11 @@ public class StartContainerCmdTest extends CmdTest {
     @Test
     public void startContainerWithLinkingDeprecated() throws DockerException {
 
+        String container1Name = "containerWithLink1" + dockerRule.getKind();
+        String container2Name = "containerWithLink2" + dockerRule.getKind();
+
         CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999")
-                .withName("container1").exec();
+                .withName(container1Name).exec();
 
         LOG.info("Created container1 {}", container1.toString());
         assertThat(container1.getId(), not(isEmptyString()));
@@ -265,7 +270,7 @@ public class StartContainerCmdTest extends CmdTest {
         assertThat(inspectContainerResponse1.getConfig(), is(notNullValue()));
         assertThat(inspectContainerResponse1.getId(), not(isEmptyString()));
         assertThat(inspectContainerResponse1.getId(), startsWith(container1.getId()));
-        assertThat(inspectContainerResponse1.getName(), equalTo("/container1"));
+        assertThat(inspectContainerResponse1.getName(), equalTo("/" + container1Name));
         assertThat(inspectContainerResponse1.getImageId(), not(isEmptyString()));
         assertThat(inspectContainerResponse1.getState(), is(notNullValue()));
         assertThat(inspectContainerResponse1.getState().getRunning(), is(true));
@@ -275,7 +280,7 @@ public class StartContainerCmdTest extends CmdTest {
         }
 
         CreateContainerResponse container2 = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999")
-                .withName("container2").withLinks(new Link("container1", "container1Link")).exec();
+                .withName(container2Name).withLinks(new Link(container1Name, container1Name + "Link")).exec();
 
         LOG.info("Created container2 {}", container2.toString());
         assertThat(container2.getId(), not(isEmptyString()));
@@ -290,10 +295,10 @@ public class StartContainerCmdTest extends CmdTest {
         assertThat(inspectContainerResponse2.getId(), not(isEmptyString()));
         assertThat(inspectContainerResponse2.getHostConfig(), is(notNullValue()));
         assertThat(inspectContainerResponse2.getHostConfig().getLinks(), is(notNullValue()));
-        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] {new Link("container1",
-                "container1Link")}));
+        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] {new Link(container1Name,
+                container1Name + "Link")}));
         assertThat(inspectContainerResponse2.getId(), startsWith(container2.getId()));
-        assertThat(inspectContainerResponse2.getName(), equalTo("/container2"));
+        assertThat(inspectContainerResponse2.getName(), equalTo("/" + container2Name));
         assertThat(inspectContainerResponse2.getImageId(), not(isEmptyString()));
         assertThat(inspectContainerResponse2.getState(), is(notNullValue()));
         assertThat(inspectContainerResponse2.getState().getRunning(), is(true));
@@ -302,9 +307,12 @@ public class StartContainerCmdTest extends CmdTest {
 
     @Test
     public void startContainerWithLinking() throws DockerException {
+        String container1Name = "containerWithLinking1" + dockerRule.getKind();
+        String container2Name = "containerWithLinking2" + dockerRule.getKind();
+
 
         CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999")
-                .withName("container1").exec();
+                .withName(container1Name).exec();
 
         LOG.info("Created container1 {}", container1.toString());
         assertThat(container1.getId(), not(isEmptyString()));
@@ -318,7 +326,7 @@ public class StartContainerCmdTest extends CmdTest {
         assertThat(inspectContainerResponse1.getConfig(), is(notNullValue()));
         assertThat(inspectContainerResponse1.getId(), not(isEmptyString()));
         assertThat(inspectContainerResponse1.getId(), startsWith(container1.getId()));
-        assertThat(inspectContainerResponse1.getName(), equalTo("/container1"));
+        assertThat(inspectContainerResponse1.getName(), equalTo("/" + container1Name));
         assertThat(inspectContainerResponse1.getImageId(), not(isEmptyString()));
         assertThat(inspectContainerResponse1.getState(), is(notNullValue()));
         assertThat(inspectContainerResponse1.getState().getRunning(), is(true));
@@ -328,7 +336,7 @@ public class StartContainerCmdTest extends CmdTest {
         }
 
         CreateContainerResponse container2 = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999")
-                .withName("container2").withLinks(new Link("container1", "container1Link")).exec();
+                .withName(container2Name).withLinks(new Link(container1Name, container1Name + "Link")).exec();
 
         LOG.info("Created container2 {}", container2.toString());
         assertThat(container2.getId(), not(isEmptyString()));
@@ -343,10 +351,10 @@ public class StartContainerCmdTest extends CmdTest {
         assertThat(inspectContainerResponse2.getId(), not(isEmptyString()));
         assertThat(inspectContainerResponse2.getHostConfig(), is(notNullValue()));
         assertThat(inspectContainerResponse2.getHostConfig().getLinks(), is(notNullValue()));
-        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] {new Link("container1",
-                "container1Link")}));
+        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[] {new Link(container1Name,
+                container1Name + "Link")}));
         assertThat(inspectContainerResponse2.getId(), startsWith(container2.getId()));
-        assertThat(inspectContainerResponse2.getName(), equalTo("/container2"));
+        assertThat(inspectContainerResponse2.getName(), equalTo("/" + container2Name));
         assertThat(inspectContainerResponse2.getImageId(), not(isEmptyString()));
         assertThat(inspectContainerResponse2.getState(), is(notNullValue()));
         assertThat(inspectContainerResponse2.getState().getRunning(), is(true));
