@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.UUID;
 
+import static com.github.dockerjava.cmd.CmdTest.FactoryType.JERSEY;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_21;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_23;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_25;
@@ -188,6 +189,8 @@ public class BuildImageCmdTest extends CmdTest {
 
     @Test
     public void fromPrivateRegistry() throws Exception {
+        int port = getFactoryType() == JERSEY ? 5001 : 5002;
+
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("privateRegistry").getFile());
 
         String imageId = dockerRule.buildImage(baseDir);
@@ -203,7 +206,7 @@ public class BuildImageCmdTest extends CmdTest {
         CreateContainerResponse testregistry = dockerRule.getClient()
                 .createContainerCmd("testregistryy" +dockerRule.getKind() + ":2")
                 .withName("registryy" + dockerRule.getKind())
-                .withPortBindings(new PortBinding(Ports.Binding.bindPort(5000), ExposedPort.tcp(5000)))
+                .withPortBindings(new PortBinding(Ports.Binding.bindPort(port), ExposedPort.tcp(5000)))
                 .withEnv("REGISTRY_AUTH=htpasswd", "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm",
                         "REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd", "REGISTRY_LOG_LEVEL=debug",
                         "REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt", "REGISTRY_HTTP_TLS_KEY=/certs/domain.key")
@@ -219,15 +222,15 @@ public class BuildImageCmdTest extends CmdTest {
                 .withUsername("testuser")
                 .withPassword("testpassword")
                 .withEmail("foo@bar.de")
-                .withRegistryAddress("localhost:5000");
+                .withRegistryAddress("localhost:" + port);
 
         dockerRule.getClient().authCmd().withAuthConfig(authConfig).exec();
-        dockerRule.getClient().tagImageCmd("busybox:latest", "localhost:5000/testuser/busybox", "latest").withForce().exec();
+        dockerRule.getClient().tagImageCmd("busybox:latest", String.format("localhost:%d/testuser/busybox", port), "latest").withForce().exec();
 
-        dockerRule.getClient().pushImageCmd("localhost:5000/testuser/busybox").withTag("latest").withAuthConfig(authConfig)
+        dockerRule.getClient().pushImageCmd(String.format("localhost:%d/testuser/busybox", port)).withTag("latest").withAuthConfig(authConfig)
                 .exec(new PushImageResultCallback()).awaitSuccess();
 
-        dockerRule.getClient().removeImageCmd("localhost:5000/testuser/busybox").withForce(true).exec();
+        dockerRule.getClient().removeImageCmd(String.format("localhost:%d/testuser/busybox", port)).withForce(true).exec();
 
         baseDir = fileFromBuildTestResource("FROM/privateRegistry");
 
