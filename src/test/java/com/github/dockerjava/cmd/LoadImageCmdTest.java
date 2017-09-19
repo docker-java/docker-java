@@ -2,6 +2,7 @@ package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.utils.TestResources;
+import net.jcip.annotations.NotThreadSafe;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +17,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
 
+@NotThreadSafe
 public class LoadImageCmdTest extends CmdTest {
 
     private String expectedImageId;
