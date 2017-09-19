@@ -136,4 +136,14 @@ public class DockerRule extends ExternalResource {
         return "default";
     }
 
+    public void ensureRemoved(String container1Name) {
+        try {
+            getClient().removeContainerCmd(container1Name)
+                    .withForce(true)
+                    .withRemoveVolumes(true)
+                    .exec();
+        } catch (NotFoundException ex) {
+            // ignore
+        }
+    }
 }

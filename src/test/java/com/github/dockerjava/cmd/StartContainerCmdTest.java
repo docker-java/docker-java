@@ -251,12 +251,15 @@ public class StartContainerCmdTest extends CmdTest {
 
     @Test
     public void startContainerWithLinkingDeprecated() throws DockerException {
-
         String container1Name = "containerWithLink1" + dockerRule.getKind();
         String container2Name = "containerWithLink2" + dockerRule.getKind();
+        dockerRule.ensureRemoved(container1Name);
+        dockerRule.ensureRemoved(container2Name);
 
-        CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999")
-                .withName(container1Name).exec();
+        CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd("busybox")
+                .withCmd("sleep", "9999")
+                .withName(container1Name)
+                .exec();
 
         LOG.info("Created container1 {}", container1.toString());
         assertThat(container1.getId(), not(isEmptyString()));
@@ -309,10 +312,13 @@ public class StartContainerCmdTest extends CmdTest {
     public void startContainerWithLinking() throws DockerException {
         String container1Name = "containerWithLinking1" + dockerRule.getKind();
         String container2Name = "containerWithLinking2" + dockerRule.getKind();
+        dockerRule.ensureRemoved(container1Name);
+        dockerRule.ensureRemoved(container2Name);
 
-
-        CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999")
-                .withName(container1Name).exec();
+        CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd("busybox")
+                .withCmd("sleep", "9999")
+                .withName(container1Name)
+                .exec();
 
         LOG.info("Created container1 {}", container1.toString());
         assertThat(container1.getId(), not(isEmptyString()));
