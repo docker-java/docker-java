@@ -15,14 +15,15 @@ public class RemoveVolumeCmdTest extends CmdTest {
     @Test(expected = NotFoundException.class)
     public void removeVolume() throws DockerException {
 
-        String volumeName = "volume1";
+        String volumeName = "volume1" + dockerRule.getKind();
 
-        CreateVolumeResponse createVolumeResponse = dockerRule.getClient().createVolumeCmd().withName(volumeName)
+        CreateVolumeResponse createVolumeResponse = dockerRule.getClient().createVolumeCmd()
+                .withName(volumeName)
                 .withDriver("local").exec();
 
         assertThat(createVolumeResponse.getName(), equalTo(volumeName));
         assertThat(createVolumeResponse.getDriver(), equalTo("local"));
-        assertThat(createVolumeResponse.getMountpoint(), containsString("/volume1/"));
+        assertThat(createVolumeResponse.getMountpoint(), containsString(volumeName));
 
         dockerRule.getClient().removeVolumeCmd(volumeName).exec();
 
