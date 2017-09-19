@@ -137,7 +137,7 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
         if (value != null && !value.isEmpty()) {
             try {
                 return webTarget.queryParam(name,
-                        URLEncoder.encode(MAPPER.writeValueAsString(value), "UTF-8"));
+                        URLEncoder.encode(MAPPER.writeValueAsString(value), "UTF-8").replaceAll("\\+", "%20"));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
