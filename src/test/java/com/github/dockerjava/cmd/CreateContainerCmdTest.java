@@ -21,6 +21,7 @@ import com.github.dockerjava.api.model.Ulimit;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
 import com.github.dockerjava.core.command.LogContainerResultCallback;
+import net.jcip.annotations.NotThreadSafe;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -58,6 +59,7 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assume.assumeThat;
 
+@NotThreadSafe
 public class CreateContainerCmdTest extends CmdTest {
     public static final Logger LOG = LoggerFactory.getLogger(CreateContainerCmdTest.class);
 
@@ -230,10 +232,12 @@ public class CreateContainerCmdTest extends CmdTest {
 
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
 
-        assertThat(inspectContainerResponse.getName(), equalTo("/container"));
+        assertThat(inspectContainerResponse.getName(), equalTo("/" + containerName));
 
-
-        dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withName(containerName).withCmd("env").exec();
+        dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+                .withName(containerName)
+                .withCmd("env")
+                .exec();
     }
 
     @Test
@@ -427,7 +431,8 @@ public class CreateContainerCmdTest extends CmdTest {
 
         String[] extraHosts = {"dockerhost:127.0.0.1", "otherhost:10.0.0.1"};
 
-        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withName("container")
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+                .withName("containerextrahosts" + dockerRule.getKind())
                 .withExtraHosts(extraHosts).exec();
 
         LOG.info("Created container {}", container.toString());
@@ -608,10 +613,11 @@ public class CreateContainerCmdTest extends CmdTest {
 
     @Test
     public void createContainerWithULimits() throws DockerException {
-
+        String containerName = "containerulimit" + dockerRule.getKind();
         Ulimit[] ulimits = {new Ulimit("nproc", 709, 1026), new Ulimit("nofile", 1024, 4096)};
 
-        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withName("container")
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+                .withName(containerName)
                 .withUlimits(ulimits).exec();
 
         LOG.info("Created container {}", container.toString());
