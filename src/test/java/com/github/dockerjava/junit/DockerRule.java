@@ -136,7 +136,7 @@ public class DockerRule extends ExternalResource {
         return "default";
     }
 
-    public void ensureRemoved(String container1Name) {
+    public void ensureContainerRemoved(String container1Name) {
         try {
             getClient().removeContainerCmd(container1Name)
                     .withForce(true)

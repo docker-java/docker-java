@@ -13,6 +13,7 @@ import com.github.dockerjava.core.command.BuildImageResultCallback;
 import com.github.dockerjava.core.command.PushImageResultCallback;
 import com.github.dockerjava.core.command.WaitContainerResultCallback;
 import com.github.dockerjava.core.util.CompressArchiveUtil;
+import net.jcip.annotations.NotThreadSafe;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.junit.Test;
@@ -28,7 +29,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.UUID;
 
-import static com.github.dockerjava.cmd.CmdTest.FactoryType.JERSEY;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_21;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_23;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_25;
@@ -45,6 +45,7 @@ import static org.junit.Assume.assumeThat;
 /**
  * @author Kanstantsin Shautsou
  */
+@NotThreadSafe
 public class BuildImageCmdTest extends CmdTest {
     public static final Logger LOG = LoggerFactory.getLogger(BuildImageCmd.class);
 
@@ -189,7 +190,10 @@ public class BuildImageCmdTest extends CmdTest {
 
     @Test
     public void fromPrivateRegistry() throws Exception {
-        int port = getFactoryType() == JERSEY ? 5001 : 5002;
+//        int port = getFactoryType() == JERSEY ? 5001 : 5002;
+        int port = 5000;
+        String containerName = "registryy" + dockerRule.getKind();
+        dockerRule.ensureContainerRemoved(containerName);
 
         File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("privateRegistry").getFile());
 
@@ -205,7 +209,7 @@ public class BuildImageCmdTest extends CmdTest {
         // see https://github.com/docker/distribution/blob/master/docs/deploying.md#native-basic-auth
         CreateContainerResponse testregistry = dockerRule.getClient()
                 .createContainerCmd("testregistryy" +dockerRule.getKind() + ":2")
-                .withName("registryy" + dockerRule.getKind())
+                .withName(containerName)
                 .withPortBindings(new PortBinding(Ports.Binding.bindPort(port), ExposedPort.tcp(5000)))
                 .withEnv("REGISTRY_AUTH=htpasswd", "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm",
                         "REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd", "REGISTRY_LOG_LEVEL=debug",

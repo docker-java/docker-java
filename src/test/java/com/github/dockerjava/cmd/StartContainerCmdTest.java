@@ -17,11 +17,11 @@ import com.github.dockerjava.api.model.RestartPolicy;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
 import com.github.dockerjava.core.command.WaitContainerResultCallback;
+import net.jcip.annotations.NotThreadSafe;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.concurrent.NotThreadSafe;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -253,8 +253,8 @@ public class StartContainerCmdTest extends CmdTest {
     public void startContainerWithLinkingDeprecated() throws DockerException {
         String container1Name = "containerWithLink1" + dockerRule.getKind();
         String container2Name = "containerWithLink2" + dockerRule.getKind();
-        dockerRule.ensureRemoved(container1Name);
-        dockerRule.ensureRemoved(container2Name);
+        dockerRule.ensureContainerRemoved(container1Name);
+        dockerRule.ensureContainerRemoved(container2Name);
 
         CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd("busybox")
                 .withCmd("sleep", "9999")
@@ -312,8 +312,8 @@ public class StartContainerCmdTest extends CmdTest {
     public void startContainerWithLinking() throws DockerException {
         String container1Name = "containerWithLinking1" + dockerRule.getKind();
         String container2Name = "containerWithLinking2" + dockerRule.getKind();
-        dockerRule.ensureRemoved(container1Name);
-        dockerRule.ensureRemoved(container2Name);
+        dockerRule.ensureContainerRemoved(container1Name);
+        dockerRule.ensureContainerRemoved(container2Name);
 
         CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd("busybox")
                 .withCmd("sleep", "9999")

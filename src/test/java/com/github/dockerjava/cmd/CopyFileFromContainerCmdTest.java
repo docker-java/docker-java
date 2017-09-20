@@ -29,7 +29,7 @@ public class CopyFileFromContainerCmdTest extends CmdTest {
         assumeNotSwarm("", dockerRule);
 
         String containerName = "docker-java-itest-copyFromContainer" + dockerRule.getKind();
-        dockerRule.ensureRemoved(containerName);
+        dockerRule.ensureContainerRemoved(containerName);
 
         // TODO extract this into a shared method
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
