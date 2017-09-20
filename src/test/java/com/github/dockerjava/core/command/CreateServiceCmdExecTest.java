@@ -21,11 +21,16 @@ import org.testng.annotations.Test;
 import org.testng.collections.Lists;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 @Test(groups = "swarm-integration")
 public class CreateServiceCmdExecTest extends AbstractSwarmDockerClientTest {
@@ -59,11 +64,13 @@ public class CreateServiceCmdExecTest extends AbstractSwarmDockerClientTest {
                 .withListenAddr("127.0.0.1")
                 .withAdvertiseAddr("127.0.0.1")
                 .exec();
-
+        List<String> command = Arrays.asList("sleep", "300");
+        Map<String,String> labels=new HashMap<>();
+        labels.put("com.docker.java.usage","test");
         dockerClient.createServiceCmd(new ServiceSpec()
-                .withName(SERVICE_NAME)
+                .withName(SERVICE_NAME).withLabels(labels)
                 .withTaskTemplate(new TaskSpec()
-                        .withContainerSpec(new ContainerSpec()
+                        .withContainerSpec(new ContainerSpec().withCommand(command)
                                 .withImage("busybox"))))
         .exec();
 
@@ -72,7 +79,7 @@ public class CreateServiceCmdExecTest extends AbstractSwarmDockerClientTest {
                 .exec();
 
         assertThat(services, hasSize(1));
-
+        assertThat(services.get(0).getSpec().getLabels().get("com.docker.java.usage"), is("test"));
         dockerClient.removeServiceCmd(SERVICE_NAME).exec();
     }
 
