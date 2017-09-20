@@ -242,8 +242,8 @@ public class CreateContainerCmdTest extends CmdTest {
 
     @Test
     public void createContainerWithLink() throws DockerException {
-        String containerName1 = "containerlink_" + dockerRule.getKind();
-        String containerName2 = "container2link_" + dockerRule.getKind();
+        String containerName1 = "containerWithlink_" + dockerRule.getKind();
+        String containerName2 = "container2Withlink_" + dockerRule.getKind();
 
         CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("sleep", "9999")
                 .withName(containerName1).exec();
@@ -496,9 +496,14 @@ public class CreateContainerCmdTest extends CmdTest {
 
     @Test
     public void createContainerWithLinking() throws DockerException {
+        String containerName1 = "containerWithlinking_" + dockerRule.getKind();
+        String containerName2 = "container2Withlinking_" + dockerRule.getKind();
 
-        CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("sleep", "9999")
-                .withName("container1").exec();
+
+
+        CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+                .withCmd("sleep", "9999")
+                .withName(containerName1).exec();
 
         LOG.info("Created container1 {}", container1.toString());
         assertThat(container1.getId(), not(isEmptyString()));
@@ -512,7 +517,7 @@ public class CreateContainerCmdTest extends CmdTest {
         assertThat(inspectContainerResponse1.getConfig(), is(notNullValue()));
         assertThat(inspectContainerResponse1.getId(), not(isEmptyString()));
         assertThat(inspectContainerResponse1.getId(), startsWith(container1.getId()));
-        assertThat(inspectContainerResponse1.getName(), equalTo("/container1"));
+        assertThat(inspectContainerResponse1.getName(), equalTo("/" + containerName1));
         assertThat(inspectContainerResponse1.getImageId(), not(isEmptyString()));
         assertThat(inspectContainerResponse1.getState(), is(notNullValue()));
         assertThat(inspectContainerResponse1.getState().getRunning(), is(true));
@@ -522,7 +527,8 @@ public class CreateContainerCmdTest extends CmdTest {
         }
 
         CreateContainerResponse container2 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("sleep", "9999")
-                .withName("container2").withLinks(new Link("container1", "container1Link")).exec();
+                .withName(containerName2)
+                .withLinks(new Link(containerName1, containerName1 + "Link")).exec();
 
         LOG.info("Created container2 {}", container2.toString());
         assertThat(container2.getId(), not(isEmptyString()));
@@ -535,10 +541,10 @@ public class CreateContainerCmdTest extends CmdTest {
         assertThat(inspectContainerResponse2.getId(), not(isEmptyString()));
         assertThat(inspectContainerResponse2.getHostConfig(), is(notNullValue()));
         assertThat(inspectContainerResponse2.getHostConfig().getLinks(), is(notNullValue()));
-        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[]{new Link("container1",
-                "container1Link")}));
+        assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[]{new Link(containerName1,
+                containerName1 + "Link")}));
         assertThat(inspectContainerResponse2.getId(), startsWith(container2.getId()));
-        assertThat(inspectContainerResponse2.getName(), equalTo("/container2"));
+        assertThat(inspectContainerResponse2.getName(), equalTo("/" + containerName2));
         assertThat(inspectContainerResponse2.getImageId(), not(isEmptyString()));
 
     }
