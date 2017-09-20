@@ -24,13 +24,16 @@ public class CopyFileFromContainerCmdTest extends CmdTest {
 
     @Test
     public void copyFromContainer() throws Exception {
-        assumeThat("Doesn't work since 1.24", dockerRule, isGreaterOrEqual(VERSION_1_24));
+        assumeThat("Doesn't work since 1.24", dockerRule, not(isGreaterOrEqual(VERSION_1_24)));
 
         assumeNotSwarm("", dockerRule);
 
+        String containerName = "docker-java-itest-copyFromContainer" + dockerRule.getKind();
+        dockerRule.ensureRemoved(containerName);
+
         // TODO extract this into a shared method
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withName("docker-java-itest-copyFromContainer" + dockerRule.getKind())
+                .withName(containerName)
                 .withCmd("touch", "/copyFromContainer")
                 .exec();
 
