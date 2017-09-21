@@ -265,7 +265,7 @@ public class BuildImageCmdExecTest extends AbstractNettyDockerClientTest {
     public void buildArgs() throws Exception {
         File baseDir = fileFromBuildTestResource("buildArgs");
 
-        String imageId = dockerClient.buildImageCmd(baseDir).withNoCache(true).withBuildArg("testArg", "abc")
+        String imageId = dockerClient.buildImageCmd(baseDir).withNoCache(true).withBuildArg("testArg", "abc !@#$%^&*()_+")
                 .exec(new BuildImageResultCallback())
                 .awaitImageId();
 
@@ -273,7 +273,7 @@ public class BuildImageCmdExecTest extends AbstractNettyDockerClientTest {
         assertThat(inspectImageResponse, not(nullValue()));
         LOG.info("Image Inspect: {}", inspectImageResponse.toString());
 
-        assertThat(inspectImageResponse.getConfig().getLabels().get("test"), equalTo("abc"));
+        assertThat(inspectImageResponse.getConfig().getLabels().get("test"), equalTo("abc !@#$%^&*()_+"));
     }
 
     @Test
