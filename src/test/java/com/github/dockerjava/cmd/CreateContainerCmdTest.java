@@ -271,7 +271,8 @@ public class CreateContainerCmdTest extends CmdTest {
     @Test
     public void createContainerWithLinkInCustomNetwork() throws DockerException {
         assumeNotSwarm("no network in swarm", dockerRule);
-        String containerName1 = "containerlink_" + dockerRule.getKind();
+        String containerName1 = "containerCustomlink_" + dockerRule.getKind();
+        String containerName2 = "containerCustom2link_" + dockerRule.getKind();
         String networkName = "linkNetcustom" + dockerRule.getKind();
 
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd()
@@ -297,9 +298,9 @@ public class CreateContainerCmdTest extends CmdTest {
 
         CreateContainerResponse container2 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withNetworkMode(networkName)
-                .withName("container2")
+                .withName(containerName2)
                 .withCmd("env")
-                .withLinks(new Link(containerName1, "container1Link"))
+                .withLinks(new Link(containerName1, containerName1 + "Link"))
                 .exec();
 
         LOG.info("Created container {}", container2.toString());
@@ -310,26 +311,30 @@ public class CreateContainerCmdTest extends CmdTest {
 
         ContainerNetwork linkNet = inspectContainerResponse2.getNetworkSettings().getNetworks().get(networkName);
         assertNotNull(linkNet);
-        assertThat(linkNet.getLinks(), equalTo(new Link[]{new Link(containerName1, "container1Link")}));
+        assertThat(linkNet.getLinks(), equalTo(new Link[]{new Link(containerName1, containerName1 + "Link")}));
     }
 
     @Test
     public void createContainerWithCustomIp() throws DockerException {
         assumeNotSwarm("Swarm has no network", dockerRule);
 
+        String containerName1 = "containerCustomIplink_" + dockerRule.getKind();
+        String networkName = "customIpNet" + dockerRule.getKind();
+
+
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd()
                 .withIpam(new Network.Ipam()
                         .withConfig(new Network.Ipam.Config()
                                 .withSubnet("10.100.101.0/24")))
-                .withName("customIpNet")
+                .withName(networkName)
                 .exec();
 
         assertNotNull(createNetworkResponse.getId());
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withNetworkMode("customIpNet")
+                .withNetworkMode(networkName)
                 .withCmd("sleep", "9999")
-                .withName("container")
+                .withName(containerName1)
                 .withIpv4Address("10.100.101.100")
                 .exec();
 
@@ -340,7 +345,7 @@ public class CreateContainerCmdTest extends CmdTest {
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId())
                 .exec();
 
-        ContainerNetwork customIpNet = inspectContainerResponse.getNetworkSettings().getNetworks().get("customIpNet");
+        ContainerNetwork customIpNet = inspectContainerResponse.getNetworkSettings().getNetworks().get(networkName);
         assertNotNull(customIpNet);
         assertThat(customIpNet.getGateway(), is("10.100.101.1"));
         assertThat(customIpNet.getIpAddress(), is("10.100.101.100"));
@@ -350,17 +355,20 @@ public class CreateContainerCmdTest extends CmdTest {
     public void createContainerWithAlias() throws DockerException {
         assumeNotSwarm("Swarm has no network", dockerRule);
 
+        String containerName1 = "containerAlias_" + dockerRule.getKind();
+        String networkName = "aliasNet" + dockerRule.getKind();
+
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd()
-                .withName("aliasNet")
+                .withName(networkName)
                 .exec();
 
         assertNotNull(createNetworkResponse.getId());
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withNetworkMode("aliasNet")
+                .withNetworkMode(networkName)
                 .withCmd("sleep", "9999")
-                .withName("container")
-                .withAliases("server")
+                .withName(containerName1)
+                .withAliases("server" + dockerRule.getKind())
                 .exec();
 
         assertThat(container.getId(), not(isEmptyString()));
@@ -370,8 +378,8 @@ public class CreateContainerCmdTest extends CmdTest {
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId())
                 .exec();
 
-        ContainerNetwork aliasNet = inspectContainerResponse.getNetworkSettings().getNetworks().get("aliasNet");
-        assertThat(aliasNet.getAliases(), hasItem("server"));
+        ContainerNetwork aliasNet = inspectContainerResponse.getNetworkSettings().getNetworks().get(networkName);
+        assertThat(aliasNet.getAliases(), hasItem("server" + dockerRule.getKind()));
     }
 
     @Test
