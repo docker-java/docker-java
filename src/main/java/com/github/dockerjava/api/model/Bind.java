@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.model;
 
+import org.apache.commons.lang.SystemUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -52,43 +53,97 @@ public class Bind {
     }
 
     /**
-     * Parses a bind mount specification to a {@link Bind}.
+     * Should only be used for parsing Windows path.
+     * e.g. Windows path
+     * - C:\opt\dchq\cache:C:\opt\dchq\cache
+     * - C:\opt\dchq\cache:C:\opt\dchq\cache:ro
+     * - C:\opt\dchq\cache:C:\opt\dchq\cache:rw
+     * <p>
+     * Note: Current support Volume Specifications are
+     * 1. Fully qualified windows paths and optionally read/write permissions
+     * <p>
+     * When you split above the mount and you get
+     * - 3 tokens - consider first two tokens as the host path and the 3rd and 4th as the container path
+     * - 4 tokens - consider first two tokens as the host path and the 3rd and 4th as the container path and the 5th as read-write flag.
+     * <p>
+     * --- 3.0.6 release support -----
+     * - C:\opt\dchq\cache:C:\opt\dchq\cache:
+     * - C:\opt\dchq\cache:C:\opt\dchq\cache:shared
+     * - C:\opt\dchq\cache:C:\opt\dchq\cache:private
+     * - C:\opt\dchq\cache:C:\opt\dchq\cache:slave
      *
      * @param serialized
-     *            the specification, e.g. <code>/host:/container:ro</code>
+     * @return
+     */
+    public static String[] parseInternal(String serialized) {
+        try {
+            String[] parts = null;
+            String[] tokens = serialized.split(":");
+
+            if (tokens != null && tokens.length == 4) {
+                parts = new String[2];
+                parts[0] = String.format("%s:%s", tokens[0], tokens[1]);
+                parts[1] = String.format("%s:%s", tokens[2], tokens[3]);
+            } else if (tokens != null && tokens.length == 5) {
+                parts = new String[3];
+                parts[0] = String.format("%s:%s", tokens[0], tokens[1]);
+                parts[1] = String.format("%s:%s", tokens[2], tokens[3]);
+                parts[2] = tokens[4];
+            }
+            return parts;
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error parsing Bind '" + serialized + "'", e);
+        }
+    }
+
+    /**
+     * Parses a bind mount specification to a {@link Bind}.
+     *
+     * @param serialized the specification, e.g. <code>/host:/container:ro</code>
      * @return a {@link Bind} matching the specification
-     * @throws IllegalArgumentException
-     *             if the specification cannot be parsed
+     * @throws IllegalArgumentException if the specification cannot be parsed
      */
     public static Bind parse(String serialized) {
         try {
-            String[] parts = serialized.split(":");
-            switch (parts.length) {
-            case 2: {
-                return new Bind(parts[0], new Volume(parts[1]));
-            }
-            case 3: {
-                String[] flags = parts[2].split(",");
-                AccessMode accessMode = AccessMode.DEFAULT;
-                SELContext seMode = SELContext.DEFAULT;
-                for (String p : flags) {
-                    if (p.length() == 2) {
-                        accessMode = AccessMode.valueOf(p.toLowerCase());
-                    } else {
-                        seMode = SELContext.fromString(p);
-                    }
-                }
+            String[] parts = null;
 
-                return new Bind(parts[0], new Volume(parts[1]), accessMode, seMode);
+            if (SystemUtils.IS_OS_WINDOWS) {
+                parts = parseInternal(serialized);
+            } else {
+                parts = serialized.split(":");
             }
-            default: {
-                throw new IllegalArgumentException();
+
+            if (parts == null || parts.length <= 0) {
+                throw new IllegalArgumentException("Error parsing Bind '" + serialized + "'");
             }
+
+            switch (parts.length) {
+                case 2: {
+                    return new Bind(parts[0], new Volume(parts[1]));
+                }
+                case 3: {
+                    String[] flags = parts[2].split(",");
+                    AccessMode accessMode = AccessMode.DEFAULT;
+                    SELContext seMode = SELContext.DEFAULT;
+                    for (String p : flags) {
+                        if (p.length() == 2) {
+                            accessMode = AccessMode.valueOf(p.toLowerCase());
+                        } else {
+                            seMode = SELContext.fromString(p);
+                        }
+                    }
+
+                    return new Bind(parts[0], new Volume(parts[1]), accessMode, seMode);
+                }
+                default: {
+                    throw new IllegalArgumentException();
+                }
             }
         } catch (Exception e) {
             throw new IllegalArgumentException("Error parsing Bind '" + serialized + "'", e);
         }
     }
+
 
     @Override
     public boolean equals(Object obj) {
