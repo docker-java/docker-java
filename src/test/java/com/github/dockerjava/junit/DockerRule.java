@@ -146,4 +146,14 @@ public class DockerRule extends ExternalResource {
             // ignore
         }
     }
+
+    public void ensureImageRemoved(String imageId) {
+        try {
+            getClient().removeImageCmd(imageId)
+                    .withForce(true)
+                    .exec();
+        } catch (NotFoundException ex) {
+            // ignore
+        }
+    }
 }
