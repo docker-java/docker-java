@@ -126,7 +126,10 @@ public class Bind implements Serializable {
                 parts[1] = String.format("%s:%s", tokens[2], tokens[3]);
                 parts[2] = tokens[4];
             }
-            return parts;
+            if (parts != null) {
+                return parts;
+            }
+            return serialized.split(":");
         } catch (Exception e) {
             throw new IllegalArgumentException("Error parsing Bind '" + serialized + "'", e);
         }
@@ -144,13 +147,7 @@ public class Bind implements Serializable {
     public static Bind parse(String serialized) {
         try {
 
-            String[] parts = null;
-
-            if (SystemUtils.IS_OS_WINDOWS) {
-                parts = parseInternal(serialized);
-            } else {
-                parts = serialized.split(":");
-            }
+            String[] parts = parseInternal(serialized);
 
             switch (parts.length) {
             case 2: {
