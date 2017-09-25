@@ -12,6 +12,6 @@ public enum PortConfigProtocol {
     TCP,
 
     @JsonProperty("udp")
-    udp
+    UDP
 
 }
