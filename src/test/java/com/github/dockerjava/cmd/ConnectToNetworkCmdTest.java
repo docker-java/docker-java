@@ -17,6 +17,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * TODO fix parallel.
+ */
 @ThreadSafe
 public class ConnectToNetworkCmdTest extends CmdTest {
 
