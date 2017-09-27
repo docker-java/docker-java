@@ -335,7 +335,7 @@ public class CreateContainerCmdTest extends CmdTest {
 
         String containerName1 = "containerCustomIplink_" + dockerRule.getKind();
         String networkName = "customIpNet" + dockerRule.getKind();
-        String subnetPrefix = getFactoryType() == JERSEY ? "10.100.101" : "10.100.102";
+        String subnetPrefix = getFactoryType() == JERSEY ? "10.100.104" : "10.100.105";
 
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd()
                 .withIpam(new Network.Ipam()
