@@ -36,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.github.dockerjava.api.model.Capability.MKNOD;
 import static com.github.dockerjava.api.model.Capability.NET_ADMIN;
+import static com.github.dockerjava.cmd.CmdTest.FactoryType.JERSEY;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_23;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_24;
 import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
@@ -320,12 +321,12 @@ public class CreateContainerCmdTest extends CmdTest {
 
         String containerName1 = "containerCustomIplink_" + dockerRule.getKind();
         String networkName = "customIpNet" + dockerRule.getKind();
-
+        String subnetPrefix = getFactoryType() == JERSEY ? "10.100.101" : "10.100.102";
 
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd()
                 .withIpam(new Network.Ipam()
                         .withConfig(new Network.Ipam.Config()
-                                .withSubnet("10.100.101.0/24")))
+                                .withSubnet(subnetPrefix + ".0/24")))
                 .withName(networkName)
                 .exec();
 
@@ -335,20 +336,21 @@ public class CreateContainerCmdTest extends CmdTest {
                 .withNetworkMode(networkName)
                 .withCmd("sleep", "9999")
                 .withName(containerName1)
-                .withIpv4Address("10.100.101.100")
+                .withIpv4Address(subnetPrefix +".100")
                 .exec();
 
         assertThat(container.getId(), not(isEmptyString()));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
-        InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId())
+        InspectContainerResponse inspectContainerResponse = dockerRule.getClient()
+                .inspectContainerCmd(container.getId())
                 .exec();
 
         ContainerNetwork customIpNet = inspectContainerResponse.getNetworkSettings().getNetworks().get(networkName);
         assertNotNull(customIpNet);
-        assertThat(customIpNet.getGateway(), is("10.100.101.1"));
-        assertThat(customIpNet.getIpAddress(), is("10.100.101.100"));
+        assertThat(customIpNet.getGateway(), is(subnetPrefix + ".1"));
+        assertThat(customIpNet.getIpAddress(), is(subnetPrefix + ".100"));
     }
 
     @Test
