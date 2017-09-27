@@ -7,12 +7,17 @@ import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.api.model.PullResponseItem;
+import com.github.dockerjava.core.RemoteApiVersion;
 import com.github.dockerjava.core.command.PullImageCmdImpl;
 import com.github.dockerjava.core.command.PullImageResultCallback;
+import com.github.dockerjava.utils.TestUtils;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.github.dockerjava.utils.TestUtils.getVersion;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.notNullValue;
@@ -20,6 +25,9 @@ import static org.junit.Assert.assertEquals;
 
 public class PullImageCmdTest extends CmdTest {
     private static final Logger LOG = LoggerFactory.getLogger(PullImageCmdTest.class);
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
 
     private static final PullImageCmd.Exec NOP_EXEC = new PullImageCmd.Exec() {
         public Void exec(PullImageCmd command, ResultCallback<PullResponseItem> resultCallback) {
@@ -85,10 +93,17 @@ public class PullImageCmdTest extends CmdTest {
 
 
 
-//    @Test(expected = NotFoundException.class)
-    @Test(expected = DockerClientException.class)
+    @Test
     public void testPullNonExistingImage() throws Exception {
         // does not throw an exception
+
+        if (getVersion(dockerRule.getClient())
+                .isGreaterOrEqual(RemoteApiVersion.VERSION_1_24)) {
+            exception.expect(NotFoundException.class);
+        } else {
+            exception.expect(DockerClientException.class);
+        }
+
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pullImageCmd("xvxcv/foo")
                 .exec(new PullImageResultCallback())

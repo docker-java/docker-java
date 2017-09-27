@@ -61,7 +61,10 @@ public class CreateNetworkCmdTest extends CmdTest {
         assumeThat("API version should be >= 1.24", dockerRule, isGreaterOrEqual(VERSION_1_24));
 
         String networkName = "createAttachableNetwork" + dockerRule.getKind();
-        CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd().withName(networkName).withAttachable(true).exec();
+        CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd()
+                .withName(networkName)
+                .withAttachable(true)
+                .exec();
         assertNotNull(createNetworkResponse.getId());
         Network network = dockerRule.getClient().inspectNetworkCmd().withNetworkId(createNetworkResponse.getId()).exec();
         assertTrue(network.isAttachable());
