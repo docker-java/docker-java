@@ -6,6 +6,7 @@ import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.ContainerNetwork;
 import com.github.dockerjava.api.model.Network;
+import net.jcip.annotations.ThreadSafe;
 import org.junit.Test;
 
 import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
@@ -16,6 +17,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+@ThreadSafe
 public class ConnectToNetworkCmdTest extends CmdTest {
 
     @Test
@@ -42,8 +44,8 @@ public class ConnectToNetworkCmdTest extends CmdTest {
     public void connectToNetworkWithContainerNetwork() throws InterruptedException {
         assumeNotSwarm("no network in swarm", dockerRule);
 
-        final String NETWORK_SUBNET = "10.100.102.0/24";
-        final String NETWORK_NAME = "jerseyTestNetwork";
+        final String networkSubnet = "10.100.102.0/24";
+        final String networkName = "TestNetwork" + dockerRule.getKind();
         final String CONTAINER_IP = "10.100.102.100";
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
@@ -53,15 +55,15 @@ public class ConnectToNetworkCmdTest extends CmdTest {
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         try {
-            dockerRule.getClient().removeNetworkCmd(NETWORK_NAME).exec();
+            dockerRule.getClient().removeNetworkCmd(networkName).exec();
         } catch (DockerException ignore) {
         }
 
         CreateNetworkResponse network = dockerRule.getClient().createNetworkCmd()
-                .withName(NETWORK_NAME)
+                .withName(networkName)
                 .withIpam(new Network.Ipam()
                         .withConfig(new Network.Ipam.Config()
-                                .withSubnet(NETWORK_SUBNET)))
+                                .withSubnet(networkSubnet)))
                 .exec();
 
         dockerRule.getClient().connectToNetworkCmd()
@@ -81,7 +83,7 @@ public class ConnectToNetworkCmdTest extends CmdTest {
 
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
 
-        ContainerNetwork testNetwork = inspectContainerResponse.getNetworkSettings().getNetworks().get(NETWORK_NAME);
+        ContainerNetwork testNetwork = inspectContainerResponse.getNetworkSettings().getNetworks().get(networkName);
         assertNotNull(testNetwork);
         assertThat(testNetwork.getAliases(), hasItem("aliasName"));
         assertThat(testNetwork.getGateway(), is("10.100.102.1"));
