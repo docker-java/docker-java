@@ -3,6 +3,7 @@ package com.github.dockerjava.cmd;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.api.command.PullImageCmd;
+import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.api.model.PullResponseItem;
@@ -84,13 +85,14 @@ public class PullImageCmdTest extends CmdTest {
 
 
 
-    @Test(expected = NotFoundException.class)
+//    @Test(expected = NotFoundException.class)
+    @Test(expected = DockerClientException.class)
     public void testPullNonExistingImage() throws Exception {
         // does not throw an exception
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pullImageCmd("xvxcv/foo")
                 .exec(new PullImageResultCallback())
-                .awaitCompletion();
+                .awaitSuccess();
     }
 
 }
