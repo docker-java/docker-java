@@ -2,6 +2,7 @@ package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.CreateNetworkResponse;
+import com.github.dockerjava.api.command.CreateVolumeResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.DockerException;
@@ -23,10 +24,13 @@ import com.github.dockerjava.api.model.VolumesFrom;
 import com.github.dockerjava.core.command.LogContainerResultCallback;
 import net.jcip.annotations.NotThreadSafe;
 import org.apache.commons.io.FileUtils;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -63,6 +67,9 @@ import static org.junit.Assume.assumeThat;
 @NotThreadSafe
 public class CreateContainerCmdTest extends CmdTest {
     public static final Logger LOG = LoggerFactory.getLogger(CreateContainerCmdTest.class);
+
+    @Rule
+    public TemporaryFolder tempDir = new TemporaryFolder(new File("target/"));
 
     @Test(expected = ConflictException.class)
     public void createContainerWithExistingName() throws DockerException {
@@ -128,19 +135,23 @@ public class CreateContainerCmdTest extends CmdTest {
 
     @Test
     public void createContainerWithVolumesFrom() throws DockerException {
-
-        Volume volume1 = new Volume("/opt/webapp1");
-        Volume volume2 = new Volume("/opt/webapp2");
-
         String container1Name = UUID.randomUUID().toString();
+        CreateVolumeResponse volume1Info = dockerRule.getClient().createVolumeCmd().exec();
+        CreateVolumeResponse volume2Info = dockerRule.getClient().createVolumeCmd().exec();
+        String mountpoint1 = volume1Info.getMountpoint();
+        String mountpoint2 = volume2Info.getMountpoint();
+        Volume volume1 = new Volume(mountpoint1);
+        Volume volume2 = new Volume(mountpoint2);
 
         Bind bind1 = new Bind("/src/webapp1", volume1);
         Bind bind2 = new Bind("/src/webapp2", volume2);
 
         // create a running container with bind mounts
-        CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("sleep", "9999")
+        CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+                .withCmd("sleep", "9999")
                 .withName(container1Name)
                 .withBinds(bind1, bind2).exec();
+
         LOG.info("Created container1 {}", container1.toString());
 
         InspectContainerResponse inspectContainerResponse1 = dockerRule.getClient().inspectContainerCmd(container1.getId())
@@ -151,16 +162,19 @@ public class CreateContainerCmdTest extends CmdTest {
         assertThat(inspectContainerResponse1, mountedVolumes(containsInAnyOrder(volume1, volume2)));
 
         // create a second container with volumes from first container
-        CreateContainerResponse container2 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("sleep", "9999")
-                .withVolumesFrom(new VolumesFrom(container1Name)).exec();
+        CreateContainerResponse container2 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+                .withCmd("sleep", "9999")
+                .withVolumesFrom(new VolumesFrom(container1Name))
+                .exec();
+
         LOG.info("Created container2 {}", container2.toString());
 
         InspectContainerResponse inspectContainerResponse2 = dockerRule.getClient().inspectContainerCmd(container2.getId())
                 .exec();
 
         // No volumes are created, the information is just stored in .HostConfig.VolumesFrom
-        assertThat(inspectContainerResponse2.getHostConfig().getVolumesFrom(), hasItemInArray(new VolumesFrom(
-                container1Name)));
+        assertThat(inspectContainerResponse2.getHostConfig().getVolumesFrom(),
+                hasItemInArray(new VolumesFrom(container1Name)));
 
         // To ensure that the information stored in VolumesFrom really is considered
         // when starting the container, we start it and verify that it has the same
