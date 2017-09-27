@@ -26,7 +26,7 @@ public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateC
     private Boolean attachStderr;
 
     @JsonProperty("Env")
-    private List<String> env;
+    private String[] env;
 
     @JsonProperty("Tty")
     private Boolean tty;
@@ -89,10 +89,16 @@ public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateC
     }
 
     @Override
-    public ExecCreateCmd withEnv(List<String> env) {
+    public ExecCreateCmd withEnv(String... env) {
         checkNotNull(env, "env was not specified");
         this.env = env;
         return this;
+    }
+
+    @Override
+    public ExecCreateCmd withEnv(List<String> env) {
+        checkNotNull(env, "env was not specified");
+        return withEnv(env.toArray(new String[env.size()]));
     }
 
     @Override
@@ -101,7 +107,7 @@ public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateC
     }
 
     @Override
-    public List<String> getEnv() {
+    public String[] getEnv() {
         return env;
     }
 

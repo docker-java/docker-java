@@ -25,7 +25,7 @@ public interface ExecCreateCmd extends SyncDockerCmd<ExecCreateCmdResponse> {
     String getUser();
 
     @CheckForNull
-    List<String> getEnv();
+    String[] getEnv();
 
     ExecCreateCmd withAttachStderr(Boolean attachStderr);
 
@@ -36,6 +36,8 @@ public interface ExecCreateCmd extends SyncDockerCmd<ExecCreateCmdResponse> {
     ExecCreateCmd withCmd(String... cmd);
 
     ExecCreateCmd withContainerId(@Nonnull String containerId);
+
+    ExecCreateCmd withEnv(String... env);
 
     ExecCreateCmd withEnv(List<String> env);
 
