@@ -331,7 +331,8 @@ public class BuildImageCmdExecTest extends AbstractNettyDockerClientTest {
     	assertThat(inspectImageResponse1, not(nullValue()));
     	
     	File baseDir2 = fileFromBuildTestResource("CacheFrom/test2");
-    	String imageId2 = dockerClient.buildImageCmd(baseDir2).withCacheFrom(new HashSet<>(Arrays.asList(imageId1)))
+    	String cacheImage = String.format("[\"%s\"]", imageId1);
+    	String imageId2 = dockerClient.buildImageCmd(baseDir2).withCacheFrom(new HashSet<>(Arrays.asList(cacheImage)))
     			.exec(new BuildImageResultCallback())
     			.awaitImageId();
     	InspectImageResponse inspectImageResponse2 = dockerClient.inspectImageCmd(imageId2).exec();
