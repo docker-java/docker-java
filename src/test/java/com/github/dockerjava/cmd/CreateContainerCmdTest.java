@@ -421,7 +421,8 @@ public class CreateContainerCmdTest extends CmdTest {
     @Test
     public void createContainerWithEntrypoint() throws DockerException {
 
-        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withName("container")
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+                .withName("containerEntrypoint" + dockerRule.getKind())
                 .withEntrypoint("sleep", "9999").exec();
 
         LOG.info("Created container {}", container.toString());
