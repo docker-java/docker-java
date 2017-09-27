@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -37,7 +38,7 @@ public class CreateServiceCmdExecTest extends SwarmCmdTest {
                 .withName(SERVICE_NAME)
                 .withTaskTemplate(new TaskSpec()
                         .withContainerSpec(new ContainerSpec()
-                                .withImage("busybox"))))
+                                .withImage(DEFAULT_IMAGE))))
         .exec();
 
         List<Service> services = dockerRule.getClient().listServicesCmd()

@@ -9,6 +9,7 @@ import com.github.dockerjava.api.model.Network;
 import net.jcip.annotations.ThreadSafe;
 import org.junit.Test;
 
+import static com.github.dockerjava.cmd.CmdTest.FactoryType.JERSEY;
 import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
 import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
 import static org.hamcrest.Matchers.hasItem;
@@ -26,11 +27,12 @@ public class ConnectToNetworkCmdTest extends CmdTest {
     @Test
     public void connectToNetwork() throws InterruptedException {
         assumeNotSwarm("no network in swarm", dockerRule);
+        String networkName = "connectToNetwork" + dockerRule.getKind();
 
-        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999").exec();
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("sleep", "9999").exec();
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
-        CreateNetworkResponse network = dockerRule.getClient().createNetworkCmd().withName("testNetwork").exec();
+        CreateNetworkResponse network = dockerRule.getClient().createNetworkCmd().withName(networkName).exec();
 
         dockerRule.getClient().connectToNetworkCmd().withNetworkId(network.getId()).withContainerId(container.getId()).exec();
 
@@ -40,14 +42,14 @@ public class ConnectToNetworkCmdTest extends CmdTest {
 
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
 
-        assertNotNull(inspectContainerResponse.getNetworkSettings().getNetworks().get("testNetwork"));
+        assertNotNull(inspectContainerResponse.getNetworkSettings().getNetworks().get(networkName));
     }
 
     @Test
     public void connectToNetworkWithContainerNetwork() throws InterruptedException {
         assumeNotSwarm("no network in swarm", dockerRule);
 
-        final String subnetPrefix = getFactoryType() == FactoryType.JERSEY ?  "10.100.102" : "10.100.103";
+        final String subnetPrefix = getFactoryType() == JERSEY ?  "10.100.102" : "10.100.103";
         final String networkName = "ContainerWithNetwork" + dockerRule.getKind();
         final String containerIp = subnetPrefix + ".100";
 

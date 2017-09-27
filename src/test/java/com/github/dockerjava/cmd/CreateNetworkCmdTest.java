@@ -27,7 +27,7 @@ public class CreateNetworkCmdTest extends CmdTest {
     public void createNetwork() throws DockerException {
         assumeNotSwarm("no network in swarm", dockerRule);
 
-        String networkName = "testNetwork" + dockerRule.getKind();
+        String networkName = "createNetwork" + dockerRule.getKind();
 
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd().withName(networkName).exec();
 
@@ -42,7 +42,7 @@ public class CreateNetworkCmdTest extends CmdTest {
     public void createNetworkWithIpamConfig() throws DockerException {
         assumeNotSwarm("no network in swarm", dockerRule);
 
-        String networkName = "testNetworkIpam" + dockerRule.getKind();
+        String networkName = "networkIpam" + dockerRule.getKind();
         String subnet = getFactoryType() == FactoryType.JERSEY ? "10.67.79.0/24" : "10.67.90.0/24";
 
         Network.Ipam ipam = new Network.Ipam().withConfig(new Network.Ipam.Config().withSubnet(subnet));
