@@ -28,13 +28,13 @@ public class CopyFileFromContainerCmdTest extends CmdTest {
 
         assumeNotSwarm("", dockerRule);
 
-        String containerName = "docker-java-itest-copyFromContainer" + dockerRule.getKind();
+        String containerName = "copyFileFromContainer" + dockerRule.getKind();
         dockerRule.ensureContainerRemoved(containerName);
 
         // TODO extract this into a shared method
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
                 .withName(containerName)
-                .withCmd("touch", "/copyFromContainer")
+                .withCmd("touch", "/copyFileFromContainer")
                 .exec();
 
         LOG.info("Created container: {}", container);
@@ -42,7 +42,7 @@ public class CopyFileFromContainerCmdTest extends CmdTest {
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
-        InputStream response = dockerRule.getClient().copyFileFromContainerCmd(container.getId(), "/copyFromContainer").exec();
+        InputStream response = dockerRule.getClient().copyFileFromContainerCmd(container.getId(), "/copyFileFromContainer").exec();
         Boolean bytesAvailable = response.available() > 0;
         assertTrue("The file was not copied from the container.", bytesAvailable );
 
