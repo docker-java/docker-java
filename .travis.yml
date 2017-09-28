@@ -22,12 +22,13 @@ env:
     - COVERITY_SCAN_NOTIFICATION_EMAIL="kanstantsin.sha@gmail.com"
 
   matrix:
-    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="17.09.0~ce-0~ubuntu-trusty" DEPLOY=true COVERITY=true
-    - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="17.09.0~ce-0~ubuntu-trusty"
-    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="17.06.2~ce-0~ubuntu-trusty"
-    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2377" DOCKER_VERSION="17.06.2~ce-0~ubuntu-trusty" SWARM_VERSION="1.2.6"
-    - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="17.06.2~ce-0~ubuntu-trusty"
-    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2377" DOCKER_VERSION="1.13.1-0~ubuntu-trusty" # SWARM_VERSION="1.2.6"
+#    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="17.09.0~ce-0~ubuntu-trusty"
+#    - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="17.09.0~ce-0~ubuntu-trusty"
+#    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="17.06.2~ce-0~ubuntu-trusty" DEPLOY=true COVERITY=true
+    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="17.05.0~ce-0~ubuntu-trusty" DEPLOY=true COVERITY=true
+    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2377" DOCKER_VERSION="17.05.0~ce-0~ubuntu-trusty" SWARM_VERSION="1.2.6"
+    - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="17.05.0~ce-0~ubuntu-trusty"
+    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2377" DOCKER_VERSION="1.13.1-0~ubuntu-trusty" SWARM_VERSION="1.2.6"
     - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="1.13.1-0~ubuntu-trusty"
     - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="1.13.1-0~ubuntu-trusty"
     - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="1.12.6-0~ubuntu-trusty"
