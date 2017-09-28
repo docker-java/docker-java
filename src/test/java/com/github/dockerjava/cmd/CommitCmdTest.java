@@ -4,6 +4,7 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.core.RemoteApiVersion;
 import com.github.dockerjava.junit.DockerRule;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
@@ -14,6 +15,7 @@ import java.util.Map;
 
 import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
 import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
+import static com.github.dockerjava.utils.TestUtils.getVersion;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
@@ -73,10 +75,14 @@ public class CommitCmdTest extends CmdTest {
 
         InspectImageResponse inspectImageResponse = dockerRule.getClient().inspectImageCmd(imageId).exec();
         LOG.info("Image Inspect: {}", inspectImageResponse.toString());
-        Map<String, String> responseLabels = inspectImageResponse.getContainerConfig().getLabels();
-        assertThat(responseLabels.size(), is(2));
-        assertThat(responseLabels.get("label1"), equalTo("abc"));
-        assertThat(responseLabels.get("label2"), equalTo("123"));
+
+        // docker bug?
+        if (!getVersion(dockerRule.getClient()).isGreaterOrEqual(RemoteApiVersion.VERSION_1_24)) {
+            Map<String, String> responseLabels = inspectImageResponse.getContainerConfig().getLabels();
+            assertThat(responseLabels.size(), is(2));
+            assertThat(responseLabels.get("label1"), equalTo("abc"));
+            assertThat(responseLabels.get("label2"), equalTo("123"));
+        }
     }
 
     @Test(expected = NotFoundException.class)

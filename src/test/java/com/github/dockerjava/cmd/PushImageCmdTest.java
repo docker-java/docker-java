@@ -2,15 +2,23 @@ package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.DockerClientException;
+import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.core.RemoteApiVersion;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.core.command.PushImageResultCallback;
 import com.github.dockerjava.junit.category.AuthIntegration;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.rules.ExpectedException;
+import org.junit.rules.TemporaryFolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+
+import static com.github.dockerjava.utils.TestUtils.getVersion;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
@@ -20,6 +28,9 @@ public class PushImageCmdTest extends CmdTest {
     public static final Logger LOG = LoggerFactory.getLogger(PushImageCmdTest.class);
 
     String username;
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
 
     @Before
     public void beforeTest() throws Exception {
@@ -48,10 +59,18 @@ public class PushImageCmdTest extends CmdTest {
         dockerRule.getClient().pullImageCmd(username + "/busybox").exec(new PullImageResultCallback()).awaitSuccess();
     }
 
-    @Test(expected = DockerClientException.class)
+    @Test
     public void pushNonExistentImage() throws Exception {
+        if (getVersion(dockerRule.getClient())
+                .isGreaterOrEqual(RemoteApiVersion.VERSION_1_24)) {
+            exception.expect(NotFoundException.class);
+        } else {
+            exception.expect(DockerClientException.class);
+        }
 
-        dockerRule.getClient().pushImageCmd(username + "/xxx").exec(new PushImageResultCallback()).awaitSuccess();
+        dockerRule.getClient().pushImageCmd(username + "/xxx")
+                .exec(new PushImageResultCallback())
+                .awaitSuccess();
 
     }
 
