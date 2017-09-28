@@ -35,6 +35,8 @@ import static com.github.dockerjava.cmd.CmdTest.FactoryType.JERSEY;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_21;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_23;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_25;
+import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_26;
+import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_27;
 import static com.github.dockerjava.junit.DockerMatchers.isGreaterOrEqual;
 import static org.apache.commons.io.FileUtils.writeStringToFile;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -329,7 +331,7 @@ public class BuildImageCmdTest extends CmdTest {
 
     @Test
     public void cacheFrom() throws Exception {
-        assumeThat(dockerRule, isGreaterOrEqual(VERSION_1_25));
+        assumeThat(dockerRule, isGreaterOrEqual(VERSION_1_27));
 
         File baseDir1 = fileFromBuildTestResource("CacheFrom/test1");
         String imageId1 = dockerRule.getClient().buildImageCmd(baseDir1)
