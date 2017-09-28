@@ -62,8 +62,12 @@ public class PushImageCmdTest extends CmdTest {
 
     @Test
     public void pushNonExistentImage() throws Exception {
+
         if (getVersion(dockerRule.getClient())
                 .isGreaterOrEqual(RemoteApiVersion.VERSION_1_29)) {
+         // no errors??
+        } else if (getVersion(dockerRule.getClient())
+                .isGreaterOrEqual(RemoteApiVersion.VERSION_1_24)) {
             exception.expect(DockerClientException.class);
         } else {
             exception.expect(NotFoundException.class);
