@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 import static com.github.dockerjava.utils.TestUtils.getVersion;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -27,7 +28,7 @@ public class PushImageCmdTest extends CmdTest {
 
     public static final Logger LOG = LoggerFactory.getLogger(PushImageCmdTest.class);
 
-    String username;
+    private String username;
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
@@ -62,15 +63,15 @@ public class PushImageCmdTest extends CmdTest {
     @Test
     public void pushNonExistentImage() throws Exception {
         if (getVersion(dockerRule.getClient())
-                .isGreaterOrEqual(RemoteApiVersion.VERSION_1_24)) {
-            exception.expect(NotFoundException.class);
-        } else {
+                .isGreaterOrEqual(RemoteApiVersion.VERSION_1_29)) {
             exception.expect(DockerClientException.class);
+        } else {
+            exception.expect(NotFoundException.class);
         }
 
         dockerRule.getClient().pushImageCmd(username + "/xxx")
                 .exec(new PushImageResultCallback())
-                .awaitSuccess();
+                .awaitCompletion(20, TimeUnit.SECONDS); // exclude infinite await sleep
 
     }
 

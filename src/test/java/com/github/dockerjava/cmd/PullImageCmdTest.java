@@ -17,6 +17,8 @@ import org.junit.rules.ExpectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.TimeUnit;
+
 import static com.github.dockerjava.utils.TestUtils.getVersion;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
@@ -107,7 +109,7 @@ public class PullImageCmdTest extends CmdTest {
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pullImageCmd("xvxcv/foo")
                 .exec(new PullImageResultCallback())
-                .awaitSuccess();
+                .awaitCompletion(30, TimeUnit.SECONDS);
     }
 
 }
