@@ -1,9 +1,8 @@
 package com.github.dockerjava.junit;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.cmd.CmdTest;
+import com.github.dockerjava.cmd.CmdIT;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.command.BuildImageResultCallback;
@@ -19,10 +18,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-import static com.github.dockerjava.cmd.CmdTest.FactoryType.JERSEY;
-import static com.github.dockerjava.cmd.CmdTest.FactoryType.NETTY;
-import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
+import static com.github.dockerjava.cmd.CmdIT.FactoryType.JERSEY;
+import static com.github.dockerjava.cmd.CmdIT.FactoryType.NETTY;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
 
@@ -36,17 +33,17 @@ public class DockerRule extends ExternalResource {
     private DockerClient nettyClient;
     private DockerClient jerseyClient;
 
-    private CmdTest cmdTest;
+    private CmdIT cmdIT;
     private Object cmdExecFactory;
 
 
-    public DockerRule(CmdTest cmdTest) {
-        this.cmdTest = cmdTest;
+    public DockerRule(CmdIT cmdIT) {
+        this.cmdIT = cmdIT;
     }
 
 
     public DockerClient getClient() {
-        if (cmdTest.getFactoryType() == NETTY) {
+        if (cmdIT.getFactoryType() == NETTY) {
             if (nettyClient == null) {
                 nettyClient = DockerClientBuilder.getInstance(config())
                         .withDockerCmdExecFactory((new NettyDockerCmdExecFactory())
@@ -55,7 +52,7 @@ public class DockerRule extends ExternalResource {
             }
 
             return nettyClient;
-        } else if (cmdTest.getFactoryType() == JERSEY) {
+        } else if (cmdIT.getFactoryType() == JERSEY) {
             if (jerseyClient == null) {
                 jerseyClient = DockerClientBuilder.getInstance(config())
                         .withDockerCmdExecFactory((new JerseyDockerCmdExecFactory())
@@ -129,9 +126,9 @@ public class DockerRule extends ExternalResource {
     }
 
     public String getKind() {
-        if (cmdTest.getFactoryType() == NETTY) {
+        if (cmdIT.getFactoryType() == NETTY) {
             return "netty";
-        } else if (cmdTest.getFactoryType() == JERSEY) {
+        } else if (cmdIT.getFactoryType() == JERSEY) {
             return "jersey";
         }
 
