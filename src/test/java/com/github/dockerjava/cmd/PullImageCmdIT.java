@@ -98,8 +98,10 @@ public class PullImageCmdIT extends CmdIT {
     public void testPullNonExistingImage() throws Exception {
         // does not throw an exception
 
-        if (getVersion(dockerRule.getClient())
-                .isGreaterOrEqual(RemoteApiVersion.VERSION_1_24)) {
+        if (getVersion(dockerRule.getClient()).equals(RemoteApiVersion.VERSION_1_24)) {
+            // 1.24 - no exception
+        } else if (getVersion(dockerRule.getClient())
+                .isGreaterOrEqual(RemoteApiVersion.VERSION_1_26)) {
             exception.expect(NotFoundException.class);
         } else {
             exception.expect(DockerClientException.class);
