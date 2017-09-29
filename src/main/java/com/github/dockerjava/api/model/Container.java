@@ -51,6 +51,12 @@ public class Container implements Serializable {
     @JsonProperty("Labels")
     public Map<String, String> labels;
 
+    /**
+     * @since ~{@link RemoteApiVersion#VERSION_1_23}
+     */
+    @JsonProperty("State")
+    private String state;
+
     @JsonProperty("Status")
     private String status;
 
@@ -102,6 +108,10 @@ public class Container implements Serializable {
 
     public Long getCreated() {
         return created;
+    }
+
+    public String getState() {
+        return state;
     }
 
     public String getStatus() {
