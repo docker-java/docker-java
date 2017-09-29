@@ -50,11 +50,11 @@ public class TaskSpec implements Serializable {
 
     /**
      * @since 1.24
-     *  a counter that triggers an update even if no relevant parameters have been changed
-     *  a random value will work if it is incrementing.
+     * a counter that triggers an update even if no relevant parameters have been changed
+     * a random value will work if it is incrementing.
      */
     @JsonProperty("ForceUpdate")
-    private Integer forceUpdate;
+    private Integer forceUpdate = 0;
 
     /**
      * @see #containerSpec

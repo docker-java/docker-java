@@ -21,7 +21,7 @@ public class EndpointSpec implements Serializable {
      * @since 1.24
      */
     @JsonProperty("Mode")
-    EndpointResolutionMode mode;
+    EndpointResolutionMode mode = EndpointResolutionMode.VIP;
 
     /**
      * @since 1.24
