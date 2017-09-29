@@ -1,14 +1,19 @@
 package com.github.dockerjava.api.model;
 
-import static org.testng.Assert.assertEquals;
-
-import org.testng.annotations.Test;
-
 import com.github.dockerjava.api.model.Ports.Binding;
+import org.junit.Ignore;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
+import static org.junit.Assert.assertEquals;
 
 public class PortBindingTest {
 
     private static final ExposedPort TCP_8080 = ExposedPort.tcp(8080);
+
+    @Rule
+    public ExpectedException expectedEx = ExpectedException.none();
 
     @Test
     public void fullDefinition() {
@@ -41,13 +46,20 @@ public class PortBindingTest {
         assertEquals(PortBinding.parse("127.0.0.1::8080"), new PortBinding(Binding.bindIp("127.0.0.1"), TCP_8080));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing PortBinding 'nonsense'", enabled = false)
+    @Test
+    @Ignore
     public void parseInvalidInput() {
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("Error parsing PortBinding 'nonsense'");
+
         PortBinding.parse("nonsense");
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing PortBinding 'null'")
+    @Test
     public void parseNull() {
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("Error parsing PortBinding 'null'");
+
         PortBinding.parse(null);
     }
 

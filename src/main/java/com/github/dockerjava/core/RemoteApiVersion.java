@@ -77,6 +77,10 @@ public class RemoteApiVersion implements Serializable {
      */
     public static final RemoteApiVersion VERSION_1_25 = RemoteApiVersion.create(1, 25);
 
+    public static final RemoteApiVersion VERSION_1_26 = RemoteApiVersion.create(1, 26);
+    public static final RemoteApiVersion VERSION_1_27 = RemoteApiVersion.create(1, 27);
+    public static final RemoteApiVersion VERSION_1_29 = RemoteApiVersion.create(1, 29);
+
 
     /**
      * Unknown, docker doesn't reflect reality. I.e. we implemented method, but for javadoc it not clear when it was added.
@@ -85,6 +89,11 @@ public class RemoteApiVersion implements Serializable {
 
         @Override
         public boolean isGreaterOrEqual(final RemoteApiVersion other) {
+            return false;
+        }
+
+        @Override
+        public boolean isGreater(RemoteApiVersion other) {
             return false;
         }
 
@@ -146,6 +155,11 @@ public class RemoteApiVersion implements Serializable {
         return false;
     }
 
+    public boolean isGreater(final RemoteApiVersion other) {
+        return major > other.major || (major == other.major && minor > other.minor);
+
+    }
+
     /**
      * @return String representation of version. i.e. "1.22"
      */
@@ -179,4 +193,5 @@ public class RemoteApiVersion implements Serializable {
     public String asWebPathPart() {
         return "v" + major + "." + minor;
     }
+
 }

@@ -1,11 +1,12 @@
-FROM      ubuntu:latest
+FROM      busybox:latest
 
 # Copy testrun.sh files into the container
 
 ADD .   /src/
 
-run ls -la /src
+RUN ls -la /src
 
-run cp /src/folderA/testAddFolder.sh /usr/local/bin/ && chmod +x /usr/local/bin/testAddFolder.sh
+RUN mkdir -p /usr/local/bin
+RUN cp /src/folderA/testAddFolder.sh /usr/local/bin/ && chmod +x /usr/local/bin/testAddFolder.sh
 
 CMD ["testAddFolder.sh"]

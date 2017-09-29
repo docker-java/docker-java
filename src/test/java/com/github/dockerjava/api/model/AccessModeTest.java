@@ -1,11 +1,17 @@
 package com.github.dockerjava.api.model;
 
-import static com.github.dockerjava.api.model.AccessMode.rw;
-import static org.testng.Assert.assertEquals;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
-import org.testng.annotations.Test;
+import static com.github.dockerjava.api.model.AccessMode.rw;
+import static org.junit.Assert.assertEquals;
+
 
 public class AccessModeTest {
+
+    @Rule
+    public ExpectedException expectedEx = ExpectedException.none();
 
     @Test
     public void defaultAccessMode() {
@@ -22,8 +28,11 @@ public class AccessModeTest {
         assertEquals(AccessMode.valueOf("rw"), rw);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "No enum const.*")
+    @Test
     public void fromIllegalString() {
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("No enum const");
+
         AccessMode.valueOf("xx");
     }
 

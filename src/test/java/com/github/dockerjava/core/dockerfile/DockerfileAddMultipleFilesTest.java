@@ -1,22 +1,21 @@
 package com.github.dockerjava.core.dockerfile;
 
-import static com.google.common.collect.Collections2.transform;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
+import com.google.common.base.Function;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.testng.annotations.Test;
-
-import com.google.common.base.Function;
+import static com.google.common.collect.Collections2.transform;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 
 public class DockerfileAddMultipleFilesTest {
 
-    private static final Logger log = LoggerFactory.getLogger(DockerfileAddMultipleFilesTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DockerfileAddMultipleFilesTest.class);
 
     private static final Function<File, String> TO_FILE_NAMES = new Function<File, String>() {
         @Override

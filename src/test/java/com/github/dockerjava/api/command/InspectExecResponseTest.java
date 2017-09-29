@@ -3,7 +3,7 @@ package com.github.dockerjava.api.command;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.core.RemoteApiVersion;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import static com.github.dockerjava.test.serdes.JSONSamples.testRoundTrip;
 import static org.hamcrest.MatcherAssert.assertThat;

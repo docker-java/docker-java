@@ -1,12 +1,13 @@
 package com.github.dockerjava.core.util;
 
 import com.google.common.collect.Maps;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import java.util.Map;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+
 
 /**
  * @author Vincent Latombe <vincent@latombe.net>

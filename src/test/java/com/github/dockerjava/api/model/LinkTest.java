@@ -1,10 +1,15 @@
 package com.github.dockerjava.api.model;
 
-import static org.testng.Assert.assertEquals;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
-import org.testng.annotations.Test;
+import static org.junit.Assert.assertEquals;
 
 public class LinkTest {
+
+    @Rule
+    public ExpectedException expectedEx = ExpectedException.none();
 
     @Test
     public void parse() {
@@ -20,13 +25,19 @@ public class LinkTest {
         assertEquals(link.getAlias(), "alias");
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing Link 'nonsense'")
+    @Test
     public void parseInvalidInput() {
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("Error parsing Link 'nonsense'");
+
         Link.parse("nonsense");
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing Link 'null'")
+    @Test
     public void parseNull() {
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("Error parsing Link 'null'");
+
         Link.parse(null);
     }
 

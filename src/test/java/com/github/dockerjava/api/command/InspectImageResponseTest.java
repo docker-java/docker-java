@@ -3,7 +3,7 @@ package com.github.dockerjava.api.command;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.model.ContainerConfig;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -191,7 +191,7 @@ public class InspectImageResponseTest {
     }
 
     @Test
-    private void testOverlayNetworkRootDir() throws IOException {
+    public void testOverlayNetworkRootDir() throws IOException {
         final ObjectMapper mapper = new ObjectMapper();
         final JavaType type = mapper.getTypeFactory().constructType(InspectImageResponse.class);
 

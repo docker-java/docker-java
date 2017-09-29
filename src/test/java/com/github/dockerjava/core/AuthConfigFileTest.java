@@ -3,46 +3,68 @@
  */
 package com.github.dockerjava.core;
 
+import com.github.dockerjava.api.model.AuthConfig;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
 import java.io.File;
 import java.io.IOException;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-import com.github.dockerjava.api.model.AuthConfig;
+import static org.junit.Assert.assertEquals;
 
 public class AuthConfigFileTest {
+    @Rule
+    public ExpectedException expectedEx = ExpectedException.none();
 
     private final File FILESROOT = new File(Thread.currentThread().getContextClassLoader()
             .getResource("testAuthConfigFile").getFile());
 
-    @Test(expectedExceptions = IOException.class, expectedExceptionsMessageRegExp = "The Auth Config file is empty")
+    @Test
     public void emptyFile() throws IOException {
+        expectedEx.expect(IOException.class);
+        expectedEx.expectMessage("The Auth Config file is empty");
+
         runTest("emptyFile");
     }
 
-    @Test(expectedExceptions = IOException.class, expectedExceptionsMessageRegExp = "The Auth Config file is empty")
+    @Test
     public void tooSmallFile() throws IOException {
+        expectedEx.expect(IOException.class);
+        expectedEx.expectMessage("The Auth Config file is empty");
+
         runTest("tooSmallFile");
     }
 
-    @Test(expectedExceptions = IOException.class, expectedExceptionsMessageRegExp = "Invalid auth configuration file")
+    @Test
     public void invalidJsonInvalidAuth() throws IOException {
+        expectedEx.expect(IOException.class);
+        expectedEx.expectMessage("Invalid auth configuration file");
+
         runTest("invalidJsonInvalidAuth");
     }
 
-    @Test(expectedExceptions = IOException.class, expectedExceptionsMessageRegExp = "Invalid Auth config file")
+    @Test
     public void invalidLegacyAuthLine() throws IOException {
+        expectedEx.expect(IOException.class);
+        expectedEx.expectMessage("Invalid Auth config file");
+
         runTest("invalidLegacyAuthLine");
     }
 
-    @Test(expectedExceptions = IOException.class, expectedExceptionsMessageRegExp = "Invalid auth configuration file")
+    @Test
     public void invalidLegacyInvalidAuth() throws IOException {
+        expectedEx.expect(IOException.class);
+        expectedEx.expectMessage("Invalid auth configuration file");
+
         runTest("invalidLegacyInvalidAuth");
     }
 
-    @Test(expectedExceptions = IOException.class, expectedExceptionsMessageRegExp = "Invalid Auth config file")
+    @Test
     public void invalidLegacyEmailLine() throws IOException {
+        expectedEx.expect(IOException.class);
+        expectedEx.expectMessage("Invalid Auth config file");
+
         runTest("invalidLegacyEmailLine");
     }
 
@@ -64,7 +86,7 @@ public class AuthConfigFileTest {
         expected.addConfig(authConfig1);
         expected.addConfig(authConfig2);
 
-        Assert.assertEquals(runTest("validJson.json"), expected);
+        assertEquals(runTest("validJson.json"), expected);
 
     }
 
@@ -85,7 +107,7 @@ public class AuthConfigFileTest {
     public void validJsonWithOnlyUnknown() throws IOException {
         AuthConfigFile expected = new AuthConfigFile();
         AuthConfigFile actual = runTest("validJsonWithOnlyUnknown.json");
-        Assert.assertEquals(actual, expected);
+        assertEquals(actual, expected);
     }
 
     @Test
@@ -99,13 +121,13 @@ public class AuthConfigFileTest {
         AuthConfigFile expected = new AuthConfigFile();
         expected.addConfig(authConfig);
 
-        Assert.assertEquals(runTest("validLegacy"), expected);
+        assertEquals(runTest("validLegacy"), expected);
     }
 
     @Test
     public void nonExistent() throws IOException {
         AuthConfigFile expected = new AuthConfigFile();
-        Assert.assertEquals(runTest("idontexist"), expected);
+        assertEquals(runTest("idontexist"), expected);
     }
 
     private AuthConfigFile runTest(String testFileName) throws IOException {
