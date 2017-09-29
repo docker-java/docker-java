@@ -11,9 +11,11 @@ import java.util.Map;
 
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_21;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_24;
+import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_25;
 import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
 import static com.github.dockerjava.junit.DockerMatchers.isGreaterOrEqual;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
@@ -58,7 +60,7 @@ public class CreateNetworkCmdIT extends CmdIT {
 
     @Test
     public void createAttachableNetwork() throws DockerException {
-        assumeThat("API version should be >= 1.24", dockerRule, isGreaterOrEqual(VERSION_1_24));
+        assumeThat("API version should be > 1.24", dockerRule, isGreaterOrEqual(VERSION_1_25));
 
         String networkName = "createAttachableNetwork" + dockerRule.getKind();
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd()
@@ -67,6 +69,7 @@ public class CreateNetworkCmdIT extends CmdIT {
                 .exec();
         assertNotNull(createNetworkResponse.getId());
         Network network = dockerRule.getClient().inspectNetworkCmd().withNetworkId(createNetworkResponse.getId()).exec();
+        assertThat(network, notNullValue());
         assertTrue(network.isAttachable());
     }
 
