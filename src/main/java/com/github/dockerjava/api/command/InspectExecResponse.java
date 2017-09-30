@@ -37,6 +37,9 @@ public class InspectExecResponse {
     @JsonProperty("ExitCode")
     private Integer exitCode;
 
+    @JsonProperty("Pid")
+    private Integer pid;
+
     @JsonProperty("ProcessConfig")
     private ProcessConfig processConfig;
 
@@ -67,6 +70,10 @@ public class InspectExecResponse {
 
     public String getId() {
         return id;
+    }
+
+    public Integer getPid() {
+        return pid;
     }
 
     public Boolean isOpenStdin() {
