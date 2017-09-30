@@ -11,6 +11,8 @@ import java.security.Security;
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLParameters;
 
+import com.github.dockerjava.api.command.ListTasksCmd;
+import com.github.dockerjava.netty.exec.ListTasksCmdExec;
 import org.apache.commons.lang.SystemUtils;
 
 import com.github.dockerjava.api.command.AttachContainerCmd;
@@ -720,6 +722,11 @@ public class NettyDockerCmdExecFactory implements DockerCmdExecFactory {
     @Override
     public UpdateSwarmNodeCmd.Exec updateSwarmNodeCmdExec() {
         return new UpdateSwarmNodeCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public ListTasksCmd.Exec listTasksCmdExec() {
+        return new ListTasksCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override

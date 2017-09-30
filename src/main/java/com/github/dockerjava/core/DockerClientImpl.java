@@ -36,6 +36,7 @@ import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.ListNetworksCmd;
 import com.github.dockerjava.api.command.ListServicesCmd;
+import com.github.dockerjava.api.command.ListTasksCmd;
 import com.github.dockerjava.api.command.ListVolumesCmd;
 import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.api.command.LogContainerCmd;
@@ -101,6 +102,7 @@ import com.github.dockerjava.core.command.ListContainersCmdImpl;
 import com.github.dockerjava.core.command.ListImagesCmdImpl;
 import com.github.dockerjava.core.command.ListNetworksCmdImpl;
 import com.github.dockerjava.core.command.ListServicesCmdImpl;
+import com.github.dockerjava.core.command.ListTasksCmdImpl;
 import com.github.dockerjava.core.command.ListVolumesCmdImpl;
 import com.github.dockerjava.core.command.LoadImageCmdImpl;
 import com.github.dockerjava.core.command.LogContainerCmdImpl;
@@ -548,6 +550,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public RemoveServiceCmd removeServiceCmd(String serviceId) {
         return new RemoveServiceCmdImpl(getDockerCmdExecFactory().createRemoveServiceCmdExec(), serviceId);
+    }
+
+    @Override
+    public ListTasksCmd listTasksCmd() {
+        return new ListTasksCmdImpl(getDockerCmdExecFactory().listTasksCmdExec());
     }
 
     @Override
