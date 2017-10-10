@@ -1,1 +1,1 @@
-FROM      localhost:5000/testuser/busybox:latest
+FROM      localhost:5050/testuser/busybox:latest

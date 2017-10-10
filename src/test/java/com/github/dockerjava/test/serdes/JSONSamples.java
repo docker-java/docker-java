@@ -10,8 +10,8 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotSame;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 
 /**
  * Samples helper
@@ -57,9 +57,9 @@ public class JSONSamples {
         JsonNode json2 = mapper.readTree(serialized2);
         TClass deserialized2 = mapper.readValue(serialized2, type);
 
-        assertEquals(json2, json1, "JSONs must be equal after the second roundtrip");
-        assertEquals(deserialized2, deserialized2, "Objects must be equal after the second roundtrip");
-        assertNotSame(deserialized2, deserialized1, "Objects must be not the same");
+        assertEquals("JSONs must be equal after the second roundtrip", json2, json1);
+        assertEquals("Objects must be equal after the second roundtrip", deserialized2, deserialized2);
+        assertNotSame("Objects must be not the same", deserialized2, deserialized1);
 
         return deserialized2;
     }

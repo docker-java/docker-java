@@ -1,19 +1,21 @@
 package com.github.dockerjava.netty;
 
-import static org.testng.Assert.assertEquals;
 
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Alexander Koshevoy
  */
 public class WebTargetTest {
-    @Mock private ChannelProvider channelProvider;
+    @Mock
+    private ChannelProvider channelProvider;
 
-    @BeforeMethod
+    @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
     }

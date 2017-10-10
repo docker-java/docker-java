@@ -1,3 +1,3 @@
-FROM      ubuntu:latest
+FROM      busybox:latest
 
 CMD ["echo", "Success"]

@@ -3,15 +3,14 @@
  */
 package com.github.dockerjava.core;
 
-import com.github.dockerjava.core.exception.InvalidRepositoryNameException;
-import org.apache.commons.lang.StringUtils;
-import org.testng.annotations.Test;
-
-import static org.testng.Assert.assertEquals;
-
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.core.NameParser.HostnameReposName;
 import com.github.dockerjava.core.NameParser.ReposTag;
+import com.github.dockerjava.core.exception.InvalidRepositoryNameException;
+import org.apache.commons.lang.StringUtils;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -33,47 +32,47 @@ public class NameParserTest {
         NameParser.validateRepoName("namespace/repository_with_underscores");
     }
 
-    @Test(expectedExceptions = InvalidRepositoryNameException.class)
+    @Test(expected = InvalidRepositoryNameException.class)
     public void testValidateRepoNameEmpty() throws Exception {
         NameParser.validateRepoName("");
     }
 
-    @Test(expectedExceptions = InvalidRepositoryNameException.class)
+    @Test(expected = InvalidRepositoryNameException.class)
     public void testValidateRepoNameExceedsMaxLength() throws Exception {
         NameParser.validateRepoName(StringUtils.repeat("repository", 255));
     }
 
-    @Test(expectedExceptions = InvalidRepositoryNameException.class)
+    @Test(expected = InvalidRepositoryNameException.class)
     public void testValidateRepoNameEndWithDash() throws Exception {
         NameParser.validateRepoName("repository-");
     }
 
-    @Test(expectedExceptions = InvalidRepositoryNameException.class)
+    @Test(expected = InvalidRepositoryNameException.class)
     public void testValidateRepoNameStartWithDash() throws Exception {
         NameParser.validateRepoName("-repository");
     }
 
-    @Test(expectedExceptions = InvalidRepositoryNameException.class)
+    @Test(expected = InvalidRepositoryNameException.class)
     public void testValidateRepoNameEndWithDot() throws Exception {
         NameParser.validateRepoName("repository.");
     }
 
-    @Test(expectedExceptions = InvalidRepositoryNameException.class)
+    @Test(expected = InvalidRepositoryNameException.class)
     public void testValidateRepoNameStartWithDot() throws Exception {
         NameParser.validateRepoName(".repository");
     }
 
-    @Test(expectedExceptions = InvalidRepositoryNameException.class)
+    @Test(expected = InvalidRepositoryNameException.class)
     public void testValidateRepoNameEndWithUnderscore() throws Exception {
         NameParser.validateRepoName("repository_");
     }
 
-    @Test(expectedExceptions = InvalidRepositoryNameException.class)
+    @Test(expected = InvalidRepositoryNameException.class)
     public void testValidateRepoNameStartWithUnderscore() throws Exception {
         NameParser.validateRepoName("_repository");
     }
 
-    @Test(expectedExceptions = InvalidRepositoryNameException.class)
+    @Test(expected = InvalidRepositoryNameException.class)
     public void testValidateRepoNameWithColon() throws Exception {
         NameParser.validateRepoName("repository:with:colon");
     }
@@ -96,7 +95,7 @@ public class NameParserTest {
         assertEquals(resolved, new HostnameReposName("localhost:5000", "namespace/repository"));
     }
 
-    @Test(expectedExceptions = InvalidRepositoryNameException.class)
+    @Test(expected = InvalidRepositoryNameException.class)
     public void testResolveRepositoryNameWithIndex() throws Exception {
         NameParser.resolveRepositoryName("index.docker.io/repository");
     }

@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.security.KeyFactory;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -13,7 +12,6 @@ import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +23,7 @@ import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
+import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,26 +110,10 @@ public class CertificateUtils {
         try (PEMParser pemParser = new PEMParser(reader)) {
             Object readObject = pemParser.readObject();
             while (readObject != null) {
-                if (readObject instanceof PEMKeyPair) {
-                    PEMKeyPair pemKeyPair = (PEMKeyPair) readObject;
-                    PrivateKey privateKey = guessKey(pemKeyPair.getPrivateKeyInfo().getEncoded());
-                    if (privateKey != null) {
-                        return privateKey;
-                    }
-                } else if (readObject instanceof PrivateKeyInfo) {
-                    PrivateKeyInfo privateKeyInfo = (PrivateKeyInfo) readObject;
-                    PrivateKey privateKey = guessKey(privateKeyInfo.getEncoded());
-                    if (privateKey != null) {
-                        return privateKey;
-                    }
-                } else if (readObject instanceof ASN1ObjectIdentifier) {
-                    // no idea how it can be used
-                    final ASN1ObjectIdentifier asn1ObjectIdentifier = (ASN1ObjectIdentifier) readObject;
-                    LOG.trace("Ignoring asn1ObjectIdentifier {}", asn1ObjectIdentifier);
-                } else {
-                    LOG.warn("Unknown object '{}' from PEMParser", readObject);
+                PrivateKeyInfo privateKeyInfo = getPrivateKeyInfoOrNull(readObject);
+                if (privateKeyInfo != null) {
+                    return new JcaPEMKeyConverter().getPrivateKey(privateKeyInfo);
                 }
-
                 readObject = pemParser.readObject();
             }
         }
@@ -138,20 +121,25 @@ public class CertificateUtils {
         return null;
     }
 
+    /**
+     * Find a PrivateKeyInfo in the PEM object details. Returns null if the PEM object type is unknown.
+     */
     @CheckForNull
-    public static PrivateKey guessKey(byte[] encodedKey) throws NoSuchAlgorithmException {
-        //no way to know, so iterate
-        for (String guessFactory : new String[]{"RSA", "ECDSA"}) {
-            try {
-                KeyFactory factory = KeyFactory.getInstance(guessFactory);
-
-                PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(encodedKey);
-                return factory.generatePrivate(privateKeySpec);
-            } catch (InvalidKeySpecException ignore) {
-            }
+    private static PrivateKeyInfo getPrivateKeyInfoOrNull(Object pemObject) throws NoSuchAlgorithmException {
+        PrivateKeyInfo privateKeyInfo = null;
+        if (pemObject instanceof PEMKeyPair) {
+            PEMKeyPair pemKeyPair = (PEMKeyPair) pemObject;
+            privateKeyInfo = pemKeyPair.getPrivateKeyInfo();
+        } else if (pemObject instanceof PrivateKeyInfo) {
+            privateKeyInfo = (PrivateKeyInfo) pemObject;
+        } else if (pemObject instanceof ASN1ObjectIdentifier) {
+            // no idea how it can be used
+            final ASN1ObjectIdentifier asn1ObjectIdentifier = (ASN1ObjectIdentifier) pemObject;
+            LOG.trace("Ignoring asn1ObjectIdentifier {}", asn1ObjectIdentifier);
+        } else {
+            LOG.warn("Unknown object '{}' from PEMParser", pemObject);
         }
-
-        return null;
+        return privateKeyInfo;
     }
 
     /**

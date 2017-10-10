@@ -17,13 +17,12 @@ package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.api.model.Event;
 import com.github.dockerjava.core.RemoteApiVersion;
-import static com.github.dockerjava.test.serdes.JSONSamples.testRoundTrip;
+import org.junit.Test;
+
 import java.io.IOException;
 
-import org.testng.annotations.Test;
-
+import static com.github.dockerjava.test.serdes.JSONSamples.testRoundTrip;
 import static com.github.dockerjava.test.serdes.JSONTestHelper.testRoundTrip;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -31,9 +30,9 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsNot.not;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for {@link InspectContainerResponse}.

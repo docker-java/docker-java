@@ -1,7 +1,7 @@
 package com.github.dockerjava.core;
 
 import org.apache.commons.lang.SerializationUtils;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;

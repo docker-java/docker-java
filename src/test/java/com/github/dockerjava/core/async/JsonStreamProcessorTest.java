@@ -3,7 +3,9 @@
  */
 package com.github.dockerjava.core.async;
 
-import static org.testng.Assert.assertFalse;
+import com.github.dockerjava.api.async.ResultCallback;
+import com.github.dockerjava.api.model.PullResponseItem;
+import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.Closeable;
@@ -12,10 +14,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.testng.annotations.Test;
-
-import com.github.dockerjava.api.async.ResultCallback;
-import com.github.dockerjava.api.model.PullResponseItem;
+import static org.junit.Assert.assertFalse;
 
 
 /**
@@ -46,7 +45,7 @@ public class JsonStreamProcessorTest {
 
             @Override
             public void onNext(PullResponseItem object) {
-                assertFalse(true, "onNext called for empty json");
+                assertFalse("onNext called for empty json", true);
             }
 
             @Override
@@ -59,7 +58,7 @@ public class JsonStreamProcessorTest {
             }
         });
 
-        assertFalse(completed.isEmpty(), "Stream processing not completed");
+        assertFalse("Stream processing not completed", completed.isEmpty());
     }
 
 }

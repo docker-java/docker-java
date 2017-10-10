@@ -1,4 +1,4 @@
-FROM      ubuntu:latest
+FROM      busybox:latest
 
 # Copy multiple source files into the container
 

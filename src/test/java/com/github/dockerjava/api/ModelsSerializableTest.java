@@ -7,9 +7,9 @@ import com.github.dockerjava.api.model.PushResponseItem;
 import com.github.dockerjava.api.model.ResponseItem;
 import com.google.common.reflect.ClassPath.ClassInfo;
 import org.apache.commons.lang.reflect.FieldUtils;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.io.Serializable;

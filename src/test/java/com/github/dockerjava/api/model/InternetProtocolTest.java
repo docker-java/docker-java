@@ -1,11 +1,15 @@
 package com.github.dockerjava.api.model;
 
-import static com.github.dockerjava.api.model.InternetProtocol.TCP;
-import static org.testng.Assert.assertEquals;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
-import org.testng.annotations.Test;
+import static com.github.dockerjava.api.model.InternetProtocol.TCP;
+import static org.junit.Assert.assertEquals;
 
 public class InternetProtocolTest {
+    @Rule
+    public ExpectedException expectedEx = ExpectedException.none();
 
     @Test
     public void defaultProtocol() {
@@ -27,13 +31,19 @@ public class InternetProtocolTest {
         assertEquals(InternetProtocol.parse("tcp"), TCP);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing Protocol.*")
+    @Test
     public void parseInvalidInput() {
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("Error parsing Protocol 'xx'");
+
         InternetProtocol.parse("xx");
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error parsing Protocol 'null'")
+    @Test
     public void parseNull() {
+        expectedEx.expect(IllegalArgumentException.class);
+        expectedEx.expectMessage("Error parsing Protocol 'null'");
+
         InternetProtocol.parse(null);
     }
 

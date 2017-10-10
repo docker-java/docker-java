@@ -8,24 +8,10 @@ import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.model.Frame;
 
 /**
- * Attach to container
- *
- * @param logs
- *            - true or false, includes logs. Defaults to false.
- *
- * @param followStream
- *            - true or false, return stream. Defaults to false.
- * @param stdout
- *            - true or false, includes stdout log. Defaults to false.
- * @param stderr
- *            - true or false, includes stderr log. Defaults to false.
- * @param stdin
- *            - null or {@link InputStream}, pass stream to stdin of the container.
- * @param timestamps
- *            - true or false, if true, print timestamps for every log line. Defaults to false.
+ * Attach to container.
  */
-public class AttachContainerCmdImpl extends AbstrAsyncDockerCmd<AttachContainerCmd, Frame> implements
-        AttachContainerCmd {
+public class AttachContainerCmdImpl extends AbstrAsyncDockerCmd<AttachContainerCmd, Frame>
+        implements AttachContainerCmd {
 
     private String containerId;
 

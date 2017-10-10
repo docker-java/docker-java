@@ -110,24 +110,29 @@ public class AuthConfigFile {
         }
 
         Map<String, AuthConfig> configMap = null;
-        /*
-        Registry v2 expects config expects config.json while v2 expects .dockercfg
-        The only difference between them is that config.json wraps "auths" around the AuthConfig
-         */
-        try {
-            // try registry version 2
-            final ObjectNode node = filterNonAuthsFromJSON(confFile);
-            Map<String, Map<String, AuthConfig>>  configJson = MAPPER.convertValue(node, CONFIG_JSON_MAP_TYPE);
-            if (configJson != null && !configJson.isEmpty()) {
-                configMap = configJson.get(AUTHS_PROPERTY);
-            }
-
-        } catch (IOException e1) {
+        if (isJSONFile(confFile)) {
+            /*
+            Registry v2 expects config expects config.json while v2 expects .dockercfg
+            The only difference between them is that config.json wraps "auths" around the AuthConfig
+             */
             try {
-                // try registry version 1
-                configMap = MAPPER.readValue(confFile, CONFIG_CFG_MAP_TYPE);
-            } catch (IOException e2) {
-                // pass
+                // try registry version 2
+                final ObjectNode node = filterNonAuthsFromJSON(confFile);
+                Map<String, Map<String, AuthConfig>> configJson = MAPPER.convertValue(node, CONFIG_JSON_MAP_TYPE);
+                if (configJson != null && !configJson.isEmpty()) {
+                    configMap = configJson.get(AUTHS_PROPERTY);
+                }
+
+            } catch (IOException e1) {
+                try {
+                    // try registry version 1
+                    configMap = MAPPER.readValue(confFile, CONFIG_CFG_MAP_TYPE);
+                } catch (IOException e2) {
+                    // we know it is JSON so it does not make sense to check for the old format
+                    // probably Docker writes some unstructured contents here, see #806
+                    // at least it is not worse than the totally absent file
+                    return new AuthConfigFile();
+                }
             }
         }
 
@@ -163,6 +168,14 @@ public class AuthConfigFile {
         }
         return configFile;
 
+    }
+
+    private static boolean isJSONFile(final File confFile) {
+        try {
+            return MAPPER.readValue(confFile, ObjectNode.class) != null;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     private static ObjectNode filterNonAuthsFromJSON(final File confFile) throws IOException {

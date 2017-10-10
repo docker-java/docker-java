@@ -1,13 +1,14 @@
 package com.github.dockerjava.netty.handler;
 
-import static com.github.dockerjava.netty.handler.HttpResponseStreamHandler.HttpResponseInputStream;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
-
+import com.github.dockerjava.core.async.ResultCallbackTemplate;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.ReferenceCountUtil;
+import org.apache.commons.io.IOUtils;
+import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,11 +17,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.apache.commons.io.IOUtils;
-import org.mockito.Mockito;
-import org.testng.annotations.Test;
-
-import com.github.dockerjava.core.async.ResultCallbackTemplate;
+import static com.github.dockerjava.netty.handler.HttpResponseStreamHandler.HttpResponseInputStream;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Alexander Koshevoy
@@ -32,12 +31,15 @@ public class HttpResponseStreamHandlerTest {
         HttpResponseStreamHandler streamHandler = new HttpResponseStreamHandler(callback);
         ChannelHandlerContext ctx = Mockito.mock(ChannelHandlerContext.class);
         ByteBuf buffer = generateByteBuf();
-        streamHandler.channelRead0(ctx, buffer);
+        ByteBuf readBuffer = buffer.copy();
+        assertEquals(buffer.refCnt(), 1);
+        streamHandler.channelRead(ctx, buffer);
         streamHandler.channelInactive(ctx);
-
+        assertEquals(buffer.refCnt(), 0);
         try (InputStream inputStream = callback.getInputStream()) {
-            assertTrue(IOUtils.contentEquals(inputStream, new ByteBufInputStream(buffer)));
+            assertTrue(IOUtils.contentEquals(inputStream, new ByteBufInputStream(readBuffer)));
         }
+        ReferenceCountUtil.release(readBuffer);
     }
 
     @Test
@@ -46,16 +48,19 @@ public class HttpResponseStreamHandlerTest {
         HttpResponseStreamHandler streamHandler = new HttpResponseStreamHandler(callback);
         ChannelHandlerContext ctx = Mockito.mock(ChannelHandlerContext.class);
         ByteBuf buffer = generateByteBuf();
-        streamHandler.channelRead0(ctx, buffer);
+        ByteBuf readBuffer = buffer.copy();
+        assertEquals(buffer.refCnt(), 1);
+        streamHandler.channelRead(ctx, buffer);
         streamHandler.channelInactive(ctx);
-
+        assertEquals(buffer.refCnt(), 0);
         try (InputStream inputStream = callback.getInputStream()) {
-            for (int i = 0; i < buffer.readableBytes(); i++) {
+            for (int i = 0; i < readBuffer.readableBytes(); i++) {
                 int b = inputStream.read();
-                assertEquals(b, buffer.getByte(i));
+                assertEquals(b, readBuffer.getByte(i));
             }
             assertTrue(inputStream.read() == -1);
         }
+        ReferenceCountUtil.release(readBuffer);
     }
 
     @Test
@@ -100,7 +105,7 @@ public class HttpResponseStreamHandlerTest {
         submit.get();
     }
 
-    @Test(expectedExceptions = IOException.class)
+    @Test(expected = IOException.class)
     public void testReadClosedResponseStream() throws Exception {
         HttpResponseInputStream inputStream = new HttpResponseInputStream();
         ByteBuf buffer = generateByteBuf();
