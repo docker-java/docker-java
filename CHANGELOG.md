@@ -4,6 +4,14 @@ Change Log
 - Swarm Mode support.
 - Classic swarm support.
  
+ 
+## 3.0.14
+- Encode spaces as %20 rather than + in URL params
+
+## 3.0.13
+- Fix .dockerignore handling on Windows
+- Include empty directories in build context
+ 
 ## 3.0.12
 - Make NettyDockerCmdExecFactory has compatibility both Linux and OSX automatically
 - Fix double encoding for netty.
