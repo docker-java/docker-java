@@ -1,3 +1,4 @@
+[![Join the chat at https://gitter.im/docker-java/docker-java](https://badges.gitter.im/docker-java/docker-java.svg)](https://gitter.im/docker-java/docker-java?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.docker-java/docker-java.svg)](https://mvnrepository.com/artifact/com.github.docker-java/docker-java)
 [![Bintray](https://api.bintray.com/packages/kostyasha/maven/com.github.docker-java%3Adocker-java/images/download.svg)](https://bintray.com/kostyasha/maven/com.github.docker-java%3Adocker-java/_latestVersion) 
 [![Reference Status](https://www.versioneye.com/java/com.github.docker-java:docker-java/reference_badge.svg?style=flat)](https://www.versioneye.com/java/com.github.docker-java:docker-java/references)
