@@ -58,6 +58,6 @@ public abstract class AbstrAsyncDockerCmdExec<CMD_T extends AsyncDockerCmd<CMD_T
         return null;
     }
 
-    protected abstract Void execute0(final CMD_T command, final ResultCallback<A_RES_T> resultCallback);
+    protected abstract Void execute0(CMD_T command, ResultCallback<A_RES_T> resultCallback);
 
 }
