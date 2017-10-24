@@ -2,8 +2,6 @@ package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.DockerClientException;
-import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.core.RemoteApiVersion;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.core.command.PushImageResultCallback;
 import com.github.dockerjava.junit.category.AuthIntegration;
@@ -15,9 +13,6 @@ import org.junit.rules.ExpectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.TimeUnit;
-
-import static com.github.dockerjava.utils.TestUtils.getVersion;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
@@ -61,7 +56,7 @@ public class PushImageCmdIT extends CmdIT {
     @Test
     public void pushNonExistentImage() throws Exception {
 
-        if (getVersion(dockerRule.getClient())
+        /*if (getVersion(dockerRule.getClient())
                 .isGreaterOrEqual(RemoteApiVersion.VERSION_1_26)) {
          // no errors??
         } else if (getVersion(dockerRule.getClient())
@@ -69,11 +64,12 @@ public class PushImageCmdIT extends CmdIT {
             exception.expect(DockerClientException.class);
         } else {
             exception.expect(NotFoundException.class);
-        }
+        }*/
+        exception.expect(DockerClientException.class);
 
         dockerRule.getClient().pushImageCmd(username + "/xxx")
                 .exec(new PushImageResultCallback())
-                .awaitCompletion(20, TimeUnit.SECONDS); // exclude infinite await sleep
+                .awaitSuccess(); // exclude infinite await sleep
 
     }
 
