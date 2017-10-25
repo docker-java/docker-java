@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.CheckForNull;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -40,6 +41,7 @@ public class PullImageResultCallback extends ResultCallbackTemplate<PullImageRes
         } else {
             handleDockerClientResponse(item);
         }
+
         LOGGER.debug(item.toString());
     }
 
@@ -50,16 +52,26 @@ public class PullImageResultCallback extends ResultCallbackTemplate<PullImageRes
         }
     }
 
-    private void handleDockerSwarmResponse(PullResponseItem item) {
+    private void handleDockerSwarmResponse(final PullResponseItem item) {
         if (results == null) {
-            results = new HashMap<String, PullResponseItem>();
+            results = new HashMap<>();
         }
-        results.put(item.getId(), item);
+
+        // Swarm terminates a pull sometimes with an empty line.
+        // Therefore keep first success message
+        PullResponseItem currentItem = results.get(item.getId());
+        if (currentItem == null || !currentItem.isPullSuccessIndicated()) {
+            results.put(item.getId(), item);
+        }
+    }
+
+    private void handleDockerClientResponse(PullResponseItem item) {
+        latestItem = item;
     }
 
     private void checkDockerSwarmPullSuccessful() {
         if (results.isEmpty()) {
-            throw new DockerClientException("Could not pull image");
+            throw new DockerClientException("Could not pull image through Docker Swarm");
         } else {
             boolean pullFailed = false;
             StringBuilder sb = new StringBuilder();
@@ -67,7 +79,7 @@ public class PullImageResultCallback extends ResultCallbackTemplate<PullImageRes
             for (PullResponseItem pullResponseItem : results.values()) {
                 if (!pullResponseItem.isPullSuccessIndicated()) {
                     pullFailed = true;
-                    sb.append("[" + pullResponseItem.getId() + ";" + pullResponseItem.getError() + "]");
+                    sb.append("[" + pullResponseItem.getId() + ":" + messageFromPullResult(pullResponseItem) + "]");
                 }
             }
 
@@ -77,22 +89,33 @@ public class PullImageResultCallback extends ResultCallbackTemplate<PullImageRes
         }
     }
 
-    private void handleDockerClientResponse(PullResponseItem item) {
-        latestItem = item;
-    }
-
     private void checkDockerClientPullSuccessful() {
         if (latestItem == null) {
             throw new DockerClientException("Could not pull image");
         } else if (!latestItem.isPullSuccessIndicated()) {
-            String message = (latestItem.getError() != null) ? latestItem.getError() : latestItem.getStatus();
-            throw new DockerClientException("Could not pull image: " + message);
+            throw new DockerClientException("Could not pull image: " + messageFromPullResult(latestItem));
+        }
+    }
+
+    private String messageFromPullResult(PullResponseItem pullResponseItem) {
+        return (pullResponseItem.getError() != null) ? pullResponseItem.getError() : pullResponseItem.getStatus();
+    }
+
+    @Override
+    protected void throwFirstError() {
+        super.throwFirstError();
+
+        if (isSwarm) {
+            checkDockerSwarmPullSuccessful();
+        } else {
+            checkDockerClientPullSuccessful();
         }
     }
 
     /**
      * Awaits the image to be pulled successful.
      *
+     * @deprecated use {@link #awaitCompletion()} or {@link #awaitCompletion(long, TimeUnit)} instead
      * @throws DockerClientException
      *             if the pull fails.
      */
@@ -101,12 +124,6 @@ public class PullImageResultCallback extends ResultCallbackTemplate<PullImageRes
             awaitCompletion();
         } catch (InterruptedException e) {
             throw new DockerClientException("", e);
-        }
-
-        if (isSwarm) {
-            checkDockerSwarmPullSuccessful();
-        } else {
-            checkDockerClientPullSuccessful();
         }
     }
 }

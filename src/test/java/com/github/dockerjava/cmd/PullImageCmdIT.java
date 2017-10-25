@@ -80,7 +80,7 @@ public class PullImageCmdIT extends CmdIT {
 
         LOG.info("Pulling image: {}", testImage);
 
-        dockerRule.getClient().pullImageCmd(testImage).exec(new PullImageResultCallback()).awaitSuccess();
+        dockerRule.getClient().pullImageCmd(testImage).exec(new PullImageResultCallback()).awaitCompletion();
 
         info = dockerRule.getClient().infoCmd().exec();
         LOG.info("Client info after pull, {}", info.toString());
