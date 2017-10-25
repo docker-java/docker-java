@@ -50,4 +50,25 @@ public class PullImageResultCallback extends ResultCallbackTemplate<PullImageRes
             throw new DockerClientException("Could not pull image: " + message);
         }
     }
+    
+    /**
+     * Awaits the image to be pulled successful, with timeout
+     *
+     * @throws DockerClientException
+     *             if the pull fails.
+     */
+    public void awaitSuccess(long timeout, TimeUnit timeUnit) {
+        try {
+            awaitCompletion(timeout, timeUnit);
+        } catch (InterruptedException e) {
+            throw new DockerClientException("", e);
+        }
+
+        if (latestItem == null) {
+            throw new DockerClientException("Could not pull image");
+        } else if (!latestItem.isPullSuccessIndicated()) {
+            String message = (latestItem.getError() != null) ? latestItem.getError() : latestItem.getStatus();
+            throw new DockerClientException("Could not pull image: " + message);
+        }
+    }
 }
