@@ -4,7 +4,7 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.core.RemoteApiVersion;
+import com.github.dockerjava.core.command.WaitContainerResultCallback;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -14,13 +14,11 @@ import java.util.Map;
 
 import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
 import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
-import static com.github.dockerjava.utils.TestUtils.getVersion;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.iterableWithSize;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
 import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
@@ -66,6 +64,11 @@ public class CommitCmdIT extends CmdIT {
         assertThat(container.getId(), not(isEmptyString()));
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
+        Integer status = dockerRule.getClient().waitContainerCmd(container.getId())
+                .exec(new WaitContainerResultCallback()).awaitStatusCode();
+
+        assertThat(status, is(0));
+
         LOG.info("Committing container: {}", container.toString());
         Map<String, String> labels = ImmutableMap.of("label1", "abc", "label2", "123");
         String imageId = dockerRule.getClient().commitCmd(container.getId())
@@ -75,13 +78,14 @@ public class CommitCmdIT extends CmdIT {
         InspectImageResponse inspectImageResponse = dockerRule.getClient().inspectImageCmd(imageId).exec();
         LOG.info("Image Inspect: {}", inspectImageResponse.toString());
 
-        // docker bug?
-        if (!getVersion(dockerRule.getClient()).isGreaterOrEqual(RemoteApiVersion.VERSION_1_24)) {
-            Map<String, String> responseLabels = inspectImageResponse.getContainerConfig().getLabels();
-            assertThat(responseLabels.size(), is(2));
-            assertThat(responseLabels.get("label1"), equalTo("abc"));
-            assertThat(responseLabels.get("label2"), equalTo("123"));
-        }
+        //use config here since containerConfig contains the configuration of the container which was
+        //committed to the container
+        //https://stackoverflow.com/questions/36216220/what-is-different-of-config-and-containerconfig-of-docker-inspect
+        Map<String, String> responseLabels = inspectImageResponse.getConfig().getLabels();
+        //swarm will attach additional labels here
+        assertThat(responseLabels.size(), greaterThanOrEqualTo(2));
+        assertThat(responseLabels.get("label1"), equalTo("abc"));
+        assertThat(responseLabels.get("label2"), equalTo("123"));
     }
 
     @Test(expected = NotFoundException.class)

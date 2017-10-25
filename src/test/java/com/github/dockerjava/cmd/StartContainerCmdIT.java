@@ -163,14 +163,15 @@ public class StartContainerCmdIT extends CmdIT {
 
     @Test
     public void startContainerWithPortBindings() throws DockerException {
+        int baseport = dockerRule.getKind().equals("jersey")? 13000: 14000;
 
         ExposedPort tcp22 = ExposedPort.tcp(22);
         ExposedPort tcp23 = ExposedPort.tcp(23);
 
         Ports portBindings = new Ports();
-        portBindings.bind(tcp22, Binding.bindPort(11022));
-        portBindings.bind(tcp23, Binding.bindPort(11023));
-        portBindings.bind(tcp23, Binding.bindPort(11024));
+        portBindings.bind(tcp22, Binding.bindPort(baseport + 22));
+        portBindings.bind(tcp23, Binding.bindPort(baseport + 23));
+        portBindings.bind(tcp23, Binding.bindPort(baseport + 24));
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("true")
                 .withExposedPorts(tcp22, tcp23).withPortBindings(portBindings).exec();
@@ -188,13 +189,13 @@ public class StartContainerCmdIT extends CmdIT {
         assertThat(Arrays.asList(inspectContainerResponse.getConfig().getExposedPorts()), contains(tcp22, tcp23));
 
         assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp22)[0],
-                is(equalTo(Binding.bindPort(11022))));
+                is(equalTo(Binding.bindPort(baseport + 22))));
 
         assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23)[0],
-                is(equalTo(Binding.bindPort(11023))));
+                is(equalTo(Binding.bindPort(baseport + 23))));
 
         assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23)[1],
-                is(equalTo(Binding.bindPort(11024))));
+                is(equalTo(Binding.bindPort(baseport + 24))));
 
     }
 

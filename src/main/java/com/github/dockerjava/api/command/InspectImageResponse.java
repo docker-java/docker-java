@@ -122,6 +122,7 @@ public class InspectImageResponse {
     }
 
     /**
+     * Get the image commit configuration
      * @see #config
      */
     @CheckForNull
@@ -154,6 +155,8 @@ public class InspectImageResponse {
     }
 
     /**
+     * If the image was created from a container, this config contains the configuration of the container
+     * which was committed in this image
      * @see #containerConfig
      */
     @CheckForNull

@@ -43,7 +43,6 @@ import static com.github.dockerjava.api.model.Capability.NET_ADMIN;
 import static com.github.dockerjava.cmd.CmdIT.FactoryType.JERSEY;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_23;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_24;
-import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
 import static com.github.dockerjava.junit.DockerMatchers.isGreaterOrEqual;
 import static com.github.dockerjava.junit.DockerMatchers.mountedVolumes;
 import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
@@ -285,13 +284,13 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Test
     public void createContainerWithLinkInCustomNetwork() throws DockerException {
-        assumeNotSwarm("no network in swarm", dockerRule);
         String containerName1 = "containerCustomlink_" + dockerRule.getKind();
         String containerName2 = "containerCustom2link_" + dockerRule.getKind();
         String networkName = "linkNetcustom" + dockerRule.getKind();
 
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd()
                 .withName(networkName)
+                .withDriver("bridge")
                 .exec();
 
         assertNotNull(createNetworkResponse.getId());
@@ -331,8 +330,6 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Test
     public void createContainerWithCustomIp() throws DockerException {
-        assumeNotSwarm("Swarm has no network", dockerRule);
-
         String containerName1 = "containerCustomIplink_" + dockerRule.getKind();
         String networkName = "customIpNet" + dockerRule.getKind();
         String subnetPrefix = getFactoryType() == JERSEY ? "10.100.104" : "10.100.105";
@@ -341,6 +338,7 @@ public class CreateContainerCmdIT extends CmdIT {
                 .withIpam(new Network.Ipam()
                         .withConfig(new Network.Ipam.Config()
                                 .withSubnet(subnetPrefix + ".0/24")))
+                .withDriver("bridge")
                 .withName(networkName)
                 .exec();
 
@@ -369,13 +367,12 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Test
     public void createContainerWithAlias() throws DockerException {
-        assumeNotSwarm("Swarm has no network", dockerRule);
-
         String containerName1 = "containerAlias_" + dockerRule.getKind();
         String networkName = "aliasNet" + dockerRule.getKind();
 
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd()
                 .withName(networkName)
+                .withDriver("bridge")
                 .exec();
 
         assertNotNull(createNetworkResponse.getId());
@@ -488,14 +485,15 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Test
     public void createContainerWithPortBindings() throws DockerException {
+        int baseport = dockerRule.getKind().equals("jersey")? 11000: 12000;
 
         ExposedPort tcp22 = ExposedPort.tcp(22);
         ExposedPort tcp23 = ExposedPort.tcp(23);
 
         Ports portBindings = new Ports();
-        portBindings.bind(tcp22, Binding.bindPort(11022));
-        portBindings.bind(tcp23, Binding.bindPort(11023));
-        portBindings.bind(tcp23, Binding.bindPort(11024));
+        portBindings.bind(tcp22, Binding.bindPort(baseport + 22));
+        portBindings.bind(tcp23, Binding.bindPort(baseport + 23));
+        portBindings.bind(tcp23, Binding.bindPort(baseport + 24));
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("true")
                 .withExposedPorts(tcp22, tcp23).withPortBindings(portBindings).exec();
@@ -509,13 +507,13 @@ public class CreateContainerCmdIT extends CmdIT {
         assertThat(Arrays.asList(inspectContainerResponse.getConfig().getExposedPorts()), contains(tcp22, tcp23));
 
         assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp22)[0],
-                is(equalTo(Binding.bindPort(11022))));
+                is(equalTo(Binding.bindPort(baseport + 22))));
 
         assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23)[0],
-                is(equalTo(Binding.bindPort(11023))));
+                is(equalTo(Binding.bindPort(baseport + 23))));
 
         assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23)[1],
-                is(equalTo(Binding.bindPort(11024))));
+                is(equalTo(Binding.bindPort(baseport + 24))));
 
     }
 
