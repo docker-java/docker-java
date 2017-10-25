@@ -2,9 +2,11 @@ package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.DockerClientException;
+import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.core.command.PushImageResultCallback;
 import com.github.dockerjava.junit.category.AuthIntegration;
+import com.github.dockerjava.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -45,31 +47,26 @@ public class PushImageCmdIT extends CmdIT {
         String imageId = dockerRule.getClient().commitCmd(container.getId()).withRepository(username + "/busybox").exec();
 
         // we have to block until image is pushed
-        dockerRule.getClient().pushImageCmd(username + "/busybox").exec(new PushImageResultCallback()).awaitSuccess();
+        dockerRule.getClient().pushImageCmd(username + "/busybox").exec(new PushImageResultCallback()).awaitCompletion();
 
         LOG.info("Removing image: {}", imageId);
         dockerRule.getClient().removeImageCmd(imageId).exec();
 
-        dockerRule.getClient().pullImageCmd(username + "/busybox").exec(new PullImageResultCallback()).awaitSuccess();
+        dockerRule.getClient().pullImageCmd(username + "/busybox").exec(new PullImageResultCallback()).awaitCompletion();
     }
 
     @Test
     public void pushNonExistentImage() throws Exception {
-
-        /*if (getVersion(dockerRule.getClient())
-                .isGreaterOrEqual(RemoteApiVersion.VERSION_1_26)) {
-         // no errors??
-        } else if (getVersion(dockerRule.getClient())
-                .isGreaterOrEqual(RemoteApiVersion.VERSION_1_24)) {
-            exception.expect(DockerClientException.class);
-        } else {
+        //swarms throws a different error here
+        if (TestUtils.isSwarm(dockerRule.getClient())) {
             exception.expect(NotFoundException.class);
-        }*/
-        exception.expect(DockerClientException.class);
+        } else {
+            exception.expect(DockerClientException.class);
+        }
 
         dockerRule.getClient().pushImageCmd(username + "/xxx")
                 .exec(new PushImageResultCallback())
-                .awaitSuccess(); // exclude infinite await sleep
+                .awaitCompletion(); // exclude infinite await sleep
 
     }
 
