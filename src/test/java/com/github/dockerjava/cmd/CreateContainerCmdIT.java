@@ -485,7 +485,7 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Test
     public void createContainerWithPortBindings() throws DockerException {
-        int baseport = dockerRule.getKind().equals("jersey")? 11000: 12000;
+        int baseport = getFactoryType() == FactoryType.JERSEY? 11000: 12000;
 
         ExposedPort tcp22 = ExposedPort.tcp(22);
         ExposedPort tcp23 = ExposedPort.tcp(23);
@@ -521,8 +521,6 @@ public class CreateContainerCmdIT extends CmdIT {
     public void createContainerWithLinking() throws DockerException {
         String containerName1 = "containerWithlinking_" + dockerRule.getKind();
         String containerName2 = "container2Withlinking_" + dockerRule.getKind();
-
-
 
         CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withCmd("sleep", "9999")

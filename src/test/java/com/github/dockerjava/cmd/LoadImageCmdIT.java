@@ -42,7 +42,9 @@ public class LoadImageCmdIT extends CmdIT {
         }
 
         //swarm needs some time to refelct new images
-        wait(5000);
+        synchronized (this) {
+            wait(5000);
+        }
 
         final Image image = findImageWithId(expectedImageId, dockerRule.getClient().listImagesCmd().exec());
 

@@ -134,12 +134,12 @@ if [[ -n $SWARM_VERSION ]]; then
         swarm manage --engine-refresh-min-interval "3s" --engine-refresh-max-interval "6s" "nodes://${HOST_IP}:${HOST_PORT}"
 #        swarm manage --engine-refresh-min-interval "3s" --engine-refresh-max-interval "6s" "consul://${HOST_IP}:8500"
 
-    # join engine to swarm, is not required if fixed ip addresses are used
-#    docker run \
-#        -d \
-#        "--name=swarm_join" \
-#        "swarm:${SWARM_VERSION}" \
-#        join --advertise="${HOST_IP}:${HOST_PORT}" --delay="0s" --heartbeat "5s" "nodes://${HOST_IP}:${HOST_PORT}"
+    # join engine to swarm
+    docker run \
+        -d \
+        "--name=swarm_join" \
+        "swarm:${SWARM_VERSION}" \
+        join --advertise="${HOST_IP}:${HOST_PORT}" --delay="0s" --heartbeat "5s" "nodes://${HOST_IP}:${HOST_PORT}"
 #        join --advertise="${HOST_IP}:${HOST_PORT}" --delay="0s" --heartbeat "5s" "token://${SWARM_TOKEN}"
 
     docker run --rm \

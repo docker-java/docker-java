@@ -7,7 +7,6 @@ import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.api.model.PullResponseItem;
-import com.github.dockerjava.core.RemoteApiVersion;
 import com.github.dockerjava.core.command.PullImageCmdImpl;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import org.junit.Rule;
@@ -18,11 +17,11 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.github.dockerjava.utils.TestUtils.getVersion;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class PullImageCmdIT extends CmdIT {
     private static final Logger LOG = LoggerFactory.getLogger(PullImageCmdIT.class);
@@ -80,7 +79,9 @@ public class PullImageCmdIT extends CmdIT {
 
         LOG.info("Pulling image: {}", testImage);
 
-        dockerRule.getClient().pullImageCmd(testImage).exec(new PullImageResultCallback()).awaitCompletion();
+        dockerRule.getClient().pullImageCmd(testImage)
+                .exec(new PullImageResultCallback())
+                .awaitCompletion(30, TimeUnit.SECONDS);
 
         info = dockerRule.getClient().infoCmd().exec();
         LOG.info("Client info after pull, {}", info.toString());
@@ -92,25 +93,19 @@ public class PullImageCmdIT extends CmdIT {
         assertThat(inspectImageResponse, notNullValue());
     }
 
-
-
     @Test
     public void testPullNonExistingImage() throws Exception {
-        // does not throw an exception
+        //different docker version throws different errors here
+        try {
+            // stream needs to be fully read in order to close the underlying connection
+            dockerRule.getClient().pullImageCmd("xvxcv/foo")
+                    .exec(new PullImageResultCallback())
+                    .awaitCompletion(30, TimeUnit.SECONDS);
 
-        if (getVersion(dockerRule.getClient()).equals(RemoteApiVersion.VERSION_1_24)) {
-            // 1.24 - no exception
-        } else if (getVersion(dockerRule.getClient())
-                .isGreaterOrEqual(RemoteApiVersion.VERSION_1_26)) {
-            exception.expect(NotFoundException.class);
-        } else {
-            exception.expect(DockerClientException.class);
+            fail("An exception is expected.");
+        } catch (NotFoundException | DockerClientException e) {
+            //expected exception
         }
-
-        // stream needs to be fully read in order to close the underlying connection
-        dockerRule.getClient().pullImageCmd("xvxcv/foo")
-                .exec(new PullImageResultCallback())
-                .awaitCompletion(30, TimeUnit.SECONDS);
     }
 
 }

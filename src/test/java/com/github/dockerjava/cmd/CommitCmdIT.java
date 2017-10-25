@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
 import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -29,8 +28,6 @@ public class CommitCmdIT extends CmdIT {
 
     @Test
     public void commit() throws DockerException, InterruptedException {
-        assumeNotSwarm("", dockerRule);
-
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withCmd("touch", "/test")
                 .exec();
@@ -42,8 +39,10 @@ public class CommitCmdIT extends CmdIT {
         LOG.info("Committing container: {}", container.toString());
         String imageId = dockerRule.getClient().commitCmd(container.getId()).exec();
 
-        //swarm needs some time to refelct new images
-        wait(5000);
+        //swarm needs some time to reflect new images
+        synchronized (this) {
+            wait(5000);
+        }
 
         InspectImageResponse inspectImageResponse = dockerRule.getClient().inspectImageCmd(imageId).exec();
         LOG.info("Image Inspect: {}", inspectImageResponse.toString());
