@@ -28,7 +28,7 @@ public class CommitCmdIT extends CmdIT {
     public static final Logger LOG = LoggerFactory.getLogger(CommitCmdIT.class);
 
     @Test
-    public void commit() throws DockerException {
+    public void commit() throws DockerException, InterruptedException {
         assumeNotSwarm("", dockerRule);
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
@@ -41,6 +41,9 @@ public class CommitCmdIT extends CmdIT {
 
         LOG.info("Committing container: {}", container.toString());
         String imageId = dockerRule.getClient().commitCmd(container.getId()).exec();
+
+        //swarm needs some time to refelct new images
+        wait(5000);
 
         InspectImageResponse inspectImageResponse = dockerRule.getClient().inspectImageCmd(imageId).exec();
         LOG.info("Image Inspect: {}", inspectImageResponse.toString());
