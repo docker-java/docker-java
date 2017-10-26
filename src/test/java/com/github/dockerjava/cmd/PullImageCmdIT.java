@@ -18,10 +18,11 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 public class PullImageCmdIT extends CmdIT {
     private static final Logger LOG = LoggerFactory.getLogger(PullImageCmdIT.class);
@@ -96,16 +97,11 @@ public class PullImageCmdIT extends CmdIT {
     @Test
     public void testPullNonExistingImage() throws Exception {
         //different docker version throws different errors here
-        try {
-            // stream needs to be fully read in order to close the underlying connection
-            dockerRule.getClient().pullImageCmd("xvxcv/foo")
-                    .exec(new PullImageResultCallback())
-                    .awaitCompletion(30, TimeUnit.SECONDS);
+        exception.expect(anyOf(instanceOf(NotFoundException.class), instanceOf(DockerClientException.class)));
 
-            fail("An exception is expected.");
-        } catch (NotFoundException | DockerClientException e) {
-            //expected exception
-        }
+        // stream needs to be fully read in order to close the underlying connection
+        dockerRule.getClient().pullImageCmd("xvxcv/foo")
+                .exec(new PullImageResultCallback())
+                .awaitCompletion(30, TimeUnit.SECONDS);
     }
-
 }

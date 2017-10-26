@@ -67,7 +67,8 @@ public class CommitCmdIT extends CmdIT {
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         Integer status = dockerRule.getClient().waitContainerCmd(container.getId())
-                .exec(new WaitContainerResultCallback()).awaitStatusCode();
+                .exec(new WaitContainerResultCallback())
+                .awaitStatusCode();
 
         assertThat(status, is(0));
 

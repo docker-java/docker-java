@@ -6,7 +6,6 @@ import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.core.command.PushImageResultCallback;
 import com.github.dockerjava.junit.category.AuthIntegration;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 
@@ -62,14 +63,10 @@ public class PushImageCmdIT extends CmdIT {
     @Test
     public void pushNonExistentImage() throws Exception {
         //swarms throws a different error here
-        try {
-            dockerRule.getClient().pushImageCmd(username + "/xxx")
-                    .exec(new PushImageResultCallback())
-                    .awaitCompletion(30, TimeUnit.SECONDS);
+        exception.expect(anyOf(instanceOf(DockerClientException.class), instanceOf(NotFoundException.class)));
 
-            Assert.fail("An exception is expected.");
-        } catch (DockerClientException | NotFoundException e) {
-            // expected exception
-        }
+        dockerRule.getClient().pushImageCmd(username + "/xxx")
+                .exec(new PushImageResultCallback())
+                .awaitCompletion(30, TimeUnit.SECONDS);
     }
 }
