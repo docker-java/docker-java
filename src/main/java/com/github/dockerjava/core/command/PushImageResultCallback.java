@@ -3,14 +3,14 @@
  */
 package com.github.dockerjava.core.command;
 
-import javax.annotation.CheckForNull;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.PushResponseItem;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.annotation.CheckForNull;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -30,9 +30,21 @@ public class PushImageResultCallback extends ResultCallbackTemplate<PushImageRes
         LOGGER.debug(item.toString());
     }
 
+    @Override
+    protected void throwFirstError() {
+        super.throwFirstError();
+
+        if (latestItem == null) {
+            throw new DockerClientException("Could not push image");
+        } else if (latestItem.isErrorIndicated()) {
+            throw new DockerClientException("Could not push image: " + latestItem.getError());
+        }
+    }
+
     /**
      * Awaits the image to be pulled successful.
      *
+     * @deprecated use {@link #awaitCompletion()} or {@link #awaitCompletion(long, TimeUnit)} instead
      * @throws DockerClientException
      *             if the push fails.
      */
@@ -41,12 +53,6 @@ public class PushImageResultCallback extends ResultCallbackTemplate<PushImageRes
             awaitCompletion();
         } catch (InterruptedException e) {
             throw new DockerClientException("", e);
-        }
-
-        if (latestItem == null) {
-            throw new DockerClientException("Could not push image");
-        } else if (latestItem.isErrorIndicated()) {
-            throw new DockerClientException("Could not push image: " + latestItem.getError());
         }
     }
 }

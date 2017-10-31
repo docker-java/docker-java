@@ -1,5 +1,18 @@
 package com.github.dockerjava.netty;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dockerjava.api.async.ResultCallback;
+import com.github.dockerjava.api.exception.DockerClientException;
+import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.core.async.ResultCallbackTemplate;
+import com.github.dockerjava.netty.handler.FramedResponseStreamHandler;
+import com.github.dockerjava.netty.handler.HttpConnectionHijackHandler;
+import com.github.dockerjava.netty.handler.HttpRequestProvider;
+import com.github.dockerjava.netty.handler.HttpResponseHandler;
+import com.github.dockerjava.netty.handler.HttpResponseStreamHandler;
+import com.github.dockerjava.netty.handler.JsonResponseCallbackHandler;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -28,20 +41,6 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.api.async.ResultCallback;
-import com.github.dockerjava.api.exception.DockerClientException;
-import com.github.dockerjava.api.model.Frame;
-import com.github.dockerjava.core.async.ResultCallbackTemplate;
-import com.github.dockerjava.netty.handler.FramedResponseStreamHandler;
-import com.github.dockerjava.netty.handler.HttpConnectionHijackHandler;
-import com.github.dockerjava.netty.handler.HttpRequestProvider;
-import com.github.dockerjava.netty.handler.HttpResponseHandler;
-import com.github.dockerjava.netty.handler.HttpResponseStreamHandler;
-import com.github.dockerjava.netty.handler.JsonResponseCallbackHandler;
 
 /**
  * This class is basically a replacement of javax.ws.rs.client.Invocation.Builder to allow simpler migration of JAX-RS code to a netty based
@@ -122,7 +121,7 @@ public class InvocationBuilder {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            getFirstError();
+            throwFirstError();
             return result;
         }
     }

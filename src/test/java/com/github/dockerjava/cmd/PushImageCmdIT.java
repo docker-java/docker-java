@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.dockerjava.utils.TestUtils.getVersion;
+import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
@@ -50,21 +51,20 @@ public class PushImageCmdIT extends CmdIT {
         String imageId = dockerRule.getClient().commitCmd(container.getId()).withRepository(username + "/busybox").exec();
 
         // we have to block until image is pushed
-        dockerRule.getClient().pushImageCmd(username + "/busybox").exec(new PushImageResultCallback()).awaitSuccess();
+        dockerRule.getClient().pushImageCmd(username + "/busybox").exec(new PushImageResultCallback())
+                .awaitCompletion(30, TimeUnit.SECONDS);
 
         LOG.info("Removing image: {}", imageId);
         dockerRule.getClient().removeImageCmd(imageId).exec();
 
-        dockerRule.getClient().pullImageCmd(username + "/busybox").exec(new PullImageResultCallback()).awaitSuccess();
+        dockerRule.getClient().pullImageCmd(username + "/busybox").exec(new PullImageResultCallback())
+                .awaitCompletion(30, TimeUnit.SECONDS);
     }
 
     @Test
     public void pushNonExistentImage() throws Exception {
 
-        if (getVersion(dockerRule.getClient())
-                .isGreaterOrEqual(RemoteApiVersion.VERSION_1_26)) {
-         // no errors??
-        } else if (getVersion(dockerRule.getClient())
+        if (isNotSwarm(dockerRule.getClient()) && getVersion(dockerRule.getClient())
                 .isGreaterOrEqual(RemoteApiVersion.VERSION_1_24)) {
             exception.expect(DockerClientException.class);
         } else {
@@ -73,8 +73,7 @@ public class PushImageCmdIT extends CmdIT {
 
         dockerRule.getClient().pushImageCmd(username + "/xxx")
                 .exec(new PushImageResultCallback())
-                .awaitCompletion(20, TimeUnit.SECONDS); // exclude infinite await sleep
+                .awaitCompletion(30, TimeUnit.SECONDS); // exclude infinite await sleep
 
     }
-
 }

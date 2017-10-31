@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.dockerjava.utils.TestUtils.getVersion;
+import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.notNullValue;
@@ -80,7 +81,9 @@ public class PullImageCmdIT extends CmdIT {
 
         LOG.info("Pulling image: {}", testImage);
 
-        dockerRule.getClient().pullImageCmd(testImage).exec(new PullImageResultCallback()).awaitSuccess();
+        dockerRule.getClient().pullImageCmd(testImage)
+                .exec(new PullImageResultCallback())
+                .awaitCompletion(30, TimeUnit.SECONDS);
 
         info = dockerRule.getClient().infoCmd().exec();
         LOG.info("Client info after pull, {}", info.toString());
@@ -92,15 +95,9 @@ public class PullImageCmdIT extends CmdIT {
         assertThat(inspectImageResponse, notNullValue());
     }
 
-
-
     @Test
     public void testPullNonExistingImage() throws Exception {
-        // does not throw an exception
-
-        if (getVersion(dockerRule.getClient()).equals(RemoteApiVersion.VERSION_1_24)) {
-            // 1.24 - no exception
-        } else if (getVersion(dockerRule.getClient())
+        if (isNotSwarm(dockerRule.getClient()) && getVersion(dockerRule.getClient())
                 .isGreaterOrEqual(RemoteApiVersion.VERSION_1_26)) {
             exception.expect(NotFoundException.class);
         } else {
@@ -112,5 +109,4 @@ public class PullImageCmdIT extends CmdIT {
                 .exec(new PullImageResultCallback())
                 .awaitCompletion(30, TimeUnit.SECONDS);
     }
-
 }

@@ -3,18 +3,15 @@
  */
 package com.github.dockerjava.core.async;
 
+import com.github.dockerjava.api.async.ResultCallback;
+import com.google.common.base.Throwables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
-import javax.annotation.CheckForNull;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.github.dockerjava.api.async.ResultCallback;
-import com.google.common.base.Throwables;
 
 /**
  * Abstract template implementation of {@link ResultCallback}
@@ -91,7 +88,7 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
     public RC_T awaitCompletion() throws InterruptedException {
         completed.await();
         // eventually (re)throws RuntimeException
-        getFirstError();
+        throwFirstError();
         return (RC_T) this;
     }
 
@@ -102,13 +99,14 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
      */
     public boolean awaitCompletion(long timeout, TimeUnit timeUnit) throws InterruptedException {
         boolean result = completed.await(timeout, timeUnit);
-        getFirstError();
+        throwFirstError();
         return result;
     }
 
     /**
-     * Blocks until {@link ResultCallback#onStart()} was called. {@link ResultCallback#onStart()} is called when the request was processed
-     * on the server side and the response is incoming.
+     * Blocks until {@link ResultCallback#onStart(Closeable)} was called.
+     * {@link ResultCallback#onStart(Closeable)} is called when the request was processed on the server
+     * side and the response is incoming.
      */
     @SuppressWarnings("unchecked")
     public RC_T awaitStarted() throws InterruptedException {
@@ -117,22 +115,25 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
     }
 
     /**
-     * Blocks until {@link ResultCallback#onStart()} was called or the given timeout occurs. {@link ResultCallback#onStart()} is called when
-     * the request was processed on the server side and the response is incoming.
+     * Blocks until {@link ResultCallback#onStart(Closeable)} was called or the given timeout occurs.
+     * {@link ResultCallback#onStart(Closeable)} is called when the request was processed on the server side
+     * and the response is incoming.
      * @return {@code true} if started and {@code false} if the waiting time elapsed
-     *         before {@link ResultCallback#onStart()} was called.
+     *         before {@link ResultCallback#onStart(Closeable)} was called.
      */
     public boolean awaitStarted(long timeout, TimeUnit timeUnit) throws InterruptedException {
         return started.await(timeout, timeUnit);
     }
 
-    @CheckForNull
-    protected RuntimeException getFirstError() {
+    /**
+     * Throws the first occurred error as a runtime exception
+     * @throws com.github.dockerjava.api.exception.DockerException The first docker based Error
+     * @throws RuntimeException on any other occurred error
+     */
+    protected void throwFirstError() {
         if (firstError != null) {
             // this call throws a RuntimeException
-            return Throwables.propagate(firstError);
-        } else {
-            return null;
+            Throwables.propagate(firstError);
         }
     }
 }

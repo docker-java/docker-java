@@ -215,11 +215,6 @@ public class AttachContainerCmdIT extends CmdIT {
         }
 
         @Override
-        public RuntimeException getFirstError() {
-            return super.getFirstError();
-        }
-
-        @Override
         public String toString() {
             return log.toString();
         }

@@ -41,6 +41,11 @@ public class LoadImageCmdIT extends CmdIT {
             dockerRule.getClient().loadImageCmd(uploadStream).exec();
         }
 
+        //swarm needs some time to refelct new images
+        synchronized (this) {
+            wait(5000);
+        }
+
         final Image image = findImageWithId(expectedImageId, dockerRule.getClient().listImagesCmd().exec());
 
         assertThat("Can't find expected image after loading from a tar archive!", image, notNullValue());
