@@ -3,6 +3,7 @@ package com.github.dockerjava.cmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.core.RemoteApiVersion;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.core.command.PushImageResultCallback;
 import com.github.dockerjava.junit.category.AuthIntegration;
@@ -16,9 +17,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
 
+import static com.github.dockerjava.utils.TestUtils.getVersion;
+import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.anyOf;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 
@@ -62,11 +63,17 @@ public class PushImageCmdIT extends CmdIT {
 
     @Test
     public void pushNonExistentImage() throws Exception {
-        //swarms throws a different error here
-        exception.expect(anyOf(instanceOf(DockerClientException.class), instanceOf(NotFoundException.class)));
+
+        if (isNotSwarm(dockerRule.getClient()) && getVersion(dockerRule.getClient())
+                .isGreaterOrEqual(RemoteApiVersion.VERSION_1_24)) {
+            exception.expect(DockerClientException.class);
+        } else {
+            exception.expect(NotFoundException.class);
+        }
 
         dockerRule.getClient().pushImageCmd(username + "/xxx")
                 .exec(new PushImageResultCallback())
-                .awaitCompletion(30, TimeUnit.SECONDS);
+                .awaitCompletion(30, TimeUnit.SECONDS); // exclude infinite await sleep
+
     }
 }
