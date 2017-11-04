@@ -431,8 +431,8 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
-    public TagImageCmd tagImageCmd(String imageId, String repository, String tag) {
-        return new TagImageCmdImpl(getDockerCmdExecFactory().createTagImageCmdExec(), imageId, repository, tag);
+    public TagImageCmd tagImageCmd(String imageId, String imageNameWithRepository, String tag) {
+        return new TagImageCmdImpl(getDockerCmdExecFactory().createTagImageCmdExec(), imageId, imageNameWithRepository, tag);
     }
 
     @Override

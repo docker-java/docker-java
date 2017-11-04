@@ -2,12 +2,10 @@ package com.github.dockerjava.jaxrs;
 
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.core.DockerClientConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
@@ -22,14 +20,6 @@ public class CreateContainerCmdExec extends AbstrSyncDockerCmdExec<CreateContain
         super(baseResource, dockerClientConfig);
     }
 
-    private Invocation.Builder resourceWithOptionalAuthConfig(CreateContainerCmd command, Invocation.Builder request) {
-        AuthConfig authConfig = command.getAuthConfig();
-        if (authConfig != null) {
-            request = request.header("X-Registry-Auth", registryAuth(authConfig));
-        }
-        return request;
-    }
-
     @Override
     protected CreateContainerResponse execute(CreateContainerCmd command) {
         WebTarget webResource = getBaseResource().path("/containers/create");
@@ -39,7 +29,7 @@ public class CreateContainerCmdExec extends AbstrSyncDockerCmdExec<CreateContain
         }
 
         LOGGER.trace("POST: {} ", webResource);
-        return resourceWithOptionalAuthConfig(command, webResource.request()).accept(MediaType.APPLICATION_JSON)
+        return resourceWithOptionalAuthConfig(command.getAuthConfig(), webResource.request()).accept(MediaType.APPLICATION_JSON)
                 .post(entity(command, MediaType.APPLICATION_JSON), CreateContainerResponse.class);
     }
 

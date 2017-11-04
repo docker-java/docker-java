@@ -34,10 +34,9 @@ public class PushImageCmdExec extends AbstrAsyncDockerCmdExec<PushImageCmd, Push
         WebTarget webResource = getBaseResource().path("/images/" + name(command) + "/push").queryParam("tag",
                 command.getTag());
 
-        final String registryAuth = registryAuth(command.getAuthConfig());
         LOGGER.trace("POST: {}", webResource);
 
-        InvocationBuilder builder = webResource.request().header("X-Registry-Auth", registryAuth)
+        InvocationBuilder builder = resourceWithAuthConfig(command.getAuthConfig(), webResource.request())
                 .accept(MediaType.APPLICATION_JSON);
 
         builder.post(null, new TypeReference<PushResponseItem>() {

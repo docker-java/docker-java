@@ -236,7 +236,7 @@ public interface DockerClient extends Closeable {
 
     TopContainerCmd topContainerCmd(String containerId);
 
-    TagImageCmd tagImageCmd(String imageId, String repository, String tag);
+    TagImageCmd tagImageCmd(String imageId, String imageNameWithRepository, String tag);
 
     PauseContainerCmd pauseContainerCmd(String containerId);
 

@@ -187,6 +187,10 @@ public class DockerConfigFile {
     }
 
     private static void decodeAuth(AuthConfig config) throws IOException {
+        if (config.getAuth() == null) {
+            return;
+        }
+
         String str = new String(Base64.decodeBase64(config.getAuth()), StandardCharsets.UTF_8);
         String[] parts = str.split(":", 2);
         if (parts.length != 2) {

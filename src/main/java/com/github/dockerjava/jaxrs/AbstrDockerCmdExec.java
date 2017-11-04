@@ -1,21 +1,20 @@
 package com.github.dockerjava.jaxrs;
 
-import static com.github.dockerjava.core.RemoteApiVersion.UNKNOWN_VERSION;
-import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_19;
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.io.IOException;
-
-import javax.ws.rs.client.WebTarget;
-
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.apache.commons.codec.binary.Base64;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.RemoteApiVersion;
+import org.apache.commons.codec.binary.Base64;
+
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import java.io.IOException;
+
+import static com.github.dockerjava.core.RemoteApiVersion.UNKNOWN_VERSION;
+import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_19;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class AbstrDockerCmdExec {
 
@@ -44,6 +43,18 @@ public abstract class AbstrDockerCmdExec {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected Invocation.Builder resourceWithAuthConfig(AuthConfig authConfig, Invocation.Builder request) {
+        request = request.header("X-Registry-Auth", registryAuth(authConfig));
+        return request;
+    }
+
+    protected Invocation.Builder resourceWithOptionalAuthConfig(AuthConfig authConfig, Invocation.Builder request) {
+        if (authConfig != null) {
+            request = resourceWithAuthConfig(authConfig, request);
+        }
+        return request;
     }
 
     protected String registryConfigs(AuthConfigurations authConfigs) {

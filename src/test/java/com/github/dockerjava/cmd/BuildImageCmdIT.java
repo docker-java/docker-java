@@ -6,13 +6,11 @@ import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
-import com.github.dockerjava.api.model.ExposedPort;
-import com.github.dockerjava.api.model.PortBinding;
-import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.core.command.BuildImageResultCallback;
 import com.github.dockerjava.core.command.PushImageResultCallback;
 import com.github.dockerjava.core.command.WaitContainerResultCallback;
 import com.github.dockerjava.core.util.CompressArchiveUtil;
+import com.github.dockerjava.utils.RegistryUtils;
 import net.jcip.annotations.NotThreadSafe;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
@@ -30,8 +28,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
-import static com.github.dockerjava.cmd.CmdIT.FactoryType.JERSEY;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_21;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_23;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_27;
@@ -197,61 +195,29 @@ public class BuildImageCmdIT extends CmdIT {
 
     @Test
     public void fromPrivateRegistry() throws Exception {
-        int port = getFactoryType() == JERSEY ? 5001 : 5002;
-//        int port = 5050;
+        AuthConfig authConfig = RegistryUtils.runPrivateRegistry(dockerRule.getClient());
+        String imgName = authConfig.getRegistryAddress() + "/testuser/busybox";
 
         File dockerfile = folder.newFile("Dockerfile");
-        writeStringToFile(dockerfile, String.format("FROM      localhost:%d/testuser/busybox:latest", port));
+        writeStringToFile(dockerfile, "FROM " + imgName);
 
-
-        String containerName = "registryy" + dockerRule.getKind();
-        String imageName = "testregistryy" + dockerRule.getKind();
-        dockerRule.ensureContainerRemoved(containerName);
-        dockerRule.ensureImageRemoved(imageName);
-
-        File baseDir = new File(Thread.currentThread().getContextClassLoader().getResource("privateRegistry").getFile());
-
-        String imageId = dockerRule.buildImage(baseDir);
-
-        InspectImageResponse inspectImageResponse = dockerRule.getClient().inspectImageCmd(imageId).exec();
-        assertThat(inspectImageResponse, not(nullValue()));
-        LOG.info("Image Inspect: {}", inspectImageResponse.toString());
-
-        dockerRule.getClient().tagImageCmd(imageId, imageName, "2")
-                .withForce().exec();
-
-        // see https://github.com/docker/distribution/blob/master/docs/deploying.md#native-basic-auth
-        CreateContainerResponse testregistry = dockerRule.getClient()
-                .createContainerCmd(imageName + ":2")
-                .withName(containerName)
-                .withPortBindings(new PortBinding(Ports.Binding.bindPort(port), ExposedPort.tcp(5000)))
-                .withEnv("REGISTRY_AUTH=htpasswd", "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm",
-                        "REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd", "REGISTRY_LOG_LEVEL=debug",
-                        "REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt", "REGISTRY_HTTP_TLS_KEY=/certs/domain.key")
-                .exec();
-
-        dockerRule.getClient().startContainerCmd(testregistry.getId()).exec();
-
-        // wait for registry to boot
-        Thread.sleep(3000);
-
-        // credentials as configured in /auth/htpasswd
-        AuthConfig authConfig = new AuthConfig()
-                .withUsername("testuser")
-                .withPassword("testpassword")
-                .withEmail("foo@bar.de")
-                .withRegistryAddress("localhost:" + port);
+        File baseDir;
+        InspectImageResponse inspectImageResponse;
 
         dockerRule.getClient().authCmd().withAuthConfig(authConfig).exec();
-        dockerRule.getClient().tagImageCmd("busybox:latest", String.format("localhost:%d/testuser/busybox", port), "latest").withForce().exec();
+        dockerRule.getClient().tagImageCmd("busybox:latest", imgName, "latest")
+                .withForce()
+                .exec();
 
-        dockerRule.getClient().pushImageCmd(String.format("localhost:%d/testuser/busybox", port))
+        dockerRule.getClient().pushImageCmd(imgName)
                 .withTag("latest")
                 .withAuthConfig(authConfig)
                 .exec(new PushImageResultCallback())
-                .awaitSuccess();
+                .awaitCompletion(30, TimeUnit.SECONDS);
 
-        dockerRule.getClient().removeImageCmd(String.format("localhost:%d/testuser/busybox", port)).withForce(true).exec();
+        dockerRule.getClient().removeImageCmd(imgName)
+                .withForce(true)
+                .exec();
 
 //        baseDir = fileFromBuildTestResource("FROM/privateRegistry");
         baseDir = folder.getRoot();
@@ -259,8 +225,8 @@ public class BuildImageCmdIT extends CmdIT {
         AuthConfigurations authConfigurations = new AuthConfigurations();
         authConfigurations.addConfig(authConfig);
 
-        imageId = dockerRule.getClient().buildImageCmd(baseDir).
-                withNoCache(true)
+        String imageId = dockerRule.getClient().buildImageCmd(baseDir)
+                .withNoCache(true)
                 .withBuildAuthConfigs(authConfigurations)
                 .exec(new BuildImageResultCallback())
                 .awaitImageId();
@@ -268,9 +234,6 @@ public class BuildImageCmdIT extends CmdIT {
         inspectImageResponse = dockerRule.getClient().inspectImageCmd(imageId).exec();
         assertThat(inspectImageResponse, not(nullValue()));
         LOG.info("Image Inspect: {}", inspectImageResponse.toString());
-
-        dockerRule.ensureContainerRemoved(containerName);
-//        dockerRule.ensureImageRemoved(imageId);
     }
 
     @Test

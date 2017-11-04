@@ -200,6 +200,12 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     @CheckForNull
     Boolean isTty();
 
+    /**
+     * While using swarm classic, you can provide an optional auth config which will be used to pull images from a private registry,
+     * if the swarm node does not already have the docker image.
+     * Note: This option does not have any effect in normal docker
+     * @param authConfig The optional auth config
+     */
     CreateContainerCmd withAuthConfig(AuthConfig authConfig);
 
     /**

@@ -28,8 +28,8 @@ public class CreateContainerCmdExec extends AbstrSyncDockerCmdExec<CreateContain
         }
 
         LOGGER.trace("POST: {} ", webResource);
-        return webResource.request().accept(MediaType.APPLICATION_JSON)
-                .post(command, new TypeReference<CreateContainerResponse>() {
-                });
+        return resourceWithOptionalAuthConfig(command.getAuthConfig(), webResource.request())
+                .accept(MediaType.APPLICATION_JSON)
+                .post(command, new TypeReference<CreateContainerResponse>() { });
     }
 }

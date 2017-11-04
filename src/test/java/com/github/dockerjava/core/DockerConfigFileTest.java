@@ -11,14 +11,14 @@ import org.junit.rules.ExpectedException;
 import java.io.File;
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 public class DockerConfigFileTest {
     @Rule
     public ExpectedException expectedEx = ExpectedException.none();
 
-    private final File FILESROOT = new File(Thread.currentThread().getContextClassLoader()
-            .getResource("testAuthConfigFile").getFile());
+    private final File FILESROOT = new File(DockerConfigFileTest.class.getResource("/testAuthConfigFile").getFile());
 
     @Test
     public void emptyFile() throws IOException {
@@ -69,7 +69,7 @@ public class DockerConfigFileTest {
     }
 
     @Test
-    public void validJson() throws IOException {
+    public void validLegacyJson() throws IOException {
         AuthConfig authConfig1 = new AuthConfig()
                 .withEmail("foo@example.com")
                 .withUsername("foo")
@@ -86,28 +86,32 @@ public class DockerConfigFileTest {
         expected.addAuthConfig(authConfig1);
         expected.addAuthConfig(authConfig2);
 
-        assertEquals(expected, runTest("validJson"));
-
+        assertThat(runTest("validLegacyJson"), is(expected));
     }
 
     @Test
     public void validJsonWithUnknown() throws IOException {
         AuthConfig authConfig1 = new AuthConfig()
+                .withRegistryAddress("192.168.99.100:32768");
+
+        AuthConfig authConfig2 = new AuthConfig()
                 .withEmail("foo@example.com")
                 .withUsername("foo")
                 .withPassword("bar")
-                .withRegistryAddress("quay.io");
+                .withRegistryAddress("https://index.docker.io/v1/");
 
         DockerConfigFile expected = new DockerConfigFile();
         expected.addAuthConfig(authConfig1);
-        runTest("validJsonWithUnknown.json");
+        expected.addAuthConfig(authConfig2);
+        DockerConfigFile actual = runTest("validJsonWithUnknown");
+        assertThat(actual, is(expected));
     }
 
     @Test
     public void validJsonWithOnlyUnknown() throws IOException {
         DockerConfigFile expected = new DockerConfigFile();
-        DockerConfigFile actual = runTest("validJsonWithOnlyUnknown.json");
-        assertEquals(actual, expected);
+        DockerConfigFile actual = runTest("validJsonWithOnlyUnknown");
+        assertThat(actual, is(expected));
     }
 
     @Test
@@ -121,7 +125,7 @@ public class DockerConfigFileTest {
         DockerConfigFile expected = new DockerConfigFile();
         expected.addAuthConfig(authConfig);
 
-        assertEquals(runTest("validLegacy"), expected);
+        assertThat(runTest("validLegacy"), is(expected));
     }
 
     @Test
@@ -142,13 +146,13 @@ public class DockerConfigFileTest {
         expected.addAuthConfig(authConfig1);
         expected.addAuthConfig(authConfig2);
 
-        assertEquals(runTest("validDockerConfig"), expected);
+        assertThat(runTest("validDockerConfig"), is(expected));
     }
 
     @Test
     public void nonExistent() throws IOException {
         DockerConfigFile expected = new DockerConfigFile();
-        assertEquals(runTest("idontexist"), expected);
+        assertThat(runTest("idontexist"), is(expected));
     }
 
     private DockerConfigFile runTest(String testFileName) throws IOException {

@@ -6,6 +6,9 @@ import com.github.dockerjava.api.command.CreateVolumeResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.exception.InternalServerErrorException;
+import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.ContainerNetwork;
 import com.github.dockerjava.api.model.Device;
@@ -22,10 +25,14 @@ import com.github.dockerjava.api.model.Ulimit;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
 import com.github.dockerjava.core.command.LogContainerResultCallback;
+import com.github.dockerjava.junit.DockerAssume;
+import com.github.dockerjava.utils.RegistryUtils;
+import com.github.dockerjava.utils.TestUtils;
 import net.jcip.annotations.NotThreadSafe;
 import org.apache.commons.io.FileUtils;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +62,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItemInArray;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
@@ -69,6 +77,9 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Rule
     public TemporaryFolder tempDir = new TemporaryFolder(new File("target/"));
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
 
     @Test(expected = ConflictException.class)
     public void createContainerWithExistingName() throws DockerException {
@@ -823,4 +834,36 @@ public class CreateContainerCmdIT extends CmdIT {
         }
         assertThat(containerNetwork, notNullValue());
     }
+
+    @Test
+    public void createContainerFromPrivateRegistryWithValidAuth() throws Exception {
+        DockerAssume.assumeSwarm(dockerRule.getClient());
+
+        AuthConfig authConfig = RegistryUtils.runPrivateRegistry(dockerRule.getClient());
+
+        String imgName = RegistryUtils.createPrivateImage(dockerRule, "create-container-with-valid-auth");
+
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(imgName)
+                .withAuthConfig(authConfig)
+                .exec();
+
+        assertThat(container.getId(), is(notNullValue()));
+    }
+
+    @Test
+    public void createContainerFromPrivateRegistryWithNoAuth() throws Exception {
+        AuthConfig authConfig = RegistryUtils.runPrivateRegistry(dockerRule.getClient());
+
+        String imgName = RegistryUtils.createPrivateImage(dockerRule, "create-container-with-no-auth");
+
+        if (TestUtils.isSwarm(dockerRule.getClient())) {
+            exception.expect(instanceOf(InternalServerErrorException.class));
+        } else {
+            exception.expect(instanceOf(NotFoundException.class));
+        }
+
+        dockerRule.getClient().createContainerCmd(imgName)
+                .exec();
+    }
+
 }
