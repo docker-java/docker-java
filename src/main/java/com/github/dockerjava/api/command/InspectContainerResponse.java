@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.model.ContainerConfig;
+import com.github.dockerjava.api.model.ContainerNode;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.NetworkSettings;
 import com.github.dockerjava.api.model.Volume;
@@ -83,6 +84,9 @@ public class InspectContainerResponse {
     @JsonProperty("NetworkSettings")
     private NetworkSettings networkSettings;
 
+    @JsonProperty("Node")
+    private ContainerNode node;
+
     @JsonProperty("Path")
     private String path;
 
@@ -148,6 +152,10 @@ public class InspectContainerResponse {
 
     public NetworkSettings getNetworkSettings() {
         return networkSettings;
+    }
+
+    public ContainerNode getNode() {
+        return node;
     }
 
     public String getResolvConfPath() {
