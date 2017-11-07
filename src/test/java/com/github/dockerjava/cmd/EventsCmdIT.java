@@ -4,6 +4,7 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Event;
 import com.github.dockerjava.core.command.EventsResultCallback;
 import com.github.dockerjava.core.command.PullImageResultCallback;
+import com.github.dockerjava.utils.TestUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,8 @@ import java.util.concurrent.TimeUnit;
 
 import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -32,10 +35,9 @@ public class EventsCmdIT extends CmdIT {
 
     @Test
     public void testEventStreamTimeBound() throws Exception {
+        //since until and filtering events is broken in swarm
+        //https://github.com/docker/swarm/issues/1203
         assumeNotSwarm("", dockerRule);
-
-        // Don't include other tests events
-        TimeUnit.SECONDS.sleep(1);
 
         String startTime = getEpochTime();
         int expectedEvents = generateEvents();
@@ -48,7 +50,7 @@ public class EventsCmdIT extends CmdIT {
                 .withUntil(endTime)
                 .exec(eventCallback);
 
-        List<Event> events = eventCallback.awaitExpectedEvents(3, TimeUnit.MINUTES);
+        List<Event> events = eventCallback.awaitExpectedEvents(30, TimeUnit.SECONDS);
 
         // we may receive more events as expected
         assertTrue("Received events: " + events, events.size() >= expectedEvents);
@@ -56,12 +58,8 @@ public class EventsCmdIT extends CmdIT {
 
     @Test
     public void testEventStreaming() throws Exception {
-        assumeNotSwarm("", dockerRule);
-
-        // Don't include other tests events
-        TimeUnit.SECONDS.sleep(1);
-
         String startTime = getEpochTime();
+
         int expectedEvents = generateEvents();
 
         EventsTestCallback eventCallback = new EventsTestCallback(expectedEvents);
@@ -72,18 +70,29 @@ public class EventsCmdIT extends CmdIT {
 
         generateEvents();
 
-        List<Event> events = eventCallback.awaitExpectedEvents(3, TimeUnit.MINUTES);
+        List<Event> events = eventCallback.awaitExpectedEvents(30, TimeUnit.SECONDS);
 
         // we may receive more events as expected
         assertTrue("Received events: " + events, events.size() >= expectedEvents);
+
+        for (Event event : events) {
+            if (TestUtils.isSwarm(dockerRule.getClient())) {
+                assertThat(event.getNode(), is(notNullValue()));
+                assertThat(event.getNode().getAddr(), is(notNullValue()));
+                assertThat(event.getNode().getId(), is(notNullValue()));
+                assertThat(event.getNode().getIp(), is(notNullValue()));
+                assertThat(event.getNode().getName(), is(notNullValue()));
+            } else {
+                assertThat(event.getNode(), is(nullValue()));
+            }
+        }
     }
 
-
+    @Test
     public void testEventStreamingWithFilter() throws Exception {
+        //since until and filtering events is broken in swarm
+        //https://github.com/docker/swarm/issues/1203
         assumeNotSwarm("", dockerRule);
-
-        // Don't include other tests events
-        TimeUnit.SECONDS.sleep(1);
 
         String startTime = getEpochTime();
         int expectedEvents = 1;
@@ -97,10 +106,12 @@ public class EventsCmdIT extends CmdIT {
 
         generateEvents();
 
-        List<Event> events = eventCallback.awaitExpectedEvents(3, TimeUnit.MINUTES);
+        List<Event> events = eventCallback.awaitExpectedEvents(30, TimeUnit.SECONDS);
 
-        // we should get exactly one "start" event here
-        assertThat("Received events: " + events, events.size(), is(expectedEvents));
+        // we should only get "start" events here
+        for (Event event : events) {
+            assertThat("Received event: " + event, event.getAction(), is("start"));
+        }
     }
 
     /**
