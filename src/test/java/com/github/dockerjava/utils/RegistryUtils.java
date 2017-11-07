@@ -100,7 +100,7 @@ public class RegistryUtils {
         dockerRule.getClient().removeImageCmd(imgNameWithTag)
                 .exec();
 
-        //ensures that the image is available
+        //ensures that the image is available, the private registry needs some time to reflect a tag push
         Thread.sleep(5000);
 
         return imgNameWithTag;
