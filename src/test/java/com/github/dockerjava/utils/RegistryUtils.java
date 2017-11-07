@@ -97,9 +97,11 @@ public class RegistryUtils {
                 .exec(new PushImageResultCallback())
                 .awaitCompletion(30, TimeUnit.SECONDS);
 
-        Thread.sleep(5000); //ensures that the image is also purged from the swarm cache
         dockerRule.getClient().removeImageCmd(imgNameWithTag)
                 .exec();
+
+        //ensures that the image is available
+        Thread.sleep(5000);
 
         return imgNameWithTag;
     }

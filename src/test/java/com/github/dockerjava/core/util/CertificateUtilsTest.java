@@ -5,6 +5,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -86,6 +87,6 @@ public class CertificateUtilsTest {
     }
 
     private String readFileAsString(String path) throws IOException {
-        return new String(Files.readAllBytes(Paths.get(baseDir + path)));
+        return new String(Files.readAllBytes(Paths.get(new File(baseDir + path).getPath())));
     }
 }

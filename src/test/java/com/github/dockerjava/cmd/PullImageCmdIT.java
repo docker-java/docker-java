@@ -132,7 +132,8 @@ public class PullImageCmdIT extends CmdIT {
 
         String imgName = RegistryUtils.createPrivateImage(dockerRule, "pull-image-with-no-auth");
 
-        if (isNotSwarm(dockerRule.getClient())) {
+        if (isNotSwarm(dockerRule.getClient()) && getVersion(dockerRule.getClient())
+                .isGreater(RemoteApiVersion.VERSION_1_27)) {
             exception.expect(InternalServerErrorException.class);
         } else {
             exception.expect(DockerClientException.class);
@@ -156,7 +157,8 @@ public class PullImageCmdIT extends CmdIT {
 
         String imgName = RegistryUtils.createPrivateImage(dockerRule, "pull-image-with-invalid-auth");
 
-        if (isNotSwarm(dockerRule.getClient())) {
+        if (isNotSwarm(dockerRule.getClient()) && getVersion(dockerRule.getClient())
+                .isGreater(RemoteApiVersion.VERSION_1_27)) {
             exception.expect(InternalServerErrorException.class);
         } else {
             exception.expect(DockerClientException.class);
