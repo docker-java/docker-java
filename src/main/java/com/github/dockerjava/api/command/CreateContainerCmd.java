@@ -435,6 +435,10 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     CreateContainerCmd withCgroupParent(String cgroupParent);
 
+    CreateContainerCmd withGroupAdd(String[] groups);
+
+    String[] getGroupAdd();
+
     /**
      * Set the PID (Process) Namespace mode for the container, 'host': use the host's PID namespace inside the container
      */

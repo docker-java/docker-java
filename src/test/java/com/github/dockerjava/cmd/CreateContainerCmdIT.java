@@ -823,4 +823,23 @@ public class CreateContainerCmdIT extends CmdIT {
         }
         assertThat(containerNetwork, notNullValue());
     }
+
+    @Test
+    public void createContainerWithGroupAdd() throws DockerException {
+        String[] groupsToAdd = {"www-data"};
+
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+                .withGroupAdd(groupsToAdd)
+                .withCmd("true").exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
+
+        LOG.info("Inspect container {}", Arrays.toString(inspectContainerResponse.getHostConfig().getGroupAdd()));
+
+        assertThat(inspectContainerResponse.getHostConfig().getGroupAdd(), is(groupsToAdd));
+    }
 }

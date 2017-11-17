@@ -255,6 +255,12 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
+    @JsonIgnore
+    public String[] getGroupAdd() {
+        return hostConfig.getGroupAdd();
+    }
+
+    @Override
     public String getDomainName() {
         return domainName;
     }
@@ -984,6 +990,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public CreateContainerCmd withHostConfig(HostConfig hostConfig) {
         this.hostConfig = hostConfig;
+        return this;
+    }
+
+    @Override
+    public CreateContainerCmd withGroupAdd(String[] groupAdd) {
+        checkNotNull(groupAdd, "groupAdd was not specified");
+        this.hostConfig.withGroupAdd(groupAdd);
         return this;
     }
 
