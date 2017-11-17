@@ -462,18 +462,6 @@
 				<groupId>org.eclipse.virgo.bundlor</groupId>
 				<artifactId>org.eclipse.virgo.bundlor.maven</artifactId>
 				<version>${maven-bundlor-plugin.version}</version>
-				<dependencies>
-					<dependency>
-						<groupId>org.eclipse.virgo.bundlor</groupId>
-						<artifactId>org.eclipse.virgo.bundlor</artifactId>
-						<version>1.1.2.RELEASE</version>
-					</dependency>
-					<dependency>
-						<groupId>org.eclipse.virgo.bundlor</groupId>
-						<artifactId>org.eclipse.virgo.bundlor.blint</artifactId>
-						<version>1.1.2.RELEASE</version>
-					</dependency>
-				</dependencies>
 				<executions>
 					<execution>
 						<id>bundlor</id>
