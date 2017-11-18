@@ -1,16 +1,15 @@
 package com.github.dockerjava.jaxrs;
 
-import static javax.ws.rs.client.Entity.entity;
+import com.github.dockerjava.api.command.CreateContainerCmd;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.core.DockerClientConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.github.dockerjava.api.command.CreateContainerCmd;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.core.DockerClientConfig;
+import static javax.ws.rs.client.Entity.entity;
 
 public class CreateContainerCmdExec extends AbstrSyncDockerCmdExec<CreateContainerCmd, CreateContainerResponse>
         implements CreateContainerCmd.Exec {
@@ -30,7 +29,7 @@ public class CreateContainerCmdExec extends AbstrSyncDockerCmdExec<CreateContain
         }
 
         LOGGER.trace("POST: {} ", webResource);
-        return webResource.request().accept(MediaType.APPLICATION_JSON)
+        return resourceWithOptionalAuthConfig(command.getAuthConfig(), webResource.request()).accept(MediaType.APPLICATION_JSON)
                 .post(entity(command, MediaType.APPLICATION_JSON), CreateContainerResponse.class);
     }
 

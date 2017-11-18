@@ -8,6 +8,7 @@ import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Capability;
 import com.github.dockerjava.api.model.ContainerNetwork;
@@ -127,10 +128,22 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @JsonIgnore
     private List<String> aliases = null;
 
-    public CreateContainerCmdImpl(CreateContainerCmd.Exec exec, String image) {
+    private AuthConfig authConfig;
+
+    public CreateContainerCmdImpl(CreateContainerCmd.Exec exec, AuthConfig authConfig, String image) {
         super(exec);
         checkNotNull(image, "image was not specified");
+        withAuthConfig(authConfig);
         withImage(image);
+    }
+
+    public AuthConfig getAuthConfig() {
+        return authConfig;
+    }
+
+    public CreateContainerCmd withAuthConfig(AuthConfig authConfig) {
+        this.authConfig = authConfig;
+        return this;
     }
 
     /**

@@ -1,11 +1,10 @@
 package com.github.dockerjava.api.command;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
-
 import com.github.dockerjava.api.exception.UnauthorizedException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthResponse;
+
+import javax.annotation.CheckForNull;
 
 /**
  *
@@ -17,7 +16,7 @@ public interface AuthCmd extends SyncDockerCmd<AuthResponse> {
     @CheckForNull
     AuthConfig getAuthConfig();
 
-    AuthCmd withAuthConfig(@Nonnull AuthConfig authConfig);
+    AuthCmd withAuthConfig(AuthConfig authConfig);
 
     /**
      * @return The status. Based on it's value you may mean you need to authorise your account, e.g.: "Account created. Please see the

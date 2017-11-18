@@ -238,12 +238,8 @@ public class DockerClientImpl implements Closeable, DockerClient {
 
     @Override
     public PushImageCmd pushImageCmd(String name) {
-        PushImageCmd cmd = new PushImageCmdImpl(getDockerCmdExecFactory().createPushImageCmdExec(), name);
-
-        AuthConfig cfg = dockerClientConfig.effectiveAuthConfig(name);
-        if (cfg != null) {
-            cmd.withAuthConfig(cfg);
-        }
+        PushImageCmd cmd = new PushImageCmdImpl(getDockerCmdExecFactory().createPushImageCmdExec(),
+                dockerClientConfig.effectiveAuthConfig(name), name);
         return cmd;
     }
 
@@ -308,7 +304,8 @@ public class DockerClientImpl implements Closeable, DockerClient {
 
     @Override
     public CreateContainerCmd createContainerCmd(String image) {
-        return new CreateContainerCmdImpl(getDockerCmdExecFactory().createCreateContainerCmdExec(), image);
+        return new CreateContainerCmdImpl(getDockerCmdExecFactory()
+                .createCreateContainerCmdExec(), dockerClientConfig.effectiveAuthConfig(image), image);
     }
 
     @Override
@@ -430,8 +427,8 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
-    public TagImageCmd tagImageCmd(String imageId, String repository, String tag) {
-        return new TagImageCmdImpl(getDockerCmdExecFactory().createTagImageCmdExec(), imageId, repository, tag);
+    public TagImageCmd tagImageCmd(String imageId, String imageNameWithRepository, String tag) {
+        return new TagImageCmdImpl(getDockerCmdExecFactory().createTagImageCmdExec(), imageId, imageNameWithRepository, tag);
     }
 
     @Override

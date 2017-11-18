@@ -1,10 +1,10 @@
 package com.github.dockerjava.api.command;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
-
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.PullResponseItem;
+
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -22,6 +22,7 @@ public interface PullImageCmd extends AsyncDockerCmd<PullImageCmd, PullResponseI
     @CheckForNull
     String getRegistry();
 
+    @CheckForNull
     AuthConfig getAuthConfig();
 
     PullImageCmd withRepository(@Nonnull String repository);
