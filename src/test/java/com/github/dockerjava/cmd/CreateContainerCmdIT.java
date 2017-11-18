@@ -148,19 +148,18 @@ public class CreateContainerCmdIT extends CmdIT {
         String container1Name = UUID.randomUUID().toString();
         CreateVolumeResponse volume1Info = dockerRule.getClient().createVolumeCmd().exec();
         CreateVolumeResponse volume2Info = dockerRule.getClient().createVolumeCmd().exec();
-        String mountpoint1 = volume1Info.getMountpoint();
-        String mountpoint2 = volume2Info.getMountpoint();
-        Volume volume1 = new Volume(mountpoint1);
-        Volume volume2 = new Volume(mountpoint2);
 
-        Bind bind1 = new Bind("/src/webapp1", volume1);
-        Bind bind2 = new Bind("/src/webapp2", volume2);
+        Volume volume1 = new Volume("/src/webapp1");
+        Volume volume2 = new Volume("/src/webapp2");
+        Bind bind1 = new Bind(volume1Info.getName(), volume1);
+        Bind bind2 = new Bind(volume2Info.getName(), volume2);
 
         // create a running container with bind mounts
         CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withCmd("sleep", "9999")
                 .withName(container1Name)
-                .withBinds(bind1, bind2).exec();
+                .withBinds(bind1, bind2)
+                .exec();
 
         LOG.info("Created container1 {}", container1.toString());
 
@@ -185,6 +184,7 @@ public class CreateContainerCmdIT extends CmdIT {
         // No volumes are created, the information is just stored in .HostConfig.VolumesFrom
         assertThat(inspectContainerResponse2.getHostConfig().getVolumesFrom(),
                 hasItemInArray(new VolumesFrom(container1Name)));
+        assertThat(inspectContainerResponse1, mountedVolumes(containsInAnyOrder(volume1, volume2)));
 
         // To ensure that the information stored in VolumesFrom really is considered
         // when starting the container, we start it and verify that it has the same

@@ -10,7 +10,6 @@ import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.api.model.PullResponseItem;
 import com.github.dockerjava.core.RemoteApiVersion;
-import com.github.dockerjava.core.command.PullImageCmdImpl;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.utils.RegistryUtils;
 import org.junit.Rule;
@@ -26,7 +25,6 @@ import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertEquals;
 
 public class PullImageCmdIT extends CmdIT {
     private static final Logger LOG = LoggerFactory.getLogger(PullImageCmdIT.class);
@@ -39,19 +37,6 @@ public class PullImageCmdIT extends CmdIT {
             return null;
         };
     };
-
-    @Test
-    public void nullAuthConfig() throws Exception {
-        PullImageCmdImpl pullImageCmd = new PullImageCmdImpl(NOP_EXEC, null, "");
-        try {
-            pullImageCmd.withAuthConfig(null);
-            throw new AssertionError();
-        } catch (Exception e) {
-            assertEquals(e.getMessage(), "authConfig was not specified");
-        } finally {
-            pullImageCmd.close();
-        }
-    }
 
     @Test
     public void testPullImage() throws Exception {
