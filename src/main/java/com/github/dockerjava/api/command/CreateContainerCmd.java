@@ -24,6 +24,7 @@ import java.util.Map;
 
 public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerResponse> {
 
+    @CheckForNull
     AuthConfig getAuthConfig();
 
     @CheckForNull

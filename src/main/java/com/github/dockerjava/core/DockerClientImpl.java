@@ -238,12 +238,8 @@ public class DockerClientImpl implements Closeable, DockerClient {
 
     @Override
     public PushImageCmd pushImageCmd(String name) {
-        PushImageCmd cmd = new PushImageCmdImpl(getDockerCmdExecFactory().createPushImageCmdExec(), name);
-
-        AuthConfig cfg = dockerClientConfig.effectiveAuthConfig(name);
-        if (cfg != null) {
-            cmd.withAuthConfig(cfg);
-        }
+        PushImageCmd cmd = new PushImageCmdImpl(getDockerCmdExecFactory().createPushImageCmdExec(),
+                dockerClientConfig.effectiveAuthConfig(name), name);
         return cmd;
     }
 
