@@ -34,6 +34,7 @@ import java.io.File;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -826,7 +827,7 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Test
     public void createContainerWithGroupAdd() throws DockerException {
-        String[] groupsToAdd = {"www-data"};
+        List<String> groupsToAdd = Arrays.asList("www-data");
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withGroupAdd(groupsToAdd)
@@ -838,7 +839,7 @@ public class CreateContainerCmdIT extends CmdIT {
 
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
 
-        LOG.info("Inspect container {}", Arrays.toString(inspectContainerResponse.getHostConfig().getGroupAdd()));
+        LOG.info("Inspect container {}", inspectContainerResponse.getHostConfig().getGroupAdd());
 
         assertThat(inspectContainerResponse.getHostConfig().getGroupAdd(), is(groupsToAdd));
     }

@@ -201,7 +201,7 @@ public class HostConfig implements Serializable {
     private Long pidsLimit;
 
     @JsonProperty("GroupAdd")
-    private String[] groupAdd;
+    private List<String> groupAdd;
 
     @JsonIgnore
     public Bind[] getBinds() {
@@ -824,14 +824,14 @@ public class HostConfig implements Serializable {
      * @see #groupAdd
      */
     @CheckForNull
-    public String[] getGroupAdd() {
+    public List<String> getGroupAdd() {
         return groupAdd;
     }
 
     /**
      * @see #groupAdd
      */
-    public HostConfig withGroupAdd(String[] groupAdd) {
+    public HostConfig withGroupAdd(List<String> groupAdd) {
         this.groupAdd = groupAdd;
         return this;
     }
