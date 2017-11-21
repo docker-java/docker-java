@@ -6,6 +6,9 @@ import com.github.dockerjava.api.command.CreateVolumeResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.exception.InternalServerErrorException;
+import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.ContainerNetwork;
 import com.github.dockerjava.api.model.Device;
@@ -22,10 +25,14 @@ import com.github.dockerjava.api.model.Ulimit;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
 import com.github.dockerjava.core.command.LogContainerResultCallback;
+import com.github.dockerjava.junit.DockerAssume;
+import com.github.dockerjava.utils.RegistryUtils;
+import com.github.dockerjava.utils.TestUtils;
 import net.jcip.annotations.NotThreadSafe;
 import org.apache.commons.io.FileUtils;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +63,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItemInArray;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
@@ -70,6 +78,9 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Rule
     public TemporaryFolder tempDir = new TemporaryFolder(new File("target/"));
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
 
     @Test(expected = ConflictException.class)
     public void createContainerWithExistingName() throws DockerException {
@@ -138,19 +149,18 @@ public class CreateContainerCmdIT extends CmdIT {
         String container1Name = UUID.randomUUID().toString();
         CreateVolumeResponse volume1Info = dockerRule.getClient().createVolumeCmd().exec();
         CreateVolumeResponse volume2Info = dockerRule.getClient().createVolumeCmd().exec();
-        String mountpoint1 = volume1Info.getMountpoint();
-        String mountpoint2 = volume2Info.getMountpoint();
-        Volume volume1 = new Volume(mountpoint1);
-        Volume volume2 = new Volume(mountpoint2);
 
-        Bind bind1 = new Bind("/src/webapp1", volume1);
-        Bind bind2 = new Bind("/src/webapp2", volume2);
+        Volume volume1 = new Volume("/src/webapp1");
+        Volume volume2 = new Volume("/src/webapp2");
+        Bind bind1 = new Bind(volume1Info.getName(), volume1);
+        Bind bind2 = new Bind(volume2Info.getName(), volume2);
 
         // create a running container with bind mounts
         CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withCmd("sleep", "9999")
                 .withName(container1Name)
-                .withBinds(bind1, bind2).exec();
+                .withBinds(bind1, bind2)
+                .exec();
 
         LOG.info("Created container1 {}", container1.toString());
 
@@ -175,6 +185,7 @@ public class CreateContainerCmdIT extends CmdIT {
         // No volumes are created, the information is just stored in .HostConfig.VolumesFrom
         assertThat(inspectContainerResponse2.getHostConfig().getVolumesFrom(),
                 hasItemInArray(new VolumesFrom(container1Name)));
+        assertThat(inspectContainerResponse1, mountedVolumes(containsInAnyOrder(volume1, volume2)));
 
         // To ensure that the information stored in VolumesFrom really is considered
         // when starting the container, we start it and verify that it has the same
@@ -842,5 +853,36 @@ public class CreateContainerCmdIT extends CmdIT {
         LOG.info("Inspect container {}", inspectContainerResponse.getHostConfig().getGroupAdd());
 
         assertThat(inspectContainerResponse.getHostConfig().getGroupAdd(), is(groupsToAdd));
+    }
+
+    @Test
+    public void createContainerFromPrivateRegistryWithValidAuth() throws Exception {
+        DockerAssume.assumeSwarm(dockerRule.getClient());
+
+        AuthConfig authConfig = RegistryUtils.runPrivateRegistry(dockerRule.getClient());
+
+        String imgName = RegistryUtils.createPrivateImage(dockerRule, "create-container-with-valid-auth");
+
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(imgName)
+                .withAuthConfig(authConfig)
+                .exec();
+
+        assertThat(container.getId(), is(notNullValue()));
+    }
+
+    @Test
+    public void createContainerFromPrivateRegistryWithNoAuth() throws Exception {
+        AuthConfig authConfig = RegistryUtils.runPrivateRegistry(dockerRule.getClient());
+
+        String imgName = RegistryUtils.createPrivateImage(dockerRule, "create-container-with-no-auth");
+
+        if (TestUtils.isSwarm(dockerRule.getClient())) {
+            exception.expect(instanceOf(InternalServerErrorException.class));
+        } else {
+            exception.expect(instanceOf(NotFoundException.class));
+        }
+
+        dockerRule.getClient().createContainerCmd(imgName)
+                .exec();
     }
 }

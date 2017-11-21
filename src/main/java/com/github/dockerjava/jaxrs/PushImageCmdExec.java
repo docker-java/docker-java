@@ -1,14 +1,5 @@
 package com.github.dockerjava.jaxrs;
 
-import static javax.ws.rs.client.Entity.entity;
-
-import javax.ws.rs.client.Invocation.Builder;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.model.AuthConfig;
@@ -17,6 +8,14 @@ import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.async.JsonStreamProcessor;
 import com.github.dockerjava.jaxrs.async.AbstractCallbackNotifier;
 import com.github.dockerjava.jaxrs.async.POSTCallbackNotifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ws.rs.client.Invocation.Builder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+
+import static javax.ws.rs.client.Entity.entity;
 
 public class PushImageCmdExec extends AbstrAsyncDockerCmdExec<PushImageCmd, PushResponseItem> implements
         PushImageCmd.Exec {
@@ -40,10 +39,9 @@ public class PushImageCmdExec extends AbstrAsyncDockerCmdExec<PushImageCmd, Push
         WebTarget webResource = getBaseResource().path("/images/" + name(command) + "/push").queryParam("tag",
                 command.getTag());
 
-        final String registryAuth = registryAuth(command.getAuthConfig());
         LOGGER.trace("POST: {}", webResource);
 
-        Builder builder = webResource.request().header("X-Registry-Auth", registryAuth)
+        Builder builder = resourceWithAuthConfig(command.getAuthConfig(), webResource.request())
                 .accept(MediaType.APPLICATION_JSON);
 
         return new POSTCallbackNotifier<PushResponseItem>(new JsonStreamProcessor<PushResponseItem>(

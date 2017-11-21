@@ -10,7 +10,9 @@ import com.github.dockerjava.api.model.AuthResponse;
  * Authenticate with the server, useful for checking authentication.
  *
  */
-public class AuthCmdImpl extends AbstrAuthCfgDockerCmd<AuthCmd, AuthResponse> implements AuthCmd {
+public class AuthCmdImpl extends AbstrDockerCmd<AuthCmd, AuthResponse> implements AuthCmd {
+
+    private AuthConfig authConfig;
 
     public AuthCmdImpl(AuthCmd.Exec exec, AuthConfig authConfig) {
         super(exec);
@@ -20,5 +22,14 @@ public class AuthCmdImpl extends AbstrAuthCfgDockerCmd<AuthCmd, AuthResponse> im
     @Override
     public AuthResponse exec() throws UnauthorizedException {
         return super.exec();
+    }
+
+    public AuthConfig getAuthConfig() {
+        return authConfig;
+    }
+
+    public AuthCmd withAuthConfig(AuthConfig authConfig) {
+        this.authConfig = authConfig;
+        return this;
     }
 }

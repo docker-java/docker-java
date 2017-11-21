@@ -3,14 +3,14 @@ package com.github.dockerjava.cmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.core.RemoteApiVersion;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.core.command.PushImageResultCallback;
-import com.github.dockerjava.junit.category.AuthIntegration;
+import com.github.dockerjava.utils.RegistryUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.junit.rules.ExpectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,33 +31,40 @@ public class PushImageCmdIT extends CmdIT {
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
+    private AuthConfig authConfig;
 
     @Before
     public void beforeTest() throws Exception {
         username = dockerRule.getClient().authConfig().getUsername();
+        authConfig = RegistryUtils.runPrivateRegistry(dockerRule.getClient());
     }
 
-    @Category(AuthIntegration.class)
     @Test
     public void pushLatest() throws Exception {
-
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("true").exec();
 
         LOG.info("Created container {}", container.toString());
-
         assertThat(container.getId(), not(isEmptyString()));
 
         LOG.info("Committing container: {}", container.toString());
-        String imageId = dockerRule.getClient().commitCmd(container.getId()).withRepository(username + "/busybox").exec();
+        String imgName = authConfig.getRegistryAddress() + "/" + dockerRule.getKind() + "-push-latest";
+        String imageId = dockerRule.getClient().commitCmd(container.getId())
+                .withRepository(imgName)
+                .exec();
 
         // we have to block until image is pushed
-        dockerRule.getClient().pushImageCmd(username + "/busybox").exec(new PushImageResultCallback())
+        dockerRule.getClient().pushImageCmd(imgName)
+                .withAuthConfig(authConfig)
+                .exec(new PushImageResultCallback())
                 .awaitCompletion(30, TimeUnit.SECONDS);
 
         LOG.info("Removing image: {}", imageId);
         dockerRule.getClient().removeImageCmd(imageId).exec();
 
-        dockerRule.getClient().pullImageCmd(username + "/busybox").exec(new PullImageResultCallback())
+        dockerRule.getClient().pullImageCmd(imgName)
+                .withTag("latest")
+                .withAuthConfig(authConfig)
+                .exec(new PullImageResultCallback())
                 .awaitCompletion(30, TimeUnit.SECONDS);
     }
 
@@ -75,5 +82,47 @@ public class PushImageCmdIT extends CmdIT {
                 .exec(new PushImageResultCallback())
                 .awaitCompletion(30, TimeUnit.SECONDS); // exclude infinite await sleep
 
+    }
+
+    @Test
+    public void testPushImageWithValidAuth() throws Exception {
+        String imgName = RegistryUtils.createTestImage(dockerRule, "push-image-with-valid-auth");
+
+        // stream needs to be fully read in order to close the underlying connection
+        dockerRule.getClient().pushImageCmd(imgName)
+                .withAuthConfig(authConfig)
+                .exec(new PushImageResultCallback())
+                .awaitCompletion(30, TimeUnit.SECONDS);
+    }
+
+    @Test
+    public void testPushImageWithNoAuth() throws Exception {
+        String imgName = RegistryUtils.createTestImage(dockerRule, "push-image-with-no-auth");
+
+        exception.expect(DockerClientException.class);
+
+        // stream needs to be fully read in order to close the underlying connection
+        dockerRule.getClient().pushImageCmd(imgName)
+                .exec(new PushImageResultCallback())
+                .awaitCompletion(30, TimeUnit.SECONDS);
+    }
+
+    @Test
+    public void testPushImageWithInvalidAuth() throws Exception {
+        AuthConfig invalidAuthConfig = new AuthConfig()
+                .withUsername("testuser")
+                .withPassword("testwrongpassword")
+                .withEmail("foo@bar.de")
+                .withRegistryAddress(authConfig.getRegistryAddress());
+
+        String imgName = RegistryUtils.createTestImage(dockerRule, "push-image-with-invalid-auth");
+
+        exception.expect(DockerClientException.class);
+
+        // stream needs to be fully read in order to close the underlying connection
+        dockerRule.getClient().pushImageCmd(imgName)
+                .withAuthConfig(invalidAuthConfig)
+                .exec(new PushImageResultCallback())
+                .awaitCompletion(30, TimeUnit.SECONDS);
     }
 }
