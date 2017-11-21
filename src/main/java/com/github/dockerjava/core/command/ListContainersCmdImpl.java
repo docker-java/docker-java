@@ -138,11 +138,6 @@ public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, Lis
     }
 
     @Override
-    public ListContainersCmd withExitcodeFilter(Integer exitcode) {
-        return withExitedFilter(exitcode);
-    }
-
-    @Override
     public ListContainersCmd withFilter(String filterName, Collection<String> filterValues) {
         checkNotNull(filterValues, filterName + " was not specified");
         this.filters.withFilter(filterName, filterValues);
@@ -150,7 +145,7 @@ public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, Lis
     }
 
     @Override
-    public ListContainersCmd withStatusFilter(String... status) {
+    public ListContainersCmd withStatusFilter(Collection<String> status) {
         checkNotNull(status, "status was not specified");
         this.filters.withFilter("status", status);
         return this;

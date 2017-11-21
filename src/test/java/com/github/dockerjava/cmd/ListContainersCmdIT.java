@@ -1,8 +1,6 @@
 package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.CreateNetworkResponse;
-import com.github.dockerjava.api.command.CreateVolumeResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Container;
@@ -208,7 +206,7 @@ public class ListContainersCmdIT extends CmdIT {
         List<Container> filteredContainers = dockerRule.getClient().listContainersCmd()
                 .withShowAll(true)
                 .withLabelFilter(testLabel)
-                .withStatusFilter("created")
+                .withStatusFilter(singletonList("created"))
                 .exec();
 
         assertThat(filteredContainers.size(), is(2));
@@ -219,7 +217,7 @@ public class ListContainersCmdIT extends CmdIT {
         filteredContainers = dockerRule.getClient().listContainersCmd()
                 .withShowAll(true)
                 .withLabelFilter(testLabel)
-                .withStatusFilter("running")
+                .withStatusFilter(singletonList("running"))
                 .exec();
 
         assertThat(filteredContainers.size(), is(1));
@@ -230,7 +228,7 @@ public class ListContainersCmdIT extends CmdIT {
         filteredContainers = dockerRule.getClient().listContainersCmd()
                 .withShowAll(true)
                 .withLabelFilter(testLabel)
-                .withStatusFilter("paused")
+                .withStatusFilter(singletonList("paused"))
                 .exec();
 
         assertThat(filteredContainers.size(), is(1));
@@ -242,7 +240,7 @@ public class ListContainersCmdIT extends CmdIT {
         filteredContainers = dockerRule.getClient().listContainersCmd()
                 .withShowAll(true)
                 .withLabelFilter(testLabel)
-                .withStatusFilter("exited")
+                .withStatusFilter(singletonList("exited"))
                 .exec();
 
         assertThat(filteredContainers.size(), is(1));
@@ -252,7 +250,7 @@ public class ListContainersCmdIT extends CmdIT {
     @Test
     public void testVolumeFilter() throws Exception {
         String id;
-        CreateVolumeResponse volume = dockerRule.getClient().createVolumeCmd()
+        dockerRule.getClient().createVolumeCmd()
                 .withName("TestFilterVolume")
                 .withDriver("local")
                 .exec();
@@ -280,7 +278,7 @@ public class ListContainersCmdIT extends CmdIT {
     @Test
     public void testNetworkFilter() throws Exception {
         String id;
-        CreateNetworkResponse network = dockerRule.getClient().createNetworkCmd()
+        dockerRule.getClient().createNetworkCmd()
                 .withName("TestFilterNetwork")
                 .withDriver("bridge")
                 .exec();

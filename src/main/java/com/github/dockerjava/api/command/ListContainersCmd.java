@@ -74,18 +74,10 @@ public interface ListContainersCmd extends SyncDockerCmd<List<Container>> {
     ListContainersCmd withExitedFilter(Integer exited);
 
     /**
-     * Use {@link #withExitedFilter(Integer)} instead
-     * @param exitcode
-     *            - Show only containers that exited with the passed exitcode.
-     */
-    @Deprecated
-    ListContainersCmd withExitcodeFilter(Integer exitcode);
-
-    /**
      * @param status
      *            - Show only containers with the passed status (created|restarting|running|paused|exited).
      */
-    ListContainersCmd withStatusFilter(String... status);
+    ListContainersCmd withStatusFilter(Collection<String> status);
 
     /**
      * @param labels
