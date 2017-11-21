@@ -9,6 +9,7 @@ import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.core.command.WaitContainerResultCallback;
+import com.github.dockerjava.junit.DockerAssume;
 import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
@@ -22,6 +23,8 @@ import java.util.Map;
 import java.util.UUID;
 
 import static ch.lambdaj.Lambda.filter;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
@@ -126,7 +129,7 @@ public class ListContainersCmdIT extends CmdIT {
         // List by string label
         List<Container> filteredContainers = dockerRule.getClient().listContainersCmd()
                 .withShowAll(true)
-                .withLabelFilter("test=" + testLabel.get("test"))
+                .withLabelFilter(singletonList("test=" + testLabel.get("test")))
                 .exec();
 
         assertThat(filteredContainers.size(), is(1));
@@ -156,7 +159,7 @@ public class ListContainersCmdIT extends CmdIT {
 
         List<Container> filteredContainers = dockerRule.getClient().listContainersCmd()
                 .withShowAll(true)
-                .withNameFilter("nameFilterTest1-" + testUUID, "nameFilterTest2-" + testUUID)
+                .withNameFilter(asList("nameFilterTest1-" + testUUID, "nameFilterTest2-" + testUUID))
                 .exec();
 
         assertThat(filteredContainers.size(), is(2));
@@ -179,7 +182,7 @@ public class ListContainersCmdIT extends CmdIT {
 
         List<Container> filteredContainers = dockerRule.getClient().listContainersCmd()
                 .withShowAll(true)
-                .withIdFilter(id1, id2)
+                .withIdFilter(asList(id1, id2))
                 .exec();
 
         assertThat(filteredContainers.size(), is(2));
@@ -267,7 +270,7 @@ public class ListContainersCmdIT extends CmdIT {
         List<Container> filteredContainers = dockerRule.getClient().listContainersCmd()
                 .withShowAll(true)
                 .withLabelFilter(testLabel)
-                .withVolumeFilter("TestFilterVolume")
+                .withVolumeFilter(singletonList("TestFilterVolume"))
                 .exec();
 
         assertThat(filteredContainers.size(), is(1));
@@ -295,7 +298,7 @@ public class ListContainersCmdIT extends CmdIT {
         List<Container> filteredContainers = dockerRule.getClient().listContainersCmd()
                 .withShowAll(true)
                 .withLabelFilter(testLabel)
-                .withNetworkFilter("TestFilterNetwork")
+                .withNetworkFilter(singletonList("TestFilterNetwork"))
                 .exec();
 
         assertThat(filteredContainers.size(), is(1));
@@ -304,10 +307,14 @@ public class ListContainersCmdIT extends CmdIT {
 
     @Test
     public void testAncestorFilter() throws Exception {
+        // ancestor filters are broken in swarm
+        // https://github.com/docker/swarm/issues/1716
+        DockerAssume.assumeNotSwarm(dockerRule.getClient());
+
         dockerRule.getClient().pullImageCmd("busybox")
                 .withTag("1.24")
                 .exec(new PullImageResultCallback())
-                .awaitSuccess();
+                .awaitCompletion();
 
         dockerRule.getClient().createContainerCmd("busybox:1.24")
                 .withLabels(testLabel)
@@ -323,7 +330,7 @@ public class ListContainersCmdIT extends CmdIT {
         List<Container> filteredContainers = dockerRule.getClient().listContainersCmd()
                 .withLabelFilter(testLabel)
                 .withShowAll(true)
-                .withAncestorFilter(imageId)
+                .withAncestorFilter(singletonList(imageId))
                 .exec();
 
         assertThat(filteredContainers.size(), is(1));

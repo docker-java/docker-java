@@ -3,6 +3,7 @@ package com.github.dockerjava.api.command;
 import com.github.dockerjava.api.model.Container;
 
 import javax.annotation.CheckForNull;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -40,31 +41,31 @@ public interface ListContainersCmd extends SyncDockerCmd<List<Container>> {
      * @param name
      *            - Show only containers that has the container's name
      */
-    ListContainersCmd withNameFilter(String... name);
+    ListContainersCmd withNameFilter(Collection<String> name);
 
     /**
      * @param id
      *            - Show only containers that has the container's id
      */
-    ListContainersCmd withIdFilter(String... id);
+    ListContainersCmd withIdFilter(Collection<String> id);
 
     /**
      * @param ancestor
      *            - Show only containers created from an image or a descendant.
      */
-    ListContainersCmd withAncestorFilter(String... ancestor);
+    ListContainersCmd withAncestorFilter(Collection<String> ancestor);
 
     /**
      * @param volume
      *            - Show only containers with volume name or mount point destination
      */
-    ListContainersCmd withVolumeFilter(String... volume);
+    ListContainersCmd withVolumeFilter(Collection<String> volume);
 
     /**
      * @param network
      *            - Show only containers with network id or network name
      */
-    ListContainersCmd withNetworkFilter(String... network);
+    ListContainersCmd withNetworkFilter(Collection<String> network);
 
     /**
      * @param exited
@@ -90,7 +91,7 @@ public interface ListContainersCmd extends SyncDockerCmd<List<Container>> {
      * @param labels
      *            - Show only containers with the passed labels.
      */
-    ListContainersCmd withLabelFilter(String... labels);
+    ListContainersCmd withLabelFilter(Collection<String> labels);
 
     /**
      * @param labels
@@ -127,7 +128,7 @@ public interface ListContainersCmd extends SyncDockerCmd<List<Container>> {
      * @param filterValues
      *            - Show only containers where the filter matches the given values
      */
-    ListContainersCmd withFilter(String filterName, String... filterValues);
+    ListContainersCmd withFilter(String filterName, Collection<String> filterValues);
 
     interface Exec extends DockerCmdSyncExec<ListContainersCmd, List<Container>> {
     }
