@@ -52,6 +52,12 @@ public class Statistics implements Serializable {
     @JsonProperty("precpu_stats")
     private Map<String, Object> preCpuStats;
 
+    /**
+     * @since Docker Remote API 1.23
+     */
+    @JsonProperty("pids_stats")
+    private Map<String, Object> pidsStats;
+
     public String getRead() {
         return read;
     }
@@ -90,6 +96,10 @@ public class Statistics implements Serializable {
 
     public Map<String, Object> getBlkioStats() {
         return blkioStats;
+    }
+
+    public Map<String, Object> getPidsStats() {
+        return pidsStats;
     }
 
     @Override
