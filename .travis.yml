@@ -17,9 +17,9 @@ env:
     # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
     #   via the "travis encrypt" command using the project repo's public key
     - secure: "GonzmzvnXsTNQV+6sKtBSSPiwbpMZjxumNt5LFp1g77/afLxw9kl2EQOXbUe308vFOwRVqeY7drBvNJa8aJkTUClfMaGRjfZ9DUwm6doMKMUYrdEkYoQTcH7yDX5K5w9MT6m+Izj+BK2gB7nK3yFlYG6COeXCdFbQ4/cf3/xfRc="
-    - COVERITY_SCAN_PROJECT_NAME="docker-java/docker-java"
+    - COVERITY_SCAN_PROJECT_NAME="yuting-liu/docker-java"
     - COVERITY_SCAN_BRANCH_PATTERN="master"
-    - COVERITY_SCAN_NOTIFICATION_EMAIL="kanstantsin.sha@gmail.com"
+    - COVERITY_SCAN_NOTIFICATION_EMAIL="yuting@sumologic.com"
 
   matrix:
 #    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="17.09.0~ce-0~ubuntu-trusty"
