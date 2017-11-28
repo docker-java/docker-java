@@ -55,6 +55,12 @@ public class Container implements Serializable {
     private String status;
 
     /**
+     * @since ~{@link RemoteApiVersion#VERSION_1_23}
+     */
+    @JsonProperty("State")
+    private String state;
+
+    /**
      * @since ~{@link RemoteApiVersion#VERSION_1_19}
      */
     @JsonProperty("SizeRw")
@@ -83,6 +89,12 @@ public class Container implements Serializable {
     @JsonProperty("NetworkSettings")
     private ContainerNetworkSettings networkSettings;
 
+    /**
+     * @since ~{@link RemoteApiVersion#VERSION_1_23}
+     */
+    @JsonProperty("Mounts")
+    private ContainerMount[] mounts;
+
     public String getId() {
         return id;
     }
@@ -106,6 +118,10 @@ public class Container implements Serializable {
 
     public String getStatus() {
         return status;
+    }
+
+    public String getState() {
+        return state;
     }
 
     public ContainerPort[] getPorts() {
@@ -150,6 +166,10 @@ public class Container implements Serializable {
     @CheckForNull
     public ContainerHostConfig getHostConfig() {
         return hostConfig;
+    }
+
+    public ContainerMount[] getMounts() {
+        return mounts;
     }
 
     @Override
