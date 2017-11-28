@@ -12,6 +12,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -93,7 +94,7 @@ public class Container implements Serializable {
      * @since ~{@link RemoteApiVersion#VERSION_1_23}
      */
     @JsonProperty("Mounts")
-    private ContainerMount[] mounts;
+    private List<ContainerMount> mounts;
 
     public String getId() {
         return id;
@@ -168,7 +169,7 @@ public class Container implements Serializable {
         return hostConfig;
     }
 
-    public ContainerMount[] getMounts() {
+    public List<ContainerMount> getMounts() {
         return mounts;
     }
 
