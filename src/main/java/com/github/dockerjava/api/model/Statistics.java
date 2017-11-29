@@ -35,7 +35,7 @@ public class Statistics implements Serializable {
      */
     @Deprecated
     @JsonProperty("network")
-    private Map<String, Object> network;
+    private Map<String, StatisticNetWorksConfig> network;
 
     @JsonProperty("memory_stats")
     private Map<String, Object> memoryStats;
@@ -68,7 +68,7 @@ public class Statistics implements Serializable {
      * @deprecated as of Docker Remote API 1.21, replaced by {@link #getNetworks()}
      */
     @Deprecated
-    public Map<String, Object> getNetwork() {
+    public Map<String, StatisticNetWorksConfig> getNetwork() {
         return network;
     }
 
