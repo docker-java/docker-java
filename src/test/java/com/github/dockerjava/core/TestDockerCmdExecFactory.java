@@ -42,6 +42,7 @@ import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.ListNetworksCmd;
 import com.github.dockerjava.api.command.ListServicesCmd;
 import com.github.dockerjava.api.command.ListSwarmNodesCmd;
+import com.github.dockerjava.api.command.ListTasksCmd;
 import com.github.dockerjava.api.command.ListVolumesCmd;
 import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.api.command.LogContainerCmd;
@@ -512,6 +513,11 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
     @Override
     public UpdateSwarmNodeCmd.Exec updateSwarmNodeCmdExec() {
         return delegate.updateSwarmNodeCmdExec();
+    }
+
+    @Override
+    public ListTasksCmd.Exec listTasksCmdExec() {
+        return delegate.listTasksCmdExec();
     }
 
     public List<String> getContainerNames() {

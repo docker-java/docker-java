@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -13,6 +14,7 @@ import java.io.Serializable;
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TaskSpec implements Serializable {
     public static final Long serialVersionUID = 1L;
 
@@ -45,6 +47,14 @@ public class TaskSpec implements Serializable {
      */
     @JsonProperty("LogDriver")
     private Driver logDriver;
+
+    /**
+     * @since 1.24
+     * a counter that triggers an update even if no relevant parameters have been changed
+     * a random value will work if it is incrementing.
+     */
+    @JsonProperty("ForceUpdate")
+    private Integer forceUpdate;
 
     /**
      * @see #containerSpec
@@ -123,6 +133,22 @@ public class TaskSpec implements Serializable {
      */
     public TaskSpec withLogDriver(Driver logDriver) {
         this.logDriver = logDriver;
+        return this;
+    }
+
+    /**
+     * @see #forceUpdate
+     */
+    @CheckForNull
+    public Integer getForceUpdate() {
+        return forceUpdate;
+    }
+
+    /**
+     * @see #forceUpdate
+     */
+    public TaskSpec withForceUpdate(Integer forceUpdate) {
+        this.forceUpdate = forceUpdate;
         return this;
     }
 

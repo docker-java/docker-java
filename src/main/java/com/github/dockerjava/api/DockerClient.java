@@ -34,6 +34,7 @@ import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.ListNetworksCmd;
 import com.github.dockerjava.api.command.ListServicesCmd;
+import com.github.dockerjava.api.command.ListTasksCmd;
 import com.github.dockerjava.api.command.ListVolumesCmd;
 import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.api.command.LogContainerCmd;
@@ -346,6 +347,14 @@ public interface DockerClient extends Closeable {
      * @return command
      */
     RemoveServiceCmd removeServiceCmd(String serviceId);
+
+    /**
+     * List tasks in the swarm cluster
+     *
+     * @return the command
+     * @since 1.24
+     */
+    ListTasksCmd listTasksCmd();
 
     @Override
     void close() throws IOException;

@@ -38,7 +38,7 @@ public abstract class SwarmCmdIT extends CmdIT {
     private static final String DOCKER_IN_DOCKER_IMAGE_REPOSITORY = "docker";
     private static final String DOCKER_IN_DOCKER_IMAGE_TAG = "1.12-dind";
 
-    @BeforeClass
+    @Before
     public void beforeTest() throws Exception {
         assumeThat(dockerRule, isGreaterOrEqual(VERSION_1_24));
     }

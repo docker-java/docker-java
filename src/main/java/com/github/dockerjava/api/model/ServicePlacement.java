@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -14,6 +15,7 @@ import java.util.List;
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ServicePlacement implements Serializable {
     public static final Long serialVersionUID = 1L;
 
@@ -22,6 +24,12 @@ public class ServicePlacement implements Serializable {
      */
     @JsonProperty("Constraints")
     private List<String> constraints;
+
+    /**
+     * @since 1.30
+     */
+    @JsonProperty("Platforms")
+    private List<SwarmNodePlatform> platforms;
 
     /**
      * @see #constraints
@@ -37,6 +45,17 @@ public class ServicePlacement implements Serializable {
     public ServicePlacement withConstraints(List<String> constraints) {
         this.constraints = constraints;
         return this;
+    }
+
+    /**
+     * @see #platforms
+     */
+    public List<SwarmNodePlatform> getPlatforms() {
+        return platforms;
+    }
+
+    public void setPlatforms(List<SwarmNodePlatform> platforms) {
+        this.platforms = platforms;
     }
 
     @Override

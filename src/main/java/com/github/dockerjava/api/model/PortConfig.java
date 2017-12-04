@@ -41,6 +41,14 @@ public class PortConfig implements Serializable {
     private int publishedPort;
 
     /**
+     * @since 1.25
+     * docker 1.13
+     * https://github.com/mrjana/docker/blob/14ac9f60d0174256e0713701ebffaf5ca827da71/api/types/swarm/network.go
+     */
+    @JsonProperty("PublishMode")
+    private PublishMode publishMode;
+
+    /**
      * @see #name
      */
     public String getName() {
@@ -103,6 +111,16 @@ public class PortConfig implements Serializable {
         return this;
     }
 
+    @CheckForNull
+    public PublishMode getPublishMode() {
+        return publishMode;
+    }
+
+    public PortConfig withPublishMode(PublishMode publishMode) {
+        this.publishMode = publishMode;
+        return this;
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
@@ -116,5 +134,14 @@ public class PortConfig implements Serializable {
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    public enum PublishMode {
+        //ingress load balancing using routing mesh.
+        @JsonProperty("ingress")
+        ingress,
+        //direct host level access on the host where the task is running.
+        @JsonProperty("host")
+        host
     }
 }
