@@ -26,6 +26,12 @@ public class ServicePlacement implements Serializable {
     private List<String> constraints;
 
     /**
+     * @since 1.30
+     */
+    @JsonProperty("Platforms")
+    private List<SwarmNodePlatform> platforms;
+
+    /**
      * @see #constraints
      */
     @CheckForNull
@@ -39,6 +45,17 @@ public class ServicePlacement implements Serializable {
     public ServicePlacement withConstraints(List<String> constraints) {
         this.constraints = constraints;
         return this;
+    }
+
+    /**
+     * @see #platforms
+     */
+    public List<SwarmNodePlatform> getPlatforms() {
+        return platforms;
+    }
+
+    public void setPlatforms(List<SwarmNodePlatform> platforms) {
+        this.platforms = platforms;
     }
 
     @Override
