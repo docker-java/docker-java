@@ -12,8 +12,6 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
  * Update swarmNode spec
  *
@@ -25,6 +23,12 @@ public class UpdateSwarmNodeCmdImpl extends AbstrDockerCmd<UpdateSwarmNodeCmd, V
     private String swarmNodeId;
 
     private SwarmNodeSpec swarmNodeSpec;
+
+    private Integer version;
+
+    public UpdateSwarmNodeCmdImpl(Exec exec) {
+        super(exec);
+    }
 
     public UpdateSwarmNodeCmdImpl(Exec exec, String swarmNodeId, SwarmNodeSpec swarmNodeSpec) {
         super(exec);
@@ -60,10 +64,20 @@ public class UpdateSwarmNodeCmdImpl extends AbstrDockerCmd<UpdateSwarmNodeCmd, V
      * @see #swarmNodeSpec
      */
     public UpdateSwarmNodeCmd withSwarmNodeSpec(SwarmNodeSpec swarmNodeSpec) {
-        checkNotNull(swarmNodeSpec.getAvailability(), "Availability in SwarmNodeSpec was not specified");
-        checkNotNull(swarmNodeSpec.getRole(), "Role in SwarmNodeSpec was not specified");
         this.swarmNodeSpec = swarmNodeSpec;
         return this;
+    }
+
+    @Override
+    public UpdateSwarmNodeCmd withVersion(@Nonnull Integer versionId) {
+        this.version = versionId;
+        return this;
+    }
+
+    @CheckForNull
+    @Override
+    public Integer getVersion() {
+        return version;
     }
 
     /**
