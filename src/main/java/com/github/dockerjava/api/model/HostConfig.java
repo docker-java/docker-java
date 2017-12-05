@@ -170,6 +170,9 @@ public class HostConfig implements Serializable {
     @JsonProperty("PidMode")
     private String pidMode;
 
+    @JsonProperty("IpcMode")
+    private String ipcMode;
+
     /**
      * @since {@link RemoteApiVersion#VERSION_1_20}
      */
@@ -299,6 +302,11 @@ public class HostConfig implements Serializable {
     @CheckForNull
     public String getPidMode() {
         return pidMode;
+    }
+
+    @CheckForNull
+    public String getIpcMode() {
+        return ipcMode;
     }
 
     /**
@@ -702,6 +710,14 @@ public class HostConfig implements Serializable {
      */
     public HostConfig withPidMode(String pidMode) {
         this.pidMode = pidMode;
+        return this;
+    }
+
+    /**
+     * @see #ipcMode
+     */
+    public HostConfig withIpcMode(String ipcMode) {
+        this.ipcMode = ipcMode;
         return this;
     }
 
