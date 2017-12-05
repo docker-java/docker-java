@@ -208,6 +208,7 @@ public class DefaultDockerClientConfigTest {
     @Test
     public void testGetAuthConfigurationsFromDockerCfg() throws URISyntaxException {
         File cfgFile = new File(Resources.getResource("com.github.dockerjava.core/registry.v1").toURI());
+        System.setProperty("user.home", cfgFile.getAbsolutePath());
         DefaultDockerClientConfig clientConfig = new DefaultDockerClientConfig(URI.create(
             "unix://foo"), cfgFile.getAbsolutePath(), "apiVersion", "registryUrl", "registryUsername", "registryPassword",
             "registryEmail", null);

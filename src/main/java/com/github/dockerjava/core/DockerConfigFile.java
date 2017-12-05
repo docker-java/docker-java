@@ -112,13 +112,13 @@ public class DockerConfigFile {
         return "DockerConfigFile [auths=" + auths + "]";
     }
 
-    public static DockerConfigFile loadConfig(File dockerConfigPath) throws IOException {
+    public static DockerConfigFile loadConfig(File userHome, File dockerConfigPath) throws IOException {
         //parse new docker config file format
         DockerConfigFile dockerConfig = loadCurrentConfig(dockerConfigPath);
 
         //parse old auth config file format
         if (dockerConfig == null) {
-            dockerConfig = loadLegacyConfig(dockerConfigPath);
+            dockerConfig = loadLegacyConfig(userHome);
         }
 
         //otherwise create default config
@@ -150,8 +150,8 @@ public class DockerConfigFile {
         }
     }
 
-    private static DockerConfigFile loadLegacyConfig(File dockerConfigPath) throws IOException {
-        File dockerLegacyCfgFile = new File(dockerConfigPath, File.separator + DOCKER_LEGACY_CFG);
+    private static DockerConfigFile loadLegacyConfig(File userHome) throws IOException {
+        File dockerLegacyCfgFile = new File(userHome, DOCKER_LEGACY_CFG);
 
         if (!dockerLegacyCfgFile.exists() || !dockerLegacyCfgFile.isFile()) {
             return null;
