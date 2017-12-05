@@ -473,6 +473,12 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
+    @JsonIgnore
+    public String getIpcMode() {
+        return hostConfig.getIpcMode();
+    }
+
+    @Override
     public HostConfig getHostConfig() {
         return hostConfig;
     }
@@ -978,6 +984,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public CreateContainerCmd withPidMode(String pidMode) {
         checkNotNull(pidMode, "pidMode was not specified");
         this.hostConfig.withPidMode(pidMode);
+        return this;
+    }
+
+    @Override
+    public CreateContainerCmd withIpcMode(String ipcMode) {
+        checkNotNull(ipcMode, "ipcMode was not specified");
+        this.hostConfig.withIpcMode(ipcMode);
         return this;
     }
 

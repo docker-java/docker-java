@@ -189,6 +189,9 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     String getPidMode();
 
     @CheckForNull
+    String getIpcMode();
+
+    @CheckForNull
     HostConfig getHostConfig();
 
     @CheckForNull
@@ -439,6 +442,8 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
      * Set the PID (Process) Namespace mode for the container, 'host': use the host's PID namespace inside the container
      */
     CreateContainerCmd withPidMode(String pidMode);
+
+    CreateContainerCmd withIpcMode(String ipcMode);
 
     CreateContainerCmd withHostConfig(HostConfig hostConfig);
 
