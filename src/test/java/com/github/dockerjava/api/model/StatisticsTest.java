@@ -38,5 +38,47 @@ public class StatisticsTest {
         assertThat(networkConfig.getTxPackets(), is(0L));
         assertThat(networkConfig.getTxErrors(), is(0L));
         assertThat(networkConfig.getTxDropped(), is(0L));
+
+        final MemoryStatsConfig memoryStatsConfig = stat.getMemoryStats();
+        assertThat(memoryStatsConfig.getUsage(), is(647168L));
+        assertThat(memoryStatsConfig.getMaxUsage(), is(1703936L));
+
+        final StatsConfig statsConfig = memoryStatsConfig.getStats();
+        assertThat(statsConfig.getActiveAnon(), is(102400L));
+        assertThat(statsConfig.getActiveFile(), is(0L));
+        assertThat(statsConfig.getCache(), is(0L));
+        assertThat(statsConfig.getDirty(), is(0L));
+        assertThat(statsConfig.getHierarchicalMemoryLimit(), is(9223372036854771712L));
+        assertThat(statsConfig.getHierarchicalMemswLimit(), is(9223372036854771712L));
+        assertThat(statsConfig.getInactiveAnon(), is(0L));
+        assertThat(statsConfig.getInactiveFile(), is(0L));
+        assertThat(statsConfig.getMappedFile(), is(0L));
+        assertThat(statsConfig.getPgfault(), is(9656L));
+        assertThat(statsConfig.getPgmajfault(), is(0L));
+        assertThat(statsConfig.getPgpgin(), is(3425L));
+        assertThat(statsConfig.getPgpgout(), is(3400L));
+        assertThat(statsConfig.getRss(), is(102400L));
+        assertThat(statsConfig.getRssHuge(), is(0L));
+        assertThat(statsConfig.getSwap(), is(0L));
+        assertThat(statsConfig.getTotalActiveAnon(), is(102400L));
+        assertThat(statsConfig.getTotalActiveFile(), is(0L));
+        assertThat(statsConfig.getTotalCache(), is(0L));
+        assertThat(statsConfig.getTotalDirty(), is(0L));
+        assertThat(statsConfig.getTotalInactiveAnon(), is(0L));
+        assertThat(statsConfig.getTotalInactiveFile(), is(0L));
+        assertThat(statsConfig.getTotalMappedFile(), is(0L));
+        assertThat(statsConfig.getTotalPgfault(), is(9656L));
+        assertThat(statsConfig.getTotalPgmajfault(), is(0L));
+        assertThat(statsConfig.getTotalPgpgin(), is(3425L));
+        assertThat(statsConfig.getTotalPgpgout(), is(3400L));
+        assertThat(statsConfig.getTotalRss(), is(102400L));
+        assertThat(statsConfig.getTotalRssHuge(), is(0L));
+        assertThat(statsConfig.getTotalSwap(), is(0L));
+        assertThat(statsConfig.getTotalUnevictable(), is(0L));
+        assertThat(statsConfig.getTotalWriteback(), is(0L));
+        assertThat(statsConfig.getUnevictable(), is(0L));
+        assertThat(statsConfig.getWriteback(), is(0L));
+
+        assertThat(memoryStatsConfig.getLimit(), is(2095874048L));
     }
 }
