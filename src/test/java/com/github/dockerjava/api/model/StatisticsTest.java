@@ -10,6 +10,7 @@ import java.io.IOException;
 import static com.github.dockerjava.test.serdes.JSONSamples.testRoundTrip;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 
 /**
  * @author Yuting Liu
@@ -29,13 +30,13 @@ public class StatisticsTest {
         assertThat(stat.getRead(), equalTo("2017-12-06T00:42:03.8352972Z"));
 
         final StatisticNetWorksConfig networkConfig = stat.getNetworks().get("eth0");
-        assertThat(networkConfig.getRxBytes(), equalTo(1230L));
-        assertThat(networkConfig.getRxPackets(), equalTo(19L));
-        assertThat(networkConfig.getRxErrors(), equalTo(0L));
-        assertThat(networkConfig.getRxDropped(), equalTo(0L));
-        assertThat(networkConfig.getTxBytes(), equalTo(0L));
-        assertThat(networkConfig.getTxPackets(), equalTo(0L));
-        assertThat(networkConfig.getTxErrors(), equalTo(0L));
-        assertThat(networkConfig.getTxDropped(), equalTo(0L));
+        assertThat(networkConfig.getRxBytes(), is(1230L));
+        assertThat(networkConfig.getRxPackets(), is(19L));
+        assertThat(networkConfig.getRxErrors(), is(0L));
+        assertThat(networkConfig.getRxDropped(), is(0L));
+        assertThat(networkConfig.getTxBytes(), is(0L));
+        assertThat(networkConfig.getTxPackets(), is(0L));
+        assertThat(networkConfig.getTxErrors(), is(0L));
+        assertThat(networkConfig.getTxDropped(), is(0L));
     }
 }
