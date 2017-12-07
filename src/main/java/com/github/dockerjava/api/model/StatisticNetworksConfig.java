@@ -120,5 +120,4 @@ class StatisticNetWorksConfig implements Serializable {
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
     }
-
 }

@@ -382,4 +382,3 @@ class StatsConfig implements Serializable {
         return writeback;
     }
 }
-

@@ -44,13 +44,19 @@ public class Statistics implements Serializable {
     private BlkioStatsConfig blkioStats;
 
     @JsonProperty("cpu_stats")
-    private Map<String, Object> cpuStats;
+    private CpuStatsConfig cpuStats;
 
     /**
      * @since Docker Remote API 1.19
      */
     @JsonProperty("precpu_stats")
-    private Map<String, Object> preCpuStats;
+    private CpuStatsConfig preCpuStats;
+
+    /**
+     * @since Docker Remote API 1.23
+     */
+    @JsonProperty("pids_stats")
+    private PidsStatsConfig pidsStats;
 
     public String getRead() {
         return read;
@@ -72,7 +78,7 @@ public class Statistics implements Serializable {
         return network;
     }
 
-    public Map<String, Object> getCpuStats() {
+    public CpuStatsConfig getCpuStats() {
         return cpuStats;
     }
 
@@ -80,7 +86,7 @@ public class Statistics implements Serializable {
      * The cpu statistic of last read, which is used for calculating the cpu usage percent.
      * It is not the exact copy of the {@link #getCpuStats()}.
      */
-    public Map<String, Object> getPreCpuStats() {
+    public CpuStatsConfig getPreCpuStats() {
         return preCpuStats;
     }
 
@@ -90,6 +96,10 @@ public class Statistics implements Serializable {
 
     public BlkioStatsConfig getBlkioStats() {
         return blkioStats;
+    }
+
+    public PidsStatsConfig getPidsStats() {
+        return pidsStats;
     }
 
     @Override
