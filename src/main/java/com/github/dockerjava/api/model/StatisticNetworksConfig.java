@@ -14,7 +14,6 @@ import java.io.Serializable;
  *
  * @author Yuting Liu
  */
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 class StatisticNetWorksConfig implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -52,27 +51,11 @@ class StatisticNetWorksConfig implements Serializable {
     }
 
     /**
-     * @see #rxBytes
-     */
-    public StatisticNetWorksConfig withRxBytes(Long rxBytes) {
-        this.rxBytes = rxBytes;
-        return this;
-    }
-
-    /**
      * @see #rxDropped
      */
     @CheckForNull
     public Long getRxDropped() {
         return rxDropped;
-    }
-
-    /**
-     * @see #rxDropped
-     */
-    public StatisticNetWorksConfig withRxDropped(Long rxDropped) {
-        this.rxDropped = rxDropped;
-        return this;
     }
 
     /**
@@ -84,27 +67,11 @@ class StatisticNetWorksConfig implements Serializable {
     }
 
     /**
-     * @see #rxErrors
-     */
-    public StatisticNetWorksConfig withRxErrors(Long rxErrors) {
-        this.rxErrors = rxErrors;
-        return this;
-    }
-
-    /**
      * @see #rxPackets
      */
     @CheckForNull
     public Long getRxPackets() {
         return rxPackets;
-    }
-
-    /**
-     * @see #rxPackets
-     */
-    public StatisticNetWorksConfig withRxPackets(Long rxPackets) {
-        this.rxPackets = rxPackets;
-        return this;
     }
 
     /**
@@ -116,27 +83,11 @@ class StatisticNetWorksConfig implements Serializable {
     }
 
     /**
-     * @see #txBytes
-     */
-    public StatisticNetWorksConfig withTxBytes(Long txBytes) {
-        this.txBytes = txBytes;
-        return this;
-    }
-
-    /**
      * @see #txDropped
      */
     @CheckForNull
     public Long getTxDropped() {
         return txDropped;
-    }
-
-    /**
-     * @see #txDropped
-     */
-    public StatisticNetWorksConfig withTxDropped(Long txDropped) {
-        this.txDropped = txDropped;
-        return this;
     }
 
     /**
@@ -148,27 +99,11 @@ class StatisticNetWorksConfig implements Serializable {
     }
 
     /**
-     * @see #txErrors
-     */
-    public StatisticNetWorksConfig withTxErrors(Long txErrors) {
-        this.txErrors = txErrors;
-        return this;
-    }
-
-    /**
      * @see #txPackets
      */
     @CheckForNull
     public Long getTxPackets() {
         return txPackets;
-    }
-
-    /**
-     * @see #txPackets
-     */
-    public StatisticNetWorksConfig withTxPackets(Long txPackets) {
-        this.txPackets = txPackets;
-        return this;
     }
 
     @Override

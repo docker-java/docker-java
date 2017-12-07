@@ -41,7 +41,7 @@ public class Statistics implements Serializable {
     private MemoryStatsConfig memoryStats;
 
     @JsonProperty("blkio_stats")
-    private Map<String, Object> blkioStats;
+    private BlkioStatsConfig blkioStats;
 
     @JsonProperty("cpu_stats")
     private Map<String, Object> cpuStats;
@@ -88,7 +88,7 @@ public class Statistics implements Serializable {
         return memoryStats;
     }
 
-    public Map<String, Object> getBlkioStats() {
+    public BlkioStatsConfig getBlkioStats() {
         return blkioStats;
     }
 

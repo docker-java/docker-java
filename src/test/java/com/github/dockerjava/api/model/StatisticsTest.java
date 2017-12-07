@@ -3,14 +3,18 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.core.RemoteApiVersion;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.ArrayList;
 
 import static com.github.dockerjava.test.serdes.JSONSamples.testRoundTrip;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.empty;
 
 /**
  * @author Yuting Liu
@@ -80,5 +84,17 @@ public class StatisticsTest {
         assertThat(statsConfig.getWriteback(), is(0L));
 
         assertThat(memoryStatsConfig.getLimit(), is(2095874048L));
+
+        final BlkioStatsConfig blkioStatsConfig = stat.getBlkioStats();
+        assertThat(blkioStatsConfig.getIoServiceBytesRecursive(), is(empty()));
+        assertThat(blkioStatsConfig.getIoServicedRecursive(), is(empty()));
+        assertThat(blkioStatsConfig.getIoQueueRecursive(), is(empty()));
+        assertThat(blkioStatsConfig.getIoServiceTimeRecursive(), is(empty()));
+        assertThat(blkioStatsConfig.getIoWaitTimeRecursive(), is(empty()));
+        assertThat(blkioStatsConfig.getIoMergedRecursive(), is(empty()));
+        assertThat(blkioStatsConfig.getIoTimeRecursive(), is(empty()));
+        assertThat(blkioStatsConfig.getSectorsRecursive(), is(empty()));
+
+
     }
 }

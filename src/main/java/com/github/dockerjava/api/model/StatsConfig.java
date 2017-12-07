@@ -119,27 +119,11 @@ class StatsConfig implements Serializable {
     }
 
     /**
-     * @see #activeAnon
-     */
-    public StatsConfig withActiveAnon(Long activeAnon) {
-        this.activeAnon = activeAnon;
-        return this;
-    }
-
-    /**
      * @see #activeFile
      */
     @CheckForNull
     public Long getActiveFile() {
         return activeFile;
-    }
-
-    /**
-     * @see #activeFile
-     */
-    public StatsConfig withActiveFile(Long activeFile) {
-        this.activeFile = activeFile;
-        return this;
     }
 
     /**
@@ -151,27 +135,11 @@ class StatsConfig implements Serializable {
     }
 
     /**
-     * @see #cache
-     */
-    public StatsConfig withCache(Long cache) {
-        this.cache = cache;
-        return this;
-    }
-
-    /**
      * @see #dirty
      */
     @CheckForNull
     public Long getDirty() {
         return dirty;
-    }
-
-    /**
-     * @see #dirty
-     */
-    public StatsConfig withDirty(Long dirty) {
-        this.dirty = dirty;
-        return this;
     }
 
     /**
@@ -183,27 +151,11 @@ class StatsConfig implements Serializable {
     }
 
     /**
-     * @see #hierarchicalMemoryLimit
-     */
-    public StatsConfig withHierarchicalMemoryLimit(Long hierarchicalMemoryLimit) {
-        this.hierarchicalMemoryLimit = hierarchicalMemoryLimit;
-        return this;
-    }
-
-    /**
      * @see #hierarchicalMemswLimit
      */
     @CheckForNull
     public Long getHierarchicalMemswLimit() {
         return hierarchicalMemswLimit;
-    }
-
-    /**
-     * @see #hierarchicalMemswLimit
-     */
-    public StatsConfig withHierarchicalMemswLimit(Long hierarchicalMemswLimit) {
-        this.hierarchicalMemswLimit = hierarchicalMemswLimit;
-        return this;
     }
 
     /**
@@ -215,27 +167,11 @@ class StatsConfig implements Serializable {
     }
 
     /**
-     * @see #inactiveAnon
-     */
-    public StatsConfig withInactiveAnon(Long inactiveAnon) {
-        this.inactiveAnon = inactiveAnon;
-        return this;
-    }
-
-    /**
      * @see #inactiveFile
      */
     @CheckForNull
     public Long getInactiveFile() {
         return inactiveFile;
-    }
-
-    /**
-     * @see #inactiveFile
-     */
-    public StatsConfig withInactiveFile(Long inactiveFile) {
-        this.inactiveFile = inactiveFile;
-        return this;
     }
 
     /**
@@ -247,27 +183,11 @@ class StatsConfig implements Serializable {
     }
 
     /**
-     * @see #mappedFile
-     */
-    public StatsConfig withMappedFile(Long mappedFile) {
-        this.mappedFile = mappedFile;
-        return this;
-    }
-
-    /**
      * @see #pgfault
      */
     @CheckForNull
     public Long getPgfault() {
         return pgfault;
-    }
-
-    /**
-     * @see #pgfault
-     */
-    public StatsConfig withPgfault(Long pgfault) {
-        this.pgfault = pgfault;
-        return this;
     }
 
     /**
@@ -279,27 +199,11 @@ class StatsConfig implements Serializable {
     }
 
     /**
-     * @see #pgmajfault
-     */
-    public StatsConfig withPgmajfault(Long pgmajfault) {
-        this.pgmajfault = pgmajfault;
-        return this;
-    }
-
-    /**
      * @see #pgpgin
      */
     @CheckForNull
     public Long getPgpgin() {
         return pgpgin;
-    }
-
-    /**
-     * @see #pgpgin
-     */
-    public StatsConfig withPgpgin(Long pgpgin) {
-        this.pgpgin = pgpgin;
-        return this;
     }
 
     /**
@@ -311,27 +215,11 @@ class StatsConfig implements Serializable {
     }
 
     /**
-     * @see #pgpgout
-     */
-    public StatsConfig withPgpgout(Long pgpgout) {
-        this.pgpgout = pgpgout;
-        return this;
-    }
-
-    /**
      * @see #rss
      */
     @CheckForNull
     public Long getRss() {
         return rss;
-    }
-
-    /**
-     * @see #rss
-     */
-    public StatsConfig withRss(Long rss) {
-        this.rss = rss;
-        return this;
     }
 
     /**
@@ -343,27 +231,11 @@ class StatsConfig implements Serializable {
     }
 
     /**
-     * @see #rssHuge
-     */
-    public StatsConfig withRssHuge(Long rssHuge) {
-        this.rssHuge = rssHuge;
-        return this;
-    }
-
-    /**
      * @see #swap
      */
     @CheckForNull
     public Long getSwap() {
         return swap;
-    }
-
-    /**
-     * @see #swap
-     */
-    public StatsConfig withSwap(Long swap) {
-        this.swap = swap;
-        return this;
     }
 
     /**
@@ -375,27 +247,11 @@ class StatsConfig implements Serializable {
     }
 
     /**
-     * @see #totalActiveAnon
-     */
-    public StatsConfig withTotalActiveAnon(Long totalActiveAnon) {
-        this.totalActiveAnon = totalActiveAnon;
-        return this;
-    }
-
-    /**
      * @see #totalActiveFile
      */
     @CheckForNull
     public Long getTotalActiveFile() {
         return totalActiveFile;
-    }
-
-    /**
-     * @see #totalActiveFile
-     */
-    public StatsConfig withTotalActiveFile(Long totalActiveFile) {
-        this.totalActiveFile = totalActiveFile;
-        return this;
     }
 
     /**
@@ -407,27 +263,11 @@ class StatsConfig implements Serializable {
     }
 
     /**
-     * @see #totalCache
-     */
-    public StatsConfig withTotalCache(Long totalCache) {
-        this.totalCache = totalCache;
-        return this;
-    }
-
-    /**
      * @see #totalDirty
      */
     @CheckForNull
     public Long getTotalDirty() {
         return totalDirty;
-    }
-
-    /**
-     * @see #totalDirty
-     */
-    public StatsConfig withTotalDirty(Long totalDirty) {
-        this.totalDirty = totalDirty;
-        return this;
     }
 
     /**
@@ -439,27 +279,11 @@ class StatsConfig implements Serializable {
     }
 
     /**
-     * @see #totalInactiveAnon
-     */
-    public StatsConfig withTotalInactiveAnon(Long totalInactiveAnon) {
-        this.totalInactiveAnon = totalInactiveAnon;
-        return this;
-    }
-
-    /**
      * @see #totalInactiveFile
      */
     @CheckForNull
     public Long getTotalInactiveFile() {
         return totalInactiveFile;
-    }
-
-    /**
-     * @see #totalInactiveFile
-     */
-    public StatsConfig withTotalInactiveFile(Long totalInactiveFile) {
-        this.totalInactiveFile = totalInactiveFile;
-        return this;
     }
 
     /**
@@ -471,27 +295,11 @@ class StatsConfig implements Serializable {
     }
 
     /**
-     * @see #totalMappedFile
-     */
-    public StatsConfig withTotalMappedFile(Long totalMappedFile) {
-        this.totalMappedFile = totalMappedFile;
-        return this;
-    }
-
-    /**
      * @see #totalPgfault
      */
     @CheckForNull
     public Long getTotalPgfault() {
         return totalPgfault;
-    }
-
-    /**
-     * @see #totalPgfault
-     */
-    public StatsConfig withTotalPgfault(Long totalPgfault) {
-        this.totalPgfault = totalPgfault;
-        return this;
     }
 
     /**
@@ -503,27 +311,11 @@ class StatsConfig implements Serializable {
     }
 
     /**
-     * @see #totalPgmajfault
-     */
-    public StatsConfig withTotalPgmajfault(Long totalPgmajfault) {
-        this.totalPgmajfault = totalPgmajfault;
-        return this;
-    }
-
-    /**
      * @see #totalPgpgin
      */
     @CheckForNull
     public Long getTotalPgpgin() {
         return totalPgpgin;
-    }
-
-    /**
-     * @see #totalPgpgin
-     */
-    public StatsConfig withTotalPgpgin(Long totalPgpgin) {
-        this.totalPgpgin = totalPgpgin;
-        return this;
     }
 
     /**
@@ -535,27 +327,11 @@ class StatsConfig implements Serializable {
     }
 
     /**
-     * @see #totalPgpgout
-     */
-    public StatsConfig withTotalPgpgout(Long totalPgpgout) {
-        this.totalPgpgout = totalPgpgout;
-        return this;
-    }
-
-    /**
      * @see #totalRss
      */
     @CheckForNull
     public Long getTotalRss() {
         return totalRss;
-    }
-
-    /**
-     * @see #totalRss
-     */
-    public StatsConfig withTotalRss(Long totalRss) {
-        this.totalRss = totalRss;
-        return this;
     }
 
     /**
@@ -567,27 +343,11 @@ class StatsConfig implements Serializable {
     }
 
     /**
-     * @see #totalRssHuge
-     */
-    public StatsConfig withTotalRssHuge(Long totalRssHuge) {
-        this.totalRssHuge = totalRssHuge;
-        return this;
-    }
-
-    /**
      * @see #totalSwap
      */
     @CheckForNull
     public Long getTotalSwap() {
         return totalSwap;
-    }
-
-    /**
-     * @see #totalSwap
-     */
-    public StatsConfig withTotalSwap(Long totalSwap) {
-        this.totalSwap = totalSwap;
-        return this;
     }
 
     /**
@@ -599,27 +359,11 @@ class StatsConfig implements Serializable {
     }
 
     /**
-     * @see #totalUnevictable
-     */
-    public StatsConfig withTotalUnevictable(Long totalUnevictable) {
-        this.totalUnevictable = totalUnevictable;
-        return this;
-    }
-
-    /**
      * @see #totalWriteback
      */
     @CheckForNull
     public Long getTotalWriteback() {
         return totalWriteback;
-    }
-
-    /**
-     * @see #totalWriteback
-     */
-    public StatsConfig withTotalWriteback(Long totalWriteback) {
-        this.totalWriteback = totalWriteback;
-        return this;
     }
 
     /**
@@ -631,27 +375,11 @@ class StatsConfig implements Serializable {
     }
 
     /**
-     * @see #unevictable
-     */
-    public StatsConfig withUnevictable(Long unevictable) {
-        this.unevictable = unevictable;
-        return this;
-    }
-
-    /**
      * @see #writeback
      */
     @CheckForNull
     public Long getWriteback() {
         return writeback;
-    }
-
-    /**
-     * @see #writeback
-     */
-    public StatsConfig withWriteback(Long writeback) {
-        this.writeback = writeback;
-        return this;
     }
 }
 
