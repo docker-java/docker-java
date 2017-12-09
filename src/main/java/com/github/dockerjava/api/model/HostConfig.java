@@ -200,6 +200,11 @@ public class HostConfig implements Serializable {
     @JsonProperty("PidsLimit")
     private Long pidsLimit;
 
+    /**
+     * @since ~{@link RemoteApiVersion#VERSION_1_30}
+     */
+    @JsonProperty("Runtime")
+    private String runtime;
 
     @JsonIgnore
     public Bind[] getBinds() {
@@ -436,6 +441,10 @@ public class HostConfig implements Serializable {
     @JsonIgnore
     public boolean isUserDefinedNetwork() {
         return networkMode != null && !PREDEFINED_NETWORKS.contains(networkMode) && !networkMode.startsWith("container:");
+    }
+
+    public String getRuntime() {
+        return runtime;
     }
 
     @JsonIgnore
@@ -814,6 +823,11 @@ public class HostConfig implements Serializable {
      */
     public HostConfig withPidsLimit(Long pidsLimit) {
         this.pidsLimit = pidsLimit;
+        return this;
+    }
+
+    public HostConfig withRuntime(String runtime) {
+        this.runtime = runtime;
         return this;
     }
     // end of auto-generated

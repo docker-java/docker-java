@@ -27,7 +27,7 @@ public class UpdateSwarmNodeIT extends SwarmCmdIT {
         docker1.updateSwarmNodeCmd().withSwarmNodeId(node.getId()).withVersion(node.getVersion().getIndex())
                 .withSwarmNodeSpec(nodeSpec).exec();
         nodes = docker1.listSwarmNodesCmd().exec();
-        assertThat(1, is(nodes.size()));
-        assertThat(SwarmNodeAvailability.PAUSE, is(nodes.get(0).getSpec().getAvailability()));
+        assertThat(nodes.size(), is(1));
+        assertThat(nodes.get(0).getSpec().getAvailability(), is(SwarmNodeAvailability.PAUSE));
     }
 }

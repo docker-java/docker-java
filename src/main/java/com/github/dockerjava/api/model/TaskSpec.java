@@ -57,6 +57,12 @@ public class TaskSpec implements Serializable {
     private Integer forceUpdate;
 
     /**
+     * @since 1.30
+     */
+    @JsonProperty("Runtime")
+    private String runtime;
+
+    /**
      * @see #containerSpec
      */
     @CheckForNull
@@ -117,6 +123,15 @@ public class TaskSpec implements Serializable {
      */
     public TaskSpec withPlacement(ServicePlacement placement) {
         this.placement = placement;
+        return this;
+    }
+
+    public String getRuntime() {
+        return runtime;
+    }
+
+    public TaskSpec withRuntime(String runtime) {
+        this.runtime = runtime;
         return this;
     }
 
