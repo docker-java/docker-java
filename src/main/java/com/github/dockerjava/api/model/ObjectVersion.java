@@ -22,13 +22,13 @@ public class ObjectVersion implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("Index")
-    private Integer index = null;
+    private Long index = null;
 
-    public Integer getIndex() {
+    public Long getIndex() {
         return index;
     }
 
-    public ObjectVersion withIndex(Integer index) {
+    public ObjectVersion withIndex(Long index) {
         this.index = index;
         return this;
     }

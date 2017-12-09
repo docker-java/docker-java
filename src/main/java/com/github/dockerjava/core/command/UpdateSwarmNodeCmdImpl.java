@@ -24,7 +24,7 @@ public class UpdateSwarmNodeCmdImpl extends AbstrDockerCmd<UpdateSwarmNodeCmd, V
 
     private SwarmNodeSpec swarmNodeSpec;
 
-    private Integer version;
+    private Long version;
 
     public UpdateSwarmNodeCmdImpl(Exec exec) {
         super(exec);
@@ -69,14 +69,14 @@ public class UpdateSwarmNodeCmdImpl extends AbstrDockerCmd<UpdateSwarmNodeCmd, V
     }
 
     @Override
-    public UpdateSwarmNodeCmd withVersion(@Nonnull Integer versionId) {
+    public UpdateSwarmNodeCmd withVersion(@Nonnull Long versionId) {
         this.version = versionId;
         return this;
     }
 
     @CheckForNull
     @Override
-    public Integer getVersion() {
+    public Long getVersion() {
         return version;
     }
 

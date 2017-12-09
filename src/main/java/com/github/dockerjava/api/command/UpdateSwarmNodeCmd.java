@@ -23,10 +23,10 @@ public interface UpdateSwarmNodeCmd extends SyncDockerCmd<Void> {
 
     UpdateSwarmNodeCmd withSwarmNodeSpec(SwarmNodeSpec swarmNodeSpec);
 
-    UpdateSwarmNodeCmd withVersion(@Nonnull Integer versionId);
+    UpdateSwarmNodeCmd withVersion(@Nonnull Long versionId);
 
     @CheckForNull
-    Integer getVersion();
+    Long getVersion();
 
     interface Exec extends DockerCmdSyncExec<UpdateSwarmNodeCmd, Void> {
     }
