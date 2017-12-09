@@ -27,14 +27,14 @@ public class SwarmNode implements Serializable {
     /**
      * @since 1.24
      */
-    @JsonProperty("Id")
+    @JsonProperty("ID")
     private String id;
 
     /**
      * @since 1.24
      */
     @JsonProperty("Version")
-    private String[] version;
+    private ObjectVersion version;
 
     /**
      * @since 1.24
@@ -92,14 +92,14 @@ public class SwarmNode implements Serializable {
      * @see #version
      */
     @CheckForNull
-    public String[] getVersion() {
+    public ObjectVersion getVersion() {
         return version;
     }
 
     /**
      * @see #version
      */
-    public SwarmNode withVersion(String[] version) {
+    public SwarmNode withVersion(ObjectVersion version) {
         this.version = version;
         return this;
     }
