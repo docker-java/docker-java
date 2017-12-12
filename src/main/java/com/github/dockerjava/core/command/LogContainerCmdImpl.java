@@ -24,12 +24,14 @@ import com.github.dockerjava.api.model.Frame;
  * @param since
  *            - UNIX timestamp (integer) to filter logs. Specifying a timestamp will only output log-entries since that timestamp. Default:
  *            0 (unfiltered)
+ * @param details
+ *            - true or false, if true, show extra details provided to logs. Defaults to false.
  */
 public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Frame> implements LogContainerCmd {
 
     private String containerId;
 
-    private Boolean followStream, timestamps, stdout, stderr;
+    private Boolean followStream, timestamps, stdout, stderr, details;
 
     private Integer tail, since;
 
@@ -66,6 +68,11 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
     @Override
     public Boolean hasStderrEnabled() {
         return stderr;
+    }
+
+    @Override
+    public Boolean hasDetailsEnabled() {
+        return details;
     }
 
     @Override
@@ -119,6 +126,12 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
     @Override
     public LogContainerCmd withSince(Integer since) {
         this.since = since;
+        return this;
+    }
+
+    @Override
+    public LogContainerCmd withDetails(Boolean details) {
+        this.details = details;
         return this;
     }
 
