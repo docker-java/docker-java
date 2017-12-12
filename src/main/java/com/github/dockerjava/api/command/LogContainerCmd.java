@@ -74,6 +74,9 @@ public interface LogContainerCmd extends AsyncDockerCmd<LogContainerCmd, Frame> 
 
     LogContainerCmd withSince(Integer since);
 
+    /**
+     * @since Docker Remote API 1.23
+     */
     LogContainerCmd withDetails(Boolean details);
 
     /**
