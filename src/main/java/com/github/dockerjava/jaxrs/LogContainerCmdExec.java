@@ -41,6 +41,7 @@ public class LogContainerCmdExec extends AbstrAsyncDockerCmdExec<LogContainerCmd
         webTarget = booleanQueryParam(webTarget, "stdout", command.hasStdoutEnabled());
         webTarget = booleanQueryParam(webTarget, "stderr", command.hasStderrEnabled());
         webTarget = booleanQueryParam(webTarget, "follow", command.hasFollowStreamEnabled());
+        webTarget = booleanQueryParam(webTarget, "details", command.hasDetailsEnabled());
 
         LOGGER.trace("GET: {}", webTarget);
 
