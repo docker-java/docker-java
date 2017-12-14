@@ -1,6 +1,7 @@
 package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.LogContainerCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.StreamType;
 import com.github.dockerjava.core.command.WaitContainerResultCallback;
@@ -196,5 +197,55 @@ public class LogContainerCmdIT extends CmdIT {
         loggingCallback.awaitCompletion();
 
         assertThat(loggingCallback.toString(), containsString(snippet));
+    }
+
+    @Test
+    public void asyncLogContainerWithDetails() throws Exception {
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
+                .withCmd("--log-driver", "journald", "--log-opt", "env=ENV_VAR", "-e", "ENV_VAR=logtester.1234", "flyinprogrammer/logtester")
+                .exec();
+
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+
+        dockerRule.getClient().startContainerCmd(container.getId())
+                .exec();
+
+        LogContainerTestCallback loggingCallback = new LogContainerTestCallback(true);
+
+        dockerRule.getClient().logContainerCmd(container.getId())
+                .withStdErr(true)
+                .withStdOut(true)
+                .withDetails(true)
+                .exec(loggingCallback);
+
+        loggingCallback.awaitCompletion(3, TimeUnit.SECONDS);
+
+        assertTrue(loggingCallback.toString().contains("ENV_VAR=logtester.1234"));
+    }
+
+    @Test
+    public void asyncLogContainerWithoutDetails() throws Exception {
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
+                .withCmd("--log-driver", "journald", "--log-opt", "env=ENV_VAR", "-e", "ENV_VAR=logtester.1234", "flyinprogrammer/logtester")
+                .exec();
+
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+
+        dockerRule.getClient().startContainerCmd(container.getId())
+                .exec();
+
+        LogContainerTestCallback loggingCallback = new LogContainerTestCallback(true);
+
+        dockerRule.getClient().logContainerCmd(container.getId())
+                .withStdErr(true)
+                .withStdOut(true)
+                .withDetails(false)
+                .exec(loggingCallback);
+
+        loggingCallback.awaitCompletion(3, TimeUnit.SECONDS);
+
+        assertTrue(!loggingCallback.toString().contains("ENV_VAR"));
     }
 }
