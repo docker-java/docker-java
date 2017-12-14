@@ -7,13 +7,13 @@
 		<version>9</version>
 	</parent>
 
-	<groupId>com.github.docker-java</groupId>
+	<groupId>com.github.yuting-liu</groupId>
 	<artifactId>docker-java</artifactId>
 	<packaging>jar</packaging>
-	<version>3.1.0-SNAPSHOT</version>
+	<version>3.1.0</version>
 
 	<name>docker-java</name>
-	<url>https://github.com/docker-java/docker-java</url>
+	<url>https://github.com/yuting-liu/docker-java</url>
 	<description>Java API Client for Docker</description>
 
 	<licenses>
