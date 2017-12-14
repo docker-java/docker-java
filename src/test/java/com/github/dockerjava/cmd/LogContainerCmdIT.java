@@ -3,6 +3,7 @@ package com.github.dockerjava.cmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.LogContainerCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.api.model.LogConfig;
 import com.github.dockerjava.api.model.StreamType;
 import com.github.dockerjava.core.command.WaitContainerResultCallback;
 import com.github.dockerjava.utils.LogContainerTestCallback;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -201,8 +203,12 @@ public class LogContainerCmdIT extends CmdIT {
 
     @Test
     public void asyncLogContainerWithDetails() throws Exception {
-        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withCmd("--log-driver", "journald", "--log-opt", "env=ENV_VAR", "-e", "ENV_VAR=logtester.1234", "flyinprogrammer/logtester")
+        HashMap<String, String> config = new HashMap<>();
+        config.put("env", "ENV_VAR");
+        LogConfig logConfig = new LogConfig(LogConfig.LoggingType.JOURNALD, config);
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("flyinprogrammer/logtester")
+                .withEnv("ENV_VAR=logtester.1234")
+                .withLogConfig(logConfig)
                 .exec();
 
         LOG.info("Created container: {}", container.toString());
@@ -226,8 +232,12 @@ public class LogContainerCmdIT extends CmdIT {
 
     @Test
     public void asyncLogContainerWithoutDetails() throws Exception {
-        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withCmd("--log-driver", "journald", "--log-opt", "env=ENV_VAR", "-e", "ENV_VAR=logtester.1234", "flyinprogrammer/logtester")
+        HashMap<String, String> config = new HashMap<>();
+        config.put("env", "ENV_VAR");
+        LogConfig logConfig = new LogConfig(LogConfig.LoggingType.JOURNALD, config);
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("flyinprogrammer/logtester")
+                .withEnv("ENV_VAR=logtester.1234")
+                .withLogConfig(logConfig)
                 .exec();
 
         LOG.info("Created container: {}", container.toString());
