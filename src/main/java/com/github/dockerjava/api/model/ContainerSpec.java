@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -19,6 +20,7 @@ import java.util.Map;
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ContainerSpec implements Serializable {
     public static final Long serialVersionUID = 1L;
 
