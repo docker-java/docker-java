@@ -65,6 +65,12 @@ public class ServiceSpec implements Serializable {
     private Map<String, String> labels;
 
     /**
+     * @since 1.28
+     */
+    @JsonProperty("RollbackConfig")
+    private UpdateConfig rollbackConfig;
+
+    /**
      * @see #name
      */
     public String getName() {
@@ -164,6 +170,15 @@ public class ServiceSpec implements Serializable {
      */
     public ServiceSpec withLabels(Map<String, String> labels) {
         this.labels = labels;
+        return this;
+    }
+
+    public UpdateConfig getRollbackConfig() {
+        return rollbackConfig;
+    }
+
+    public ServiceSpec withRollbackConfig(UpdateConfig rollbackConfig) {
+        this.rollbackConfig = rollbackConfig;
         return this;
     }
 

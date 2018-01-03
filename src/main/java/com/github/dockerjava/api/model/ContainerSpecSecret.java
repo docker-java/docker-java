@@ -9,58 +9,51 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-import javax.annotation.CheckForNull;
 import java.io.Serializable;
 
 /**
- * @since {@link RemoteApiVersion#VERSION_1_24}
+ * docker secrets that will be exposed to the service
+ *
+ * @since {@link RemoteApiVersion#VERSION_1_26}
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ResourceRequirements implements Serializable {
-    public static final Long serialVersionUID = 1L;
+public class ContainerSpecSecret implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-    /**
-     * @since 1.24
-     */
-    @JsonProperty("Limits")
-    private ResourceSpecs limits;
+    @JsonProperty("File")
+    private ContainerSpecFile file;
 
-    /**
-     * @since 1.24
-     */
-    @JsonProperty("Reservations")
-    private ResourceSpecs reservations;
+    @JsonProperty("SecretID")
+    private String secretId;
 
-    /**
-     * @see #limits
-     */
-    @CheckForNull
-    public ResourceSpecs getLimits() {
-        return limits;
+    @JsonProperty("SecretName")
+    private String secretName;
+
+    public ContainerSpecFile getFile() {
+        return file;
     }
 
-    /**
-     * @see #limits
-     */
-    public ResourceRequirements withLimits(ResourceSpecs limits) {
-        this.limits = limits;
+    public ContainerSpecSecret withFile(ContainerSpecFile file) {
+        this.file = file;
         return this;
     }
 
-    /**
-     * @see #reservations
-     */
-    @CheckForNull
-    public ResourceSpecs getReservations() {
-        return reservations;
+    public String getSecretId() {
+        return secretId;
     }
 
-    /**
-     * @see #reservations
-     */
-    public ResourceRequirements withReservations(ResourceSpecs reservations) {
-        this.reservations = reservations;
+    public ContainerSpecSecret withSecretId(String secretId) {
+        this.secretId = secretId;
+        return this;
+    }
+
+    public String getSecretName() {
+        return secretName;
+    }
+
+    public ContainerSpecSecret withSecretName(String secretName) {
+        this.secretName = secretName;
         return this;
     }
 
@@ -78,5 +71,4 @@ public class ResourceRequirements implements Serializable {
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
     }
-
 }

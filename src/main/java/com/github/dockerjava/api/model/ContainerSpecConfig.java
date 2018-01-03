@@ -9,58 +9,50 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-import javax.annotation.CheckForNull;
 import java.io.Serializable;
 
 /**
- * @since {@link RemoteApiVersion#VERSION_1_24}
+ * docker configs that will be exposed to the service
+ *
+ * @since {@link RemoteApiVersion#VERSION_1_29}
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ResourceRequirements implements Serializable {
-    public static final Long serialVersionUID = 1L;
+public class ContainerSpecConfig implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @JsonProperty("File")
+    private ContainerSpecFile file;
 
-    /**
-     * @since 1.24
-     */
-    @JsonProperty("Limits")
-    private ResourceSpecs limits;
+    @JsonProperty("ConfigID")
+    private String configID;
 
-    /**
-     * @since 1.24
-     */
-    @JsonProperty("Reservations")
-    private ResourceSpecs reservations;
+    @JsonProperty("ConfigName")
+    private String configName;
 
-    /**
-     * @see #limits
-     */
-    @CheckForNull
-    public ResourceSpecs getLimits() {
-        return limits;
+    public ContainerSpecFile getFile() {
+        return file;
     }
 
-    /**
-     * @see #limits
-     */
-    public ResourceRequirements withLimits(ResourceSpecs limits) {
-        this.limits = limits;
+    public ContainerSpecConfig withFile(ContainerSpecFile file) {
+        this.file = file;
         return this;
     }
 
-    /**
-     * @see #reservations
-     */
-    @CheckForNull
-    public ResourceSpecs getReservations() {
-        return reservations;
+    public String getConfigID() {
+        return configID;
     }
 
-    /**
-     * @see #reservations
-     */
-    public ResourceRequirements withReservations(ResourceSpecs reservations) {
-        this.reservations = reservations;
+    public ContainerSpecConfig withConfigID(String configID) {
+        this.configID = configID;
+        return this;
+    }
+
+    public String getConfigName() {
+        return configName;
+    }
+
+    public ContainerSpecConfig withConfigName(String configName) {
+        this.configName = configName;
         return this;
     }
 
@@ -78,5 +70,4 @@ public class ResourceRequirements implements Serializable {
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
     }
-
 }

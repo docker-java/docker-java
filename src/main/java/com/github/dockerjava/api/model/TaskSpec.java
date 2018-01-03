@@ -11,6 +11,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
@@ -57,6 +58,12 @@ public class TaskSpec implements Serializable {
      */
     @JsonProperty("ForceUpdate")
     private Integer forceUpdate;
+
+    /**
+     * @since 1.25
+     */
+    @JsonProperty("Networks")
+    private List<NetworkAttachmentConfig> networks;
 
     /**
      * @since 1.30
@@ -166,6 +173,15 @@ public class TaskSpec implements Serializable {
      */
     public TaskSpec withForceUpdate(Integer forceUpdate) {
         this.forceUpdate = forceUpdate;
+        return this;
+    }
+
+    public List<NetworkAttachmentConfig> getNetworks() {
+        return networks;
+    }
+
+    public TaskSpec withNetworks(List<NetworkAttachmentConfig> networks) {
+        this.networks = networks;
         return this;
     }
 
