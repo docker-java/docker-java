@@ -84,8 +84,9 @@ public class StatisticsTest {
         assertThat(memoryStats.getLimit(), is(2095874048L));
 
         final BlkioStatsConfig blkioStats = statistics.getBlkioStats();
-        assertThat(blkioStats.getIoServiceBytesRecursive(), is(empty()));
-        assertThat(blkioStats.getIoServicedRecursive(), is(empty()));
+        assertThat(blkioStats.getIoServiceBytesRecursive().size(), is(2));
+        assertThat(blkioStats.getIoServiceBytesRecursive().get(0).getValue(), is(26214L));
+        assertThat(blkioStats.getIoServicedRecursive().size(), is(2));
         assertThat(blkioStats.getIoQueueRecursive(), is(empty()));
         assertThat(blkioStats.getIoServiceTimeRecursive(), is(empty()));
         assertThat(blkioStats.getIoWaitTimeRecursive(), is(empty()));
