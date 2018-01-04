@@ -35,6 +35,25 @@ public class UpdateConfig implements Serializable {
     private UpdateFailureAction failureAction;
 
     /**
+     * @since 1.25
+     */
+    @JsonProperty("MaxFailureRatio")
+    private Float maxFailureRatio;
+
+    /**
+     * @since 1.25
+     */
+    @JsonProperty("Monitor")
+    private Long monitor;
+
+    /**
+     * @since 1.36
+     */
+    @JsonProperty("Order")
+    private UpdateOrder order;
+
+
+    /**
      * @see #parallelism
      */
     @CheckForNull
@@ -79,6 +98,43 @@ public class UpdateConfig implements Serializable {
      */
     public UpdateConfig withFailureAction(UpdateFailureAction failureAction) {
         this.failureAction = failureAction;
+        return this;
+    }
+
+    public UpdateConfig withParallelism(Long parallelism) {
+        this.parallelism = parallelism;
+        return this;
+    }
+
+    public UpdateConfig withDelay(Long delay) {
+        this.delay = delay;
+        return this;
+    }
+
+    public Float getMaxFailureRatio() {
+        return maxFailureRatio;
+    }
+
+    public UpdateConfig withMaxFailureRatio(Float maxFailureRatio) {
+        this.maxFailureRatio = maxFailureRatio;
+        return this;
+    }
+
+    public Long getMonitor() {
+        return monitor;
+    }
+
+    public UpdateConfig withMonitor(Long monitor) {
+        this.monitor = monitor;
+        return this;
+    }
+
+    public UpdateOrder getOrder() {
+        return order;
+    }
+
+    public UpdateConfig withOrder(UpdateOrder order) {
+        this.order = order;
         return this;
     }
 

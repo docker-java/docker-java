@@ -9,58 +9,50 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-import javax.annotation.CheckForNull;
 import java.io.Serializable;
+import java.util.List;
 
 /**
- * @since {@link RemoteApiVersion#VERSION_1_24}
+ * Specification for DNS related configurations in resolver configuration file (&#x60;resolv.conf&#x60;).
+ *
+ * @since {@link RemoteApiVersion#VERSION_1_25}
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ResourceRequirements implements Serializable {
-    public static final Long serialVersionUID = 1L;
+public class ContainerDNSConfig implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-    /**
-     * @since 1.24
-     */
-    @JsonProperty("Limits")
-    private ResourceSpecs limits;
+    @JsonProperty("Nameservers")
+    private List<String> nameservers;
+    @JsonProperty("Search")
+    private List<String> search;
+    @JsonProperty("Options")
+    private List<String> options;
 
-    /**
-     * @since 1.24
-     */
-    @JsonProperty("Reservations")
-    private ResourceSpecs reservations;
-
-    /**
-     * @see #limits
-     */
-    @CheckForNull
-    public ResourceSpecs getLimits() {
-        return limits;
+    public List<String> getNameservers() {
+        return nameservers;
     }
 
-    /**
-     * @see #limits
-     */
-    public ResourceRequirements withLimits(ResourceSpecs limits) {
-        this.limits = limits;
+    public ContainerDNSConfig withNameservers(List<String> nameservers) {
+        this.nameservers = nameservers;
         return this;
     }
 
-    /**
-     * @see #reservations
-     */
-    @CheckForNull
-    public ResourceSpecs getReservations() {
-        return reservations;
+    public List<String> getSearch() {
+        return search;
     }
 
-    /**
-     * @see #reservations
-     */
-    public ResourceRequirements withReservations(ResourceSpecs reservations) {
-        this.reservations = reservations;
+    public ContainerDNSConfig withSearch(List<String> search) {
+        this.search = search;
+        return this;
+    }
+
+    public List<String> getOptions() {
+        return options;
+    }
+
+    public ContainerDNSConfig withOptions(List<String> options) {
+        this.options = options;
         return this;
     }
 
@@ -68,6 +60,7 @@ public class ResourceRequirements implements Serializable {
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -78,5 +71,4 @@ public class ResourceRequirements implements Serializable {
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
     }
-
 }

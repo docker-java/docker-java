@@ -28,6 +28,12 @@ public class Network implements Serializable {
     @JsonProperty("Driver")
     private String driver;
 
+    @JsonProperty("EnableIPv6")
+    private Boolean enableIPv6;
+
+    @JsonProperty("Internal")
+    private Boolean internal;
+
     @JsonProperty("IPAM")
     private Ipam ipam;
 
@@ -57,6 +63,14 @@ public class Network implements Serializable {
 
     public String getDriver() {
         return driver;
+    }
+
+    public Boolean getEnableIPv6() {
+        return enableIPv6;
+    }
+
+    public Boolean getInternal() {
+        return internal;
     }
 
     public Ipam getIpam() {

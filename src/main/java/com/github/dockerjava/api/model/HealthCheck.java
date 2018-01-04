@@ -18,7 +18,9 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
+import java.util.List;
 
 /**
  *
@@ -35,11 +37,66 @@ public class HealthCheck implements Serializable {
     @JsonProperty("Timeout")
     private Long timeout;
 
+    /**
+     * @since 1.26
+     */
+    @JsonProperty("Test")
+    private List<String> test;
+
+    /**
+     * @since 1.26
+     */
+    @JsonProperty("Retries")
+    private Long retries;
+
+    /**
+     * @since 1.26
+     */
+    @JsonProperty("StartPeriod")
+    private Long startPeriod;
+
     public Long getInterval() {
         return interval;
     }
 
     public Long getTimeout() {
         return timeout;
+    }
+
+    public HealthCheck withInterval(Long interval) {
+        this.interval = interval;
+        return this;
+    }
+
+    public HealthCheck withTimeout(Long timeout) {
+        this.timeout = timeout;
+        return this;
+    }
+
+    public List<String> getTest() {
+        return test;
+    }
+
+    public HealthCheck withTest(List<String> test) {
+        this.test = test;
+        return this;
+    }
+
+    public Long getRetries() {
+        return retries;
+    }
+
+    public HealthCheck withRetries(Long retries) {
+        this.retries = retries;
+        return this;
+    }
+
+    public Long getStartPeriod() {
+        return startPeriod;
+    }
+
+    public HealthCheck withStartPeriod(Long startPeriod) {
+        this.startPeriod = startPeriod;
+        return this;
     }
 }
