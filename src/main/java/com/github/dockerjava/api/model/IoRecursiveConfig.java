@@ -17,7 +17,7 @@ public class IoRecursiveConfig implements Serializable {
     private Long minor;
 
     @JsonProperty("op")
-    private Long op;
+    private String op;
 
     @JsonProperty("value")
     private Long value;
@@ -41,7 +41,7 @@ public class IoRecursiveConfig implements Serializable {
     /**
      * @see #op
      */
-    public Long getOp() {
+    public String getOp() {
         return op;
     }
 
@@ -50,5 +50,37 @@ public class IoRecursiveConfig implements Serializable {
      */
     public Long getValue() {
         return value;
+    }
+
+    /**
+     * @see #major
+     */
+    public IoRecursiveConfig withMajor(Long major) {
+        this.major = major;
+        return this;
+    }
+
+    /**
+     * @see #minor
+     */
+    public IoRecursiveConfig withMinor(Long minor) {
+        this.minor = minor;
+        return this;
+    }
+
+    /**
+     * @see #op
+     */
+    public IoRecursiveConfig withOp(String op) {
+        this.op = op;
+        return this;
+    }
+
+    /**
+     * @see #value
+     */
+    public IoRecursiveConfig withValue(Long value) {
+        this.value = value;
+        return this;
     }
 }
