@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @author Yuting Liu
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-class MemoryStatsConfig implements Serializable {
+public class MemoryStatsConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("usage")
