@@ -5,6 +5,7 @@ package com.github.dockerjava.core;
 
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -19,6 +20,8 @@ public class NameParser {
 
     // CHECKSTYLE:OFF
     private static final int RepositoryNameTotalLengthMax = 255;
+
+    private static final String SHA256_SEPARATOR = "@sha256:";
 
     private static final Pattern RepositoryNameComponentRegexp = Pattern.compile("[a-z0-9]+(?:[._-][a-z0-9]+)*");
 
@@ -37,6 +40,9 @@ public class NameParser {
             return new ReposTag(name, "");
         }
         String tag = name.substring(n + 1);
+        if (StringUtils.containsIgnoreCase(name, SHA256_SEPARATOR)) {
+            return new ReposTag(name, "");
+        }
         if (!tag.contains("/")) {
             return new ReposTag(name.substring(0, n), tag);
         }
@@ -109,6 +115,9 @@ public class NameParser {
         if (hostname.contains("index.docker.io")) {
             throw new InvalidRepositoryNameException(String.format("Invalid repository name, try \"%s\" instead",
                     reposName));
+        }
+        if (StringUtils.containsIgnoreCase(reposName, SHA256_SEPARATOR)) {
+            reposName = StringUtils.substringBeforeLast(reposName, SHA256_SEPARATOR);
         }
 
         validateRepoName(reposName);
