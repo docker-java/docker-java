@@ -82,6 +82,7 @@ public class StatisticsTest {
         assertThat(stats.getWriteback(), is(0L));
 
         assertThat(memoryStats.getLimit(), is(2095874048L));
+        assertThat(memoryStats.getFailcnt(), is(0L));
 
         final BlkioStatsConfig blkioStats = statistics.getBlkioStats();
         assertThat(blkioStats.getIoServiceBytesRecursive(), equalTo(Arrays.asList(
