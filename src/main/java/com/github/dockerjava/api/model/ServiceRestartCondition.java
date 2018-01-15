@@ -8,7 +8,7 @@ import com.github.dockerjava.core.RemoteApiVersion;
  */
 public enum ServiceRestartCondition {
 
-    @JsonProperty("on_failure")
+    @JsonProperty("on-failure")
     ON_FAILURE,
 
     @JsonProperty("any")
