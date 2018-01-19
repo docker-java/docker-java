@@ -1,31 +1,11 @@
 package com.github.dockerjava.netty.exec;
 
-import com.github.dockerjava.api.command.RemoveSwarmNodeCmd;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.netty.MediaType;
-import com.github.dockerjava.netty.WebTarget;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.github.dockerjava.core.WebTarget;
 
-
-public class RemoveSwarmNodeCmdExec extends AbstrSyncDockerCmdExec<RemoveSwarmNodeCmd, Void> implements
-        RemoveSwarmNodeCmd.Exec {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(com.github.dockerjava.jaxrs.RemoveSwarmNodeCmdExec.class);
+public class RemoveSwarmNodeCmdExec extends com.github.dockerjava.core.exec.RemoveSwarmNodeCmdExec {
 
     public RemoveSwarmNodeCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
         super(baseResource, dockerClientConfig);
-    }
-
-    @Override
-    protected Void execute(RemoveSwarmNodeCmd command) {
-        WebTarget webTarget = getBaseResource().path("/nodes/" + command.getSwarmNodeId());
-
-        webTarget = booleanQueryParam(webTarget, "force", command.hasForceEnabled());
-
-        LOGGER.trace("DELETE: {}", webTarget);
-        webTarget.request().accept(MediaType.APPLICATION_JSON).delete();
-
-        return null;
     }
 }

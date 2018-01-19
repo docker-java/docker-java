@@ -1,29 +1,12 @@
 package com.github.dockerjava.netty.exec;
 
 
-import com.github.dockerjava.api.command.JoinSwarmCmd;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.netty.MediaType;
-import com.github.dockerjava.netty.WebTarget;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.github.dockerjava.core.WebTarget;
 
-public class JoinSwarmCmdExec extends AbstrSyncDockerCmdExec<JoinSwarmCmd, Void>
-        implements JoinSwarmCmd.Exec {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(InitializeSwarmCmdExec.class);
+public class JoinSwarmCmdExec extends com.github.dockerjava.core.exec.JoinSwarmCmdExec {
 
     public JoinSwarmCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
         super(baseResource, dockerClientConfig);
-    }
-
-    @Override
-    protected Void execute(JoinSwarmCmd command) {
-        WebTarget webResource = getBaseResource().path("/swarm/join");
-
-        LOGGER.trace("POST: {} ", webResource);
-        webResource.request().accept(MediaType.APPLICATION_JSON)
-                .post(command);
-        return null;
     }
 }

@@ -1,31 +1,11 @@
 package com.github.dockerjava.netty.exec;
 
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.github.dockerjava.api.command.InspectSwarmCmd;
-import com.github.dockerjava.api.model.Swarm;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.netty.MediaType;
-import com.github.dockerjava.netty.WebTarget;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.github.dockerjava.core.WebTarget;
 
-public class InspectSwarmCmdExec extends AbstrSyncDockerCmdExec<InspectSwarmCmd, Swarm>
-        implements InspectSwarmCmd.Exec {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(InspectSwarmCmdExec.class);
+public class InspectSwarmCmdExec extends com.github.dockerjava.core.exec.InspectSwarmCmdExec {
 
     public InspectSwarmCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
         super(baseResource, dockerClientConfig);
-    }
-
-    @Override
-    protected Swarm execute(InspectSwarmCmd command) {
-        WebTarget webResource = getBaseResource().path("/swarm");
-
-        LOGGER.debug("GET: {}", webResource);
-        return webResource.request().accept(MediaType.APPLICATION_JSON)
-                .get(new TypeReference<Swarm>() {
-                });
     }
 }

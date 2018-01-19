@@ -48,7 +48,7 @@ import java.util.concurrent.CountDownLatch;
  *
  * @author Marcus Linke
  */
-public class InvocationBuilder {
+public class InvocationBuilder implements com.github.dockerjava.core.InvocationBuilder {
 
     public class ResponseCallback<T> extends ResultCallbackTemplate<ResponseCallback<T>, T> {
 
@@ -77,54 +77,10 @@ public class InvocationBuilder {
 
     /**
      * Implementation of {@link ResultCallback} with the single result event expected.
+     *
+     * @deprecated use {@link com.github.dockerjava.core.InvocationBuilder.AsyncResultCallback}
      */
-    public static class AsyncResultCallback<A_RES_T>
-            extends ResultCallbackTemplate<AsyncResultCallback<A_RES_T>, A_RES_T> {
-
-        private A_RES_T result = null;
-
-        private final CountDownLatch resultReady = new CountDownLatch(1);
-
-        @Override
-        public void onNext(A_RES_T object) {
-            onResult(object);
-        }
-
-        private void onResult(A_RES_T object) {
-            if (resultReady.getCount() == 0) {
-                throw new IllegalStateException("Result has already been set");
-            }
-
-            try {
-                result = object;
-            } finally {
-                resultReady.countDown();
-            }
-        }
-
-        @Override
-        public void close() throws IOException {
-            try {
-                super.close();
-            } finally {
-                resultReady.countDown();
-            }
-        }
-
-        /**
-         * Blocks until {@link ResultCallback#onNext(Object)} was called for the first time
-         */
-        @SuppressWarnings("unchecked")
-        public A_RES_T awaitResult() {
-            try {
-                resultReady.await();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            throwFirstError();
-            return result;
-        }
-    }
+    public static class AsyncResultCallback<A_RES_T> extends com.github.dockerjava.core.InvocationBuilder.AsyncResultCallback<A_RES_T> { }
 
     private ChannelProvider channelProvider;
 
@@ -137,7 +93,14 @@ public class InvocationBuilder {
         this.resource = resource;
     }
 
+    @Deprecated
     public InvocationBuilder accept(MediaType mediaType) {
+        accept(mediaType.toCoreMediaType());
+        return this;
+    }
+
+    @Override
+    public com.github.dockerjava.core.InvocationBuilder accept(com.github.dockerjava.core.MediaType mediaType) {
         return header(HttpHeaderNames.ACCEPT.toString(), mediaType.getMediaType());
     }
 
@@ -519,7 +482,16 @@ public class InvocationBuilder {
         return resultCallback.awaitResult();
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public void put(InputStream body, MediaType mediaType) {
+        put(body, mediaType.toCoreMediaType());
+    }
+
+    @Override
+    public void put(InputStream body, com.github.dockerjava.core.MediaType mediaType) {
         HttpRequestProvider requestProvider = httpPutRequestProvider(null);
 
         Channel channel = getChannel();
@@ -547,5 +519,5 @@ public class InvocationBuilder {
         channel.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT);
 
         resultCallback.awaitResult();
-    };
+    }
 }

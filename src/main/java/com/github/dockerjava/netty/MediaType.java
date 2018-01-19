@@ -5,6 +5,7 @@ package com.github.dockerjava.netty;
  * implementation.
  *
  * @author Marcus Linke
+ * @deprecated use {@link com.github.dockerjava.core.MediaType}
  */
 public enum MediaType {
 
@@ -20,5 +21,9 @@ public enum MediaType {
 
     public String getMediaType() {
         return mediaType;
+    }
+
+    com.github.dockerjava.core.MediaType toCoreMediaType(){
+        return com.github.dockerjava.core.MediaType.valueOf(this.name());
     }
 }

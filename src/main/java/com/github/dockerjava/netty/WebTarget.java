@@ -25,7 +25,7 @@ import com.google.common.collect.ImmutableMap;
  *
  * @author Marcus Linke
  */
-public class WebTarget {
+public class WebTarget implements com.github.dockerjava.core.WebTarget {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private final ChannelProvider channelProvider;
