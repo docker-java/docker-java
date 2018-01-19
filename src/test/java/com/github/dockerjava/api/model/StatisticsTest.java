@@ -82,10 +82,23 @@ public class StatisticsTest {
         assertThat(stats.getWriteback(), is(0L));
 
         assertThat(memoryStats.getLimit(), is(2095874048L));
+        assertThat(memoryStats.getFailcnt(), is(0L));
 
         final BlkioStatsConfig blkioStats = statistics.getBlkioStats();
-        assertThat(blkioStats.getIoServiceBytesRecursive(), is(empty()));
-        assertThat(blkioStats.getIoServicedRecursive(), is(empty()));
+        assertThat(blkioStats.getIoServiceBytesRecursive(), equalTo(Arrays.asList(
+            new IoRecursiveConfig().withMajor(259L).withMinor(0L).withOp("Read").withValue(823296L),
+            new IoRecursiveConfig().withMajor(259L).withMinor(0L).withOp("Write").withValue(122880L),
+            new IoRecursiveConfig().withMajor(259L).withMinor(0L).withOp("Sync").withValue(835584L),
+            new IoRecursiveConfig().withMajor(259L).withMinor(0L).withOp("Async").withValue(110592L),
+            new IoRecursiveConfig().withMajor(259L).withMinor(0L).withOp("Total").withValue(946176L)
+        )));
+        assertThat(blkioStats.getIoServicedRecursive(), equalTo(Arrays.asList(
+            new IoRecursiveConfig().withMajor(259L).withMinor(0L).withOp("Read").withValue(145L),
+            new IoRecursiveConfig().withMajor(259L).withMinor(0L).withOp("Write").withValue(4L),
+            new IoRecursiveConfig().withMajor(259L).withMinor(0L).withOp("Sync").withValue(148L),
+            new IoRecursiveConfig().withMajor(259L).withMinor(0L).withOp("Async").withValue(1L),
+            new IoRecursiveConfig().withMajor(259L).withMinor(0L).withOp("Total").withValue(149L)
+        )));
         assertThat(blkioStats.getIoQueueRecursive(), is(empty()));
         assertThat(blkioStats.getIoServiceTimeRecursive(), is(empty()));
         assertThat(blkioStats.getIoWaitTimeRecursive(), is(empty()));

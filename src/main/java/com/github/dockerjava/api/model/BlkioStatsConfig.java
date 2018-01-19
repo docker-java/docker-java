@@ -17,34 +17,34 @@ class BlkioStatsConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("io_service_bytes_recursive")
-    private List<Long> ioServiceBytesRecursive;
+    private List<IoRecursiveConfig> ioServiceBytesRecursive;
 
     @JsonProperty("io_serviced_recursive")
-    private List<Long> ioServicedRecursive;
+    private List<IoRecursiveConfig> ioServicedRecursive;
 
     @JsonProperty("io_queue_recursive")
-    private List<Long> ioQueueRecursive;
+    private List<IoRecursiveConfig> ioQueueRecursive;
 
     @JsonProperty("io_service_time_recursive")
-    private List<Long> ioServiceTimeRecursive;
+    private List<IoRecursiveConfig> ioServiceTimeRecursive;
 
     @JsonProperty("io_wait_time_recursive")
-    private List<Long> ioWaitTimeRecursive;
+    private List<IoRecursiveConfig> ioWaitTimeRecursive;
 
     @JsonProperty("io_merged_recursive")
-    private List<Long> ioMergedRecursive;
+    private List<IoRecursiveConfig> ioMergedRecursive;
 
     @JsonProperty("io_time_recursive")
-    private List<Long> ioTimeRecursive;
+    private List<IoRecursiveConfig> ioTimeRecursive;
 
     @JsonProperty("sectors_recursive")
-    private List<Long> sectorsRecursive;
+    private List<IoRecursiveConfig> sectorsRecursive;
 
     /**
      * @see #ioServiceBytesRecursive
      */
     @CheckForNull
-    public List<Long> getIoServiceBytesRecursive() {
+    public List<IoRecursiveConfig> getIoServiceBytesRecursive() {
         return ioServiceBytesRecursive;
     }
 
@@ -52,7 +52,7 @@ class BlkioStatsConfig implements Serializable {
      * @see #ioServicedRecursive
      */
     @CheckForNull
-    public List<Long> getIoServicedRecursive() {
+    public List<IoRecursiveConfig> getIoServicedRecursive() {
         return ioServicedRecursive;
     }
 
@@ -60,7 +60,7 @@ class BlkioStatsConfig implements Serializable {
      * @see #ioQueueRecursive
      */
     @CheckForNull
-    public List<Long> getIoQueueRecursive() {
+    public List<IoRecursiveConfig> getIoQueueRecursive() {
         return ioQueueRecursive;
     }
 
@@ -68,7 +68,7 @@ class BlkioStatsConfig implements Serializable {
      * @see #ioServiceTimeRecursive
      */
     @CheckForNull
-    public List<Long> getIoServiceTimeRecursive() {
+    public List<IoRecursiveConfig> getIoServiceTimeRecursive() {
         return ioServiceTimeRecursive;
     }
 
@@ -76,7 +76,7 @@ class BlkioStatsConfig implements Serializable {
      * @see #ioWaitTimeRecursive
      */
     @CheckForNull
-    public List<Long> getIoWaitTimeRecursive() {
+    public List<IoRecursiveConfig> getIoWaitTimeRecursive() {
         return ioWaitTimeRecursive;
     }
 
@@ -84,7 +84,7 @@ class BlkioStatsConfig implements Serializable {
      * @see #ioMergedRecursive
      */
     @CheckForNull
-    public List<Long> getIoMergedRecursive() {
+    public List<IoRecursiveConfig> getIoMergedRecursive() {
         return ioMergedRecursive;
     }
 
@@ -92,7 +92,7 @@ class BlkioStatsConfig implements Serializable {
      * @see #ioTimeRecursive
      */
     @CheckForNull
-    public List<Long> getIoTimeRecursive() {
+    public List<IoRecursiveConfig> getIoTimeRecursive() {
         return ioTimeRecursive;
     }
 
@@ -100,7 +100,7 @@ class BlkioStatsConfig implements Serializable {
      * @see #sectorsRecursive
      */
     @CheckForNull
-    public List<Long> getSectorsRecursive() {
+    public List<IoRecursiveConfig> getSectorsRecursive() {
         return sectorsRecursive;
     }
 }
