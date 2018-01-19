@@ -1,6 +1,5 @@
 package com.github.dockerjava.jaxrs.filter;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -58,16 +57,7 @@ public class ResponseStatusExceptionFilter implements ClientResponseFilter {
 
     private String getBodyAsMessage(ClientResponseContext responseContext) throws IOException {
         if (responseContext.hasEntity()) {
-            int contentLength = responseContext.getLength();
-            if (contentLength != -1) {
-                byte[] buffer = new byte[contentLength];
-                try {
-                    InputStream entityStream = responseContext.getEntityStream();
-                    IOUtils.readFully(entityStream, buffer);
-                    entityStream.close();
-                } catch (EOFException e) {
-                    return null;
-                }
+            try (InputStream entityStream = responseContext.getEntityStream()) {
                 Charset charset = null;
                 MediaType mediaType = responseContext.getMediaType();
                 if (mediaType != null) {
@@ -75,16 +65,16 @@ public class ResponseStatusExceptionFilter implements ClientResponseFilter {
                     if (charsetName != null) {
                         try {
                             charset = Charset.forName(charsetName);
-                        } catch (Exception e) {
-                            // Do noting...
-                        }
+                        } catch (Exception ignored) { }
                     }
                 }
+
                 if (charset == null) {
                     charset = Charset.defaultCharset();
                 }
-                return new String(buffer, charset);
-            }
+
+                return IOUtils.toString(entityStream, charset);
+            } catch (Exception ignored) { }
         }
         return null;
     }
