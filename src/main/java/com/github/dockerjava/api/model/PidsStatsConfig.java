@@ -10,7 +10,7 @@ import java.io.Serializable;
  *
  * @author Yuting Liu
  */
-class PidsStatsConfig implements Serializable {
+public class PidsStatsConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("current")

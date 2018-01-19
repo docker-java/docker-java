@@ -15,7 +15,7 @@ import java.io.Serializable;
  * @author Yuting Liu
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-class StatisticNetWorksConfig implements Serializable {
+public class StatisticNetworksConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("rx_bytes")

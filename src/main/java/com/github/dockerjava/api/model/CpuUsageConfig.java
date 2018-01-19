@@ -13,7 +13,7 @@ import java.util.List;
  * @author Yuting Liu
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-class CpuUsageConfig implements Serializable {
+public class CpuUsageConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("total_usage")

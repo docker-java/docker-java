@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @author Yuting Liu
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-class CpuStatsConfig implements Serializable {
+public class CpuStatsConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("cpu_usage")

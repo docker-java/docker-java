@@ -31,7 +31,7 @@ public class StatisticsTest {
 
         assertThat(statistics.getRead(), equalTo("2017-12-06T00:42:03.8352972Z"));
 
-        final StatisticNetWorksConfig network = statistics.getNetworks().get("eth0");
+        final StatisticNetworksConfig network = statistics.getNetworks().get("eth0");
         assertThat(network.getRxBytes(), is(1230L));
         assertThat(network.getRxPackets(), is(19L));
         assertThat(network.getRxErrors(), is(0L));

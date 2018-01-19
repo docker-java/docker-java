@@ -13,7 +13,7 @@ import java.util.List;
  * @author Yuting Liu
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-class BlkioStatsConfig implements Serializable {
+public class BlkioStatsConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("io_service_bytes_recursive")
