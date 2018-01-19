@@ -23,7 +23,7 @@ public enum MediaType {
         return mediaType;
     }
 
-    com.github.dockerjava.core.MediaType toCoreMediaType(){
+    public com.github.dockerjava.core.MediaType toCoreMediaType() {
         return com.github.dockerjava.core.MediaType.valueOf(this.name());
     }
 }

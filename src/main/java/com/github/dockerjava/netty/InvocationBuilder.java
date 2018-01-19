@@ -40,7 +40,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * This class is basically a replacement of javax.ws.rs.client.Invocation.Builder to allow simpler migration of JAX-RS code to a netty based

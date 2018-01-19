@@ -67,8 +67,6 @@ import com.github.dockerjava.api.command.UpdateSwarmCmd;
 import com.github.dockerjava.api.command.UpdateSwarmNodeCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
-import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.WebTarget;
 import com.github.dockerjava.core.exec.AttachContainerCmdExec;
 import com.github.dockerjava.core.exec.AuthCmdExec;
 import com.github.dockerjava.core.exec.BuildImageCmdExec;
@@ -487,5 +485,5 @@ public abstract class AbstractDockerCmdExecFactory implements DockerCmdExecFacto
         return new ListTasksCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
-    abstract protected WebTarget getBaseResource();
+    protected abstract WebTarget getBaseResource();
 }
