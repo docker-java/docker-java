@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.net.SocketTimeoutException;
 import java.security.Security;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLParameters;
@@ -153,6 +155,7 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelConfig;
 import io.netty.channel.ChannelFactory;
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.EpollDomainSocketChannel;
@@ -168,6 +171,9 @@ import io.netty.channel.unix.UnixChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslHandler;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
+import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
@@ -215,6 +221,8 @@ public class NettyDockerCmdExecFactory implements DockerCmdExecFactory {
     };
 
     private Integer connectTimeout = null;
+
+    private Integer readTimeout = null;
 
     @Override
     public void init(DockerClientConfig dockerClientConfig) {
@@ -744,14 +752,52 @@ public class NettyDockerCmdExecFactory implements DockerCmdExecFactory {
         return this;
     }
 
+    /**
+     * Configure read timeout in milliseconds
+     */
+    public NettyDockerCmdExecFactory withReadTimeout(Integer readTimeout) {
+        this.readTimeout = readTimeout;
+        return this;
+    }
+
     private <T extends Channel> T configure(T channel) {
         ChannelConfig channelConfig = channel.config();
 
         if (connectTimeout != null) {
             channelConfig.setConnectTimeoutMillis(connectTimeout);
         }
+        if (readTimeout != null) {
+            channel.pipeline().addLast("readTimeoutHandler", new ReadTimeoutHandler());
+        }
 
         return channel;
+    }
+
+    private final class ReadTimeoutHandler extends IdleStateHandler {
+        private boolean alreadyTimedOut;
+
+        ReadTimeoutHandler() {
+            super(readTimeout, 0, 0, TimeUnit.MILLISECONDS);
+        }
+
+        /**
+         * Called when a read timeout was detected.
+         */
+        @Override
+        protected synchronized void channelIdle(ChannelHandlerContext ctx, IdleStateEvent evt) throws Exception {
+            assert evt.state() == IdleState.READER_IDLE;
+            final Channel channel = ctx.channel();
+            if (channel == null || !channel.isActive() || alreadyTimedOut) {
+                return;
+            }
+            final Object dockerAPIEndpoint = dockerClientConfig.getDockerHost();
+            final String msg = "Read timed out: No data received within " + readTimeout
+                    + "ms.  Perhaps the docker API (" + dockerAPIEndpoint
+                    + ") is not responding normally, or perhaps you need to increase the readTimeout value.";
+            final Exception ex = new SocketTimeoutException(msg);
+            ctx.fireExceptionCaught(ex);
+            alreadyTimedOut = true;
+        }
     }
 
     protected WebTarget getBaseResource() {
