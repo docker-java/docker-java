@@ -74,13 +74,6 @@ public class InvocationBuilder implements com.github.dockerjava.core.InvocationB
         }
     }
 
-    /**
-     * Implementation of {@link ResultCallback} with the single result event expected.
-     *
-     * @deprecated use {@link com.github.dockerjava.core.InvocationBuilder.AsyncResultCallback}
-     */
-    public static class AsyncResultCallback<A_RES_T> extends com.github.dockerjava.core.InvocationBuilder.AsyncResultCallback<A_RES_T> { }
-
     private ChannelProvider channelProvider;
 
     private String resource;
@@ -90,12 +83,6 @@ public class InvocationBuilder implements com.github.dockerjava.core.InvocationB
     public InvocationBuilder(ChannelProvider channelProvider, String resource) {
         this.channelProvider = channelProvider;
         this.resource = resource;
-    }
-
-    @Deprecated
-    public InvocationBuilder accept(MediaType mediaType) {
-        accept(mediaType.toCoreMediaType());
-        return this;
     }
 
     @Override
@@ -479,14 +466,6 @@ public class InvocationBuilder implements com.github.dockerjava.core.InvocationB
         sendRequest(requestProvider, channel);
 
         return resultCallback.awaitResult();
-    }
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public void put(InputStream body, MediaType mediaType) {
-        put(body, mediaType.toCoreMediaType());
     }
 
     @Override
