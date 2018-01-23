@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * @author Alexander Koshevoy
  */
-public class WebTargetTest {
+public class NettyWebTargetTest {
     @Mock
     private ChannelProvider channelProvider;
 
@@ -22,20 +22,20 @@ public class WebTargetTest {
 
     @Test
     public void verifyImmutability() throws Exception {
-        WebTarget emptyWebTarget = new WebTarget(channelProvider);
+        NettyWebTarget emptyWebTarget = new NettyWebTarget(channelProvider);
 
-        WebTarget initWebTarget = emptyWebTarget.path("/containers/{id}/attach").resolveTemplate("id", "d03da378b592")
+        NettyWebTarget initWebTarget = emptyWebTarget.path("/containers/{id}/attach").resolveTemplate("id", "d03da378b592")
                 .queryParam("logs", "true");
 
-        WebTarget anotherWebTarget = emptyWebTarget.path("/containers/{id}/attach")
+        NettyWebTarget anotherWebTarget = emptyWebTarget.path("/containers/{id}/attach")
                 .resolveTemplate("id", "2cfada4e3c07").queryParam("stdin", "true");
 
-        assertEquals(new WebTarget(channelProvider), emptyWebTarget);
+        assertEquals(new NettyWebTarget(channelProvider), emptyWebTarget);
 
-        assertEquals(new WebTarget(channelProvider).path("/containers/d03da378b592/attach")
+        assertEquals(new NettyWebTarget(channelProvider).path("/containers/d03da378b592/attach")
                 .queryParam("logs", "true"), initWebTarget);
 
-        assertEquals(new WebTarget(channelProvider).path("/containers/2cfada4e3c07/attach")
+        assertEquals(new NettyWebTarget(channelProvider).path("/containers/2cfada4e3c07/attach")
                 .queryParam("stdin", "true"), anotherWebTarget);
     }
 }

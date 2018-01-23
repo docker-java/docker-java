@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.core.InvocationBuilder;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
 import com.github.dockerjava.netty.handler.FramedResponseStreamHandler;
 import com.github.dockerjava.netty.handler.HttpConnectionHijackHandler;
@@ -47,7 +48,7 @@ import java.util.Map;
  *
  * @author Marcus Linke
  */
-public class InvocationBuilder implements com.github.dockerjava.core.InvocationBuilder {
+public class NettyInvocationBuilder implements InvocationBuilder {
 
     public class ResponseCallback<T> extends ResultCallbackTemplate<ResponseCallback<T>, T> {
 
@@ -80,17 +81,17 @@ public class InvocationBuilder implements com.github.dockerjava.core.InvocationB
 
     private Map<String, String> headers = new HashMap<String, String>();
 
-    public InvocationBuilder(ChannelProvider channelProvider, String resource) {
+    public NettyInvocationBuilder(ChannelProvider channelProvider, String resource) {
         this.channelProvider = channelProvider;
         this.resource = resource;
     }
 
     @Override
-    public com.github.dockerjava.core.InvocationBuilder accept(com.github.dockerjava.core.MediaType mediaType) {
+    public InvocationBuilder accept(com.github.dockerjava.core.MediaType mediaType) {
         return header(HttpHeaderNames.ACCEPT.toString(), mediaType.getMediaType());
     }
 
-    public InvocationBuilder header(String name, String value) {
+    public NettyInvocationBuilder header(String name, String value) {
         headers.put(name, value);
         return this;
     }

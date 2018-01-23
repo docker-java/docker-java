@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dockerjava.core.WebTarget;
 import com.google.common.collect.ImmutableSet;
 import io.netty.handler.codec.http.HttpConstants;
 import org.apache.commons.lang.StringUtils;
@@ -25,7 +26,7 @@ import com.google.common.collect.ImmutableMap;
  *
  * @author Marcus Linke
  */
-public class WebTarget implements com.github.dockerjava.core.WebTarget {
+public class NettyWebTarget implements WebTarget {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private final ChannelProvider channelProvider;
@@ -41,12 +42,12 @@ public class WebTarget implements com.github.dockerjava.core.WebTarget {
 
     private static final String PATH_SEPARATOR = "/";
 
-    public WebTarget(ChannelProvider channelProvider) {
+    public NettyWebTarget(ChannelProvider channelProvider) {
         this(channelProvider, ImmutableList.<String>of(), ImmutableMap.<String, String>of(),
                 ImmutableMap.<String, Set<String>>of());
     }
 
-    private WebTarget(ChannelProvider channelProvider,
+    private NettyWebTarget(ChannelProvider channelProvider,
                       ImmutableList<String> path,
                       ImmutableMap<String, String> queryParams,
                       ImmutableMap<String, Set<String>> queryParamsSet) {
@@ -56,17 +57,17 @@ public class WebTarget implements com.github.dockerjava.core.WebTarget {
         this.queryParamsSet = queryParamsSet;
     }
 
-    public WebTarget path(String... components) {
+    public NettyWebTarget path(String... components) {
         ImmutableList.Builder<String> newPath = ImmutableList.<String>builder().addAll(this.path);
 
         for (String component : components) {
             newPath.addAll(Arrays.asList(StringUtils.split(component, PATH_SEPARATOR)));
         }
 
-        return new WebTarget(channelProvider, newPath.build(), queryParams, queryParamsSet);
+        return new NettyWebTarget(channelProvider, newPath.build(), queryParams, queryParamsSet);
     }
 
-    public InvocationBuilder request() {
+    public NettyInvocationBuilder request() {
         String resource = PATH_SEPARATOR + StringUtils.join(path, PATH_SEPARATOR);
 
         List<String> params = new ArrayList<>();
@@ -84,7 +85,7 @@ public class WebTarget implements com.github.dockerjava.core.WebTarget {
             resource = resource + "?" + StringUtils.join(params, "&");
         }
 
-        return new InvocationBuilder(channelProvider, resource);
+        return new NettyInvocationBuilder(channelProvider, resource);
     }
 
     /**
@@ -99,24 +100,24 @@ public class WebTarget implements com.github.dockerjava.core.WebTarget {
         }
     }
 
-    public WebTarget resolveTemplate(String name, Object value) {
+    public NettyWebTarget resolveTemplate(String name, Object value) {
         ImmutableList.Builder<String> newPath = ImmutableList.builder();
         for (String component : path) {
             component = component.replaceAll("\\{" + name + "\\}", value.toString());
             newPath.add(component);
         }
-        return new WebTarget(channelProvider, newPath.build(), queryParams, queryParamsSet);
+        return new NettyWebTarget(channelProvider, newPath.build(), queryParams, queryParamsSet);
     }
 
-    public WebTarget queryParam(String name, Object value) {
+    public NettyWebTarget queryParam(String name, Object value) {
         ImmutableMap.Builder<String, String> builder = ImmutableMap.<String, String>builder().putAll(queryParams);
         if (value != null) {
             builder.put(name, value.toString());
         }
-        return new WebTarget(channelProvider, path, builder.build(), queryParamsSet);
+        return new NettyWebTarget(channelProvider, path, builder.build(), queryParamsSet);
     }
 
-    public WebTarget queryParamsSet(String name, Set<?> values) {
+    public NettyWebTarget queryParamsSet(String name, Set<?> values) {
         ImmutableMap.Builder<String, Set<String>> builder = ImmutableMap.<String, Set<String>>builder().putAll(queryParamsSet);
         if (values != null) {
             ImmutableSet.Builder<String> valueBuilder = ImmutableSet.builder();
@@ -125,10 +126,10 @@ public class WebTarget implements com.github.dockerjava.core.WebTarget {
             }
             builder.put(name, valueBuilder.build());
         }
-        return new WebTarget(channelProvider, path, queryParams, builder.build());
+        return new NettyWebTarget(channelProvider, path, queryParams, builder.build());
     }
 
-    public WebTarget queryParamsJsonMap(String name, Map<String, String> values) {
+    public NettyWebTarget queryParamsJsonMap(String name, Map<String, String> values) {
         if (values != null && !values.isEmpty()) {
             try {
                 // when param value is JSON string
@@ -150,7 +151,7 @@ public class WebTarget implements com.github.dockerjava.core.WebTarget {
             return false;
         }
 
-        WebTarget webTarget = (WebTarget) o;
+        NettyWebTarget webTarget = (NettyWebTarget) o;
 
         if (channelProvider != null ? !channelProvider.equals(webTarget.channelProvider) : webTarget.channelProvider != null) {
             return false;

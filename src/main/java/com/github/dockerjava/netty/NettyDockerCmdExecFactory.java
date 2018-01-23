@@ -100,7 +100,7 @@ public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory impl
 
         eventLoopGroup = nettyInitializer.init(bootstrap, dockerClientConfig);
 
-        baseResource = new com.github.dockerjava.netty.WebTarget(channelProvider).path(dockerClientConfig.getApiVersion().asWebPathPart());
+        baseResource = new NettyWebTarget(channelProvider).path(dockerClientConfig.getApiVersion().asWebPathPart());
     }
 
     private DuplexChannel connect() {
