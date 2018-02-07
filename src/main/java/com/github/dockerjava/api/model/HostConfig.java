@@ -202,7 +202,7 @@ public class HostConfig implements Serializable {
 
     @JsonProperty("GroupAdd")
     private List<String> groupAdd;
-  
+
     /**
      * @since ~{@link RemoteApiVersion#VERSION_1_30}
      */
