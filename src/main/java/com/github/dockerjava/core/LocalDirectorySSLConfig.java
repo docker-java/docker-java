@@ -6,12 +6,15 @@ import java.io.File;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.security.Security;
 
+import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.glassfish.jersey.SslConfigurator;
 
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.core.util.CertificateUtils;
@@ -53,13 +56,20 @@ public class LocalDirectorySSLConfig implements SSLConfig, Serializable {
                 String certpem = new String(Files.readAllBytes(Paths.get(certPemPath)));
                 String capem = new String(Files.readAllBytes(Paths.get(caPemPath)));
 
-                SslConfigurator sslConfig = SslConfigurator.newInstance(true);
-                sslConfig.securityProtocol("TLSv1.2");
-                sslConfig.keyStore(CertificateUtils.createKeyStore(keypem, certpem));
-                sslConfig.keyStorePassword("docker");
-                sslConfig.trustStore(CertificateUtils.createTrustStore(capem));
+                String kmfAlgorithm = AccessController.doPrivileged(getSystemProperty("ssl.keyManagerFactory.algorithm",
+                    KeyManagerFactory.getDefaultAlgorithm()));
+                KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(kmfAlgorithm);
+                keyManagerFactory.init(CertificateUtils.createKeyStore(keypem, certpem), "docker".toCharArray());
 
-                return sslConfig.createSSLContext();
+                String tmfAlgorithm = AccessController.doPrivileged(getSystemProperty("ssl.trustManagerFactory.algorithm",
+                    TrustManagerFactory.getDefaultAlgorithm()));
+                TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(tmfAlgorithm);
+                trustManagerFactory.init(CertificateUtils.createTrustStore(capem));
+
+                SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
+                sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), null);
+
+                return sslContext;
 
             } catch (Exception e) {
                 throw new DockerClientException(e.getMessage(), e);
@@ -69,6 +79,15 @@ public class LocalDirectorySSLConfig implements SSLConfig, Serializable {
 
         return null;
 
+    }
+
+    private PrivilegedAction<String> getSystemProperty(final String name, final String def) {
+        return new PrivilegedAction<String>() {
+            @Override
+            public String run() {
+                return System.getProperty(name, def);
+            }
+        };
     }
 
     @Override

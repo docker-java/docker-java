@@ -2,6 +2,7 @@ package com.github.dockerjava.core.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,11 @@ public class FiltersBuilder {
 
     public FiltersBuilder withFilter(String key, String... value) {
         filters.put(key, Arrays.asList(value));
+        return this;
+    }
+
+    public FiltersBuilder withFilter(String key, Collection<String> value) {
+        filters.put(key, value instanceof List ? (List<String>) value : new ArrayList<>(value));
         return this;
     }
 

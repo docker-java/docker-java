@@ -1,5 +1,7 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -9,10 +11,13 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TaskSpec implements Serializable {
     public static final Long serialVersionUID = 1L;
 
@@ -45,6 +50,26 @@ public class TaskSpec implements Serializable {
      */
     @JsonProperty("LogDriver")
     private Driver logDriver;
+
+    /**
+     * @since 1.24
+     * a counter that triggers an update even if no relevant parameters have been changed
+     * a random value will work if it is incrementing.
+     */
+    @JsonProperty("ForceUpdate")
+    private Integer forceUpdate;
+
+    /**
+     * @since 1.25
+     */
+    @JsonProperty("Networks")
+    private List<NetworkAttachmentConfig> networks;
+
+    /**
+     * @since 1.30
+     */
+    @JsonProperty("Runtime")
+    private String runtime;
 
     /**
      * @see #containerSpec
@@ -110,6 +135,15 @@ public class TaskSpec implements Serializable {
         return this;
     }
 
+    public String getRuntime() {
+        return runtime;
+    }
+
+    public TaskSpec withRuntime(String runtime) {
+        this.runtime = runtime;
+        return this;
+    }
+
     /**
      * @see #logDriver
      */
@@ -123,6 +157,31 @@ public class TaskSpec implements Serializable {
      */
     public TaskSpec withLogDriver(Driver logDriver) {
         this.logDriver = logDriver;
+        return this;
+    }
+
+    /**
+     * @see #forceUpdate
+     */
+    @CheckForNull
+    public Integer getForceUpdate() {
+        return forceUpdate;
+    }
+
+    /**
+     * @see #forceUpdate
+     */
+    public TaskSpec withForceUpdate(Integer forceUpdate) {
+        this.forceUpdate = forceUpdate;
+        return this;
+    }
+
+    public List<NetworkAttachmentConfig> getNetworks() {
+        return networks;
+    }
+
+    public TaskSpec withNetworks(List<NetworkAttachmentConfig> networks) {
+        this.networks = networks;
         return this;
     }
 

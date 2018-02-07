@@ -25,7 +25,8 @@ public class UpdateSwarmNodeCmdExec extends AbstrSyncDockerCmdExec<UpdateSwarmNo
     @Override
     protected Void execute(UpdateSwarmNodeCmd command) {
         WebTarget webResource = getBaseResource().path("/nodes/{id}/update")
-                .resolveTemplate("id", command.getSwarmNodeId());
+                .resolveTemplate("id", command.getSwarmNodeId())
+                .queryParam("version", command.getVersion());
 
         LOGGER.trace("POST: {}", webResource);
         webResource.request().accept(MediaType.APPLICATION_JSON)

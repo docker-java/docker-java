@@ -3,6 +3,7 @@ package com.github.dockerjava.cmd.swarm;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.ConflictException;
+import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotAcceptableException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.ExposedPort;
@@ -38,7 +39,7 @@ public abstract class SwarmCmdIT extends CmdIT {
     private static final String DOCKER_IN_DOCKER_IMAGE_REPOSITORY = "docker";
     private static final String DOCKER_IN_DOCKER_IMAGE_TAG = "1.12-dind";
 
-    @BeforeClass
+    @Before
     public void beforeTest() throws Exception {
         assumeThat(dockerRule, isGreaterOrEqual(VERSION_1_24));
     }
@@ -56,7 +57,7 @@ public abstract class SwarmCmdIT extends CmdIT {
     protected void removeDockersInDocker() {
         for (int i = 1; i <= numberOfDockersInDocker; i++) {
             try {
-                dockerRule.getClient().removeContainerCmd(DOCKER_IN_DOCKER_CONTAINER_PREFIX + i);
+                dockerRule.getClient().removeContainerCmd(DOCKER_IN_DOCKER_CONTAINER_PREFIX + i).withForce(true).exec();
             } catch (NotFoundException e) {
                 // container does not exist
             }
@@ -129,6 +130,10 @@ public abstract class SwarmCmdIT extends CmdIT {
             dockerRule.getClient().leaveSwarmCmd().withForceEnabled(true).exec();
         } catch (NotAcceptableException e) {
             // do nothing, node is not part of a swarm
+        } catch (DockerException ex) {
+            if (!ex.getMessage().contains("node is not part of a swarm")) {
+                throw ex;
+            }
         }
     }
 }

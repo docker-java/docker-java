@@ -28,29 +28,35 @@ public class Statistics implements Serializable {
      */
     @CheckForNull
     @JsonProperty("networks")
-    private Map<String, Object> networks;
+    private Map<String, StatisticNetworksConfig> networks;
 
     /**
      * @deprecated as of Docker Remote API 1.21, replaced by {@link #networks}
      */
     @Deprecated
     @JsonProperty("network")
-    private Map<String, Object> network;
+    private Map<String, StatisticNetworksConfig> network;
 
     @JsonProperty("memory_stats")
-    private Map<String, Object> memoryStats;
+    private MemoryStatsConfig memoryStats;
 
     @JsonProperty("blkio_stats")
-    private Map<String, Object> blkioStats;
+    private BlkioStatsConfig blkioStats;
 
     @JsonProperty("cpu_stats")
-    private Map<String, Object> cpuStats;
+    private CpuStatsConfig cpuStats;
 
     /**
      * @since Docker Remote API 1.19
      */
     @JsonProperty("precpu_stats")
-    private Map<String, Object> preCpuStats;
+    private CpuStatsConfig preCpuStats;
+
+    /**
+     * @since Docker Remote API 1.23
+     */
+    @JsonProperty("pids_stats")
+    private PidsStatsConfig pidsStats;
 
     public String getRead() {
         return read;
@@ -60,7 +66,7 @@ public class Statistics implements Serializable {
      * @since Docker Remote API 1.21
      */
     @CheckForNull
-    public Map<String, Object> getNetworks() {
+    public Map<String, StatisticNetworksConfig> getNetworks() {
         return networks;
     }
 
@@ -68,11 +74,11 @@ public class Statistics implements Serializable {
      * @deprecated as of Docker Remote API 1.21, replaced by {@link #getNetworks()}
      */
     @Deprecated
-    public Map<String, Object> getNetwork() {
+    public Map<String, StatisticNetworksConfig> getNetwork() {
         return network;
     }
 
-    public Map<String, Object> getCpuStats() {
+    public CpuStatsConfig getCpuStats() {
         return cpuStats;
     }
 
@@ -80,16 +86,20 @@ public class Statistics implements Serializable {
      * The cpu statistic of last read, which is used for calculating the cpu usage percent.
      * It is not the exact copy of the {@link #getCpuStats()}.
      */
-    public Map<String, Object> getPreCpuStats() {
+    public CpuStatsConfig getPreCpuStats() {
         return preCpuStats;
     }
 
-    public Map<String, Object> getMemoryStats() {
+    public MemoryStatsConfig getMemoryStats() {
         return memoryStats;
     }
 
-    public Map<String, Object> getBlkioStats() {
+    public BlkioStatsConfig getBlkioStats() {
         return blkioStats;
+    }
+
+    public PidsStatsConfig getPidsStats() {
+        return pidsStats;
     }
 
     @Override

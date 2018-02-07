@@ -36,6 +36,8 @@ import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.ListNetworksCmd;
 import com.github.dockerjava.api.command.ListServicesCmd;
+import com.github.dockerjava.api.command.ListSwarmNodesCmd;
+import com.github.dockerjava.api.command.ListTasksCmd;
 import com.github.dockerjava.api.command.ListVolumesCmd;
 import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.api.command.LogContainerCmd;
@@ -61,6 +63,7 @@ import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.UpdateContainerCmd;
 import com.github.dockerjava.api.command.UpdateServiceCmd;
 import com.github.dockerjava.api.command.UpdateSwarmCmd;
+import com.github.dockerjava.api.command.UpdateSwarmNodeCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.model.AuthConfig;
@@ -101,6 +104,8 @@ import com.github.dockerjava.core.command.ListContainersCmdImpl;
 import com.github.dockerjava.core.command.ListImagesCmdImpl;
 import com.github.dockerjava.core.command.ListNetworksCmdImpl;
 import com.github.dockerjava.core.command.ListServicesCmdImpl;
+import com.github.dockerjava.core.command.ListSwarmNodesCmdImpl;
+import com.github.dockerjava.core.command.ListTasksCmdImpl;
 import com.github.dockerjava.core.command.ListVolumesCmdImpl;
 import com.github.dockerjava.core.command.LoadImageCmdImpl;
 import com.github.dockerjava.core.command.LogContainerCmdImpl;
@@ -126,6 +131,7 @@ import com.github.dockerjava.core.command.UnpauseContainerCmdImpl;
 import com.github.dockerjava.core.command.UpdateContainerCmdImpl;
 import com.github.dockerjava.core.command.UpdateServiceCmdImpl;
 import com.github.dockerjava.core.command.UpdateSwarmCmdImpl;
+import com.github.dockerjava.core.command.UpdateSwarmNodeCmdImpl;
 import com.github.dockerjava.core.command.VersionCmdImpl;
 import com.github.dockerjava.core.command.WaitContainerCmdImpl;
 
@@ -526,6 +532,16 @@ public class DockerClientImpl implements Closeable, DockerClient {
         return new UpdateSwarmCmdImpl(getDockerCmdExecFactory().createUpdateSwarmCmdExec(), swarmSpec);
     }
 
+    @Override
+    public UpdateSwarmNodeCmd updateSwarmNodeCmd() {
+        return new UpdateSwarmNodeCmdImpl(getDockerCmdExecFactory().updateSwarmNodeCmdExec());
+    }
+
+    @Override
+    public ListSwarmNodesCmd listSwarmNodesCmd() {
+        return new ListSwarmNodesCmdImpl(getDockerCmdExecFactory().listSwarmNodeCmdExec());
+    }
+
     @Override public ListServicesCmd listServicesCmd() {
         return new ListServicesCmdImpl(getDockerCmdExecFactory().createListServicesCmdExec());
     }
@@ -548,6 +564,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public RemoveServiceCmd removeServiceCmd(String serviceId) {
         return new RemoveServiceCmdImpl(getDockerCmdExecFactory().createRemoveServiceCmdExec(), serviceId);
+    }
+
+    @Override
+    public ListTasksCmd listTasksCmd() {
+        return new ListTasksCmdImpl(getDockerCmdExecFactory().listTasksCmdExec());
     }
 
     @Override

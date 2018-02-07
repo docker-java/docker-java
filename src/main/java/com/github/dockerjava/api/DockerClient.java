@@ -34,6 +34,8 @@ import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.ListNetworksCmd;
 import com.github.dockerjava.api.command.ListServicesCmd;
+import com.github.dockerjava.api.command.ListSwarmNodesCmd;
+import com.github.dockerjava.api.command.ListTasksCmd;
 import com.github.dockerjava.api.command.ListVolumesCmd;
 import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.api.command.LogContainerCmd;
@@ -59,6 +61,7 @@ import com.github.dockerjava.api.command.UnpauseContainerCmd;
 import com.github.dockerjava.api.command.UpdateContainerCmd;
 import com.github.dockerjava.api.command.UpdateServiceCmd;
 import com.github.dockerjava.api.command.UpdateSwarmCmd;
+import com.github.dockerjava.api.command.UpdateSwarmNodeCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.exception.DockerException;
@@ -309,6 +312,22 @@ public interface DockerClient extends Closeable {
     UpdateSwarmCmd updateSwarmCmd(SwarmSpec swarmSpec);
 
     /**
+     * Updates the swarm node
+     *
+     * @return the command
+     * @since 1.24
+     */
+    UpdateSwarmNodeCmd updateSwarmNodeCmd();
+
+    /**
+     * List nodes in swarm
+     *
+     * @return the command
+     * @since 1.24
+     */
+    ListSwarmNodesCmd listSwarmNodesCmd();
+
+    /**
      * Command to list all services in a docker swarm. Only applicable if docker runs in swarm mode.
      *
      * @since {@link RemoteApiVersion#VERSION_1_24}
@@ -346,6 +365,14 @@ public interface DockerClient extends Closeable {
      * @return command
      */
     RemoveServiceCmd removeServiceCmd(String serviceId);
+
+    /**
+     * List tasks in the swarm cluster
+     *
+     * @return the command
+     * @since 1.24
+     */
+    ListTasksCmd listTasksCmd();
 
     @Override
     void close() throws IOException;

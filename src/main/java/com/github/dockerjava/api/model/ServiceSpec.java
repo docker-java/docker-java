@@ -1,5 +1,7 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -10,10 +12,13 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ServiceSpec implements Serializable {
     public static final Long serialVersionUID = 1L;
 
@@ -52,6 +57,18 @@ public class ServiceSpec implements Serializable {
      */
     @JsonProperty("EndpointSpec")
     private EndpointSpec endpointSpec;
+
+    /**
+     * @since 1.24
+     */
+    @JsonProperty("Labels")
+    private Map<String, String> labels;
+
+    /**
+     * @since 1.28
+     */
+    @JsonProperty("RollbackConfig")
+    private UpdateConfig rollbackConfig;
 
     /**
      * @see #name
@@ -146,6 +163,31 @@ public class ServiceSpec implements Serializable {
     public ServiceSpec withEndpointSpec(EndpointSpec endpointSpec) {
         this.endpointSpec = endpointSpec;
         return this;
+    }
+
+    /**
+     * @see #labels
+     */
+    public ServiceSpec withLabels(Map<String, String> labels) {
+        this.labels = labels;
+        return this;
+    }
+
+    public UpdateConfig getRollbackConfig() {
+        return rollbackConfig;
+    }
+
+    public ServiceSpec withRollbackConfig(UpdateConfig rollbackConfig) {
+        this.rollbackConfig = rollbackConfig;
+        return this;
+    }
+
+    /**
+     * @see #labels
+     */
+    @CheckForNull
+    public Map<String, String> getLabels() {
+        return labels;
     }
 
     @Override

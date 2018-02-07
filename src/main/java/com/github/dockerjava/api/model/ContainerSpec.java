@@ -1,5 +1,7 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -17,6 +19,8 @@ import java.util.Map;
  *
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ContainerSpec implements Serializable {
     public static final Long serialVersionUID = 1L;
 
@@ -36,7 +40,7 @@ public class ContainerSpec implements Serializable {
      * @since 1.24
      */
     @JsonProperty("Command")
-    private String command;
+    private List<String> command;
 
     /**
      * @since 1.24
@@ -87,6 +91,82 @@ public class ContainerSpec implements Serializable {
     private Long duration;
 
     /**
+     * @since 1.24
+     */
+    @JsonProperty("StopGracePeriod")
+    private Long stopGracePeriod;
+
+    /**
+     * @since 1.25
+     * Specification for DNS related configurations in resolver configuration file
+     */
+    @JsonProperty("DNSConfig")
+    private ContainerDNSConfig dnsConfig;
+
+    /**
+     * @since 1.26
+     * Open stdin
+     */
+    @JsonProperty("OpenStdin")
+    private Boolean openStdin;
+
+    /**
+     * @since 1.26
+     * Mount the container's root filesystem as read only.
+     */
+    @JsonProperty("ReadOnly")
+    private Boolean readOnly;
+
+    /**
+     * @since 1.26
+     * A list of hostnames/IP mappings to add to the container's /etc/hosts file.
+     */
+    @JsonProperty("Hosts")
+    private List<String> hosts;
+
+    /**
+     * @since 1.26
+     * The hostname to use for the container, as a valid RFC 1123 hostname
+     */
+    @JsonProperty("Hostname")
+    private String hostname;
+
+    /**
+     * @since 1.26
+     * Secrets contains references to zero or more secrets that will be exposed to the service.
+     */
+    @JsonProperty("Secrets")
+    private List<ContainerSpecSecret> secrets;
+
+    /**
+     * @since 1.26
+     * A test to perform to check that the container is healthy.
+     */
+    @JsonProperty("HealthCheck")
+    private HealthCheck healthCheck;
+
+    /**
+     * @since 1.28
+     * Signal to stop the container.
+     */
+    @JsonProperty("StopSignal")
+    private String stopSignal;
+
+    /**
+     * @since 1.29
+     * Security options for the container
+     */
+    @JsonProperty("Privileges")
+    private ContainerSpecPrivileges privileges;
+
+    /**
+     * @since 1.29
+     * Configs contains references to zero or more configs that will be exposed to the service.
+     */
+    @JsonProperty("Configs")
+    private List<ContainerSpecConfig> configs;
+
+    /**
      * @see #image
      */
     @CheckForNull
@@ -122,14 +202,14 @@ public class ContainerSpec implements Serializable {
      * @see #command
      */
     @CheckForNull
-    public String getCommand() {
+    public List<String> getCommand() {
         return command;
     }
 
     /**
      * @see #command
      */
-    public ContainerSpec withCommand(String command) {
+    public ContainerSpec withCommand(List<String> command) {
         this.command = command;
         return this;
     }
@@ -259,6 +339,105 @@ public class ContainerSpec implements Serializable {
      */
     public ContainerSpec withDuration(Long duration) {
         this.duration = duration;
+        return this;
+    }
+
+    public ContainerDNSConfig getDnsConfig() {
+        return dnsConfig;
+    }
+
+    public ContainerSpec withDnsConfig(ContainerDNSConfig dnsConfig) {
+        this.dnsConfig = dnsConfig;
+        return this;
+    }
+
+    public Boolean getOpenStdin() {
+        return openStdin;
+    }
+
+    public ContainerSpec withOpenStdin(Boolean openStdin) {
+        this.openStdin = openStdin;
+        return this;
+    }
+
+    public Boolean getReadOnly() {
+        return readOnly;
+    }
+
+    public ContainerSpec withReadOnly(Boolean readOnly) {
+        this.readOnly = readOnly;
+        return this;
+    }
+
+    public List<String> getHosts() {
+        return hosts;
+    }
+
+    public ContainerSpec withHosts(List<String> hosts) {
+        this.hosts = hosts;
+        return this;
+    }
+
+    public String getHostname() {
+        return hostname;
+    }
+
+    public ContainerSpec withHostname(String hostname) {
+        this.hostname = hostname;
+        return this;
+    }
+
+    public List<ContainerSpecSecret> getSecrets() {
+        return secrets;
+    }
+
+    public ContainerSpec withSecrets(List<ContainerSpecSecret> secrets) {
+        this.secrets = secrets;
+        return this;
+    }
+
+    public HealthCheck getHealthCheck() {
+        return healthCheck;
+    }
+
+    public ContainerSpec withHealthCheck(HealthCheck healthCheck) {
+        this.healthCheck = healthCheck;
+        return this;
+    }
+
+    public String getStopSignal() {
+        return stopSignal;
+    }
+
+    public ContainerSpec withStopSignal(String stopSignal) {
+        this.stopSignal = stopSignal;
+        return this;
+    }
+
+    public Long getStopGracePeriod() {
+        return stopGracePeriod;
+    }
+
+    public ContainerSpec withStopGracePeriod(Long stopGracePeriod) {
+        this.stopGracePeriod = stopGracePeriod;
+        return this;
+    }
+
+    public ContainerSpecPrivileges getPrivileges() {
+        return privileges;
+    }
+
+    public ContainerSpec withPrivileges(ContainerSpecPrivileges privileges) {
+        this.privileges = privileges;
+        return this;
+    }
+
+    public List<ContainerSpecConfig> getConfigs() {
+        return configs;
+    }
+
+    public ContainerSpec withConfigs(List<ContainerSpecConfig> configs) {
+        this.configs = configs;
         return this;
     }
 
