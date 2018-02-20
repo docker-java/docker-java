@@ -1,8 +1,10 @@
 Change Log
 ===
-## 3.1.0 WIP
+## 3.1.0-rc-1
+  A lot of changes...
 - Swarm Mode support.
 - Classic swarm support.
+- various netty improvements
  
  
 ## 3.0.14
