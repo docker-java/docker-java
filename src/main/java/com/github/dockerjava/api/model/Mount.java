@@ -53,6 +53,12 @@ public class Mount implements Serializable {
     private VolumeOptions volumeOptions;
 
     /**
+     * @since 1.29
+     */
+    @JsonProperty("TmpfsOptions")
+    private TmpfsOptions tmpfsOptions;
+
+    /**
      * @see #type
      */
     @CheckForNull
@@ -129,6 +135,9 @@ public class Mount implements Serializable {
      */
     public Mount withBindOptions(BindOptions bindOptions) {
         this.bindOptions = bindOptions;
+        if (bindOptions != null) {
+            this.type = MountType.BIND;
+        }
         return this;
     }
 
@@ -145,6 +154,28 @@ public class Mount implements Serializable {
      */
     public Mount withVolumeOptions(VolumeOptions volumeOptions) {
         this.volumeOptions = volumeOptions;
+        if (volumeOptions != null) {
+            this.type = MountType.VOLUME;
+        }
+        return this;
+    }
+
+    /**
+     * @see #tmpfsOptions
+     */
+    @CheckForNull
+    public TmpfsOptions getTmpfsOptions() {
+        return tmpfsOptions;
+    }
+
+    /**
+     * @see #tmpfsOptions
+     */
+    public Mount withTmpfsOptions(TmpfsOptions tmpfsOptions) {
+        this.tmpfsOptions = tmpfsOptions;
+        if (tmpfsOptions != null) {
+            this.type = MountType.TMPFS;
+        }
         return this;
     }
 
