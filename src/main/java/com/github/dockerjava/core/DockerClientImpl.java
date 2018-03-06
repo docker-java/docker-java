@@ -41,6 +41,7 @@ import com.github.dockerjava.api.command.ListTasksCmd;
 import com.github.dockerjava.api.command.ListVolumesCmd;
 import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.api.command.LogContainerCmd;
+import com.github.dockerjava.api.command.LogSwarmObjectCmd;
 import com.github.dockerjava.api.command.PauseContainerCmd;
 import com.github.dockerjava.api.command.PingCmd;
 import com.github.dockerjava.api.command.PullImageCmd;
@@ -109,6 +110,7 @@ import com.github.dockerjava.core.command.ListTasksCmdImpl;
 import com.github.dockerjava.core.command.ListVolumesCmdImpl;
 import com.github.dockerjava.core.command.LoadImageCmdImpl;
 import com.github.dockerjava.core.command.LogContainerCmdImpl;
+import com.github.dockerjava.core.command.LogSwarmObjectImpl;
 import com.github.dockerjava.core.command.PauseContainerCmdImpl;
 import com.github.dockerjava.core.command.PingCmdImpl;
 import com.github.dockerjava.core.command.PullImageCmdImpl;
@@ -542,7 +544,8 @@ public class DockerClientImpl implements Closeable, DockerClient {
         return new ListSwarmNodesCmdImpl(getDockerCmdExecFactory().listSwarmNodeCmdExec());
     }
 
-    @Override public ListServicesCmd listServicesCmd() {
+    @Override
+    public ListServicesCmd listServicesCmd() {
         return new ListServicesCmdImpl(getDockerCmdExecFactory().createListServicesCmdExec());
     }
 
@@ -564,6 +567,16 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public RemoveServiceCmd removeServiceCmd(String serviceId) {
         return new RemoveServiceCmdImpl(getDockerCmdExecFactory().createRemoveServiceCmdExec(), serviceId);
+    }
+
+    @Override
+    public LogSwarmObjectCmd logServiceCmd(String serviceId) {
+        return new LogSwarmObjectImpl(getDockerCmdExecFactory().logSwarmObjectExec("services"), serviceId);
+    }
+
+    @Override
+    public LogSwarmObjectCmd logTaskCmd(String taskId) {
+        return new LogSwarmObjectImpl(getDockerCmdExecFactory().logSwarmObjectExec("tasks"), taskId);
     }
 
     @Override

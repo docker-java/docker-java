@@ -41,6 +41,7 @@ import com.github.dockerjava.api.command.ListTasksCmd;
 import com.github.dockerjava.api.command.ListVolumesCmd;
 import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.api.command.LogContainerCmd;
+import com.github.dockerjava.api.command.LogSwarmObjectCmd;
 import com.github.dockerjava.api.command.PauseContainerCmd;
 import com.github.dockerjava.api.command.PingCmd;
 import com.github.dockerjava.api.command.PullImageCmd;
@@ -133,6 +134,7 @@ import com.github.dockerjava.core.exec.UpdateSwarmCmdExec;
 import com.github.dockerjava.core.exec.UpdateSwarmNodeCmdExec;
 import com.github.dockerjava.core.exec.VersionCmdExec;
 import com.github.dockerjava.core.exec.WaitContainerCmdExec;
+import com.github.dockerjava.core.exec.LogSwarmObjectExec;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -483,6 +485,11 @@ public abstract class AbstractDockerCmdExecFactory implements DockerCmdExecFacto
     @Override
     public ListTasksCmd.Exec listTasksCmdExec() {
         return new ListTasksCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public LogSwarmObjectCmd.Exec logSwarmObjectExec(String endpoint) {
+        return new LogSwarmObjectExec(getBaseResource(), getDockerClientConfig(), endpoint);
     }
 
     protected abstract WebTarget getBaseResource();
