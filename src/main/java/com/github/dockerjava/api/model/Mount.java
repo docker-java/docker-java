@@ -41,6 +41,12 @@ public class Mount implements Serializable {
     private Boolean readOnly;
 
     /**
+     * @since 1.29
+     */
+    @JsonProperty("Consistency")
+    private Consistency consistency;
+
+    /**
      * @since 1.24
      */
     @JsonProperty("BindOptions")
@@ -113,6 +119,22 @@ public class Mount implements Serializable {
      */
     public Mount withReadOnly(Boolean readOnly) {
         this.readOnly = readOnly;
+        return this;
+    }
+
+    /**
+     * @see #consistency
+     */
+    @CheckForNull
+    public Consistency getConsistency() {
+        return consistency;
+    }
+
+    /**
+     * @see #consistency
+     */
+    public Mount withConsistency(Consistency consistency) {
+        this.consistency = consistency;
         return this;
     }
 
