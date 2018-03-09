@@ -10,6 +10,7 @@ import java.util.Map;
 /**
  * Representation of filters to service lists.
  */
+@Deprecated
 public class ServiceFiltersBuilder {
 
     private Map<String, List<String>> filters = new HashMap<>();
