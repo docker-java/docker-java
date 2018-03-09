@@ -2,7 +2,7 @@ package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.command.ListServicesCmd;
 import com.github.dockerjava.api.model.Service;
-import com.github.dockerjava.core.util.ServiceFiltersBuilder;
+import com.github.dockerjava.core.util.FiltersBuilder;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +15,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class ListServicesCmdImpl extends AbstrDockerCmd<ListServicesCmd, List<Service>> implements
         ListServicesCmd {
 
-    private ServiceFiltersBuilder filters = new ServiceFiltersBuilder();
+    private FiltersBuilder filters = new FiltersBuilder();
 
     public ListServicesCmdImpl(Exec exec) {
         super(exec);
@@ -29,15 +29,21 @@ public class ListServicesCmdImpl extends AbstrDockerCmd<ListServicesCmd, List<Se
     @Override
     public ListServicesCmd withIdFilter(List<String> ids) {
         checkNotNull(ids, "ids was not specified");
-        this.filters.withIds(ids);
+        this.filters.withFilter("id", ids);
         return this;
     }
 
     @Override
     public ListServicesCmd withNameFilter(List<String> names) {
         checkNotNull(names, "names was not specified");
-        this.filters.withNames(names);
+        this.filters.withFilter("name", names);
         return this;
     }
 
+    @Override
+    public ListServicesCmd withLabelFilter(Map<String, String> labels) {
+        checkNotNull(labels, "labels was not specified");
+        this.filters.withLabels(labels);
+        return this;
+    }
 }
