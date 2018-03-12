@@ -1,5 +1,6 @@
 package com.github.dockerjava.cmd;
 
+import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.core.command.WaitContainerResultCallback;
@@ -45,6 +46,17 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
                 .withHostResource("src/test/resources/testReadFile")
                 .exec();
         assertFileCopied(container);
+    }
+
+    @Test
+    public void copyStreamToContainerTwice() throws Exception {
+        CreateContainerResponse container = prepareContainerForCopy("rerun");
+        CopyArchiveToContainerCmd copyArchiveToContainerCmd=dockerRule.getClient().copyArchiveToContainerCmd(container.getId())
+                .withHostResource("src/test/resources/testReadFile");
+        copyArchiveToContainerCmd.exec();
+        assertFileCopied(container);
+        //run again to make sure no DockerClientException
+        copyArchiveToContainerCmd.exec();
     }
 
     private CreateContainerResponse prepareContainerForCopy(String method) {

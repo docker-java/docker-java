@@ -143,6 +143,7 @@ public class CopyArchiveToContainerCmdImpl extends AbstrDockerCmd<CopyArchiveToC
             } catch (IOException e) {
                 throw new DockerClientException("Unable to read temp file " + toUpload.toFile().getAbsolutePath(), e);
             } finally {
+                this.tarInputStream = null;
                 // remove tmp docker-javaxxx.tar.gz
                 toUpload.toFile().delete();
             }
