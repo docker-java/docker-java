@@ -27,12 +27,13 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class CreateServiceCmdExecIT extends SwarmCmdIT {
 
@@ -105,16 +106,12 @@ public class CreateServiceCmdExecIT extends SwarmCmdIT {
         assertThat(services.get(0).getSpec(), is(spec));
     }
 
-    private static <T> T randomFrom(Random r, T[] array) {
-        return array[r.nextInt(array.length)];
-    }
 
     @Test
     public void testCreateServiceWithConsistency() {
-        final Random random = new Random();
         final Mount mount = new Mount().withTarget("/tmp/foo")
-                .withType(randomFrom(random, MountType.values()))
-                .withConsistency(randomFrom(random, Consistency.values()));
+                .withType(MountType.BIND)
+                .withConsistency(Consistency.DELEGATED);
         final ContainerSpec containerSpec = new ContainerSpec()
                 .withImage("busybox")
                 .withMounts(Collections.singletonList(mount));
@@ -143,7 +140,14 @@ public class CreateServiceCmdExecIT extends SwarmCmdIT {
                 .exec();
 
         assertThat(services, hasSize(1));
-        assertThat(services.get(0).getSpec(), is(spec));
+        ServiceSpec serviceSpec = services.get(0).getSpec();
+        assertNotNull(serviceSpec);
+        // The `Consistency` field is not filled in the response
+        assertEquals(SERVICE_NAME, serviceSpec.getName());
+        List<Mount> mounts = serviceSpec.getTaskTemplate().getContainerSpec().getMounts();
+        assertThat(mounts, hasSize(1));
+        Mount mount1 = mounts.get(0);
+        assertEquals("/tmp/foo", mount1.getTarget());
     }
 
     @After
