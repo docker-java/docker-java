@@ -61,4 +61,24 @@ public class AuthConfigTest {
 
         assertThat(authConfig1, equalTo(authConfig));
     }
+
+    @Test
+    public void compatibleWithIdentitytoken() throws IOException {
+        final ObjectMapper mapper = new ObjectMapper();
+        final JavaType type = mapper.getTypeFactory().uncheckedSimpleType(AuthConfig.class);
+
+        final AuthConfig authConfig = testRoundTrip(RemoteApiVersion.VERSION_1_23,
+                "/auth/config.json",
+                type
+        );
+
+        String identitytoken = "403f751f5f2b21...";
+        assertThat(authConfig, notNullValue());
+        assertThat(authConfig.getIdentitytoken(), is(identitytoken));
+
+
+        final AuthConfig authConfig1 = new AuthConfig().withIdentityToken(identitytoken);
+
+        assertThat(authConfig1, equalTo(authConfig));
+    }
 }

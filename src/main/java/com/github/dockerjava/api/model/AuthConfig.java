@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.annotation.CheckForNull;
 import java.io.Serializable;
 
 @JsonInclude(Include.NON_NULL)
@@ -41,6 +40,13 @@ public class AuthConfig implements Serializable {
      */
     @JsonProperty("registrytoken")
     private String registrytoken;
+
+
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_23}
+     */
+    @JsonProperty("identitytoken")
+    private String identitytoken;
 
     public String getUsername() {
         return username;
@@ -90,7 +96,6 @@ public class AuthConfig implements Serializable {
     /**
      * @see #registrytoken
      */
-    @CheckForNull
     public String getRegistrytoken() {
         return registrytoken;
     }
@@ -100,6 +105,21 @@ public class AuthConfig implements Serializable {
      */
     public AuthConfig withRegistrytoken(String registrytoken) {
         this.registrytoken = registrytoken;
+        return this;
+    }
+
+    /**
+     * @see #identitytoken
+     */
+    public String getIdentitytoken() {
+        return identitytoken;
+    }
+
+    /**
+     * @see #identitytoken
+     */
+    public AuthConfig withIdentityToken(String identitytoken) {
+        this.identitytoken = identitytoken;
         return this;
     }
 

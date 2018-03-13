@@ -138,7 +138,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class AbstractDockerCmdExecFactory implements DockerCmdExecFactory {
 
-    private DockerClientConfig dockerClientConfig;
+    protected DockerClientConfig dockerClientConfig;
 
     protected DockerClientConfig getDockerClientConfig() {
         checkNotNull(dockerClientConfig,
