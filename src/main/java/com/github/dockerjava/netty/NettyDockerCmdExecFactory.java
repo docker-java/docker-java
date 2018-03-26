@@ -1,26 +1,11 @@
 package com.github.dockerjava.netty;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.net.SocketTimeoutException;
-import java.security.Security;
-import java.util.concurrent.TimeUnit;
-
-import javax.net.ssl.SSLEngine;
-import javax.net.ssl.SSLParameters;
-
-import com.github.dockerjava.core.AbstractDockerCmdExecFactory;
-import com.github.dockerjava.core.WebTarget;
-import org.apache.commons.lang.SystemUtils;
-
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
+import com.github.dockerjava.core.AbstractDockerCmdExecFactory;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.core.SSLConfig;
+import com.github.dockerjava.core.WebTarget;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelConfig;
@@ -45,7 +30,20 @@ import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.concurrent.DefaultThreadFactory;
+import org.apache.commons.lang.SystemUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.SSLParameters;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.net.SocketTimeoutException;
+import java.security.Security;
+import java.util.concurrent.TimeUnit;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 
 /**
@@ -330,6 +328,7 @@ public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory impl
         }
     }
 
+    @Override
     protected WebTarget getBaseResource() {
         checkNotNull(baseResource, "Factory not initialized, baseResource not set. You probably forgot to call init()!");
         return baseResource;

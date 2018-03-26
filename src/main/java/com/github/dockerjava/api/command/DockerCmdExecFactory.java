@@ -1,10 +1,10 @@
 package com.github.dockerjava.api.command;
 
-import java.io.Closeable;
-import java.io.IOException;
-
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.RemoteApiVersion;
+
+import java.io.Closeable;
+import java.io.IOException;
 
 public interface DockerCmdExecFactory extends Closeable {
 
@@ -23,6 +23,8 @@ public interface DockerCmdExecFactory extends Closeable {
     PullImageCmd.Exec createPullImageCmdExec();
 
     PushImageCmd.Exec createPushImageCmdExec();
+
+    SaveImagesCmd.Exec createSaveImagesCmdExec();
 
     SaveImageCmd.Exec createSaveImageCmdExec();
 
