@@ -319,6 +319,7 @@ public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory impl
             if (channel == null || !channel.isActive() || alreadyTimedOut) {
                 return;
             }
+            DockerClientConfig dockerClientConfig = getDockerClientConfig();
             final Object dockerAPIEndpoint = dockerClientConfig.getDockerHost();
             final String msg = "Read timed out: No data received within " + readTimeout
                     + "ms.  Perhaps the docker API (" + dockerAPIEndpoint
