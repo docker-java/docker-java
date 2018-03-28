@@ -15,6 +15,9 @@ public class Volume implements Serializable {
 
     private String path;
 
+    public Volume() {
+    }
+
     public Volume(String path) {
         this.path = path;
     }
