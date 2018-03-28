@@ -1,7 +1,9 @@
 package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.LogContainerCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.api.model.LogConfig;
 import com.github.dockerjava.api.model.StreamType;
 import com.github.dockerjava.core.command.WaitContainerResultCallback;
 import com.github.dockerjava.utils.LogContainerTestCallback;
@@ -10,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -196,5 +199,63 @@ public class LogContainerCmdIT extends CmdIT {
         loggingCallback.awaitCompletion();
 
         assertThat(loggingCallback.toString(), containsString(snippet));
+    }
+
+    @Test
+    public void asyncLogContainerWithDetails() throws Exception {
+        HashMap<String, String> config = new HashMap<>();
+        config.put("env", "ENV_VAR");
+        LogConfig logConfig = new LogConfig(LogConfig.LoggingType.JOURNALD, config);
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("flyinprogrammer/logtester")
+                .withEnv("ENV_VAR=logtester.1234")
+                .withLogConfig(logConfig)
+                .exec();
+
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+
+        dockerRule.getClient().startContainerCmd(container.getId())
+                .exec();
+
+        LogContainerTestCallback loggingCallback = new LogContainerTestCallback(true);
+
+        dockerRule.getClient().logContainerCmd(container.getId())
+                .withStdErr(true)
+                .withStdOut(true)
+                .withDetails(true)
+                .exec(loggingCallback);
+
+        loggingCallback.awaitCompletion(3, TimeUnit.SECONDS);
+
+        assertTrue(loggingCallback.toString().contains("ENV_VAR=logtester.1234"));
+    }
+
+    @Test
+    public void asyncLogContainerWithoutDetails() throws Exception {
+        HashMap<String, String> config = new HashMap<>();
+        config.put("env", "ENV_VAR");
+        LogConfig logConfig = new LogConfig(LogConfig.LoggingType.JOURNALD, config);
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("flyinprogrammer/logtester")
+                .withEnv("ENV_VAR=logtester.1234")
+                .withLogConfig(logConfig)
+                .exec();
+
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+
+        dockerRule.getClient().startContainerCmd(container.getId())
+                .exec();
+
+        LogContainerTestCallback loggingCallback = new LogContainerTestCallback(true);
+
+        dockerRule.getClient().logContainerCmd(container.getId())
+                .withStdErr(true)
+                .withStdOut(true)
+                .withDetails(false)
+                .exec(loggingCallback);
+
+        loggingCallback.awaitCompletion(3, TimeUnit.SECONDS);
+
+        assertTrue(!loggingCallback.toString().contains("ENV_VAR"));
     }
 }
