@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-import static com.google.common.net.UrlEscapers.urlPathSegmentEscaper;
-
 public class ListServicesCmdExec extends AbstrSyncDockerCmdExec<ListServicesCmd, List<Service>> implements
         ListServicesCmd.Exec {
 
@@ -29,7 +27,7 @@ public class ListServicesCmdExec extends AbstrSyncDockerCmdExec<ListServicesCmd,
 
         if (command.getFilters() != null && !command.getFilters().isEmpty()) {
             webTarget = webTarget
-                    .queryParam("filters", urlPathSegmentEscaper().escape(FiltersEncoder.jsonEncode(command.getFilters())));
+                    .queryParam("filters", FiltersEncoder.jsonEncode(command.getFilters()));
         }
 
         LOGGER.trace("GET: {}", webTarget);

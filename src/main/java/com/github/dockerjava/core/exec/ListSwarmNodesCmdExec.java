@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-import static com.google.common.net.UrlEscapers.urlPathSegmentEscaper;
-
 public class ListSwarmNodesCmdExec extends AbstrSyncDockerCmdExec<ListSwarmNodesCmd, List<SwarmNode>> implements
         ListSwarmNodesCmd.Exec {
 
@@ -30,7 +28,7 @@ public class ListSwarmNodesCmdExec extends AbstrSyncDockerCmdExec<ListSwarmNodes
 
         if (command.getFilters() != null && !command.getFilters().isEmpty()) {
             webTarget = webTarget
-                    .queryParam("filters", urlPathSegmentEscaper().escape(FiltersEncoder.jsonEncode(command.getFilters())));
+                    .queryParam("filters", FiltersEncoder.jsonEncode(command.getFilters()));
         }
 
         LOGGER.trace("GET: {}", webTarget);
