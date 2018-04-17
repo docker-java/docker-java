@@ -869,16 +869,12 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Test
     public void createContainerWithTmpFs() throws DockerException {
-
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("sleep", "9999")
                 .withHostConfig(new HostConfig().withTmpFs(Collections.singletonMap("/tmp", "rw,noexec,nosuid,size=50m"))).exec();
-
-        LOG.info("Created container {}", container.toString());
 
         assertThat(container.getId(), not(isEmptyString()));
 
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
-
-        assertThat(inspectContainerResponse.getHostConfig().getTmpFs().keySet(), contains("/tmp"));
+        assertThat(inspectContainerResponse.getHostConfig().getTmpFs().get("/tmp"), equalTo("rw,noexec,nosuid,size=50m"));
     }
 }
