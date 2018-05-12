@@ -87,6 +87,7 @@ import org.glassfish.jersey.apache.connector.ApacheClientProperties;
 import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.client.RequestEntityProcessing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -136,6 +137,8 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
 
     private PoolingHttpClientConnectionManager connManager = null;
 
+    private RequestEntityProcessing requestEntityProcessing;
+
     @Override
     public void init(DockerClientConfig dockerClientConfig) {
         checkNotNull(dockerClientConfig, "config was not specified");
@@ -145,6 +148,9 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
         clientConfig.connectorProvider(new ApacheConnectorProvider());
         clientConfig.property(CommonProperties.FEATURE_AUTO_DISCOVERY_DISABLE, true);
 
+        if (requestEntityProcessing != null) {
+            clientConfig.property(ClientProperties.REQUEST_ENTITY_PROCESSING, requestEntityProcessing);
+        }
         clientConfig.register(ResponseStatusExceptionFilter.class);
         clientConfig.register(JsonClientFilter.class);
         clientConfig.register(JacksonJsonProvider.class);
@@ -685,6 +691,16 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
 
     public JerseyDockerCmdExecFactory withClientRequestFilters(ClientRequestFilter... clientRequestFilters) {
         this.clientRequestFilters = clientRequestFilters;
+        return this;
+    }
+
+    public JerseyDockerCmdExecFactory withBufferedRequestEntityProcessing() {
+        this.requestEntityProcessing = RequestEntityProcessing.BUFFERED;
+        return this;
+    }
+
+    public JerseyDockerCmdExecFactory withChunkedRequestEntityProcessing() {
+        this.requestEntityProcessing = RequestEntityProcessing.CHUNKED;
         return this;
     }
 
