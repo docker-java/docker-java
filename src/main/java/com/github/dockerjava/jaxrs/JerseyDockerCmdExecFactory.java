@@ -694,16 +694,10 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
         return this;
     }
 
-    public JerseyDockerCmdExecFactory withBufferedRequestEntityProcessing() {
-        this.requestEntityProcessing = RequestEntityProcessing.BUFFERED;
+    public JerseyDockerCmdExecFactory withRequestEntityProcessing(RequestEntityProcessing requestEntityProcessing) {
+        this.requestEntityProcessing = requestEntityProcessing;
         return this;
     }
-
-    public JerseyDockerCmdExecFactory withChunkedRequestEntityProcessing() {
-        this.requestEntityProcessing = RequestEntityProcessing.CHUNKED;
-        return this;
-    }
-
 
     /**
      * release connections from the pool
