@@ -55,10 +55,6 @@ public class UpdateContainerCmdImpl extends AbstrDockerCmd<UpdateContainerCmd, U
     @JsonProperty("KernelMemory")
     private Long kernelMemory;
 
-    public UpdateContainerCmdImpl() {
-        super(null);
-    }
-
     public UpdateContainerCmdImpl(UpdateContainerCmd.Exec exec, String containerId) {
         super(exec);
         withContainerId(containerId);
