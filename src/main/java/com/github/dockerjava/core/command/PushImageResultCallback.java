@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class PushImageResultCallback extends ResultCallbackTemplate<PushImageResultCallback, PushResponseItem> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(PushImageResultCallback.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PushImageResultCallback.class);
 
 	@CheckForNull
 	private PushResponseItem latestItem = null;
