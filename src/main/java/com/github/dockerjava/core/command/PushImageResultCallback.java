@@ -29,7 +29,7 @@ public class PushImageResultCallback extends ResultCallbackTemplate<PushImageRes
 
 	@Override
 	public void onNext(PushResponseItem item) {
-		checkNotNull(item, "item was not specified");
+	    checkNotNull(item, "item was not specified");
 		this.latestItem = item;
 		LOGGER.debug(item.toString());
 	}

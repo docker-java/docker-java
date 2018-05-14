@@ -28,7 +28,7 @@ public class PullImageCmdImpl extends AbstrAsyncDockerCmd<PullImageCmd, PullResp
     }
 
     public PullImageCmd withAuthConfig(AuthConfig authConfig) {
-    	checkNotNull(authConfig, "authConfig was not specified");
+        checkNotNull(authConfig, "authConfig was not specified");
         this.authConfig = authConfig;
         return this;
     }

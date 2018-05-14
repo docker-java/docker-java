@@ -53,7 +53,7 @@ public class UpdateServiceCmdImpl extends AbstrDockerCmd<UpdateServiceCmd, Void>
      * @see #serviceId
      */
     public UpdateServiceCmd withServiceId(@Nonnull String serviceId) {
-    	checkNotNull(serviceId, "serviceId was not specified");
+        checkNotNull(serviceId, "serviceId was not specified");
         this.serviceId = serviceId;
         return this;
     }
@@ -70,7 +70,7 @@ public class UpdateServiceCmdImpl extends AbstrDockerCmd<UpdateServiceCmd, Void>
      * @see #serviceSpec
      */
     public UpdateServiceCmd withServiceSpec(ServiceSpec serviceSpec) {
-    	checkNotNull(serviceSpec, "serviceSpec was not specified");
+        checkNotNull(serviceSpec, "serviceSpec was not specified");
         this.serviceSpec = serviceSpec;
         return this;
     }

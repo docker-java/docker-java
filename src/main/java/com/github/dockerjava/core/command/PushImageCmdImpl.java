@@ -63,7 +63,7 @@ public class PushImageCmdImpl extends AbstrAsyncDockerCmd<PushImageCmd, PushResp
     }
 
     public PushImageCmd withAuthConfig(AuthConfig authConfig) {
-    	checkNotNull(authConfig, "authConfig was not specified");
+        checkNotNull(authConfig, "authConfig was not specified");
         this.authConfig = authConfig;
         return this;
     }

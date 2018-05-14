@@ -90,7 +90,7 @@ public class UpdateContainerCmdImpl extends AbstrDockerCmd<UpdateContainerCmd, U
      * @see #containerId
      */
     public UpdateContainerCmd withContainerId(@Nonnull String containerId) {
-    	checkNotNull(containerId, "containerId was not specified");
+        checkNotNull(containerId, "containerId was not specified");
         this.containerId = containerId;
         return this;
     }

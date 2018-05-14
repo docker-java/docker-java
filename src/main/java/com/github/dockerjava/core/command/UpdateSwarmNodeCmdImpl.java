@@ -50,7 +50,7 @@ public class UpdateSwarmNodeCmdImpl extends AbstrDockerCmd<UpdateSwarmNodeCmd, V
      * @see #swarmNodeId
      */
     public UpdateSwarmNodeCmd withSwarmNodeId(@Nonnull String swarmNodeId) {
-    	checkNotNull(swarmNodeId, "swarmNodeId was not specified");
+        checkNotNull(swarmNodeId, "swarmNodeId was not specified");
         this.swarmNodeId = swarmNodeId;
         return this;
     }
@@ -67,7 +67,7 @@ public class UpdateSwarmNodeCmdImpl extends AbstrDockerCmd<UpdateSwarmNodeCmd, V
      * @see #swarmNodeSpec
      */
     public UpdateSwarmNodeCmd withSwarmNodeSpec(SwarmNodeSpec swarmNodeSpec) {
-    	checkNotNull(swarmNodeSpec, "swarmNodeSpec was not specified");
+        checkNotNull(swarmNodeSpec, "swarmNodeSpec was not specified");
         this.swarmNodeSpec = swarmNodeSpec;
         return this;
     }

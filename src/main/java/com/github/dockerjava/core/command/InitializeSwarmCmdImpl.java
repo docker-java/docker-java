@@ -29,7 +29,7 @@ public class InitializeSwarmCmdImpl extends AbstrDockerCmd<InitializeSwarmCmd, V
 
     public InitializeSwarmCmdImpl(InitializeSwarmCmd.Exec exec, SwarmSpec swarmSpec) {
         super(exec);
-        this.withSwarmSpec(swarmSpec);
+        withSwarmSpec(swarmSpec);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class InitializeSwarmCmdImpl extends AbstrDockerCmd<InitializeSwarmCmd, V
 
     @Override
     public InitializeSwarmCmd withSwarmSpec(SwarmSpec swarmSpec) {
-    	checkNotNull(swarmSpec, "swarmSpec was not specified");
+        checkNotNull(swarmSpec, "swarmSpec was not specified");
         this.spec = swarmSpec;
         return this;
     }

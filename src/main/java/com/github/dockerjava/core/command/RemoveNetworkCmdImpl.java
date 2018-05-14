@@ -21,7 +21,7 @@ public class RemoveNetworkCmdImpl extends AbstrDockerCmd<RemoveNetworkCmd, Void>
 
     @Override
     public RemoveNetworkCmd withNetworkId(String networkId) {
-    	checkNotNull(networkId, "networkId was not specified");
+        checkNotNull(networkId, "networkId was not specified");
         this.networkId = networkId;
         return this;
     }

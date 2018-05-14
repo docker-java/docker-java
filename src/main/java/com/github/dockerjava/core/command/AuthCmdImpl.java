@@ -31,7 +31,7 @@ public class AuthCmdImpl extends AbstrDockerCmd<AuthCmd, AuthResponse> implement
     }
 
     public AuthCmd withAuthConfig(AuthConfig authConfig) {
-    	checkNotNull(authConfig, "AuthConfig was not specified");
+        checkNotNull(authConfig, "AuthConfig was not specified");
         this.authConfig = authConfig;
         return this;
     }
