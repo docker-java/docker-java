@@ -17,6 +17,7 @@ public class InspectContainerCmdImpl extends AbstrDockerCmd<InspectContainerCmd,
 
     public InspectContainerCmdImpl(InspectContainerCmd.Exec exec, String containerId) {
         super(exec);
+        checkNotNull(containerId, "containerId was not specified");
         withContainerId(containerId);
     }
 

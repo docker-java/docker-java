@@ -19,7 +19,7 @@ public class UpdateSwarmCmdImpl extends AbstrDockerCmd<UpdateSwarmCmd, Void> imp
 
     public UpdateSwarmCmdImpl(Exec exec, SwarmSpec swarmSpec) {
         super(exec);
-        this.swarmSpec = swarmSpec;
+        withSwarmSpec(swarmSpec);
     }
 
     @Override

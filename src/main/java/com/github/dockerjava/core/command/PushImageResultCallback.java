@@ -10,6 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.CheckForNull;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -19,40 +22,42 @@ import java.util.concurrent.TimeUnit;
  */
 public class PushImageResultCallback extends ResultCallbackTemplate<PushImageResultCallback, PushResponseItem> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PushImageResultCallback.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(PushImageResultCallback.class);
 
-    @CheckForNull
-    private PushResponseItem latestItem = null;
+	@CheckForNull
+	private PushResponseItem latestItem = null;
 
-    @Override
-    public void onNext(PushResponseItem item) {
-        this.latestItem = item;
-        LOGGER.debug(item.toString());
-    }
+	@Override
+	public void onNext(PushResponseItem item) {
+		checkNotNull(item, "item was not specified");
+		this.latestItem = item;
+		LOGGER.debug(item.toString());
+	}
 
-    @Override
-    protected void throwFirstError() {
-        super.throwFirstError();
+	@Override
+	protected void throwFirstError() {
+		super.throwFirstError();
 
-        if (latestItem == null) {
-            throw new DockerClientException("Could not push image");
-        } else if (latestItem.isErrorIndicated()) {
-            throw new DockerClientException("Could not push image: " + latestItem.getError());
-        }
-    }
+		if (latestItem == null) {
+			throw new DockerClientException("Could not push image");
+		} else if (latestItem.isErrorIndicated()) {
+			throw new DockerClientException("Could not push image: " + latestItem.getError());
+		}
+	}
 
-    /**
-     * Awaits the image to be pulled successful.
-     *
-     * @deprecated use {@link #awaitCompletion()} or {@link #awaitCompletion(long, TimeUnit)} instead
-     * @throws DockerClientException
-     *             if the push fails.
-     */
-    public void awaitSuccess() {
-        try {
-            awaitCompletion();
-        } catch (InterruptedException e) {
-            throw new DockerClientException("", e);
-        }
-    }
+	/**
+	 * Awaits the image to be pulled successful.
+	 *
+	 * @deprecated use {@link #awaitCompletion()} or
+	 *             {@link #awaitCompletion(long, TimeUnit)} instead
+	 * @throws DockerClientException
+	 *             if the push fails.
+	 */
+	public void awaitSuccess() {
+		try {
+			awaitCompletion();
+		} catch (InterruptedException e) {
+			throw new DockerClientException("", e);
+		}
+	}
 }

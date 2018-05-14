@@ -10,6 +10,8 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
@@ -88,6 +90,7 @@ public class UpdateContainerCmdImpl extends AbstrDockerCmd<UpdateContainerCmd, U
      * @see #containerId
      */
     public UpdateContainerCmd withContainerId(@Nonnull String containerId) {
+    	checkNotNull(containerId, "containerId was not specified");
         this.containerId = containerId;
         return this;
     }

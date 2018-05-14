@@ -1,5 +1,7 @@
 package com.github.dockerjava.core.command;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.github.dockerjava.api.command.DockerCmdSyncExec;
 import com.github.dockerjava.api.command.RemoveNetworkCmd;
 
@@ -19,6 +21,7 @@ public class RemoveNetworkCmdImpl extends AbstrDockerCmd<RemoveNetworkCmd, Void>
 
     @Override
     public RemoveNetworkCmd withNetworkId(String networkId) {
+    	checkNotNull(networkId, "networkId was not specified");
         this.networkId = networkId;
         return this;
     }

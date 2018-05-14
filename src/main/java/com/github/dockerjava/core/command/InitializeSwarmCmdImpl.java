@@ -8,6 +8,8 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import javax.annotation.CheckForNull;
 
 public class InitializeSwarmCmdImpl extends AbstrDockerCmd<InitializeSwarmCmd, Void> implements
@@ -27,6 +29,7 @@ public class InitializeSwarmCmdImpl extends AbstrDockerCmd<InitializeSwarmCmd, V
 
     public InitializeSwarmCmdImpl(InitializeSwarmCmd.Exec exec, SwarmSpec swarmSpec) {
         super(exec);
+        checkNotNull(swarmSpec, "swarmSpec was not specified");
         this.spec = swarmSpec;
     }
 
