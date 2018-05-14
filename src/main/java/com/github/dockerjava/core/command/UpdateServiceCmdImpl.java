@@ -9,6 +9,8 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
@@ -51,6 +53,7 @@ public class UpdateServiceCmdImpl extends AbstrDockerCmd<UpdateServiceCmd, Void>
      * @see #serviceId
      */
     public UpdateServiceCmd withServiceId(@Nonnull String serviceId) {
+        checkNotNull(serviceId, "serviceId was not specified");
         this.serviceId = serviceId;
         return this;
     }
@@ -67,6 +70,7 @@ public class UpdateServiceCmdImpl extends AbstrDockerCmd<UpdateServiceCmd, Void>
      * @see #serviceSpec
      */
     public UpdateServiceCmd withServiceSpec(ServiceSpec serviceSpec) {
+        checkNotNull(serviceSpec, "serviceSpec was not specified");
         this.serviceSpec = serviceSpec;
         return this;
     }

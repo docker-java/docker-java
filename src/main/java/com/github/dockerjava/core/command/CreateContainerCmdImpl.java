@@ -132,7 +132,6 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     public CreateContainerCmdImpl(CreateContainerCmd.Exec exec, AuthConfig authConfig, String image) {
         super(exec);
-        checkNotNull(image, "image was not specified");
         withAuthConfig(authConfig);
         withImage(image);
     }
@@ -142,6 +141,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     public CreateContainerCmd withAuthConfig(AuthConfig authConfig) {
+        checkNotNull(authConfig, "authConfig was not specified");
         this.authConfig = authConfig;
         return this;
     }

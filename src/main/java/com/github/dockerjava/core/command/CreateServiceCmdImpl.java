@@ -16,7 +16,6 @@ public class CreateServiceCmdImpl extends AbstrDockerCmd<CreateServiceCmd, Creat
 
     public CreateServiceCmdImpl(CreateServiceCmd.Exec exec, ServiceSpec serviceSpec) {
         super(exec);
-        checkNotNull(serviceSpec, "serviceSpec was not specified");
         withServiceSpec(serviceSpec);
     }
 

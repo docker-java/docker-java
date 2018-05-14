@@ -9,6 +9,8 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
@@ -48,6 +50,7 @@ public class UpdateSwarmNodeCmdImpl extends AbstrDockerCmd<UpdateSwarmNodeCmd, V
      * @see #swarmNodeId
      */
     public UpdateSwarmNodeCmd withSwarmNodeId(@Nonnull String swarmNodeId) {
+        checkNotNull(swarmNodeId, "swarmNodeId was not specified");
         this.swarmNodeId = swarmNodeId;
         return this;
     }
@@ -64,6 +67,7 @@ public class UpdateSwarmNodeCmdImpl extends AbstrDockerCmd<UpdateSwarmNodeCmd, V
      * @see #swarmNodeSpec
      */
     public UpdateSwarmNodeCmd withSwarmNodeSpec(SwarmNodeSpec swarmNodeSpec) {
+        checkNotNull(swarmNodeSpec, "swarmNodeSpec was not specified");
         this.swarmNodeSpec = swarmNodeSpec;
         return this;
     }
