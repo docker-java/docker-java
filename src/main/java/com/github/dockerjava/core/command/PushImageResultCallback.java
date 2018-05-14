@@ -25,7 +25,7 @@ public class PushImageResultCallback extends ResultCallbackTemplate<PushImageRes
     private static final Logger LOGGER = LoggerFactory.getLogger(PushImageResultCallback.class);
 
 	@CheckForNull
-	private PushResponseItem latestItem = null;
+    private PushResponseItem latestItem = null;
 
 	@Override
 	public void onNext(PushResponseItem item) {
