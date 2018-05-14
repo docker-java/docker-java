@@ -24,40 +24,40 @@ public class PushImageResultCallback extends ResultCallbackTemplate<PushImageRes
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PushImageResultCallback.class);
 
-	@CheckForNull
+    @CheckForNull
     private PushResponseItem latestItem = null;
 
-	@Override
-	public void onNext(PushResponseItem item) {
+    @Override
+    public void onNext(PushResponseItem item) {
 	    checkNotNull(item, "item was not specified");
-		this.latestItem = item;
-		LOGGER.debug(item.toString());
-	}
+	    this.latestItem = item;
+	    LOGGER.debug(item.toString());
+    }
 
-	@Override
-	protected void throwFirstError() {
-		super.throwFirstError();
+    @Override
+    protected void throwFirstError() {
+	    super.throwFirstError();
 
-		if (latestItem == null) {
-			throw new DockerClientException("Could not push image");
-		} else if (latestItem.isErrorIndicated()) {
-			throw new DockerClientException("Could not push image: " + latestItem.getError());
-		}
-	}
+	    if (latestItem == null) {
+		    throw new DockerClientException("Could not push image");
+	    } else if (latestItem.isErrorIndicated()) {
+		    throw new DockerClientException("Could not push image: " + latestItem.getError());
+	    }
+    }
 
-	/**
-	 * Awaits the image to be pulled successful.
-	 *
-	 * @deprecated use {@link #awaitCompletion()} or
-	 *             {@link #awaitCompletion(long, TimeUnit)} instead
-	 * @throws DockerClientException
-	 *             if the push fails.
-	 */
-	public void awaitSuccess() {
-		try {
-			awaitCompletion();
-		} catch (InterruptedException e) {
-			throw new DockerClientException("", e);
-		}
-	}
+    /**
+     * Awaits the image to be pulled successful.
+     *
+     * @deprecated use {@link #awaitCompletion()} or
+     *             {@link #awaitCompletion(long, TimeUnit)} instead
+     * @throws DockerClientException
+     *             if the push fails.
+     */
+    public void awaitSuccess() {
+        try {
+		    awaitCompletion();
+	    } catch (InterruptedException e) {
+		    throw new DockerClientException("", e);
+	    }
+    }
 }
