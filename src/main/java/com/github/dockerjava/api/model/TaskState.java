@@ -33,7 +33,11 @@ public enum TaskState {
 
     FAILED("failed"),
 
-    REJECTED("rejected");
+    REJECTED("rejected"),
+
+    REMOVE("remove"),
+
+    ORPHANED("orphaned");
 
     private String value;
 
