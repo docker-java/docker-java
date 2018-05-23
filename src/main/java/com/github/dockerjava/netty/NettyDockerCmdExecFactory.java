@@ -176,7 +176,10 @@ public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory impl
 
         @Override
         public DuplexChannel connect(Bootstrap bootstrap) throws InterruptedException {
-            return (DuplexChannel) bootstrap.connect(new DomainSocketAddress("/var/run/docker.sock")).sync().channel();
+            DockerClientConfig dockerClientConfig = getDockerClientConfig();
+            String path = dockerClientConfig.getDockerHost().getPath();
+
+            return (DuplexChannel) bootstrap.connect(new DomainSocketAddress(path)).sync().channel();
         }
     }
 
