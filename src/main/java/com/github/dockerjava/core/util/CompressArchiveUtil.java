@@ -1,6 +1,7 @@
 package com.github.dockerjava.core.util;
 
 import static com.github.dockerjava.core.util.FilePathUtil.relativize;
+import static java.nio.file.FileVisitOption.FOLLOW_LINKS;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -12,6 +13,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.EnumSet;
 import java.util.zip.GZIPOutputStream;
 
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
@@ -78,7 +80,8 @@ public class CompressArchiveUtil {
                     // In order to have the dossier as the root entry
                     sourcePath = inputPath.getParent();
                 }
-                Files.walkFileTree(inputPath, new TarDirWalker(sourcePath, tarArchiveOutputStream));
+                Files.walkFileTree(inputPath, EnumSet.of(FOLLOW_LINKS), Integer.MAX_VALUE,
+                        new TarDirWalker(sourcePath, tarArchiveOutputStream));
             }
             tarArchiveOutputStream.flush();
         }
