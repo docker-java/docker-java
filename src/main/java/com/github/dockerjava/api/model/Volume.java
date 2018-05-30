@@ -1,5 +1,7 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -15,7 +17,8 @@ public class Volume implements Serializable {
 
     private String path;
 
-    public Volume(String path) {
+    @JsonCreator
+    public Volume(@JsonProperty("path") String path) {
         this.path = path;
     }
 
