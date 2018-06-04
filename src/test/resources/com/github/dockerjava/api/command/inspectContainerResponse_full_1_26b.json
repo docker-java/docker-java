@@ -1,0 +1,180 @@
+[
+  {
+    "HostsPath" : "",
+    "RestartCount" : 0,
+    "ProcessLabel" : "",
+    "Args" : [],
+    "GraphDriver" : {
+      "Name" : "aufs",
+      "Data" : null
+    },
+    "Config" : {
+      "OpenStdin" : false,
+      "Volumes" : {
+        "/srv/test" : {}
+      },
+      "User" : "",
+      "Image" : "busybox:latest",
+      "Entrypoint" : null,
+      "Tty" : false,
+      "Env" : [
+        "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      ],
+      "StdinOnce" : false,
+      "OnBuild" : null,
+      "Hostname" : "812f8c0d2342",
+      "Domainname" : "",
+      "AttachStdout" : false,
+      "Cmd" : [
+        "true"
+      ],
+      "AttachStdin" : false,
+      "WorkingDir" : "",
+      "AttachStderr" : false,
+      "Labels" : {}
+    },
+    "Driver" : "aufs",
+    "Image" : "sha256:8c811b4aec35f259572d0f79207bc0678df4c736eeec50bc9fec37ed936a472a",
+    "LogPath" : "",
+    "Mounts" : [
+      {
+        "Source" : "/var/lib/docker/volumes/53690c8e68d587308c3b8c8c76a7912aecf5abd4851f555df687229ac625112f/_data",
+        "Name" : "53690c8e68d587308c3b8c8c76a7912aecf5abd4851f555df687229ac625112f",
+        "RW" : true,
+        "Type" : "volume",
+        "Destination" : "/srv/test",
+        "Driver" : "local",
+        "Propagation" : "",
+        "Mode" : ""
+      }
+    ],
+    "MountLabel" : "",
+    "ResolvConfPath" : "",
+    "AppArmorProfile" : "",
+    "NetworkSettings" : {
+      "MacAddress" : "",
+      "SecondaryIPv6Addresses" : null,
+      "LinkLocalIPv6PrefixLen" : 0,
+      "LinkLocalIPv6Address" : "",
+      "GlobalIPv6PrefixLen" : 0,
+      "Networks" : {
+        "bridge" : {
+          "GlobalIPv6Address" : "",
+          "NetworkID" : "",
+          "Gateway" : "",
+          "IPAddress" : "",
+          "IPPrefixLen" : 0,
+          "MacAddress" : "",
+          "EndpointID" : "",
+          "IPAMConfig" : null,
+          "IPv6Gateway" : "",
+          "GlobalIPv6PrefixLen" : 0,
+          "Aliases" : null,
+          "Links" : null
+        }
+      },
+      "SandboxKey" : "",
+      "EndpointID" : "",
+      "Bridge" : "",
+      "IPPrefixLen" : 0,
+      "Ports" : null,
+      "IPAddress" : "",
+      "IPv6Gateway" : "",
+      "SandboxID" : "",
+      "Gateway" : "",
+      "GlobalIPv6Address" : "",
+      "SecondaryIPAddresses" : null,
+      "HairpinMode" : false
+    },
+    "Name" : "/elegant_mccarthy",
+    "Id" : "812f8c0d2342c45bda537b856dd50f65f6c4cd13cded5231d0424edfb9132f38",
+    "HostConfig" : {
+      "Dns" : null,
+      "BlkioDeviceWriteBps" : null,
+      "BlkioWeight" : 0,
+      "CpuQuota" : 0,
+      "ExtraHosts" : null,
+      "NanoCpus" : 0,
+      "KernelMemory" : 0,
+      "MemorySwap" : 0,
+      "CgroupParent" : "",
+      "ShmSize" : 67108864,
+      "CpuPercent" : 0,
+      "DnsOptions" : null,
+      "PidMode" : "",
+      "BlkioDeviceWriteIOps" : null,
+      "Devices" : null,
+      "Binds" : null,
+      "Memory" : 0,
+      "RestartPolicy" : {
+        "MaximumRetryCount" : 0,
+        "Name" : ""
+      },
+      "IOMaximumIOps" : 0,
+      "CpuRealtimeRuntime" : 0,
+      "PublishAllPorts" : false,
+      "CapAdd" : null,
+      "ReadonlyRootfs" : false,
+      "GroupAdd" : null,
+      "MemoryReservation" : 0,
+      "AutoRe     ove" : false,
+      "UsernsMode" : "",
+      "Runtime" : "runc",
+      "BlkioWeightDevice" : null,
+      "Ulimits" : null,
+      "Cgroup" : "",
+      "NetworkMode" : "default",
+      "CpusetCpus" : "",
+      "Isolation" : "",
+      "CpuCount" : 0,
+      "CpuRealtimePeriod" : 0,
+      "IOMaximumBandwidth" : 0,
+      "IpcMode" : "",
+      "OomKillDisable" : false,
+      "OomScoreAdj" : 0,
+      "SecurityOpt" : null,
+      "MemorySwappiness" : -1,
+      "ContainerIDFile" : "",
+      "BlkioDeviceReadBps" : null,
+      "CpusetMems" : "",
+      "PortBindings" : null,
+      "BlkioDeviceReadIOps" : null,
+      "PidsLimit" : 0,
+      "VolumesFrom" : null,
+      "Links" : null,
+      "Privileged" : false,
+      "ConsoleSize" : [
+        0,
+        0
+      ],
+      "DnsSearch" : null,
+      "UTSMode" : "",
+      "LogConfig" : {
+        "Type" : "json-file",
+        "Config" : {}
+      },
+      "CpuShares" : 0,
+      "VolumeDriver" : "",
+      "CpuPeriod" : 0,
+      "CapDrop" : null,
+      "DiskQuota" : 0
+    },
+    "Created" : "2018-06-04T08:09:33.086574793Z",
+    "HostnamePath" : "",
+    "ExecIDs" : null,
+    "Path" : "true",
+    "State" : {
+      "Error" : "",
+      "Pid" : 0,
+      "Running" : false,
+      "Dead" : false,
+      "OOMKilled" : false,
+      "ExitCode" : 0,
+      "StartedAt" : "0001-01-01T00:00:00Z",
+      "Paused" : false,
+      "Restarting" : false,
+      "FinishedAt" : "0001-01-01T00:00:00Z",
+      "Status" : "created"
+    }
+  }
+]

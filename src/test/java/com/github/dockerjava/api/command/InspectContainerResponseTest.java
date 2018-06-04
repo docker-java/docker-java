@@ -96,8 +96,8 @@ public class InspectContainerResponseTest {
     }
 
     @Test
-    public void roundTrip_1_26_full() throws IOException {
-        InspectContainerResponse[] responses = testRoundTrip(CommandJSONSamples.inspectContainerResponse_full_1_26,
+    public void roundTrip_1_26a_full() throws IOException {
+        InspectContainerResponse[] responses = testRoundTrip(CommandJSONSamples.inspectContainerResponse_full_1_26a,
                 InspectContainerResponse[].class);
 
         assertEquals(1, responses.length);
@@ -109,6 +109,22 @@ public class InspectContainerResponseTest {
         final InspectContainerResponse.Mount mount = mounts.get(0);
         final Volume volume = mount.getDestination();
         assertEquals(volume.getPath(), "/var/lib/postgresql/data");
+    }
+
+    @Test
+    public void roundTrip_1_26b_full() throws IOException {
+        InspectContainerResponse[] responses = testRoundTrip(CommandJSONSamples.inspectContainerResponse_full_1_26b,
+                InspectContainerResponse[].class);
+
+        assertEquals(1, responses.length);
+        final InspectContainerResponse response = responses[0];
+
+        final List<InspectContainerResponse.Mount> mounts = response.getMounts();
+        assertEquals(mounts.size(), 1);
+
+        final InspectContainerResponse.Mount mount = mounts.get(0);
+        final Volume volume = mount.getDestination();
+        assertEquals(volume.getPath(), "/srv/test");
     }
 
     @Test
