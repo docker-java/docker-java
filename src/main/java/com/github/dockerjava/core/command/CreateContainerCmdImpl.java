@@ -195,6 +195,12 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public List<String> getAliases() {
         return aliases;
     }
+    
+    @Override
+    @JsonIgnore
+    public Boolean getAutoRemove() {
+      return hostConfig.getAutoRemove();
+    }
 
     @Override
     @JsonIgnore
@@ -501,6 +507,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         return this;
     }
 
+    
     @Override
     public CreateContainerCmd withAliases(List<String> aliases) {
         checkNotNull(aliases, "aliases was not specified");
@@ -526,6 +533,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public CreateContainerCmd withAttachStdout(Boolean attachStdout) {
         checkNotNull(attachStdout, "attachStdout was not specified");
         this.attachStdout = attachStdout;
+        return this;
+    }
+    
+    @Override
+    public CreateContainerCmd withAutoRemove(Boolean autoRemove) {
+        checkNotNull(autoRemove, "autoRemove was not specified");
+        hostConfig.withAutoRemove(autoRemove);
         return this;
     }
 
