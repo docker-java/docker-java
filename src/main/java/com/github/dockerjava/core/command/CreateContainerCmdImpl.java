@@ -198,12 +198,6 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     @JsonIgnore
-    public Boolean getAutoRemove() {
-      return hostConfig.getAutoRemove();
-    }
-
-    @Override
-    @JsonIgnore
     public Bind[] getBinds() {
         return hostConfig.getBinds();
     }

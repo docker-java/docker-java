@@ -169,12 +169,6 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     Boolean isNetworkDisabled();
 
     /**
-     * @since 1.25
-     */
-    @CheckForNull
-    Boolean getAutoRemove();
-
-    /**
      * @since 1.19
      */
     @CheckForNull
