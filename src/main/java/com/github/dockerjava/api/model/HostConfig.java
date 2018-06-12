@@ -39,7 +39,6 @@ public class HostConfig implements Serializable {
     @JsonProperty("BlkioWeightDevice")
     private List<Object> blkioWeightDevice;
 
-
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
      */
