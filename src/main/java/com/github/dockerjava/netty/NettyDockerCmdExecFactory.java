@@ -137,7 +137,7 @@ public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory impl
             } else if (SystemUtils.IS_OS_MAC_OSX) {
                 return kqueueGroup();
             }
-            throw new RuntimeException("Unspported OS");
+            throw new RuntimeException("Unsupported OS");
         }
 
         public EventLoopGroup epollGroup() {
