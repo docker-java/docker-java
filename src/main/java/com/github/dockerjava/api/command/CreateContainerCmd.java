@@ -385,11 +385,6 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     CreateContainerCmd withNetworkMode(String networkMode);
 
     /**
-     * @since 1.25
-     */
-    CreateContainerCmd withAutoRemove(Boolean autoRemove);
-
-    /**
      * @since 1.19
      */
     CreateContainerCmd withOomKillDisable(Boolean oomKillDisable);
