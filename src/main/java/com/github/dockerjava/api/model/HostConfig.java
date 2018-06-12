@@ -142,6 +142,12 @@ public class HostConfig implements Serializable {
     private Boolean oomKillDisable;
 
     /**
+     * @since {@link RemoteApiVersion#VERSION_1_25}
+     */
+    @JsonProperty("AutoRemove")
+    private Boolean autoRemove;
+
+    /**
      * @since {@link RemoteApiVersion#VERSION_1_22}
      */
     @JsonProperty("OomScoreAdj")
@@ -399,6 +405,13 @@ public class HostConfig implements Serializable {
     @CheckForNull
     public Boolean getOomKillDisable() {
         return oomKillDisable;
+    }
+    /**
+     * @see #autoRemove
+     */
+    @CheckForNull
+    public Boolean getAutoRemove() {
+      return autoRemove;
     }
 
     /**
@@ -711,6 +724,13 @@ public class HostConfig implements Serializable {
     public HostConfig withOomKillDisable(Boolean oomKillDisable) {
         this.oomKillDisable = oomKillDisable;
         return this;
+    }
+    /**
+     * @see #autoRemove
+     */
+    public HostConfig withAutoRemove(Boolean autoRemove) {
+      this.autoRemove = autoRemove;
+      return this;
     }
 
     /**
