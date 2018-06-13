@@ -99,6 +99,12 @@ public class HostConfig implements Serializable {
     @JsonProperty("Devices")
     private Device[] devices;
 
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_25}
+     */
+    @JsonProperty("DiskQuota")
+    private Long diskQuota;
+
     @JsonProperty("Dns")
     private String[] dns;
 
@@ -258,6 +264,10 @@ public class HostConfig implements Serializable {
 
     public Device[] getDevices() {
         return devices;
+    }
+
+    public Long getDiskQuota() {
+        return diskQuota;
     }
 
     public String[] getDns() {
@@ -619,6 +629,14 @@ public class HostConfig implements Serializable {
      */
     public HostConfig withDevices(Device[] devices) {
         this.devices = devices;
+        return this;
+    }
+
+    /**
+     * @see #diskQuota
+     */
+    public HostConfig withDiskQuota(Long diskQuota) {
+        this.diskQuota = diskQuota;
         return this;
     }
 
