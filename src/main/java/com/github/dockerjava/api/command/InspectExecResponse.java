@@ -59,6 +59,12 @@ public class InspectExecResponse {
     @JsonProperty("DetachKeys")
     private String detachKeys;
 
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_25}
+     */
+    @JsonProperty("Pid")
+    private Integer pid;
+
     public String getId() {
         return id;
     }
@@ -117,6 +123,14 @@ public class InspectExecResponse {
     @CheckForNull
     public String getDetachKeys() {
         return detachKeys;
+    }
+
+    /**
+     * @see #pid
+     */
+    @CheckForNull
+    public Integer getPid() {
+        return pid;
     }
 
     @Override
