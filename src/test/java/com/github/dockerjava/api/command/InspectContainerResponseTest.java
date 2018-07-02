@@ -17,10 +17,12 @@ package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.List;
 
 import static com.github.dockerjava.test.serdes.JSONSamples.testRoundTrip;
 import static com.github.dockerjava.test.serdes.JSONTestHelper.testRoundTrip;
@@ -91,6 +93,38 @@ public class InspectContainerResponseTest {
         assertFalse(state.getRestarting());
         assertFalse(state.getOOMKilled());
         assertThat(state.getError(), isEmptyString());
+    }
+
+    @Test
+    public void roundTrip_1_26a_full() throws IOException {
+        InspectContainerResponse[] responses = testRoundTrip(CommandJSONSamples.inspectContainerResponse_full_1_26a,
+                InspectContainerResponse[].class);
+
+        assertEquals(1, responses.length);
+        final InspectContainerResponse response = responses[0];
+
+        final List<InspectContainerResponse.Mount> mounts = response.getMounts();
+        assertEquals(mounts.size(), 1);
+
+        final InspectContainerResponse.Mount mount = mounts.get(0);
+        final Volume volume = mount.getDestination();
+        assertEquals(volume.getPath(), "/var/lib/postgresql/data");
+    }
+
+    @Test
+    public void roundTrip_1_26b_full() throws IOException {
+        InspectContainerResponse[] responses = testRoundTrip(CommandJSONSamples.inspectContainerResponse_full_1_26b,
+                InspectContainerResponse[].class);
+
+        assertEquals(1, responses.length);
+        final InspectContainerResponse response = responses[0];
+
+        final List<InspectContainerResponse.Mount> mounts = response.getMounts();
+        assertEquals(mounts.size(), 1);
+
+        final InspectContainerResponse.Mount mount = mounts.get(0);
+        final Volume volume = mount.getDestination();
+        assertEquals(volume.getPath(), "/srv/test");
     }
 
     @Test

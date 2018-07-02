@@ -1,0 +1,155 @@
+[
+  {
+    "Driver" : "aufs",
+    "Path" : "docker-entrypoint.sh",
+    "Args" : [
+      "postgres"
+    ],
+    "SizeRootFs" : null,
+    "HostConfig" : {
+      "KernelMemory" : 0,
+      "MemorySwappiness" : -1,
+      "PidMode" : "",
+      "CpuPeriod" : 0,
+      "LogConfig" : {
+        "Type" : "json-file",
+        "Config" : {}
+      },
+      "ReadonlyRootfs" : false,
+      "CgroupParent" : "",
+      "PublishAllPorts" : false,
+      "VolumeDriver" : "",
+      "NetworkMode" : "default",
+      "BlkioWeight" : 0,
+      "OomKillDisable" : false,
+      "Privileged" : false,
+      "CpusetMems" : "",
+      "ContainerIDFile" : "",
+      "ShmSize" : 67108864,
+      "CpusetCpus" : "",
+      "CpuShares" : 0,
+      "PidsLimit" : 0,
+      "RestartPolicy" : {
+        "Name" : "",
+        "MaximumRetryCount" : 0
+      },
+      "Memory" : 0,
+      "MemorySwap" : 0,
+      "CpuQuota" : 0,
+      "OomScoreAdj" : false,
+      "MemoryReservation" : 0
+    },
+    "Id" : "58fd1abe8e43a65fb6231b76a9678e7bb4e91686f838945e782a4b74119ce959",
+    "Volumes" : null,
+    "State" : {
+      "Pid" : 0,
+      "ExitCode" : 0,
+      "FinishedAt" : "0001-01-01T00:00:00Z",
+      "Paused" : false,
+      "Error" : "",
+      "Status" : "created",
+      "OOMKilled" : false,
+      "Health" : null,
+      "oomkilled" : false,
+      "StartedAt" : "0001-01-01T00:00:00Z",
+      "Dead" : false,
+      "Running" : false,
+      "Restarting" : false
+    },
+    "Config" : {
+      "OpenStdin" : false,
+      "Hostname" : "58fd1abe8e43",
+      "StdinOnce" : false,
+      "Domainname" : "",
+      "Env" : [
+        "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/postgresql/10/bin",
+        "GOSU_VERSION=1.10",
+        "LANG=en_US.utf8",
+        "PG_MAJOR=10",
+        "PG_VERSION=10.4-2.pgdg90+1",
+        "PGDATA=/var/lib/postgresql/data"
+      ],
+      "Entrypoint" : [
+        "docker-entrypoint.sh"
+      ],
+      "User" : "",
+      "AttachStdout" : false,
+      "Cmd" : [
+        "postgres"
+      ],
+      "ExposedPorts" : {
+        "5432/tcp" : {}
+      },
+      "Image" : "postgres:latest",
+      "AttachStderr" : false,
+      "Labels" : {},
+      "Volumes" : {
+        "/var/lib/postgresql/data" : {}
+      },
+      "Tty" : false,
+      "WorkingDir" : "",
+      "AttachStdin" : false
+    },
+    "ProcessLabel" : "",
+    "HostsPath" : "",
+    "Name" : "/fmi-test01",
+    "ExecDriver" : null,
+    "LogPath" : "",
+    "ExecIDs" : null,
+    "MountLabel" : "",
+    "Created" : "2018-05-30T08:37:12.308001081Z",
+    "Image" : "sha256:61d053fc271ce1313896a2edf7719fb3b68637b53397e61d8114793b39e9ae65",
+    "ResolvConfPath" : "",
+    "HostnamePath" : "",
+    "RestartCount" : 0,
+    "NetworkSettings" : {
+      "GlobalIPv6PrefixLen" : 0,
+      "LinkLocalIPv6PrefixLen" : 0,
+      "EndpointID" : "",
+      "SandboxID" : "",
+      "GlobalIPv6Address" : "",
+      "LinkLocalIPv6Address" : "",
+      "HairpinMode" : false,
+      "PortMapping" : null,
+      "SecondaryIPv6Addresses" : null,
+      "SecondaryIPAddresses" : null,
+      "Gateway" : "",
+      "Ports" : null,
+      "MacAddress" : "",
+      "Networks" : {
+        "bridge" : {
+          "IPv6Gateway" : "",
+          "IPPrefixLen" : 0,
+          "GlobalIPv6Address" : "",
+          "IPAddress" : "",
+          "EndpointID" : "",
+          "Aliases" : null,
+          "GlobalIPv6PrefixLen" : 0,
+          "Gateway" : "",
+          "NetworkID" : "",
+          "IPAMConfig" : null,
+          "Links" : null,
+          "MacAddress" : ""
+        }
+      },
+      "IPAddress" : "",
+      "Bridge" : "",
+      "IPPrefixLen" : 0,
+      "IPv6Gateway" : "",
+      "SandboxKey" : ""
+    },
+    "VolumesRW" : null,
+    "Mounts" : [
+      {
+        "RW" : true,
+        "Driver" : "local",
+        "Name" : "d9e76cbb4f797b0b8d62f5f4cd46ee6502fc520c6ce1187a62d200bc8364dd74",
+        "Source" : "/var/lib/docker/volumes/d9e76cbb4f797b0b8d62f5f4cd46ee6502fc520c6ce1187a62d200bc8364dd74/_data",
+        "Mode" : "",
+        "Destination" : {
+          "path" : "/var/lib/postgresql/data"
+        }
+      }
+    ]
+  }
+]
