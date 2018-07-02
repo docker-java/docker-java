@@ -163,6 +163,13 @@ public interface DockerCmdExecFactory extends Closeable {
      */
     RemoveServiceCmd.Exec createRemoveServiceCmdExec();
 
+    /**
+     * @param endpoint endpoint name to tail logs
+     * @return
+     * @since {@link RemoteApiVersion#VERSION_1_29}
+     */
+    LogSwarmObjectCmd.Exec logSwarmObjectExec(String endpoint);
+
     // nodes
 
     /**

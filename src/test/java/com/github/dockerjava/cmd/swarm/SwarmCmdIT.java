@@ -37,7 +37,7 @@ public abstract class SwarmCmdIT extends CmdIT {
     private static final int MAX_CONNECT_ATTEMPTS = 5;
     private static final int CONNECT_ATTEMPT_INTERVAL = 200;
     private static final String DOCKER_IN_DOCKER_IMAGE_REPOSITORY = "docker";
-    private static final String DOCKER_IN_DOCKER_IMAGE_TAG = "1.12-dind";
+    private static final String DOCKER_IN_DOCKER_IMAGE_TAG = "17.12-dind";
 
     @Before
     public void beforeTest() throws Exception {

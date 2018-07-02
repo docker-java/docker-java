@@ -46,6 +46,7 @@ import com.github.dockerjava.api.command.ListTasksCmd;
 import com.github.dockerjava.api.command.ListVolumesCmd;
 import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.api.command.LogContainerCmd;
+import com.github.dockerjava.api.command.LogSwarmObjectCmd;
 import com.github.dockerjava.api.command.PauseContainerCmd;
 import com.github.dockerjava.api.command.PingCmd;
 import com.github.dockerjava.api.command.PullImageCmd;
@@ -492,6 +493,11 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
     @Override
     public RemoveServiceCmd.Exec createRemoveServiceCmdExec() {
         return delegate.createRemoveServiceCmdExec();
+    }
+
+    @Override
+    public LogSwarmObjectCmd.Exec logSwarmObjectExec(String endpoint) {
+        return delegate.logSwarmObjectExec(endpoint);
     }
 
     // nodes
