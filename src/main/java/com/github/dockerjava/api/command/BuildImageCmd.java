@@ -125,6 +125,12 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     @CheckForNull
     Map<String, String> getLabels();
 
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_25}
+     */
+    @CheckForNull
+    String getNetworkMode();
+
     // setters
 
     /**
@@ -187,6 +193,11 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     *@since {@link RemoteApiVersion#VERSION_1_23}
     */
     BuildImageCmd withLabels(Map<String, String> labels);
+
+    /**
+     *@since {@link RemoteApiVersion#VERSION_1_25}
+     */
+    BuildImageCmd withNetworkMode(String networkMode);
 
     interface Exec extends DockerCmdAsyncExec<BuildImageCmd, BuildResponseItem> {
     }

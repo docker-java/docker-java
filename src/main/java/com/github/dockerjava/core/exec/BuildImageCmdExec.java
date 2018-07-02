@@ -102,6 +102,10 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
             webTarget = webTarget.queryParamsJsonMap("labels", command.getLabels());
         }
 
+        if (command.getNetworkMode() != null) {
+            webTarget = webTarget.queryParam("networkmode", command.getNetworkMode());
+        }
+
         LOGGER.trace("POST: {}", webTarget);
 
         InvocationBuilder builder = resourceWithOptionalAuthConfig(command, webTarget.request())

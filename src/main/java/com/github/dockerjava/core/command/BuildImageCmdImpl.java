@@ -66,6 +66,8 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     private Map<String, String> labels;
 
+    private String networkMode;
+
     public BuildImageCmdImpl(BuildImageCmd.Exec exec) {
         super(exec);
     }
@@ -175,6 +177,11 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @Override
     public Map<String, String> getLabels() {
         return labels;
+    }
+
+    @Override
+    public String getNetworkMode() {
+        return networkMode;
     }
 
     // getter lib specific
@@ -360,6 +367,12 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @Override
     public BuildImageCmd withLabels(Map<String, String> labels) {
         this.labels = labels;
+        return this;
+    }
+
+    @Override
+    public BuildImageCmd withNetworkMode(String networkMode) {
+        this.networkMode = networkMode;
         return this;
     }
 

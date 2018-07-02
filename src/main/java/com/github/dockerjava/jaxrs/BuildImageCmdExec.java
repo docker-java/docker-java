@@ -121,6 +121,10 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
 
         webTarget = writeMap(webTarget, "labels", command.getLabels());
 
+        if (command.getNetworkMode() != null) {
+            webTarget = webTarget.queryParam("networkmode", command.getNetworkMode());
+        }
+
         webTarget.property(ClientProperties.REQUEST_ENTITY_PROCESSING, RequestEntityProcessing.CHUNKED);
         webTarget.property(ClientProperties.CHUNKED_ENCODING_SIZE, 1024 * 1024);
 
