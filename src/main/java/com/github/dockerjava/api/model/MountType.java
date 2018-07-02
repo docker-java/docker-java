@@ -11,5 +11,10 @@ public enum MountType {
     BIND,
 
     @JsonProperty("volume")
-    VOLUME
+    VOLUME,
+
+    //@since 1.29
+    @JsonProperty("tmpfs")
+    TMPFS
+
 }
