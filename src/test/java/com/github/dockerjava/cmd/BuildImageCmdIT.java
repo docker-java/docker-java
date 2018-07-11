@@ -195,7 +195,7 @@ public class BuildImageCmdIT extends CmdIT {
 
     @Test
     public void fromPrivateRegistry() throws Exception {
-        AuthConfig authConfig = RegistryUtils.runPrivateRegistry(dockerRule.getClient());
+        AuthConfig authConfig = dockerRule.runPrivateRegistry();
         String imgName = authConfig.getRegistryAddress() + "/testuser/busybox";
 
         File dockerfile = folder.newFile("Dockerfile");

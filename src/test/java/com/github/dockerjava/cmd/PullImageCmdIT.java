@@ -100,9 +100,9 @@ public class PullImageCmdIT extends CmdIT {
 
     @Test
     public void testPullImageWithValidAuth() throws Exception {
-        AuthConfig authConfig = RegistryUtils.runPrivateRegistry(dockerRule.getClient());
+        AuthConfig authConfig = dockerRule.runPrivateRegistry();
 
-        String imgName = RegistryUtils.createPrivateImage(dockerRule, "pull-image-with-valid-auth");
+        String imgName = dockerRule.createPrivateImage( "pull-image-with-valid-auth");
 
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pullImageCmd(imgName)
@@ -113,9 +113,9 @@ public class PullImageCmdIT extends CmdIT {
 
     @Test
     public void testPullImageWithNoAuth() throws Exception {
-        RegistryUtils.runPrivateRegistry(dockerRule.getClient());
+      dockerRule.runPrivateRegistry();
 
-        String imgName = RegistryUtils.createPrivateImage(dockerRule, "pull-image-with-no-auth");
+        String imgName = dockerRule.createPrivateImage( "pull-image-with-no-auth");
 
         if (isNotSwarm(dockerRule.getClient()) && getVersion(dockerRule.getClient())
                 .isGreaterOrEqual(RemoteApiVersion.VERSION_1_30)) {
@@ -132,7 +132,7 @@ public class PullImageCmdIT extends CmdIT {
 
     @Test
     public void testPullImageWithInvalidAuth() throws Exception {
-        AuthConfig validAuthConfig = RegistryUtils.runPrivateRegistry(dockerRule.getClient());
+        AuthConfig validAuthConfig = dockerRule.runPrivateRegistry();
 
         AuthConfig authConfig = new AuthConfig()
                 .withUsername("testuser")
@@ -140,7 +140,7 @@ public class PullImageCmdIT extends CmdIT {
                 .withEmail("foo@bar.de")
                 .withRegistryAddress(validAuthConfig.getRegistryAddress());
 
-        String imgName = RegistryUtils.createPrivateImage(dockerRule, "pull-image-with-invalid-auth");
+        String imgName = dockerRule.createPrivateImage( "pull-image-with-invalid-auth");
 
         if (isNotSwarm(dockerRule.getClient()) && getVersion(dockerRule.getClient())
                 .isGreaterOrEqual(RemoteApiVersion.VERSION_1_30)) {

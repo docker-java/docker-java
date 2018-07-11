@@ -840,9 +840,9 @@ public class CreateContainerCmdIT extends CmdIT {
     public void createContainerFromPrivateRegistryWithValidAuth() throws Exception {
         DockerAssume.assumeSwarm(dockerRule.getClient());
 
-        AuthConfig authConfig = RegistryUtils.runPrivateRegistry(dockerRule.getClient());
+        AuthConfig authConfig = dockerRule.runPrivateRegistry();
 
-        String imgName = RegistryUtils.createPrivateImage(dockerRule, "create-container-with-valid-auth");
+        String imgName = dockerRule.createPrivateImage( "create-container-with-valid-auth");
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(imgName)
                 .withAuthConfig(authConfig)
@@ -853,9 +853,9 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Test
     public void createContainerFromPrivateRegistryWithNoAuth() throws Exception {
-        AuthConfig authConfig = RegistryUtils.runPrivateRegistry(dockerRule.getClient());
+        AuthConfig authConfig = dockerRule.runPrivateRegistry();
 
-        String imgName = RegistryUtils.createPrivateImage(dockerRule, "create-container-with-no-auth");
+        String imgName = dockerRule.createPrivateImage( "create-container-with-no-auth");
 
         if (TestUtils.isSwarm(dockerRule.getClient())) {
             exception.expect(instanceOf(InternalServerErrorException.class));

@@ -2,14 +2,18 @@ package com.github.dockerjava.junit;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.cmd.CmdIT;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
+import com.github.dockerjava.core.TestDockerCmdExecFactory;
 import com.github.dockerjava.core.command.BuildImageResultCallback;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory;
 import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
 import com.github.dockerjava.utils.LogContainerTestCallback;
+import com.github.dockerjava.utils.RegistryUtils;
+
 import org.junit.rules.ExternalResource;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
@@ -35,6 +39,8 @@ public class DockerRule extends ExternalResource {
 
     private CmdIT cmdIT;
     private Object cmdExecFactory;
+    
+    private TestDockerCmdExecFactory testDockerCmdExecFactory;
 
 
     public DockerRule(CmdIT cmdIT) {
@@ -45,19 +51,21 @@ public class DockerRule extends ExternalResource {
     public DockerClient getClient() {
         if (cmdIT.getFactoryType() == NETTY) {
             if (nettyClient == null) {
+                testDockerCmdExecFactory = new TestDockerCmdExecFactory(
+                  new NettyDockerCmdExecFactory().withConnectTimeout(10 * 1000));
+              
                 nettyClient = DockerClientBuilder.getInstance(config())
-                        .withDockerCmdExecFactory((new NettyDockerCmdExecFactory())
-                                .withConnectTimeout(10 * 1000))
-                        .build();
+                  .withDockerCmdExecFactory((testDockerCmdExecFactory)).build();
             }
 
             return nettyClient;
         } else if (cmdIT.getFactoryType() == JERSEY) {
             if (jerseyClient == null) {
+                testDockerCmdExecFactory = new TestDockerCmdExecFactory(
+                  new JerseyDockerCmdExecFactory().withConnectTimeout(10 * 1000));
+
                 jerseyClient = DockerClientBuilder.getInstance(config())
-                        .withDockerCmdExecFactory((new JerseyDockerCmdExecFactory())
-                                .withConnectTimeout(10 * 1000))
-                        .build();
+                  .withDockerCmdExecFactory((testDockerCmdExecFactory)).build();
             }
             return jerseyClient;
         }
@@ -93,7 +101,15 @@ public class DockerRule extends ExternalResource {
 
     @Override
     protected void after() {
-//        LOG.debug("======================= END OF AFTERTEST =======================");
+//      LOG.debug("======================= END OF AFTERTEST =======================");
+        if (testDockerCmdExecFactory != null) {
+            for (String string : testDockerCmdExecFactory.getContainerNames()) {
+                ensureContainerRemoved(string);
+            }
+            for (String string : testDockerCmdExecFactory.getNetworkIds()) {
+                ensureNetworkRemoved(string);
+            }
+        }
     }
 
     private static DefaultDockerClientConfig config() {
@@ -154,5 +170,25 @@ public class DockerRule extends ExternalResource {
         } catch (NotFoundException ex) {
             // ignore
         }
+    }
+    
+    public void ensureNetworkRemoved(String networkId) {
+        try {
+            getClient().removeNetworkCmd(networkId).exec();
+        } catch (NotFoundException ex) {
+            // ignore
+        }
+    }
+    
+    public AuthConfig runPrivateRegistry() throws Exception {
+        return RegistryUtils.runPrivateRegistry(getClient());
+    }
+
+    public String createPrivateImage(String tagName) throws InterruptedException {
+        return RegistryUtils.createPrivateImage(this, tagName);
+    }
+
+    public String createTestImage(String tagName) {
+        return RegistryUtils.createTestImage(this, tagName);
     }
 }

@@ -36,7 +36,7 @@ public class PushImageCmdIT extends CmdIT {
     @Before
     public void beforeTest() throws Exception {
         username = dockerRule.getClient().authConfig().getUsername();
-        authConfig = RegistryUtils.runPrivateRegistry(dockerRule.getClient());
+        authConfig = dockerRule.runPrivateRegistry();
     }
 
     @Test
@@ -86,7 +86,7 @@ public class PushImageCmdIT extends CmdIT {
 
     @Test
     public void testPushImageWithValidAuth() throws Exception {
-        String imgName = RegistryUtils.createTestImage(dockerRule, "push-image-with-valid-auth");
+        String imgName = dockerRule.createTestImage( "push-image-with-valid-auth");
 
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pushImageCmd(imgName)
@@ -97,7 +97,7 @@ public class PushImageCmdIT extends CmdIT {
 
     @Test
     public void testPushImageWithNoAuth() throws Exception {
-        String imgName = RegistryUtils.createTestImage(dockerRule, "push-image-with-no-auth");
+        String imgName = dockerRule.createTestImage( "push-image-with-no-auth");
 
         exception.expect(DockerClientException.class);
 
