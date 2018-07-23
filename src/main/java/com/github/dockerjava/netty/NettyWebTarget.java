@@ -31,6 +31,8 @@ public class NettyWebTarget implements WebTarget {
 
     private final ChannelProvider channelProvider;
 
+    private final String host;
+
     private final ImmutableList<String> path;
 
     private final ImmutableMap<String, String> queryParams;
@@ -42,16 +44,18 @@ public class NettyWebTarget implements WebTarget {
 
     private static final String PATH_SEPARATOR = "/";
 
-    public NettyWebTarget(ChannelProvider channelProvider) {
-        this(channelProvider, ImmutableList.<String>of(), ImmutableMap.<String, String>of(),
+    public NettyWebTarget(ChannelProvider channelProvider, String host) {
+        this(channelProvider, host, ImmutableList.<String>of(), ImmutableMap.<String, String>of(),
                 ImmutableMap.<String, Set<String>>of());
     }
 
     private NettyWebTarget(ChannelProvider channelProvider,
+                      String host,
                       ImmutableList<String> path,
                       ImmutableMap<String, String> queryParams,
                       ImmutableMap<String, Set<String>> queryParamsSet) {
         this.channelProvider = channelProvider;
+        this.host = host;
         this.path = path;
         this.queryParams = queryParams;
         this.queryParamsSet = queryParamsSet;
@@ -64,7 +68,7 @@ public class NettyWebTarget implements WebTarget {
             newPath.addAll(Arrays.asList(StringUtils.split(component, PATH_SEPARATOR)));
         }
 
-        return new NettyWebTarget(channelProvider, newPath.build(), queryParams, queryParamsSet);
+        return new NettyWebTarget(channelProvider, host, newPath.build(), queryParams, queryParamsSet);
     }
 
     public NettyInvocationBuilder request() {
@@ -85,7 +89,8 @@ public class NettyWebTarget implements WebTarget {
             resource = resource + "?" + StringUtils.join(params, "&");
         }
 
-        return new NettyInvocationBuilder(channelProvider, resource);
+        return new NettyInvocationBuilder(channelProvider, resource)
+            .header("Host", host);
     }
 
     /**
@@ -106,7 +111,7 @@ public class NettyWebTarget implements WebTarget {
             component = component.replaceAll("\\{" + name + "\\}", value.toString());
             newPath.add(component);
         }
-        return new NettyWebTarget(channelProvider, newPath.build(), queryParams, queryParamsSet);
+        return new NettyWebTarget(channelProvider, host, newPath.build(), queryParams, queryParamsSet);
     }
 
     public NettyWebTarget queryParam(String name, Object value) {
@@ -114,7 +119,7 @@ public class NettyWebTarget implements WebTarget {
         if (value != null) {
             builder.put(name, value.toString());
         }
-        return new NettyWebTarget(channelProvider, path, builder.build(), queryParamsSet);
+        return new NettyWebTarget(channelProvider, host, path, builder.build(), queryParamsSet);
     }
 
     public NettyWebTarget queryParamsSet(String name, Set<?> values) {
@@ -126,7 +131,7 @@ public class NettyWebTarget implements WebTarget {
             }
             builder.put(name, valueBuilder.build());
         }
-        return new NettyWebTarget(channelProvider, path, queryParams, builder.build());
+        return new NettyWebTarget(channelProvider, host, path, queryParams, builder.build());
     }
 
     public NettyWebTarget queryParamsJsonMap(String name, Map<String, String> values) {

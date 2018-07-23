@@ -99,16 +99,20 @@ public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory impl
         bootstrap = new Bootstrap();
 
         String scheme = dockerClientConfig.getDockerHost().getScheme();
+        String host = "";
 
         if ("unix".equals(scheme)) {
             nettyInitializer = new UnixDomainSocketInitializer();
+            host = "DUMMY";
         } else if ("tcp".equals(scheme)) {
             nettyInitializer = new InetSocketInitializer();
+            host = dockerClientConfig.getDockerHost().getHost() + ":"
+                + Integer.toString(dockerClientConfig.getDockerHost().getPort());
         }
 
         eventLoopGroup = nettyInitializer.init(bootstrap, dockerClientConfig);
 
-        baseResource = new NettyWebTarget(channelProvider).path(dockerClientConfig.getApiVersion().asWebPathPart());
+        baseResource = new NettyWebTarget(channelProvider, host).path(dockerClientConfig.getApiVersion().asWebPathPart());
     }
 
     private DuplexChannel connect() {
