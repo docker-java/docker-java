@@ -14,5 +14,8 @@ public enum ServiceUpdateState {
     PAUSED,
 
     @JsonProperty("completed")
-    COMPLETED
+    COMPLETED,
+
+    @JsonProperty("rollback_completed")
+    ROLLBACK_COMPLETED
 }
