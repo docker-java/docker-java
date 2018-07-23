@@ -240,7 +240,7 @@ public class BuildImageCmdIT extends CmdIT {
     public void buildArgs() throws Exception {
         File baseDir = fileFromBuildTestResource("buildArgs");
 
-        String imageId = dockerRule.getClient().buildImageCmd(baseDir).withNoCache(true).withBuildArg("testArg", "abc")
+        String imageId = dockerRule.getClient().buildImageCmd(baseDir).withNoCache(true).withBuildArg("testArg", "abc !@#$%^&*()_+")
                 .exec(new BuildImageResultCallback())
                 .awaitImageId();
 
@@ -248,7 +248,7 @@ public class BuildImageCmdIT extends CmdIT {
         assertThat(inspectImageResponse, not(nullValue()));
         LOG.info("Image Inspect: {}", inspectImageResponse.toString());
 
-        assertThat(inspectImageResponse.getConfig().getLabels().get("test"), equalTo("abc"));
+        assertThat(inspectImageResponse.getConfig().getLabels().get("test"), equalTo("abc !@#$%^&*()_+"));
     }
 
     @Test
