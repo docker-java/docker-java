@@ -115,7 +115,7 @@ public class PushImageCmdIT extends CmdIT {
                 .withEmail("foo@bar.de")
                 .withRegistryAddress(authConfig.getRegistryAddress());
 
-        String imgName = RegistryUtils.createTestImage(dockerRule, "push-image-with-invalid-auth");
+        String imgName = dockerRule.createTestImage("push-image-with-invalid-auth");
 
         exception.expect(DockerClientException.class);
 

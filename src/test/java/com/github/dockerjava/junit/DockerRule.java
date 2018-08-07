@@ -31,6 +31,9 @@ import static org.hamcrest.core.IsNull.notNullValue;
  * @author Kanstantsin Shautsou
  */
 public class DockerRule extends ExternalResource {
+  
+    private RegistryUtils registryUtils= new RegistryUtils();
+    
     public static final Logger LOG = LoggerFactory.getLogger(DockerRule.class);
     public static final String DEFAULT_IMAGE = "busybox:latest";
 
@@ -38,10 +41,8 @@ public class DockerRule extends ExternalResource {
     private DockerClient jerseyClient;
 
     private CmdIT cmdIT;
-    private Object cmdExecFactory;
     
     private TestDockerCmdExecFactory testDockerCmdExecFactory;
-
 
     public DockerRule(CmdIT cmdIT) {
         this.cmdIT = cmdIT;
@@ -109,14 +110,15 @@ public class DockerRule extends ExternalResource {
             for (String string : testDockerCmdExecFactory.getNetworkIds()) {
                 ensureNetworkRemoved(string);
             }
+            ensurePrivateRegistryRemoved();
         }
     }
 
-    private static DefaultDockerClientConfig config() {
+    private DefaultDockerClientConfig config() {
         return config(null);
     }
 
-    public static DefaultDockerClientConfig config(String password) {
+    public DefaultDockerClientConfig config(String password) {
         DefaultDockerClientConfig.Builder builder = DefaultDockerClientConfig.createDefaultConfigBuilder()
                 .withRegistryUrl("https://index.docker.io/v1/");
         if (password != null) {
@@ -181,14 +183,18 @@ public class DockerRule extends ExternalResource {
     }
     
     public AuthConfig runPrivateRegistry() throws Exception {
-        return RegistryUtils.runPrivateRegistry(getClient());
+        return registryUtils.runPrivateRegistry(getClient());
+    }
+    
+    public void ensurePrivateRegistryRemoved() {
+      registryUtils.removePrivateRegistry(getClient());
     }
 
     public String createPrivateImage(String tagName) throws InterruptedException {
-        return RegistryUtils.createPrivateImage(this, tagName);
+        return registryUtils.createPrivateImage(this, tagName);
     }
 
     public String createTestImage(String tagName) {
-        return RegistryUtils.createTestImage(this, tagName);
+        return registryUtils.createTestImage(this, tagName);
     }
 }

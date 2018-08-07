@@ -1,5 +1,13 @@
 package com.github.dockerjava.utils;
 
+import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+
+import java.io.File;
+import java.util.concurrent.TimeUnit;
+
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectImageResponse;
@@ -12,17 +20,9 @@ import com.github.dockerjava.core.command.BuildImageResultCallback;
 import com.github.dockerjava.core.command.PushImageResultCallback;
 import com.github.dockerjava.junit.DockerRule;
 
-import java.io.File;
-import java.util.concurrent.TimeUnit;
-
-import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
-
 public class RegistryUtils {
 
-    private static AuthConfig privateRegistryAuthConfig;
+    private  AuthConfig privateRegistryAuthConfig;
 
     /**
      * Starts a local test registry when it is not already started and returns the auth configuration for it
@@ -30,7 +30,7 @@ public class RegistryUtils {
      * @return The auth configuration for the started private docker registry
      * @throws Exception
      */
-    public static synchronized AuthConfig runPrivateRegistry(DockerClient dockerClient) throws Exception {
+    public synchronized AuthConfig runPrivateRegistry(DockerClient dockerClient) throws Exception {
         if (privateRegistryAuthConfig == null) {
             int port = 5050;
 
@@ -86,7 +86,7 @@ public class RegistryUtils {
         return privateRegistryAuthConfig;
     }
 
-    public static String createPrivateImage(DockerRule dockerRule, String tagName) throws InterruptedException {
+    public String createPrivateImage(DockerRule dockerRule, String tagName) throws InterruptedException {
         if (privateRegistryAuthConfig == null)
             throw new IllegalStateException("Ensure that you have invoked runPrivateRegistry beforehand.");
 
@@ -106,7 +106,7 @@ public class RegistryUtils {
         return imgNameWithTag;
     }
 
-    public static String createTestImage(DockerRule dockerRule, String tagName) {
+    public String createTestImage(DockerRule dockerRule, String tagName) {
         String tag = dockerRule.getKind() + "-" + tagName;
         String imgName = privateRegistryAuthConfig.getRegistryAddress() + "/busybox";
         String imgNameWithTag = imgName + ":" + tag;
@@ -114,5 +114,27 @@ public class RegistryUtils {
         dockerRule.getClient().tagImageCmd(DEFAULT_IMAGE, imgName, tag)
                 .exec();
         return imgNameWithTag;
+    }
+    
+    /**
+     * Starts a local test registry when it is not already started and returns the auth configuration for it
+     * This method is synchronized so that only the first invocation starts the registry
+     * @return The auth configuration for the started private docker registry
+     * @throws Exception
+     */
+    public synchronized void removePrivateRegistry(DockerClient dockerClient) {
+        if (privateRegistryAuthConfig != null) {
+
+            String containerName = "private-registry";
+
+            try {
+                dockerClient.removeContainerCmd(containerName)
+                        .withForce(true)
+                        .withRemoveVolumes(true)
+                        .exec();
+            } catch (NotFoundException ex) {
+                // ignore
+            }
+        }
     }
 }
