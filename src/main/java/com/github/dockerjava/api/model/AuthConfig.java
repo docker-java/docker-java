@@ -42,6 +42,12 @@ public class AuthConfig implements Serializable {
     @JsonProperty("registrytoken")
     private String registrytoken;
 
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_23}
+     */
+    @JsonProperty("identitytoken")
+    private String identitytoken;
+
     public String getUsername() {
         return username;
     }
@@ -84,6 +90,20 @@ public class AuthConfig implements Serializable {
 
     public AuthConfig withAuth(String auth) {
         this.auth = auth;
+        return this;
+    }
+
+    /**
+     * @see #identitytoken
+     */
+    public String getIdentitytoken() {
+        return identitytoken;
+    }
+    /**
+     * @see #identitytoken
+     */
+    public AuthConfig withIdentityToken(String identitytoken) {
+        this.identitytoken = identitytoken;
         return this;
     }
 
