@@ -39,6 +39,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.channel.unix.DomainSocketAddress;
 import io.netty.channel.unix.UnixChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
+import io.netty.handler.codec.http.HttpContentDecompressor;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslHandler;
 import io.netty.handler.timeout.IdleState;
@@ -158,6 +159,7 @@ public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory impl
                 @Override
                 protected void initChannel(final UnixChannel channel) throws Exception {
                     channel.pipeline().addLast(new HttpClientCodec());
+                    channel.pipeline().addLast(new HttpContentDecompressor());
                 }
             });
             return epollEventLoopGroup;
@@ -172,6 +174,7 @@ public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory impl
                         protected void initChannel(final KQueueDomainSocketChannel channel) throws Exception {
                             channel.pipeline().addLast(new LoggingHandler(getClass()));
                             channel.pipeline().addLast(new HttpClientCodec());
+                            channel.pipeline().addLast(new HttpContentDecompressor());
                         }
                     });
 
@@ -212,6 +215,7 @@ public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory impl
                             // channel.pipeline().addLast(new
                             // HttpProxyHandler(proxyAddress));
                             channel.pipeline().addLast(new HttpClientCodec());
+                            channel.pipeline().addLast(new HttpContentDecompressor());
                         }
                     });
 
