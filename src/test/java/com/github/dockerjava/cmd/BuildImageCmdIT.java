@@ -302,8 +302,7 @@ public class BuildImageCmdIT extends CmdIT {
         assertThat(inspectImageResponse1, not(nullValue()));
 
         File baseDir2 = fileFromBuildTestResource("CacheFrom/test2");
-        String cacheImage = String.format("[\"%s\"]", imageId1);
-        String imageId2 = dockerRule.getClient().buildImageCmd(baseDir2).withCacheFrom(new HashSet<>(Arrays.asList(cacheImage)))
+        String imageId2 = dockerRule.getClient().buildImageCmd(baseDir2).withCacheFrom(new HashSet<>(Arrays.asList(imageId1)))
                 .exec(new BuildImageResultCallback())
                 .awaitImageId();
         InspectImageResponse inspectImageResponse2 = dockerRule.getClient().inspectImageCmd(imageId2).exec();
