@@ -10,6 +10,7 @@ import java.io.IOException;
 import static com.github.dockerjava.test.serdes.JSONSamples.testRoundTrip;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertEquals;
@@ -78,4 +79,18 @@ public class AuthConfigTest {
         final AuthConfig authConfig1 = new AuthConfig().withAuth(auth).withIdentityToken(identitytoken);
         assertThat(authConfig1, equalTo(authConfig));
     }
+
+    @Test
+    public void shouldNotFailWithStackOrchestratorInConfig() throws IOException {
+        final ObjectMapper mapper = new ObjectMapper();
+        final JavaType type = mapper.getTypeFactory().uncheckedSimpleType(AuthConfig.class);
+        final AuthConfig authConfig = testRoundTrip(RemoteApiVersion.VERSION_1_25,
+                "/other/AuthConfig/orchestrators.json",
+                type
+        );
+        assertThat(authConfig, notNullValue());
+        assertThat(authConfig.getAuth(), is(nullValue()));
+        assertThat(authConfig.getStackOrchestrator(), is("kubernetes"));
+    }
+
 }

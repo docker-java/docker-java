@@ -48,6 +48,12 @@ public class AuthConfig implements Serializable {
     @JsonProperty("identitytoken")
     private String identitytoken;
 
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_25}
+     */
+    @JsonProperty("stackOrchestrator")
+    private String stackOrchestrator;
+
     public String getUsername() {
         return username;
     }
@@ -121,6 +127,20 @@ public class AuthConfig implements Serializable {
     public AuthConfig withRegistrytoken(String registrytoken) {
         this.registrytoken = registrytoken;
         return this;
+    }
+
+    /**
+     * @see #stackOrchestrator
+     */
+    public String getStackOrchestrator() {
+        return stackOrchestrator;
+    }
+
+    /**
+     * @see #stackOrchestrator
+     */
+    public void setStackOrchestrator(String stackOrchestrator) {
+        this.stackOrchestrator = stackOrchestrator;
     }
 
     @Override
