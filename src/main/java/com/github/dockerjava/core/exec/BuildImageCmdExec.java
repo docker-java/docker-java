@@ -9,7 +9,7 @@ import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.InvocationBuilder;
 import com.github.dockerjava.core.MediaType;
 import com.github.dockerjava.core.WebTarget;
-import com.google.common.base.Joiner;
+import com.github.dockerjava.core.util.CacheFromEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,7 +59,7 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
         }
 
         if (command.getCacheFrom() != null && !command.getCacheFrom().isEmpty()) {
-            webTarget = webTarget.queryParam("cachefrom", "[\"" + Joiner.on("\",\"").join(command.getCacheFrom()) + "\"]");
+            webTarget = webTarget.queryParam("cachefrom", CacheFromEncoder.jsonEncode(command.getCacheFrom()));
         }
 
         if (command.getRemote() != null) {
