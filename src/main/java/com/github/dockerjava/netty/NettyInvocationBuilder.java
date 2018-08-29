@@ -3,6 +3,7 @@ package com.github.dockerjava.netty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.Frame;
@@ -343,7 +344,9 @@ public class NettyInvocationBuilder implements InvocationBuilder {
 
             byte[] bytes;
             try {
-                bytes = new ObjectMapper().writeValueAsBytes(entity);
+                ObjectMapper objectMapper = new ObjectMapper();
+                objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+                bytes = objectMapper.writeValueAsBytes(entity);
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
