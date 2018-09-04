@@ -70,6 +70,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assume.assumeThat;
 
 @NotThreadSafe
@@ -292,6 +293,25 @@ public class CreateContainerCmdIT extends CmdIT {
                 .exec();
         assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[]{new Link(containerName1,
                 "container1Link")}));
+    }
+
+    @Test
+    public void createContainerWithMemorySwappiness() throws DockerException {
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+                .withCmd("sleep", "9999")
+                .withMemorySwappiness(42)
+                .exec();
+        assertThat(container.getId(), not(isEmptyString()));
+        LOG.info("Created container {}", container.toString());
+
+        dockerRule.getClient().startContainerCmd(container.getId()).exec();
+        LOG.info("Started container {}", container.toString());
+
+        InspectContainerResponse inspectContainerResponse = dockerRule.getClient()
+                .inspectContainerCmd(container.getId())
+                .exec();
+        LOG.info("Container Inspect: {}", inspectContainerResponse.toString());
+        assertSame(42, inspectContainerResponse.getHostConfig().getMemorySwappiness());
     }
 
     @Test

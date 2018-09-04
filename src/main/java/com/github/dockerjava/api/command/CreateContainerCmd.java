@@ -127,6 +127,9 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     Long getMemorySwap();
 
     @CheckForNull
+    Integer getMemorySwappiness();
+
+    @CheckForNull
     String getName();
 
     @CheckForNull
@@ -367,6 +370,8 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     CreateContainerCmd withMemory(Long memory);
 
     CreateContainerCmd withMemorySwap(Long memorySwap);
+
+    CreateContainerCmd withMemorySwappiness(Integer memorySwappiness);
 
     CreateContainerCmd withName(String name);
 

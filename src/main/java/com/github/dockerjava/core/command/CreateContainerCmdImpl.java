@@ -364,6 +364,12 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
+    @JsonIgnore
+    public Integer getMemorySwappiness() {
+        return hostConfig.getMemorySwappiness();
+    }
+
+    @Override
     public String getName() {
         return name;
     }
@@ -813,6 +819,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public CreateContainerCmd withMemorySwap(Long memorySwap) {
         checkNotNull(memorySwap, "memorySwap was not specified");
         hostConfig.withMemorySwap(memorySwap);
+        return this;
+    }
+
+    @Override
+    public CreateContainerCmd withMemorySwappiness(Integer memorySwappiness) {
+        checkNotNull(memorySwappiness, "memorySwappiness was not specified");
+        hostConfig.withMemorySwappiness(memorySwappiness);
         return this;
     }
 
