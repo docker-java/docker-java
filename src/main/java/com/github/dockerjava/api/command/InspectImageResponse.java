@@ -49,6 +49,12 @@ public class InspectImageResponse {
     @JsonProperty("Os")
     private String os;
 
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_25}
+     */
+    @JsonProperty("OsVersion")
+    private String osVersion;
+
     @JsonProperty("Parent")
     private String parent;
 
@@ -72,6 +78,9 @@ public class InspectImageResponse {
      */
     @JsonProperty("GraphDriver")
     private GraphDriver graphDriver;
+
+    @JsonProperty("RootFS")
+    private RootFS rootFS;
 
     /**
      * @see #arch
@@ -237,6 +246,22 @@ public class InspectImageResponse {
     }
 
     /**
+     * @see #osVersion
+     */
+    @CheckForNull
+    public String getOsVersion() {
+        return osVersion;
+    }
+
+    /**
+     * @see #osVersion
+     */
+    public InspectImageResponse withOsVersion(String osVersion) {
+        this.osVersion = osVersion;
+        return this;
+    }
+
+    /**
      * @see #parent
      */
     @CheckForNull
@@ -329,6 +354,22 @@ public class InspectImageResponse {
      */
     public InspectImageResponse withVirtualSize(Long virtualSize) {
         this.virtualSize = virtualSize;
+        return this;
+    }
+
+    /**
+     * @see #rootFS
+     */
+    @CheckForNull
+    public RootFS getRootFS() {
+        return rootFS;
+    }
+
+    /**
+     * @see #rootFS
+     */
+    public InspectImageResponse withRootFS(RootFS rootFS) {
+        this.rootFS = rootFS;
         return this;
     }
 

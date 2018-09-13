@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Collections;
 
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_22;
+import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_25;
 import static com.github.dockerjava.test.serdes.JSONSamples.testRoundTrip;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -205,5 +206,50 @@ public class InspectImageResponseTest {
         assertThat(graphDriver, equalTo(overlayGraphDriver));
         assertThat(graphDriver.getName(), is("overlay"));
         assertThat(graphDriver.getData(), equalTo(overlayGraphData));
+    }
+
+    @Test
+    public void inspectWindowsImage() throws IOException {
+        final ObjectMapper mapper = new ObjectMapper();
+        final JavaType type = mapper.getTypeFactory().constructType(InspectImageResponse.class);
+
+        final InspectImageResponse inspectImage = testRoundTrip(VERSION_1_25,
+                "images/windowsImage/doc.json",
+                type
+        );
+
+        assertThat(inspectImage, notNullValue());
+
+        assertThat(inspectImage.getRepoTags(), hasSize(1));
+        assertThat(inspectImage.getRepoTags(), contains(
+                "microsoft/nanoserver:latest"
+        ));
+
+        assertThat(inspectImage.getRepoDigests(), hasSize(1));
+        assertThat(inspectImage.getRepoDigests(), contains("microsoft/nanoserver@" +
+                "sha256:aee7d4330fe3dc5987c808f647441c16ed2fa1c7d9c6ef49d6498e5c9860b50b")
+        );
+
+        assertThat(inspectImage.getConfig(), notNullValue());
+        assertThat(inspectImage.getConfig().getCmd(), is(new String[]{"c:\\windows\\system32\\cmd.exe"}));
+
+        assertThat(inspectImage.getOs(), is("windows"));
+        assertThat(inspectImage.getOsVersion(), is("10.0.14393"));
+        assertThat(inspectImage.getSize(), is(651862727L));
+        assertThat(inspectImage.getVirtualSize(), is(651862727L));
+
+        assertThat(inspectImage.getGraphDriver(), notNullValue());
+        assertThat(inspectImage.getGraphDriver().getName(), is("windowsfilter"));
+        assertThat(inspectImage.getGraphDriver().getData(), notNullValue());
+        assertThat(inspectImage.getGraphDriver().getData().getDir(), is("C:\\control\\windowsfilter\\" +
+                "6fe6a289b98276a6a5ca0345156ca61d7b38f3da6bb49ef95af1d0f1ac37e5bf"
+        ));
+
+        assertThat(inspectImage.getRootFS(), notNullValue());
+        assertThat(inspectImage.getRootFS().getType(), is("layers"));
+        assertThat(inspectImage.getRootFS().getLayers(), hasSize(1));
+        assertThat(inspectImage.getRootFS().getLayers(), contains(
+                "sha256:342d4e407550c52261edd20cd901b5ce438f0b1e940336de3978210612365063"
+        ));
     }
 }
