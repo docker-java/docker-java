@@ -20,6 +20,9 @@ public interface PullImageCmd extends AsyncDockerCmd<PullImageCmd, PullResponseI
     String getTag();
 
     @CheckForNull
+    String getPlatform();
+
+    @CheckForNull
     String getRegistry();
 
     @CheckForNull
@@ -28,6 +31,11 @@ public interface PullImageCmd extends AsyncDockerCmd<PullImageCmd, PullResponseI
     PullImageCmd withRepository(@Nonnull String repository);
 
     PullImageCmd withTag(String tag);
+
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_32}
+     */
+    PullImageCmd withPlatform(String tag);
 
     PullImageCmd withRegistry(String registry);
 
