@@ -9,6 +9,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Used for `/version`
@@ -53,6 +54,24 @@ public class Version implements Serializable {
     @JsonProperty("Experimental")
     private Boolean experimental;
 
+    /**
+     * @since ~{@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_25}
+     */
+    @JsonProperty("MinAPIVersion")
+    private String minAPIVersion;
+
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_35}
+     */
+    @JsonProperty("Platform")
+    private VersionPlatform platform;
+
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_35}
+     */
+    @JsonProperty("Components")
+    private List<VersionComponent> components;
+
     public String getVersion() {
         return version;
     }
@@ -95,6 +114,30 @@ public class Version implements Serializable {
     @CheckForNull
     public Boolean getExperimental() {
         return experimental;
+    }
+
+    /**
+     * @see #minAPIVersion
+     */
+    @CheckForNull
+    public String getMinAPIVersion() {
+        return minAPIVersion;
+    }
+
+    /**
+     * @see #platform
+     */
+    @CheckForNull
+    public VersionPlatform getPlatform() {
+        return platform;
+    }
+
+    /**
+     * @see #components
+     */
+    @CheckForNull
+    public List<VersionComponent> getComponents() {
+        return components;
     }
 
     @Override
