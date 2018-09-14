@@ -2,20 +2,24 @@ package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.core.RemoteApiVersion;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.annotation.CheckForNull;
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * Part of {@link Version}
  *
+ * @since {@link RemoteApiVersion#VERSION_1_35}
  * @author Dmitry Tretyakov
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class VersionComponent {
+public class VersionComponent implements Serializable {
+    public static final Long serialVersionUID = 1L;
 
     @JsonProperty("Details")
     private Map<String, String> details;
