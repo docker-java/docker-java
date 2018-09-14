@@ -26,6 +26,9 @@ public interface ExecCreateCmd extends SyncDockerCmd<ExecCreateCmdResponse> {
     @CheckForNull
     Boolean getPrivileged();
 
+    @CheckForNull
+    String getWorkingDir();
+
     ExecCreateCmd withAttachStderr(Boolean attachStderr);
 
     ExecCreateCmd withAttachStdin(Boolean attachStdin);
@@ -41,6 +44,8 @@ public interface ExecCreateCmd extends SyncDockerCmd<ExecCreateCmdResponse> {
     ExecCreateCmd withUser(String user);
 
     ExecCreateCmd withPrivileged(Boolean isPrivileged);
+
+    ExecCreateCmd withWorkingDir(String workingDir);
 
     interface Exec extends DockerCmdSyncExec<ExecCreateCmd, ExecCreateCmdResponse> {
     }
