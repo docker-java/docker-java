@@ -3,10 +3,12 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.model.InfoRegistryConfig.IndexConfig;
+import com.github.dockerjava.core.RemoteApiVersion;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -326,5 +328,40 @@ public class InfoTest {
                 ;
 
         assertThat(info, is(withInfo));
+    }
+
+    @Test
+    public void info_1_38() throws IOException {
+        final ObjectMapper mapper = new ObjectMapper();
+        final JavaType type = mapper.getTypeFactory().constructType(Info.class);
+
+        final Info info = testRoundTrip(RemoteApiVersion.VERSION_1_38,
+                "info/lcow.json",
+                type
+        );
+
+        assertThat(info, notNullValue());
+        assertThat(info.getArchitecture(), is("x86_64"));
+        assertThat(info.getDockerRootDir(), is("C:\\ProgramData\\Docker"));
+        assertThat(info.getDriver(), is("windowsfilter (windows) lcow (linux)"));
+
+        assertThat(info.getDriverStatuses(), equalTo(Arrays.asList(
+                Arrays.asList("Windows", ""),
+                Arrays.asList("LCOW", "")
+        )));
+
+        assertThat(info.getIsolation(), is("hyperv"));
+        assertThat(info.getKernelVersion(), is("10.0 17134 (17134.1.amd64fre.rs4_release.180410-1804)"));
+        assertThat(info.getOsType(), is("windows"));
+        assertThat(info.getOperatingSystem(), is("Windows 10 Pro Version 1803 (OS Build 17134.228)"));
+
+        final Map<String, List<String>> plugins = new LinkedHashMap<>();
+        plugins.put("Authorization", null);
+        plugins.put("Log", asList("awslogs", "etwlogs", "fluentd", "gelf", "json-file", "logentries", "splunk", "syslog"));
+        plugins.put("Network", asList("ics", "l2bridge", "l2tunnel", "nat", "null", "overlay", "transparent"));
+        plugins.put("Volume", singletonList("local"));
+        assertThat(info.getPlugins(), equalTo(plugins));
+
+        assertThat(info.getServerVersion(), is("18.06.1-ce"));
     }
 }
