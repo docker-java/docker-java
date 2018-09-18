@@ -10,7 +10,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import javax.annotation.CheckForNull;
 
 /**
- * Part of {@link InspectImageResponse}
+ * Part of {@link InspectImageResponse} and {@link InspectContainerResponse}
  *
  * @author Kanstantsin Shautsou
  * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_21}
