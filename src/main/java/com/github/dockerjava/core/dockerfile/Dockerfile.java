@@ -205,12 +205,10 @@ public class Dockerfile {
 
             if (files.length != 0) {
                 for (File f : files) {
-                    if (effectiveMatchingIgnorePattern(f) == null) {
-                        if (f.isDirectory()) {
-                            addFilesInDirectory(f);
-                        } else {
-                            filesToAdd.add(f);
-                        }
+                    if (f.isDirectory()) {
+                        addFilesInDirectory(f);
+                    } else if (effectiveMatchingIgnorePattern(f) == null) {
+                        filesToAdd.add(f);
                     }
                 }
                 // base directory should at least contains Dockerfile, but better check
