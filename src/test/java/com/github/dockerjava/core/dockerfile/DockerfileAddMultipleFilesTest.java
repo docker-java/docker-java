@@ -25,6 +25,17 @@ public class DockerfileAddMultipleFilesTest {
     };
 
     @Test
+    public void ignoreAllBut() throws Exception {
+        File baseDir = fileFromBuildTestResource("dockerignore/IgnoreAllBut");
+        Dockerfile dockerfile = new Dockerfile(new File(baseDir, "Dockerfile"), baseDir);
+        Dockerfile.ScannedResult result = dockerfile.parse();
+        Collection<String> filesToAdd = transform(result.filesToAdd, TO_FILE_NAMES);
+
+        assertThat(filesToAdd,
+                   containsInAnyOrder("Dockerfile", "foo.jar"));
+    }
+    
+    @Test
     public void nestedDirsPatterns() throws Exception {
         File baseDir = fileFromBuildTestResource("dockerignore/NestedDirsDockerignore");
         Dockerfile dockerfile = new Dockerfile(new File(baseDir, "Dockerfile"), baseDir);
