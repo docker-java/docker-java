@@ -10,8 +10,7 @@ import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.MediaType;
 import com.github.dockerjava.core.WebTarget;
 
-public class ExecCreateCmdExec extends AbstrSyncDockerCmdExec<ExecCreateCmd, ExecCreateCmdResponse> implements
-        ExecCreateCmd.Exec {
+public class ExecCreateCmdExec extends AbstrSyncDockerCmdExec<ExecCreateCmd, ExecCreateCmdResponse> implements ExecCreateCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecCreateCmdExec.class);
 
