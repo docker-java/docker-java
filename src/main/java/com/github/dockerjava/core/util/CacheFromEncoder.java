@@ -11,15 +11,16 @@ import java.util.Collection;
  * JSON Encoder for the docker --cache-from parameter.
  */
 public class CacheFromEncoder {
+
     private CacheFromEncoder() {
     }
 
-    private static final ObjectMapper OBJECT_MAPPER = new JacksonJaxbJsonProvider().locateMapper(Collection.class,
+    private static final ObjectMapper MAPPER = new JacksonJaxbJsonProvider().locateMapper(Collection.class,
             MediaType.APPLICATION_JSON_TYPE);
 
     public static String jsonEncode(Collection<String> imageIds) {
         try {
-            return OBJECT_MAPPER.writeValueAsString(imageIds);
+            return MAPPER.writeValueAsString(imageIds);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
