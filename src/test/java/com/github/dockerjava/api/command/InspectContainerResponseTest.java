@@ -17,11 +17,13 @@ package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dockerjava.api.model.ContainerNetwork;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 import static com.github.dockerjava.test.serdes.JSONSamples.testRoundTrip;
@@ -30,6 +32,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
@@ -130,5 +133,58 @@ public class InspectContainerResponseTest {
     @Test
     public void roundTrip_empty() throws IOException {
         testRoundTrip(CommandJSONSamples.inspectContainerResponse_empty, InspectContainerResponse[].class);
+    }
+
+    @Test
+    public void inspect_windows_container() throws IOException {
+
+        final ObjectMapper mapper = new ObjectMapper();
+        final JavaType type = mapper.getTypeFactory().uncheckedSimpleType(InspectContainerResponse.class);
+
+        final InspectContainerResponse response = testRoundTrip(RemoteApiVersion.VERSION_1_38,
+                "/containers/inspect/lcow.json",
+                type
+        );
+
+        assertThat(response, notNullValue());
+
+        assertThat(response.getConfig(), notNullValue());
+        assertThat(response.getConfig().getCmd(), is(new String[]{"cmd"}));
+        assertThat(response.getConfig().getImage(), is("microsoft/nanoserver"));
+
+        assertThat(response.getDriver(), is("windowsfilter"));
+
+        assertThat(response.getGraphDriver(), notNullValue());
+        assertThat(response.getGraphDriver().getName(), is("windowsfilter"));
+        assertThat(response.getGraphDriver().getData(), is(new GraphData().withDir(
+                "C:\\ProgramData\\Docker\\windowsfilter\\35da02ca897bd378ee52be3066c847fee396ba1a28a00b4be36f42c6686bf556"
+        )));
+
+        assertThat(response.getHostConfig(), notNullValue());
+        assertThat(response.getHostConfig().getIsolation(), is("hyperv"));
+
+        assertThat(response.getImageId(), is("sha256:1381511ec0122f197b6abff5bc0692bef19943ddafd6680eff41197afa3a6dda"));
+        assertThat(response.getLogPath(), is(
+                "C:\\ProgramData\\Docker\\containers\\35da02ca897bd378ee52be3066c847fee396ba1a28a00b4be36f42c6686bf556" +
+                        "\\35da02ca897bd378ee52be3066c847fee396ba1a28a00b4be36f42c6686bf556-json.log"
+        ));
+        assertThat(response.getName(), is("/cranky_clarke"));
+
+        assertThat(response.getNetworkSettings(), notNullValue());
+        assertThat(response.getNetworkSettings().getNetworks(), is(Collections.singletonMap("nat",
+                new ContainerNetwork()
+                        .withEndpointId("493b77d6fe7e3b92435b1eb01461fde669781330deb84a9cbada360db8997ebc")
+                        .withGateway("172.17.18.1")
+                        .withGlobalIPv6Address("")
+                        .withGlobalIPv6PrefixLen(0)
+                        .withIpv4Address("172.17.18.123")
+                        .withIpPrefixLen(16)
+                        .withIpV6Gateway("")
+                        .withMacAddress("00:aa:ff:cf:dd:09")
+                        .withNetworkID("398c0e206dd677ed4a6566f9de458311f5767d8c7a8b963275490ab64c5d10a7")
+        )));
+
+        assertThat(response.getPath(), is("cmd"));
+        assertThat(response.getPlatform(), is("windows"));
     }
 }

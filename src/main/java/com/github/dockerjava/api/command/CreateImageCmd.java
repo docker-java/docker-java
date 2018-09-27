@@ -14,6 +14,9 @@ public interface CreateImageCmd extends SyncDockerCmd<CreateImageResponse> {
     String getTag();
 
     @CheckForNull
+    String getPlatform();
+
+    @CheckForNull
     InputStream getImageStream();
 
     /**
@@ -34,6 +37,12 @@ public interface CreateImageCmd extends SyncDockerCmd<CreateImageResponse> {
      * @deprecated use repo:tag format for repository
      */
     CreateImageCmd withTag(String tag);
+
+    /**
+     * @param platform
+     *            the platform for this image
+     */
+    CreateImageCmd withPlatform(String platform);
 
     interface Exec extends DockerCmdSyncExec<CreateImageCmd, CreateImageResponse> {
     }

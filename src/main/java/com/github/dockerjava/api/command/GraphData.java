@@ -28,6 +28,9 @@ public class GraphData {
     @JsonProperty("DeviceSize")
     private String deviceSize;
 
+    @JsonProperty("dir")
+    private String dir;
+
     /**
      * @see #rootDir
      */
@@ -89,6 +92,22 @@ public class GraphData {
      */
     public GraphData withDeviceSize(String deviceSize) {
         this.deviceSize = deviceSize;
+        return this;
+    }
+
+    /**
+     * @see #dir
+     */
+    @CheckForNull
+    public String getDir() {
+        return dir;
+    }
+
+    /**
+     * @see #dir
+     */
+    public GraphData withDir(String dir) {
+        this.dir = dir;
         return this;
     }
 

@@ -13,7 +13,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class PullImageCmdImpl extends AbstrAsyncDockerCmd<PullImageCmd, PullResponseItem> implements PullImageCmd {
 
-    private String repository, tag, registry;
+    private String repository, tag, platform, registry;
 
     private AuthConfig authConfig;
 
@@ -43,6 +43,11 @@ public class PullImageCmdImpl extends AbstrAsyncDockerCmd<PullImageCmd, PullResp
     }
 
     @Override
+    public String getPlatform() {
+        return platform;
+    }
+
+    @Override
     public String getRegistry() {
         return registry;
     }
@@ -58,6 +63,12 @@ public class PullImageCmdImpl extends AbstrAsyncDockerCmd<PullImageCmd, PullResp
     public PullImageCmd withTag(String tag) {
         checkNotNull(tag, "tag was not specified");
         this.tag = tag;
+        return this;
+    }
+
+    @Override
+    public PullImageCmd withPlatform(String platform) {
+        this.platform = platform;
         return this;
     }
 

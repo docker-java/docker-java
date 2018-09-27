@@ -231,6 +231,12 @@ public class Info implements Serializable {
     private SwarmInfo swarm;
 
     /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_25}
+     */
+    @JsonProperty("Isolation")
+    private String isolation;
+
+    /**
      * @see #architecture
      */
     @CheckForNull
@@ -1043,6 +1049,22 @@ public class Info implements Serializable {
      */
     public Info withSwarm(SwarmInfo swarm) {
         this.swarm = swarm;
+        return this;
+    }
+
+    /**
+     * @see #isolation
+     */
+    @CheckForNull
+    public String getIsolation() {
+        return isolation;
+    }
+
+    /**
+     * @see #isolation
+     */
+    public Info withIsolation(String isolation) {
+        this.isolation = isolation;
         return this;
     }
 

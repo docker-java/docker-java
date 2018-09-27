@@ -225,6 +225,12 @@ public class HostConfig implements Serializable {
     @JsonProperty("Tmpfs")
     private Map<String, String> tmpFs;
 
+    /**
+     * @since ~{@link RemoteApiVersion#VERSION_1_22}
+     */
+    @JsonProperty("Isolation")
+    private String isolation;
+
     @JsonIgnore
     public Bind[] getBinds() {
         return (binds == null) ? new Bind[0] : binds.getBinds();
@@ -327,6 +333,14 @@ public class HostConfig implements Serializable {
     @CheckForNull
     public String getPidMode() {
         return pidMode;
+    }
+
+    /**
+     * @see #isolation
+     */
+    @CheckForNull
+    public String getIsolation() {
+        return isolation;
     }
 
     /**
@@ -889,6 +903,14 @@ public class HostConfig implements Serializable {
      */
     public HostConfig withTmpFs(Map<String, String> tmpFs) {
         this.tmpFs = tmpFs;
+        return this;
+    }
+
+    /**
+     * @see #isolation
+     */
+    public HostConfig withIsolation(String isolation) {
+        this.isolation = isolation;
         return this;
     }
 

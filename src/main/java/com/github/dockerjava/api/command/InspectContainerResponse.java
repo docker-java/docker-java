@@ -110,6 +110,15 @@ public class InspectContainerResponse {
     @JsonProperty("Mounts")
     private List<Mount> mounts;
 
+    @JsonProperty("GraphDriver")
+    private GraphDriver graphDriver;
+
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_30}
+     */
+    @JsonProperty("Platform")
+    private String platform;
+
     public String getId() {
         return id;
     }
@@ -225,6 +234,22 @@ public class InspectContainerResponse {
      */
     public Node getNode() {
         return node;
+    }
+
+    /**
+     * @see #graphDriver
+     */
+    @CheckForNull
+    public GraphDriver getGraphDriver() {
+        return graphDriver;
+    }
+
+    /**
+     * @see #platform
+     */
+    @CheckForNull
+    public String getPlatform() {
+        return platform;
     }
 
     @Override

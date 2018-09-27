@@ -2,63 +2,56 @@ package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.annotation.CheckForNull;
+import java.util.List;
 
 /**
- * Part of {@link InspectImageResponse} and {@link InspectContainerResponse}
+ * Part of {@link InspectImageResponse}
  *
- * @author Kanstantsin Shautsou
- * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_21}
+ * @author Dmitry Tretyakov
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GraphDriver {
-    /**
-     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_21}
-     */
-    @JsonProperty("Name")
-    private String name;
+public class RootFS {
+
+    @JsonProperty("Type")
+    private String type;
+
+    @JsonProperty("Layers")
+    private List<String> layers;
 
     /**
-     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_21}
-     */
-    @JsonProperty("Data")
-    private GraphData data;
-
-
-    /**
-     * @see #data
+     * @see #type
      */
     @CheckForNull
-    public GraphData getData() {
-        return data;
+    public String getType() {
+        return type;
     }
 
     /**
-     * @see #data
+     * @see #type
      */
-    public GraphDriver withData(GraphData data) {
-        this.data = data;
+    public RootFS withType(String type) {
+        this.type = type;
         return this;
     }
 
     /**
-     * @see #name
+     * @see #layers
      */
     @CheckForNull
-    public String getName() {
-        return name;
+    public List<String> getLayers() {
+        return layers;
     }
 
     /**
-     * @see #name
+     * @see #layers
      */
-    public GraphDriver withName(String name) {
-        this.name = name;
+    public RootFS withLayers(List<String> layers) {
+        this.layers = layers;
         return this;
     }
 

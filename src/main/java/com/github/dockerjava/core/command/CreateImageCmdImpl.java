@@ -12,7 +12,7 @@ import com.github.dockerjava.api.command.CreateImageResponse;
  */
 public class CreateImageCmdImpl extends AbstrDockerCmd<CreateImageCmd, CreateImageResponse> implements CreateImageCmd {
 
-    private String repository, tag;
+    private String repository, tag, platform;
 
     private InputStream imageStream;
 
@@ -36,6 +36,11 @@ public class CreateImageCmdImpl extends AbstrDockerCmd<CreateImageCmd, CreateIma
     @Override
     public String getTag() {
         return tag;
+    }
+
+    @Override
+    public String getPlatform() {
+        return platform;
     }
 
     @Override
@@ -73,6 +78,15 @@ public class CreateImageCmdImpl extends AbstrDockerCmd<CreateImageCmd, CreateIma
     public CreateImageCmdImpl withTag(String tag) {
         checkNotNull(tag, "tag was not specified");
         this.tag = tag;
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CreateImageCmd withPlatform(String platform) {
+        this.platform = platform;
         return this;
     }
 }

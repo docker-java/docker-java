@@ -1,50 +1,27 @@
-package com.github.dockerjava.api.command;
+package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.github.dockerjava.core.RemoteApiVersion;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.annotation.CheckForNull;
+import java.io.Serializable;
 
 /**
- * Part of {@link InspectImageResponse} and {@link InspectContainerResponse}
+ * Part of {@link Version}
  *
- * @author Kanstantsin Shautsou
- * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_21}
+ * @since {@link RemoteApiVersion#VERSION_1_35}
+ * @author Dmitry Tretyakov
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GraphDriver {
-    /**
-     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_21}
-     */
+public class VersionPlatform implements Serializable {
+    public static final Long serialVersionUID = 1L;
+
     @JsonProperty("Name")
     private String name;
-
-    /**
-     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_21}
-     */
-    @JsonProperty("Data")
-    private GraphData data;
-
-
-    /**
-     * @see #data
-     */
-    @CheckForNull
-    public GraphData getData() {
-        return data;
-    }
-
-    /**
-     * @see #data
-     */
-    public GraphDriver withData(GraphData data) {
-        this.data = data;
-        return this;
-    }
 
     /**
      * @see #name
@@ -57,7 +34,7 @@ public class GraphDriver {
     /**
      * @see #name
      */
-    public GraphDriver withName(String name) {
+    public VersionPlatform withName(String name) {
         this.name = name;
         return this;
     }

@@ -33,13 +33,19 @@ public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateC
     private Boolean privileged;
 
     /**
-     * @since {@link RemoteApiVersion#VERSION_1_19}
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_19}
      */
     @JsonProperty("User")
     private String user;
 
     @JsonProperty("Cmd")
     private String[] cmd;
+
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_35}
+     */
+    @JsonProperty("WorkingDir")
+    private String workingDir;
 
     public ExecCreateCmdImpl(ExecCreateCmd.Exec exec, String containerId) {
         super(exec);
@@ -96,6 +102,12 @@ public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateC
     }
 
     @Override
+    public ExecCreateCmd withWorkingDir(String workingDir) {
+        this.workingDir = workingDir;
+        return this;
+    }
+
+    @Override
     public String getContainerId() {
         return containerId;
     }
@@ -128,6 +140,11 @@ public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateC
     @Override
     public String getUser() {
         return user;
+    }
+
+    @Override
+    public String getWorkingDir() {
+        return workingDir;
     }
 
     /**

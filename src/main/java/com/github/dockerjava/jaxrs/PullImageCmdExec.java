@@ -32,6 +32,10 @@ public class PullImageCmdExec extends AbstrAsyncDockerCmdExec<PullImageCmd, Pull
         WebTarget webResource = getBaseResource().path("/images/create").queryParam("tag", command.getTag())
                 .queryParam("fromImage", command.getRepository()).queryParam("registry", command.getRegistry());
 
+        if (command.getPlatform() != null) {
+            webResource = webResource.queryParam("platform", command.getPlatform());
+        }
+
         LOGGER.trace("POST: {}", webResource);
         Builder builder = resourceWithOptionalAuthConfig(command.getAuthConfig(), webResource.request()).accept(
                 MediaType.APPLICATION_OCTET_STREAM_TYPE);

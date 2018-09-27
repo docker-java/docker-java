@@ -24,6 +24,10 @@ public class CreateImageCmdExec extends AbstrSyncDockerCmdExec<CreateImageCmd, C
         WebTarget webResource = getBaseResource().path("/images/create").queryParam("repo", command.getRepository())
                 .queryParam("tag", command.getTag()).queryParam("fromSrc", "-");
 
+        if (command.getPlatform() != null) {
+            webResource = webResource.queryParam("platform", command.getPlatform());
+        }
+
         LOGGER.trace("POST: {}", webResource);
         return webResource.request().accept(MediaType.APPLICATION_OCTET_STREAM)
                 .post(new TypeReference<CreateImageResponse>() {

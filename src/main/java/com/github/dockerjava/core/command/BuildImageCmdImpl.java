@@ -68,6 +68,8 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     private String networkMode;
 
+    private String platform;
+
     public BuildImageCmdImpl(BuildImageCmd.Exec exec) {
         super(exec);
     }
@@ -182,6 +184,11 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @Override
     public String getNetworkMode() {
         return networkMode;
+    }
+
+    @Override
+    public String getPlatform() {
+        return platform;
     }
 
     // getter lib specific
@@ -373,6 +380,12 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @Override
     public BuildImageCmd withNetworkMode(String networkMode) {
         this.networkMode = networkMode;
+        return this;
+    }
+
+    @Override
+    public BuildImageCmd withPlatform(String platform) {
+        this.platform = platform;
         return this;
     }
 
