@@ -2,6 +2,8 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -40,6 +42,12 @@ public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateC
 
     @JsonProperty("Cmd")
     private String[] cmd;
+
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_25}
+     */
+    @JsonProperty("Env")
+    private List<String> env;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_35}
@@ -96,6 +104,12 @@ public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateC
     }
 
     @Override
+    public ExecCreateCmd withEnv(List<String> env) {
+        this.env = env;
+        return this;
+    }
+
+    @Override
     public ExecCreateCmd withPrivileged(Boolean privileged) {
         this.privileged = privileged;
         return this;
@@ -130,6 +144,11 @@ public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateC
     @Override
     public Boolean hasTtyEnabled() {
         return tty;
+    }
+
+    @Override
+    public List<String> getEnv() {
+        return env;
     }
 
     @Override

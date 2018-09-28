@@ -1,5 +1,7 @@
 package com.github.dockerjava.api.command;
 
+import java.util.List;
+
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
@@ -21,6 +23,9 @@ public interface ExecCreateCmd extends SyncDockerCmd<ExecCreateCmdResponse> {
     Boolean hasTtyEnabled();
 
     @CheckForNull
+    List<String> getEnv();
+
+    @CheckForNull
     String getUser();
 
     @CheckForNull
@@ -36,6 +41,8 @@ public interface ExecCreateCmd extends SyncDockerCmd<ExecCreateCmdResponse> {
     ExecCreateCmd withAttachStdout(Boolean attachStdout);
 
     ExecCreateCmd withCmd(String... cmd);
+
+    ExecCreateCmd withEnv(List<String> env);
 
     ExecCreateCmd withContainerId(@Nonnull String containerId);
 
