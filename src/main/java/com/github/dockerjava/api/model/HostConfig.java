@@ -174,6 +174,12 @@ public class HostConfig implements Serializable {
     @JsonProperty("RestartPolicy")
     private RestartPolicy restartPolicy;
 
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_24}
+     */
+    @JsonProperty("StorageOpt")
+    private Map<String, String> storageOpt;
+
     @JsonProperty("Ulimits")
     private Ulimit[] ulimits;
 
@@ -842,6 +848,21 @@ public class HostConfig implements Serializable {
      */
     public HostConfig withRestartPolicy(RestartPolicy restartPolicy) {
         this.restartPolicy = restartPolicy;
+        return this;
+    }
+
+    /**
+     * @see #storageOpt
+     */
+    public Map<String, String> getStorageOpt() {
+        return storageOpt;
+    }
+
+    /**
+     * @see #storageOpt
+     */
+    public HostConfig withStorageOpt(Map<String, String> storageOpt) {
+        this.storageOpt = storageOpt;
         return this;
     }
 
