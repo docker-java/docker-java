@@ -15,6 +15,7 @@ import com.github.dockerjava.junit.DockerRule;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
+import static com.github.dockerjava.api.model.HostConfig.newHostConfig;
 import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
@@ -64,7 +65,8 @@ public class RegistryUtils {
             CreateContainerResponse testregistry = dockerClient
                     .createContainerCmd(imageName + ":2")
                     .withName(containerName)
-                    .withPortBindings(new PortBinding(Ports.Binding.bindPort(port), ExposedPort.tcp(5000)))
+                    .withHostConfig(newHostConfig()
+                            .withPortBindings(new PortBinding(Ports.Binding.bindPort(port), ExposedPort.tcp(5000))))
                     .withEnv("REGISTRY_AUTH=htpasswd", "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm",
                             "REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd", "REGISTRY_LOG_LEVEL=debug",
                             "REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt", "REGISTRY_HTTP_TLS_KEY=/certs/domain.key")

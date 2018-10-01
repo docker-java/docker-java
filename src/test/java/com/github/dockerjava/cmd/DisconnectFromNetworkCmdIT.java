@@ -5,6 +5,7 @@ import com.github.dockerjava.api.command.CreateNetworkResponse;
 import com.github.dockerjava.api.model.Network;
 import org.junit.Test;
 
+import static com.github.dockerjava.api.model.HostConfig.newHostConfig;
 import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -40,8 +41,9 @@ public class DisconnectFromNetworkCmdIT extends CmdIT {
         CreateNetworkResponse network = dockerRule.getClient().createNetworkCmd().withName("testNetwork2" + dockerRule.getKind()).exec();
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withNetworkMode("testNetwork2" + dockerRule.getKind())
                 .withCmd("sleep", "9999")
+                .withHostConfig(newHostConfig()
+                        .withNetworkMode("testNetwork2" + dockerRule.getKind()))
                 .exec();
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();

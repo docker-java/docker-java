@@ -242,6 +242,10 @@ public class HostConfig implements Serializable {
     @JsonProperty("Isolation")
     private String isolation;
 
+    public static HostConfig newHostConfig() {
+        return new HostConfig();
+    }
+
     @JsonIgnore
     public Bind[] getBinds() {
         return (binds == null) ? new Bind[0] : binds.getBinds();
@@ -531,6 +535,12 @@ public class HostConfig implements Serializable {
         return this;
     }
 
+    public HostConfig withBinds(Bind... binds) {
+        checkNotNull(binds, "binds was not specified");
+        setBinds(binds);
+        return this;
+    }
+
     /**
      * @see #blkioDeviceReadBps
      */
@@ -583,7 +593,7 @@ public class HostConfig implements Serializable {
      * Add linux <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">kernel capability</a> to the container. For example:
      * adding {@link Capability#MKNOD} allows the container to create special files using the 'mknod' command.
      */
-    public HostConfig withCapAdd(Capability[] capAdd) {
+    public HostConfig withCapAdd(Capability... capAdd) {
         this.capAdd = capAdd;
         return this;
     }
@@ -591,7 +601,7 @@ public class HostConfig implements Serializable {
     /**
      * @see #capDrop
      */
-    public HostConfig withCapDrop(Capability[] capDrop) {
+    public HostConfig withCapDrop(Capability... capDrop) {
         this.capDrop = capDrop;
         return this;
     }
@@ -660,7 +670,7 @@ public class HostConfig implements Serializable {
     /**
      * @see #devices
      */
-    public HostConfig withDevices(Device[] devices) {
+    public HostConfig withDevices(Device... devices) {
         this.devices = devices;
         return this;
     }
@@ -676,7 +686,7 @@ public class HostConfig implements Serializable {
     /**
      * @see #dns
      */
-    public HostConfig withDns(String[] dns) {
+    public HostConfig withDns(String... dns) {
         this.dns = dns;
         return this;
     }
@@ -689,7 +699,7 @@ public class HostConfig implements Serializable {
     /**
      * @see #dnsSearch
      */
-    public HostConfig withDnsSearch(String[] dnsSearch) {
+    public HostConfig withDnsSearch(String... dnsSearch) {
         this.dnsSearch = dnsSearch;
         return this;
     }
@@ -702,7 +712,7 @@ public class HostConfig implements Serializable {
     /**
      * @see #extraHosts
      */
-    public HostConfig withExtraHosts(String[] extraHosts) {
+    public HostConfig withExtraHosts(String... extraHosts) {
         this.extraHosts = extraHosts;
         return this;
     }
@@ -731,6 +741,12 @@ public class HostConfig implements Serializable {
     public HostConfig withLinks(List<Link> links) {
         checkNotNull(links, "links was not specified");
         setLinks(links.toArray(new Link[links.size()]));
+        return this;
+    }
+
+    public HostConfig withLinks(Link... links) {
+        checkNotNull(links, "links was not specified");
+        setLinks(links);
         return this;
     }
 
@@ -992,8 +1008,6 @@ public class HostConfig implements Serializable {
         this.isolation = isolation;
         return this;
     }
-
-    // end of auto-generated
 
     @Override
     public String toString() {
