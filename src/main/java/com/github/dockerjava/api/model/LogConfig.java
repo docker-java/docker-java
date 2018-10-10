@@ -80,7 +80,8 @@ public class LogConfig implements Serializable {
         FLUENTD("fluentd"),
         AWSLOGS("awslogs"),
         DB("db"), // Synology specific driver
-        SPLUNK("splunk");
+        SPLUNK("splunk"),
+        GCPLOGS("gcplogs");
 
         private String type;
 
