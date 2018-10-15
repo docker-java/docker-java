@@ -4,6 +4,7 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Container;
+import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.core.command.WaitContainerResultCallback;
@@ -257,7 +258,9 @@ public class ListContainersCmdIT extends CmdIT {
 
         id = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withLabels(testLabel)
-                .withBinds(new Bind("TestFilterVolume", new Volume("/test")))
+                .withHostConfig(HostConfig.newHostConfig()
+                        .withBinds(new Bind("TestFilterVolume", new Volume("/test")))
+                )
                 .exec()
                 .getId();
 
@@ -285,7 +288,9 @@ public class ListContainersCmdIT extends CmdIT {
 
         id = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withLabels(testLabel)
-                .withNetworkMode("TestFilterNetwork")
+                .withHostConfig(HostConfig.newHostConfig()
+                        .withNetworkMode("TestFilterNetwork")
+                )
                 .exec()
                 .getId();
 

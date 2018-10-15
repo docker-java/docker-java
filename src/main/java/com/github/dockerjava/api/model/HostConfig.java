@@ -16,6 +16,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Used in `/containers/create`, and in inspect container.
  * TODO exclude usage for 2 different models.
@@ -30,6 +32,9 @@ public class HostConfig implements Serializable {
     @JsonProperty("Binds")
     private Binds binds;
 
+    /**
+     * @since 1.19
+     */
     @JsonProperty("BlkioWeight")
     private Integer blkioWeight;
 
@@ -78,6 +83,9 @@ public class HostConfig implements Serializable {
     @JsonProperty("ContainerIDFile")
     private String containerIDFile;
 
+    /**
+     * @since 1.19
+     */
     @JsonProperty("CpuPeriod")
     private Integer cpuPeriod;
 
@@ -93,6 +101,9 @@ public class HostConfig implements Serializable {
     @JsonProperty("CpusetCpus")
     private String cpusetCpus;
 
+    /**
+     * @since 1.19
+     */
     @JsonProperty("CpusetMems")
     private String cpusetMems;
 
@@ -135,7 +146,7 @@ public class HostConfig implements Serializable {
     @JsonProperty("MemoryReservation")
     private Long memoryReservation;
 
-     /**
+    /**
      * @since {@link RemoteApiVersion#VERSION_1_21}
      */
     @JsonProperty("KernelMemory")
@@ -230,6 +241,10 @@ public class HostConfig implements Serializable {
      */
     @JsonProperty("Isolation")
     private String isolation;
+
+    public static HostConfig newHostConfig() {
+        return new HostConfig();
+    }
 
     @JsonIgnore
     public Bind[] getBinds() {
@@ -430,12 +445,13 @@ public class HostConfig implements Serializable {
     public Boolean getOomKillDisable() {
         return oomKillDisable;
     }
+
     /**
      * @see #autoRemove
      */
     @CheckForNull
     public Boolean getAutoRemove() {
-      return autoRemove;
+        return autoRemove;
     }
 
     /**
@@ -510,11 +526,18 @@ public class HostConfig implements Serializable {
     }
 
     // auto-generated builder setters
+
     /**
      * @see #binds
      */
     public HostConfig withBinds(Binds binds) {
         this.binds = binds;
+        return this;
+    }
+
+    public HostConfig withBinds(Bind... binds) {
+        checkNotNull(binds, "binds was not specified");
+        setBinds(binds);
         return this;
     }
 
@@ -567,9 +590,10 @@ public class HostConfig implements Serializable {
     }
 
     /**
-     * @see #capAdd
+     * Add linux <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">kernel capability</a> to the container. For example:
+     * adding {@link Capability#MKNOD} allows the container to create special files using the 'mknod' command.
      */
-    public HostConfig withCapAdd(Capability[] capAdd) {
+    public HostConfig withCapAdd(Capability... capAdd) {
         this.capAdd = capAdd;
         return this;
     }
@@ -577,7 +601,7 @@ public class HostConfig implements Serializable {
     /**
      * @see #capDrop
      */
-    public HostConfig withCapDrop(Capability[] capDrop) {
+    public HostConfig withCapDrop(Capability... capDrop) {
         this.capDrop = capDrop;
         return this;
     }
@@ -638,10 +662,15 @@ public class HostConfig implements Serializable {
         return this;
     }
 
+    public HostConfig withDevices(List<Device> devices) {
+        checkNotNull(devices, "devices was not specified");
+        return withDevices(devices.toArray(new Device[devices.size()]));
+    }
+
     /**
      * @see #devices
      */
-    public HostConfig withDevices(Device[] devices) {
+    public HostConfig withDevices(Device... devices) {
         this.devices = devices;
         return this;
     }
@@ -657,25 +686,40 @@ public class HostConfig implements Serializable {
     /**
      * @see #dns
      */
-    public HostConfig withDns(String[] dns) {
+    public HostConfig withDns(String... dns) {
         this.dns = dns;
         return this;
+    }
+
+    public HostConfig withDns(List<String> dns) {
+        checkNotNull(dns, "dns was not specified");
+        return withDns(dns.toArray(new String[dns.size()]));
     }
 
     /**
      * @see #dnsSearch
      */
-    public HostConfig withDnsSearch(String[] dnsSearch) {
+    public HostConfig withDnsSearch(String... dnsSearch) {
         this.dnsSearch = dnsSearch;
         return this;
+    }
+
+    public HostConfig withDnsSearch(List<String> dnsSearch) {
+        checkNotNull(dnsSearch, "dnsSearch was not specified");
+        return withDnsSearch(dnsSearch.toArray(new String[0]));
     }
 
     /**
      * @see #extraHosts
      */
-    public HostConfig withExtraHosts(String[] extraHosts) {
+    public HostConfig withExtraHosts(String... extraHosts) {
         this.extraHosts = extraHosts;
         return this;
+    }
+
+    public HostConfig withExtraHosts(List<String> extraHosts) {
+        checkNotNull(extraHosts, "extraHosts was not specified");
+        return withExtraHosts(extraHosts.toArray(new String[extraHosts.size()]));
     }
 
     /**
@@ -694,6 +738,18 @@ public class HostConfig implements Serializable {
         return this;
     }
 
+    public HostConfig withLinks(List<Link> links) {
+        checkNotNull(links, "links was not specified");
+        setLinks(links.toArray(new Link[links.size()]));
+        return this;
+    }
+
+    public HostConfig withLinks(Link... links) {
+        checkNotNull(links, "links was not specified");
+        setLinks(links);
+        return this;
+    }
+
     /**
      * @see #logConfig
      */
@@ -708,6 +764,11 @@ public class HostConfig implements Serializable {
     public HostConfig withLxcConf(LxcConf[] lxcConf) {
         this.lxcConf = lxcConf;
         return this;
+    }
+
+    public HostConfig withLxcConf(List<LxcConf> lxcConf) {
+        checkNotNull(lxcConf, "lxcConf was not specified");
+        return withLxcConf(lxcConf.toArray(new LxcConf[0]));
     }
 
     /**
@@ -743,6 +804,15 @@ public class HostConfig implements Serializable {
     }
 
     /**
+     * Set the Network mode for the container
+     * <ul>
+     * <li>'bridge': creates a new network stack for the container on the docker bridge</li>
+     * <li>'none': no networking for this container</li>
+     * <li>'container:<name|id>': reuses another container network stack</li>
+     * <li>'host': use the host network stack inside the container. Note: the host mode gives the container full access to local system
+     * services such as D-bus and is therefore considered insecure.</li>
+     * </ul>
+     *
      * @see #networkMode
      */
     public HostConfig withNetworkMode(String networkMode) {
@@ -757,12 +827,13 @@ public class HostConfig implements Serializable {
         this.oomKillDisable = oomKillDisable;
         return this;
     }
+
     /**
      * @see #autoRemove
      */
     public HostConfig withAutoRemove(Boolean autoRemove) {
-      this.autoRemove = autoRemove;
-      return this;
+        this.autoRemove = autoRemove;
+        return this;
     }
 
     /**
@@ -779,6 +850,19 @@ public class HostConfig implements Serializable {
     public HostConfig withPidMode(String pidMode) {
         this.pidMode = pidMode;
         return this;
+    }
+
+    /**
+     * @see #portBindings
+     */
+    public HostConfig withPortBindings(PortBinding... portBindings) {
+        checkNotNull(portBindings, "portBindings was not specified");
+        return withPortBindings(new Ports(portBindings));
+    }
+
+    public HostConfig withPortBindings(List<PortBinding> portBindings) {
+        checkNotNull(portBindings, "portBindings was not specified");
+        return withPortBindings(portBindings.toArray(new PortBinding[0]));
     }
 
     /**
@@ -869,6 +953,11 @@ public class HostConfig implements Serializable {
         return this;
     }
 
+    public HostConfig withUlimits(List<Ulimit> ulimits) {
+        checkNotNull(ulimits, "no ulimits was specified");
+        return withUlimits(ulimits.toArray(new Ulimit[ulimits.size()]));
+    }
+
     /**
      * @see #volumeDriver
      */
@@ -880,10 +969,16 @@ public class HostConfig implements Serializable {
     /**
      * @see #volumesFrom
      */
-    public HostConfig withVolumesFrom(VolumesFrom[] volumesFrom) {
+    public HostConfig withVolumesFrom(VolumesFrom... volumesFrom) {
         this.volumesFrom = volumesFrom;
         return this;
     }
+
+    public HostConfig withVolumesFrom(List<VolumesFrom> volumesFrom) {
+        checkNotNull(volumesFrom, "volumesFrom was not specified");
+        return withVolumesFrom(volumesFrom.toArray(new VolumesFrom[volumesFrom.size()]));
+    }
+
 
     /**
      * @see #pidsLimit
@@ -913,8 +1008,6 @@ public class HostConfig implements Serializable {
         this.isolation = isolation;
         return this;
     }
-
-    // end of auto-generated
 
     @Override
     public String toString() {

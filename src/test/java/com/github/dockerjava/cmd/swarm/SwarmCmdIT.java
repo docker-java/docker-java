@@ -7,6 +7,7 @@ import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotAcceptableException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.ExposedPort;
+import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.cmd.CmdIT;
@@ -22,6 +23,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.experimental.categories.Category;
 
+import static com.github.dockerjava.api.model.HostConfig.newHostConfig;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_24;
 import static com.github.dockerjava.junit.DockerMatchers.isGreaterOrEqual;
 import static org.junit.Assume.assumeThat;
@@ -102,14 +104,17 @@ public abstract class SwarmCmdIT extends CmdIT {
         int port = PORT_START + (numberOfDockersInDocker - 1);
         CreateContainerResponse response = dockerRule.getClient()
                 .createContainerCmd(DOCKER_IN_DOCKER_IMAGE_REPOSITORY + ":" + DOCKER_IN_DOCKER_IMAGE_TAG)
-                .withPrivileged(true)
+                .withHostConfig(newHostConfig()
+                        .withPrivileged(true)
+                        .withNetworkMode(NETWORK_NAME)
+                        .withPortBindings(new PortBinding(
+                                Ports.Binding.bindIpAndPort("127.0.0.1", port),
+                                ExposedPort.tcp(2375)
+                        )))
                 .withName(name)
-                .withNetworkMode(NETWORK_NAME)
                 .withAliases(name)
-                .withPortBindings(new PortBinding(
-                        Ports.Binding.bindIpAndPort("127.0.0.1", port),
-                        ExposedPort.tcp(2375)))
                 .exec();
+
         dockerRule.getClient().startContainerCmd(response.getId()).exec();
 
         return initializeDockerClient(port);
