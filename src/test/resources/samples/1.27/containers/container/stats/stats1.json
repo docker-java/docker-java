@@ -5,32 +5,68 @@
     "current":2
   },
   "blkio_stats":{
-    "io_service_bytes_recursive": [
+    "io_service_bytes_recursive":[
       {
-        "major": 8,
-        "minor": "0",
-        "op": "Read",
-        "value": 26214
+        "major":259,
+        "minor":0,
+        "op":"Read",
+        "value":823296
       },
       {
-        "major": 8,
-        "minor": "0",
-        "op": "Write",
-        "value": 26214
+        "major":259,
+        "minor":0,
+        "op":"Write",
+        "value":122880
+      },
+      {
+        "major":259,
+        "minor":0,
+        "op":"Sync",
+        "value":835584
+      },
+      {
+        "major":259,
+        "minor":0,
+        "op":"Async",
+        "value":110592
+      },
+      {
+        "major":259,
+        "minor":0,
+        "op":"Total",
+        "value":946176
       }
     ],
-    "io_serviced_recursive": [
+    "io_serviced_recursive":[
       {
-        "major": 8,
-        "minor": 0,
-        "op": "Read",
-        "value": 41771
+        "major":259,
+        "minor":0,
+        "op":"Read",
+        "value":145
       },
       {
-        "major": 8,
-        "minor": 0,
-        "op": "Write",
-        "value": 72796
+        "major":259,
+        "minor":0,
+        "op":"Write",
+        "value":4
+      },
+      {
+        "major":259,
+        "minor":0,
+        "op":"Sync",
+        "value":148
+      },
+      {
+        "major":259,
+        "minor":0,
+        "op":"Async",
+        "value":1
+      },
+      {
+        "major":259,
+        "minor":0,
+        "op":"Total",
+        "value":149
       }
     ],
     "io_queue_recursive":[
@@ -135,7 +171,8 @@
       "unevictable":0,
       "writeback":0
     },
-    "limit":2095874048
+    "limit":2095874048,
+    "failcnt":0
   },
   "name":"/gallant_hamilton",
   "id":"b581d78b03e41d81c9fe941f03f5d35e23733ff96370456b58d2906e002b0deb",

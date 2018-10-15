@@ -15,17 +15,28 @@ import java.io.Serializable;
 public class MemoryStatsConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @JsonProperty("stats")
+    private StatsConfig stats;
+
     @JsonProperty("usage")
     private Long usage;
 
     @JsonProperty("max_usage")
     private Long maxUsage;
 
-    @JsonProperty("stats")
-    private StatsConfig stats;
+    @JsonProperty("failcnt")
+    private Long failcnt;
 
     @JsonProperty("limit")
     private Long limit;
+
+    /**
+     * @see #stats
+     */
+    @CheckForNull
+    public StatsConfig getStats() {
+        return stats;
+    }
 
     /**
      * @see #usage
@@ -44,11 +55,10 @@ public class MemoryStatsConfig implements Serializable {
     }
 
     /**
-     * @see #stats
+     * @see #failcnt
      */
-    @CheckForNull
-    public StatsConfig getStats() {
-        return stats;
+    public Long getFailcnt() {
+        return failcnt;
     }
 
     /**

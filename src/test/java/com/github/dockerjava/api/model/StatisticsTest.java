@@ -3,6 +3,7 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.core.RemoteApiVersion;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -82,11 +83,26 @@ public class StatisticsTest {
         assertThat(stats.getWriteback(), is(0L));
 
         assertThat(memoryStats.getLimit(), is(2095874048L));
+        assertThat(memoryStats.getFailcnt(), is(0L));
 
         final BlkioStatsConfig blkioStats = statistics.getBlkioStats();
-        assertThat(blkioStats.getIoServiceBytesRecursive().size(), is(2));
-        assertThat(blkioStats.getIoServiceBytesRecursive().get(0).getValue(), is(26214L));
-        assertThat(blkioStats.getIoServicedRecursive().size(), is(2));
+        assertThat(blkioStats.getIoServiceBytesRecursive(), Matchers.<BlkioStatEntry>hasSize(5));
+        assertThat(blkioStats.getIoServiceBytesRecursive(), equalTo(Arrays.asList(
+            new BlkioStatEntry().withMajor(259L).withMinor(0L).withOp("Read").withValue(823296L),
+            new BlkioStatEntry().withMajor(259L).withMinor(0L).withOp("Write").withValue(122880L),
+            new BlkioStatEntry().withMajor(259L).withMinor(0L).withOp("Sync").withValue(835584L),
+            new BlkioStatEntry().withMajor(259L).withMinor(0L).withOp("Async").withValue(110592L),
+            new BlkioStatEntry().withMajor(259L).withMinor(0L).withOp("Total").withValue(946176L)
+        )));
+
+        assertThat(blkioStats.getIoServicedRecursive(), Matchers.<BlkioStatEntry>hasSize(5));
+        assertThat(blkioStats.getIoServicedRecursive(), equalTo(Arrays.asList(
+            new BlkioStatEntry().withMajor(259L).withMinor(0L).withOp("Read").withValue(145L),
+            new BlkioStatEntry().withMajor(259L).withMinor(0L).withOp("Write").withValue(4L),
+            new BlkioStatEntry().withMajor(259L).withMinor(0L).withOp("Sync").withValue(148L),
+            new BlkioStatEntry().withMajor(259L).withMinor(0L).withOp("Async").withValue(1L),
+            new BlkioStatEntry().withMajor(259L).withMinor(0L).withOp("Total").withValue(149L)
+        )));
         assertThat(blkioStats.getIoQueueRecursive(), is(empty()));
         assertThat(blkioStats.getIoServiceTimeRecursive(), is(empty()));
         assertThat(blkioStats.getIoWaitTimeRecursive(), is(empty()));
