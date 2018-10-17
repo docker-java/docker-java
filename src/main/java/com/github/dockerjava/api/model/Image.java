@@ -1,13 +1,17 @@
 package com.github.dockerjava.api.model;
 
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.CheckForNull;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.io.Serializable;
 
 /**
  *
@@ -29,7 +33,10 @@ public class Image implements Serializable {
     private String parentId;
 
     @JsonProperty("RepoTags")
-    private String[] repoTags;
+    private List<String> repoTags;
+
+    @JsonProperty("RepoDigests")
+    private List<String> repoDigests;
 
     @JsonProperty("Size")
     private Long size;
@@ -37,12 +44,27 @@ public class Image implements Serializable {
     @JsonProperty("VirtualSize")
     private Long virtualSize;
 
+    @JsonProperty("SharedSize")
+    private Long sharedSize;
+
+    @JsonProperty("Labels")
+    public Map<String, String> labels;
+
+    @JsonProperty("Containers")
+    private Integer containers;
+
     public String getId() {
         return id;
     }
 
-    public String[] getRepoTags() {
+    @CheckForNull
+    public List<String> getRepoTags() {
         return repoTags;
+    }
+
+    @CheckForNull
+    public List<String> getRepoDigests() {
+        return repoDigests;
     }
 
     public String getParentId() {
@@ -59,6 +81,19 @@ public class Image implements Serializable {
 
     public Long getVirtualSize() {
         return virtualSize;
+    }
+
+    public Long getSharedSize() {
+        return sharedSize;
+    }
+
+    @CheckForNull
+    public Map<String, String> getLabels() {
+        return labels;
+    }
+
+    public Integer getContainers() {
+        return containers;
     }
 
     @Override

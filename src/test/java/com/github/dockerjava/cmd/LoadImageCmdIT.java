@@ -50,7 +50,7 @@ public class LoadImageCmdIT extends CmdIT {
 
         assertThat("Can't find expected image after loading from a tar archive!", image, notNullValue());
         assertThat("Image after loading from a tar archive has wrong tags!",
-                asList(image.getRepoTags()), equalTo(singletonList("docker-java/load:1.0")));
+                image.getRepoTags(), equalTo(singletonList("docker-java/load:1.0")));
     }
 
     private Image findImageWithId(final String id, final List<Image> images) {

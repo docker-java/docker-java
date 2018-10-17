@@ -13,6 +13,7 @@ import java.util.List;
 import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyArray;
+import static org.hamcrest.Matchers.emptyIterable;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
@@ -39,7 +40,7 @@ public class ListImagesCmdIT extends CmdIT {
         assertThat(img.getCreated(), is(greaterThan(0L)));
         assertThat(img.getVirtualSize(), is(greaterThan(0L)));
         assertThat(img.getId(), not(isEmptyString()));
-        assertThat(img.getRepoTags(), not(emptyArray()));
+        assertThat(img.getRepoTags(), emptyIterable());
     }
 
     @Test
