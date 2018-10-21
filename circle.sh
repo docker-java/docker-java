@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash  -ex
 
 case "$1" in
     pre_machine)
@@ -25,10 +25,10 @@ case "$1" in
 
     dependencies)
         mvn clean install -T 2 -Dmaven.javadoc.skip=true -DskipTests=true -B -V
-        ;;
+         ;;
 
     test)
-        mvn clean verify
+        mvn clean verify)
         ;;
 
     collect_artifacts)
