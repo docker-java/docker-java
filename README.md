@@ -30,9 +30,9 @@ Build and run integration tests as follows:
 
     $ mvn clean install
 
-If you do not have access to a Docker server or just want to execute the build quickly, you can run the build without the integration tests:
+If you do not have access to a Docker server or just want to execute the build quickly, you can run the build without the integration tests::
 
-    $ mvn clean install -DskipITs
+    $ mvn clean install -DskipITs.
 
 By default the docker engine is using local UNIX sockets for communication with the docker CLI so docker-java
 client also uses UNIX domain sockets to connect to the docker daemon by default. To make the docker daemon listening on a TCP (http/https) port you have to configure it by setting the DOCKER_OPTS environment variable to something like the following: 
