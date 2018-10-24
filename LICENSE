@@ -14,11 +14,11 @@
       the copyright owner that is granting the License.
 
       "Legal Entity" shall mean the union of the acting entity and all
-      other entities that control, are controlled by, or are under common
+      other entities that control, are controlled by or are under common
       control with that entity. For the purposes of this definition,
       "control" means (i) the power, direct or indirect, to cause the
       direction or management of such entity, whether by contract or
-      otherwise, or (ii) ownership of fifty percent (50%) or more of the
+      otherwise, or (ii) ownership of fifty per cent (50%) or more of the
       outstanding shares, or (iii) beneficial ownership of such entity.
 
       "You" (or "Your") shall mean an individual or Legal Entity
@@ -68,7 +68,7 @@
       this License, each Contributor hereby grants to You a perpetual,
       worldwide, non-exclusive, no-charge, royalty-free, irrevocable
       copyright license to reproduce, prepare Derivative Works of,
-      publicly display, publicly perform, sublicense, and distribute the
+      publicly display, publicly perform, sublicense, and distribute them
       Work and such Derivative Works in Source or Object form.
 
    3. Grant of Patent License. Subject to the terms and conditions of
@@ -85,7 +85,7 @@
       or a Contribution incorporated within the Work constitutes direct
       or contributory patent infringement, then any patent licenses
       granted to You under this License for that Work shall terminate
-      as of the date such litigation is filed.
+      as of the date, such litigation is filed.
 
    4. Redistribution. You may reproduce and distribute copies of the
       Work or Derivative Works thereof in any medium, with or without
@@ -125,12 +125,12 @@
       may provide additional or different license terms and conditions
       for use, reproduction, or distribution of Your modifications, or
       for any such Derivative Works as a whole, provided Your use,
-      reproduction, and distribution of the Work otherwise complies with
+      reproduction and distribution of the Work otherwise complies with
       the conditions stated in this License.
 
    5. Submission of Contributions. Unless You explicitly state otherwise,
       any Contribution intentionally submitted for inclusion in the Work
-      by You to the Licensor shall be under the terms and conditions of
+      You to the Licensor shall be under the terms and conditions of
       this License, without any additional terms or conditions.
       Notwithstanding the above, nothing herein shall supersede or modify
       the terms of any separate license agreement you may have executed
@@ -157,9 +157,9 @@
       negligent acts) or agreed to in writing, shall any Contributor be
       liable to You for damages, including any direct, indirect, special,
       incidental, or consequential damages of any character arising as a
-      result of this License or out of the use or inability to use the
+      a result of this License or out of the use or inability to use them
       Work (including but not limited to damages for loss of goodwill,
-      work stoppage, computer failure or malfunction, or any and all
+      a work stoppage, computer failure or malfunction, or any and all
       other commercial damages or losses), even if such Contributor
       has been advised of the possibility of such damages.
 
@@ -180,12 +180,8 @@
 
       To apply the Apache License to your work, attach the following
       boilerplate notice, with the fields enclosed by brackets "[]"
-      replaced with your own identifying information. (Don't include
-      the brackets!)  The text should be enclosed in the appropriate
-      comment syntax for the file format. We also recommend that a
-      file or class name and description of purpose be included on the
-      same "printed page" as the copyright notice for easier
-      identification within third-party archives.
+      replaced with your own identifying information. (Don't include the brackets!)  The text should be enclosed in the appropriate comment syntax for the file format. We also recommend that a
+      file or class name and description of purpose be included on the same "printed page" as the copyright notice for easier identification within third-party archives.
 
    Copyright [2013] [docker-java@googlegroups.com]
 
