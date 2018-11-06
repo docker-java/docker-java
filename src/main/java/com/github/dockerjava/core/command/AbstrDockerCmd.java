@@ -31,7 +31,6 @@ public abstract class AbstrDockerCmd<CMD_T extends DockerCmd<RES_T>, RES_T> impl
     @Override
     @SuppressWarnings("unchecked")
     public RES_T exec() throws DockerException {
-        LOGGER.debug("Cmd: {}", this);
         return execution.exec((CMD_T) this);
     }
 
