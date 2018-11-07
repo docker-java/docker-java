@@ -58,7 +58,7 @@
 		<jdk.target>1.7</jdk.target>
 
 		<jersey.version>2.27</jersey.version>
-		<jackson-jaxrs.version>2.6.7</jackson-jaxrs.version>
+		<jackson-jaxrs.version>2.9.7</jackson-jaxrs.version>
 		<httpclient.version>4.5.6</httpclient.version><!-- 4.5.1-4.5.2 broken -->
 		<commons-compress.version>1.17</commons-compress.version>
 		<commons-codec.version>1.11</commons-codec.version>
@@ -87,6 +87,7 @@
 		<maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
 		<maven-bundlor-plugin.version>1.1.2.RELEASE</maven-bundlor-plugin.version>
 		<maven-build-helper-plugin.version>3.0.0</maven-build-helper-plugin.version>
+		<maven-owasp-dependency-check.version>3.3.4</maven-owasp-dependency-check.version>
 	</properties>
 
 	<dependencies>
@@ -450,6 +451,21 @@
 					</instructions>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.owasp</groupId>
+				<artifactId>dependency-check-maven</artifactId>
+				<version>${maven-owasp-dependency-check.version}</version>
+				<configuration>
+					<failBuildOnCVSS>7</failBuildOnCVSS>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>                
 		</plugins>
 	</build>
 
