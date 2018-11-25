@@ -24,7 +24,7 @@ public class EventsTest {
     @Test
     public void serderDocs1() throws IOException {
         final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().uncheckedSimpleType(Event.class);
+        final JavaType type = mapper.getTypeFactory().constructType(Event.class);
 
         final Event event = testRoundTrip(RemoteApiVersion.VERSION_1_24,
                 "/events/docs1.json",
