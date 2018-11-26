@@ -36,7 +36,7 @@
       "Memory" : 0,
       "MemorySwap" : 0,
       "CpuQuota" : 0,
-      "OomScoreAdj" : false,
+      "OomScoreAdj" : 500,
       "MemoryReservation" : 0
     },
     "Id" : "58fd1abe8e43a65fb6231b76a9678e7bb4e91686f838945e782a4b74119ce959",

@@ -35,10 +35,10 @@ public class HealthCheck implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("Interval")
-    private Integer interval;
+    private Long interval;
 
     @JsonProperty("Timeout")
-    private Integer timeout;
+    private Long timeout;
 
     /**
      * @since 1.26
@@ -58,20 +58,20 @@ public class HealthCheck implements Serializable {
     @JsonProperty("StartPeriod")
     private Integer startPeriod;
 
-    public Integer getInterval() {
+    public Long getInterval() {
         return interval;
     }
 
-    public Integer getTimeout() {
+    public Long getTimeout() {
         return timeout;
     }
 
-    public HealthCheck withInterval(Integer interval) {
+    public HealthCheck withInterval(Long interval) {
         this.interval = interval;
         return this;
     }
 
-    public HealthCheck withTimeout(Integer timeout) {
+    public HealthCheck withTimeout(Long timeout) {
         this.timeout = timeout;
         return this;
     }
