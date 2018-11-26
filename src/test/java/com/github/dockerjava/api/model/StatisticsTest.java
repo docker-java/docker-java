@@ -23,7 +23,7 @@ public class StatisticsTest {
     @Test
     public void serderJson1() throws IOException {
         final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().uncheckedSimpleType(Statistics.class);
+        final JavaType type = mapper.getTypeFactory().constructType(Statistics.class);
 
         final Statistics statistics = testRoundTrip(RemoteApiVersion.VERSION_1_27,
                 "containers/container/stats/stats1.json",

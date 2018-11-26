@@ -84,7 +84,7 @@ public class UpdateContainerCmdIT extends CmdIT {
     @Test
     public void serDerDocs1() throws IOException {
         final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().uncheckedSimpleType(UpdateContainerCmdImpl.class);
+        final JavaType type = mapper.getTypeFactory().constructType(UpdateContainerCmdImpl.class);
 
         final UpdateContainerCmdImpl upd = testRoundTrip(VERSION_1_22,
                 "/containers/container/update/docs.json",
