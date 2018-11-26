@@ -10,7 +10,6 @@ import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Device;
 import com.github.dockerjava.api.model.ExposedPort;
-import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.Ports.Binding;
@@ -55,12 +54,10 @@ public class StartContainerCmdIT extends CmdIT {
 
         Volume volume2 = new Volume("/opt/webapp2");
 
-        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withVolumes(volume1, volume2)
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withVolumes(volume1, volume2)
                 .withCmd("true")
                 .withHostConfig(newHostConfig()
-                        .withBinds(new Bind("/src/webapp1", volume1, ro), new Bind("/src/webapp2", volume2))
-                )
+                        .withBinds(new Bind("/src/webapp1", volume1, ro), new Bind("/src/webapp2", volume2)))
                 .exec();
 
         LOG.info("Created container {}", container.toString());
@@ -135,8 +132,7 @@ public class StartContainerCmdIT extends CmdIT {
         String aDnsServer = "8.8.8.8";
         String anotherDnsServer = "8.8.4.4";
 
-        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withCmd("true")
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("true")
                 .withHostConfig(newHostConfig()
                         .withDns(aDnsServer, anotherDnsServer))
                 .exec();
@@ -158,8 +154,7 @@ public class StartContainerCmdIT extends CmdIT {
 
         String dnsSearch = "example.com";
 
-        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withCmd("true")
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("true")
                 .withHostConfig(newHostConfig()
                         .withDnsSearch(dnsSearch))
                 .exec();
@@ -189,12 +184,10 @@ public class StartContainerCmdIT extends CmdIT {
         portBindings.bind(tcp23, Binding.bindPort(baseport + 23));
         portBindings.bind(tcp23, Binding.bindPort(baseport + 24));
 
-        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withCmd("true")
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("true")
                 .withExposedPorts(tcp22, tcp23)
                 .withHostConfig(newHostConfig()
-                        .withPortBindings(portBindings))
-                .exec();
+                        .withPortBindings(portBindings)).exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -230,8 +223,7 @@ public class StartContainerCmdIT extends CmdIT {
         portBindings.bind(tcp23, Binding.empty());
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999")
-                .withExposedPorts(tcp22, tcp23)
-                .withHostConfig(newHostConfig()
+                .withExposedPorts(tcp22, tcp23).withHostConfig(newHostConfig()
                         .withPortBindings(portBindings)
                         .withPublishAllPorts(true))
                 .exec();
@@ -265,8 +257,7 @@ public class StartContainerCmdIT extends CmdIT {
         portBindings.bind(tcp23, Binding.bindPort(11022));
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("true")
-                .withExposedPorts(tcp22, tcp23)
-                .withHostConfig(newHostConfig()
+                .withExposedPorts(tcp22, tcp23).withHostConfig(newHostConfig()
                         .withPortBindings(portBindings))
                 .exec();
 
@@ -310,10 +301,8 @@ public class StartContainerCmdIT extends CmdIT {
             assertThat(inspectContainerResponse1.getState().getExitCode(), is(equalTo(0)));
         }
 
-        CreateContainerResponse container2 = dockerRule.getClient().createContainerCmd("busybox")
-                .withCmd("sleep", "9999")
-                .withName(container2Name)
-                .withHostConfig(newHostConfig()
+        CreateContainerResponse container2 = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999")
+                .withName(container2Name).withHostConfig(newHostConfig()
                         .withLinks(new Link(container1Name, container1Name + "Link")))
                 .exec();
 
@@ -374,8 +363,7 @@ public class StartContainerCmdIT extends CmdIT {
         }
 
         CreateContainerResponse container2 = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999")
-                .withName(container2Name)
-                .withHostConfig(newHostConfig()
+                .withName(container2Name).withHostConfig(newHostConfig()
                         .withLinks(new Link(container1Name, container1Name + "Link")))
                 .exec();
 
@@ -446,8 +434,7 @@ public class StartContainerCmdIT extends CmdIT {
     @Test
     public void startContainerWithNetworkMode() throws DockerException {
 
-        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withCmd("true")
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("true")
                 .withHostConfig(newHostConfig()
                         .withNetworkMode("host"))
                 .exec();
@@ -493,7 +480,8 @@ public class StartContainerCmdIT extends CmdIT {
     @Test
     public void startContainerWithDevices() throws DockerException {
 
-        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999")
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
+                .withCmd("sleep", "9999")
                 .withHostConfig(newHostConfig()
                         .withDevices(new Device("rwm", "/dev/nulo", "/dev/zero")))
                 .exec();
@@ -539,9 +527,11 @@ public class StartContainerCmdIT extends CmdIT {
 
         RestartPolicy restartPolicy = RestartPolicy.onFailureRestart(5);
 
-        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999")
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
+                .withCmd("sleep", "9999")
                 .withHostConfig(newHostConfig()
-                        .withRestartPolicy(restartPolicy)).exec();
+                        .withRestartPolicy(restartPolicy))
+                .exec();
 
         LOG.info("Created container {}", container.toString());
 

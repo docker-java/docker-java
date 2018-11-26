@@ -71,8 +71,8 @@ public class UpdateContainerCmdIT extends CmdIT {
 
 //        assertThat(afterHostConfig.getBlkioWeight(), is(300));
         assertThat(afterHostConfig.getCpuShares(), is(512));
-        assertThat(afterHostConfig.getCpuPeriod(), is(100000));
-        assertThat(afterHostConfig.getCpuQuota(), is(50000));
+        assertThat(afterHostConfig.getCpuPeriod(), is(100000L));
+        assertThat(afterHostConfig.getCpuQuota(), is(50000L));
         assertThat(afterHostConfig.getCpusetMems(), is("0"));
 
 //        assertThat(afterHostConfig.getMemoryReservation(), is(209715200L));

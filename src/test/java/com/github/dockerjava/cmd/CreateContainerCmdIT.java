@@ -306,7 +306,7 @@ public class CreateContainerCmdIT extends CmdIT {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withCmd("sleep", "9999")
                 .withHostConfig(newHostConfig()
-                        .withMemorySwappiness(42))
+                        .withMemorySwappiness(42L))
                 .exec();
         assertThat(container.getId(), not(isEmptyString()));
         LOG.info("Created container {}", container.toString());
@@ -335,9 +335,9 @@ public class CreateContainerCmdIT extends CmdIT {
         assertNotNull(createNetworkResponse.getId());
 
         CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withCmd("sleep", "9999")
                 .withHostConfig(newHostConfig()
                         .withNetworkMode(networkName))
+                .withCmd("sleep", "9999")
                 .withName(containerName1)
                 .exec();
 
@@ -352,9 +352,8 @@ public class CreateContainerCmdIT extends CmdIT {
 
         CreateContainerResponse container2 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withHostConfig(newHostConfig()
-                        .withNetworkMode(networkName)
                         .withLinks(new Link(containerName1, containerName1 + "Link"))
-                )
+                        .withNetworkMode(networkName))
                 .withName(containerName2)
                 .withCmd("env")
                 .exec();
@@ -387,9 +386,9 @@ public class CreateContainerCmdIT extends CmdIT {
         assertNotNull(createNetworkResponse.getId());
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withCmd("sleep", "9999")
                 .withHostConfig(newHostConfig()
                         .withNetworkMode(networkName))
+                .withCmd("sleep", "9999")
                 .withName(containerName1)
                 .withIpv4Address(subnetPrefix + ".100")
                 .exec();
@@ -421,9 +420,9 @@ public class CreateContainerCmdIT extends CmdIT {
         assertNotNull(createNetworkResponse.getId());
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withCmd("sleep", "9999")
                 .withHostConfig(newHostConfig()
                         .withNetworkMode(networkName))
+                .withCmd("sleep", "9999")
                 .withName(containerName1)
                 .withAliases("server" + dockerRule.getKind())
                 .exec();
@@ -505,8 +504,7 @@ public class CreateContainerCmdIT extends CmdIT {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withName("containerextrahosts" + dockerRule.getKind())
                 .withHostConfig(newHostConfig()
-                        .withExtraHosts(extraHosts))
-                .exec();
+                        .withExtraHosts(extraHosts)).exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -523,7 +521,8 @@ public class CreateContainerCmdIT extends CmdIT {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("sleep", "9999")
                 .withHostConfig(newHostConfig()
-                        .withDevices(new Device("rwm", "/dev/nulo", "/dev/zero"))).exec();
+                        .withDevices(new Device("rwm", "/dev/nulo", "/dev/zero")))
+                .exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -548,8 +547,10 @@ public class CreateContainerCmdIT extends CmdIT {
         portBindings.bind(tcp23, Binding.bindPort(baseport + 24));
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("true")
-                .withExposedPorts(tcp22, tcp23).withHostConfig(newHostConfig()
-                        .withPortBindings(portBindings)).exec();
+                .withExposedPorts(tcp22, tcp23)
+                .withHostConfig(newHostConfig()
+                        .withPortBindings(portBindings))
+                .exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -603,7 +604,8 @@ public class CreateContainerCmdIT extends CmdIT {
         CreateContainerResponse container2 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("sleep", "9999")
                 .withName(containerName2)
                 .withHostConfig(newHostConfig()
-                        .withLinks(new Link(containerName1, containerName1 + "Link"))).exec();
+                        .withLinks(new Link(containerName1, containerName1 + "Link")))
+                .exec();
 
         LOG.info("Created container2 {}", container2.toString());
         assertThat(container2.getId(), not(isEmptyString()));
@@ -630,8 +632,7 @@ public class CreateContainerCmdIT extends CmdIT {
         RestartPolicy restartPolicy = RestartPolicy.onFailureRestart(5);
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("sleep", "9999")
-                .withHostConfig(newHostConfig()
-                        .withRestartPolicy(restartPolicy)).exec();
+                .withHostConfig(newHostConfig().withRestartPolicy(restartPolicy)).exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -646,8 +647,7 @@ public class CreateContainerCmdIT extends CmdIT {
     public void createContainerWithPidMode() throws DockerException {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("true")
-                .withHostConfig(newHostConfig()
-                        .withPidMode("host")).exec();
+                .withHostConfig(newHostConfig().withPidMode("host")).exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -669,7 +669,8 @@ public class CreateContainerCmdIT extends CmdIT {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("true")
                 .withHostConfig(newHostConfig()
-                        .withNetworkMode("host")).exec();
+                        .withNetworkMode("host"))
+                .exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -703,7 +704,8 @@ public class CreateContainerCmdIT extends CmdIT {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withName(containerName)
                 .withHostConfig(newHostConfig()
-                        .withUlimits(ulimits)).exec();
+                        .withUlimits(ulimits))
+                .exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -819,7 +821,8 @@ public class CreateContainerCmdIT extends CmdIT {
     public void createContainerWithCgroupParent() throws DockerException {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
                 .withHostConfig(newHostConfig()
-                        .withCgroupParent("/parent")).exec();
+                        .withCgroupParent("/parent"))
+                .exec();
 
         LOG.info("Created container {}", container.toString());
 

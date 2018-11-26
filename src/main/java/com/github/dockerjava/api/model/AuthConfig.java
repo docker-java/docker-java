@@ -21,13 +21,13 @@ public class AuthConfig implements Serializable {
      */
     public static final String DEFAULT_SERVER_ADDRESS = "https://index.docker.io/v1/";
 
-    @JsonProperty
+    @JsonProperty("username")
     private String username;
 
-    @JsonProperty
+    @JsonProperty("password")
     private String password;
 
-    @JsonProperty
+    @JsonProperty("email")
     private String email;
 
     @JsonProperty("serveraddress")

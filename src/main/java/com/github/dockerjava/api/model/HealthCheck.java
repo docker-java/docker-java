@@ -18,6 +18,9 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.io.Serializable;
 import java.util.List;
@@ -32,10 +35,10 @@ public class HealthCheck implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("Interval")
-    private Long interval;
+    private Integer interval;
 
     @JsonProperty("Timeout")
-    private Long timeout;
+    private Integer timeout;
 
     /**
      * @since 1.26
@@ -47,28 +50,28 @@ public class HealthCheck implements Serializable {
      * @since 1.26
      */
     @JsonProperty("Retries")
-    private Long retries;
+    private Integer retries;
 
     /**
      * @since 1.26
      */
     @JsonProperty("StartPeriod")
-    private Long startPeriod;
+    private Integer startPeriod;
 
-    public Long getInterval() {
+    public Integer getInterval() {
         return interval;
     }
 
-    public Long getTimeout() {
+    public Integer getTimeout() {
         return timeout;
     }
 
-    public HealthCheck withInterval(Long interval) {
+    public HealthCheck withInterval(Integer interval) {
         this.interval = interval;
         return this;
     }
 
-    public HealthCheck withTimeout(Long timeout) {
+    public HealthCheck withTimeout(Integer timeout) {
         this.timeout = timeout;
         return this;
     }
@@ -82,21 +85,36 @@ public class HealthCheck implements Serializable {
         return this;
     }
 
-    public Long getRetries() {
+    public Integer getRetries() {
         return retries;
     }
 
-    public HealthCheck withRetries(Long retries) {
+    public HealthCheck withRetries(Integer retries) {
         this.retries = retries;
         return this;
     }
 
-    public Long getStartPeriod() {
+    public Integer getStartPeriod() {
         return startPeriod;
     }
 
-    public HealthCheck withStartPeriod(Long startPeriod) {
+    public HealthCheck withStartPeriod(Integer startPeriod) {
         this.startPeriod = startPeriod;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return EqualsBuilder.reflectionEquals(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

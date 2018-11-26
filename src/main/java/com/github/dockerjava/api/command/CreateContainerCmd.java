@@ -4,6 +4,7 @@ import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.ExposedPort;
+import com.github.dockerjava.api.model.HealthCheck;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Volume;
 
@@ -16,87 +17,6 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     @CheckForNull
     AuthConfig getAuthConfig();
 
-    @CheckForNull
-    List<String> getAliases();
-
-    @CheckForNull
-    String[] getCmd();
-
-    @CheckForNull
-    String getDomainName();
-
-    @CheckForNull
-    String[] getEntrypoint();
-
-    @CheckForNull
-    String[] getEnv();
-
-    @CheckForNull
-    ExposedPort[] getExposedPorts();
-
-    @CheckForNull
-    String getStopSignal();
-
-    @CheckForNull
-    public Integer getStopTimeout();
-
-    @CheckForNull
-    String getHostName();
-
-    @CheckForNull
-    String getImage();
-
-    @CheckForNull
-    String getIpv4Address();
-
-    @CheckForNull
-    String getIpv6Address();
-
-    @CheckForNull
-    Map<String, String> getLabels();
-
-    @CheckForNull
-    String getMacAddress();
-
-    @CheckForNull
-    String getName();
-
-    @CheckForNull
-    String[] getPortSpecs();
-
-    @CheckForNull
-    String getUser();
-
-    @CheckForNull
-    Volume[] getVolumes();
-
-    @CheckForNull
-    String getWorkingDir();
-
-    @CheckForNull
-    Boolean isAttachStderr();
-
-    @CheckForNull
-    Boolean isAttachStdin();
-
-    @CheckForNull
-    Boolean isAttachStdout();
-
-    @CheckForNull
-    Boolean isNetworkDisabled();
-
-    @CheckForNull
-    Boolean isStdInOnce();
-
-    @CheckForNull
-    Boolean isStdinOpen();
-
-    @CheckForNull
-    HostConfig getHostConfig();
-
-    @CheckForNull
-    Boolean isTty();
-
     /**
      * While using swarm classic, you can provide an optional auth config which will be used to pull images from a private registry,
      * if the swarm node does not already have the docker image.
@@ -106,12 +26,8 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
      */
     CreateContainerCmd withAuthConfig(AuthConfig authConfig);
 
-    /**
-     * Add network-scoped alias for the container
-     *
-     * @param aliases on ore more aliases
-     */
-    CreateContainerCmd withAliases(String... aliases);
+    @CheckForNull
+    List<String> getAliases();
 
     /**
      * Add network-scoped alias for the container
@@ -120,67 +36,167 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
      */
     CreateContainerCmd withAliases(List<String> aliases);
 
-    CreateContainerCmd withAttachStderr(Boolean attachStderr);
+    /**
+     * Add network-scoped alias for the container
+     *
+     * @param aliases on ore more aliases
+     */
+    CreateContainerCmd withAliases(String... aliases);
 
-    CreateContainerCmd withAttachStdin(Boolean attachStdin);
-
-    CreateContainerCmd withAttachStdout(Boolean attachStdout);
+    @CheckForNull
+    String[] getCmd();
 
     CreateContainerCmd withCmd(String... cmd);
 
     CreateContainerCmd withCmd(List<String> cmd);
 
+    @CheckForNull
+    HealthCheck getHealthcheck();
+
+    CreateContainerCmd withHealthcheck(HealthCheck healthCheck);
+
+    @CheckForNull
+    Boolean getArgsEscaped();
+
+    CreateContainerCmd withArgsEscaped(Boolean argsEscaped);
+
+    @CheckForNull
+    String getDomainName();
+
     CreateContainerCmd withDomainName(String domainName);
+
+    @CheckForNull
+    String[] getEntrypoint();
 
     CreateContainerCmd withEntrypoint(String... entrypoint);
 
     CreateContainerCmd withEntrypoint(List<String> entrypoint);
 
+    @CheckForNull
+    String[] getEnv();
+
     CreateContainerCmd withEnv(String... env);
 
     CreateContainerCmd withEnv(List<String> env);
 
-    CreateContainerCmd withExposedPorts(ExposedPort... exposedPorts);
-
-    CreateContainerCmd withStopSignal(String stopSignal);
-
-    CreateContainerCmd withStopTimeout(Integer stopTimeout);
+    @CheckForNull
+    ExposedPort[] getExposedPorts();
 
     CreateContainerCmd withExposedPorts(List<ExposedPort> exposedPorts);
 
+    CreateContainerCmd withExposedPorts(ExposedPort... exposedPorts);
+
+    @CheckForNull
+    String getStopSignal();
+
+    CreateContainerCmd withStopSignal(String stopSignal);
+
+    @CheckForNull
+    Integer getStopTimeout();
+
+    CreateContainerCmd withStopTimeout(Integer stopTimeout);
+
+    @CheckForNull
+    String getHostName();
+
     CreateContainerCmd withHostName(String hostName);
+
+    @CheckForNull
+    String getImage();
 
     CreateContainerCmd withImage(String image);
 
+    @CheckForNull
+    String getIpv4Address();
+
     CreateContainerCmd withIpv4Address(String ipv4Address);
+
+    @CheckForNull
+    String getIpv6Address();
 
     CreateContainerCmd withIpv6Address(String ipv6Address);
 
+    @CheckForNull
+    Map<String, String> getLabels();
+
     CreateContainerCmd withLabels(Map<String, String> labels);
+
+    @CheckForNull
+    String getMacAddress();
 
     CreateContainerCmd withMacAddress(String macAddress);
 
+    @CheckForNull
+    String getName();
+
     CreateContainerCmd withName(String name);
 
-    CreateContainerCmd withNetworkDisabled(Boolean disableNetwork);
+    @CheckForNull
+    String[] getPortSpecs();
 
     CreateContainerCmd withPortSpecs(String... portSpecs);
 
     CreateContainerCmd withPortSpecs(List<String> portSpecs);
 
-    CreateContainerCmd withStdInOnce(Boolean stdInOnce);
-
-    CreateContainerCmd withStdinOpen(Boolean stdinOpen);
-
-    CreateContainerCmd withTty(Boolean tty);
+    @CheckForNull
+    String getUser();
 
     CreateContainerCmd withUser(String user);
+
+    @CheckForNull
+    Volume[] getVolumes();
 
     CreateContainerCmd withVolumes(Volume... volumes);
 
     CreateContainerCmd withVolumes(List<Volume> volumes);
 
+    @CheckForNull
+    String getWorkingDir();
+
     CreateContainerCmd withWorkingDir(String workingDir);
+
+    @CheckForNull
+    Boolean isAttachStderr();
+
+    CreateContainerCmd withAttachStderr(Boolean attachStderr);
+
+    @CheckForNull
+    Boolean isAttachStdin();
+
+    CreateContainerCmd withAttachStdin(Boolean attachStdin);
+
+    @CheckForNull
+    Boolean isAttachStdout();
+
+    CreateContainerCmd withAttachStdout(Boolean attachStdout);
+
+    @CheckForNull
+    Boolean isNetworkDisabled();
+
+    CreateContainerCmd withNetworkDisabled(Boolean disableNetwork);
+
+    @CheckForNull
+    Boolean isStdInOnce();
+
+    CreateContainerCmd withStdInOnce(Boolean stdInOnce);
+
+    @CheckForNull
+    Boolean isStdinOpen();
+
+    CreateContainerCmd withStdinOpen(Boolean stdinOpen);
+
+    @CheckForNull
+    Boolean isTty();
+
+    CreateContainerCmd withTty(Boolean tty);
+
+    @CheckForNull
+    List<String> getOnBuild();
+
+    CreateContainerCmd withOnBuild(List<String> onBuild);
+
+    @CheckForNull
+    HostConfig getHostConfig();
 
     CreateContainerCmd withHostConfig(HostConfig hostConfig);
 
