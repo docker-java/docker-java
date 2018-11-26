@@ -9,6 +9,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.github.dockerjava.core.util.CacheFromEncoder;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.RequestEntityProcessing;
 import org.slf4j.Logger;
@@ -75,10 +76,8 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
             webTarget = webTarget.queryParam("t", command.getTag());
         }
 
-        if (command.getCacheFrom() != null) {
-            for (String c: command.getCacheFrom()) {
-               webTarget = webTarget.queryParam("cachefrom", c);
-            }
+        if (command.getCacheFrom() != null && !command.getCacheFrom().isEmpty()) {
+            webTarget = webTarget.queryParam("cachefrom", CacheFromEncoder.jsonEncode(command.getCacheFrom()));
         }
 
         if (command.getRemote() != null) {

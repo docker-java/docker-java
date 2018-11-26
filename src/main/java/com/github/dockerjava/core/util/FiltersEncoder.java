@@ -13,20 +13,20 @@ import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
  * JSON Encoder for docker filters.
  *
  * @author Carlos Sanchez <carlos@apache.org>
- *
  */
 public class FiltersEncoder {
+
     private FiltersEncoder() {
     }
 
-    private static final ObjectMapper OBJECT_MAPPER = new JacksonJaxbJsonProvider().locateMapper(Map.class,
-            MediaType.APPLICATION_JSON_TYPE);
+    private static final ObjectMapper MAPPER = new JacksonJaxbJsonProvider().locateMapper(Map.class, MediaType.APPLICATION_JSON_TYPE);
 
-    public static String jsonEncode(Map<String, List<String>> filters) {
+    public static String jsonEncode(Map<String, List<String>> mapStringListString) {
         try {
-            return OBJECT_MAPPER.writeValueAsString(filters);
+            return MAPPER.writeValueAsString(mapStringListString);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }
+
 }

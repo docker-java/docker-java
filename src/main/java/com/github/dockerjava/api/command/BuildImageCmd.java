@@ -19,7 +19,7 @@ import com.github.dockerjava.core.RemoteApiVersion;
  * TODO: http://docs.docker.com/reference/builder/#dockerignore
  *
  * @see <a
- *      href="https://docs.docker.com/reference/api/docker_remote_api_v1.20/#build-image-from-a-dockerfile">build-image-from-a-dockerfile</a>
+ * href="https://docs.docker.com/reference/api/docker_remote_api_v1.20/#build-image-from-a-dockerfile">build-image-from-a-dockerfile</a>
  */
 public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildResponseItem> {
 
@@ -45,6 +45,7 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
 
     /**
      * Multple "t" tags.
+     *
      * @since {@link RemoteApiVersion#VERSION_1_21}
      */
     @CheckForNull
@@ -114,7 +115,7 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     Map<String, String> getBuildArgs();
 
     /**
-     *@since {@link RemoteApiVersion#VERSION_1_22}
+     * @since {@link RemoteApiVersion#VERSION_1_22}
      */
     @CheckForNull
     Long getShmsize();
@@ -143,7 +144,7 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
 
     /**
      * @deprecated since docker API version 1.21 there can be multiple tags
-     * specified so use {@link #withTags(Set<String>)}
+     * specified so use {@link BuildImageCmd#withTags(java.util.Set)}
      */
     @Deprecated
     BuildImageCmd withTag(String tag);
@@ -193,17 +194,17 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     BuildImageCmd withTarInputStream(@Nonnull InputStream tarInputStream);
 
     /**
-    *@since {@link RemoteApiVersion#VERSION_1_22}
-    */
+     * @since {@link RemoteApiVersion#VERSION_1_22}
+     */
     BuildImageCmd withShmsize(Long shmsize);
 
     /**
-    *@since {@link RemoteApiVersion#VERSION_1_23}
-    */
+     * @since {@link RemoteApiVersion#VERSION_1_23}
+     */
     BuildImageCmd withLabels(Map<String, String> labels);
 
     /**
-     *@since {@link RemoteApiVersion#VERSION_1_25}
+     * @since {@link RemoteApiVersion#VERSION_1_25}
      */
     BuildImageCmd withNetworkMode(String networkMode);
 

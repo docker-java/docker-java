@@ -1,8 +1,5 @@
 package com.github.dockerjava.core.exec;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.BuildImageCmd;
@@ -12,7 +9,10 @@ import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.InvocationBuilder;
 import com.github.dockerjava.core.MediaType;
 import com.github.dockerjava.core.WebTarget;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import static com.github.dockerjava.core.util.CacheFromEncoder.jsonEncode;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, BuildResponseItem> implements
@@ -59,7 +59,7 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
         }
 
         if (command.getCacheFrom() != null && !command.getCacheFrom().isEmpty()) {
-            webTarget = webTarget.queryParamsSet("cachefrom", command.getCacheFrom());
+            webTarget = webTarget.queryParam("cachefrom", jsonEncode(command.getCacheFrom()));
         }
 
         if (command.getRemote() != null) {
