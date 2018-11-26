@@ -318,7 +318,7 @@ public class CreateContainerCmdIT extends CmdIT {
                 .inspectContainerCmd(container.getId())
                 .exec();
         LOG.info("Container Inspect: {}", inspectContainerResponse.toString());
-        assertSame(42, inspectContainerResponse.getHostConfig().getMemorySwappiness());
+        assertSame(42L, inspectContainerResponse.getHostConfig().getMemorySwappiness());
     }
 
     @Test
