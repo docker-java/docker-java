@@ -38,6 +38,9 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     String getStopSignal();
 
     @CheckForNull
+    public Integer getStopTimeout();
+
+    @CheckForNull
     String getHostName();
 
     @CheckForNull
@@ -98,18 +101,21 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
      * While using swarm classic, you can provide an optional auth config which will be used to pull images from a private registry,
      * if the swarm node does not already have the docker image.
      * Note: This option does not have any effect in normal docker
+     *
      * @param authConfig The optional auth config
      */
     CreateContainerCmd withAuthConfig(AuthConfig authConfig);
 
     /**
      * Add network-scoped alias for the container
+     *
      * @param aliases on ore more aliases
      */
     CreateContainerCmd withAliases(String... aliases);
 
     /**
      * Add network-scoped alias for the container
+     *
      * @param aliases on ore more aliases
      */
     CreateContainerCmd withAliases(List<String> aliases);
@@ -137,6 +143,8 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     CreateContainerCmd withExposedPorts(ExposedPort... exposedPorts);
 
     CreateContainerCmd withStopSignal(String stopSignal);
+
+    CreateContainerCmd withStopTimeout(Integer stopTimeout);
 
     CreateContainerCmd withExposedPorts(List<ExposedPort> exposedPorts);
 
@@ -177,10 +185,8 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     CreateContainerCmd withHostConfig(HostConfig hostConfig);
 
     /**
-     * @throws NotFoundException
-     *             No such container
-     * @throws ConflictException
-     *             Named container already exists
+     * @throws NotFoundException No such container
+     * @throws ConflictException Named container already exists
      */
     @Override
     CreateContainerResponse exec() throws NotFoundException, ConflictException;

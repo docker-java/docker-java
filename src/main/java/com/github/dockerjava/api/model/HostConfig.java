@@ -87,7 +87,13 @@ public class HostConfig implements Serializable {
      * @since 1.19
      */
     @JsonProperty("CpuPeriod")
-    private Integer cpuPeriod;
+    private Long cpuPeriod;
+
+    @JsonProperty("CpuRealtimePeriod")
+    private Long cpuRealtimePeriod;
+
+    @JsonProperty("CpuRealtimeRuntime")
+    private Long cpuRealtimeRuntime;
 
     @JsonProperty("CpuShares")
     private Integer cpuShares;
@@ -96,7 +102,7 @@ public class HostConfig implements Serializable {
      * @since ~{@link RemoteApiVersion#VERSION_1_20}
      */
     @JsonProperty("CpuQuota")
-    private Integer cpuQuota;
+    private Long cpuQuota;
 
     @JsonProperty("CpusetCpus")
     private String cpusetCpus;
@@ -151,6 +157,12 @@ public class HostConfig implements Serializable {
      */
     @JsonProperty("KernelMemory")
     private Long kernelMemory;
+
+    @JsonProperty("NanoCPUs")
+    private Long nanoCPUs;
+
+    @JsonProperty("CpuPercent")
+    private Long cpuPercent;
 
     @JsonProperty("NetworkMode")
     private String networkMode;
@@ -273,8 +285,16 @@ public class HostConfig implements Serializable {
         return containerIDFile;
     }
 
-    public Integer getCpuPeriod() {
+    public Long getCpuPeriod() {
         return cpuPeriod;
+    }
+
+    public Long getCpuRealtimePeriod() {
+        return cpuRealtimePeriod;
+    }
+
+    public Long getCpuRealtimeRuntime() {
+        return cpuRealtimeRuntime;
     }
 
     public Integer getCpuShares() {
@@ -416,7 +436,7 @@ public class HostConfig implements Serializable {
      * @see #cpuQuota
      */
     @CheckForNull
-    public Integer getCpuQuota() {
+    public Long getCpuQuota() {
         return cpuQuota;
     }
 
@@ -426,6 +446,16 @@ public class HostConfig implements Serializable {
     @CheckForNull
     public Long getKernelMemory() {
         return kernelMemory;
+    }
+
+    @CheckForNull
+    public Long getNanoCPUs() {
+        return nanoCPUs;
+    }
+
+    @CheckForNull
+    public Long getCpuPercent() {
+        return cpuPercent;
     }
 
     /**
@@ -631,15 +661,25 @@ public class HostConfig implements Serializable {
     /**
      * @see #cpuPeriod
      */
-    public HostConfig withCpuPeriod(Integer cpuPeriod) {
+    public HostConfig withCpuPeriod(Long cpuPeriod) {
         this.cpuPeriod = cpuPeriod;
+        return this;
+    }
+
+    public HostConfig withCpuRealtimePeriod(Long cpuRealtimePeriod) {
+        this.cpuRealtimePeriod = cpuRealtimePeriod;
+        return this;
+    }
+
+    public HostConfig withCpuRealtimeRuntime(Long cpuRealtimeRuntime) {
+        this.cpuRealtimeRuntime = cpuRealtimeRuntime;
         return this;
     }
 
     /**
      * @see #cpuQuota
      */
-    public HostConfig withCpuQuota(Integer cpuQuota) {
+    public HostConfig withCpuQuota(Long cpuQuota) {
         this.cpuQuota = cpuQuota;
         return this;
     }
@@ -733,6 +773,16 @@ public class HostConfig implements Serializable {
      */
     public HostConfig withKernelMemory(Long kernelMemory) {
         this.kernelMemory = kernelMemory;
+        return this;
+    }
+
+    public HostConfig withNanoCPUs(Long nanoCPUs) {
+        this.nanoCPUs = nanoCPUs;
+        return this;
+    }
+
+    public HostConfig withCpuPercent(Long cpuPercent) {
+        this.cpuPercent = cpuPercent;
         return this;
     }
 

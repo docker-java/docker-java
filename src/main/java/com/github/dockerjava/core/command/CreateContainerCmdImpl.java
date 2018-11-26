@@ -99,6 +99,9 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @JsonProperty("StopSignal")
     private String stopSignal;
 
+    @JsonProperty("StopTimeout")
+    private Integer stopTimeout;
+
     @JsonProperty("HostConfig")
     private HostConfig hostConfig = new HostConfig();
 
@@ -213,11 +216,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     /**
      * @see #stopSignal
      */
-    @JsonIgnore
     @Override
     public String getStopSignal() {
         return stopSignal;
     }
+
+    @Override
+    public Integer getStopTimeout() { return stopTimeout; }
 
     @Override
     public String getHostName() {
@@ -408,6 +413,12 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public CreateContainerCmd withStopSignal(String stopSignal) {
         checkNotNull(stopSignal, "stopSignal wasn't specified.");
         this.stopSignal = stopSignal;
+        return this;
+    }
+
+    @Override
+    public CreateContainerCmd withStopTimeout(Integer stopTimeout) {
+        this.stopTimeout = stopTimeout;
         return this;
     }
 
