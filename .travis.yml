@@ -26,7 +26,7 @@ env:
 #    - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="17.09.0~ce-0~ubuntu-trusty"
 #    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="17.06.2~ce-0~ubuntu-trusty" DEPLOY=true COVERITY=true
     - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="18.06.1~ce~3-0~ubuntu"
-    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2377" DOCKER_VERSION="17.05.0~ce-0~ubuntu-trusty" SWARM_VERSION="1.2.8"
+    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2377" DOCKER_VERSION="18.06.1~ce~3-0~ubuntu" SWARM_VERSION="1.2.8"
     - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="17.05.0~ce-0~ubuntu-trusty" DEPLOY=true COVERITY=true
     - repo="main" DOCKER_HOST="tcp://127.0.0.1:2377" DOCKER_VERSION="17.05.0~ce-0~ubuntu-trusty" SWARM_VERSION="1.2.8"
     - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="17.05.0~ce-0~ubuntu-trusty"
