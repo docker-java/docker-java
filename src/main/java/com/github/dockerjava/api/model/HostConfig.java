@@ -29,12 +29,13 @@ public class HostConfig implements Serializable {
 
     private static final List<String> PREDEFINED_NETWORKS = Arrays.asList("bridge", "host", "none");
 
+    public static HostConfig newHostConfig() {
+        return new HostConfig();
+    }
+
     @JsonProperty("Binds")
     private Binds binds;
 
-    /**
-     * @since 1.19
-     */
     @JsonProperty("BlkioWeight")
     private Integer blkioWeight;
 
@@ -42,37 +43,40 @@ public class HostConfig implements Serializable {
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
      */
     @JsonProperty("BlkioWeightDevice")
-    private List<Object> blkioWeightDevice;
+    private List<BlkioWeightDevice> blkioWeightDevice;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
      */
     @JsonProperty("BlkioDeviceReadBps")
-    private List<Object> blkioDeviceReadBps;
-
-    /**
-     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
-     */
-    @JsonProperty("BlkioDeviceReadIOps")
-    private List<Object> blkioDeviceReadIOps;
+    private List<BlkioRateDevice> blkioDeviceReadBps;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
      */
     @JsonProperty("BlkioDeviceWriteBps")
-    private List<Object> blkioDeviceWriteBps;
+    private List<BlkioRateDevice> blkioDeviceWriteBps;
+
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
+     */
+    @JsonProperty("BlkioDeviceReadIOps")
+    private List<BlkioRateDevice> blkioDeviceReadIOps;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
      */
     @JsonProperty("BlkioDeviceWriteIOps")
-    private List<Object> blkioDeviceWriteIOps;
+    private List<BlkioRateDevice> blkioDeviceWriteIOps;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_20}
      */
     @JsonProperty("MemorySwappiness")
-    private Integer memorySwappiness;
+    private Long memorySwappiness;
+
+    @JsonProperty("NanoCPUs")
+    private Long nanoCPUs;
 
     @JsonProperty("CapAdd")
     private Capability[] capAdd;
@@ -83,11 +87,14 @@ public class HostConfig implements Serializable {
     @JsonProperty("ContainerIDFile")
     private String containerIDFile;
 
-    /**
-     * @since 1.19
-     */
     @JsonProperty("CpuPeriod")
-    private Integer cpuPeriod;
+    private Long cpuPeriod;
+
+    @JsonProperty("CpuRealtimePeriod")
+    private Long cpuRealtimePeriod;
+
+    @JsonProperty("CpuRealtimeRuntime")
+    private Long cpuRealtimeRuntime;
 
     @JsonProperty("CpuShares")
     private Integer cpuShares;
@@ -96,19 +103,19 @@ public class HostConfig implements Serializable {
      * @since ~{@link RemoteApiVersion#VERSION_1_20}
      */
     @JsonProperty("CpuQuota")
-    private Integer cpuQuota;
+    private Long cpuQuota;
 
     @JsonProperty("CpusetCpus")
     private String cpusetCpus;
 
-    /**
-     * @since 1.19
-     */
     @JsonProperty("CpusetMems")
     private String cpusetMems;
 
     @JsonProperty("Devices")
     private Device[] devices;
+
+    @JsonProperty("DeviceCgroupRules")
+    private List<String> deviceCgroupRules;
 
     /**
      * @since {@link RemoteApiVersion#VERSION_1_25}
@@ -119,11 +126,23 @@ public class HostConfig implements Serializable {
     @JsonProperty("Dns")
     private String[] dns;
 
+    @JsonProperty("DnsOptions")
+    private List<String> dnsOptions;
+
     @JsonProperty("DnsSearch")
     private String[] dnsSearch;
 
     @JsonProperty("ExtraHosts")
     private String[] extraHosts;
+
+    @JsonProperty("GroupAdd")
+    private List<String> groupAdd;
+
+    @JsonProperty("IpcMode")
+    private String ipcMode;
+
+    @JsonProperty("Cgroup")
+    private String cgroup;
 
     @JsonProperty("Links")
     private Links links;
@@ -158,6 +177,9 @@ public class HostConfig implements Serializable {
     @JsonProperty("OomKillDisable")
     private Boolean oomKillDisable;
 
+    @JsonProperty("Init")
+    private Boolean init;
+
     /**
      * @since {@link RemoteApiVersion#VERSION_1_25}
      */
@@ -168,7 +190,7 @@ public class HostConfig implements Serializable {
      * @since {@link RemoteApiVersion#VERSION_1_22}
      */
     @JsonProperty("OomScoreAdj")
-    private Boolean oomScoreAdj;
+    private Integer oomScoreAdj;
 
     @JsonProperty("PortBindings")
     private Ports portBindings;
@@ -185,26 +207,41 @@ public class HostConfig implements Serializable {
     @JsonProperty("RestartPolicy")
     private RestartPolicy restartPolicy;
 
-    /**
-     * @since {@link RemoteApiVersion#VERSION_1_24}
-     */
-    @JsonProperty("StorageOpt")
-    private Map<String, String> storageOpt;
-
     @JsonProperty("Ulimits")
     private Ulimit[] ulimits;
+
+    @JsonProperty("CpuCount")
+    private Long cpuCount;
+
+    @JsonProperty("CpuPercent")
+    private Long cpuPercent;
+
+    @JsonProperty("IOMaximumIOps")
+    private Long ioMaximumIOps;
+
+    @JsonProperty("IOMaximumBandwidth")
+    private Long ioMaximumBandwidth;
 
     @JsonProperty("VolumesFrom")
     private VolumesFrom[] volumesFrom;
 
+    @JsonProperty("Mounts")
+    private List<Mount> mounts;
+
     @JsonProperty("PidMode")
     private String pidMode;
+
+    @JsonProperty("Isolation")
+    private Isolation isolation;
 
     /**
      * @since {@link RemoteApiVersion#VERSION_1_20}
      */
     @JsonProperty("SecurityOpt")
     private List<String> securityOpts;
+
+    @JsonProperty("StorageOpt")
+    private Map<String, String> storageOpt;
 
     /**
      * @since {@link RemoteApiVersion#VERSION_1_20}
@@ -242,15 +279,17 @@ public class HostConfig implements Serializable {
     @JsonProperty("Tmpfs")
     private Map<String, String> tmpFs;
 
-    /**
-     * @since ~{@link RemoteApiVersion#VERSION_1_22}
-     */
-    @JsonProperty("Isolation")
-    private String isolation;
+    @JsonProperty("UTSMode")
+    private String utSMode;
 
-    public static HostConfig newHostConfig() {
-        return new HostConfig();
-    }
+    @JsonProperty("UsernsMode")
+    private String usernsMode;
+
+    @JsonProperty("Sysctls")
+    private Map<String, String> sysctls;
+
+    @JsonProperty("ConsoleSize")
+    private List<Integer> consoleSize;
 
     @JsonIgnore
     public Bind[] getBinds() {
@@ -273,9 +312,10 @@ public class HostConfig implements Serializable {
         return containerIDFile;
     }
 
-    public Integer getCpuPeriod() {
+    public Long getCpuPeriod() {
         return cpuPeriod;
     }
+
 
     public Integer getCpuShares() {
         return cpuShares;
@@ -357,18 +397,10 @@ public class HostConfig implements Serializable {
     }
 
     /**
-     * @see #isolation
-     */
-    @CheckForNull
-    public String getIsolation() {
-        return isolation;
-    }
-
-    /**
      * @see #blkioDeviceReadBps
      */
     @CheckForNull
-    public List<Object> getBlkioDeviceReadBps() {
+    public List<BlkioRateDevice> getBlkioDeviceReadBps() {
         return blkioDeviceReadBps;
     }
 
@@ -376,7 +408,7 @@ public class HostConfig implements Serializable {
      * @see #blkioDeviceReadIOps
      */
     @CheckForNull
-    public List<Object> getBlkioDeviceReadIOps() {
+    public List<BlkioRateDevice> getBlkioDeviceReadIOps() {
         return blkioDeviceReadIOps;
     }
 
@@ -384,7 +416,7 @@ public class HostConfig implements Serializable {
      * @see #blkioDeviceWriteBps
      */
     @CheckForNull
-    public List<Object> getBlkioDeviceWriteBps() {
+    public List<BlkioRateDevice> getBlkioDeviceWriteBps() {
         return blkioDeviceWriteBps;
     }
 
@@ -392,7 +424,7 @@ public class HostConfig implements Serializable {
      * @see #blkioDeviceWriteIOps
      */
     @CheckForNull
-    public List<Object> getBlkioDeviceWriteIOps() {
+    public List<BlkioRateDevice> getBlkioDeviceWriteIOps() {
         return blkioDeviceWriteIOps;
     }
 
@@ -400,7 +432,7 @@ public class HostConfig implements Serializable {
      * @see #blkioWeightDevice
      */
     @CheckForNull
-    public List<Object> getBlkioWeightDevice() {
+    public List<BlkioWeightDevice> getBlkioWeightDevice() {
         return blkioWeightDevice;
     }
 
@@ -408,7 +440,7 @@ public class HostConfig implements Serializable {
      * @see #oomScoreAdj
      */
     @CheckForNull
-    public Boolean getOomScoreAdj() {
+    public Integer getOomScoreAdj() {
         return oomScoreAdj;
     }
 
@@ -416,7 +448,7 @@ public class HostConfig implements Serializable {
      * @see #cpuQuota
      */
     @CheckForNull
-    public Integer getCpuQuota() {
+    public Long getCpuQuota() {
         return cpuQuota;
     }
 
@@ -440,7 +472,7 @@ public class HostConfig implements Serializable {
      * @see #memorySwappiness
      */
     @CheckForNull
-    public Integer getMemorySwappiness() {
+    public Long getMemorySwappiness() {
         return memorySwappiness;
     }
 
@@ -547,10 +579,15 @@ public class HostConfig implements Serializable {
         return this;
     }
 
+    public HostConfig withBinds(List<Bind> binds) {
+        checkNotNull(binds, "binds was not specified");
+        return withBinds(binds.toArray(new Bind[binds.size()]));
+    }
+
     /**
      * @see #blkioDeviceReadBps
      */
-    public HostConfig withBlkioDeviceReadBps(List<Object> blkioDeviceReadBps) {
+    public HostConfig withBlkioDeviceReadBps(List<BlkioRateDevice> blkioDeviceReadBps) {
         this.blkioDeviceReadBps = blkioDeviceReadBps;
         return this;
     }
@@ -558,7 +595,7 @@ public class HostConfig implements Serializable {
     /**
      * @see #blkioDeviceReadIOps
      */
-    public HostConfig withBlkioDeviceReadIOps(List<Object> blkioDeviceReadIOps) {
+    public HostConfig withBlkioDeviceReadIOps(List<BlkioRateDevice> blkioDeviceReadIOps) {
         this.blkioDeviceReadIOps = blkioDeviceReadIOps;
         return this;
     }
@@ -566,7 +603,7 @@ public class HostConfig implements Serializable {
     /**
      * @see #blkioDeviceWriteBps
      */
-    public HostConfig withBlkioDeviceWriteBps(List<Object> blkioDeviceWriteBps) {
+    public HostConfig withBlkioDeviceWriteBps(List<BlkioRateDevice> blkioDeviceWriteBps) {
         this.blkioDeviceWriteBps = blkioDeviceWriteBps;
         return this;
     }
@@ -574,7 +611,7 @@ public class HostConfig implements Serializable {
     /**
      * @see #blkioDeviceWriteIOps
      */
-    public HostConfig withBlkioDeviceWriteIOps(List<Object> blkioDeviceWriteIOps) {
+    public HostConfig withBlkioDeviceWriteIOps(List<BlkioRateDevice> blkioDeviceWriteIOps) {
         this.blkioDeviceWriteIOps = blkioDeviceWriteIOps;
         return this;
     }
@@ -590,14 +627,13 @@ public class HostConfig implements Serializable {
     /**
      * @see #blkioWeightDevice
      */
-    public HostConfig withBlkioWeightDevice(List<Object> blkioWeightDevice) {
+    public HostConfig withBlkioWeightDevice(List<BlkioWeightDevice> blkioWeightDevice) {
         this.blkioWeightDevice = blkioWeightDevice;
         return this;
     }
 
     /**
-     * Add linux <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">kernel capability</a> to the container. For example:
-     * adding {@link Capability#MKNOD} allows the container to create special files using the 'mknod' command.
+     * @see #capAdd
      */
     public HostConfig withCapAdd(Capability... capAdd) {
         this.capAdd = capAdd;
@@ -631,7 +667,7 @@ public class HostConfig implements Serializable {
     /**
      * @see #cpuPeriod
      */
-    public HostConfig withCpuPeriod(Integer cpuPeriod) {
+    public HostConfig withCpuPeriod(Long cpuPeriod) {
         this.cpuPeriod = cpuPeriod;
         return this;
     }
@@ -639,7 +675,7 @@ public class HostConfig implements Serializable {
     /**
      * @see #cpuQuota
      */
-    public HostConfig withCpuQuota(Integer cpuQuota) {
+    public HostConfig withCpuQuota(Long cpuQuota) {
         this.cpuQuota = cpuQuota;
         return this;
     }
@@ -668,17 +704,17 @@ public class HostConfig implements Serializable {
         return this;
     }
 
-    public HostConfig withDevices(List<Device> devices) {
-        checkNotNull(devices, "devices was not specified");
-        return withDevices(devices.toArray(new Device[devices.size()]));
-    }
-
     /**
      * @see #devices
      */
     public HostConfig withDevices(Device... devices) {
         this.devices = devices;
         return this;
+    }
+
+    public HostConfig withDevices(List<Device> devices) {
+        checkNotNull(devices, "devices was not specified");
+        return withDevices(devices.toArray(new Device[0]));
     }
 
     /**
@@ -699,7 +735,7 @@ public class HostConfig implements Serializable {
 
     public HostConfig withDns(List<String> dns) {
         checkNotNull(dns, "dns was not specified");
-        return withDns(dns.toArray(new String[dns.size()]));
+        return withDns(dns.toArray(new String[0]));
     }
 
     /**
@@ -723,11 +759,6 @@ public class HostConfig implements Serializable {
         return this;
     }
 
-    public HostConfig withExtraHosts(List<String> extraHosts) {
-        checkNotNull(extraHosts, "extraHosts was not specified");
-        return withExtraHosts(extraHosts.toArray(new String[extraHosts.size()]));
-    }
-
     /**
      * @see #kernelMemory
      */
@@ -744,17 +775,17 @@ public class HostConfig implements Serializable {
         return this;
     }
 
-    public HostConfig withLinks(List<Link> links) {
-        checkNotNull(links, "links was not specified");
-        setLinks(links.toArray(new Link[links.size()]));
-        return this;
-    }
-
     public HostConfig withLinks(Link... links) {
         checkNotNull(links, "links was not specified");
         setLinks(links);
         return this;
     }
+
+    public HostConfig withLinks(List<Link> links) {
+        checkNotNull(links, "links was not specified");
+        return withLinks(links.toArray(new Link[0]));
+    }
+
 
     /**
      * @see #logConfig
@@ -770,11 +801,6 @@ public class HostConfig implements Serializable {
     public HostConfig withLxcConf(LxcConf[] lxcConf) {
         this.lxcConf = lxcConf;
         return this;
-    }
-
-    public HostConfig withLxcConf(List<LxcConf> lxcConf) {
-        checkNotNull(lxcConf, "lxcConf was not specified");
-        return withLxcConf(lxcConf.toArray(new LxcConf[0]));
     }
 
     /**
@@ -804,7 +830,7 @@ public class HostConfig implements Serializable {
     /**
      * @see #memorySwappiness
      */
-    public HostConfig withMemorySwappiness(Integer memorySwappiness) {
+    public HostConfig withMemorySwappiness(Long memorySwappiness) {
         this.memorySwappiness = memorySwappiness;
         return this;
     }
@@ -818,8 +844,6 @@ public class HostConfig implements Serializable {
      * <li>'host': use the host network stack inside the container. Note: the host mode gives the container full access to local system
      * services such as D-bus and is therefore considered insecure.</li>
      * </ul>
-     *
-     * @see #networkMode
      */
     public HostConfig withNetworkMode(String networkMode) {
         this.networkMode = networkMode;
@@ -828,6 +852,7 @@ public class HostConfig implements Serializable {
 
     /**
      * @see #oomKillDisable
+     * @since 1.19
      */
     public HostConfig withOomKillDisable(Boolean oomKillDisable) {
         this.oomKillDisable = oomKillDisable;
@@ -845,12 +870,14 @@ public class HostConfig implements Serializable {
     /**
      * @see #oomScoreAdj
      */
-    public HostConfig withOomScoreAdj(Boolean oomScoreAdj) {
+    public HostConfig withOomScoreAdj(Integer oomScoreAdj) {
         this.oomScoreAdj = oomScoreAdj;
         return this;
     }
 
     /**
+     * Set the PID (Process) Namespace mode for the container, 'host': use the host's PID namespace inside the container
+     *
      * @see #pidMode
      */
     public HostConfig withPidMode(String pidMode) {
@@ -859,24 +886,23 @@ public class HostConfig implements Serializable {
     }
 
     /**
-     * @see #portBindings
+     * Add one or more {@link PortBinding}s. This corresponds to the <code>--publish</code> (<code>-p</code>) option of the
+     * <code>docker run</code> CLI command.
      */
+    public HostConfig withPortBindings(Ports portBindings) {
+        this.portBindings = portBindings;
+        return this;
+    }
+
     public HostConfig withPortBindings(PortBinding... portBindings) {
         checkNotNull(portBindings, "portBindings was not specified");
-        return withPortBindings(new Ports(portBindings));
+        withPortBindings(new Ports(portBindings));
+        return this;
     }
 
     public HostConfig withPortBindings(List<PortBinding> portBindings) {
         checkNotNull(portBindings, "portBindings was not specified");
         return withPortBindings(portBindings.toArray(new PortBinding[0]));
-    }
-
-    /**
-     * @see #portBindings
-     */
-    public HostConfig withPortBindings(Ports portBindings) {
-        this.portBindings = portBindings;
-        return this;
     }
 
     /**
@@ -928,25 +954,10 @@ public class HostConfig implements Serializable {
     }
 
     /**
-     * @see #restartPolicy
+     * Set custom {@link RestartPolicy} for the container. Defaults to {@link RestartPolicy#noRestart()}
      */
     public HostConfig withRestartPolicy(RestartPolicy restartPolicy) {
         this.restartPolicy = restartPolicy;
-        return this;
-    }
-
-    /**
-     * @see #storageOpt
-     */
-    public Map<String, String> getStorageOpt() {
-        return storageOpt;
-    }
-
-    /**
-     * @see #storageOpt
-     */
-    public HostConfig withStorageOpt(Map<String, String> storageOpt) {
-        this.storageOpt = storageOpt;
         return this;
     }
 
@@ -976,7 +987,7 @@ public class HostConfig implements Serializable {
 
     public HostConfig withUlimits(List<Ulimit> ulimits) {
         checkNotNull(ulimits, "no ulimits was specified");
-        return withUlimits(ulimits.toArray(new Ulimit[ulimits.size()]));
+        return withUlimits(ulimits.toArray(new Ulimit[0]));
     }
 
     /**
@@ -997,9 +1008,8 @@ public class HostConfig implements Serializable {
 
     public HostConfig withVolumesFrom(List<VolumesFrom> volumesFrom) {
         checkNotNull(volumesFrom, "volumesFrom was not specified");
-        return withVolumesFrom(volumesFrom.toArray(new VolumesFrom[volumesFrom.size()]));
+        return withVolumesFrom(volumesFrom.toArray(new VolumesFrom[0]));
     }
-
 
     /**
      * @see #pidsLimit
@@ -1022,11 +1032,203 @@ public class HostConfig implements Serializable {
         return this;
     }
 
-    /**
-     * @see #isolation
-     */
-    public HostConfig withIsolation(String isolation) {
+    @CheckForNull
+    public List<String> getDeviceCgroupRules() {
+        return deviceCgroupRules;
+    }
+
+    public HostConfig withDeviceCgroupRules(List<String> deviceCgroupRules) {
+        this.deviceCgroupRules = deviceCgroupRules;
+        return this;
+    }
+
+    @CheckForNull
+    public Long getNanoCPUs() {
+        return nanoCPUs;
+    }
+
+    public HostConfig withNanoCPUs(Long nanoCPUs) {
+        this.nanoCPUs = nanoCPUs;
+        return this;
+    }
+
+    @CheckForNull
+    public Boolean getInit() {
+        return init;
+    }
+
+    public HostConfig withInit(Boolean init) {
+        this.init = init;
+        return this;
+    }
+
+    @CheckForNull
+    public Long getCpuCount() {
+        return cpuCount;
+    }
+
+    public HostConfig withCpuCount(Long cpuCount) {
+        this.cpuCount = cpuCount;
+        return this;
+    }
+
+    @CheckForNull
+    public Long getCpuPercent() {
+        return cpuPercent;
+    }
+
+    public HostConfig withCpuPercent(Long cpuPercent) {
+        this.cpuPercent = cpuPercent;
+        return this;
+    }
+
+    @CheckForNull
+    public Long getIoMaximumIOps() {
+        return ioMaximumIOps;
+    }
+
+    public HostConfig withIoMaximumIOps(Long ioMaximumIOps) {
+        this.ioMaximumIOps = ioMaximumIOps;
+        return this;
+    }
+
+    @CheckForNull
+    public Long getIoMaximumBandwidth() {
+        return ioMaximumBandwidth;
+    }
+
+    public HostConfig withIoMaximumBandwidth(Long ioMaximumBandwidth) {
+        this.ioMaximumBandwidth = ioMaximumBandwidth;
+        return this;
+    }
+
+    @CheckForNull
+    public List<Mount> getMounts() {
+        return mounts;
+    }
+
+    public HostConfig withMounts(List<Mount> mounts) {
+        this.mounts = mounts;
+        return this;
+    }
+
+    @CheckForNull
+    public List<String> getDnsOptions() {
+        return dnsOptions;
+    }
+
+    public HostConfig withDnsOptions(List<String> dnsOptions) {
+        this.dnsOptions = dnsOptions;
+        return this;
+    }
+
+    @CheckForNull
+    public List<String> getGroupAdd() {
+        return groupAdd;
+    }
+
+    public HostConfig withGroupAdd(List<String> groupAdd) {
+        this.groupAdd = groupAdd;
+        return this;
+    }
+
+    @CheckForNull
+    public String getIpcMode() {
+        return ipcMode;
+    }
+
+    public HostConfig withIpcMode(String ipcMode) {
+        this.ipcMode = ipcMode;
+        return this;
+    }
+
+    @CheckForNull
+    public String getCgroup() {
+        return cgroup;
+    }
+
+    public HostConfig withCgroup(String cgroup) {
+        this.cgroup = cgroup;
+        return this;
+    }
+
+    @CheckForNull
+    public Map<String, String> getStorageOpt() {
+        return storageOpt;
+    }
+
+    public HostConfig withStorageOpt(Map<String, String> storageOpt) {
+        this.storageOpt = storageOpt;
+        return this;
+    }
+
+    @CheckForNull
+    public String getUtSMode() {
+        return utSMode;
+    }
+
+    public HostConfig withUtSMode(String utSMode) {
+        this.utSMode = utSMode;
+        return this;
+    }
+
+    @CheckForNull
+    public String getUsernsMode() {
+        return usernsMode;
+    }
+
+    public HostConfig withUsernsMode(String usernsMode) {
+        this.usernsMode = usernsMode;
+        return this;
+    }
+
+    @CheckForNull
+    public Map<String, String> getSysctls() {
+        return sysctls;
+    }
+
+    public HostConfig withSysctls(Map<String, String> sysctls) {
+        this.sysctls = sysctls;
+        return this;
+    }
+
+    @CheckForNull
+    public List<Integer> getConsoleSize() {
+        return consoleSize;
+    }
+
+    public HostConfig withConsoleSize(List<Integer> consoleSize) {
+        this.consoleSize = consoleSize;
+        return this;
+    }
+
+    @CheckForNull
+    public Isolation getIsolation() {
+        return isolation;
+    }
+
+    public HostConfig withIsolation(Isolation isolation) {
         this.isolation = isolation;
+        return this;
+    }
+
+    @CheckForNull
+    public Long getCpuRealtimePeriod() {
+        return cpuRealtimePeriod;
+    }
+
+    public HostConfig withCpuRealtimePeriod(Long cpuRealtimePeriod) {
+        this.cpuRealtimePeriod = cpuRealtimePeriod;
+        return this;
+    }
+
+    @CheckForNull
+    public Long getCpuRealtimeRuntime() {
+        return cpuRealtimeRuntime;
+    }
+
+    public HostConfig withCpuRealtimeRuntime(Long cpuRealtimeRuntime) {
+        this.cpuRealtimeRuntime = cpuRealtimeRuntime;
         return this;
     }
 

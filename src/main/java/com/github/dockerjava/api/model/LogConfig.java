@@ -1,28 +1,19 @@
 package com.github.dockerjava.api.model;
 
-import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+
+import javax.annotation.CheckForNull;
 import java.io.Serializable;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.ObjectCodec;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 /**
  * Log driver to use for a created/running container. The available types are:
- *
+ * <p>
  * json-file (default) syslog journald none
- *
+ * <p>
  * If a driver is specified that is NOT supported,docker will default to null. If configs are supplied that are not supported by the type
  * docker will ignore them. In most cases setting the config option to null will suffice. Consult the docker remote API for a more detailed
  * and up-to-date explanation of the available types and their options.
@@ -68,12 +59,11 @@ public class LogConfig implements Serializable {
         return this;
     }
 
-    @JsonDeserialize(using = LoggingType.Deserializer.class)
-    @JsonSerialize(using = LoggingType.Serializer.class)
     public enum LoggingType {
-        DEFAULT("json-file"),
-        JSON_FILE("json-file"),
         NONE("none"),
+        DEFAULT("json-file"),
+        ETWLOGS("etwlogs"),
+        JSON_FILE("json-file"),
         SYSLOG("syslog"),
         JOURNALD("journald"),
         GELF("gelf"),
@@ -89,34 +79,25 @@ public class LogConfig implements Serializable {
             this.type = type;
         }
 
+        @JsonValue
         public String getType() {
             return type;
         }
 
-        public static final class Serializer extends JsonSerializer<LoggingType> {
-            @Override
-            public void serialize(LoggingType value, JsonGenerator jgen, SerializerProvider provider)
-                    throws IOException, JsonProcessingException {
-                jgen.writeString(value.getType());
+        @JsonCreator
+        @CheckForNull
+        public static LoggingType fromValue(String text) {
+            for (LoggingType b : LoggingType.values()) {
+                if (String.valueOf(b.type).equals(text)) {
+                    return b;
+                }
             }
+            return null;
         }
 
-        public static final class Deserializer extends JsonDeserializer<LoggingType> {
-            @Override
-            public LoggingType deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-                    throws IOException, JsonProcessingException {
-
-                ObjectCodec oc = jsonParser.getCodec();
-                JsonNode node = oc.readTree(jsonParser);
-
-                for (LoggingType loggingType : values()) {
-                    if (loggingType.getType().equals(node.asText())) {
-                        return loggingType;
-                    }
-                }
-
-                throw new IllegalArgumentException("No enum constant " + LoggingType.class + "." + node.asText());
-            }
+        @Override
+        public String toString() {
+            return String.valueOf(type);
         }
     }
 }

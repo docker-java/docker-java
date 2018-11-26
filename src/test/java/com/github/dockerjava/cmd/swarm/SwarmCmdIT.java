@@ -7,7 +7,6 @@ import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotAcceptableException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.ExposedPort;
-import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.cmd.CmdIT;
@@ -20,7 +19,6 @@ import com.github.dockerjava.junit.category.SwarmModeIntegration;
 import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.experimental.categories.Category;
 
 import static com.github.dockerjava.api.model.HostConfig.newHostConfig;
@@ -105,14 +103,14 @@ public abstract class SwarmCmdIT extends CmdIT {
         CreateContainerResponse response = dockerRule.getClient()
                 .createContainerCmd(DOCKER_IN_DOCKER_IMAGE_REPOSITORY + ":" + DOCKER_IN_DOCKER_IMAGE_TAG)
                 .withHostConfig(newHostConfig()
-                        .withPrivileged(true)
                         .withNetworkMode(NETWORK_NAME)
                         .withPortBindings(new PortBinding(
                                 Ports.Binding.bindIpAndPort("127.0.0.1", port),
-                                ExposedPort.tcp(2375)
-                        )))
+                                ExposedPort.tcp(2375)))
+                        .withPrivileged(true))
                 .withName(name)
                 .withAliases(name)
+
                 .exec();
 
         dockerRule.getClient().startContainerCmd(response.getId()).exec();

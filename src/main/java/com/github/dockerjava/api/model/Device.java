@@ -127,8 +127,10 @@ public class Device implements Serializable {
     public boolean equals(Object obj) {
         if (obj instanceof Device) {
             Device other = (Device) obj;
-            return new EqualsBuilder().append(cGroupPermissions, other.getcGroupPermissions())
-                    .append(pathInContainer, other.getPathInContainer()).append(pathOnHost, other.getPathOnHost())
+            return new EqualsBuilder()
+                    .append(cGroupPermissions, other.getcGroupPermissions())
+                    .append(pathInContainer, other.getPathInContainer())
+                    .append(pathOnHost, other.getPathOnHost())
                     .isEquals();
         } else {
             return super.equals(obj);
@@ -137,7 +139,11 @@ public class Device implements Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(cGroupPermissions).append(pathInContainer).append(pathOnHost).toHashCode();
+        return new HashCodeBuilder()
+                .append(cGroupPermissions)
+                .append(pathInContainer)
+                .append(pathOnHost)
+                .toHashCode();
     }
 
 }

@@ -18,6 +18,7 @@ package com.github.dockerjava.api.command;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.model.ContainerNetwork;
+import com.github.dockerjava.api.model.Isolation;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.junit.Test;
@@ -161,7 +162,7 @@ public class InspectContainerResponseTest {
         )));
 
         assertThat(response.getHostConfig(), notNullValue());
-        assertThat(response.getHostConfig().getIsolation(), is("hyperv"));
+        assertThat(response.getHostConfig().getIsolation(), is(Isolation.HYPERV));
 
         assertThat(response.getImageId(), is("sha256:1381511ec0122f197b6abff5bc0692bef19943ddafd6680eff41197afa3a6dda"));
         assertThat(response.getLogPath(), is(

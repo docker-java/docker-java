@@ -25,12 +25,10 @@ public class Ulimit implements Serializable {
     private Integer hard;
 
     public Ulimit() {
-
     }
 
     public Ulimit(String name, int soft, int hard) {
         checkNotNull(name, "Name is null");
-
         this.name = name;
         this.soft = soft;
         this.hard = hard;

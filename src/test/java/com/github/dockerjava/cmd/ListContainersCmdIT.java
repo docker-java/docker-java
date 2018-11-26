@@ -4,7 +4,6 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Container;
-import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.core.command.WaitContainerResultCallback;
@@ -22,6 +21,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static ch.lambdaj.Lambda.filter;
+import static com.github.dockerjava.api.model.HostConfig.newHostConfig;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -258,9 +258,8 @@ public class ListContainersCmdIT extends CmdIT {
 
         id = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withLabels(testLabel)
-                .withHostConfig(HostConfig.newHostConfig()
-                        .withBinds(new Bind("TestFilterVolume", new Volume("/test")))
-                )
+                .withHostConfig(newHostConfig()
+                        .withBinds(new Bind("TestFilterVolume", new Volume("/test"))))
                 .exec()
                 .getId();
 
@@ -288,9 +287,8 @@ public class ListContainersCmdIT extends CmdIT {
 
         id = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withLabels(testLabel)
-                .withHostConfig(HostConfig.newHostConfig()
-                        .withNetworkMode("TestFilterNetwork")
-                )
+                .withHostConfig(newHostConfig()
+                        .withNetworkMode("TestFilterNetwork"))
                 .exec()
                 .getId();
 
