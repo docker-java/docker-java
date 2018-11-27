@@ -156,7 +156,7 @@ public class DockerConfigFileTest {
     }
 
     private DockerConfigFile runTest(String testFileName) throws IOException {
-        return DockerConfigFile.loadConfig(new File(FILESROOT, testFileName));
+        return DockerConfigFile.loadConfig(new File(FILESROOT, testFileName).getAbsolutePath());
     }
 
 }
