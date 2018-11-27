@@ -50,7 +50,7 @@ public class DockerConfigFile {
     }
 
     @CheckForNull
-    public AuthConfig resolveAuthConfig(@Nonnull String hostname) {
+    public AuthConfig resolveAuthConfig(@CheckForNull String hostname) {
         if (StringUtils.isEmpty(hostname) || AuthConfig.DEFAULT_SERVER_ADDRESS.equals(hostname)) {
             return auths.get(AuthConfig.DEFAULT_SERVER_ADDRESS);
         }
@@ -124,10 +124,8 @@ public class DockerConfigFile {
             return new DockerConfigFile();
         }
 
-        DockerConfigFile dockerConfig;
-
         //parse new docker config file format
-        dockerConfig = loadCurrentConfig(dockerConfigPath);
+        DockerConfigFile dockerConfig = loadCurrentConfig(dockerConfigPath);
 
         //parse old auth config file format
         if (dockerConfig == null) {
