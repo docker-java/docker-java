@@ -12,6 +12,8 @@ import com.github.dockerjava.core.WebTarget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.CheckForNull;
+
 import static com.github.dockerjava.core.util.CacheFromEncoder.jsonEncode;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
@@ -31,8 +33,9 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
         return request;
     }
 
-    private static AuthConfigurations firstNonNull(final AuthConfigurations fromCommand,
-            final AuthConfigurations fromConfig) {
+    @CheckForNull
+    private static AuthConfigurations firstNonNull(@CheckForNull final AuthConfigurations fromCommand,
+            @CheckForNull final AuthConfigurations fromConfig) {
         if (fromCommand != null) {
             return fromCommand;
         }

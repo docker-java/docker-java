@@ -30,8 +30,9 @@ public class PullImageCmdExec extends AbstrAsyncDockerCmdExec<PullImageCmd, Pull
         }
 
         LOGGER.trace("POST: {}", webResource);
-        resourceWithOptionalAuthConfig(command.getAuthConfig(), webResource.request()).accept(MediaType.APPLICATION_OCTET_STREAM).post(
-                null, new TypeReference<PullResponseItem>() {
+        resourceWithOptionalAuthConfig(command.getAuthConfig(), webResource.request())
+                .accept(MediaType.APPLICATION_OCTET_STREAM)
+                .post(null, new TypeReference<PullResponseItem>() {
                 }, resultCallback);
 
         return null;

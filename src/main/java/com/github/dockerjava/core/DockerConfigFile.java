@@ -10,6 +10,8 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -27,7 +29,7 @@ public class DockerConfigFile {
     private static final TypeReference<Map<String, AuthConfig>> CONFIG_MAP_TYPE = new TypeReference<Map<String, AuthConfig>>() {
     };
 
-    @JsonProperty()
+    @JsonProperty
     private final Map<String, AuthConfig> auths;
 
     public DockerConfigFile() {
@@ -38,6 +40,7 @@ public class DockerConfigFile {
         auths = authConfigMap;
     }
 
+    @Nonnull
     public Map<String, AuthConfig> getAuths() {
         return auths;
     }
@@ -46,7 +49,8 @@ public class DockerConfigFile {
         auths.put(config.getRegistryAddress(), config);
     }
 
-    public AuthConfig resolveAuthConfig(String hostname) {
+    @CheckForNull
+    public AuthConfig resolveAuthConfig(@Nonnull String hostname) {
         if (StringUtils.isEmpty(hostname) || AuthConfig.DEFAULT_SERVER_ADDRESS.equals(hostname)) {
             return auths.get(AuthConfig.DEFAULT_SERVER_ADDRESS);
         }
@@ -70,6 +74,7 @@ public class DockerConfigFile {
         return null;
     }
 
+    @Nonnull
     public AuthConfigurations getAuthConfigurations() {
         final AuthConfigurations authConfigurations = new AuthConfigurations();
         for (Map.Entry<String, AuthConfig> authConfigEntry : auths.entrySet()) {
@@ -112,9 +117,12 @@ public class DockerConfigFile {
         return "DockerConfigFile [auths=" + auths + "]";
     }
 
-    public static DockerConfigFile loadConfig(File dockerConfigPath) throws IOException {
+    @Nonnull
+    public static DockerConfigFile loadConfig(@CheckForNull String dockerConfigPath) throws IOException {
+        DockerConfigFile dockerConfig;
+
         //parse new docker config file format
-        DockerConfigFile dockerConfig = loadCurrentConfig(dockerConfigPath);
+        dockerConfig = loadCurrentConfig(dockerConfigPath);
 
         //parse old auth config file format
         if (dockerConfig == null) {
@@ -136,8 +144,9 @@ public class DockerConfigFile {
         return dockerConfig;
     }
 
-    private static DockerConfigFile loadCurrentConfig(File dockerConfigPath) throws IOException {
-        File dockerCfgFile = new File(dockerConfigPath, File.separator + DOCKER_CFG);
+    @CheckForNull
+    private static DockerConfigFile loadCurrentConfig(String dockerConfigPath) throws IOException {
+        File dockerCfgFile = new File(dockerConfigPath, DOCKER_CFG);
 
         if (!dockerCfgFile.exists() || !dockerCfgFile.isFile()) {
             return null;
@@ -150,8 +159,9 @@ public class DockerConfigFile {
         }
     }
 
-    private static DockerConfigFile loadLegacyConfig(File dockerConfigPath) throws IOException {
-        File dockerLegacyCfgFile = new File(dockerConfigPath, File.separator + DOCKER_LEGACY_CFG);
+    @CheckForNull
+    private static DockerConfigFile loadLegacyConfig(String dockerConfigPath) throws IOException {
+        File dockerLegacyCfgFile = new File(dockerConfigPath, DOCKER_LEGACY_CFG);
 
         if (!dockerLegacyCfgFile.exists() || !dockerLegacyCfgFile.isFile()) {
             return null;

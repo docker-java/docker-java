@@ -5,11 +5,13 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.RemoteApiVersion;
 import com.github.dockerjava.core.InvocationBuilder;
+import com.github.dockerjava.core.RemoteApiVersion;
 import com.github.dockerjava.core.WebTarget;
 import org.apache.commons.codec.binary.Base64;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 import java.io.IOException;
 
 import static com.github.dockerjava.core.RemoteApiVersion.UNKNOWN_VERSION;
@@ -33,11 +35,12 @@ public abstract class AbstrDockerCmdExec {
         return baseResource;
     }
 
+    @CheckForNull
     protected AuthConfigurations getBuildAuthConfigs() {
         return dockerClientConfig.getAuthConfigurations();
     }
 
-    protected String registryAuth(AuthConfig authConfig) {
+    protected String registryAuth(@Nonnull AuthConfig authConfig) {
         try {
             return Base64.encodeBase64String(new ObjectMapper().writeValueAsString(authConfig).getBytes());
         } catch (IOException e) {
@@ -45,7 +48,8 @@ public abstract class AbstrDockerCmdExec {
         }
     }
 
-    protected String registryConfigs(AuthConfigurations authConfigs) {
+    @Nonnull
+    protected String registryConfigs(@Nonnull AuthConfigurations authConfigs) {
         try {
             final String json;
             final ObjectMapper objectMapper = new ObjectMapper();
@@ -68,11 +72,15 @@ public abstract class AbstrDockerCmdExec {
         }
     }
 
-    protected InvocationBuilder resourceWithAuthConfig(AuthConfig authConfig, InvocationBuilder request) {
+    @Nonnull
+    protected InvocationBuilder resourceWithAuthConfig(@Nonnull AuthConfig authConfig,
+                                                       @Nonnull InvocationBuilder request) {
         return request.header("X-Registry-Auth", registryAuth(authConfig));
     }
 
-    protected InvocationBuilder resourceWithOptionalAuthConfig(AuthConfig authConfig, InvocationBuilder request) {
+    @Nonnull
+    protected InvocationBuilder resourceWithOptionalAuthConfig(@CheckForNull AuthConfig authConfig,
+                                                               @Nonnull InvocationBuilder request) {
         if (authConfig != null) {
             request = resourceWithAuthConfig(authConfig, request);
         }

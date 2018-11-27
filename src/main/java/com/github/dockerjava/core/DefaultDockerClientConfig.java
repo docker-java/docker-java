@@ -11,6 +11,8 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -231,14 +233,16 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
         return registryUrl;
     }
 
+    @CheckForNull
     public String getDockerConfigPath() {
         return dockerConfigPath;
     }
 
+    @Nonnull
     public DockerConfigFile getDockerConfig() {
         if (dockerConfig == null) {
             try {
-                dockerConfig = DockerConfigFile.loadConfig(new File(getDockerConfigPath()));
+                dockerConfig = DockerConfigFile.loadConfig(getDockerConfigPath());
             } catch (IOException e) {
                 throw new DockerClientException("Failed to parse docker configuration file", e);
             }
