@@ -175,7 +175,7 @@ public class LogContainerCmdIT extends CmdIT {
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
 
-        String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
+        int timestamp = (int) (System.currentTimeMillis() / 1000);
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
@@ -190,40 +190,6 @@ public class LogContainerCmdIT extends CmdIT {
         dockerRule.getClient().logContainerCmd(container.getId())
                 .withStdErr(true)
                 .withStdOut(true)
-                .withSince(timestamp)
-                .exec(loggingCallback);
-
-        loggingCallback.awaitCompletion();
-
-        assertThat(loggingCallback.toString(), containsString(snippet));
-    }
-
-    @Test
-    public void asyncLogContainerWithSinceNanoseconds() throws Exception {
-        String snippet = "hello world";
-
-        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withCmd("/bin/echo", snippet)
-                .exec();
-
-        LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
-
-        String timestamp = String.format("%.4f", System.currentTimeMillis() / 1000d);
-        dockerRule.getClient().startContainerCmd(container.getId()).exec();
-
-        int exitCode = dockerRule.getClient().waitContainerCmd(container.getId())
-                .exec(new WaitContainerResultCallback())
-                .awaitStatusCode();
-
-        assertThat(exitCode, equalTo(0));
-
-        LogContainerTestCallback loggingCallback = new LogContainerTestCallback();
-
-        dockerRule.getClient().logContainerCmd(container.getId())
-                .withStdErr(true)
-                .withStdOut(true)
-                .withTimestamps(true)
                 .withSince(timestamp)
                 .exec(loggingCallback);
 
