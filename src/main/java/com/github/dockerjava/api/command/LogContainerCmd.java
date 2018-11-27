@@ -23,8 +23,8 @@ import com.github.dockerjava.api.model.Frame;
  * @param tail
  *            - `all` or `<number>`, Output specified number of lines at the end of logs
  * @param since
- *            - UNIX timestamp, RFC 3339 date, or Go duration string to filter logs.
- *            Specifying a timestamp will only output log-entries since that timestamp. Default: 0 (unfiltered)
+ *            - UNIX timestamp (integer) to filter logs. Specifying a timestamp will only output log-entries since that timestamp. Default:
+ *            0 (unfiltered)
  */
 public interface LogContainerCmd extends AsyncDockerCmd<LogContainerCmd, Frame> {
 
@@ -47,7 +47,7 @@ public interface LogContainerCmd extends AsyncDockerCmd<LogContainerCmd, Frame> 
     Boolean hasStderrEnabled();
 
     @CheckForNull
-    String getSince();
+    Integer getSince();
 
     LogContainerCmd withContainerId(@Nonnull String containerId);
 
@@ -67,7 +67,7 @@ public interface LogContainerCmd extends AsyncDockerCmd<LogContainerCmd, Frame> 
 
     LogContainerCmd withTail(Integer tail);
 
-    LogContainerCmd withSince(String since);
+    LogContainerCmd withSince(Integer since);
 
     /**
      * @throws com.github.dockerjava.api.NotFoundException
