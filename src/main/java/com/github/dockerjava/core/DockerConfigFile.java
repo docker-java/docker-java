@@ -119,6 +119,11 @@ public class DockerConfigFile {
 
     @Nonnull
     public static DockerConfigFile loadConfig(@CheckForNull String dockerConfigPath) throws IOException {
+        // no any configs, but for empty auths return non null object
+        if (dockerConfigPath == null) {
+            return new DockerConfigFile();
+        }
+
         DockerConfigFile dockerConfig;
 
         //parse new docker config file format
@@ -145,7 +150,7 @@ public class DockerConfigFile {
     }
 
     @CheckForNull
-    private static DockerConfigFile loadCurrentConfig(String dockerConfigPath) throws IOException {
+    private static DockerConfigFile loadCurrentConfig(@CheckForNull String dockerConfigPath) throws IOException {
         File dockerCfgFile = new File(dockerConfigPath, DOCKER_CFG);
 
         if (!dockerCfgFile.exists() || !dockerCfgFile.isFile()) {
