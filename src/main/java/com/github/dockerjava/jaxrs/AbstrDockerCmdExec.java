@@ -6,7 +6,7 @@ import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.RemoteApiVersion;
-import org.apache.commons.codec.binary.Base64;
+import com.google.common.io.BaseEncoding;
 
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
@@ -39,7 +39,7 @@ public abstract class AbstrDockerCmdExec {
 
     protected String registryAuth(AuthConfig authConfig) {
         try {
-            return Base64.encodeBase64URLSafeString(new ObjectMapper().writeValueAsString(authConfig).getBytes());
+            return BaseEncoding.base64Url().encode(new ObjectMapper().writeValueAsString(authConfig).getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -74,7 +74,7 @@ public abstract class AbstrDockerCmdExec {
                 json = objectMapper.writeValueAsString(authConfigs);
             }
 
-            return Base64.encodeBase64URLSafeString(json.getBytes());
+            return BaseEncoding.base64Url().encode(json.getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
