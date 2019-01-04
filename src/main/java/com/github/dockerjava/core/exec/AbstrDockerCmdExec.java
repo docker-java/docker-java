@@ -42,7 +42,7 @@ public abstract class AbstrDockerCmdExec {
 
     protected String registryAuth(@Nonnull AuthConfig authConfig) {
         try {
-            return Base64.encodeBase64String(new ObjectMapper().writeValueAsString(authConfig).getBytes());
+            return Base64.encodeBase64URLSafeString(new ObjectMapper().writeValueAsString(authConfig).getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -66,7 +66,7 @@ public abstract class AbstrDockerCmdExec {
                 json = objectMapper.writeValueAsString(authConfigs);
             }
 
-            return Base64.encodeBase64String(json.getBytes());
+            return Base64.encodeBase64URLSafeString(json.getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
