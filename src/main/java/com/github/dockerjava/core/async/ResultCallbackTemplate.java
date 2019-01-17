@@ -74,14 +74,13 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
     public void close() throws IOException {
         if (!closed) {
            closed = true;
-           if (stream != null) {
-               try {
+           try {
+               if (stream != null) {
                    stream.close();
-               } catch (IOException e) {
-                   LOGGER.debug("Error closing stream", e);
                }
+           } finally {
+               completed.countDown();
            }
-           completed.countDown();
         }
     }
 
