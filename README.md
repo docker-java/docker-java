@@ -52,7 +52,7 @@ For secure tls (https) communication:
     DOCKER_CERT_PATH=/Users/marcus/.docker/machine/machines/docker-1.11.2
 
 ### Latest release version
-Supports a subset of the Docker Remote API [v1.23](https://github.com/docker/docker/blob/master/docs/api/v1.23.md), Docker Server version 1.11.x
+Supports a subset of the Docker Remote API [v1.37](https://docs.docker.com/engine/api/v1.37/), Docker Server version since 1.12.6
 
     <dependency>
           <groupId>com.github.docker-java</groupId>
@@ -62,7 +62,7 @@ Supports a subset of the Docker Remote API [v1.23](https://github.com/docker/doc
     </dependency>
     
 ### Latest development version
-Supports a subset of the Docker Remote API [v1.23](https://github.com/docker/docker/blob/master/docs/api/v1.23.md), Docker Server version 1.11.x
+May contain new features while they are not released.
 
 You can find the latest development version including javadoc and source files on [Sonatypes OSS repository](https://oss.sonatype.org/content/groups/public/com/github/docker-java/docker-java/).
 
@@ -101,7 +101,7 @@ In your application, e.g.
         .withDockerTlsVerify(true)
         .withDockerCertPath("/home/user/.docker/certs")
         .withDockerConfig("/home/user/.docker")
-        .withApiVersion("1.23")
+        .withApiVersion("1.30") // optional
         .withRegistryUrl("https://index.docker.io/v1/")
         .withRegistryUsername("dockeruser")
         .withRegistryPassword("ilovedocker")
