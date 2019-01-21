@@ -1,5 +1,6 @@
 package com.github.dockerjava.cmd.swarm;
 
+import com.github.dockerjava.api.command.CreateServiceResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.ContainerSpec;
 import com.github.dockerjava.api.model.EndpointResolutionMode;
@@ -83,8 +84,12 @@ public class CreateServiceCmdExecIT extends SwarmCmdIT {
                                 .withReservations(new ResourceReservation()
                                         .withGenericResources(Lists.newArrayList(
                                                 new GenericResourceWrapper()
-                                                        .withKind("abc")
-                                                        .withValue("567")
+                                                        .withKind("gpu")
+                                                        .withValue(2)
+                                                ,
+                                                new GenericResourceWrapper()
+                                                        .withKind("cpu")
+                                                        .withValue(7)
                                                 )
                                         )
                                 )
@@ -107,7 +112,9 @@ public class CreateServiceCmdExecIT extends SwarmCmdIT {
                                 .withProtocol(PortConfigProtocol.TCP)
                         )));
 
-        dockerRule.getClient().createServiceCmd(spec).exec();
+        CreateServiceResponse createServiceResponse = dockerRule.getClient().createServiceCmd(spec).exec();
+
+        //Service inspectedService = dockerRule.getClient().inspectServiceCmd(createServiceResponse.getId()).exec();
 
         List<Service> services = dockerRule.getClient().listServicesCmd()
                 .withNameFilter(Lists.newArrayList(SERVICE_NAME))

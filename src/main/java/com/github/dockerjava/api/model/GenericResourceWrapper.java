@@ -48,7 +48,7 @@ public class GenericResourceWrapper implements Serializable {
         return this;
     }
 
-    public GenericResourceWrapper withValue(String value) {
+    public GenericResourceWrapper withValue(int value) {
         if (this.discreteResourceSpec == null) {
             this.discreteResourceSpec = new DiscreteResourceSpec();
         }
