@@ -56,7 +56,7 @@ public class HealthCheck implements Serializable {
      * @since 1.26
      */
     @JsonProperty("StartPeriod")
-    private Integer startPeriod;
+    private Long startPeriod;
 
     public Long getInterval() {
         return interval;
@@ -94,11 +94,11 @@ public class HealthCheck implements Serializable {
         return this;
     }
 
-    public Integer getStartPeriod() {
+    public Long getStartPeriod() {
         return startPeriod;
     }
 
-    public HealthCheck withStartPeriod(Integer startPeriod) {
+    public HealthCheck withStartPeriod(Long startPeriod) {
         this.startPeriod = startPeriod;
         return this;
     }
