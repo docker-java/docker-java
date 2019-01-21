@@ -4,12 +4,14 @@ import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.ContainerSpec;
 import com.github.dockerjava.api.model.EndpointResolutionMode;
 import com.github.dockerjava.api.model.EndpointSpec;
+import com.github.dockerjava.api.model.GenericResourceWrapper;
 import com.github.dockerjava.api.model.Mount;
-import com.github.dockerjava.api.model.MountType;
 import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.api.model.NetworkAttachmentConfig;
 import com.github.dockerjava.api.model.PortConfig;
 import com.github.dockerjava.api.model.PortConfigProtocol;
+import com.github.dockerjava.api.model.ResourceRequirements;
+import com.github.dockerjava.api.model.ResourceReservation;
 import com.github.dockerjava.api.model.Service;
 import com.github.dockerjava.api.model.ServiceModeConfig;
 import com.github.dockerjava.api.model.ServiceReplicatedModeOptions;
@@ -77,6 +79,16 @@ public class CreateServiceCmdExecIT extends SwarmCmdIT {
                         .withForceUpdate(0)
                         .withContainerSpec(new ContainerSpec()
                                 .withImage("busybox"))
+                        .withResources(new ResourceRequirements()
+                                .withReservations(new ResourceReservation()
+                                        .withGenericResources(Lists.newArrayList(
+                                                new GenericResourceWrapper()
+                                                        .withKind("abc")
+                                                        .withValue("567")
+                                                )
+                                        )
+                                )
+                        )
                 )
                 .withNetworks(Lists.newArrayList(
                         new NetworkAttachmentConfig()

@@ -14,55 +14,29 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * @since {@link RemoteApiVersion#VERSION_1_24}
- * type of reservations changed at 1.39 from ResourceSpecs to ResourceReservation .
+ * @since {@link RemoteApiVersion#VERSION_1_39}
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ResourceRequirements implements Serializable {
+public class ResourceReservation implements Serializable {
     public static final Long serialVersionUID = 1L;
-
-    /**
-     * @since 1.24
-     */
-    @JsonProperty("Limits")
-    private ResourceSpecs limits;
 
     /**
      * @since 1.39
      */
-    @JsonProperty("Reservations")
-    private ResourceReservation reservations;
+    @JsonProperty("GenericResources")
+    private List<GenericResourceWrapper> genericResources;
 
     /**
-     * @see #limits
+     * @see #genericResources
      */
     @CheckForNull
-    public ResourceSpecs getLimits() {
-        return limits;
+    public List<GenericResourceWrapper> getGenericResources() {
+        return genericResources;
     }
 
-    /**
-     * @see #limits
-     */
-    public ResourceRequirements withLimits(ResourceSpecs limits) {
-        this.limits = limits;
-        return this;
-    }
-
-    /**
-     * @see #reservations
-     */
-    @CheckForNull
-    public ResourceReservation getReservations() {
-        return reservations;
-    }
-
-    /**
-     * @see #reservations
-     */
-    public ResourceRequirements withReservations(ResourceReservation reservations) {
-        this.reservations = reservations;
+    public ResourceReservation withGenericResources(List<GenericResourceWrapper> genericResources) {
+        this.genericResources = genericResources;
         return this;
     }
 

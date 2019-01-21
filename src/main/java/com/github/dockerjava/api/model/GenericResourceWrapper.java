@@ -9,60 +9,50 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-import javax.annotation.CheckForNull;
 import java.io.Serializable;
-import java.util.List;
 
 /**
- * @since {@link RemoteApiVersion#VERSION_1_24}
- * type of reservations changed at 1.39 from ResourceSpecs to ResourceReservation .
+ * @since {@link RemoteApiVersion#VERSION_1_39}
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ResourceRequirements implements Serializable {
+public class GenericResourceWrapper implements Serializable {
     public static final Long serialVersionUID = 1L;
-
-    /**
-     * @since 1.24
-     */
-    @JsonProperty("Limits")
-    private ResourceSpecs limits;
 
     /**
      * @since 1.39
      */
-    @JsonProperty("Reservations")
-    private ResourceReservation reservations;
+    @JsonProperty("DiscreteResourceSpec")
+    private DiscreteResourceSpec discreteResourceSpec;
 
     /**
-     * @see #limits
+     * @see #discreteResourceSpec
      */
-    @CheckForNull
-    public ResourceSpecs getLimits() {
-        return limits;
+    public DiscreteResourceSpec getDiscreteResourceSpec() {
+        return discreteResourceSpec;
     }
 
     /**
-     * @see #limits
+     * @see #discreteResourceSpec
      */
-    public ResourceRequirements withLimits(ResourceSpecs limits) {
-        this.limits = limits;
+    public GenericResourceWrapper withDiscreteResourceSpec(DiscreteResourceSpec discreteResourceSpec) {
+        this.discreteResourceSpec = discreteResourceSpec;
         return this;
     }
 
-    /**
-     * @see #reservations
-     */
-    @CheckForNull
-    public ResourceReservation getReservations() {
-        return reservations;
+    public GenericResourceWrapper withKind(String kind) {
+        if (this.discreteResourceSpec == null) {
+            this.discreteResourceSpec = new DiscreteResourceSpec();
+        }
+        discreteResourceSpec.withKind(kind);
+        return this;
     }
 
-    /**
-     * @see #reservations
-     */
-    public ResourceRequirements withReservations(ResourceReservation reservations) {
-        this.reservations = reservations;
+    public GenericResourceWrapper withValue(String value) {
+        if (this.discreteResourceSpec == null) {
+            this.discreteResourceSpec = new DiscreteResourceSpec();
+        }
+        discreteResourceSpec.withValue(value);
         return this;
     }
 
@@ -80,5 +70,4 @@ public class ResourceRequirements implements Serializable {
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
     }
-
 }
