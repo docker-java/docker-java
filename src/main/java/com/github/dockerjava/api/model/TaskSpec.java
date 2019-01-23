@@ -190,9 +190,15 @@ public class TaskSpec implements Serializable {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
+    /**
+     * excluding the field runtime, since on creation of service its value is null, and after inspection value is "container".
+     * if leave it unexcluded tests will fail (for example: com.github.dockerjava.cmd.swarm.CreateServiceCmdExecIT#testCreateServiceWithNetworks
+     */
+    private static final String[] excludeEqualsFieldArray = new String[]{"runtime"};
+
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        return EqualsBuilder.reflectionEquals(this, o, excludeEqualsFieldArray);
     }
 
     @Override
