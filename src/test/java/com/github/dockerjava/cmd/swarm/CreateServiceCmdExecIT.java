@@ -13,6 +13,7 @@ import com.github.dockerjava.api.model.PortConfig;
 import com.github.dockerjava.api.model.PortConfigProtocol;
 import com.github.dockerjava.api.model.ResourceRequirements;
 import com.github.dockerjava.api.model.ResourceReservation;
+import com.github.dockerjava.api.model.ResourceSpecs;
 import com.github.dockerjava.api.model.Service;
 import com.github.dockerjava.api.model.ServiceModeConfig;
 import com.github.dockerjava.api.model.ServiceReplicatedModeOptions;
@@ -81,7 +82,13 @@ public class CreateServiceCmdExecIT extends SwarmCmdIT {
                         .withContainerSpec(new ContainerSpec()
                                 .withImage("busybox"))
                         .withResources(new ResourceRequirements()
+                                .withLimits(new ResourceSpecs()
+                                        .withMemoryBytes(524_288_000) // 500M
+                                        .withNanoCPUs(250000000) // '0.25'
+                                )
                                 .withReservations(new ResourceReservation()
+                                        .withMemoryBytes(104_857_600) // 100M
+                                        .withNanoCPUs(500000000) // '0.50'
                                         .withGenericResources(Lists.newArrayList(
                                                 new GenericResourceWrapper()
                                                         .withKind("gpu")

@@ -22,10 +22,58 @@ public class ResourceReservation implements Serializable {
     public static final Long serialVersionUID = 1L;
 
     /**
+     * 100M at docker-compose equals to 104857600 of MemoryBytes.
+     *
+     * @since 1.24
+     */
+    @JsonProperty("MemoryBytes")
+    private Long memoryBytes;
+
+    /**
+     * '0.50' at docker-compose equals to 500000000 of NanoCPUs.
+     *
+     * @since 1.24
+     */
+    @JsonProperty("NanoCPUs")
+    private Long nanoCPUs;
+
+    /**
      * @since 1.39
      */
     @JsonProperty("GenericResources")
     private List<GenericResourceWrapper> genericResources;
+
+    /**
+     * @see #memoryBytes
+     */
+    @CheckForNull
+    public Long getMemoryBytes() {
+        return memoryBytes;
+    }
+
+    /**
+     * @see #memoryBytes
+     */
+    public ResourceReservation withMemoryBytes(long memoryBytes) {
+        this.memoryBytes = memoryBytes;
+        return this;
+    }
+
+    /**
+     * @see #nanoCPUs
+     */
+    @CheckForNull
+    public Long getNanoCPUs() {
+        return nanoCPUs;
+    }
+
+    /**
+     * @see #nanoCPUs
+     */
+    public ResourceReservation withNanoCPUs(long nanoCPUs) {
+        this.nanoCPUs = nanoCPUs;
+        return this;
+    }
 
     /**
      * @see #genericResources
