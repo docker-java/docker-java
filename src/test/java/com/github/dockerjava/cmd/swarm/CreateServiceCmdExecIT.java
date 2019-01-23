@@ -84,11 +84,11 @@ public class CreateServiceCmdExecIT extends SwarmCmdIT {
                         .withResources(new ResourceRequirements()
                                 .withLimits(new ResourceSpecs()
                                         .withMemoryBytes(524_288_000) // 500M
-                                        .withNanoCPUs(250000000) // '0.25'
+                                        .withNanoCPUs(500000000) // '0.50'
                                 )
                                 .withReservations(new ResourceReservation()
                                         .withMemoryBytes(104_857_600) // 100M
-                                        .withNanoCPUs(500000000) // '0.50'
+                                        .withNanoCPUs(250000000) // '0.25'
                                         .withGenericResources(Lists.newArrayList(
                                                 new GenericResourceWrapper()
                                                         .withKind("gpu")
