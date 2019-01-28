@@ -19,6 +19,10 @@ public class SaveImageCmdIT extends CmdIT {
         InputStream image = IOUtils.toBufferedInputStream(dockerRule.getClient().saveImageCmd("busybox").exec());
         assertThat(image.available(), greaterThan(0));
 
+        InputStream image2 = IOUtils.toBufferedInputStream(dockerRule.getClient().saveImageCmd("busybox").withTag("latest").exec());
+        assertThat(image2.available(), greaterThan(0));
+
+
     }
 
 }
