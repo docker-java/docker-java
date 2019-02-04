@@ -1,6 +1,9 @@
 Change Log
 ===
 
+## 3.1.0-rc-9
+- Upgrade junixsocket dependencies to 2.1.0
+
 ## 3.1.0-rc-8
 - Do awaitCompletion upon socket close exception
 - Fix `X-Registry-Auth` base64 encoding
