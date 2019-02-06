@@ -1,8 +1,12 @@
 Change Log
 ===
 
-## 3.1.0-rc-9
-- Upgrade junixsocket dependencies to 2.1.0
+## 3.1.1
+- Patch save image with tag
+- [api/healthcheck] startPeriod is now a long
+
+## 3.1.0 
+- Release
 
 ## 3.1.0-rc-8
 - Do awaitCompletion upon socket close exception
