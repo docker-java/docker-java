@@ -1,5 +1,7 @@
 package com.github.dockerjava.core.util;
 
+import com.google.common.base.Strings;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -7,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 /**
  * Representation of Docker filters.
@@ -15,6 +18,13 @@ import java.util.Map.Entry;
  *
  */
 public class FiltersBuilder {
+
+    private static final Pattern UNTIL_TIMESTAMP_PATTERN =
+            Pattern.compile("^\\d{1,10}$");
+    private static final Pattern UNTIL_DATETIME_PATTERN =
+            Pattern.compile("^([0-9]+)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])([Tt]([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]|60)(\\.[0-9]+)?)?(([Zz])|([\\+|\\-]([01][0-9]|2[0-3]):[0-5][0-9]))?$");
+    private static final Pattern UNTIL_GO_PATTERN =
+            Pattern.compile("^([1-9][0-9]*h)?([1-9][0-9]*m)?([1-9][0-9]*s)?$");
 
     private Map<String, List<String>> filters = new HashMap<String, List<String>>();
 
@@ -75,6 +85,14 @@ public class FiltersBuilder {
         return this;
     }
 
+    public FiltersBuilder withUntil(String until) throws NumberFormatException {
+        if (!isValidUntil(until)) {
+            throw new NumberFormatException("Not valid format of 'until': " + until);
+        }
+
+        return withFilter("until", until);
+    }
+
     private static List<String> labelsMapToList(Map<String, String> labels) {
         List<String> result = new ArrayList<String>();
         for (Entry<String, String> entry : labels.entrySet()) {
@@ -85,6 +103,18 @@ public class FiltersBuilder {
             result.add(label);
         }
         return result;
+    }
+
+    private boolean isValidUntil(String until) {
+        if (UNTIL_DATETIME_PATTERN.matcher(until).matches()) {
+            return true;
+        } else if (!Strings.isNullOrEmpty(until) && UNTIL_GO_PATTERN.matcher(until).matches()) {
+            return true;
+        } else if (UNTIL_TIMESTAMP_PATTERN.matcher(until).matches()) {
+            return true;
+        }
+
+        return false;
     }
 
     // CHECKSTYLE:OFF
