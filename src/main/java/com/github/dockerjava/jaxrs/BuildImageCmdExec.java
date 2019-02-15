@@ -128,6 +128,10 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
             webTarget = webTarget.queryParam("platform", command.getPlatform());
         }
 
+        if (command.getTarget() != null) {
+            webTarget = webTarget.queryParam("target", command.getTarget());
+        }
+
         webTarget.property(ClientProperties.REQUEST_ENTITY_PROCESSING, RequestEntityProcessing.CHUNKED);
         webTarget.property(ClientProperties.CHUNKED_ENCODING_SIZE, 1024 * 1024);
 
