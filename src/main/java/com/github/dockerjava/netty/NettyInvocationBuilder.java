@@ -151,7 +151,7 @@ public class NettyInvocationBuilder implements InvocationBuilder {
         HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, resultCallback);
 
         channel.pipeline().addLast(responseHandler);
-        channel.pipeline().addLast(new JsonObjectDecoder());
+        channel.pipeline().addLast(new JsonObjectDecoder(3 * 1024 * 1024));
         channel.pipeline().addLast(jsonResponseHandler);
 
         sendRequest(requestProvider, channel);
@@ -300,7 +300,7 @@ public class NettyInvocationBuilder implements InvocationBuilder {
         HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, resultCallback);
 
         channel.pipeline().addLast(responseHandler);
-        channel.pipeline().addLast(new JsonObjectDecoder());
+        channel.pipeline().addLast(new JsonObjectDecoder(3 * 1024 * 1024));
         channel.pipeline().addLast(jsonResponseHandler);
 
         sendRequest(requestProvider, channel);
@@ -408,7 +408,7 @@ public class NettyInvocationBuilder implements InvocationBuilder {
 
         channel.pipeline().addLast(new ChunkedWriteHandler());
         channel.pipeline().addLast(responseHandler);
-        channel.pipeline().addLast(new JsonObjectDecoder());
+        channel.pipeline().addLast(new JsonObjectDecoder(3 * 1024 * 1024));
         channel.pipeline().addLast(jsonResponseHandler);
 
         postChunkedStreamRequest(requestProvider, channel, body);
