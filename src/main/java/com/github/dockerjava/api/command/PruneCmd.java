@@ -29,7 +29,8 @@ public interface PruneCmd extends SyncDockerCmd<PruneResponse> {
     /**
      * Prune containers created before this timestamp
      * Meaningful only for CONTAINERS and IMAGES prune type
-     * @param until Can be Unix timestamps, date formatted timestamps, or Go duration strings (e.g. 10m, 1h30m) computed relative to the daemon machine’s time.
+     * @param until Can be Unix timestamps, date formatted timestamps,
+     *              or Go duration strings (e.g. 10m, 1h30m) computed relative to the daemon machine’s time.
      */
     PruneCmd withUntilFilter(String until);
 

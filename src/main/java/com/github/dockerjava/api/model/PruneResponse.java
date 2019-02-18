@@ -53,8 +53,9 @@ public class PruneResponse implements Serializable {
         if (o instanceof Ulimit) {
             Ulimit other = (Ulimit) o;
             return new EqualsBuilder().append(spaceReclaimed, other.getName()).isEquals();
-        } else
+        } else {
             return super.equals(o);
+        }
     }
 
     @Override

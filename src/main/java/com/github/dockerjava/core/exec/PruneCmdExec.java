@@ -30,7 +30,7 @@ public class PruneCmdExec extends AbstrSyncDockerCmdExec<PruneCmd, PruneResponse
         LOGGER.trace("POST: {}", webTarget);
 
         PruneResponse response = webTarget.request().accept(MediaType.APPLICATION_JSON)
-                .post(null, new TypeReference<PruneResponse>() {});
+                .post(null, new TypeReference<PruneResponse>() { });
 
         LOGGER.trace("Response: {}", response);
 
