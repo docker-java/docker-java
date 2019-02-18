@@ -394,11 +394,11 @@ public interface DockerClient extends Closeable {
     LogSwarmObjectCmd logTaskCmd(String taskId);
 
     /**
-     * Command to delete unused containers
+     * Command to delete unused containers/images/networks/volumes
      *
      * @since {@link RemoteApiVersion#VERSION_1_25}
      */
-    PruneCmd pruneContainersCmd(PruneType pruneType);
+    PruneCmd pruneCmd(PruneType pruneType);
 
     @Override
     void close() throws IOException;

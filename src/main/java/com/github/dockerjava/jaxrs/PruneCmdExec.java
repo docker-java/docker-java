@@ -11,6 +11,8 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 
+import static com.google.common.net.UrlEscapers.urlPathSegmentEscaper;
+
 public class PruneCmdExec extends AbstrSyncDockerCmdExec<PruneCmd, PruneResponse> implements PruneCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PruneCmdExec.class);
@@ -24,7 +26,7 @@ public class PruneCmdExec extends AbstrSyncDockerCmdExec<PruneCmd, PruneResponse
         WebTarget webTarget = getBaseResource().path(command.getApiPath());
 
         if (command.getFilters() != null && !command.getFilters().isEmpty()) {
-            webTarget = webTarget.queryParam("filters", FiltersEncoder.jsonEncode(command.getFilters()));
+            webTarget = webTarget.queryParam("filters", urlPathSegmentEscaper().escape(FiltersEncoder.jsonEncode(command.getFilters())));
         }
 
         LOGGER.trace("POST: {}", webTarget);

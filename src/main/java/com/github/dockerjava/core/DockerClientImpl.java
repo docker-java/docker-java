@@ -583,7 +583,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
-    public PruneCmd pruneContainersCmd(PruneType pruneType) {
+    public PruneCmd pruneCmd(PruneType pruneType) {
         return new PruneCmdImpl(getDockerCmdExecFactory().pruneCmdExec(), pruneType);
     }
 
