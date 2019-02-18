@@ -329,7 +329,7 @@ public interface DockerClient extends Closeable {
      *
      * @since {@link RemoteApiVersion#VERSION_1_25}
      */
-    PruneCmd createPruneContainersCmd(PruneType pruneType);
+    PruneCmd pruneContainersCmd(PruneType pruneType);
 
     @Override
     void close() throws IOException;
