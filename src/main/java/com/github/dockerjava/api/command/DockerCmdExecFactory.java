@@ -207,6 +207,13 @@ public interface DockerCmdExecFactory extends Closeable {
      */
     ListTasksCmd.Exec listTasksCmdExec();
 
+    /**
+     * Delete unused content (containers, images, volumes, networks, build relicts)
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_25}
+     */
+    PruneCmd.Exec pruneCmdExec();
+
     @Override
     void close() throws IOException;
 

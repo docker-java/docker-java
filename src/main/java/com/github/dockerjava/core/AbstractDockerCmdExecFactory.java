@@ -44,6 +44,7 @@ import com.github.dockerjava.api.command.LogContainerCmd;
 import com.github.dockerjava.api.command.LogSwarmObjectCmd;
 import com.github.dockerjava.api.command.PauseContainerCmd;
 import com.github.dockerjava.api.command.PingCmd;
+import com.github.dockerjava.api.command.PruneCmd;
 import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.command.RemoveContainerCmd;
@@ -110,6 +111,7 @@ import com.github.dockerjava.core.exec.LoadImageCmdExec;
 import com.github.dockerjava.core.exec.LogContainerCmdExec;
 import com.github.dockerjava.core.exec.PauseContainerCmdExec;
 import com.github.dockerjava.core.exec.PingCmdExec;
+import com.github.dockerjava.core.exec.PruneCmdExec;
 import com.github.dockerjava.core.exec.PullImageCmdExec;
 import com.github.dockerjava.core.exec.PushImageCmdExec;
 import com.github.dockerjava.core.exec.RemoveContainerCmdExec;
@@ -490,6 +492,11 @@ public abstract class AbstractDockerCmdExecFactory implements DockerCmdExecFacto
     @Override
     public LogSwarmObjectCmd.Exec logSwarmObjectExec(String endpoint) {
         return new LogSwarmObjectExec(getBaseResource(), getDockerClientConfig(), endpoint);
+    }
+
+    @Override
+    public PruneCmd.Exec pruneCmdExec() {
+        return new PruneCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     protected abstract WebTarget getBaseResource();

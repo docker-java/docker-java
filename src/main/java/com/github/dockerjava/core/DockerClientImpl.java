@@ -44,6 +44,7 @@ import com.github.dockerjava.api.command.LogContainerCmd;
 import com.github.dockerjava.api.command.LogSwarmObjectCmd;
 import com.github.dockerjava.api.command.PauseContainerCmd;
 import com.github.dockerjava.api.command.PingCmd;
+import com.github.dockerjava.api.command.PruneCmd;
 import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.command.RemoveContainerCmd;
@@ -69,6 +70,7 @@ import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Identifier;
+import com.github.dockerjava.api.model.PruneType;
 import com.github.dockerjava.api.model.ServiceSpec;
 import com.github.dockerjava.api.model.SwarmSpec;
 import com.github.dockerjava.core.command.AttachContainerCmdImpl;
@@ -113,6 +115,7 @@ import com.github.dockerjava.core.command.LogContainerCmdImpl;
 import com.github.dockerjava.core.command.LogSwarmObjectImpl;
 import com.github.dockerjava.core.command.PauseContainerCmdImpl;
 import com.github.dockerjava.core.command.PingCmdImpl;
+import com.github.dockerjava.core.command.PruneCmdImpl;
 import com.github.dockerjava.core.command.PullImageCmdImpl;
 import com.github.dockerjava.core.command.PushImageCmdImpl;
 import com.github.dockerjava.core.command.RemoveContainerCmdImpl;
@@ -577,6 +580,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public LogSwarmObjectCmd logTaskCmd(String taskId) {
         return new LogSwarmObjectImpl(getDockerCmdExecFactory().logSwarmObjectExec("tasks"), taskId);
+    }
+
+    @Override
+    public PruneCmd pruneCmd(PruneType pruneType) {
+        return new PruneCmdImpl(getDockerCmdExecFactory().pruneCmdExec(), pruneType);
     }
 
     @Override

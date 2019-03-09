@@ -42,6 +42,7 @@ import com.github.dockerjava.api.command.LogContainerCmd;
 import com.github.dockerjava.api.command.LogSwarmObjectCmd;
 import com.github.dockerjava.api.command.PauseContainerCmd;
 import com.github.dockerjava.api.command.PingCmd;
+import com.github.dockerjava.api.command.PruneCmd;
 import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.command.RemoveContainerCmd;
@@ -68,6 +69,7 @@ import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Identifier;
+import com.github.dockerjava.api.model.PruneType;
 import com.github.dockerjava.api.model.ServiceSpec;
 import com.github.dockerjava.api.model.SwarmSpec;
 import com.github.dockerjava.core.RemoteApiVersion;
@@ -390,6 +392,13 @@ public interface DockerClient extends Closeable {
      * @since 1.29
      */
     LogSwarmObjectCmd logTaskCmd(String taskId);
+
+    /**
+     * Command to delete unused containers/images/networks/volumes
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_25}
+     */
+    PruneCmd pruneCmd(PruneType pruneType);
 
     @Override
     void close() throws IOException;

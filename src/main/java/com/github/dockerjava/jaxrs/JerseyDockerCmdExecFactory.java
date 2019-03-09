@@ -47,6 +47,7 @@ import com.github.dockerjava.api.command.LogContainerCmd;
 import com.github.dockerjava.api.command.LogSwarmObjectCmd;
 import com.github.dockerjava.api.command.PauseContainerCmd;
 import com.github.dockerjava.api.command.PingCmd;
+import com.github.dockerjava.api.command.PruneCmd;
 import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.command.RemoveContainerCmd;
@@ -656,6 +657,11 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
     @Override
     public ListTasksCmd.Exec listTasksCmdExec() {
         return new ListTasksCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public PruneCmd.Exec pruneCmdExec() {
+        return new PruneCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
