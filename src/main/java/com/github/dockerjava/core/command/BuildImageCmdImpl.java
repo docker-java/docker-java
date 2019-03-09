@@ -70,6 +70,8 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     private String platform;
 
+    private String target;
+
     public BuildImageCmdImpl(BuildImageCmd.Exec exec) {
         super(exec);
     }
@@ -189,6 +191,11 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @Override
     public String getPlatform() {
         return platform;
+    }
+
+    @Override
+    public String getTarget() {
+        return target;
     }
 
     // getter lib specific
@@ -386,6 +393,12 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @Override
     public BuildImageCmd withPlatform(String platform) {
         this.platform = platform;
+        return this;
+    }
+
+    @Override
+    public BuildImageCmd withTarget(String target) {
+        this.target = target;
         return this;
     }
 

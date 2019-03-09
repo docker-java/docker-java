@@ -140,6 +140,12 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     @CheckForNull
     String getPlatform();
 
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_38}
+     */
+    @CheckForNull
+    String getTarget();
+
     // setters
 
     /**
@@ -212,6 +218,11 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
      *@since {@link RemoteApiVersion#VERSION_1_32}
      */
     BuildImageCmd withPlatform(String platform);
+
+    /**
+     * @since {@link RemoteApiVersion#VERSION_1_38}
+     */
+    BuildImageCmd withTarget(String target);
 
     interface Exec extends DockerCmdAsyncExec<BuildImageCmd, BuildResponseItem> {
     }
