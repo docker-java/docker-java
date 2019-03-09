@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
 
-class StatsConfig implements Serializable {
+public class StatsConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("active_anon")
