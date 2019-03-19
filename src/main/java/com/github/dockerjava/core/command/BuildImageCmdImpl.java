@@ -327,7 +327,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
             throw new IllegalArgumentException("Dockerfile does not exist");
         }
         if (!dockerfile.isFile()) {
-            throw new IllegalArgumentException("Not a directory");
+            throw new IllegalArgumentException("Dockerfile is not a file");
         }
 
         if (baseDirectory == null) {
