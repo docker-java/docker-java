@@ -11,6 +11,9 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.io.IOUtils;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.github.dockerjava.api.exception.BadRequestException;
 import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.DockerException;
@@ -73,7 +76,17 @@ public class ResponseStatusExceptionFilter implements ClientResponseFilter {
                     charset = Charset.defaultCharset();
                 }
 
-                return IOUtils.toString(entityStream, charset);
+                String message = IOUtils.toString(entityStream, charset);
+
+                if (MediaType.APPLICATION_JSON_TYPE.equals(mediaType)) {
+                    ObjectMapper mapper = new ObjectMapper();
+                    JsonNode node = mapper.readTree(entityStream).get("message");
+                    if (node != null) {
+                        message = node.textValue();
+                    }
+                }
+
+                return message;
             } catch (Exception ignored) { }
         }
         return null;
