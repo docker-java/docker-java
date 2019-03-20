@@ -55,7 +55,7 @@ public class ResponseStatusExceptionFilter implements ClientResponseFilter {
         }
     }
 
-    private String getBodyAsMessage(ClientResponseContext responseContext) throws IOException {
+    private String getBodyAsMessage(ClientResponseContext responseContext) {
         if (responseContext.hasEntity()) {
             try (InputStream entityStream = responseContext.getEntityStream()) {
                 Charset charset = null;
