@@ -1,6 +1,17 @@
 Change Log
 ===
 
+
+## 3.1.2
+- update unix-socket to 2.2.0
+- Remove `JacksonJaxbJsonProvider` from `FiltersEncoder`
+- BuildImageCmdImpl: Fix an exception message
+- Add support for target parameter in BuildImgCmd
+- Add prune operations
+- Updating Jackson due to CVEs
+- Make StatsConfig public
+- Set 3 mb as limit for json responce. 
+
 ## 3.1.1
 - Patch save image with tag
 - [api/healthcheck] startPeriod is now a long
