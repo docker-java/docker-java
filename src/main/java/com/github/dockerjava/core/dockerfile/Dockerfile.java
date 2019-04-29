@@ -1,18 +1,5 @@
 package com.github.dockerjava.core.dockerfile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.core.GoLangFileMatch;
 import com.github.dockerjava.core.exception.GoLangFileMatchException;
@@ -22,11 +9,28 @@ import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.annotation.CheckForNull;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Parse a Dockerfile.
  */
 public class Dockerfile {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Dockerfile.class);
 
     public final File dockerFile;
 
@@ -121,20 +125,30 @@ public class Dockerfile {
         final List<File> filesToAdd = new ArrayList<File>();
 
         public InputStream buildDockerFolderTar() {
-            return buildDockerFolderTar(baseDirectory);
+            return buildDockerFolderTar(baseDirectory, null, null);
         }
 
-        public InputStream buildDockerFolderTar(File directory) {
+        public InputStream buildDockerFolderTar(@CheckForNull File tempDirectory, @CheckForNull PrintStream printStream) {
+            return buildDockerFolderTar(baseDirectory, tempDirectory, printStream);
+        }
 
+        protected InputStream buildDockerFolderTar(File baseDirectory,
+                                                @CheckForNull File tempDirectory, @CheckForNull PrintStream printStream) {
             File dockerFolderTar = null;
 
             try {
-                final String archiveNameWithOutExtension = UUID.randomUUID().toString();
-
-                dockerFolderTar = CompressArchiveUtil.archiveTARFiles(directory, filesToAdd,
-                        archiveNameWithOutExtension);
+                final String archiveName = UUID.randomUUID().toString();
+                if (tempDirectory == null) {
+                    dockerFolderTar = CompressArchiveUtil.archiveTARFiles(baseDirectory, filesToAdd, archiveName);
+                } else {
+                    dockerFolderTar = CompressArchiveUtil.archiveTARFiles(baseDirectory, tempDirectory, filesToAdd, archiveName);
+                }
 
                 long length = dockerFolderTar.length();
+                LOGGER.debug("Tar size {}", length);
+                if (printStream != null) {
+                    printStream.println("Uploading context " + FileUtils.byteCountToDisplaySize(length));
+                }
 
                 final FileInputStream tarInputStream = FileUtils.openInputStream(dockerFolderTar);
                 final File tarFile = dockerFolderTar;
@@ -262,6 +276,6 @@ public class Dockerfile {
             String lastMatchingPattern = matchingPattern.get(matchingPattern.size() - 1);
 
             return !lastMatchingPattern.startsWith("!") ? lastMatchingPattern : null;
-         }
+        }
     }
 }

@@ -1,17 +1,17 @@
 package com.github.dockerjava.api.command;
 
-import java.io.File;
-import java.io.InputStream;
-import java.net.URI;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
-
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.BuildResponseItem;
 import com.github.dockerjava.core.RemoteApiVersion;
+
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+import java.io.File;
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.net.URI;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Build an image from Dockerfile.
@@ -168,6 +168,12 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
 
     BuildImageCmd withDockerfile(File dockerfile);
 
+    /**
+     * @param tempDir     directory where tar archive temporary created
+     * @param printStream additional log messages during tar creation.
+     */
+    BuildImageCmd withDockerfile(File dockerfile, @CheckForNull File tempDir, @CheckForNull PrintStream printStream);
+
     BuildImageCmd withDockerfilePath(String dockerfilePath);
 
     BuildImageCmd withNoCache(Boolean noCache);
@@ -215,7 +221,7 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     BuildImageCmd withNetworkMode(String networkMode);
 
     /**
-     *@since {@link RemoteApiVersion#VERSION_1_32}
+     * @since {@link RemoteApiVersion#VERSION_1_32}
      */
     BuildImageCmd withPlatform(String platform);
 

@@ -89,7 +89,14 @@ public class CompressArchiveUtil {
 
     public static File archiveTARFiles(File base, Iterable<File> files, String archiveNameWithOutExtension)
             throws IOException {
-        File tarFile = new File(FileUtils.getTempDirectoryPath(), archiveNameWithOutExtension + ".tar");
+        File tmpDir = new File(FileUtils.getTempDirectoryPath());
+        return archiveTARFiles(base, tmpDir, files, archiveNameWithOutExtension);
+    }
+
+    public static File archiveTARFiles(File base, File tmpDir, Iterable<File> files, String archiveNameWithOutExtension)
+            throws IOException {
+        File tarFile = new File(tmpDir, archiveNameWithOutExtension + ".tar");
+
         tarFile.deleteOnExit();
         try (TarArchiveOutputStream tos = new TarArchiveOutputStream(new GZIPOutputStream(new BufferedOutputStream(
                 new FileOutputStream(tarFile))))) {

@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +18,7 @@ import com.github.dockerjava.core.dockerfile.Dockerfile;
 import com.github.dockerjava.core.util.FilePathUtil;
 
 import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 /**
  * Build an image from Dockerfile.
@@ -225,7 +227,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
      */
     @Deprecated
     @Override
-    public BuildImageCmdImpl withTag(String tag) {
+    public BuildImageCmd withTag(String tag) {
         checkNotNull(tag, "Tag is null");
         this.tag = tag;
         return this;
@@ -250,13 +252,13 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     }
 
     @Override
-    public BuildImageCmdImpl withNoCache(Boolean noCache) {
+    public BuildImageCmd withNoCache(Boolean noCache) {
         this.noCache = noCache;
         return this;
     }
 
     @Override
-    public BuildImageCmdImpl withRemove(Boolean rm) {
+    public BuildImageCmd withRemove(Boolean rm) {
         this.remove = rm;
         return this;
     }
@@ -268,7 +270,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     }
 
     @Override
-    public BuildImageCmdImpl withQuiet(Boolean quiet) {
+    public BuildImageCmd withQuiet(Boolean quiet) {
         this.quiet = quiet;
         return this;
     }
@@ -321,7 +323,12 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     }
 
     @Override
-    public BuildImageCmdImpl withDockerfile(File dockerfile) {
+    public BuildImageCmd withDockerfile(File dockerfile) {
+        return withDockerfile(dockerfile, null, null);
+    }
+
+    @Override
+    public BuildImageCmd withDockerfile(File dockerfile, @CheckForNull File tempDir, @CheckForNull PrintStream printStream) {
         checkNotNull(dockerfile);
         if (!dockerfile.exists()) {
             throw new IllegalArgumentException("Dockerfile does not exist");
@@ -337,7 +344,10 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
         this.dockerFile = dockerfile;
 
         try {
-            withTarInputStream(new Dockerfile(dockerfile, baseDirectory).parse().buildDockerFolderTar());
+            withTarInputStream(new Dockerfile(dockerfile, baseDirectory)
+                    .parse()
+                    .buildDockerFolderTar(tempDir, printStream)
+            );
         } catch (IOException e) {
             // we just created the file this should never happen.
             throw new RuntimeException(e);
@@ -353,7 +363,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     }
 
     @Override
-    public BuildImageCmdImpl withTarInputStream(InputStream tarInputStream) {
+    public BuildImageCmd withTarInputStream(@Nonnull InputStream tarInputStream) {
         checkNotNull(tarInputStream, "tarInputStream is null");
         this.tarInputStream = tarInputStream;
         return this;
