@@ -18,7 +18,6 @@ import com.github.dockerjava.core.dockerfile.Dockerfile;
 import com.github.dockerjava.core.util.FilePathUtil;
 
 import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
 
 /**
  * Build an image from Dockerfile.
@@ -328,7 +327,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     }
 
     @Override
-    public BuildImageCmd withDockerfile(File dockerfile, @CheckForNull File tempDir, @CheckForNull PrintStream printStream) {
+    public BuildImageCmdImpl withDockerfile(File dockerfile, @CheckForNull File tempDir, @CheckForNull PrintStream printStream) {
         checkNotNull(dockerfile);
         if (!dockerfile.exists()) {
             throw new IllegalArgumentException("Dockerfile does not exist");
