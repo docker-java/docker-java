@@ -172,7 +172,9 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
      * @param tempDir     directory where tar archive temporary created
      * @param printStream additional log messages during tar creation.
      */
-    BuildImageCmd withDockerfile(File dockerfile, @CheckForNull File tempDir, @CheckForNull PrintStream printStream);
+    default BuildImageCmd withDockerfile(File dockerfile, @CheckForNull File tempDir, @CheckForNull PrintStream printStream) {
+        return withDockerfile(dockerfile);
+    }
 
     BuildImageCmd withDockerfilePath(String dockerfilePath);
 

@@ -227,7 +227,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
      */
     @Deprecated
     @Override
-    public BuildImageCmd withTag(String tag) {
+    public BuildImageCmdImpl withTag(String tag) {
         checkNotNull(tag, "Tag is null");
         this.tag = tag;
         return this;
@@ -252,13 +252,13 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     }
 
     @Override
-    public BuildImageCmd withNoCache(Boolean noCache) {
+    public BuildImageCmdImpl withNoCache(Boolean noCache) {
         this.noCache = noCache;
         return this;
     }
 
     @Override
-    public BuildImageCmd withRemove(Boolean rm) {
+    public BuildImageCmdImpl withRemove(Boolean rm) {
         this.remove = rm;
         return this;
     }
@@ -270,7 +270,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     }
 
     @Override
-    public BuildImageCmd withQuiet(Boolean quiet) {
+    public BuildImageCmdImpl withQuiet(Boolean quiet) {
         this.quiet = quiet;
         return this;
     }
@@ -323,7 +323,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     }
 
     @Override
-    public BuildImageCmd withDockerfile(File dockerfile) {
+    public BuildImageCmdImpl withDockerfile(File dockerfile) {
         return withDockerfile(dockerfile, null, null);
     }
 
@@ -363,7 +363,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     }
 
     @Override
-    public BuildImageCmd withTarInputStream(@Nonnull InputStream tarInputStream) {
+    public BuildImageCmdImpl withTarInputStream(InputStream tarInputStream) {
         checkNotNull(tarInputStream, "tarInputStream is null");
         this.tarInputStream = tarInputStream;
         return this;
