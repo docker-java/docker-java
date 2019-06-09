@@ -80,7 +80,7 @@ public class FramedResponseStreamHandler extends SimpleChannelInboundHandler<Byt
             streamType = streamType(header[0]);
 
             if (streamType.equals(StreamType.RAW)) {
-                return new Frame(streamType, Arrays.copyOf(header, headerCount));
+                return new Frame(streamType, Arrays.copyOfRange(header, headerCnt - headerCount, headerCnt));
             }
 
             if (headerCnt < HEADER_SIZE) {
