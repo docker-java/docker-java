@@ -166,6 +166,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @CheckForNull
     @Override
     @Deprecated
+    @JsonIgnore
     public Bind[] getBinds() {
         return hostConfig.getBinds();
     }
@@ -387,6 +388,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @CheckForNull
     @Override
     @Deprecated
+    @JsonIgnore
     public String getNetworkMode() {
         return hostConfig.getNetworkMode();
     }
@@ -402,6 +404,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @CheckForNull
     @Override
     @Deprecated
+    @JsonIgnore
     public Ports getPortBindings() {
         return hostConfig.getPortBindings();
     }
@@ -457,6 +460,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @CheckForNull
     @Override
     @Deprecated
+    @JsonIgnore
     public Boolean getPrivileged() {
         return hostConfig.getPrivileged();
     }
@@ -539,6 +543,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @CheckForNull
     @Override
     @Deprecated
+    @JsonIgnore
     public VolumesFrom[] getVolumesFrom() {
         return hostConfig.getVolumesFrom();
     }
@@ -623,6 +628,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @CheckForNull
     @Override
     @Deprecated
+    @JsonIgnore
     public Boolean getPublishAllPorts() {
         return hostConfig.getPublishAllPorts();
     }
@@ -638,6 +644,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @CheckForNull
     @Override
     @Deprecated
+    @JsonIgnore
     public String[] getExtraHosts() {
         return hostConfig.getExtraHosts();
     }
@@ -660,6 +667,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @CheckForNull
     @Override
     @Deprecated
+    @JsonIgnore
     public Capability[] getCapAdd() {
         return hostConfig.getCapAdd();
     }
@@ -682,6 +690,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @CheckForNull
     @Override
     @Deprecated
+    @JsonIgnore
     public Capability[] getCapDrop() {
         return hostConfig.getCapDrop();
     }
@@ -727,6 +736,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @CheckForNull
     @Override
     @Deprecated
+    @JsonIgnore
     public Link[] getLinks() {
         return hostConfig.getLinks();
     }
