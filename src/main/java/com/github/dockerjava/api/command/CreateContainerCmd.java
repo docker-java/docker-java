@@ -4,6 +4,7 @@ import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Bind;
+import com.github.dockerjava.api.model.Capability;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HealthCheck;
 import com.github.dockerjava.api.model.HostConfig;
@@ -303,6 +304,43 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
      */
     @Deprecated
     CreateContainerCmd withExtraHosts(List<String> extraHosts);
+
+    @CheckForNull
+    @Deprecated
+    Capability[] getCapAdd();
+
+    /**
+     * Add linux <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">kernel capability</a> to the container. For example:
+     * adding {@link Capability#MKNOD} allows the container to create special files using the 'mknod' command.
+     */
+    @Deprecated
+    CreateContainerCmd withCapAdd(Capability... capAdd);
+
+    /**
+     * Add linux <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">kernel capability</a> to the container. For example:
+     * adding {@link Capability#MKNOD} allows the container to create special files using the 'mknod' command.
+     */
+    @Deprecated
+    CreateContainerCmd withCapAdd(List<Capability> capAdd);
+
+    @CheckForNull
+    @Deprecated
+    Capability[] getCapDrop();
+
+    /**
+     * Drop linux <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">kernel capability</a> from the container. For example:
+     * dropping {@link Capability#CHOWN} prevents the container from changing the owner of any files.
+     */
+    @Deprecated
+    CreateContainerCmd withCapDrop(Capability... capDrop);
+
+    /**
+     * Drop linux <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">kernel capability</a> from the container. For example:
+     * dropping {@link Capability#CHOWN} prevents the container from changing the owner of any files.
+     */
+    @Deprecated
+    CreateContainerCmd withCapDrop(List<Capability> capDrop);
+
 
     @CheckForNull
     List<String> getOnBuild();

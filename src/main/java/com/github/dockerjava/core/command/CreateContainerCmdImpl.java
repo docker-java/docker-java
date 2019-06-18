@@ -10,6 +10,7 @@ import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Bind;
+import com.github.dockerjava.api.model.Capability;
 import com.github.dockerjava.api.model.ContainerNetwork;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.ExposedPorts;
@@ -164,11 +165,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @CheckForNull
     @Override
+    @Deprecated
     public Bind[] getBinds() {
         return hostConfig.getBinds();
     }
 
     @Override
+    @Deprecated
     public CreateContainerCmd withBinds(Bind... binds) {
         checkNotNull(binds, "binds was not specified");
         hostConfig.setBinds(binds);
@@ -176,6 +179,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
+    @Deprecated
     public CreateContainerCmd withBinds(List<Bind> binds) {
         checkNotNull(binds, "binds was not specified");
         return withBinds(binds.toArray(new Bind[binds.size()]));
@@ -382,11 +386,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @CheckForNull
     @Override
+    @Deprecated
     public String getNetworkMode() {
         return hostConfig.getNetworkMode();
     }
 
     @Override
+    @Deprecated
     public CreateContainerCmd withNetworkMode(String networkMode) {
         checkNotNull(networkMode, "networkMode was not specified");
         this.hostConfig.withNetworkMode(networkMode);
@@ -395,11 +401,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @CheckForNull
     @Override
+    @Deprecated
     public Ports getPortBindings() {
         return hostConfig.getPortBindings();
     }
 
     @Override
+    @Deprecated
     public CreateContainerCmd withPortBindings(PortBinding... portBindings) {
         checkNotNull(portBindings, "portBindings was not specified");
         this.hostConfig.withPortBindings(new Ports(portBindings));
@@ -407,12 +415,14 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
+    @Deprecated
     public CreateContainerCmd withPortBindings(List<PortBinding> portBindings) {
         checkNotNull(portBindings, "portBindings was not specified");
         return withPortBindings(portBindings.toArray(new PortBinding[0]));
     }
 
     @Override
+    @Deprecated
     public CreateContainerCmd withPortBindings(Ports portBindings) {
         checkNotNull(portBindings, "portBindings was not specified");
         this.hostConfig.withPortBindings(portBindings);
@@ -446,11 +456,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @CheckForNull
     @Override
+    @Deprecated
     public Boolean getPrivileged() {
         return hostConfig.getPrivileged();
     }
 
     @Override
+    @Deprecated
     public CreateContainerCmd withPrivileged(Boolean privileged) {
         checkNotNull(privileged, "no privileged was specified");
         this.hostConfig.withPrivileged(privileged);
@@ -481,7 +493,6 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         return this;
     }
 
-
     @Override
     public Boolean isAttachStdin() {
         return attachStdin;
@@ -494,7 +505,6 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         return this;
     }
 
-
     @Override
     public Boolean isAttachStdout() {
         return attachStdout;
@@ -506,7 +516,6 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         this.attachStdout = attachStdout;
         return this;
     }
-
 
     @Override
     @JsonIgnore
@@ -529,11 +538,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @CheckForNull
     @Override
+    @Deprecated
     public VolumesFrom[] getVolumesFrom() {
         return hostConfig.getVolumesFrom();
     }
 
     @Override
+    @Deprecated
     public CreateContainerCmd withVolumesFrom(VolumesFrom... volumesFrom) {
         checkNotNull(volumesFrom, "volumesFrom was not specified");
         this.hostConfig.withVolumesFrom(volumesFrom);
@@ -541,6 +552,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
+    @Deprecated
     public CreateContainerCmd withVolumesFrom(List<VolumesFrom> volumesFrom) {
         checkNotNull(volumesFrom, "volumesFrom was not specified");
         return withVolumesFrom(volumesFrom.toArray(new VolumesFrom[volumesFrom.size()]));
@@ -610,11 +622,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @CheckForNull
     @Override
+    @Deprecated
     public Boolean getPublishAllPorts() {
         return hostConfig.getPublishAllPorts();
     }
 
     @Override
+    @Deprecated
     public CreateContainerCmd withPublishAllPorts(Boolean publishAllPorts) {
         checkNotNull(publishAllPorts, "no publishAllPorts was specified");
         this.hostConfig.withPublishAllPorts(publishAllPorts);
@@ -623,11 +637,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @CheckForNull
     @Override
+    @Deprecated
     public String[] getExtraHosts() {
         return hostConfig.getExtraHosts();
     }
 
     @Override
+    @Deprecated
     public CreateContainerCmd withExtraHosts(String... extraHosts) {
         checkNotNull(extraHosts, "extraHosts was not specified");
         this.hostConfig.withExtraHosts(extraHosts);
@@ -635,9 +651,54 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
+    @Deprecated
     public CreateContainerCmd withExtraHosts(List<String> extraHosts) {
         checkNotNull(extraHosts, "extraHosts was not specified");
         return withExtraHosts(extraHosts.toArray(new String[extraHosts.size()]));
+    }
+
+    @CheckForNull
+    @Override
+    @Deprecated
+    public Capability[] getCapAdd() {
+        return hostConfig.getCapAdd();
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withCapAdd(Capability... capAdd) {
+        checkNotNull(capAdd, "capAdd was not specified");
+        hostConfig.withCapAdd(capAdd);
+        return this;
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withCapAdd(List<Capability> capAdd) {
+        checkNotNull(capAdd, "capAdd was not specified");
+        return withCapAdd(capAdd.toArray(new Capability[capAdd.size()]));
+    }
+
+    @CheckForNull
+    @Override
+    @Deprecated
+    public Capability[] getCapDrop() {
+        return hostConfig.getCapDrop();
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withCapDrop(Capability... capDrop) {
+        checkNotNull(capDrop, "capDrop was not specified");
+        hostConfig.withCapDrop(capDrop);
+        return this;
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withCapDrop(List<Capability> capDrop) {
+        checkNotNull(capDrop, "capDrop was not specified");
+        return withCapDrop(capDrop.toArray(new Capability[capDrop.size()]));
     }
 
     @Override
@@ -665,11 +726,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @CheckForNull
     @Override
+    @Deprecated
     public Link[] getLinks() {
         return hostConfig.getLinks();
     }
 
     @Override
+    @Deprecated
     public CreateContainerCmd withLinks(Link... links) {
         checkNotNull(links, "links was not specified");
         this.hostConfig.setLinks(links);
@@ -677,6 +740,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
+    @Deprecated
     public CreateContainerCmd withLinks(List<Link> links) {
         checkNotNull(links, "links was not specified");
         return withLinks(links.toArray(new Link[links.size()]));
