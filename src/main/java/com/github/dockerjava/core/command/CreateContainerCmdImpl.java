@@ -9,13 +9,18 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.ContainerNetwork;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.ExposedPorts;
 import com.github.dockerjava.api.model.HealthCheck;
 import com.github.dockerjava.api.model.HostConfig;
+import com.github.dockerjava.api.model.Link;
+import com.github.dockerjava.api.model.PortBinding;
+import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.Volumes;
+import com.github.dockerjava.api.model.VolumesFrom;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -155,6 +160,25 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @JsonIgnore
     public List<String> getAliases() {
         return aliases;
+    }
+
+    @CheckForNull
+    @Override
+    public Bind[] getBinds() {
+        return hostConfig.getBinds();
+    }
+
+    @Override
+    public CreateContainerCmd withBinds(Bind... binds) {
+        checkNotNull(binds, "binds was not specified");
+        hostConfig.setBinds(binds);
+        return this;
+    }
+
+    @Override
+    public CreateContainerCmd withBinds(List<Bind> binds) {
+        checkNotNull(binds, "binds was not specified");
+        return withBinds(binds.toArray(new Bind[binds.size()]));
     }
 
     @Override
@@ -356,6 +380,45 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         return name;
     }
 
+    @CheckForNull
+    @Override
+    public String getNetworkMode() {
+        return hostConfig.getNetworkMode();
+    }
+
+    @Override
+    public CreateContainerCmd withNetworkMode(String networkMode) {
+        checkNotNull(networkMode, "networkMode was not specified");
+        this.hostConfig.withNetworkMode(networkMode);
+        return this;
+    }
+
+    @CheckForNull
+    @Override
+    public Ports getPortBindings() {
+        return hostConfig.getPortBindings();
+    }
+
+    @Override
+    public CreateContainerCmd withPortBindings(PortBinding... portBindings) {
+        checkNotNull(portBindings, "portBindings was not specified");
+        this.hostConfig.withPortBindings(new Ports(portBindings));
+        return this;
+    }
+
+    @Override
+    public CreateContainerCmd withPortBindings(List<PortBinding> portBindings) {
+        checkNotNull(portBindings, "portBindings was not specified");
+        return withPortBindings(portBindings.toArray(new PortBinding[0]));
+    }
+
+    @Override
+    public CreateContainerCmd withPortBindings(Ports portBindings) {
+        checkNotNull(portBindings, "portBindings was not specified");
+        this.hostConfig.withPortBindings(portBindings);
+        return this;
+    }
+
     @Override
     public CreateContainerCmd withName(String name) {
         checkNotNull(name, "name was not specified");
@@ -381,6 +444,19 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         return withPortSpecs(portSpecs.toArray(new String[0]));
     }
 
+    @CheckForNull
+    @Override
+    public Boolean getPrivileged() {
+        return hostConfig.getPrivileged();
+    }
+
+    @Override
+    public CreateContainerCmd withPrivileged(Boolean privileged) {
+        checkNotNull(privileged, "no privileged was specified");
+        this.hostConfig.withPrivileged(privileged);
+        return this;
+    }
+
     @Override
     public String getUser() {
         return user;
@@ -392,7 +468,6 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         this.user = user;
         return this;
     }
-
 
     @Override
     public Boolean isAttachStderr() {
@@ -450,6 +525,25 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public CreateContainerCmd withVolumes(List<Volume> volumes) {
         checkNotNull(volumes, "volumes was not specified");
         return withVolumes(volumes.toArray(new Volume[0]));
+    }
+
+    @CheckForNull
+    @Override
+    public VolumesFrom[] getVolumesFrom() {
+        return hostConfig.getVolumesFrom();
+    }
+
+    @Override
+    public CreateContainerCmd withVolumesFrom(VolumesFrom... volumesFrom) {
+        checkNotNull(volumesFrom, "volumesFrom was not specified");
+        this.hostConfig.withVolumesFrom(volumesFrom);
+        return this;
+    }
+
+    @Override
+    public CreateContainerCmd withVolumesFrom(List<VolumesFrom> volumesFrom) {
+        checkNotNull(volumesFrom, "volumesFrom was not specified");
+        return withVolumesFrom(volumesFrom.toArray(new VolumesFrom[volumesFrom.size()]));
     }
 
     @Override
@@ -514,6 +608,38 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         return this;
     }
 
+    @CheckForNull
+    @Override
+    public Boolean getPublishAllPorts() {
+        return hostConfig.getPublishAllPorts();
+    }
+
+    @Override
+    public CreateContainerCmd withPublishAllPorts(Boolean publishAllPorts) {
+        checkNotNull(publishAllPorts, "no publishAllPorts was specified");
+        this.hostConfig.withPublishAllPorts(publishAllPorts);
+        return this;
+    }
+
+    @CheckForNull
+    @Override
+    public String[] getExtraHosts() {
+        return hostConfig.getExtraHosts();
+    }
+
+    @Override
+    public CreateContainerCmd withExtraHosts(String... extraHosts) {
+        checkNotNull(extraHosts, "extraHosts was not specified");
+        this.hostConfig.withExtraHosts(extraHosts);
+        return this;
+    }
+
+    @Override
+    public CreateContainerCmd withExtraHosts(List<String> extraHosts) {
+        checkNotNull(extraHosts, "extraHosts was not specified");
+        return withExtraHosts(extraHosts.toArray(new String[extraHosts.size()]));
+    }
+
     @Override
     public HostConfig getHostConfig() {
         return hostConfig;
@@ -535,6 +661,25 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         checkNotNull(ipv4Address, "no ipv4Address was specified");
         this.ipv4Address = ipv4Address;
         return this;
+    }
+
+    @CheckForNull
+    @Override
+    public Link[] getLinks() {
+        return hostConfig.getLinks();
+    }
+
+    @Override
+    public CreateContainerCmd withLinks(Link... links) {
+        checkNotNull(links, "links was not specified");
+        this.hostConfig.setLinks(links);
+        return this;
+    }
+
+    @Override
+    public CreateContainerCmd withLinks(List<Link> links) {
+        checkNotNull(links, "links was not specified");
+        return withLinks(links.toArray(new Link[links.size()]));
     }
 
     @Override
