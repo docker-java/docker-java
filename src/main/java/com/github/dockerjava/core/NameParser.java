@@ -100,8 +100,7 @@ public class NameParser {
 
     public static HostnameReposName resolveRepositoryName(String reposName) {
         if (reposName.contains("://")) {
-            // It cannot contain a scheme!
-            throw new InvalidRepositoryNameException();
+            throw new InvalidRepositoryNameException("RepositoryName shouldn't contain a scheme");
         }
 
         String[] nameParts = reposName.split("/", 2);
