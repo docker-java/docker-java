@@ -41,7 +41,7 @@ public class LoadImageCmdIT extends CmdIT {
             dockerRule.getClient().loadImageCmd(uploadStream).exec();
         }
 
-        //swarm needs some time to refelct new images
+        //swarm needs some time to reflect new images
         synchronized (this) {
             wait(5000);
         }
