@@ -155,7 +155,6 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
         }
         clientConfig.register(ResponseStatusExceptionFilter.class);
         clientConfig.register(JsonClientFilter.class);
-        clientConfig.register(JacksonJsonProvider.class);
         RequestConfig.Builder requestConfigBuilder = RequestConfig.custom();
 
         ObjectMapper objectMapper = new ObjectMapper();
