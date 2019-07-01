@@ -81,7 +81,6 @@ public class RegistryUtils {
             privateRegistryAuthConfig = new AuthConfig()
                     .withUsername("testuser")
                     .withPassword("testpassword")
-                    .withEmail("foo@bar.de")
                     .withRegistryAddress("localhost:" + port);
         }
 

@@ -252,8 +252,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
     private AuthConfig getAuthConfig() {
         AuthConfig authConfig = null;
-        if (getRegistryUsername() != null && getRegistryPassword() != null && getRegistryEmail() != null
-                && getRegistryUrl() != null) {
+        if (getRegistryUsername() != null && getRegistryPassword() != null && getRegistryUrl() != null) {
             authConfig = new AuthConfig()
                     .withUsername(getRegistryUsername())
                     .withPassword(getRegistryPassword())
