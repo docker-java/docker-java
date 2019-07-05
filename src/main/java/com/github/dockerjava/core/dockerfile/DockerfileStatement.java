@@ -12,7 +12,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.google.common.base.Function;
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -155,7 +155,7 @@ public abstract class DockerfileStatement<T extends DockerfileStatement<?>> {
 
         @Override
         public String toString() {
-            return Objects.toStringHelper(this).add("sources", sources).add("destination", destination).toString();
+            return MoreObjects.toStringHelper(this).add("sources", sources).add("destination", destination).toString();
         }
     }
 
@@ -192,7 +192,7 @@ public abstract class DockerfileStatement<T extends DockerfileStatement<?>> {
 
         @Override
         public String toString() {
-            return Objects.toStringHelper(this).add("variable", variable).add("value", value).toString();
+            return MoreObjects.toStringHelper(this).add("variable", variable).add("value", value).toString();
         }
     }
 

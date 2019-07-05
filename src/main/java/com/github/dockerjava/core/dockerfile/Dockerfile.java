@@ -19,7 +19,7 @@ import com.github.dockerjava.core.exception.GoLangFileMatchException;
 import com.github.dockerjava.core.util.CompressArchiveUtil;
 import com.github.dockerjava.core.util.FilePathUtil;
 import com.google.common.base.Function;
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
 
@@ -171,7 +171,7 @@ public class Dockerfile {
 
         @Override
         public String toString() {
-            return Objects.toStringHelper(this).add("ignores", ignores).add("filesToAdd", filesToAdd).toString();
+            return MoreObjects.toStringHelper(this).add("ignores", ignores).add("filesToAdd", filesToAdd).toString();
         }
 
         public ScannedResult() throws IOException {
