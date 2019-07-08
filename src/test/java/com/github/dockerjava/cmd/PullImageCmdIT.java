@@ -112,6 +112,20 @@ public class PullImageCmdIT extends CmdIT {
     }
 
     @Test
+    public void testPullImageWithValidAuthAndEmail() throws Exception {
+        AuthConfig authConfig = RegistryUtils.runPrivateRegistry(dockerRule.getClient())
+                .withEmail("foo@bar.de");
+
+        String imgName = RegistryUtils.createPrivateImage(dockerRule, "pull-image-with-valid-auth");
+
+        // stream needs to be fully read in order to close the underlying connection
+        dockerRule.getClient().pullImageCmd(imgName)
+                .withAuthConfig(authConfig)
+                .exec(new PullImageResultCallback())
+                .awaitCompletion(30, TimeUnit.SECONDS);
+    }
+
+    @Test
     public void testPullImageWithNoAuth() throws Exception {
         RegistryUtils.runPrivateRegistry(dockerRule.getClient());
 
@@ -129,6 +143,7 @@ public class PullImageCmdIT extends CmdIT {
                 .exec(new PullImageResultCallback())
                 .awaitCompletion(30, TimeUnit.SECONDS);
     }
+
 
     @Test
     public void testPullImageWithInvalidAuth() throws Exception {
