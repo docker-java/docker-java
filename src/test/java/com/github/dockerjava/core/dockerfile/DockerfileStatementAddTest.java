@@ -7,8 +7,6 @@ import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -20,8 +18,6 @@ public class DockerfileStatementAddTest {
 
     @RunWith(Parameterized.class)
     public static final class ParamTests {
-
-        private static final Logger LOG = LoggerFactory.getLogger(DockerfileStatementAddTest.class);
 
         @Parameterized.Parameters(name = "{0} {1} {2}")
         public static Object[][] data() {

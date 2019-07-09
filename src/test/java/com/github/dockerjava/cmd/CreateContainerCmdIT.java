@@ -906,7 +906,7 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Test
     public void createContainerFromPrivateRegistryWithNoAuth() throws Exception {
-        AuthConfig authConfig = RegistryUtils.runPrivateRegistry(dockerRule.getClient());
+        RegistryUtils.runPrivateRegistry(dockerRule.getClient());
 
         String imgName = RegistryUtils.createPrivateImage(dockerRule, "create-container-with-no-auth");
 

@@ -134,8 +134,6 @@ public class Dockerfile {
                 dockerFolderTar = CompressArchiveUtil.archiveTARFiles(directory, filesToAdd,
                         archiveNameWithOutExtension);
 
-                long length = dockerFolderTar.length();
-
                 final FileInputStream tarInputStream = FileUtils.openInputStream(dockerFolderTar);
                 final File tarFile = dockerFolderTar;
 

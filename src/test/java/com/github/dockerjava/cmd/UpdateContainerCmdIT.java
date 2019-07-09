@@ -46,7 +46,7 @@ public class UpdateContainerCmdIT extends CmdIT {
         LOG.debug("Inspect: {}", inspectBefore);
         final Long memory = inspectBefore.getHostConfig().getMemory();
 
-        final UpdateContainerResponse updateResponse = dockerRule.getClient().updateContainerCmd(containerId)
+        dockerRule.getClient().updateContainerCmd(containerId)
                 .withBlkioWeight(300)
                 .withCpuShares(512)
                 .withCpuPeriod(100000)

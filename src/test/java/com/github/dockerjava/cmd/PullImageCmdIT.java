@@ -1,14 +1,11 @@
 package com.github.dockerjava.cmd;
 
-import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.InspectImageResponse;
-import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.exception.InternalServerErrorException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Info;
-import com.github.dockerjava.api.model.PullResponseItem;
 import com.github.dockerjava.core.RemoteApiVersion;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.utils.RegistryUtils;
@@ -31,12 +28,6 @@ public class PullImageCmdIT extends CmdIT {
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
-
-    private static final PullImageCmd.Exec NOP_EXEC = new PullImageCmd.Exec() {
-        public Void exec(PullImageCmd command, ResultCallback<PullResponseItem> resultCallback) {
-            return null;
-        };
-    };
 
     @Test
     public void testPullImage() throws Exception {
