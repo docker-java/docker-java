@@ -18,7 +18,7 @@ import java.io.Serializable;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class VersionPlatform implements Serializable {
-    public static final Long serialVersionUID = 1L;
+    public static final long serialVersionUID = 1L;
 
     @JsonProperty("Name")
     private String name;

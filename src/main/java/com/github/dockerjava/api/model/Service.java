@@ -22,7 +22,7 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
 public class Service implements Serializable {
-    public static final Long serialVersionUID = 1L;
+    public static final long serialVersionUID = 1L;
 
     /**
      * @since 1.24

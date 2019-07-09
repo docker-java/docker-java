@@ -9,7 +9,7 @@ import java.util.Date;
  * @since 1.24
  */
 public class Swarm extends ClusterInfo {
-    public static final Long serialVersionUID = 1L;
+    public static final long serialVersionUID = 1L;
 
     /**
      * @since 1.24

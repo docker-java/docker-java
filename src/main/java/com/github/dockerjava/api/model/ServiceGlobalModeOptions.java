@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
 public class ServiceGlobalModeOptions implements Serializable {
-    public static final Long serialVersionUID = 1L;
+    public static final long serialVersionUID = 1L;
 
     // Intentionally left blank, there are no options for this mode
 

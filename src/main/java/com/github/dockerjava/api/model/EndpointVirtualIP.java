@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
 public class EndpointVirtualIP implements Serializable {
-    public static final Long serialVersionUID = 1L;
+    public static final long serialVersionUID = 1L;
 
     /**
      * @since 1.24

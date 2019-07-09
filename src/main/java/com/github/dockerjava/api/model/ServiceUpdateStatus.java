@@ -15,7 +15,7 @@ import java.util.Date;
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
 public class ServiceUpdateStatus implements Serializable {
-    public static final Long serialVersionUID = 1L;
+    public static final long serialVersionUID = 1L;
 
     /**
      * @since 1.24
