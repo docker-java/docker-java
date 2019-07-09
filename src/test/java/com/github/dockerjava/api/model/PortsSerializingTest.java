@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class PortsSerializingTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -47,7 +48,7 @@ public class PortsSerializingTest {
         Map<ExposedPort, Binding[]> map = ports.getBindings();
         assertEquals(map.size(), 1);
 
-        assertEquals(map.get(ExposedPort.tcp(80)), null);
+        assertNull(map.get(ExposedPort.tcp(80)));
     }
 
     @Test
