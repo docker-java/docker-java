@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_21;
-import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_24;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_25;
 import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
 import static com.github.dockerjava.junit.DockerMatchers.isGreaterOrEqual;
