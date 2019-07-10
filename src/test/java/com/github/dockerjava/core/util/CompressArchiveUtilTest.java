@@ -1,6 +1,5 @@
-package com.github.dockerjava.core;
+package com.github.dockerjava.core.util;
 
-import com.github.dockerjava.core.util.CompressArchiveUtil;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.io.IOUtils;
