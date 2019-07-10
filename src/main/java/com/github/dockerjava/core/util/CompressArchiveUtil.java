@@ -28,14 +28,19 @@ public class CompressArchiveUtil {
         // utility class
     }
 
-    static void putTarEntry(TarArchiveOutputStream tarOutputStream, TarArchiveEntry tarEntry, Path file)
+    static void addFileToTar(TarArchiveOutputStream tarArchiveOutputStream, Path file, String entryName)
             throws IOException {
-        tarEntry.setSize(Files.size(file));
-        tarOutputStream.putArchiveEntry(tarEntry);
-        try (InputStream input = new BufferedInputStream(Files.newInputStream(file))) {
-            ByteStreams.copy(input, tarOutputStream);
-            tarOutputStream.closeArchiveEntry();
+        TarArchiveEntry archiveEntry = (TarArchiveEntry) tarArchiveOutputStream.createArchiveEntry(file.toFile(), entryName);
+        if (file.toFile().canExecute()) {
+            archiveEntry.setMode(archiveEntry.getMode() | 0755);
         }
+        tarArchiveOutputStream.putArchiveEntry(archiveEntry);
+        if (file.toFile().isFile()) {
+            try (InputStream input = new BufferedInputStream(Files.newInputStream(file))) {
+                ByteStreams.copy(input, tarArchiveOutputStream);
+            }
+        }
+        tarArchiveOutputStream.closeArchiveEntry();
     }
 
     private static TarArchiveOutputStream buildTarStream(Path outputPath, boolean gZipped) throws IOException {
@@ -69,11 +74,7 @@ public class CompressArchiveUtil {
 
         try (TarArchiveOutputStream tarArchiveOutputStream = buildTarStream(outputPath, gZipped)) {
             if (!Files.isDirectory(inputPath)) {
-                TarArchiveEntry tarEntry = new TarArchiveEntry(inputPath.getFileName().toString());
-                if (inputPath.toFile().canExecute()) {
-                    tarEntry.setMode(tarEntry.getMode() | 0755);
-                }
-                putTarEntry(tarArchiveOutputStream, tarEntry, inputPath);
+                addFileToTar(tarArchiveOutputStream, inputPath, inputPath.getFileName().toString());
             } else {
                 Path sourcePath = inputPath;
                 if (!childrenOnly) {
@@ -95,19 +96,7 @@ public class CompressArchiveUtil {
                 new FileOutputStream(tarFile))))) {
             tos.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU);
             for (File file : files) {
-                TarArchiveEntry tarEntry = new TarArchiveEntry(file);
-                tarEntry.setName(relativize(base, file));
-
-                if (!file.isDirectory() && file.canExecute()) {
-                    tarEntry.setMode(tarEntry.getMode() | 0755);
-                }
-
-                tos.putArchiveEntry(tarEntry);
-
-                if (!file.isDirectory()) {
-                    FileUtils.copyFile(file, tos);
-                }
-                tos.closeArchiveEntry();
+                addFileToTar(tos, file.toPath(), relativize(base, file));
             }
         }
 
