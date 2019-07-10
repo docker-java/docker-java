@@ -20,8 +20,6 @@ import java.io.File;
 
 import static com.github.dockerjava.cmd.CmdIT.FactoryType.JERSEY;
 import static com.github.dockerjava.cmd.CmdIT.FactoryType.NETTY;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsNull.notNullValue;
 
 /**
  * @author Kanstantsin Shautsou

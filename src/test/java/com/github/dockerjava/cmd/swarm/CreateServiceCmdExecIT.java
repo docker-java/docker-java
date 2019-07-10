@@ -5,7 +5,6 @@ import com.github.dockerjava.api.model.ContainerSpec;
 import com.github.dockerjava.api.model.EndpointResolutionMode;
 import com.github.dockerjava.api.model.EndpointSpec;
 import com.github.dockerjava.api.model.Mount;
-import com.github.dockerjava.api.model.MountType;
 import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.api.model.NetworkAttachmentConfig;
 import com.github.dockerjava.api.model.PortConfig;

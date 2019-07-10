@@ -21,7 +21,6 @@ import java.util.Map;
 import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 
 public class ListServicesCmdExecIT extends SwarmCmdIT {
     public static final Logger LOG = LoggerFactory.getLogger(CreateServiceCmdExecIT.class);
