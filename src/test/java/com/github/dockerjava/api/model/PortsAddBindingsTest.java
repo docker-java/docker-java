@@ -6,7 +6,9 @@ import org.junit.Test;
 
 import java.util.Map;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * As there may be several {@link Binding}s per {@link ExposedPort}, it makes a difference if you add {@link PortBinding}s for the same or
@@ -35,8 +37,8 @@ public class PortsAddBindingsTest {
         Map<ExposedPort, Binding[]> bindings = ports.getBindings();
         // two keys with one value each
         assertEquals(bindings.size(), 2);
-        assertEquals(bindings.get(TCP_80), new Binding[] {BINDING_8080});
-        assertEquals(bindings.get(TCP_90), new Binding[] {BINDING_9090});
+        assertArrayEquals(bindings.get(TCP_80), new Binding[] {BINDING_8080});
+        assertArrayEquals(bindings.get(TCP_90), new Binding[] {BINDING_9090});
     }
 
     @Test
@@ -46,7 +48,7 @@ public class PortsAddBindingsTest {
         Map<ExposedPort, Binding[]> bindings = ports.getBindings();
         // one key with two values
         assertEquals(bindings.size(), 1);
-        assertEquals(bindings.get(TCP_80), new Binding[] {BINDING_8080, BINDING_9090});
+        assertArrayEquals(bindings.get(TCP_80), new Binding[] {BINDING_8080, BINDING_9090});
     }
 
     @Test
@@ -55,6 +57,6 @@ public class PortsAddBindingsTest {
         Map<ExposedPort, Binding[]> bindings = ports.getBindings();
         // one key with two values
         assertEquals(bindings.size(), 1);
-        assertEquals(bindings.get(TCP_80), null);
+        assertNull(bindings.get(TCP_80));
     }
 }

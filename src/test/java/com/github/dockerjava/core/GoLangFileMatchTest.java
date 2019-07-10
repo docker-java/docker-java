@@ -4,11 +4,13 @@
 package com.github.dockerjava.core;
 
 import com.github.dockerjava.core.exception.GoLangFileMatchException;
-import junit.framework.Assert;
 import org.apache.commons.io.FilenameUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 
@@ -97,9 +99,9 @@ public class GoLangFileMatchTest {
         try {
             Boolean matched = GoLangFileMatch.match(pattern, s);
             if (testCase.expectException) {
-                Assert.fail("Expected GoFileMatchException");
+                fail("Expected GoFileMatchException");
             }
-            Assert.assertEquals(testCase.toString(), testCase.matches, matched);
+            assertEquals(testCase.toString(), testCase.matches, matched);
         } catch (GoLangFileMatchException e) {
             if (!testCase.expectException) {
                 throw e;
