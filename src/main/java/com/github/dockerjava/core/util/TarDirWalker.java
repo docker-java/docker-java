@@ -33,9 +33,6 @@ public class TarDirWalker extends SimpleFileVisitor<Path> {
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-        if (attrs.isSymbolicLink()) { // symbolic link to folder
-            return FileVisitResult.CONTINUE;
-        }
         CompressArchiveUtil.addFileToTar(tarArchiveOutputStream, file, FilePathUtil.relativize(basePath, file));
         return FileVisitResult.CONTINUE;
     }

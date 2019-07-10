@@ -1,7 +1,6 @@
 package com.github.dockerjava.core.util;
 
 import static com.github.dockerjava.core.util.FilePathUtil.relativize;
-import static java.nio.file.FileVisitOption.FOLLOW_LINKS;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -13,7 +12,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.EnumSet;
 import java.util.zip.GZIPOutputStream;
 
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
@@ -30,14 +28,21 @@ public class CompressArchiveUtil {
 
     static void addFileToTar(TarArchiveOutputStream tarArchiveOutputStream, Path file, String entryName)
             throws IOException {
-        TarArchiveEntry archiveEntry = (TarArchiveEntry) tarArchiveOutputStream.createArchiveEntry(file.toFile(), entryName);
-        if (file.toFile().canExecute()) {
-            archiveEntry.setMode(archiveEntry.getMode() | 0755);
-        }
-        tarArchiveOutputStream.putArchiveEntry(archiveEntry);
-        if (file.toFile().isFile()) {
-            try (InputStream input = new BufferedInputStream(Files.newInputStream(file))) {
-                ByteStreams.copy(input, tarArchiveOutputStream);
+        if (Files.isSymbolicLink(file)) {
+            TarArchiveEntry tarArchiveEntry = new TarArchiveEntry(entryName, TarArchiveEntry.LF_SYMLINK);
+            tarArchiveEntry.setLinkName(Files.readSymbolicLink(file).toString());
+            tarArchiveOutputStream.putArchiveEntry(tarArchiveEntry);
+        } else {
+            TarArchiveEntry tarArchiveEntry = (TarArchiveEntry) tarArchiveOutputStream.createArchiveEntry(file.toFile(),
+                    entryName);
+            if (file.toFile().canExecute()) {
+                tarArchiveEntry.setMode(tarArchiveEntry.getMode() | 0755);
+            }
+            tarArchiveOutputStream.putArchiveEntry(tarArchiveEntry);
+            if (file.toFile().isFile()) {
+                try (InputStream input = new BufferedInputStream(Files.newInputStream(file))) {
+                    ByteStreams.copy(input, tarArchiveOutputStream);
+                }
             }
         }
         tarArchiveOutputStream.closeArchiveEntry();
@@ -81,8 +86,7 @@ public class CompressArchiveUtil {
                     // In order to have the dossier as the root entry
                     sourcePath = inputPath.getParent();
                 }
-                Files.walkFileTree(inputPath, EnumSet.of(FOLLOW_LINKS), Integer.MAX_VALUE,
-                        new TarDirWalker(sourcePath, tarArchiveOutputStream));
+                Files.walkFileTree(inputPath, new TarDirWalker(sourcePath, tarArchiveOutputStream));
             }
             tarArchiveOutputStream.flush();
         }
@@ -96,7 +100,10 @@ public class CompressArchiveUtil {
                 new FileOutputStream(tarFile))))) {
             tos.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU);
             for (File file : files) {
-                addFileToTar(tos, file.toPath(), relativize(base, file));
+                // relativize with method using Path otherwise method with File resolves the symlinks
+                // and this is not want we want. If the file is a symlink, the relativized path should
+                // keep the symlink name and not the target it points to.
+                addFileToTar(tos, file.toPath(), relativize(base.toPath(), file.toPath()));
             }
         }
 

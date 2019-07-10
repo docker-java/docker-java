@@ -2,7 +2,6 @@ package com.github.dockerjava.core.util;
 
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -69,7 +68,6 @@ public class CompressArchiveUtilTest {
     }
 
     @Test
-    @Ignore("Symlink creation is broken so test do not pass")
     public void tarWithSymbolicLinkFileAsInput() throws IOException {
         Path archiveSourceFile = tempFolder.getRoot().toPath().resolve("symlinkFile");
         Path linkTargetFile = tempFolder.newFile("link-target").toPath();
@@ -140,7 +138,6 @@ public class CompressArchiveUtilTest {
     }
 
     @Test
-    @Ignore("Symlink creation is broken so test do not pass")
     public void tarWithfolderAsInputAndNestedSymbolicLinkFile() throws Exception {
         Path archiveSourceDir = tempFolder.newFolder("archive-source").toPath();
         Path linkTargetFile = tempFolder.newFile("link-target").toPath();
@@ -162,7 +159,6 @@ public class CompressArchiveUtilTest {
     }
 
     @Test
-    @Ignore("Symlink creation is broken so test do not pass")
     public void tarWithfolderAsInputAndNestedSymbolicLinkDir() throws Exception {
         Path archiveSourceDir = tempFolder.newFolder("archive-source").toPath();
         Path linkTargetDir = tempFolder.newFolder("link-target").toPath();
@@ -207,7 +203,6 @@ public class CompressArchiveUtilTest {
     }
 
     @Test
-    @Ignore("Symlink creation is broken so test do not pass")
     public void archiveTARFilesWithSymbolicLinkFile() throws Exception {
         Path linkTargetFile = tempFolder.newFile("link-target").toPath();
         Path symlinkFile = tempFolder.getRoot().toPath().resolve("symlinkFile");
@@ -219,7 +214,6 @@ public class CompressArchiveUtilTest {
     }
 
     @Test
-    @Ignore("Symlink creation is broken so test do not pass")
     public void archiveTARFilesWithSymbolicLinkDir() throws Exception {
         Path linkTargetDir = tempFolder.newFolder("link-target").toPath();
         Path symlinkFile = tempFolder.getRoot().toPath().resolve("symlinkFile");
