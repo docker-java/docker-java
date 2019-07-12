@@ -32,8 +32,6 @@ public class DockerRule extends ExternalResource {
     private DockerClient jerseyClient;
 
     private CmdIT cmdIT;
-    private Object cmdExecFactory;
-
 
     public DockerRule(CmdIT cmdIT) {
         this.cmdIT = cmdIT;
