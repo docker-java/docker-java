@@ -351,6 +351,37 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         return this;
     }
 
+    @Deprecated
+    @Override
+    @JsonIgnore
+    public Long getMemory() {
+        return hostConfig.getMemory();
+    }
+
+    @Deprecated
+    @Override
+    public CreateContainerCmd withMemory(Long memory) {
+        checkNotNull(memory, "memory was not specified");
+        hostConfig.withMemory(memory);
+        return this;
+    }
+
+    @Deprecated
+    @Override
+    @JsonIgnore
+    public Long getMemorySwap() {
+        return hostConfig.getMemorySwap();
+    }
+
+    @Deprecated
+    @Override
+    public CreateContainerCmd withMemorySwap(Long memorySwap) {
+        checkNotNull(memorySwap, "memorySwap was not specified");
+        hostConfig.withMemorySwap(memorySwap);
+        return this;
+    }
+
+
     @Override
     public String getName() {
         return name;
