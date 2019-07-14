@@ -158,6 +158,20 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     CreateContainerCmd withMacAddress(String macAddress);
 
+    @Deprecated
+    @CheckForNull
+    Long getMemory();
+
+    @Deprecated
+    CreateContainerCmd withMemory(Long memory);
+
+    @Deprecated
+    @CheckForNull
+    Long getMemorySwap();
+
+    @Deprecated
+    CreateContainerCmd withMemorySwap(Long memorySwap);
+
     @CheckForNull
     String getName();
 
