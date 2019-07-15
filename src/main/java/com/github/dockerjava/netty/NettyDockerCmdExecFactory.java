@@ -15,6 +15,8 @@ import javax.net.ssl.SSLParameters;
 
 import com.github.dockerjava.core.AbstractDockerCmdExecFactory;
 import com.github.dockerjava.core.WebTarget;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 import org.apache.commons.lang.SystemUtils;
 
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
@@ -232,12 +234,34 @@ public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory impl
                 throw new RuntimeException("no port configured for " + host);
             }
 
-            DuplexChannel channel = (DuplexChannel) bootstrap.connect(host, port).sync().channel();
+            final DuplexChannel channel = (DuplexChannel) bootstrap.connect(host, port).sync().channel();
 
             final SslHandler ssl = initSsl(dockerClientConfig);
 
             if (ssl != null) {
                 channel.pipeline().addFirst(ssl);
+
+                // https://tools.ietf.org/html/rfc5246#section-7.2.1
+                // TLS has its own special message about connection termination. Because TLS is a
+                // session-level protocol, it can be covered by any transport-level protocol like
+                // TCP, UTP and so on. But we know exactly that data being transferred over TCP and
+                // that other side will never send any byte into this TCP connection, so this
+                // channel should be closed.
+                // RFC says that we must notify opposite side about closing. This could be done only
+                // in sun.security.ssl.SSLEngineImpl and unfortunately it does not send this
+                // message. On the other hand RFC does not enforce the opposite side to wait for
+                // such message.
+                ssl.sslCloseFuture().addListener(new GenericFutureListener<Future<? super Channel>>() {
+                    @Override
+                    public void operationComplete(Future<? super Channel> future) {
+                        channel.eventLoop().execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                channel.close();
+                            }
+                        });
+                    }
+                });
             }
 
             return channel;
