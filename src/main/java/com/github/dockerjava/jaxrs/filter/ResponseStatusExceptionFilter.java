@@ -79,13 +79,18 @@ public class ResponseStatusExceptionFilter implements ClientResponseFilter {
                 String message = IOUtils.toString(entityStream, charset);
 
                 if (MediaType.APPLICATION_JSON_TYPE.equals(mediaType)) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    JsonNode node = mapper.readTree(entityStream).get("message");
-                    if (node != null) {
-                        message = node.textValue();
+                    try {
+                        JsonNode node = new ObjectMapper().readTree(message);
+                        if (node != null) {
+                            JsonNode messageNode = node.get("message");
+                            if (messageNode != null && messageNode.isTextual()) {
+                                message = messageNode.textValue();
+                            }
+                        }
+                    } catch (IOException ignored) {
+                        //ignore parsing errors and return the message as is
                     }
                 }
-
                 return message;
             } catch (Exception ignored) { }
         }
