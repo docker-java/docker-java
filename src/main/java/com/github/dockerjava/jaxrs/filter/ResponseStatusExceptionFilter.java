@@ -80,9 +80,12 @@ public class ResponseStatusExceptionFilter implements ClientResponseFilter {
 
                 if (MediaType.APPLICATION_JSON_TYPE.equals(mediaType)) {
                     ObjectMapper mapper = new ObjectMapper();
-                    JsonNode node = mapper.readTree(entityStream).get("message");
+                    JsonNode node = mapper.readTree(message);
                     if (node != null) {
-                        message = node.textValue();
+                        JsonNode messageNode = node.get("message");
+                        if (messageNode != null && messageNode.isTextual()) {
+                            message = messageNode.textValue();
+                        }
                     }
                 }
 
