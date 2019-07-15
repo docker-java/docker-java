@@ -11,6 +11,7 @@ import java.io.Serializable;
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ServiceGlobalModeOptions implements Serializable {
     public static final long serialVersionUID = 1L;
 
