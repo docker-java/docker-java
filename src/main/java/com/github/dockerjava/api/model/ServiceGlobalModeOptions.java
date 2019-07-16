@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -11,6 +12,7 @@ import java.io.Serializable;
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ServiceGlobalModeOptions implements Serializable {
     public static final long serialVersionUID = 1L;
 
