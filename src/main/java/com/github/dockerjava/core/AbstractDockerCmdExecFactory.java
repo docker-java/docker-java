@@ -12,6 +12,7 @@ import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateImageCmd;
 import com.github.dockerjava.api.command.CreateNetworkCmd;
+import com.github.dockerjava.api.command.CreateSecretCmd;
 import com.github.dockerjava.api.command.CreateServiceCmd;
 import com.github.dockerjava.api.command.CreateVolumeCmd;
 import com.github.dockerjava.api.command.DisconnectFromNetworkCmd;
@@ -35,6 +36,7 @@ import com.github.dockerjava.api.command.LeaveSwarmCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.ListNetworksCmd;
+import com.github.dockerjava.api.command.ListSecretsCmd;
 import com.github.dockerjava.api.command.ListServicesCmd;
 import com.github.dockerjava.api.command.ListSwarmNodesCmd;
 import com.github.dockerjava.api.command.ListTasksCmd;
@@ -50,6 +52,7 @@ import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.command.RemoveContainerCmd;
 import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.command.RemoveNetworkCmd;
+import com.github.dockerjava.api.command.RemoveSecretCmd;
 import com.github.dockerjava.api.command.RemoveServiceCmd;
 import com.github.dockerjava.api.command.RemoveSwarmNodeCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
@@ -81,6 +84,7 @@ import com.github.dockerjava.core.exec.CopyFileFromContainerCmdExec;
 import com.github.dockerjava.core.exec.CreateContainerCmdExec;
 import com.github.dockerjava.core.exec.CreateImageCmdExec;
 import com.github.dockerjava.core.exec.CreateNetworkCmdExec;
+import com.github.dockerjava.core.exec.CreateSecretCmdExec;
 import com.github.dockerjava.core.exec.CreateServiceCmdExec;
 import com.github.dockerjava.core.exec.CreateVolumeCmdExec;
 import com.github.dockerjava.core.exec.DisconnectFromNetworkCmdExec;
@@ -103,12 +107,14 @@ import com.github.dockerjava.core.exec.LeaveSwarmCmdExec;
 import com.github.dockerjava.core.exec.ListContainersCmdExec;
 import com.github.dockerjava.core.exec.ListImagesCmdExec;
 import com.github.dockerjava.core.exec.ListNetworksCmdExec;
+import com.github.dockerjava.core.exec.ListSecretsCmdExec;
 import com.github.dockerjava.core.exec.ListServicesCmdExec;
 import com.github.dockerjava.core.exec.ListSwarmNodesCmdExec;
 import com.github.dockerjava.core.exec.ListTasksCmdExec;
 import com.github.dockerjava.core.exec.ListVolumesCmdExec;
 import com.github.dockerjava.core.exec.LoadImageCmdExec;
 import com.github.dockerjava.core.exec.LogContainerCmdExec;
+import com.github.dockerjava.core.exec.LogSwarmObjectExec;
 import com.github.dockerjava.core.exec.PauseContainerCmdExec;
 import com.github.dockerjava.core.exec.PingCmdExec;
 import com.github.dockerjava.core.exec.PruneCmdExec;
@@ -117,6 +123,7 @@ import com.github.dockerjava.core.exec.PushImageCmdExec;
 import com.github.dockerjava.core.exec.RemoveContainerCmdExec;
 import com.github.dockerjava.core.exec.RemoveImageCmdExec;
 import com.github.dockerjava.core.exec.RemoveNetworkCmdExec;
+import com.github.dockerjava.core.exec.RemoveSecretCmdExec;
 import com.github.dockerjava.core.exec.RemoveServiceCmdExec;
 import com.github.dockerjava.core.exec.RemoveSwarmNodeCmdExec;
 import com.github.dockerjava.core.exec.RemoveVolumeCmdExec;
@@ -136,7 +143,6 @@ import com.github.dockerjava.core.exec.UpdateSwarmCmdExec;
 import com.github.dockerjava.core.exec.UpdateSwarmNodeCmdExec;
 import com.github.dockerjava.core.exec.VersionCmdExec;
 import com.github.dockerjava.core.exec.WaitContainerCmdExec;
-import com.github.dockerjava.core.exec.LogSwarmObjectExec;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -497,6 +503,21 @@ public abstract class AbstractDockerCmdExecFactory implements DockerCmdExecFacto
     @Override
     public PruneCmd.Exec pruneCmdExec() {
         return new PruneCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public ListSecretsCmd.Exec createListSecretsCmdExec() {
+        return new ListSecretsCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public CreateSecretCmd.Exec createCreateSecretCmdExec() {
+        return new CreateSecretCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public RemoveSecretCmd.Exec createRemoveSecretCmdExec() {
+        return new RemoveSecretCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     protected abstract WebTarget getBaseResource();

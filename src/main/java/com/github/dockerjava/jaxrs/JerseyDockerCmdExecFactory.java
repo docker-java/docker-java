@@ -15,6 +15,7 @@ import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateImageCmd;
 import com.github.dockerjava.api.command.CreateNetworkCmd;
+import com.github.dockerjava.api.command.CreateSecretCmd;
 import com.github.dockerjava.api.command.CreateServiceCmd;
 import com.github.dockerjava.api.command.CreateVolumeCmd;
 import com.github.dockerjava.api.command.DisconnectFromNetworkCmd;
@@ -38,6 +39,7 @@ import com.github.dockerjava.api.command.LeaveSwarmCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.ListNetworksCmd;
+import com.github.dockerjava.api.command.ListSecretsCmd;
 import com.github.dockerjava.api.command.ListServicesCmd;
 import com.github.dockerjava.api.command.ListSwarmNodesCmd;
 import com.github.dockerjava.api.command.ListTasksCmd;
@@ -53,6 +55,7 @@ import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.command.RemoveContainerCmd;
 import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.command.RemoveNetworkCmd;
+import com.github.dockerjava.api.command.RemoveSecretCmd;
 import com.github.dockerjava.api.command.RemoveServiceCmd;
 import com.github.dockerjava.api.command.RemoveSwarmNodeCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
@@ -661,6 +664,21 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
     @Override
     public PruneCmd.Exec pruneCmdExec() {
         return new PruneCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public ListSecretsCmd.Exec createListSecretsCmdExec() {
+        return new ListSecretsCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public CreateSecretCmd.Exec createCreateSecretCmdExec() {
+        return new CreateSecretCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public RemoveSecretCmd.Exec createRemoveSecretCmdExec() {
+        return new RemoveSecretCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
