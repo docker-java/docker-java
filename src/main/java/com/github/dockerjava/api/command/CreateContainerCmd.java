@@ -5,12 +5,17 @@ import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Capability;
+import com.github.dockerjava.api.model.Device;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HealthCheck;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Link;
+import com.github.dockerjava.api.model.LogConfig;
+import com.github.dockerjava.api.model.LxcConf;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
+import com.github.dockerjava.api.model.RestartPolicy;
+import com.github.dockerjava.api.model.Ulimit;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
 
@@ -365,6 +370,160 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     HostConfig getHostConfig();
 
     CreateContainerCmd withHostConfig(HostConfig hostConfig);
+
+    // The following methods are deprecated and should be set on {@link #getHostConfig()} instead.
+    // TODO remove in the next big release
+
+    @Deprecated
+    @CheckForNull
+    Integer getBlkioWeight();
+
+    @CheckForNull
+    @Deprecated
+    String getCgroupParent();
+
+    @Deprecated
+    @CheckForNull
+    Integer getCpuPeriod();
+
+    @Deprecated
+    @CheckForNull
+    Integer getCpuShares();
+
+    @Deprecated
+    @CheckForNull
+    String getCpusetCpus();
+
+    @Deprecated
+    @CheckForNull
+    String getCpusetMems();
+
+    @Deprecated
+    @CheckForNull
+    Device[] getDevices();
+
+    @Deprecated
+    @CheckForNull
+    String[] getDns();
+
+    @Deprecated
+    @CheckForNull
+    String[] getDnsSearch();
+
+    @Deprecated
+    @CheckForNull
+    LogConfig getLogConfig();
+
+    @Deprecated
+    @CheckForNull
+    LxcConf[] getLxcConf();
+
+    @Deprecated
+    @CheckForNull
+    Boolean getOomKillDisable();
+
+    @Deprecated
+    @CheckForNull
+    String getPidMode();
+
+    @Deprecated
+    @CheckForNull
+    Boolean getReadonlyRootfs();
+
+    @Deprecated
+    @CheckForNull
+    RestartPolicy getRestartPolicy();
+
+    @Deprecated
+    @CheckForNull
+    Ulimit[] getUlimits();
+
+    @Deprecated
+    CreateContainerCmd withBlkioWeight(Integer blkioWeight);
+
+    @Deprecated
+    CreateContainerCmd withCgroupParent(String cgroupParent);
+
+    @Deprecated
+    CreateContainerCmd withContainerIDFile(String containerIDFile);
+
+    @Deprecated
+    CreateContainerCmd withCpuPeriod(Integer cpuPeriod);
+
+    @Deprecated
+    CreateContainerCmd withCpuShares(Integer cpuShares);
+
+    @Deprecated
+    CreateContainerCmd withCpusetCpus(String cpusetCpus);
+
+    @Deprecated
+    CreateContainerCmd withCpusetMems(String cpusetMems);
+
+    @Deprecated
+    CreateContainerCmd withDevices(Device... devices);
+
+    /**
+     * Add host devices to the container
+     */
+    @Deprecated
+    CreateContainerCmd withDevices(List<Device> devices);
+
+    /**
+     * Set custom DNS servers
+     */
+    @Deprecated
+    CreateContainerCmd withDns(String... dns);
+
+    /**
+     * Set custom DNS servers
+     */
+    @Deprecated
+    CreateContainerCmd withDns(List<String> dns);
+
+    /**
+     * Set custom DNS search domains
+     */
+    @Deprecated
+    CreateContainerCmd withDnsSearch(String... dnsSearch);
+
+    /**
+     * Set custom DNS search domains
+     */
+    @Deprecated
+    CreateContainerCmd withDnsSearch(List<String> dnsSearch);
+
+    @Deprecated
+    CreateContainerCmd withLogConfig(LogConfig logConfig);
+
+    @Deprecated
+    CreateContainerCmd withLxcConf(LxcConf... lxcConf);
+
+    @Deprecated
+    CreateContainerCmd withLxcConf(List<LxcConf> lxcConf);
+
+    @Deprecated
+    CreateContainerCmd withOomKillDisable(Boolean oomKillDisable);
+
+    /**
+     * Set the PID (Process) Namespace mode for the container, 'host': use the host's PID namespace inside the container
+     */
+    @Deprecated
+    CreateContainerCmd withPidMode(String pidMode);
+
+    @Deprecated
+    CreateContainerCmd withReadonlyRootfs(Boolean readonlyRootfs);
+
+    /**
+     * Set custom {@link RestartPolicy} for the container. Defaults to {@link RestartPolicy#noRestart()}
+     */
+    @Deprecated
+    CreateContainerCmd withRestartPolicy(RestartPolicy restartPolicy);
+
+    @Deprecated
+    CreateContainerCmd withUlimits(Ulimit... ulimits);
+
+    @Deprecated
+    CreateContainerCmd withUlimits(List<Ulimit> ulimits);
 
     /**
      * @throws NotFoundException No such container

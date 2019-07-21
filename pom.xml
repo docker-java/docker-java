@@ -450,6 +450,32 @@
 					</instructions>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<!-- use with "mvn -DskipTests clean package japicmp:cmp" -->
+				<groupId>com.github.siom79.japicmp</groupId>
+				<artifactId>japicmp-maven-plugin</artifactId>
+				<version>0.14.1</version>
+				<configuration>
+					<oldVersion>
+						<dependency>
+							<groupId>com.github.docker-java</groupId>
+							<artifactId>docker-java</artifactId>
+							<version>3.1.0-rc-4</version>
+							<type>jar</type>
+						</dependency>
+					</oldVersion>
+					<newVersion>
+						<file>
+							<path>${project.build.directory}/${project.artifactId}-${project.version}.jar</path>
+						</file>
+					</newVersion>
+					<parameter>
+						<accessModifier>public</accessModifier>
+						<onlyBinaryIncompatible>true</onlyBinaryIncompatible>
+					</parameter>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
