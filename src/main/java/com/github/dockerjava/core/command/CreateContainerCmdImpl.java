@@ -482,6 +482,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @CheckForNull
     @Override
     @Deprecated
+    @JsonIgnore
     public Ulimit[] getUlimits() {
         return hostConfig.getUlimits();
     }
@@ -1024,8 +1025,10 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
+    @Deprecated
     public CreateContainerCmd withLogConfig(LogConfig logConfig) {
-        return null;
+        hostConfig.withLogConfig(logConfig);
+        return this;
     }
 
     @Override
