@@ -96,8 +96,20 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     @CheckForNull
     String[] getEnv();
 
+    /**
+     * Adds environment-variables. NB: Not additive, i.e. in case of multiple calls to the method, only the most recent
+     * values will be injected. Prior env-variables will be deleted.
+     *
+     * @param env the String(s) to set as ENV in the container
+     */
     CreateContainerCmd withEnv(String... env);
 
+    /**
+     * Adds environment-variables. NB: Not additive, i.e. in case of multiple calls to the method, only the most recent
+     * values will be injected. Prior env-variables will be deleted.
+     *
+     * @param env the list of Strings to set as ENV in the container
+     */
     CreateContainerCmd withEnv(List<String> env);
 
     @CheckForNull
