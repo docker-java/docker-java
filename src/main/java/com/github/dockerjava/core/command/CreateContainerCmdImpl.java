@@ -12,13 +12,18 @@ import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Capability;
 import com.github.dockerjava.api.model.ContainerNetwork;
+import com.github.dockerjava.api.model.Device;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.ExposedPorts;
 import com.github.dockerjava.api.model.HealthCheck;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Link;
+import com.github.dockerjava.api.model.LogConfig;
+import com.github.dockerjava.api.model.LxcConf;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
+import com.github.dockerjava.api.model.RestartPolicy;
+import com.github.dockerjava.api.model.Ulimit;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.Volumes;
 import com.github.dockerjava.api.model.VolumesFrom;
@@ -171,6 +176,14 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         return hostConfig.getBinds();
     }
 
+    @CheckForNull
+    @Override
+    @Deprecated
+    @JsonIgnore
+    public Integer getBlkioWeight() {
+        return hostConfig.getBlkioWeight();
+    }
+
     @Override
     @Deprecated
     public CreateContainerCmd withBinds(Bind... binds) {
@@ -184,6 +197,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public CreateContainerCmd withBinds(List<Bind> binds) {
         checkNotNull(binds, "binds was not specified");
         return withBinds(binds.toArray(new Bind[binds.size()]));
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withBlkioWeight(Integer blkioWeight) {
+        hostConfig.withBlkioWeight(blkioWeight);
+        return this;
     }
 
     @Override
@@ -205,6 +225,63 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         return cmd;
     }
 
+    @CheckForNull
+    @Override
+    @Deprecated
+    @JsonIgnore
+    public Integer getCpuPeriod() {
+        Long result = hostConfig.getCpuPeriod();
+        return result != null ? result.intValue() : null;
+    }
+
+    @CheckForNull
+    @Override
+    @Deprecated
+    @JsonIgnore
+    public Integer getCpuShares() {
+        return hostConfig.getCpuShares();
+    }
+
+    @CheckForNull
+    @Override
+    @Deprecated
+    @JsonIgnore
+    public String getCpusetCpus() {
+        return hostConfig.getCpusetCpus();
+    }
+
+    @CheckForNull
+    @Override
+    @Deprecated
+    @JsonIgnore
+    public String getCpusetMems() {
+        return hostConfig.getCpusetMems();
+    }
+
+    @CheckForNull
+    @Override
+    @Deprecated
+    @JsonIgnore
+    public Device[] getDevices() {
+        return hostConfig.getDevices();
+    }
+
+    @CheckForNull
+    @Override
+    @Deprecated
+    @JsonIgnore
+    public String[] getDns() {
+        return hostConfig.getDns();
+    }
+
+    @CheckForNull
+    @Override
+    @Deprecated
+    @JsonIgnore
+    public String[] getDnsSearch() {
+        return hostConfig.getDnsSearch();
+    }
+
     @Override
     public CreateContainerCmd withCmd(String... cmd) {
         checkNotNull(cmd, "cmd was not specified");
@@ -216,6 +293,83 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public CreateContainerCmd withCmd(List<String> cmd) {
         checkNotNull(cmd, "cmd was not specified");
         return withCmd(cmd.toArray(new String[0]));
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withContainerIDFile(String containerIDFile) {
+        hostConfig.withContainerIDFile(containerIDFile);
+        return this;
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withCpuPeriod(Integer cpuPeriod) {
+        hostConfig.withCpuPeriod(cpuPeriod != null ? cpuPeriod.longValue() : null);
+        return this;
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withCpuShares(Integer cpuShares) {
+        hostConfig.withCpuShares(cpuShares);
+        return this;
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withCpusetCpus(String cpusetCpus) {
+        hostConfig.withCpusetCpus(cpusetCpus);
+        return this;
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withCpusetMems(String cpusetMems) {
+        hostConfig.withCpusetMems(cpusetMems);
+        return this;
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withDevices(Device... devices) {
+        hostConfig.withDevices(devices);
+        return this;
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withDevices(List<Device> devices) {
+        hostConfig.withDevices(devices);
+        return this;
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withDns(String... dns) {
+        hostConfig.withDns(dns);
+        return this;
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withDns(List<String> dns) {
+        hostConfig.withDns(dns);
+        return this;
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withDnsSearch(String... dnsSearch) {
+        hostConfig.withDnsSearch(dnsSearch);
+        return this;
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withDnsSearch(List<String> dnsSearch) {
+        hostConfig.withDnsSearch(dnsSearch);
+        return this;
     }
 
     @CheckForNull
@@ -323,6 +477,14 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public Integer getStopTimeout() {
         return stopTimeout;
+    }
+
+    @CheckForNull
+    @Override
+    @Deprecated
+    @JsonIgnore
+    public Ulimit[] getUlimits() {
+        return hostConfig.getUlimits();
     }
 
     @Override
@@ -656,6 +818,20 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         return this;
     }
 
+    @Override
+    @Deprecated
+    public CreateContainerCmd withUlimits(Ulimit... ulimits) {
+        hostConfig.withUlimits(ulimits);
+        return this;
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withUlimits(List<Ulimit> ulimits) {
+        hostConfig.withUlimits(ulimits);
+        return this;
+    }
+
     @CheckForNull
     @Override
     @Deprecated
@@ -664,11 +840,41 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         return hostConfig.getPublishAllPorts();
     }
 
+    @CheckForNull
+    @Override
+    @Deprecated
+    @JsonIgnore
+    public Boolean getReadonlyRootfs() {
+        return hostConfig.getReadonlyRootfs();
+    }
+
+    @CheckForNull
+    @Override
+    @Deprecated
+    @JsonIgnore
+    public RestartPolicy getRestartPolicy() {
+        return hostConfig.getRestartPolicy();
+    }
+
     @Override
     @Deprecated
     public CreateContainerCmd withPublishAllPorts(Boolean publishAllPorts) {
         checkNotNull(publishAllPorts, "no publishAllPorts was specified");
         this.hostConfig.withPublishAllPorts(publishAllPorts);
+        return this;
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withReadonlyRootfs(Boolean readonlyRootfs) {
+        hostConfig.withReadonlyRootfs(readonlyRootfs);
+        return this;
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withRestartPolicy(RestartPolicy restartPolicy) {
+        hostConfig.withRestartPolicy(restartPolicy);
         return this;
     }
 
@@ -726,6 +932,14 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         return hostConfig.getCapDrop();
     }
 
+    @CheckForNull
+    @Override
+    @Deprecated
+    @JsonIgnore
+    public String getCgroupParent() {
+        return hostConfig.getCgroupParent();
+    }
+
     @Override
     @Deprecated
     public CreateContainerCmd withCapDrop(Capability... capDrop) {
@@ -739,6 +953,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public CreateContainerCmd withCapDrop(List<Capability> capDrop) {
         checkNotNull(capDrop, "capDrop was not specified");
         return withCapDrop(capDrop.toArray(new Capability[capDrop.size()]));
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withCgroupParent(String cgroupParent) {
+        hostConfig.withCgroupParent(cgroupParent);
+        return this;
     }
 
     @Override
@@ -772,6 +993,22 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         return hostConfig.getLinks();
     }
 
+    @CheckForNull
+    @Override
+    @Deprecated
+    @JsonIgnore
+    public LogConfig getLogConfig() {
+        return hostConfig.getLogConfig();
+    }
+
+    @CheckForNull
+    @Override
+    @Deprecated
+    @JsonIgnore
+    public LxcConf[] getLxcConf() {
+        return hostConfig.getLxcConf();
+    }
+
     @Override
     @Deprecated
     public CreateContainerCmd withLinks(Link... links) {
@@ -785,6 +1022,27 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     public CreateContainerCmd withLinks(List<Link> links) {
         checkNotNull(links, "links was not specified");
         return withLinks(links.toArray(new Link[links.size()]));
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withLogConfig(LogConfig logConfig) {
+        hostConfig.withLogConfig(logConfig);
+        return this;
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withLxcConf(LxcConf... lxcConf) {
+        hostConfig.withLxcConf(lxcConf);
+        return this;
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withLxcConf(List<LxcConf> lxcConf) {
+        hostConfig.withLxcConf(lxcConf.toArray(new LxcConf[0]));
+        return this;
     }
 
     @Override
@@ -804,8 +1062,38 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         return onBuild;
     }
 
+    @CheckForNull
+    @Override
+    @Deprecated
+    @JsonIgnore
+    public Boolean getOomKillDisable() {
+        return hostConfig.getOomKillDisable();
+    }
+
+    @CheckForNull
+    @Override
+    @Deprecated
+    @JsonIgnore
+    public String getPidMode() {
+        return hostConfig.getPidMode();
+    }
+
     public CreateContainerCmdImpl withOnBuild(List<String> onBuild) {
         this.onBuild = onBuild;
+        return this;
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withOomKillDisable(Boolean oomKillDisable) {
+        hostConfig.withOomKillDisable(oomKillDisable);
+        return this;
+    }
+
+    @Override
+    @Deprecated
+    public CreateContainerCmd withPidMode(String pidMode) {
+        hostConfig.withPidMode(pidMode);
         return this;
     }
 
