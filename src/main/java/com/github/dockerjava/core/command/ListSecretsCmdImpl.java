@@ -2,7 +2,6 @@ package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.command.ListSecretsCmd;
 import com.github.dockerjava.api.model.Secret;
-import com.github.dockerjava.api.model.Service;
 import com.github.dockerjava.core.util.FiltersBuilder;
 
 import java.util.List;

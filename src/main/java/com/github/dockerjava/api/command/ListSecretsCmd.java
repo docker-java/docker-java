@@ -1,17 +1,13 @@
 package com.github.dockerjava.api.command;
 
-import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Secret;
-import com.github.dockerjava.api.model.Service;
 
 import javax.annotation.CheckForNull;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 /**
  * List secrets
- *
  */
 public interface ListSecretsCmd extends SyncDockerCmd<List<Secret>> {
 

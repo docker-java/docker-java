@@ -12,7 +12,6 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 
 /**

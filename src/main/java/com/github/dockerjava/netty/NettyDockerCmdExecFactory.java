@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLParameters;
 
-import com.github.dockerjava.api.command.ListSecretsCmd;
 import com.github.dockerjava.core.AbstractDockerCmdExecFactory;
 import com.github.dockerjava.core.WebTarget;
 import io.netty.util.concurrent.Future;
