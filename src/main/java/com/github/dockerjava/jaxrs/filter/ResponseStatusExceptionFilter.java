@@ -10,6 +10,8 @@ import javax.ws.rs.client.ClientResponseFilter;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,6 +32,8 @@ import com.github.dockerjava.api.exception.UnauthorizedException;
  *
  */
 public class ResponseStatusExceptionFilter implements ClientResponseFilter {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ResponseStatusExceptionFilter.class);
 
     @Override
     public void filter(ClientRequestContext requestContext, ClientResponseContext responseContext) throws IOException {
@@ -79,13 +83,19 @@ public class ResponseStatusExceptionFilter implements ClientResponseFilter {
                 String message = IOUtils.toString(entityStream, charset);
 
                 if (MediaType.APPLICATION_JSON_TYPE.equals(mediaType)) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    JsonNode node = mapper.readTree(entityStream).get("message");
-                    if (node != null) {
-                        message = node.textValue();
+                    try {
+                        JsonNode node = new ObjectMapper().readTree(message);
+                        if (node != null) {
+                            JsonNode messageNode = node.get("message");
+                            if (messageNode != null && messageNode.isTextual()) {
+                                message = messageNode.textValue();
+                            }
+                        }
+                    } catch (IOException e) {
+                        // ignore parsing errors and return the message as is
+                        LOG.debug("Failed to unwrap error message: {}", e.getMessage(), e);
                     }
                 }
-
                 return message;
             } catch (Exception ignored) { }
         }

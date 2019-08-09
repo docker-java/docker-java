@@ -10,7 +10,7 @@
 	<groupId>com.github.docker-java</groupId>
 	<artifactId>docker-java</artifactId>
 	<packaging>bundle</packaging>
-	<version>3.1.4-SNAPSHOT</version>
+	<version>3.1.6-SNAPSHOT</version>
 
 	<name>docker-java</name>
 	<url>https://github.com/docker-java/docker-java</url>
@@ -448,6 +448,32 @@
 						<Export-Package>!com.github.dockerjava.jaxrs.*,!com.github.dockerjava.netty.*,com.github.dockerjava.*</Export-Package>
 						<Import-Package>org.newsclub.net.unix;resolution:="optional",*</Import-Package>
 					</instructions>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<!-- use with "mvn -DskipTests clean package japicmp:cmp" -->
+				<groupId>com.github.siom79.japicmp</groupId>
+				<artifactId>japicmp-maven-plugin</artifactId>
+				<version>0.14.1</version>
+				<configuration>
+					<oldVersion>
+						<dependency>
+							<groupId>com.github.docker-java</groupId>
+							<artifactId>docker-java</artifactId>
+							<version>3.1.0-rc-4</version>
+							<type>jar</type>
+						</dependency>
+					</oldVersion>
+					<newVersion>
+						<file>
+							<path>${project.build.directory}/${project.artifactId}-${project.version}.jar</path>
+						</file>
+					</newVersion>
+					<parameter>
+						<accessModifier>public</accessModifier>
+						<onlyBinaryIncompatible>true</onlyBinaryIncompatible>
+					</parameter>
 				</configuration>
 			</plugin>
 		</plugins>
