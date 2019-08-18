@@ -13,6 +13,7 @@ import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateImageCmd;
 import com.github.dockerjava.api.command.CreateNetworkCmd;
+import com.github.dockerjava.api.command.CreateSecretCmd;
 import com.github.dockerjava.api.command.CreateServiceCmd;
 import com.github.dockerjava.api.command.CreateVolumeCmd;
 import com.github.dockerjava.api.command.DisconnectFromNetworkCmd;
@@ -35,6 +36,7 @@ import com.github.dockerjava.api.command.LeaveSwarmCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.ListNetworksCmd;
+import com.github.dockerjava.api.command.ListSecretsCmd;
 import com.github.dockerjava.api.command.ListServicesCmd;
 import com.github.dockerjava.api.command.ListSwarmNodesCmd;
 import com.github.dockerjava.api.command.ListTasksCmd;
@@ -50,6 +52,7 @@ import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.command.RemoveContainerCmd;
 import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.command.RemoveNetworkCmd;
+import com.github.dockerjava.api.command.RemoveSecretCmd;
 import com.github.dockerjava.api.command.RemoveServiceCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
@@ -71,6 +74,7 @@ import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Identifier;
 import com.github.dockerjava.api.model.PruneType;
+import com.github.dockerjava.api.model.SecretSpec;
 import com.github.dockerjava.api.model.ServiceSpec;
 import com.github.dockerjava.api.model.SwarmSpec;
 import com.github.dockerjava.core.command.AttachContainerCmdImpl;
@@ -85,6 +89,7 @@ import com.github.dockerjava.core.command.CopyFileFromContainerCmdImpl;
 import com.github.dockerjava.core.command.CreateContainerCmdImpl;
 import com.github.dockerjava.core.command.CreateImageCmdImpl;
 import com.github.dockerjava.core.command.CreateNetworkCmdImpl;
+import com.github.dockerjava.core.command.CreateSecretCmdImpl;
 import com.github.dockerjava.core.command.CreateServiceCmdImpl;
 import com.github.dockerjava.core.command.CreateVolumeCmdImpl;
 import com.github.dockerjava.core.command.DisconnectFromNetworkCmdImpl;
@@ -106,6 +111,7 @@ import com.github.dockerjava.core.command.LeaveSwarmCmdImpl;
 import com.github.dockerjava.core.command.ListContainersCmdImpl;
 import com.github.dockerjava.core.command.ListImagesCmdImpl;
 import com.github.dockerjava.core.command.ListNetworksCmdImpl;
+import com.github.dockerjava.core.command.ListSecretsCmdImpl;
 import com.github.dockerjava.core.command.ListServicesCmdImpl;
 import com.github.dockerjava.core.command.ListSwarmNodesCmdImpl;
 import com.github.dockerjava.core.command.ListTasksCmdImpl;
@@ -121,6 +127,7 @@ import com.github.dockerjava.core.command.PushImageCmdImpl;
 import com.github.dockerjava.core.command.RemoveContainerCmdImpl;
 import com.github.dockerjava.core.command.RemoveImageCmdImpl;
 import com.github.dockerjava.core.command.RemoveNetworkCmdImpl;
+import com.github.dockerjava.core.command.RemoveSecretCmdImpl;
 import com.github.dockerjava.core.command.RemoveServiceCmdImpl;
 import com.github.dockerjava.core.command.RemoveVolumeCmdImpl;
 import com.github.dockerjava.core.command.RenameContainerCmdImpl;
@@ -585,6 +592,21 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public PruneCmd pruneCmd(PruneType pruneType) {
         return new PruneCmdImpl(getDockerCmdExecFactory().pruneCmdExec(), pruneType);
+    }
+
+    @Override
+    public ListSecretsCmd listSecretsCmd() {
+        return new ListSecretsCmdImpl(getDockerCmdExecFactory().createListSecretsCmdExec());
+    }
+
+    @Override
+    public CreateSecretCmd createSecretCmd(SecretSpec secretSpec) {
+        return new CreateSecretCmdImpl(getDockerCmdExecFactory().createCreateSecretCmdExec(), secretSpec);
+    }
+
+    @Override
+    public RemoveSecretCmd removeSecretCmd(String secretId) {
+        return new RemoveSecretCmdImpl(getDockerCmdExecFactory().createRemoveSecretCmdExec(), secretId);
     }
 
     @Override

@@ -214,6 +214,27 @@ public interface DockerCmdExecFactory extends Closeable {
      */
     PruneCmd.Exec pruneCmdExec();
 
+    /**
+     * Command to list all secrets.
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_25}
+     */
+    ListSecretsCmd.Exec createListSecretsCmdExec();
+
+    /**
+     * Command to create a new secret in a docker swarm. Only applicable if docker runs in swarm mode.
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_25}
+     */
+    CreateSecretCmd.Exec createCreateSecretCmdExec();
+
+    /**
+     * Command to remove a secret in a docker swarm. Only applicable if docker runs in swarm mode.
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_25}
+     */
+    RemoveSecretCmd.Exec createRemoveSecretCmdExec();
+
     @Override
     void close() throws IOException;
 

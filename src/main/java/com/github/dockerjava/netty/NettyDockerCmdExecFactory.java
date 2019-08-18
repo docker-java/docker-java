@@ -118,6 +118,7 @@ public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory impl
         baseResource = new NettyWebTarget(channelProvider, host).path(dockerClientConfig.getApiVersion().asWebPathPart());
     }
 
+
     private DuplexChannel connect() {
         try {
             return connect(bootstrap);

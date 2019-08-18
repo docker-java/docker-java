@@ -12,6 +12,7 @@ import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateImageCmd;
 import com.github.dockerjava.api.command.CreateNetworkCmd;
+import com.github.dockerjava.api.command.CreateSecretCmd;
 import com.github.dockerjava.api.command.CreateServiceCmd;
 import com.github.dockerjava.api.command.CreateVolumeCmd;
 import com.github.dockerjava.api.command.DisconnectFromNetworkCmd;
@@ -33,6 +34,7 @@ import com.github.dockerjava.api.command.LeaveSwarmCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.ListNetworksCmd;
+import com.github.dockerjava.api.command.ListSecretsCmd;
 import com.github.dockerjava.api.command.ListServicesCmd;
 import com.github.dockerjava.api.command.ListSwarmNodesCmd;
 import com.github.dockerjava.api.command.ListTasksCmd;
@@ -48,6 +50,7 @@ import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.command.RemoveContainerCmd;
 import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.command.RemoveNetworkCmd;
+import com.github.dockerjava.api.command.RemoveSecretCmd;
 import com.github.dockerjava.api.command.RemoveServiceCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
@@ -70,6 +73,7 @@ import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Identifier;
 import com.github.dockerjava.api.model.PruneType;
+import com.github.dockerjava.api.model.SecretSpec;
 import com.github.dockerjava.api.model.ServiceSpec;
 import com.github.dockerjava.api.model.SwarmSpec;
 import com.github.dockerjava.core.RemoteApiVersion;
@@ -399,6 +403,32 @@ public interface DockerClient extends Closeable {
      * @since {@link RemoteApiVersion#VERSION_1_25}
      */
     PruneCmd pruneCmd(PruneType pruneType);
+
+    /**
+     *  Command to list all secrets. Only applicable if docker runs in swarm mode.
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_25}
+     * @return command
+     */
+    ListSecretsCmd listSecretsCmd();
+
+    /**
+     * Command to create a secret in a docker swarm. Only applicable if docker runs in swarm mode.
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_25}
+     * @param secretSpec the secret specification
+     * @return command
+     */
+    CreateSecretCmd createSecretCmd(SecretSpec secretSpec);
+
+    /**
+     * Command to remove a secret
+     * @param secretId secret id or secret name
+     * @return command
+     */
+    RemoveSecretCmd removeSecretCmd(String secretId);
+
+
 
     @Override
     void close() throws IOException;
