@@ -230,6 +230,116 @@ public class CreateContainerCmdIT extends CmdIT {
     }
 
     @Test
+    public void createContainerWithEnvAdditive() throws Exception {
+
+        final String testVariable1 = "VARIABLE1=success1";
+        final String testVariable2 = "VARIABLE2=success2";
+
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+                .withEnv(testVariable1)
+                .withEnv(testVariable2)
+                .withCmd("env")
+                .exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
+
+        assertThat(Arrays.asList(inspectContainerResponse.getConfig().getEnv()), not(hasItem(testVariable1)));
+        assertThat(Arrays.asList(inspectContainerResponse.getConfig().getEnv()), hasItem(testVariable2));
+
+        dockerRule.getClient().startContainerCmd(container.getId()).exec();
+
+        assertThat(dockerRule.containerLog(container.getId()), not(containsString(testVariable1)));
+        assertThat(dockerRule.containerLog(container.getId()), containsString(testVariable2));
+    }
+
+    @Test
+    public void createContainerWithEnvAdditiveMap() throws Exception {
+        final String[] testVariables1 = {"VARIABLE1=success1", "VARIABLE2=success2"};
+        final String[] testVariables2 = {"VARIABLE3=success3", "VARIABLE4=success4"};
+
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+                .withEnv(testVariables1)
+                .withEnv(testVariables2)
+                .withCmd("env")
+                .exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
+
+        assertThat(Arrays.asList(inspectContainerResponse.getConfig().getEnv()), not(hasItem(testVariables1[0])));
+        assertThat(Arrays.asList(inspectContainerResponse.getConfig().getEnv()), not(hasItem(testVariables1[1])));
+
+        assertThat(Arrays.asList(inspectContainerResponse.getConfig().getEnv()), hasItem(testVariables2[0]));
+        assertThat(Arrays.asList(inspectContainerResponse.getConfig().getEnv()), hasItem(testVariables2[1]));
+
+
+        dockerRule.getClient().startContainerCmd(container.getId()).exec();
+
+        assertThat(dockerRule.containerLog(container.getId()), not(containsString(testVariables1[0])));
+        assertThat(dockerRule.containerLog(container.getId()), not(containsString(testVariables1[1])));
+
+        assertThat(dockerRule.containerLog(container.getId()), containsString(testVariables2[0]));
+        assertThat(dockerRule.containerLog(container.getId()), containsString(testVariables2[1]));
+    }
+
+    @Test
+    public void createContainerWithEnvAsVararg() throws Exception {
+
+        final String testVariable1 = "VARIABLE1=success1";
+        final String testVariable2 = "VARIABLE2=success2";
+
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+                .withEnv(testVariable1, testVariable2)
+                .withCmd("env")
+                .exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
+
+        assertThat(Arrays.asList(inspectContainerResponse.getConfig().getEnv()), hasItem(testVariable1));
+        assertThat(Arrays.asList(inspectContainerResponse.getConfig().getEnv()), hasItem(testVariable2));
+
+        dockerRule.getClient().startContainerCmd(container.getId()).exec();
+
+        assertThat(dockerRule.containerLog(container.getId()), containsString(testVariable1));
+        assertThat(dockerRule.containerLog(container.getId()), containsString(testVariable2));
+    }
+
+    @Test
+    public void createContainerWithEnvAsMap() throws Exception {
+        final String[] testVariables = {"VARIABLE1=success1", "VARIABLE2=success2"};
+
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+                .withEnv(testVariables)
+                .withCmd("env")
+                .exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
+
+        assertThat(Arrays.asList(inspectContainerResponse.getConfig().getEnv()), hasItem(testVariables[0]));
+        assertThat(Arrays.asList(inspectContainerResponse.getConfig().getEnv()), hasItem(testVariables[1]));
+
+        dockerRule.getClient().startContainerCmd(container.getId()).exec();
+
+        assertThat(dockerRule.containerLog(container.getId()), containsString(testVariables[0]));
+        assertThat(dockerRule.containerLog(container.getId()), containsString(testVariables[1]));
+    }
+
+    @Test
     public void createContainerWithHostname() throws Exception {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withHostName("docker-java")
