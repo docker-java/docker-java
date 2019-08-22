@@ -22,7 +22,7 @@ public class ResizeCmdIT extends CmdIT {
     public void execResize() throws Exception {
         assumeNotSwarm("no network in swarm", dockerRule);
 
-        String containerName = "generated_" + new SecureRandom().nextInt();
+        String containerName = "generated_" + dockerRule.getKind() + new SecureRandom().nextInt();
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("sh")
                 .withName(containerName).withTty(true).withStdinOpen(true).exec();
@@ -42,10 +42,15 @@ public class ResizeCmdIT extends CmdIT {
     public void containerResize() throws Exception {
         assumeNotSwarm("no network in swarm", dockerRule);
 
-        String containerName = "generated_" + new SecureRandom().nextInt();
+        String containerName = "generated_" + dockerRule.getKind() + new SecureRandom().nextInt();
 
-        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("sh")
-                .withName(containerName).withTty(true).withStdinOpen(true).exec();
+        CreateContainerResponse container = dockerRule.getClient()
+                .createContainerCmd("busybox")
+                .withCmd("sh")
+                .withName(containerName)
+                .withTty(true)
+                .withStdinOpen(true)
+                .exec();
         LOG.info("Created container {}", container.toString());
         assertThat(container.getId(), not(isEmptyString()));
         dockerRule.getClient().startContainerCmd(container.getId()).exec();

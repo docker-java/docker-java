@@ -29,7 +29,7 @@ public class InfoCmdIT extends CmdIT {
         // TODO extract this into a shared method
         if (dockerClient.listContainersCmd().withShowAll(true).exec().size() == 0) {
             CreateContainerResponse container = dockerClient.createContainerCmd(DEFAULT_IMAGE)
-                    .withName("docker-java-itest-info")
+                    .withName("docker-java-itest-info-" + dockerRule.getKind())
                     .withCmd("touch", "/test")
                     .exec();
 
