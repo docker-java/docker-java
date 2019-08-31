@@ -17,6 +17,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>${groupId}</groupId>
+			<artifactId>docker-java-api</artifactId>
+			<version>${version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.fasterxml.jackson.jaxrs</groupId>
 			<artifactId>jackson-jaxrs-json-provider</artifactId>
 			<version>${jackson-jaxrs.version}</version>
