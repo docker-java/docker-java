@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Optional;
 
@@ -8,6 +9,7 @@ import java.io.Serializable;
 /**
  * @author magnayn
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Identifier implements Serializable {
     private static final long serialVersionUID = 1L;
 

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map.Entry;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -29,6 +30,7 @@ import com.github.dockerjava.api.model.Ports.Binding;
  * {@link InternetProtocol}. It can be published by Docker by {@link Ports#bind(ExposedPort, Binding) binding} it to a host port,
  * represented by a {@link Binding}.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(using = ExposedPort.Deserializer.class)
 @JsonSerialize(using = ExposedPort.Serializer.class)
 public class ExposedPort implements Serializable {

@@ -4,11 +4,13 @@ import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.MoreObjects;
 
 /**
  * A repository or image name.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Repository implements Serializable {
     private static final long serialVersionUID = 1L;
 

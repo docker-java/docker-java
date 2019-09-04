@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -17,6 +18,7 @@ import java.io.Serializable;
  * existing port bindings from a container configuration in {@link NetworkSettings#getPorts()} and {@link HostConfig#getPortBindings()}. In
  * that context, a <code>Map&lt;ExposedPort, Binding[]&gt;</code> is used.</i>
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PortBinding implements Serializable {
     private static final long serialVersionUID = 1L;
 

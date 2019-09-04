@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -14,6 +15,7 @@ import java.io.Serializable;
  *
  * @since {@link RemoteApiVersion#VERSION_1_29}
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ContainerSpecPrivilegesCredential implements Serializable {
     private static final long serialVersionUID = 1L;
 

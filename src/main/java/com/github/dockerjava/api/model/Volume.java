@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -20,6 +21,7 @@ import java.io.Serializable;
  *
  * @see Bind
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Volume implements Serializable {
     private static final long serialVersionUID = 1L;
 

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map.Entry;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -27,6 +28,7 @@ import com.github.dockerjava.core.RemoteApiVersion;
  * @see Bind
  * @deprecated since {@link RemoteApiVersion#VERSION_1_20}
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(using = VolumeRW.Deserializer.class)
 @JsonSerialize(using = VolumeRW.Serializer.class)
 @Deprecated

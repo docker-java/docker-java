@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AuthConfigurations implements Serializable {
     private static final long serialVersionUID = 1L;
 

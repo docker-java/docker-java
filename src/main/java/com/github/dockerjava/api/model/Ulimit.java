@@ -2,6 +2,7 @@ package com.github.dockerjava.api.model;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -12,6 +13,7 @@ import java.io.Serializable;
 /**
  * @author Vangie Du (duwan@live.com)
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Ulimit implements Serializable {
     private static final long serialVersionUID = 1L;
 

@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.annotation.CheckForNull;
@@ -8,6 +9,7 @@ import java.util.Date;
 /**
  * @since 1.24
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Swarm extends ClusterInfo {
     public static final long serialVersionUID = 1L;
 

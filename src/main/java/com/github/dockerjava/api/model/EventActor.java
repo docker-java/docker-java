@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -13,6 +14,7 @@ import java.util.Map;
  * @author Kanstantsin Shautsou
  * @since 1.22
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class EventActor implements Serializable {
     private static final long serialVersionUID = 1L;
 

@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -34,6 +35,7 @@ import static org.apache.commons.lang.StringUtils.isEmpty;
  * @see NetworkSettings#getPorts()
  */
 @SuppressWarnings(value = "checkstyle:equalshashcode")
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(using = Ports.Deserializer.class)
 @JsonSerialize(using = Ports.Serializer.class)
 public class Ports implements Serializable {

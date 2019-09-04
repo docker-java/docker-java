@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -10,6 +11,7 @@ import java.io.Serializable;
  * container with the aliased name {@link #getAlias()}. This involves creating an entry in <code>/etc/hosts</code> and some environment
  * variables in the target container as well as creating a network bridge between both containers.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Link implements Serializable {
     private static final long serialVersionUID = 1L;
 

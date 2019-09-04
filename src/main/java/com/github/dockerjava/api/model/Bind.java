@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -9,6 +10,7 @@ import java.io.Serializable;
  * Represents a host path being bind mounted as a {@link Volume} in a Docker container.
  * The Bind can be in read only or read write access mode.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Bind implements Serializable {
     private static final long serialVersionUID = 1L;
 

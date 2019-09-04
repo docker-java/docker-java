@@ -3,6 +3,7 @@ package com.github.dockerjava.api.model;
 import java.io.IOException;
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -18,6 +19,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(using = VolumesFrom.Serializer.class)
 @JsonDeserialize(using = VolumesFrom.Deserializer.class)
 public class VolumesFrom implements Serializable {

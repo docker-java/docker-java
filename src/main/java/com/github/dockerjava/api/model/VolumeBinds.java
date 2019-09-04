@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,6 +22,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.node.NullNode;
 
 // This is not going to be serialized
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(using = VolumeBinds.Deserializer.class)
 @JsonSerialize(using = VolumeBinds.Serializer.class)
 public class VolumeBinds implements Serializable {

@@ -2,6 +2,7 @@ package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 
@@ -18,6 +19,7 @@ import java.util.Map;
  * docker will ignore them. In most cases setting the config option to null will suffice. Consult the docker remote API for a more detailed
  * and up-to-date explanation of the available types and their options.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class LogConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
