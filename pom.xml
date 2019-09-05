@@ -57,8 +57,8 @@
 		<jdk.source>1.7</jdk.source>
 		<jdk.target>1.7</jdk.target>
 
-		<jersey.version>2.27</jersey.version>
-		<jackson-jaxrs.version>2.9.8</jackson-jaxrs.version>
+        <jersey.version>2.27</jersey.version>
+        <jackson-jaxrs.version>2.9.9</jackson-jaxrs.version>
 		<httpclient.version>4.5.6</httpclient.version><!-- 4.5.1-4.5.2 broken -->
 		<commons-compress.version>1.18</commons-compress.version>
 		<commons-codec.version>1.11</commons-codec.version>
@@ -94,6 +94,15 @@
 			<groupId>com.fasterxml.jackson.jaxrs</groupId>
 			<artifactId>jackson-jaxrs-json-provider</artifactId>
 			<version>${jackson-jaxrs.version}</version>
+        </dependency>
+        <dependency>
+            <!--
+                Deserialization of Untrusted Data Vulnerability, refer to
+                https://snyk.io/vuln/SNYK-JAVA-COMFASTERXMLJACKSONCORE-455617
+                -->
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.9.9.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.connectors</groupId>
@@ -528,7 +537,7 @@
 							<failOnViolation>true</failOnViolation>
 							<logViolationsToConsole>true</logViolationsToConsole>
 							<linkXRef>false</linkXRef>
-							<!-- if some IDE has integration and requires other place, propose 
+							<!-- if some IDE has integration and requires other place, propose
 								it -->
 							<configLocation>
 								src/test/resources/checkstyle/checkstyle-config.xml
