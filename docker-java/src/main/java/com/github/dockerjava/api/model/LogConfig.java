@@ -1,13 +1,20 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.ObjectCodec;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import javax.annotation.CheckForNull;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Log driver to use for a created/running container. The available types are:
@@ -22,28 +29,28 @@ public class LogConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("Type")
-    public LoggingType type = null;
+    public Type type = null;
 
     @JsonProperty("Config")
     public Map<String, String> config;
 
-    public LogConfig(LoggingType type, Map<String, String> config) {
+    public LogConfig(Type type, Map<String, String> config) {
         this.type = type;
         this.config = config;
     }
 
-    public LogConfig(LoggingType type) {
+    public LogConfig(Type type) {
         this(type, null);
     }
 
     public LogConfig() {
     }
 
-    public LoggingType getType() {
+    public Type getType() {
         return type;
     }
 
-    public LogConfig setType(LoggingType type) {
+    public LogConfig setType(Type type) {
         this.type = type;
         return this;
     }
@@ -59,7 +66,31 @@ public class LogConfig implements Serializable {
         return this;
     }
 
-    public enum LoggingType {
+    @JsonDeserialize(using = LoggingType.Deserializer.class)
+    public interface Type {
+        @JsonValue
+        String getType();
+
+        final class Deserializer extends JsonDeserializer<Type> {
+            @Override
+            public Type deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+                    throws IOException, JsonProcessingException {
+
+                ObjectCodec oc = jsonParser.getCodec();
+                JsonNode node = oc.readTree(jsonParser);
+
+                for (LoggingType loggingType : LoggingType.values()) {
+                    if (loggingType.getType().equals(node.asText())) {
+                        return loggingType;
+                    }
+                }
+
+                return new CustomLoggingType(node.asText());
+            }
+        }
+    }
+
+    public enum LoggingType implements Type {
         NONE("none"),
         DEFAULT("json-file"),
         ETWLOGS("etwlogs"),
@@ -79,25 +110,45 @@ public class LogConfig implements Serializable {
             this.type = type;
         }
 
-        @JsonValue
+        @Override
         public String getType() {
             return type;
-        }
-
-        @JsonCreator
-        @CheckForNull
-        public static LoggingType fromValue(String text) {
-            for (LoggingType b : LoggingType.values()) {
-                if (String.valueOf(b.type).equals(text)) {
-                    return b;
-                }
-            }
-            return null;
         }
 
         @Override
         public String toString() {
             return String.valueOf(type);
+        }
+    }
+
+    public static class CustomLoggingType implements Type {
+        private String type;
+
+        public CustomLoggingType(String type) {
+            this.type = type;
+        }
+
+        @Override
+        public String getType() {
+            return this.type;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(type);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Type)) return false;
+            Type that = (Type) o;
+            return getType().equals(that.getType());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getType());
         }
     }
 }
