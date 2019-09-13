@@ -862,18 +862,28 @@ public class CreateContainerCmdIT extends CmdIT {
 
         LogConfig logConfig = new LogConfig(LogConfig.LoggingType.NONE, null);
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withHostConfig(newHostConfig()
-                        .withLogConfig(logConfig))
+                .withHostConfig(newHostConfig().withLogConfig(logConfig))
                 .exec();
 
         LOG.info("Created container {}", container.toString());
-
         assertThat(container.getId(), not(isEmptyString()));
 
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
+        assertThat(inspectContainerResponse.getHostConfig().getLogConfig().type, is(LogConfig.LoggingType.NONE));
+        assertThat(inspectContainerResponse.getHostConfig().getLogConfig().getLoggingType(), equalTo(LogConfig.NONE));
+    }
 
-        // null becomes empty string
-        assertThat(inspectContainerResponse.getHostConfig().getLogConfig().type, is(logConfig.type));
+    @Test
+    public void createContainerWithCustomLogConfig() throws DockerException {
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+                .withHostConfig(new HostConfig().withLogConfig(new LogConfig().withLoggingType("json-file")))
+                .exec();
+
+        LOG.info("Created container {}", container.toString());
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
+        assertThat(inspectContainerResponse.getHostConfig().getLogConfig().getLoggingType(), equalTo(LogConfig.JSON_FILE));
     }
 
     /**

@@ -1,11 +1,10 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
-import javax.annotation.CheckForNull;
 import java.io.Serializable;
 import java.util.Map;
 
@@ -21,30 +20,80 @@ import java.util.Map;
 public class LogConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("Type")
+    public static final String NONE = "none";
+    public static final String DEFAULT = "json-file";
+    public static final String ETWLOGS = "etwlogs";
+    public static final String JSON_FILE = "json-file";
+    public static final String SYSLOG = "syslog";
+    public static final String JOURNALD = "journald";
+    public static final String GELF = "gelf";
+    public static final String FLUENTD = "fluentd";
+    public static final String AWSLOGS = "awslogs";
+    public static final String DB = "db"; // Synology specific driver
+    public static final String SPLUNK = "splunk";
+    public static final String GCPLOGS = "gcplogs";
+
+    @Deprecated
     public LoggingType type = null;
+    private String loggingType = null;
 
     @JsonProperty("Config")
     public Map<String, String> config;
 
+    @Deprecated
     public LogConfig(LoggingType type, Map<String, String> config) {
-        this.type = type;
         this.config = config;
+        this.type = type;
     }
 
+    @Deprecated
     public LogConfig(LoggingType type) {
+        this(type, null);
+    }
+
+    public LogConfig(String type, Map<String, String> config) {
+        this.config = config;
+        this.withLoggingType(type);
+    }
+
+    public LogConfig(String type) {
         this(type, null);
     }
 
     public LogConfig() {
     }
 
+    @Deprecated
+    @JsonIgnore
     public LoggingType getType() {
         return type;
     }
 
+    @Deprecated
+    @JsonIgnore
     public LogConfig setType(LoggingType type) {
         this.type = type;
+        return this;
+    }
+
+    @JsonGetter("Type")
+    public String getLoggingType() {
+        if (type != null) {
+            return type.getType();
+        }
+
+        return loggingType;
+    }
+
+    @JsonSetter("Type")
+    public LogConfig withLoggingType(String loggingType) {
+        for (LoggingType enumType : LoggingType.values()) {
+            if (enumType.getType().equals(loggingType)) {
+                this.type = enumType;
+            }
+        }
+
+        this.loggingType = loggingType;
         return this;
     }
 
@@ -54,11 +103,19 @@ public class LogConfig implements Serializable {
     }
 
     @JsonIgnore
+    @Deprecated
     public LogConfig setConfig(Map<String, String> config) {
         this.config = config;
         return this;
     }
 
+    @JsonIgnore
+    public LogConfig withConfig(Map<String, String> config) {
+        this.config = config;
+        return this;
+    }
+
+    @Deprecated
     public enum LoggingType {
         NONE("none"),
         DEFAULT("json-file"),
@@ -79,20 +136,8 @@ public class LogConfig implements Serializable {
             this.type = type;
         }
 
-        @JsonValue
         public String getType() {
             return type;
-        }
-
-        @JsonCreator
-        @CheckForNull
-        public static LoggingType fromValue(String text) {
-            for (LoggingType b : LoggingType.values()) {
-                if (String.valueOf(b.type).equals(text)) {
-                    return b;
-                }
-            }
-            return null;
         }
 
         @Override
