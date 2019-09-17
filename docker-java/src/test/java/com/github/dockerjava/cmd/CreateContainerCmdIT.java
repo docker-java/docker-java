@@ -829,6 +829,23 @@ public class CreateContainerCmdIT extends CmdIT {
     }
 
     @Test
+    public void createContainerWithUsernsMode() throws DockerException {
+
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("true")
+                .withHostConfig(newHostConfig()
+                        .withUsernsMode("host"))
+                .exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
+
+        assertThat(inspectContainerResponse.getHostConfig().getUsernsMode(), is(equalTo("host")));
+    }
+
+    @Test
     public void createContainerWithLabels() throws DockerException {
 
         Map<String, String> labels = new HashMap<String, String>();

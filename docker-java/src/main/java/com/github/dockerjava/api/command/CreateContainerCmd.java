@@ -256,6 +256,10 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     CreateContainerCmd withUser(String user);
 
+    String getUsernsMode();
+
+    CreateContainerCmd withUsernsMode(String usernsMode);
+
     @CheckForNull
     Volume[] getVolumes();
 

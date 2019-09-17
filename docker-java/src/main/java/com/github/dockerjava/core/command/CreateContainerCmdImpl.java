@@ -679,6 +679,18 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
+    public String getUsernsMode() {
+        return user;
+    }
+
+    @Override
+    public CreateContainerCmd withUsernsMode(String usernsMode) {
+        checkNotNull(usernsMode, "usernsMode was not specified");
+        this.hostConfig.withUsernsMode(usernsMode);
+        return this;
+    }
+
+    @Override
     public Boolean isAttachStderr() {
         return attachStderr;
     }
