@@ -317,6 +317,21 @@ public class BuildImageCmdIT extends CmdIT {
 
     }
 
+    @Test
+    public void quiet() {
+        File baseDir = fileFromBuildTestResource("labels");
+
+        String imageId = dockerRule.getClient()
+                .buildImageCmd(baseDir)
+                .withQuiet(true)
+                .exec(new BuildImageResultCallback())
+                .awaitImageId();
+
+        InspectImageResponse inspectImageResponse = dockerRule.getClient().inspectImageCmd(imageId).exec();
+        assertThat(inspectImageResponse, not(nullValue()));
+        LOG.info("Image Inspect: {}", inspectImageResponse.toString());
+    }
+
     public void dockerfileNotInBaseDirectory() throws Exception {
         File baseDirectory = fileFromBuildTestResource("dockerfileNotInBaseDirectory");
         File dockerfile = fileFromBuildTestResource("dockerfileNotInBaseDirectory/dockerfileFolder/Dockerfile");
