@@ -61,7 +61,7 @@
 		<jackson.version>2.9.8</jackson.version>
 		<jackson-jaxrs.version>2.9.8</jackson-jaxrs.version>
 		<httpclient.version>4.5.6</httpclient.version><!-- 4.5.1-4.5.2 broken -->
-		<commons-compress.version>1.18</commons-compress.version>
+		<commons-compress.version>1.19</commons-compress.version>
 		<commons-codec.version>1.11</commons-codec.version>
 		<commons-io.version>2.6</commons-io.version>
 		<commons-lang.version>2.6</commons-lang.version>
@@ -285,7 +285,7 @@
 							<failOnViolation>true</failOnViolation>
 							<logViolationsToConsole>true</logViolationsToConsole>
 							<linkXRef>false</linkXRef>
-							<!-- if some IDE has integration and requires other place, propose 
+							<!-- if some IDE has integration and requires other place, propose
 								it -->
 							<configLocation>
 								${maven.multiModuleProjectDirectory}/src/test/resources/checkstyle/checkstyle-config.xml
