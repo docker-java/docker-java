@@ -140,7 +140,7 @@ public class EventsCmdIT extends CmdIT {
 
         private final CountDownLatch countDownLatch;
 
-        private final List<Event> events = new ArrayList<Event>();
+        private final List<Event> events = new ArrayList<>();
 
         public EventsTestCallback(int expextedEvents) {
             this.countDownLatch = new CountDownLatch(expextedEvents);
@@ -159,7 +159,7 @@ public class EventsCmdIT extends CmdIT {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            return new ArrayList<Event>(events);
+            return new ArrayList<>(events);
         }
     }
 }

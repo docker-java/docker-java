@@ -12,7 +12,7 @@ import java.util.List;
 public class LogContainerTestCallback extends LogContainerResultCallback {
     protected final StringBuffer log = new StringBuffer();
 
-    List<Frame> collectedFrames = new ArrayList<Frame>();
+    List<Frame> collectedFrames = new ArrayList<>();
 
     boolean collectFrames = false;
 

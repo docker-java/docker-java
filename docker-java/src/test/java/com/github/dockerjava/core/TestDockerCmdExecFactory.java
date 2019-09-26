@@ -92,11 +92,11 @@ import java.util.List;
  */
 public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 
-    private List<String> containerNames = new ArrayList<String>();
+    private List<String> containerNames = new ArrayList<>();
 
-    private List<String> imageNames = new ArrayList<String>();
+    private List<String> imageNames = new ArrayList<>();
 
-    private List<String> volumeNames = new ArrayList<String>();
+    private List<String> volumeNames = new ArrayList<>();
 
     private List<String> networkIds = new ArrayList<>();
 
@@ -118,78 +118,60 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 
     @Override
     public CreateContainerCmd.Exec createCreateContainerCmdExec() {
-        return new CreateContainerCmd.Exec() {
-            @Override
-            public CreateContainerResponse exec(CreateContainerCmd command) {
-                CreateContainerResponse createContainerResponse = delegate.createCreateContainerCmdExec().exec(command);
-                containerNames.add(createContainerResponse.getId());
-                return createContainerResponse;
-            }
+        return command -> {
+            CreateContainerResponse createContainerResponse = delegate.createCreateContainerCmdExec().exec(command);
+            containerNames.add(createContainerResponse.getId());
+            return createContainerResponse;
         };
     }
 
     @Override
     public RemoveContainerCmd.Exec createRemoveContainerCmdExec() {
-        return new RemoveContainerCmd.Exec() {
-            @Override
-            public Void exec(RemoveContainerCmd command) {
-                delegate.createRemoveContainerCmdExec().exec(command);
-                containerNames.remove(command.getContainerId());
-                return null;
-            }
+        return command -> {
+            delegate.createRemoveContainerCmdExec().exec(command);
+            containerNames.remove(command.getContainerId());
+            return null;
         };
     }
 
     @Override
     public CreateImageCmd.Exec createCreateImageCmdExec() {
-        return new CreateImageCmd.Exec() {
-            @Override
-            public CreateImageResponse exec(CreateImageCmd command) {
-                CreateImageResponse createImageResponse = delegate.createCreateImageCmdExec().exec(command);
-                imageNames.add(createImageResponse.getId());
-                return createImageResponse;
-            }
+        return command -> {
+            CreateImageResponse createImageResponse = delegate.createCreateImageCmdExec().exec(command);
+            imageNames.add(createImageResponse.getId());
+            return createImageResponse;
         };
     }
 
     @Override
     public LoadImageCmd.Exec createLoadImageCmdExec() {
-        return new LoadImageCmd.Exec() {
-            @Override
-            public Void exec(LoadImageCmd command) {
-                delegate.createLoadImageCmdExec().exec(command);
-                return null;
-            }
+        return command -> {
+            delegate.createLoadImageCmdExec().exec(command);
+            return null;
         };
     }
 
     @Override
     public RemoveImageCmd.Exec createRemoveImageCmdExec() {
-        return new RemoveImageCmd.Exec() {
-            @Override
-            public Void exec(RemoveImageCmd command) {
-                delegate.createRemoveImageCmdExec().exec(command);
-                imageNames.remove(command.getImageId());
-                return null;
-            }
+        return command -> {
+            delegate.createRemoveImageCmdExec().exec(command);
+            imageNames.remove(command.getImageId());
+            return null;
         };
     }
 
     @Override
     public BuildImageCmd.Exec createBuildImageCmdExec() {
-        return new BuildImageCmd.Exec() {
-            @Override
-            public Void exec(BuildImageCmd command, ResultCallback<BuildResponseItem> resultCallback) {
-                // can't detect image id here so tagging it
-                String tag = command.getTag();
-                if (tag == null || "".equals(tag.trim())) {
-                    tag = "" + new SecureRandom().nextInt(Integer.MAX_VALUE);
-                    command.withTag(tag);
-                }
-                delegate.createBuildImageCmdExec().exec(command, resultCallback);
-                imageNames.add(tag);
-                return null;
+        return (command, resultCallback) -> {
+            // can't detect image id here so tagging it
+            String tag = command.getTag();
+            if (tag == null || "".equals(tag.trim())) {
+                tag = "" + new SecureRandom().nextInt(Integer.MAX_VALUE);
+                command.withTag(tag);
             }
+            delegate.createBuildImageCmdExec().exec(command, resultCallback);
+            imageNames.add(tag);
+            return null;
         };
     }
 
@@ -370,13 +352,10 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 
     @Override
     public CreateVolumeCmd.Exec createCreateVolumeCmdExec() {
-        return new CreateVolumeCmd.Exec() {
-            @Override
-            public CreateVolumeResponse exec(CreateVolumeCmd command) {
-                CreateVolumeResponse result = delegate.createCreateVolumeCmdExec().exec(command);
-                volumeNames.add(command.getName());
-                return result;
-            }
+        return command -> {
+            CreateVolumeResponse result = delegate.createCreateVolumeCmdExec().exec(command);
+            volumeNames.add(command.getName());
+            return result;
         };
     }
 
@@ -387,13 +366,10 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 
     @Override
     public RemoveVolumeCmd.Exec createRemoveVolumeCmdExec() {
-        return new RemoveVolumeCmd.Exec() {
-            @Override
-            public Void exec(RemoveVolumeCmd command) {
-                delegate.createRemoveVolumeCmdExec().exec(command);
-                volumeNames.remove(command.getName());
-                return null;
-            }
+        return command -> {
+            delegate.createRemoveVolumeCmdExec().exec(command);
+            volumeNames.remove(command.getName());
+            return null;
         };
     }
 
@@ -415,25 +391,19 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
     @Override
     public CreateNetworkCmd.Exec createCreateNetworkCmdExec() {
 
-        return new CreateNetworkCmd.Exec() {
-            @Override
-            public CreateNetworkResponse exec(CreateNetworkCmd command) {
-                CreateNetworkResponse result = delegate.createCreateNetworkCmdExec().exec(command);
-                networkIds.add(result.getId());
-                return result;
-            }
+        return command -> {
+            CreateNetworkResponse result = delegate.createCreateNetworkCmdExec().exec(command);
+            networkIds.add(result.getId());
+            return result;
         };
     }
 
     @Override
     public RemoveNetworkCmd.Exec createRemoveNetworkCmdExec() {
-        return new RemoveNetworkCmd.Exec() {
-            @Override
-            public Void exec(RemoveNetworkCmd command) {
-                delegate.createRemoveNetworkCmdExec().exec(command);
-                networkIds.remove(command.getNetworkId());
-                return null;
-            }
+        return command -> {
+            delegate.createRemoveNetworkCmdExec().exec(command);
+            networkIds.remove(command.getNetworkId());
+            return null;
         };
     }
 
@@ -551,15 +521,15 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     public List<String> getContainerNames() {
-        return new ArrayList<String>(containerNames);
+        return new ArrayList<>(containerNames);
     }
 
     public List<String> getImageNames() {
-        return new ArrayList<String>(imageNames);
+        return new ArrayList<>(imageNames);
     }
 
     public List<String> getVolumeNames() {
-        return new ArrayList<String>(volumeNames);
+        return new ArrayList<>(volumeNames);
     }
 
     public List<String> getNetworkIds() {

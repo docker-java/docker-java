@@ -52,7 +52,7 @@ public class DefaultDockerClientConfigTest {
     public void environmentDockerHost() throws Exception {
 
         // given docker host in env
-        Map<String, String> env = new HashMap<String, String>();
+        Map<String, String> env = new HashMap<>();
         env.put(DefaultDockerClientConfig.DOCKER_HOST, "tcp://baz:8768");
         // and it looks to be SSL disabled
         env.remove("DOCKER_CERT_PATH");
@@ -72,7 +72,7 @@ public class DefaultDockerClientConfigTest {
     public void environment() throws Exception {
 
         // given a default config in env properties
-        Map<String, String> env = new HashMap<String, String>();
+        Map<String, String> env = new HashMap<>();
         env.put(DefaultDockerClientConfig.DOCKER_HOST, "tcp://foo");
         env.put(DefaultDockerClientConfig.API_VERSION, "apiVersion");
         env.put(DefaultDockerClientConfig.REGISTRY_USERNAME, "registryUsername");

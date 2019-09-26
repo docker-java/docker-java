@@ -84,7 +84,7 @@ public class Dockerfile {
     }
 
     public List<String> getIgnores() throws IOException {
-        List<String> ignores = new ArrayList<String>();
+        List<String> ignores = new ArrayList<>();
         File dockerIgnoreFile = new File(baseDirectory, ".dockerignore");
         if (dockerIgnoreFile.exists()) {
             int lineNumber = 0;
@@ -118,7 +118,7 @@ public class Dockerfile {
 
         final List<String> ignores;
 
-        final List<File> filesToAdd = new ArrayList<File>();
+        final List<File> filesToAdd = new ArrayList<>();
 
         public InputStream buildDockerFolderTar() {
             return buildDockerFolderTar(baseDirectory);
@@ -224,7 +224,7 @@ public class Dockerfile {
          * Returns all matching ignore patterns for the given file name.
          */
         private List<String> matchingIgnorePatterns(String fileName) {
-            List<String> matches = new ArrayList<String>();
+            List<String> matches = new ArrayList<>();
 
             int lineNumber = 0;
             for (String pattern : ignores) {

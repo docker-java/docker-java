@@ -31,7 +31,7 @@ public class DockerMatchers {
 
         @Override
         public List<Volume> featureValueOf(InspectContainerResponse item) {
-            List<Volume> volumes = new ArrayList<Volume>();
+            List<Volume> volumes = new ArrayList<>();
             for (InspectContainerResponse.Mount mount : item.getMounts()) {
                 volumes.add(mount.getDestination());
             }

@@ -317,9 +317,7 @@ public class ChunkedInputStream extends InputStream {
                         while (read(buff) >= 0) {
                            continue;
                         }
-                    } catch (ConnectionClosedException e) {
-                        // just ignore
-                    } catch (TruncatedChunkException e) {
+                    } catch (ConnectionClosedException | TruncatedChunkException e) {
                         // just ignore
                     }
                 }

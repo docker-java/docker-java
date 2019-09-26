@@ -21,18 +21,15 @@ public class DockerClientBuilderTest {
     @Test
     public void testConcurrentClientBuilding() throws Exception {
         // we use it to check instance uniqueness
-        final Set<DockerCmdExecFactory> instances = Collections.synchronizedSet(new HashSet<DockerCmdExecFactory>());
+        final Set<DockerCmdExecFactory> instances = Collections.synchronizedSet(new HashSet<>());
 
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                DockerCmdExecFactory factory = DockerClientBuilder.getDefaultDockerCmdExecFactory();
-                // factory created
-                assertNotNull(factory);
-                // and is unique
-                assertFalse(instances.contains(factory));
-                instances.add(factory);
-            }
+        Runnable runnable = () -> {
+            DockerCmdExecFactory factory = DockerClientBuilder.getDefaultDockerCmdExecFactory();
+            // factory created
+            assertNotNull(factory);
+            // and is unique
+            assertFalse(instances.contains(factory));
+            instances.add(factory);
         };
 
         parallel(AMOUNT, runnable);
@@ -42,14 +39,11 @@ public class DockerClientBuilderTest {
 
     public static void parallel(int threads, final Runnable task) throws Exception {
         final ExceptionListener exceptionListener = new ExceptionListener();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    task.run();
-                } catch (Throwable e) {
-                    exceptionListener.onException(e);
-                }
+        Runnable runnable = () -> {
+            try {
+                task.run();
+            } catch (Throwable e) {
+                exceptionListener.onException(e);
             }
         };
 

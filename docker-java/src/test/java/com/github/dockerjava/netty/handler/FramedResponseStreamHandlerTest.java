@@ -18,8 +18,8 @@ public class FramedResponseStreamHandlerTest {
 
   public class MockedResponseHandler implements ResultCallback<Frame> {
 
-    public List<Frame> frames = new ArrayList<Frame>();
-    public List<Throwable> exceptions = new ArrayList<Throwable>();
+    public List<Frame> frames = new ArrayList<>();
+    public List<Throwable> exceptions = new ArrayList<>();
 
     @Override
     public void close() {

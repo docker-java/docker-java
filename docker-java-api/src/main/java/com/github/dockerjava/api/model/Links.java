@@ -57,7 +57,7 @@ public class Links implements Serializable {
         @Override
         public Links deserialize(final JsonParser jsonParser, final DeserializationContext deserializationContext)
                 throws IOException, JsonProcessingException {
-            final List<Link> binds = new ArrayList<Link>();
+            final List<Link> binds = new ArrayList<>();
             final ObjectCodec oc = jsonParser.getCodec();
             final JsonNode node = oc.readTree(jsonParser);
             for (final Iterator<JsonNode> it = node.elements(); it.hasNext();) {

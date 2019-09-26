@@ -41,6 +41,6 @@ public class AttachContainerCmdExec extends AbstrAsyncDockerCmdExec<AttachContai
 
         LOGGER.trace("POST: {}", webTarget);
 
-        return new POSTCallbackNotifier<Frame>(new FrameStreamProcessor(), resultCallback, webTarget.request(), null);
+        return new POSTCallbackNotifier<>(new FrameStreamProcessor(), resultCallback, webTarget.request(), null);
     }
 }

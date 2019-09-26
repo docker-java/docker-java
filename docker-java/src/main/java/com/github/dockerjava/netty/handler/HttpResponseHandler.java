@@ -52,12 +52,7 @@ public class HttpResponseHandler extends SimpleChannelInboundHandler<HttpObject>
 
             response = (HttpResponse) msg;
 
-            resultCallback.onStart(new Closeable() {
-                @Override
-                public void close() {
-                    ctx.channel().close();
-                }
-            });
+            resultCallback.onStart(() -> ctx.channel().close());
 
         } else if (msg instanceof HttpContent) {
 

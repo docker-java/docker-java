@@ -45,6 +45,6 @@ public class LogSwarmObjectExec extends AbstrAsyncDockerCmdExec<LogSwarmObjectCm
         webTarget = booleanQueryParam(webTarget, "details", command.getDetails());
         LOGGER.trace("GET: {}", webTarget);
 
-        return new GETCallbackNotifier<Frame>(new FrameStreamProcessor(), resultCallback, webTarget.request());
+        return new GETCallbackNotifier<>(new FrameStreamProcessor(), resultCallback, webTarget.request());
     }
 }

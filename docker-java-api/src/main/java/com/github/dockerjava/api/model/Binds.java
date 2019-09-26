@@ -55,7 +55,7 @@ public class Binds implements Serializable {
         public Binds deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
                 throws IOException, JsonProcessingException {
 
-            List<Bind> binds = new ArrayList<Bind>();
+            List<Bind> binds = new ArrayList<>();
             ObjectCodec oc = jsonParser.getCodec();
             JsonNode node = oc.readTree(jsonParser);
             for (Iterator<JsonNode> it = node.elements(); it.hasNext();) {

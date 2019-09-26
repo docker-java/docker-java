@@ -306,7 +306,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @Override
     public BuildImageCmd withBuildArg(String key, String value) {
         if (this.buildArgs == null) {
-            this.buildArgs = new HashMap<String, String>();
+            this.buildArgs = new HashMap<>();
         }
         this.buildArgs.put(key, value);
         return this;

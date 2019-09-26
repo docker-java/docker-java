@@ -64,7 +64,7 @@ public class GoLangFileMatch {
      * Returns the matching patterns for the given string
      */
     public static List<String> match(List<String> patterns, String name) {
-        List<String> matches = new ArrayList<String>();
+        List<String> matches = new ArrayList<>();
         for (String pattern : patterns) {
             if (match(pattern, name)) {
                 matches.add(pattern);

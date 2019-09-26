@@ -82,16 +82,13 @@ public class HttpResponseStreamHandlerTest {
         final CountDownLatch firstWrite = new CountDownLatch(1);
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<?> submit = executor.submit(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    inputStream.write(buffer);
-                    firstWrite.countDown();
-                    inputStream.write(buffer);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        Future<?> submit = executor.submit(() -> {
+            try {
+                inputStream.write(buffer);
+                firstWrite.countDown();
+                inputStream.write(buffer);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         });
 

@@ -55,7 +55,7 @@ public class VolumesRW implements Serializable {
         public VolumesRW deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
                 throws IOException, JsonProcessingException {
 
-            List<VolumeRW> volumesRW = new ArrayList<VolumeRW>();
+            List<VolumeRW> volumesRW = new ArrayList<>();
             ObjectCodec oc = jsonParser.getCodec();
             JsonNode node = oc.readTree(jsonParser);
 

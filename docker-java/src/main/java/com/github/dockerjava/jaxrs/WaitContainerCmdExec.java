@@ -34,9 +34,9 @@ public class WaitContainerCmdExec extends AbstrAsyncDockerCmdExec<WaitContainerC
 
         LOGGER.trace("POST: {}", webResource);
 
-        return new POSTCallbackNotifier<WaitResponse>(new JsonStreamProcessor<WaitResponse>(WaitResponse.class),
+        return new POSTCallbackNotifier<>(new JsonStreamProcessor<>(WaitResponse.class),
                 resultCallback, webResource.request().accept(MediaType.APPLICATION_JSON), entity(null,
-                        MediaType.APPLICATION_JSON));
+                MediaType.APPLICATION_JSON));
     }
 
 }

@@ -30,7 +30,7 @@ public class ExecStartCmdExec extends AbstrAsyncDockerCmdExec<ExecStartCmd, Fram
 
         LOGGER.trace("POST: {}", webTarget);
 
-        return new POSTCallbackNotifier<Frame>(new FrameStreamProcessor(), resultCallback, webTarget.request().accept(
+        return new POSTCallbackNotifier<>(new FrameStreamProcessor(), resultCallback, webTarget.request().accept(
                 MediaType.APPLICATION_JSON), entity(command, MediaType.APPLICATION_JSON));
     }
 }

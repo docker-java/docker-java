@@ -95,13 +95,7 @@ public class LoggingFilter implements ContainerRequestFilter, ClientRequestFilte
 
     private static final String ENTITY_LOGGER_PROPERTY = LoggingFilter.class.getName() + ".entityLogger";
 
-    private static final Comparator<Map.Entry<String, List<String>>> COMPARATOR = new Comparator<Map.Entry<String, List<String>>>() {
-
-        @Override
-        public int compare(final Map.Entry<String, List<String>> o1, final Map.Entry<String, List<String>> o2) {
-            return o1.getKey().compareToIgnoreCase(o2.getKey());
-        }
-    };
+    private static final Comparator<Map.Entry<String, List<String>>> COMPARATOR = (o1, o2) -> o1.getKey().compareToIgnoreCase(o2.getKey());
 
     private static final int DEFAULT_MAX_ENTITY_SIZE = 8 * 1024;
 
@@ -202,7 +196,7 @@ public class LoggingFilter implements ContainerRequestFilter, ClientRequestFilte
     }
 
     private Set<Map.Entry<String, List<String>>> getSortedHeaders(final Set<Map.Entry<String, List<String>>> headers) {
-        final TreeSet<Map.Entry<String, List<String>>> sortedHeaders = new TreeSet<Map.Entry<String, List<String>>>(
+        final TreeSet<Map.Entry<String, List<String>>> sortedHeaders = new TreeSet<>(
                 COMPARATOR);
         sortedHeaders.addAll(headers);
         return sortedHeaders;

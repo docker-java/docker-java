@@ -61,7 +61,7 @@ public class Volumes implements Serializable {
         public Volumes deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
                 throws IOException, JsonProcessingException {
 
-            List<Volume> volumes = new ArrayList<Volume>();
+            List<Volume> volumes = new ArrayList<>();
             ObjectCodec oc = jsonParser.getCodec();
             JsonNode node = oc.readTree(jsonParser);
             for (Iterator<Map.Entry<String, JsonNode>> it = node.fields(); it.hasNext();) {

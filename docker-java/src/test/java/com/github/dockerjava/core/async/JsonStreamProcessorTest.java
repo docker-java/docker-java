@@ -29,9 +29,9 @@ public class JsonStreamProcessorTest {
 
         InputStream response = new ByteArrayInputStream("{}".getBytes());
 
-        JsonStreamProcessor<PullResponseItem> jsonStreamProcessor = new JsonStreamProcessor<PullResponseItem>(PullResponseItem.class);
+        JsonStreamProcessor<PullResponseItem> jsonStreamProcessor = new JsonStreamProcessor<>(PullResponseItem.class);
 
-        final List<Boolean> completed = new ArrayList<Boolean>();
+        final List<Boolean> completed = new ArrayList<>();
 
         jsonStreamProcessor.processResponseStream(response, new ResultCallback<PullResponseItem>() {
 

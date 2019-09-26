@@ -13,12 +13,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 
 public class DockerfileAddMultipleFilesTest {
 
-    private static final Function<File, String> TO_FILE_NAMES = new Function<File, String>() {
-        @Override
-        public String apply(File file) {
-            return file.getName();
-        }
-    };
+    private static final Function<File, String> TO_FILE_NAMES = File::getName;
 
     @Test
     public void ignoreAllBut() throws Exception {
