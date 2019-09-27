@@ -34,8 +34,6 @@ import io.netty.handler.codec.http.LastHttpContent;
 import io.netty.handler.codec.json.JsonObjectDecoder;
 import io.netty.handler.stream.ChunkedStream;
 import io.netty.handler.stream.ChunkedWriteHandler;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;

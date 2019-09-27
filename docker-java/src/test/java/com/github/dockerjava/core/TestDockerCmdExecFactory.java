@@ -1,6 +1,5 @@
 package com.github.dockerjava.core;
 
-import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd.Exec;
 import com.github.dockerjava.api.command.BuildImageCmd;
@@ -77,7 +76,6 @@ import com.github.dockerjava.api.command.UpdateSwarmCmd;
 import com.github.dockerjava.api.command.UpdateSwarmNodeCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
-import com.github.dockerjava.api.model.BuildResponseItem;
 
 import java.io.IOException;
 import java.security.SecureRandom;

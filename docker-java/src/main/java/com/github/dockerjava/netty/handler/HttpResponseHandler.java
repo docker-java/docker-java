@@ -11,7 +11,6 @@ import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.LastHttpContent;
 
-import java.io.Closeable;
 import java.nio.charset.Charset;
 
 import com.github.dockerjava.api.async.ResultCallback;

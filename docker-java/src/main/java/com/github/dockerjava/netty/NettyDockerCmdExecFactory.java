@@ -15,8 +15,6 @@ import javax.net.ssl.SSLParameters;
 
 import com.github.dockerjava.core.AbstractDockerCmdExecFactory;
 import com.github.dockerjava.core.WebTarget;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 import org.apache.commons.lang.SystemUtils;
 
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
