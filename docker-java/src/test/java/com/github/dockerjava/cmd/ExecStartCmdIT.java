@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.security.SecureRandom;
+import java.util.concurrent.TimeUnit;
 
 import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
 import static com.github.dockerjava.utils.TestUtils.asString;

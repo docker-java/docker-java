@@ -6,7 +6,6 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.HostConfig;
-import com.github.dockerjava.api.model.UpdateContainerResponse;
 import com.github.dockerjava.core.command.UpdateContainerCmdImpl;
 import org.junit.Ignore;
 import org.junit.Test;

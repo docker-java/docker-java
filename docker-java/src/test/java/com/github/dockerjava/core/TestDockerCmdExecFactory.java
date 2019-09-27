@@ -1,6 +1,5 @@
 package com.github.dockerjava.core;
 
-import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd.Exec;
 import com.github.dockerjava.api.command.BuildImageCmd;
@@ -77,7 +76,6 @@ import com.github.dockerjava.api.command.UpdateSwarmCmd;
 import com.github.dockerjava.api.command.UpdateSwarmNodeCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
-import com.github.dockerjava.api.model.BuildResponseItem;
 
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -90,7 +88,7 @@ import java.util.List;
  *
  * @author Marcus Linke
  */
-public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
+public class TestDockerCmdExecFactory implements DockerCmdExecFactory, DockerClientConfigAware {
 
     private List<String> containerNames = new ArrayList<>();
 
@@ -108,7 +106,9 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 
     @Override
     public void init(DockerClientConfig dockerClientConfig) {
-        delegate.init(dockerClientConfig);
+        if (delegate instanceof DockerClientConfigAware) {
+            ((DockerClientConfigAware) delegate).init(dockerClientConfig);
+        }
     }
 
     @Override

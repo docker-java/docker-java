@@ -3,12 +3,7 @@ package com.github.dockerjava.api.command;
 import java.io.Closeable;
 import java.io.IOException;
 
-import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.RemoteApiVersion;
-
 public interface DockerCmdExecFactory extends Closeable {
-
-    void init(DockerClientConfig dockerClientConfig);
 
     AuthCmd.Exec createAuthCmdExec();
 

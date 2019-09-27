@@ -54,8 +54,8 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<jdk.debug>true</jdk.debug>
 		<jdk.optimize>false</jdk.optimize>
-		<jdk.source>1.7</jdk.source>
-		<jdk.target>1.7</jdk.target>
+		<jdk.source>1.8</jdk.source>
+		<jdk.target>1.8</jdk.target>
 
 		<jersey.version>2.27</jersey.version>
 		<jackson.version>2.9.8</jackson.version>
@@ -92,6 +92,9 @@
 
 	<modules>
 		<module>docker-java-api</module>
+		<module>docker-java-core</module>
+		<module>docker-java-transport-netty</module>
+		<module>docker-java-transport-jersey</module>
 		<module>docker-java</module>
 	</modules>
 
