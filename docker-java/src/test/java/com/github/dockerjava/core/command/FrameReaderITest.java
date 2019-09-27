@@ -73,19 +73,16 @@ public class FrameReaderITest {
     @Test
     public void canLogInOneThreadAndExecuteCommandsInAnother() throws Exception {
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Iterator<Frame> frames = getLoggingFrames().iterator();
+        Thread thread = new Thread(() -> {
+            try {
+                Iterator<Frame> frames = getLoggingFrames().iterator();
 
-                    while (frames.hasNext()) {
-                        frames.next();
-                    }
-
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+                while (frames.hasNext()) {
+                    frames.next();
                 }
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         });
 

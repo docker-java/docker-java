@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class SwarmNodesFiltersBuilder {
 
-    private Map<String, List<String>> filters = new HashMap<String, List<String>>();
+    private Map<String, List<String>> filters = new HashMap<>();
 
     public SwarmNodesFiltersBuilder() {
 

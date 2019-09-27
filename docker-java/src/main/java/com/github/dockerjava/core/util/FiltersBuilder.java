@@ -27,7 +27,7 @@ public class FiltersBuilder {
     private static final Pattern UNTIL_GO_PATTERN =
             Pattern.compile("^([1-9][0-9]*h)?([1-9][0-9]*m)?([1-9][0-9]*s)?$");
 
-    private Map<String, List<String>> filters = new HashMap<String, List<String>>();
+    private Map<String, List<String>> filters = new HashMap<>();
 
     public FiltersBuilder() {
     }
@@ -95,7 +95,7 @@ public class FiltersBuilder {
     }
 
     private static List<String> labelsMapToList(Map<String, String> labels) {
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         for (Entry<String, String> entry : labels.entrySet()) {
             String rest = (entry.getValue() != null & !entry.getValue().isEmpty()) ? "=" + entry.getValue() : "";
 

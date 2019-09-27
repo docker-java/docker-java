@@ -39,7 +39,7 @@ import static org.apache.commons.lang.StringUtils.isEmpty;
 public class Ports implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private final Map<ExposedPort, Binding[]> ports = new HashMap<ExposedPort, Binding[]>();
+    private final Map<ExposedPort, Binding[]> ports = new HashMap<>();
 
     /**
      * Creates a {@link Ports} object with no {@link PortBinding}s. Use {@link #bind(ExposedPort, Binding)} or {@link #add(PortBinding...)}

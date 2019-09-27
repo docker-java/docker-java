@@ -269,7 +269,7 @@ public class CompressArchiveUtilTest {
      * @throws IOException if an error occurs while creating the folders/files.
      */
     private static List<File> createFoldersAndSubFolderWithFiles(Path destinationFolder) throws IOException {
-        List<File> createdFiles = new ArrayList<File>();
+        List<File> createdFiles = new ArrayList<>();
         Path folderA = destinationFolder.resolve("folderA");
         createdFiles.add(Files.createDirectories(folderA).toFile());
         createdFiles.add(createFileWithContent(folderA.resolve("fileA")));

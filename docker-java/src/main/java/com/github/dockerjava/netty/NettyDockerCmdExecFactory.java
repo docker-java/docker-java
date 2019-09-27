@@ -15,8 +15,6 @@ import javax.net.ssl.SSLParameters;
 
 import com.github.dockerjava.core.AbstractDockerCmdExecFactory;
 import com.github.dockerjava.core.WebTarget;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 import org.apache.commons.lang.SystemUtils;
 
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
@@ -151,12 +149,7 @@ public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory impl
         public EventLoopGroup epollGroup() {
             EventLoopGroup epollEventLoopGroup = new EpollEventLoopGroup(0, new DefaultThreadFactory(threadPrefix));
 
-            ChannelFactory<EpollDomainSocketChannel> factory = new ChannelFactory<EpollDomainSocketChannel>() {
-                @Override
-                public EpollDomainSocketChannel newChannel() {
-                    return configure(new EpollDomainSocketChannel());
-                }
-            };
+            ChannelFactory<EpollDomainSocketChannel> factory = () -> configure(new EpollDomainSocketChannel());
 
             bootstrap.group(epollEventLoopGroup).channelFactory(factory).handler(new ChannelInitializer<UnixChannel>() {
                 @Override
@@ -204,12 +197,7 @@ public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory impl
 
             Security.addProvider(new BouncyCastleProvider());
 
-            ChannelFactory<NioSocketChannel> factory = new ChannelFactory<NioSocketChannel>() {
-                @Override
-                public NioSocketChannel newChannel() {
-                    return configure(new NioSocketChannel());
-                }
-            };
+            ChannelFactory<NioSocketChannel> factory = () -> configure(new NioSocketChannel());
 
             bootstrap.group(nioEventLoopGroup).channelFactory(factory)
                     .handler(new ChannelInitializer<SocketChannel>() {
@@ -252,17 +240,7 @@ public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory impl
                 // in sun.security.ssl.SSLEngineImpl and unfortunately it does not send this
                 // message. On the other hand RFC does not enforce the opposite side to wait for
                 // such message.
-                ssl.sslCloseFuture().addListener(new GenericFutureListener<Future<? super Channel>>() {
-                    @Override
-                    public void operationComplete(Future<? super Channel> future) {
-                        channel.eventLoop().execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                channel.close();
-                            }
-                        });
-                    }
-                });
+                ssl.sslCloseFuture().addListener(future -> channel.eventLoop().execute(channel::close));
             }
 
             return channel;

@@ -11,7 +11,6 @@ import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.LastHttpContent;
 
-import java.io.Closeable;
 import java.nio.charset.Charset;
 
 import com.github.dockerjava.api.async.ResultCallback;
@@ -52,12 +51,7 @@ public class HttpResponseHandler extends SimpleChannelInboundHandler<HttpObject>
 
             response = (HttpResponse) msg;
 
-            resultCallback.onStart(new Closeable() {
-                @Override
-                public void close() {
-                    ctx.channel().close();
-                }
-            });
+            resultCallback.onStart(() -> ctx.channel().close());
 
         } else if (msg instanceof HttpContent) {
 

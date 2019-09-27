@@ -54,7 +54,7 @@ public class VolumeBinds implements Serializable {
         public VolumeBinds deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
                 throws IOException, JsonProcessingException {
 
-            List<VolumeBind> binds = new ArrayList<VolumeBind>();
+            List<VolumeBind> binds = new ArrayList<>();
             ObjectCodec oc = jsonParser.getCodec();
             JsonNode node = oc.readTree(jsonParser);
             for (Iterator<Map.Entry<String, JsonNode>> it = node.fields(); it.hasNext();) {

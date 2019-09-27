@@ -21,7 +21,7 @@ public class SelectiveLoggingFilter extends LoggingFilter {
     // Immutable'ish
     private static final Set<String> SKIPPED_CONTENT;
     static {
-        Set<String> s = new HashSet<String>();
+        Set<String> s = new HashSet<>();
         s.add(MediaType.APPLICATION_OCTET_STREAM);
         s.add("application/tar");
         s.add("application/x-tar");

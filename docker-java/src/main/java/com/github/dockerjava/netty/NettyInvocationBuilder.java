@@ -34,8 +34,6 @@ import io.netty.handler.codec.http.LastHttpContent;
 import io.netty.handler.codec.json.JsonObjectDecoder;
 import io.netty.handler.stream.ChunkedStream;
 import io.netty.handler.stream.ChunkedWriteHandler;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -80,7 +78,7 @@ public class NettyInvocationBuilder implements InvocationBuilder {
 
     private String resource;
 
-    private Map<String, String> headers = new HashMap<String, String>();
+    private Map<String, String> headers = new HashMap<>();
 
     public NettyInvocationBuilder(ChannelProvider channelProvider, String resource) {
         this.channelProvider = channelProvider;
@@ -101,7 +99,7 @@ public class NettyInvocationBuilder implements InvocationBuilder {
 
         HttpRequestProvider requestProvider = httpDeleteRequestProvider();
 
-        ResponseCallback<Void> callback = new ResponseCallback<Void>();
+        ResponseCallback<Void> callback = new ResponseCallback<>();
 
         HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, callback);
 
@@ -132,7 +130,7 @@ public class NettyInvocationBuilder implements InvocationBuilder {
 
     public <T> T get(TypeReference<T> typeReference) {
 
-        ResponseCallback<T> callback = new ResponseCallback<T>();
+        ResponseCallback<T> callback = new ResponseCallback<>();
 
         get(typeReference, callback);
 
@@ -145,7 +143,7 @@ public class NettyInvocationBuilder implements InvocationBuilder {
 
         Channel channel = getChannel();
 
-        JsonResponseCallbackHandler<T> jsonResponseHandler = new JsonResponseCallbackHandler<T>(typeReference,
+        JsonResponseCallbackHandler<T> jsonResponseHandler = new JsonResponseCallbackHandler<>(typeReference,
                 resultCallback);
 
         HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, resultCallback);
@@ -164,39 +162,19 @@ public class NettyInvocationBuilder implements InvocationBuilder {
     }
 
     private HttpRequestProvider httpDeleteRequestProvider() {
-        return new HttpRequestProvider() {
-            @Override
-            public HttpRequest getHttpRequest(String uri) {
-                return prepareDeleteRequest(uri);
-            }
-        };
+        return this::prepareDeleteRequest;
     }
 
     private HttpRequestProvider httpGetRequestProvider() {
-        return new HttpRequestProvider() {
-            @Override
-            public HttpRequest getHttpRequest(String uri) {
-                return prepareGetRequest(uri);
-            }
-        };
+        return this::prepareGetRequest;
     }
 
     private HttpRequestProvider httpPostRequestProvider(final Object entity) {
-        return new HttpRequestProvider() {
-            @Override
-            public HttpRequest getHttpRequest(String uri) {
-                return preparePostRequest(uri, entity);
-            }
-        };
+        return uri -> preparePostRequest(uri, entity);
     }
 
     private HttpRequestProvider httpPutRequestProvider(final Object entity) {
-        return new HttpRequestProvider() {
-            @Override
-            public HttpRequest getHttpRequest(String uri) {
-                return preparePutRequest(uri, entity);
-            }
-        };
+        return uri -> preparePutRequest(uri, entity);
     }
 
     public InputStream post(final Object entity) {
@@ -227,12 +205,7 @@ public class NettyInvocationBuilder implements InvocationBuilder {
         final DuplexChannel channel = getChannel();
 
         // result callback's close() method must be called when the servers closes the connection
-        channel.closeFuture().addListener(new GenericFutureListener<Future<? super Void>>() {
-            @Override
-            public void operationComplete(Future<? super Void> future) throws Exception {
-                resultCallback.onComplete();
-            }
-        });
+        channel.closeFuture().addListener(future -> resultCallback.onComplete());
 
         HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, resultCallback);
 
@@ -281,7 +254,7 @@ public class NettyInvocationBuilder implements InvocationBuilder {
 
     public <T> T post(final Object entity, TypeReference<T> typeReference) {
 
-        ResponseCallback<T> callback = new ResponseCallback<T>();
+        ResponseCallback<T> callback = new ResponseCallback<>();
 
         post(entity, typeReference, callback);
 
@@ -294,7 +267,7 @@ public class NettyInvocationBuilder implements InvocationBuilder {
 
         Channel channel = getChannel();
 
-        JsonResponseCallbackHandler<T> jsonResponseHandler = new JsonResponseCallbackHandler<T>(typeReference,
+        JsonResponseCallbackHandler<T> jsonResponseHandler = new JsonResponseCallbackHandler<>(typeReference,
                 resultCallback);
 
         HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, resultCallback);
@@ -370,10 +343,7 @@ public class NettyInvocationBuilder implements InvocationBuilder {
 
         ChannelFuture channelFuture = channel.writeAndFlush(requestProvider.getHttpRequest(resource));
 
-        channelFuture.addListener(new ChannelFutureListener() {
-            @Override
-            public void operationComplete(ChannelFuture future) throws Exception {
-            }
+        channelFuture.addListener((ChannelFutureListener) future -> {
         });
     }
 
@@ -389,7 +359,7 @@ public class NettyInvocationBuilder implements InvocationBuilder {
 
     public <T> T post(TypeReference<T> typeReference, InputStream body) {
 
-        ResponseCallback<T> callback = new ResponseCallback<T>();
+        ResponseCallback<T> callback = new ResponseCallback<>();
 
         post(typeReference, callback, body);
 
@@ -401,7 +371,7 @@ public class NettyInvocationBuilder implements InvocationBuilder {
 
         Channel channel = getChannel();
 
-        JsonResponseCallbackHandler<T> jsonResponseHandler = new JsonResponseCallbackHandler<T>(typeReference,
+        JsonResponseCallbackHandler<T> jsonResponseHandler = new JsonResponseCallbackHandler<>(typeReference,
                 resultCallback);
 
         HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, resultCallback);
@@ -478,7 +448,7 @@ public class NettyInvocationBuilder implements InvocationBuilder {
 
         Channel channel = getChannel();
 
-        ResponseCallback<Void> resultCallback = new ResponseCallback<Void>();
+        ResponseCallback<Void> resultCallback = new ResponseCallback<>();
 
         HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, resultCallback);
 

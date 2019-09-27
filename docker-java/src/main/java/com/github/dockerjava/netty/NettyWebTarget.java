@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -158,16 +159,16 @@ public class NettyWebTarget implements WebTarget {
 
         NettyWebTarget webTarget = (NettyWebTarget) o;
 
-        if (channelProvider != null ? !channelProvider.equals(webTarget.channelProvider) : webTarget.channelProvider != null) {
+        if (!Objects.equals(channelProvider, webTarget.channelProvider)) {
             return false;
         }
-        if (path != null ? !path.equals(webTarget.path) : webTarget.path != null) {
+        if (!Objects.equals(path, webTarget.path)) {
             return false;
         }
-        if (queryParams != null ? !queryParams.equals(webTarget.queryParams) : webTarget.queryParams != null) {
+        if (!Objects.equals(queryParams, webTarget.queryParams)) {
             return false;
         }
-        if (queryParamsSet != null ? !queryParamsSet.equals(webTarget.queryParamsSet) : webTarget.queryParamsSet != null) {
+        if (!Objects.equals(queryParamsSet, webTarget.queryParamsSet)) {
             return false;
         }
 

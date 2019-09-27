@@ -2,24 +2,9 @@ package com.github.dockerjava.cmd.swarm;
 
 import com.github.dockerjava.api.command.CreateSecretResponse;
 import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.api.model.ContainerSpec;
-import com.github.dockerjava.api.model.EndpointResolutionMode;
-import com.github.dockerjava.api.model.EndpointSpec;
-import com.github.dockerjava.api.model.Mount;
-import com.github.dockerjava.api.model.Network;
-import com.github.dockerjava.api.model.NetworkAttachmentConfig;
-import com.github.dockerjava.api.model.PortConfig;
-import com.github.dockerjava.api.model.PortConfigProtocol;
 import com.github.dockerjava.api.model.Secret;
 import com.github.dockerjava.api.model.SecretSpec;
-import com.github.dockerjava.api.model.Service;
-import com.github.dockerjava.api.model.ServiceModeConfig;
-import com.github.dockerjava.api.model.ServiceReplicatedModeOptions;
-import com.github.dockerjava.api.model.ServiceSpec;
 import com.github.dockerjava.api.model.SwarmSpec;
-import com.github.dockerjava.api.model.TaskSpec;
-import com.github.dockerjava.api.model.TmpfsOptions;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.RandomStringUtils;
 import org.hamcrest.collection.IsCollectionWithSize;
@@ -27,15 +12,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.charset.Charset;
-import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
-import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class CreateSecretCmdExecIT extends SwarmCmdIT {

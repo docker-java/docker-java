@@ -831,7 +831,7 @@ public class CreateContainerCmdIT extends CmdIT {
     @Test
     public void createContainerWithLabels() throws DockerException {
 
-        Map<String, String> labels = new HashMap<String, String>();
+        Map<String, String> labels = new HashMap<>();
         labels.put("com.github.dockerjava.null", null);
         labels.put("com.github.dockerjava.Boolean", "true");
 

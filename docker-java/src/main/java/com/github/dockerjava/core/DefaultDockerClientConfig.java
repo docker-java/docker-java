@@ -54,7 +54,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
     private static final String DOCKER_JAVA_PROPERTIES = "docker-java.properties";
 
-    private static final Set<String> CONFIG_KEYS = new HashSet<String>();
+    private static final Set<String> CONFIG_KEYS = new HashSet<>();
 
     static {
         CONFIG_KEYS.add(DOCKER_HOST);

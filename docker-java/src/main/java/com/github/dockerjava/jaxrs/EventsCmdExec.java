@@ -36,7 +36,7 @@ public class EventsCmdExec extends AbstrAsyncDockerCmdExec<EventsCmd, Event> imp
 
         LOGGER.trace("GET: {}", webTarget);
 
-        return new GETCallbackNotifier<Event>(new JsonStreamProcessor<Event>(Event.class), resultCallback,
+        return new GETCallbackNotifier<>(new JsonStreamProcessor<>(Event.class), resultCallback,
                 webTarget.request());
     }
 }

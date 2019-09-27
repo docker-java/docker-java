@@ -11,10 +11,8 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 
 import com.github.dockerjava.api.exception.DockerClientException;
-import com.google.common.base.Function;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
 /**
@@ -92,28 +90,19 @@ public abstract class DockerfileStatement<T extends DockerfileStatement<?>> {
 
         @Override
         public Add transform(final Map<String, String> env) {
-            Collection<String> resources = Collections2.transform(sources, new Function<String, String>() {
-                @Override
-                public String apply(String source) {
-                    return filterForEnvironmentVars(env, source).trim();
-                }
-            });
+            Collection<String> resources = Collections2.transform(sources, source -> filterForEnvironmentVars(env, source).trim());
             return new Add(resources, destination);
         }
 
         public Iterable<String> getFileResources() {
-            return Collections2.filter(sources, new Predicate<String>() {
-
-                @Override
-                public boolean apply(String source) {
-                    URI uri;
-                    try {
-                        uri = new URI(source);
-                    } catch (URISyntaxException e) {
-                        return false;
-                    }
-                    return uri.getScheme() == null || "file".equals(uri.getScheme());
+            return Collections2.filter(sources, source -> {
+                URI uri;
+                try {
+                    uri = new URI(source);
+                } catch (URISyntaxException e) {
+                    return false;
                 }
+                return uri.getScheme() == null || "file".equals(uri.getScheme());
             });
         }
 

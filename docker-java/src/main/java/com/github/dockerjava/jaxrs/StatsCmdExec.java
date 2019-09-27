@@ -29,7 +29,7 @@ public class StatsCmdExec extends AbstrAsyncDockerCmdExec<StatsCmd, Statistics> 
 
         LOGGER.trace("GET: {}", webTarget);
 
-        return new GETCallbackNotifier<Statistics>(new JsonStreamProcessor<Statistics>(Statistics.class),
+        return new GETCallbackNotifier<>(new JsonStreamProcessor<>(Statistics.class),
                 resultCallback, webTarget.request());
     }
 }

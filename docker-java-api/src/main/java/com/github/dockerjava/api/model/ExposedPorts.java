@@ -61,7 +61,7 @@ public class ExposedPorts implements Serializable {
         public ExposedPorts deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
                 throws IOException, JsonProcessingException {
 
-            List<ExposedPort> exposedPorts = new ArrayList<ExposedPort>();
+            List<ExposedPort> exposedPorts = new ArrayList<>();
             ObjectCodec oc = jsonParser.getCodec();
             JsonNode node = oc.readTree(jsonParser);
             for (Iterator<Map.Entry<String, JsonNode>> it = node.fields(); it.hasNext();) {

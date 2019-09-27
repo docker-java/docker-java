@@ -44,6 +44,6 @@ public class LogContainerCmdExec extends AbstrAsyncDockerCmdExec<LogContainerCmd
 
         LOGGER.trace("GET: {}", webTarget);
 
-        return new GETCallbackNotifier<Frame>(new FrameStreamProcessor(), resultCallback, webTarget.request());
+        return new GETCallbackNotifier<>(new FrameStreamProcessor(), resultCallback, webTarget.request());
     }
 }

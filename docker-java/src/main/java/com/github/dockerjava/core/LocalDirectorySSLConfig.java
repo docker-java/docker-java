@@ -82,12 +82,7 @@ public class LocalDirectorySSLConfig implements SSLConfig, Serializable {
     }
 
     private PrivilegedAction<String> getSystemProperty(final String name, final String def) {
-        return new PrivilegedAction<String>() {
-            @Override
-            public String run() {
-                return System.getProperty(name, def);
-            }
-        };
+        return () -> System.getProperty(name, def);
     }
 
     @Override

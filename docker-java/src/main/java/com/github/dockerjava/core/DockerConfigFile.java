@@ -33,7 +33,7 @@ public class DockerConfigFile {
     private final Map<String, AuthConfig> auths;
 
     public DockerConfigFile() {
-        this(new HashMap<String, AuthConfig>());
+        this(new HashMap<>());
     }
 
     private DockerConfigFile(Map<String, AuthConfig> authConfigMap) {

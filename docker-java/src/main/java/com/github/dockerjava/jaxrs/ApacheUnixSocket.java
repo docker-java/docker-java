@@ -45,7 +45,7 @@ public class ApacheUnixSocket extends Socket {
 
     private final AFUNIXSocket inner;
 
-    private final Queue<SocketOptionSetter> optionsToSet = new ArrayDeque<SocketOptionSetter>();
+    private final Queue<SocketOptionSetter> optionsToSet = new ArrayDeque<>();
 
     public ApacheUnixSocket() throws IOException {
         this.inner = AFUNIXSocket.newInstance();
@@ -132,12 +132,7 @@ public class ApacheUnixSocket extends Socket {
 
     @Override
     public void setTcpNoDelay(final boolean on) throws SocketException {
-        setSocketOption(new SocketOptionSetter() {
-            @Override
-            public void run() throws SocketException {
-                inner.setTcpNoDelay(on);
-            }
-        });
+        setSocketOption(() -> inner.setTcpNoDelay(on));
     }
 
     @Override
@@ -147,12 +142,7 @@ public class ApacheUnixSocket extends Socket {
 
     @Override
     public void setSoLinger(final boolean on, final int linger) throws SocketException {
-        setSocketOption(new SocketOptionSetter() {
-            @Override
-            public void run() throws SocketException {
-                inner.setSoLinger(on, linger);
-            }
-        });
+        setSocketOption(() -> inner.setSoLinger(on, linger));
     }
 
     @Override
@@ -167,12 +157,7 @@ public class ApacheUnixSocket extends Socket {
 
     @Override
     public void setOOBInline(final boolean on) throws SocketException {
-        setSocketOption(new SocketOptionSetter() {
-            @Override
-            public void run() throws SocketException {
-                inner.setOOBInline(on);
-            }
-        });
+        setSocketOption(() -> inner.setOOBInline(on));
     }
 
     @Override
@@ -182,12 +167,7 @@ public class ApacheUnixSocket extends Socket {
 
     @Override
     public synchronized void setSoTimeout(final int timeout) throws SocketException {
-        setSocketOption(new SocketOptionSetter() {
-            @Override
-            public void run() throws SocketException {
-                inner.setSoTimeout(timeout);
-            }
-        });
+        setSocketOption(() -> inner.setSoTimeout(timeout));
     }
 
     @Override
@@ -197,12 +177,7 @@ public class ApacheUnixSocket extends Socket {
 
     @Override
     public synchronized void setSendBufferSize(final int size) throws SocketException {
-        setSocketOption(new SocketOptionSetter() {
-            @Override
-            public void run() throws SocketException {
-                inner.setSendBufferSize(size);
-            }
-        });
+        setSocketOption(() -> inner.setSendBufferSize(size));
     }
 
     @Override
@@ -212,12 +187,7 @@ public class ApacheUnixSocket extends Socket {
 
     @Override
     public synchronized void setReceiveBufferSize(final int size) throws SocketException {
-        setSocketOption(new SocketOptionSetter() {
-            @Override
-            public void run() throws SocketException {
-                inner.setReceiveBufferSize(size);
-            }
-        });
+        setSocketOption(() -> inner.setReceiveBufferSize(size));
     }
 
     @Override
@@ -227,12 +197,7 @@ public class ApacheUnixSocket extends Socket {
 
     @Override
     public void setKeepAlive(final boolean on) throws SocketException {
-        setSocketOption(new SocketOptionSetter() {
-            @Override
-            public void run() throws SocketException {
-                inner.setKeepAlive(on);
-            }
-        });
+        setSocketOption(() -> inner.setKeepAlive(on));
     }
 
     @Override
@@ -242,12 +207,7 @@ public class ApacheUnixSocket extends Socket {
 
     @Override
     public void setTrafficClass(final int tc) throws SocketException {
-        setSocketOption(new SocketOptionSetter() {
-            @Override
-            public void run() throws SocketException {
-                inner.setTrafficClass(tc);
-            }
-        });
+        setSocketOption(() -> inner.setTrafficClass(tc));
     }
 
     @Override
