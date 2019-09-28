@@ -10,7 +10,7 @@
 	<groupId>com.github.docker-java</groupId>
 	<artifactId>docker-java-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>3.1.6-SNAPSHOT</version>
+	<version>3.2.0-SNAPSHOT</version>
 
 	<name>docker-java-parent</name>
 	<url>https://github.com/docker-java/docker-java</url>
