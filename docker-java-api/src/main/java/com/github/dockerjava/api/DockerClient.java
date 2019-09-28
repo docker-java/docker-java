@@ -76,7 +76,6 @@ import com.github.dockerjava.api.model.PruneType;
 import com.github.dockerjava.api.model.SecretSpec;
 import com.github.dockerjava.api.model.ServiceSpec;
 import com.github.dockerjava.api.model.SwarmSpec;
-import com.github.dockerjava.core.RemoteApiVersion;
 
 import javax.annotation.Nonnull;
 import java.io.Closeable;

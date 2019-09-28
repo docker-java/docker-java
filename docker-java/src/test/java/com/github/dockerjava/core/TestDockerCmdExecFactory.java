@@ -88,7 +88,7 @@ import java.util.List;
  *
  * @author Marcus Linke
  */
-public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
+public class TestDockerCmdExecFactory implements DockerCmdExecFactory, DockerClientConfigAware {
 
     private List<String> containerNames = new ArrayList<>();
 
@@ -106,7 +106,9 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory {
 
     @Override
     public void init(DockerClientConfig dockerClientConfig) {
-        delegate.init(dockerClientConfig);
+        if (delegate instanceof DockerClientConfigAware) {
+            ((DockerClientConfigAware) delegate).init(dockerClientConfig);
+        }
     }
 
     @Override

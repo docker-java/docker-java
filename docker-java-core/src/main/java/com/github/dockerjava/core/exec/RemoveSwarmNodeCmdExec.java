@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 public class RemoveSwarmNodeCmdExec extends AbstrSyncDockerCmdExec<RemoveSwarmNodeCmd, Void> implements
         RemoveSwarmNodeCmd.Exec {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(com.github.dockerjava.jaxrs.RemoveSwarmNodeCmdExec.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RemoveSwarmNodeCmdExec.class);
 
     public RemoveSwarmNodeCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
         super(baseResource, dockerClientConfig);

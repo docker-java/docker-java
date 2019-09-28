@@ -1,7 +1,6 @@
 package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.model.Service;
-import com.github.dockerjava.core.RemoteApiVersion;
 
 import javax.annotation.CheckForNull;
 import java.util.List;

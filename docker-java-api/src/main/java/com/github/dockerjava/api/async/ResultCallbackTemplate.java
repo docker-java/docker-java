@@ -1,9 +1,8 @@
 /*
  * Created on 16.06.2015
  */
-package com.github.dockerjava.core.async;
+package com.github.dockerjava.api.async;
 
-import com.github.dockerjava.api.async.ResultCallback;
 import com.google.common.base.Throwables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

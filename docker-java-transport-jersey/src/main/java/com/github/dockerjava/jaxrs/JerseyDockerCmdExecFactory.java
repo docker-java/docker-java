@@ -77,6 +77,7 @@ import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.DockerClientConfigAware;
 import com.github.dockerjava.core.SSLConfig;
 import com.github.dockerjava.jaxrs.filter.JsonClientFilter;
 import com.github.dockerjava.jaxrs.filter.ResponseStatusExceptionFilter;
@@ -116,7 +117,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 //import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 // see https://github.com/docker-java/docker-java/issues/196
 
-public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory {
+public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory, DockerClientConfigAware {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JerseyDockerCmdExecFactory.class.getName());
 

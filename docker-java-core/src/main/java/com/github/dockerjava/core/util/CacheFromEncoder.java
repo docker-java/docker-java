@@ -2,9 +2,7 @@ package com.github.dockerjava.core.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 
-import javax.ws.rs.core.MediaType;
 import java.util.Collection;
 
 /**
@@ -15,8 +13,7 @@ public class CacheFromEncoder {
     private CacheFromEncoder() {
     }
 
-    private static final ObjectMapper MAPPER = new JacksonJaxbJsonProvider().locateMapper(Collection.class,
-            MediaType.APPLICATION_JSON_TYPE);
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public static String jsonEncode(Collection<String> imageIds) {
         try {

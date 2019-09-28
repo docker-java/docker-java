@@ -11,7 +11,6 @@ import javax.annotation.Nonnull;
 
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.BuildResponseItem;
-import com.github.dockerjava.core.RemoteApiVersion;
 
 /**
  * Build an image from Dockerfile.

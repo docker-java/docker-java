@@ -19,7 +19,6 @@ import org.apache.commons.lang.SystemUtils;
 
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.core.SSLConfig;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -53,7 +52,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
  * Experimental implementation of {@link DockerCmdExecFactory} that supports http connection hijacking that is needed to pass STDIN to the
  * container.
  * <p>
- * To use it just pass an instance via {@link DockerClientImpl#withDockerCmdExecFactory(DockerCmdExecFactory)}
+ * To use it just pass an instance via {@link com.github.dockerjava.core.DockerClientImpl#withDockerCmdExecFactory(DockerCmdExecFactory)}
  *
  * @author Marcus Linke
  * @see https://docs.docker.com/engine/reference/api/docker_remote_api_v1.21/#attach-to-a-container

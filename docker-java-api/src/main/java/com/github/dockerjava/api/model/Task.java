@@ -3,7 +3,6 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.dockerjava.core.RemoteApiVersion;
 
 import java.io.Serializable;
 import java.util.List;

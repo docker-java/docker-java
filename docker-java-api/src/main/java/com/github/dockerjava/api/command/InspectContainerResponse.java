@@ -11,7 +11,6 @@ import com.github.dockerjava.api.model.VolumeBind;
 import com.github.dockerjava.api.model.VolumeBinds;
 import com.github.dockerjava.api.model.VolumeRW;
 import com.github.dockerjava.api.model.VolumesRW;
-import com.github.dockerjava.core.RemoteApiVersion;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;

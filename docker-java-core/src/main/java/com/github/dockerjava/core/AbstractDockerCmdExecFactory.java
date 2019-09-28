@@ -146,7 +146,7 @@ import com.github.dockerjava.core.exec.WaitContainerCmdExec;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public abstract class AbstractDockerCmdExecFactory implements DockerCmdExecFactory {
+public abstract class AbstractDockerCmdExecFactory implements DockerCmdExecFactory, DockerClientConfigAware {
 
     private DockerClientConfig dockerClientConfig;
 

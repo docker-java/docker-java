@@ -92,6 +92,9 @@
 
 	<modules>
 		<module>docker-java-api</module>
+		<module>docker-java-core</module>
+		<module>docker-java-transport-netty</module>
+		<module>docker-java-transport-jersey</module>
 		<module>docker-java</module>
 	</modules>
 

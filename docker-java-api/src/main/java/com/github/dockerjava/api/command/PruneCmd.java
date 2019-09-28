@@ -2,7 +2,6 @@ package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.model.PruneResponse;
 import com.github.dockerjava.api.model.PruneType;
-import com.github.dockerjava.core.RemoteApiVersion;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
