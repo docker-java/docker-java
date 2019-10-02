@@ -10,6 +10,7 @@ import java.io.Serializable;
  * The Bind can be in read only or read write access mode.
  */
 public class Bind implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     private String path;
@@ -89,50 +90,57 @@ public class Bind implements Serializable {
     /**
      * Parses a bind mount specification to a {@link Bind}.
      *
-     * @param serialized
-     *            the specification, e.g. <code>/host:/container:ro</code>
+     * @param serialized the specification, e.g. <code>/host:/container:ro</code>
      * @return a {@link Bind} matching the specification
-     * @throws IllegalArgumentException
-     *             if the specification cannot be parsed
+     * @throws IllegalArgumentException if the specification cannot be parsed
      */
     public static Bind parse(String serialized) {
-        try {
-            String[] parts = serialized.split(":");
-            switch (parts.length) {
-            case 2: {
-                return new Bind(parts[0], new Volume(parts[1]));
-            }
-            case 3: {
-                String[] flags = parts[2].split(",");
-                AccessMode accessMode = AccessMode.DEFAULT;
-                SELContext seMode = SELContext.DEFAULT;
-                Boolean nocopy = null;
-                PropagationMode propagationMode = PropagationMode.DEFAULT_MODE;
-                for (String p : flags) {
-                    if (p.length() == 2) {
-                        accessMode = AccessMode.valueOf(p.toLowerCase());
-                    } else if ("nocopy".equals(p)) {
-                        nocopy = true;
-                    } else if (PropagationMode.SHARED.toString().equals(p)) {
-                        propagationMode = PropagationMode.SHARED;
-                    } else if (PropagationMode.SLAVE.toString().equals(p)) {
-                        propagationMode = PropagationMode.SLAVE;
-                    } else if (PropagationMode.PRIVATE.toString().equals(p)) {
-                        propagationMode = PropagationMode.PRIVATE;
-                    } else {
-                        seMode = SELContext.fromString(p);
-                    }
-                }
+        return parse(serialized, new StringUtilWindowsProbe());
+    }
 
-                return new Bind(parts[0], new Volume(parts[1]), accessMode, seMode, nocopy, propagationMode);
+    /**
+     * Parses a bind mount specification to a {@link Bind}.
+     *
+     * @param serialized the specification, e.g. <code>/host:/container:ro</code>
+     * @return a {@link Bind} matching the specification
+     * @throws IllegalArgumentException if the specification cannot be parsed
+     */
+    public static Bind parse(String serialized, WindowsProbe windowsProbe) {
+        SpecificationParser parser = SpecificationParser.parse(serialized, windowsProbe);
+
+        if (!parser.hasExtraParams()) {
+            return new Bind(parser.getPath(), new Volume(parser.getVolumePath()));
+        } else if (parser.hasExtraParams()) {
+            String[] flags = parser.getFlags().split(",");
+
+            AccessMode accessMode = AccessMode.DEFAULT;
+            SELContext seMode = SELContext.DEFAULT;
+            Boolean nocopy = null;
+            PropagationMode propagationMode = PropagationMode.DEFAULT_MODE;
+            for (String p : flags) {
+                if (p.length() == 2) {
+                    try {
+                        accessMode = AccessMode.valueOf(p.toLowerCase());
+                    } catch (Exception e) {
+                        throw new IllegalArgumentException("Error parsing Bind '" + serialized + "'", e);
+                    }
+                } else if ("nocopy".equals(p)) {
+                    nocopy = true;
+                } else if (PropagationMode.SHARED.toString().equals(p)) {
+                    propagationMode = PropagationMode.SHARED;
+                } else if (PropagationMode.SLAVE.toString().equals(p)) {
+                    propagationMode = PropagationMode.SLAVE;
+                } else if (PropagationMode.PRIVATE.toString().equals(p)) {
+                    propagationMode = PropagationMode.PRIVATE;
+                } else {
+                    seMode = SELContext.fromString(p);
+                }
             }
-            default: {
-                throw new IllegalArgumentException();
-            }
-            }
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Error parsing Bind '" + serialized + "'", e);
+            return new Bind(parser.getPath(), new Volume(parser.getVolumePath()),
+                    accessMode, seMode, nocopy,
+                    propagationMode);
         }
+        throw new IllegalArgumentException();
     }
 
     @Override

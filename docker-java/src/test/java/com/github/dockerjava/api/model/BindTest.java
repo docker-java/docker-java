@@ -37,6 +37,7 @@ public class BindTest {
         assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT_MODE));
     }
 
+
     @Test
     public void parseReadWriteNoCopy() {
         Bind bind = Bind.parse("/host:/container:rw,nocopy");
@@ -136,7 +137,7 @@ public class BindTest {
     @Test
     public void parseInvalidAccessMode() {
         expectedEx.expect(IllegalArgumentException.class);
-        expectedEx.expectMessage( "Error parsing Bind");
+        expectedEx.expectMessage("Error parsing Bind");
 
         Bind.parse("/host:/container:xx");
     }
@@ -206,5 +207,28 @@ public class BindTest {
     public void toStringDefaultSEL() {
         assertThat(Bind.parse("/host:/container:Z").toString(), is("/host:/container:rw,Z"));
     }
+
+    @Test
+    public void parseUsingDefaultAccessModeOnWindows() {
+        Bind bind = Bind.parse("G:\\host:C:\\container", () -> true);
+        assertThat(bind.getPath(), is("G:\\host"));
+        assertThat(bind.getVolume().getPath(), is("C:\\container"));
+        assertThat(bind.getAccessMode(), is(AccessMode.DEFAULT));
+        assertThat(bind.getSecMode(), is(SELContext.none));
+        assertThat(bind.getNoCopy(), nullValue());
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT_MODE));
+    }
+
+    @Test
+    public void parseReadWriteOnWindows() {
+        Bind bind = Bind.parse("G:\\host:C:\\container:rw", () -> true);
+        assertThat(bind.getPath(), is("G:\\host"));
+        assertThat(bind.getVolume().getPath(), is("C:\\container"));
+        assertThat(bind.getAccessMode(), is(rw));
+        assertThat(bind.getSecMode(), is(SELContext.none));
+        assertThat(bind.getNoCopy(), nullValue());
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT_MODE));
+    }
+
 
 }
