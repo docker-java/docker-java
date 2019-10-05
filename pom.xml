@@ -10,7 +10,7 @@
 	<groupId>com.github.docker-java</groupId>
 	<artifactId>docker-java-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>3.2.0-SNAPSHOT</version>
+	<version>3.2.0-rc1</version>
 
 	<name>docker-java-parent</name>
 	<url>https://github.com/docker-java/docker-java</url>
@@ -28,7 +28,7 @@
 		<connection>scm:git:git@github.com:docker-java/docker-java.git</connection>
 		<url>git@github.com:docker-java/docker-java.git</url>
 		<developerConnection>scm:git:git@github.com:docker-java/docker-java.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>3.2.0-rc1</tag>
 	</scm>
 
 	<developers>
