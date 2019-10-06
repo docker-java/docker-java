@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Used in `/containers/create`, and in inspect container.
@@ -573,13 +573,13 @@ public class HostConfig implements Serializable {
     }
 
     public HostConfig withBinds(Bind... binds) {
-        checkNotNull(binds, "binds was not specified");
+        requireNonNull(binds, "binds was not specified");
         setBinds(binds);
         return this;
     }
 
     public HostConfig withBinds(List<Bind> binds) {
-        checkNotNull(binds, "binds was not specified");
+        requireNonNull(binds, "binds was not specified");
         return withBinds(binds.toArray(new Bind[binds.size()]));
     }
 
@@ -712,7 +712,7 @@ public class HostConfig implements Serializable {
     }
 
     public HostConfig withDevices(List<Device> devices) {
-        checkNotNull(devices, "devices was not specified");
+        requireNonNull(devices, "devices was not specified");
         return withDevices(devices.toArray(new Device[0]));
     }
 
@@ -733,7 +733,7 @@ public class HostConfig implements Serializable {
     }
 
     public HostConfig withDns(List<String> dns) {
-        checkNotNull(dns, "dns was not specified");
+        requireNonNull(dns, "dns was not specified");
         return withDns(dns.toArray(new String[0]));
     }
 
@@ -746,7 +746,7 @@ public class HostConfig implements Serializable {
     }
 
     public HostConfig withDnsSearch(List<String> dnsSearch) {
-        checkNotNull(dnsSearch, "dnsSearch was not specified");
+        requireNonNull(dnsSearch, "dnsSearch was not specified");
         return withDnsSearch(dnsSearch.toArray(new String[0]));
     }
 
@@ -775,13 +775,13 @@ public class HostConfig implements Serializable {
     }
 
     public HostConfig withLinks(Link... links) {
-        checkNotNull(links, "links was not specified");
+        requireNonNull(links, "links was not specified");
         setLinks(links);
         return this;
     }
 
     public HostConfig withLinks(List<Link> links) {
-        checkNotNull(links, "links was not specified");
+        requireNonNull(links, "links was not specified");
         return withLinks(links.toArray(new Link[0]));
     }
 
@@ -894,13 +894,13 @@ public class HostConfig implements Serializable {
     }
 
     public HostConfig withPortBindings(PortBinding... portBindings) {
-        checkNotNull(portBindings, "portBindings was not specified");
+        requireNonNull(portBindings, "portBindings was not specified");
         withPortBindings(new Ports(portBindings));
         return this;
     }
 
     public HostConfig withPortBindings(List<PortBinding> portBindings) {
-        checkNotNull(portBindings, "portBindings was not specified");
+        requireNonNull(portBindings, "portBindings was not specified");
         return withPortBindings(portBindings.toArray(new PortBinding[0]));
     }
 
@@ -985,7 +985,7 @@ public class HostConfig implements Serializable {
     }
 
     public HostConfig withUlimits(List<Ulimit> ulimits) {
-        checkNotNull(ulimits, "no ulimits was specified");
+        requireNonNull(ulimits, "no ulimits was specified");
         return withUlimits(ulimits.toArray(new Ulimit[0]));
     }
 
@@ -1006,7 +1006,7 @@ public class HostConfig implements Serializable {
     }
 
     public HostConfig withVolumesFrom(List<VolumesFrom> volumesFrom) {
-        checkNotNull(volumesFrom, "volumesFrom was not specified");
+        requireNonNull(volumesFrom, "volumesFrom was not specified");
         return withVolumesFrom(volumesFrom.toArray(new VolumesFrom[0]));
     }
 

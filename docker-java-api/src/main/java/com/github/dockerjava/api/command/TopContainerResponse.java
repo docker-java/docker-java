@@ -2,7 +2,6 @@ package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.Joiner;
 
 /**
  *
@@ -28,14 +27,19 @@ public class TopContainerResponse {
 
     @Override
     public String toString() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder("TopContainerResponse{");
+        buffer.append("titles=");
+        buffer.append(String.join("; ", titles));
+        buffer.append(", processes=");
         buffer.append("[");
         for (String[] fields : processes) {
-            buffer.append("[" + Joiner.on("; ").skipNulls().join(fields) + "]");
+            buffer.append("[")
+                    .append(String.join("; ", fields))
+                    .append("]");
         }
         buffer.append("]");
+        buffer.append("}");
 
-        return "TopContainerResponse{" + "titles=" + Joiner.on("; ").skipNulls().join(titles) + ", processes="
-                + buffer.toString() + '}';
+        return buffer.toString();
     }
 }

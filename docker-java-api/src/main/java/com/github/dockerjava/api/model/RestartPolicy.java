@@ -1,13 +1,13 @@
 package com.github.dockerjava.api.model;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Container restart policy
@@ -41,7 +41,7 @@ public class RestartPolicy implements Serializable {
     }
 
     private RestartPolicy(int maximumRetryCount, String name) {
-        checkNotNull(name, "name is null");
+        requireNonNull(name, "name is null");
         this.maximumRetryCount = maximumRetryCount;
         this.name = name;
     }

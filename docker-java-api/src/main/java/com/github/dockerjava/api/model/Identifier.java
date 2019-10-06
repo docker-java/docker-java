@@ -1,9 +1,7 @@
 package com.github.dockerjava.api.model;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Optional;
-
 import java.io.Serializable;
+import java.util.Optional;
 
 /**
  * @author magnayn
@@ -18,11 +16,7 @@ public class Identifier implements Serializable {
     public Identifier(Repository repository, String tag) {
         this.repository = repository;
 
-        if (tag == null) {
-            this.tag = Optional.absent();
-        } else {
-            this.tag = Optional.of(tag);
-        }
+        this.tag = Optional.ofNullable(tag);
     }
 
     /**
@@ -55,6 +49,9 @@ public class Identifier implements Serializable {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("repository", repository).add("tag", tag).toString();
+        return "Identifier{" +
+                "repository=" + repository +
+                ", tag=" + tag +
+                '}';
     }
 }
