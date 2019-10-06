@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import com.google.common.base.MoreObjects;
-
 /**
  * A repository or image name.
  */
@@ -36,7 +34,9 @@ public class Repository implements Serializable {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("name", name).toString();
+        return "Repository{" +
+                "name='" + name + '\'' +
+                '}';
     }
 
     public String getPath() {

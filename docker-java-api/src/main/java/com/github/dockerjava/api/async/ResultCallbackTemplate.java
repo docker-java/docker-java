@@ -3,7 +3,6 @@
  */
 package com.github.dockerjava.api.async;
 
-import com.google.common.base.Throwables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -134,8 +133,13 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
      */
     protected void throwFirstError() {
         if (firstError != null) {
-            // this call throws a RuntimeException
-            Throwables.propagate(firstError);
+            if (firstError instanceof Error) {
+              throw (Error) firstError;
+            }
+            if (firstError instanceof RuntimeException) {
+              throw (RuntimeException) firstError;
+            }
+            throw new RuntimeException(firstError);
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang.BooleanUtils.isNotTrue;
 import static org.apache.commons.lang.StringUtils.isEmpty;
 
@@ -34,9 +34,9 @@ public class Device implements Serializable {
     }
 
     public Device(String cGroupPermissions, String pathInContainer, String pathOnHost) {
-        checkNotNull(cGroupPermissions, "cGroupPermissions is null");
-        checkNotNull(pathInContainer, "pathInContainer is null");
-        checkNotNull(pathOnHost, "pathOnHost is null");
+        requireNonNull(cGroupPermissions, "cGroupPermissions is null");
+        requireNonNull(pathInContainer, "pathInContainer is null");
+        requireNonNull(pathOnHost, "pathOnHost is null");
         this.cGroupPermissions = cGroupPermissions;
         this.pathInContainer = pathInContainer;
         this.pathOnHost = pathOnHost;
