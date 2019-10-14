@@ -39,7 +39,7 @@ public class DockerfileFixture implements AutoCloseable {
 
         Image lastCreatedImage = client.listImagesCmd().exec().get(0);
 
-        repository = lastCreatedImage.getRepoTags()[0];
+        repository = lastCreatedImage.getRepoTags().get(0);
 
         LOGGER.info("created {} {}", lastCreatedImage.getId(), repository);
 

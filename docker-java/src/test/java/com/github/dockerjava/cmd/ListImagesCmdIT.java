@@ -1,18 +1,8 @@
 package com.github.dockerjava.cmd;
 
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.api.model.Image;
-import com.github.dockerjava.api.model.Info;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.List;
-
 import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.emptyArray;
+import static org.hamcrest.Matchers.emptyIterable;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
@@ -20,6 +10,17 @@ import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.model.Image;
+import com.github.dockerjava.api.model.Info;
 
 public class ListImagesCmdIT extends CmdIT {
     public static final Logger LOG = LoggerFactory.getLogger(ListImagesCmdIT.class);
@@ -39,7 +40,7 @@ public class ListImagesCmdIT extends CmdIT {
         assertThat(img.getCreated(), is(greaterThan(0L)));
         assertThat(img.getVirtualSize(), is(greaterThan(0L)));
         assertThat(img.getId(), not(isEmptyString()));
-        assertThat(img.getRepoTags(), not(emptyArray()));
+        assertThat(img.getRepoTags(), not(emptyIterable()));
     }
 
     @Test
