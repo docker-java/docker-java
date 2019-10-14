@@ -60,6 +60,7 @@ import com.github.dockerjava.api.command.SearchImagesCmd;
 import com.github.dockerjava.api.command.StartContainerCmd;
 import com.github.dockerjava.api.command.StatsCmd;
 import com.github.dockerjava.api.command.StopContainerCmd;
+import com.github.dockerjava.api.command.SyncStatsCmd;
 import com.github.dockerjava.api.command.TagImageCmd;
 import com.github.dockerjava.api.command.TopContainerCmd;
 import com.github.dockerjava.api.command.UnpauseContainerCmd;
@@ -254,6 +255,8 @@ public interface DockerClient extends Closeable {
     EventsCmd eventsCmd();
 
     StatsCmd statsCmd(String containerId);
+
+    SyncStatsCmd syncStatsCmd(String containerId);
 
     CreateVolumeCmd createVolumeCmd();
 

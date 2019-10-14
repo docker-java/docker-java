@@ -66,6 +66,7 @@ import com.github.dockerjava.api.command.SearchImagesCmd;
 import com.github.dockerjava.api.command.StartContainerCmd;
 import com.github.dockerjava.api.command.StatsCmd;
 import com.github.dockerjava.api.command.StopContainerCmd;
+import com.github.dockerjava.api.command.SyncStatsCmd;
 import com.github.dockerjava.api.command.TagImageCmd;
 import com.github.dockerjava.api.command.TopContainerCmd;
 import com.github.dockerjava.api.command.UnpauseContainerCmd;
@@ -523,6 +524,11 @@ public class JerseyDockerCmdExecFactory implements DockerCmdExecFactory, DockerC
     @Override
     public StatsCmd.Exec createStatsCmdExec() {
         return new StatsCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public SyncStatsCmd.Exec createSyncStatsCmdExec() {
+        return new SyncStatsCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override

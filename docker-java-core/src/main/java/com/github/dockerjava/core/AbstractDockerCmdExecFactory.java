@@ -63,6 +63,7 @@ import com.github.dockerjava.api.command.SearchImagesCmd;
 import com.github.dockerjava.api.command.StartContainerCmd;
 import com.github.dockerjava.api.command.StatsCmd;
 import com.github.dockerjava.api.command.StopContainerCmd;
+import com.github.dockerjava.api.command.SyncStatsCmd;
 import com.github.dockerjava.api.command.TagImageCmd;
 import com.github.dockerjava.api.command.TopContainerCmd;
 import com.github.dockerjava.api.command.UnpauseContainerCmd;
@@ -134,6 +135,7 @@ import com.github.dockerjava.core.exec.SearchImagesCmdExec;
 import com.github.dockerjava.core.exec.StartContainerCmdExec;
 import com.github.dockerjava.core.exec.StatsCmdExec;
 import com.github.dockerjava.core.exec.StopContainerCmdExec;
+import com.github.dockerjava.core.exec.SyncStatsCmdExec;
 import com.github.dockerjava.core.exec.TagImageCmdExec;
 import com.github.dockerjava.core.exec.TopContainerCmdExec;
 import com.github.dockerjava.core.exec.UnpauseContainerCmdExec;
@@ -365,6 +367,11 @@ public abstract class AbstractDockerCmdExecFactory implements DockerCmdExecFacto
     @Override
     public StatsCmd.Exec createStatsCmdExec() {
         return new StatsCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public SyncStatsCmd.Exec createSyncStatsCmdExec() {
+        return new SyncStatsCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override

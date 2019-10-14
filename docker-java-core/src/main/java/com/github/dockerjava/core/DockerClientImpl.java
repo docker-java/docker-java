@@ -62,6 +62,7 @@ import com.github.dockerjava.api.command.SearchImagesCmd;
 import com.github.dockerjava.api.command.StartContainerCmd;
 import com.github.dockerjava.api.command.StatsCmd;
 import com.github.dockerjava.api.command.StopContainerCmd;
+import com.github.dockerjava.api.command.SyncStatsCmd;
 import com.github.dockerjava.api.command.TagImageCmd;
 import com.github.dockerjava.api.command.TopContainerCmd;
 import com.github.dockerjava.api.command.UnpauseContainerCmd;
@@ -137,6 +138,7 @@ import com.github.dockerjava.core.command.SearchImagesCmdImpl;
 import com.github.dockerjava.core.command.StartContainerCmdImpl;
 import com.github.dockerjava.core.command.StatsCmdImpl;
 import com.github.dockerjava.core.command.StopContainerCmdImpl;
+import com.github.dockerjava.core.command.SyncStatsCmdImpl;
 import com.github.dockerjava.core.command.TagImageCmdImpl;
 import com.github.dockerjava.core.command.TopContainerCmdImpl;
 import com.github.dockerjava.core.command.UnpauseContainerCmdImpl;
@@ -469,6 +471,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public StatsCmd statsCmd(String containerId) {
         return new StatsCmdImpl(getDockerCmdExecFactory().createStatsCmdExec(), containerId);
+    }
+
+    @Override
+    public SyncStatsCmd syncStatsCmd(String containerId) {
+        return new SyncStatsCmdImpl(getDockerCmdExecFactory().createSyncStatsCmdExec(), containerId);
     }
 
     @Override

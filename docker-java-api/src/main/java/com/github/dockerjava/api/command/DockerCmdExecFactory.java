@@ -92,6 +92,8 @@ public interface DockerCmdExecFactory extends Closeable {
 
     StatsCmd.Exec createStatsCmdExec();
 
+    SyncStatsCmd.Exec createSyncStatsCmdExec();
+
     CreateVolumeCmd.Exec createCreateVolumeCmdExec();
 
     InspectVolumeCmd.Exec createInspectVolumeCmdExec();
