@@ -2,10 +2,9 @@ package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Delete unused content (containers, images, volumes, networks, build relicts)
@@ -50,16 +49,14 @@ public class PruneResponse implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof Ulimit) {
-            Ulimit other = (Ulimit) o;
-            return new EqualsBuilder().append(spaceReclaimed, other.getName()).isEquals();
-        } else {
-            return super.equals(o);
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PruneResponse that = (PruneResponse) o;
+        return Objects.equals(spaceReclaimed, that.spaceReclaimed);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(spaceReclaimed).toHashCode();
+        return Objects.hash(spaceReclaimed);
     }
 }

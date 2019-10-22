@@ -1,7 +1,5 @@
 package com.github.dockerjava.api.model;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -53,6 +51,12 @@ public class SearchItem implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return "SearchItem{" +
+                "starCount=" + starCount +
+                ", isOfficial=" + isOfficial +
+                ", isTrusted=" + isTrusted +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

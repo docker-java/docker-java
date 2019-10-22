@@ -1,7 +1,5 @@
 package com.github.dockerjava.api.model;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -32,6 +30,9 @@ public class ChangeLog implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return "ChangeLog{" +
+                "path='" + path + '\'' +
+                ", kind=" + kind +
+                '}';
     }
 }

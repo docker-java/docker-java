@@ -2,14 +2,11 @@ package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Used in {@link Statistics}
@@ -110,16 +107,35 @@ public class BlkioStatsConfig implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return "BlkioStatsConfig{" +
+                "ioServiceBytesRecursive=" + ioServiceBytesRecursive +
+                ", ioServicedRecursive=" + ioServicedRecursive +
+                ", ioQueueRecursive=" + ioQueueRecursive +
+                ", ioServiceTimeRecursive=" + ioServiceTimeRecursive +
+                ", ioWaitTimeRecursive=" + ioWaitTimeRecursive +
+                ", ioMergedRecursive=" + ioMergedRecursive +
+                ", ioTimeRecursive=" + ioTimeRecursive +
+                ", sectorsRecursive=" + sectorsRecursive +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BlkioStatsConfig that = (BlkioStatsConfig) o;
+        return Objects.equals(ioServiceBytesRecursive, that.ioServiceBytesRecursive) &&
+                Objects.equals(ioServicedRecursive, that.ioServicedRecursive) &&
+                Objects.equals(ioQueueRecursive, that.ioQueueRecursive) &&
+                Objects.equals(ioServiceTimeRecursive, that.ioServiceTimeRecursive) &&
+                Objects.equals(ioWaitTimeRecursive, that.ioWaitTimeRecursive) &&
+                Objects.equals(ioMergedRecursive, that.ioMergedRecursive) &&
+                Objects.equals(ioTimeRecursive, that.ioTimeRecursive) &&
+                Objects.equals(sectorsRecursive, that.sectorsRecursive);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(ioServiceBytesRecursive, ioServicedRecursive, ioQueueRecursive, ioServiceTimeRecursive, ioWaitTimeRecursive, ioMergedRecursive, ioTimeRecursive, sectorsRecursive);
     }
 }

@@ -3,11 +3,9 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * A node as returned by the /events API, for instance, when Swarm is used.
@@ -62,16 +60,27 @@ public class Node implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return "Node{" +
+                "name='" + name + '\'' +
+                ", id='" + id + '\'' +
+                ", addr='" + addr + '\'' +
+                ", ip='" + ip + '\'' +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Node node = (Node) o;
+        return Objects.equals(name, node.name) &&
+                Objects.equals(id, node.id) &&
+                Objects.equals(addr, node.addr) &&
+                Objects.equals(ip, node.ip);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(name, id, addr, ip);
     }
 }

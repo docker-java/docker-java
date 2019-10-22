@@ -1,9 +1,7 @@
 package com.github.dockerjava.api.model;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Represents a network link between two Docker containers. The container with the name {@link #getName()} is made available in the target
@@ -72,18 +70,17 @@ public class Link implements Serializable {
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (obj instanceof Link) {
-            final Link other = (Link) obj;
-            return new EqualsBuilder().append(name, other.getName()).append(alias, other.getAlias()).isEquals();
-        } else {
-            return super.equals(obj);
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Link link = (Link) o;
+        return Objects.equals(name, link.name) &&
+                Objects.equals(alias, link.alias);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(name).append(alias).toHashCode();
+        return Objects.hash(name, alias);
     }
 
     /**

@@ -1,12 +1,11 @@
 package com.github.dockerjava.api.model;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.github.dockerjava.api.model.Ports.Binding;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * In a {@link PortBinding}, a network socket on the Docker host, expressed as a {@link Binding}, is bound to an {@link ExposedPort} of a
@@ -63,19 +62,16 @@ public class PortBinding implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof PortBinding) {
-            PortBinding other = (PortBinding) obj;
-            return new EqualsBuilder().append(binding, other.getBinding()).append(exposedPort, other.getExposedPort())
-                    .isEquals();
-        } else {
-            return super.equals(obj);
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PortBinding that = (PortBinding) o;
+        return Objects.equals(binding, that.binding) &&
+                Objects.equals(exposedPort, that.exposedPort);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(binding).append(exposedPort).toHashCode();
+        return Objects.hash(binding, exposedPort);
     }
-
 }

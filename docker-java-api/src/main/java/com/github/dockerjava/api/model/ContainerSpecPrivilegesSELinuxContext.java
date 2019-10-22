@@ -3,12 +3,9 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * SELinux labels of the container
@@ -81,16 +78,29 @@ public class ContainerSpecPrivilegesSELinuxContext implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return "ContainerSpecPrivilegesSELinuxContext{" +
+                "disable=" + disable +
+                ", user='" + user + '\'' +
+                ", role='" + role + '\'' +
+                ", type='" + type + '\'' +
+                ", level='" + level + '\'' +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ContainerSpecPrivilegesSELinuxContext that = (ContainerSpecPrivilegesSELinuxContext) o;
+        return Objects.equals(disable, that.disable) &&
+                Objects.equals(user, that.user) &&
+                Objects.equals(role, that.role) &&
+                Objects.equals(type, that.type) &&
+                Objects.equals(level, that.level);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(disable, user, role, type, level);
     }
 }

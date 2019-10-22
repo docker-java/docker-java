@@ -2,8 +2,6 @@ package com.github.dockerjava.api.command;
 
 import java.util.List;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.model.NetworkSettings;
@@ -134,7 +132,20 @@ public class InspectExecResponse {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return "InspectExecResponse{" +
+                "id='" + id + '\'' +
+                ", openStdin=" + openStdin +
+                ", openStderr=" + openStderr +
+                ", openStdout=" + openStdout +
+                ", running=" + running +
+                ", canRemove=" + canRemove +
+                ", exitCode=" + exitCode +
+                ", processConfig=" + processConfig +
+                ", container=" + container +
+                ", containerID='" + containerID + '\'' +
+                ", detachKeys='" + detachKeys + '\'' +
+                ", pid=" + pid +
+                '}';
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

@@ -1,9 +1,7 @@
 package com.github.dockerjava.api.model;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Represents a host path being bind mounted as a {@link Volume} in a Docker container.
@@ -136,32 +134,21 @@ public class Bind implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Bind) {
-            Bind other = (Bind) obj;
-            return new EqualsBuilder()
-                    .append(path, other.getPath())
-                    .append(volume, other.getVolume())
-                    .append(accessMode, other.getAccessMode())
-                    .append(secMode, other.getSecMode())
-                    .append(noCopy, other.getNoCopy())
-                    .append(propagationMode, other.getPropagationMode())
-                    .isEquals();
-        } else {
-            return super.equals(obj);
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Bind bind = (Bind) o;
+        return Objects.equals(path, bind.path) &&
+                Objects.equals(volume, bind.volume) &&
+                accessMode == bind.accessMode &&
+                Objects.equals(noCopy, bind.noCopy) &&
+                secMode == bind.secMode &&
+                propagationMode == bind.propagationMode;
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(path)
-                .append(volume)
-                .append(accessMode)
-                .append(secMode)
-                .append(noCopy)
-                .append(propagationMode)
-                .toHashCode();
+        return Objects.hash(path, volume, accessMode, noCopy, secMode, propagationMode);
     }
 
     /**

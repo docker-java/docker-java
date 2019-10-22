@@ -1,9 +1,5 @@
 package com.github.dockerjava.api.model;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -11,9 +7,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.annotation.CheckForNull;
 
-import static org.apache.commons.lang.builder.ToStringStyle.SHORT_PREFIX_STYLE;
-
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Representation of a Docker event.
@@ -247,16 +242,37 @@ public class Event implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, SHORT_PREFIX_STYLE);
+        return "Event{" +
+                "status='" + status + '\'' +
+                ", id='" + id + '\'' +
+                ", from='" + from + '\'' +
+                ", node=" + node +
+                ", type=" + type +
+                ", action='" + action + '\'' +
+                ", actor=" + actor +
+                ", time=" + time +
+                ", timeNano=" + timeNano +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Event event = (Event) o;
+        return Objects.equals(status, event.status) &&
+                Objects.equals(id, event.id) &&
+                Objects.equals(from, event.from) &&
+                Objects.equals(node, event.node) &&
+                type == event.type &&
+                Objects.equals(action, event.action) &&
+                Objects.equals(actor, event.actor) &&
+                Objects.equals(time, event.time) &&
+                Objects.equals(timeNano, event.timeNano);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(status, id, from, node, type, action, actor, time, timeNano);
     }
 }

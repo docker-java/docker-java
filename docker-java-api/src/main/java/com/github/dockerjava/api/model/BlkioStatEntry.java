@@ -3,12 +3,9 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * BlkioStat is not documented in pubic docker swapper.yaml yet, reference:
@@ -65,16 +62,27 @@ public class BlkioStatEntry implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return "BlkioStatEntry{" +
+                "major=" + major +
+                ", minor=" + minor +
+                ", op='" + op + '\'' +
+                ", value=" + value +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BlkioStatEntry that = (BlkioStatEntry) o;
+        return Objects.equals(major, that.major) &&
+                Objects.equals(minor, that.minor) &&
+                Objects.equals(op, that.op) &&
+                Objects.equals(value, that.value);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(major, minor, op, value);
     }
 }

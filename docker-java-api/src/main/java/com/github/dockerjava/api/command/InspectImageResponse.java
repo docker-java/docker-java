@@ -1,15 +1,12 @@
 package com.github.dockerjava.api.command;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.model.ContainerConfig;
 
 import javax.annotation.CheckForNull;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -375,16 +372,55 @@ public class InspectImageResponse {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return "InspectImageResponse{" +
+                "arch='" + arch + '\'' +
+                ", author='" + author + '\'' +
+                ", comment='" + comment + '\'' +
+                ", config=" + config +
+                ", container='" + container + '\'' +
+                ", containerConfig=" + containerConfig +
+                ", created='" + created + '\'' +
+                ", dockerVersion='" + dockerVersion + '\'' +
+                ", id='" + id + '\'' +
+                ", os='" + os + '\'' +
+                ", osVersion='" + osVersion + '\'' +
+                ", parent='" + parent + '\'' +
+                ", size=" + size +
+                ", repoTags=" + repoTags +
+                ", repoDigests=" + repoDigests +
+                ", virtualSize=" + virtualSize +
+                ", graphDriver=" + graphDriver +
+                ", rootFS=" + rootFS +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        InspectImageResponse that = (InspectImageResponse) o;
+        return Objects.equals(arch, that.arch) &&
+                Objects.equals(author, that.author) &&
+                Objects.equals(comment, that.comment) &&
+                Objects.equals(config, that.config) &&
+                Objects.equals(container, that.container) &&
+                Objects.equals(containerConfig, that.containerConfig) &&
+                Objects.equals(created, that.created) &&
+                Objects.equals(dockerVersion, that.dockerVersion) &&
+                Objects.equals(id, that.id) &&
+                Objects.equals(os, that.os) &&
+                Objects.equals(osVersion, that.osVersion) &&
+                Objects.equals(parent, that.parent) &&
+                Objects.equals(size, that.size) &&
+                Objects.equals(repoTags, that.repoTags) &&
+                Objects.equals(repoDigests, that.repoDigests) &&
+                Objects.equals(virtualSize, that.virtualSize) &&
+                Objects.equals(graphDriver, that.graphDriver) &&
+                Objects.equals(rootFS, that.rootFS);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(arch, author, comment, config, container, containerConfig, created, dockerVersion, id, os, osVersion, parent, size, repoTags, repoDigests, virtualSize, graphDriver, rootFS);
     }
 }

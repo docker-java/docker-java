@@ -1,13 +1,12 @@
 package com.github.dockerjava.api.model;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  *
@@ -63,6 +62,13 @@ public class Image implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return "Image{" +
+                "created=" + created +
+                ", id='" + id + '\'' +
+                ", parentId='" + parentId + '\'' +
+                ", repoTags=" + Arrays.toString(repoTags) +
+                ", size=" + size +
+                ", virtualSize=" + virtualSize +
+                '}';
     }
 }

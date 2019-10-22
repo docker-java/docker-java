@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.node.NullNode;
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.builder.EqualsBuilder;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -21,8 +20,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import static org.apache.commons.lang.StringUtils.isEmpty;
+import java.util.Objects;
 
 /**
  * A container for port bindings, made available as a {@link Map} via its {@link #getBindings()} method.
@@ -186,7 +184,7 @@ public class Ports implements Serializable {
          * @see ExposedPort
          */
         public Binding(String hostIp, String hostPortSpec) {
-            this.hostIp = isEmpty(hostIp) ? null : hostIp;
+            this.hostIp = hostIp == null || hostIp.length() == 0 ? null : hostIp;
             this.hostPortSpec = hostPortSpec;
         }
 
@@ -248,7 +246,7 @@ public class Ports implements Serializable {
          */
         @Override
         public String toString() {
-            if (isEmpty(hostIp)) {
+            if (hostIp == null || hostIp.length() == 0) {
                 return hostPortSpec;
             } else if (hostPortSpec == null) {
                 return hostIp;
@@ -258,14 +256,17 @@ public class Ports implements Serializable {
         }
 
         @Override
-        public boolean equals(Object obj) {
-            if (obj instanceof Binding) {
-                Binding other = (Binding) obj;
-                return new EqualsBuilder().append(hostIp, other.getHostIp()).append(hostPortSpec, other.getHostPortSpec())
-                        .isEquals();
-            } else {
-                return super.equals(obj);
-            }
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Binding binding = (Binding) o;
+            return Objects.equals(hostIp, binding.hostIp) &&
+                    Objects.equals(hostPortSpec, binding.hostPortSpec);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(hostIp, hostPortSpec);
         }
     }
 

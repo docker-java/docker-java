@@ -11,14 +11,12 @@ import com.github.dockerjava.api.model.VolumeBind;
 import com.github.dockerjava.api.model.VolumeBinds;
 import com.github.dockerjava.api.model.VolumeRW;
 import com.github.dockerjava.api.model.VolumesRW;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 
 import javax.annotation.CheckForNull;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  *
@@ -253,7 +251,35 @@ public class InspectContainerResponse {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return "InspectContainerResponse{" +
+                "args=" + Arrays.toString(args) +
+                ", config=" + config +
+                ", created='" + created + '\'' +
+                ", driver='" + driver + '\'' +
+                ", execDriver='" + execDriver + '\'' +
+                ", hostConfig=" + hostConfig +
+                ", hostnamePath='" + hostnamePath + '\'' +
+                ", hostsPath='" + hostsPath + '\'' +
+                ", logPath='" + logPath + '\'' +
+                ", id='" + id + '\'' +
+                ", sizeRootFs=" + sizeRootFs +
+                ", imageId='" + imageId + '\'' +
+                ", mountLabel='" + mountLabel + '\'' +
+                ", name='" + name + '\'' +
+                ", restartCount=" + restartCount +
+                ", networkSettings=" + networkSettings +
+                ", path='" + path + '\'' +
+                ", processLabel='" + processLabel + '\'' +
+                ", resolvConfPath='" + resolvConfPath + '\'' +
+                ", execIds=" + execIds +
+                ", state=" + state +
+                ", volumes=" + volumes +
+                ", volumesRW=" + volumesRW +
+                ", node=" + node +
+                ", mounts=" + mounts +
+                ", graphDriver=" + graphDriver +
+                ", platform='" + platform + '\'' +
+                '}';
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -439,17 +465,44 @@ public class InspectContainerResponse {
 
         @Override
         public boolean equals(Object o) {
-            return EqualsBuilder.reflectionEquals(this, o);
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            ContainerState that = (ContainerState) o;
+            return Objects.equals(status, that.status) &&
+                    Objects.equals(running, that.running) &&
+                    Objects.equals(paused, that.paused) &&
+                    Objects.equals(restarting, that.restarting) &&
+                    Objects.equals(oomKilled, that.oomKilled) &&
+                    Objects.equals(dead, that.dead) &&
+                    Objects.equals(pid, that.pid) &&
+                    Objects.equals(exitCode, that.exitCode) &&
+                    Objects.equals(error, that.error) &&
+                    Objects.equals(startedAt, that.startedAt) &&
+                    Objects.equals(finishedAt, that.finishedAt) &&
+                    Objects.equals(health, that.health);
         }
 
         @Override
         public int hashCode() {
-            return HashCodeBuilder.reflectionHashCode(this);
+            return Objects.hash(status, running, paused, restarting, oomKilled, dead, pid, exitCode, error, startedAt, finishedAt, health);
         }
 
         @Override
         public String toString() {
-            return ToStringBuilder.reflectionToString(this);
+            return "ContainerState{" +
+                    "status='" + status + '\'' +
+                    ", running=" + running +
+                    ", paused=" + paused +
+                    ", restarting=" + restarting +
+                    ", oomKilled=" + oomKilled +
+                    ", dead=" + dead +
+                    ", pid=" + pid +
+                    ", exitCode=" + exitCode +
+                    ", error='" + error + '\'' +
+                    ", startedAt='" + startedAt + '\'' +
+                    ", finishedAt='" + finishedAt + '\'' +
+                    ", health=" + health +
+                    '}';
         }
     }
 
@@ -578,17 +631,32 @@ public class InspectContainerResponse {
 
         @Override
         public String toString() {
-            return ToStringBuilder.reflectionToString(this);
+            return "Mount{" +
+                    "name='" + name + '\'' +
+                    ", source='" + source + '\'' +
+                    ", destination=" + destination +
+                    ", driver='" + driver + '\'' +
+                    ", mode='" + mode + '\'' +
+                    ", rw=" + rw +
+                    '}';
         }
 
         @Override
         public boolean equals(Object o) {
-            return EqualsBuilder.reflectionEquals(this, o);
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Mount mount = (Mount) o;
+            return Objects.equals(name, mount.name) &&
+                    Objects.equals(source, mount.source) &&
+                    Objects.equals(destination, mount.destination) &&
+                    Objects.equals(driver, mount.driver) &&
+                    Objects.equals(mode, mount.mode) &&
+                    Objects.equals(rw, mount.rw);
         }
 
         @Override
         public int hashCode() {
-            return HashCodeBuilder.reflectionHashCode(this);
+            return Objects.hash(name, source, destination, driver, mode, rw);
         }
     }
 
@@ -646,7 +714,15 @@ public class InspectContainerResponse {
 
         @Override
         public String toString() {
-            return ToStringBuilder.reflectionToString(this);
+            return "Node{" +
+                    "id='" + id + '\'' +
+                    ", ip='" + ip + '\'' +
+                    ", addr='" + addr + '\'' +
+                    ", name='" + name + '\'' +
+                    ", cpus=" + cpus +
+                    ", memory=" + memory +
+                    ", labels=" + labels +
+                    '}';
         }
     }
 }

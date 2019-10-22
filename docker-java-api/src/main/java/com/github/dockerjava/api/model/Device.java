@@ -1,11 +1,6 @@
 package com.github.dockerjava.api.model;
 
 import static java.util.Objects.requireNonNull;
-import static org.apache.commons.lang.BooleanUtils.isNotTrue;
-import static org.apache.commons.lang.StringUtils.isEmpty;
-
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -15,6 +10,7 @@ import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.StringTokenizer;
 
 @JsonInclude(Include.NON_NULL)
@@ -89,7 +85,7 @@ public class Device implements Serializable {
             }
         }
 
-        if (isEmpty(dst)) {
+        if (dst == null || dst.length() == 0) {
             dst = src;
         }
 
@@ -108,13 +104,13 @@ public class Device implements Serializable {
         validModes.put("w", true);
         validModes.put("m", true);
 
-        if (isEmpty(deviceMode)) {
+        if (deviceMode == null || deviceMode.length() == 0) {
             return false;
         }
 
         for (char ch : deviceMode.toCharArray()) {
             final String mode = String.valueOf(ch);
-            if (isNotTrue(validModes.get(mode))) {
+            if (!Boolean.TRUE.equals(validModes.get(mode))) {
                 return false; // wrong mode
             }
             validModes.put(mode, false);
@@ -124,26 +120,17 @@ public class Device implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Device) {
-            Device other = (Device) obj;
-            return new EqualsBuilder()
-                    .append(cGroupPermissions, other.getcGroupPermissions())
-                    .append(pathInContainer, other.getPathInContainer())
-                    .append(pathOnHost, other.getPathOnHost())
-                    .isEquals();
-        } else {
-            return super.equals(obj);
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Device device = (Device) o;
+        return Objects.equals(cGroupPermissions, device.cGroupPermissions) &&
+                Objects.equals(pathOnHost, device.pathOnHost) &&
+                Objects.equals(pathInContainer, device.pathInContainer);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(cGroupPermissions)
-                .append(pathInContainer)
-                .append(pathOnHost)
-                .toHashCode();
+        return Objects.hash(cGroupPermissions, pathOnHost, pathInContainer);
     }
-
 }

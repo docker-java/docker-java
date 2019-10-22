@@ -2,14 +2,12 @@ package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @since ~{@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_20}
@@ -80,17 +78,26 @@ public final class InfoRegistryConfig implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return "InfoRegistryConfig{" +
+                "indexConfigs=" + indexConfigs +
+                ", insecureRegistryCIDRs=" + insecureRegistryCIDRs +
+                ", mirrors=" + mirrors +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
-       return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        InfoRegistryConfig that = (InfoRegistryConfig) o;
+        return Objects.equals(indexConfigs, that.indexConfigs) &&
+                Objects.equals(insecureRegistryCIDRs, that.insecureRegistryCIDRs) &&
+                Objects.equals(mirrors, that.mirrors);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(indexConfigs, insecureRegistryCIDRs, mirrors);
     }
 
     /**
@@ -176,17 +183,28 @@ public final class InfoRegistryConfig implements Serializable {
 
         @Override
         public String toString() {
-            return ToStringBuilder.reflectionToString(this);
+            return "IndexConfig{" +
+                    "mirrors=" + mirrors +
+                    ", name='" + name + '\'' +
+                    ", official=" + official +
+                    ", secure=" + secure +
+                    '}';
         }
 
         @Override
         public boolean equals(Object o) {
-            return EqualsBuilder.reflectionEquals(this, o);
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            IndexConfig that = (IndexConfig) o;
+            return Objects.equals(mirrors, that.mirrors) &&
+                    Objects.equals(name, that.name) &&
+                    Objects.equals(official, that.official) &&
+                    Objects.equals(secure, that.secure);
         }
 
         @Override
         public int hashCode() {
-            return HashCodeBuilder.reflectionHashCode(this);
+            return Objects.hash(mirrors, name, official, secure);
         }
     }
 }

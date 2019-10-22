@@ -1,7 +1,5 @@
 package com.github.dockerjava.api.model;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -33,6 +31,9 @@ public class DriverStatus implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return "DriverStatus{" +
+                "rootDir='" + rootDir + '\'' +
+                ", dirs=" + dirs +
+                '}';
     }
 }

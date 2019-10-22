@@ -5,14 +5,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.command.ListContainersCmd;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Used for Listing containers.
@@ -174,16 +173,52 @@ public class Container implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return "Container{" +
+                "command='" + command + '\'' +
+                ", created=" + created +
+                ", id='" + id + '\'' +
+                ", image='" + image + '\'' +
+                ", imageId='" + imageId + '\'' +
+                ", names=" + Arrays.toString(names) +
+                ", ports=" + Arrays.toString(ports) +
+                ", labels=" + labels +
+                ", status='" + status + '\'' +
+                ", state='" + state + '\'' +
+                ", sizeRw=" + sizeRw +
+                ", sizeRootFs=" + sizeRootFs +
+                ", hostConfig=" + hostConfig +
+                ", networkSettings=" + networkSettings +
+                ", mounts=" + mounts +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
-      return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Container container = (Container) o;
+        return Objects.equals(command, container.command) &&
+                Objects.equals(created, container.created) &&
+                Objects.equals(id, container.id) &&
+                Objects.equals(image, container.image) &&
+                Objects.equals(imageId, container.imageId) &&
+                Arrays.equals(names, container.names) &&
+                Arrays.equals(ports, container.ports) &&
+                Objects.equals(labels, container.labels) &&
+                Objects.equals(status, container.status) &&
+                Objects.equals(state, container.state) &&
+                Objects.equals(sizeRw, container.sizeRw) &&
+                Objects.equals(sizeRootFs, container.sizeRootFs) &&
+                Objects.equals(hostConfig, container.hostConfig) &&
+                Objects.equals(networkSettings, container.networkSettings) &&
+                Objects.equals(mounts, container.mounts);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        int result = Objects.hash(command, created, id, image, imageId, labels, status, state, sizeRw, sizeRootFs, hostConfig, networkSettings, mounts);
+        result = 31 * result + Arrays.hashCode(names);
+        result = 31 * result + Arrays.hashCode(ports);
+        return result;
     }
 }

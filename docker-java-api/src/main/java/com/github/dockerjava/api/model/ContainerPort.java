@@ -2,12 +2,10 @@ package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * @author Kanstantsin Shautsou
@@ -95,16 +93,27 @@ public class ContainerPort implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return "ContainerPort{" +
+                "ip='" + ip + '\'' +
+                ", privatePort=" + privatePort +
+                ", publicPort=" + publicPort +
+                ", type='" + type + '\'' +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ContainerPort that = (ContainerPort) o;
+        return Objects.equals(ip, that.ip) &&
+                Objects.equals(privatePort, that.privatePort) &&
+                Objects.equals(publicPort, that.publicPort) &&
+                Objects.equals(type, that.type);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(ip, privatePort, publicPort, type);
     }
 }

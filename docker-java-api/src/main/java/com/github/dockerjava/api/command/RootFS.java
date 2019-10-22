@@ -2,12 +2,10 @@ package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.annotation.CheckForNull;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Part of {@link InspectImageResponse}
@@ -57,16 +55,23 @@ public class RootFS {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return "RootFS{" +
+                "type='" + type + '\'' +
+                ", layers=" + layers +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RootFS rootFS = (RootFS) o;
+        return Objects.equals(type, rootFS.type) &&
+                Objects.equals(layers, rootFS.layers);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(type, layers);
     }
 }

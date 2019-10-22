@@ -3,8 +3,6 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
@@ -146,7 +144,11 @@ public class ResponseItem implements Serializable {
 
         @Override
         public String toString() {
-            return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+            return "ProgressDetail{" +
+                    "current=" + current +
+                    ", total=" + total +
+                    ", start=" + start +
+                    '}';
         }
     }
 
@@ -172,7 +174,10 @@ public class ResponseItem implements Serializable {
 
         @Override
         public String toString() {
-            return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+            return "ErrorDetail{" +
+                    "code=" + code +
+                    ", message='" + message + '\'' +
+                    '}';
         }
     }
 
@@ -206,12 +211,27 @@ public class ResponseItem implements Serializable {
 
         @Override
         public String toString() {
-            return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+            return "AuxDetail{" +
+                    "size=" + size +
+                    ", tag='" + tag + '\'' +
+                    ", digest='" + digest + '\'' +
+                    '}';
         }
     }
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return "ResponseItem{" +
+                "stream='" + stream + '\'' +
+                ", status='" + status + '\'' +
+                ", progressDetail=" + progressDetail +
+                ", progress='" + progress + '\'' +
+                ", id='" + id + '\'' +
+                ", from='" + from + '\'' +
+                ", time=" + time +
+                ", errorDetail=" + errorDetail +
+                ", error='" + error + '\'' +
+                ", aux=" + aux +
+                '}';
     }
 }

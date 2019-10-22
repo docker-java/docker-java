@@ -1,11 +1,9 @@
 package com.github.dockerjava.api.model;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
@@ -136,19 +134,16 @@ public class RestartPolicy implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof RestartPolicy) {
-            RestartPolicy other = (RestartPolicy) obj;
-            return new EqualsBuilder().append(maximumRetryCount, other.getMaximumRetryCount())
-                    .append(name, other.getName()).isEquals();
-        } else {
-            return super.equals(obj);
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RestartPolicy that = (RestartPolicy) o;
+        return Objects.equals(maximumRetryCount, that.maximumRetryCount) &&
+                Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(maximumRetryCount).append(name).toHashCode();
+        return Objects.hash(maximumRetryCount, name);
     }
-
 }

@@ -1,13 +1,10 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
@@ -122,17 +119,30 @@ public class PortConfig implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return "PortConfig{" +
+                "name='" + name + '\'' +
+                ", protocol=" + protocol +
+                ", targetPort=" + targetPort +
+                ", publishedPort=" + publishedPort +
+                ", publishMode=" + publishMode +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PortConfig that = (PortConfig) o;
+        return targetPort == that.targetPort &&
+                publishedPort == that.publishedPort &&
+                Objects.equals(name, that.name) &&
+                protocol == that.protocol &&
+                publishMode == that.publishMode;
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(name, protocol, targetPort, publishedPort, publishMode);
     }
 
     public enum PublishMode {

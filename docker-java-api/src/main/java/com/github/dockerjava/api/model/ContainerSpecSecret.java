@@ -3,12 +3,9 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * docker secrets that will be exposed to the service
@@ -58,16 +55,25 @@ public class ContainerSpecSecret implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return "ContainerSpecSecret{" +
+                "file=" + file +
+                ", secretId='" + secretId + '\'' +
+                ", secretName='" + secretName + '\'' +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ContainerSpecSecret that = (ContainerSpecSecret) o;
+        return Objects.equals(file, that.file) &&
+                Objects.equals(secretId, that.secretId) &&
+                Objects.equals(secretName, that.secretName);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(file, secretId, secretName);
     }
 }

@@ -1,8 +1,5 @@
 package com.github.dockerjava.api.command;
 
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -18,6 +15,8 @@ public class ExecCreateCmdResponse {
 
     @Override
     public String toString() {
-        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return "ExecCreateCmdResponse{" +
+                "id='" + id + '\'' +
+                '}';
     }
 }

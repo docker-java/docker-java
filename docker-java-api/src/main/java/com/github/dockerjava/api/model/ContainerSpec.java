@@ -3,15 +3,12 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * The specification for containers as used in {@link TaskSpec}
@@ -442,17 +439,63 @@ public class ContainerSpec implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return "ContainerSpec{" +
+                "image='" + image + '\'' +
+                ", labels=" + labels +
+                ", command=" + command +
+                ", args=" + args +
+                ", env=" + env +
+                ", dir='" + dir + '\'' +
+                ", user='" + user + '\'' +
+                ", groups='" + groups + '\'' +
+                ", tty=" + tty +
+                ", mounts=" + mounts +
+                ", duration=" + duration +
+                ", stopGracePeriod=" + stopGracePeriod +
+                ", dnsConfig=" + dnsConfig +
+                ", openStdin=" + openStdin +
+                ", readOnly=" + readOnly +
+                ", hosts=" + hosts +
+                ", hostname='" + hostname + '\'' +
+                ", secrets=" + secrets +
+                ", healthCheck=" + healthCheck +
+                ", stopSignal='" + stopSignal + '\'' +
+                ", privileges=" + privileges +
+                ", configs=" + configs +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ContainerSpec that = (ContainerSpec) o;
+        return Objects.equals(image, that.image) &&
+                Objects.equals(labels, that.labels) &&
+                Objects.equals(command, that.command) &&
+                Objects.equals(args, that.args) &&
+                Objects.equals(env, that.env) &&
+                Objects.equals(dir, that.dir) &&
+                Objects.equals(user, that.user) &&
+                Objects.equals(groups, that.groups) &&
+                Objects.equals(tty, that.tty) &&
+                Objects.equals(mounts, that.mounts) &&
+                Objects.equals(duration, that.duration) &&
+                Objects.equals(stopGracePeriod, that.stopGracePeriod) &&
+                Objects.equals(dnsConfig, that.dnsConfig) &&
+                Objects.equals(openStdin, that.openStdin) &&
+                Objects.equals(readOnly, that.readOnly) &&
+                Objects.equals(hosts, that.hosts) &&
+                Objects.equals(hostname, that.hostname) &&
+                Objects.equals(secrets, that.secrets) &&
+                Objects.equals(healthCheck, that.healthCheck) &&
+                Objects.equals(stopSignal, that.stopSignal) &&
+                Objects.equals(privileges, that.privileges) &&
+                Objects.equals(configs, that.configs);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(image, labels, command, args, env, dir, user, groups, tty, mounts, duration, stopGracePeriod, dnsConfig, openStdin, readOnly, hosts, hostname, secrets, healthCheck, stopSignal, privileges, configs);
     }
-
 }

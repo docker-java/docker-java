@@ -5,7 +5,6 @@ package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -202,6 +201,26 @@ public class NetworkSettings implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return "NetworkSettings{" +
+                "bridge='" + bridge + '\'' +
+                ", sandboxId='" + sandboxId + '\'' +
+                ", hairpinMode=" + hairpinMode +
+                ", linkLocalIPv6Address='" + linkLocalIPv6Address + '\'' +
+                ", linkLocalIPv6PrefixLen=" + linkLocalIPv6PrefixLen +
+                ", ports=" + ports +
+                ", sandboxKey='" + sandboxKey + '\'' +
+                ", secondaryIPAddresses=" + secondaryIPAddresses +
+                ", secondaryIPv6Addresses=" + secondaryIPv6Addresses +
+                ", endpointID='" + endpointID + '\'' +
+                ", gateway='" + gateway + '\'' +
+                ", portMapping=" + portMapping +
+                ", globalIPv6Address='" + globalIPv6Address + '\'' +
+                ", globalIPv6PrefixLen=" + globalIPv6PrefixLen +
+                ", ipAddress='" + ipAddress + '\'' +
+                ", ipPrefixLen=" + ipPrefixLen +
+                ", ipV6Gateway='" + ipV6Gateway + '\'' +
+                ", macAddress='" + macAddress + '\'' +
+                ", networks=" + networks +
+                '}';
     }
 }

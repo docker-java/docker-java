@@ -1,8 +1,5 @@
 package com.github.dockerjava.api.model;
 
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -145,7 +142,16 @@ public class AuthConfig implements Serializable {
 
     @Override
     public String toString() {
-        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return "AuthConfig{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", registryAddress='" + registryAddress + '\'' +
+                ", auth='" + auth + '\'' +
+                ", registrytoken='" + registrytoken + '\'' +
+                ", identitytoken='" + identitytoken + '\'' +
+                ", stackOrchestrator='" + stackOrchestrator + '\'' +
+                '}';
     }
 
     // CHECKSTYLE:OFF

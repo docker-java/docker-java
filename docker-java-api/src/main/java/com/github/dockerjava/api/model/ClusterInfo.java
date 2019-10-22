@@ -3,14 +3,11 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 
 /**
@@ -135,17 +132,29 @@ public class ClusterInfo implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return "ClusterInfo{" +
+                "createdAt=" + createdAt +
+                ", spec=" + spec +
+                ", id='" + id + '\'' +
+                ", updatedAt=" + updatedAt +
+                ", version=" + version +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ClusterInfo that = (ClusterInfo) o;
+        return Objects.equals(createdAt, that.createdAt) &&
+                Objects.equals(spec, that.spec) &&
+                Objects.equals(id, that.id) &&
+                Objects.equals(updatedAt, that.updatedAt) &&
+                Objects.equals(version, that.version);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(createdAt, spec, id, updatedAt, version);
     }
-
 }

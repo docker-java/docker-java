@@ -3,7 +3,6 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -95,7 +94,19 @@ public class Network implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return "Network{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", scope='" + scope + '\'' +
+                ", driver='" + driver + '\'' +
+                ", enableIPv6=" + enableIPv6 +
+                ", internal=" + internal +
+                ", ipam=" + ipam +
+                ", containers=" + containers +
+                ", options=" + options +
+                ", attachable=" + attachable +
+                ", labels=" + labels +
+                '}';
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -131,7 +142,12 @@ public class Network implements Serializable {
 
         @Override
         public String toString() {
-            return ToStringBuilder.reflectionToString(this);
+            return "ContainerNetworkConfig{" +
+                    "endpointId='" + endpointId + '\'' +
+                    ", macAddress='" + macAddress + '\'' +
+                    ", ipv4Address='" + ipv4Address + '\'' +
+                    ", ipv6Address='" + ipv6Address + '\'' +
+                    '}';
         }
     }
 
@@ -176,7 +192,11 @@ public class Network implements Serializable {
 
         @Override
         public String toString() {
-            return ToStringBuilder.reflectionToString(this);
+            return "Ipam{" +
+                    "driver='" + driver + '\'' +
+                    ", config=" + config +
+                    ", options=" + options +
+                    '}';
         }
 
         @JsonIgnoreProperties(ignoreUnknown = true)

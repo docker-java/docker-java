@@ -6,9 +6,7 @@ import static com.github.dockerjava.api.model.InternetProtocol.UDP;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map.Entry;
-
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import java.util.Objects;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -149,18 +147,17 @@ public class ExposedPort implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof ExposedPort) {
-            ExposedPort other = (ExposedPort) obj;
-            return new EqualsBuilder().append(protocol, other.getProtocol()).append(port, other.getPort()).isEquals();
-        } else {
-            return super.equals(obj);
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ExposedPort that = (ExposedPort) o;
+        return port == that.port &&
+                protocol == that.protocol;
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(protocol).append(port).toHashCode();
+        return Objects.hash(protocol, port);
     }
 
     public static class Deserializer extends JsonDeserializer<ExposedPort> {
