@@ -34,7 +34,7 @@ public class InspectExecResponse {
     private Boolean canRemove;
 
     @JsonProperty("ExitCode")
-    private Integer exitCode;
+    private Long exitCode;
 
     @JsonProperty("ProcessConfig")
     private ProcessConfig processConfig;
@@ -62,7 +62,7 @@ public class InspectExecResponse {
      * @since {@link RemoteApiVersion#VERSION_1_25}
      */
     @JsonProperty("Pid")
-    private Integer pid;
+    private Long pid;
 
     public String getId() {
         return id;
@@ -84,7 +84,15 @@ public class InspectExecResponse {
         return running;
     }
 
+    /**
+     * @deprecated use {@link #getExitCodeLong()}
+     */
+    @Deprecated
     public Integer getExitCode() {
+        return exitCode != null ? exitCode.intValue() : null;
+    }
+
+    public Long getExitCodeLong() {
         return exitCode;
     }
 
@@ -126,9 +134,19 @@ public class InspectExecResponse {
 
     /**
      * @see #pid
+     * @deprecated use {@link #getPidLong()}
      */
     @CheckForNull
+    @Deprecated
     public Integer getPid() {
+        return pid != null ? pid.intValue() : null;
+    }
+
+    /**
+     * @see #pid
+     */
+    @CheckForNull
+    public Long getPidLong() {
         return pid;
     }
 
