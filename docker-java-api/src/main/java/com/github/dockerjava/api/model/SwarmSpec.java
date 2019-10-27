@@ -4,13 +4,10 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
@@ -156,16 +153,31 @@ public class SwarmSpec implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return "SwarmSpec{" +
+                "dispatcher=" + dispatcher +
+                ", orchestration=" + orchestration +
+                ", caConfig=" + caConfig +
+                ", raft=" + raft +
+                ", taskDefaults=" + taskDefaults +
+                ", name='" + name + '\'' +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SwarmSpec swarmSpec = (SwarmSpec) o;
+        return Objects.equals(dispatcher, swarmSpec.dispatcher) &&
+                Objects.equals(orchestration, swarmSpec.orchestration) &&
+                Objects.equals(caConfig, swarmSpec.caConfig) &&
+                Objects.equals(raft, swarmSpec.raft) &&
+                Objects.equals(taskDefaults, swarmSpec.taskDefaults) &&
+                Objects.equals(name, swarmSpec.name);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(dispatcher, orchestration, caConfig, raft, taskDefaults, name);
     }
 }

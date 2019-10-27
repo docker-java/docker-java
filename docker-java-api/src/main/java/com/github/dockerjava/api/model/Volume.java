@@ -2,11 +2,10 @@ package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import javax.annotation.Nonnull;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Represents a bind mounted volume in a Docker container.
@@ -55,18 +54,15 @@ public class Volume implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Volume) {
-            Volume other = (Volume) obj;
-            return new EqualsBuilder().append(path, other.getPath()).isEquals();
-        } else {
-            return super.equals(obj);
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Volume volume = (Volume) o;
+        return Objects.equals(path, volume.path);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(path).toHashCode();
+        return Objects.hash(path);
     }
-
 }

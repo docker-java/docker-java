@@ -3,10 +3,10 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.codec.binary.Base64;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
+import java.util.Base64;
 import java.util.Map;
 import java.util.Objects;
 
@@ -62,7 +62,7 @@ public class SecretSpec implements Serializable {
      * @see #data
      */
     public SecretSpec withData(String data) {
-        this.data = Base64.encodeBase64String(data.getBytes());
+        this.data = Base64.getEncoder().encodeToString(data.getBytes());
         return this;
     }
 

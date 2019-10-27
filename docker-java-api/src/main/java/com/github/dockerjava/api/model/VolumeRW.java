@@ -3,9 +3,7 @@ package com.github.dockerjava.api.model;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map.Entry;
-
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import java.util.Objects;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -65,19 +63,17 @@ public class VolumeRW implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof VolumeRW) {
-            VolumeRW other = (VolumeRW) obj;
-            return new EqualsBuilder().append(getVolume(), other.getVolume()).append(accessMode, other.getAccessMode())
-                    .isEquals();
-        } else {
-            return super.equals(obj);
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        VolumeRW volumeRW = (VolumeRW) o;
+        return Objects.equals(volume, volumeRW.volume) &&
+                accessMode == volumeRW.accessMode;
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(getVolume()).append(getAccessMode()).toHashCode();
+        return Objects.hash(volume, accessMode);
     }
 
     public static class Serializer extends JsonSerializer<VolumeRW> {

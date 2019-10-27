@@ -3,15 +3,12 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
@@ -191,17 +188,35 @@ public class ServiceSpec implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return "ServiceSpec{" +
+                "name='" + name + '\'' +
+                ", taskTemplate=" + taskTemplate +
+                ", mode=" + mode +
+                ", updateConfig=" + updateConfig +
+                ", networks=" + networks +
+                ", endpointSpec=" + endpointSpec +
+                ", labels=" + labels +
+                ", rollbackConfig=" + rollbackConfig +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ServiceSpec that = (ServiceSpec) o;
+        return Objects.equals(name, that.name) &&
+                Objects.equals(taskTemplate, that.taskTemplate) &&
+                Objects.equals(mode, that.mode) &&
+                Objects.equals(updateConfig, that.updateConfig) &&
+                Objects.equals(networks, that.networks) &&
+                Objects.equals(endpointSpec, that.endpointSpec) &&
+                Objects.equals(labels, that.labels) &&
+                Objects.equals(rollbackConfig, that.rollbackConfig);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(name, taskTemplate, mode, updateConfig, networks, endpointSpec, labels, rollbackConfig);
     }
-
 }

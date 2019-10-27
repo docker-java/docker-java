@@ -5,8 +5,6 @@ import java.util.Map;
 
 import javax.annotation.CheckForNull;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -104,6 +102,15 @@ public class Statistics implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return "Statistics{" +
+                "read='" + read + '\'' +
+                ", networks=" + networks +
+                ", network=" + network +
+                ", memoryStats=" + memoryStats +
+                ", blkioStats=" + blkioStats +
+                ", cpuStats=" + cpuStats +
+                ", preCpuStats=" + preCpuStats +
+                ", pidsStats=" + pidsStats +
+                '}';
     }
 }

@@ -1,11 +1,9 @@
 package com.github.dockerjava.api.model;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
@@ -46,21 +44,18 @@ public class Ulimit implements Serializable {
         return hard;
     }
 
-    // CHECKSTYLE:OFF
     @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Ulimit) {
-            Ulimit other = (Ulimit) obj;
-            return new EqualsBuilder().append(name, other.getName()).append(soft, other.getSoft())
-                    .append(hard, other.getHard()).isEquals();
-        } else
-            return super.equals(obj);
-
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ulimit ulimit = (Ulimit) o;
+        return Objects.equals(name, ulimit.name) &&
+                Objects.equals(soft, ulimit.soft) &&
+                Objects.equals(hard, ulimit.hard);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(name).append(soft).append(hard).toHashCode();
+        return Objects.hash(name, soft, hard);
     }
-    // CHECKSTYLE:ON
 }

@@ -12,7 +12,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.node.NullNode;
-import org.apache.commons.lang.ArrayUtils;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -64,7 +63,10 @@ public class Ports implements Serializable {
     public void bind(ExposedPort exposedPort, Binding binding) {
         if (ports.containsKey(exposedPort)) {
             Binding[] bindings = ports.get(exposedPort);
-            ports.put(exposedPort, (Binding[]) ArrayUtils.add(bindings, binding));
+            Binding[] newBindings = new Binding[bindings.length + 1];
+            System.arraycopy(bindings, 0, newBindings, 0, bindings.length);
+            newBindings[newBindings.length - 1] = binding;
+            ports.put(exposedPort, newBindings);
         } else {
             if (binding == null) {
                 ports.put(exposedPort, null);

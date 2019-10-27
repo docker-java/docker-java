@@ -188,7 +188,13 @@ public class InspectExecResponse {
 
         @Override
         public String toString() {
-            return ToStringBuilder.reflectionToString(this);
+            return "ProcessConfig{" +
+                    "arguments=" + arguments +
+                    ", entryPoint='" + entryPoint + '\'' +
+                    ", privileged=" + privileged +
+                    ", tty=" + tty +
+                    ", user='" + user + '\'' +
+                    '}';
         }
     }
 

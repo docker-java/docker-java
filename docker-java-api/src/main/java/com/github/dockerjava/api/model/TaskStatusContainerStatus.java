@@ -3,8 +3,6 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 
 import java.io.Serializable;
 
@@ -51,8 +49,13 @@ public class TaskStatusContainerStatus implements Serializable {
         this.exitCode = exitCode;
         return this;
     }
+
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE).toString();
+        return "TaskStatusContainerStatus{" +
+                "containerID='" + containerID + '\'' +
+                ", pid=" + pid +
+                ", exitCode=" + exitCode +
+                '}';
     }
 }

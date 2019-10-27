@@ -2,9 +2,7 @@ package com.github.dockerjava.api.model;
 
 import java.io.IOException;
 import java.io.Serializable;
-
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import java.util.Objects;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -74,19 +72,17 @@ public class VolumesFrom implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof VolumesFrom) {
-            VolumesFrom other = (VolumesFrom) obj;
-            return new EqualsBuilder().append(container, other.getContainer())
-                    .append(accessMode, other.getAccessMode()).isEquals();
-        } else {
-            return super.equals(obj);
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        VolumesFrom that = (VolumesFrom) o;
+        return Objects.equals(container, that.container) &&
+                accessMode == that.accessMode;
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(container).append(accessMode).toHashCode();
+        return Objects.hash(container, accessMode);
     }
 
     /**

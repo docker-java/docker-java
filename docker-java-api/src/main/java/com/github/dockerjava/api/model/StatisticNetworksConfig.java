@@ -2,12 +2,10 @@ package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Used in {@link Statistics}
@@ -108,16 +106,35 @@ public class StatisticNetworksConfig implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return "StatisticNetworksConfig{" +
+                "rxBytes=" + rxBytes +
+                ", rxDropped=" + rxDropped +
+                ", rxErrors=" + rxErrors +
+                ", rxPackets=" + rxPackets +
+                ", txBytes=" + txBytes +
+                ", txDropped=" + txDropped +
+                ", txErrors=" + txErrors +
+                ", txPackets=" + txPackets +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StatisticNetworksConfig that = (StatisticNetworksConfig) o;
+        return Objects.equals(rxBytes, that.rxBytes) &&
+                Objects.equals(rxDropped, that.rxDropped) &&
+                Objects.equals(rxErrors, that.rxErrors) &&
+                Objects.equals(rxPackets, that.rxPackets) &&
+                Objects.equals(txBytes, that.txBytes) &&
+                Objects.equals(txDropped, that.txDropped) &&
+                Objects.equals(txErrors, that.txErrors) &&
+                Objects.equals(txPackets, that.txPackets);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(rxBytes, rxDropped, rxErrors, rxPackets, txBytes, txDropped, txErrors, txPackets);
     }
 }

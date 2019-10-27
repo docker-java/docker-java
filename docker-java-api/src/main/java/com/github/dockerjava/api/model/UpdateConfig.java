@@ -1,13 +1,10 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
@@ -139,17 +136,31 @@ public class UpdateConfig implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return "UpdateConfig{" +
+                "parallelism=" + parallelism +
+                ", delay=" + delay +
+                ", failureAction=" + failureAction +
+                ", maxFailureRatio=" + maxFailureRatio +
+                ", monitor=" + monitor +
+                ", order=" + order +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UpdateConfig that = (UpdateConfig) o;
+        return Objects.equals(parallelism, that.parallelism) &&
+                Objects.equals(delay, that.delay) &&
+                failureAction == that.failureAction &&
+                Objects.equals(maxFailureRatio, that.maxFailureRatio) &&
+                Objects.equals(monitor, that.monitor) &&
+                order == that.order;
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(parallelism, delay, failureAction, maxFailureRatio, monitor, order);
     }
-
 }

@@ -1,7 +1,5 @@
 package com.github.dockerjava.api.model;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.github.dockerjava.api.model.Ports.Binding;
 
 import java.io.Serializable;
@@ -38,7 +36,7 @@ public class PortBinding implements Serializable {
 
     public static PortBinding parse(String serialized) throws IllegalArgumentException {
         try {
-            String[] parts = StringUtils.splitByWholeSeparator(serialized, ":");
+            String[] parts = serialized.split(":");
             switch (parts.length) {
                 case 3:
                     // 127.0.0.1:80:8080/tcp

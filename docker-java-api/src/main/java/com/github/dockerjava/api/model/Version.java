@@ -3,13 +3,11 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.command.VersionCmd;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Used for `/version`
@@ -142,16 +140,43 @@ public class Version implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return "Version{" +
+                "apiVersion='" + apiVersion + '\'' +
+                ", arch='" + arch + '\'' +
+                ", gitCommit='" + gitCommit + '\'' +
+                ", goVersion='" + goVersion + '\'' +
+                ", kernelVersion='" + kernelVersion + '\'' +
+                ", operatingSystem='" + operatingSystem + '\'' +
+                ", version='" + version + '\'' +
+                ", buildTime='" + buildTime + '\'' +
+                ", experimental=" + experimental +
+                ", minAPIVersion='" + minAPIVersion + '\'' +
+                ", platform=" + platform +
+                ", components=" + components +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        return  EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Version version1 = (Version) o;
+        return Objects.equals(apiVersion, version1.apiVersion) &&
+                Objects.equals(arch, version1.arch) &&
+                Objects.equals(gitCommit, version1.gitCommit) &&
+                Objects.equals(goVersion, version1.goVersion) &&
+                Objects.equals(kernelVersion, version1.kernelVersion) &&
+                Objects.equals(operatingSystem, version1.operatingSystem) &&
+                Objects.equals(version, version1.version) &&
+                Objects.equals(buildTime, version1.buildTime) &&
+                Objects.equals(experimental, version1.experimental) &&
+                Objects.equals(minAPIVersion, version1.minAPIVersion) &&
+                Objects.equals(platform, version1.platform) &&
+                Objects.equals(components, version1.components);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(apiVersion, arch, gitCommit, goVersion, kernelVersion, operatingSystem, version, buildTime, experimental, minAPIVersion, platform, components);
     }
 }

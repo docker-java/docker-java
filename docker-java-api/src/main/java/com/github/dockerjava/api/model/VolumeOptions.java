@@ -1,13 +1,10 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
@@ -80,17 +77,25 @@ public class VolumeOptions implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return "VolumeOptions{" +
+                "noCopy=" + noCopy +
+                ", labels=" + labels +
+                ", driverConfig=" + driverConfig +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        VolumeOptions that = (VolumeOptions) o;
+        return Objects.equals(noCopy, that.noCopy) &&
+                Objects.equals(labels, that.labels) &&
+                Objects.equals(driverConfig, that.driverConfig);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(noCopy, labels, driverConfig);
     }
-
 }
