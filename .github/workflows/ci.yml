@@ -13,4 +13,4 @@ jobs:
       with:
         java-version: 8
     - name: Build with Maven
-      run: mvn build
+      run: mvn verify
