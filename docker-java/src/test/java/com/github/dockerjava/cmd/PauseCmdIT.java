@@ -1,7 +1,7 @@
 package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.exception.InternalServerErrorException;
+import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.utils.ContainerUtils;
 import org.junit.Test;
@@ -33,7 +33,7 @@ public class PauseCmdIT extends CmdIT {
         dockerRule.getClient().pauseContainerCmd("non-existing").exec();
     }
 
-    @Test(expected = InternalServerErrorException.class)
+    @Test(expected = DockerException.class)
     public void pauseStoppedContainer() {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999").exec();
@@ -47,7 +47,7 @@ public class PauseCmdIT extends CmdIT {
         dockerRule.getClient().pauseContainerCmd(container.getId()).exec();
     }
 
-    @Test(expected = InternalServerErrorException.class)
+    @Test(expected = DockerException.class)
     public void pausePausedContainer() {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999").exec();
@@ -61,7 +61,7 @@ public class PauseCmdIT extends CmdIT {
         dockerRule.getClient().pauseContainerCmd(container.getId()).exec();
     }
 
-    @Test(expected = InternalServerErrorException.class)
+    @Test(expected = DockerException.class)
     public void pauseCreatedContainer() {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999").exec();
