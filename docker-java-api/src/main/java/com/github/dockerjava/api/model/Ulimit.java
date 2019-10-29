@@ -1,13 +1,13 @@
 package com.github.dockerjava.api.model;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vangie Du (duwan@live.com)
@@ -28,7 +28,7 @@ public class Ulimit implements Serializable {
     }
 
     public Ulimit(String name, int soft, int hard) {
-        checkNotNull(name, "Name is null");
+        requireNonNull(name, "Name is null");
         this.name = name;
         this.soft = soft;
         this.hard = hard;
