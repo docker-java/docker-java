@@ -334,14 +334,14 @@ public class InspectContainerResponse {
          */
         @CheckForNull
         @JsonProperty("Pid")
-        private Integer pid;
+        private Long pid;
 
         /**
          * @since < {@link RemoteApiVersion#VERSION_1_16}
          */
         @CheckForNull
         @JsonProperty("ExitCode")
-        private Integer exitCode;
+        private Long exitCode;
 
         /**
          * @since {@link RemoteApiVersion#VERSION_1_17}
@@ -421,17 +421,39 @@ public class InspectContainerResponse {
 
         /**
          * See {@link #pid}
+         *
+         * @deprecated use {@link #getPidLong()}
          */
+        @Deprecated
         @CheckForNull
         public Integer getPid() {
+            return pid != null ? pid.intValue() : null;
+        }
+
+        /**
+         * See {@link #pid}
+         */
+        @CheckForNull
+        public Long getPidLong() {
             return pid;
+        }
+
+        /**
+         * See {@link #exitCode}
+         *
+         * @deprecated use {@link #getExitCodeLong()}
+         */
+        @Deprecated
+        @CheckForNull
+        public Integer getExitCode() {
+            return exitCode != null ? exitCode.intValue() : null;
         }
 
         /**
          * See {@link #exitCode}
          */
         @CheckForNull
-        public Integer getExitCode() {
+        public Long getExitCodeLong() {
             return exitCode;
         }
 
