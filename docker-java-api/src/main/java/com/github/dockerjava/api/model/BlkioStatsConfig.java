@@ -136,6 +136,15 @@ public class BlkioStatsConfig implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(ioServiceBytesRecursive, ioServicedRecursive, ioQueueRecursive, ioServiceTimeRecursive, ioWaitTimeRecursive, ioMergedRecursive, ioTimeRecursive, sectorsRecursive);
+        return Objects.hash(
+                ioServiceBytesRecursive,
+                ioServicedRecursive,
+                ioQueueRecursive,
+                ioServiceTimeRecursive,
+                ioWaitTimeRecursive,
+                ioMergedRecursive,
+                ioTimeRecursive,
+                sectorsRecursive
+        );
     }
 }

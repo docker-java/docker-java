@@ -22,4 +22,9 @@ public class ServiceGlobalModeOptions implements Serializable {
     public boolean equals(Object o) {
         return this == o;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

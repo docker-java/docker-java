@@ -421,6 +421,25 @@ public class InspectImageResponse {
 
     @Override
     public int hashCode() {
-        return Objects.hash(arch, author, comment, config, container, containerConfig, created, dockerVersion, id, os, osVersion, parent, size, repoTags, repoDigests, virtualSize, graphDriver, rootFS);
+        return Objects.hash(
+                arch,
+                author,
+                comment,
+                config,
+                container,
+                containerConfig,
+                created,
+                dockerVersion,
+                id,
+                os,
+                osVersion,
+                parent,
+                size,
+                repoTags,
+                repoDigests,
+                virtualSize,
+                graphDriver,
+                rootFS
+        );
     }
 }

@@ -488,7 +488,25 @@ public class ContainerConfig implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(attachStderr, attachStdin, attachStdout, domainName, exposedPorts, hostName, image, labels, macAddress, networkDisabled, stdinOpen, stdInOnce, tty, user, volumes, workingDir, healthCheck);
+        int result = Objects.hash(
+                attachStderr,
+                attachStdin,
+                attachStdout,
+                domainName,
+                exposedPorts,
+                hostName,
+                image,
+                labels,
+                macAddress,
+                networkDisabled,
+                stdinOpen,
+                stdInOnce,
+                tty,
+                user,
+                volumes,
+                workingDir,
+                healthCheck
+        );
         result = 31 * result + Arrays.hashCode(cmd);
         result = 31 * result + Arrays.hashCode(entrypoint);
         result = 31 * result + Arrays.hashCode(env);

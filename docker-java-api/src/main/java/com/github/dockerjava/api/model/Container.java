@@ -216,7 +216,21 @@ public class Container implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(command, created, id, image, imageId, labels, status, state, sizeRw, sizeRootFs, hostConfig, networkSettings, mounts);
+        int result = Objects.hash(
+                command,
+                created,
+                id,
+                image,
+                imageId,
+                labels,
+                status,
+                state,
+                sizeRw,
+                sizeRootFs,
+                hostConfig,
+                networkSettings,
+                mounts
+        );
         result = 31 * result + Arrays.hashCode(names);
         result = 31 * result + Arrays.hashCode(ports);
         return result;

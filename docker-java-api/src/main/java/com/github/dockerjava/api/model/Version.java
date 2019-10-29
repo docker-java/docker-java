@@ -177,6 +177,19 @@ public class Version implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(apiVersion, arch, gitCommit, goVersion, kernelVersion, operatingSystem, version, buildTime, experimental, minAPIVersion, platform, components);
+        return Objects.hash(
+                apiVersion,
+                arch,
+                gitCommit,
+                goVersion,
+                kernelVersion,
+                operatingSystem,
+                version,
+                buildTime,
+                experimental,
+                minAPIVersion,
+                platform,
+                components
+        );
     }
 }

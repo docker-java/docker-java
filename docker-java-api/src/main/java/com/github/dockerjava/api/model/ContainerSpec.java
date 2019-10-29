@@ -496,6 +496,29 @@ public class ContainerSpec implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(image, labels, command, args, env, dir, user, groups, tty, mounts, duration, stopGracePeriod, dnsConfig, openStdin, readOnly, hosts, hostname, secrets, healthCheck, stopSignal, privileges, configs);
+        return Objects.hash(
+                image,
+                labels,
+                command,
+                args,
+                env,
+                dir,
+                user,
+                groups,
+                tty,
+                mounts,
+                duration,
+                stopGracePeriod,
+                dnsConfig,
+                openStdin,
+                readOnly,
+                hosts,
+                hostname,
+                secrets,
+                healthCheck,
+                stopSignal,
+                privileges,
+                configs
+        );
     }
 }

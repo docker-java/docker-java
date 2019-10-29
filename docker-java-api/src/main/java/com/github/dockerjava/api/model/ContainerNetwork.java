@@ -318,7 +318,20 @@ public class ContainerNetwork implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(ipamConfig, links, aliases, networkID, endpointId, gateway, ipAddress, ipPrefixLen, ipV6Gateway, globalIPv6Address, globalIPv6PrefixLen, macAddress);
+        return Objects.hash(
+                ipamConfig,
+                links,
+                aliases,
+                networkID,
+                endpointId,
+                gateway,
+                ipAddress,
+                ipPrefixLen,
+                ipV6Gateway,
+                globalIPv6Address,
+                globalIPv6PrefixLen,
+                macAddress
+        );
     }
 
     /**
