@@ -1,14 +1,17 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
+@EqualsAndHashCode
+@ToString
 public class ServiceRestartPolicy implements Serializable {
     public static final long serialVersionUID = 1L;
 
@@ -98,31 +101,5 @@ public class ServiceRestartPolicy implements Serializable {
     public ServiceRestartPolicy withWindow(Long window) {
         this.window = window;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "ServiceRestartPolicy{" +
-                "condition=" + condition +
-                ", delay=" + delay +
-                ", maxAttempts=" + maxAttempts +
-                ", window=" + window +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ServiceRestartPolicy that = (ServiceRestartPolicy) o;
-        return condition == that.condition &&
-                Objects.equals(delay, that.delay) &&
-                Objects.equals(maxAttempts, that.maxAttempts) &&
-                Objects.equals(window, that.window);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(condition, delay, maxAttempts, window);
     }
 }

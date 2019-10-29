@@ -4,16 +4,19 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class SwarmNodeResources implements Serializable {
     public static final long serialVersionUID = 1L;
 
@@ -59,27 +62,5 @@ public class SwarmNodeResources implements Serializable {
     public SwarmNodeResources withMemoryBytes(Long memoryBytes) {
         this.memoryBytes = memoryBytes;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "SwarmNodeResources{" +
-                "nanoCPUs=" + nanoCPUs +
-                ", memoryBytes=" + memoryBytes +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SwarmNodeResources that = (SwarmNodeResources) o;
-        return Objects.equals(nanoCPUs, that.nanoCPUs) &&
-                Objects.equals(memoryBytes, that.memoryBytes);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(nanoCPUs, memoryBytes);
     }
 }

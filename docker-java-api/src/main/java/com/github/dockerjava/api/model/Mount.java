@@ -1,14 +1,17 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
+@EqualsAndHashCode
+@ToString
 public class Mount implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -173,37 +176,5 @@ public class Mount implements Serializable {
             this.type = MountType.TMPFS;
         }
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "Mount{" +
-                "type=" + type +
-                ", source='" + source + '\'' +
-                ", target='" + target + '\'' +
-                ", readOnly=" + readOnly +
-                ", bindOptions=" + bindOptions +
-                ", volumeOptions=" + volumeOptions +
-                ", tmpfsOptions=" + tmpfsOptions +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Mount mount = (Mount) o;
-        return type == mount.type &&
-                Objects.equals(source, mount.source) &&
-                Objects.equals(target, mount.target) &&
-                Objects.equals(readOnly, mount.readOnly) &&
-                Objects.equals(bindOptions, mount.bindOptions) &&
-                Objects.equals(volumeOptions, mount.volumeOptions) &&
-                Objects.equals(tmpfsOptions, mount.tmpfsOptions);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(type, source, target, readOnly, bindOptions, volumeOptions, tmpfsOptions);
     }
 }

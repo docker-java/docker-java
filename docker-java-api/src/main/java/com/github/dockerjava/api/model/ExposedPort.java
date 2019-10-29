@@ -6,7 +6,6 @@ import static com.github.dockerjava.api.model.InternetProtocol.UDP;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map.Entry;
-import java.util.Objects;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -21,6 +20,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.github.dockerjava.api.model.Ports.Binding;
+import lombok.EqualsAndHashCode;
 
 /**
  * Represents a container port that Docker exposes to external clients. The port is defined by its {@link #getPort() port number} and an
@@ -29,6 +29,7 @@ import com.github.dockerjava.api.model.Ports.Binding;
  */
 @JsonDeserialize(using = ExposedPort.Deserializer.class)
 @JsonSerialize(using = ExposedPort.Serializer.class)
+@EqualsAndHashCode
 public class ExposedPort implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -144,20 +145,6 @@ public class ExposedPort implements Serializable {
     @Override
     public String toString() {
         return port + "/" + protocol.toString();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ExposedPort that = (ExposedPort) o;
-        return port == that.port &&
-                protocol == that.protocol;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(protocol, port);
     }
 
     public static class Deserializer extends JsonDeserializer<ExposedPort> {

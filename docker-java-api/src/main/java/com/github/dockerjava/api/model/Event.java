@@ -4,17 +4,20 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * Representation of a Docker event.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class Event implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -238,41 +241,5 @@ public class Event implements Serializable {
     public Event withEventActor(EventActor actor) {
         this.actor = actor;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "Event{" +
-                "status='" + status + '\'' +
-                ", id='" + id + '\'' +
-                ", from='" + from + '\'' +
-                ", node=" + node +
-                ", type=" + type +
-                ", action='" + action + '\'' +
-                ", actor=" + actor +
-                ", time=" + time +
-                ", timeNano=" + timeNano +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Event event = (Event) o;
-        return Objects.equals(status, event.status) &&
-                Objects.equals(id, event.id) &&
-                Objects.equals(from, event.from) &&
-                Objects.equals(node, event.node) &&
-                type == event.type &&
-                Objects.equals(action, event.action) &&
-                Objects.equals(actor, event.actor) &&
-                Objects.equals(time, event.time) &&
-                Objects.equals(timeNano, event.timeNano);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(status, id, from, node, type, action, actor, time, timeNano);
     }
 }

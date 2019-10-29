@@ -3,7 +3,6 @@ package com.github.dockerjava.api.model;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map.Entry;
-import java.util.Objects;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -17,6 +16,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.node.NullNode;
+import lombok.EqualsAndHashCode;
 
 /**
  * Represents a bind mounted volume in a Docker container.
@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.node.NullNode;
 @JsonDeserialize(using = VolumeRW.Deserializer.class)
 @JsonSerialize(using = VolumeRW.Serializer.class)
 @Deprecated
+@EqualsAndHashCode
 public class VolumeRW implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -60,20 +61,6 @@ public class VolumeRW implements Serializable {
     @Override
     public String toString() {
         return getVolume() + ":" + getAccessMode();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        VolumeRW volumeRW = (VolumeRW) o;
-        return Objects.equals(volume, volumeRW.volume) &&
-                accessMode == volumeRW.accessMode;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(volume, accessMode);
     }
 
     public static class Serializer extends JsonSerializer<VolumeRW> {

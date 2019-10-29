@@ -2,15 +2,18 @@ package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
-import java.util.Objects;
 
 /**
  * part of {@link GraphDriver}
  * @author Kanstantsin Shautsou
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode
+@ToString
 public class GraphData {
 
     @JsonProperty("RootDir")
@@ -106,33 +109,5 @@ public class GraphData {
     public GraphData withDir(String dir) {
         this.dir = dir;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "GraphData{" +
-                "rootDir='" + rootDir + '\'' +
-                ", deviceId='" + deviceId + '\'' +
-                ", deviceName='" + deviceName + '\'' +
-                ", deviceSize='" + deviceSize + '\'' +
-                ", dir='" + dir + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        GraphData graphData = (GraphData) o;
-        return Objects.equals(rootDir, graphData.rootDir) &&
-                Objects.equals(deviceId, graphData.deviceId) &&
-                Objects.equals(deviceName, graphData.deviceName) &&
-                Objects.equals(deviceSize, graphData.deviceSize) &&
-                Objects.equals(dir, graphData.dir);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(rootDir, deviceId, deviceName, deviceSize, dir);
     }
 }

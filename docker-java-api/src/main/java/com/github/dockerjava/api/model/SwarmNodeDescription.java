@@ -3,16 +3,19 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class SwarmNodeDescription implements Serializable {
     public static final long serialVersionUID = 1L;
 
@@ -102,31 +105,5 @@ public class SwarmNodeDescription implements Serializable {
     public SwarmNodeDescription withEngine(SwarmNodeEngineDescription engine) {
         this.engine = engine;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "SwarmNodeDescription{" +
-                "hostname='" + hostname + '\'' +
-                ", platform=" + platform +
-                ", resources=" + resources +
-                ", engine=" + engine +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SwarmNodeDescription that = (SwarmNodeDescription) o;
-        return Objects.equals(hostname, that.hostname) &&
-                Objects.equals(platform, that.platform) &&
-                Objects.equals(resources, that.resources) &&
-                Objects.equals(engine, that.engine);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(hostname, platform, resources, engine);
     }
 }

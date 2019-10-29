@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.command.ListContainersCmd;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Used for Listing containers.
@@ -20,6 +20,8 @@ import java.util.Objects;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class Container implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -169,70 +171,5 @@ public class Container implements Serializable {
 
     public List<ContainerMount> getMounts() {
         return mounts;
-    }
-
-    @Override
-    public String toString() {
-        return "Container{" +
-                "command='" + command + '\'' +
-                ", created=" + created +
-                ", id='" + id + '\'' +
-                ", image='" + image + '\'' +
-                ", imageId='" + imageId + '\'' +
-                ", names=" + Arrays.toString(names) +
-                ", ports=" + Arrays.toString(ports) +
-                ", labels=" + labels +
-                ", status='" + status + '\'' +
-                ", state='" + state + '\'' +
-                ", sizeRw=" + sizeRw +
-                ", sizeRootFs=" + sizeRootFs +
-                ", hostConfig=" + hostConfig +
-                ", networkSettings=" + networkSettings +
-                ", mounts=" + mounts +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Container container = (Container) o;
-        return Objects.equals(command, container.command) &&
-                Objects.equals(created, container.created) &&
-                Objects.equals(id, container.id) &&
-                Objects.equals(image, container.image) &&
-                Objects.equals(imageId, container.imageId) &&
-                Arrays.equals(names, container.names) &&
-                Arrays.equals(ports, container.ports) &&
-                Objects.equals(labels, container.labels) &&
-                Objects.equals(status, container.status) &&
-                Objects.equals(state, container.state) &&
-                Objects.equals(sizeRw, container.sizeRw) &&
-                Objects.equals(sizeRootFs, container.sizeRootFs) &&
-                Objects.equals(hostConfig, container.hostConfig) &&
-                Objects.equals(networkSettings, container.networkSettings) &&
-                Objects.equals(mounts, container.mounts);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = Objects.hash(
-                command,
-                created,
-                id,
-                image,
-                imageId,
-                labels,
-                status,
-                state,
-                sizeRw,
-                sizeRootFs,
-                hostConfig,
-                networkSettings,
-                mounts
-        );
-        result = 31 * result + Arrays.hashCode(names);
-        result = 31 * result + Arrays.hashCode(ports);
-        return result;
     }
 }

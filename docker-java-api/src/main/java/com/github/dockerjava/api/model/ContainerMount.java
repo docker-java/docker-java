@@ -2,16 +2,19 @@ package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * @author Yuting Liu
  * @see Container
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode
+@ToString
 public class ContainerMount implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -146,37 +149,5 @@ public class ContainerMount implements Serializable {
     public ContainerMount withPropagation(String propagation) {
         this.propagation = propagation;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "ContainerMount{" +
-                "name='" + name + '\'' +
-                ", source='" + source + '\'' +
-                ", destination='" + destination + '\'' +
-                ", driver='" + driver + '\'' +
-                ", mode='" + mode + '\'' +
-                ", rw=" + rw +
-                ", propagation='" + propagation + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ContainerMount that = (ContainerMount) o;
-        return rw == that.rw &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(source, that.source) &&
-                Objects.equals(destination, that.destination) &&
-                Objects.equals(driver, that.driver) &&
-                Objects.equals(mode, that.mode) &&
-                Objects.equals(propagation, that.propagation);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, source, destination, driver, mode, rw, propagation);
     }
 }

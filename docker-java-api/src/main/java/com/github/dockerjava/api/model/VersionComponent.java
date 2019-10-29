@@ -2,11 +2,12 @@ package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Part of {@link Version}
@@ -15,6 +16,8 @@ import java.util.Objects;
  * @author Dmitry Tretyakov
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode
+@ToString
 public class VersionComponent implements Serializable {
     public static final long serialVersionUID = 1L;
 
@@ -73,29 +76,5 @@ public class VersionComponent implements Serializable {
     public VersionComponent withVersion(String version) {
         this.version = version;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "VersionComponent{" +
-                "details=" + details +
-                ", name='" + name + '\'' +
-                ", version='" + version + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        VersionComponent that = (VersionComponent) o;
-        return Objects.equals(details, that.details) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(version, that.version);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(details, name, version);
     }
 }

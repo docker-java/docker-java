@@ -2,6 +2,8 @@ package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Parse reponses from /images/create
@@ -10,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode
+@ToString
 public class CreateImageResponse {
 
     @JsonProperty("status")
@@ -17,12 +21,5 @@ public class CreateImageResponse {
 
     public String getId() {
         return id;
-    }
-
-    @Override
-    public String toString() {
-        return "CreateImageResponse{" +
-                "id='" + id + '\'' +
-                '}';
     }
 }

@@ -3,6 +3,8 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
@@ -11,6 +13,8 @@ import java.io.Serializable;
  * Represents a pull response stream item
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode
+@ToString
 public class ResponseItem implements Serializable {
     private static final long serialVersionUID = -5187169652557467828L;
 
@@ -115,6 +119,8 @@ public class ResponseItem implements Serializable {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @EqualsAndHashCode
+    @ToString
     public static class ProgressDetail implements Serializable {
         private static final long serialVersionUID = -1954994695645715264L;
 
@@ -141,18 +147,11 @@ public class ResponseItem implements Serializable {
         public Long getStart() {
             return start;
         }
-
-        @Override
-        public String toString() {
-            return "ProgressDetail{" +
-                    "current=" + current +
-                    ", total=" + total +
-                    ", start=" + start +
-                    '}';
-        }
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @EqualsAndHashCode
+    @ToString
     public static class ErrorDetail implements Serializable {
         private static final long serialVersionUID = -9136704865403084083L;
 
@@ -171,17 +170,11 @@ public class ResponseItem implements Serializable {
         public String getMessage() {
             return message;
         }
-
-        @Override
-        public String toString() {
-            return "ErrorDetail{" +
-                    "code=" + code +
-                    ", message='" + message + '\'' +
-                    '}';
-        }
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @EqualsAndHashCode
+    @ToString
     public static class AuxDetail implements Serializable {
         private static final long serialVersionUID = 1L;
 
@@ -208,30 +201,5 @@ public class ResponseItem implements Serializable {
         public String getDigest() {
             return digest;
         }
-
-        @Override
-        public String toString() {
-            return "AuxDetail{" +
-                    "size=" + size +
-                    ", tag='" + tag + '\'' +
-                    ", digest='" + digest + '\'' +
-                    '}';
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "ResponseItem{" +
-                "stream='" + stream + '\'' +
-                ", status='" + status + '\'' +
-                ", progressDetail=" + progressDetail +
-                ", progress='" + progress + '\'' +
-                ", id='" + id + '\'' +
-                ", from='" + from + '\'' +
-                ", time=" + time +
-                ", errorDetail=" + errorDetail +
-                ", error='" + error + '\'' +
-                ", aux=" + aux +
-                '}';
     }
 }

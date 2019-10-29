@@ -3,17 +3,20 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class TaskSpec implements Serializable {
     public static final long serialVersionUID = 1L;
 
@@ -179,39 +182,5 @@ public class TaskSpec implements Serializable {
     public TaskSpec withNetworks(List<NetworkAttachmentConfig> networks) {
         this.networks = networks;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "TaskSpec{" +
-                "containerSpec=" + containerSpec +
-                ", resources=" + resources +
-                ", restartPolicy=" + restartPolicy +
-                ", placement=" + placement +
-                ", logDriver=" + logDriver +
-                ", forceUpdate=" + forceUpdate +
-                ", networks=" + networks +
-                ", runtime='" + runtime + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TaskSpec taskSpec = (TaskSpec) o;
-        return Objects.equals(containerSpec, taskSpec.containerSpec) &&
-                Objects.equals(resources, taskSpec.resources) &&
-                Objects.equals(restartPolicy, taskSpec.restartPolicy) &&
-                Objects.equals(placement, taskSpec.placement) &&
-                Objects.equals(logDriver, taskSpec.logDriver) &&
-                Objects.equals(forceUpdate, taskSpec.forceUpdate) &&
-                Objects.equals(networks, taskSpec.networks) &&
-                Objects.equals(runtime, taskSpec.runtime);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(containerSpec, resources, restartPolicy, placement, logDriver, forceUpdate, networks, runtime);
     }
 }

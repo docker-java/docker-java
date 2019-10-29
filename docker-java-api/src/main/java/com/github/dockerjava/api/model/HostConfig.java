@@ -5,13 +5,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
@@ -21,6 +22,8 @@ import static java.util.Objects.requireNonNull;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class HostConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -1227,226 +1230,5 @@ public class HostConfig implements Serializable {
     public HostConfig withCpuRealtimeRuntime(Long cpuRealtimeRuntime) {
         this.cpuRealtimeRuntime = cpuRealtimeRuntime;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "HostConfig{" +
-                "binds=" + binds +
-                ", blkioWeight=" + blkioWeight +
-                ", blkioWeightDevice=" + blkioWeightDevice +
-                ", blkioDeviceReadBps=" + blkioDeviceReadBps +
-                ", blkioDeviceWriteBps=" + blkioDeviceWriteBps +
-                ", blkioDeviceReadIOps=" + blkioDeviceReadIOps +
-                ", blkioDeviceWriteIOps=" + blkioDeviceWriteIOps +
-                ", memorySwappiness=" + memorySwappiness +
-                ", nanoCPUs=" + nanoCPUs +
-                ", capAdd=" + Arrays.toString(capAdd) +
-                ", capDrop=" + Arrays.toString(capDrop) +
-                ", containerIDFile='" + containerIDFile + '\'' +
-                ", cpuPeriod=" + cpuPeriod +
-                ", cpuRealtimePeriod=" + cpuRealtimePeriod +
-                ", cpuRealtimeRuntime=" + cpuRealtimeRuntime +
-                ", cpuShares=" + cpuShares +
-                ", cpuQuota=" + cpuQuota +
-                ", cpusetCpus='" + cpusetCpus + '\'' +
-                ", cpusetMems='" + cpusetMems + '\'' +
-                ", devices=" + Arrays.toString(devices) +
-                ", deviceCgroupRules=" + deviceCgroupRules +
-                ", diskQuota=" + diskQuota +
-                ", dns=" + Arrays.toString(dns) +
-                ", dnsOptions=" + dnsOptions +
-                ", dnsSearch=" + Arrays.toString(dnsSearch) +
-                ", extraHosts=" + Arrays.toString(extraHosts) +
-                ", groupAdd=" + groupAdd +
-                ", ipcMode='" + ipcMode + '\'' +
-                ", cgroup='" + cgroup + '\'' +
-                ", links=" + links +
-                ", logConfig=" + logConfig +
-                ", lxcConf=" + Arrays.toString(lxcConf) +
-                ", memory=" + memory +
-                ", memorySwap=" + memorySwap +
-                ", memoryReservation=" + memoryReservation +
-                ", kernelMemory=" + kernelMemory +
-                ", networkMode='" + networkMode + '\'' +
-                ", oomKillDisable=" + oomKillDisable +
-                ", init=" + init +
-                ", autoRemove=" + autoRemove +
-                ", oomScoreAdj=" + oomScoreAdj +
-                ", portBindings=" + portBindings +
-                ", privileged=" + privileged +
-                ", publishAllPorts=" + publishAllPorts +
-                ", readonlyRootfs=" + readonlyRootfs +
-                ", restartPolicy=" + restartPolicy +
-                ", ulimits=" + Arrays.toString(ulimits) +
-                ", cpuCount=" + cpuCount +
-                ", cpuPercent=" + cpuPercent +
-                ", ioMaximumIOps=" + ioMaximumIOps +
-                ", ioMaximumBandwidth=" + ioMaximumBandwidth +
-                ", volumesFrom=" + Arrays.toString(volumesFrom) +
-                ", mounts=" + mounts +
-                ", pidMode='" + pidMode + '\'' +
-                ", isolation=" + isolation +
-                ", securityOpts=" + securityOpts +
-                ", storageOpt=" + storageOpt +
-                ", cgroupParent='" + cgroupParent + '\'' +
-                ", volumeDriver='" + volumeDriver + '\'' +
-                ", shmSize=" + shmSize +
-                ", pidsLimit=" + pidsLimit +
-                ", runtime='" + runtime + '\'' +
-                ", tmpFs=" + tmpFs +
-                ", utSMode='" + utSMode + '\'' +
-                ", usernsMode='" + usernsMode + '\'' +
-                ", sysctls=" + sysctls +
-                ", consoleSize=" + consoleSize +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        HostConfig that = (HostConfig) o;
-        return Objects.equals(binds, that.binds) &&
-                Objects.equals(blkioWeight, that.blkioWeight) &&
-                Objects.equals(blkioWeightDevice, that.blkioWeightDevice) &&
-                Objects.equals(blkioDeviceReadBps, that.blkioDeviceReadBps) &&
-                Objects.equals(blkioDeviceWriteBps, that.blkioDeviceWriteBps) &&
-                Objects.equals(blkioDeviceReadIOps, that.blkioDeviceReadIOps) &&
-                Objects.equals(blkioDeviceWriteIOps, that.blkioDeviceWriteIOps) &&
-                Objects.equals(memorySwappiness, that.memorySwappiness) &&
-                Objects.equals(nanoCPUs, that.nanoCPUs) &&
-                Arrays.equals(capAdd, that.capAdd) &&
-                Arrays.equals(capDrop, that.capDrop) &&
-                Objects.equals(containerIDFile, that.containerIDFile) &&
-                Objects.equals(cpuPeriod, that.cpuPeriod) &&
-                Objects.equals(cpuRealtimePeriod, that.cpuRealtimePeriod) &&
-                Objects.equals(cpuRealtimeRuntime, that.cpuRealtimeRuntime) &&
-                Objects.equals(cpuShares, that.cpuShares) &&
-                Objects.equals(cpuQuota, that.cpuQuota) &&
-                Objects.equals(cpusetCpus, that.cpusetCpus) &&
-                Objects.equals(cpusetMems, that.cpusetMems) &&
-                Arrays.equals(devices, that.devices) &&
-                Objects.equals(deviceCgroupRules, that.deviceCgroupRules) &&
-                Objects.equals(diskQuota, that.diskQuota) &&
-                Arrays.equals(dns, that.dns) &&
-                Objects.equals(dnsOptions, that.dnsOptions) &&
-                Arrays.equals(dnsSearch, that.dnsSearch) &&
-                Arrays.equals(extraHosts, that.extraHosts) &&
-                Objects.equals(groupAdd, that.groupAdd) &&
-                Objects.equals(ipcMode, that.ipcMode) &&
-                Objects.equals(cgroup, that.cgroup) &&
-                Objects.equals(links, that.links) &&
-                Objects.equals(logConfig, that.logConfig) &&
-                Arrays.equals(lxcConf, that.lxcConf) &&
-                Objects.equals(memory, that.memory) &&
-                Objects.equals(memorySwap, that.memorySwap) &&
-                Objects.equals(memoryReservation, that.memoryReservation) &&
-                Objects.equals(kernelMemory, that.kernelMemory) &&
-                Objects.equals(networkMode, that.networkMode) &&
-                Objects.equals(oomKillDisable, that.oomKillDisable) &&
-                Objects.equals(init, that.init) &&
-                Objects.equals(autoRemove, that.autoRemove) &&
-                Objects.equals(oomScoreAdj, that.oomScoreAdj) &&
-                Objects.equals(portBindings, that.portBindings) &&
-                Objects.equals(privileged, that.privileged) &&
-                Objects.equals(publishAllPorts, that.publishAllPorts) &&
-                Objects.equals(readonlyRootfs, that.readonlyRootfs) &&
-                Objects.equals(restartPolicy, that.restartPolicy) &&
-                Arrays.equals(ulimits, that.ulimits) &&
-                Objects.equals(cpuCount, that.cpuCount) &&
-                Objects.equals(cpuPercent, that.cpuPercent) &&
-                Objects.equals(ioMaximumIOps, that.ioMaximumIOps) &&
-                Objects.equals(ioMaximumBandwidth, that.ioMaximumBandwidth) &&
-                Arrays.equals(volumesFrom, that.volumesFrom) &&
-                Objects.equals(mounts, that.mounts) &&
-                Objects.equals(pidMode, that.pidMode) &&
-                isolation == that.isolation &&
-                Objects.equals(securityOpts, that.securityOpts) &&
-                Objects.equals(storageOpt, that.storageOpt) &&
-                Objects.equals(cgroupParent, that.cgroupParent) &&
-                Objects.equals(volumeDriver, that.volumeDriver) &&
-                Objects.equals(shmSize, that.shmSize) &&
-                Objects.equals(pidsLimit, that.pidsLimit) &&
-                Objects.equals(runtime, that.runtime) &&
-                Objects.equals(tmpFs, that.tmpFs) &&
-                Objects.equals(utSMode, that.utSMode) &&
-                Objects.equals(usernsMode, that.usernsMode) &&
-                Objects.equals(sysctls, that.sysctls) &&
-                Objects.equals(consoleSize, that.consoleSize);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = Objects.hash(
-                binds,
-                blkioWeight,
-                blkioWeightDevice,
-                blkioDeviceReadBps,
-                blkioDeviceWriteBps,
-                blkioDeviceReadIOps,
-                blkioDeviceWriteIOps,
-                memorySwappiness,
-                nanoCPUs,
-                containerIDFile,
-                cpuPeriod,
-                cpuRealtimePeriod,
-                cpuRealtimeRuntime,
-                cpuShares,
-                cpuQuota,
-                cpusetCpus,
-                cpusetMems,
-                deviceCgroupRules,
-                diskQuota,
-                dnsOptions,
-                groupAdd,
-                ipcMode,
-                cgroup,
-                links,
-                logConfig,
-                memory,
-                memorySwap,
-                memoryReservation,
-                kernelMemory,
-                networkMode,
-                oomKillDisable,
-                init,
-                autoRemove,
-                oomScoreAdj,
-                portBindings,
-                privileged,
-                publishAllPorts,
-                readonlyRootfs,
-                restartPolicy,
-                cpuCount,
-                cpuPercent,
-                ioMaximumIOps,
-                ioMaximumBandwidth,
-                mounts,
-                pidMode,
-                isolation,
-                securityOpts,
-                storageOpt,
-                cgroupParent,
-                volumeDriver,
-                shmSize,
-                pidsLimit,
-                runtime,
-                tmpFs,
-                utSMode,
-                usernsMode,
-                sysctls,
-                consoleSize
-        );
-        result = 31 * result + Arrays.hashCode(capAdd);
-        result = 31 * result + Arrays.hashCode(capDrop);
-        result = 31 * result + Arrays.hashCode(devices);
-        result = 31 * result + Arrays.hashCode(dns);
-        result = 31 * result + Arrays.hashCode(dnsSearch);
-        result = 31 * result + Arrays.hashCode(extraHosts);
-        result = 31 * result + Arrays.hashCode(lxcConf);
-        result = 31 * result + Arrays.hashCode(ulimits);
-        result = 31 * result + Arrays.hashCode(volumesFrom);
-        return result;
     }
 }

@@ -1,15 +1,18 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * Security options for the container
  *
  * @since {@link RemoteApiVersion#VERSION_1_29}
  */
+@EqualsAndHashCode
+@ToString
 public class ContainerSpecPrivileges implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -35,28 +38,5 @@ public class ContainerSpecPrivileges implements Serializable {
     public ContainerSpecPrivileges withSeLinuxContext(ContainerSpecPrivilegesSELinuxContext seLinuxContext) {
         this.seLinuxContext = seLinuxContext;
         return this;
-    }
-
-    @Override
-    public String
-    toString() {
-        return "ContainerSpecPrivileges{" +
-                "credentialSpec=" + credentialSpec +
-                ", seLinuxContext=" + seLinuxContext +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ContainerSpecPrivileges that = (ContainerSpecPrivileges) o;
-        return Objects.equals(credentialSpec, that.credentialSpec) &&
-                Objects.equals(seLinuxContext, that.seLinuxContext);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(credentialSpec, seLinuxContext);
     }
 }

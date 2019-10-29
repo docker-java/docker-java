@@ -1,15 +1,18 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * Credential for managed service account (Windows only)
  *
  * @since {@link RemoteApiVersion#VERSION_1_29}
  */
+@EqualsAndHashCode
+@ToString
 public class ContainerSpecPrivilegesCredential implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -47,27 +50,5 @@ public class ContainerSpecPrivilegesCredential implements Serializable {
     public ContainerSpecPrivilegesCredential withRegistry(String registry) {
         this.registry = registry;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "ContainerSpecPrivilegesCredential{" +
-                "file='" + file + '\'' +
-                ", registry='" + registry + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ContainerSpecPrivilegesCredential that = (ContainerSpecPrivilegesCredential) o;
-        return Objects.equals(file, that.file) &&
-                Objects.equals(registry, that.registry);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(file, registry);
     }
 }

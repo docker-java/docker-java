@@ -1,14 +1,17 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
+@EqualsAndHashCode
+@ToString
 public class VolumeOptions implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -73,29 +76,5 @@ public class VolumeOptions implements Serializable {
     public VolumeOptions withDriverConfig(Driver driverConfig) {
         this.driverConfig = driverConfig;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "VolumeOptions{" +
-                "noCopy=" + noCopy +
-                ", labels=" + labels +
-                ", driverConfig=" + driverConfig +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        VolumeOptions that = (VolumeOptions) o;
-        return Objects.equals(noCopy, that.noCopy) &&
-                Objects.equals(labels, that.labels) &&
-                Objects.equals(driverConfig, that.driverConfig);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(noCopy, labels, driverConfig);
     }
 }

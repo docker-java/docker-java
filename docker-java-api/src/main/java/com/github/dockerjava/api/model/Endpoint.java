@@ -1,15 +1,17 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
+@EqualsAndHashCode
+@ToString
 public class Endpoint implements Serializable {
     public static final long serialVersionUID = 1L;
 
@@ -77,32 +79,5 @@ public class Endpoint implements Serializable {
     public Endpoint withVirtualIPs(EndpointVirtualIP[] virtualIPs) {
         this.virtualIPs = virtualIPs;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "Endpoint{" +
-                "spec=" + spec +
-                ", ports=" + Arrays.toString(ports) +
-                ", virtualIPs=" + Arrays.toString(virtualIPs) +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Endpoint endpoint = (Endpoint) o;
-        return Objects.equals(spec, endpoint.spec) &&
-                Arrays.equals(ports, endpoint.ports) &&
-                Arrays.equals(virtualIPs, endpoint.virtualIPs);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = Objects.hash(spec);
-        result = 31 * result + Arrays.hashCode(ports);
-        result = 31 * result + Arrays.hashCode(virtualIPs);
-        return result;
     }
 }

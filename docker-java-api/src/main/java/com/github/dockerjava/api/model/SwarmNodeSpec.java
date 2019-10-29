@@ -4,17 +4,20 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class SwarmNodeSpec implements Serializable {
     public static final long serialVersionUID = 1L;
 
@@ -104,31 +107,5 @@ public class SwarmNodeSpec implements Serializable {
     public SwarmNodeSpec withLabels(Map<String, String> labels) {
         this.labels = labels;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "SwarmNodeSpec{" +
-                "name='" + name + '\'' +
-                ", role=" + role +
-                ", availability=" + availability +
-                ", labels=" + labels +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SwarmNodeSpec that = (SwarmNodeSpec) o;
-        return Objects.equals(name, that.name) &&
-                role == that.role &&
-                availability == that.availability &&
-                Objects.equals(labels, that.labels);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, role, availability, labels);
     }
 }

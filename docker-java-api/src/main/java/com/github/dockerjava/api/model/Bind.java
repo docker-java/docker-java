@@ -1,12 +1,14 @@
 package com.github.dockerjava.api.model;
 
+import lombok.EqualsAndHashCode;
+
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * Represents a host path being bind mounted as a {@link Volume} in a Docker container.
  * The Bind can be in read only or read write access mode.
  */
+@EqualsAndHashCode
 public class Bind implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -131,24 +133,6 @@ public class Bind implements Serializable {
         } catch (Exception e) {
             throw new IllegalArgumentException("Error parsing Bind '" + serialized + "'", e);
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Bind bind = (Bind) o;
-        return Objects.equals(path, bind.path) &&
-                Objects.equals(volume, bind.volume) &&
-                accessMode == bind.accessMode &&
-                Objects.equals(noCopy, bind.noCopy) &&
-                secMode == bind.secMode &&
-                propagationMode == bind.propagationMode;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(path, volume, accessMode, noCopy, secMode, propagationMode);
     }
 
     /**

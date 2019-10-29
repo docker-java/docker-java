@@ -3,12 +3,13 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * The specification for containers as used in {@link TaskSpec}
@@ -17,6 +18,8 @@ import java.util.Objects;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class ContainerSpec implements Serializable {
     public static final long serialVersionUID = 1L;
 
@@ -435,90 +438,5 @@ public class ContainerSpec implements Serializable {
     public ContainerSpec withConfigs(List<ContainerSpecConfig> configs) {
         this.configs = configs;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "ContainerSpec{" +
-                "image='" + image + '\'' +
-                ", labels=" + labels +
-                ", command=" + command +
-                ", args=" + args +
-                ", env=" + env +
-                ", dir='" + dir + '\'' +
-                ", user='" + user + '\'' +
-                ", groups='" + groups + '\'' +
-                ", tty=" + tty +
-                ", mounts=" + mounts +
-                ", duration=" + duration +
-                ", stopGracePeriod=" + stopGracePeriod +
-                ", dnsConfig=" + dnsConfig +
-                ", openStdin=" + openStdin +
-                ", readOnly=" + readOnly +
-                ", hosts=" + hosts +
-                ", hostname='" + hostname + '\'' +
-                ", secrets=" + secrets +
-                ", healthCheck=" + healthCheck +
-                ", stopSignal='" + stopSignal + '\'' +
-                ", privileges=" + privileges +
-                ", configs=" + configs +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ContainerSpec that = (ContainerSpec) o;
-        return Objects.equals(image, that.image) &&
-                Objects.equals(labels, that.labels) &&
-                Objects.equals(command, that.command) &&
-                Objects.equals(args, that.args) &&
-                Objects.equals(env, that.env) &&
-                Objects.equals(dir, that.dir) &&
-                Objects.equals(user, that.user) &&
-                Objects.equals(groups, that.groups) &&
-                Objects.equals(tty, that.tty) &&
-                Objects.equals(mounts, that.mounts) &&
-                Objects.equals(duration, that.duration) &&
-                Objects.equals(stopGracePeriod, that.stopGracePeriod) &&
-                Objects.equals(dnsConfig, that.dnsConfig) &&
-                Objects.equals(openStdin, that.openStdin) &&
-                Objects.equals(readOnly, that.readOnly) &&
-                Objects.equals(hosts, that.hosts) &&
-                Objects.equals(hostname, that.hostname) &&
-                Objects.equals(secrets, that.secrets) &&
-                Objects.equals(healthCheck, that.healthCheck) &&
-                Objects.equals(stopSignal, that.stopSignal) &&
-                Objects.equals(privileges, that.privileges) &&
-                Objects.equals(configs, that.configs);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(
-                image,
-                labels,
-                command,
-                args,
-                env,
-                dir,
-                user,
-                groups,
-                tty,
-                mounts,
-                duration,
-                stopGracePeriod,
-                dnsConfig,
-                openStdin,
-                readOnly,
-                hosts,
-                hostname,
-                secrets,
-                healthCheck,
-                stopSignal,
-                privileges,
-                configs
-        );
     }
 }

@@ -2,7 +2,6 @@ package com.github.dockerjava.api.model;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Objects;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -15,9 +14,11 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.EqualsAndHashCode;
 
 @JsonSerialize(using = VolumesFrom.Serializer.class)
 @JsonDeserialize(using = VolumesFrom.Deserializer.class)
+@EqualsAndHashCode
 public class VolumesFrom implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -69,20 +70,6 @@ public class VolumesFrom implements Serializable {
         } catch (Exception e) {
             throw new IllegalArgumentException("Error parsing Bind '" + serialized + "'");
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        VolumesFrom that = (VolumesFrom) o;
-        return Objects.equals(container, that.container) &&
-                accessMode == that.accessMode;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(container, accessMode);
     }
 
     /**

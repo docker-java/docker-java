@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.node.NullNode;
+import lombok.EqualsAndHashCode;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -19,7 +20,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 
 /**
  * A container for port bindings, made available as a {@link Map} via its {@link #getBindings()} method.
@@ -117,6 +117,7 @@ public class Ports implements Serializable {
      * @see Ports#bind(ExposedPort, Binding)
      * @see ExposedPort
      */
+    @EqualsAndHashCode
     public static class Binding {
 
         /**
@@ -255,20 +256,6 @@ public class Ports implements Serializable {
             } else {
                 return hostIp + ":" + hostPortSpec;
             }
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Binding binding = (Binding) o;
-            return Objects.equals(hostIp, binding.hostIp) &&
-                    Objects.equals(hostPortSpec, binding.hostPortSpec);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(hostIp, hostPortSpec);
         }
     }
 

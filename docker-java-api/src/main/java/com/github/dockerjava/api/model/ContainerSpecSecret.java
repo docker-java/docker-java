@@ -3,9 +3,10 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * docker secrets that will be exposed to the service
@@ -14,6 +15,8 @@ import java.util.Objects;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class ContainerSpecSecret implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -51,29 +54,5 @@ public class ContainerSpecSecret implements Serializable {
     public ContainerSpecSecret withSecretName(String secretName) {
         this.secretName = secretName;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "ContainerSpecSecret{" +
-                "file=" + file +
-                ", secretId='" + secretId + '\'' +
-                ", secretName='" + secretName + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ContainerSpecSecret that = (ContainerSpecSecret) o;
-        return Objects.equals(file, that.file) &&
-                Objects.equals(secretId, that.secretId) &&
-                Objects.equals(secretName, that.secretName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(file, secretId, secretName);
     }
 }

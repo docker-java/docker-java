@@ -5,12 +5,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Used as part of 'images/IMAGE/someimage' response.
@@ -19,6 +19,8 @@ import java.util.Objects;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class ContainerConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -427,91 +429,5 @@ public class ContainerConfig implements Serializable {
     public ContainerConfig withWorkingDir(String workingDir) {
         this.workingDir = workingDir;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "ContainerConfig{" +
-                "attachStderr=" + attachStderr +
-                ", attachStdin=" + attachStdin +
-                ", attachStdout=" + attachStdout +
-                ", cmd=" + Arrays.toString(cmd) +
-                ", domainName='" + domainName + '\'' +
-                ", entrypoint=" + Arrays.toString(entrypoint) +
-                ", env=" + Arrays.toString(env) +
-                ", exposedPorts=" + exposedPorts +
-                ", hostName='" + hostName + '\'' +
-                ", image='" + image + '\'' +
-                ", labels=" + labels +
-                ", macAddress='" + macAddress + '\'' +
-                ", networkDisabled=" + networkDisabled +
-                ", onBuild=" + Arrays.toString(onBuild) +
-                ", stdinOpen=" + stdinOpen +
-                ", portSpecs=" + Arrays.toString(portSpecs) +
-                ", stdInOnce=" + stdInOnce +
-                ", tty=" + tty +
-                ", user='" + user + '\'' +
-                ", volumes=" + volumes +
-                ", workingDir='" + workingDir + '\'' +
-                ", healthCheck=" + healthCheck +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ContainerConfig that = (ContainerConfig) o;
-        return Objects.equals(attachStderr, that.attachStderr) &&
-                Objects.equals(attachStdin, that.attachStdin) &&
-                Objects.equals(attachStdout, that.attachStdout) &&
-                Arrays.equals(cmd, that.cmd) &&
-                Objects.equals(domainName, that.domainName) &&
-                Arrays.equals(entrypoint, that.entrypoint) &&
-                Arrays.equals(env, that.env) &&
-                Objects.equals(exposedPorts, that.exposedPorts) &&
-                Objects.equals(hostName, that.hostName) &&
-                Objects.equals(image, that.image) &&
-                Objects.equals(labels, that.labels) &&
-                Objects.equals(macAddress, that.macAddress) &&
-                Objects.equals(networkDisabled, that.networkDisabled) &&
-                Arrays.equals(onBuild, that.onBuild) &&
-                Objects.equals(stdinOpen, that.stdinOpen) &&
-                Arrays.equals(portSpecs, that.portSpecs) &&
-                Objects.equals(stdInOnce, that.stdInOnce) &&
-                Objects.equals(tty, that.tty) &&
-                Objects.equals(user, that.user) &&
-                Objects.equals(volumes, that.volumes) &&
-                Objects.equals(workingDir, that.workingDir) &&
-                Objects.equals(healthCheck, that.healthCheck);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = Objects.hash(
-                attachStderr,
-                attachStdin,
-                attachStdout,
-                domainName,
-                exposedPorts,
-                hostName,
-                image,
-                labels,
-                macAddress,
-                networkDisabled,
-                stdinOpen,
-                stdInOnce,
-                tty,
-                user,
-                volumes,
-                workingDir,
-                healthCheck
-        );
-        result = 31 * result + Arrays.hashCode(cmd);
-        result = 31 * result + Arrays.hashCode(entrypoint);
-        result = 31 * result + Arrays.hashCode(env);
-        result = 31 * result + Arrays.hashCode(onBuild);
-        result = 31 * result + Arrays.hashCode(portSpecs);
-        return result;
     }
 }

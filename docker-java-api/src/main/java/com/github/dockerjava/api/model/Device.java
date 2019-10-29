@@ -5,15 +5,18 @@ import static java.util.Objects.requireNonNull;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.StringTokenizer;
 
 @JsonInclude(Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class Device implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -117,20 +120,5 @@ public class Device implements Serializable {
         }
 
         return true;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Device device = (Device) o;
-        return Objects.equals(cGroupPermissions, device.cGroupPermissions) &&
-                Objects.equals(pathOnHost, device.pathOnHost) &&
-                Objects.equals(pathInContainer, device.pathInContainer);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(cGroupPermissions, pathOnHost, pathInContainer);
     }
 }

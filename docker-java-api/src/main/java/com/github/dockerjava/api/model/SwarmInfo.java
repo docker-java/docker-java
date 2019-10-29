@@ -3,17 +3,20 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @since 1.24
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class SwarmInfo implements Serializable {
     public static final long serialVersionUID = 1L;
 
@@ -213,41 +216,5 @@ public class SwarmInfo implements Serializable {
     public SwarmInfo withClusterInfo(ClusterInfo clusterInfo) {
         this.clusterInfo = clusterInfo;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "SwarmInfo{" +
-                "nodeID='" + nodeID + '\'' +
-                ", nodeAddr='" + nodeAddr + '\'' +
-                ", localNodeState=" + localNodeState +
-                ", controlAvailable=" + controlAvailable +
-                ", error='" + error + '\'' +
-                ", remoteManagers=" + remoteManagers +
-                ", nodes=" + nodes +
-                ", managers=" + managers +
-                ", clusterInfo=" + clusterInfo +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SwarmInfo swarmInfo = (SwarmInfo) o;
-        return Objects.equals(nodeID, swarmInfo.nodeID) &&
-                Objects.equals(nodeAddr, swarmInfo.nodeAddr) &&
-                localNodeState == swarmInfo.localNodeState &&
-                Objects.equals(controlAvailable, swarmInfo.controlAvailable) &&
-                Objects.equals(error, swarmInfo.error) &&
-                Objects.equals(remoteManagers, swarmInfo.remoteManagers) &&
-                Objects.equals(nodes, swarmInfo.nodes) &&
-                Objects.equals(managers, swarmInfo.managers) &&
-                Objects.equals(clusterInfo, swarmInfo.clusterInfo);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(nodeID, nodeAddr, localNodeState, controlAvailable, error, remoteManagers, nodes, managers, clusterInfo);
     }
 }

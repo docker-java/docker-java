@@ -3,12 +3,13 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Types taken form
@@ -19,6 +20,8 @@ import java.util.Objects;
  * @author Kanstantsin Shautsou
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode
+@ToString
 public class ContainerNetwork implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -277,61 +280,6 @@ public class ContainerNetwork implements Serializable {
     public ContainerNetwork withNetworkID(String networkID) {
         this.networkID = networkID;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "ContainerNetwork{" +
-                "ipamConfig=" + ipamConfig +
-                ", links=" + links +
-                ", aliases=" + aliases +
-                ", networkID='" + networkID + '\'' +
-                ", endpointId='" + endpointId + '\'' +
-                ", gateway='" + gateway + '\'' +
-                ", ipAddress='" + ipAddress + '\'' +
-                ", ipPrefixLen=" + ipPrefixLen +
-                ", ipV6Gateway='" + ipV6Gateway + '\'' +
-                ", globalIPv6Address='" + globalIPv6Address + '\'' +
-                ", globalIPv6PrefixLen=" + globalIPv6PrefixLen +
-                ", macAddress='" + macAddress + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ContainerNetwork that = (ContainerNetwork) o;
-        return Objects.equals(ipamConfig, that.ipamConfig) &&
-                Objects.equals(links, that.links) &&
-                Objects.equals(aliases, that.aliases) &&
-                Objects.equals(networkID, that.networkID) &&
-                Objects.equals(endpointId, that.endpointId) &&
-                Objects.equals(gateway, that.gateway) &&
-                Objects.equals(ipAddress, that.ipAddress) &&
-                Objects.equals(ipPrefixLen, that.ipPrefixLen) &&
-                Objects.equals(ipV6Gateway, that.ipV6Gateway) &&
-                Objects.equals(globalIPv6Address, that.globalIPv6Address) &&
-                Objects.equals(globalIPv6PrefixLen, that.globalIPv6PrefixLen) &&
-                Objects.equals(macAddress, that.macAddress);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(
-                ipamConfig,
-                links,
-                aliases,
-                networkID,
-                endpointId,
-                gateway,
-                ipAddress,
-                ipPrefixLen,
-                ipV6Gateway,
-                globalIPv6Address,
-                globalIPv6PrefixLen,
-                macAddress
-        );
     }
 
     /**

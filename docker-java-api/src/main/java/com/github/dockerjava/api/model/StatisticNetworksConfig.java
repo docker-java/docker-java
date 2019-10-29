@@ -2,10 +2,11 @@ package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * Used in {@link Statistics}
@@ -13,6 +14,8 @@ import java.util.Objects;
  * @author Yuting Liu
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode
+@ToString
 public class StatisticNetworksConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -102,39 +105,5 @@ public class StatisticNetworksConfig implements Serializable {
     @CheckForNull
     public Long getTxPackets() {
         return txPackets;
-    }
-
-    @Override
-    public String toString() {
-        return "StatisticNetworksConfig{" +
-                "rxBytes=" + rxBytes +
-                ", rxDropped=" + rxDropped +
-                ", rxErrors=" + rxErrors +
-                ", rxPackets=" + rxPackets +
-                ", txBytes=" + txBytes +
-                ", txDropped=" + txDropped +
-                ", txErrors=" + txErrors +
-                ", txPackets=" + txPackets +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        StatisticNetworksConfig that = (StatisticNetworksConfig) o;
-        return Objects.equals(rxBytes, that.rxBytes) &&
-                Objects.equals(rxDropped, that.rxDropped) &&
-                Objects.equals(rxErrors, that.rxErrors) &&
-                Objects.equals(rxPackets, that.rxPackets) &&
-                Objects.equals(txBytes, that.txBytes) &&
-                Objects.equals(txDropped, that.txDropped) &&
-                Objects.equals(txErrors, that.txErrors) &&
-                Objects.equals(txPackets, that.txPackets);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(rxBytes, rxDropped, rxErrors, rxPackets, txBytes, txDropped, txErrors, txPackets);
     }
 }

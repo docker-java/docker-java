@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Used for `/info`
@@ -19,6 +19,8 @@ import java.util.Objects;
  */
 @JsonInclude(Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode
+@ToString
 public class Info implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -1065,181 +1067,5 @@ public class Info implements Serializable {
     public Info withIsolation(String isolation) {
         this.isolation = isolation;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "Info{" +
-                "architecture='" + architecture + '\'' +
-                ", containers=" + containers +
-                ", containersStopped=" + containersStopped +
-                ", containersPaused=" + containersPaused +
-                ", containersRunning=" + containersRunning +
-                ", cpuCfsPeriod=" + cpuCfsPeriod +
-                ", cpuCfsQuota=" + cpuCfsQuota +
-                ", cpuShares=" + cpuShares +
-                ", cpuSet=" + cpuSet +
-                ", debug=" + debug +
-                ", discoveryBackend='" + discoveryBackend + '\'' +
-                ", dockerRootDir='" + dockerRootDir + '\'' +
-                ", driver='" + driver + '\'' +
-                ", driverStatuses=" + driverStatuses +
-                ", systemStatus=" + systemStatus +
-                ", plugins=" + plugins +
-                ", executionDriver='" + executionDriver + '\'' +
-                ", loggingDriver='" + loggingDriver + '\'' +
-                ", experimentalBuild=" + experimentalBuild +
-                ", httpProxy='" + httpProxy + '\'' +
-                ", httpsProxy='" + httpsProxy + '\'' +
-                ", id='" + id + '\'' +
-                ", ipv4Forwarding=" + ipv4Forwarding +
-                ", bridgeNfIptables=" + bridgeNfIptables +
-                ", bridgeNfIp6tables=" + bridgeNfIp6tables +
-                ", images=" + images +
-                ", indexServerAddress='" + indexServerAddress + '\'' +
-                ", initPath='" + initPath + '\'' +
-                ", initSha1='" + initSha1 + '\'' +
-                ", kernelVersion='" + kernelVersion + '\'' +
-                ", labels=" + Arrays.toString(labels) +
-                ", memoryLimit=" + memoryLimit +
-                ", memTotal=" + memTotal +
-                ", name='" + name + '\'' +
-                ", ncpu=" + ncpu +
-                ", nEventsListener=" + nEventsListener +
-                ", nfd=" + nfd +
-                ", nGoroutines=" + nGoroutines +
-                ", noProxy='" + noProxy + '\'' +
-                ", oomKillDisable=" + oomKillDisable +
-                ", osType='" + osType + '\'' +
-                ", oomScoreAdj=" + oomScoreAdj +
-                ", operatingSystem='" + operatingSystem + '\'' +
-                ", registryConfig=" + registryConfig +
-                ", sockets=" + Arrays.toString(sockets) +
-                ", swapLimit=" + swapLimit +
-                ", systemTime='" + systemTime + '\'' +
-                ", serverVersion='" + serverVersion + '\'' +
-                ", clusterStore='" + clusterStore + '\'' +
-                ", clusterAdvertise='" + clusterAdvertise + '\'' +
-                ", swarm=" + swarm +
-                ", isolation='" + isolation + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Info info = (Info) o;
-        return Objects.equals(architecture, info.architecture) &&
-                Objects.equals(containers, info.containers) &&
-                Objects.equals(containersStopped, info.containersStopped) &&
-                Objects.equals(containersPaused, info.containersPaused) &&
-                Objects.equals(containersRunning, info.containersRunning) &&
-                Objects.equals(cpuCfsPeriod, info.cpuCfsPeriod) &&
-                Objects.equals(cpuCfsQuota, info.cpuCfsQuota) &&
-                Objects.equals(cpuShares, info.cpuShares) &&
-                Objects.equals(cpuSet, info.cpuSet) &&
-                Objects.equals(debug, info.debug) &&
-                Objects.equals(discoveryBackend, info.discoveryBackend) &&
-                Objects.equals(dockerRootDir, info.dockerRootDir) &&
-                Objects.equals(driver, info.driver) &&
-                Objects.equals(driverStatuses, info.driverStatuses) &&
-                Objects.equals(systemStatus, info.systemStatus) &&
-                Objects.equals(plugins, info.plugins) &&
-                Objects.equals(executionDriver, info.executionDriver) &&
-                Objects.equals(loggingDriver, info.loggingDriver) &&
-                Objects.equals(experimentalBuild, info.experimentalBuild) &&
-                Objects.equals(httpProxy, info.httpProxy) &&
-                Objects.equals(httpsProxy, info.httpsProxy) &&
-                Objects.equals(id, info.id) &&
-                Objects.equals(ipv4Forwarding, info.ipv4Forwarding) &&
-                Objects.equals(bridgeNfIptables, info.bridgeNfIptables) &&
-                Objects.equals(bridgeNfIp6tables, info.bridgeNfIp6tables) &&
-                Objects.equals(images, info.images) &&
-                Objects.equals(indexServerAddress, info.indexServerAddress) &&
-                Objects.equals(initPath, info.initPath) &&
-                Objects.equals(initSha1, info.initSha1) &&
-                Objects.equals(kernelVersion, info.kernelVersion) &&
-                Arrays.equals(labels, info.labels) &&
-                Objects.equals(memoryLimit, info.memoryLimit) &&
-                Objects.equals(memTotal, info.memTotal) &&
-                Objects.equals(name, info.name) &&
-                Objects.equals(ncpu, info.ncpu) &&
-                Objects.equals(nEventsListener, info.nEventsListener) &&
-                Objects.equals(nfd, info.nfd) &&
-                Objects.equals(nGoroutines, info.nGoroutines) &&
-                Objects.equals(noProxy, info.noProxy) &&
-                Objects.equals(oomKillDisable, info.oomKillDisable) &&
-                Objects.equals(osType, info.osType) &&
-                Objects.equals(oomScoreAdj, info.oomScoreAdj) &&
-                Objects.equals(operatingSystem, info.operatingSystem) &&
-                Objects.equals(registryConfig, info.registryConfig) &&
-                Arrays.equals(sockets, info.sockets) &&
-                Objects.equals(swapLimit, info.swapLimit) &&
-                Objects.equals(systemTime, info.systemTime) &&
-                Objects.equals(serverVersion, info.serverVersion) &&
-                Objects.equals(clusterStore, info.clusterStore) &&
-                Objects.equals(clusterAdvertise, info.clusterAdvertise) &&
-                Objects.equals(swarm, info.swarm) &&
-                Objects.equals(isolation, info.isolation);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = Objects.hash(
-                architecture,
-                containers,
-                containersStopped,
-                containersPaused,
-                containersRunning,
-                cpuCfsPeriod,
-                cpuCfsQuota,
-                cpuShares,
-                cpuSet,
-                debug,
-                discoveryBackend,
-                dockerRootDir,
-                driver,
-                driverStatuses,
-                systemStatus,
-                plugins,
-                executionDriver,
-                loggingDriver,
-                experimentalBuild,
-                httpProxy,
-                httpsProxy,
-                id,
-                ipv4Forwarding,
-                bridgeNfIptables,
-                bridgeNfIp6tables,
-                images,
-                indexServerAddress,
-                initPath,
-                initSha1,
-                kernelVersion,
-                memoryLimit,
-                memTotal,
-                name,
-                ncpu,
-                nEventsListener,
-                nfd,
-                nGoroutines,
-                noProxy,
-                oomKillDisable,
-                osType,
-                oomScoreAdj,
-                operatingSystem,
-                registryConfig,
-                swapLimit,
-                systemTime,
-                serverVersion,
-                clusterStore,
-                clusterAdvertise,
-                swarm,
-                isolation
-        );
-        result = 31 * result + Arrays.hashCode(labels);
-        result = 31 * result + Arrays.hashCode(sockets);
-        return result;
     }
 }

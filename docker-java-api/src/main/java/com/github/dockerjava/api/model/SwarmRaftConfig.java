@@ -3,16 +3,19 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class SwarmRaftConfig implements Serializable {
 
     public static final long serialVersionUID = 1L;
@@ -103,31 +106,5 @@ public class SwarmRaftConfig implements Serializable {
     public SwarmRaftConfig withElectionTick(int electionTick) {
         this.electionTick = electionTick;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "SwarmRaftConfig{" +
-                "logEntriesForSlowFollowers=" + logEntriesForSlowFollowers +
-                ", heartbeatTick=" + heartbeatTick +
-                ", snapshotInterval=" + snapshotInterval +
-                ", electionTick=" + electionTick +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SwarmRaftConfig that = (SwarmRaftConfig) o;
-        return logEntriesForSlowFollowers == that.logEntriesForSlowFollowers &&
-                heartbeatTick == that.heartbeatTick &&
-                snapshotInterval == that.snapshotInterval &&
-                electionTick == that.electionTick;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(logEntriesForSlowFollowers, heartbeatTick, snapshotInterval, electionTick);
     }
 }

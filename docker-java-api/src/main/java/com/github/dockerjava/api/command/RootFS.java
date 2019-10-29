@@ -2,10 +2,11 @@ package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Part of {@link InspectImageResponse}
@@ -13,6 +14,8 @@ import java.util.Objects;
  * @author Dmitry Tretyakov
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode
+@ToString
 public class RootFS {
 
     @JsonProperty("Type")
@@ -51,27 +54,5 @@ public class RootFS {
     public RootFS withLayers(List<String> layers) {
         this.layers = layers;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "RootFS{" +
-                "type='" + type + '\'' +
-                ", layers=" + layers +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        RootFS rootFS = (RootFS) o;
-        return Objects.equals(type, rootFS.type) &&
-                Objects.equals(layers, rootFS.layers);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(type, layers);
     }
 }

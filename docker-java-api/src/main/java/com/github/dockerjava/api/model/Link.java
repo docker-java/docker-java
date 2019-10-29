@@ -1,13 +1,15 @@
 package com.github.dockerjava.api.model;
 
+import lombok.EqualsAndHashCode;
+
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * Represents a network link between two Docker containers. The container with the name {@link #getName()} is made available in the target
  * container with the aliased name {@link #getAlias()}. This involves creating an entry in <code>/etc/hosts</code> and some environment
  * variables in the target container as well as creating a network bridge between both containers.
  */
+@EqualsAndHashCode
 public class Link implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -67,20 +69,6 @@ public class Link implements Serializable {
         } catch (final Exception e) {
             throw new IllegalArgumentException("Error parsing Link '" + serialized + "'");
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Link link = (Link) o;
-        return Objects.equals(name, link.name) &&
-                Objects.equals(alias, link.alias);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, alias);
     }
 
     /**

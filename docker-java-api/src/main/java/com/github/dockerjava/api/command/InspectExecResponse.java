@@ -5,10 +5,14 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.model.NetworkSettings;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode
+@ToString
 public class InspectExecResponse {
     @JsonProperty("ID")
     private String id;
@@ -148,25 +152,9 @@ public class InspectExecResponse {
         return pid;
     }
 
-    @Override
-    public String toString() {
-        return "InspectExecResponse{" +
-                "id='" + id + '\'' +
-                ", openStdin=" + openStdin +
-                ", openStderr=" + openStderr +
-                ", openStdout=" + openStdout +
-                ", running=" + running +
-                ", canRemove=" + canRemove +
-                ", exitCode=" + exitCode +
-                ", processConfig=" + processConfig +
-                ", container=" + container +
-                ", containerID='" + containerID + '\'' +
-                ", detachKeys='" + detachKeys + '\'' +
-                ", pid=" + pid +
-                '}';
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @EqualsAndHashCode
+    @ToString
     public class ProcessConfig {
 
         @JsonProperty("arguments")
@@ -202,17 +190,6 @@ public class InspectExecResponse {
 
         public String getUser() {
             return user;
-        }
-
-        @Override
-        public String toString() {
-            return "ProcessConfig{" +
-                    "arguments=" + arguments +
-                    ", entryPoint='" + entryPoint + '\'' +
-                    ", privileged=" + privileged +
-                    ", tty=" + tty +
-                    ", user='" + user + '\'' +
-                    '}';
         }
     }
 

@@ -3,11 +3,12 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
 
 
 /**
@@ -17,6 +18,8 @@ import java.util.Objects;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class SwarmNode implements Serializable {
     public static final long serialVersionUID = 1L;
 
@@ -194,39 +197,5 @@ public class SwarmNode implements Serializable {
     public SwarmNode withManagerStatus(SwarmNodeManagerStatus managerStatus) {
         this.managerStatus = managerStatus;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "SwarmNode{" +
-                "id='" + id + '\'' +
-                ", version=" + version +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", spec=" + spec +
-                ", description=" + description +
-                ", status=" + status +
-                ", managerStatus=" + managerStatus +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SwarmNode swarmNode = (SwarmNode) o;
-        return Objects.equals(id, swarmNode.id) &&
-                Objects.equals(version, swarmNode.version) &&
-                Objects.equals(createdAt, swarmNode.createdAt) &&
-                Objects.equals(updatedAt, swarmNode.updatedAt) &&
-                Objects.equals(spec, swarmNode.spec) &&
-                Objects.equals(description, swarmNode.description) &&
-                Objects.equals(status, swarmNode.status) &&
-                Objects.equals(managerStatus, swarmNode.managerStatus);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, version, createdAt, updatedAt, spec, description, status, managerStatus);
     }
 }

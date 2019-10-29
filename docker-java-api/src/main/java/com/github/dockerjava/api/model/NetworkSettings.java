@@ -5,6 +5,8 @@ package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -15,6 +17,8 @@ import java.util.Map;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode
+@ToString
 public class NetworkSettings implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -197,30 +201,5 @@ public class NetworkSettings implements Serializable {
      */
     public Integer getGlobalIPv6PrefixLen() {
         return globalIPv6PrefixLen;
-    }
-
-    @Override
-    public String toString() {
-        return "NetworkSettings{" +
-                "bridge='" + bridge + '\'' +
-                ", sandboxId='" + sandboxId + '\'' +
-                ", hairpinMode=" + hairpinMode +
-                ", linkLocalIPv6Address='" + linkLocalIPv6Address + '\'' +
-                ", linkLocalIPv6PrefixLen=" + linkLocalIPv6PrefixLen +
-                ", ports=" + ports +
-                ", sandboxKey='" + sandboxKey + '\'' +
-                ", secondaryIPAddresses=" + secondaryIPAddresses +
-                ", secondaryIPv6Addresses=" + secondaryIPv6Addresses +
-                ", endpointID='" + endpointID + '\'' +
-                ", gateway='" + gateway + '\'' +
-                ", portMapping=" + portMapping +
-                ", globalIPv6Address='" + globalIPv6Address + '\'' +
-                ", globalIPv6PrefixLen=" + globalIPv6PrefixLen +
-                ", ipAddress='" + ipAddress + '\'' +
-                ", ipPrefixLen=" + ipPrefixLen +
-                ", ipV6Gateway='" + ipV6Gateway + '\'' +
-                ", macAddress='" + macAddress + '\'' +
-                ", networks=" + networks +
-                '}';
     }
 }

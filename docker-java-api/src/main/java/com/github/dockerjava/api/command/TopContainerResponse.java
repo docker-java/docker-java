@@ -2,6 +2,8 @@ package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  *
@@ -9,6 +11,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode
+@ToString
 public class TopContainerResponse {
 
     @JsonProperty("Titles")
@@ -23,23 +27,5 @@ public class TopContainerResponse {
 
     public String[][] getProcesses() {
         return processes;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder buffer = new StringBuilder("TopContainerResponse{");
-        buffer.append("titles=");
-        buffer.append(String.join("; ", titles));
-        buffer.append(", processes=");
-        buffer.append("[");
-        for (String[] fields : processes) {
-            buffer.append("[")
-                    .append(String.join("; ", fields))
-                    .append("]");
-        }
-        buffer.append("]");
-        buffer.append("}");
-
-        return buffer.toString();
     }
 }

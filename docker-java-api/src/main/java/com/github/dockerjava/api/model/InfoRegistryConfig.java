@@ -2,17 +2,20 @@ package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @since ~{@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_20}
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode
+@ToString
 public final class InfoRegistryConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -76,34 +79,12 @@ public final class InfoRegistryConfig implements Serializable {
         return this;
     }
 
-    @Override
-    public String toString() {
-        return "InfoRegistryConfig{" +
-                "indexConfigs=" + indexConfigs +
-                ", insecureRegistryCIDRs=" + insecureRegistryCIDRs +
-                ", mirrors=" + mirrors +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        InfoRegistryConfig that = (InfoRegistryConfig) o;
-        return Objects.equals(indexConfigs, that.indexConfigs) &&
-                Objects.equals(insecureRegistryCIDRs, that.insecureRegistryCIDRs) &&
-                Objects.equals(mirrors, that.mirrors);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(indexConfigs, insecureRegistryCIDRs, mirrors);
-    }
-
     /**
      * @since ~{@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_20}
      */
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @EqualsAndHashCode
+    @ToString
     public static final class IndexConfig {
         @JsonProperty("Mirrors")
         private List<String> mirrors;
@@ -179,32 +160,6 @@ public final class InfoRegistryConfig implements Serializable {
         public IndexConfig withSecure(Boolean secure) {
             this.secure = secure;
             return this;
-        }
-
-        @Override
-        public String toString() {
-            return "IndexConfig{" +
-                    "mirrors=" + mirrors +
-                    ", name='" + name + '\'' +
-                    ", official=" + official +
-                    ", secure=" + secure +
-                    '}';
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            IndexConfig that = (IndexConfig) o;
-            return Objects.equals(mirrors, that.mirrors) &&
-                    Objects.equals(name, that.name) &&
-                    Objects.equals(official, that.official) &&
-                    Objects.equals(secure, that.secure);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(mirrors, name, official, secure);
         }
     }
 }

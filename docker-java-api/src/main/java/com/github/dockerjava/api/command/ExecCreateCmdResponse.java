@@ -2,8 +2,12 @@ package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode
+@ToString
 public class ExecCreateCmdResponse {
 
     @JsonProperty("Id")
@@ -11,12 +15,5 @@ public class ExecCreateCmdResponse {
 
     public String getId() {
         return id;
-    }
-
-    @Override
-    public String toString() {
-        return "ExecCreateCmdResponse{" +
-                "id='" + id + '\'' +
-                '}';
     }
 }

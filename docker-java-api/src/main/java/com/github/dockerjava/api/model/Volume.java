@@ -2,10 +2,10 @@ package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
 
 import javax.annotation.Nonnull;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * Represents a bind mounted volume in a Docker container.
@@ -19,6 +19,7 @@ import java.util.Objects;
  *
  * @see Bind
  */
+@EqualsAndHashCode
 public class Volume implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -51,18 +52,5 @@ public class Volume implements Serializable {
     @Override
     public String toString() {
         return getPath();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Volume volume = (Volume) o;
-        return Objects.equals(path, volume.path);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(path);
     }
 }

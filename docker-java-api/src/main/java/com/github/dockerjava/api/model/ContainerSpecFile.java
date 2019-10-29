@@ -3,9 +3,10 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * File represents a specific target that is backed by a file.
@@ -14,6 +15,8 @@ import java.util.Objects;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class ContainerSpecFile implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -69,31 +72,5 @@ public class ContainerSpecFile implements Serializable {
     public ContainerSpecFile withMode(Long mode) {
         this.mode = mode;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "ContainerSpecFile{" +
-                "name='" + name + '\'' +
-                ", uid='" + uid + '\'' +
-                ", gid='" + gid + '\'' +
-                ", mode=" + mode +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ContainerSpecFile that = (ContainerSpecFile) o;
-        return Objects.equals(name, that.name) &&
-                Objects.equals(uid, that.uid) &&
-                Objects.equals(gid, that.gid) &&
-                Objects.equals(mode, that.mode);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, uid, gid, mode);
     }
 }

@@ -1,15 +1,18 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vangie Du (duwan@live.com)
  */
+@EqualsAndHashCode
+@ToString
 public class Ulimit implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -42,20 +45,5 @@ public class Ulimit implements Serializable {
 
     public Integer getHard() {
         return hard;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Ulimit ulimit = (Ulimit) o;
-        return Objects.equals(name, ulimit.name) &&
-                Objects.equals(soft, ulimit.soft) &&
-                Objects.equals(hard, ulimit.hard);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, soft, hard);
     }
 }

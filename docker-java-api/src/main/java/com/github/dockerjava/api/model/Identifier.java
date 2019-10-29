@@ -1,11 +1,16 @@
 package com.github.dockerjava.api.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import java.io.Serializable;
 import java.util.Optional;
 
 /**
  * @author magnayn
  */
+@EqualsAndHashCode
+@ToString
 public class Identifier implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -45,13 +50,5 @@ public class Identifier implements Serializable {
         }
 
         return new Identifier(new Repository(parts[0] + "/" + rhs[0]), rhs[1]);
-    }
-
-    @Override
-    public String toString() {
-        return "Identifier{" +
-                "repository=" + repository +
-                ", tag=" + tag +
-                '}';
     }
 }

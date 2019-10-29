@@ -1,9 +1,10 @@
 package com.github.dockerjava.api.model;
 
 import com.github.dockerjava.api.model.Ports.Binding;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * In a {@link PortBinding}, a network socket on the Docker host, expressed as a {@link Binding}, is bound to an {@link ExposedPort} of a
@@ -14,6 +15,8 @@ import java.util.Objects;
  * existing port bindings from a container configuration in {@link NetworkSettings#getPorts()} and {@link HostConfig#getPortBindings()}. In
  * that context, a <code>Map&lt;ExposedPort, Binding[]&gt;</code> is used.</i>
  */
+@EqualsAndHashCode
+@ToString
 public class PortBinding implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -57,19 +60,5 @@ public class PortBinding implements Serializable {
 
     private static PortBinding createFromSubstrings(String binding, String exposedPort) throws IllegalArgumentException {
         return new PortBinding(Binding.parse(binding), ExposedPort.parse(exposedPort));
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PortBinding that = (PortBinding) o;
-        return Objects.equals(binding, that.binding) &&
-                Objects.equals(exposedPort, that.exposedPort);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(binding, exposedPort);
     }
 }

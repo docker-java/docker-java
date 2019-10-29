@@ -3,9 +3,10 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * SELinux labels of the container
@@ -14,6 +15,8 @@ import java.util.Objects;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class ContainerSpecPrivilegesSELinuxContext implements Serializable {
     private static final long serialVersionUID = 1L;
     @JsonProperty("Disable")
@@ -74,33 +77,5 @@ public class ContainerSpecPrivilegesSELinuxContext implements Serializable {
     public ContainerSpecPrivilegesSELinuxContext withLevel(String level) {
         this.level = level;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "ContainerSpecPrivilegesSELinuxContext{" +
-                "disable=" + disable +
-                ", user='" + user + '\'' +
-                ", role='" + role + '\'' +
-                ", type='" + type + '\'' +
-                ", level='" + level + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ContainerSpecPrivilegesSELinuxContext that = (ContainerSpecPrivilegesSELinuxContext) o;
-        return Objects.equals(disable, that.disable) &&
-                Objects.equals(user, that.user) &&
-                Objects.equals(role, that.role) &&
-                Objects.equals(type, that.type) &&
-                Objects.equals(level, that.level);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(disable, user, role, type, level);
     }
 }

@@ -1,15 +1,18 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
+@EqualsAndHashCode
+@ToString
 public class ServiceUpdateStatus implements Serializable {
     public static final long serialVersionUID = 1L;
 
@@ -99,31 +102,5 @@ public class ServiceUpdateStatus implements Serializable {
     public ServiceUpdateStatus withMessage(String message) {
         this.message = message;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "ServiceUpdateStatus{" +
-                "state=" + state +
-                ", startedAt=" + startedAt +
-                ", completedAt=" + completedAt +
-                ", message='" + message + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ServiceUpdateStatus that = (ServiceUpdateStatus) o;
-        return state == that.state &&
-                Objects.equals(startedAt, that.startedAt) &&
-                Objects.equals(completedAt, that.completedAt) &&
-                Objects.equals(message, that.message);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(state, startedAt, completedAt, message);
     }
 }

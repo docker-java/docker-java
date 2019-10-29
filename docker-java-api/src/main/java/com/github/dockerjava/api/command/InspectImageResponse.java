@@ -3,10 +3,11 @@ package com.github.dockerjava.api.command;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.model.ContainerConfig;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.util.List;
-import java.util.Objects;
 
 /**
  *
@@ -14,6 +15,8 @@ import java.util.Objects;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode
+@ToString
 public class InspectImageResponse {
 
     @JsonProperty("Architecture")
@@ -368,78 +371,5 @@ public class InspectImageResponse {
     public InspectImageResponse withRootFS(RootFS rootFS) {
         this.rootFS = rootFS;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "InspectImageResponse{" +
-                "arch='" + arch + '\'' +
-                ", author='" + author + '\'' +
-                ", comment='" + comment + '\'' +
-                ", config=" + config +
-                ", container='" + container + '\'' +
-                ", containerConfig=" + containerConfig +
-                ", created='" + created + '\'' +
-                ", dockerVersion='" + dockerVersion + '\'' +
-                ", id='" + id + '\'' +
-                ", os='" + os + '\'' +
-                ", osVersion='" + osVersion + '\'' +
-                ", parent='" + parent + '\'' +
-                ", size=" + size +
-                ", repoTags=" + repoTags +
-                ", repoDigests=" + repoDigests +
-                ", virtualSize=" + virtualSize +
-                ", graphDriver=" + graphDriver +
-                ", rootFS=" + rootFS +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        InspectImageResponse that = (InspectImageResponse) o;
-        return Objects.equals(arch, that.arch) &&
-                Objects.equals(author, that.author) &&
-                Objects.equals(comment, that.comment) &&
-                Objects.equals(config, that.config) &&
-                Objects.equals(container, that.container) &&
-                Objects.equals(containerConfig, that.containerConfig) &&
-                Objects.equals(created, that.created) &&
-                Objects.equals(dockerVersion, that.dockerVersion) &&
-                Objects.equals(id, that.id) &&
-                Objects.equals(os, that.os) &&
-                Objects.equals(osVersion, that.osVersion) &&
-                Objects.equals(parent, that.parent) &&
-                Objects.equals(size, that.size) &&
-                Objects.equals(repoTags, that.repoTags) &&
-                Objects.equals(repoDigests, that.repoDigests) &&
-                Objects.equals(virtualSize, that.virtualSize) &&
-                Objects.equals(graphDriver, that.graphDriver) &&
-                Objects.equals(rootFS, that.rootFS);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(
-                arch,
-                author,
-                comment,
-                config,
-                container,
-                containerConfig,
-                created,
-                dockerVersion,
-                id,
-                os,
-                osVersion,
-                parent,
-                size,
-                repoTags,
-                repoDigests,
-                virtualSize,
-                graphDriver,
-                rootFS
-        );
     }
 }

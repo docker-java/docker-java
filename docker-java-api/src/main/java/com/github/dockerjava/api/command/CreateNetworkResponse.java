@@ -2,10 +2,12 @@ package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.Arrays;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode
+@ToString
 public class CreateNetworkResponse {
 
     @JsonProperty("Id")
@@ -28,13 +30,5 @@ public class CreateNetworkResponse {
 
     public void setWarnings(String[] warnings) {
         this.warnings = warnings;
-    }
-
-    @Override
-    public String toString() {
-        return "CreateNetworkResponse{" +
-                "id='" + id + '\'' +
-                ", warnings=" + Arrays.toString(warnings) +
-                '}';
     }
 }

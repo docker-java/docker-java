@@ -4,11 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
 
 /**
  * Used for Listing services.
@@ -17,6 +18,8 @@ import java.util.Objects;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class Service implements Serializable {
     public static final long serialVersionUID = 1L;
 
@@ -172,37 +175,5 @@ public class Service implements Serializable {
     public Service withVersion(ResourceVersion version) {
         this.version = version;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "Service{" +
-                "id='" + id + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", spec=" + spec +
-                ", endpoint=" + endpoint +
-                ", updateStatus=" + updateStatus +
-                ", version=" + version +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Service service = (Service) o;
-        return Objects.equals(id, service.id) &&
-                Objects.equals(createdAt, service.createdAt) &&
-                Objects.equals(updatedAt, service.updatedAt) &&
-                Objects.equals(spec, service.spec) &&
-                Objects.equals(endpoint, service.endpoint) &&
-                Objects.equals(updateStatus, service.updateStatus) &&
-                Objects.equals(version, service.version);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, createdAt, updatedAt, spec, endpoint, updateStatus, version);
     }
 }

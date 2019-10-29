@@ -2,14 +2,17 @@ package com.github.dockerjava.api.model;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
+@EqualsAndHashCode
+@ToString
 public class SwarmNodePlatform implements Serializable {
     public static final long serialVersionUID = 1L;
 
@@ -55,27 +58,5 @@ public class SwarmNodePlatform implements Serializable {
     public SwarmNodePlatform withOs(String os) {
         this.os = os;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "SwarmNodePlatform{" +
-                "architecture='" + architecture + '\'' +
-                ", os='" + os + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SwarmNodePlatform that = (SwarmNodePlatform) o;
-        return Objects.equals(architecture, that.architecture) &&
-                Objects.equals(os, that.os);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(architecture, os);
     }
 }

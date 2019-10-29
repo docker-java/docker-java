@@ -4,9 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 /**
  *
@@ -15,6 +16,8 @@ import java.util.Arrays;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class Image implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -58,17 +61,5 @@ public class Image implements Serializable {
 
     public Long getVirtualSize() {
         return virtualSize;
-    }
-
-    @Override
-    public String toString() {
-        return "Image{" +
-                "created=" + created +
-                ", id='" + id + '\'' +
-                ", parentId='" + parentId + '\'' +
-                ", repoTags=" + Arrays.toString(repoTags) +
-                ", size=" + size +
-                ", virtualSize=" + virtualSize +
-                '}';
     }
 }

@@ -3,9 +3,10 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * docker configs that will be exposed to the service
@@ -14,6 +15,8 @@ import java.util.Objects;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class ContainerSpecConfig implements Serializable {
     private static final long serialVersionUID = 1L;
     @JsonProperty("File")
@@ -50,29 +53,5 @@ public class ContainerSpecConfig implements Serializable {
     public ContainerSpecConfig withConfigName(String configName) {
         this.configName = configName;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "ContainerSpecConfig{" +
-                "file=" + file +
-                ", configID='" + configID + '\'' +
-                ", configName='" + configName + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ContainerSpecConfig that = (ContainerSpecConfig) o;
-        return Objects.equals(file, that.file) &&
-                Objects.equals(configID, that.configID) &&
-                Objects.equals(configName, that.configName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(file, configID, configName);
     }
 }

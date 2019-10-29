@@ -1,14 +1,17 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
+@EqualsAndHashCode
+@ToString
 public class UpdateConfig implements Serializable {
     public static final long serialVersionUID = 1L;
 
@@ -132,35 +135,5 @@ public class UpdateConfig implements Serializable {
     public UpdateConfig withOrder(UpdateOrder order) {
         this.order = order;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "UpdateConfig{" +
-                "parallelism=" + parallelism +
-                ", delay=" + delay +
-                ", failureAction=" + failureAction +
-                ", maxFailureRatio=" + maxFailureRatio +
-                ", monitor=" + monitor +
-                ", order=" + order +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UpdateConfig that = (UpdateConfig) o;
-        return Objects.equals(parallelism, that.parallelism) &&
-                Objects.equals(delay, that.delay) &&
-                failureAction == that.failureAction &&
-                Objects.equals(maxFailureRatio, that.maxFailureRatio) &&
-                Objects.equals(monitor, that.monitor) &&
-                order == that.order;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(parallelism, delay, failureAction, maxFailureRatio, monitor, order);
     }
 }

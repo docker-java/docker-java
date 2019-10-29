@@ -3,10 +3,11 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Specification for DNS related configurations in resolver configuration file (&#x60;resolv.conf&#x60;).
@@ -15,6 +16,8 @@ import java.util.Objects;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class ContainerDNSConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -50,30 +53,5 @@ public class ContainerDNSConfig implements Serializable {
     public ContainerDNSConfig withOptions(List<String> options) {
         this.options = options;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "ContainerDNSConfig{" +
-                "nameservers=" + nameservers +
-                ", search=" + search +
-                ", options=" + options +
-                '}';
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ContainerDNSConfig that = (ContainerDNSConfig) o;
-        return Objects.equals(nameservers, that.nameservers) &&
-                Objects.equals(search, that.search) &&
-                Objects.equals(options, that.options);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(nameservers, search, options);
     }
 }

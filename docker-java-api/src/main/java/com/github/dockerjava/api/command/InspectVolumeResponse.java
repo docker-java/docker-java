@@ -2,12 +2,16 @@ package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  *
  * @author Marcus Linke
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode
+@ToString
 public class InspectVolumeResponse {
 
     @JsonProperty("Name")
@@ -29,14 +33,5 @@ public class InspectVolumeResponse {
 
     public String getMountpoint() {
         return mountpoint;
-    }
-
-    @Override
-    public String toString() {
-        return "InspectVolumeResponse{" +
-                "name='" + name + '\'' +
-                ", driver='" + driver + '\'' +
-                ", mountpoint='" + mountpoint + '\'' +
-                '}';
     }
 }

@@ -3,6 +3,8 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,6 +14,8 @@ import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class Network implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -92,24 +96,9 @@ public class Network implements Serializable {
         return labels;
     }
 
-    @Override
-    public String toString() {
-        return "Network{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", scope='" + scope + '\'' +
-                ", driver='" + driver + '\'' +
-                ", enableIPv6=" + enableIPv6 +
-                ", internal=" + internal +
-                ", ipam=" + ipam +
-                ", containers=" + containers +
-                ", options=" + options +
-                ", attachable=" + attachable +
-                ", labels=" + labels +
-                '}';
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @EqualsAndHashCode
+    @ToString
     public static class ContainerNetworkConfig {
 
         @JsonProperty("EndpointID")
@@ -139,19 +128,11 @@ public class Network implements Serializable {
         public String getIpv6Address() {
             return ipv6Address;
         }
-
-        @Override
-        public String toString() {
-            return "ContainerNetworkConfig{" +
-                    "endpointId='" + endpointId + '\'' +
-                    ", macAddress='" + macAddress + '\'' +
-                    ", ipv4Address='" + ipv4Address + '\'' +
-                    ", ipv6Address='" + ipv6Address + '\'' +
-                    '}';
-        }
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @EqualsAndHashCode
+    @ToString
     public static class Ipam {
 
         @JsonProperty("Driver")
@@ -188,15 +169,6 @@ public class Network implements Serializable {
         public Ipam withDriver(String driver) {
             this.driver = driver;
             return this;
-        }
-
-        @Override
-        public String toString() {
-            return "Ipam{" +
-                    "driver='" + driver + '\'' +
-                    ", config=" + config +
-                    ", options=" + options +
-                    '}';
         }
 
         @JsonIgnoreProperties(ignoreUnknown = true)
