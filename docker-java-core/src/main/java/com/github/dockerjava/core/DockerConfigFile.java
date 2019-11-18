@@ -6,7 +6,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -15,6 +14,7 @@ import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -204,7 +204,7 @@ public class DockerConfigFile {
             return;
         }
 
-        String str = new String(Base64.decodeBase64(config.getAuth()), StandardCharsets.UTF_8);
+        String str = new String(Base64.getDecoder().decode(config.getAuth()), StandardCharsets.UTF_8);
         String[] parts = str.split(":", 2);
         if (parts.length != 2) {
             throw new IOException("Invalid auth configuration file");
