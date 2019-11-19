@@ -5,18 +5,20 @@ import java.util.Map;
 
 import javax.annotation.CheckForNull;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Representation of a Docker statistics.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class Statistics implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -100,10 +102,5 @@ public class Statistics implements Serializable {
 
     public PidsStatsConfig getPidsStats() {
         return pidsStats;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
     }
 }

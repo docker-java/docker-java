@@ -1,9 +1,9 @@
 package com.github.dockerjava.api.command;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  *
@@ -11,6 +11,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode
+@ToString
 public class CreateContainerResponse {
 
     @JsonProperty("Id")
@@ -33,10 +35,5 @@ public class CreateContainerResponse {
 
     public void setWarnings(String[] warnings) {
         this.warnings = warnings;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
     }
 }

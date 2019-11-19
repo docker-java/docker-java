@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -19,6 +16,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.node.NullNode;
+import lombok.EqualsAndHashCode;
 
 /**
  * Represents a bind mounted volume in a Docker container.
@@ -29,6 +27,7 @@ import com.fasterxml.jackson.databind.node.NullNode;
 @JsonDeserialize(using = VolumeRW.Deserializer.class)
 @JsonSerialize(using = VolumeRW.Serializer.class)
 @Deprecated
+@EqualsAndHashCode
 public class VolumeRW implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -62,22 +61,6 @@ public class VolumeRW implements Serializable {
     @Override
     public String toString() {
         return getVolume() + ":" + getAccessMode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof VolumeRW) {
-            VolumeRW other = (VolumeRW) obj;
-            return new EqualsBuilder().append(getVolume(), other.getVolume()).append(accessMode, other.getAccessMode())
-                    .isEquals();
-        } else {
-            return super.equals(obj);
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(getVolume()).append(getAccessMode()).toHashCode();
     }
 
     public static class Serializer extends JsonSerializer<VolumeRW> {

@@ -1,10 +1,8 @@
 package com.github.dockerjava.api.model;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 import com.github.dockerjava.api.model.Ports.Binding;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -17,6 +15,8 @@ import java.io.Serializable;
  * existing port bindings from a container configuration in {@link NetworkSettings#getPorts()} and {@link HostConfig#getPortBindings()}. In
  * that context, a <code>Map&lt;ExposedPort, Binding[]&gt;</code> is used.</i>
  */
+@EqualsAndHashCode
+@ToString
 public class PortBinding implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -39,7 +39,7 @@ public class PortBinding implements Serializable {
 
     public static PortBinding parse(String serialized) throws IllegalArgumentException {
         try {
-            String[] parts = StringUtils.splitByWholeSeparator(serialized, ":");
+            String[] parts = serialized.split(":");
             switch (parts.length) {
                 case 3:
                     // 127.0.0.1:80:8080/tcp
@@ -61,21 +61,4 @@ public class PortBinding implements Serializable {
     private static PortBinding createFromSubstrings(String binding, String exposedPort) throws IllegalArgumentException {
         return new PortBinding(Binding.parse(binding), ExposedPort.parse(exposedPort));
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof PortBinding) {
-            PortBinding other = (PortBinding) obj;
-            return new EqualsBuilder().append(binding, other.getBinding()).append(exposedPort, other.getExposedPort())
-                    .isEquals();
-        } else {
-            return super.equals(obj);
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(binding).append(exposedPort).toHashCode();
-    }
-
 }

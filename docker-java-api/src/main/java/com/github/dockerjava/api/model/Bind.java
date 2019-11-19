@@ -1,7 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
@@ -9,6 +8,7 @@ import java.io.Serializable;
  * Represents a host path being bind mounted as a {@link Volume} in a Docker container.
  * The Bind can be in read only or read write access mode.
  */
+@EqualsAndHashCode
 public class Bind implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -133,35 +133,6 @@ public class Bind implements Serializable {
         } catch (Exception e) {
             throw new IllegalArgumentException("Error parsing Bind '" + serialized + "'", e);
         }
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Bind) {
-            Bind other = (Bind) obj;
-            return new EqualsBuilder()
-                    .append(path, other.getPath())
-                    .append(volume, other.getVolume())
-                    .append(accessMode, other.getAccessMode())
-                    .append(secMode, other.getSecMode())
-                    .append(noCopy, other.getNoCopy())
-                    .append(propagationMode, other.getPropagationMode())
-                    .isEquals();
-        } else {
-            return super.equals(obj);
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder()
-                .append(path)
-                .append(volume)
-                .append(accessMode)
-                .append(secMode)
-                .append(noCopy)
-                .append(propagationMode)
-                .toHashCode();
     }
 
     /**

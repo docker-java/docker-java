@@ -3,9 +3,6 @@ package com.github.dockerjava.api.model;
 import java.io.IOException;
 import java.io.Serializable;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -17,9 +14,11 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.EqualsAndHashCode;
 
 @JsonSerialize(using = VolumesFrom.Serializer.class)
 @JsonDeserialize(using = VolumesFrom.Deserializer.class)
+@EqualsAndHashCode
 public class VolumesFrom implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -71,22 +70,6 @@ public class VolumesFrom implements Serializable {
         } catch (Exception e) {
             throw new IllegalArgumentException("Error parsing Bind '" + serialized + "'");
         }
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof VolumesFrom) {
-            VolumesFrom other = (VolumesFrom) obj;
-            return new EqualsBuilder().append(container, other.getContainer())
-                    .append(accessMode, other.getAccessMode()).isEquals();
-        } else {
-            return super.equals(obj);
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(container).append(accessMode).toHashCode();
     }
 
     /**

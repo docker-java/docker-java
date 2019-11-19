@@ -2,8 +2,7 @@ package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.EqualsAndHashCode;
 
 import javax.annotation.Nonnull;
 import java.io.Serializable;
@@ -20,6 +19,7 @@ import java.io.Serializable;
  *
  * @see Bind
  */
+@EqualsAndHashCode
 public class Volume implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -53,20 +53,4 @@ public class Volume implements Serializable {
     public String toString() {
         return getPath();
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Volume) {
-            Volume other = (Volume) obj;
-            return new EqualsBuilder().append(path, other.getPath()).isEquals();
-        } else {
-            return super.equals(obj);
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(path).toHashCode();
-    }
-
 }

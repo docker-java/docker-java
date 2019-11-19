@@ -12,8 +12,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.node.NullNode;
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.builder.EqualsBuilder;
+import lombok.EqualsAndHashCode;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -21,8 +20,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import static org.apache.commons.lang.StringUtils.isEmpty;
 
 /**
  * A container for port bindings, made available as a {@link Map} via its {@link #getBindings()} method.
@@ -66,7 +63,10 @@ public class Ports implements Serializable {
     public void bind(ExposedPort exposedPort, Binding binding) {
         if (ports.containsKey(exposedPort)) {
             Binding[] bindings = ports.get(exposedPort);
-            ports.put(exposedPort, (Binding[]) ArrayUtils.add(bindings, binding));
+            Binding[] newBindings = new Binding[bindings.length + 1];
+            System.arraycopy(bindings, 0, newBindings, 0, bindings.length);
+            newBindings[newBindings.length - 1] = binding;
+            ports.put(exposedPort, newBindings);
         } else {
             if (binding == null) {
                 ports.put(exposedPort, null);
@@ -117,6 +117,7 @@ public class Ports implements Serializable {
      * @see Ports#bind(ExposedPort, Binding)
      * @see ExposedPort
      */
+    @EqualsAndHashCode
     public static class Binding {
 
         /**
@@ -186,7 +187,7 @@ public class Ports implements Serializable {
          * @see ExposedPort
          */
         public Binding(String hostIp, String hostPortSpec) {
-            this.hostIp = isEmpty(hostIp) ? null : hostIp;
+            this.hostIp = hostIp == null || hostIp.length() == 0 ? null : hostIp;
             this.hostPortSpec = hostPortSpec;
         }
 
@@ -248,23 +249,12 @@ public class Ports implements Serializable {
          */
         @Override
         public String toString() {
-            if (isEmpty(hostIp)) {
+            if (hostIp == null || hostIp.length() == 0) {
                 return hostPortSpec;
             } else if (hostPortSpec == null) {
                 return hostIp;
             } else {
                 return hostIp + ":" + hostPortSpec;
-            }
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj instanceof Binding) {
-                Binding other = (Binding) obj;
-                return new EqualsBuilder().append(hostIp, other.getHostIp()).append(hostPortSpec, other.getHostPortSpec())
-                        .isEquals();
-            } else {
-                return super.equals(obj);
             }
         }
     }

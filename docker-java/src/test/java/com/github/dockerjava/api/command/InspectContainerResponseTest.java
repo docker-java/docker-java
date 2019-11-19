@@ -31,6 +31,7 @@ import static com.github.dockerjava.test.serdes.JSONSamples.testRoundTrip;
 import static com.github.dockerjava.test.serdes.JSONTestHelper.testRoundTrip;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.notNullValue;
@@ -187,5 +188,10 @@ public class InspectContainerResponseTest {
 
         assertThat(response.getPath(), is("cmd"));
         assertThat(response.getPlatform(), is("windows"));
+    }
+
+    @Test
+    public void equals() {
+        assertThat(new InspectContainerResponse(), equalTo(new InspectContainerResponse()));
     }
 }
