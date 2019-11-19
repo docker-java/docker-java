@@ -5,7 +5,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.IOException;
 import java.util.Base64;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.slf4j.Logger;
@@ -48,9 +47,7 @@ public abstract class AbstrDockerCmd<CMD_T extends DockerCmd<RES_T>, RES_T> impl
     @Deprecated
     protected String registryAuth(AuthConfig authConfig) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper()
-                    .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-            return Base64.getEncoder().encodeToString(objectMapper.writeValueAsBytes(authConfig));
+            return Base64.getEncoder().encodeToString(new ObjectMapper().writeValueAsBytes(authConfig));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
