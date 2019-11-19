@@ -24,15 +24,11 @@ public abstract class AbstrDockerCmdExec {
 
     private final WebTarget baseResource;
 
-    protected final ObjectMapper objectMapper;
-
     public AbstrDockerCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
         checkNotNull(baseResource, "baseResource was not specified");
         checkNotNull(dockerClientConfig, "dockerClientConfig was not specified");
         this.baseResource = baseResource;
         this.dockerClientConfig = dockerClientConfig;
-        this.objectMapper = dockerClientConfig.getObjectMapper();
-        checkNotNull(objectMapper, "objectMapper was not specified");
     }
 
     protected WebTarget getBaseResource() {
@@ -46,7 +42,7 @@ public abstract class AbstrDockerCmdExec {
 
     protected String registryAuth(@Nonnull AuthConfig authConfig) {
         try {
-            return BaseEncoding.base64Url().encode(objectMapper.writeValueAsString(authConfig).getBytes());
+            return BaseEncoding.base64Url().encode(dockerClientConfig.getObjectMapper().writeValueAsString(authConfig).getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -57,6 +53,7 @@ public abstract class AbstrDockerCmdExec {
         try {
             final String json;
             final RemoteApiVersion apiVersion = dockerClientConfig.getApiVersion();
+            ObjectMapper objectMapper = dockerClientConfig.getObjectMapper();
 
             if (apiVersion.equals(UNKNOWN_VERSION)) {
                 ObjectNode rootNode = objectMapper.valueToTree(authConfigs.getConfigs()); // all registries
