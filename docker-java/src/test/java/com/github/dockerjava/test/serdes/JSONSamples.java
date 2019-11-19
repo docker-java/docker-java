@@ -3,7 +3,6 @@ package com.github.dockerjava.test.serdes;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.apache.commons.io.FileUtils;
 
@@ -35,8 +34,7 @@ public class JSONSamples {
 
     public static <TClass> TClass testRoundTrip(RemoteApiVersion version, String context,
                                                 JavaType type) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        final TClass tObject = mapper.readValue(getSampleContent(version, context), type);
+        final TClass tObject = JSONTestHelper.getMapper().readValue(getSampleContent(version, context), type);
         return testRoundTrip(tObject, type);
     }
 
@@ -46,16 +44,14 @@ public class JSONSamples {
      */
     public static <TClass> TClass testRoundTrip(TClass item, JavaType type)
             throws IOException, AssertionError {
-        ObjectMapper mapper = new ObjectMapper();
+        String serialized1 = JSONTestHelper.getMapper().writeValueAsString(item);
+        JsonNode json1 = JSONTestHelper.getMapper().readTree(serialized1);
 
-        String serialized1 = mapper.writeValueAsString(item);
-        JsonNode json1 = mapper.readTree(serialized1);
+        TClass deserialized1 = JSONTestHelper.getMapper().readValue(serialized1, type);
+        String serialized2 = JSONTestHelper.getMapper().writeValueAsString(deserialized1);
 
-        TClass deserialized1 = mapper.readValue(serialized1, type);
-        String serialized2 = mapper.writeValueAsString(deserialized1);
-
-        JsonNode json2 = mapper.readTree(serialized2);
-        TClass deserialized2 = mapper.readValue(serialized2, type);
+        JsonNode json2 = JSONTestHelper.getMapper().readTree(serialized2);
+        TClass deserialized2 = JSONTestHelper.getMapper().readValue(serialized2, type);
 
         assertEquals("JSONs must be equal after the second roundtrip", json2, json1);
         assertEquals("Objects must be equal after the second roundtrip", deserialized2, deserialized2);

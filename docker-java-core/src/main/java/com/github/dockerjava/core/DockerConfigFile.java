@@ -1,6 +1,5 @@
 package com.github.dockerjava.core;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,12 +19,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class DockerConfigFile {
     private static final String DOCKER_LEGACY_CFG = ".dockercfg";
     private static final String DOCKER_CFG = "config.json";
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final TypeReference<Map<String, AuthConfig>> CONFIG_MAP_TYPE = new TypeReference<Map<String, AuthConfig>>() {
     };
 
@@ -118,18 +115,24 @@ public class DockerConfigFile {
     }
 
     @Nonnull
+    @Deprecated
     public static DockerConfigFile loadConfig(@CheckForNull String dockerConfigPath) throws IOException {
+        return loadConfig(DefaultObjectMapperHolder.INSTANCE.getObjectMapper(), dockerConfigPath);
+    }
+
+    @Nonnull
+    public static DockerConfigFile loadConfig(ObjectMapper objectMapper, @CheckForNull String dockerConfigPath) throws IOException {
         // no any configs, but for empty auths return non null object
         if (dockerConfigPath == null) {
             return new DockerConfigFile();
         }
 
         //parse new docker config file format
-        DockerConfigFile dockerConfig = loadCurrentConfig(dockerConfigPath);
+        DockerConfigFile dockerConfig = loadCurrentConfig(objectMapper, dockerConfigPath);
 
         //parse old auth config file format
         if (dockerConfig == null) {
-            dockerConfig = loadLegacyConfig(dockerConfigPath);
+            dockerConfig = loadLegacyConfig(objectMapper, dockerConfigPath);
         }
 
         //otherwise create default config
@@ -148,7 +151,7 @@ public class DockerConfigFile {
     }
 
     @CheckForNull
-    private static DockerConfigFile loadCurrentConfig(@CheckForNull String dockerConfigPath) throws IOException {
+    private static DockerConfigFile loadCurrentConfig(ObjectMapper objectMapper, @CheckForNull String dockerConfigPath) throws IOException {
         File dockerCfgFile = new File(dockerConfigPath, DOCKER_CFG);
 
         if (!dockerCfgFile.exists() || !dockerCfgFile.isFile()) {
@@ -156,14 +159,14 @@ public class DockerConfigFile {
         }
 
         try {
-            return MAPPER.readValue(dockerCfgFile, DockerConfigFile.class);
+            return objectMapper.readValue(dockerCfgFile, DockerConfigFile.class);
         } catch (IOException e) {
             throw new IOException("Failed to parse docker " + DOCKER_CFG, e);
         }
     }
 
     @CheckForNull
-    private static DockerConfigFile loadLegacyConfig(String dockerConfigPath) throws IOException {
+    private static DockerConfigFile loadLegacyConfig(ObjectMapper objectMapper, String dockerConfigPath) throws IOException {
         File dockerLegacyCfgFile = new File(dockerConfigPath, DOCKER_LEGACY_CFG);
 
         if (!dockerLegacyCfgFile.exists() || !dockerLegacyCfgFile.isFile()) {
@@ -172,7 +175,7 @@ public class DockerConfigFile {
 
         //parse legacy auth config file format
         try {
-            return new DockerConfigFile(MAPPER.<Map<String, AuthConfig>>readValue(dockerLegacyCfgFile, CONFIG_MAP_TYPE));
+            return new DockerConfigFile(objectMapper.<Map<String, AuthConfig>>readValue(dockerLegacyCfgFile, CONFIG_MAP_TYPE));
         } catch (IOException e) {
             // pass
         }

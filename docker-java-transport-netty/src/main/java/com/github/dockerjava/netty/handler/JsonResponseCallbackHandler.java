@@ -1,5 +1,6 @@
 package com.github.dockerjava.netty.handler;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -16,16 +17,27 @@ import com.github.dockerjava.api.async.ResultCallback;
  */
 public class JsonResponseCallbackHandler<T> extends SimpleChannelInboundHandler<ByteBuf> {
 
-    private static ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     private TypeReference<T> typeReference;
 
     private ResultCallback<T> callback;
 
+    @Deprecated
     public JsonResponseCallbackHandler(TypeReference<T> typeReference, ResultCallback<T> callback) {
+        this(
+                new ObjectMapper()
+                        .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                        .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS),
+                typeReference,
+                callback
+        );
+    }
+
+    public JsonResponseCallbackHandler(ObjectMapper objectMapper, TypeReference<T> typeReference, ResultCallback<T> callback) {
+        this.objectMapper = objectMapper;
         this.typeReference = typeReference;
         this.callback = callback;
-        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     }
 
     @Override

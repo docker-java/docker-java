@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.IOException;
 import java.util.Base64;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.slf4j.Logger;
@@ -23,9 +24,21 @@ public abstract class AbstrDockerCmd<CMD_T extends DockerCmd<RES_T>, RES_T> impl
 
     protected DockerCmdSyncExec<CMD_T, RES_T> execution;
 
+    protected final ObjectMapper objectMapper;
+
+    @Deprecated
     public AbstrDockerCmd(DockerCmdSyncExec<CMD_T, RES_T> execution) {
+        this(
+                new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES),
+                execution
+        );
+    }
+
+    public AbstrDockerCmd(ObjectMapper objectMapper, DockerCmdSyncExec<CMD_T, RES_T> execution) {
+        checkNotNull(objectMapper, "objectMapper was not specified");
         checkNotNull(execution, "execution was not specified");
         this.execution = execution;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -46,7 +59,7 @@ public abstract class AbstrDockerCmd<CMD_T extends DockerCmd<RES_T>, RES_T> impl
 
     protected String registryAuth(AuthConfig authConfig) {
         try {
-            return Base64.getEncoder().encodeToString(new ObjectMapper().writeValueAsBytes(authConfig));
+            return Base64.getEncoder().encodeToString(objectMapper.writeValueAsBytes(authConfig));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

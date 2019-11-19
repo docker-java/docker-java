@@ -1,8 +1,8 @@
 package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.model.ContainerConfig;
+import com.github.dockerjava.test.serdes.JSONTestHelper;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -28,8 +28,7 @@ import static org.hamcrest.Matchers.nullValue;
 public class InspectImageResponseTest {
     @Test
     public void serder1_22Json() throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(InspectImageResponse.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(InspectImageResponse.class);
 
         final InspectImageResponse inspectImage = testRoundTrip(VERSION_1_22,
                 "images/image1/inspect1.json",
@@ -138,8 +137,7 @@ public class InspectImageResponseTest {
 
     @Test
     public void serder1_22_doc() throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(InspectImageResponse.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(InspectImageResponse.class);
 
         final InspectImageResponse inspectImage = testRoundTrip(VERSION_1_22,
                 "images/docImage/doc.json",
@@ -164,8 +162,7 @@ public class InspectImageResponseTest {
 
     @Test
     public void serder1_22_inspect_doc() throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(InspectImageResponse.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(InspectImageResponse.class);
 
         final InspectImageResponse inspectImage = testRoundTrip(VERSION_1_22,
                 "images/docImage/inspect_doc.json",
@@ -193,8 +190,7 @@ public class InspectImageResponseTest {
 
     @Test
     public void testOverlayNetworkRootDir() throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(InspectImageResponse.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(InspectImageResponse.class);
 
         final InspectImageResponse inspectImage = testRoundTrip(VERSION_1_22, "images/overlay/inspectOverlay.json", type);
 
@@ -210,8 +206,7 @@ public class InspectImageResponseTest {
 
     @Test
     public void inspectWindowsImage() throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(InspectImageResponse.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(InspectImageResponse.class);
 
         final InspectImageResponse inspectImage = testRoundTrip(VERSION_1_25,
                 "images/windowsImage/doc.json",

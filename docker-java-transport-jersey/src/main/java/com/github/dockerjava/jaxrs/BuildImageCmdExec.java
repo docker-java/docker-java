@@ -7,8 +7,6 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.github.dockerjava.core.util.CacheFromEncoder;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.RequestEntityProcessing;
@@ -31,8 +29,6 @@ import java.util.Map;
 public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, BuildResponseItem> implements
         BuildImageCmd.Exec {
     private static final Logger LOGGER = LoggerFactory.getLogger(BuildImageCmdExec.class);
-
-    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public BuildImageCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
         super(baseResource, dockerClientConfig);
@@ -137,7 +133,7 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
 
         LOGGER.trace("POST: {}", webTarget);
 
-        return new POSTCallbackNotifier<>(new JsonStreamProcessor<>(BuildResponseItem.class),
+        return new POSTCallbackNotifier<>(new JsonStreamProcessor<>(objectMapper, BuildResponseItem.class),
                 resultCallback,
                 resourceWithOptionalAuthConfig(command, webTarget.request()).accept(MediaType.TEXT_PLAIN),
                 entity(command.getTarInputStream(), "application/tar")
@@ -148,7 +144,7 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
         if (value != null && !value.isEmpty()) {
             try {
                 return webTarget.queryParam(name,
-                        URLEncoder.encode(MAPPER.writeValueAsString(value), "UTF-8").replaceAll("\\+", "%20"));
+                        URLEncoder.encode(objectMapper.writeValueAsString(value), "UTF-8").replaceAll("\\+", "%20"));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

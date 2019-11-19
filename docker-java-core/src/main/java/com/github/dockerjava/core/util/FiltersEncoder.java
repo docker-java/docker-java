@@ -16,6 +16,7 @@ public class FiltersEncoder {
     private FiltersEncoder() {
     }
 
+    // This instance MUST NOT be used for domain-specific serialization of the docker-java types
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public static String jsonEncode(Map<String, List<String>> mapStringListString) {

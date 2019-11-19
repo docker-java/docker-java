@@ -1,8 +1,8 @@
 package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.core.RemoteApiVersion;
+import com.github.dockerjava.test.serdes.JSONTestHelper;
 import org.junit.Test;
 
 import static com.github.dockerjava.test.serdes.JSONSamples.testRoundTrip;
@@ -20,8 +20,7 @@ public class InspectExecResponseTest {
 
     @Test
     public void test_1_22_SerDer1() throws Exception {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(InspectExecResponse.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(InspectExecResponse.class);
 
         final InspectExecResponse execResponse = testRoundTrip(RemoteApiVersion.VERSION_1_22,
                 "/exec/ID/1.json",

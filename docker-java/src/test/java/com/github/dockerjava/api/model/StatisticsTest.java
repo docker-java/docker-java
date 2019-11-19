@@ -1,8 +1,8 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.core.RemoteApiVersion;
+import com.github.dockerjava.test.serdes.JSONTestHelper;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
@@ -22,8 +22,7 @@ public class StatisticsTest {
 
     @Test
     public void serderJson1() throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(Statistics.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(Statistics.class);
 
         final Statistics statistics = testRoundTrip(RemoteApiVersion.VERSION_1_27,
                 "containers/container/stats/stats1.json",

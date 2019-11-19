@@ -11,7 +11,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Handler that encodes an outgoing object to JSON.
  *
  * @author Marcus Linke
+ *
+ * @deprecated unused in docker-java
  */
+@Deprecated
 public class JsonRequestHandler extends MessageToByteEncoder<Object> {
 
     private ObjectMapper mapper = new ObjectMapper();

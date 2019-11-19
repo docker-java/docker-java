@@ -1,9 +1,9 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.model.InfoRegistryConfig.IndexConfig;
 import com.github.dockerjava.core.RemoteApiVersion;
+import com.github.dockerjava.test.serdes.JSONTestHelper;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
@@ -35,8 +35,7 @@ public class InfoTest {
 
     @Test
     public void serder1Json() throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(Info.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(Info.class);
 
         final Info info = testRoundTrip(VERSION_1_22,
                 "info/1.json",
@@ -175,8 +174,7 @@ public class InfoTest {
 
     @Test
     public void serder2Json() throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(Info.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(Info.class);
 
         final Info info = testRoundTrip(VERSION_1_22,
                 "info/2.json",
@@ -332,8 +330,7 @@ public class InfoTest {
 
     @Test
     public void info_1_38() throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(Info.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(Info.class);
 
         final Info info = testRoundTrip(RemoteApiVersion.VERSION_1_38,
                 "info/lcow.json",

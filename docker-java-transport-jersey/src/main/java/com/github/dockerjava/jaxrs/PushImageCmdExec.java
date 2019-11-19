@@ -44,7 +44,8 @@ public class PushImageCmdExec extends AbstrAsyncDockerCmdExec<PushImageCmd, Push
         Builder builder = resourceWithAuthConfig(command.getAuthConfig(), webResource.request())
                 .accept(MediaType.APPLICATION_JSON);
 
-        return new POSTCallbackNotifier<>(new JsonStreamProcessor<>(
-                PushResponseItem.class), resultCallback, builder, entity(null, MediaType.APPLICATION_JSON));
+        return new POSTCallbackNotifier<>(
+                new JsonStreamProcessor<>(objectMapper, PushResponseItem.class),
+                resultCallback, builder, entity(null, MediaType.APPLICATION_JSON));
     }
 }
