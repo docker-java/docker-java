@@ -1,6 +1,5 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -10,7 +9,6 @@ import java.io.Serializable;
 /**
  * Delete unused content (containers, images, volumes, networks, build relicts)
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 @EqualsAndHashCode
 @ToString
 public class PruneResponse implements Serializable {

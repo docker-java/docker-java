@@ -2,7 +2,6 @@ package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
-import com.github.dockerjava.api.command.StartContainerCmd;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.InternalServerErrorException;
 import com.github.dockerjava.api.exception.NotFoundException;
@@ -16,7 +15,6 @@ import com.github.dockerjava.api.model.RestartPolicy;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
 import com.github.dockerjava.core.command.WaitContainerResultCallback;
-import com.github.dockerjava.test.serdes.JSONTestHelper;
 import net.jcip.annotations.NotThreadSafe;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -569,11 +567,5 @@ public class StartContainerCmdIT extends CmdIT {
         // The DNS setting survived.
         assertThat(inspectContainerResponse.getHostConfig().getDns(), is(notNullValue()));
         assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getDns()), contains(dnsServer));
-    }
-
-    @Test
-    public void anUnconfiguredCommandSerializesToEmptyJson() throws Exception {
-        StartContainerCmd command = dockerRule.getClient().startContainerCmd("");
-        assertThat(JSONTestHelper.getMapper().writeValueAsString(command), is("{}"));
     }
 }

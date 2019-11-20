@@ -1,9 +1,6 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -20,8 +17,6 @@ import static java.util.Objects.requireNonNull;
  * Used in `/containers/create`, and in inspect container.
  * TODO exclude usage for 2 different models.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(Include.NON_NULL)
 @EqualsAndHashCode
 @ToString
 public class HostConfig implements Serializable {

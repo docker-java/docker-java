@@ -1,7 +1,5 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -12,8 +10,6 @@ import java.io.Serializable;
  * BlkioStat is not documented in pubic docker swapper.yaml yet, reference:
  * https://github.com/moby/moby/blob/master/api/types/stats.go
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @EqualsAndHashCode
 @ToString
 public class BlkioStatEntry implements Serializable {

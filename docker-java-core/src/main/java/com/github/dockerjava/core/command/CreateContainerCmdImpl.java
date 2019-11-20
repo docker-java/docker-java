@@ -1,8 +1,6 @@
 package com.github.dockerjava.core.command;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
@@ -43,7 +41,6 @@ import static java.util.Collections.singletonMap;
  * Creates a new container.
  * `/containers/create`
  */
-@JsonInclude(Include.NON_NULL)
 public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, CreateContainerResponse> implements
         CreateContainerCmd {
 

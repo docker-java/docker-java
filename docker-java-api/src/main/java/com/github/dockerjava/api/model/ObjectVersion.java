@@ -1,7 +1,5 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
@@ -15,8 +13,6 @@ import java.io.Serializable;
  * same base version, only one of the requests can succeed. As a result, two separate update requests that
  * happen at the same time will not unintentionally overwrite each other.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ObjectVersion implements Serializable {
     private static final long serialVersionUID = 1L;
 

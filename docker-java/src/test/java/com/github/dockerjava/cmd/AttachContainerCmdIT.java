@@ -218,7 +218,7 @@ public class AttachContainerCmdIT extends CmdIT {
         DockerClient dockerClient = dockerRule.getClient();
 
         CreateContainerResponse container = dockerClient.createContainerCmd(DEFAULT_IMAGE)
-                .withCmd("echo", "hello world")
+                .withCmd("echo", "hello")
                 .withTty(false)
                 .exec();
         LOG.info("Created container: {}", container.toString());
@@ -238,11 +238,18 @@ public class AttachContainerCmdIT extends CmdIT {
 
             @Override
             public void onNext(Frame item) {
+                LOG.info("Got frame: {}", item);
                 if (item.getStreamType() == StreamType.STDOUT) {
                     gotLineAtNanos.set(System.nanoTime());
                     gotLine.countDown();
                 }
                 super.onNext(item);
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                LOG.info("Got error: ", throwable);
+                super.onError(throwable);
             }
 
             @Override
