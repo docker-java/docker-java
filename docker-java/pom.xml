@@ -129,9 +129,9 @@
 				<configuration>
 					<rerunFailingTestsCount>3</rerunFailingTestsCount>
 					<!--<useUnlimitedThreads>true</useUnlimitedThreads>-->
-					<perCoreThreadCount>true</perCoreThreadCount>
-					<threadCount>1</threadCount>
-					<parallel>classes</parallel>
+<!--					<perCoreThreadCount>true</perCoreThreadCount>-->
+<!--					<threadCount>1</threadCount>-->
+<!--					<parallel>classes</parallel>-->
 					<groups>com.github.dockerjava.junit.category.Integration</groups>
 					<excludedGroups>com.github.dockerjava.junit.category.AuthIntegration,com.github.dockerjava.junit.category.SwarmModeIntegration</excludedGroups>
 				</configuration>
