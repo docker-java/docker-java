@@ -42,7 +42,7 @@ public abstract class AbstrDockerCmdExec {
 
     protected String registryAuth(@Nonnull AuthConfig authConfig) {
         try {
-            return BaseEncoding.base64Url().encode(new ObjectMapper().writeValueAsString(authConfig).getBytes());
+            return BaseEncoding.base64Url().encode(dockerClientConfig.getObjectMapper().writeValueAsString(authConfig).getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -52,8 +52,8 @@ public abstract class AbstrDockerCmdExec {
     protected String registryConfigs(@Nonnull AuthConfigurations authConfigs) {
         try {
             final String json;
-            final ObjectMapper objectMapper = new ObjectMapper();
             final RemoteApiVersion apiVersion = dockerClientConfig.getApiVersion();
+            ObjectMapper objectMapper = dockerClientConfig.getObjectMapper();
 
             if (apiVersion.equals(UNKNOWN_VERSION)) {
                 ObjectNode rootNode = objectMapper.valueToTree(authConfigs.getConfigs()); // all registries

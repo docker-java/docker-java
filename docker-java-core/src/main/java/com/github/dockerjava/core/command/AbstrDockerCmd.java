@@ -44,6 +44,7 @@ public abstract class AbstrDockerCmd<CMD_T extends DockerCmd<RES_T>, RES_T> impl
         return ReflectionToStringBuilder.toString(this, ToStringStyle.SIMPLE_STYLE);
     }
 
+    @Deprecated
     protected String registryAuth(AuthConfig authConfig) {
         try {
             return Base64.getEncoder().encodeToString(new ObjectMapper().writeValueAsBytes(authConfig));

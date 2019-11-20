@@ -5,6 +5,8 @@ package com.github.dockerjava.core;
 
 import java.net.URI;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
 
@@ -37,4 +39,20 @@ public interface DockerClientConfig {
      */
     SSLConfig getSSLConfig();
 
+    default ObjectMapper getObjectMapper() {
+        return DefaultObjectMapperHolder.INSTANCE.getObjectMapper();
+    }
+}
+
+enum DefaultObjectMapperHolder {
+    INSTANCE;
+
+    private final ObjectMapper objectMapper = new ObjectMapper()
+            // TODO .setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL)
+            // TODO .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
+    public ObjectMapper getObjectMapper() {
+        return objectMapper;
+    }
 }

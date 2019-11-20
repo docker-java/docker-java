@@ -1,6 +1,5 @@
 package com.github.dockerjava.cmd;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.StartContainerCmd;
@@ -17,6 +16,7 @@ import com.github.dockerjava.api.model.RestartPolicy;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
 import com.github.dockerjava.core.command.WaitContainerResultCallback;
+import com.github.dockerjava.test.serdes.JSONTestHelper;
 import net.jcip.annotations.NotThreadSafe;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -573,8 +573,7 @@ public class StartContainerCmdIT extends CmdIT {
 
     @Test
     public void anUnconfiguredCommandSerializesToEmptyJson() throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
         StartContainerCmd command = dockerRule.getClient().startContainerCmd("");
-        assertThat(objectMapper.writeValueAsString(command), is("{}"));
+        assertThat(JSONTestHelper.getMapper().writeValueAsString(command), is("{}"));
     }
 }

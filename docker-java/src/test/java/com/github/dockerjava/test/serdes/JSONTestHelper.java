@@ -17,6 +17,7 @@ package com.github.dockerjava.test.serdes;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dockerjava.core.DefaultDockerClientConfig;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
@@ -31,6 +32,8 @@ import static org.junit.Assert.assertNotNull;
  * @author Oleg Nenashev
  */
 public class JSONTestHelper {
+
+    static final ObjectMapper MAPPER = DefaultDockerClientConfig.createDefaultConfigBuilder().build().getObjectMapper();
 
     /**
      * Reads JSON String from the specified resource
@@ -64,9 +67,8 @@ public class JSONTestHelper {
      *             JSON conversion error
      */
     public static <TClass> TClass readObject(JSONResourceRef resource, Class<TClass> tclass) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
         String str = readString(resource);
-        return mapper.readValue(str, tclass);
+        return MAPPER.readValue(str, tclass);
     }
 
     /**
@@ -125,16 +127,18 @@ public class JSONTestHelper {
      *             Validation error
      */
     public static <TClass> TClass testRoundTrip(TClass item, Class<TClass> asclass) throws IOException, AssertionError {
-        ObjectMapper mapper = new ObjectMapper();
-
-        String serialized1 = mapper.writeValueAsString(item);
-        JsonNode json1 = mapper.readTree(serialized1);
-        TClass deserialized1 = mapper.readValue(serialized1, asclass);
-        String serialized2 = mapper.writeValueAsString(deserialized1);
-        JsonNode json2 = mapper.readTree(serialized2);
-        TClass deserialized2 = mapper.readValue(serialized2, asclass);
+        String serialized1 = MAPPER.writeValueAsString(item);
+        JsonNode json1 = MAPPER.readTree(serialized1);
+        TClass deserialized1 = MAPPER.readValue(serialized1, asclass);
+        String serialized2 = MAPPER.writeValueAsString(deserialized1);
+        JsonNode json2 = MAPPER.readTree(serialized2);
+        TClass deserialized2 = MAPPER.readValue(serialized2, asclass);
 
         assertEquals("JSONs must be equal after the second roundtrip", json2, json1);
         return deserialized2;
+    }
+
+    public static ObjectMapper getMapper() {
+        return MAPPER;
     }
 }

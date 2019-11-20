@@ -40,7 +40,8 @@ public class PullImageCmdExec extends AbstrAsyncDockerCmdExec<PullImageCmd, Pull
         Builder builder = resourceWithOptionalAuthConfig(command.getAuthConfig(), webResource.request()).accept(
                 MediaType.APPLICATION_OCTET_STREAM_TYPE);
 
-        return new POSTCallbackNotifier<>(new JsonStreamProcessor<>(
-                PullResponseItem.class), resultCallback, builder, entity(null, MediaType.APPLICATION_JSON));
+        return new POSTCallbackNotifier<>(
+                new JsonStreamProcessor<>(objectMapper, PullResponseItem.class),
+                resultCallback, builder, entity(null, MediaType.APPLICATION_JSON));
     }
 }

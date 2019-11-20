@@ -1,8 +1,8 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.github.dockerjava.core.RemoteApiVersion;
+import com.github.dockerjava.test.serdes.JSONTestHelper;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -20,8 +20,7 @@ public class ContainerTest {
 
     @Test
     public void serderJson1() throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
-        final CollectionType type = mapper.getTypeFactory().constructCollectionType(List.class, Container.class);
+        final CollectionType type = JSONTestHelper.getMapper().getTypeFactory().constructCollectionType(List.class, Container.class);
 
         final List<Container> containers = testRoundTrip(RemoteApiVersion.VERSION_1_22,
                 "containers/json/filter1.json",

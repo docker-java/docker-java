@@ -5,6 +5,7 @@ package com.github.dockerjava.core.async;
 
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.model.PullResponseItem;
+import com.github.dockerjava.test.serdes.JSONTestHelper;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -29,7 +30,8 @@ public class JsonStreamProcessorTest {
 
         InputStream response = new ByteArrayInputStream("{}".getBytes());
 
-        JsonStreamProcessor<PullResponseItem> jsonStreamProcessor = new JsonStreamProcessor<>(PullResponseItem.class);
+        JsonStreamProcessor<PullResponseItem> jsonStreamProcessor = new JsonStreamProcessor<>(
+                JSONTestHelper.getMapper(), PullResponseItem.class);
 
         final List<Boolean> completed = new ArrayList<>();
 
