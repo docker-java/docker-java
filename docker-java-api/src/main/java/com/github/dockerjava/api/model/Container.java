@@ -1,8 +1,5 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import lombok.EqualsAndHashCode;
@@ -18,8 +15,6 @@ import java.util.Map;
  *
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(Include.NON_NULL)
 @EqualsAndHashCode
 @ToString
 public class Container implements Serializable {

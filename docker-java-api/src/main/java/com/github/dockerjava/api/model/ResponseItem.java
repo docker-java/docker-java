@@ -1,7 +1,6 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -12,7 +11,6 @@ import java.io.Serializable;
 /**
  * Represents a pull response stream item
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 @EqualsAndHashCode
 @ToString
 public class ResponseItem implements Serializable {
@@ -118,7 +116,6 @@ public class ResponseItem implements Serializable {
         return getError() != null || getErrorDetail() != null;
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     @EqualsAndHashCode
     @ToString
     public static class ProgressDetail implements Serializable {
@@ -149,7 +146,6 @@ public class ResponseItem implements Serializable {
         }
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     @EqualsAndHashCode
     @ToString
     public static class ErrorDetail implements Serializable {
@@ -172,7 +168,6 @@ public class ResponseItem implements Serializable {
         }
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     @EqualsAndHashCode
     @ToString
     public static class AuxDetail implements Serializable {

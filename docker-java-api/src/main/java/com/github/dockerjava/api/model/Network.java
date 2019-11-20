@@ -1,7 +1,5 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -12,8 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @EqualsAndHashCode
 @ToString
 public class Network implements Serializable {
@@ -96,7 +92,6 @@ public class Network implements Serializable {
         return labels;
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     @EqualsAndHashCode
     @ToString
     public static class ContainerNetworkConfig {
@@ -130,7 +125,6 @@ public class Network implements Serializable {
         }
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     @EqualsAndHashCode
     @ToString
     public static class Ipam {
@@ -171,7 +165,6 @@ public class Network implements Serializable {
             return this;
         }
 
-        @JsonIgnoreProperties(ignoreUnknown = true)
         public static class Config {
 
             @JsonProperty("Subnet")

@@ -1,7 +1,6 @@
 package com.github.dockerjava.core.command;
 
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.command.JoinSwarmCmd;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -11,7 +10,6 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import javax.annotation.CheckForNull;
 import java.util.List;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class JoinSwarmCmdImpl extends AbstrDockerCmd<JoinSwarmCmd, Void> implements
         JoinSwarmCmd {
 

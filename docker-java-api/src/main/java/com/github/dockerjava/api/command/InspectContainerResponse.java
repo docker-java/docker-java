@@ -1,7 +1,6 @@
 package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.model.ContainerConfig;
 import com.github.dockerjava.api.model.HostConfig;
@@ -23,7 +22,6 @@ import java.util.Map;
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  *
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 @EqualsAndHashCode
 @ToString
 public class InspectContainerResponse {
@@ -251,7 +249,6 @@ public class InspectContainerResponse {
         return platform;
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     @EqualsAndHashCode
     @ToString
     public class ContainerState {
@@ -457,7 +454,6 @@ public class InspectContainerResponse {
         }
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     @EqualsAndHashCode
     @ToString
     public static class Mount {
@@ -583,7 +579,6 @@ public class InspectContainerResponse {
         }
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     @EqualsAndHashCode
     @ToString
     public class Node {

@@ -2,7 +2,6 @@ package com.github.dockerjava.api.command;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.model.NetworkSettings;
 import lombok.EqualsAndHashCode;
@@ -10,7 +9,6 @@ import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 @EqualsAndHashCode
 @ToString
 public class InspectExecResponse {
@@ -152,7 +150,6 @@ public class InspectExecResponse {
         return pid;
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     @EqualsAndHashCode
     @ToString
     public class ProcessConfig {
@@ -193,7 +190,6 @@ public class InspectExecResponse {
         }
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public class Container {
 
         @JsonProperty("NetworkSettings")

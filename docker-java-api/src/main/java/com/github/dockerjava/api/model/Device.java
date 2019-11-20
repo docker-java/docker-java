@@ -2,8 +2,6 @@ package com.github.dockerjava.api.model;
 
 import static java.util.Objects.requireNonNull;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -14,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-@JsonInclude(Include.NON_NULL)
 @EqualsAndHashCode
 @ToString
 public class Device implements Serializable {
