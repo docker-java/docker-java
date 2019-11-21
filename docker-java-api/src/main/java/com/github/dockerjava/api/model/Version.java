@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import com.github.dockerjava.api.command.VersionCmd;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -20,55 +20,55 @@ import java.util.List;
 public class Version implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("ApiVersion")
+    @FieldName("ApiVersion")
     private String apiVersion;
 
-    @JsonProperty("Arch")
+    @FieldName("Arch")
     private String arch;
 
-    @JsonProperty("GitCommit")
+    @FieldName("GitCommit")
     private String gitCommit;
 
-    @JsonProperty("GoVersion")
+    @FieldName("GoVersion")
     private String goVersion;
 
-    @JsonProperty("KernelVersion")
+    @FieldName("KernelVersion")
     private String kernelVersion;
 
-    @JsonProperty("Os")
+    @FieldName("Os")
     private String operatingSystem;
 
-    @JsonProperty("Version")
+    @FieldName("Version")
     private String version;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
      */
-    @JsonProperty("BuildTime")
+    @FieldName("BuildTime")
     private String buildTime;
 
     /**
      * @since ~{@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_20}
      */
-    @JsonProperty("Experimental")
+    @FieldName("Experimental")
     private Boolean experimental;
 
     /**
      * @since ~{@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_25}
      */
-    @JsonProperty("MinAPIVersion")
+    @FieldName("MinAPIVersion")
     private String minAPIVersion;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_35}
      */
-    @JsonProperty("Platform")
+    @FieldName("Platform")
     private VersionPlatform platform;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_35}
      */
-    @JsonProperty("Components")
+    @FieldName("Components")
     private List<VersionComponent> components;
 
     public String getVersion() {

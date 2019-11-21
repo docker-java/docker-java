@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -20,13 +20,13 @@ public class SwarmCAConfig implements Serializable {
     /**
      * @since 1.24
      */
-    @JsonProperty("NodeCertExpiry")
+    @FieldName("NodeCertExpiry")
     private Long nodeCertExpiry;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("ExternalCAs")
+    @FieldName("ExternalCAs")
     private List<ExternalCA> externalCA;
 
     /**

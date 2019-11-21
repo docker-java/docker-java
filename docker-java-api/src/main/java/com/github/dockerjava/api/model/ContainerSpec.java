@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -22,143 +22,143 @@ public class ContainerSpec implements Serializable {
     /**
      * @since 1.24
      */
-    @JsonProperty("Image")
+    @FieldName("Image")
     private String image;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("Labels")
+    @FieldName("Labels")
     private Map<String, String> labels;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("Command")
+    @FieldName("Command")
     private List<String> command;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("Args")
+    @FieldName("Args")
     private List<String> args;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("Env")
+    @FieldName("Env")
     private List<String> env;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("Dir")
+    @FieldName("Dir")
     private String dir;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("User")
+    @FieldName("User")
     private String user;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("Groups")
+    @FieldName("Groups")
     private String groups;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("TTY")
+    @FieldName("TTY")
     private Boolean tty;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("Mounts")
+    @FieldName("Mounts")
     private List<Mount> mounts;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("Duration")
+    @FieldName("Duration")
     private Long duration;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("StopGracePeriod")
+    @FieldName("StopGracePeriod")
     private Long stopGracePeriod;
 
     /**
      * @since 1.25
      * Specification for DNS related configurations in resolver configuration file
      */
-    @JsonProperty("DNSConfig")
+    @FieldName("DNSConfig")
     private ContainerDNSConfig dnsConfig;
 
     /**
      * @since 1.26
      * Open stdin
      */
-    @JsonProperty("OpenStdin")
+    @FieldName("OpenStdin")
     private Boolean openStdin;
 
     /**
      * @since 1.26
      * Mount the container's root filesystem as read only.
      */
-    @JsonProperty("ReadOnly")
+    @FieldName("ReadOnly")
     private Boolean readOnly;
 
     /**
      * @since 1.26
      * A list of hostnames/IP mappings to add to the container's /etc/hosts file.
      */
-    @JsonProperty("Hosts")
+    @FieldName("Hosts")
     private List<String> hosts;
 
     /**
      * @since 1.26
      * The hostname to use for the container, as a valid RFC 1123 hostname
      */
-    @JsonProperty("Hostname")
+    @FieldName("Hostname")
     private String hostname;
 
     /**
      * @since 1.26
      * Secrets contains references to zero or more secrets that will be exposed to the service.
      */
-    @JsonProperty("Secrets")
+    @FieldName("Secrets")
     private List<ContainerSpecSecret> secrets;
 
     /**
      * @since 1.26
      * A test to perform to check that the container is healthy.
      */
-    @JsonProperty("HealthCheck")
+    @FieldName("HealthCheck")
     private HealthCheck healthCheck;
 
     /**
      * @since 1.28
      * Signal to stop the container.
      */
-    @JsonProperty("StopSignal")
+    @FieldName("StopSignal")
     private String stopSignal;
 
     /**
      * @since 1.29
      * Security options for the container
      */
-    @JsonProperty("Privileges")
+    @FieldName("Privileges")
     private ContainerSpecPrivileges privileges;
 
     /**
      * @since 1.29
      * Configs contains references to zero or more configs that will be exposed to the service.
      */
-    @JsonProperty("Configs")
+    @FieldName("Configs")
     private List<ContainerSpecConfig> configs;
 
     /**

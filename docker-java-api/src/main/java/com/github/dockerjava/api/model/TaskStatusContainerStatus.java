@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -14,13 +14,13 @@ import java.io.Serializable;
 public class TaskStatusContainerStatus implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("ContainerID")
+    @FieldName("ContainerID")
     private String containerID = null;
 
-    @JsonProperty("PID")
+    @FieldName("PID")
     private Long pid = null;
 
-    @JsonProperty("ExitCode")
+    @FieldName("ExitCode")
     private Long exitCode = null;
 
     public String getContainerID() {

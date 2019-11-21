@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -19,37 +19,37 @@ public class AuthConfig implements Serializable {
      */
     public static final String DEFAULT_SERVER_ADDRESS = "https://index.docker.io/v1/";
 
-    @JsonProperty("username")
+    @FieldName("username")
     private String username;
 
-    @JsonProperty("password")
+    @FieldName("password")
     private String password;
 
-    @JsonProperty("email")
+    @FieldName("email")
     private String email;
 
-    @JsonProperty("serveraddress")
+    @FieldName("serveraddress")
     private String registryAddress = DEFAULT_SERVER_ADDRESS;
 
-    @JsonProperty("auth")
+    @FieldName("auth")
     private String auth;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
      */
-    @JsonProperty("registrytoken")
+    @FieldName("registrytoken")
     private String registrytoken;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_23}
      */
-    @JsonProperty("identitytoken")
+    @FieldName("identitytoken")
     private String identitytoken;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_25}
      */
-    @JsonProperty("stackOrchestrator")
+    @FieldName("stackOrchestrator")
     private String stackOrchestrator;
 
     public String getUsername() {

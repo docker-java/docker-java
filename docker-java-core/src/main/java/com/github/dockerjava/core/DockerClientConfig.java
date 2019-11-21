@@ -5,8 +5,11 @@ package com.github.dockerjava.core;
 
 import java.net.URI;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
 
@@ -40,7 +43,7 @@ public interface DockerClientConfig {
     SSLConfig getSSLConfig();
 
     default ObjectMapper getObjectMapper() {
-        return DefaultObjectMapperHolder.INSTANCE.getObjectMapper();
+        return DefaultObjectMapperHolder.INSTANCE.getObjectMapper().copy();
     }
 }
 
@@ -49,8 +52,12 @@ enum DefaultObjectMapperHolder {
 
     private final ObjectMapper objectMapper = new ObjectMapper()
             // TODO .setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL)
-            // TODO .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
-            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+            .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)
+            .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
+            .setVisibility(PropertyAccessor.CREATOR, JsonAutoDetect.Visibility.ANY)
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+            .setAnnotationIntrospector(new DockerJavaJacksonAnnotationIntrospector());
 
     public ObjectMapper getObjectMapper() {
         return objectMapper;

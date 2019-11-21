@@ -1,26 +1,26 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
 public enum BindPropagation {
-    @JsonProperty("rprivate")
+    @FieldName("rprivate")
     R_PRIVATE,
 
-    @JsonProperty("private")
+    @FieldName("private")
     PRIVATE,
 
-    @JsonProperty("rshared")
+    @FieldName("rshared")
     R_SHARED,
 
-    @JsonProperty("shared")
+    @FieldName("shared")
     SHARED,
 
-    @JsonProperty("rslave")
+    @FieldName("rslave")
     R_SLAVE,
 
-    @JsonProperty("slave")
+    @FieldName("slave")
     SLAVE
 }

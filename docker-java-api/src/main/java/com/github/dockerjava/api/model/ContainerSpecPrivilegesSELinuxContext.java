@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -15,19 +15,19 @@ import java.io.Serializable;
 @ToString
 public class ContainerSpecPrivilegesSELinuxContext implements Serializable {
     private static final long serialVersionUID = 1L;
-    @JsonProperty("Disable")
+    @FieldName("Disable")
     private Boolean disable;
 
-    @JsonProperty("User")
+    @FieldName("User")
     private String user;
 
-    @JsonProperty("Role")
+    @FieldName("Role")
     private String role;
 
-    @JsonProperty("Type")
+    @FieldName("Type")
     private String type;
 
-    @JsonProperty("Level")
+    @FieldName("Level")
     private String level;
 
     public Boolean getDisable() {

@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -17,28 +17,28 @@ import java.io.Serializable;
 public class StatisticNetworksConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("rx_bytes")
+    @FieldName("rx_bytes")
     private Long rxBytes;
 
-    @JsonProperty("rx_dropped")
+    @FieldName("rx_dropped")
     private Long rxDropped;
 
-    @JsonProperty("rx_errors")
+    @FieldName("rx_errors")
     private Long rxErrors;
 
-    @JsonProperty("rx_packets")
+    @FieldName("rx_packets")
     private Long rxPackets;
 
-    @JsonProperty("tx_bytes")
+    @FieldName("tx_bytes")
     private Long txBytes;
 
-    @JsonProperty("tx_dropped")
+    @FieldName("tx_dropped")
     private Long txDropped;
 
-    @JsonProperty("tx_errors")
+    @FieldName("tx_errors")
     private Long txErrors;
 
-    @JsonProperty("tx_packets")
+    @FieldName("tx_packets")
     private Long txPackets;
 
     /**

@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.command;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import com.github.dockerjava.api.model.ContainerConfig;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -17,67 +17,67 @@ import java.util.List;
 @ToString
 public class InspectImageResponse {
 
-    @JsonProperty("Architecture")
+    @FieldName("Architecture")
     private String arch;
 
-    @JsonProperty("Author")
+    @FieldName("Author")
     private String author;
 
-    @JsonProperty("Comment")
+    @FieldName("Comment")
     private String comment;
 
-    @JsonProperty("Config")
+    @FieldName("Config")
     private ContainerConfig config;
 
-    @JsonProperty("Container")
+    @FieldName("Container")
     private String container;
 
-    @JsonProperty("ContainerConfig")
+    @FieldName("ContainerConfig")
     private ContainerConfig containerConfig;
 
-    @JsonProperty("Created")
+    @FieldName("Created")
     private String created;
 
-    @JsonProperty("DockerVersion")
+    @FieldName("DockerVersion")
     private String dockerVersion;
 
-    @JsonProperty("Id")
+    @FieldName("Id")
     private String id;
 
-    @JsonProperty("Os")
+    @FieldName("Os")
     private String os;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_25}
      */
-    @JsonProperty("OsVersion")
+    @FieldName("OsVersion")
     private String osVersion;
 
-    @JsonProperty("Parent")
+    @FieldName("Parent")
     private String parent;
 
-    @JsonProperty("Size")
+    @FieldName("Size")
     private Long size;
 
-    @JsonProperty("RepoTags")
+    @FieldName("RepoTags")
     private List<String> repoTags;
 
-    @JsonProperty("RepoDigests")
+    @FieldName("RepoDigests")
     private List<String> repoDigests;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_21}
      */
-    @JsonProperty("VirtualSize")
+    @FieldName("VirtualSize")
     private Long virtualSize;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_21}
      */
-    @JsonProperty("GraphDriver")
+    @FieldName("GraphDriver")
     private GraphDriver graphDriver;
 
-    @JsonProperty("RootFS")
+    @FieldName("RootFS")
     private RootFS rootFS;
 
     /**

@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -21,7 +21,7 @@ public class ContainerSpecPrivilegesCredential implements Serializable {
      * `CredentialSpecs` subdirectory in the docker data directory, which defaults to
      * <code>C:\ProgramData\Docker\</code> on Windows.
      */
-    @JsonProperty("File")
+    @FieldName("File")
     private String file;
 
     /**
@@ -31,7 +31,7 @@ public class ContainerSpecPrivilegesCredential implements Serializable {
      * HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization\Containers\CredentialSpecs
      * </code>
      */
-    @JsonProperty("Registry")
+    @FieldName("Registry")
     private String registry;
 
     public String getFile() {

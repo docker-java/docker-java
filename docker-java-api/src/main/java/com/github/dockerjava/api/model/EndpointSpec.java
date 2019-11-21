@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -19,13 +19,13 @@ public class EndpointSpec implements Serializable {
     /**
      * @since 1.24
      */
-    @JsonProperty("Mode")
+    @FieldName("Mode")
     EndpointResolutionMode mode;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("Ports")
+    @FieldName("Ports")
     List<PortConfig> ports;
 
     /**

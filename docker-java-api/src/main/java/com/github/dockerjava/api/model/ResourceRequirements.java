@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -18,13 +18,13 @@ public class ResourceRequirements implements Serializable {
     /**
      * @since 1.24
      */
-    @JsonProperty("Limits")
+    @FieldName("Limits")
     private ResourceSpecs limits;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("Reservations")
+    @FieldName("Reservations")
     private ResourceSpecs reservations;
 
     /**

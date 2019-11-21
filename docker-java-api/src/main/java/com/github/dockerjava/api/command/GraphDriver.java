@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.command;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -18,13 +18,13 @@ public class GraphDriver {
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_21}
      */
-    @JsonProperty("Name")
+    @FieldName("Name")
     private String name;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_21}
      */
-    @JsonProperty("Data")
+    @FieldName("Data")
     private GraphData data;
 
 

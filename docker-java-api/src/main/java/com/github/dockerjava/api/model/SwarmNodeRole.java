@@ -1,15 +1,15 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
 public enum SwarmNodeRole {
 
-    @JsonProperty("worker")
+    @FieldName("worker")
     WORKER,
 
-    @JsonProperty("manager")
+    @FieldName("manager")
     MANAGER
 }

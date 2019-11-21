@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -16,43 +16,43 @@ import java.util.Map;
 public class Task implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("ID")
+    @FieldName("ID")
     private String id = null;
 
-    @JsonProperty("Version")
+    @FieldName("Version")
     private ObjectVersion version = null;
 
-    @JsonProperty("CreatedAt")
+    @FieldName("CreatedAt")
     private String createdAt = null;
 
-    @JsonProperty("UpdatedAt")
+    @FieldName("UpdatedAt")
     private String updatedAt = null;
 
-    @JsonProperty("Name")
+    @FieldName("Name")
     private String name = null;
 
-    @JsonProperty("Labels")
+    @FieldName("Labels")
     private Map<String, String> labels = null;
 
-    @JsonProperty("Spec")
+    @FieldName("Spec")
     private TaskSpec spec = null;
 
-    @JsonProperty("ServiceID")
+    @FieldName("ServiceID")
     private String serviceId = null;
 
-    @JsonProperty("Slot")
+    @FieldName("Slot")
     private Integer slot = null;
 
-    @JsonProperty("NodeID")
+    @FieldName("NodeID")
     private String nodeId = null;
 
-    @JsonProperty("AssignedGenericResources")
+    @FieldName("AssignedGenericResources")
     private List<GenericResource> assignedGenericResources = null;
 
-    @JsonProperty("Status")
+    @FieldName("Status")
     private TaskStatus status = null;
 
-    @JsonProperty("DesiredState")
+    @FieldName("DesiredState")
     private TaskState desiredState = null;
 
     /**

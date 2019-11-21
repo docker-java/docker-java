@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -15,37 +15,37 @@ import java.util.Map;
 public class Network implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("Id")
+    @FieldName("Id")
     private String id;
 
-    @JsonProperty("Name")
+    @FieldName("Name")
     private String name;
 
-    @JsonProperty("Scope")
+    @FieldName("Scope")
     private String scope;
 
-    @JsonProperty("Driver")
+    @FieldName("Driver")
     private String driver;
 
-    @JsonProperty("EnableIPv6")
+    @FieldName("EnableIPv6")
     private Boolean enableIPv6;
 
-    @JsonProperty("Internal")
+    @FieldName("Internal")
     private Boolean internal;
 
-    @JsonProperty("IPAM")
+    @FieldName("IPAM")
     private Ipam ipam;
 
-    @JsonProperty("Containers")
+    @FieldName("Containers")
     private Map<String, ContainerNetworkConfig> containers;
 
-    @JsonProperty("Options")
+    @FieldName("Options")
     private Map<String, String> options;
 
-    @JsonProperty("Attachable")
+    @FieldName("Attachable")
     private Boolean attachable;
 
-    @JsonProperty("Labels")
+    @FieldName("Labels")
     public Map<String, String> labels;
 
     public String getId() {
@@ -96,16 +96,16 @@ public class Network implements Serializable {
     @ToString
     public static class ContainerNetworkConfig {
 
-        @JsonProperty("EndpointID")
+        @FieldName("EndpointID")
         private String endpointId;
 
-        @JsonProperty("MacAddress")
+        @FieldName("MacAddress")
         private String macAddress;
 
-        @JsonProperty("IPv4Address")
+        @FieldName("IPv4Address")
         private String ipv4Address;
 
-        @JsonProperty("IPv6Address")
+        @FieldName("IPv6Address")
         private String ipv6Address;
 
         public String getEndpointId() {
@@ -129,13 +129,13 @@ public class Network implements Serializable {
     @ToString
     public static class Ipam {
 
-        @JsonProperty("Driver")
+        @FieldName("Driver")
         private String driver;
 
-        @JsonProperty("Config")
+        @FieldName("Config")
         private List<Config> config = new ArrayList<>();
 
-        @JsonProperty("Options")
+        @FieldName("Options")
         private Map<String, String> options = null;
 
         public String getDriver() {
@@ -167,16 +167,16 @@ public class Network implements Serializable {
 
         public static class Config {
 
-            @JsonProperty("Subnet")
+            @FieldName("Subnet")
             private String subnet;
 
-            @JsonProperty("IPRange")
+            @FieldName("IPRange")
             private String ipRange;
 
-            @JsonProperty("Gateway")
+            @FieldName("Gateway")
             private String gateway;
 
-            @JsonProperty("NetworkID")
+            @FieldName("NetworkID")
             private String networkID;
 
             public String getSubnet() {

@@ -1,15 +1,15 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 
 import java.io.Serializable;
 
 public abstract class GenericResource<T> implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("Kind")
+    @FieldName("Kind")
     String kind;
-    @JsonProperty("Value")
+    @FieldName("Value")
     T value = null;
 
     public String getKind() {

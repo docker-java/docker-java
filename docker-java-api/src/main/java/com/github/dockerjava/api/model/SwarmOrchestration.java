@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -19,7 +19,7 @@ public class SwarmOrchestration implements Serializable {
     /**
      * @since 1.24
      */
-    @JsonProperty("TaskHistoryRetentionLimit")
+    @FieldName("TaskHistoryRetentionLimit")
     private int taskHistoryRententionLimit;
 
     /**

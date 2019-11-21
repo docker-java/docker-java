@@ -1,23 +1,11 @@
 package com.github.dockerjava.api.model;
 
-import java.io.IOException;
 import java.io.Serializable;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.ObjectCodec;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.github.dockerjava.api.annotation.FromPrimitive;
+import com.github.dockerjava.api.annotation.ToPrimitive;
 import lombok.EqualsAndHashCode;
 
-@JsonSerialize(using = VolumesFrom.Serializer.class)
-@JsonDeserialize(using = VolumesFrom.Deserializer.class)
 @EqualsAndHashCode
 public class VolumesFrom implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -52,6 +40,7 @@ public class VolumesFrom implements Serializable {
      * @throws IllegalArgumentException
      *             if the specification cannot be parsed
      */
+    @FromPrimitive
     public static VolumesFrom parse(String serialized) {
         try {
             String[] parts = serialized.split(":");
@@ -79,32 +68,9 @@ public class VolumesFrom implements Serializable {
      * @return a string representation of this {@link VolumesFrom}
      */
     @Override
+    @ToPrimitive
     public String toString() {
         return container + ":" + accessMode.toString();
-    }
-
-    public static class Serializer extends JsonSerializer<VolumesFrom> {
-
-        @Override
-        public void serialize(VolumesFrom volumeFrom, JsonGenerator jsonGen, SerializerProvider serProvider)
-                throws IOException, JsonProcessingException {
-
-            jsonGen.writeString(volumeFrom.toString());
-
-        }
-
-    }
-
-    public static class Deserializer extends JsonDeserializer<VolumesFrom> {
-        @Override
-        public VolumesFrom deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-                throws IOException, JsonProcessingException {
-
-            ObjectCodec oc = jsonParser.getCodec();
-            JsonNode node = oc.readTree(jsonParser);
-            return VolumesFrom.parse(node.asText());
-
-        }
     }
 
 }

@@ -4,12 +4,12 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 
 public class AuthConfigurations implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("configs")
+    @FieldName("configs")
     private Map<String, AuthConfig> configs = new TreeMap<>();
 
     public void addConfig(AuthConfig authConfig) {

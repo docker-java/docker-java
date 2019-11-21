@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -23,31 +23,31 @@ public class ClusterInfo implements Serializable {
     /**
      * @since 1.24
      */
-    @JsonProperty("CreatedAt")
+    @FieldName("CreatedAt")
     private Date createdAt;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("Spec")
+    @FieldName("Spec")
     private SwarmSpec spec;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("ID")
+    @FieldName("ID")
     private String id;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("UpdatedAt")
+    @FieldName("UpdatedAt")
     private Date updatedAt;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("Version")
+    @FieldName("Version")
     private ResourceVersion version;
 
     /**

@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -16,25 +16,25 @@ import java.io.Serializable;
 public class ContainerMount implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("Name")
+    @FieldName("Name")
     String name;
 
-    @JsonProperty("Source")
+    @FieldName("Source")
     String source;
 
-    @JsonProperty("Destination")
+    @FieldName("Destination")
     String destination;
 
-    @JsonProperty("Driver")
+    @FieldName("Driver")
     String driver;
 
-    @JsonProperty("Mode")
+    @FieldName("Mode")
     String mode;
 
-    @JsonProperty("RW")
+    @FieldName("RW")
     boolean rw;
 
-    @JsonProperty("Propagation")
+    @FieldName("Propagation")
     String propagation;
 
     /**

@@ -1,7 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -28,265 +27,264 @@ public class HostConfig implements Serializable {
         return new HostConfig();
     }
 
-    @JsonProperty("Binds")
+    @FieldName("Binds")
     private Binds binds;
 
-    @JsonProperty("BlkioWeight")
+    @FieldName("BlkioWeight")
     private Integer blkioWeight;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
      */
-    @JsonProperty("BlkioWeightDevice")
+    @FieldName("BlkioWeightDevice")
     private List<BlkioWeightDevice> blkioWeightDevice;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
      */
-    @JsonProperty("BlkioDeviceReadBps")
+    @FieldName("BlkioDeviceReadBps")
     private List<BlkioRateDevice> blkioDeviceReadBps;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
      */
-    @JsonProperty("BlkioDeviceWriteBps")
+    @FieldName("BlkioDeviceWriteBps")
     private List<BlkioRateDevice> blkioDeviceWriteBps;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
      */
-    @JsonProperty("BlkioDeviceReadIOps")
+    @FieldName("BlkioDeviceReadIOps")
     private List<BlkioRateDevice> blkioDeviceReadIOps;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
      */
-    @JsonProperty("BlkioDeviceWriteIOps")
+    @FieldName("BlkioDeviceWriteIOps")
     private List<BlkioRateDevice> blkioDeviceWriteIOps;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_20}
      */
-    @JsonProperty("MemorySwappiness")
+    @FieldName("MemorySwappiness")
     private Long memorySwappiness;
 
-    @JsonProperty("NanoCPUs")
+    @FieldName("NanoCPUs")
     private Long nanoCPUs;
 
-    @JsonProperty("CapAdd")
+    @FieldName("CapAdd")
     private Capability[] capAdd;
 
-    @JsonProperty("CapDrop")
+    @FieldName("CapDrop")
     private Capability[] capDrop;
 
-    @JsonProperty("ContainerIDFile")
+    @FieldName("ContainerIDFile")
     private String containerIDFile;
 
-    @JsonProperty("CpuPeriod")
+    @FieldName("CpuPeriod")
     private Long cpuPeriod;
 
-    @JsonProperty("CpuRealtimePeriod")
+    @FieldName("CpuRealtimePeriod")
     private Long cpuRealtimePeriod;
 
-    @JsonProperty("CpuRealtimeRuntime")
+    @FieldName("CpuRealtimeRuntime")
     private Long cpuRealtimeRuntime;
 
-    @JsonProperty("CpuShares")
+    @FieldName("CpuShares")
     private Integer cpuShares;
 
     /**
      * @since ~{@link RemoteApiVersion#VERSION_1_20}
      */
-    @JsonProperty("CpuQuota")
+    @FieldName("CpuQuota")
     private Long cpuQuota;
 
-    @JsonProperty("CpusetCpus")
+    @FieldName("CpusetCpus")
     private String cpusetCpus;
 
-    @JsonProperty("CpusetMems")
+    @FieldName("CpusetMems")
     private String cpusetMems;
 
-    @JsonProperty("Devices")
+    @FieldName("Devices")
     private Device[] devices;
 
-    @JsonProperty("DeviceCgroupRules")
+    @FieldName("DeviceCgroupRules")
     private List<String> deviceCgroupRules;
 
     /**
      * @since {@link RemoteApiVersion#VERSION_1_25}
      */
-    @JsonProperty("DiskQuota")
+    @FieldName("DiskQuota")
     private Long diskQuota;
 
-    @JsonProperty("Dns")
+    @FieldName("Dns")
     private String[] dns;
 
-    @JsonProperty("DnsOptions")
+    @FieldName("DnsOptions")
     private List<String> dnsOptions;
 
-    @JsonProperty("DnsSearch")
+    @FieldName("DnsSearch")
     private String[] dnsSearch;
 
-    @JsonProperty("ExtraHosts")
+    @FieldName("ExtraHosts")
     private String[] extraHosts;
 
-    @JsonProperty("GroupAdd")
+    @FieldName("GroupAdd")
     private List<String> groupAdd;
 
-    @JsonProperty("IpcMode")
+    @FieldName("IpcMode")
     private String ipcMode;
 
-    @JsonProperty("Cgroup")
+    @FieldName("Cgroup")
     private String cgroup;
 
-    @JsonProperty("Links")
+    @FieldName("Links")
     private Links links;
 
-    @JsonProperty("LogConfig")
+    @FieldName("LogConfig")
     private LogConfig logConfig;
 
-    @JsonProperty("LxcConf")
+    @FieldName("LxcConf")
     private LxcConf[] lxcConf;
 
-    @JsonProperty("Memory")
+    @FieldName("Memory")
     private Long memory;
 
-    @JsonProperty("MemorySwap")
+    @FieldName("MemorySwap")
     private Long memorySwap;
 
     /**
      * @since {@link RemoteApiVersion#VERSION_1_21}
      */
-    @JsonProperty("MemoryReservation")
+    @FieldName("MemoryReservation")
     private Long memoryReservation;
 
     /**
      * @since {@link RemoteApiVersion#VERSION_1_21}
      */
-    @JsonProperty("KernelMemory")
+    @FieldName("KernelMemory")
     private Long kernelMemory;
 
-    @JsonProperty("NetworkMode")
+    @FieldName("NetworkMode")
     private String networkMode;
 
-    @JsonProperty("OomKillDisable")
+    @FieldName("OomKillDisable")
     private Boolean oomKillDisable;
 
-    @JsonProperty("Init")
+    @FieldName("Init")
     private Boolean init;
 
     /**
      * @since {@link RemoteApiVersion#VERSION_1_25}
      */
-    @JsonProperty("AutoRemove")
+    @FieldName("AutoRemove")
     private Boolean autoRemove;
 
     /**
      * @since {@link RemoteApiVersion#VERSION_1_22}
      */
-    @JsonProperty("OomScoreAdj")
+    @FieldName("OomScoreAdj")
     private Integer oomScoreAdj;
 
-    @JsonProperty("PortBindings")
+    @FieldName("PortBindings")
     private Ports portBindings;
 
-    @JsonProperty("Privileged")
+    @FieldName("Privileged")
     private Boolean privileged;
 
-    @JsonProperty("PublishAllPorts")
+    @FieldName("PublishAllPorts")
     private Boolean publishAllPorts;
 
-    @JsonProperty("ReadonlyRootfs")
+    @FieldName("ReadonlyRootfs")
     private Boolean readonlyRootfs;
 
-    @JsonProperty("RestartPolicy")
+    @FieldName("RestartPolicy")
     private RestartPolicy restartPolicy;
 
-    @JsonProperty("Ulimits")
+    @FieldName("Ulimits")
     private Ulimit[] ulimits;
 
-    @JsonProperty("CpuCount")
+    @FieldName("CpuCount")
     private Long cpuCount;
 
-    @JsonProperty("CpuPercent")
+    @FieldName("CpuPercent")
     private Long cpuPercent;
 
-    @JsonProperty("IOMaximumIOps")
+    @FieldName("IOMaximumIOps")
     private Long ioMaximumIOps;
 
-    @JsonProperty("IOMaximumBandwidth")
+    @FieldName("IOMaximumBandwidth")
     private Long ioMaximumBandwidth;
 
-    @JsonProperty("VolumesFrom")
+    @FieldName("VolumesFrom")
     private VolumesFrom[] volumesFrom;
 
-    @JsonProperty("Mounts")
+    @FieldName("Mounts")
     private List<Mount> mounts;
 
-    @JsonProperty("PidMode")
+    @FieldName("PidMode")
     private String pidMode;
 
-    @JsonProperty("Isolation")
+    @FieldName("Isolation")
     private Isolation isolation;
 
     /**
      * @since {@link RemoteApiVersion#VERSION_1_20}
      */
-    @JsonProperty("SecurityOpt")
+    @FieldName("SecurityOpt")
     private List<String> securityOpts;
 
-    @JsonProperty("StorageOpt")
+    @FieldName("StorageOpt")
     private Map<String, String> storageOpt;
 
     /**
      * @since {@link RemoteApiVersion#VERSION_1_20}
      */
-    @JsonProperty("CgroupParent")
+    @FieldName("CgroupParent")
     private String cgroupParent;
 
     /**
      * @since {@link RemoteApiVersion#VERSION_1_21}
      */
-    @JsonProperty("VolumeDriver")
+    @FieldName("VolumeDriver")
     private String volumeDriver;
 
     /**
      * @since {@link RemoteApiVersion#VERSION_1_22}
      */
-    @JsonProperty("ShmSize")
+    @FieldName("ShmSize")
     private Long shmSize;
 
     /**
      * @since ~{@link RemoteApiVersion#VERSION_1_23}
      */
-    @JsonProperty("PidsLimit")
+    @FieldName("PidsLimit")
     private Long pidsLimit;
 
     /**
      * @since ~{@link RemoteApiVersion#VERSION_1_30}
      */
-    @JsonProperty("Runtime")
+    @FieldName("Runtime")
     private String runtime;
 
     /**
      * @since ~{@link RemoteApiVersion#VERSION_1_22}
      */
-    @JsonProperty("Tmpfs")
+    @FieldName("Tmpfs")
     private Map<String, String> tmpFs;
 
-    @JsonProperty("UTSMode")
+    @FieldName("UTSMode")
     private String utSMode;
 
-    @JsonProperty("UsernsMode")
+    @FieldName("UsernsMode")
     private String usernsMode;
 
-    @JsonProperty("Sysctls")
+    @FieldName("Sysctls")
     private Map<String, String> sysctls;
 
-    @JsonProperty("ConsoleSize")
+    @FieldName("ConsoleSize")
     private List<Integer> consoleSize;
 
-    @JsonIgnore
     public Bind[] getBinds() {
         return (binds == null) ? new Bind[0] : binds.getBinds();
     }
@@ -344,12 +342,10 @@ public class HostConfig implements Serializable {
         return extraHosts;
     }
 
-    @JsonIgnore
     public Link[] getLinks() {
         return (links == null) ? new Link[0] : links.getLinks();
     }
 
-    @JsonIgnore
     public LogConfig getLogConfig() {
         return (logConfig == null) ? new LogConfig() : logConfig;
     }
@@ -539,7 +535,6 @@ public class HostConfig implements Serializable {
      * Parse the network mode as specified at
      * {@see https://github.com/docker/engine-api/blob/master/types/container/hostconfig_unix.go}
      */
-    @JsonIgnore
     public boolean isUserDefinedNetwork() {
         return networkMode != null && !PREDEFINED_NETWORKS.contains(networkMode) && !networkMode.startsWith("container:");
     }
@@ -548,12 +543,10 @@ public class HostConfig implements Serializable {
         return runtime;
     }
 
-    @JsonIgnore
     public void setBinds(Bind... binds) {
         this.binds = new Binds(binds);
     }
 
-    @JsonIgnore
     public void setLinks(Link... links) {
         this.links = new Links(links);
     }

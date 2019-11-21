@@ -12,8 +12,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.WebTarget;
 import com.google.common.collect.ImmutableSet;
 import io.netty.handler.codec.http.HttpConstants;
@@ -50,7 +50,7 @@ public class NettyWebTarget implements WebTarget {
     @Deprecated
     public NettyWebTarget(ChannelProvider channelProvider, String host) {
         this(
-                new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES),
+                DefaultDockerClientConfig.createDefaultConfigBuilder().build().getObjectMapper(),
                 channelProvider,
                 host,
                 ImmutableList.of(),

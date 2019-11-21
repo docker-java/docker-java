@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
@@ -13,7 +13,7 @@ import java.io.Serializable;
 public class PidsStatsConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("current")
+    @FieldName("current")
     private Long current;
 
     /**

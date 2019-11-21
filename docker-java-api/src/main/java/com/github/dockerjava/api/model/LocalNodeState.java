@@ -1,7 +1,7 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.github.dockerjava.api.annotation.FromPrimitive;
+import com.github.dockerjava.api.annotation.ToPrimitive;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -40,12 +40,12 @@ public enum LocalNodeState {
         this.value = value;
     }
 
-    @JsonValue
+    @ToPrimitive
     public String getValue() {
         return value;
     }
 
-    @JsonCreator
+    @FromPrimitive
     public static LocalNodeState forValue(String s) {
         return TYPES.get(s);
     }

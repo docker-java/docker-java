@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.command;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -8,10 +8,10 @@ import lombok.ToString;
 @ToString
 public class CreateNetworkResponse {
 
-    @JsonProperty("Id")
+    @FieldName("Id")
     private String id;
 
-    @JsonProperty("Warnings")
+    @FieldName("Warnings")
     private String[] warnings;
 
     public String getId() {

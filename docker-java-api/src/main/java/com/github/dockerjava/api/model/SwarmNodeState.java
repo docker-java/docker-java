@@ -1,21 +1,21 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
 public enum SwarmNodeState {
 
-    @JsonProperty("unknown")
+    @FieldName("unknown")
     UNKNOWN,
 
-    @JsonProperty("down")
+    @FieldName("down")
     DOWN,
 
-    @JsonProperty("ready")
+    @FieldName("ready")
     READY,
 
-    @JsonProperty("disconnected")
+    @FieldName("disconnected")
     DISCONNECTED
 }

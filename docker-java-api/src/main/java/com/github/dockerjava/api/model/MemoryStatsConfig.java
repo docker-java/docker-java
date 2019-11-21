@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
@@ -13,19 +13,19 @@ import java.io.Serializable;
 public class MemoryStatsConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("stats")
+    @FieldName("stats")
     private StatsConfig stats;
 
-    @JsonProperty("usage")
+    @FieldName("usage")
     private Long usage;
 
-    @JsonProperty("max_usage")
+    @FieldName("max_usage")
     private Long maxUsage;
 
-    @JsonProperty("failcnt")
+    @FieldName("failcnt")
     private Long failcnt;
 
-    @JsonProperty("limit")
+    @FieldName("limit")
     private Long limit;
 
     /**

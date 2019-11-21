@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -19,25 +19,25 @@ public class ServiceUpdateStatus implements Serializable {
     /**
      * @since 1.24
      */
-    @JsonProperty("State")
+    @FieldName("State")
     private ServiceUpdateState state;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("StartedAt")
+    @FieldName("StartedAt")
     private Date startedAt;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("CompletedAt")
+    @FieldName("CompletedAt")
     private Date completedAt;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("Message")
+    @FieldName("Message")
     private String message;
 
     /**

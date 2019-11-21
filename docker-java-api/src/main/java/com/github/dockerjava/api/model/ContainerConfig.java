@@ -1,7 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -19,73 +18,72 @@ import java.util.Map;
 public class ContainerConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("AttachStderr")
+    @FieldName("AttachStderr")
     private Boolean attachStderr;
 
-    @JsonProperty("AttachStdin")
+    @FieldName("AttachStdin")
     private Boolean attachStdin;
 
-    @JsonProperty("AttachStdout")
+    @FieldName("AttachStdout")
     private Boolean attachStdout;
 
-    @JsonProperty("Cmd")
+    @FieldName("Cmd")
     private String[] cmd;
 
-    @JsonProperty("Domainname")
+    @FieldName("Domainname")
     private String domainName;
 
-    @JsonProperty("Entrypoint")
+    @FieldName("Entrypoint")
     private String[] entrypoint;
 
-    @JsonProperty("Env")
+    @FieldName("Env")
     private String[] env;
 
-    @JsonProperty("ExposedPorts")
+    @FieldName("ExposedPorts")
     private ExposedPorts exposedPorts;
 
-    @JsonProperty("Hostname")
+    @FieldName("Hostname")
     private String hostName;
 
-    @JsonProperty("Image")
+    @FieldName("Image")
     private String image;
 
-    @JsonProperty("Labels")
+    @FieldName("Labels")
     private Map<String, String> labels;
 
-    @JsonProperty("MacAddress")
+    @FieldName("MacAddress")
     private String macAddress;
 
-    @JsonProperty("NetworkDisabled")
+    @FieldName("NetworkDisabled")
     private Boolean networkDisabled;
 
-    @JsonProperty("OnBuild")
+    @FieldName("OnBuild")
     private String[] onBuild;
 
-    @JsonProperty("OpenStdin")
+    @FieldName("OpenStdin")
     private Boolean stdinOpen;
 
-    @JsonProperty("PortSpecs")
+    @FieldName("PortSpecs")
     private String[] portSpecs;
 
-    @JsonProperty("StdinOnce")
+    @FieldName("StdinOnce")
     private Boolean stdInOnce;
 
-    @JsonProperty("Tty")
+    @FieldName("Tty")
     private Boolean tty;
 
-    @JsonProperty("User")
+    @FieldName("User")
     private String user;
 
-    @JsonProperty("Volumes")
+    @FieldName("Volumes")
     private Map<String, ?> volumes;
 
-    @JsonProperty("WorkingDir")
+    @FieldName("WorkingDir")
     private String workingDir;
 
-    @JsonProperty("Healthcheck")
+    @FieldName("Healthcheck")
     private HealthCheck healthCheck;
 
-    @JsonIgnore
     public ExposedPort[] getExposedPorts() {
         return exposedPorts != null ? exposedPorts.getExposedPorts() : null;
     }

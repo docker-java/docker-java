@@ -1,7 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -26,13 +25,13 @@ public class ContainerNetwork implements Serializable {
     /**
      * FIXME verify
      */
-    @JsonProperty("IPAMConfig")
+    @FieldName("IPAMConfig")
     private Ipam ipamConfig;
 
     /**
      * FIXME verify
      */
-    @JsonProperty("Links")
+    @FieldName("Links")
     private Links links;
 
     /**
@@ -41,34 +40,34 @@ public class ContainerNetwork implements Serializable {
      *
      * @since {@link RemoteApiVersion#VERSION_1_22}
      */
-    @JsonProperty("Aliases")
+    @FieldName("Aliases")
     private List<String> aliases;
 
-    @JsonProperty("NetworkID")
+    @FieldName("NetworkID")
     private String networkID;
 
-    @JsonProperty("EndpointID")
+    @FieldName("EndpointID")
     private String endpointId;
 
-    @JsonProperty("Gateway")
+    @FieldName("Gateway")
     private String gateway;
 
-    @JsonProperty("IPAddress")
+    @FieldName("IPAddress")
     private String ipAddress;
 
-    @JsonProperty("IPPrefixLen")
+    @FieldName("IPPrefixLen")
     private Integer ipPrefixLen;
 
-    @JsonProperty("IPv6Gateway")
+    @FieldName("IPv6Gateway")
     private String ipV6Gateway;
 
-    @JsonProperty("GlobalIPv6Address")
+    @FieldName("GlobalIPv6Address")
     private String globalIPv6Address;
 
-    @JsonProperty("GlobalIPv6PrefixLen")
+    @FieldName("GlobalIPv6PrefixLen")
     private Integer globalIPv6PrefixLen;
 
-    @JsonProperty("MacAddress")
+    @FieldName("MacAddress")
     private String macAddress;
 
     /**
@@ -227,7 +226,6 @@ public class ContainerNetwork implements Serializable {
      * @see #links
      */
     @CheckForNull
-    @JsonIgnore
     public Link[] getLinks() {
         return links == null ? new Link[0] : links.getLinks();
     }
@@ -285,10 +283,10 @@ public class ContainerNetwork implements Serializable {
      */
     public static class Ipam {
 
-        @JsonProperty("IPv4Address")
+        @FieldName("IPv4Address")
         private String ipv4Address;
 
-        @JsonProperty("IPv6Address")
+        @FieldName("IPv6Address")
         private String ipv6Address;
 
         public String getIpv4Address() {

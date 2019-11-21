@@ -1,9 +1,8 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.github.dockerjava.api.annotation.FromPrimitive;
+import com.github.dockerjava.api.annotation.FieldName;
+import com.github.dockerjava.api.annotation.ToPrimitive;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
@@ -21,10 +20,10 @@ import java.util.Map;
 public class LogConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("Type")
+    @FieldName("Type")
     public LoggingType type = null;
 
-    @JsonProperty("Config")
+    @FieldName("Config")
     public Map<String, String> config;
 
     public LogConfig(LoggingType type, Map<String, String> config) {
@@ -48,12 +47,10 @@ public class LogConfig implements Serializable {
         return this;
     }
 
-    @JsonIgnore
     public Map<String, String> getConfig() {
         return config;
     }
 
-    @JsonIgnore
     public LogConfig setConfig(Map<String, String> config) {
         this.config = config;
         return this;
@@ -79,12 +76,12 @@ public class LogConfig implements Serializable {
             this.type = type;
         }
 
-        @JsonValue
+        @ToPrimitive
         public String getType() {
             return type;
         }
 
-        @JsonCreator
+        @FromPrimitive
         @CheckForNull
         public static LoggingType fromValue(String text) {
             for (LoggingType b : LoggingType.values()) {

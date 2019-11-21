@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 
 import javax.annotation.CheckForNull;
 import java.util.Date;
@@ -14,7 +14,7 @@ public class Swarm extends ClusterInfo {
     /**
      * @since 1.24
      */
-    @JsonProperty("JoinTokens")
+    @FieldName("JoinTokens")
     private SwarmJoinTokens joinTokens;
 
     /**

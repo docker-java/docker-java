@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.command;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -14,19 +14,19 @@ import javax.annotation.CheckForNull;
 @ToString
 public class GraphData {
 
-    @JsonProperty("RootDir")
+    @FieldName("RootDir")
     private String rootDir;
 
-    @JsonProperty("DeviceId")
+    @FieldName("DeviceId")
     private String deviceId;
 
-    @JsonProperty("DeviceName")
+    @FieldName("DeviceName")
     private String deviceName;
 
-    @JsonProperty("DeviceSize")
+    @FieldName("DeviceSize")
     private String deviceSize;
 
-    @JsonProperty("dir")
+    @FieldName("dir")
     private String dir;
 
     /**

@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 
 import javax.annotation.CheckForNull;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
 public class UpdateContainerResponse extends ResponseItem {
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("Warnings")
+    @FieldName("Warnings")
     private List<String> warnings;
 
     @CheckForNull

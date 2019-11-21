@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -21,7 +21,7 @@ public class ContainerNetworkSettings implements Serializable {
     /**
      * @since {@link RemoteApiVersion#VERSION_1_22}
      */
-    @JsonProperty("Networks")
+    @FieldName("Networks")
     private Map<String, ContainerNetwork> networks;
 
     /**

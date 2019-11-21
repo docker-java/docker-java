@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -20,13 +20,13 @@ public class EventActor implements Serializable {
     /**
      * @since 1.22
      */
-    @JsonProperty("ID")
+    @FieldName("ID")
     private String id;
 
     /**
      * @since 1.22
      */
-    @JsonProperty("Attributes")
+    @FieldName("Attributes")
     private Map<String, String> attributes;
 
     /**

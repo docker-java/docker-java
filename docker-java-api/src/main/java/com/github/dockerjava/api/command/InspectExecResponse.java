@@ -2,7 +2,7 @@ package com.github.dockerjava.api.command;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import com.github.dockerjava.api.model.NetworkSettings;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -12,56 +12,56 @@ import javax.annotation.CheckForNull;
 @EqualsAndHashCode
 @ToString
 public class InspectExecResponse {
-    @JsonProperty("ID")
+    @FieldName("ID")
     private String id;
 
-    @JsonProperty("OpenStdin")
+    @FieldName("OpenStdin")
     private Boolean openStdin;
 
-    @JsonProperty("OpenStderr")
+    @FieldName("OpenStderr")
     private Boolean openStderr;
 
-    @JsonProperty("OpenStdout")
+    @FieldName("OpenStdout")
     private Boolean openStdout;
 
-    @JsonProperty("Running")
+    @FieldName("Running")
     private Boolean running;
 
     /**
      * @since {@link RemoteApiVersion#VERSION_1_22}
      */
-    @JsonProperty("CanRemove")
+    @FieldName("CanRemove")
     private Boolean canRemove;
 
-    @JsonProperty("ExitCode")
+    @FieldName("ExitCode")
     private Long exitCode;
 
-    @JsonProperty("ProcessConfig")
+    @FieldName("ProcessConfig")
     private ProcessConfig processConfig;
 
     /**
      * @deprecated @since {@link RemoteApiVersion#VERSION_1_22}
      */
     @Deprecated
-    @JsonProperty("Container")
+    @FieldName("Container")
     private Container container;
 
     /**
      * @since {@link RemoteApiVersion#VERSION_1_22}
      */
-    @JsonProperty("ContainerID")
+    @FieldName("ContainerID")
     private String containerID;
 
     /**
      * @since {@link RemoteApiVersion#VERSION_1_22}
      */
-    @JsonProperty("DetachKeys")
+    @FieldName("DetachKeys")
     private String detachKeys;
 
     /**
      * @since {@link RemoteApiVersion#VERSION_1_25}
      */
-    @JsonProperty("Pid")
+    @FieldName("Pid")
     private Long pid;
 
     public String getId() {
@@ -154,19 +154,19 @@ public class InspectExecResponse {
     @ToString
     public class ProcessConfig {
 
-        @JsonProperty("arguments")
+        @FieldName("arguments")
         private List<String> arguments;
 
-        @JsonProperty("entrypoint")
+        @FieldName("entrypoint")
         private String entryPoint;
 
-        @JsonProperty("privileged")
+        @FieldName("privileged")
         private Boolean privileged;
 
-        @JsonProperty("tty")
+        @FieldName("tty")
         private Boolean tty;
 
-        @JsonProperty("user")
+        @FieldName("user")
         private String user;
 
         public List<String> getArguments() {
@@ -192,7 +192,7 @@ public class InspectExecResponse {
 
     public class Container {
 
-        @JsonProperty("NetworkSettings")
+        @FieldName("NetworkSettings")
         private NetworkSettings networkSettings;
 
         /**

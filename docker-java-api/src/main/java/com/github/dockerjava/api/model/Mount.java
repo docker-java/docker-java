@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -18,43 +18,43 @@ public class Mount implements Serializable {
     /**
      * @since 1.24
      */
-    @JsonProperty("Type")
+    @FieldName("Type")
     private MountType type;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("Source")
+    @FieldName("Source")
     private String source;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("Target")
+    @FieldName("Target")
     private String target;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("ReadOnly")
+    @FieldName("ReadOnly")
     private Boolean readOnly;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("BindOptions")
+    @FieldName("BindOptions")
     private BindOptions bindOptions;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("VolumeOptions")
+    @FieldName("VolumeOptions")
     private VolumeOptions volumeOptions;
 
     /**
      * @since 1.29
      */
-    @JsonProperty("TmpfsOptions")
+    @FieldName("TmpfsOptions")
     private TmpfsOptions tmpfsOptions;
 
     /**

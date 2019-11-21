@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -16,22 +16,22 @@ import java.io.Serializable;
 public class Image implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("Created")
+    @FieldName("Created")
     private Long created;
 
-    @JsonProperty("Id")
+    @FieldName("Id")
     private String id;
 
-    @JsonProperty("ParentId")
+    @FieldName("ParentId")
     private String parentId;
 
-    @JsonProperty("RepoTags")
+    @FieldName("RepoTags")
     private String[] repoTags;
 
-    @JsonProperty("Size")
+    @FieldName("Size")
     private Long size;
 
-    @JsonProperty("VirtualSize")
+    @FieldName("VirtualSize")
     private Long virtualSize;
 
     public String getId() {

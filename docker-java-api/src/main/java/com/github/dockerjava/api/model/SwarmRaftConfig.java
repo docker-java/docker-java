@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -19,25 +19,25 @@ public class SwarmRaftConfig implements Serializable {
     /**
      * @since 1.24
      */
-    @JsonProperty("LogEntriesForSlowFollowers")
+    @FieldName("LogEntriesForSlowFollowers")
     private long logEntriesForSlowFollowers;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("HeartbeatTick")
+    @FieldName("HeartbeatTick")
     private int heartbeatTick;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("SnapshotInterval")
+    @FieldName("SnapshotInterval")
     private long snapshotInterval;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("ElectionTick")
+    @FieldName("ElectionTick")
     private int electionTick;
 
     /**

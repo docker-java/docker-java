@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -20,19 +20,19 @@ public class SecretSpec implements Serializable {
     /**
      * @since 1.25
      */
-    @JsonProperty("Name")
+    @FieldName("Name")
     private String name;
 
     /**
      * @since 1.25
      */
-    @JsonProperty("Data")
+    @FieldName("Data")
     private String data;
 
     /**
      * @since 1.25
      */
-    @JsonProperty("Labels")
+    @FieldName("Labels")
     private Map<String, String> labels;
 
     /**

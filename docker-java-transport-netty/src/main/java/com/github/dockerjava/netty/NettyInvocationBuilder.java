@@ -2,12 +2,11 @@ package com.github.dockerjava.netty;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.InvocationBuilder;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
 import com.github.dockerjava.netty.handler.FramedResponseStreamHandler;
@@ -86,14 +85,14 @@ public class NettyInvocationBuilder implements InvocationBuilder {
     @Deprecated
     public NettyInvocationBuilder(ChannelProvider channelProvider, String resource) {
         this(
-                new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES),
+                DefaultDockerClientConfig.createDefaultConfigBuilder().build().getObjectMapper(),
                 channelProvider,
                 resource
         );
     }
 
     public NettyInvocationBuilder(ObjectMapper objectMapper, ChannelProvider channelProvider, String resource) {
-        this.objectMapper = objectMapper.copy().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        this.objectMapper = objectMapper;
         this.channelProvider = channelProvider;
         this.resource = resource;
     }

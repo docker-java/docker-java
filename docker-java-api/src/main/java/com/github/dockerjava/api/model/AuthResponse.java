@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -12,13 +12,13 @@ public class AuthResponse implements Serializable {
     /**
      * @since 1.23
      */
-    @JsonProperty("Status")
+    @FieldName("Status")
     private String status;
 
     /**
      * @since 1.23
      */
-    @JsonProperty("IdentityToken")
+    @FieldName("IdentityToken")
     private String identityToken;
 
     /**

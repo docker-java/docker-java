@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.github.dockerjava.api.annotation.FromPrimitive;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
@@ -47,7 +47,7 @@ public enum TaskState {
         return value;
     }
 
-    @JsonCreator
+    @FromPrimitive
     public static TaskState forValue(String s) {
         return TaskState.valueOf(s.toUpperCase());
     }

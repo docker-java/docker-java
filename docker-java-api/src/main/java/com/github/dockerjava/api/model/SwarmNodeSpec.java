@@ -1,7 +1,7 @@
 package com.github.dockerjava.api.model;
 
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -20,25 +20,25 @@ public class SwarmNodeSpec implements Serializable {
     /**
      * @since 1.24
      */
-    @JsonProperty("Name")
+    @FieldName("Name")
     private String name;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("Role")
+    @FieldName("Role")
     private SwarmNodeRole role;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("Availability")
+    @FieldName("Availability")
     private SwarmNodeAvailability availability;
 
     /**
      * @since 1.24
      */
-    @JsonProperty("Labels")
+    @FieldName("Labels")
     public Map<String, String> labels;
 
     /**

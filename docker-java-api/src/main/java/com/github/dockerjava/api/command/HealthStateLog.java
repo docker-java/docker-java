@@ -1,19 +1,19 @@
 package com.github.dockerjava.api.command;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.annotation.FieldName;
 
 public class HealthStateLog {
 
-    @JsonProperty("Start")
+    @FieldName("Start")
     private String start;
 
-    @JsonProperty("End")
+    @FieldName("End")
     private String end;
 
-    @JsonProperty("ExitCode")
+    @FieldName("ExitCode")
     private Long exitCode;
 
-    @JsonProperty("Output")
+    @FieldName("Output")
     private String output;
 
     public String getStart() {

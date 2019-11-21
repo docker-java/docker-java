@@ -1,21 +1,12 @@
 package com.github.dockerjava.api.model;
 
-import java.io.IOException;
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Map.Entry;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.ObjectCodec;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.node.NullNode;
+import com.github.dockerjava.api.annotation.FromPrimitive;
+import com.github.dockerjava.api.annotation.ToPrimitive;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -24,28 +15,26 @@ import lombok.EqualsAndHashCode;
  * @see Bind
  * @deprecated since {@link RemoteApiVersion#VERSION_1_20}
  */
-@JsonDeserialize(using = VolumeRW.Deserializer.class)
-@JsonSerialize(using = VolumeRW.Serializer.class)
 @Deprecated
 @EqualsAndHashCode
 public class VolumeRW implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Volume volume;
+    private String volume;
 
     private AccessMode accessMode = AccessMode.rw;
 
     public VolumeRW(Volume volume) {
-        this.volume = volume;
+        this.volume = volume.getPath();
     }
 
     public VolumeRW(Volume volume, AccessMode accessMode) {
-        this.volume = volume;
+        this.volume = volume.getPath();
         this.accessMode = accessMode;
     }
 
     public Volume getVolume() {
-        return volume;
+        return new Volume(volume);
     }
 
     public AccessMode getAccessMode() {
@@ -63,35 +52,15 @@ public class VolumeRW implements Serializable {
         return getVolume() + ":" + getAccessMode();
     }
 
-    public static class Serializer extends JsonSerializer<VolumeRW> {
-
-        @Override
-        public void serialize(VolumeRW volumeRW, JsonGenerator jsonGen, SerializerProvider serProvider)
-                throws IOException, JsonProcessingException {
-
-            jsonGen.writeStartObject();
-            jsonGen.writeFieldName(volumeRW.getVolume().getPath());
-            jsonGen.writeString(Boolean.toString(volumeRW.getAccessMode().toBoolean()));
-            jsonGen.writeEndObject();
-        }
-
+    @FromPrimitive
+    public static VolumeRW fromPrimitive(Map<String, Boolean> map) {
+        Entry<String, Boolean> entry = map.entrySet().iterator().next();
+        return new VolumeRW(new Volume(entry.getKey()), AccessMode.fromBoolean(entry.getValue()));
     }
 
-    public static class Deserializer extends JsonDeserializer<VolumeRW> {
-        @Override
-        public VolumeRW deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-                throws IOException, JsonProcessingException {
-            ObjectCodec oc = jsonParser.getCodec();
-            JsonNode node = oc.readTree(jsonParser);
-            if (!node.equals(NullNode.getInstance())) {
-                Entry<String, JsonNode> field = node.fields().next();
-                String volume = field.getKey();
-                AccessMode accessMode = AccessMode.fromBoolean(field.getValue().asBoolean());
-                return new VolumeRW(new Volume(volume), accessMode);
-            } else {
-                return null;
-            }
-        }
+    @ToPrimitive
+    public Map<String, Boolean> toPrimitive() {
+        return Collections.singletonMap(volume, accessMode.toBoolean());
     }
 
 }
