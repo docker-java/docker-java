@@ -2,6 +2,7 @@ package com.github.dockerjava.api.model;
 
 import com.github.dockerjava.api.annotation.FromPrimitive;
 import com.github.dockerjava.api.annotation.FieldName;
+import com.github.dockerjava.api.annotation.IgnoredField;
 import com.github.dockerjava.api.annotation.ToPrimitive;
 
 import javax.annotation.CheckForNull;
@@ -47,10 +48,12 @@ public class LogConfig implements Serializable {
         return this;
     }
 
+    @IgnoredField
     public Map<String, String> getConfig() {
         return config;
     }
 
+    @IgnoredField
     public LogConfig setConfig(Map<String, String> config) {
         this.config = config;
         return this;

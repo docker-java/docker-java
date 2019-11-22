@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import com.fasterxml.jackson.databind.util.ClassUtil;
 import com.github.dockerjava.api.annotation.FromPrimitive;
 import com.github.dockerjava.api.annotation.FieldName;
+import com.github.dockerjava.api.annotation.IgnoredField;
 import com.github.dockerjava.api.annotation.ToPrimitive;
 
 import java.lang.reflect.Field;
@@ -36,6 +37,11 @@ public class DockerJavaJacksonAnnotationIntrospector extends JacksonAnnotationIn
             names[i] = expl.getOrDefault(enumValues[i].name(), names[i]);
         }
         return names;
+    }
+
+    @Override
+    protected boolean _isIgnorable(Annotated a) {
+        return a.hasAnnotation(IgnoredField.class) || super._isIgnorable(a);
     }
 
     @Override

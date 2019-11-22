@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.model;
 
 import com.github.dockerjava.api.annotation.FieldName;
+import com.github.dockerjava.api.annotation.IgnoredField;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -226,6 +227,7 @@ public class ContainerNetwork implements Serializable {
      * @see #links
      */
     @CheckForNull
+    @IgnoredField
     public Link[] getLinks() {
         return links == null ? new Link[0] : links.getLinks();
     }

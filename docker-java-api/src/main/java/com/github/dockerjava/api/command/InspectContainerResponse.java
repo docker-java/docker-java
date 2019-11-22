@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.annotation.FieldName;
+import com.github.dockerjava.api.annotation.IgnoredField;
 import com.github.dockerjava.api.model.ContainerConfig;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.NetworkSettings;
@@ -159,6 +160,7 @@ public class InspectContainerResponse {
         return resolvConfPath;
     }
 
+    @IgnoredField
     public VolumeBind[] getVolumes() {
         return volumes == null ? null : volumes.getBinds();
     }
@@ -168,6 +170,7 @@ public class InspectContainerResponse {
      */
     @Deprecated
     @CheckForNull
+    @IgnoredField
     public VolumeRW[] getVolumesRW() {
         return volumesRW == null ? null : volumesRW.getVolumesRW();
     }

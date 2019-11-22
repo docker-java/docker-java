@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.model;
 
 import com.github.dockerjava.api.annotation.FieldName;
+import com.github.dockerjava.api.annotation.IgnoredField;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -109,6 +110,7 @@ public class ResponseItem implements Serializable {
      *
      * @returns true: the error field indicates an error, false: the error field doesn't indicate an error
      */
+    @IgnoredField
     public boolean isErrorIndicated() {
         // check both the deprecated and current error fields, just in case
         return getError() != null || getErrorDetail() != null;

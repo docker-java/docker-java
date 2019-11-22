@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.model;
 
 import com.github.dockerjava.api.annotation.FieldName;
+import com.github.dockerjava.api.annotation.IgnoredField;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -84,6 +85,7 @@ public class ContainerConfig implements Serializable {
     @FieldName("Healthcheck")
     private HealthCheck healthCheck;
 
+    @IgnoredField
     public ExposedPort[] getExposedPorts() {
         return exposedPorts != null ? exposedPorts.getExposedPorts() : null;
     }

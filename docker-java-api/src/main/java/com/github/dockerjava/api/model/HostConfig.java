@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.model;
 
 import com.github.dockerjava.api.annotation.FieldName;
+import com.github.dockerjava.api.annotation.IgnoredField;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -285,6 +286,7 @@ public class HostConfig implements Serializable {
     @FieldName("ConsoleSize")
     private List<Integer> consoleSize;
 
+    @IgnoredField
     public Bind[] getBinds() {
         return (binds == null) ? new Bind[0] : binds.getBinds();
     }
@@ -342,10 +344,12 @@ public class HostConfig implements Serializable {
         return extraHosts;
     }
 
+    @IgnoredField
     public Link[] getLinks() {
         return (links == null) ? new Link[0] : links.getLinks();
     }
 
+    @IgnoredField
     public LogConfig getLogConfig() {
         return (logConfig == null) ? new LogConfig() : logConfig;
     }
@@ -535,6 +539,7 @@ public class HostConfig implements Serializable {
      * Parse the network mode as specified at
      * {@see https://github.com/docker/engine-api/blob/master/types/container/hostconfig_unix.go}
      */
+    @IgnoredField
     public boolean isUserDefinedNetwork() {
         return networkMode != null && !PREDEFINED_NETWORKS.contains(networkMode) && !networkMode.startsWith("container:");
     }
@@ -543,10 +548,12 @@ public class HostConfig implements Serializable {
         return runtime;
     }
 
+    @IgnoredField
     public void setBinds(Bind... binds) {
         this.binds = new Binds(binds);
     }
 
+    @IgnoredField
     public void setLinks(Link... links) {
         this.links = new Links(links);
     }

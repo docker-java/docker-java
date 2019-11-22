@@ -5,8 +5,6 @@ package com.github.dockerjava.core;
 
 import java.net.URI;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -52,9 +50,6 @@ enum DefaultObjectMapperHolder {
 
     private final ObjectMapper objectMapper = new ObjectMapper()
             // TODO .setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL)
-            .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)
-            .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
-            .setVisibility(PropertyAccessor.CREATOR, JsonAutoDetect.Visibility.ANY)
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
             .setAnnotationIntrospector(new DockerJavaJacksonAnnotationIntrospector());

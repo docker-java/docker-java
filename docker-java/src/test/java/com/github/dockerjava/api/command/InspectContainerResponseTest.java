@@ -16,6 +16,7 @@
 package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.github.dockerjava.api.model.ContainerNetwork;
 import com.github.dockerjava.api.model.Isolation;
 import com.github.dockerjava.api.model.Volume;
@@ -39,6 +40,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -133,7 +135,17 @@ public class InspectContainerResponseTest {
 
     @Test
     public void roundTrip_empty() throws IOException {
-        testRoundTrip(CommandJSONSamples.inspectContainerResponse_empty, InspectContainerResponse[].class);
+        String str = JSONTestHelper.readString(CommandJSONSamples.inspectContainerResponse_empty);
+        InspectContainerResponse[] item = JSONTestHelper.getMapper().readValue(str, InspectContainerResponse[].class);
+        assertNotNull(item);
+        String serialized1 = JSONTestHelper.getMapper().writerWithDefaultPrettyPrinter().writeValueAsString(item);
+        JsonNode json1 = JSONTestHelper.getMapper().readTree(serialized1);
+        InspectContainerResponse[] deserialized1 = JSONTestHelper.getMapper().readValue(serialized1, InspectContainerResponse[].class);
+        String serialized2 = JSONTestHelper.getMapper().writeValueAsString(deserialized1);
+        JsonNode json2 = JSONTestHelper.getMapper().readTree(serialized2);
+        InspectContainerResponse[] deserialized2 = JSONTestHelper.getMapper().readValue(serialized2, InspectContainerResponse[].class);
+
+        assertEquals("JSONs must be equal after the second roundtrip", json2, json1);
     }
 
     @Test

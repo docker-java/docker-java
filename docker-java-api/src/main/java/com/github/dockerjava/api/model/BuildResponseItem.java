@@ -1,5 +1,7 @@
 package com.github.dockerjava.api.model;
 
+import com.github.dockerjava.api.annotation.IgnoredField;
+
 /**
  * Represents a build response stream item
  */
@@ -11,6 +13,7 @@ public class BuildResponseItem extends ResponseItem {
     /**
      * Returns whether the stream field indicates a successful build operation
      */
+    @IgnoredField
     public boolean isBuildSuccessIndicated() {
         if (isErrorIndicated() || getStream() == null) {
             return false;
@@ -19,6 +22,7 @@ public class BuildResponseItem extends ResponseItem {
         return getStream().contains(BUILD_SUCCESS);
     }
 
+    @IgnoredField
     public String getImageId() {
         if (!isBuildSuccessIndicated()) {
             return null;

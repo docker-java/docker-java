@@ -1,5 +1,7 @@
 package com.github.dockerjava.api.model;
 
+import com.github.dockerjava.api.annotation.IgnoredField;
+
 /**
  * Represents a pull response stream item
  */
@@ -22,6 +24,7 @@ public class PullResponseItem extends ResponseItem {
      *
      * @returns true: status indicates that pull was successful, false: status doesn't indicate a successful pull
      */
+    @IgnoredField
     public boolean isPullSuccessIndicated() {
         if (isErrorIndicated() || getStatus() == null) {
             return false;
