@@ -10,6 +10,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 /**
  * Abstract template implementation of {@link ResultCallback}
@@ -20,7 +21,19 @@ import java.util.concurrent.TimeUnit;
 public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T>, A_RES_T> implements
         ResultCallback<A_RES_T> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ResultCallbackTemplate.class);
+    private static final Consumer<Throwable> ERROR_LOGGER;
+
+    static {
+        Consumer<Throwable> errorLogger = e -> {};
+        try {
+            if (Class.forName("org.slf4j.LoggerFactory") != null) {
+                Logger LOGGER = LoggerFactory.getLogger(ResultCallbackTemplate.class);
+                errorLogger = e -> LOGGER.error("Error during callback", e);
+            }
+        } catch (ClassNotFoundException ignored) {
+        }
+        ERROR_LOGGER = errorLogger;
+    }
 
     private final CountDownLatch started = new CountDownLatch(1);
 
@@ -49,7 +62,7 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
         }
 
         try {
-            LOGGER.error("Error during callback", throwable);
+            ERROR_LOGGER.accept(throwable);
         } finally {
             try {
                 close();
