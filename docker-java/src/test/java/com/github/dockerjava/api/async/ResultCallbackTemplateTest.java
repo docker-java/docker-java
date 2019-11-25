@@ -26,7 +26,7 @@ public class ResultCallbackTemplateTest {
 
     @Test
     public void shouldNotFailIfSlf4jIsNotOnClasspath() throws Exception {
-        try(
+        try (
                 URLClassLoader classLoader = new URLClassLoader(
                         CLASSPATH.stream().filter(it -> !it.getPath().contains("slf4j")).toArray(URL[]::new),
                         null

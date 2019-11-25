@@ -24,11 +24,12 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
     private static final Consumer<Throwable> ERROR_LOGGER;
 
     static {
-        Consumer<Throwable> errorLogger = e -> {};
+        Consumer<Throwable> errorLogger = e -> {
+        };
         try {
             if (Class.forName("org.slf4j.LoggerFactory") != null) {
-                Logger LOGGER = LoggerFactory.getLogger(ResultCallbackTemplate.class);
-                errorLogger = e -> LOGGER.error("Error during callback", e);
+                Logger logger = LoggerFactory.getLogger(ResultCallbackTemplate.class);
+                errorLogger = e -> logger.error("Error during callback", e);
             }
         } catch (ClassNotFoundException ignored) {
         }
