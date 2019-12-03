@@ -1,11 +1,12 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.EqualsAndHashCode;
 
 import javax.annotation.Nonnull;
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * Represents a bind mounted volume in a Docker container.
@@ -30,8 +31,8 @@ public class Volume implements Serializable {
      */
     @Nonnull
     @JsonCreator
-    public static Volume parse(@JsonProperty("path") String path) {
-        return new Volume(path);
+    public static Volume parse(Map<String, String> primitive) {
+        return new Volume(primitive.get("path"));
     }
 
     private String path;
@@ -50,6 +51,7 @@ public class Volume implements Serializable {
     }
 
     @Override
+    @JsonValue
     public String toString() {
         return getPath();
     }

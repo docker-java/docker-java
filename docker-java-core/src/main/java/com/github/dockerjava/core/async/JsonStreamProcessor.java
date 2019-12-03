@@ -9,10 +9,10 @@ import java.io.InputStream;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.dockerjava.api.async.ResultCallback;
+import com.github.dockerjava.core.DefaultDockerClientConfig;
 
 /**
  *
@@ -30,7 +30,7 @@ public class JsonStreamProcessor<T> implements ResponseStreamProcessor<T> {
     @Deprecated
     public JsonStreamProcessor(Class<T> clazz) {
         this(
-                new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES),
+                DefaultDockerClientConfig.createDefaultConfigBuilder().build().getObjectMapper(),
                 clazz
         );
     }

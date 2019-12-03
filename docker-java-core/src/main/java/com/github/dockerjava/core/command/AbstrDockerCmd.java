@@ -21,7 +21,7 @@ public abstract class AbstrDockerCmd<CMD_T extends DockerCmd<RES_T>, RES_T> impl
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstrDockerCmd.class);
 
-    protected DockerCmdSyncExec<CMD_T, RES_T> execution;
+    protected transient DockerCmdSyncExec<CMD_T, RES_T> execution;
 
     public AbstrDockerCmd(DockerCmdSyncExec<CMD_T, RES_T> execution) {
         checkNotNull(execution, "execution was not specified");

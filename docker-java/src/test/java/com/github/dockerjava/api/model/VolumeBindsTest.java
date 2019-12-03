@@ -6,9 +6,22 @@ import org.junit.Test;
 
 import java.io.IOException;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class VolumeBindsTest {
+
+    @Test
+    public void usesToJson() throws Exception {
+        VolumeBinds binds = new VolumeBinds(
+                new VolumeBind("/bar", "/foo"),
+                new VolumeBind("/bop", "/bip")
+        );
+        String json = JSONTestHelper.getMapper().writeValueAsString(binds);
+
+        assertThat(json, is("{\"/foo\":\"/bar\",\"/bip\":\"/bop\"}"));
+    }
 
     @Test
     public void t() throws IOException {

@@ -9,7 +9,7 @@ import javax.ws.rs.client.ClientResponseContext;
 import javax.ws.rs.client.ClientResponseFilter;
 import javax.ws.rs.core.MediaType;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.github.dockerjava.core.DefaultDockerClientConfig;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,7 @@ public class ResponseStatusExceptionFilter implements ClientResponseFilter {
 
     @Deprecated
     public ResponseStatusExceptionFilter() {
-        this(new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES));
+        this(DefaultDockerClientConfig.createDefaultConfigBuilder().build().getObjectMapper());
     }
 
     public ResponseStatusExceptionFilter(ObjectMapper objectMapper) {

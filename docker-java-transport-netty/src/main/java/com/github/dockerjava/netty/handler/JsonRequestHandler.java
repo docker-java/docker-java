@@ -1,6 +1,6 @@
 package com.github.dockerjava.netty.handler;
 
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.github.dockerjava.core.DefaultDockerClientConfig;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
@@ -17,11 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Deprecated
 public class JsonRequestHandler extends MessageToByteEncoder<Object> {
 
-    private ObjectMapper mapper = new ObjectMapper();
-
-    public JsonRequestHandler() {
-        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-    }
+    private ObjectMapper mapper = DefaultDockerClientConfig.createDefaultConfigBuilder().build().getObjectMapper();
 
     @Override
     protected void encode(ChannelHandlerContext ctx, Object msg, ByteBuf out) throws Exception {

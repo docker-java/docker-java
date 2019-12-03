@@ -20,9 +20,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class AbstrDockerCmdExec {
 
-    private final DockerClientConfig dockerClientConfig;
+    private final transient DockerClientConfig dockerClientConfig;
 
-    private final WebTarget baseResource;
+    private final transient WebTarget baseResource;
 
     public AbstrDockerCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
         checkNotNull(baseResource, "baseResource was not specified");
