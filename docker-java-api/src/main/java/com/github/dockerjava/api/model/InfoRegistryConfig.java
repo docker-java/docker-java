@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -17,16 +17,16 @@ import java.util.Map;
 public final class InfoRegistryConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @FieldName("IndexConfigs")
+    @JsonProperty("IndexConfigs")
     private Map<String, IndexConfig> indexConfigs;
 
-    @FieldName("InsecureRegistryCIDRs")
+    @JsonProperty("InsecureRegistryCIDRs")
     private List<String> insecureRegistryCIDRs;
 
     /**
      * //FIXME unknown field
      */
-    @FieldName("Mirrors")
+    @JsonProperty("Mirrors")
     private Object mirrors;
 
     /**
@@ -83,16 +83,16 @@ public final class InfoRegistryConfig implements Serializable {
     @EqualsAndHashCode
     @ToString
     public static final class IndexConfig {
-        @FieldName("Mirrors")
+        @JsonProperty("Mirrors")
         private List<String> mirrors;
 
-        @FieldName("Name")
+        @JsonProperty("Name")
         private String name;
 
-        @FieldName("Official")
+        @JsonProperty("Official")
         private Boolean official;
 
-        @FieldName("Secure")
+        @JsonProperty("Secure")
         private Boolean secure;
 
         /**

@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.command;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -16,10 +16,10 @@ import java.util.List;
 @ToString
 public class RootFS {
 
-    @FieldName("Type")
+    @JsonProperty("Type")
     private String type;
 
-    @FieldName("Layers")
+    @JsonProperty("Layers")
     private List<String> layers;
 
     /**

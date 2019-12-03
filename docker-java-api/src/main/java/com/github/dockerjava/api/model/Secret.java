@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -16,31 +16,31 @@ public class Secret implements Serializable {
     /**
      * @since 1.24
      */
-    @FieldName("ID")
+    @JsonProperty("ID")
     private String id;
 
     /**
      * @since 1.24
      */
-    @FieldName("CreatedAt")
+    @JsonProperty("CreatedAt")
     private Date createdAt;
 
     /**
      * @since 1.24
      */
-    @FieldName("UpdatedAt")
+    @JsonProperty("UpdatedAt")
     private Date updatedAt;
 
     /**
      * @since 1.24
      */
-    @FieldName("Spec")
+    @JsonProperty("Spec")
     private ServiceSpec spec;
 
     /**
      * @since 1.24
      */
-    @FieldName("Version")
+    @JsonProperty("Version")
     private ResourceVersion version;
 
     public String getId() {

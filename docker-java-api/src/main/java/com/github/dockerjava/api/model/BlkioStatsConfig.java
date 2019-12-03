@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -18,28 +18,28 @@ import java.util.List;
 public class BlkioStatsConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @FieldName("io_service_bytes_recursive")
+    @JsonProperty("io_service_bytes_recursive")
     private List<BlkioStatEntry> ioServiceBytesRecursive;
 
-    @FieldName("io_serviced_recursive")
+    @JsonProperty("io_serviced_recursive")
     private List<BlkioStatEntry> ioServicedRecursive;
 
-    @FieldName("io_queue_recursive")
+    @JsonProperty("io_queue_recursive")
     private List<BlkioStatEntry> ioQueueRecursive;
 
-    @FieldName("io_service_time_recursive")
+    @JsonProperty("io_service_time_recursive")
     private List<BlkioStatEntry> ioServiceTimeRecursive;
 
-    @FieldName("io_wait_time_recursive")
+    @JsonProperty("io_wait_time_recursive")
     private List<BlkioStatEntry> ioWaitTimeRecursive;
 
-    @FieldName("io_merged_recursive")
+    @JsonProperty("io_merged_recursive")
     private List<BlkioStatEntry> ioMergedRecursive;
 
-    @FieldName("io_time_recursive")
+    @JsonProperty("io_time_recursive")
     private List<BlkioStatEntry> ioTimeRecursive;
 
-    @FieldName("sectors_recursive")
+    @JsonProperty("sectors_recursive")
     private List<BlkioStatEntry> sectorsRecursive;
 
     /**

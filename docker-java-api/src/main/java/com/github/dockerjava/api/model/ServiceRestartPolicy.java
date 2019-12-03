@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -18,25 +18,25 @@ public class ServiceRestartPolicy implements Serializable {
     /**
      * @since 1.24
      */
-    @FieldName("Condition")
+    @JsonProperty("Condition")
     private ServiceRestartCondition condition;
 
     /**
      * @since 1.24
      */
-    @FieldName("Delay")
+    @JsonProperty("Delay")
     private Long delay;
 
     /**
      * @since 1.24
      */
-    @FieldName("MaxAttempts")
+    @JsonProperty("MaxAttempts")
     private Long maxAttempts;
 
     /**
      * @since 1.24
      */
-    @FieldName("Window")
+    @JsonProperty("Window")
     private Long window;
 
     /**

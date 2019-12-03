@@ -15,7 +15,7 @@
  */
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -31,28 +31,28 @@ import java.util.List;
 public class HealthCheck implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @FieldName("Interval")
+    @JsonProperty("Interval")
     private Long interval;
 
-    @FieldName("Timeout")
+    @JsonProperty("Timeout")
     private Long timeout;
 
     /**
      * @since 1.26
      */
-    @FieldName("Test")
+    @JsonProperty("Test")
     private List<String> test;
 
     /**
      * @since 1.26
      */
-    @FieldName("Retries")
+    @JsonProperty("Retries")
     private Integer retries;
 
     /**
      * @since 1.26
      */
-    @FieldName("StartPeriod")
+    @JsonProperty("StartPeriod")
     private Long startPeriod;
 
     public Long getInterval() {

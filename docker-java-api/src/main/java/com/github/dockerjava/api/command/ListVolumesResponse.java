@@ -2,7 +2,7 @@ package com.github.dockerjava.api.command;
 
 import java.util.List;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -14,7 +14,7 @@ import lombok.ToString;
 @ToString
 public class ListVolumesResponse {
 
-    @FieldName("Volumes")
+    @JsonProperty("Volumes")
     private List<InspectVolumeResponse> volumes;
 
     public List<InspectVolumeResponse> getVolumes() {

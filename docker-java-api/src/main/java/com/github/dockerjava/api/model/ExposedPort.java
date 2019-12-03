@@ -4,8 +4,9 @@ import static com.github.dockerjava.api.model.InternetProtocol.TCP;
 import static com.github.dockerjava.api.model.InternetProtocol.UDP;
 
 import java.io.Serializable;
-import com.github.dockerjava.api.annotation.FromPrimitive;
-import com.github.dockerjava.api.annotation.ToPrimitive;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.github.dockerjava.api.model.Ports.Binding;
 import lombok.EqualsAndHashCode;
 
@@ -105,7 +106,7 @@ public class ExposedPort implements Serializable {
      * @throws IllegalArgumentException
      *             if the specification cannot be parsed
      */
-    @FromPrimitive
+    @JsonCreator
     public static ExposedPort parse(String serialized) throws IllegalArgumentException {
         try {
             String[] parts = serialized.split("/");
@@ -129,7 +130,7 @@ public class ExposedPort implements Serializable {
      * @return a string representation of this {@link ExposedPort}
      */
     @Override
-    @ToPrimitive
+    @JsonValue
     public String toString() {
         return port + "/" + protocol.toString();
     }

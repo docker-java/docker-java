@@ -1,16 +1,16 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
 public enum EndpointResolutionMode {
 
-    @FieldName("vip")
+    @JsonProperty("vip")
     VIP,
 
-    @FieldName("dnsrr")
+    @JsonProperty("dnsrr")
     DNSRR
 
 }

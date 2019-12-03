@@ -1,7 +1,7 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FromPrimitive;
-import com.github.dockerjava.api.annotation.ToPrimitive;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
@@ -248,7 +248,7 @@ public class Ports implements Serializable {
         }
     }
 
-    @FromPrimitive
+    @JsonCreator
     public static Ports fromPrimitive(Map<String, List<Map<String, String>>> map) {
         Ports out = new Ports();
         for (Entry<String, List<Map<String, String>>> entry : map.entrySet()) {
@@ -265,7 +265,7 @@ public class Ports implements Serializable {
         return out;
     }
 
-    @ToPrimitive
+    @JsonValue
     public Map<String, List<Map<String, String>>> toPrimitive() {
         // Use reduce-like collect to be able to put nulls into the values
         return ports.entrySet().stream().collect(

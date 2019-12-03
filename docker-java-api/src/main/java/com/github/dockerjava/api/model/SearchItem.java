@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -16,19 +16,19 @@ import java.io.Serializable;
 public class SearchItem implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @FieldName("star_count")
+    @JsonProperty("star_count")
     private Integer starCount;
 
-    @FieldName("is_official")
+    @JsonProperty("is_official")
     private Boolean isOfficial;
 
-    @FieldName("is_trusted")
+    @JsonProperty("is_trusted")
     private Boolean isTrusted;
 
-    @FieldName("name")
+    @JsonProperty("name")
     private String name;
 
-    @FieldName("description")
+    @JsonProperty("description")
     private String description;
 
     public Integer getStarCount() {

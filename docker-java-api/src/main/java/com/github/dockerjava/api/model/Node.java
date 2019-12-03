@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -14,16 +14,16 @@ import java.io.Serializable;
 public class Node implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @FieldName("Name")
+    @JsonProperty("Name")
     private String name;
 
-    @FieldName("Id")
+    @JsonProperty("Id")
     private String id;
 
-    @FieldName("Addr")
+    @JsonProperty("Addr")
     private String addr;
 
-    @FieldName("Ip")
+    @JsonProperty("Ip")
     private String ip;
 
     public String getName() {

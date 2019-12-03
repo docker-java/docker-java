@@ -1,16 +1,16 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
 public class LxcConf implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @FieldName("Key")
+    @JsonProperty("Key")
     public String key;
 
-    @FieldName("Value")
+    @JsonProperty("Value")
     public String value;
 
     public LxcConf(String key, String value) {

@@ -51,8 +51,7 @@ enum DefaultObjectMapperHolder {
     private final ObjectMapper objectMapper = new ObjectMapper()
             // TODO .setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL)
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-            .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
-            .setAnnotationIntrospector(new DockerJavaJacksonAnnotationIntrospector());
+            .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 
     public ObjectMapper getObjectMapper() {
         return objectMapper;

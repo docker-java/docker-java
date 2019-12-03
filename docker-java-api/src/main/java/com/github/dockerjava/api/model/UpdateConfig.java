@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -18,37 +18,37 @@ public class UpdateConfig implements Serializable {
     /**
      * @since 1.24
      */
-    @FieldName("Parallelism")
+    @JsonProperty("Parallelism")
     private Long parallelism;
 
     /**
      * @since 1.24
      */
-    @FieldName("Delay")
+    @JsonProperty("Delay")
     private Long delay;
 
     /**
      * @since 1.24
      */
-    @FieldName("FailureAction")
+    @JsonProperty("FailureAction")
     private UpdateFailureAction failureAction;
 
     /**
      * @since 1.25
      */
-    @FieldName("MaxFailureRatio")
+    @JsonProperty("MaxFailureRatio")
     private Float maxFailureRatio;
 
     /**
      * @since 1.25
      */
-    @FieldName("Monitor")
+    @JsonProperty("Monitor")
     private Long monitor;
 
     /**
      * @since 1.36
      */
-    @FieldName("Order")
+    @JsonProperty("Order")
     private UpdateOrder order;
 
 

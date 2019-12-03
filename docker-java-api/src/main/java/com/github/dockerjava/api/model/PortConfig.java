@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -18,25 +18,25 @@ public class PortConfig implements Serializable {
     /**
      * @since 1.24
      */
-    @FieldName("Name")
+    @JsonProperty("Name")
     private String name;
 
     /**
      * @since 1.24
      */
-    @FieldName("Protocol")
+    @JsonProperty("Protocol")
     private PortConfigProtocol protocol;
 
     /**
      * @since 1.24
      */
-    @FieldName("TargetPort")
+    @JsonProperty("TargetPort")
     private int targetPort;
 
     /**
      * @since 1.24
      */
-    @FieldName("PublishedPort")
+    @JsonProperty("PublishedPort")
     private int publishedPort;
 
     /**
@@ -44,7 +44,7 @@ public class PortConfig implements Serializable {
      * docker 1.13
      * https://github.com/mrjana/docker/blob/14ac9f60d0174256e0713701ebffaf5ca827da71/api/types/swarm/network.go
      */
-    @FieldName("PublishMode")
+    @JsonProperty("PublishMode")
     private PublishMode publishMode;
 
     /**
@@ -122,10 +122,10 @@ public class PortConfig implements Serializable {
 
     public enum PublishMode {
         //ingress load balancing using routing mesh.
-        @FieldName("ingress")
+        @JsonProperty("ingress")
         ingress,
         //direct host level access on the host where the task is running.
-        @FieldName("host")
+        @JsonProperty("host")
         host
     }
 }

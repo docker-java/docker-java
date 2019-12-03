@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
@@ -16,7 +16,7 @@ import java.io.Serializable;
 public class ObjectVersion implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @FieldName("Index")
+    @JsonProperty("Index")
     private Long index = null;
 
     public Long getIndex() {

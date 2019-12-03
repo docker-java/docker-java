@@ -1,7 +1,7 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FromPrimitive;
-import com.github.dockerjava.api.annotation.ToPrimitive;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.io.Serializable;
 
@@ -18,12 +18,12 @@ public enum Isolation implements Serializable {
         this.value = value;
     }
 
-    @ToPrimitive
+    @JsonValue
     public String getValue() {
         return value;
     }
 
-    @FromPrimitive
+    @JsonCreator
     public static Isolation fromValue(String text) {
         for (Isolation b : Isolation.values()) {
             if (String.valueOf(b.value).equals(text)) {

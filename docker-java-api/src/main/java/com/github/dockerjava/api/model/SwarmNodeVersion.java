@@ -1,7 +1,7 @@
 package com.github.dockerjava.api.model;
 
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -20,7 +20,7 @@ public class SwarmNodeVersion implements Serializable {
     /**
      * @since 1.24
      */
-    @FieldName("Index")
+    @JsonProperty("Index")
     private long index;
 
     /**

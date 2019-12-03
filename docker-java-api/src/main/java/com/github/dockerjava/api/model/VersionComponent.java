@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -19,13 +19,13 @@ import java.util.Map;
 public class VersionComponent implements Serializable {
     public static final long serialVersionUID = 1L;
 
-    @FieldName("Details")
+    @JsonProperty("Details")
     private Map<String, String> details;
 
-    @FieldName("Name")
+    @JsonProperty("Name")
     private String name;
 
-    @FieldName("Version")
+    @JsonProperty("Version")
     private String version;
 
     /**

@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -16,13 +16,13 @@ import java.io.Serializable;
 public class ContainerSpecSecret implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @FieldName("File")
+    @JsonProperty("File")
     private ContainerSpecFile file;
 
-    @FieldName("SecretID")
+    @JsonProperty("SecretID")
     private String secretId;
 
-    @FieldName("SecretName")
+    @JsonProperty("SecretName")
     private String secretName;
 
     public ContainerSpecFile getFile() {

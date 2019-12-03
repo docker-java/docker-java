@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.command;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -13,10 +13,10 @@ import lombok.ToString;
 @ToString
 public class TopContainerResponse {
 
-    @FieldName("Titles")
+    @JsonProperty("Titles")
     private String[] titles;
 
-    @FieldName("Processes")
+    @JsonProperty("Processes")
     private String[][] processes;
 
     public String[] getTitles() {

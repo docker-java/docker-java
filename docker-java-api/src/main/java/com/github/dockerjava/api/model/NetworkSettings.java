@@ -3,7 +3,7 @@
  */
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -20,61 +20,61 @@ import java.util.Map;
 public class NetworkSettings implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @FieldName("Bridge")
+    @JsonProperty("Bridge")
     private String bridge;
 
-    @FieldName("SandboxID")
+    @JsonProperty("SandboxID")
     private String sandboxId;
 
-    @FieldName("HairpinMode")
+    @JsonProperty("HairpinMode")
     private Boolean hairpinMode;
 
-    @FieldName("LinkLocalIPv6Address")
+    @JsonProperty("LinkLocalIPv6Address")
     private String linkLocalIPv6Address;
 
-    @FieldName("LinkLocalIPv6PrefixLen")
+    @JsonProperty("LinkLocalIPv6PrefixLen")
     private Integer linkLocalIPv6PrefixLen;
 
-    @FieldName("Ports")
+    @JsonProperty("Ports")
     private Ports ports;
 
-    @FieldName("SandboxKey")
+    @JsonProperty("SandboxKey")
     private String sandboxKey;
 
-    @FieldName("SecondaryIPAddresses")
+    @JsonProperty("SecondaryIPAddresses")
     private Object secondaryIPAddresses;
 
-    @FieldName("SecondaryIPv6Addresses")
+    @JsonProperty("SecondaryIPv6Addresses")
     private Object secondaryIPv6Addresses;
 
-    @FieldName("EndpointID")
+    @JsonProperty("EndpointID")
     private String endpointID;
 
-    @FieldName("Gateway")
+    @JsonProperty("Gateway")
     private String gateway;
 
-    @FieldName("PortMapping")
+    @JsonProperty("PortMapping")
     private Map<String, Map<String, String>> portMapping;
 
-    @FieldName("GlobalIPv6Address")
+    @JsonProperty("GlobalIPv6Address")
     private String globalIPv6Address;
 
-    @FieldName("GlobalIPv6PrefixLen")
+    @JsonProperty("GlobalIPv6PrefixLen")
     private Integer globalIPv6PrefixLen;
 
-    @FieldName("IPAddress")
+    @JsonProperty("IPAddress")
     private String ipAddress;
 
-    @FieldName("IPPrefixLen")
+    @JsonProperty("IPPrefixLen")
     private Integer ipPrefixLen;
 
-    @FieldName("IPv6Gateway")
+    @JsonProperty("IPv6Gateway")
     private String ipV6Gateway;
 
-    @FieldName("MacAddress")
+    @JsonProperty("MacAddress")
     private String macAddress;
 
-    @FieldName("Networks")
+    @JsonProperty("Networks")
     private Map<String, ContainerNetwork> networks;
 
     /**

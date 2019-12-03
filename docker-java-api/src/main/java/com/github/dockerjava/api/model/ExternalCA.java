@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -20,19 +20,19 @@ public class ExternalCA implements Serializable {
     /**
      * @since 1.24
      */
-    @FieldName("Protocol")
+    @JsonProperty("Protocol")
     private ExternalCAProtocol protocol;
 
     /**
      * @since 1.24
      */
-    @FieldName("URL")
+    @JsonProperty("URL")
     private String url;
 
     /**
      * @since 1.24
      */
-    @FieldName("Options")
+    @JsonProperty("Options")
     private Map<String, String> options;
 
     /**

@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -19,55 +19,55 @@ public class Event implements Serializable {
     /**
      * @since 1.16
      */
-    @FieldName("status")
+    @JsonProperty("status")
     private String status;
 
     /**
      * @since 1.16
      */
-    @FieldName("id")
+    @JsonProperty("id")
     private String id;
 
     /**
      * @since 1.16
      */
-    @FieldName("from")
+    @JsonProperty("from")
     private String from;
 
     /**
      * ??
      */
-    @FieldName("node")
+    @JsonProperty("node")
     private Node node;
 
     /*
      * @since 1.
      */
-    @FieldName("Type")
+    @JsonProperty("Type")
     private EventType type;
 
     /**
      * @since 1.22
      */
-    @FieldName("Action")
+    @JsonProperty("Action")
     private String action;
 
     /**
      * @since 1.22
      */
-    @FieldName("Actor")
+    @JsonProperty("Actor")
     private EventActor actor;
 
     /**
      * @since 1.16
      */
-    @FieldName("time")
+    @JsonProperty("time")
     private Long time;
 
     /**
      * @since 1.21
      */
-    @FieldName("timeNano")
+    @JsonProperty("timeNano")
     private Long timeNano;
 
     /**

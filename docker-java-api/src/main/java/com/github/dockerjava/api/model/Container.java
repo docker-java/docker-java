@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -20,46 +20,46 @@ import java.util.Map;
 public class Container implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @FieldName("Command")
+    @JsonProperty("Command")
     private String command;
 
-    @FieldName("Created")
+    @JsonProperty("Created")
     private Long created;
 
-    @FieldName("Id")
+    @JsonProperty("Id")
     private String id;
 
-    @FieldName("Image")
+    @JsonProperty("Image")
     private String image;
 
     /**
      * @since since {@link RemoteApiVersion#VERSION_1_21}
      */
-    @FieldName("ImageID")
+    @JsonProperty("ImageID")
     private String imageId;
 
-    @FieldName("Names")
+    @JsonProperty("Names")
     private String[] names;
 
-    @FieldName("Ports")
+    @JsonProperty("Ports")
     public ContainerPort[] ports;
 
-    @FieldName("Labels")
+    @JsonProperty("Labels")
     public Map<String, String> labels;
 
-    @FieldName("Status")
+    @JsonProperty("Status")
     private String status;
 
     /**
      * @since ~{@link RemoteApiVersion#VERSION_1_23}
      */
-    @FieldName("State")
+    @JsonProperty("State")
     private String state;
 
     /**
      * @since ~{@link RemoteApiVersion#VERSION_1_19}
      */
-    @FieldName("SizeRw")
+    @JsonProperty("SizeRw")
     private Long sizeRw;
 
     /**
@@ -67,13 +67,13 @@ public class Container implements Serializable {
      *
      * @since ~{@link RemoteApiVersion#VERSION_1_19}
      */
-    @FieldName("SizeRootFs")
+    @JsonProperty("SizeRootFs")
     private Long sizeRootFs;
 
     /**
      * @since ~{@link RemoteApiVersion#VERSION_1_20}
      */
-    @FieldName("HostConfig")
+    @JsonProperty("HostConfig")
     private ContainerHostConfig hostConfig;
 
     /**
@@ -82,13 +82,13 @@ public class Container implements Serializable {
      *
      * @since ~{@link RemoteApiVersion#VERSION_1_22}
      */
-    @FieldName("NetworkSettings")
+    @JsonProperty("NetworkSettings")
     private ContainerNetworkSettings networkSettings;
 
     /**
      * @since ~{@link RemoteApiVersion#VERSION_1_23}
      */
-    @FieldName("Mounts")
+    @JsonProperty("Mounts")
     private List<ContainerMount> mounts;
 
     public String getId() {

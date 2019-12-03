@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -22,214 +22,214 @@ public class Info implements Serializable {
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
      */
-    @FieldName("Architecture")
+    @JsonProperty("Architecture")
     private String architecture;
 
-    @FieldName("Containers")
+    @JsonProperty("Containers")
     private Integer containers;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
      */
-    @FieldName("ContainersStopped")
+    @JsonProperty("ContainersStopped")
     private Integer containersStopped;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
      */
-    @FieldName("ContainersPaused")
+    @JsonProperty("ContainersPaused")
     private Integer containersPaused;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
      */
-    @FieldName("ContainersRunning")
+    @JsonProperty("ContainersRunning")
     private Integer containersRunning;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_20}
      */
-    @FieldName("CpuCfsPeriod")
+    @JsonProperty("CpuCfsPeriod")
     private Boolean cpuCfsPeriod;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_20}
      */
-    @FieldName("CpuCfsQuota")
+    @JsonProperty("CpuCfsQuota")
     private Boolean cpuCfsQuota;
 
-    @FieldName("CPUShares")
+    @JsonProperty("CPUShares")
     private Boolean cpuShares;
 
-    @FieldName("CPUSet")
+    @JsonProperty("CPUSet")
     private Boolean cpuSet;
 
-    @FieldName("Debug")
+    @JsonProperty("Debug")
     private Boolean debug;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_21}
      */
-    @FieldName("DiscoveryBackend")
+    @JsonProperty("DiscoveryBackend")
     private String discoveryBackend;
 
-    @FieldName("DockerRootDir")
+    @JsonProperty("DockerRootDir")
     private String dockerRootDir;
 
-    @FieldName("Driver")
+    @JsonProperty("Driver")
     private String driver;
 
-    @FieldName("DriverStatus")
+    @JsonProperty("DriverStatus")
     private List<List<String>> driverStatuses;
 
-    @FieldName("SystemStatus")
+    @JsonProperty("SystemStatus")
     private List<Object> systemStatus;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
      */
-    @FieldName("Plugins")
+    @JsonProperty("Plugins")
     private Map<String, List<String>> plugins;
 
-    @FieldName("ExecutionDriver")
+    @JsonProperty("ExecutionDriver")
     private String executionDriver;
 
-    @FieldName("LoggingDriver")
+    @JsonProperty("LoggingDriver")
     private String loggingDriver;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_20}
      */
-    @FieldName("ExperimentalBuild")
+    @JsonProperty("ExperimentalBuild")
     private Boolean experimentalBuild;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_20}
      */
-    @FieldName("HttpProxy")
+    @JsonProperty("HttpProxy")
     private String httpProxy;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_20}
      */
-    @FieldName("HttpsProxy")
+    @JsonProperty("HttpsProxy")
     private String httpsProxy;
 
-    @FieldName("ID")
+    @JsonProperty("ID")
     private String id;
 
-    @FieldName("IPv4Forwarding")
+    @JsonProperty("IPv4Forwarding")
     private Boolean ipv4Forwarding;
 
-    @FieldName("BridgeNfIptables")
+    @JsonProperty("BridgeNfIptables")
     private Boolean bridgeNfIptables;
 
-    @FieldName("BridgeNfIp6tables")
+    @JsonProperty("BridgeNfIp6tables")
     private Boolean bridgeNfIp6tables;
 
-    @FieldName("Images")
+    @JsonProperty("Images")
     private Integer images;
 
-    @FieldName("IndexServerAddress")
+    @JsonProperty("IndexServerAddress")
     private String indexServerAddress;
 
-    @FieldName("InitPath")
+    @JsonProperty("InitPath")
     private String initPath;
 
-    @FieldName("InitSha1")
+    @JsonProperty("InitSha1")
     private String initSha1;
 
-    @FieldName("KernelVersion")
+    @JsonProperty("KernelVersion")
     private String kernelVersion;
 
-    @FieldName("Labels")
+    @JsonProperty("Labels")
     private String[] labels;
 
-    @FieldName("MemoryLimit")
+    @JsonProperty("MemoryLimit")
     private Boolean memoryLimit;
 
-    @FieldName("MemTotal")
+    @JsonProperty("MemTotal")
     private Long memTotal;
 
-    @FieldName("Name")
+    @JsonProperty("Name")
     private String name;
 
-    @FieldName("NCPU")
+    @JsonProperty("NCPU")
     private Integer ncpu;
 
-    @FieldName("NEventsListener")
+    @JsonProperty("NEventsListener")
     private Integer nEventsListener;
 
-    @FieldName("NFd")
+    @JsonProperty("NFd")
     private Integer nfd;
 
-    @FieldName("NGoroutines")
+    @JsonProperty("NGoroutines")
     private Integer nGoroutines;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_20}
      */
-    @FieldName("NoProxy")
+    @JsonProperty("NoProxy")
     private String noProxy;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_20}
      */
-    @FieldName("OomKillDisable")
+    @JsonProperty("OomKillDisable")
     private Boolean oomKillDisable;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
      */
-    @FieldName("OSType")
+    @JsonProperty("OSType")
     private String osType;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_22}
      */
-    @FieldName("OomScoreAdj")
+    @JsonProperty("OomScoreAdj")
     private Integer oomScoreAdj;
 
-    @FieldName("OperatingSystem")
+    @JsonProperty("OperatingSystem")
     private String operatingSystem;
 
-    @FieldName("RegistryConfig")
+    @JsonProperty("RegistryConfig")
     private InfoRegistryConfig registryConfig;
 
-    @FieldName("Sockets")
+    @JsonProperty("Sockets")
     private String[] sockets;
 
-    @FieldName("SwapLimit")
+    @JsonProperty("SwapLimit")
     private Boolean swapLimit;
 
     /**
      * @since ~{@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_20}
      */
-    @FieldName("SystemTime")
+    @JsonProperty("SystemTime")
     private String systemTime;
 
     /**
      * @since ~{@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_21}
      */
-    @FieldName("ServerVersion")
+    @JsonProperty("ServerVersion")
     private String serverVersion;
 
-    @FieldName("ClusterStore")
+    @JsonProperty("ClusterStore")
     private String clusterStore;
 
-    @FieldName("ClusterAdvertise")
+    @JsonProperty("ClusterAdvertise")
     private String clusterAdvertise;
 
     /**
      * @since 1.24
      */
-    @FieldName("Swarm")
+    @JsonProperty("Swarm")
     private SwarmInfo swarm;
 
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_25}
      */
-    @FieldName("Isolation")
+    @JsonProperty("Isolation")
     private String isolation;
 
     /**

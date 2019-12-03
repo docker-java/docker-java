@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.github.dockerjava.api.annotation.FromPrimitive;
-import com.github.dockerjava.api.annotation.ToPrimitive;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 public class ExposedPorts implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -26,14 +26,14 @@ public class ExposedPorts implements Serializable {
         return exposedPorts;
     }
 
-    @FromPrimitive
+    @JsonCreator
     public static ExposedPorts fromPrimitive(Map<String, Object> object) {
         return new ExposedPorts(
                 object.keySet().stream().map(ExposedPort::parse).toArray(ExposedPort[]::new)
         );
     }
 
-    @ToPrimitive
+    @JsonValue
     public Map<String, Object> toPrimitive() {
         return Stream.of(exposedPorts).collect(Collectors.toMap(
                 ExposedPort::toString,

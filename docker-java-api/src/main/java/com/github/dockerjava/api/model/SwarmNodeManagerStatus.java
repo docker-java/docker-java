@@ -1,7 +1,7 @@
 package com.github.dockerjava.api.model;
 
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -19,19 +19,19 @@ public class SwarmNodeManagerStatus implements Serializable {
     /**
      * @since 1.24
      */
-    @FieldName("Leader")
+    @JsonProperty("Leader")
     private boolean leader;
 
     /**
      * @since 1.24
      */
-    @FieldName("Reachability")
+    @JsonProperty("Reachability")
     private Reachability reachability;
 
     /**
      * @since 1.24
      */
-    @FieldName("Addr")
+    @JsonProperty("Addr")
     private String addr;
 
     /**

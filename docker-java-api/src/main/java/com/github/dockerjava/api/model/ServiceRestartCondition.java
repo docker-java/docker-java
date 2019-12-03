@@ -1,19 +1,19 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
 public enum ServiceRestartCondition {
 
-    @FieldName("on-failure")
+    @JsonProperty("on-failure")
     ON_FAILURE,
 
-    @FieldName("any")
+    @JsonProperty("any")
     ANY,
 
-    @FieldName("none")
+    @JsonProperty("none")
     NONE
 
 }

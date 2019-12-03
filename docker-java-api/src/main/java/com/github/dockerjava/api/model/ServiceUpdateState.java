@@ -1,20 +1,20 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
 public enum ServiceUpdateState {
-    @FieldName("updating")
+    @JsonProperty("updating")
     UPDATING,
 
-    @FieldName("paused")
+    @JsonProperty("paused")
     PAUSED,
 
-    @FieldName("completed")
+    @JsonProperty("completed")
     COMPLETED,
 
-    @FieldName("rollback_completed")
+    @JsonProperty("rollback_completed")
     ROLLBACK_COMPLETED
 }

@@ -2,8 +2,8 @@ package com.github.dockerjava.api.model;
 
 import java.io.Serializable;
 
-import com.github.dockerjava.api.annotation.FromPrimitive;
-import com.github.dockerjava.api.annotation.ToPrimitive;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
@@ -40,7 +40,7 @@ public class VolumesFrom implements Serializable {
      * @throws IllegalArgumentException
      *             if the specification cannot be parsed
      */
-    @FromPrimitive
+    @JsonCreator
     public static VolumesFrom parse(String serialized) {
         try {
             String[] parts = serialized.split(":");
@@ -68,7 +68,7 @@ public class VolumesFrom implements Serializable {
      * @return a string representation of this {@link VolumesFrom}
      */
     @Override
-    @ToPrimitive
+    @JsonValue
     public String toString() {
         return container + ":" + accessMode.toString();
     }

@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class WaitResponse implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @FieldName("StatusCode")
+    @JsonProperty("StatusCode")
     private Integer statusCode;
 
     public Integer getStatusCode() {

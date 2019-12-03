@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -19,31 +19,31 @@ public class TaskSpec implements Serializable {
     /**
      * @since 1.24
      */
-    @FieldName("ContainerSpec")
+    @JsonProperty("ContainerSpec")
     private ContainerSpec containerSpec;
 
     /**
      * @since 1.24
      */
-    @FieldName("Resources")
+    @JsonProperty("Resources")
     private ResourceRequirements resources;
 
     /**
      * @since 1.24
      */
-    @FieldName("RestartPolicy")
+    @JsonProperty("RestartPolicy")
     private ServiceRestartPolicy restartPolicy;
 
     /**
      * @since 1.24
      */
-    @FieldName("Placement")
+    @JsonProperty("Placement")
     private ServicePlacement placement;
 
     /**
      * @since 1.24
      */
-    @FieldName("LogDriver")
+    @JsonProperty("LogDriver")
     private Driver logDriver;
 
     /**
@@ -51,19 +51,19 @@ public class TaskSpec implements Serializable {
      * a counter that triggers an update even if no relevant parameters have been changed
      * a random value will work if it is incrementing.
      */
-    @FieldName("ForceUpdate")
+    @JsonProperty("ForceUpdate")
     private Integer forceUpdate;
 
     /**
      * @since 1.25
      */
-    @FieldName("Networks")
+    @JsonProperty("Networks")
     private List<NetworkAttachmentConfig> networks;
 
     /**
      * @since 1.30
      */
-    @FieldName("Runtime")
+    @JsonProperty("Runtime")
     private String runtime;
 
     /**

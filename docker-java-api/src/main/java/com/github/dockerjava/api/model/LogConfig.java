@@ -1,9 +1,9 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FromPrimitive;
-import com.github.dockerjava.api.annotation.FieldName;
-import com.github.dockerjava.api.annotation.IgnoredField;
-import com.github.dockerjava.api.annotation.ToPrimitive;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
@@ -21,10 +21,10 @@ import java.util.Map;
 public class LogConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @FieldName("Type")
+    @JsonProperty("Type")
     public LoggingType type = null;
 
-    @FieldName("Config")
+    @JsonProperty("Config")
     public Map<String, String> config;
 
     public LogConfig(LoggingType type, Map<String, String> config) {
@@ -48,12 +48,12 @@ public class LogConfig implements Serializable {
         return this;
     }
 
-    @IgnoredField
+    @JsonIgnore
     public Map<String, String> getConfig() {
         return config;
     }
 
-    @IgnoredField
+    @JsonIgnore
     public LogConfig setConfig(Map<String, String> config) {
         this.config = config;
         return this;
@@ -79,12 +79,12 @@ public class LogConfig implements Serializable {
             this.type = type;
         }
 
-        @ToPrimitive
+        @JsonValue
         public String getType() {
             return type;
         }
 
-        @FromPrimitive
+        @JsonCreator
         @CheckForNull
         public static LoggingType fromValue(String text) {
             for (LoggingType b : LoggingType.values()) {

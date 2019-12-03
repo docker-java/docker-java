@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.command;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -12,13 +12,13 @@ import lombok.ToString;
 @ToString
 public class InspectVolumeResponse {
 
-    @FieldName("Name")
+    @JsonProperty("Name")
     private String name;
 
-    @FieldName("Driver")
+    @JsonProperty("Driver")
     private String driver;
 
-    @FieldName("Mountpoint")
+    @JsonProperty("Mountpoint")
     private String mountpoint;
 
     public String getName() {

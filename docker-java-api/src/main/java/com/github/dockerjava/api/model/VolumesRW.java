@@ -5,8 +5,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.github.dockerjava.api.annotation.FromPrimitive;
-import com.github.dockerjava.api.annotation.ToPrimitive;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 // This is not going to be serialized
 public class VolumesRW implements Serializable {
@@ -22,7 +22,7 @@ public class VolumesRW implements Serializable {
         return volumesRW;
     }
 
-    @FromPrimitive
+    @JsonCreator
     public static VolumesRW fromPrimitive(Map<String, Boolean> map) {
         return new VolumesRW(
                 map.entrySet().stream()
@@ -31,7 +31,7 @@ public class VolumesRW implements Serializable {
         );
     }
 
-    @ToPrimitive
+    @JsonValue
     public Map<String, Boolean> toPrimitive() {
         return Stream.of(volumesRW).collect(Collectors.toMap(
                 it -> it.getVolume().getPath(),

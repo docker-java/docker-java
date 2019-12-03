@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Stream;
 
-import com.github.dockerjava.api.annotation.FromPrimitive;
-import com.github.dockerjava.api.annotation.ToPrimitive;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 public class Links implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -24,14 +24,14 @@ public class Links implements Serializable {
         return links;
     }
 
-    @FromPrimitive
+    @JsonCreator
     public static Links fromPrimitive(String[] links) {
         return new Links(
                 Stream.of(links).map(Link::parse).toArray(Link[]::new)
         );
     }
 
-    @ToPrimitive
+    @JsonValue
     public String[] toPrimitive() {
         return Stream.of(links).map(Link::toString).toArray(String[]::new);
     }

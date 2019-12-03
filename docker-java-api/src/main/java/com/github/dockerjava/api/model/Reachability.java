@@ -1,18 +1,18 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
 public enum Reachability {
 
-    @FieldName("unknown")
+    @JsonProperty("unknown")
     UNKNOWN,
 
-    @FieldName("unreachable")
+    @JsonProperty("unreachable")
     UNREACHABLE,
 
-    @FieldName("reachable")
+    @JsonProperty("reachable")
     REACHABLE
 }

@@ -1,17 +1,17 @@
 package com.github.dockerjava.api.command;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public class HealthState {
 
-    @FieldName("Status")
+    @JsonProperty("Status")
     private String status;
 
-    @FieldName("FailingStreak")
+    @JsonProperty("FailingStreak")
     private Integer failingStreak;
 
-    @FieldName("Log")
+    @JsonProperty("Log")
     private List<HealthStateLog> log;
 
     public String getStatus() {

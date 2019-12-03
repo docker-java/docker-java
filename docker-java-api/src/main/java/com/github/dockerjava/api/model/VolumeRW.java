@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.github.dockerjava.api.annotation.FromPrimitive;
-import com.github.dockerjava.api.annotation.ToPrimitive;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -20,21 +20,21 @@ import lombok.EqualsAndHashCode;
 public class VolumeRW implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String volume;
+    private Volume volume;
 
     private AccessMode accessMode = AccessMode.rw;
 
     public VolumeRW(Volume volume) {
-        this.volume = volume.getPath();
+        this.volume = volume;
     }
 
     public VolumeRW(Volume volume, AccessMode accessMode) {
-        this.volume = volume.getPath();
+        this.volume = volume;
         this.accessMode = accessMode;
     }
 
     public Volume getVolume() {
-        return new Volume(volume);
+        return volume;
     }
 
     public AccessMode getAccessMode() {
@@ -52,15 +52,15 @@ public class VolumeRW implements Serializable {
         return getVolume() + ":" + getAccessMode();
     }
 
-    @FromPrimitive
+    @JsonCreator
     public static VolumeRW fromPrimitive(Map<String, Boolean> map) {
         Entry<String, Boolean> entry = map.entrySet().iterator().next();
         return new VolumeRW(new Volume(entry.getKey()), AccessMode.fromBoolean(entry.getValue()));
     }
 
-    @ToPrimitive
+    @JsonValue
     public Map<String, Boolean> toPrimitive() {
-        return Collections.singletonMap(volume, accessMode.toBoolean());
+        return Collections.singletonMap(volume.getPath(), accessMode.toBoolean());
     }
 
 }

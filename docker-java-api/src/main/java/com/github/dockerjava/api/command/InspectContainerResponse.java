@@ -1,7 +1,7 @@
 package com.github.dockerjava.api.command;
 
-import com.github.dockerjava.api.annotation.FieldName;
-import com.github.dockerjava.api.annotation.IgnoredField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.model.ContainerConfig;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.NetworkSettings;
@@ -26,94 +26,94 @@ import java.util.Map;
 @ToString
 public class InspectContainerResponse {
 
-    @FieldName("Args")
+    @JsonProperty("Args")
     private String[] args;
 
-    @FieldName("Config")
+    @JsonProperty("Config")
     private ContainerConfig config;
 
-    @FieldName("Created")
+    @JsonProperty("Created")
     private String created;
 
-    @FieldName("Driver")
+    @JsonProperty("Driver")
     private String driver;
 
-    @FieldName("ExecDriver")
+    @JsonProperty("ExecDriver")
     private String execDriver;
 
-    @FieldName("HostConfig")
+    @JsonProperty("HostConfig")
     private HostConfig hostConfig;
 
-    @FieldName("HostnamePath")
+    @JsonProperty("HostnamePath")
     private String hostnamePath;
 
-    @FieldName("HostsPath")
+    @JsonProperty("HostsPath")
     private String hostsPath;
 
     /**
      * @since {@link RemoteApiVersion#VERSION_1_17}
      */
-    @FieldName("LogPath")
+    @JsonProperty("LogPath")
     private String logPath;
 
-    @FieldName("Id")
+    @JsonProperty("Id")
     private String id;
 
-    @FieldName("SizeRootFs")
+    @JsonProperty("SizeRootFs")
     private Integer sizeRootFs;
 
-    @FieldName("Image")
+    @JsonProperty("Image")
     private String imageId;
 
-    @FieldName("MountLabel")
+    @JsonProperty("MountLabel")
     private String mountLabel;
 
-    @FieldName("Name")
+    @JsonProperty("Name")
     private String name;
 
     /**
      * @since {@link RemoteApiVersion#VERSION_1_17}
      */
-    @FieldName("RestartCount")
+    @JsonProperty("RestartCount")
     private Integer restartCount;
 
-    @FieldName("NetworkSettings")
+    @JsonProperty("NetworkSettings")
     private NetworkSettings networkSettings;
 
-    @FieldName("Path")
+    @JsonProperty("Path")
     private String path;
 
-    @FieldName("ProcessLabel")
+    @JsonProperty("ProcessLabel")
     private String processLabel;
 
-    @FieldName("ResolvConfPath")
+    @JsonProperty("ResolvConfPath")
     private String resolvConfPath;
 
-    @FieldName("ExecIDs")
+    @JsonProperty("ExecIDs")
     private List<String> execIds;
 
-    @FieldName("State")
+    @JsonProperty("State")
     private ContainerState state;
 
-    @FieldName("Volumes")
+    @JsonProperty("Volumes")
     private VolumeBinds volumes;
 
-    @FieldName("VolumesRW")
+    @JsonProperty("VolumesRW")
     private VolumesRW volumesRW;
 
-    @FieldName("Node")
+    @JsonProperty("Node")
     private Node node;
 
-    @FieldName("Mounts")
+    @JsonProperty("Mounts")
     private List<Mount> mounts;
 
-    @FieldName("GraphDriver")
+    @JsonProperty("GraphDriver")
     private GraphDriver graphDriver;
 
     /**
      * @since {@link RemoteApiVersion#VERSION_1_30}
      */
-    @FieldName("Platform")
+    @JsonProperty("Platform")
     private String platform;
 
     public String getId() {
@@ -160,7 +160,7 @@ public class InspectContainerResponse {
         return resolvConfPath;
     }
 
-    @IgnoredField
+    @JsonIgnore
     public VolumeBind[] getVolumes() {
         return volumes == null ? null : volumes.getBinds();
     }
@@ -168,9 +168,9 @@ public class InspectContainerResponse {
     /**
      * @deprecated As of {@link RemoteApiVersion#VERSION_1_20} use {@link #getMounts()} instead
      */
+    @JsonIgnore
     @Deprecated
     @CheckForNull
-    @IgnoredField
     public VolumeRW[] getVolumesRW() {
         return volumesRW == null ? null : volumesRW.getVolumesRW();
     }
@@ -257,35 +257,35 @@ public class InspectContainerResponse {
          * @since {@link RemoteApiVersion#VERSION_1_20}
          */
         @CheckForNull
-        @FieldName("Status")
+        @JsonProperty("Status")
         private String status;
 
         /**
          * @since < {@link RemoteApiVersion#VERSION_1_16}
          */
         @CheckForNull
-        @FieldName("Running")
+        @JsonProperty("Running")
         private Boolean running;
 
         /**
          * @since {@link RemoteApiVersion#VERSION_1_17}
          */
         @CheckForNull
-        @FieldName("Paused")
+        @JsonProperty("Paused")
         private Boolean paused;
 
         /**
          * @since {@link RemoteApiVersion#VERSION_1_17}
          */
         @CheckForNull
-        @FieldName("Restarting")
+        @JsonProperty("Restarting")
         private Boolean restarting;
 
         /**
          * @since {@link RemoteApiVersion#VERSION_1_17}
          */
         @CheckForNull
-        @FieldName("OOMKilled")
+        @JsonProperty("OOMKilled")
         private Boolean oomKilled;
 
         /**
@@ -294,49 +294,49 @@ public class InspectContainerResponse {
          * @since {@link RemoteApiVersion#UNKNOWN_VERSION}
          */
         @CheckForNull
-        @FieldName("Dead")
+        @JsonProperty("Dead")
         private Boolean dead;
 
         /**
          * @since < {@link RemoteApiVersion#VERSION_1_16}
          */
         @CheckForNull
-        @FieldName("Pid")
+        @JsonProperty("Pid")
         private Long pid;
 
         /**
          * @since < {@link RemoteApiVersion#VERSION_1_16}
          */
         @CheckForNull
-        @FieldName("ExitCode")
+        @JsonProperty("ExitCode")
         private Long exitCode;
 
         /**
          * @since {@link RemoteApiVersion#VERSION_1_17}
          */
         @CheckForNull
-        @FieldName("Error")
+        @JsonProperty("Error")
         private String error;
 
         /**
          * @since < {@link RemoteApiVersion#VERSION_1_16}
          */
         @CheckForNull
-        @FieldName("StartedAt")
+        @JsonProperty("StartedAt")
         private String startedAt;
 
         /**
          * @since {@link RemoteApiVersion#VERSION_1_17}
          */
         @CheckForNull
-        @FieldName("FinishedAt")
+        @JsonProperty("FinishedAt")
         private String finishedAt;
 
 
         /**
          * @since Docker version 1.12
          */
-        @FieldName("Health")
+        @JsonProperty("Health")
         private HealthState health;
 
         /**
@@ -462,42 +462,42 @@ public class InspectContainerResponse {
          * @since {@link RemoteApiVersion#VERSION_1_20}
          */
         @CheckForNull
-        @FieldName("Name")
+        @JsonProperty("Name")
         private String name;
 
         /**
          * @since {@link RemoteApiVersion#VERSION_1_20}
          */
         @CheckForNull
-        @FieldName("Source")
+        @JsonProperty("Source")
         private String source;
 
         /**
          * @since {@link RemoteApiVersion#VERSION_1_20}
          */
         @CheckForNull
-        @FieldName("Destination")
+        @JsonProperty("Destination")
         private Volume destination;
 
         /**
          * @since {@link RemoteApiVersion#VERSION_1_20}
          */
         @CheckForNull
-        @FieldName("Driver")
+        @JsonProperty("Driver")
         private String driver;
 
         /**
          * @since {@link RemoteApiVersion#VERSION_1_20}
          */
         @CheckForNull
-        @FieldName("Mode")
+        @JsonProperty("Mode")
         private String mode;
 
         /**
          * @since {@link RemoteApiVersion#VERSION_1_20}
          */
         @CheckForNull
-        @FieldName("RW")
+        @JsonProperty("RW")
         private Boolean rw;
 
         @CheckForNull
@@ -583,25 +583,25 @@ public class InspectContainerResponse {
     @ToString
     public class Node {
 
-        @FieldName("ID")
+        @JsonProperty("ID")
         private String id;
 
-        @FieldName("IP")
+        @JsonProperty("IP")
         private String ip;
 
-        @FieldName("Addr")
+        @JsonProperty("Addr")
         private String addr;
 
-        @FieldName("Name")
+        @JsonProperty("Name")
         private String name;
 
-        @FieldName("Cpus")
+        @JsonProperty("Cpus")
         private Integer cpus;
 
-        @FieldName("Memory")
+        @JsonProperty("Memory")
         private Long memory;
 
-        @FieldName("Labels")
+        @JsonProperty("Labels")
         private Map<String, String> labels;
 
         public String getId() {

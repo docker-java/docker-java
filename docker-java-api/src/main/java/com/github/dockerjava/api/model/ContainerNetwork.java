@@ -1,7 +1,7 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
-import com.github.dockerjava.api.annotation.IgnoredField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -26,13 +26,13 @@ public class ContainerNetwork implements Serializable {
     /**
      * FIXME verify
      */
-    @FieldName("IPAMConfig")
+    @JsonProperty("IPAMConfig")
     private Ipam ipamConfig;
 
     /**
      * FIXME verify
      */
-    @FieldName("Links")
+    @JsonProperty("Links")
     private Links links;
 
     /**
@@ -41,34 +41,34 @@ public class ContainerNetwork implements Serializable {
      *
      * @since {@link RemoteApiVersion#VERSION_1_22}
      */
-    @FieldName("Aliases")
+    @JsonProperty("Aliases")
     private List<String> aliases;
 
-    @FieldName("NetworkID")
+    @JsonProperty("NetworkID")
     private String networkID;
 
-    @FieldName("EndpointID")
+    @JsonProperty("EndpointID")
     private String endpointId;
 
-    @FieldName("Gateway")
+    @JsonProperty("Gateway")
     private String gateway;
 
-    @FieldName("IPAddress")
+    @JsonProperty("IPAddress")
     private String ipAddress;
 
-    @FieldName("IPPrefixLen")
+    @JsonProperty("IPPrefixLen")
     private Integer ipPrefixLen;
 
-    @FieldName("IPv6Gateway")
+    @JsonProperty("IPv6Gateway")
     private String ipV6Gateway;
 
-    @FieldName("GlobalIPv6Address")
+    @JsonProperty("GlobalIPv6Address")
     private String globalIPv6Address;
 
-    @FieldName("GlobalIPv6PrefixLen")
+    @JsonProperty("GlobalIPv6PrefixLen")
     private Integer globalIPv6PrefixLen;
 
-    @FieldName("MacAddress")
+    @JsonProperty("MacAddress")
     private String macAddress;
 
     /**
@@ -227,7 +227,7 @@ public class ContainerNetwork implements Serializable {
      * @see #links
      */
     @CheckForNull
-    @IgnoredField
+    @JsonIgnore
     public Link[] getLinks() {
         return links == null ? new Link[0] : links.getLinks();
     }
@@ -285,10 +285,10 @@ public class ContainerNetwork implements Serializable {
      */
     public static class Ipam {
 
-        @FieldName("IPv4Address")
+        @JsonProperty("IPv4Address")
         private String ipv4Address;
 
-        @FieldName("IPv6Address")
+        @JsonProperty("IPv6Address")
         private String ipv6Address;
 
         public String getIpv4Address() {

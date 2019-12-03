@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
@@ -13,16 +13,16 @@ import java.io.Serializable;
 public class CpuStatsConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @FieldName("cpu_usage")
+    @JsonProperty("cpu_usage")
     private CpuUsageConfig cpuUsage;
 
-    @FieldName("system_cpu_usage")
+    @JsonProperty("system_cpu_usage")
     private Long systemCpuUsage;
 
-    @FieldName("online_cpus")
+    @JsonProperty("online_cpus")
     private Long onlineCpus;
 
-    @FieldName("throttling_data")
+    @JsonProperty("throttling_data")
     private ThrottlingDataConfig throttlingData;
 
     /**

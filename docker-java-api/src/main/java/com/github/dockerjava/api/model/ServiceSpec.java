@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -20,49 +20,49 @@ public class ServiceSpec implements Serializable {
     /**
      * @since 1.24
      */
-    @FieldName("Name")
+    @JsonProperty("Name")
     private String name;
 
     /**
      * @since 1.24
      */
-    @FieldName("TaskTemplate")
+    @JsonProperty("TaskTemplate")
     private TaskSpec taskTemplate;
 
     /**
      * @since 1.24
      */
-    @FieldName("Mode")
+    @JsonProperty("Mode")
     private ServiceModeConfig mode;
 
     /**
      * @since 1.24
      */
-    @FieldName("UpdateConfig")
+    @JsonProperty("UpdateConfig")
     private UpdateConfig updateConfig;
 
     /**
      * @since 1.24
      */
-    @FieldName("Networks")
+    @JsonProperty("Networks")
     private List<NetworkAttachmentConfig> networks;
 
     /**
      * @since 1.24
      */
-    @FieldName("EndpointSpec")
+    @JsonProperty("EndpointSpec")
     private EndpointSpec endpointSpec;
 
     /**
      * @since 1.24
      */
-    @FieldName("Labels")
+    @JsonProperty("Labels")
     private Map<String, String> labels;
 
     /**
      * @since 1.28
      */
-    @FieldName("RollbackConfig")
+    @JsonProperty("RollbackConfig")
     private UpdateConfig rollbackConfig;
 
     /**

@@ -1,7 +1,7 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FromPrimitive;
-import com.github.dockerjava.api.annotation.ToPrimitive;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.EqualsAndHashCode;
 
 import javax.annotation.Nonnull;
@@ -30,7 +30,7 @@ public class Volume implements Serializable {
      * @return a volume instance referring to the given path.
      */
     @Nonnull
-    @FromPrimitive
+    @JsonCreator
     public static Volume parse(Map<String, String> primitive) {
         return new Volume(primitive.get("path"));
     }
@@ -51,7 +51,7 @@ public class Volume implements Serializable {
     }
 
     @Override
-    @ToPrimitive
+    @JsonValue
     public String toString() {
         return getPath();
     }

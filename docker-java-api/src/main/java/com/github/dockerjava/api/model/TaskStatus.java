@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -14,19 +14,19 @@ import java.io.Serializable;
 public class TaskStatus implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @FieldName("Timestamp")
+    @JsonProperty("Timestamp")
     private String timestamp = null;
 
-    @FieldName("State")
+    @JsonProperty("State")
     private TaskState state = null;
 
-    @FieldName("Message")
+    @JsonProperty("Message")
     private String message = null;
 
-    @FieldName("Err")
+    @JsonProperty("Err")
     private String err = null;
 
-    @FieldName("ContainerStatus")
+    @JsonProperty("ContainerStatus")
     private TaskStatusContainerStatus containerStatus = null;
 
     public String getTimestamp() {

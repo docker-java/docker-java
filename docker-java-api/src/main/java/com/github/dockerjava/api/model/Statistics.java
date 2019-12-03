@@ -5,7 +5,7 @@ import java.util.Map;
 
 import javax.annotation.CheckForNull;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -17,42 +17,42 @@ import lombok.ToString;
 public class Statistics implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @FieldName("read")
+    @JsonProperty("read")
     private String read;
 
     /**
      * @since Docker Remote API 1.21
      */
     @CheckForNull
-    @FieldName("networks")
+    @JsonProperty("networks")
     private Map<String, StatisticNetworksConfig> networks;
 
     /**
      * @deprecated as of Docker Remote API 1.21, replaced by {@link #networks}
      */
     @Deprecated
-    @FieldName("network")
+    @JsonProperty("network")
     private Map<String, StatisticNetworksConfig> network;
 
-    @FieldName("memory_stats")
+    @JsonProperty("memory_stats")
     private MemoryStatsConfig memoryStats;
 
-    @FieldName("blkio_stats")
+    @JsonProperty("blkio_stats")
     private BlkioStatsConfig blkioStats;
 
-    @FieldName("cpu_stats")
+    @JsonProperty("cpu_stats")
     private CpuStatsConfig cpuStats;
 
     /**
      * @since Docker Remote API 1.19
      */
-    @FieldName("precpu_stats")
+    @JsonProperty("precpu_stats")
     private CpuStatsConfig preCpuStats;
 
     /**
      * @since Docker Remote API 1.23
      */
-    @FieldName("pids_stats")
+    @JsonProperty("pids_stats")
     private PidsStatsConfig pidsStats;
 
     public String getRead() {

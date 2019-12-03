@@ -1,7 +1,7 @@
 package com.github.dockerjava.api.model;
 
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -19,13 +19,13 @@ public class SwarmNodePlatform implements Serializable {
     /**
      * @since 1.24
      */
-    @FieldName("Architecture")
+    @JsonProperty("Architecture")
     private String architecture;
 
     /**
      * @since 1.24
      */
-    @FieldName("OS")
+    @JsonProperty("OS")
     private String os;
 
     /**

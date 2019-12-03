@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -16,13 +16,13 @@ import static java.util.Objects.requireNonNull;
 public class Ulimit implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @FieldName("Name")
+    @JsonProperty("Name")
     private String name;
 
-    @FieldName("Soft")
+    @JsonProperty("Soft")
     private Integer soft;
 
-    @FieldName("Hard")
+    @JsonProperty("Hard")
     private Integer hard;
 
     public Ulimit() {

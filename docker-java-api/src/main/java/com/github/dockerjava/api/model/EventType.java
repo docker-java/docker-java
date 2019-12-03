@@ -1,7 +1,7 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FromPrimitive;
-import com.github.dockerjava.api.annotation.ToPrimitive;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -43,12 +43,12 @@ public enum EventType {
         this.value = value;
     }
 
-    @ToPrimitive
+    @JsonValue
     public String getValue() {
         return value;
     }
 
-    @FromPrimitive
+    @JsonCreator
     public static EventType forValue(String s) {
         return EVENT_TYPES.get(s);
     }

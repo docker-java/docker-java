@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -17,11 +17,11 @@ import java.util.List;
 public class ContainerDNSConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @FieldName("Nameservers")
+    @JsonProperty("Nameservers")
     private List<String> nameservers;
-    @FieldName("Search")
+    @JsonProperty("Search")
     private List<String> search;
-    @FieldName("Options")
+    @JsonProperty("Options")
     private List<String> options;
 
     public List<String> getNameservers() {

@@ -2,7 +2,7 @@ package com.github.dockerjava.api.model;
 
 import static java.util.Objects.requireNonNull;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -17,13 +17,13 @@ import java.util.StringTokenizer;
 public class Device implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @FieldName("CgroupPermissions")
+    @JsonProperty("CgroupPermissions")
     private String cGroupPermissions = "";
 
-    @FieldName("PathOnHost")
+    @JsonProperty("PathOnHost")
     private String pathOnHost = null;
 
-    @FieldName("PathInContainer")
+    @JsonProperty("PathInContainer")
     private String pathInContainer = null;
 
     public Device() {

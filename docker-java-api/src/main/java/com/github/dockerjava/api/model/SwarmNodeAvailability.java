@@ -1,18 +1,18 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
 public enum SwarmNodeAvailability {
 
-    @FieldName("active")
+    @JsonProperty("active")
     ACTIVE,
 
-    @FieldName("pause")
+    @JsonProperty("pause")
     PAUSE,
 
-    @FieldName("drain")
+    @JsonProperty("drain")
     DRAIN
 }

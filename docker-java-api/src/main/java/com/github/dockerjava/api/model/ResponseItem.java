@@ -1,7 +1,7 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
-import com.github.dockerjava.api.annotation.IgnoredField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -16,39 +16,39 @@ import java.io.Serializable;
 public class ResponseItem implements Serializable {
     private static final long serialVersionUID = -5187169652557467828L;
 
-    @FieldName("stream")
+    @JsonProperty("stream")
     private String stream;
 
-    @FieldName("status")
+    @JsonProperty("status")
     private String status;
 
-    @FieldName("progressDetail")
+    @JsonProperty("progressDetail")
     private ProgressDetail progressDetail;
 
     @Deprecated
-    @FieldName("progress")
+    @JsonProperty("progress")
     private String progress;
 
-    @FieldName("id")
+    @JsonProperty("id")
     private String id;
 
-    @FieldName("from")
+    @JsonProperty("from")
     private String from;
 
-    @FieldName("time")
+    @JsonProperty("time")
     private Long time;
 
-    @FieldName("errorDetail")
+    @JsonProperty("errorDetail")
     private ErrorDetail errorDetail;
 
     @Deprecated
-    @FieldName("error")
+    @JsonProperty("error")
     private String error;
 
     /**
      * @since {@link RemoteApiVersion#VERSION_1_22}
      */
-    @FieldName("aux")
+    @JsonProperty("aux")
     private AuxDetail aux;
 
     @CheckForNull
@@ -110,7 +110,7 @@ public class ResponseItem implements Serializable {
      *
      * @returns true: the error field indicates an error, false: the error field doesn't indicate an error
      */
-    @IgnoredField
+    @JsonIgnore
     public boolean isErrorIndicated() {
         // check both the deprecated and current error fields, just in case
         return getError() != null || getErrorDetail() != null;
@@ -121,13 +121,13 @@ public class ResponseItem implements Serializable {
     public static class ProgressDetail implements Serializable {
         private static final long serialVersionUID = -1954994695645715264L;
 
-        @FieldName("current")
+        @JsonProperty("current")
         Long current;
 
-        @FieldName("total")
+        @JsonProperty("total")
         Long total;
 
-        @FieldName("start")
+        @JsonProperty("start")
         Long start;
 
         @CheckForNull
@@ -151,10 +151,10 @@ public class ResponseItem implements Serializable {
     public static class ErrorDetail implements Serializable {
         private static final long serialVersionUID = -9136704865403084083L;
 
-        @FieldName("code")
+        @JsonProperty("code")
         Integer code;
 
-        @FieldName("message")
+        @JsonProperty("message")
         String message;
 
         @CheckForNull
@@ -173,13 +173,13 @@ public class ResponseItem implements Serializable {
     public static class AuxDetail implements Serializable {
         private static final long serialVersionUID = 1L;
 
-        @FieldName("Size")
+        @JsonProperty("Size")
         private Integer size;
 
-        @FieldName("Tag")
+        @JsonProperty("Tag")
         private String tag;
 
-        @FieldName("Digest")
+        @JsonProperty("Digest")
         private String digest;
 
         @CheckForNull

@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
@@ -30,10 +30,10 @@ import static java.util.Objects.requireNonNull;
 public class RestartPolicy implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @FieldName("MaximumRetryCount")
+    @JsonProperty("MaximumRetryCount")
     private Integer maximumRetryCount = 0;
 
-    @FieldName("Name")
+    @JsonProperty("Name")
     private String name = "";
 
     public RestartPolicy() {

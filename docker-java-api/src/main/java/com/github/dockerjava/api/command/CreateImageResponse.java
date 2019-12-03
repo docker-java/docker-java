@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.command;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -14,7 +14,7 @@ import lombok.ToString;
 @ToString
 public class CreateImageResponse {
 
-    @FieldName("status")
+    @JsonProperty("status")
     private String id;
 
     public String getId() {

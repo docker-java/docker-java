@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -16,22 +16,22 @@ import java.io.Serializable;
 public class ContainerSpecFile implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @FieldName("Name")
+    @JsonProperty("Name")
     private String name;
     /**
      * UID represents the file UID.
      */
-    @FieldName("UID")
+    @JsonProperty("UID")
     private String uid;
     /**
      * GID represents the file GID.
      */
-    @FieldName("GID")
+    @JsonProperty("GID")
     private String gid;
     /**
      * Mode represents the FileMode of the file.
      */
-    @FieldName("Mode")
+    @JsonProperty("Mode")
     private Long mode;
 
     public String getName() {

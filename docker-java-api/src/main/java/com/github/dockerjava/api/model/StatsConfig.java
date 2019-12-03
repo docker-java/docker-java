@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
@@ -8,106 +8,106 @@ import java.io.Serializable;
 public class StatsConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @FieldName("active_anon")
+    @JsonProperty("active_anon")
     private Long activeAnon;
 
-    @FieldName("active_file")
+    @JsonProperty("active_file")
     private Long activeFile;
 
-    @FieldName("cache")
+    @JsonProperty("cache")
     private Long cache;
 
-    @FieldName("dirty")
+    @JsonProperty("dirty")
     private Long dirty;
 
-    @FieldName("hierarchical_memory_limit")
+    @JsonProperty("hierarchical_memory_limit")
     private Long hierarchicalMemoryLimit;
 
-    @FieldName("hierarchical_memsw_limit")
+    @JsonProperty("hierarchical_memsw_limit")
     private Long hierarchicalMemswLimit;
 
-    @FieldName("inactive_anon")
+    @JsonProperty("inactive_anon")
     private Long  inactiveAnon;
 
-    @FieldName("inactive_file")
+    @JsonProperty("inactive_file")
     private Long inactiveFile;
 
-    @FieldName("mapped_file")
+    @JsonProperty("mapped_file")
     private Long mappedFile;
 
-    @FieldName("pgfault")
+    @JsonProperty("pgfault")
     private Long pgfault;
 
-    @FieldName("pgmajfault")
+    @JsonProperty("pgmajfault")
     private Long pgmajfault;
 
-    @FieldName("pgpgin")
+    @JsonProperty("pgpgin")
     private Long pgpgin;
 
-    @FieldName("pgpgout")
+    @JsonProperty("pgpgout")
     private Long pgpgout;
 
-    @FieldName("rss")
+    @JsonProperty("rss")
     private Long rss;
 
-    @FieldName("rss_huge")
+    @JsonProperty("rss_huge")
     private Long rssHuge;
 
-    @FieldName("swap")
+    @JsonProperty("swap")
     private Long swap;
 
-    @FieldName("total_active_anon")
+    @JsonProperty("total_active_anon")
     private Long totalActiveAnon;
 
-    @FieldName("total_active_file")
+    @JsonProperty("total_active_file")
     private Long totalActiveFile;
 
-    @FieldName("total_cache")
+    @JsonProperty("total_cache")
     private Long totalCache;
 
-    @FieldName("total_dirty")
+    @JsonProperty("total_dirty")
     private Long totalDirty;
 
-    @FieldName("total_inactive_anon")
+    @JsonProperty("total_inactive_anon")
     private Long totalInactiveAnon;
 
-    @FieldName("total_inactive_file")
+    @JsonProperty("total_inactive_file")
     private Long totalInactiveFile;
 
-    @FieldName("total_mapped_file")
+    @JsonProperty("total_mapped_file")
     private Long totalMappedFile;
 
-    @FieldName("total_pgfault")
+    @JsonProperty("total_pgfault")
     private Long totalPgfault;
 
-    @FieldName("total_pgmajfault")
+    @JsonProperty("total_pgmajfault")
     private Long totalPgmajfault;
 
-    @FieldName("total_pgpgin")
+    @JsonProperty("total_pgpgin")
     private Long totalPgpgin;
 
-    @FieldName("total_pgpgout")
+    @JsonProperty("total_pgpgout")
     private Long totalPgpgout;
 
-    @FieldName("total_rss")
+    @JsonProperty("total_rss")
     private Long totalRss;
 
-    @FieldName("total_rss_huge")
+    @JsonProperty("total_rss_huge")
     private Long totalRssHuge;
 
-    @FieldName("total_swap")
+    @JsonProperty("total_swap")
     private Long totalSwap;
 
-    @FieldName("total_unevictable")
+    @JsonProperty("total_unevictable")
     private Long totalUnevictable;
 
-    @FieldName("total_writeback")
+    @JsonProperty("total_writeback")
     private Long totalWriteback;
 
-    @FieldName("unevictable")
+    @JsonProperty("unevictable")
     private Long unevictable;
 
-    @FieldName("writeback")
+    @JsonProperty("writeback")
     private Long writeback;
 
     /**

@@ -1,14 +1,14 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_36}
  */
 public enum UpdateOrder {
-    @FieldName("stop-first")
+    @JsonProperty("stop-first")
     STOP_FIRST,
 
-    @FieldName("start-first")
+    @JsonProperty("start-first")
     START_FIRST
 }

@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -16,10 +16,10 @@ import java.io.Serializable;
 public class ChangeLog implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @FieldName("Path")
+    @JsonProperty("Path")
     private String path;
 
-    @FieldName("Kind")
+    @JsonProperty("Kind")
     private Integer kind;
 
     public String getPath() {

@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -19,55 +19,55 @@ public class SwarmInfo implements Serializable {
     /**
      * @since 1.24
      */
-    @FieldName("NodeID")
+    @JsonProperty("NodeID")
     private String nodeID;
 
     /**
      * @since 1.24
      */
-    @FieldName("NodeAddr")
+    @JsonProperty("NodeAddr")
     private String nodeAddr;
 
     /**
      * @since 1.24
      */
-    @FieldName("LocalNodeState")
+    @JsonProperty("LocalNodeState")
     private LocalNodeState localNodeState;
 
     /**
      * @since 1.24
      */
-    @FieldName("ControlAvailable")
+    @JsonProperty("ControlAvailable")
     private Boolean controlAvailable;
 
     /**
      * @since 1.24
      */
-    @FieldName("Error")
+    @JsonProperty("Error")
     private String error;
 
     /**
      * @since 1.24
      */
-    @FieldName("RemoteManagers")
+    @JsonProperty("RemoteManagers")
     private List<PeerNode> remoteManagers;
 
     /**
      * @since 1.24
      */
-    @FieldName("Nodes")
+    @JsonProperty("Nodes")
     private Integer nodes;
 
     /**
      * @since 1.24
      */
-    @FieldName("Managers")
+    @JsonProperty("Managers")
     private Integer managers;
 
     /**
      * @since 1.24
      */
-    @FieldName("ClusterInfo")
+    @JsonProperty("ClusterInfo")
     private ClusterInfo clusterInfo;
 
     /**

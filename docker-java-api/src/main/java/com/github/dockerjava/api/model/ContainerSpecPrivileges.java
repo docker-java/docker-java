@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -16,10 +16,10 @@ import java.io.Serializable;
 public class ContainerSpecPrivileges implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @FieldName("CredentialSpec")
+    @JsonProperty("CredentialSpec")
     private ContainerSpecPrivilegesCredential credentialSpec;
 
-    @FieldName("SELinuxContext")
+    @JsonProperty("SELinuxContext")
     private ContainerSpecPrivilegesSELinuxContext seLinuxContext;
 
     public ContainerSpecPrivilegesCredential getCredentialSpec() {

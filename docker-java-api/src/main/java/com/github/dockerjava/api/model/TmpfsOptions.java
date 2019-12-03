@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -13,12 +13,12 @@ import java.io.Serializable;
 @ToString
 public class TmpfsOptions implements Serializable {
     private static final long serialVersionUID = 1L;
-    @FieldName("SizeBytes")
+    @JsonProperty("SizeBytes")
     //The size for the tmpfs mount in bytes.
     private Long sizeBytes;
 
     //The permission mode for the tmpfs mount in an integer.
-    @FieldName("Mode")
+    @JsonProperty("Mode")
     private Integer mode;
 
     public Long getSizeBytes() {

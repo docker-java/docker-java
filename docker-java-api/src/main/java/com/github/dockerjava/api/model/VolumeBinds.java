@@ -5,8 +5,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.github.dockerjava.api.annotation.FromPrimitive;
-import com.github.dockerjava.api.annotation.ToPrimitive;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 public class VolumeBinds implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -21,7 +21,7 @@ public class VolumeBinds implements Serializable {
         return binds;
     }
 
-    @FromPrimitive
+    @JsonCreator
     public static VolumeBinds fromPrimitive(Map<String, String> primitive) {
         return new VolumeBinds(
                 primitive.entrySet().stream()
@@ -30,7 +30,7 @@ public class VolumeBinds implements Serializable {
         );
     }
 
-    @ToPrimitive
+    @JsonValue
     public Map<String, String> toPrimitive() {
         return Stream.of(binds).collect(Collectors.toMap(
                 VolumeBind::getContainerPath,

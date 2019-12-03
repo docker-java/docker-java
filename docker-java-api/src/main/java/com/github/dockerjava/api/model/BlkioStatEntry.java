@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -14,13 +14,13 @@ import java.io.Serializable;
 @ToString
 public class BlkioStatEntry implements Serializable {
     private static final long serialVersionUID = 1L;
-    @FieldName("major")
+    @JsonProperty("major")
     Long major;
-    @FieldName("minor")
+    @JsonProperty("minor")
     Long minor;
-    @FieldName("op")
+    @JsonProperty("op")
     String op;
-    @FieldName("value")
+    @JsonProperty("value")
     Long value;
 
     public Long getMajor() {

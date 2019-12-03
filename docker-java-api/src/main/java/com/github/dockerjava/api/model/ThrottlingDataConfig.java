@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
@@ -13,13 +13,13 @@ import java.io.Serializable;
 public class ThrottlingDataConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @FieldName("periods")
+    @JsonProperty("periods")
     private Long periods;
 
-    @FieldName("throttled_periods")
+    @JsonProperty("throttled_periods")
     private Long throttledPeriods;
 
-    @FieldName("throttled_time")
+    @JsonProperty("throttled_time")
     private Long throttledTime;
 
     /**

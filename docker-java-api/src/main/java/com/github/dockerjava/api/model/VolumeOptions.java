@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.github.dockerjava.api.annotation.FieldName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -18,19 +18,19 @@ public class VolumeOptions implements Serializable {
     /**
      * @since 1.24
      */
-    @FieldName("NoCopy")
+    @JsonProperty("NoCopy")
     private Boolean noCopy;
 
     /**
      * @since 1.24
      */
-    @FieldName("Labels")
+    @JsonProperty("Labels")
     private Map<String, String> labels;
 
     /**
      * @since 1.24
      */
-    @FieldName("DriverConfig")
+    @JsonProperty("DriverConfig")
     private Driver driverConfig;
 
     /**
