@@ -202,8 +202,10 @@ class UnixDomainSocket extends Socket {
 
     public static class SockAddr extends Structure {
 
-        public short sunFamily;
-        public byte[] sunPath;
+        @SuppressWarnings("checkstyle:membername")
+        public short sun_family;
+        @SuppressWarnings("checkstyle:membername")
+        public byte[] sun_path;
 
         /**
          * Contructor.
@@ -211,10 +213,10 @@ class UnixDomainSocket extends Socket {
          * @param sunPath path
          */
         SockAddr(String sunPath) {
-            sunFamily = AF_UNIX;
+            sun_family = AF_UNIX;
             byte[] arr = sunPath.getBytes();
-            this.sunPath = new byte[arr.length + 1];
-            System.arraycopy(arr, 0, this.sunPath, 0, Math.min(this.sunPath.length - 1, arr.length));
+            sun_path = new byte[arr.length + 1];
+            System.arraycopy(arr, 0, sun_path, 0, Math.min(sun_path.length - 1, arr.length));
             allocateMemory();
         }
 

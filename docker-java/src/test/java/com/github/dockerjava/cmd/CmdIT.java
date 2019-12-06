@@ -26,7 +26,7 @@ public abstract class CmdIT {
     @Parameterized.Parameters(name = "{index}:{0}")
     public static Iterable<FactoryType> data() {
         return Arrays.asList(
-                NETTY, JERSEY,OKHTTP
+                NETTY, JERSEY, OKHTTP
         );
     }
 
