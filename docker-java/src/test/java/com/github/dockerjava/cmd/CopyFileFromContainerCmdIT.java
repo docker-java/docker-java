@@ -43,8 +43,6 @@ public class CopyFileFromContainerCmdIT extends CmdIT {
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         InputStream response = dockerRule.getClient().copyFileFromContainerCmd(container.getId(), "/copyFileFromContainer").exec();
-        Boolean bytesAvailable = response.available() > 0;
-        assertTrue("The file was not copied from the container.", bytesAvailable );
 
         // read the stream fully. Otherwise, the underlying stream will not be closed.
         String responseAsString = asString(response);

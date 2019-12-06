@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.io.InputStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.not;
 
 public class SaveImageCmdIT extends CmdIT {
     public static final Logger LOG = LoggerFactory.getLogger(SaveImageCmdIT.class);
@@ -17,10 +17,10 @@ public class SaveImageCmdIT extends CmdIT {
     public void saveImage() throws Exception {
 
         InputStream image = IOUtils.toBufferedInputStream(dockerRule.getClient().saveImageCmd("busybox").exec());
-        assertThat(image.available(), greaterThan(0));
+        assertThat(image.read(), not(-1));
 
         InputStream image2 = IOUtils.toBufferedInputStream(dockerRule.getClient().saveImageCmd("busybox").withTag("latest").exec());
-        assertThat(image2.available(), greaterThan(0));
+        assertThat(image2.read(), not(-1));
 
 
     }

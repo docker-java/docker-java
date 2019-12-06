@@ -72,7 +72,7 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
 
     private void assertFileCopied(CreateContainerResponse container) throws IOException {
         try (InputStream response = dockerRule.getClient().copyArchiveFromContainerCmd(container.getId(), "testReadFile").exec()) {
-            boolean bytesAvailable = response.available() > 0;
+            boolean bytesAvailable = response.read() != -1;
             assertTrue( "The file was not copied to the container.", bytesAvailable);
         }
     }

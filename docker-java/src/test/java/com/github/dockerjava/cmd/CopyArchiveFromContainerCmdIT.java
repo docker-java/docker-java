@@ -43,8 +43,6 @@ public class CopyArchiveFromContainerCmdIT extends CmdIT {
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         InputStream response = dockerRule.getClient().copyArchiveFromContainerCmd(container.getId(), "/copyFromContainer").exec();
-        Boolean bytesAvailable = response.available() > 0;
-        assertTrue("The file was not copied from the container.", bytesAvailable );
 
         // read the stream fully. Otherwise, the underlying stream will not be closed.
         String responseAsString = TestUtils.asString(response);
@@ -76,8 +74,6 @@ public class CopyArchiveFromContainerCmdIT extends CmdIT {
         }
 
         InputStream response = dockerRule.getClient().copyArchiveFromContainerCmd(container.getId(), "/binary.dat").exec();
-        Boolean bytesAvailable = response.available() > 0;
-        assertTrue("The file was not copied from the container.", bytesAvailable);
 
         try (TarArchiveInputStream tarInputStream = new TarArchiveInputStream(response)) {
             TarArchiveEntry nextTarEntry = tarInputStream.getNextTarEntry();
