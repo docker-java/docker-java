@@ -9,6 +9,7 @@ import com.github.dockerjava.core.command.BuildImageResultCallback;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory;
 import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
+import com.github.dockerjava.okhttp.OkHttpDockerCmdExecFactory;
 import com.github.dockerjava.utils.LogContainerTestCallback;
 import org.junit.rules.ExternalResource;
 import org.junit.runner.Description;
@@ -28,8 +29,7 @@ public class DockerRule extends ExternalResource {
     public static final Logger LOG = LoggerFactory.getLogger(DockerRule.class);
     public static final String DEFAULT_IMAGE = "busybox:latest";
 
-    private DockerClient nettyClient;
-    private DockerClient jerseyClient;
+    private DockerClient dockerClient;
 
     private CmdIT cmdIT;
 
@@ -39,23 +39,24 @@ public class DockerRule extends ExternalResource {
 
 
     public DockerClient getClient() {
-        if (cmdIT.getFactoryType() == NETTY) {
-            if (nettyClient == null) {
-                nettyClient = DockerClientBuilder.getInstance(config())
+        if (dockerClient != null) {
+            return dockerClient;
+        }
+        switch (cmdIT.getFactoryType()) {
+            case NETTY:
+                return dockerClient = DockerClientBuilder.getInstance(config())
                         .withDockerCmdExecFactory((new NettyDockerCmdExecFactory())
                                 .withConnectTimeout(10 * 1000))
                         .build();
-            }
-
-            return nettyClient;
-        } else if (cmdIT.getFactoryType() == JERSEY) {
-            if (jerseyClient == null) {
-                jerseyClient = DockerClientBuilder.getInstance(config())
+            case JERSEY:
+                return dockerClient = DockerClientBuilder.getInstance(config())
                         .withDockerCmdExecFactory((new JerseyDockerCmdExecFactory())
                                 .withConnectTimeout(10 * 1000))
                         .build();
-            }
-            return jerseyClient;
+            case OKHTTP:
+                return dockerClient = DockerClientBuilder.getInstance(config())
+                        .withDockerCmdExecFactory(new OkHttpDockerCmdExecFactory())
+                        .build();
         }
 
         throw new IllegalStateException("Why factory type is not set?");

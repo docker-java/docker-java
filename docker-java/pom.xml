@@ -40,6 +40,12 @@
 
 		<!-- /// Test /////////////////////////// -->
 		<dependency>
+			<groupId>${groupId}</groupId>
+			<artifactId>docker-java-transport-okhttp</artifactId>
+			<version>${version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-core</artifactId>
 			<version>${logback.version}</version>
