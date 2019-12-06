@@ -181,7 +181,13 @@ class OkHttpInvocationBuilder implements InvocationBuilder {
                                         BufferedSink sink = (BufferedSink) sinkField.get(chain.connection());
                                         Source source = Okio.source(stdin);
                                 ) {
-                                    sink.writeAll(source);
+                                    while (sink.isOpen()) {
+                                        int available = stdin.available();
+                                        if (available > 0) {
+                                            sink.write(source, available);
+                                            sink.emit();
+                                        }
+                                    }
                                 }
                             } catch (Exception e) {
                                 throw new RuntimeException(e);
