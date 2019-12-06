@@ -6,6 +6,7 @@ import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.StreamType;
 import com.github.dockerjava.core.command.AttachContainerResultCallback;
+import org.junit.Assume;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -32,7 +33,6 @@ import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.assumeThat;
 
 /**
  * @author Kanstantsin Shautsou
@@ -48,7 +48,7 @@ public class AttachContainerCmdIT extends CmdIT {
     public void attachContainerWithStdin() throws Exception {
         DockerClient dockerClient = dockerRule.getClient();
 
-        assumeThat(getFactoryType(), is(FactoryType.NETTY));
+        Assume.assumeTrue("supports stdin attach", getFactoryType().supportsStdinAttach());
 
         String snippet = "hello world";
 
@@ -172,9 +172,8 @@ public class AttachContainerCmdIT extends CmdIT {
     public void attachContainerStdinUnsupported() throws Exception {
 
         DockerClient dockerClient = dockerRule.getClient();
-        if (getFactoryType() == FactoryType.JERSEY) {
-            expectedException.expect(UnsupportedOperationException.class);
-        }
+        Assume.assumeFalse("does not support stdin attach", getFactoryType().supportsStdinAttach());
+        expectedException.expect(UnsupportedOperationException.class);
 
         String snippet = "hello world";
 

@@ -7,9 +7,6 @@ import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.command.BuildImageResultCallback;
 import com.github.dockerjava.core.command.PullImageResultCallback;
-import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory;
-import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
-import com.github.dockerjava.okhttp.OkHttpDockerCmdExecFactory;
 import com.github.dockerjava.utils.LogContainerTestCallback;
 import org.junit.rules.ExternalResource;
 import org.junit.runner.Description;
@@ -18,9 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-
-import static com.github.dockerjava.cmd.CmdIT.FactoryType.JERSEY;
-import static com.github.dockerjava.cmd.CmdIT.FactoryType.NETTY;
 
 /**
  * @author Kanstantsin Shautsou
@@ -42,24 +36,9 @@ public class DockerRule extends ExternalResource {
         if (dockerClient != null) {
             return dockerClient;
         }
-        switch (cmdIT.getFactoryType()) {
-            case NETTY:
-                return dockerClient = DockerClientBuilder.getInstance(config())
-                        .withDockerCmdExecFactory((new NettyDockerCmdExecFactory())
-                                .withConnectTimeout(10 * 1000))
-                        .build();
-            case JERSEY:
-                return dockerClient = DockerClientBuilder.getInstance(config())
-                        .withDockerCmdExecFactory((new JerseyDockerCmdExecFactory())
-                                .withConnectTimeout(10 * 1000))
-                        .build();
-            case OKHTTP:
-                return dockerClient = DockerClientBuilder.getInstance(config())
-                        .withDockerCmdExecFactory(new OkHttpDockerCmdExecFactory())
-                        .build();
-        }
-
-        throw new IllegalStateException("Why factory type is not set?");
+        return dockerClient = DockerClientBuilder.getInstance(config())
+                .withDockerCmdExecFactory(cmdIT.getFactoryType().createExecFactory())
+                .build();
     }
 
     @Override
@@ -123,13 +102,7 @@ public class DockerRule extends ExternalResource {
     }
 
     public String getKind() {
-        if (cmdIT.getFactoryType() == NETTY) {
-            return "netty";
-        } else if (cmdIT.getFactoryType() == JERSEY) {
-            return "jersey";
-        }
-
-        return "default";
+        return cmdIT.getFactoryType().name().toLowerCase();
     }
 
     public void ensureContainerRemoved(String container1Name) {

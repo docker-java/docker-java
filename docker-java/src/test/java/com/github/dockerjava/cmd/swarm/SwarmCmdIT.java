@@ -13,10 +13,8 @@ import com.github.dockerjava.cmd.CmdIT;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.command.PullImageResultCallback;
-import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory;
 import com.github.dockerjava.junit.category.Integration;
 import com.github.dockerjava.junit.category.SwarmModeIntegration;
-import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.experimental.categories.Category;
@@ -121,7 +119,7 @@ public abstract class SwarmCmdIT extends CmdIT {
                 .withRegistryUrl("https://index.docker.io/v1/")
                 .withDockerHost("tcp://localhost:" + port).build();
         return DockerClientBuilder.getInstance(config)
-                .withDockerCmdExecFactory(getFactoryType() == FactoryType.NETTY ? new NettyDockerCmdExecFactory() : new JerseyDockerCmdExecFactory())
+                .withDockerCmdExecFactory(getFactoryType().createExecFactory())
                 .build();
     }
 

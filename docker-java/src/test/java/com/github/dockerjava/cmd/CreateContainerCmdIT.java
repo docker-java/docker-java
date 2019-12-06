@@ -49,7 +49,6 @@ import java.util.concurrent.TimeUnit;
 import static com.github.dockerjava.api.model.Capability.MKNOD;
 import static com.github.dockerjava.api.model.Capability.NET_ADMIN;
 import static com.github.dockerjava.api.model.HostConfig.newHostConfig;
-import static com.github.dockerjava.cmd.CmdIT.FactoryType.JERSEY;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_23;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_24;
 import static com.github.dockerjava.junit.DockerMatchers.isGreaterOrEqual;
@@ -483,7 +482,7 @@ public class CreateContainerCmdIT extends CmdIT {
     public void createContainerWithCustomIp() throws DockerException {
         String containerName1 = "containerCustomIplink_" + dockerRule.getKind();
         String networkName = "customIpNet" + dockerRule.getKind();
-        String subnetPrefix = getFactoryType() == JERSEY ? "10.100.104" : "10.100.105";
+        String subnetPrefix = getFactoryType().getSubnetPrefix() + "101";
 
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd()
                 .withIpam(new Network.Ipam()
@@ -646,7 +645,7 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Test
     public void createContainerWithPortBindings() throws DockerException {
-        int baseport = getFactoryType() == FactoryType.JERSEY ? 11000 : 12000;
+        int baseport = 10_000 + (getFactoryType().ordinal() * 1000);
 
         ExposedPort tcp22 = ExposedPort.tcp(22);
         ExposedPort tcp23 = ExposedPort.tcp(23);

@@ -9,7 +9,6 @@ import com.github.dockerjava.api.model.Network;
 import net.jcip.annotations.ThreadSafe;
 import org.junit.Test;
 
-import static com.github.dockerjava.cmd.CmdIT.FactoryType.JERSEY;
 import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
 import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
 import static org.hamcrest.Matchers.hasItem;
@@ -49,7 +48,7 @@ public class ConnectToNetworkCmdIT extends CmdIT {
     public void connectToNetworkWithContainerNetwork() throws InterruptedException {
         assumeNotSwarm("no network in swarm", dockerRule);
 
-        final String subnetPrefix = getFactoryType() == JERSEY ?  "10.100.102" : "10.100.103";
+        final String subnetPrefix = getFactoryType().getSubnetPrefix() + "100";
         final String networkName = "ContainerWithNetwork" + dockerRule.getKind();
         final String containerIp = subnetPrefix + ".100";
 
