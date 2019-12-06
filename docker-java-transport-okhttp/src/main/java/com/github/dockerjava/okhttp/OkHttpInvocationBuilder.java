@@ -43,7 +43,7 @@ class OkHttpInvocationBuilder implements InvocationBuilder {
 
     private final Request.Builder requestBuilder;
 
-    public OkHttpInvocationBuilder(ObjectMapper objectMapper, OkHttpClient okHttpClient, HttpUrl httpUrl) {
+    OkHttpInvocationBuilder(ObjectMapper objectMapper, OkHttpClient okHttpClient, HttpUrl httpUrl) {
         this.objectMapper = objectMapper;
         this.okHttpClient = okHttpClient;
 
@@ -164,11 +164,11 @@ class OkHttpInvocationBuilder implements InvocationBuilder {
             throw new RuntimeException(e);
         }
 
-        OkHttpClient okHttpClient = this.okHttpClient;
+        OkHttpClient clientToUse = this.okHttpClient;
 
         if (stdin != null) {
             // FIXME there must be a better way of handling it
-            okHttpClient = okHttpClient.newBuilder()
+            clientToUse = clientToUse.newBuilder()
                 .addNetworkInterceptor(chain -> {
                     Response response = chain.proceed(chain.request());
                     if (response.isSuccessful()) {
@@ -195,7 +195,7 @@ class OkHttpInvocationBuilder implements InvocationBuilder {
         }
 
         executeAndStream(
-            okHttpClient,
+            clientToUse,
             request,
             resultCallback,
             new FramedSink(resultCallback)
@@ -300,7 +300,12 @@ class OkHttpInvocationBuilder implements InvocationBuilder {
         executeAndStream(okHttpClient, request, callback, sourceConsumer);
     }
 
-    protected <T> void executeAndStream(OkHttpClient okHttpClient, Request request, ResultCallback<T> callback, Consumer<BufferedSource> sourceConsumer) {
+    protected <T> void executeAndStream(
+            OkHttpClient okHttpClient,
+            Request request,
+            ResultCallback<T> callback,
+            Consumer<BufferedSource> sourceConsumer
+    ) {
         Thread thread = new Thread(() -> {
             try (
                     Response response = execute(okHttpClient, request.newBuilder().tag("streaming").build());
@@ -335,7 +340,7 @@ class OkHttpInvocationBuilder implements InvocationBuilder {
 
         private final ResultCallback<T> resultCallback;
 
-        public JsonSink(ObjectMapper objectMapper, TypeReference<T> typeReference, ResultCallback<T> resultCallback) {
+        JsonSink(ObjectMapper objectMapper, TypeReference<T> typeReference, ResultCallback<T> resultCallback) {
             this.objectMapper = objectMapper;
             this.typeReference = typeReference;
             this.resultCallback = resultCallback;

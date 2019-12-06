@@ -29,7 +29,7 @@ class OkHttpWebTarget implements WebTarget {
 
     final SetMultimap<String, String> queryParams;
 
-    public OkHttpWebTarget(
+    OkHttpWebTarget(
             ObjectMapper objectMapper,
             OkHttpClient okHttpClient,
             HttpUrl baseUrl,

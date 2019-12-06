@@ -52,12 +52,18 @@
 
 package com.github.dockerjava.okhttp;
 
-import com.sun.jna.*;
+import com.sun.jna.LastErrorException;
+import com.sun.jna.Native;
+import com.sun.jna.Platform;
+import com.sun.jna.Structure;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.util.concurrent.atomic.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.net.SocketAddress;
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 class UnixDomainSocket extends Socket {
 
@@ -82,7 +88,7 @@ class UnixDomainSocket extends Socket {
     private OutputStream os;
     private boolean connected;
 
-    public UnixDomainSocket(String path) throws IOException {
+    UnixDomainSocket(String path) throws IOException {
         if (Platform.isWindows() || Platform.isWindowsCE()) {
             throw new IOException("Unix domain sockets are not supported on Windows");
         }
@@ -196,19 +202,19 @@ class UnixDomainSocket extends Socket {
 
     public static class SockAddr extends Structure {
 
-        public short sun_family;
-        public byte[] sun_path;
+        public short sunFamily;
+        public byte[] sunPath;
 
         /**
          * Contructor.
          *
          * @param sunPath path
          */
-        public SockAddr(String sunPath) {
-            sun_family = AF_UNIX;
+        SockAddr(String sunPath) {
+            sunFamily = AF_UNIX;
             byte[] arr = sunPath.getBytes();
-            sun_path = new byte[arr.length + 1];
-            System.arraycopy(arr, 0, sun_path, 0, Math.min(sun_path.length - 1, arr.length));
+            this.sunPath = new byte[arr.length + 1];
+            System.arraycopy(arr, 0, this.sunPath, 0, Math.min(this.sunPath.length - 1, arr.length));
             allocateMemory();
         }
 

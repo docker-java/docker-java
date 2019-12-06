@@ -14,7 +14,7 @@ class UnixSocketFactory extends SocketFactory {
 
     private final String socketPath;
 
-    public UnixSocketFactory(String socketPath) {
+    UnixSocketFactory(String socketPath) {
         this.socketPath = socketPath;
     }
 
