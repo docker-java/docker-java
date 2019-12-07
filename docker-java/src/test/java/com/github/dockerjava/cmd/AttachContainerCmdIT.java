@@ -217,7 +217,7 @@ public class AttachContainerCmdIT extends CmdIT {
         DockerClient dockerClient = dockerRule.getClient();
 
         CreateContainerResponse container = dockerClient.createContainerCmd(DEFAULT_IMAGE)
-                .withCmd("echo", "hello")
+                .withCmd("sh", "-c", "echo hello && sleep 1")
                 .withTty(false)
                 .exec();
         LOG.info("Created container: {}", container.toString());
@@ -253,6 +253,7 @@ public class AttachContainerCmdIT extends CmdIT {
 
             @Override
             public void onComplete() {
+                LOG.info("On complete");
                 completed.countDown();
                 super.onComplete();
             }
@@ -272,7 +273,7 @@ public class AttachContainerCmdIT extends CmdIT {
             long gotLineDurationSeconds = (gotLineAtNanos.get() - startedAtNanos.get()) / 1_000_000_000L;
             LOG.info("Got line from {} for {} seconds", container.getId(), gotLineDurationSeconds);
 
-            boolean finished = completed.await(1L + gotLineDurationSeconds, SECONDS);
+            boolean finished = completed.await(5L + gotLineDurationSeconds, SECONDS);
             assertTrue("Should get EOF in a time close to time of getting the first line", finished);
         }
     }

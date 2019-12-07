@@ -5,6 +5,7 @@ import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.StreamType;
 import okio.BufferedSource;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.function.Consumer;
@@ -22,7 +23,14 @@ class FramedSink implements Consumer<BufferedSource> {
     @Override
     public void accept(BufferedSource source) {
         try {
-            while (!source.exhausted()) {
+            while (true) {
+                try {
+                    if (source.exhausted()) {
+                        break;
+                    }
+                } catch (IOException e) {
+                    break;
+                }
                 // See https://docs.docker.com/engine/api/v1.37/#operation/ContainerAttach
                 // [8]byte{STREAM_TYPE, 0, 0, 0, SIZE1, SIZE2, SIZE3, SIZE4}[]byte{OUTPUT}
 
