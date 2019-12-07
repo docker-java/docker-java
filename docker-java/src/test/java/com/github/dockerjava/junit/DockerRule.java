@@ -7,8 +7,6 @@ import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.command.BuildImageResultCallback;
 import com.github.dockerjava.core.command.PullImageResultCallback;
-import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory;
-import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
 import com.github.dockerjava.utils.LogContainerTestCallback;
 import org.junit.rules.ExternalResource;
 import org.junit.runner.Description;
@@ -18,9 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-import static com.github.dockerjava.cmd.CmdIT.FactoryType.JERSEY;
-import static com.github.dockerjava.cmd.CmdIT.FactoryType.NETTY;
-
 /**
  * @author Kanstantsin Shautsou
  */
@@ -28,8 +23,7 @@ public class DockerRule extends ExternalResource {
     public static final Logger LOG = LoggerFactory.getLogger(DockerRule.class);
     public static final String DEFAULT_IMAGE = "busybox:latest";
 
-    private DockerClient nettyClient;
-    private DockerClient jerseyClient;
+    private DockerClient dockerClient;
 
     private CmdIT cmdIT;
 
@@ -39,26 +33,12 @@ public class DockerRule extends ExternalResource {
 
 
     public DockerClient getClient() {
-        if (cmdIT.getFactoryType() == NETTY) {
-            if (nettyClient == null) {
-                nettyClient = DockerClientBuilder.getInstance(config())
-                        .withDockerCmdExecFactory((new NettyDockerCmdExecFactory())
-                                .withConnectTimeout(10 * 1000))
-                        .build();
-            }
-
-            return nettyClient;
-        } else if (cmdIT.getFactoryType() == JERSEY) {
-            if (jerseyClient == null) {
-                jerseyClient = DockerClientBuilder.getInstance(config())
-                        .withDockerCmdExecFactory((new JerseyDockerCmdExecFactory())
-                                .withConnectTimeout(10 * 1000))
-                        .build();
-            }
-            return jerseyClient;
+        if (dockerClient != null) {
+            return dockerClient;
         }
-
-        throw new IllegalStateException("Why factory type is not set?");
+        return dockerClient = DockerClientBuilder.getInstance(config())
+                .withDockerCmdExecFactory(cmdIT.getFactoryType().createExecFactory())
+                .build();
     }
 
     @Override
@@ -122,13 +102,7 @@ public class DockerRule extends ExternalResource {
     }
 
     public String getKind() {
-        if (cmdIT.getFactoryType() == NETTY) {
-            return "netty";
-        } else if (cmdIT.getFactoryType() == JERSEY) {
-            return "jersey";
-        }
-
-        return "default";
+        return cmdIT.getFactoryType().name().toLowerCase();
     }
 
     public void ensureContainerRemoved(String container1Name) {

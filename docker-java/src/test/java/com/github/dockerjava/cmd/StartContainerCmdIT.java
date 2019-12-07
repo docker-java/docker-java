@@ -172,7 +172,7 @@ public class StartContainerCmdIT extends CmdIT {
 
     @Test
     public void startContainerWithPortBindings() throws DockerException {
-        int baseport = getFactoryType() == FactoryType.JERSEY ? 13000 : 14000;
+        int baseport = 20_000 + (getFactoryType().ordinal() * 1000);
 
         ExposedPort tcp22 = ExposedPort.tcp(22);
         ExposedPort tcp23 = ExposedPort.tcp(23);
