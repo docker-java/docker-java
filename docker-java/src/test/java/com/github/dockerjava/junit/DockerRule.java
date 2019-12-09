@@ -127,18 +127,33 @@ public class DockerRule extends ExternalResource {
                         .withRemoveVolumes(true)
                         .exec();
             } catch (ConflictException | NotFoundException ignored) {
+            } catch (Throwable e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
+                LOG.debug("Failed to remove container {}", containerId, e);
             }
         });
         createdNetworkIds.parallelStream().forEach(networkId -> {
             try {
                 dockerClient.removeNetworkCmd(networkId).exec();
             } catch (ConflictException | NotFoundException ignored) {
+            } catch (Throwable e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
+                LOG.debug("Failed to remove network {}", networkId, e);
             }
         });
         createdVolumeNames.parallelStream().forEach(volumeName -> {
             try {
                 dockerClient.removeVolumeCmd(volumeName).exec();
             } catch (ConflictException | NotFoundException ignored) {
+            } catch (Throwable e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
+                LOG.debug("Failed to remove volume {}", volumeName, e);
             }
         });
     }
