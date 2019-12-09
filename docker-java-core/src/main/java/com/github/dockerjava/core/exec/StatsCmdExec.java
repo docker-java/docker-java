@@ -10,6 +10,8 @@ import com.github.dockerjava.api.model.Statistics;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.WebTarget;
 
+import static org.apache.commons.lang.BooleanUtils.isTrue;
+
 public class StatsCmdExec extends AbstrAsyncDockerCmdExec<StatsCmd, Statistics> implements StatsCmd.Exec {
     private static final Logger LOGGER = LoggerFactory.getLogger(StatsCmdExec.class);
 
@@ -22,6 +24,10 @@ public class StatsCmdExec extends AbstrAsyncDockerCmdExec<StatsCmd, Statistics> 
 
         WebTarget webTarget = getBaseResource().path("/containers/{id}/stats").resolveTemplate("id",
                 command.getContainerId());
+
+        if (isTrue(command.getNoStream())) {
+            webTarget = webTarget.queryParam("stream", "0");
+        }
 
         LOGGER.trace("GET: {}", webTarget);
 

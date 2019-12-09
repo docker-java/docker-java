@@ -12,6 +12,8 @@ public class StatsCmdImpl extends AbstrAsyncDockerCmd<StatsCmd, Statistics> impl
 
     private String containerId;
 
+    private Boolean noStream;
+
     public StatsCmdImpl(StatsCmd.Exec exec, String containerId) {
         super(exec);
         withContainerId(containerId);
@@ -29,4 +31,15 @@ public class StatsCmdImpl extends AbstrAsyncDockerCmd<StatsCmd, Statistics> impl
         return containerId;
     }
 
+    @Override
+    public Boolean getNoStream() {
+        return noStream;
+    }
+
+    @Override
+    public StatsCmd withNoStream(Boolean noStream) {
+        checkNotNull(noStream, "noStream was not specified");
+        this.noStream = noStream;
+        return this;
+    }
 }
