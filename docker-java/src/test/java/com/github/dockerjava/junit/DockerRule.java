@@ -156,6 +156,12 @@ public class DockerRule extends ExternalResource {
                 LOG.debug("Failed to remove volume {}", volumeName, e);
             }
         });
+
+        try {
+            dockerClient.close();
+        } catch (Exception e) {
+            LOG.warn("Failed to close the DockerClient", e);
+        }
     }
 
     private static DefaultDockerClientConfig config() {
