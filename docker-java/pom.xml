@@ -115,6 +115,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>${maven-surefire-plugin.version}</version>
 				<configuration>
+					<trimStackTrace>false</trimStackTrace>
 					<rerunFailingTestsCount>3</rerunFailingTestsCount>
 					<excludedGroups>com.github.dockerjava.junit.category.Integration</excludedGroups>
 				</configuration>
@@ -133,6 +134,7 @@
 					</execution>
 				</executions>
 				<configuration>
+					<trimStackTrace>false</trimStackTrace>
 					<rerunFailingTestsCount>5</rerunFailingTestsCount>
 					<groups>com.github.dockerjava.junit.category.Integration</groups>
 					<excludedGroups>com.github.dockerjava.junit.category.AuthIntegration,com.github.dockerjava.junit.category.SwarmModeIntegration</excludedGroups>
