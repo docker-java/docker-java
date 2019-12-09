@@ -20,10 +20,6 @@ import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URI;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
 import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
@@ -74,10 +70,12 @@ public class OkHttpDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
         }
 
         SSLConfig sslConfig = dockerClientConfig.getSSLConfig();
+        boolean isSSL = false;
         if (sslConfig != null) {
             try {
                 SSLContext sslContext = sslConfig.getSSLContext();
                 if (sslContext != null) {
+                    isSSL = true;
                     clientBuilder
                             .sslSocketFactory(sslContext.getSocketFactory(), new TrustAllX509TrustManager());
                 }
@@ -94,20 +92,14 @@ public class OkHttpDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
             case "unix":
             case "npipe":
                 baseUrlBuilder = new HttpUrl.Builder()
-                    .scheme("http")
-                    .host("docker" + SOCKET_SUFFIX);
+                        .scheme("http")
+                        .host("docker" + SOCKET_SUFFIX);
                 break;
             case "tcp":
-                SSLContext sslContext;
-                try {
-                    sslContext = sslConfig.getSSLContext();
-                } catch (KeyManagementException | UnrecoverableKeyException | NoSuchAlgorithmException | KeyStoreException e) {
-                    throw new RuntimeException(e);
-                }
                 baseUrlBuilder = new HttpUrl.Builder()
-                    .scheme(sslConfig != null && sslContext != null ? "https" : "http")
-                    .host(dockerHost.getHost())
-                    .port(dockerHost.getPort());
+                        .scheme(isSSL ? "https" : "http")
+                        .host(dockerHost.getHost())
+                        .port(dockerHost.getPort());
                 break;
             default:
                 baseUrlBuilder = HttpUrl.get(dockerHost.toString()).newBuilder();
