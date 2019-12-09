@@ -13,10 +13,6 @@ import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 
-import static com.github.dockerjava.cmd.CmdIT.FactoryType.JERSEY;
-import static com.github.dockerjava.cmd.CmdIT.FactoryType.NETTY;
-import static com.github.dockerjava.cmd.CmdIT.FactoryType.OKHTTP;
-
 /**
  * @author Kanstantsin Shautsou
  */
@@ -64,9 +60,8 @@ public abstract class CmdIT {
 
     @Parameterized.Parameters(name = "{index}:{0}")
     public static Iterable<FactoryType> data() {
-        return Arrays.asList(
-                NETTY, JERSEY, OKHTTP
-        );
+        // return Arrays.asList(FactoryType.values());
+        return Arrays.asList(FactoryType.OKHTTP);
     }
 
     @Parameterized.Parameter
