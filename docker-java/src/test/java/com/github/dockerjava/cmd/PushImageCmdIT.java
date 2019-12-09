@@ -7,8 +7,9 @@ import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.core.RemoteApiVersion;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.core.command.PushImageResultCallback;
-import com.github.dockerjava.utils.RegistryUtils;
+import com.github.dockerjava.junit.PrivateRegistryRule;
 import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -27,6 +28,9 @@ public class PushImageCmdIT extends CmdIT {
 
     public static final Logger LOG = LoggerFactory.getLogger(PushImageCmdIT.class);
 
+    @ClassRule
+    public static PrivateRegistryRule REGISTRY = new PrivateRegistryRule();
+
     private String username;
 
     @Rule
@@ -36,7 +40,7 @@ public class PushImageCmdIT extends CmdIT {
     @Before
     public void beforeTest() throws Exception {
         username = dockerRule.getClient().authConfig().getUsername();
-        authConfig = RegistryUtils.runPrivateRegistry(dockerRule.getClient());
+        authConfig = REGISTRY.getAuthConfig();
     }
 
     @Test
@@ -86,7 +90,7 @@ public class PushImageCmdIT extends CmdIT {
 
     @Test
     public void testPushImageWithValidAuth() throws Exception {
-        String imgName = RegistryUtils.createTestImage(dockerRule, "push-image-with-valid-auth");
+        String imgName = REGISTRY.createTestImage("push-image-with-valid-auth");
 
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pushImageCmd(imgName)
@@ -97,7 +101,7 @@ public class PushImageCmdIT extends CmdIT {
 
     @Test
     public void testPushImageWithNoAuth() throws Exception {
-        String imgName = RegistryUtils.createTestImage(dockerRule, "push-image-with-no-auth");
+        String imgName = REGISTRY.createTestImage("push-image-with-no-auth");
 
         exception.expect(DockerClientException.class);
 
@@ -115,7 +119,7 @@ public class PushImageCmdIT extends CmdIT {
                 .withEmail("foo@bar.de")
                 .withRegistryAddress(authConfig.getRegistryAddress());
 
-        String imgName = RegistryUtils.createTestImage(dockerRule, "push-image-with-invalid-auth");
+        String imgName = REGISTRY.createTestImage("push-image-with-invalid-auth");
 
         exception.expect(DockerClientException.class);
 

@@ -1,6 +1,14 @@
 package com.github.dockerjava.junit;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.command.CreateContainerCmd;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.CreateNetworkCmd;
+import com.github.dockerjava.api.command.CreateNetworkResponse;
+import com.github.dockerjava.api.command.CreateVolumeCmd;
+import com.github.dockerjava.api.command.CreateVolumeResponse;
+import com.github.dockerjava.api.command.DockerCmdExecFactory;
+import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.cmd.CmdIT;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
@@ -15,6 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Kanstantsin Shautsou
@@ -27,6 +37,12 @@ public class DockerRule extends ExternalResource {
 
     private CmdIT cmdIT;
 
+    private final Set<String> createdContainerIds = new HashSet<>();
+
+    private final Set<String> createdNetworkIds = new HashSet<>();
+
+    private final Set<String> createdVolumeNames = new HashSet<>();
+
     public DockerRule(CmdIT cmdIT) {
         this.cmdIT = cmdIT;
     }
@@ -36,8 +52,42 @@ public class DockerRule extends ExternalResource {
         if (dockerClient != null) {
             return dockerClient;
         }
+        DockerCmdExecFactory execFactory = new DockerCmdExecFactoryDelegate(
+                cmdIT.getFactoryType().createExecFactory()
+        ) {
+            @Override
+            public CreateContainerCmd.Exec createCreateContainerCmdExec() {
+                CreateContainerCmd.Exec exec = super.createCreateContainerCmdExec();
+                return command -> {
+                    CreateContainerResponse response = exec.exec(command);
+                    createdContainerIds.add(response.getId());
+                    return response;
+                };
+            }
+
+            @Override
+            public CreateNetworkCmd.Exec createCreateNetworkCmdExec() {
+                CreateNetworkCmd.Exec exec = super.createCreateNetworkCmdExec();
+                return command -> {
+                    CreateNetworkResponse response = exec.exec(command);
+                    createdNetworkIds.add(response.getId());
+                    return response;
+                };
+            }
+
+            @Override
+            public CreateVolumeCmd.Exec createCreateVolumeCmdExec() {
+                CreateVolumeCmd.Exec exec = super.createCreateVolumeCmdExec();
+                return command -> {
+                    CreateVolumeResponse response = exec.exec(command);
+                    createdVolumeNames.add(response.getName());
+                    return response;
+                };
+            }
+        };
+
         return dockerClient = DockerClientBuilder.getInstance(config())
-                .withDockerCmdExecFactory(cmdIT.getFactoryType().createExecFactory())
+                .withDockerCmdExecFactory(execFactory)
                 .build();
     }
 
@@ -70,6 +120,48 @@ public class DockerRule extends ExternalResource {
     @Override
     protected void after() {
 //        LOG.debug("======================= END OF AFTERTEST =======================");
+        createdContainerIds.parallelStream().forEach(containerId -> {
+            try {
+                dockerClient.removeContainerCmd(containerId)
+                        .withForce(true)
+                        .withRemoveVolumes(true)
+                        .exec();
+            } catch (ConflictException | NotFoundException ignored) {
+            } catch (Throwable e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
+                LOG.debug("Failed to remove container {}", containerId, e);
+            }
+        });
+        createdNetworkIds.parallelStream().forEach(networkId -> {
+            try {
+                dockerClient.removeNetworkCmd(networkId).exec();
+            } catch (ConflictException | NotFoundException ignored) {
+            } catch (Throwable e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
+                LOG.debug("Failed to remove network {}", networkId, e);
+            }
+        });
+        createdVolumeNames.parallelStream().forEach(volumeName -> {
+            try {
+                dockerClient.removeVolumeCmd(volumeName).exec();
+            } catch (ConflictException | NotFoundException ignored) {
+            } catch (Throwable e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
+                LOG.debug("Failed to remove volume {}", volumeName, e);
+            }
+        });
+
+        try {
+            dockerClient.close();
+        } catch (Exception e) {
+            LOG.warn("Failed to close the DockerClient", e);
+        }
     }
 
     private static DefaultDockerClientConfig config() {

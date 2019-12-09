@@ -14,14 +14,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
-import java.io.Closeable;
 import java.io.File;
 import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
 
 import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -222,58 +220,38 @@ public class AttachContainerCmdIT extends CmdIT {
                 .exec();
         LOG.info("Created container: {}", container.toString());
 
-        final CountDownLatch started = new CountDownLatch(1);
-        final AtomicLong startedAtNanos = new AtomicLong();
-        final CountDownLatch gotLine = new CountDownLatch(1);
-        final CountDownLatch completed = new CountDownLatch(1);
-        final AtomicLong gotLineAtNanos = new AtomicLong();
-        AttachContainerTestCallback callback = new AttachContainerTestCallback() {
-            @Override
-            public void onStart(Closeable stream) {
-                startedAtNanos.set(System.nanoTime());
-                started.countDown();
-                super.onStart(stream);
-            }
+        CountDownLatch gotLine = new CountDownLatch(1);
+        try (
+                AttachContainerResultCallback resultCallback = dockerClient.attachContainerCmd(container.getId())
+                        .withStdOut(true)
+                        .withStdErr(true)
+                        .withFollowStream(true)
+                        .exec(new AttachContainerTestCallback() {
+                            @Override
+                            public void onNext(Frame item) {
+                                LOG.info("Got frame: {}", item);
+                                if (item.getStreamType() == StreamType.STDOUT) {
+                                    gotLine.countDown();
+                                }
+                                super.onNext(item);
+                            }
 
-            @Override
-            public void onNext(Frame item) {
-                LOG.info("Got frame: {}", item);
-                if (item.getStreamType() == StreamType.STDOUT) {
-                    gotLineAtNanos.set(System.nanoTime());
-                    gotLine.countDown();
-                }
-                super.onNext(item);
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                LOG.info("Got error: ", throwable);
-                super.onError(throwable);
-            }
-
-            @Override
-            public void onComplete() {
-                completed.countDown();
-                super.onComplete();
-            }
-        };
-
-        try (Closeable ignored = callback) {
-            dockerClient.attachContainerCmd(container.getId())
-                    .withStdOut(true)
-                    .withFollowStream(true)
-                    .exec(callback);
+                            @Override
+                            public void onComplete() {
+                                LOG.info("On complete");
+                                super.onComplete();
+                            }
+                        })
+        ) {
+            resultCallback.awaitStarted(5, SECONDS);
+            LOG.info("Attach started");
 
             dockerClient.startContainerCmd(container.getId()).exec();
+            LOG.info("Container started");
 
-            assertTrue("Should start in a reasonable time", started.await(30, SECONDS));
             assertTrue("Should get first line quickly after the start", gotLine.await(15, SECONDS));
 
-            long gotLineDurationSeconds = (gotLineAtNanos.get() - startedAtNanos.get()) / 1_000_000_000L;
-            LOG.info("Got line from {} for {} seconds", container.getId(), gotLineDurationSeconds);
-
-            boolean finished = completed.await(1L + gotLineDurationSeconds, SECONDS);
-            assertTrue("Should get EOF in a time close to time of getting the first line", finished);
+            resultCallback.awaitCompletion(5, SECONDS);
         }
     }
 
