@@ -10,6 +10,7 @@ import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.command.BuildImageResultCallback;
 import com.github.dockerjava.core.command.PushImageResultCallback;
+import com.github.dockerjava.okhttp.OkHttpDockerCmdExecFactory;
 import org.junit.rules.ExternalResource;
 
 import java.io.File;
@@ -30,7 +31,9 @@ public class PrivateRegistryRule extends ExternalResource {
     private String containerId;
 
     public PrivateRegistryRule() {
-        this.dockerClient = DockerClientBuilder.getInstance().build();
+        this.dockerClient = DockerClientBuilder.getInstance()
+                .withDockerCmdExecFactory(new OkHttpDockerCmdExecFactory())
+                .build();
     }
 
     public AuthConfig getAuthConfig() {
