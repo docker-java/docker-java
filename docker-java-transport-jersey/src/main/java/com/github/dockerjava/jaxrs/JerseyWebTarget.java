@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
+import static com.google.common.net.UrlEscapers.urlPathSegmentEscaper;
+
 class JerseyWebTarget implements WebTarget {
 
     private static final String PATH_SEPARATOR = "/";
@@ -44,6 +46,9 @@ class JerseyWebTarget implements WebTarget {
 
     @Override
     public JerseyWebTarget queryParam(String name, Object value) {
+        if (value instanceof String) {
+            value = urlPathSegmentEscaper().escape((String) value);
+        }
         return new JerseyWebTarget(
                 objectMapper,
                 webTarget.queryParam(name, value)
