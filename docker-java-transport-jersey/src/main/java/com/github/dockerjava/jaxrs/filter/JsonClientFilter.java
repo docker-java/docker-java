@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  *
  */
+@Deprecated
 public class JsonClientFilter implements ClientResponseFilter {
 
     @Override

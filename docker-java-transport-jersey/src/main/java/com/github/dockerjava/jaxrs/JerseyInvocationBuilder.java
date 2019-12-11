@@ -50,12 +50,12 @@ class JerseyInvocationBuilder implements InvocationBuilder {
     @Override
     public void get(ResultCallback<Frame> resultCallback) {
         try {
-            GETCallbackNotifier getCallbackNotifier = new GETCallbackNotifier(
+            GETCallbackNotifier<Frame> getCallbackNotifier = new GETCallbackNotifier<>(
                     new FrameStreamProcessor(),
                     resultCallback,
                     resource
             );
-            getCallbackNotifier.call();
+            getCallbackNotifier.start();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -74,11 +74,11 @@ class JerseyInvocationBuilder implements InvocationBuilder {
     public <T> void get(TypeReference<T> typeReference, ResultCallback<T> resultCallback) {
         try {
             GETCallbackNotifier<T> getCallbackNotifier = new GETCallbackNotifier<T>(
-                    new JsonStreamProcessor(objectMapper, typeReference),
+                    new JsonStreamProcessor<>(objectMapper, typeReference),
                     resultCallback,
                     resource
             );
-            getCallbackNotifier.call();
+            getCallbackNotifier.start();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -104,11 +104,7 @@ class JerseyInvocationBuilder implements InvocationBuilder {
                 toEntity(entity, javax.ws.rs.core.MediaType.APPLICATION_JSON)
         );
 
-        try {
-            postCallbackNotifier.call();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        postCallbackNotifier.start();
     }
 
     @Override
@@ -131,13 +127,13 @@ class JerseyInvocationBuilder implements InvocationBuilder {
     @Override
     public <T> void post(Object entity, TypeReference<T> typeReference, ResultCallback<T> resultCallback) {
         try {
-            POSTCallbackNotifier postCallbackNotifier = new POSTCallbackNotifier<>(
+            POSTCallbackNotifier<T> postCallbackNotifier = new POSTCallbackNotifier<>(
                     new JsonStreamProcessor<>(objectMapper, typeReference),
-                    (ResultCallback) resultCallback,
+                    resultCallback,
                     resource,
                     toEntity(entity, javax.ws.rs.core.MediaType.APPLICATION_JSON)
             );
-            postCallbackNotifier.call();
+            postCallbackNotifier.start();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -161,12 +157,12 @@ class JerseyInvocationBuilder implements InvocationBuilder {
     public <T> void post(TypeReference<T> typeReference, ResultCallback<T> resultCallback, InputStream body) {
         try {
             POSTCallbackNotifier<T> postCallbackNotifier = new POSTCallbackNotifier<T>(
-                    new JsonStreamProcessor(objectMapper, typeReference),
+                    new JsonStreamProcessor<>(objectMapper, typeReference),
                     resultCallback,
                     resource,
                     toEntity(body, "application/tar")
             );
-            postCallbackNotifier.call();
+            postCallbackNotifier.start();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

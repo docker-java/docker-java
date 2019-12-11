@@ -21,6 +21,7 @@ import com.github.dockerjava.core.async.ResponseStreamProcessor;
 import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
+@Deprecated
 public abstract class AbstractCallbackNotifier<T> implements Callable<Void> {
 
     private final ResponseStreamProcessor<T> responseStreamProcessor;
@@ -42,9 +43,9 @@ public abstract class AbstractCallbackNotifier<T> implements Callable<Void> {
     }
 
     @Override
-    public Void call() throws Exception {
+    public Void call() {
 
-        Response response = null;
+        Response response;
 
         try {
             response = response();
@@ -58,6 +59,9 @@ public abstract class AbstractCallbackNotifier<T> implements Callable<Void> {
                 resultCallback.onError(e);
             }
             return null;
+        }
+        if (resultCallback != null) {
+            resultCallback.onStart(response::close);
         }
 
         try (InputStream inputStream = new WrappedResponseInputStream(response)) {
@@ -84,5 +88,9 @@ public abstract class AbstractCallbackNotifier<T> implements Callable<Void> {
         Future<Void> response = executorService.submit(callbackNotifier);
         executorService.shutdown();
         return response;
+    }
+
+    public void start() {
+        FACTORY.newThread(this::call).start();
     }
 }
