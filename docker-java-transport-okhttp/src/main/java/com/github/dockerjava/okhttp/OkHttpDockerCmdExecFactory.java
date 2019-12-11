@@ -1,19 +1,15 @@
 package com.github.dockerjava.okhttp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.api.command.PingCmd;
 import com.github.dockerjava.core.AbstractDockerCmdExecFactory;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.SSLConfig;
-import com.github.dockerjava.core.WebTarget;
-import com.github.dockerjava.core.exec.PingCmdExec;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.MultimapBuilder;
 import okhttp3.ConnectionPool;
 import okhttp3.Dns;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
-import org.apache.commons.io.IOUtils;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.X509TrustManager;
@@ -118,22 +114,6 @@ public class OkHttpDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
             ImmutableList.of(),
             MultimapBuilder.hashKeys().hashSetValues().build()
         );
-    }
-
-    @Override
-    public PingCmd.Exec createPingCmdExec() {
-        return new PingCmdExec(getBaseResource(), getDockerClientConfig()) {
-
-            @Override
-            protected Void execute(PingCmd command) {
-                WebTarget webResource = getBaseResource().path("/_ping");
-
-                // TODO contribute to docker-java, make it close the stream
-                IOUtils.closeQuietly(webResource.request().get());
-
-                return null;
-            }
-        };
     }
 
     @Override

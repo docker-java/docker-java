@@ -7,6 +7,8 @@ import com.github.dockerjava.api.command.PingCmd;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.WebTarget;
 
+import java.io.IOException;
+
 public class PingCmdExec extends AbstrSyncDockerCmdExec<PingCmd, Void> implements PingCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PingCmdExec.class);
@@ -20,7 +22,11 @@ public class PingCmdExec extends AbstrSyncDockerCmdExec<PingCmd, Void> implement
         WebTarget webResource = getBaseResource().path("/_ping");
 
         LOGGER.trace("GET: {}", webResource);
-        webResource.request().get();
+        try {
+            webResource.request().get().close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return null;
     }

@@ -8,6 +8,8 @@ import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.MediaType;
 import com.github.dockerjava.core.WebTarget;
 
+import java.io.IOException;
+
 public class RestartContainerCmdExec extends AbstrSyncDockerCmdExec<RestartContainerCmd, Void> implements
         RestartContainerCmd.Exec {
 
@@ -27,7 +29,11 @@ public class RestartContainerCmdExec extends AbstrSyncDockerCmdExec<RestartConta
         }
 
         LOGGER.trace("POST: {}", webResource);
-        webResource.request().accept(MediaType.APPLICATION_JSON).post(null);
+        try {
+            webResource.request().accept(MediaType.APPLICATION_JSON).post(null).close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return null;
     }
