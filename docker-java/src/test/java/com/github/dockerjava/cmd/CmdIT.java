@@ -60,7 +60,7 @@ public abstract class CmdIT {
 
     @Parameterized.Parameters(name = "{index}:{0}")
     public static Iterable<FactoryType> data() {
-        return Arrays.asList(FactoryType.JERSEY);
+        return Arrays.asList(FactoryType.values());
     }
 
     @Parameterized.Parameter
