@@ -16,6 +16,7 @@ import com.github.dockerjava.jaxrs.util.WrappedResponseInputStream;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.io.InputStream;
 
 class JerseyInvocationBuilder implements InvocationBuilder {
@@ -62,9 +63,9 @@ class JerseyInvocationBuilder implements InvocationBuilder {
 
     @Override
     public <T> T get(TypeReference<T> typeReference) {
-        try {
-            return (T) resource.get(Class.forName(typeReference.getType().getTypeName()));
-        } catch (ClassNotFoundException e) {
+        try (Response response = resource.get()) {
+            return objectMapper.readValue(response.readEntity(InputStream.class), typeReference);
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -73,7 +74,7 @@ class JerseyInvocationBuilder implements InvocationBuilder {
     public <T> void get(TypeReference<T> typeReference, ResultCallback<T> resultCallback) {
         try {
             GETCallbackNotifier<T> getCallbackNotifier = new GETCallbackNotifier<T>(
-                    new JsonStreamProcessor(objectMapper, Class.forName(typeReference.getType().getTypeName())),
+                    new JsonStreamProcessor(objectMapper, typeReference),
                     resultCallback,
                     resource
             );
@@ -120,9 +121,9 @@ class JerseyInvocationBuilder implements InvocationBuilder {
             throw new UnauthorizedException("Unauthorized");
         }
 
-        try {
-            return (T) response.readEntity(Class.forName(typeReference.getType().getTypeName()));
-        } catch (ClassNotFoundException e) {
+        try (InputStream inputStream = response.readEntity(InputStream.class)) {
+            return objectMapper.readValue(inputStream, typeReference);
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -131,7 +132,7 @@ class JerseyInvocationBuilder implements InvocationBuilder {
     public <T> void post(Object entity, TypeReference<T> typeReference, ResultCallback<T> resultCallback) {
         try {
             POSTCallbackNotifier postCallbackNotifier = new POSTCallbackNotifier<>(
-                    new JsonStreamProcessor<>(objectMapper, Class.forName(typeReference.getType().getTypeName())),
+                    new JsonStreamProcessor<>(objectMapper, typeReference),
                     (ResultCallback) resultCallback,
                     resource,
                     toEntity(entity, javax.ws.rs.core.MediaType.APPLICATION_JSON)
@@ -144,12 +145,14 @@ class JerseyInvocationBuilder implements InvocationBuilder {
 
     @Override
     public <T> T post(TypeReference<T> typeReference, InputStream body) {
-        try {
-            return (T) resource.post(
-                    toEntity(body, javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM),
-                    Class.forName(typeReference.getType().getTypeName())
-            );
-        } catch (ClassNotFoundException e) {
+        try (
+                Response response = resource.post(
+                        toEntity(body, javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM)
+                )
+        ) {
+            InputStream inputStream = response.readEntity(InputStream.class);
+            return objectMapper.readValue(inputStream, typeReference);
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -158,7 +161,7 @@ class JerseyInvocationBuilder implements InvocationBuilder {
     public <T> void post(TypeReference<T> typeReference, ResultCallback<T> resultCallback, InputStream body) {
         try {
             POSTCallbackNotifier<T> postCallbackNotifier = new POSTCallbackNotifier<T>(
-                    new JsonStreamProcessor(objectMapper, Class.forName(typeReference.getType().getTypeName())),
+                    new JsonStreamProcessor(objectMapper, typeReference),
                     resultCallback,
                     resource,
                     toEntity(body, "application/tar")

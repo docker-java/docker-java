@@ -9,6 +9,7 @@ import java.io.InputStream;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.dockerjava.api.async.ResultCallback;
@@ -23,7 +24,7 @@ public class JsonStreamProcessor<T> implements ResponseStreamProcessor<T> {
 
     private static final JsonFactory JSON_FACTORY = new JsonFactory();
 
-    private final Class<T> clazz;
+    private final TypeReference<T> typeReference;
 
     private final ObjectMapper objectMapper;
 
@@ -31,12 +32,13 @@ public class JsonStreamProcessor<T> implements ResponseStreamProcessor<T> {
     public JsonStreamProcessor(Class<T> clazz) {
         this(
                 DefaultDockerClientConfig.createDefaultConfigBuilder().build().getObjectMapper(),
-                clazz
+                new TypeReference<T>() {
+                }
         );
     }
 
-    public JsonStreamProcessor(ObjectMapper objectMapper, Class<T> clazz) {
-        this.clazz = clazz;
+    public JsonStreamProcessor(ObjectMapper objectMapper, TypeReference<T> typeReference) {
+        this.typeReference = typeReference;
         this.objectMapper = objectMapper.copy().enable(JsonParser.Feature.AUTO_CLOSE_SOURCE);
     }
 
@@ -54,7 +56,7 @@ public class JsonStreamProcessor<T> implements ResponseStreamProcessor<T> {
                     ObjectNode objectNode = objectMapper.readTree(jp);
                     // exclude empty item serialization into class #461
                     if (!objectNode.isEmpty(null)) {
-                        T next = objectMapper.treeToValue(objectNode, clazz);
+                        T next = objectMapper.convertValue(objectNode, typeReference);
                         resultCallback.onNext(next);
                     }
                 } catch (Exception e) {
