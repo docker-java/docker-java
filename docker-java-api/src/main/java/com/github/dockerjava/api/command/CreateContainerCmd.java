@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.command;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.AuthConfig;
@@ -22,6 +23,9 @@ import com.github.dockerjava.api.model.VolumesFrom;
 import javax.annotation.CheckForNull;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import static java.util.Objects.requireNonNull;
 
 public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerResponse> {
 
@@ -42,13 +46,23 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     @Deprecated
     @CheckForNull
-    Bind[] getBinds();
+    @JsonIgnore
+    default Bind[] getBinds() {
+        return getHostConfig().getBinds();
+    }
 
     @Deprecated
-    CreateContainerCmd withBinds(Bind... binds);
+    default CreateContainerCmd withBinds(Bind... binds) {
+        Objects.requireNonNull(binds, "binds was not specified");
+        getHostConfig().setBinds(binds);
+        return this;
+    }
 
     @Deprecated
-    CreateContainerCmd withBinds(List<Bind> binds);
+    default CreateContainerCmd withBinds(List<Bind> binds) {
+        Objects.requireNonNull(binds, "binds was not specified");
+        return withBinds(binds.toArray(new Bind[binds.size()]));
+    }
 
     /**
      * Add network-scoped alias for the container
@@ -146,19 +160,29 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     @Deprecated
     @CheckForNull
-    Link[] getLinks();
+    @JsonIgnore
+    default Link[] getLinks() {
+        return getHostConfig().getLinks();
+    }
 
     /**
      * Add link to another container.
      */
     @Deprecated
-    CreateContainerCmd withLinks(Link... links);
+    default CreateContainerCmd withLinks(Link... links) {
+        requireNonNull(links, "links was not specified");
+        getHostConfig().setLinks(links);
+        return this;
+    }
 
     /**
      * Add link to another container.
      */
     @Deprecated
-    CreateContainerCmd withLinks(List<Link> links);
+    default CreateContainerCmd withLinks(List<Link> links) {
+        requireNonNull(links, "links was not specified");
+        return withLinks(links.toArray(new Link[links.size()]));
+    }
 
     @CheckForNull
     String getIpv6Address();
@@ -177,24 +201,41 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     @Deprecated
     @CheckForNull
-    Long getMemory();
+    @JsonIgnore
+    default Long getMemory() {
+        return getHostConfig().getMemory();
+    }
 
     @Deprecated
-    CreateContainerCmd withMemory(Long memory);
+    default CreateContainerCmd withMemory(Long memory) {
+        Objects.requireNonNull(memory, "memory was not specified");
+        getHostConfig().withMemory(memory);
+        return this;
+    }
 
     @Deprecated
     @CheckForNull
-    Long getMemorySwap();
+    @JsonIgnore
+    default Long getMemorySwap() {
+        return getHostConfig().getMemorySwap();
+    }
 
     @Deprecated
-    CreateContainerCmd withMemorySwap(Long memorySwap);
+    default CreateContainerCmd withMemorySwap(Long memorySwap) {
+        Objects.requireNonNull(memorySwap, "memorySwap was not specified");
+        getHostConfig().withMemorySwap(memorySwap);
+        return this;
+    }
 
     @CheckForNull
     String getName();
 
     @Deprecated
     @CheckForNull
-    String getNetworkMode();
+    @JsonIgnore
+    default String getNetworkMode() {
+        return getHostConfig().getNetworkMode();
+    }
 
     /**
      * Set the Network mode for the container
@@ -207,25 +248,39 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
      * </ul>
      */
     @Deprecated
-    CreateContainerCmd withNetworkMode(String networkMode);
+    default CreateContainerCmd withNetworkMode(String networkMode) {
+        Objects.requireNonNull(networkMode, "networkMode was not specified");
+        getHostConfig().withNetworkMode(networkMode);
+        return this;
+    }
 
     @Deprecated
     @CheckForNull
-    Ports getPortBindings();
+    @JsonIgnore
+    default Ports getPortBindings() {
+        return getHostConfig().getPortBindings();
+    }
 
     /**
      * Add one or more {@link PortBinding}s. This corresponds to the <code>--publish</code> (<code>-p</code>) option of the
      * <code>docker run</code> CLI command.
      */
     @Deprecated
-    CreateContainerCmd withPortBindings(PortBinding... portBindings);
+    default CreateContainerCmd withPortBindings(PortBinding... portBindings) {
+        Objects.requireNonNull(portBindings, "portBindings was not specified");
+        getHostConfig().withPortBindings(new Ports(portBindings));
+        return this;
+    }
 
     /**
      * Add one or more {@link PortBinding}s. This corresponds to the <code>--publish</code> (<code>-p</code>) option of the
      * <code>docker run</code> CLI command.
      */
     @Deprecated
-    CreateContainerCmd withPortBindings(List<PortBinding> portBindings);
+    default CreateContainerCmd withPortBindings(List<PortBinding> portBindings) {
+        Objects.requireNonNull(portBindings, "portBindings was not specified");
+        return withPortBindings(portBindings.toArray(new PortBinding[0]));
+    }
 
     /**
      * Add the port bindings that are contained in the given {@link Ports} object.
@@ -233,7 +288,11 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
      * @see #withPortBindings(PortBinding...)
      */
     @Deprecated
-    CreateContainerCmd withPortBindings(Ports portBindings);
+    default CreateContainerCmd withPortBindings(Ports portBindings) {
+        Objects.requireNonNull(portBindings, "portBindings was not specified");
+        getHostConfig().withPortBindings(portBindings);
+        return this;
+    }
 
     CreateContainerCmd withName(String name);
 
@@ -246,10 +305,17 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     @Deprecated
     @CheckForNull
-    Boolean getPrivileged();
+    @JsonIgnore
+    default Boolean getPrivileged() {
+        return getHostConfig().getPrivileged();
+    }
 
     @Deprecated
-    CreateContainerCmd withPrivileged(Boolean privileged);
+    default CreateContainerCmd withPrivileged(Boolean privileged) {
+        Objects.requireNonNull(privileged, "no privileged was specified");
+        getHostConfig().withPrivileged(privileged);
+        return this;
+    }
 
     @CheckForNull
     String getUser();
@@ -265,13 +331,23 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     @Deprecated
     @CheckForNull
-    VolumesFrom[] getVolumesFrom();
+    @JsonIgnore
+    default VolumesFrom[] getVolumesFrom() {
+        return getHostConfig().getVolumesFrom();
+    }
 
     @Deprecated
-    CreateContainerCmd withVolumesFrom(VolumesFrom... volumesFrom);
+    default CreateContainerCmd withVolumesFrom(VolumesFrom... volumesFrom) {
+        Objects.requireNonNull(volumesFrom, "volumesFrom was not specified");
+        getHostConfig().withVolumesFrom(volumesFrom);
+        return this;
+    }
 
     @Deprecated
-    CreateContainerCmd withVolumesFrom(List<VolumesFrom> volumesFrom);
+    default CreateContainerCmd withVolumesFrom(List<VolumesFrom> volumesFrom) {
+        requireNonNull(volumesFrom, "volumesFrom was not specified");
+        return withVolumesFrom(volumesFrom.toArray(new VolumesFrom[volumesFrom.size()]));
+    }
 
     @CheckForNull
     String getWorkingDir();
@@ -315,62 +391,99 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     @Deprecated
     @CheckForNull
-    Boolean getPublishAllPorts();
+    @JsonIgnore
+    default Boolean getPublishAllPorts() {
+        return getHostConfig().getPublishAllPorts();
+    }
 
     @Deprecated
-    CreateContainerCmd withPublishAllPorts(Boolean publishAllPorts);
+    default CreateContainerCmd withPublishAllPorts(Boolean publishAllPorts) {
+        requireNonNull(publishAllPorts, "no publishAllPorts was specified");
+        getHostConfig().withPublishAllPorts(publishAllPorts);
+        return this;
+    }
 
     @CheckForNull
     @Deprecated
-    String[] getExtraHosts();
+    @JsonIgnore
+    default String[] getExtraHosts() {
+        return getHostConfig().getExtraHosts();
+    }
 
     /**
      * Add hostnames to /etc/hosts in the container
      */
     @Deprecated
-    CreateContainerCmd withExtraHosts(String... extraHosts);
+    default CreateContainerCmd withExtraHosts(String... extraHosts) {
+        requireNonNull(extraHosts, "extraHosts was not specified");
+        getHostConfig().withExtraHosts(extraHosts);
+        return this;
+    }
 
     /**
      * Add hostnames to /etc/hosts in the container
      */
     @Deprecated
-    CreateContainerCmd withExtraHosts(List<String> extraHosts);
+    default CreateContainerCmd withExtraHosts(List<String> extraHosts) {
+        requireNonNull(extraHosts, "extraHosts was not specified");
+        return withExtraHosts(extraHosts.toArray(new String[extraHosts.size()]));
+    }
 
     @CheckForNull
     @Deprecated
-    Capability[] getCapAdd();
+    @JsonIgnore
+    default Capability[] getCapAdd() {
+        return getHostConfig().getCapAdd();
+    }
 
     /**
      * Add linux <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">kernel capability</a> to the container. For example:
      * adding {@link Capability#MKNOD} allows the container to create special files using the 'mknod' command.
      */
     @Deprecated
-    CreateContainerCmd withCapAdd(Capability... capAdd);
+    default CreateContainerCmd withCapAdd(Capability... capAdd) {
+        requireNonNull(capAdd, "capAdd was not specified");
+        getHostConfig().withCapAdd(capAdd);
+        return this;
+    }
 
     /**
      * Add linux <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">kernel capability</a> to the container. For example:
      * adding {@link Capability#MKNOD} allows the container to create special files using the 'mknod' command.
      */
     @Deprecated
-    CreateContainerCmd withCapAdd(List<Capability> capAdd);
+    default CreateContainerCmd withCapAdd(List<Capability> capAdd) {
+        requireNonNull(capAdd, "capAdd was not specified");
+        return withCapAdd(capAdd.toArray(new Capability[capAdd.size()]));
+    }
 
     @CheckForNull
     @Deprecated
-    Capability[] getCapDrop();
+    @JsonIgnore
+    default Capability[] getCapDrop() {
+        return getHostConfig().getCapDrop();
+    }
 
     /**
      * Drop linux <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">kernel capability</a> from the container. For example:
      * dropping {@link Capability#CHOWN} prevents the container from changing the owner of any files.
      */
     @Deprecated
-    CreateContainerCmd withCapDrop(Capability... capDrop);
+    default CreateContainerCmd withCapDrop(Capability... capDrop) {
+        requireNonNull(capDrop, "capDrop was not specified");
+        getHostConfig().withCapDrop(capDrop);
+        return this;
+    }
 
     /**
      * Drop linux <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">kernel capability</a> from the container. For example:
      * dropping {@link Capability#CHOWN} prevents the container from changing the owner of any files.
      */
     @Deprecated
-    CreateContainerCmd withCapDrop(List<Capability> capDrop);
+    default CreateContainerCmd withCapDrop(List<Capability> capDrop) {
+        requireNonNull(capDrop, "capDrop was not specified");
+        return withCapDrop(capDrop.toArray(new Capability[capDrop.size()]));
+    }
 
 
     @CheckForNull
@@ -388,154 +501,270 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     @Deprecated
     @CheckForNull
-    Integer getBlkioWeight();
+    @JsonIgnore
+    default Integer getBlkioWeight() {
+        return getHostConfig().getBlkioWeight();
+    }
 
     @CheckForNull
     @Deprecated
-    String getCgroupParent();
+    @JsonIgnore
+    default String getCgroupParent() {
+        return getHostConfig().getCgroupParent();
+    }
 
     @Deprecated
     @CheckForNull
-    Integer getCpuPeriod();
+    @JsonIgnore
+    default Integer getCpuPeriod() {
+        Long result = getHostConfig().getCpuPeriod();
+        return result != null ? result.intValue() : null;
+    }
 
     @Deprecated
     @CheckForNull
-    Integer getCpuShares();
+    @JsonIgnore
+    default Integer getCpuShares() {
+        return getHostConfig().getCpuShares();
+    }
 
     @Deprecated
     @CheckForNull
-    String getCpusetCpus();
+    @JsonIgnore
+    default String getCpusetCpus() {
+        return getHostConfig().getCpusetCpus();
+    }
 
     @Deprecated
     @CheckForNull
-    String getCpusetMems();
+    @JsonIgnore
+    default String getCpusetMems() {
+        return getHostConfig().getCpusetMems();
+    }
 
     @Deprecated
     @CheckForNull
-    Device[] getDevices();
+    @JsonIgnore
+    default Device[] getDevices() {
+        return getHostConfig().getDevices();
+    }
 
     @Deprecated
     @CheckForNull
-    String[] getDns();
+    @JsonIgnore
+    default String[] getDns() {
+        return getHostConfig().getDns();
+    }
 
     @Deprecated
     @CheckForNull
-    String[] getDnsSearch();
+    @JsonIgnore
+    default String[] getDnsSearch() {
+        return getHostConfig().getDnsSearch();
+    }
 
     @Deprecated
     @CheckForNull
-    LogConfig getLogConfig();
+    @JsonIgnore
+    default LogConfig getLogConfig() {
+        return getHostConfig().getLogConfig();
+    }
 
     @Deprecated
     @CheckForNull
-    LxcConf[] getLxcConf();
+    @JsonIgnore
+    default LxcConf[] getLxcConf() {
+        return getHostConfig().getLxcConf();
+    }
 
     @Deprecated
     @CheckForNull
-    Boolean getOomKillDisable();
+    @JsonIgnore
+    default Boolean getOomKillDisable() {
+        return getHostConfig().getOomKillDisable();
+    }
 
     @Deprecated
     @CheckForNull
-    String getPidMode();
+    @JsonIgnore
+    default String getPidMode() {
+        return getHostConfig().getPidMode();
+    }
 
     @Deprecated
     @CheckForNull
-    Boolean getReadonlyRootfs();
+    @JsonIgnore
+    default Boolean getReadonlyRootfs() {
+        return getHostConfig().getReadonlyRootfs();
+    }
 
     @Deprecated
     @CheckForNull
-    RestartPolicy getRestartPolicy();
+    @JsonIgnore
+    default RestartPolicy getRestartPolicy() {
+        return getHostConfig().getRestartPolicy();
+    }
 
     @Deprecated
     @CheckForNull
-    Ulimit[] getUlimits();
+    @JsonIgnore
+    default Ulimit[] getUlimits() {
+        return getHostConfig().getUlimits();
+    }
 
     @Deprecated
-    CreateContainerCmd withBlkioWeight(Integer blkioWeight);
+    default CreateContainerCmd withBlkioWeight(Integer blkioWeight) {
+        getHostConfig().withBlkioWeight(blkioWeight);
+        return this;
+    }
 
     @Deprecated
-    CreateContainerCmd withCgroupParent(String cgroupParent);
+    default CreateContainerCmd withCgroupParent(String cgroupParent) {
+        getHostConfig().withCgroupParent(cgroupParent);
+        return this;
+    }
 
     @Deprecated
-    CreateContainerCmd withContainerIDFile(String containerIDFile);
+    default CreateContainerCmd withContainerIDFile(String containerIDFile) {
+        getHostConfig().withContainerIDFile(containerIDFile);
+        return this;
+    }
 
     @Deprecated
-    CreateContainerCmd withCpuPeriod(Integer cpuPeriod);
+    default CreateContainerCmd withCpuPeriod(Integer cpuPeriod) {
+        getHostConfig().withCpuPeriod(cpuPeriod != null ? cpuPeriod.longValue() : null);
+        return this;
+    }
 
     @Deprecated
-    CreateContainerCmd withCpuShares(Integer cpuShares);
+    default CreateContainerCmd withCpuShares(Integer cpuShares) {
+        getHostConfig().withCpuShares(cpuShares);
+        return this;
+    }
 
     @Deprecated
-    CreateContainerCmd withCpusetCpus(String cpusetCpus);
+    default CreateContainerCmd withCpusetCpus(String cpusetCpus) {
+        getHostConfig().withCpusetCpus(cpusetCpus);
+        return this;
+    }
 
     @Deprecated
-    CreateContainerCmd withCpusetMems(String cpusetMems);
+    default CreateContainerCmd withCpusetMems(String cpusetMems) {
+        getHostConfig().withCpusetMems(cpusetMems);
+        return this;
+    }
 
     @Deprecated
-    CreateContainerCmd withDevices(Device... devices);
+    default CreateContainerCmd withDevices(Device... devices) {
+        getHostConfig().withDevices(devices);
+        return this;
+    }
 
     /**
      * Add host devices to the container
      */
     @Deprecated
-    CreateContainerCmd withDevices(List<Device> devices);
+    default CreateContainerCmd withDevices(List<Device> devices) {
+        getHostConfig().withDevices(devices);
+        return this;
+    }
 
     /**
      * Set custom DNS servers
      */
     @Deprecated
-    CreateContainerCmd withDns(String... dns);
+    default CreateContainerCmd withDns(String... dns) {
+        getHostConfig().withDns(dns);
+        return this;
+    }
 
     /**
      * Set custom DNS servers
      */
     @Deprecated
-    CreateContainerCmd withDns(List<String> dns);
+    default CreateContainerCmd withDns(List<String> dns) {
+        getHostConfig().withDns(dns);
+        return this;
+    }
 
     /**
      * Set custom DNS search domains
      */
     @Deprecated
-    CreateContainerCmd withDnsSearch(String... dnsSearch);
+    default CreateContainerCmd withDnsSearch(String... dnsSearch) {
+        getHostConfig().withDnsSearch(dnsSearch);
+        return this;
+    }
 
     /**
      * Set custom DNS search domains
      */
     @Deprecated
-    CreateContainerCmd withDnsSearch(List<String> dnsSearch);
+    default CreateContainerCmd withDnsSearch(List<String> dnsSearch) {
+        getHostConfig().withDnsSearch(dnsSearch);
+        return this;
+    }
 
     @Deprecated
-    CreateContainerCmd withLogConfig(LogConfig logConfig);
+    default CreateContainerCmd withLogConfig(LogConfig logConfig) {
+        getHostConfig().withLogConfig(logConfig);
+        return this;
+    }
 
     @Deprecated
-    CreateContainerCmd withLxcConf(LxcConf... lxcConf);
+    default CreateContainerCmd withLxcConf(LxcConf... lxcConf) {
+        getHostConfig().withLxcConf(lxcConf);
+        return this;
+    }
 
     @Deprecated
-    CreateContainerCmd withLxcConf(List<LxcConf> lxcConf);
+    default CreateContainerCmd withLxcConf(List<LxcConf> lxcConf) {
+        getHostConfig().withLxcConf(lxcConf.toArray(new LxcConf[0]));
+        return this;
+    }
 
     @Deprecated
-    CreateContainerCmd withOomKillDisable(Boolean oomKillDisable);
+    default CreateContainerCmd withOomKillDisable(Boolean oomKillDisable) {
+        getHostConfig().withOomKillDisable(oomKillDisable);
+        return this;
+    }
 
     /**
      * Set the PID (Process) Namespace mode for the container, 'host': use the host's PID namespace inside the container
      */
     @Deprecated
-    CreateContainerCmd withPidMode(String pidMode);
+    default CreateContainerCmd withPidMode(String pidMode) {
+        getHostConfig().withPidMode(pidMode);
+        return this;
+    }
 
     @Deprecated
-    CreateContainerCmd withReadonlyRootfs(Boolean readonlyRootfs);
+    default CreateContainerCmd withReadonlyRootfs(Boolean readonlyRootfs) {
+        getHostConfig().withReadonlyRootfs(readonlyRootfs);
+        return this;
+    }
 
     /**
      * Set custom {@link RestartPolicy} for the container. Defaults to {@link RestartPolicy#noRestart()}
      */
     @Deprecated
-    CreateContainerCmd withRestartPolicy(RestartPolicy restartPolicy);
+    default CreateContainerCmd withRestartPolicy(RestartPolicy restartPolicy) {
+        getHostConfig().withRestartPolicy(restartPolicy);
+        return this;
+    }
 
     @Deprecated
-    CreateContainerCmd withUlimits(Ulimit... ulimits);
+    @JsonIgnore
+    default CreateContainerCmd withUlimits(Ulimit... ulimits) {
+        getHostConfig().withUlimits(ulimits);
+        return this;
+    }
 
     @Deprecated
-    CreateContainerCmd withUlimits(List<Ulimit> ulimits);
+    default CreateContainerCmd withUlimits(List<Ulimit> ulimits) {
+        getHostConfig().withUlimits(ulimits);
+        return this;
+    }
 
     /**
      * @throws NotFoundException No such container
