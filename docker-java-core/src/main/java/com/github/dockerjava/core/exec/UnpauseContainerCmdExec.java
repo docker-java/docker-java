@@ -8,6 +8,8 @@ import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.MediaType;
 import com.github.dockerjava.core.WebTarget;
 
+import java.io.IOException;
+
 public class UnpauseContainerCmdExec extends AbstrSyncDockerCmdExec<UnpauseContainerCmd, Void> implements
         UnpauseContainerCmd.Exec {
 
@@ -23,7 +25,11 @@ public class UnpauseContainerCmdExec extends AbstrSyncDockerCmdExec<UnpauseConta
                 command.getContainerId());
 
         LOGGER.trace("POST: {}", webResource);
-        webResource.request().accept(MediaType.APPLICATION_JSON).post(null);
+        try {
+            webResource.request().accept(MediaType.APPLICATION_JSON).post(null).close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return null;
     }

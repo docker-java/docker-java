@@ -7,6 +7,8 @@ import com.github.dockerjava.api.command.TagImageCmd;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.WebTarget;
 
+import java.io.IOException;
+
 public class TagImageCmdExec extends AbstrSyncDockerCmdExec<TagImageCmd, Void> implements TagImageCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TagImageCmdExec.class);
@@ -23,7 +25,11 @@ public class TagImageCmdExec extends AbstrSyncDockerCmdExec<TagImageCmd, Void> i
         webTarget = booleanQueryParam(webTarget, "force", command.hasForceEnabled());
 
         LOGGER.trace("POST: {}", webTarget);
-        webTarget.request().post(null);
+        try {
+            webTarget.request().post(null).close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return null;
     }
 

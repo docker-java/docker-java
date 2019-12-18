@@ -8,6 +8,8 @@ import com.github.dockerjava.core.WebTarget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 public class UpdateSwarmCmdExec extends AbstrSyncDockerCmdExec<UpdateSwarmCmd, Void>
         implements UpdateSwarmCmd.Exec {
 
@@ -25,8 +27,11 @@ public class UpdateSwarmCmdExec extends AbstrSyncDockerCmdExec<UpdateSwarmCmd, V
         webResource = booleanQueryParam(webResource, "rotateWorkertoken", command.getRotateWorkerToken());
 
         LOGGER.trace("POST: {} ", webResource);
-        webResource.request().accept(MediaType.APPLICATION_JSON)
-                .post(command.getSwarmSpec());
+        try {
+            webResource.request().accept(MediaType.APPLICATION_JSON).post(command.getSwarmSpec()).close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return null;
     }
 }

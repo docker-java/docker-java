@@ -6,6 +6,8 @@ import com.github.dockerjava.core.WebTarget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 public class DisconnectFromNetworkCmdExec extends AbstrSyncDockerCmdExec<DisconnectFromNetworkCmd, Void>
         implements DisconnectFromNetworkCmd.Exec {
 
@@ -21,7 +23,11 @@ public class DisconnectFromNetworkCmdExec extends AbstrSyncDockerCmdExec<Disconn
         WebTarget webTarget = getBaseResource().path("/networks/" + command.getNetworkId() + "/disconnect");
 
         LOGGER.trace("POST: {}", webTarget);
-        webTarget.request().post(command);
+        try {
+            webTarget.request().post(command).close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return null;
     }
