@@ -82,6 +82,7 @@ import org.slf4j.LoggerFactory;
 @PreMatching
 @Priority(Integer.MIN_VALUE)
 @SuppressWarnings("ClassWithMultipleLoggers")
+@Deprecated
 public class LoggingFilter implements ContainerRequestFilter, ClientRequestFilter, ContainerResponseFilter,
         ClientResponseFilter, WriterInterceptor {
 

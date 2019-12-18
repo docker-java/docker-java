@@ -32,6 +32,7 @@ import com.github.dockerjava.api.exception.UnauthorizedException;
  * @author Marcus Linke
  *
  */
+@Deprecated
 public class ResponseStatusExceptionFilter implements ClientResponseFilter {
 
     private static final Logger LOG = LoggerFactory.getLogger(ResponseStatusExceptionFilter.class);

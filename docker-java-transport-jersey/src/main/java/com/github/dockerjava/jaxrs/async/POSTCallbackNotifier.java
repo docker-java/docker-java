@@ -15,6 +15,7 @@ import com.github.dockerjava.core.async.ResponseStreamProcessor;
  * @author Marcus Linke
  *
  */
+@Deprecated
 public class POSTCallbackNotifier<T> extends AbstractCallbackNotifier<T> {
 
     Entity<?> entity = null;
