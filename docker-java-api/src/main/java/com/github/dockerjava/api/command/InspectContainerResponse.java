@@ -441,10 +441,6 @@ public class InspectContainerResponse {
         public String getFinishedAt() {
             return finishedAt;
         }
-
-        public HealthState getHealth() {
-            return health;
-        }
     }
 
     @EqualsAndHashCode
