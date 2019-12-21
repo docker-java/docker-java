@@ -332,13 +332,6 @@ public class InspectContainerResponse {
         @JsonProperty("FinishedAt")
         private String finishedAt;
 
-
-        /**
-         * @since Docker version 1.12
-         */
-        @JsonProperty("Health")
-        private HealthState health;
-
         /**
          * See {@link #status}
          */
