@@ -4,10 +4,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -18,10 +22,9 @@ import com.github.dockerjava.core.GoLangFileMatch;
 import com.github.dockerjava.core.exception.GoLangFileMatchException;
 import com.github.dockerjava.core.util.CompressArchiveUtil;
 import com.github.dockerjava.core.util.FilePathUtil;
-import com.google.common.base.Function;
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Optional;
-import com.google.common.collect.Collections2;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Parse a Dockerfile.
@@ -62,7 +65,7 @@ public class Dockerfile {
         public Optional<? extends DockerfileStatement> apply(String input) {
             try {
                 line++;
-                return DockerfileStatement.createFromLine(input);
+                return Optional.ofNullable(DockerfileStatement.createFromLine(input).orNull());
 
             } catch (Exception ex) {
                 throw new DockerClientException("Error on dockerfile line " + line);
@@ -77,10 +80,10 @@ public class Dockerfile {
             throw new DockerClientException(String.format("Dockerfile %s is empty", dockerFile));
         }
 
-        Collection<Optional<? extends DockerfileStatement>> optionals = Collections2.transform(dockerFileContent,
-                new LineTransformer());
-
-        return Optional.presentInstances(optionals);
+        return dockerFileContent.stream()
+                .map(new LineTransformer())
+                .flatMap(o -> o.map(Stream::of).orElseGet(Stream::empty))
+                .collect(toList());
     }
 
     public List<String> getIgnores() throws IOException {
@@ -88,7 +91,7 @@ public class Dockerfile {
         File dockerIgnoreFile = new File(baseDirectory, ".dockerignore");
         if (dockerIgnoreFile.exists()) {
             int lineNumber = 0;
-            List<String> dockerIgnoreFileContent = FileUtils.readLines(dockerIgnoreFile);
+            List<String> dockerIgnoreFileContent = FileUtils.readLines(dockerIgnoreFile, Charset.defaultCharset());
             for (String pattern : dockerIgnoreFileContent) {
                 lineNumber++;
                 pattern = pattern.trim();

@@ -107,7 +107,7 @@ public abstract class DockerfileStatement<T extends DockerfileStatement<?>> {
         }
 
         /**
-         * Createa an Add if it matches, or missing if not.
+         * Create an Add if it matches, or missing if not.
          *
          * @param statement
          *            statement that may be an ADD or a COPY
