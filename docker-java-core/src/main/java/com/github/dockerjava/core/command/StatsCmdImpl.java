@@ -37,8 +37,7 @@ public class StatsCmdImpl extends AbstrAsyncDockerCmd<StatsCmd, Statistics> impl
     }
 
     @Override
-    public StatsCmd withNoStream(Boolean noStream) {
-        checkNotNull(noStream, "noStream was not specified");
+    public StatsCmd withNoStream(boolean noStream) {
         this.noStream = noStream;
         return this;
     }

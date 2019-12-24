@@ -19,7 +19,7 @@ public interface StatsCmd extends AsyncDockerCmd<StatsCmd, Statistics> {
     @CheckForNull
     Boolean getNoStream();
 
-    StatsCmd withNoStream(@Nonnull Boolean noStream);
+    StatsCmd withNoStream(boolean noStream);
 
     interface Exec extends DockerCmdAsyncExec<StatsCmd, Statistics> {
     }

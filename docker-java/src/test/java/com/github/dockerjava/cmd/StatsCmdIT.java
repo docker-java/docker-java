@@ -25,8 +25,6 @@ public class StatsCmdIT extends CmdIT {
 
     @Test
     public void testStatsStreaming() throws InterruptedException, IOException {
-        TimeUnit.SECONDS.sleep(1);
-
         CountDownLatch countDownLatch = new CountDownLatch(NUM_STATS);
 
         String containerName = "generated_" + new SecureRandom().nextInt();
@@ -38,15 +36,14 @@ public class StatsCmdIT extends CmdIT {
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
-        StatsCallbackTest statsCallback = dockerRule.getClient().statsCmd(container.getId()).exec(
-                new StatsCallbackTest(countDownLatch));
+        Boolean gotStats;
+        try (StatsCallbackTest statsCallback = dockerRule.getClient().statsCmd(container.getId()).exec(
+                new StatsCallbackTest(countDownLatch))) {
+            countDownLatch.await(3, TimeUnit.SECONDS);
+            gotStats = statsCallback.gotStats();
 
-        countDownLatch.await(3, TimeUnit.SECONDS);
-        Boolean gotStats = statsCallback.gotStats();
-
-        LOG.info("Stop stats collection");
-
-        statsCallback.close();
+            LOG.info("Stop stats collection");
+        }
 
         LOG.info("Stopping container");
         dockerRule.getClient().stopContainerCmd(container.getId()).exec();
@@ -54,13 +51,10 @@ public class StatsCmdIT extends CmdIT {
 
         LOG.info("Completed test");
         assertTrue("Expected true", gotStats);
-
     }
 
     @Test
     public void testStatsNoStreaming() throws InterruptedException, IOException {
-        TimeUnit.SECONDS.sleep(1);
-
         CountDownLatch countDownLatch = new CountDownLatch(NUM_STATS);
 
         String containerName = "generated_" + new SecureRandom().nextInt();
@@ -72,15 +66,14 @@ public class StatsCmdIT extends CmdIT {
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
-        StatsCallbackTest statsCallback = dockerRule.getClient().statsCmd(container.getId()).withNoStream(true).exec(
-                new StatsCallbackTest(countDownLatch));
+        Boolean gotStats;
+        try (StatsCallbackTest statsCallback = dockerRule.getClient().statsCmd(container.getId()).withNoStream(true).exec(
+                new StatsCallbackTest(countDownLatch))) {
+            countDownLatch.await(5, TimeUnit.SECONDS);
+            gotStats = statsCallback.gotStats();
 
-        countDownLatch.await(5, TimeUnit.SECONDS);
-        Boolean gotStats = statsCallback.gotStats();
-
-        LOG.info("Stop stats collection");
-
-        statsCallback.close();
+            LOG.info("Stop stats collection");
+        }
 
         LOG.info("Stopping container");
         dockerRule.getClient().stopContainerCmd(container.getId()).exec();
