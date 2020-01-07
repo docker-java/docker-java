@@ -214,7 +214,7 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     BuildImageCmd withNetworkMode(String networkMode);
 
     /**
-     *@since {@link RemoteApiVersion#VERSION_1_32}
+     * @since {@link RemoteApiVersion#VERSION_1_32}
      */
     BuildImageCmd withPlatform(String platform);
 

@@ -71,6 +71,6 @@ public abstract class CmdIT {
     }
 
     @Rule
-    public DockerRule dockerRule = new DockerRule( this);
+    public DockerRule dockerRule = new DockerRule(this);
 
 }

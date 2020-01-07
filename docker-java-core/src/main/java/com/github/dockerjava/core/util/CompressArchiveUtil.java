@@ -5,6 +5,7 @@ import static com.github.dockerjava.core.util.FilePathUtil.relativize;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,11 +13,18 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.UUID;
+import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
+import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.io.FileUtils;
 
 import com.google.common.io.ByteStreams;
@@ -108,5 +116,37 @@ public class CompressArchiveUtil {
         }
 
         return tarFile;
+    }
+
+    public static InputStream mergeTarStreams(List<InputStream> tarInputStreams) {
+        if (tarInputStreams == null || tarInputStreams.size() <= 1) {
+            throw new IllegalArgumentException("Only 2 or more TAR streams could be merged");
+        }
+
+        try {
+            File tarFile = new File(FileUtils.getTempDirectoryPath(), UUID.randomUUID() + ".tar");
+            tarFile.deleteOnExit();
+
+            try (TarArchiveOutputStream aos = new TarArchiveOutputStream(new GZIPOutputStream(new BufferedOutputStream(
+                    new FileOutputStream(tarFile))))) {
+                aos.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU);
+
+                for (InputStream toMergeInputStream : tarInputStreams) {
+                    try (ArchiveInputStream ais = new TarArchiveInputStream(
+                            new GZIPInputStream(new BufferedInputStream(toMergeInputStream)))) {
+                        ArchiveEntry nextEntry;
+                        while ((nextEntry = ais.getNextEntry()) != null) {
+                            aos.putArchiveEntry(nextEntry);
+                            IOUtils.copy(ais, aos);
+                            aos.closeArchiveEntry();
+                        }
+                    }
+                }
+                aos.finish();
+            }
+            return new BufferedInputStream(new FileInputStream(tarFile));
+        } catch (IOException e) {
+            throw new IllegalStateException("Unable to merge TAR streams");
+        }
     }
 }

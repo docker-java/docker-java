@@ -1,29 +1,31 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.BuildResponseItem;
 import com.github.dockerjava.core.dockerfile.Dockerfile;
+import com.github.dockerjava.core.util.CompressArchiveUtil;
 import com.github.dockerjava.core.util.FilePathUtil;
 
 import javax.annotation.CheckForNull;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Build an image from Dockerfile.
  */
 public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildResponseItem> implements BuildImageCmd {
 
-    private InputStream tarInputStream;
+    private final List<InputStream> tarInputStreams = new ArrayList<>();
 
     @Deprecated
     private String tag;
@@ -109,7 +111,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     @CheckForNull
     public Set<String> getCacheFrom() {
-       return cacheFrom;
+        return cacheFrom;
     }
 
     @Override
@@ -207,7 +209,13 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     @Override
     public InputStream getTarInputStream() {
-        return tarInputStream;
+        if (tarInputStreams.isEmpty()) {
+            return null;
+        } else if (tarInputStreams.size() == 1) {
+            return tarInputStreams.get(0);
+        } else {
+            return CompressArchiveUtil.mergeTarStreams(tarInputStreams);
+        }
     }
 
     /**
@@ -355,7 +363,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @Override
     public BuildImageCmdImpl withTarInputStream(InputStream tarInputStream) {
         checkNotNull(tarInputStream, "tarInputStream is null");
-        this.tarInputStream = tarInputStream;
+        this.tarInputStreams.add(tarInputStream);
         return this;
     }
 
@@ -405,12 +413,25 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @Override
     public void close() {
         super.close();
-
-        try {
-            tarInputStream.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        closeTarStreams();
     }
 
+    private void closeTarStreams() {
+        List<IOException> exceptions = new ArrayList<>();
+        for (InputStream tarInputStream : tarInputStreams) {
+            try {
+                tarInputStream.close();
+            } catch (IOException e) {
+                exceptions.add(e);
+            }
+        }
+
+        if (!exceptions.isEmpty()) {
+            IllegalStateException e = new IllegalStateException();
+            for (IOException exception : exceptions) {
+                e.addSuppressed(exception);
+            }
+            throw e;
+        }
+    }
 }

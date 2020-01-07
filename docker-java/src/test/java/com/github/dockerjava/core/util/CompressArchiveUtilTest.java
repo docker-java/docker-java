@@ -1,20 +1,29 @@
 package com.github.dockerjava.core.util;
 
+import com.google.common.collect.Lists;
+import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.io.IOUtils;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
@@ -224,6 +233,75 @@ public class CompressArchiveUtilTest {
         assertTarArchiveEntryIsSymlink(archive, "symlinkFile", linkTargetDir.toString());
     }
 
+    @Test
+    public void mergeTarStreams() throws Exception {
+        final Path basePathIn = Files.createDirectories(tempFolder.getRoot().toPath().resolve("merge-tar-streams").resolve("in"));
+        final Path basePathOut = Files.createDirectories(tempFolder.getRoot().toPath().resolve("merge-tar-streams").resolve("out"));
+        File resultArchive = basePathOut.resolve("result-archive.tar").toFile();
+
+        final File file1 = createFileWithContent(basePathIn.resolve("fileA"));
+        final File file2 = createFileWithContent(basePathIn.resolve("fileB"));
+
+        File archive1 = CompressArchiveUtil.archiveTARFiles(file1.getParentFile(), Collections.singletonList(file1), "archive1");
+        File archive2 = CompressArchiveUtil.archiveTARFiles(file2.getParentFile(), Collections.singletonList(file2), "archive2");
+
+        try (InputStream stream1 = new BufferedInputStream(new FileInputStream(archive1));
+             InputStream stream2 = new BufferedInputStream(new FileInputStream(archive2))) {
+            try (InputStream mergedStream = CompressArchiveUtil.mergeTarStreams(Lists.newArrayList(stream1, stream2));
+                 OutputStream outStream = new BufferedOutputStream(new FileOutputStream(resultArchive))) {
+                IOUtils.copy(mergedStream, outStream);
+            }
+        }
+
+        assertEquals(2, getNumberOfEntryInArchive(resultArchive));
+        assertTarArchiveEntryIsNonEmptyFile(resultArchive, "fileA");
+        assertTarArchiveEntryIsNonEmptyFile(resultArchive, "fileB");
+    }
+
+    @Test
+    public void mergeTarStreamsSameFileNameOverrideLastWhenExtracted() throws Exception {
+        final Path basePathIn1 = Files.createDirectories(tempFolder.getRoot().toPath()
+                .resolve("merge-tar-streams-override").resolve("file1"));
+        final Path basePathIn2 = Files.createDirectories(tempFolder.getRoot().toPath()
+                .resolve("merge-tar-streams-override").resolve("file2"));
+        final Path basePathOut = Files.createDirectories(tempFolder.getRoot().toPath().resolve("merge-tar-streams-override"));
+        File resultArchive = basePathOut.resolve("result-archive.tar").toFile();
+
+        final File file1 = createFileWithContent(basePathIn1.resolve("fileA"), "contentA");
+        final File file2 = createFileWithContent(basePathIn2.resolve("fileA"), "contentB");
+
+        File archive1 = CompressArchiveUtil.archiveTARFiles(file1.getParentFile(), Collections.singletonList(file1), "archive1");
+        File archive2 = CompressArchiveUtil.archiveTARFiles(file2.getParentFile(), Collections.singletonList(file2), "archive2");
+
+        try (InputStream stream1 = new BufferedInputStream(new FileInputStream(archive1));
+             InputStream stream2 = new BufferedInputStream(new FileInputStream(archive2))) {
+            try (InputStream mergedStream = CompressArchiveUtil.mergeTarStreams(Lists.newArrayList(stream1, stream2));
+                 OutputStream outStream = new BufferedOutputStream(new FileOutputStream(resultArchive))) {
+                IOUtils.copy(mergedStream, outStream);
+            }
+        }
+
+        final List<TarArchiveEntry> entries = getTarArchiveEntries(resultArchive, "fileA");
+        assertEquals(2, entries.size());
+
+        final Path extractPath = Files.createDirectories(tempFolder.getRoot().toPath().resolve("merge-tar-streams-extract"));
+        try (ArchiveInputStream ais = new TarArchiveInputStream(
+                new GZIPInputStream(new BufferedInputStream(new FileInputStream(resultArchive))))) {
+            ArchiveEntry nextEntry;
+            while ((nextEntry = ais.getNextEntry()) != null) {
+                try (OutputStream os = new BufferedOutputStream(new FileOutputStream(extractPath.resolve(nextEntry.getName()).toFile()))) {
+                    IOUtils.copy(ais, os);
+                }
+            }
+        }
+
+        final Path extractedFile = extractPath.resolve("fileA");
+        assertTrue(extractedFile.toFile().exists());
+        assertTrue(extractedFile.toFile().isFile());
+        final byte[] content = Files.readAllBytes(extractedFile);
+        assertEquals("contentB", new String(content, StandardCharsets.UTF_8));
+    }
+
     private static void assertTarArchiveEntryIsDirectory(File archive, String directoryName) throws IOException {
         TarArchiveEntry tarArchiveEntry = getTarArchiveEntry(archive, directoryName);
         assertNotNull(tarArchiveEntry);
@@ -234,7 +312,7 @@ public class CompressArchiveUtilTest {
         TarArchiveEntry tarArchiveEntry = getTarArchiveEntry(archive, fileName);
         assertNotNull(tarArchiveEntry);
         assertTrue(tarArchiveEntry.isFile());
-        assertTrue(tarArchiveEntry.getSize()>0);
+        assertTrue(tarArchiveEntry.getSize() > 0);
     }
 
     private static void assertTarArchiveEntryIsExecutableFile(File archive, String fileName) throws IOException {
@@ -255,14 +333,15 @@ public class CompressArchiveUtilTest {
      * Creates the following directory structure with files in the specified
      * destination folder
      *
-     *   destinationFolder
-     *   |__folderA
-     *   |  |__fileA
-     *   |__folderB
-     *      |__fileB
-     *      |__subFolderB
-     *         |__subFileB
-     *
+     * <pre>
+     * destinationFolder
+     * |__folderA
+     * |  |__fileA
+     * |__folderB
+     *    |__fileB
+     *    |__subFolderB
+     *       |__subFileB
+     * </pre>
      *
      * @param destinationFolder where to create the folder/files.
      * @return the list of created files.
@@ -285,7 +364,11 @@ public class CompressArchiveUtilTest {
     }
 
     private static File createFileWithContent(Path fileToCreate) throws IOException {
-        try (InputStream in = new ByteArrayInputStream("some content".getBytes())) {
+        return createFileWithContent(fileToCreate, "some content");
+    }
+
+    private static File createFileWithContent(Path fileToCreate, String content) throws IOException {
+        try (InputStream in = new ByteArrayInputStream(content.getBytes())) {
             Files.copy(in, fileToCreate);
         }
         return fileToCreate.toFile();
@@ -296,15 +379,33 @@ public class CompressArchiveUtilTest {
                 new GZIPInputStream(new BufferedInputStream(new FileInputStream(tarArchive))))) {
             TarArchiveEntry entry;
             while ((entry = tarArchiveInputStream.getNextTarEntry()) != null) {
-                if (entry.getName().equals(filename)
-                        || entry.getName().endsWith("/" + filename)
-                        || entry.getName().equals(filename + "/")
-                        || entry.getName().endsWith("/" + filename + "/")) {
+                if (entryNameEqualsToFilename(entry, filename)) {
                     return entry;
                 }
             }
         }
         return null;
+    }
+
+    private static List<TarArchiveEntry> getTarArchiveEntries(File tarArchive, String filename) throws IOException {
+        List<TarArchiveEntry> result = new ArrayList<>();
+        try (TarArchiveInputStream tarArchiveInputStream = new TarArchiveInputStream(
+                new GZIPInputStream(new BufferedInputStream(new FileInputStream(tarArchive))))) {
+            TarArchiveEntry entry;
+            while ((entry = tarArchiveInputStream.getNextTarEntry()) != null) {
+                if (entryNameEqualsToFilename(entry, filename)) {
+                    result.add(entry);
+                }
+            }
+        }
+        return result;
+    }
+
+    private static boolean entryNameEqualsToFilename(TarArchiveEntry entry, String filename) {
+        return entry.getName().equals(filename)
+                || entry.getName().endsWith("/" + filename)
+                || entry.getName().equals(filename + "/")
+                || entry.getName().endsWith("/" + filename + "/");
     }
 
     private static int getNumberOfEntryInArchive(File tarArchive) throws IOException {

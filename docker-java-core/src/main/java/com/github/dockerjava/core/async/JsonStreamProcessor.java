@@ -39,7 +39,8 @@ public class JsonStreamProcessor<T> implements ResponseStreamProcessor<T> {
 
     public JsonStreamProcessor(ObjectMapper objectMapper, TypeReference<T> typeReference) {
         this.typeReference = typeReference;
-        this.objectMapper = objectMapper.copy().enable(JsonParser.Feature.AUTO_CLOSE_SOURCE);
+        this.objectMapper = objectMapper.copy()
+                .enable(JsonParser.Feature.AUTO_CLOSE_SOURCE);
     }
 
     @Override

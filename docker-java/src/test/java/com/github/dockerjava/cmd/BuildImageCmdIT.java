@@ -87,6 +87,16 @@ public class BuildImageCmdIT extends CmdIT {
     }
 
     @Test
+    public void buildImageFromSpecifiedDockerfileWithFilesFromDirectory() throws Exception {
+        File baseDir = fileFromBuildTestResource("dockerfileAndCustomFiles");
+        File filesDir = new File(baseDir, "filesToAddFolder");
+        Collection<File> files = FileUtils.listFiles(filesDir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+        File tarFile = CompressArchiveUtil.archiveTARFiles(filesDir, files, UUID.randomUUID().toString());
+        String response = dockerfileBuild(new FileInputStream(tarFile), new File(baseDir, "dockerfileFolder/Dockerfile"));
+        assertThat(response, containsString("Successfully executed testrun.sh"));
+    }
+
+    @Test
     public void onBuild() throws Exception {
         File baseDir = fileFromBuildTestResource("ONBUILD/parent");
 
@@ -133,6 +143,11 @@ public class BuildImageCmdIT extends CmdIT {
     private String dockerfileBuild(InputStream tarInputStream, String dockerFilePath) throws Exception {
 
         return execBuild(dockerRule.getClient().buildImageCmd().withTarInputStream(tarInputStream).withDockerfilePath(dockerFilePath));
+    }
+
+    private String dockerfileBuild(InputStream tarInputStream, File dockerFile) throws Exception {
+
+        return execBuild(dockerRule.getClient().buildImageCmd(tarInputStream).withDockerfile(dockerFile));
     }
 
     private String dockerfileBuild(InputStream tarInputStream) throws Exception {
