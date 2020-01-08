@@ -832,6 +832,28 @@ public class CreateContainerCmdIT extends CmdIT {
     }
 
     @Test
+    public void createContainerWithIntegerBoundsExceedingULimit() throws DockerException {
+        String containerName = "containercoreulimit" + dockerRule.getKind();
+        Ulimit[] ulimits = {new Ulimit("core", 99999999998L, 99999999999L)};
+
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+                .withName(containerName)
+                .withHostConfig(newHostConfig()
+                        .withUlimits(ulimits))
+                .exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(isEmptyString()));
+
+        InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
+
+        assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getUlimits()),
+                contains(new Ulimit("core", 99999999998L, 99999999999L)));
+
+    }
+
+    @Test
     public void createContainerWithLabels() throws DockerException {
 
         Map<String, String> labels = new HashMap<>();
