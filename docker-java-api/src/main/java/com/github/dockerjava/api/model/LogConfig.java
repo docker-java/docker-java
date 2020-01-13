@@ -62,6 +62,7 @@ public class LogConfig implements Serializable {
     public enum LoggingType {
         NONE("none"),
         DEFAULT("json-file"),
+        LOCAL("local"),
         ETWLOGS("etwlogs"),
         JSON_FILE("json-file"),
         SYSLOG("syslog"),
