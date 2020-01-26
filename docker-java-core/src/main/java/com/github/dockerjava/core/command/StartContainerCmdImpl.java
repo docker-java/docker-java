@@ -2,8 +2,8 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.dockerjava.api.command.StartContainerCmd;
+import com.github.dockerjava.api.command.StartContainerSpec;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.exception.NotModifiedException;
 
@@ -12,24 +12,29 @@ import com.github.dockerjava.api.exception.NotModifiedException;
  */
 public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Void> implements StartContainerCmd {
 
-    @JsonIgnore
-    private String containerId;
+    private StartContainerSpec spec;
 
     public StartContainerCmdImpl(StartContainerCmd.Exec exec, String containerId) {
         super(exec);
-        withContainerId(containerId);
+        this.spec = StartContainerSpec.of(containerId);
+    }
+
+    @Override
+    public StartContainerCmd fromSpec(StartContainerSpec spec) {
+        this.spec = spec;
+        return this;
     }
 
     @Override
     public StartContainerCmd withContainerId(String containerId) {
         checkNotNull(containerId, "containerId was not specified");
-        this.containerId = containerId;
+        this.spec = spec.withContainerId(containerId);
         return this;
     }
 
     @Override
     public String getContainerId() {
-        return containerId;
+        return spec.getContainerId();
     }
 
     /**

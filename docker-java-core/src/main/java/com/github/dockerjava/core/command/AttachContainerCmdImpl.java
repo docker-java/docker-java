@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.InputStream;
 
 import com.github.dockerjava.api.command.AttachContainerCmd;
+import com.github.dockerjava.api.command.AttachContainerSpec;
 import com.github.dockerjava.api.model.Frame;
 
 /**
@@ -13,93 +14,97 @@ import com.github.dockerjava.api.model.Frame;
 public class AttachContainerCmdImpl extends AbstrAsyncDockerCmd<AttachContainerCmd, Frame>
         implements AttachContainerCmd {
 
-    private String containerId;
-
-    private Boolean logs, followStream, timestamps, stdout, stderr;
-
-    private InputStream stdin;
+    private AttachContainerSpec request;
 
     public AttachContainerCmdImpl(AttachContainerCmd.Exec exec, String containerId) {
         super(exec);
-        withContainerId(containerId);
+        this.request = AttachContainerSpec.builder()
+                .containerId(containerId)
+                .build();
+    }
+
+    @Override
+    public AttachContainerCmd fromSpec(AttachContainerSpec spec) {
+        this.request = spec;
+        return this;
     }
 
     @Override
     public String getContainerId() {
-        return containerId;
+        return request.getContainerId();
     }
 
     @Override
     public Boolean hasLogsEnabled() {
-        return logs;
+        return request.hasLogsEnabled();
     }
 
     @Override
     public Boolean hasFollowStreamEnabled() {
-        return followStream;
+        return request.hasFollowStreamEnabled();
     }
 
     @Override
     public Boolean hasTimestampsEnabled() {
-        return timestamps;
+        return request.hasTimestampsEnabled();
     }
 
     @Override
     public Boolean hasStdoutEnabled() {
-        return stdout;
+        return request.hasStdoutEnabled();
     }
 
     @Override
     public Boolean hasStderrEnabled() {
-        return stderr;
+        return request.hasStderrEnabled();
     }
 
     @Override
     public InputStream getStdin() {
-        return stdin;
+        return request.getStdin();
     }
 
     @Override
     public AttachContainerCmd withContainerId(String containerId) {
         checkNotNull(containerId, "containerId was not specified");
-        this.containerId = containerId;
+        this.request = request.withContainerId(containerId);
         return this;
     }
 
     @Override
     public AttachContainerCmd withFollowStream(Boolean followStream) {
-        this.followStream = followStream;
+        this.request = request.withHasFollowStreamEnabled(followStream);
         return this;
     }
 
     @Override
     public AttachContainerCmd withTimestamps(Boolean timestamps) {
-        this.timestamps = timestamps;
+        this.request = request.withHasTimestampsEnabled(timestamps);
         return this;
     }
 
     @Override
     public AttachContainerCmd withStdOut(Boolean stdout) {
-        this.stdout = stdout;
+        this.request = request.withHasStdoutEnabled(stdout);
         return this;
     }
 
     @Override
     public AttachContainerCmd withStdErr(Boolean stderr) {
-        this.stderr = stderr;
+        this.request = request.withHasStderrEnabled(stderr);
         return this;
     }
 
     @Override
     public AttachContainerCmd withStdIn(InputStream stdin) {
         checkNotNull(stdin, "stdin was not specified");
-        this.stdin = stdin;
+        this.request = request.withStdin(stdin);
         return this;
     }
 
     @Override
     public AttachContainerCmd withLogs(Boolean logs) {
-        this.logs = logs;
+        this.request = request.withHasLogsEnabled(logs);
         return this;
     }
 }

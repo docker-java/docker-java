@@ -1,20 +1,21 @@
 package com.github.dockerjava.api.command;
 
-import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 import com.github.dockerjava.api.exception.NotFoundException;
 
-public interface InspectContainerCmd extends SyncDockerCmd<InspectContainerResponse> {
+@DockerCommand
+public interface InspectContainerCmd extends InspectContainer, SyncDockerCmd<InspectContainerResponse> {
 
-    @CheckForNull
-    String getContainerId();
+    default InspectContainerCmd fromSpec(InspectContainerSpec spec) {
+        return this
+                .withContainerId(spec.getContainerId())
+                .withSize(spec.getSize());
+    }
 
     InspectContainerCmd withContainerId(@Nonnull String containerId);
 
     InspectContainerCmd withSize(Boolean showSize);
-
-    Boolean getSize();
 
     /**
      * @throws NotFoundException

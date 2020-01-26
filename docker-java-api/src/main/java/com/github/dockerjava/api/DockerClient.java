@@ -1,6 +1,8 @@
 package com.github.dockerjava.api;
 
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.AttachContainerCmd;
+import com.github.dockerjava.api.command.AttachContainerSpec;
 import com.github.dockerjava.api.command.AuthCmd;
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.CommitCmd;
@@ -10,6 +12,8 @@ import com.github.dockerjava.api.command.CopyArchiveFromContainerCmd;
 import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.CreateContainerSpec;
 import com.github.dockerjava.api.command.CreateImageCmd;
 import com.github.dockerjava.api.command.CreateNetworkCmd;
 import com.github.dockerjava.api.command.CreateSecretCmd;
@@ -22,6 +26,8 @@ import com.github.dockerjava.api.command.ExecStartCmd;
 import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InitializeSwarmCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
+import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.command.InspectContainerSpec;
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
 import com.github.dockerjava.api.command.InspectNetworkCmd;
@@ -32,6 +38,8 @@ import com.github.dockerjava.api.command.JoinSwarmCmd;
 import com.github.dockerjava.api.command.KillContainerCmd;
 import com.github.dockerjava.api.command.LeaveSwarmCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
+import com.github.dockerjava.api.command.ListContainersResponse;
+import com.github.dockerjava.api.command.ListContainersSpec;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.ListNetworksCmd;
 import com.github.dockerjava.api.command.ListSecretsCmd;
@@ -58,8 +66,10 @@ import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
 import com.github.dockerjava.api.command.SearchImagesCmd;
 import com.github.dockerjava.api.command.StartContainerCmd;
+import com.github.dockerjava.api.command.StartContainerSpec;
 import com.github.dockerjava.api.command.StatsCmd;
 import com.github.dockerjava.api.command.StopContainerCmd;
+import com.github.dockerjava.api.command.StopContainerSpec;
 import com.github.dockerjava.api.command.TagImageCmd;
 import com.github.dockerjava.api.command.TopContainerCmd;
 import com.github.dockerjava.api.command.UnpauseContainerCmd;
@@ -71,6 +81,7 @@ import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.Identifier;
 import com.github.dockerjava.api.model.PruneType;
 import com.github.dockerjava.api.model.SecretSpec;
@@ -85,6 +96,10 @@ import java.io.InputStream;
 
 // https://godoc.org/github.com/fsouza/go-dockerclient
 public interface DockerClient extends Closeable {
+
+    default ContainerCommands containerCommands() {
+        return new DefaultContainerCommands(this);
+    }
 
     AuthConfig authConfig() throws DockerException;
 
@@ -432,4 +447,31 @@ public interface DockerClient extends Closeable {
     @Override
     void close() throws IOException;
 
+    interface ContainerCommands {
+
+        CreateContainerResponse create(CreateContainerSpec spec);
+
+        void start(StartContainerSpec spec);
+
+        default void start(String containerId) {
+            start(StartContainerSpec.of(containerId));
+        }
+
+        void stop(StopContainerSpec spec);
+
+        default void stop(String containerId) {
+            stop(StopContainerSpec.of(containerId));
+        }
+
+        void attach(AttachContainerSpec spec, ResultCallback<Frame> callback);
+
+        InspectContainerResponse inspect(InspectContainerSpec request);
+
+        default InspectContainerResponse inspect(String containerId) {
+            return inspect(InspectContainerSpec.of(containerId));
+        }
+
+        ListContainersResponse list(ListContainersSpec request);
+    }
 }
+

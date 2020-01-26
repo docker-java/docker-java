@@ -2,7 +2,6 @@ package com.github.dockerjava.api.command;
 
 import java.io.InputStream;
 
-import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 import com.github.dockerjava.api.DockerClient;
@@ -23,28 +22,19 @@ import com.github.dockerjava.api.model.Frame;
  * @param timestamps
  *            - true or false, if true, print timestamps for every log line. Defaults to false.
  */
-public interface AttachContainerCmd extends AsyncDockerCmd<AttachContainerCmd, Frame> {
+@DockerCommand
+public interface AttachContainerCmd extends AttachContainer, AsyncDockerCmd<AttachContainerCmd, Frame> {
 
-    @CheckForNull
-    String getContainerId();
-
-    @CheckForNull
-    Boolean hasLogsEnabled();
-
-    @CheckForNull
-    Boolean hasFollowStreamEnabled();
-
-    @CheckForNull
-    Boolean hasTimestampsEnabled();
-
-    @CheckForNull
-    Boolean hasStdoutEnabled();
-
-    @CheckForNull
-    Boolean hasStderrEnabled();
-
-    @CheckForNull
-    InputStream getStdin();
+    default AttachContainerCmd fromSpec(AttachContainerSpec spec) {
+        return this
+                .withFollowStream(spec.hasFollowStreamEnabled())
+                .withStdErr(spec.hasStderrEnabled())
+                .withStdOut(spec.hasStdoutEnabled())
+                .withLogs(spec.hasLogsEnabled())
+                .withStdIn(spec.getStdin())
+                .withContainerId(spec.getContainerId())
+                .withTimestamps(spec.hasTimestampsEnabled());
+    }
 
     AttachContainerCmd withContainerId(@Nonnull String containerId);
 

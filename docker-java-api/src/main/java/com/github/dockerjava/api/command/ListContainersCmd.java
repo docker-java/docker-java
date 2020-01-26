@@ -2,7 +2,6 @@ package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.model.Container;
 
-import javax.annotation.CheckForNull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -11,25 +10,24 @@ import java.util.Map;
  * List containers
  *
  */
-public interface ListContainersCmd extends SyncDockerCmd<List<Container>> {
+@DockerCommand
+public interface ListContainersCmd extends ListContainers, SyncDockerCmd<List<Container>> {
 
-    @CheckForNull
-    String getBeforeId();
-
-    @CheckForNull
-    Map<String, List<String>> getFilters();
-
-    @CheckForNull
-    Integer getLimit();
-
-    @CheckForNull
-    String getSinceId();
-
-    @CheckForNull
-    Boolean hasShowAllEnabled();
-
-    @CheckForNull
-    Boolean hasShowSizeEnabled();
+    default ListContainersCmd fromSpec(ListContainersSpec spec) {
+        ListContainersCmd listContainersCmd = this;
+        Map<String, List<String>> filters = spec.getFilters();
+        if (filters != null) {
+            for (Map.Entry<String, List<String>> entry : filters.entrySet()) {
+                listContainersCmd = listContainersCmd.withFilter(entry.getKey(), entry.getValue());
+            }
+        }
+        return listContainersCmd
+                .withBefore(spec.getBeforeId())
+                .withLimit(spec.getLimit())
+                .withSince(spec.getSinceId())
+                .withShowAll(spec.hasShowAllEnabled())
+                .withShowSize(spec.hasShowSizeEnabled());
+    }
 
     /**
      * @param before
