@@ -3,6 +3,7 @@
  */
 package com.github.dockerjava.core.async;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.model.PullResponseItem;
 import com.github.dockerjava.test.serdes.JSONTestHelper;
@@ -31,7 +32,7 @@ public class JsonStreamProcessorTest {
         InputStream response = new ByteArrayInputStream("{}".getBytes());
 
         JsonStreamProcessor<PullResponseItem> jsonStreamProcessor = new JsonStreamProcessor<>(
-                JSONTestHelper.getMapper(), PullResponseItem.class);
+                JSONTestHelper.getMapper(), new TypeReference<PullResponseItem>() {});
 
         final List<Boolean> completed = new ArrayList<>();
 

@@ -16,6 +16,7 @@ import org.slf4j.Logger;
  *
  * @author sfitts
  */
+@Deprecated
 public class SelectiveLoggingFilter extends LoggingFilter {
 
     // Immutable'ish

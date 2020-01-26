@@ -20,12 +20,10 @@ import static org.junit.Assert.assertTrue;
 public class StatsCmdIT extends CmdIT {
     public static final Logger LOG = LoggerFactory.getLogger(StatsCmdIT.class);
 
-    private static int NUM_STATS = 5;
+    private static int NUM_STATS = 3;
 
     @Test
     public void testStatsStreaming() throws InterruptedException, IOException {
-        TimeUnit.SECONDS.sleep(1);
-
         CountDownLatch countDownLatch = new CountDownLatch(NUM_STATS);
 
         String containerName = "generated_" + new SecureRandom().nextInt();
@@ -40,7 +38,7 @@ public class StatsCmdIT extends CmdIT {
         StatsCallbackTest statsCallback = dockerRule.getClient().statsCmd(container.getId()).exec(
                 new StatsCallbackTest(countDownLatch));
 
-        countDownLatch.await(3, TimeUnit.SECONDS);
+        assertTrue(countDownLatch.await(10, TimeUnit.SECONDS));
         Boolean gotStats = statsCallback.gotStats();
 
         LOG.info("Stop stats collection");

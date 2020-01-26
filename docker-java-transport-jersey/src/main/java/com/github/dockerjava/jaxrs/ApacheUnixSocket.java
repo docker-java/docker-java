@@ -41,6 +41,7 @@ import org.newsclub.net.unix.AFUNIXSocket;
  *
  * This class also noop's any calls to setReuseAddress, which is called by the Apache client but isn't supported by AFUnixSocket.
  */
+@Deprecated
 public class ApacheUnixSocket extends Socket {
 
     private final AFUNIXSocket inner;

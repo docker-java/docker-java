@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.command;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.AuthConfig;
@@ -48,6 +49,7 @@ public interface CreateContainerCmd extends CreateContainer, SyncDockerCmd<Creat
 
     @Deprecated
     @CheckForNull
+    @JsonIgnore
     default Bind[] getBinds() {
         return getHostConfig().getBinds();
     }
@@ -125,6 +127,7 @@ public interface CreateContainerCmd extends CreateContainer, SyncDockerCmd<Creat
 
     @Deprecated
     @CheckForNull
+    @JsonIgnore
     default Link[] getLinks() {
         return getHostConfig().getLinks();
     }
@@ -148,6 +151,9 @@ public interface CreateContainerCmd extends CreateContainer, SyncDockerCmd<Creat
         return withLinks(links.toArray(new Link[links.size()]));
     }
 
+    @CheckForNull
+    String getIpv6Address();
+
     CreateContainerCmd withIpv6Address(String ipv6Address);
 
     CreateContainerCmd withLabels(Map<String, String> labels);
@@ -156,6 +162,7 @@ public interface CreateContainerCmd extends CreateContainer, SyncDockerCmd<Creat
 
     @Deprecated
     @CheckForNull
+    @JsonIgnore
     default Long getMemory() {
         return getHostConfig().getMemory();
     }
@@ -169,6 +176,7 @@ public interface CreateContainerCmd extends CreateContainer, SyncDockerCmd<Creat
 
     @Deprecated
     @CheckForNull
+    @JsonIgnore
     default Long getMemorySwap() {
         return getHostConfig().getMemorySwap();
     }
@@ -180,8 +188,12 @@ public interface CreateContainerCmd extends CreateContainer, SyncDockerCmd<Creat
         return this;
     }
 
+    @CheckForNull
+    String getName();
+
     @Deprecated
     @CheckForNull
+    @JsonIgnore
     default String getNetworkMode() {
         return getHostConfig().getNetworkMode();
     }
@@ -205,6 +217,7 @@ public interface CreateContainerCmd extends CreateContainer, SyncDockerCmd<Creat
 
     @Deprecated
     @CheckForNull
+    @JsonIgnore
     default Ports getPortBindings() {
         return getHostConfig().getPortBindings();
     }
@@ -250,6 +263,7 @@ public interface CreateContainerCmd extends CreateContainer, SyncDockerCmd<Creat
 
     @Deprecated
     @CheckForNull
+    @JsonIgnore
     default Boolean getPrivileged() {
         return getHostConfig().getPrivileged();
     }
@@ -261,6 +275,9 @@ public interface CreateContainerCmd extends CreateContainer, SyncDockerCmd<Creat
         return this;
     }
 
+    @CheckForNull
+    String getUser();
+
     CreateContainerCmd withUser(String user);
 
     CreateContainerCmd withVolumes(Volume... volumes);
@@ -269,6 +286,7 @@ public interface CreateContainerCmd extends CreateContainer, SyncDockerCmd<Creat
 
     @Deprecated
     @CheckForNull
+    @JsonIgnore
     default VolumesFrom[] getVolumesFrom() {
         return getHostConfig().getVolumesFrom();
     }
@@ -285,6 +303,9 @@ public interface CreateContainerCmd extends CreateContainer, SyncDockerCmd<Creat
         requireNonNull(volumesFrom, "volumesFrom was not specified");
         return withVolumesFrom(volumesFrom.toArray(new VolumesFrom[volumesFrom.size()]));
     }
+
+    @CheckForNull
+    String getWorkingDir();
 
     CreateContainerCmd withWorkingDir(String workingDir);
 
@@ -304,6 +325,7 @@ public interface CreateContainerCmd extends CreateContainer, SyncDockerCmd<Creat
 
     @Deprecated
     @CheckForNull
+    @JsonIgnore
     default Boolean getPublishAllPorts() {
         return getHostConfig().getPublishAllPorts();
     }
@@ -317,6 +339,7 @@ public interface CreateContainerCmd extends CreateContainer, SyncDockerCmd<Creat
 
     @CheckForNull
     @Deprecated
+    @JsonIgnore
     default String[] getExtraHosts() {
         return getHostConfig().getExtraHosts();
     }
@@ -342,6 +365,7 @@ public interface CreateContainerCmd extends CreateContainer, SyncDockerCmd<Creat
 
     @CheckForNull
     @Deprecated
+    @JsonIgnore
     default Capability[] getCapAdd() {
         return getHostConfig().getCapAdd();
     }
@@ -369,6 +393,7 @@ public interface CreateContainerCmd extends CreateContainer, SyncDockerCmd<Creat
 
     @CheckForNull
     @Deprecated
+    @JsonIgnore
     default Capability[] getCapDrop() {
         return getHostConfig().getCapDrop();
     }
@@ -407,18 +432,21 @@ public interface CreateContainerCmd extends CreateContainer, SyncDockerCmd<Creat
 
     @Deprecated
     @CheckForNull
+    @JsonIgnore
     default Integer getBlkioWeight() {
         return getHostConfig().getBlkioWeight();
     }
 
     @CheckForNull
     @Deprecated
+    @JsonIgnore
     default String getCgroupParent() {
         return getHostConfig().getCgroupParent();
     }
 
     @Deprecated
     @CheckForNull
+    @JsonIgnore
     default Integer getCpuPeriod() {
         Long result = getHostConfig().getCpuPeriod();
         return result != null ? result.intValue() : null;
@@ -426,78 +454,91 @@ public interface CreateContainerCmd extends CreateContainer, SyncDockerCmd<Creat
 
     @Deprecated
     @CheckForNull
+    @JsonIgnore
     default Integer getCpuShares() {
         return getHostConfig().getCpuShares();
     }
 
     @Deprecated
     @CheckForNull
+    @JsonIgnore
     default String getCpusetCpus() {
         return getHostConfig().getCpusetCpus();
     }
 
     @Deprecated
     @CheckForNull
+    @JsonIgnore
     default String getCpusetMems() {
         return getHostConfig().getCpusetMems();
     }
 
     @Deprecated
     @CheckForNull
+    @JsonIgnore
     default Device[] getDevices() {
         return getHostConfig().getDevices();
     }
 
     @Deprecated
     @CheckForNull
+    @JsonIgnore
     default String[] getDns() {
         return getHostConfig().getDns();
     }
 
     @Deprecated
     @CheckForNull
+    @JsonIgnore
     default String[] getDnsSearch() {
         return getHostConfig().getDnsSearch();
     }
 
     @Deprecated
     @CheckForNull
+    @JsonIgnore
     default LogConfig getLogConfig() {
         return getHostConfig().getLogConfig();
     }
 
     @Deprecated
     @CheckForNull
+    @JsonIgnore
     default LxcConf[] getLxcConf() {
         return getHostConfig().getLxcConf();
     }
 
     @Deprecated
     @CheckForNull
+    @JsonIgnore
     default Boolean getOomKillDisable() {
         return getHostConfig().getOomKillDisable();
     }
 
     @Deprecated
     @CheckForNull
+    @JsonIgnore
     default String getPidMode() {
         return getHostConfig().getPidMode();
     }
 
     @Deprecated
     @CheckForNull
+    @JsonIgnore
     default Boolean getReadonlyRootfs() {
         return getHostConfig().getReadonlyRootfs();
     }
 
     @Deprecated
     @CheckForNull
+    @JsonIgnore
     default RestartPolicy getRestartPolicy() {
         return getHostConfig().getRestartPolicy();
     }
 
     @Deprecated
     @CheckForNull
+    @JsonIgnore
     default Ulimit[] getUlimits() {
         return getHostConfig().getUlimits();
     }
@@ -644,6 +685,7 @@ public interface CreateContainerCmd extends CreateContainer, SyncDockerCmd<Creat
     }
 
     @Deprecated
+    @JsonIgnore
     default CreateContainerCmd withUlimits(Ulimit... ulimits) {
         getHostConfig().withUlimits(ulimits);
         return this;
