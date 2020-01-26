@@ -1,9 +1,9 @@
 package com.github.dockerjava.core.command;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.CreateContainerSpec;
 import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.AuthConfig;
@@ -20,11 +20,12 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.annotation.CheckForNull;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Collections.singletonMap;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Creates a new container.
@@ -33,123 +34,37 @@ import static java.util.Collections.singletonMap;
 public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, CreateContainerResponse> implements
         CreateContainerCmd {
 
-    private String name;
+    private CreateContainerSpec spec;
 
-    @JsonProperty("Hostname")
-    private String hostName;
-
-    @JsonProperty("Domainname")
-    private String domainName;
-
-    @JsonProperty("User")
-    private String user;
-
-    @JsonProperty("AttachStdin")
-    private Boolean attachStdin;
-
-    @JsonProperty("AttachStdout")
-    private Boolean attachStdout;
-
-    @JsonProperty("AttachStderr")
-    private Boolean attachStderr;
-
-    @JsonProperty("PortSpecs")
-    private String[] portSpecs;
-
-    @JsonProperty("Tty")
-    private Boolean tty;
-
-    @JsonProperty("OpenStdin")
-    private Boolean stdinOpen;
-
-    @JsonProperty("StdinOnce")
-    private Boolean stdInOnce;
-
-    @JsonProperty("Env")
-    private String[] env;
-
-    @JsonProperty("Cmd")
-    private String[] cmd;
-
-    @JsonProperty("Healthcheck")
-    private HealthCheck healthcheck;
-
-    @JsonProperty("ArgsEscaped")
-    private Boolean argsEscaped;
-
-    @JsonProperty("Entrypoint")
-    private String[] entrypoint;
-
-    @JsonProperty("Image")
-    private String image;
-
-    @JsonProperty("Volumes")
-    private Volumes volumes = new Volumes();
-
-    @JsonProperty("WorkingDir")
-    private String workingDir;
-
-    @JsonProperty("MacAddress")
-    private String macAddress;
-
-    @JsonProperty("OnBuild")
-    private List<String> onBuild;
-
-    @JsonProperty("NetworkDisabled")
-    private Boolean networkDisabled;
-
-    @JsonProperty("ExposedPorts")
-    private ExposedPorts exposedPorts = new ExposedPorts();
-
-    /**
-     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_21}
-     */
-    @JsonProperty("StopSignal")
-    private String stopSignal;
-
-    @JsonProperty("StopTimeout")
-    private Integer stopTimeout;
-
-    @JsonProperty("HostConfig")
-    private HostConfig hostConfig = new HostConfig();
-
-    @JsonProperty("Labels")
-    private Map<String, String> labels;
-
-    @JsonProperty("Shell")
-    private List<String> shell;
-
-    @JsonProperty("NetworkingConfig")
-    private NetworkingConfig networkingConfig;
-
-    @JsonIgnore
     private String ipv4Address = null;
 
-    @JsonIgnore
     private String ipv6Address = null;
 
-    @JsonIgnore
     private List<String> aliases = null;
-
-    private AuthConfig authConfig;
 
     public CreateContainerCmdImpl(CreateContainerCmd.Exec exec, AuthConfig authConfig, String image) {
         super(exec);
-        withAuthConfig(authConfig);
-        withImage(image);
+        this.spec = CreateContainerSpec.builder()
+                .image(image)
+                .authConfig(authConfig)
+                .build();
+    }
+
+    public CreateContainerCmdImpl fromSpec(CreateContainerSpec spec) {
+        this.spec = spec;
+        return this;
     }
 
     public AuthConfig getAuthConfig() {
-        return authConfig;
+        return spec.getAuthConfig();
     }
 
     public CreateContainerCmd withAuthConfig(AuthConfig authConfig) {
-        this.authConfig = authConfig;
+        this.spec = spec.withAuthConfig(authConfig);
         return this;
     }
 
     @Override
-    @JsonIgnore
     public List<String> getAliases() {
         return aliases;
     }
@@ -162,7 +77,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withAliases(List<String> aliases) {
-        checkNotNull(aliases, "aliases was not specified");
+        requireNonNull(aliases, "aliases was not specified");
         this.aliases = aliases;
         return this;
     }
@@ -170,352 +85,349 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public String[] getCmd() {
-        return cmd;
+        return spec.getCmd();
     }
 
     @Override
     public CreateContainerCmd withCmd(String... cmd) {
-        checkNotNull(cmd, "cmd was not specified");
-        this.cmd = cmd;
+        requireNonNull(cmd, "cmd was not specified");
+        this.spec = spec.withCmd(cmd);
         return this;
     }
 
     @Override
     public CreateContainerCmd withCmd(List<String> cmd) {
-        checkNotNull(cmd, "cmd was not specified");
+        requireNonNull(cmd, "cmd was not specified");
         return withCmd(cmd.toArray(new String[0]));
     }
 
     @CheckForNull
     public HealthCheck getHealthcheck() {
-        return healthcheck;
+        return spec.getHealthcheck();
     }
 
     public CreateContainerCmdImpl withHealthcheck(HealthCheck healthcheck) {
-        this.healthcheck = healthcheck;
+        this.spec = spec.withHealthcheck(healthcheck);
         return this;
     }
 
     public Boolean getArgsEscaped() {
-        return argsEscaped;
+        return spec.getArgsEscaped();
     }
 
     public CreateContainerCmdImpl withArgsEscaped(Boolean argsEscaped) {
-        this.argsEscaped = argsEscaped;
+        this.spec = spec.withArgsEscaped(argsEscaped);
         return this;
     }
 
     @Override
     public String getDomainName() {
-        return domainName;
+        return spec.getDomainName();
     }
 
     @Override
     public CreateContainerCmd withDomainName(String domainName) {
-        checkNotNull(domainName, "no domainName was specified");
-        this.domainName = domainName;
+        requireNonNull(domainName, "no domainName was specified");
+        this.spec = spec.withDomainName(domainName);
         return this;
     }
 
     @Override
     public String[] getEntrypoint() {
-        return entrypoint;
+        return spec.getEntrypoint();
     }
 
     @Override
     public CreateContainerCmd withEntrypoint(String... entrypoint) {
-        checkNotNull(entrypoint, "entrypoint was not specified");
-        this.entrypoint = entrypoint;
+        requireNonNull(entrypoint, "entrypoint was not specified");
+        this.spec = spec.withEntrypoint(entrypoint);
         return this;
     }
 
     @Override
     public CreateContainerCmd withEntrypoint(List<String> entrypoint) {
-        checkNotNull(entrypoint, "entrypoint was not specified");
+        requireNonNull(entrypoint, "entrypoint was not specified");
         return withEntrypoint(entrypoint.toArray(new String[0]));
     }
 
     @Override
     public String[] getEnv() {
-        return env;
+        return spec.getEnv();
     }
 
     @Override
     public CreateContainerCmd withEnv(String... env) {
-        checkNotNull(env, "env was not specified");
-        this.env = env;
+        requireNonNull(env, "env was not specified");
+        this.spec = spec.withEnv(env);
         return this;
     }
 
     @Override
     public CreateContainerCmd withEnv(List<String> env) {
-        checkNotNull(env, "env was not specified");
+        requireNonNull(env, "env was not specified");
         return withEnv(env.toArray(new String[0]));
     }
 
     @Override
-    @JsonIgnore
-    public ExposedPort[] getExposedPorts() {
-        return exposedPorts.getExposedPorts();
+    public ExposedPorts getExposedPorts() {
+        return spec.getExposedPorts();
     }
 
     @Override
     public CreateContainerCmd withExposedPorts(ExposedPort... exposedPorts) {
-        checkNotNull(exposedPorts, "exposedPorts was not specified");
-        this.exposedPorts = new ExposedPorts(exposedPorts);
+        requireNonNull(exposedPorts, "exposedPorts was not specified");
+        this.spec = spec.withExposedPorts(new ExposedPorts(exposedPorts));
         return this;
     }
 
     @Override
     public CreateContainerCmd withExposedPorts(List<ExposedPort> exposedPorts) {
-        checkNotNull(exposedPorts, "exposedPorts was not specified");
+        requireNonNull(exposedPorts, "exposedPorts was not specified");
         return withExposedPorts(exposedPorts.toArray(new ExposedPort[0]));
     }
 
     /**
      * @see #stopSignal
      */
-    @JsonIgnore
     @Override
     public String getStopSignal() {
-        return stopSignal;
+        return spec.getStopSignal();
     }
 
     @Override
     public CreateContainerCmd withStopSignal(String stopSignal) {
-        checkNotNull(stopSignal, "stopSignal wasn't specified.");
-        this.stopSignal = stopSignal;
+        requireNonNull(stopSignal, "stopSignal wasn't specified.");
+        this.spec = spec.withStopSignal(stopSignal);
         return this;
     }
 
     @Override
     public Integer getStopTimeout() {
-        return stopTimeout;
+        return spec.getStopTimeout();
     }
 
     @Override
     public CreateContainerCmd withStopTimeout(Integer stopTimeout) {
-        this.stopTimeout = stopTimeout;
+        this.spec = spec.withStopTimeout(stopTimeout);
         return this;
     }
 
     @Override
     public String getHostName() {
-        return hostName;
+        return spec.getHostName();
     }
 
     @Override
     public CreateContainerCmd withHostName(String hostName) {
-        checkNotNull(hostName, "no hostName was specified");
-        this.hostName = hostName;
+        requireNonNull(hostName, "no hostName was specified");
+        this.spec = spec.withHostName(hostName);
         return this;
     }
 
     @Override
     public String getImage() {
-        return image;
+        return spec.getImage();
     }
 
     @Override
     public CreateContainerCmd withImage(String image) {
-        checkNotNull(image, "no image was specified");
-        this.image = image;
+        requireNonNull(image, "no image was specified");
+        this.spec = spec.withImage(image);
         return this;
     }
 
     @Override
-    @JsonIgnore
     public Map<String, String> getLabels() {
-        return labels;
+        return spec.getLabels();
     }
 
     @Override
     public CreateContainerCmd withLabels(Map<String, String> labels) {
-        checkNotNull(labels, "labels was not specified");
-        this.labels = labels;
+        requireNonNull(labels, "labels was not specified");
+        labels = new HashMap<>(labels);
+        labels.replaceAll((key, value) -> value == null ? "" : value);
+        this.spec = spec.withLabels(labels);
         return this;
     }
 
     @Override
     public String getMacAddress() {
-        return macAddress;
+        return spec.getMacAddress();
     }
 
     @Override
     public CreateContainerCmd withMacAddress(String macAddress) {
-        checkNotNull(macAddress, "macAddress was not specified");
-        this.macAddress = macAddress;
+        requireNonNull(macAddress, "macAddress was not specified");
+        this.spec = spec.withMacAddress(macAddress);
         return this;
     }
 
-
     @Override
     public String getName() {
-        return name;
+        return spec.getName();
     }
 
     @Override
     public CreateContainerCmd withName(String name) {
-        checkNotNull(name, "name was not specified");
-        this.name = name;
+        requireNonNull(name, "name was not specified");
+        this.spec = spec.withName(name);
         return this;
     }
 
     @Override
     public String[] getPortSpecs() {
-        return portSpecs;
+        return spec.getPortSpecs();
     }
 
     @Override
     public CreateContainerCmd withPortSpecs(String... portSpecs) {
-        checkNotNull(portSpecs, "portSpecs was not specified");
-        this.portSpecs = portSpecs;
+        requireNonNull(portSpecs, "portSpecs was not specified");
+        this.spec = spec.withPortSpecs(portSpecs);
         return this;
     }
 
     @Override
     public CreateContainerCmd withPortSpecs(List<String> portSpecs) {
-        checkNotNull(portSpecs, "portSpecs was not specified");
+        requireNonNull(portSpecs, "portSpecs was not specified");
         return withPortSpecs(portSpecs.toArray(new String[0]));
     }
 
     @Override
     public String getUser() {
-        return user;
+        return spec.getUser();
     }
 
     @Override
     public CreateContainerCmd withUser(String user) {
-        checkNotNull(user, "user was not specified");
-        this.user = user;
+        requireNonNull(user, "user was not specified");
+        this.spec = spec.withUser(user);
         return this;
     }
 
     @Override
     public Boolean isAttachStderr() {
-        return attachStderr;
+        return spec.isAttachStderr();
     }
 
     @Override
     public CreateContainerCmd withAttachStderr(Boolean attachStderr) {
-        checkNotNull(attachStderr, "attachStderr was not specified");
-        this.attachStderr = attachStderr;
+        requireNonNull(attachStderr, "attachStderr was not specified");
+        this.spec = spec.withAttachStderr(attachStderr);
         return this;
     }
 
     @Override
     public Boolean isAttachStdin() {
-        return attachStdin;
+        return spec.isAttachStdin();
     }
 
     @Override
     public CreateContainerCmd withAttachStdin(Boolean attachStdin) {
-        checkNotNull(attachStdin, "attachStdin was not specified");
-        this.attachStdin = attachStdin;
+        requireNonNull(attachStdin, "attachStdin was not specified");
+        this.spec = spec.withAttachStdin(attachStdin);
         return this;
     }
 
     @Override
     public Boolean isAttachStdout() {
-        return attachStdout;
+        return spec.isAttachStdout();
     }
 
     @Override
     public CreateContainerCmd withAttachStdout(Boolean attachStdout) {
-        checkNotNull(attachStdout, "attachStdout was not specified");
-        this.attachStdout = attachStdout;
+        requireNonNull(attachStdout, "attachStdout was not specified");
+        this.spec = spec.withAttachStdout(attachStdout);
         return this;
     }
 
     @Override
-    @JsonIgnore
-    public Volume[] getVolumes() {
-        return volumes.getVolumes();
+    public Volumes getVolumes() {
+        return spec.getVolumes();
     }
 
     @Override
     public CreateContainerCmd withVolumes(Volume... volumes) {
-        checkNotNull(volumes, "volumes was not specified");
-        this.volumes = new Volumes(volumes);
+        requireNonNull(volumes, "volumes was not specified");
+        this.spec = spec.withVolumes(new Volumes(volumes));
         return this;
     }
 
     @Override
     public CreateContainerCmd withVolumes(List<Volume> volumes) {
-        checkNotNull(volumes, "volumes was not specified");
+        requireNonNull(volumes, "volumes was not specified");
         return withVolumes(volumes.toArray(new Volume[0]));
     }
 
     @Override
     public String getWorkingDir() {
-        return workingDir;
+        return spec.getWorkingDir();
     }
 
     @Override
     public CreateContainerCmd withWorkingDir(String workingDir) {
-        checkNotNull(workingDir, "workingDir was not specified");
-        this.workingDir = workingDir;
+        requireNonNull(workingDir, "workingDir was not specified");
+        this.spec = spec.withWorkingDir(workingDir);
         return this;
     }
 
     @Override
     public Boolean isNetworkDisabled() {
-        return networkDisabled;
+        return spec.isNetworkDisabled();
     }
 
     @Override
     public CreateContainerCmd withNetworkDisabled(Boolean disableNetwork) {
-        checkNotNull(disableNetwork, "disableNetwork was not specified");
-        this.networkDisabled = disableNetwork;
+        requireNonNull(disableNetwork, "disableNetwork was not specified");
+        this.spec = spec.withNetworkDisabled(disableNetwork);
         return this;
     }
 
 
     @Override
     public Boolean isStdInOnce() {
-        return stdInOnce;
+        return spec.isStdInOnce();
     }
 
     @Override
     public CreateContainerCmd withStdInOnce(Boolean stdInOnce) {
-        checkNotNull(stdInOnce, "no stdInOnce was specified");
-        this.stdInOnce = stdInOnce;
+        requireNonNull(stdInOnce, "no stdInOnce was specified");
+        this.spec = spec.withStdInOnce(stdInOnce);
         return this;
     }
 
     @Override
     public Boolean isStdinOpen() {
-        return stdinOpen;
+        return spec.isStdinOpen();
     }
 
     @Override
     public CreateContainerCmd withStdinOpen(Boolean stdinOpen) {
-        checkNotNull(stdinOpen, "no stdinOpen was specified");
-        this.stdinOpen = stdinOpen;
+        requireNonNull(stdinOpen, "no stdinOpen was specified");
+        this.spec = spec.withStdinOpen(stdinOpen);
         return this;
     }
 
 
     @Override
     public Boolean isTty() {
-        return tty;
+        return spec.isTty();
     }
 
     @Override
     public CreateContainerCmd withTty(Boolean tty) {
-        checkNotNull(tty, "no tty was specified");
-        this.tty = tty;
+        requireNonNull(tty, "no tty was specified");
+        this.spec = spec.withTty(tty);
         return this;
     }
 
     @Override
     public HostConfig getHostConfig() {
-        return hostConfig;
+        return spec.getHostConfig();
     }
 
     @Override
     public CreateContainerCmd withHostConfig(HostConfig hostConfig) {
-        this.hostConfig = hostConfig;
+        this.spec = spec.withHostConfig(hostConfig);
         return this;
     }
 
@@ -526,7 +438,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withIpv4Address(String ipv4Address) {
-        checkNotNull(ipv4Address, "no ipv4Address was specified");
+        requireNonNull(ipv4Address, "no ipv4Address was specified");
         this.ipv4Address = ipv4Address;
         return this;
     }
@@ -538,18 +450,18 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withIpv6Address(String ipv6Address) {
-        checkNotNull(ipv6Address, "no ipv6Address was specified");
+        requireNonNull(ipv6Address, "no ipv6Address was specified");
         this.ipv6Address = ipv6Address;
         return this;
     }
 
     @CheckForNull
     public List<String> getOnBuild() {
-        return onBuild;
+        return spec.getOnBuild();
     }
 
     public CreateContainerCmdImpl withOnBuild(List<String> onBuild) {
-        this.onBuild = onBuild;
+        this.spec = spec.withOnBuild(onBuild);
         return this;
     }
 
@@ -570,6 +482,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
                     );
 
         }
+        HostConfig hostConfig = getHostConfig();
 
         if (hostConfig.isUserDefinedNetwork() && hostConfig.getLinks().length > 0) {
             if (containerNetwork == null) {
@@ -588,13 +501,19 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         }
 
         if (containerNetwork != null) {
-            networkingConfig = new NetworkingConfig()
-                    .withEndpointsConfig(singletonMap(hostConfig.getNetworkMode(), containerNetwork));
+            spec = spec.withNetworkingConfig(
+                    new com.github.dockerjava.api.model.NetworkingConfig()
+                            .withEndpointsConfig(singletonMap(hostConfig.getNetworkMode(), containerNetwork))
+            );
         }
 
         return super.exec();
     }
 
+    @Override
+    public com.github.dockerjava.api.model.NetworkingConfig getNetworkingConfig() {
+        return spec.getNetworkingConfig();
+    }
 
     @Override
     public String toString() {
@@ -611,6 +530,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         return HashCodeBuilder.reflectionHashCode(this);
     }
 
+    @Deprecated
     public static class NetworkingConfig {
         @JsonProperty("EndpointsConfig")
         public Map<String, ContainerNetwork> endpointsConfig;
