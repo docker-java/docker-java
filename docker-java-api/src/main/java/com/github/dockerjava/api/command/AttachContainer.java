@@ -9,6 +9,7 @@ import java.io.InputStream;
 @ImmutableSpec
 interface AttachContainer {
 
+    @Value.Parameter
     String getContainerId();
 
     @Nullable
