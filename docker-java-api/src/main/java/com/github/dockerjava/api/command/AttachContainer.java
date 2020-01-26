@@ -7,7 +7,7 @@ import java.io.InputStream;
 
 @Value.Immutable
 @ImmutableSpec
-interface AttachContainer {
+public interface AttachContainer {
 
     @Value.Parameter
     String getContainerId();

@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 @Value.Immutable
 @ImmutableSpec
-interface StopContainer {
+public interface StopContainer {
 
     @Value.Parameter
     String getContainerId();

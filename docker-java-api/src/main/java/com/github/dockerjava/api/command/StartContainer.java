@@ -4,7 +4,7 @@ import org.immutables.value.Value;
 
 @Value.Immutable
 @ImmutableSpec
-interface StartContainer {
+public interface StartContainer {
 
     @Value.Parameter
     String getContainerId();

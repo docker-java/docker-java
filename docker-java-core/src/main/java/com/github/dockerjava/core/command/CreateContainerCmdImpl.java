@@ -9,11 +9,9 @@ import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.ContainerNetwork;
 import com.github.dockerjava.api.model.ExposedPort;
-import com.github.dockerjava.api.model.ExposedPorts;
 import com.github.dockerjava.api.model.HealthCheck;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Volume;
-import com.github.dockerjava.api.model.Volumes;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -169,14 +167,14 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
-    public ExposedPorts getExposedPorts() {
+    public ExposedPort[] getExposedPorts() {
         return spec.getExposedPorts();
     }
 
     @Override
     public CreateContainerCmd withExposedPorts(ExposedPort... exposedPorts) {
         requireNonNull(exposedPorts, "exposedPorts was not specified");
-        this.spec = spec.withExposedPorts(new ExposedPorts(exposedPorts));
+        this.spec = spec.withExposedPorts(exposedPorts);
         return this;
     }
 
@@ -341,14 +339,14 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
-    public Volumes getVolumes() {
+    public Volume[] getVolumes() {
         return spec.getVolumes();
     }
 
     @Override
     public CreateContainerCmd withVolumes(Volume... volumes) {
         requireNonNull(volumes, "volumes was not specified");
-        this.spec = spec.withVolumes(new Volumes(volumes));
+        this.spec = spec.withVolumes(volumes);
         return this;
     }
 

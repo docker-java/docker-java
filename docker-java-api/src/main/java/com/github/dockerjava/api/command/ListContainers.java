@@ -8,7 +8,7 @@ import java.util.Map;
 
 @Value.Immutable
 @ImmutableSpec
-interface ListContainers {
+public interface ListContainers {
 
     @Nullable
     String getBeforeId();

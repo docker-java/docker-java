@@ -2,10 +2,12 @@ package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.ExposedPorts;
 import com.github.dockerjava.api.model.HealthCheck;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.NetworkingConfig;
+import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.Volumes;
 import org.immutables.value.Value;
 
@@ -16,7 +18,7 @@ import java.util.Map;
 
 @Value.Immutable
 @ImmutableSpec
-interface CreateContainer {
+public interface CreateContainer {
 
     @Nullable
     String getName();
@@ -88,8 +90,22 @@ interface CreateContainer {
     String[] getEntrypoint();
 
     @Nullable
+    Volume[] getVolumes();
+
+    /**
+     *
+     * @deprecated do not use/implement directly, see {@link #getVolumes()} instead
+     */
+    @Nullable
     @JsonProperty("Volumes")
-    Volumes getVolumes();
+    @Deprecated
+    @Value.Auxiliary
+    default Volumes $$_JsonFriendlyVolumes() {
+        Volume[] volumes = getVolumes();
+        return volumes == null
+                ? null
+                : new Volumes(volumes);
+    }
 
     @Nullable
     @JsonProperty("WorkingDir")
@@ -108,8 +124,22 @@ interface CreateContainer {
     Boolean isNetworkDisabled();
 
     @Nullable
+    ExposedPort[] getExposedPorts();
+
+    /**
+     *
+     * @deprecated do not use/implement directly, see {@link #getExposedPorts()} instead
+     */
+    @Nullable
     @JsonProperty("ExposedPorts")
-    ExposedPorts getExposedPorts();
+    @Deprecated
+    @Value.Auxiliary
+    default ExposedPorts $$_JsonFriendlyExposedPorts() {
+        ExposedPort[] exposedPorts = getExposedPorts();
+        return exposedPorts == null
+                ? null
+                : new ExposedPorts(exposedPorts);
+    }
 
     @Nullable
     @JsonProperty("StopSignal")
