@@ -100,6 +100,7 @@ public interface CreateContainer {
     @JsonProperty("Volumes")
     @Deprecated
     @Value.Auxiliary
+    @SuppressWarnings("checkstyle:methodname")
     default Volumes $$_JsonFriendlyVolumes() {
         Volume[] volumes = getVolumes();
         return volumes == null
@@ -134,6 +135,7 @@ public interface CreateContainer {
     @JsonProperty("ExposedPorts")
     @Deprecated
     @Value.Auxiliary
+    @SuppressWarnings("checkstyle:methodname")
     default ExposedPorts $$_JsonFriendlyExposedPorts() {
         ExposedPort[] exposedPorts = getExposedPorts();
         return exposedPorts == null
