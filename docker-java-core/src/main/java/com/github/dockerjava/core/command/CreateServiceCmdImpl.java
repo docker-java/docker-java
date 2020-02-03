@@ -42,6 +42,7 @@ public class CreateServiceCmdImpl extends AbstrDockerCmd<CreateServiceCmd, Creat
 
     @Override
     public CreateServiceCmd withAuthConfig(AuthConfig authConfig) {
+        checkNotNull(authConfig, "authConfig was not specified");
         this.authConfig = authConfig;
         return this;
     }
