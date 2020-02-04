@@ -17,7 +17,7 @@ public interface StatsCmd extends AsyncDockerCmd<StatsCmd, Statistics> {
     StatsCmd withContainerId(@Nonnull String containerId);
 
     @CheckForNull
-    Boolean getNoStream();
+    Boolean hasNoStream();
 
     StatsCmd withNoStream(boolean noStream);
 

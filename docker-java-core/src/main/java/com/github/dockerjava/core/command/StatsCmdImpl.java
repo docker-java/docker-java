@@ -32,7 +32,7 @@ public class StatsCmdImpl extends AbstrAsyncDockerCmd<StatsCmd, Statistics> impl
     }
 
     @Override
-    public Boolean getNoStream() {
+    public Boolean hasNoStream() {
         return noStream;
     }
 

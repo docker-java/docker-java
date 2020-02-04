@@ -27,7 +27,7 @@ public class StatsCmdExec extends AbstrAsyncDockerCmdExec<StatsCmd, Statistics> 
         WebTarget webTarget = getBaseResource().path("/containers/{id}/stats").resolveTemplate("id",
                 command.getContainerId());
 
-        if (Boolean.TRUE.equals(command.getNoStream())) {
+        if (Boolean.TRUE.equals(command.hasNoStream())) {
             webTarget = webTarget.queryParam("stream", "0");
         }
 
