@@ -8,7 +8,8 @@ import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.core.RemoteApiVersion;
 import com.github.dockerjava.core.command.PullImageResultCallback;
-import com.github.dockerjava.utils.RegistryUtils;
+import com.github.dockerjava.junit.PrivateRegistryRule;
+import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -25,6 +26,9 @@ import static org.hamcrest.Matchers.notNullValue;
 
 public class PullImageCmdIT extends CmdIT {
     private static final Logger LOG = LoggerFactory.getLogger(PullImageCmdIT.class);
+
+    @ClassRule
+    public static PrivateRegistryRule REGISTRY = new PrivateRegistryRule();
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
@@ -91,9 +95,9 @@ public class PullImageCmdIT extends CmdIT {
 
     @Test
     public void testPullImageWithValidAuth() throws Exception {
-        AuthConfig authConfig = RegistryUtils.runPrivateRegistry(dockerRule.getClient());
+        AuthConfig authConfig = REGISTRY.getAuthConfig();
 
-        String imgName = RegistryUtils.createPrivateImage(dockerRule, "pull-image-with-valid-auth");
+        String imgName = REGISTRY.createPrivateImage("pull-image-with-valid-auth");
 
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pullImageCmd(imgName)
@@ -104,10 +108,9 @@ public class PullImageCmdIT extends CmdIT {
 
     @Test
     public void testPullImageWithValidAuthAndEmail() throws Exception {
-        AuthConfig authConfig = RegistryUtils.runPrivateRegistry(dockerRule.getClient())
-                .withEmail("foo@bar.de");
+        AuthConfig authConfig = REGISTRY.getAuthConfig().withEmail("foo@bar.de");
 
-        String imgName = RegistryUtils.createPrivateImage(dockerRule, "pull-image-with-valid-auth");
+        String imgName = REGISTRY.createPrivateImage("pull-image-with-valid-auth");
 
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pullImageCmd(imgName)
@@ -118,9 +121,9 @@ public class PullImageCmdIT extends CmdIT {
 
     @Test
     public void testPullImageWithNoAuth() throws Exception {
-        RegistryUtils.runPrivateRegistry(dockerRule.getClient());
+        AuthConfig authConfig = REGISTRY.getAuthConfig();
 
-        String imgName = RegistryUtils.createPrivateImage(dockerRule, "pull-image-with-no-auth");
+        String imgName = REGISTRY.createPrivateImage("pull-image-with-no-auth");
 
         if (isNotSwarm(dockerRule.getClient()) && getVersion(dockerRule.getClient())
                 .isGreaterOrEqual(RemoteApiVersion.VERSION_1_30)) {
@@ -138,15 +141,14 @@ public class PullImageCmdIT extends CmdIT {
 
     @Test
     public void testPullImageWithInvalidAuth() throws Exception {
-        AuthConfig validAuthConfig = RegistryUtils.runPrivateRegistry(dockerRule.getClient());
-
-        AuthConfig authConfig = new AuthConfig()
+        AuthConfig authConfig = REGISTRY.getAuthConfig();
+        AuthConfig invalidAuthConfig = new AuthConfig()
                 .withUsername("testuser")
                 .withPassword("testwrongpassword")
                 .withEmail("foo@bar.de")
-                .withRegistryAddress(validAuthConfig.getRegistryAddress());
+                .withRegistryAddress(authConfig.getRegistryAddress());
 
-        String imgName = RegistryUtils.createPrivateImage(dockerRule, "pull-image-with-invalid-auth");
+        String imgName = REGISTRY.createPrivateImage("pull-image-with-invalid-auth");
 
         if (isNotSwarm(dockerRule.getClient()) && getVersion(dockerRule.getClient())
                 .isGreaterOrEqual(RemoteApiVersion.VERSION_1_30)) {
@@ -157,7 +159,7 @@ public class PullImageCmdIT extends CmdIT {
 
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pullImageCmd(imgName)
-                .withAuthConfig(authConfig)
+                .withAuthConfig(invalidAuthConfig)
                 .exec(new PullImageResultCallback())
                 .awaitCompletion(30, TimeUnit.SECONDS);
     }

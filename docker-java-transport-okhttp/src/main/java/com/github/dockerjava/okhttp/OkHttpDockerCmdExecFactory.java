@@ -1,29 +1,21 @@
 package com.github.dockerjava.okhttp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.api.command.PingCmd;
 import com.github.dockerjava.core.AbstractDockerCmdExecFactory;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.SSLConfig;
-import com.github.dockerjava.core.WebTarget;
-import com.github.dockerjava.core.exec.PingCmdExec;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.MultimapBuilder;
 import okhttp3.ConnectionPool;
 import okhttp3.Dns;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
-import org.apache.commons.io.IOUtils;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URI;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
 import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
@@ -74,10 +66,12 @@ public class OkHttpDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
         }
 
         SSLConfig sslConfig = dockerClientConfig.getSSLConfig();
+        boolean isSSL = false;
         if (sslConfig != null) {
             try {
                 SSLContext sslContext = sslConfig.getSSLContext();
                 if (sslContext != null) {
+                    isSSL = true;
                     clientBuilder
                             .sslSocketFactory(sslContext.getSocketFactory(), new TrustAllX509TrustManager());
                 }
@@ -94,20 +88,14 @@ public class OkHttpDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
             case "unix":
             case "npipe":
                 baseUrlBuilder = new HttpUrl.Builder()
-                    .scheme("http")
-                    .host("docker" + SOCKET_SUFFIX);
+                        .scheme("http")
+                        .host("docker" + SOCKET_SUFFIX);
                 break;
             case "tcp":
-                SSLContext sslContext;
-                try {
-                    sslContext = sslConfig.getSSLContext();
-                } catch (KeyManagementException | UnrecoverableKeyException | NoSuchAlgorithmException | KeyStoreException e) {
-                    throw new RuntimeException(e);
-                }
                 baseUrlBuilder = new HttpUrl.Builder()
-                    .scheme(sslConfig != null && sslContext != null ? "https" : "http")
-                    .host(dockerHost.getHost())
-                    .port(dockerHost.getPort());
+                        .scheme(isSSL ? "https" : "http")
+                        .host(dockerHost.getHost())
+                        .port(dockerHost.getPort());
                 break;
             default:
                 baseUrlBuilder = HttpUrl.get(dockerHost.toString()).newBuilder();
@@ -126,22 +114,6 @@ public class OkHttpDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
             ImmutableList.of(),
             MultimapBuilder.hashKeys().hashSetValues().build()
         );
-    }
-
-    @Override
-    public PingCmd.Exec createPingCmdExec() {
-        return new PingCmdExec(getBaseResource(), getDockerClientConfig()) {
-
-            @Override
-            protected Void execute(PingCmd command) {
-                WebTarget webResource = getBaseResource().path("/_ping");
-
-                // TODO contribute to docker-java, make it close the stream
-                IOUtils.closeQuietly(webResource.request().get());
-
-                return null;
-            }
-        };
     }
 
     @Override

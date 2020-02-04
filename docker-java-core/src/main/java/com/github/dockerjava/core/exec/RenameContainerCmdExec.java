@@ -7,6 +7,8 @@ import com.github.dockerjava.core.WebTarget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 public class RenameContainerCmdExec extends AbstrSyncDockerCmdExec<RenameContainerCmd, Void>
         implements RenameContainerCmd.Exec {
     private static final Logger LOG = LoggerFactory.getLogger(RenameContainerCmdExec.class);
@@ -22,7 +24,11 @@ public class RenameContainerCmdExec extends AbstrSyncDockerCmdExec<RenameContain
                 .queryParam("name", command.getName());
 
         LOG.trace("POST: {}", webResource);
-        webResource.request().accept(MediaType.APPLICATION_JSON).post(null);
+        try {
+            webResource.request().accept(MediaType.APPLICATION_JSON).post(null).close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return null;
     }

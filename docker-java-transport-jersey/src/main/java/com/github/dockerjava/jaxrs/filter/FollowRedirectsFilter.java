@@ -17,6 +17,7 @@ import javax.ws.rs.core.Response;
  *
  * This filter allows arbitrary redirection for other methods.
  */
+@Deprecated
 public class FollowRedirectsFilter implements ClientResponseFilter {
 
     @Override

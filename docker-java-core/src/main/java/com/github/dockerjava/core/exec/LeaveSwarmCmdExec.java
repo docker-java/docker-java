@@ -7,6 +7,8 @@ import com.github.dockerjava.core.WebTarget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 public class LeaveSwarmCmdExec extends AbstrSyncDockerCmdExec<LeaveSwarmCmd, Void> implements LeaveSwarmCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LeaveSwarmCmdExec.class);
@@ -22,8 +24,11 @@ public class LeaveSwarmCmdExec extends AbstrSyncDockerCmdExec<LeaveSwarmCmd, Voi
         webTarget = booleanQueryParam(webTarget, "force", command.hasForceEnabled());
 
         LOGGER.trace("POST: {}", webTarget);
-        webTarget.request().accept(MediaType.APPLICATION_JSON)
-                .post(null);
+        try {
+            webTarget.request().accept(MediaType.APPLICATION_JSON).post(null).close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return null;
     }

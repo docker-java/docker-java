@@ -40,6 +40,7 @@ import org.newsclub.net.unix.AFUNIXSocketAddress;
  * Provides a ConnectionSocketFactory for connecting Apache HTTP clients to Unix sockets.
  */
 @Contract(threading = ThreadingBehavior.IMMUTABLE_CONDITIONAL)
+@Deprecated
 public class UnixConnectionSocketFactory implements ConnectionSocketFactory {
 
     private File socketFile;

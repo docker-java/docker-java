@@ -10,10 +10,11 @@ import com.github.dockerjava.core.command.BuildImageResultCallback;
 import com.github.dockerjava.core.command.PushImageResultCallback;
 import com.github.dockerjava.core.command.WaitContainerResultCallback;
 import com.github.dockerjava.core.util.CompressArchiveUtil;
-import com.github.dockerjava.utils.RegistryUtils;
+import com.github.dockerjava.junit.PrivateRegistryRule;
 import net.jcip.annotations.NotThreadSafe;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -50,6 +51,9 @@ import static org.junit.Assume.assumeThat;
 @NotThreadSafe
 public class BuildImageCmdIT extends CmdIT {
     public static final Logger LOG = LoggerFactory.getLogger(BuildImageCmd.class);
+
+    @ClassRule
+    public static PrivateRegistryRule REGISTRY = new PrivateRegistryRule();
 
     @Rule
     public TemporaryFolder folder = new TemporaryFolder(new File("target/"));
@@ -195,7 +199,7 @@ public class BuildImageCmdIT extends CmdIT {
 
     @Test
     public void fromPrivateRegistry() throws Exception {
-        AuthConfig authConfig = RegistryUtils.runPrivateRegistry(dockerRule.getClient());
+        AuthConfig authConfig = REGISTRY.getAuthConfig();
         String imgName = authConfig.getRegistryAddress() + "/testuser/busybox";
 
         File dockerfile = folder.newFile("Dockerfile");
