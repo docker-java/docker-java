@@ -89,6 +89,7 @@
 							<!-- Known 3.2.0 breaking changes: -->
 							<exclude>com.github.dockerjava.api.command.DockerCmdExecFactory#init(com.github.dockerjava.core.DockerClientConfig)</exclude>
 							<exclude>com.github.dockerjava.api.model.Identifier#tag</exclude>
+							<exclude>com.github.dockerjava.api.model.Statistics#getNetwork()</exclude>
 						</excludes>
 						<overrideCompatibilityChangeParameters>
 							<overrideCompatibilityChangeParameter>
