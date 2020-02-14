@@ -56,6 +56,8 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
     private static final Set<String> CONFIG_KEYS = new HashSet<>();
 
+    private static final Properties DEFAULT_PROPERTIES = new Properties();
+
     static {
         CONFIG_KEYS.add(DOCKER_HOST);
         CONFIG_KEYS.add(DOCKER_TLS_VERIFY);
@@ -66,6 +68,11 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
         CONFIG_KEYS.add(REGISTRY_PASSWORD);
         CONFIG_KEYS.add(REGISTRY_EMAIL);
         CONFIG_KEYS.add(REGISTRY_URL);
+
+        DEFAULT_PROPERTIES.put(DOCKER_HOST, "unix:///var/run/docker.sock");
+        DEFAULT_PROPERTIES.put(DOCKER_CONFIG, "${user.home}/.docker");
+        DEFAULT_PROPERTIES.put(REGISTRY_URL, "https://index.docker.io/v1/");
+        DEFAULT_PROPERTIES.put(REGISTRY_USERNAME, "${user.name}");
     }
 
     private final URI dockerHost;
@@ -100,14 +107,17 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
     }
 
     private static Properties loadIncludedDockerProperties(Properties systemProperties) {
+        Properties p = new Properties();
+        p.putAll(DEFAULT_PROPERTIES);
         try (InputStream is = DefaultDockerClientConfig.class.getResourceAsStream("/" + DOCKER_JAVA_PROPERTIES)) {
-            Properties p = new Properties();
-            p.load(is);
-            replaceProperties(p, systemProperties);
-            return p;
+            if (is != null) {
+                p.load(is);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        replaceProperties(p, systemProperties);
+        return p;
     }
 
     private static void replaceProperties(Properties properties, Properties replacements) {
