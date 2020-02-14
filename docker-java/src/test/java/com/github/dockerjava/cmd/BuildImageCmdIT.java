@@ -39,6 +39,7 @@ import static org.apache.commons.io.FileUtils.writeStringToFile;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
@@ -315,6 +316,22 @@ public class BuildImageCmdIT extends CmdIT {
         // Compare whether the image2's parent layer is from image1 so that cache is used
         assertThat(inspectImageResponse2.getParent(), equalTo(inspectImageResponse1.getId()));
 
+    }
+
+    @Test
+    public void quiet() {
+        File baseDir = fileFromBuildTestResource("labels");
+
+        String imageId = dockerRule.getClient()
+                .buildImageCmd(baseDir)
+                .withQuiet(true)
+                .exec(new BuildImageResultCallback())
+                .awaitImageId();
+
+        InspectImageResponse inspectImageResponse = dockerRule.getClient().inspectImageCmd(imageId).exec();
+        assertThat(inspectImageResponse, not(nullValue()));
+        assertThat(inspectImageResponse.getId(), endsWith(imageId));
+        LOG.info("Image Inspect: {}", inspectImageResponse.toString());
     }
 
     public void dockerfileNotInBaseDirectory() throws Exception {
