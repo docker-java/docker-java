@@ -34,7 +34,7 @@ public class DockerfileFixture implements AutoCloseable {
         LOGGER.info("building {}", directory);
 
         client.buildImageCmd(new File("src/test/resources", directory)).withNoCache(true)
-                .start().awaitCompletion();
+                .start().awaitImageId();
 
         Image lastCreatedImage = client.listImagesCmd().exec().get(0);
 
