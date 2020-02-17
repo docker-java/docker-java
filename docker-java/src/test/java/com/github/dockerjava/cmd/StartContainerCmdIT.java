@@ -67,7 +67,7 @@ public class StartContainerCmdIT extends CmdIT {
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
-        dockerRule.getClient().waitContainerCmd(container.getId()).start().awaitCompletion();
+        dockerRule.getClient().waitContainerCmd(container.getId()).start().awaitStatusCode();
 
         inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
 
