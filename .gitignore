@@ -11,9 +11,7 @@
 target
 
 # Ignore InteliJ Idea project files
-.idea
-!.idea/codeStyleSettings.xml
-!.idea/encodings.xml
+.idea/
 *.iml
 *.iws
 *.ipr
