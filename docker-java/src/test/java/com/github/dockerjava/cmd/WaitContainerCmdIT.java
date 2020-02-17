@@ -1,13 +1,14 @@
 package com.github.dockerjava.cmd;
 
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.command.WaitContainerResultCallback;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.WaitResponse;
-import com.github.dockerjava.core.command.WaitContainerResultCallback;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,7 @@ public class WaitContainerCmdIT extends CmdIT {
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
-        int exitCode = dockerRule.getClient().waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback())
+        int exitCode = dockerRule.getClient().waitContainerCmd(container.getId()).start()
                 .awaitStatusCode();
         LOG.info("Container exit code: {}", exitCode);
 
@@ -47,15 +48,15 @@ public class WaitContainerCmdIT extends CmdIT {
     }
 
     @Test(expected = NotFoundException.class)
-    public void testWaitNonExistingContainer() throws DockerException {
+    public void testWaitNonExistingContainer() throws Exception {
 
-        WaitContainerResultCallback callback = new WaitContainerResultCallback() {
+        ResultCallback.Adapter<WaitResponse> callback = new ResultCallback.Adapter<WaitResponse>() {
             public void onNext(WaitResponse waitResponse) {
                 throw new AssertionError("expected NotFoundException");
             }
         };
 
-        dockerRule.getClient().waitContainerCmd("non-existing").exec(callback).awaitStatusCode();
+        dockerRule.getClient().waitContainerCmd("non-existing").exec(callback).awaitCompletion();
     }
 
     @Test
@@ -68,8 +69,7 @@ public class WaitContainerCmdIT extends CmdIT {
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
-        WaitContainerResultCallback callback = dockerRule.getClient().waitContainerCmd(container.getId()).exec(
-                new WaitContainerResultCallback());
+        WaitContainerResultCallback callback = dockerRule.getClient().waitContainerCmd(container.getId()).start();
 
         Thread.sleep(5000);
 

@@ -223,6 +223,11 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
      */
     BuildImageCmd withTarget(String target);
 
+    @Override
+    default BuildImageResultCallback start() {
+        return exec(new BuildImageResultCallback());
+    }
+
     interface Exec extends DockerCmdAsyncExec<BuildImageCmd, BuildResponseItem> {
     }
 

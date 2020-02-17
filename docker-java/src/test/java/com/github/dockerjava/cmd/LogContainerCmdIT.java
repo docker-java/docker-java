@@ -3,7 +3,6 @@ package com.github.dockerjava.cmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.StreamType;
-import com.github.dockerjava.core.command.WaitContainerResultCallback;
 import com.github.dockerjava.utils.LogContainerTestCallback;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -129,7 +128,7 @@ public class LogContainerCmdIT extends CmdIT {
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         int exitCode = dockerRule.getClient().waitContainerCmd(container.getId())
-                .exec(new WaitContainerResultCallback())
+                .start()
                 .awaitStatusCode();
 
         assertThat(exitCode, equalTo(0));
@@ -180,7 +179,7 @@ public class LogContainerCmdIT extends CmdIT {
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         int exitCode = dockerRule.getClient().waitContainerCmd(container.getId())
-                .exec(new WaitContainerResultCallback())
+                .start()
                 .awaitStatusCode();
 
         assertThat(exitCode, equalTo(0));

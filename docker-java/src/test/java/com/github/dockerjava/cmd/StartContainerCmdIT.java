@@ -14,7 +14,6 @@ import com.github.dockerjava.api.model.Ports.Binding;
 import com.github.dockerjava.api.model.RestartPolicy;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
-import com.github.dockerjava.core.command.WaitContainerResultCallback;
 import net.jcip.annotations.NotThreadSafe;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -45,7 +44,7 @@ public class StartContainerCmdIT extends CmdIT {
     public static final Logger LOG = LoggerFactory.getLogger(StartContainerCmdIT.class);
 
     @Test
-    public void startContainerWithVolumes() throws DockerException {
+    public void startContainerWithVolumes() throws Exception {
 
         // see http://docs.docker.io/use/working_with_volumes/
         Volume volume1 = new Volume("/opt/webapp1");
@@ -68,7 +67,7 @@ public class StartContainerCmdIT extends CmdIT {
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
-        dockerRule.getClient().waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback()).awaitStatusCode();
+        dockerRule.getClient().waitContainerCmd(container.getId()).start().awaitCompletion();
 
         inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
 

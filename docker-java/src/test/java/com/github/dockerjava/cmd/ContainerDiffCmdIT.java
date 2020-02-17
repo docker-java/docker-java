@@ -4,7 +4,6 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.ChangeLog;
-import com.github.dockerjava.core.command.WaitContainerResultCallback;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +28,7 @@ public class ContainerDiffCmdIT extends CmdIT {
         assertThat(container.getId(), not(isEmptyString()));
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
-        int exitCode = dockerRule.getClient().waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback())
+        int exitCode = dockerRule.getClient().waitContainerCmd(container.getId()).start()
                 .awaitStatusCode();
         assertThat(exitCode, equalTo(0));
 

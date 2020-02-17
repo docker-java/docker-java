@@ -4,7 +4,6 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.core.command.WaitContainerResultCallback;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -67,7 +66,7 @@ public class CommitCmdIT extends CmdIT {
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         Integer status = dockerRule.getClient().waitContainerCmd(container.getId())
-                .exec(new WaitContainerResultCallback())
+                .start()
                 .awaitStatusCode();
 
         assertThat(status, is(0));

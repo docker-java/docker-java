@@ -1,7 +1,7 @@
 package com.github.dockerjava.utils;
 
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.model.Frame;
-import com.github.dockerjava.core.command.LogContainerResultCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author Kanstantsin Shautsou
  */
-public class LogContainerTestCallback extends LogContainerResultCallback {
+public class LogContainerTestCallback extends ResultCallback.Adapter<Frame> {
     protected final StringBuffer log = new StringBuffer();
 
     List<Frame> collectedFrames = new ArrayList<>();

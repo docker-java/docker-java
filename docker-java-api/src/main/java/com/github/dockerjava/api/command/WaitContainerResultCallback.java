@@ -1,25 +1,22 @@
 /*
  * Created on 21.07.2015
  */
-package com.github.dockerjava.core.command;
+package com.github.dockerjava.api.command;
 
-import java.util.concurrent.TimeUnit;
-
-import javax.annotation.CheckForNull;
-
+import com.github.dockerjava.api.async.ResultCallbackTemplate;
+import com.github.dockerjava.api.exception.DockerClientException;
+import com.github.dockerjava.api.model.WaitResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.api.exception.DockerClientException;
-import com.github.dockerjava.api.model.WaitResponse;
-import com.github.dockerjava.core.async.ResultCallbackTemplate;
+import javax.annotation.CheckForNull;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
  * @author Marcus Linke
  *
  */
-@Deprecated
 public class WaitContainerResultCallback extends ResultCallbackTemplate<WaitContainerResultCallback, WaitResponse> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WaitContainerResultCallback.class);

@@ -13,8 +13,6 @@ import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.cmd.CmdIT;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
-import com.github.dockerjava.core.command.BuildImageResultCallback;
-import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.utils.LogContainerTestCallback;
 import org.junit.rules.ExternalResource;
 import org.junit.runner.Description;
@@ -109,8 +107,8 @@ public class DockerRule extends ExternalResource {
             // need to block until image is pulled completely
             getClient().pullImageCmd("busybox")
                     .withTag("latest")
-                    .exec(new PullImageResultCallback())
-                    .awaitSuccess();
+                    .start()
+                    .awaitCompletion();
         }
 
 //        assertThat(getClient(), notNullValue());
@@ -181,7 +179,7 @@ public class DockerRule extends ExternalResource {
     public String buildImage(File baseDir) throws Exception {
         return getClient().buildImageCmd(baseDir)
                 .withNoCache(true)
-                .exec(new BuildImageResultCallback())
+                .start()
                 .awaitImageId();
     }
 

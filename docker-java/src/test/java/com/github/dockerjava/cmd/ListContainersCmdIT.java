@@ -5,8 +5,6 @@ import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Volume;
-import com.github.dockerjava.core.command.PullImageResultCallback;
-import com.github.dockerjava.core.command.WaitContainerResultCallback;
 import com.github.dockerjava.junit.DockerAssume;
 import org.hamcrest.Matcher;
 import org.junit.After;
@@ -314,7 +312,7 @@ public class ListContainersCmdIT extends CmdIT {
 
         dockerRule.getClient().pullImageCmd("busybox")
                 .withTag("1.24")
-                .exec(new PullImageResultCallback())
+                .start()
                 .awaitCompletion();
 
         dockerRule.getClient().createContainerCmd("busybox:1.24")
@@ -352,7 +350,7 @@ public class ListContainersCmdIT extends CmdIT {
 
         dockerRule.getClient().startContainerCmd(id).exec();
 
-        Integer status = dockerRule.getClient().waitContainerCmd(id).exec(new WaitContainerResultCallback())
+        Integer status = dockerRule.getClient().waitContainerCmd(id).start()
                 .awaitStatusCode();
 
         assertThat(status, is(42));
