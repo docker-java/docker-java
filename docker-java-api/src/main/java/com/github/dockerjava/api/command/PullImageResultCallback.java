@@ -23,7 +23,7 @@ class PullImageResultCallback extends ResultCallback.Adapter<PullResponseItem> {
     private static final Logger LOGGER = LoggerFactory.getLogger(PullImageResultCallback.class);
 
     private boolean isSwarm = false;
-    private Map<String, PullResponseItem> results = null;InspectExecResponse
+    private Map<String, PullResponseItem> results = null;
 
     @CheckForNull
     private PullResponseItem latestItem = null;
