@@ -33,7 +33,7 @@ public class JoinSwarmCmdExecIT extends SwarmCmdIT {
     }
 
     @Test
-    public void joinSwarmAsWorker() throws DockerException {
+    public void joinSwarmAsWorker() throws Exception {
         DockerClient docker1 = startDockerInDocker();
         DockerClient docker2 = startDockerInDocker();
 
@@ -69,7 +69,7 @@ public class JoinSwarmCmdExecIT extends SwarmCmdIT {
     }
 
     @Test(expected = NotAcceptableException.class)
-    public void joinSwarmIfAlreadyInSwarm() {
+    public void joinSwarmIfAlreadyInSwarm() throws Exception {
         DockerClient docker1 = startDockerInDocker();
         DockerClient docker2 = startDockerInDocker();
 

@@ -1,26 +1,24 @@
 /*
  * Created on 21.07.2015
  */
-package com.github.dockerjava.core.command;
+package com.github.dockerjava.api.command;
 
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.PullResponseItem;
-import com.github.dockerjava.core.async.ResultCallbackTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.CheckForNull;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  *
  * @author Marcus Linke
  *
  */
-@Deprecated
-public class PullImageResultCallback extends ResultCallbackTemplate<PullImageResultCallback, PullResponseItem> {
+class PullImageResultCallback extends ResultCallback.Adapter<PullResponseItem> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PullImageResultCallback.class);
 
@@ -110,21 +108,6 @@ public class PullImageResultCallback extends ResultCallbackTemplate<PullImageRes
             checkDockerSwarmPullSuccessful();
         } else {
             checkDockerClientPullSuccessful();
-        }
-    }
-
-    /**
-     * Awaits the image to be pulled successful.
-     *
-     * @deprecated use {@link #awaitCompletion()} or {@link #awaitCompletion(long, TimeUnit)} instead
-     * @throws DockerClientException
-     *             if the pull fails.
-     */
-    public void awaitSuccess() {
-        try {
-            awaitCompletion();
-        } catch (InterruptedException e) {
-            throw new DockerClientException("", e);
         }
     }
 }

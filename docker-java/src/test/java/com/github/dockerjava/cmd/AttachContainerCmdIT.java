@@ -1,11 +1,11 @@
 package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.StreamType;
-import com.github.dockerjava.core.command.AttachContainerResultCallback;
 import org.junit.Assume;
 import org.junit.Rule;
 import org.junit.Test;
@@ -207,7 +207,7 @@ public class AttachContainerCmdIT extends CmdIT {
     }
 
     /**
-     * {@link AttachContainerResultCallback#onComplete()} should be called immediately after
+     * {@link ResultCallback#onComplete()} should be called immediately after
      * container exit. It was broken for Netty and TLS connection.
      */
     @Test
@@ -222,11 +222,11 @@ public class AttachContainerCmdIT extends CmdIT {
 
         CountDownLatch gotLine = new CountDownLatch(1);
         try (
-                AttachContainerResultCallback resultCallback = dockerClient.attachContainerCmd(container.getId())
+                ResultCallback.Adapter<Frame> resultCallback = dockerClient.attachContainerCmd(container.getId())
                         .withStdOut(true)
                         .withStdErr(true)
                         .withFollowStream(true)
-                        .exec(new AttachContainerTestCallback() {
+                        .exec(new ResultCallback.Adapter<Frame>() {
                             @Override
                             public void onNext(Frame item) {
                                 LOG.info("Got frame: {}", item);
@@ -255,7 +255,7 @@ public class AttachContainerCmdIT extends CmdIT {
         }
     }
 
-    public static class AttachContainerTestCallback extends AttachContainerResultCallback {
+    public static class AttachContainerTestCallback extends ResultCallback.Adapter<Frame> {
         private StringBuffer log = new StringBuffer();
 
         @Override

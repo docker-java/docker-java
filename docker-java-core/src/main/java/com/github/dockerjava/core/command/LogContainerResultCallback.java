@@ -14,6 +14,7 @@ import com.github.dockerjava.core.async.ResultCallbackTemplate;
  * @author Marcus Linke
  *
  */
+@Deprecated
 public class LogContainerResultCallback extends ResultCallbackTemplate<LogContainerResultCallback, Frame> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogContainerResultCallback.class);

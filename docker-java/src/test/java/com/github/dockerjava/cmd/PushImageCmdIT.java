@@ -5,8 +5,6 @@ import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.core.RemoteApiVersion;
-import com.github.dockerjava.core.command.PullImageResultCallback;
-import com.github.dockerjava.core.command.PushImageResultCallback;
 import com.github.dockerjava.junit.PrivateRegistryRule;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -59,7 +57,7 @@ public class PushImageCmdIT extends CmdIT {
         // we have to block until image is pushed
         dockerRule.getClient().pushImageCmd(imgName)
                 .withAuthConfig(authConfig)
-                .exec(new PushImageResultCallback())
+                .start()
                 .awaitCompletion(30, TimeUnit.SECONDS);
 
         LOG.info("Removing image: {}", imageId);
@@ -68,7 +66,7 @@ public class PushImageCmdIT extends CmdIT {
         dockerRule.getClient().pullImageCmd(imgName)
                 .withTag("latest")
                 .withAuthConfig(authConfig)
-                .exec(new PullImageResultCallback())
+                .start()
                 .awaitCompletion(30, TimeUnit.SECONDS);
     }
 
@@ -83,7 +81,7 @@ public class PushImageCmdIT extends CmdIT {
         }
 
         dockerRule.getClient().pushImageCmd(username + "/xxx")
-                .exec(new PushImageResultCallback())
+                .start()
                 .awaitCompletion(30, TimeUnit.SECONDS); // exclude infinite await sleep
 
     }
@@ -95,7 +93,7 @@ public class PushImageCmdIT extends CmdIT {
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pushImageCmd(imgName)
                 .withAuthConfig(authConfig)
-                .exec(new PushImageResultCallback())
+                .start()
                 .awaitCompletion(30, TimeUnit.SECONDS);
     }
 
@@ -107,7 +105,7 @@ public class PushImageCmdIT extends CmdIT {
 
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pushImageCmd(imgName)
-                .exec(new PushImageResultCallback())
+                .start()
                 .awaitCompletion(30, TimeUnit.SECONDS);
     }
 
@@ -126,7 +124,7 @@ public class PushImageCmdIT extends CmdIT {
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pushImageCmd(imgName)
                 .withAuthConfig(invalidAuthConfig)
-                .exec(new PushImageResultCallback())
+                .start()
                 .awaitCompletion(30, TimeUnit.SECONDS);
     }
 }

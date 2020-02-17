@@ -6,9 +6,6 @@ import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
-import com.github.dockerjava.core.command.BuildImageResultCallback;
-import com.github.dockerjava.core.command.PushImageResultCallback;
-import com.github.dockerjava.core.command.WaitContainerResultCallback;
 import com.github.dockerjava.core.util.CompressArchiveUtil;
 import com.github.dockerjava.junit.PrivateRegistryRule;
 import net.jcip.annotations.NotThreadSafe;
@@ -96,7 +93,7 @@ public class BuildImageCmdIT extends CmdIT {
         dockerRule.getClient().buildImageCmd(baseDir)
                 .withNoCache(true)
                 .withTag("docker-java-onbuild")
-                .exec(new BuildImageResultCallback())
+                .start()
                 .awaitImageId();
 
         baseDir = fileFromBuildTestResource("ONBUILD/child");
@@ -149,7 +146,7 @@ public class BuildImageCmdIT extends CmdIT {
     }
 
     private String execBuild(BuildImageCmd buildImageCmd) throws Exception {
-        String imageId = buildImageCmd.withNoCache(true).exec(new BuildImageResultCallback()).awaitImageId();
+        String imageId = buildImageCmd.withNoCache(true).start().awaitImageId();
 
         // Create container based on image
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(imageId).exec();
@@ -158,7 +155,7 @@ public class BuildImageCmdIT extends CmdIT {
         assertThat(container.getId(), not(isEmptyString()));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
-        dockerRule.getClient().waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback()).awaitStatusCode();
+        dockerRule.getClient().waitContainerCmd(container.getId()).start().awaitStatusCode();
 
         return dockerRule.containerLog(container.getId());
     }
@@ -167,21 +164,21 @@ public class BuildImageCmdIT extends CmdIT {
     public void dockerignoreDockerfileIgnored() throws Exception {
         File baseDir = fileFromBuildTestResource("dockerignore/DockerfileIgnored");
 
-        dockerRule.getClient().buildImageCmd(baseDir).withNoCache(true).exec(new BuildImageResultCallback()).awaitImageId();
+        dockerRule.getClient().buildImageCmd(baseDir).withNoCache(true).start().awaitImageId();
     }
 
     @Test
     public void dockerignoreDockerfileNotIgnored() throws Exception {
         File baseDir = fileFromBuildTestResource("dockerignore/DockerfileNotIgnored");
 
-        dockerRule.getClient().buildImageCmd(baseDir).withNoCache(true).exec(new BuildImageResultCallback()).awaitImageId();
+        dockerRule.getClient().buildImageCmd(baseDir).withNoCache(true).start().awaitImageId();
     }
 
     @Test(expected = DockerClientException.class)
     public void dockerignoreInvalidDockerIgnorePattern() throws Exception {
         File baseDir = fileFromBuildTestResource("dockerignore/InvalidDockerignorePattern");
 
-        dockerRule.getClient().buildImageCmd(baseDir).withNoCache(true).exec(new BuildImageResultCallback()).awaitImageId();
+        dockerRule.getClient().buildImageCmd(baseDir).withNoCache(true).start().awaitImageId();
     }
 
     @Test
@@ -217,7 +214,7 @@ public class BuildImageCmdIT extends CmdIT {
         dockerRule.getClient().pushImageCmd(imgName)
                 .withTag("latest")
                 .withAuthConfig(authConfig)
-                .exec(new PushImageResultCallback())
+                .start()
                 .awaitCompletion(30, TimeUnit.SECONDS);
 
         dockerRule.getClient().removeImageCmd(imgName)
@@ -233,7 +230,7 @@ public class BuildImageCmdIT extends CmdIT {
         String imageId = dockerRule.getClient().buildImageCmd(baseDir)
                 .withNoCache(true)
                 .withBuildAuthConfigs(authConfigurations)
-                .exec(new BuildImageResultCallback())
+                .start()
                 .awaitImageId();
 
         inspectImageResponse = dockerRule.getClient().inspectImageCmd(imageId).exec();
@@ -246,7 +243,7 @@ public class BuildImageCmdIT extends CmdIT {
         File baseDir = fileFromBuildTestResource("buildArgs");
 
         String imageId = dockerRule.getClient().buildImageCmd(baseDir).withNoCache(true).withBuildArg("testArg", "abc !@#$%^&*()_+")
-                .exec(new BuildImageResultCallback())
+                .start()
                 .awaitImageId();
 
         InspectImageResponse inspectImageResponse = dockerRule.getClient().inspectImageCmd(imageId).exec();
@@ -264,7 +261,7 @@ public class BuildImageCmdIT extends CmdIT {
 
         String imageId = dockerRule.getClient().buildImageCmd(baseDir).withNoCache(true)
                 .withLabels(Collections.singletonMap("test", "abc"))
-                .exec(new BuildImageResultCallback())
+                .start()
                 .awaitImageId();
 
         InspectImageResponse inspectImageResponse = dockerRule.getClient().inspectImageCmd(imageId).exec();
@@ -284,7 +281,7 @@ public class BuildImageCmdIT extends CmdIT {
         String imageId = dockerRule.getClient().buildImageCmd(baseDir).withNoCache(true)
                 .withTag("fallback-when-withTags-not-called")
                 .withTags(new HashSet<>(Arrays.asList("docker-java-test:tag1", "docker-java-test:tag2")))
-                .exec(new BuildImageResultCallback())
+                .start()
                 .awaitImageId();
 
         InspectImageResponse inspectImageResponse = dockerRule.getClient().inspectImageCmd(imageId).exec();
@@ -301,14 +298,14 @@ public class BuildImageCmdIT extends CmdIT {
 
         File baseDir1 = fileFromBuildTestResource("CacheFrom/test1");
         String imageId1 = dockerRule.getClient().buildImageCmd(baseDir1)
-                .exec(new BuildImageResultCallback())
+                .start()
                 .awaitImageId();
         InspectImageResponse inspectImageResponse1 = dockerRule.getClient().inspectImageCmd(imageId1).exec();
         assertThat(inspectImageResponse1, not(nullValue()));
 
         File baseDir2 = fileFromBuildTestResource("CacheFrom/test2");
         String imageId2 = dockerRule.getClient().buildImageCmd(baseDir2).withCacheFrom(new HashSet<>(Arrays.asList(imageId1)))
-                .exec(new BuildImageResultCallback())
+                .start()
                 .awaitImageId();
         InspectImageResponse inspectImageResponse2 = dockerRule.getClient().inspectImageCmd(imageId2).exec();
         assertThat(inspectImageResponse2, not(nullValue()));
@@ -325,7 +322,7 @@ public class BuildImageCmdIT extends CmdIT {
         String imageId = dockerRule.getClient()
                 .buildImageCmd(baseDir)
                 .withQuiet(true)
-                .exec(new BuildImageResultCallback())
+                .start()
                 .awaitImageId();
 
         InspectImageResponse inspectImageResponse = dockerRule.getClient().inspectImageCmd(imageId).exec();

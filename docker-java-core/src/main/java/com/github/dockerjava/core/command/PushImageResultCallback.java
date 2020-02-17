@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
  * @author Marcus Linke
  *
  */
+@Deprecated
 public class PushImageResultCallback extends ResultCallbackTemplate<PushImageResultCallback, PushResponseItem> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PushImageResultCallback.class);

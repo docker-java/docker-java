@@ -12,7 +12,6 @@ import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.cmd.CmdIT;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
-import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.junit.category.Integration;
 import com.github.dockerjava.junit.category.SwarmModeIntegration;
 import org.junit.After;
@@ -68,7 +67,7 @@ public abstract class SwarmCmdIT extends CmdIT {
         numberOfDockersInDocker = 0;
     }
 
-    protected DockerClient startDockerInDocker() {
+    protected DockerClient startDockerInDocker() throws InterruptedException {
         numberOfDockersInDocker++;
         String name = DOCKER_IN_DOCKER_CONTAINER_PREFIX + numberOfDockersInDocker;
 
@@ -92,8 +91,8 @@ public abstract class SwarmCmdIT extends CmdIT {
 
         dockerRule.getClient().pullImageCmd(DOCKER_IN_DOCKER_IMAGE_REPOSITORY)
                 .withTag(DOCKER_IN_DOCKER_IMAGE_TAG)
-                .exec(new PullImageResultCallback())
-                .awaitSuccess();
+                .start()
+                .awaitCompletion();
 
         int port = PORT_START + (numberOfDockersInDocker - 1);
         CreateContainerResponse response = dockerRule.getClient()

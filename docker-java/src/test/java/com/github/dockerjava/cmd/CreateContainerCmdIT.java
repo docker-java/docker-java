@@ -1,5 +1,6 @@
 package com.github.dockerjava.cmd;
 
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.CreateNetworkResponse;
 import com.github.dockerjava.api.command.CreateVolumeResponse;
@@ -24,7 +25,6 @@ import com.github.dockerjava.api.model.RestartPolicy;
 import com.github.dockerjava.api.model.Ulimit;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.VolumesFrom;
-import com.github.dockerjava.core.command.LogContainerResultCallback;
 import com.github.dockerjava.junit.DockerAssume;
 import com.github.dockerjava.junit.PrivateRegistryRule;
 import com.github.dockerjava.utils.TestUtils;
@@ -938,7 +938,7 @@ public class CreateContainerCmdIT extends CmdIT {
         assertThat(log, is("exit trapped 10"));
     }
 
-    private static class StringBuilderLogReader extends LogContainerResultCallback {
+    private static class StringBuilderLogReader extends ResultCallback.Adapter<Frame> {
         public StringBuilder builder;
 
         public StringBuilderLogReader(StringBuilder builder) {
