@@ -60,7 +60,7 @@
 		<jersey.version>2.30</jersey.version>
 		<jackson.version>2.9.8</jackson.version>
 		<jackson-jaxrs.version>2.9.8</jackson-jaxrs.version>
-		<httpclient.version>4.5.6</httpclient.version><!-- 4.5.1-4.5.2 broken -->
+		<httpclient.version>4.5.11</httpclient.version><!-- 4.5.1-4.5.2 broken -->
 		<commons-compress.version>1.19</commons-compress.version>
 		<commons-codec.version>1.11</commons-codec.version>
 		<commons-io.version>2.6</commons-io.version>
