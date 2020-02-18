@@ -177,6 +177,12 @@ public class DefaultDockerClientConfigTest {
                 null);
     }
 
+    @Test()
+    public void testNpipeHostScheme() throws Exception {
+        new DefaultDockerClientConfig(URI.create("npipe://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
+                null);
+    }
+
     @Test
     public void withDockerTlsVerify() throws Exception {
         DefaultDockerClientConfig.Builder builder = new DefaultDockerClientConfig.Builder();
