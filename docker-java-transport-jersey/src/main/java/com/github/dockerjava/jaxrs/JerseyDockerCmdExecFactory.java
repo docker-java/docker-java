@@ -139,15 +139,20 @@ public class JerseyDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
             protocol = "http";
         }
 
-        if (!originalUri.getScheme().equals("unix")) {
+        switch (originalUri.getScheme()) {
+            case "unix":
+                break;
+            case "tcp":
+                try {
+                    originalUri = new URI(originalUri.toString().replaceFirst("tcp", protocol));
+                } catch (URISyntaxException e) {
+                    throw new RuntimeException(e);
+                }
 
-            try {
-                originalUri = new URI(originalUri.toString().replaceFirst("tcp", protocol));
-            } catch (URISyntaxException e) {
-                throw new RuntimeException(e);
-            }
-
-            configureProxy(clientConfig, originalUri, protocol);
+                configureProxy(clientConfig, originalUri, protocol);
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported protocol scheme: " + originalUri);
         }
 
         connManager = new PoolingHttpClientConnectionManager(getSchemeRegistry(
