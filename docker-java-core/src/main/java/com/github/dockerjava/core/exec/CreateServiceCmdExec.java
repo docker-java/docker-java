@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.dockerjava.api.command.CreateServiceCmd;
 import com.github.dockerjava.api.command.CreateServiceResponse;
 import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.InvocationBuilder;
 import com.github.dockerjava.core.MediaType;
 import com.github.dockerjava.core.WebTarget;
 import org.slf4j.Logger;
@@ -23,8 +24,11 @@ public class CreateServiceCmdExec extends AbstrSyncDockerCmdExec<CreateServiceCm
         WebTarget webResource = getBaseResource().path("/services/create");
 
         LOGGER.trace("POST: {} ", webResource);
-        return webResource.request().accept(MediaType.APPLICATION_JSON)
-                .post(command.getServiceSpec(), new TypeReference<CreateServiceResponse>() {
-                });
+
+        InvocationBuilder builder = resourceWithOptionalAuthConfig(command.getAuthConfig(), webResource.request())
+                .accept(MediaType.APPLICATION_JSON);
+
+        return builder.post(command.getServiceSpec(), new TypeReference<CreateServiceResponse>() {
+        });
     }
 }
