@@ -18,7 +18,7 @@ import java.util.Map;
  * @author Marcus Linke
  *
  */
-class PullImageResultCallback extends ResultCallback.Adapter<PullResponseItem> {
+public class PullImageResultCallback extends ResultCallback.Adapter<PullResponseItem> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PullImageResultCallback.class);
 
