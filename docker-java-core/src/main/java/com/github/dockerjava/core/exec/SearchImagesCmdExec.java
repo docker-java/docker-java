@@ -41,7 +41,4 @@ public class SearchImagesCmdExec extends AbstrSyncDockerCmdExec<SearchImagesCmd,
         return webResource.request().accept(MediaType.APPLICATION_JSON).get(new TypeReference<List<SearchItem>>() {
         });
     }
-
-
-
 }

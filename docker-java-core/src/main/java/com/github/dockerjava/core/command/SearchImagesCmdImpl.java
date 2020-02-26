@@ -55,5 +55,4 @@ public class SearchImagesCmdImpl extends AbstrDockerCmd<SearchImagesCmd, List<Se
         this.limit = limit;
         return this;
     }
-
 }
