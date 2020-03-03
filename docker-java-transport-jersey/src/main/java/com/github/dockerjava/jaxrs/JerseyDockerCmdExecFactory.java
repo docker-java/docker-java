@@ -50,10 +50,6 @@ public class JerseyDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
 
     private JerseyWebTarget baseResource;
 
-    private Integer readTimeout = null;
-
-    private Integer connectTimeout = null;
-
     private Integer maxTotalConnections = null;
 
     private Integer maxPerRouteConnections = null;
@@ -260,16 +256,6 @@ public class JerseyDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
         checkNotNull(client, "Factory not initialized. You probably forgot to call init()!");
         client.close();
         connManager.close();
-    }
-
-    public JerseyDockerCmdExecFactory withReadTimeout(Integer readTimeout) {
-        this.readTimeout = readTimeout;
-        return this;
-    }
-
-    public JerseyDockerCmdExecFactory withConnectTimeout(Integer connectTimeout) {
-        this.connectTimeout = connectTimeout;
-        return this;
     }
 
     public JerseyDockerCmdExecFactory withMaxTotalConnections(Integer maxTotalConnections) {

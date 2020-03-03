@@ -150,6 +150,9 @@ public abstract class AbstractDockerCmdExecFactory implements DockerCmdExecFacto
 
     private DockerClientConfig dockerClientConfig;
 
+    protected Integer connectTimeout;
+    protected Integer readTimeout;
+
     protected DockerClientConfig getDockerClientConfig() {
         checkNotNull(dockerClientConfig,
                 "Factor not initialized, dockerClientConfig not set. You probably forgot to call init()!");
@@ -170,6 +173,22 @@ public abstract class AbstractDockerCmdExecFactory implements DockerCmdExecFacto
     @Override
     public CopyArchiveToContainerCmd.Exec createCopyArchiveToContainerCmdExec() {
         return new CopyArchiveToContainerCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    /**
+     * Configure connection timeout in milliseconds
+     */
+    public AbstractDockerCmdExecFactory withConnectTimeout(Integer connectTimeout) {
+        this.connectTimeout = connectTimeout;
+        return this;
+    }
+
+    /**
+     * Configure read timeout in milliseconds
+     */
+    public AbstractDockerCmdExecFactory withReadTimeout(Integer readTimeout) {
+        this.readTimeout = readTimeout;
+        return this;
     }
 
     @Override
