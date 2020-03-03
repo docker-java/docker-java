@@ -75,7 +75,7 @@ You can find the latest development version including javadoc and source files o
 
 ## Documentation
 
-For code examples, please look at the [Wiki](https://github.com/docker-java/docker-java/wiki) or [Test cases](https://github.com/docker-java/docker-java/tree/master/src/test/java/com/github/dockerjava/core/command "Test cases")
+For code examples, please look at the [Wiki](https://github.com/docker-java/docker-java/wiki) or [Test cases](https://github.com/docker-java/docker-java/tree/master/docker-java/src/test/java/com/github/dockerjava/core/command "Test cases")
 
 ## Configuration
 
