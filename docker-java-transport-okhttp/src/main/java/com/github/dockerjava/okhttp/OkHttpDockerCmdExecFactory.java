@@ -20,6 +20,8 @@ import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
+import static java.util.Objects.nonNull;
+
 public class OkHttpDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
 
     private static final String SOCKET_SUFFIX = ".socket";
@@ -34,9 +36,15 @@ public class OkHttpDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
     public void init(DockerClientConfig dockerClientConfig) {
         super.init(dockerClientConfig);
 
-        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
-            .readTimeout(0, TimeUnit.SECONDS)
-            .retryOnConnectionFailure(true);
+        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
+        if (nonNull(readTimeout)) {
+            clientBuilder.readTimeout(readTimeout, TimeUnit.MILLISECONDS);
+        }
+        if (nonNull(connectTimeout)) {
+            clientBuilder.connectTimeout(connectTimeout, TimeUnit.MILLISECONDS);
+        }
+
+        clientBuilder.retryOnConnectionFailure(true);
 
         URI dockerHost = dockerClientConfig.getDockerHost();
         switch (dockerHost.getScheme()) {
