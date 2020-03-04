@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>docker-java-api</artifactId>
-	<packaging>bundle</packaging>
+	<packaging>jar</packaging>
 
 	<name>docker-java-api</name>
 	<url>https://github.com/docker-java/docker-java</url>
