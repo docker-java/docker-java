@@ -35,7 +35,9 @@ public abstract class CmdIT {
         OKHTTP(true) {
             @Override
             public DockerCmdExecFactory createExecFactory() {
-                return new OkHttpDockerCmdExecFactory().withConnectTimeout(30 * 1000);
+                return new OkHttpDockerCmdExecFactory()
+                    .withConnectTimeout(60 * 1000)
+                    .withReadTimeout(0);
             }
         };
 

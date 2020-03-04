@@ -1,8 +1,8 @@
 package com.github.dockerjava.cmd;
 
+import com.github.dockerjava.api.async.ResultCallbackTemplate;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Statistics;
-import com.github.dockerjava.core.async.ResultCallbackTemplate;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +28,10 @@ public class StatsCmdIT extends CmdIT {
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         boolean gotStats = false;
-        try (StatsCallbackTest statsCallback = dockerRule.getClient().statsCmd(container.getId()).exec(
-                new StatsCallbackTest(countDownLatch))) {
+        try (StatsCallbackTest statsCallback = dockerRule.getClient()
+            .statsCmd(container.getId())
+            .exec(new StatsCallbackTest(countDownLatch))) {
+
             assertTrue(countDownLatch.await(10, TimeUnit.SECONDS));
             gotStats = statsCallback.gotStats();
 
@@ -53,7 +55,7 @@ public class StatsCmdIT extends CmdIT {
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         try (StatsCallbackTest statsCallback = dockerRule.getClient().statsCmd(container.getId()).withNoStream(true).exec(
-                new StatsCallbackTest(countDownLatch))) {
+            new StatsCallbackTest(countDownLatch))) {
             countDownLatch.await(5, TimeUnit.SECONDS);
 
             LOG.info("Stop stats collection");
@@ -67,7 +69,7 @@ public class StatsCmdIT extends CmdIT {
         assertEquals("Expected stats called only once", countDownLatch.getCount(), NUM_STATS - 1);
     }
 
-    private class StatsCallbackTest extends ResultCallbackTemplate<StatsCallbackTest, Statistics> {
+    private static class StatsCallbackTest extends ResultCallbackTemplate<StatsCallbackTest, Statistics> {
         private final CountDownLatch countDownLatch;
 
         private Boolean gotStats = false;
