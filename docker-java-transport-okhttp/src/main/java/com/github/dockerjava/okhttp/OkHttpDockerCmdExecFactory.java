@@ -46,6 +46,7 @@ public class OkHttpDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
         if (nonNull(readTimeout)) {
             clientBuilder.readTimeout(readTimeout, TimeUnit.MILLISECONDS);
         } else {
+            // default is too small for most docker commands, set default like in jersey/netty
             clientBuilder.readTimeout(0, TimeUnit.MILLISECONDS);
         }
 
