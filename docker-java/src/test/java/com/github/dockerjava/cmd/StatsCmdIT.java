@@ -54,8 +54,9 @@ public class StatsCmdIT extends CmdIT {
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
-        try (StatsCallbackTest statsCallback = dockerRule.getClient().statsCmd(container.getId()).withNoStream(true).exec(
-            new StatsCallbackTest(countDownLatch))) {
+        try (StatsCallbackTest statsCallback = dockerRule.getClient().statsCmd(container.getId())
+            .withNoStream(true)
+            .exec(new StatsCallbackTest(countDownLatch))) {
             countDownLatch.await(5, TimeUnit.SECONDS);
 
             LOG.info("Stop stats collection");

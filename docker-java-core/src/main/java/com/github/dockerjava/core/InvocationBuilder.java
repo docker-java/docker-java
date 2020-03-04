@@ -69,7 +69,7 @@ public interface InvocationBuilder {
         }
 
         @Override
-        public void     close() throws IOException {
+        public void close() throws IOException {
             try {
                 super.close();
             } finally {
