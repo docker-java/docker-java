@@ -67,11 +67,9 @@ public class OkHttpDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
                 String socketPath = dockerHost.getPath();
 
                 if ("unix".equals(dockerHost.getScheme())) {
-                    clientBuilder
-                        .socketFactory(new UnixSocketFactory(socketPath));
+                    clientBuilder.socketFactory(new UnixSocketFactory(socketPath));
                 } else {
-                    clientBuilder
-                        .socketFactory(new NamedPipeSocketFactory(socketPath));
+                    clientBuilder.socketFactory(new NamedPipeSocketFactory(socketPath));
                 }
 
                 clientBuilder
