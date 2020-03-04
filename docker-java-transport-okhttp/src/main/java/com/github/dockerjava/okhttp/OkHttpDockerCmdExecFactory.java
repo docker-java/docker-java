@@ -29,8 +29,14 @@ public class OkHttpDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
     private ObjectMapper objectMapper;
 
     private OkHttpClient okHttpClient;
+    private Boolean retryOnConnectionFailure;
 
     private HttpUrl baseUrl;
+
+    public OkHttpDockerCmdExecFactory setRetryOnConnectionFailure(Boolean retryOnConnectionFailure) {
+        this.retryOnConnectionFailure = retryOnConnectionFailure;
+        return this;
+    }
 
     @Override
     public void init(DockerClientConfig dockerClientConfig) {
@@ -39,12 +45,19 @@ public class OkHttpDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
         if (nonNull(readTimeout)) {
             clientBuilder.readTimeout(readTimeout, TimeUnit.MILLISECONDS);
+        } else {
+            clientBuilder.readTimeout(0, TimeUnit.MILLISECONDS);
         }
+
         if (nonNull(connectTimeout)) {
             clientBuilder.connectTimeout(connectTimeout, TimeUnit.MILLISECONDS);
         }
 
-        clientBuilder.retryOnConnectionFailure(true);
+        if (nonNull(retryOnConnectionFailure)) {
+            clientBuilder.retryOnConnectionFailure(retryOnConnectionFailure);
+        } else {
+            clientBuilder.retryOnConnectionFailure(true);
+        }
 
         URI dockerHost = dockerClientConfig.getDockerHost();
         switch (dockerHost.getScheme()) {
@@ -80,8 +93,7 @@ public class OkHttpDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
                 SSLContext sslContext = sslConfig.getSSLContext();
                 if (sslContext != null) {
                     isSSL = true;
-                    clientBuilder
-                            .sslSocketFactory(sslContext.getSocketFactory(), new TrustAllX509TrustManager());
+                    clientBuilder.sslSocketFactory(sslContext.getSocketFactory(), new TrustAllX509TrustManager());
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -96,14 +108,14 @@ public class OkHttpDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
             case "unix":
             case "npipe":
                 baseUrlBuilder = new HttpUrl.Builder()
-                        .scheme("http")
-                        .host("docker" + SOCKET_SUFFIX);
+                    .scheme("http")
+                    .host("docker" + SOCKET_SUFFIX);
                 break;
             case "tcp":
                 baseUrlBuilder = new HttpUrl.Builder()
-                        .scheme(isSSL ? "https" : "http")
-                        .host(dockerHost.getHost())
-                        .port(dockerHost.getPort());
+                    .scheme(isSSL ? "https" : "http")
+                    .host(dockerHost.getHost())
+                    .port(dockerHost.getPort());
                 break;
             default:
                 baseUrlBuilder = HttpUrl.get(dockerHost.toString()).newBuilder();
