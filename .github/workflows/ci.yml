@@ -12,5 +12,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 8
+    - name: Prepare ws
+      run: rm -f "docker-java/src/test/resources/logback.xml" && mv "docker-java/src/test/resources/travis-logback.xml" "docker-java/src/test/resources/logback-test.xml"
     - name: Build with Maven
       run: ./mvnw --no-transfer-progress verify
