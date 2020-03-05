@@ -79,6 +79,7 @@ public class RemoteApiVersion implements Serializable {
 
     public static final RemoteApiVersion VERSION_1_26 = RemoteApiVersion.create(1, 26);
     public static final RemoteApiVersion VERSION_1_27 = RemoteApiVersion.create(1, 27);
+    public static final RemoteApiVersion VERSION_1_28 = RemoteApiVersion.create(1, 28);
     public static final RemoteApiVersion VERSION_1_29 = RemoteApiVersion.create(1, 29);
     public static final RemoteApiVersion VERSION_1_30 = RemoteApiVersion.create(1, 30);
     public static final RemoteApiVersion VERSION_1_31 = RemoteApiVersion.create(1, 31);

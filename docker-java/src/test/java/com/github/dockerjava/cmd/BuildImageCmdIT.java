@@ -31,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_21;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_23;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_27;
+import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_28;
 import static com.github.dockerjava.junit.DockerMatchers.isGreaterOrEqual;
 import static org.apache.commons.io.FileUtils.writeStringToFile;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -328,6 +329,23 @@ public class BuildImageCmdIT extends CmdIT {
         InspectImageResponse inspectImageResponse = dockerRule.getClient().inspectImageCmd(imageId).exec();
         assertThat(inspectImageResponse, not(nullValue()));
         assertThat(inspectImageResponse.getId(), endsWith(imageId));
+        LOG.info("Image Inspect: {}", inspectImageResponse.toString());
+    }
+
+    @Test
+    public void extraHosts() {
+        assumeThat(dockerRule, isGreaterOrEqual(VERSION_1_28));
+
+        File baseDir = fileFromBuildTestResource("labels");
+
+        String imageId = dockerRule.getClient()
+                .buildImageCmd(baseDir)
+                .withExtraHost("host1")
+                .start()
+                .awaitImageId();
+
+        InspectImageResponse inspectImageResponse = dockerRule.getClient().inspectImageCmd(imageId).exec();
+        assertThat(inspectImageResponse, not(nullValue()));
         LOG.info("Image Inspect: {}", inspectImageResponse.toString());
     }
 

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -71,6 +72,8 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     private String platform;
 
     private String target;
+
+    private Set<String> extraHosts;
 
     public BuildImageCmdImpl(BuildImageCmd.Exec exec) {
         super(exec);
@@ -216,6 +219,11 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @Override
     public Long getShmsize() {
         return shmsize;
+    }
+
+    @Override
+    public Set<String> getExtraHosts() {
+        return extraHosts;
     }
 
     // setters
@@ -399,6 +407,15 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @Override
     public BuildImageCmd withTarget(String target) {
         this.target = target;
+        return this;
+    }
+
+    @Override
+    public BuildImageCmd withExtraHost(String extraHost) {
+        if (this.extraHosts == null) {
+            this.extraHosts = new HashSet<>();
+        }
+        this.extraHosts.add(extraHost);
         return this;
     }
 
