@@ -15,7 +15,12 @@ public enum InternetProtocol {
     /**
      * The <i>User Datagram Protocol</i>
      */
-    UDP;
+    UDP,
+
+    /**
+     * The <i>Stream Control Transmission Protocol</i>
+     */
+    SCTP;
 
     /**
      * The default {@link InternetProtocol}: {@link #TCP}
