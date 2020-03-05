@@ -5,6 +5,7 @@ package com.github.dockerjava.api.model;
  *
  * @see #TCP
  * @see #UDP
+ * @see #SCTP
  */
 public enum InternetProtocol {
     /**
