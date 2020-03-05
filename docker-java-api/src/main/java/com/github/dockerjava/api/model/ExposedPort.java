@@ -1,13 +1,15 @@
 package com.github.dockerjava.api.model;
 
+import static com.github.dockerjava.api.model.InternetProtocol.TCP;
+import static com.github.dockerjava.api.model.InternetProtocol.UDP;
+import static com.github.dockerjava.api.model.InternetProtocol.SCTP;
+
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.github.dockerjava.api.model.Ports.Binding;
 import lombok.EqualsAndHashCode;
-
-import static com.github.dockerjava.api.model.InternetProtocol.*;
 
 /**
  * Represents a container port that Docker exposes to external clients. The port is defined by its {@link #getPort() port number} and an
