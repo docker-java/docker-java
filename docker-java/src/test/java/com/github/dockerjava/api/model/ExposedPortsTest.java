@@ -19,7 +19,7 @@ public class ExposedPortsTest {
         );
         String json = JSONTestHelper.getMapper().writeValueAsString(ports);
 
-        assertThat(json, is("{\"80/tcp\":{},\"123/udp\":{},\"3868/sctp\":{}}"));
+        assertThat(json, is("{\"80/tcp\":{},\"3868/sctp\":{},\"123/udp\":{}}"));
     }
 
     @Test
