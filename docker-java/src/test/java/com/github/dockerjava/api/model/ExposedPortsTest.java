@@ -14,21 +14,23 @@ public class ExposedPortsTest {
     public void usesToJson() throws Exception {
         ExposedPorts ports = new ExposedPorts(
                 new ExposedPort(80),
-                new ExposedPort(123, InternetProtocol.UDP)
+                new ExposedPort(123, InternetProtocol.UDP),
+                new ExposedPort(3868, InternetProtocol.SCTP)
         );
         String json = JSONTestHelper.getMapper().writeValueAsString(ports);
 
-        assertThat(json, is("{\"80/tcp\":{},\"123/udp\":{}}"));
+        assertThat(json, is("{\"80/tcp\":{},\"123/udp\":{},\"3868/sctp\":{}}"));
     }
 
     @Test
     public void usesFromJson() throws Exception {
-        ExposedPorts ports = JSONTestHelper.getMapper().readValue("{\"80/tcp\":{},\"123/udp\":{}}", ExposedPorts.class);
+        ExposedPorts ports = JSONTestHelper.getMapper().readValue("{\"80/tcp\":{},\"123/udp\":{},\"3868/sctp\":{}}", ExposedPorts.class);
 
         assertThat(ports, notNullValue());
         assertThat(ports.getExposedPorts(), arrayContaining(
                 new ExposedPort(80),
-                new ExposedPort(123, InternetProtocol.UDP)
+                new ExposedPort(123, InternetProtocol.UDP),
+                new ExposedPort(3868, InternetProtocol.SCTP)
         ));
     }
 }
