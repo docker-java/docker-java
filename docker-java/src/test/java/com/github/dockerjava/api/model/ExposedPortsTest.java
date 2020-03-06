@@ -1,10 +1,13 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.github.dockerjava.test.serdes.JSONTestHelper;
+import org.apache.commons.compress.utils.Lists;
 import org.junit.Test;
 
-import java.util.Map;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map.Entry;
 
 import static org.hamcrest.Matchers.arrayContainingInAnyOrder;
 import static org.hamcrest.Matchers.notNullValue;
@@ -20,14 +23,17 @@ public class ExposedPortsTest {
                 new ExposedPort(3868, InternetProtocol.SCTP)
         );
         String json = JSONTestHelper.getMapper().writeValueAsString(ports);
-        Map<String, Object> jsonObject = JSONTestHelper.getMapper().readValue(json, new TypeReference<Map<String, Object>>() {});
-        String[] jsonObjectKeys = jsonObject.keySet().toArray(new String[0]);
+        List<Entry<String, JsonNode>> jsonEntries = getJsonEntries(json);
 
-        String expectedJson = "{\"80/tcp\":{},\"123/udp\":{},\"3868/sctp\":{}}";
-        Map<String, Object> expectedJsonObject = JSONTestHelper.getMapper().readValue(expectedJson, new TypeReference<Map<String, Object>>() {});
-        String[] expectedJsonObjectKeys = expectedJsonObject.keySet().toArray(new String[0]);
+        String jsonExpected = "{\"80/tcp\":{},\"123/udp\":{},\"3868/sctp\":{}}";
+        List<Entry<String, JsonNode>> jsonEntriesExpected = getJsonEntries(jsonExpected);
 
-        assertThat(jsonObjectKeys, arrayContainingInAnyOrder(expectedJsonObjectKeys));
+        assertThat(jsonEntries.toArray(), arrayContainingInAnyOrder(jsonEntriesExpected.toArray()));
+    }
+
+    private List<Entry<String, JsonNode>> getJsonEntries(String json) throws Exception {
+        JsonNode jsonNode = JSONTestHelper.getMapper().readValue(json, JsonNode.class);
+        return Lists.newArrayList(jsonNode.fields());
     }
 
     @Test
