@@ -11,6 +11,9 @@ public enum PortConfigProtocol {
     TCP,
 
     @JsonProperty("udp")
-    UDP
+    UDP,
+
+    @JsonProperty("sctp")
+    SCTP
 
 }
