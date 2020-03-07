@@ -58,6 +58,7 @@ import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
+import com.github.dockerjava.api.command.SaveImagesCmd;
 import com.github.dockerjava.api.command.SearchImagesCmd;
 import com.github.dockerjava.api.command.StartContainerCmd;
 import com.github.dockerjava.api.command.StatsCmd;
@@ -133,6 +134,7 @@ import com.github.dockerjava.core.command.RemoveVolumeCmdImpl;
 import com.github.dockerjava.core.command.RenameContainerCmdImpl;
 import com.github.dockerjava.core.command.RestartContainerCmdImpl;
 import com.github.dockerjava.core.command.SaveImageCmdImpl;
+import com.github.dockerjava.core.command.SaveImagesCmdImpl;
 import com.github.dockerjava.core.command.SearchImagesCmdImpl;
 import com.github.dockerjava.core.command.StartContainerCmdImpl;
 import com.github.dockerjava.core.command.StatsCmdImpl;
@@ -281,6 +283,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public SaveImageCmd saveImageCmd(String name) {
         return new SaveImageCmdImpl(getDockerCmdExecFactory().createSaveImageCmdExec(), name);
+    }
+
+    @Override
+    public SaveImagesCmd saveImagesCmd() {
+        return new SaveImagesCmdImpl(getDockerCmdExecFactory().createSaveImagesCmdExec());
     }
 
     @Override

@@ -63,6 +63,7 @@ import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
+import com.github.dockerjava.api.command.SaveImagesCmd;
 import com.github.dockerjava.api.command.SearchImagesCmd;
 import com.github.dockerjava.api.command.StartContainerCmd;
 import com.github.dockerjava.api.command.StatsCmd;
@@ -213,6 +214,11 @@ public class TestDockerCmdExecFactory implements DockerCmdExecFactory, DockerCli
     @Override
     public SaveImageCmd.Exec createSaveImageCmdExec() {
         return delegate.createSaveImageCmdExec();
+    }
+
+    @Override
+    public SaveImagesCmd.Exec createSaveImagesCmdExec() {
+        return delegate.createSaveImagesCmdExec();
     }
 
     @Override
