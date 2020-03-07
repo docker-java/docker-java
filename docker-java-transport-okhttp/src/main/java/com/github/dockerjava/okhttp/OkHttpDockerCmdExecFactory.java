@@ -20,6 +20,8 @@ import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
+import static java.util.Objects.nonNull;
+
 public class OkHttpDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
 
     private static final String SOCKET_SUFFIX = ".socket";
@@ -27,16 +29,36 @@ public class OkHttpDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
     private ObjectMapper objectMapper;
 
     private OkHttpClient okHttpClient;
+    private Boolean retryOnConnectionFailure;
 
     private HttpUrl baseUrl;
+
+    public OkHttpDockerCmdExecFactory setRetryOnConnectionFailure(Boolean retryOnConnectionFailure) {
+        this.retryOnConnectionFailure = retryOnConnectionFailure;
+        return this;
+    }
 
     @Override
     public void init(DockerClientConfig dockerClientConfig) {
         super.init(dockerClientConfig);
 
-        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
-            .readTimeout(0, TimeUnit.SECONDS)
-            .retryOnConnectionFailure(true);
+        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
+        if (nonNull(readTimeout)) {
+            clientBuilder.readTimeout(readTimeout, TimeUnit.MILLISECONDS);
+        } else {
+            // default is too small for most docker commands, set default like in jersey/netty
+            clientBuilder.readTimeout(0, TimeUnit.MILLISECONDS);
+        }
+
+        if (nonNull(connectTimeout)) {
+            clientBuilder.connectTimeout(connectTimeout, TimeUnit.MILLISECONDS);
+        }
+
+        if (nonNull(retryOnConnectionFailure)) {
+            clientBuilder.retryOnConnectionFailure(retryOnConnectionFailure);
+        } else {
+            clientBuilder.retryOnConnectionFailure(true);
+        }
 
         URI dockerHost = dockerClientConfig.getDockerHost();
         switch (dockerHost.getScheme()) {
@@ -45,11 +67,9 @@ public class OkHttpDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
                 String socketPath = dockerHost.getPath();
 
                 if ("unix".equals(dockerHost.getScheme())) {
-                    clientBuilder
-                        .socketFactory(new UnixSocketFactory(socketPath));
+                    clientBuilder.socketFactory(new UnixSocketFactory(socketPath));
                 } else {
-                    clientBuilder
-                        .socketFactory(new NamedPipeSocketFactory(socketPath));
+                    clientBuilder.socketFactory(new NamedPipeSocketFactory(socketPath));
                 }
 
                 clientBuilder
@@ -72,8 +92,7 @@ public class OkHttpDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
                 SSLContext sslContext = sslConfig.getSSLContext();
                 if (sslContext != null) {
                     isSSL = true;
-                    clientBuilder
-                            .sslSocketFactory(sslContext.getSocketFactory(), new TrustAllX509TrustManager());
+                    clientBuilder.sslSocketFactory(sslContext.getSocketFactory(), new TrustAllX509TrustManager());
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -88,14 +107,14 @@ public class OkHttpDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
             case "unix":
             case "npipe":
                 baseUrlBuilder = new HttpUrl.Builder()
-                        .scheme("http")
-                        .host("docker" + SOCKET_SUFFIX);
+                    .scheme("http")
+                    .host("docker" + SOCKET_SUFFIX);
                 break;
             case "tcp":
                 baseUrlBuilder = new HttpUrl.Builder()
-                        .scheme(isSSL ? "https" : "http")
-                        .host(dockerHost.getHost())
-                        .port(dockerHost.getPort());
+                    .scheme(isSSL ? "https" : "http")
+                    .host(dockerHost.getHost())
+                    .port(dockerHost.getPort());
                 break;
             default:
                 baseUrlBuilder = HttpUrl.get(dockerHost.toString()).newBuilder();

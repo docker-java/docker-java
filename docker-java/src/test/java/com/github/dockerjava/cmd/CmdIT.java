@@ -23,19 +23,19 @@ public abstract class CmdIT {
         NETTY(true) {
             @Override
             public DockerCmdExecFactory createExecFactory() {
-                return new NettyDockerCmdExecFactory().withConnectTimeout(10 * 1000);
+                return new NettyDockerCmdExecFactory().withConnectTimeout(30 * 1000);
             }
         },
         JERSEY(false) {
             @Override
             public DockerCmdExecFactory createExecFactory() {
-                return new JerseyDockerCmdExecFactory().withConnectTimeout(10 * 1000);
+                return new JerseyDockerCmdExecFactory().withConnectTimeout(30 * 1000);
             }
         },
         OKHTTP(true) {
             @Override
             public DockerCmdExecFactory createExecFactory() {
-                return new OkHttpDockerCmdExecFactory();
+                return new OkHttpDockerCmdExecFactory().withConnectTimeout(30 * 1000);
             }
         };
 

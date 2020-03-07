@@ -1,6 +1,7 @@
 package com.github.dockerjava.netty;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Objects.nonNull;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -58,7 +59,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
  * @see https://docs.docker.com/engine/reference/api/docker_remote_api_v1.21/#attach-to-a-container
  * @see https://docs.docker.com/engine/reference/api/docker_remote_api_v1.21/#exec-start
  */
-public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory implements DockerCmdExecFactory {
+public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
 
     private static String threadPrefix = "dockerjava-netty";
 
@@ -87,10 +88,6 @@ public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory impl
             return channel;
         }
     };
-
-    private Integer connectTimeout = null;
-
-    private Integer readTimeout = null;
 
     @Override
     public void init(DockerClientConfig dockerClientConfig) {
@@ -292,29 +289,13 @@ public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory impl
         eventLoopGroup.shutdownGracefully();
     }
 
-    /**
-     * Configure connection timeout in milliseconds
-     */
-    public NettyDockerCmdExecFactory withConnectTimeout(Integer connectTimeout) {
-        this.connectTimeout = connectTimeout;
-        return this;
-    }
-
-    /**
-     * Configure read timeout in milliseconds
-     */
-    public NettyDockerCmdExecFactory withReadTimeout(Integer readTimeout) {
-        this.readTimeout = readTimeout;
-        return this;
-    }
-
     private <T extends Channel> T configure(T channel) {
         ChannelConfig channelConfig = channel.config();
 
-        if (connectTimeout != null) {
+        if (nonNull(connectTimeout)) {
             channelConfig.setConnectTimeoutMillis(connectTimeout);
         }
-        if (readTimeout != null) {
+        if (nonNull(readTimeout)) {
             channel.pipeline().addLast("readTimeoutHandler", new ReadTimeoutHandler());
         }
 
