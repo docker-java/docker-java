@@ -1,16 +1,15 @@
 package com.github.dockerjava.api.command;
 
+import com.github.dockerjava.api.model.AuthConfigurations;
+import com.github.dockerjava.api.model.BuildResponseItem;
+
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.Map;
 import java.util.Set;
-
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
-
-import com.github.dockerjava.api.model.AuthConfigurations;
-import com.github.dockerjava.api.model.BuildResponseItem;
 
 /**
  * Build an image from Dockerfile.
@@ -232,7 +231,7 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
     /**
      * @since {@link RemoteApiVersion#VERSION_1_28}
      */
-    BuildImageCmd withExtraHost(String extraHost);
+    BuildImageCmd withExtraHosts(Set<String> extraHosts);
 
     @Override
     default BuildImageResultCallback start() {

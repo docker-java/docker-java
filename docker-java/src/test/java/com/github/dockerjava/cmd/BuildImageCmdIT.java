@@ -340,7 +340,7 @@ public class BuildImageCmdIT extends CmdIT {
 
         String imageId = dockerRule.getClient()
                 .buildImageCmd(baseDir)
-                .withExtraHost("host1")
+                .withExtraHosts(new HashSet<>(Arrays.asList("host1")))
                 .start()
                 .awaitImageId();
 
