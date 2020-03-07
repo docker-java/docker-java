@@ -59,6 +59,7 @@ import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
+import com.github.dockerjava.api.command.SaveImagesCmd;
 import com.github.dockerjava.api.command.SearchImagesCmd;
 import com.github.dockerjava.api.command.StartContainerCmd;
 import com.github.dockerjava.api.command.StatsCmd;
@@ -130,6 +131,7 @@ import com.github.dockerjava.core.exec.RemoveVolumeCmdExec;
 import com.github.dockerjava.core.exec.RenameContainerCmdExec;
 import com.github.dockerjava.core.exec.RestartContainerCmdExec;
 import com.github.dockerjava.core.exec.SaveImageCmdExec;
+import com.github.dockerjava.core.exec.SaveImagesCmdExec;
 import com.github.dockerjava.core.exec.SearchImagesCmdExec;
 import com.github.dockerjava.core.exec.StartContainerCmdExec;
 import com.github.dockerjava.core.exec.StatsCmdExec;
@@ -205,6 +207,11 @@ public abstract class AbstractDockerCmdExecFactory implements DockerCmdExecFacto
     @Override
     public SaveImageCmd.Exec createSaveImageCmdExec() {
         return new SaveImageCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public SaveImagesCmd.Exec createSaveImagesCmdExec() {
+        return new SaveImagesCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
