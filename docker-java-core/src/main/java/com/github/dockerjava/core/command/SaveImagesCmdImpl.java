@@ -26,9 +26,6 @@ public class SaveImagesCmdImpl extends AbstrDockerCmd<SaveImagesCmd, InputStream
 
         @Override
         public String asString() {
-            if (Strings.isNullOrEmpty(tag)) {
-                return name;
-            }
             return name + ":" + tag;
         }
 
