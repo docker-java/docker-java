@@ -2,7 +2,6 @@ package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.command.SaveImagesCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
 import javax.annotation.Nonnull;
