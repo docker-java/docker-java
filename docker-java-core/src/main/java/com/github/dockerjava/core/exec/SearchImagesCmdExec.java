@@ -23,18 +23,12 @@ public class SearchImagesCmdExec extends AbstrSyncDockerCmdExec<SearchImagesCmd,
 
     @Override
     protected List<SearchItem> execute(SearchImagesCmd command) {
-        WebTarget webResource = null;
+        WebTarget webResource = getBaseResource().path("/images/search")
+            .queryParam("term", command.getTerm());
 
-        Integer limit = command.getLimit();
-        if (limit == null) {
-            webResource = getBaseResource()
-                .path("/images/search")
-                .queryParam("term", command.getTerm());
-        } else {
-            webResource = getBaseResource()
-                .path("/images/search")
-                .queryParam("term", command.getTerm())
-                .queryParam("limit", command.getLimit());
+        if (command.getLimit() != null) {
+            webResource = webResource.queryParam("limit", command.getLimit());
+
         }
 
         LOGGER.trace("GET: {}", webResource);
