@@ -12,10 +12,6 @@
 
 Java API client for [Docker](http://docs.docker.io/ "Docker")
 
-<b>The current implementation is based on Jersey 2.x and therefore classpath incompatible with older Jersey 1.x dependent libraries!</b>
-
-Developer forum for [docker-java](https://groups.google.com/forum/?#!forum/docker-java-dev "docker-java")
-
 [Changelog](https://github.com/docker-java/docker-java/blob/master/CHANGELOG.md)<br/>
 [Wiki](https://github.com/docker-java/docker-java/wiki)
 
@@ -23,7 +19,7 @@ Developer forum for [docker-java](https://groups.google.com/forum/?#!forum/docke
 
 ###### Prerequisites:
 
-* Java min 1.7
+* Java min 1.8
 * Maven 3
 
 Build and run integration tests as follows:
@@ -52,7 +48,14 @@ For secure tls (https) communication:
     DOCKER_CERT_PATH=/Users/marcus/.docker/machine/machines/docker-1.11.2
 
 ### Latest release version
-Supports a subset of the Docker Remote API [v1.37](https://docs.docker.com/engine/api/v1.37/), Docker Server version since 1.12.6
+[Maven repository modules](https://mvnrepository.com/artifact/com.github.docker-java)
+
+Since 3.2.0 project provides 3 transports:
+- `docker-java-transport-jersey` (doesn't support streams)
+- `docker-java-transport-netty`
+- `docker-java-transport-okhttp`
+
+For backward compatibility `docker-java` module keeping dependency only on jersey and netty transports. 
 
     <dependency>
           <groupId>com.github.docker-java</groupId>
@@ -139,4 +142,3 @@ In `$HOME/.docker-java.properties`
 ##### Class Path
 
 In the class path at `/docker-java.properties`
-    
