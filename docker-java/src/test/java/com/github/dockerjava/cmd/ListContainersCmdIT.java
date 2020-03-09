@@ -26,7 +26,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.isOneOf;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
@@ -73,7 +73,7 @@ public class ListContainersCmdIT extends CmdIT {
                 .withLabels(testLabel)
                 .withCmd("echo")
                 .exec();
-        assertThat(container1.getId(), not(isEmptyString()));
+        assertThat(container1.getId(), not(is(emptyString())));
 
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container1.getId()).exec();
         assertThat(inspectContainerResponse.getConfig().getImage(), is(equalTo(DEFAULT_IMAGE)));
@@ -101,7 +101,7 @@ public class ListContainersCmdIT extends CmdIT {
         }
 
         Container container2 = filteredContainers.get(0);
-        assertThat(container2.getCommand(), not(isEmptyString()));
+        assertThat(container2.getCommand(), not(is(emptyString())));
         assertThat(container2.getImage(), startsWith(DEFAULT_IMAGE));
     }
 
@@ -120,7 +120,7 @@ public class ListContainersCmdIT extends CmdIT {
         assertThat(filteredContainersByMap.size(), is(1));
 
         Container container3 = filteredContainersByMap.get(0);
-        assertThat(container3.getCommand(), not(isEmptyString()));
+        assertThat(container3.getCommand(), not(is(emptyString())));
         assertThat(container3.getImage(), startsWith(DEFAULT_IMAGE));
 
         // List by string label
@@ -132,7 +132,7 @@ public class ListContainersCmdIT extends CmdIT {
         assertThat(filteredContainers.size(), is(1));
 
         container3 = filteredContainers.get(0);
-        assertThat(container3.getCommand(), not(isEmptyString()));
+        assertThat(container3.getCommand(), not(is(emptyString())));
         assertThat(container3.getImage(), startsWith(DEFAULT_IMAGE));
         assertEquals(testLabel.get("test"), container3.getLabels().get("test"));
     }

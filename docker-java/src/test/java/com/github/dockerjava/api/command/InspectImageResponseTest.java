@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
@@ -84,7 +84,7 @@ public class InspectImageResponseTest {
         assertThat(inspectImage, notNullValue());
         assertThat(inspectImage.getArch(), is("amd64"));
         assertThat(inspectImage.getAuthor(), is("hack@worldticket.net"));
-        assertThat(inspectImage.getComment(), isEmptyString());
+        assertThat(inspectImage.getComment(), is(emptyString()));
 
         assertThat(inspectImage.getConfig(), notNullValue());
         assertThat(inspectImage.getConfig(), equalTo(config));
@@ -98,7 +98,7 @@ public class InspectImageResponseTest {
         assertThat(inspectImage.getDockerVersion(), is("0.8.1"));
         assertThat(inspectImage.getId(), is("sha256:ee45fe0d1fcdf1a0f9c2d1e36c6f4b3202bbb2032f14d7c9312b27bfcf6aee24"));
         assertThat(inspectImage.getOs(), is("linux"));
-        assertThat(inspectImage.getParent(), isEmptyString());
+        assertThat(inspectImage.getParent(), is(emptyString()));
         assertThat(inspectImage.getSize(), is(0L));
 
         assertThat(inspectImage.getRepoTags(), hasSize(1));

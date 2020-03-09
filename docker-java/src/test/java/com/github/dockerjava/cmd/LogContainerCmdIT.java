@@ -11,10 +11,11 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -31,7 +32,7 @@ public class LogContainerCmdIT extends CmdIT {
                 .exec();
 
         LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId())
             .exec();
@@ -62,7 +63,7 @@ public class LogContainerCmdIT extends CmdIT {
                 .exec();
 
         LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId())
             .exec();
@@ -123,7 +124,7 @@ public class LogContainerCmdIT extends CmdIT {
                 .exec();
 
         LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
@@ -172,7 +173,7 @@ public class LogContainerCmdIT extends CmdIT {
                 .exec();
 
         LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         int timestamp = (int) (System.currentTimeMillis() / 1000);
 

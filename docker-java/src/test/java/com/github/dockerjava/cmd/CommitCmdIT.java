@@ -16,7 +16,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
 import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
@@ -32,7 +32,7 @@ public class CommitCmdIT extends CmdIT {
                 .exec();
 
         LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         LOG.info("Committing container: {}", container.toString());
@@ -62,7 +62,7 @@ public class CommitCmdIT extends CmdIT {
                 .exec();
 
         LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         Integer status = dockerRule.getClient().waitContainerCmd(container.getId())

@@ -82,7 +82,9 @@ public final class InfoRegistryConfig implements Serializable {
      */
     @EqualsAndHashCode
     @ToString
-    public static final class IndexConfig {
+    public static final class IndexConfig implements Serializable {
+        private static final long serialVersionUID = 1L;
+
         @JsonProperty("Mirrors")
         private List<String> mirrors;
 

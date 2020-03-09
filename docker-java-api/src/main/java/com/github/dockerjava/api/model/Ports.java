@@ -107,7 +107,8 @@ public class Ports implements Serializable {
      * @see ExposedPort
      */
     @EqualsAndHashCode
-    public static class Binding {
+    public static class Binding implements Serializable {
+        private static final long serialVersionUID = 1L;
 
         /**
          * Creates a {@link Binding} for the given {@link #getHostPortSpec() port spec}, leaving the {@link #getHostIp() IP address}

@@ -18,8 +18,9 @@ import java.util.concurrent.TimeUnit;
 
 import static com.github.dockerjava.utils.TestUtils.getVersion;
 import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 
 public class PushImageCmdIT extends CmdIT {
@@ -46,7 +47,7 @@ public class PushImageCmdIT extends CmdIT {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("true").exec();
 
         LOG.info("Created container {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         LOG.info("Committing container: {}", container.toString());
         String imgName = authConfig.getRegistryAddress() + "/" + dockerRule.getKind() + "-push-latest";
