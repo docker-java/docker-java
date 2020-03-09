@@ -28,7 +28,6 @@ public class SearchImagesCmdExec extends AbstrSyncDockerCmdExec<SearchImagesCmd,
 
         if (command.getLimit() != null) {
             webResource = webResource.queryParam("limit", command.getLimit());
-
         }
 
         LOGGER.trace("GET: {}", webResource);
