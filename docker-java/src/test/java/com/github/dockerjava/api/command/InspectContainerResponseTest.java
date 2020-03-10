@@ -31,9 +31,9 @@ import static com.github.dockerjava.test.serdes.JSONSamples.testRoundTrip;
 import static com.github.dockerjava.test.serdes.JSONTestHelper.testRoundTrip;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsNot.not;
@@ -51,7 +51,7 @@ public class InspectContainerResponseTest {
     @Test
     public void roundTrip_full() throws IOException {
         InspectContainerResponse[] responses = testRoundTrip(CommandJSONSamples.inspectContainerResponse_full,
-                InspectContainerResponse[].class);
+            InspectContainerResponse[].class);
         assertEquals(1, responses.length);
         final InspectContainerResponse response = responses[0];
 
@@ -72,10 +72,10 @@ public class InspectContainerResponseTest {
         final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(InspectContainerResponse.class);
 
         final InspectContainerResponse response = testRoundTrip(RemoteApiVersion.VERSION_1_24,
-                "/containers/inspect/1.json",
-                type
+            "/containers/inspect/1.json",
+            type
         );
-        
+
         assertEquals(response.getState().getHealth().getStatus(), "healthy");
         assertEquals(response.getState().getHealth().getFailingStreak(), new Integer(0));
         assertEquals(response.getState().getHealth().getLog().size(), 2);
@@ -86,7 +86,7 @@ public class InspectContainerResponseTest {
     @Test
     public void roundTrip_1_21_full() throws IOException {
         InspectContainerResponse[] responses = testRoundTrip(CommandJSONSamples.inspectContainerResponse_full_1_21,
-                InspectContainerResponse[].class);
+            InspectContainerResponse[].class);
         assertEquals(1, responses.length);
         final InspectContainerResponse response = responses[0];
         final InspectContainerResponse.ContainerState state = response.getState();
@@ -96,13 +96,13 @@ public class InspectContainerResponseTest {
         assertThat(state.getStatus(), containsString("running"));
         assertFalse(state.getRestarting());
         assertFalse(state.getOOMKilled());
-        assertThat(state.getError(), isEmptyString());
+        assertThat(state.getError(), is(emptyString()));
     }
 
     @Test
     public void roundTrip_1_26a_full() throws IOException {
         InspectContainerResponse[] responses = testRoundTrip(CommandJSONSamples.inspectContainerResponse_full_1_26a,
-                InspectContainerResponse[].class);
+            InspectContainerResponse[].class);
 
         assertEquals(1, responses.length);
         final InspectContainerResponse response = responses[0];
@@ -118,7 +118,7 @@ public class InspectContainerResponseTest {
     @Test
     public void roundTrip_1_26b_full() throws IOException {
         InspectContainerResponse[] responses = testRoundTrip(CommandJSONSamples.inspectContainerResponse_full_1_26b,
-                InspectContainerResponse[].class);
+            InspectContainerResponse[].class);
 
         assertEquals(1, responses.length);
         final InspectContainerResponse response = responses[0];
@@ -142,8 +142,8 @@ public class InspectContainerResponseTest {
         final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(InspectContainerResponse.class);
 
         final InspectContainerResponse response = testRoundTrip(RemoteApiVersion.VERSION_1_38,
-                "/containers/inspect/lcow.json",
-                type
+            "/containers/inspect/lcow.json",
+            type
         );
 
         assertThat(response, notNullValue());
@@ -157,7 +157,7 @@ public class InspectContainerResponseTest {
         assertThat(response.getGraphDriver(), notNullValue());
         assertThat(response.getGraphDriver().getName(), is("windowsfilter"));
         assertThat(response.getGraphDriver().getData(), is(new GraphData().withDir(
-                "C:\\ProgramData\\Docker\\windowsfilter\\35da02ca897bd378ee52be3066c847fee396ba1a28a00b4be36f42c6686bf556"
+            "C:\\ProgramData\\Docker\\windowsfilter\\35da02ca897bd378ee52be3066c847fee396ba1a28a00b4be36f42c6686bf556"
         )));
 
         assertThat(response.getHostConfig(), notNullValue());
@@ -165,23 +165,23 @@ public class InspectContainerResponseTest {
 
         assertThat(response.getImageId(), is("sha256:1381511ec0122f197b6abff5bc0692bef19943ddafd6680eff41197afa3a6dda"));
         assertThat(response.getLogPath(), is(
-                "C:\\ProgramData\\Docker\\containers\\35da02ca897bd378ee52be3066c847fee396ba1a28a00b4be36f42c6686bf556" +
-                        "\\35da02ca897bd378ee52be3066c847fee396ba1a28a00b4be36f42c6686bf556-json.log"
+            "C:\\ProgramData\\Docker\\containers\\35da02ca897bd378ee52be3066c847fee396ba1a28a00b4be36f42c6686bf556" +
+                "\\35da02ca897bd378ee52be3066c847fee396ba1a28a00b4be36f42c6686bf556-json.log"
         ));
         assertThat(response.getName(), is("/cranky_clarke"));
 
         assertThat(response.getNetworkSettings(), notNullValue());
         assertThat(response.getNetworkSettings().getNetworks(), is(Collections.singletonMap("nat",
-                new ContainerNetwork()
-                        .withEndpointId("493b77d6fe7e3b92435b1eb01461fde669781330deb84a9cbada360db8997ebc")
-                        .withGateway("172.17.18.1")
-                        .withGlobalIPv6Address("")
-                        .withGlobalIPv6PrefixLen(0)
-                        .withIpv4Address("172.17.18.123")
-                        .withIpPrefixLen(16)
-                        .withIpV6Gateway("")
-                        .withMacAddress("00:aa:ff:cf:dd:09")
-                        .withNetworkID("398c0e206dd677ed4a6566f9de458311f5767d8c7a8b963275490ab64c5d10a7")
+            new ContainerNetwork()
+                .withEndpointId("493b77d6fe7e3b92435b1eb01461fde669781330deb84a9cbada360db8997ebc")
+                .withGateway("172.17.18.1")
+                .withGlobalIPv6Address("")
+                .withGlobalIPv6PrefixLen(0)
+                .withIpv4Address("172.17.18.123")
+                .withIpPrefixLen(16)
+                .withIpV6Gateway("")
+                .withMacAddress("00:aa:ff:cf:dd:09")
+                .withNetworkID("398c0e206dd677ed4a6566f9de458311f5767d8c7a8b963275490ab64c5d10a7")
         )));
 
         assertThat(response.getPath(), is("cmd"));

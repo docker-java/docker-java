@@ -27,7 +27,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -57,7 +57,7 @@ public class AttachContainerCmdIT extends CmdIT {
                 .exec();
 
         LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
@@ -104,7 +104,7 @@ public class AttachContainerCmdIT extends CmdIT {
                 .exec();
 
         LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
@@ -140,7 +140,7 @@ public class AttachContainerCmdIT extends CmdIT {
         CreateContainerResponse container = dockerClient.createContainerCmd(imageId).withTty(true).exec();
 
         LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
@@ -181,7 +181,7 @@ public class AttachContainerCmdIT extends CmdIT {
                 .exec();
 
         LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerClient.startContainerCmd(container.getId()).exec();
 

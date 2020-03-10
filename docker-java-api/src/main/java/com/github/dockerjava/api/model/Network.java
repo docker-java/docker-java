@@ -94,7 +94,8 @@ public class Network implements Serializable {
 
     @EqualsAndHashCode
     @ToString
-    public static class ContainerNetworkConfig {
+    public static class ContainerNetworkConfig implements Serializable {
+        private static final long serialVersionUID = 1L;
 
         @JsonProperty("EndpointID")
         private String endpointId;
@@ -127,7 +128,8 @@ public class Network implements Serializable {
 
     @EqualsAndHashCode
     @ToString
-    public static class Ipam {
+    public static class Ipam implements Serializable {
+        private static final long serialVersionUID = 1L;
 
         @JsonProperty("Driver")
         private String driver;
@@ -165,7 +167,8 @@ public class Network implements Serializable {
             return this;
         }
 
-        public static class Config {
+        public static class Config implements Serializable {
+            private static final long serialVersionUID = 1L;
 
             @JsonProperty("Subnet")
             private String subnet;

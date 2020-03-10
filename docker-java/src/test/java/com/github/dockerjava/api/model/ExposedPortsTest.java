@@ -5,22 +5,21 @@ import com.github.dockerjava.test.serdes.JSONTestHelper;
 import org.apache.commons.compress.utils.Lists;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map.Entry;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayContainingInAnyOrder;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
 
 public class ExposedPortsTest {
 
     @Test
     public void usesToJson() throws Exception {
         ExposedPorts ports = new ExposedPorts(
-                new ExposedPort(80),
-                new ExposedPort(123, InternetProtocol.UDP),
-                new ExposedPort(3868, InternetProtocol.SCTP)
+            new ExposedPort(80),
+            new ExposedPort(123, InternetProtocol.UDP),
+            new ExposedPort(3868, InternetProtocol.SCTP)
         );
         String json = JSONTestHelper.getMapper().writeValueAsString(ports);
         List<Entry<String, JsonNode>> jsonEntries = getJsonEntries(json);
@@ -42,9 +41,9 @@ public class ExposedPortsTest {
 
         assertThat(ports, notNullValue());
         assertThat(ports.getExposedPorts(), arrayContainingInAnyOrder(
-                new ExposedPort(80),
-                new ExposedPort(123, InternetProtocol.UDP),
-                new ExposedPort(3868, InternetProtocol.SCTP)
+            new ExposedPort(80),
+            new ExposedPort(123, InternetProtocol.UDP),
+            new ExposedPort(3868, InternetProtocol.SCTP)
         ));
     }
 }

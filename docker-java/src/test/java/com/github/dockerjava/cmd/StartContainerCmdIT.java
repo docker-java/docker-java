@@ -34,7 +34,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.startsWith;
@@ -59,7 +59,7 @@ public class StartContainerCmdIT extends CmdIT {
 
         LOG.info("Created container {}", container.toString());
 
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
 
@@ -136,7 +136,7 @@ public class StartContainerCmdIT extends CmdIT {
 
         LOG.info("Created container {}", container.toString());
 
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
@@ -158,7 +158,7 @@ public class StartContainerCmdIT extends CmdIT {
 
         LOG.info("Created container {}", container.toString());
 
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
 
@@ -188,7 +188,7 @@ public class StartContainerCmdIT extends CmdIT {
 
         LOG.info("Created container {}", container.toString());
 
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
 
@@ -227,7 +227,7 @@ public class StartContainerCmdIT extends CmdIT {
 
         LOG.info("Created container {}", container.toString());
 
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
@@ -260,7 +260,7 @@ public class StartContainerCmdIT extends CmdIT {
 
         LOG.info("Created container {}", container.toString());
 
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
     }
@@ -278,7 +278,7 @@ public class StartContainerCmdIT extends CmdIT {
                 .exec();
 
         LOG.info("Created container1 {}", container1.toString());
-        assertThat(container1.getId(), not(isEmptyString()));
+        assertThat(container1.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container1.getId()).exec();
 
@@ -287,10 +287,10 @@ public class StartContainerCmdIT extends CmdIT {
         LOG.info("Container1 Inspect: {}", inspectContainerResponse1.toString());
 
         assertThat(inspectContainerResponse1.getConfig(), is(notNullValue()));
-        assertThat(inspectContainerResponse1.getId(), not(isEmptyString()));
+        assertThat(inspectContainerResponse1.getId(), not(is(emptyString())));
         assertThat(inspectContainerResponse1.getId(), startsWith(container1.getId()));
         assertThat(inspectContainerResponse1.getName(), equalTo("/" + container1Name));
-        assertThat(inspectContainerResponse1.getImageId(), not(isEmptyString()));
+        assertThat(inspectContainerResponse1.getImageId(), not(is(emptyString())));
         assertThat(inspectContainerResponse1.getState(), is(notNullValue()));
         assertThat(inspectContainerResponse1.getState().getRunning(), is(true));
 
@@ -304,7 +304,7 @@ public class StartContainerCmdIT extends CmdIT {
                 .exec();
 
         LOG.info("Created container2 {}", container2.toString());
-        assertThat(container2.getId(), not(isEmptyString()));
+        assertThat(container2.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container2.getId()).exec();
 
@@ -313,14 +313,14 @@ public class StartContainerCmdIT extends CmdIT {
         LOG.info("Container2 Inspect: {}", inspectContainerResponse2.toString());
 
         assertThat(inspectContainerResponse2.getConfig(), is(notNullValue()));
-        assertThat(inspectContainerResponse2.getId(), not(isEmptyString()));
+        assertThat(inspectContainerResponse2.getId(), not(is(emptyString())));
         assertThat(inspectContainerResponse2.getHostConfig(), is(notNullValue()));
         assertThat(inspectContainerResponse2.getHostConfig().getLinks(), is(notNullValue()));
         assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[]{new Link(container1Name,
                 container1Name + "Link")}));
         assertThat(inspectContainerResponse2.getId(), startsWith(container2.getId()));
         assertThat(inspectContainerResponse2.getName(), equalTo("/" + container2Name));
-        assertThat(inspectContainerResponse2.getImageId(), not(isEmptyString()));
+        assertThat(inspectContainerResponse2.getImageId(), not(is(emptyString())));
         assertThat(inspectContainerResponse2.getState(), is(notNullValue()));
         assertThat(inspectContainerResponse2.getState().getRunning(), is(true));
 
@@ -339,7 +339,7 @@ public class StartContainerCmdIT extends CmdIT {
                 .exec();
 
         LOG.info("Created container1 {}", container1.toString());
-        assertThat(container1.getId(), not(isEmptyString()));
+        assertThat(container1.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container1.getId()).exec();
 
@@ -348,10 +348,10 @@ public class StartContainerCmdIT extends CmdIT {
         LOG.info("Container1 Inspect: {}", inspectContainerResponse1.toString());
 
         assertThat(inspectContainerResponse1.getConfig(), is(notNullValue()));
-        assertThat(inspectContainerResponse1.getId(), not(isEmptyString()));
+        assertThat(inspectContainerResponse1.getId(), not(is(emptyString())));
         assertThat(inspectContainerResponse1.getId(), startsWith(container1.getId()));
         assertThat(inspectContainerResponse1.getName(), equalTo("/" + container1Name));
-        assertThat(inspectContainerResponse1.getImageId(), not(isEmptyString()));
+        assertThat(inspectContainerResponse1.getImageId(), not(is(emptyString())));
         assertThat(inspectContainerResponse1.getState(), is(notNullValue()));
         assertThat(inspectContainerResponse1.getState().getRunning(), is(true));
 
@@ -365,7 +365,7 @@ public class StartContainerCmdIT extends CmdIT {
                 .exec();
 
         LOG.info("Created container2 {}", container2.toString());
-        assertThat(container2.getId(), not(isEmptyString()));
+        assertThat(container2.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container2.getId()).exec();
 
@@ -374,14 +374,14 @@ public class StartContainerCmdIT extends CmdIT {
         LOG.info("Container2 Inspect: {}", inspectContainerResponse2.toString());
 
         assertThat(inspectContainerResponse2.getConfig(), is(notNullValue()));
-        assertThat(inspectContainerResponse2.getId(), not(isEmptyString()));
+        assertThat(inspectContainerResponse2.getId(), not(is(emptyString())));
         assertThat(inspectContainerResponse2.getHostConfig(), is(notNullValue()));
         assertThat(inspectContainerResponse2.getHostConfig().getLinks(), is(notNullValue()));
         assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[]{new Link(container1Name,
                 container1Name + "Link")}));
         assertThat(inspectContainerResponse2.getId(), startsWith(container2.getId()));
         assertThat(inspectContainerResponse2.getName(), equalTo("/" + container2Name));
-        assertThat(inspectContainerResponse2.getImageId(), not(isEmptyString()));
+        assertThat(inspectContainerResponse2.getImageId(), not(is(emptyString())));
         assertThat(inspectContainerResponse2.getState(), is(notNullValue()));
         assertThat(inspectContainerResponse2.getState().getRunning(), is(true));
 
@@ -394,7 +394,7 @@ public class StartContainerCmdIT extends CmdIT {
                 .exec();
 
         LOG.info("Created container {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
@@ -402,11 +402,11 @@ public class StartContainerCmdIT extends CmdIT {
         LOG.info("Container Inspect: {}", inspectContainerResponse.toString());
 
         assertThat(inspectContainerResponse.getConfig(), is(notNullValue()));
-        assertThat(inspectContainerResponse.getId(), not(isEmptyString()));
+        assertThat(inspectContainerResponse.getId(), not(is(emptyString())));
 
         assertThat(inspectContainerResponse.getId(), startsWith(container.getId()));
 
-        assertThat(inspectContainerResponse.getImageId(), not(isEmptyString()));
+        assertThat(inspectContainerResponse.getImageId(), not(is(emptyString())));
         assertThat(inspectContainerResponse.getState(), is(notNullValue()));
 
         assertThat(inspectContainerResponse.getState().getRunning(), is(true));
@@ -438,7 +438,7 @@ public class StartContainerCmdIT extends CmdIT {
 
         LOG.info("Created container {}", container.toString());
 
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
 
@@ -461,7 +461,7 @@ public class StartContainerCmdIT extends CmdIT {
 
         LOG.info("Created container {}", container.toString());
 
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
@@ -485,7 +485,7 @@ public class StartContainerCmdIT extends CmdIT {
 
         LOG.info("Created container {}", container.toString());
 
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
@@ -507,7 +507,7 @@ public class StartContainerCmdIT extends CmdIT {
 
         LOG.info("Created container {}", container.toString());
 
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
@@ -532,7 +532,7 @@ public class StartContainerCmdIT extends CmdIT {
 
         LOG.info("Created container {}", container.toString());
 
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
@@ -556,7 +556,7 @@ public class StartContainerCmdIT extends CmdIT {
 
         LOG.info("Created container {}", container.toString());
 
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         // start container _without_any_customization_ (important!)
         dockerRule.getClient().startContainerCmd(container.getId()).exec();

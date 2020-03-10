@@ -14,7 +14,6 @@ import com.github.dockerjava.api.model.TaskSpec;
 import com.github.dockerjava.api.model.TaskState;
 import com.github.dockerjava.utils.LogContainerTestCallback;
 import org.junit.Test;
-import org.mockito.internal.matchers.Contains;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,8 +21,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.contains;
 
 public class LogSwarmObjectIT extends SwarmCmdIT {
     @Test
@@ -69,7 +69,7 @@ public class LogSwarmObjectIT extends SwarmCmdIT {
         LogContainerTestCallback loggingCallback = new LogContainerTestCallback();
         logCmd.exec(loggingCallback);
         loggingCallback.awaitCompletion(5, TimeUnit.SECONDS);
-        assertThat(loggingCallback.toString(), new Contains(messsage));
+        assertThat(loggingCallback.toString(), is(contains(messsage)));
         loggingCallback.close();
     }
 }

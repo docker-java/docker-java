@@ -51,6 +51,7 @@ public class CreateServiceCmdExecIT extends SwarmCmdIT {
 
     @Before
     public void beforeTest() throws Exception {
+        super.beforeTest();
         authConfig = REGISTRY.getAuthConfig();
     }
 

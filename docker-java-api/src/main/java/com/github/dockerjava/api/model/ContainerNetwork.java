@@ -283,7 +283,8 @@ public class ContainerNetwork implements Serializable {
     /**
      * Docker named it EndpointIPAMConfig
      */
-    public static class Ipam {
+    public static class Ipam implements Serializable {
+        private static final long serialVersionUID = 1L;
 
         @JsonProperty("IPv4Address")
         private String ipv4Address;

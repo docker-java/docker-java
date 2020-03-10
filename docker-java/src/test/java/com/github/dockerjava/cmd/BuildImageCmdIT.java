@@ -34,12 +34,13 @@ import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_27;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_28;
 import static com.github.dockerjava.junit.DockerMatchers.isGreaterOrEqual;
 import static org.apache.commons.io.FileUtils.writeStringToFile;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assume.assumeThat;
@@ -153,7 +154,7 @@ public class BuildImageCmdIT extends CmdIT {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(imageId).exec();
 
         LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
         dockerRule.getClient().waitContainerCmd(container.getId()).start().awaitStatusCode();

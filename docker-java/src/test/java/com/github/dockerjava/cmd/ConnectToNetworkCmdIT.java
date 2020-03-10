@@ -11,10 +11,10 @@ import org.junit.Test;
 
 import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
 import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -53,8 +53,8 @@ public class ConnectToNetworkCmdIT extends CmdIT {
         final String containerIp = subnetPrefix + ".100";
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withCmd("sleep", "9999")
-                .exec();
+            .withCmd("sleep", "9999")
+            .exec();
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
@@ -64,20 +64,20 @@ public class ConnectToNetworkCmdIT extends CmdIT {
         }
 
         CreateNetworkResponse network = dockerRule.getClient().createNetworkCmd()
-                .withName(networkName)
-                .withIpam(new Network.Ipam()
-                        .withConfig(new Network.Ipam.Config()
-                                .withSubnet(subnetPrefix + ".0/24")))
-                .exec();
+            .withName(networkName)
+            .withIpam(new Network.Ipam()
+                .withConfig(new Network.Ipam.Config()
+                    .withSubnet(subnetPrefix + ".0/24")))
+            .exec();
 
         dockerRule.getClient().connectToNetworkCmd()
-                .withNetworkId(network.getId())
-                .withContainerId(container.getId())
-                .withContainerNetwork(new ContainerNetwork()
-                        .withAliases("aliasName" + dockerRule.getKind())
-                        .withIpamConfig(new ContainerNetwork.Ipam()
-                                .withIpv4Address(containerIp)))
-                .exec();
+            .withNetworkId(network.getId())
+            .withContainerId(container.getId())
+            .withContainerNetwork(new ContainerNetwork()
+                .withAliases("aliasName" + dockerRule.getKind())
+                .withIpamConfig(new ContainerNetwork.Ipam()
+                    .withIpv4Address(containerIp)))
+            .exec();
 
         Network updatedNetwork = dockerRule.getClient().inspectNetworkCmd().withNetworkId(network.getId()).exec();
 
