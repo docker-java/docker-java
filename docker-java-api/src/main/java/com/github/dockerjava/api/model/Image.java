@@ -6,7 +6,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,10 +28,10 @@ public class Image implements Serializable {
     private String parentId;
 
     @JsonProperty("RepoTags")
-    private List<String> repoTags;
+    private String[] repoTags;
 
     @JsonProperty("RepoDigests")
-    private List<String> repoDigests;
+    private String[] repoDigests;
 
     @JsonProperty("Size")
     private Long size;
@@ -53,11 +52,11 @@ public class Image implements Serializable {
         return id;
     }
 
-    public List<String> getRepoTags() {
+    public String[] getRepoTags() {
         return repoTags;
     }
 
-    public List<String> getRepoDigests() {
+    public String[] getRepoDigests() {
         return repoDigests;
     }
 
