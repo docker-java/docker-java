@@ -99,7 +99,9 @@ public class OkHttpDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
             }
         }
 
-        okHttpClient = clientBuilder.build();
+        okHttpClient = clientBuilder
+            .addNetworkInterceptor(new HijackingInterceptor())
+            .build();
 
         HttpUrl.Builder baseUrlBuilder;
 

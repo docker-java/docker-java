@@ -20,7 +20,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.internal.connection.RealConnection;
 import okio.BufferedSink;
 import okio.BufferedSource;
 import okio.Okio;
@@ -29,7 +28,6 @@ import okio.Source;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -159,49 +157,13 @@ class OkHttpInvocationBuilder implements InvocationBuilder {
         try {
             request = requestBuilder
                 .post(RequestBody.create(MediaType.parse("application/json"), objectMapper.writeValueAsBytes(entity)))
+                .tag(Hijacked.class, new Hijacked(stdin))
                 .build();
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
 
-        OkHttpClient clientToUse = this.okHttpClient;
-
-        if (stdin != null) {
-            // FIXME there must be a better way of handling it
-            clientToUse = clientToUse.newBuilder()
-                .addNetworkInterceptor(chain -> {
-                    Response response = chain.proceed(chain.request());
-                    if (response.isSuccessful()) {
-                        Thread thread = new Thread(() -> {
-                            try {
-                                Field sinkField = RealConnection.class.getDeclaredField("sink");
-                                sinkField.setAccessible(true);
-
-                                try (
-                                        BufferedSink sink = (BufferedSink) sinkField.get(chain.connection());
-                                        Source source = Okio.source(stdin);
-                                ) {
-                                    while (sink.isOpen()) {
-                                        int available = stdin.available();
-                                        if (available > 0) {
-                                            sink.write(source, available);
-                                            sink.emit();
-                                        }
-                                    }
-                                }
-                            } catch (Exception e) {
-                                throw new RuntimeException(e);
-                            }
-                        });
-                        thread.start();
-                    }
-                    return response;
-                })
-                .build();
-        }
-
         executeAndStream(
-            clientToUse,
             request,
             resultCallback,
             new FramedSink(resultCallback)
@@ -268,10 +230,6 @@ class OkHttpInvocationBuilder implements InvocationBuilder {
     }
 
     protected Response execute(Request request) {
-        return execute(okHttpClient, request);
-    }
-
-    protected Response execute(OkHttpClient okHttpClient, Request request) {
         try {
             Response response = okHttpClient.newCall(request).execute();
             if (!response.isSuccessful()) {
@@ -302,20 +260,15 @@ class OkHttpInvocationBuilder implements InvocationBuilder {
         }
     }
 
-    protected <T> void executeAndStream(Request request, ResultCallback<T> callback, Consumer<BufferedSource> sourceConsumer) {
-        executeAndStream(okHttpClient, request, callback, sourceConsumer);
-    }
-
     protected <T> void executeAndStream(
-            OkHttpClient okHttpClient,
             Request request,
             ResultCallback<T> callback,
             Consumer<BufferedSource> sourceConsumer
     ) {
         Thread thread = new Thread(() -> {
             try (
-                    Response response = execute(okHttpClient, request.newBuilder().tag("streaming").build());
-                    BufferedSource source = response.body().source();
+                Response response = execute(request);
+                BufferedSource source = response.body().source();
             ) {
                 callback.onStart(() -> {
                     boolean previous = CLOSING.get();
@@ -332,7 +285,7 @@ class OkHttpInvocationBuilder implements InvocationBuilder {
             } catch (Exception e) {
                 callback.onError(e);
             }
-        }, "tc-okhttp-stream-" + Objects.hashCode(request));
+        }, "docker-java-okhttp-stream-" + Objects.hashCode(request));
         thread.setDaemon(true);
 
         thread.start();
