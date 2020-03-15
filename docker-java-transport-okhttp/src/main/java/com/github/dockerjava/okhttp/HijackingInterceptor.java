@@ -31,17 +31,15 @@ class HijackingInterceptor implements Interceptor {
 
         RealWebSocket.Streams streams = Internal.instance.exchange(response).newWebSocketStreams();
         Thread thread = new Thread(() -> {
-            try {
-                try (
-                        BufferedSink sink = streams.sink;
-                        Source source = Okio.source(inputStream);
-                ) {
-                    while (sink.isOpen()) {
-                        int available = inputStream.available();
-                        if (available > 0) {
-                            sink.write(source, available);
-                            sink.emit();
-                        }
+            try (
+                    BufferedSink sink = streams.sink;
+                    Source source = Okio.source(inputStream);
+            ) {
+                while (sink.isOpen()) {
+                    int available = inputStream.available();
+                    if (available > 0) {
+                        sink.write(source, available);
+                        sink.emit();
                     }
                 }
             } catch (Exception e) {
