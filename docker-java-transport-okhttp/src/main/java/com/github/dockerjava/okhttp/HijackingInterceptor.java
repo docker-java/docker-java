@@ -29,6 +29,10 @@ class HijackingInterceptor implements Interceptor {
 
         InputStream inputStream = hijacked.getInputStream();
 
+        if (inputStream == null) {
+            return response;
+        }
+
         RealWebSocket.Streams streams = Internal.instance.exchange(response).newWebSocketStreams();
         Thread thread = new Thread(() -> {
             try (
