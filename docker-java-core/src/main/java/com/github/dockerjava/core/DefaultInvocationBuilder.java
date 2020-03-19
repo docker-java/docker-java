@@ -29,7 +29,7 @@ class DefaultInvocationBuilder implements InvocationBuilder {
     private final DockerHttpClient dockerHttpClient;
     private final ObjectMapper objectMapper;
 
-    public DefaultInvocationBuilder(DockerHttpClient dockerHttpClient, ObjectMapper objectMapper, String path) {
+    DefaultInvocationBuilder(DockerHttpClient dockerHttpClient, ObjectMapper objectMapper, String path) {
         this.requestBuilder = DockerHttpClient.Request.builder().path(path);
         this.dockerHttpClient = dockerHttpClient;
         this.objectMapper = objectMapper;

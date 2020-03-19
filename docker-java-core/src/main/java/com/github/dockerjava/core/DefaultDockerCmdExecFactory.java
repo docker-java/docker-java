@@ -50,7 +50,7 @@ public final class DefaultDockerCmdExecFactory extends AbstractDockerCmdExecFact
 
         final SetMultimap<String, String> queryParams;
 
-        public DefaultWebTarget() {
+        DefaultWebTarget() {
             this(
                 ImmutableList.of(),
                 MultimapBuilder.hashKeys().hashSetValues().build()
