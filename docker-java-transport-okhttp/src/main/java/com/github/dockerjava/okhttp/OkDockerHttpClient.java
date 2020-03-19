@@ -159,10 +159,10 @@ public class OkDockerHttpClient implements DockerHttpClient {
 
     @Override
     public void close() throws IOException {
-        for (OkHttpClient client : new OkHttpClient[]{client, streamingClient}) {
-            client.dispatcher().cancelAll();
-            client.dispatcher().executorService().shutdown();
-            client.connectionPool().evictAll();
+        for (OkHttpClient clientToClose : new OkHttpClient[]{client, streamingClient}) {
+            clientToClose.dispatcher().cancelAll();
+            clientToClose.dispatcher().executorService().shutdown();
+            clientToClose.connectionPool().evictAll();
         }
     }
 
@@ -172,7 +172,7 @@ public class OkDockerHttpClient implements DockerHttpClient {
 
         private final okhttp3.Response response;
 
-        public OkResponse(okhttp3.Response response) {
+        OkResponse(okhttp3.Response response) {
             this.response = response;
         }
 
