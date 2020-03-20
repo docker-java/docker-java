@@ -935,7 +935,7 @@ public class CreateContainerCmdIT extends CmdIT {
                 .awaitCompletion();
 
         String log = callback.builder.toString();
-        assertThat(log, is("exit trapped 10"));
+        assertThat(log.trim(), is("exit trapped 10"));
     }
 
     private static class StringBuilderLogReader extends ResultCallback.Adapter<Frame> {
@@ -947,7 +947,7 @@ public class CreateContainerCmdIT extends CmdIT {
 
         @Override
         public void onNext(Frame item) {
-            builder.append(new String(item.getPayload()).trim());
+            builder.append(new String(item.getPayload()));
             super.onNext(item);
         }
     }

@@ -20,6 +20,8 @@ import com.github.dockerjava.core.DefaultDockerClientConfig;
  * @author Marcus Linke
  *
  */
+@SuppressWarnings("unused")
+@Deprecated
 public class JsonStreamProcessor<T> implements ResponseStreamProcessor<T> {
 
     private static final JsonFactory JSON_FACTORY = new JsonFactory();

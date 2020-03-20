@@ -251,7 +251,7 @@ class DefaultInvocationBuilder implements InvocationBuilder {
             } catch (Exception e) {
                 callback.onError(e);
             }
-        }, "docker-java-okhttp-stream-" + Objects.hashCode(request));
+        }, "docker-java-stream-" + Objects.hashCode(request));
         thread.setDaemon(true);
 
         thread.start();
