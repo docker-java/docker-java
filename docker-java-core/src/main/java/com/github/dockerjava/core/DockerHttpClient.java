@@ -2,6 +2,7 @@ package com.github.dockerjava.core;
 
 import org.immutables.value.Value;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.Closeable;
 import java.io.InputStream;
@@ -22,6 +23,18 @@ public interface DockerHttpClient extends Closeable {
 
         @Override
         void close();
+
+        @Nullable
+        default String getHeader(@Nonnull String name) {
+            for (Map.Entry<String, List<String>> entry : getHeaders().entrySet()) {
+                if (name.equalsIgnoreCase(entry.getKey())) {
+                    List<String> values = entry.getValue();
+                    return values.isEmpty() ? null : values.get(0);
+                }
+            }
+
+            return null;
+        }
     }
 
     @Value.Immutable
