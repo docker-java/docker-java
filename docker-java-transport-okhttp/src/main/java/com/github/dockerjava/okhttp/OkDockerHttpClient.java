@@ -26,7 +26,47 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class OkDockerHttpClient implements DockerHttpClient {
+public final class OkDockerHttpClient implements DockerHttpClient {
+
+    public static final class Factory {
+
+        private DockerClientConfig dockerClientConfig = null;
+
+        private Integer readTimeout = null;
+
+        private Integer connectTimeout = null;
+
+        private Boolean retryOnConnectionFailure = null;
+
+        public Factory dockerClientConfig(DockerClientConfig value) {
+            this.dockerClientConfig = value;
+            return this;
+        }
+
+        public Factory readTimeout(Integer value) {
+            this.readTimeout = value;
+            return this;
+        }
+
+        public Factory connectTimeout(Integer value) {
+            this.connectTimeout = value;
+            return this;
+        }
+
+        Factory retryOnConnectionFailure(Boolean value) {
+            this.retryOnConnectionFailure = value;
+            return this;
+        }
+
+        public OkDockerHttpClient build() {
+            return new OkDockerHttpClient(
+                dockerClientConfig,
+                readTimeout,
+                connectTimeout,
+                retryOnConnectionFailure
+            );
+        }
+    }
 
     private static final String SOCKET_SUFFIX = ".socket";
 
@@ -36,11 +76,28 @@ public class OkDockerHttpClient implements DockerHttpClient {
 
     private final HttpUrl baseUrl;
 
-    public OkDockerHttpClient(DockerClientConfig dockerClientConfig) {
+    private OkDockerHttpClient(
+        DockerClientConfig dockerClientConfig,
+        Integer readTimeout,
+        Integer connectTimeout,
+        Boolean retryOnConnectionFailure
+    ) {
         okhttp3.OkHttpClient.Builder clientBuilder = new okhttp3.OkHttpClient.Builder()
             .addNetworkInterceptor(new HijackingInterceptor())
             .readTimeout(0, TimeUnit.MILLISECONDS)
             .retryOnConnectionFailure(true);
+
+        if (readTimeout != null) {
+            clientBuilder.readTimeout(readTimeout, TimeUnit.MILLISECONDS);
+        }
+
+        if (connectTimeout != null) {
+            clientBuilder.connectTimeout(connectTimeout, TimeUnit.MILLISECONDS);
+        }
+
+        if (retryOnConnectionFailure != null) {
+            clientBuilder.retryOnConnectionFailure(retryOnConnectionFailure);
+        }
 
         URI dockerHost = dockerClientConfig.getDockerHost();
         switch (dockerHost.getScheme()) {
