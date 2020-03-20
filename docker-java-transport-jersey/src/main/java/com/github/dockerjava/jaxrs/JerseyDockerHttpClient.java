@@ -187,7 +187,7 @@ public final class JerseyDockerHttpClient implements DockerHttpClient {
             }
         }
 
-        URI originalUri = dockerClientConfig.getDockerHost();
+        URI dockerHost = dockerClientConfig.getDockerHost();
 
         SSLContext sslContext = null;
 
@@ -202,23 +202,23 @@ public final class JerseyDockerHttpClient implements DockerHttpClient {
 
         final String protocol = sslContext != null ? "https" : "http";
 
-        switch (originalUri.getScheme()) {
+        switch (dockerHost.getScheme()) {
             case "unix":
                 break;
             case "tcp":
                 try {
-                    originalUri = new URI(originalUri.toString().replaceFirst("tcp", protocol));
+                    dockerHost = new URI(dockerHost.toString().replaceFirst("tcp", protocol));
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
                 }
 
-                configureProxy(clientConfig, originalUri, protocol);
+                configureProxy(clientConfig, dockerHost, protocol);
                 break;
             default:
-                throw new IllegalArgumentException("Unsupported protocol scheme: " + originalUri);
+                throw new IllegalArgumentException("Unsupported protocol scheme: " + dockerHost);
         }
 
-        connManager = new PoolingHttpClientConnectionManager(getSchemeRegistry(originalUri, sslContext)) {
+        connManager = new PoolingHttpClientConnectionManager(getSchemeRegistry(dockerHost, sslContext)) {
 
             @Override
             public void close() {
@@ -255,7 +255,7 @@ public final class JerseyDockerHttpClient implements DockerHttpClient {
 
         client = clientBuilder.build();
 
-        this.originalUri = originalUri;
+        this.originalUri = dockerHost;
     }
 
     private URI sanitizeUrl(URI originalUri) {
@@ -352,7 +352,7 @@ public final class JerseyDockerHttpClient implements DockerHttpClient {
 
         private final javax.ws.rs.core.Response response;
 
-        public JerseyResponse(javax.ws.rs.core.Response response) {
+        JerseyResponse(javax.ws.rs.core.Response response) {
             this.response = response;
         }
 
