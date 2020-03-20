@@ -34,7 +34,7 @@ class FramedInputStreamConsumer implements Consumer<DockerHttpClient.Response> {
                 StreamType streamType = streamType(streamTypeByte);
 
                 if (streamType == StreamType.RAW) {
-                    resultCallback.onNext(new Frame(StreamType.RAW, new byte[] { (byte) streamTypeByte }));
+                    resultCallback.onNext(new Frame(StreamType.RAW, new byte[]{(byte) streamTypeByte}));
 
                     int readBytes;
                     while ((readBytes = body.read(buffer)) >= 0) {
