@@ -9,6 +9,7 @@ import com.github.dockerjava.api.command.ContainerDiffCmd;
 import com.github.dockerjava.api.command.CopyArchiveFromContainerCmd;
 import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
+import com.github.dockerjava.api.command.CreateConfigCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateImageCmd;
 import com.github.dockerjava.api.command.CreateNetworkCmd;
@@ -21,6 +22,7 @@ import com.github.dockerjava.api.command.ExecCreateCmd;
 import com.github.dockerjava.api.command.ExecStartCmd;
 import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InitializeSwarmCmd;
+import com.github.dockerjava.api.command.InspectConfigCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
@@ -31,6 +33,7 @@ import com.github.dockerjava.api.command.InspectVolumeCmd;
 import com.github.dockerjava.api.command.JoinSwarmCmd;
 import com.github.dockerjava.api.command.KillContainerCmd;
 import com.github.dockerjava.api.command.LeaveSwarmCmd;
+import com.github.dockerjava.api.command.ListConfigsCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.ListNetworksCmd;
@@ -47,6 +50,7 @@ import com.github.dockerjava.api.command.PingCmd;
 import com.github.dockerjava.api.command.PruneCmd;
 import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.command.PushImageCmd;
+import com.github.dockerjava.api.command.RemoveConfigCmd;
 import com.github.dockerjava.api.command.RemoveContainerCmd;
 import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.command.RemoveNetworkCmd;
@@ -64,6 +68,7 @@ import com.github.dockerjava.api.command.StopContainerCmd;
 import com.github.dockerjava.api.command.TagImageCmd;
 import com.github.dockerjava.api.command.TopContainerCmd;
 import com.github.dockerjava.api.command.UnpauseContainerCmd;
+import com.github.dockerjava.api.command.UpdateConfigCmd;
 import com.github.dockerjava.api.command.UpdateContainerCmd;
 import com.github.dockerjava.api.command.UpdateServiceCmd;
 import com.github.dockerjava.api.command.UpdateSwarmCmd;
@@ -72,6 +77,7 @@ import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.api.model.ConfigSpec;
 import com.github.dockerjava.api.model.Identifier;
 import com.github.dockerjava.api.model.PruneType;
 import com.github.dockerjava.api.model.SecretSpec;
@@ -434,6 +440,52 @@ public interface DockerClient extends Closeable {
      */
     RemoveSecretCmd removeSecretCmd(String secretId);
 
+    /**
+     *  Command to list all configs. Only applicable if docker runs in swarm mode.
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_30}
+     * @return command
+     */
+    ListConfigsCmd listConfigsCmd();
+
+    /**
+     * Command to create a config in a docker swarm. Only applicable if docker
+     * runs in swarm mode.
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_30}
+     * @param configSpec the config specification
+     * @return command
+     */
+    CreateConfigCmd createConfigCmd(ConfigSpec configSpec);
+
+    /**
+     * Command to remove a config in a docker swarm. Only applicable if docker
+     * runs in swarm mode
+     *
+     * @param configId config id or config name
+     * @return command
+     */
+    RemoveConfigCmd removeConfigCmd(String configId);
+
+    /**
+     * Command to update a config in a docker swarm. Only applicable if docker
+     * runs in swarm mode
+     *
+     * @param configId config id or config name
+     * @param configSpec config to change (only the Labels field can be
+     * updated).
+     * @return command
+     */
+    UpdateConfigCmd updateConfigCmd(String configId, ConfigSpec configSpec);
+
+    /**
+     * Command to inspect a config in a docker swarm. Only applicable if docker
+     * runs in swarm mode
+     *
+     * @param configId config id or config name to inspect
+     * @return command
+     */
+    InspectConfigCmd inspectConfigCmd(String configId);
 
 
     @Override

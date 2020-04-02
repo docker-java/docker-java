@@ -10,6 +10,7 @@ import com.github.dockerjava.api.command.ContainerDiffCmd;
 import com.github.dockerjava.api.command.CopyArchiveFromContainerCmd;
 import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
+import com.github.dockerjava.api.command.CreateConfigCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateImageCmd;
 import com.github.dockerjava.api.command.CreateNetworkCmd;
@@ -23,6 +24,7 @@ import com.github.dockerjava.api.command.ExecCreateCmd;
 import com.github.dockerjava.api.command.ExecStartCmd;
 import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InitializeSwarmCmd;
+import com.github.dockerjava.api.command.InspectConfigCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
@@ -33,6 +35,7 @@ import com.github.dockerjava.api.command.InspectVolumeCmd;
 import com.github.dockerjava.api.command.JoinSwarmCmd;
 import com.github.dockerjava.api.command.KillContainerCmd;
 import com.github.dockerjava.api.command.LeaveSwarmCmd;
+import com.github.dockerjava.api.command.ListConfigsCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.ListNetworksCmd;
@@ -49,6 +52,7 @@ import com.github.dockerjava.api.command.PingCmd;
 import com.github.dockerjava.api.command.PruneCmd;
 import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.command.PushImageCmd;
+import com.github.dockerjava.api.command.RemoveConfigCmd;
 import com.github.dockerjava.api.command.RemoveContainerCmd;
 import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.command.RemoveNetworkCmd;
@@ -66,6 +70,7 @@ import com.github.dockerjava.api.command.StopContainerCmd;
 import com.github.dockerjava.api.command.TagImageCmd;
 import com.github.dockerjava.api.command.TopContainerCmd;
 import com.github.dockerjava.api.command.UnpauseContainerCmd;
+import com.github.dockerjava.api.command.UpdateConfigCmd;
 import com.github.dockerjava.api.command.UpdateContainerCmd;
 import com.github.dockerjava.api.command.UpdateServiceCmd;
 import com.github.dockerjava.api.command.UpdateSwarmCmd;
@@ -73,6 +78,7 @@ import com.github.dockerjava.api.command.UpdateSwarmNodeCmd;
 import com.github.dockerjava.api.command.VersionCmd;
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.api.model.ConfigSpec;
 import com.github.dockerjava.api.model.Identifier;
 import com.github.dockerjava.api.model.PruneType;
 import com.github.dockerjava.api.model.SecretSpec;
@@ -87,6 +93,7 @@ import com.github.dockerjava.core.command.ContainerDiffCmdImpl;
 import com.github.dockerjava.core.command.CopyArchiveFromContainerCmdImpl;
 import com.github.dockerjava.core.command.CopyArchiveToContainerCmdImpl;
 import com.github.dockerjava.core.command.CopyFileFromContainerCmdImpl;
+import com.github.dockerjava.core.command.CreateConfigCmdImpl;
 import com.github.dockerjava.core.command.CreateContainerCmdImpl;
 import com.github.dockerjava.core.command.CreateImageCmdImpl;
 import com.github.dockerjava.core.command.CreateNetworkCmdImpl;
@@ -100,6 +107,7 @@ import com.github.dockerjava.core.command.ExecStartCmdImpl;
 import com.github.dockerjava.core.command.InfoCmdImpl;
 import com.github.dockerjava.core.command.InitializeSwarmCmdImpl;
 import com.github.dockerjava.core.command.InpectNetworkCmdImpl;
+import com.github.dockerjava.core.command.InspectConfigCmdImpl;
 import com.github.dockerjava.core.command.InspectContainerCmdImpl;
 import com.github.dockerjava.core.command.InspectExecCmdImpl;
 import com.github.dockerjava.core.command.InspectImageCmdImpl;
@@ -109,6 +117,7 @@ import com.github.dockerjava.core.command.InspectVolumeCmdImpl;
 import com.github.dockerjava.core.command.JoinSwarmCmdImpl;
 import com.github.dockerjava.core.command.KillContainerCmdImpl;
 import com.github.dockerjava.core.command.LeaveSwarmCmdImpl;
+import com.github.dockerjava.core.command.ListConfigsCmdImpl;
 import com.github.dockerjava.core.command.ListContainersCmdImpl;
 import com.github.dockerjava.core.command.ListImagesCmdImpl;
 import com.github.dockerjava.core.command.ListNetworksCmdImpl;
@@ -125,6 +134,7 @@ import com.github.dockerjava.core.command.PingCmdImpl;
 import com.github.dockerjava.core.command.PruneCmdImpl;
 import com.github.dockerjava.core.command.PullImageCmdImpl;
 import com.github.dockerjava.core.command.PushImageCmdImpl;
+import com.github.dockerjava.core.command.RemoveConfigCmdImpl;
 import com.github.dockerjava.core.command.RemoveContainerCmdImpl;
 import com.github.dockerjava.core.command.RemoveImageCmdImpl;
 import com.github.dockerjava.core.command.RemoveNetworkCmdImpl;
@@ -142,6 +152,7 @@ import com.github.dockerjava.core.command.StopContainerCmdImpl;
 import com.github.dockerjava.core.command.TagImageCmdImpl;
 import com.github.dockerjava.core.command.TopContainerCmdImpl;
 import com.github.dockerjava.core.command.UnpauseContainerCmdImpl;
+import com.github.dockerjava.core.command.UpdateConfigCmdImpl;
 import com.github.dockerjava.core.command.UpdateContainerCmdImpl;
 import com.github.dockerjava.core.command.UpdateServiceCmdImpl;
 import com.github.dockerjava.core.command.UpdateSwarmCmdImpl;
@@ -626,6 +637,31 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public void close() throws IOException {
         getDockerCmdExecFactory().close();
+    }
+
+    @Override
+    public ListConfigsCmd listConfigsCmd() {
+        return new ListConfigsCmdImpl(getDockerCmdExecFactory().listConfigsCmdExec());
+    }
+
+    @Override
+    public CreateConfigCmd createConfigCmd(ConfigSpec configSpec) {
+        return new CreateConfigCmdImpl(getDockerCmdExecFactory().createCreateConfigCmdExec(), configSpec);
+    }
+
+    @Override
+    public RemoveConfigCmd removeConfigCmd(String configId) {
+        return new RemoveConfigCmdImpl(getDockerCmdExecFactory().createRemoveConfigCmdExec(), configId);
+    }
+
+    @Override
+    public UpdateConfigCmd updateConfigCmd(String configId, ConfigSpec configSpec) {
+        return new UpdateConfigCmdImpl(getDockerCmdExecFactory().createUpdateConfigCmdExec(), configId, configSpec);
+    }
+
+    @Override
+    public InspectConfigCmd inspectConfigCmd(String configId) {
+        return new InspectConfigCmdImpl(getDockerCmdExecFactory().createInspectConfigCmdExec(), configId);
     }
 
 }
