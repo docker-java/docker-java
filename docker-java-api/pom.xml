@@ -55,64 +55,6 @@
 					</instructions>
 				</configuration>
 			</plugin>
-
-			<plugin>
-				<!-- use with "mvn -DskipTests clean verify" -->
-				<groupId>com.github.siom79.japicmp</groupId>
-				<artifactId>japicmp-maven-plugin</artifactId>
-				<version>0.14.3</version>
-				<configuration>
-					<oldVersion>
-						<dependency>
-							<groupId>com.github.docker-java</groupId>
-							<artifactId>docker-java</artifactId>
-							<version>3.1.5</version>
-							<type>jar</type>
-						</dependency>
-					</oldVersion>
-					<newVersion>
-						<file>
-							<path>${project.build.directory}/${project.artifactId}-${project.version}.jar</path>
-						</file>
-					</newVersion>
-					<parameter>
-						<breakBuildOnBinaryIncompatibleModifications>true</breakBuildOnBinaryIncompatibleModifications>
-						<accessModifier>public</accessModifier>
-						<onlyBinaryIncompatible>true</onlyBinaryIncompatible>
-						<includes>
-							<include>com.github.dockerjava.api</include>
-						</includes>
-						<excludes>
-							<!-- TODO? -->
-							<exclude>com.github.dockerjava.api.model.*$Serializer</exclude>
-							<exclude>com.github.dockerjava.api.model.*$Deserializer</exclude>
-							<!-- Known 3.2.0 breaking changes: -->
-							<exclude>com.github.dockerjava.api.command.DockerCmdExecFactory#init(com.github.dockerjava.core.DockerClientConfig)</exclude>
-							<exclude>com.github.dockerjava.api.model.Identifier#tag</exclude>
-						</excludes>
-						<overrideCompatibilityChangeParameters>
-							<overrideCompatibilityChangeParameter>
-								<compatibilityChange>METHOD_NEW_DEFAULT</compatibilityChange>
-								<binaryCompatible>true</binaryCompatible>
-								<sourceCompatible>true</sourceCompatible>
-							</overrideCompatibilityChangeParameter>
-							<overrideCompatibilityChangeParameter>
-								<compatibilityChange>METHOD_ABSTRACT_NOW_DEFAULT</compatibilityChange>
-								<binaryCompatible>true</binaryCompatible>
-								<sourceCompatible>true</sourceCompatible>
-							</overrideCompatibilityChangeParameter>
-						</overrideCompatibilityChangeParameters>
-					</parameter>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>verify</phase>
-						<goals>
-							<goal>cmp</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
 </project>

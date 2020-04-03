@@ -229,6 +229,54 @@
 					<artifactId>maven-bundle-plugin</artifactId>
 					<version>4.2.1</version>
 				</plugin>
+
+
+				<plugin>
+					<!-- use with "mvn -DskipTests clean verify" -->
+					<groupId>com.github.siom79.japicmp</groupId>
+					<artifactId>japicmp-maven-plugin</artifactId>
+					<version>0.14.3</version>
+					<configuration>
+						<oldVersion>
+							<dependency>
+								<groupId>com.github.docker-java</groupId>
+								<artifactId>${project.artifactId}</artifactId>
+								<version>3.2.0</version>
+								<type>jar</type>
+							</dependency>
+						</oldVersion>
+						<newVersion>
+							<file>
+								<path>${project.build.directory}/${project.artifactId}-${project.version}.jar</path>
+							</file>
+						</newVersion>
+						<parameter>
+							<breakBuildOnBinaryIncompatibleModifications>true</breakBuildOnBinaryIncompatibleModifications>
+							<accessModifier>public</accessModifier>
+							<onlyBinaryIncompatible>true</onlyBinaryIncompatible>
+							<overrideCompatibilityChangeParameters>
+								<overrideCompatibilityChangeParameter>
+									<compatibilityChange>METHOD_NEW_DEFAULT</compatibilityChange>
+									<binaryCompatible>true</binaryCompatible>
+									<sourceCompatible>true</sourceCompatible>
+								</overrideCompatibilityChangeParameter>
+								<overrideCompatibilityChangeParameter>
+									<compatibilityChange>METHOD_ABSTRACT_NOW_DEFAULT</compatibilityChange>
+									<binaryCompatible>true</binaryCompatible>
+									<sourceCompatible>true</sourceCompatible>
+								</overrideCompatibilityChangeParameter>
+							</overrideCompatibilityChangeParameters>
+						</parameter>
+					</configuration>
+					<executions>
+						<execution>
+							<phase>verify</phase>
+							<goals>
+								<goal>cmp</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
