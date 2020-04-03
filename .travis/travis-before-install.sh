@@ -26,9 +26,11 @@ if [[ -n $DOCKER_HOST ]]; then
 
     sudo mkdir -p /etc/systemd/system/docker.service.d/
 
-    sudo echo "[Service]" >> /etc/systemd/system/docker.service.d/override.conf
-    sudo echo "ExecStart=" >> /etc/systemd/system/docker.service.d/override.conf
-    sudo echo "ExecStart=\"/usr/bin/dockerd -H unix:///var/run/docker.sock -H tcp://127.0.0.1:${HOST_PORT}\"" >> /etc/systemd/system/docker.service.d/override.conf
+    echo "
+[Service]
+ExecStart=
+ExecStart=\"/usr/bin/dockerd -H unix:///var/run/docker.sock -H tcp://127.0.0.1:${HOST_PORT}\"
+    " | sudo tee -a /etc/systemd/system/docker.service.d/override.conf
 
     sudo systemctl daemon-reload
     sudo service docker restart || sudo journalctl -xe
@@ -57,8 +59,6 @@ EOF
 if [[ -n $SWARM_VERSION ]]; then
     export SWARM_PORT="2377"
     export HOST_IP="$(ip a show dev eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)"
-    # because of swarm use docker-engine directly
-    export DOCKER_HOST="tcp://127.0.0.1:${HOST_PORT}"
 
     docker pull swarm
 
