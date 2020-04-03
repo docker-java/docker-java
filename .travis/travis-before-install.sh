@@ -16,7 +16,7 @@ if [[ -n $DOCKER_VERSION ]]; then
     sudo -E apt-get -q -y --purge remove docker-engine
     sudo -E apt-cache policy docker-engine
 
-    curl -sSL https://get.docker.com/ | sh
+    ./.travis/get-docker-com.sh
 
     sudo -E stop docker
 
