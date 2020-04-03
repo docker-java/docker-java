@@ -2,6 +2,7 @@ package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.api.exception.DockerClientException;
+import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.InternalServerErrorException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.AuthConfig;
@@ -126,7 +127,7 @@ public class PullImageCmdIT extends CmdIT {
 
         if (isNotSwarm(dockerRule.getClient()) && getVersion(dockerRule.getClient())
                 .isGreaterOrEqual(RemoteApiVersion.VERSION_1_30)) {
-            exception.expect(InternalServerErrorException.class);
+            exception.expect(DockerException.class);
         } else {
             exception.expect(DockerClientException.class);
         }

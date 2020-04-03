@@ -24,19 +24,8 @@ env:
     - DOCKER_VERSION="17.06.2~ce-0~ubuntu"
     - DOCKER_VERSION="18.06.3~ce~3-0~ubuntu"
 
-#    - DOCKER_VERSION="1.13.1-0~ubuntu-trusty"
-
     # Swarm
     - SWARM_VERSION="1.2.8"
-
-#    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="1.11.2-0~trusty"
-#    - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="1.11.2-0~trusty"
-#    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="1.10.3-0~trusty"
-#    - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="1.10.3-0~trusty"
-#    - repo="testing" DOCKER_HOST="tcp://127.0.0.1:2375"
-#    - repo="testing" DOCKER_HOST="unix:///var/run/docker.sock"
-#    - repo="experimental" DOCKER_HOST="tcp://127.0.0.1:2375"
-#    - repo="experimental" DOCKER_HOST="unix:///var/run/docker.sock"
 
 cache:
   directories:

@@ -22,8 +22,6 @@ if [[ -n $DOCKER_VERSION ]]; then
 fi
 
 if [[ -n $DOCKER_HOST ]]; then
-    cat /lib/systemd/system/docker.service
-
     sudo mkdir -p /etc/systemd/system/docker.service.d/
 
     echo "
@@ -31,8 +29,6 @@ if [[ -n $DOCKER_HOST ]]; then
 ExecStart=
 ExecStart=/usr/bin/dockerd -H unix:///var/run/docker.sock -H tcp://0.0.0.0:${HOST_PORT}
     " | sudo tee -a /etc/systemd/system/docker.service.d/override.conf
-
-    sudo cat /etc/systemd/system/docker.service.d/override.conf
 
     sudo systemctl daemon-reload
     sudo service docker restart || sudo journalctl -xe
