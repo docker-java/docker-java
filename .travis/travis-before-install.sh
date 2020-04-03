@@ -29,8 +29,8 @@ ExecStart=
 ExecStart="/usr/bin/dockerd \
 --dns 8.8.8.8 \
 --dns 8.8.4.4 \
--H=unix:///var/run/docker.sock \
--H=tcp://0.0.0.0:${HOST_PORT}  \
+--host unix:///var/run/docker.sock \
+--host tcp://0.0.0.0:${HOST_PORT}  \
 --label=com.github.dockerjava.test=docker-java \
 "
 EOF
