@@ -37,6 +37,7 @@ EOF
 
     sudo systemctl daemon-reload
     sudo service docker start
+    sudo service docker status
 fi
 
 while (! docker ps ); do
