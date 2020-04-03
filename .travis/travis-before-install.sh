@@ -28,12 +28,7 @@ if [[ -n $DOCKER_HOST ]]; then
     cat << EOF | sudo tee /etc/systemd/system/docker.service.d/override.conf
 [Service]
 ExecStart=
-ExecStart="/usr/bin/dockerd \
---dns 8.8.8.8 \
---dns 8.8.4.4 \
--H unix:///var/run/docker.sock \
---label=com.github.dockerjava.test=docker-java \
-"
+ExecStart="/usr/bin/dockerd -H fd://"
 EOF
 
     sudo systemctl daemon-reload
