@@ -21,14 +21,9 @@ if [[ -n $DOCKER_VERSION ]]; then
 fi
 
 if [[ -n $DOCKER_HOST ]]; then
-    sudo -E stop docker
-    # https://github.com/docker/docker/issues/18113
-    sudo rm /var/lib/docker/network/files/local-kv.db
-
-    sudo cat /etc/default/docker
-
-    cat << EOF | sudo tee /etc/default/docker
-DOCKER_OPTS="\
+    cat << EOF | sudo tee /etc/systemd/system/docker.service.d/override.conf
+[Service]
+ExecStart="\
 --dns 8.8.8.8 \
 --dns 8.8.4.4 \
 -D \
@@ -38,9 +33,8 @@ DOCKER_OPTS="\
 "
 EOF
 
-    sudo cat /etc/default/docker
-
-    sudo -E start docker
+    sudo systemctl daemon-reload
+    sudo service docker start
 fi
 
 docker version
