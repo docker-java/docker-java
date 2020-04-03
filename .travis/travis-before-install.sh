@@ -27,7 +27,6 @@ if [[ -n $DOCKER_HOST ]]; then
     sudo mkdir -p /etc/systemd/system/docker.service.d/
     cat << EOF | sudo tee /etc/systemd/system/docker.service.d/override.conf
 [Service]
-ExecStart=
 ExecStart="/usr/bin/dockerd -H fd://"
 EOF
 
