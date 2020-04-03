@@ -37,7 +37,6 @@ DOCKER_OPTS="\
 EOF
 
     sudo cat /etc/default/docker
-    sudo bash -c ':> /var/log/upstart/docker.log'
 
     sudo -E start docker
 
