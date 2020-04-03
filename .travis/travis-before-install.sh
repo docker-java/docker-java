@@ -29,7 +29,7 @@ if [[ -n $DOCKER_HOST ]]; then
     echo "
 [Service]
 ExecStart=
-ExecStart=\"/usr/bin/dockerd -H unix:///var/run/docker.sock -H tcp://127.0.0.1:${HOST_PORT}\"
+ExecStart=/usr/bin/dockerd -H unix:///var/run/docker.sock -H tcp://0.0.0.0:${HOST_PORT}
     " | sudo tee -a /etc/systemd/system/docker.service.d/override.conf
 
     sudo cat /etc/systemd/system/docker.service.d/override.conf
