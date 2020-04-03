@@ -25,6 +25,7 @@ if [[ -n $DOCKER_HOST ]]; then
     sudo mkdir -p /etc/systemd/system/docker.service.d/
     cat << EOF | sudo tee /etc/systemd/system/docker.service.d/override.conf
 [Service]
+ExecStart=
 ExecStart="/usr/bin/dockerd \
 --dns 8.8.8.8 \
 --dns 8.8.4.4 \
