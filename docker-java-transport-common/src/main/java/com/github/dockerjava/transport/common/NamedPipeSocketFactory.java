@@ -1,6 +1,5 @@
-package com.github.dockerjava.okhttp;
+package com.github.dockerjava.transport.common;
 
-import com.github.dockerjava.okhttp.OkDockerHttpClient.OkResponse;
 import com.sun.jna.platform.win32.Kernel32;
 
 import javax.net.SocketFactory;
@@ -13,11 +12,11 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 
-class NamedPipeSocketFactory extends SocketFactory {
+public class NamedPipeSocketFactory extends SocketFactory {
 
     final String socketFileName;
 
-    NamedPipeSocketFactory(String socketFileName) {
+    public NamedPipeSocketFactory(String socketFileName) {
         this.socketFileName = socketFileName;
     }
 
@@ -62,25 +61,16 @@ class NamedPipeSocketFactory extends SocketFactory {
                 is = new InputStream() {
                     @Override
                     public int read(byte[] bytes, int off, int len) throws IOException {
-                        if (OkResponse.CLOSING.get()) {
-                            return 0;
-                        }
                         return file.read(bytes, off, len);
                     }
 
                     @Override
                     public int read() throws IOException {
-                        if (OkResponse.CLOSING.get()) {
-                            return 0;
-                        }
                         return file.read();
                     }
 
                     @Override
                     public int read(byte[] bytes) throws IOException {
-                        if (OkResponse.CLOSING.get()) {
-                            return 0;
-                        }
                         return file.read(bytes);
                     }
                 };
@@ -116,22 +106,22 @@ class NamedPipeSocketFactory extends SocketFactory {
     }
 
     @Override
-    public Socket createSocket(String s, int i) {
+    public Socket createSocket(String host, int port) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Socket createSocket(String s, int i, InetAddress inetAddress, int i1) {
+    public Socket createSocket(String host, int port, InetAddress localHost, int localPort) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Socket createSocket(InetAddress inetAddress, int i) {
+    public Socket createSocket(InetAddress host, int port) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Socket createSocket(InetAddress inetAddress, int i, InetAddress inetAddress1, int i1) {
+    public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort) {
         throw new UnsupportedOperationException();
     }
 }

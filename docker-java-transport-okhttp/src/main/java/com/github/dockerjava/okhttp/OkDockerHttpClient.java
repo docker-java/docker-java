@@ -3,6 +3,8 @@ package com.github.dockerjava.okhttp;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerHttpClient;
 import com.github.dockerjava.core.SSLConfig;
+import com.github.dockerjava.transport.common.NamedPipeSocketFactory;
+import com.github.dockerjava.transport.common.UnixSocketFactory;
 import okhttp3.ConnectionPool;
 import okhttp3.Dns;
 import okhttp3.HttpUrl;
@@ -225,8 +227,6 @@ public final class OkDockerHttpClient implements DockerHttpClient {
 
     static class OkResponse implements Response {
 
-        static final ThreadLocal<Boolean> CLOSING = ThreadLocal.withInitial(() -> false);
-
         private final okhttp3.Response response;
 
         OkResponse(okhttp3.Response response) {
@@ -255,13 +255,7 @@ public final class OkDockerHttpClient implements DockerHttpClient {
 
         @Override
         public void close() {
-            boolean previous = CLOSING.get();
-            CLOSING.set(true);
-            try {
-                response.close();
-            } finally {
-                CLOSING.set(previous);
-            }
+            response.close();
         }
     }
 

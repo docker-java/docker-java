@@ -50,7 +50,7 @@
  *
  */
 
-package com.github.dockerjava.okhttp;
+package com.github.dockerjava.transport.common;
 
 import com.sun.jna.LastErrorException;
 import com.sun.jna.Native;
@@ -106,7 +106,7 @@ class UnixDomainSocket extends Socket {
     public static native int connect(int sockfd, SockAddr sockaddr, int addrlen)
             throws LastErrorException;
 
-    public static native int recv(int fd, byte[] buffer, int count, int flags)
+    public static native int read(int fd, byte[] buffer, long size)
             throws LastErrorException;
 
     public static native int send(int fd, byte[] buffer, int count, int flags)
@@ -153,6 +153,7 @@ class UnixDomainSocket extends Socket {
                 throw new IOException(strerror(Native.getLastError()));
             }
             connected = true;
+            // setSoTimeout(timeout);
         } catch (LastErrorException lee) {
             throw new IOException("native connect() failed : " + formatError(lee));
         }
@@ -189,7 +190,6 @@ class UnixDomainSocket extends Socket {
     }
 
     public void setSoTimeout(int timeout) {
-        // do nothing
     }
 
     public void shutdownInput() {
@@ -237,17 +237,28 @@ class UnixDomainSocket extends Socket {
                     int size;
                     byte[] data = new byte[(len < 10240) ? len : 10240];
                     do {
-                        size = recv(fd, data, (remainingLength < 10240) ? remainingLength : 10240, 0);
-                        if (size > 0) {
-                            System.arraycopy(data, 0, bytesEntry, off, size);
-                            bytes += size;
-                            off += size;
-                            remainingLength -= size;
+                        if (!isConnected()) {
+                            return -1;
                         }
+                        size = UnixDomainSocket.read(fd, data, (remainingLength < 10240) ? remainingLength : 10240);
+                        if (size <= 0) {
+                            return -1;
+                        }
+                        System.arraycopy(data, 0, bytesEntry, off, size);
+                        bytes += size;
+                        off += size;
+                        remainingLength -= size;
                     } while ((remainingLength > 0) && (size > 0));
                     return bytes;
                 } else {
-                    return recv(fd, bytesEntry, len, 0);
+                    if (!isConnected()) {
+                        return -1;
+                    }
+                    int size = UnixDomainSocket.read(fd, bytesEntry, len);
+                    if (size <= 0) {
+                        return -1;
+                    }
+                    return size;
                 }
             } catch (LastErrorException lee) {
                 throw new IOException("native read() failed : " + formatError(lee));
@@ -266,6 +277,9 @@ class UnixDomainSocket extends Socket {
 
         @Override
         public int read(byte[] bytes) throws IOException {
+            if (!isConnected()) {
+                return -1;
+            }
             return read(bytes, 0, bytes.length);
         }
     }
@@ -283,14 +297,20 @@ class UnixDomainSocket extends Socket {
                     do {
                         size = (remainingLength < 10240) ? remainingLength : 10240;
                         System.arraycopy(bytesEntry, off, data, 0, size);
-                        bytes = send(fd, data, size, 0);
+                        if (!isConnected()) {
+                            return;
+                        }
+                        bytes = UnixDomainSocket.send(fd, data, size, 0);
                         if (bytes > 0) {
                             off += bytes;
                             remainingLength -= bytes;
                         }
                     } while ((remainingLength > 0) && (bytes > 0));
                 } else {
-                    bytes = send(fd, bytesEntry, len, 0);
+                    if (!isConnected()) {
+                        return;
+                    }
+                    bytes = UnixDomainSocket.send(fd, bytesEntry, len, 0);
                 }
 
                 if (bytes != len) {

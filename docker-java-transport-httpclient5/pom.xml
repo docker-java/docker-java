@@ -8,10 +8,10 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>docker-java-transport-okhttp</artifactId>
+	<artifactId>docker-java-transport-httpclient5</artifactId>
 	<packaging>jar</packaging>
 
-	<name>docker-java-transport-okhttp</name>
+	<name>docker-java-transport-httpclient5</name>
 	<url>https://github.com/docker-java/docker-java</url>
 	<description>Java API Client for Docker</description>
 
@@ -23,9 +23,15 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.squareup.okhttp3</groupId>
-			<artifactId>okhttp</artifactId>
-			<version>3.14.4</version>
+			<groupId>org.apache.httpcomponents.client5</groupId>
+			<artifactId>httpclient5</artifactId>
+			<version>5.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.httpcomponents.core5</groupId>
+					<artifactId>httpcore5-h2</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -38,12 +44,21 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>com.github.siom79.japicmp</groupId>
+				<artifactId>japicmp-maven-plugin</artifactId>
+				<configuration>
+					<!-- TODO remove once this module is released -->
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+
+			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Export-Package>com.github.dockerjava.okhttp.*</Export-Package>
+						<Export-Package>com.github.dockerjava.httpclient5.*</Export-Package>
 					</instructions>
 				</configuration>
 			</plugin>

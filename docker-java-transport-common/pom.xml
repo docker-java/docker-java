@@ -8,42 +8,39 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>docker-java-transport-okhttp</artifactId>
+	<artifactId>docker-java-transport-common</artifactId>
 	<packaging>jar</packaging>
 
-	<name>docker-java-transport-okhttp</name>
+	<name>docker-java-transport-common</name>
 	<url>https://github.com/docker-java/docker-java</url>
 	<description>Java API Client for Docker</description>
 
 	<dependencies>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>docker-java-core</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.squareup.okhttp3</groupId>
-			<artifactId>okhttp</artifactId>
-			<version>3.14.4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>docker-java-transport-common</artifactId>
-			<version>${project.version}</version>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna-platform</artifactId>
+			<version>5.5.0</version>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>com.github.siom79.japicmp</groupId>
+				<artifactId>japicmp-maven-plugin</artifactId>
+				<configuration>
+					<!-- TODO remove once this module is released -->
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+
+			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Export-Package>com.github.dockerjava.okhttp.*</Export-Package>
+						<Export-Package>com.github.dockerjava.transport.common.*</Export-Package>
 					</instructions>
 				</configuration>
 			</plugin>
