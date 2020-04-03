@@ -22,6 +22,8 @@ if [[ -n $DOCKER_VERSION ]]; then
 fi
 
 if [[ -n $DOCKER_HOST ]]; then
+    cat /lib/systemd/system/docker.service
+
     sudo mkdir -p /etc/systemd/system/docker.service.d/
     cat << EOF | sudo tee /etc/systemd/system/docker.service.d/override.conf
 [Service]
@@ -29,14 +31,14 @@ ExecStart=
 ExecStart="/usr/bin/dockerd \
 --dns 8.8.8.8 \
 --dns 8.8.4.4 \
---host unix:///var/run/docker.sock \
---host tcp://0.0.0.0:${HOST_PORT}  \
+-H unix:///var/run/docker.sock \
+-H tcp://0.0.0.0:${HOST_PORT}  \
 --label=com.github.dockerjava.test=docker-java \
 "
 EOF
 
     sudo systemctl daemon-reload
-    sudo service docker restart || true
+    sudo service docker restart || sudo journalctl -xe
     sudo service docker status
 fi
 
