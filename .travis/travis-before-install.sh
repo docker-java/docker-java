@@ -17,9 +17,10 @@ if [[ -n $DOCKER_VERSION ]]; then
     sudo -E apt-cache policy docker-engine
 
     ./.travis/get-docker-com.sh
+fi
 
+if [[ -n $DOCKER_HOST ]]; then
     sudo -E stop docker
-
     # https://github.com/docker/docker/issues/18113
     sudo rm /var/lib/docker/network/files/local-kv.db
 
@@ -39,37 +40,20 @@ EOF
     sudo cat /etc/default/docker
 
     sudo -E start docker
+fi
 
-    tries=20
-    sleep=5
-    for i in $(seq 1 $tries); do
-        if sudo grep "API listen on" /var/log/upstart/docker.log ; then
-            echo "Docker started. Delay $(($i * $sleep))"
-            break
-        elif [[ $i -ge $tries ]]; then
-            echo "Docker didn't start. Exiting!"
-            sudo cat /var/log/upstart/docker.log
-            exit 1
-        else
-            echo "Docker didn't start, sleeping for 5 secs..."
-            sleep $sleep
-        fi
-    done
+docker version
+docker info
 
-    set +u
+set +u
 
-    cat <<EOF > "${HOME}/.docker-java.properties"
+cat <<EOF > "${HOME}/.docker-java.properties"
 registry.username=${registry_username}
 registry.password=${registry_password}
 registry.email=${registry_email}
 registry.url=https://index.docker.io/v1/
 
 EOF
-
-fi
-
-docker version || sudo cat /var/log/upstart/docker.log
-docker info
 
 if [[ -n $SWARM_VERSION ]]; then
     export SWARM_PORT="2377"
