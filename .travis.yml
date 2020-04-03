@@ -1,4 +1,5 @@
 sudo: required
+dist: xenial
 language: java
 
 services:
@@ -20,11 +21,13 @@ env:
     - DOCKER_HOST="tcp://127.0.0.1:2375"
 
     # Older versions of Docker
-    - DOCKER_VERSION="17.05.0~ce-0~ubuntu-trusty"
-    - DOCKER_VERSION="1.13.1-0~ubuntu-trusty"
+    - DOCKER_VERSION="17.06.2~ce-0~ubuntu"
+    - DOCKER_VERSION="18.06.3~ce-3~ubuntu"
+-
+#    - DOCKER_VERSION="1.13.1-0~ubuntu-trusty"
 
     # Swarm
-    - DOCKER_HOST="tcp://127.0.0.1:2377" DOCKER_VERSION="17.05.0~ce-0~ubuntu-trusty" SWARM_VERSION="1.2.8"
+    - DOCKER_HOST="tcp://127.0.0.1:2377" SWARM_VERSION="1.2.8"
 
 #    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="1.11.2-0~trusty"
 #    - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="1.11.2-0~trusty"

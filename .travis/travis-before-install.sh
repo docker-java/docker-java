@@ -11,12 +11,13 @@ rm -f "docker-java/src/test/resources/logback.xml"
 mv "docker-java/src/test/resources/travis-logback.xml" "docker-java/src/test/resources/logback-test.xml"
 
 if [[ -n $DOCKER_VERSION ]]; then
-    sudo -E apt-get update
-    sudo -E apt-get install -q -y wget
     sudo -E apt-get -q -y --purge remove docker-engine
     sudo -E apt-cache policy docker-engine
 
-    ./.travis/get-docker-com.sh
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    sudo apt-get update
+    sudo apt-get install "docker-ce=$DOCKER_VERSION"
 fi
 
 if [[ -n $DOCKER_HOST ]]; then
