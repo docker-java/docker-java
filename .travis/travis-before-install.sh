@@ -39,6 +39,12 @@ EOF
     sudo service docker start
 fi
 
+while (! docker ps ); do
+  # Docker takes a few seconds to initialize
+  echo "Waiting for Docker to launch..."
+  sleep 1
+done
+
 docker version
 docker info
 
