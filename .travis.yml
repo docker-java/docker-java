@@ -27,7 +27,7 @@ env:
 #    - DOCKER_VERSION="1.13.1-0~ubuntu-trusty"
 
     # Swarm
-    - DOCKER_HOST="tcp://127.0.0.1:2377" SWARM_VERSION="1.2.8"
+    - SWARM_VERSION="1.2.8"
 
 #    - repo="main" DOCKER_HOST="tcp://127.0.0.1:2375" DOCKER_VERSION="1.11.2-0~trusty"
 #    - repo="main" DOCKER_HOST="unix:///var/run/docker.sock" DOCKER_VERSION="1.11.2-0~trusty"

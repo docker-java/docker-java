@@ -36,7 +36,7 @@ ExecStart="/usr/bin/dockerd \
 EOF
 
     sudo systemctl daemon-reload
-    sudo service docker restart
+    sudo service docker restart || true
     sudo service docker status
 fi
 
@@ -63,7 +63,6 @@ if [[ -n $SWARM_VERSION ]]; then
     export SWARM_PORT="2377"
     export HOST_IP="$(ip a show dev eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)"
     # because of swarm use docker-engine directly
-    export PRE_DOCKER_HOST="$DOCKER_HOST"
     export DOCKER_HOST="tcp://127.0.0.1:${HOST_PORT}"
 
     docker pull swarm
@@ -94,7 +93,7 @@ if [[ -n $SWARM_VERSION ]]; then
     docker logs swarm_manager
 
     # switch to swarm connection
-    DOCKER_HOST="$PRE_DOCKER_HOST"
+    export DOCKER_HOST="tcp://127.0.0.1:${SWARM_PORT}"
 
     docker version
     docker info
