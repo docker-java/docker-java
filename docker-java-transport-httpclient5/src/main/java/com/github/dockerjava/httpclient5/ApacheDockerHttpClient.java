@@ -14,6 +14,7 @@ import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
 import org.apache.hc.client5.http.socket.ConnectionSocketFactory;
 import org.apache.hc.client5.http.socket.PlainConnectionSocketFactory;
 import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
+import org.apache.hc.core5.http.ConnectionClosedException;
 import org.apache.hc.core5.http.ContentLengthStrategy;
 import org.apache.hc.core5.http.Header;
 import org.apache.hc.core5.http.HttpHeaders;
@@ -27,6 +28,8 @@ import org.apache.hc.core5.http.io.entity.InputStreamEntity;
 import org.apache.hc.core5.http.protocol.BasicHttpContext;
 import org.apache.hc.core5.http.protocol.HttpContext;
 import org.apache.hc.core5.net.URIAuthority;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
@@ -178,6 +181,8 @@ public final class ApacheDockerHttpClient implements DockerHttpClient {
 
     static class ApacheResponse implements Response {
 
+        private static final Logger log = LoggerFactory.getLogger(ApacheResponse.class);
+
         private final HttpUriRequestBase request;
 
         private final CloseableHttpResponse response;
@@ -219,7 +224,19 @@ public final class ApacheDockerHttpClient implements DockerHttpClient {
 
         @Override
         public void close() {
-            request.abort();
+            try {
+                request.abort();
+            } catch (Exception e) {
+                log.debug("Failed to abort the request", e);
+            }
+
+            try {
+                response.close();
+            } catch (ConnectionClosedException e) {
+                log.trace("Failed to close the response", e);
+            } catch (Exception e) {
+                log.debug("Failed to close the response", e);
+            }
         }
     }
 }
