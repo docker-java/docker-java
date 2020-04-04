@@ -91,7 +91,8 @@ public abstract class CmdIT {
 
     @Parameterized.Parameters(name = "{index}:{0}")
     public static Iterable<FactoryType> data() {
-        return Arrays.asList(FactoryType.values());
+        return Arrays.asList(FactoryType.HTTPCLIENT5);
+//        return Arrays.asList(FactoryType.values());
     }
 
     @Parameterized.Parameter
