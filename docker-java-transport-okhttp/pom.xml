@@ -42,6 +42,10 @@
 				<artifactId>japicmp-maven-plugin</artifactId>
 				<configuration>
 					<parameter>
+						<excludes>
+							<!-- Was never intended to be public -->
+							<exclude>com.github.dockerjava.okhttp.UnixDomainSocket$SockAddr</exclude>
+						</excludes>
 						<overrideCompatibilityChangeParameters>
 							<overrideCompatibilityChangeParameter>
 								<compatibilityChange>SUPERCLASS_REMOVED</compatibilityChange>
