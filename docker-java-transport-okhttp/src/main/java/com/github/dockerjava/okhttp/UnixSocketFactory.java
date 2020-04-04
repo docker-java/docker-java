@@ -1,5 +1,7 @@
 package com.github.dockerjava.okhttp;
 
+import com.github.dockerjava.okhttp.OkDockerHttpClient.OkResponse;
+
 import javax.net.SocketFactory;
 import java.io.FilterInputStream;
 import java.io.FilterOutputStream;
@@ -37,7 +39,7 @@ class UnixSocketFactory extends SocketFactory {
 
                         @Override
                         public int read(byte[] b, int off, int len) throws IOException {
-                            if (OkHttpInvocationBuilder.CLOSING.get()) {
+                            if (OkResponse.CLOSING.get()) {
                                 return 0;
                             }
                             return super.read(b, off, len);

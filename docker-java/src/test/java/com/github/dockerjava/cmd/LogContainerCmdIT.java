@@ -82,7 +82,7 @@ public class LogContainerCmdIT extends CmdIT {
 
         assertTrue(loggingCallback.toString().contains("hello"));
 
-        assertEquals(loggingCallback.getCollectedFrames().get(0).getStreamType(), StreamType.STDOUT);
+        assertEquals(StreamType.STDOUT, loggingCallback.getCollectedFrames().get(0).getStreamType());
     }
 
     @Test
@@ -92,7 +92,7 @@ public class LogContainerCmdIT extends CmdIT {
             @Override
             public void onError(Throwable throwable) {
 
-                assertEquals(throwable.getClass().getName(), NotFoundException.class.getName());
+                assertEquals(NotFoundException.class.getName(), throwable.getClass().getName());
 
                 try {
                     // close the callback to prevent the call to onComplete

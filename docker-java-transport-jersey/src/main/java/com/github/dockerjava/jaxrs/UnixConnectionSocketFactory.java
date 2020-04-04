@@ -40,12 +40,11 @@ import org.newsclub.net.unix.AFUNIXSocketAddress;
  * Provides a ConnectionSocketFactory for connecting Apache HTTP clients to Unix sockets.
  */
 @Contract(threading = ThreadingBehavior.IMMUTABLE_CONDITIONAL)
-@Deprecated
-public class UnixConnectionSocketFactory implements ConnectionSocketFactory {
+class UnixConnectionSocketFactory implements ConnectionSocketFactory {
 
     private File socketFile;
 
-    public UnixConnectionSocketFactory(final URI socketUri) {
+    UnixConnectionSocketFactory(final URI socketUri) {
         super();
 
         final String filename = socketUri.toString().replaceAll("^unix:///", "unix://localhost/")
