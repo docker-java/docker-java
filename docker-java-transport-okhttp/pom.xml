@@ -38,6 +38,22 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>com.github.siom79.japicmp</groupId>
+				<artifactId>japicmp-maven-plugin</artifactId>
+				<configuration>
+					<parameter>
+						<overrideCompatibilityChangeParameters>
+							<overrideCompatibilityChangeParameter>
+								<compatibilityChange>SUPERCLASS_REMOVED</compatibilityChange>
+								<binaryCompatible>true</binaryCompatible>
+								<sourceCompatible>true</sourceCompatible>
+							</overrideCompatibilityChangeParameter>
+						</overrideCompatibilityChangeParameters>
+					</parameter>
+				</configuration>
+			</plugin>
+
+			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
 				<extensions>true</extensions>

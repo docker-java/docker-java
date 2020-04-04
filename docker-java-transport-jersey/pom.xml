@@ -72,6 +72,33 @@
 
 	<build>
 		<plugins>
+
+			<plugin>
+				<groupId>com.github.siom79.japicmp</groupId>
+				<artifactId>japicmp-maven-plugin</artifactId>
+				<configuration>
+					<parameter>
+						<excludes>
+							<!-- Previously deprecated -->
+							<exclude>com.github.dockerjava.jaxrs.ApacheUnixSocket</exclude>
+							<exclude>com.github.dockerjava.jaxrs.async.AbstractCallbackNotifier</exclude>
+							<exclude>com.github.dockerjava.jaxrs.async.GETCallbackNotifier</exclude>
+							<exclude>com.github.dockerjava.jaxrs.async.GETCallbackNotifier</exclude>
+							<exclude>com.github.dockerjava.jaxrs.async.POSTCallbackNotifier</exclude>
+							<exclude>com.github.dockerjava.jaxrs.UnixConnectionSocketFactory</exclude>
+							<exclude>com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory#releaseConnection(long)</exclude>
+						</excludes>
+						<overrideCompatibilityChangeParameters>
+							<overrideCompatibilityChangeParameter>
+								<compatibilityChange>SUPERCLASS_REMOVED</compatibilityChange>
+								<binaryCompatible>true</binaryCompatible>
+								<sourceCompatible>true</sourceCompatible>
+							</overrideCompatibilityChangeParameter>
+						</overrideCompatibilityChangeParameters>
+					</parameter>
+				</configuration>
+			</plugin>
+
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
