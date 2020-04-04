@@ -29,9 +29,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>docker-java-transport-common</artifactId>
-			<version>${project.version}</version>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna-platform</artifactId>
+			<version>5.5.0</version>
 		</dependency>
 	</dependencies>
 
@@ -42,10 +42,6 @@
 				<artifactId>japicmp-maven-plugin</artifactId>
 				<configuration>
 					<parameter>
-						<excludes>
-							<!-- Was never intended to be public -->
-							<exclude>com.github.dockerjava.okhttp.UnixDomainSocket$SockAddr</exclude>
-						</excludes>
 						<overrideCompatibilityChangeParameters>
 							<overrideCompatibilityChangeParameter>
 								<compatibilityChange>SUPERCLASS_REMOVED</compatibilityChange>
