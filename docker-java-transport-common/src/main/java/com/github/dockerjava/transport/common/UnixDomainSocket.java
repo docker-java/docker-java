@@ -153,7 +153,6 @@ class UnixDomainSocket extends Socket {
                 throw new IOException(strerror(Native.getLastError()));
             }
             connected = true;
-            // setSoTimeout(timeout);
         } catch (LastErrorException lee) {
             throw new IOException("native connect() failed : " + formatError(lee));
         }

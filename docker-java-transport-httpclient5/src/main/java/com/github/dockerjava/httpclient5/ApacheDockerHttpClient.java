@@ -220,18 +220,7 @@ public final class ApacheDockerHttpClient implements DockerHttpClient {
 
         @Override
         public void close() {
-            try {
-                request.abort();
-            } catch (Exception ignored) {
-                // log?
-            }
-
-            try {
-                response.close();
-            } catch (ConnectionClosedException ignored) {
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            request.abort();
         }
     }
 }
