@@ -181,7 +181,7 @@ public final class ApacheDockerHttpClient implements DockerHttpClient {
 
     static class ApacheResponse implements Response {
 
-        private static final Logger log = LoggerFactory.getLogger(ApacheResponse.class);
+        private static final Logger LOGGER = LoggerFactory.getLogger(ApacheResponse.class);
 
         private final HttpUriRequestBase request;
 
@@ -227,15 +227,15 @@ public final class ApacheDockerHttpClient implements DockerHttpClient {
             try {
                 request.abort();
             } catch (Exception e) {
-                log.debug("Failed to abort the request", e);
+                LOGGER.debug("Failed to abort the request", e);
             }
 
             try {
                 response.close();
             } catch (ConnectionClosedException e) {
-                log.trace("Failed to close the response", e);
+                LOGGER.trace("Failed to close the response", e);
             } catch (Exception e) {
-                log.debug("Failed to close the response", e);
+                LOGGER.debug("Failed to close the response", e);
             }
         }
     }
