@@ -1,6 +1,5 @@
 package com.github.dockerjava.transport.common;
 
-import com.github.dockerjava.okhttp.OkDockerHttpClient.OkResponse;
 import com.sun.jna.platform.win32.Kernel32;
 
 import javax.net.SocketFactory;

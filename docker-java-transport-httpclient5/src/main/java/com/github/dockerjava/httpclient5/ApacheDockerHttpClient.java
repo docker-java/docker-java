@@ -69,7 +69,7 @@ public final class ApacheDockerHttpClient implements DockerHttpClient {
         switch (dockerHost.getScheme()) {
             case "unix":
             case "npipe":
-                host = new HttpHost(dockerHost.getScheme(), "docker.socket", 2375);
+                host = new HttpHost(dockerHost.getScheme(), "localhost", 2375);
                 break;
             case "tcp":
                 host = new HttpHost(
