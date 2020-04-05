@@ -3,8 +3,6 @@ package com.github.dockerjava.httpclient5;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerHttpClient;
 import com.github.dockerjava.core.SSLConfig;
-import com.github.dockerjava.transport.common.NamedPipeSocketFactory;
-import com.github.dockerjava.transport.common.UnixSocketFactory;
 import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
@@ -128,10 +126,10 @@ public final class ApacheDockerHttpClient implements DockerHttpClient {
             .register("http", PlainConnectionSocketFactory.INSTANCE)
             .register("unix", new PlainConnectionSocketFactory() {
                 @Override
-                public Socket createSocket(HttpContext context) {
+                public Socket createSocket(HttpContext context) throws IOException {
                     URI dockerHost = dockerClientConfig.getDockerHost();
 
-                    return new UnixSocketFactory(dockerHost.getPath()).createSocket();
+                    return new UnixDomainSocket(dockerHost.getPath());
                 }
             })
             .register("npipe", new PlainConnectionSocketFactory() {
@@ -139,7 +137,7 @@ public final class ApacheDockerHttpClient implements DockerHttpClient {
                 public Socket createSocket(HttpContext context) {
                     URI dockerHost = dockerClientConfig.getDockerHost();
 
-                    return new NamedPipeSocketFactory(dockerHost.getPath()).createSocket();
+                    return new NamedPipeSocket(dockerHost.getPath());
                 }
             })
             .build();

@@ -50,7 +50,7 @@
  *
  */
 
-package com.github.dockerjava.transport.common;
+package com.github.dockerjava.httpclient5;
 
 import com.sun.jna.LastErrorException;
 import com.sun.jna.Native;
