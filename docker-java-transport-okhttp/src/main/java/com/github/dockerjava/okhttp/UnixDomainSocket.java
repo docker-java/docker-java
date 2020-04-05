@@ -228,13 +228,8 @@ class UnixDomainSocket extends Socket {
 
     class UnixSocketInputStream extends InputStream {
 
-        boolean eofReached = false;
-
         @Override
         public int read(byte[] bytesEntry, int off, int len) throws IOException {
-            if (eofReached) {
-                return -1;
-            }
             try {
                 if (off > 0) {
                     int bytes = 0;
@@ -244,7 +239,6 @@ class UnixDomainSocket extends Socket {
                     do {
                         size = recv(fd, data, (remainingLength < 10240) ? remainingLength : 10240, 0);
                         if (size <= 0) {
-                            eofReached = true;
                             return -1;
                         }
                         System.arraycopy(data, 0, bytesEntry, off, size);
@@ -256,16 +250,11 @@ class UnixDomainSocket extends Socket {
                 } else {
                     int size = recv(fd, bytesEntry, len, 0);
                     if (size <= 0) {
-                        eofReached = true;
                         return -1;
                     }
                     return size;
                 }
             } catch (LastErrorException lee) {
-                // Connection reset by peer
-                if (lee.getErrorCode() == 104) {
-                    return -1;
-                }
                 throw new IOException("native read() failed(" + lee.getErrorCode() + "): " + formatError(lee));
             }
         }
