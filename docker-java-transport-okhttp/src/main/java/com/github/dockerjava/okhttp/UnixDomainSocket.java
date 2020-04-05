@@ -250,6 +250,10 @@ class UnixDomainSocket extends Socket {
                     return recv(fd, bytesEntry, len, 0);
                 }
             } catch (LastErrorException lee) {
+                // Connection reset by peer
+                if (lee.getErrorCode() == 104) {
+                    return -1;
+                }
                 throw new IOException("native read() failed(" + lee.getErrorCode() + "): " + formatError(lee));
             }
         }
