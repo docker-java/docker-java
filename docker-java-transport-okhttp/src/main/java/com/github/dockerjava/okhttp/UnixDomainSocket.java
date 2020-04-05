@@ -238,21 +238,16 @@ class UnixDomainSocket extends Socket {
                     byte[] data = new byte[(len < 10240) ? len : 10240];
                     do {
                         size = recv(fd, data, (remainingLength < 10240) ? remainingLength : 10240, 0);
-                        if (size <= 0) {
-                            return -1;
+                        if (size > 0) {
+                            System.arraycopy(data, 0, bytesEntry, off, size);
+                            bytes += size;
+                            off += size;
+                            remainingLength -= size;
                         }
-                        System.arraycopy(data, 0, bytesEntry, off, size);
-                        bytes += size;
-                        off += size;
-                        remainingLength -= size;
-                    } while (remainingLength > 0);
+                    } while ((remainingLength > 0) && (size > 0));
                     return bytes;
                 } else {
-                    int size = recv(fd, bytesEntry, len, 0);
-                    if (size <= 0) {
-                        return -1;
-                    }
-                    return size;
+                    return recv(fd, bytesEntry, len, 0);
                 }
             } catch (LastErrorException lee) {
                 throw new IOException("native read() failed(" + lee.getErrorCode() + "): " + formatError(lee));
