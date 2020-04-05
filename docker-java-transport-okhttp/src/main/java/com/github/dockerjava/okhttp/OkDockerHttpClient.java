@@ -224,8 +224,6 @@ public final class OkDockerHttpClient implements DockerHttpClient {
 
     static class OkResponse implements Response {
 
-        static final ThreadLocal<Boolean> CLOSING = ThreadLocal.withInitial(() -> false);
-
         private static final Logger LOGGER = LoggerFactory.getLogger(OkResponse.class);
 
         private final Call call;
@@ -263,22 +261,16 @@ public final class OkDockerHttpClient implements DockerHttpClient {
 
         @Override
         public void close() {
-            boolean previous = CLOSING.get();
-            // CLOSING.set(true);
             try {
-                try {
-                    call.cancel();
-                } catch (Exception e) {
-                    LOGGER.debug("Failed to cancel the call {}", call, e);
-                }
+                call.cancel();
+            } catch (Exception e) {
+                LOGGER.debug("Failed to cancel the call {}", call, e);
+            }
 
-                try {
-                    response.close();
-                } catch (Exception e) {
-                    LOGGER.debug("Failed to close the response", e);
-                }
-            } finally {
-                CLOSING.set(previous);
+            try {
+                response.close();
+            } catch (Exception e) {
+                LOGGER.debug("Failed to close the response", e);
             }
         }
     }

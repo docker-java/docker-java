@@ -1,7 +1,5 @@
 package com.github.dockerjava.okhttp;
 
-import com.github.dockerjava.okhttp.OkDockerHttpClient.OkResponse;
-
 import javax.net.SocketFactory;
 import java.io.FilterInputStream;
 import java.io.FilterOutputStream;
@@ -36,26 +34,12 @@ class UnixSocketFactory extends SocketFactory {
                         public void close() throws IOException {
                             shutdownInput();
                         }
-
-                        @Override
-                        public int read(byte[] b, int off, int len) throws IOException {
-                            if (OkResponse.CLOSING.get()) {
-                                return 0;
-                            }
-                            return super.read(b, off, len);
-                        }
                     };
                 }
 
                 @Override
                 public OutputStream getOutputStream() {
                     return new FilterOutputStream(super.getOutputStream()) {
-
-                        @Override
-                        public void write(byte[] b, int off, int len) throws IOException {
-                            out.write(b, off, len);
-                        }
-
                         @Override
                         public void close() throws IOException {
                             shutdownOutput();
