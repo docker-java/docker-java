@@ -97,7 +97,7 @@ class UnixDomainSocket extends Socket {
         try {
             fd = socket(AF_UNIX, SOCK_STREAM, PROTOCOL);
         } catch (LastErrorException lee) {
-            throw new IOException("native socket() failed : " + formatError(lee));
+            throw new IOException("native socket() failed(" + lee.getErrorCode() + "): " + formatError(lee));
         }
     }
 
@@ -135,7 +135,7 @@ class UnixDomainSocket extends Socket {
             try {
                 close(fd);
             } catch (LastErrorException lee) {
-                throw new IOException("native close() failed : " + formatError(lee));
+                throw new IOException("native close() failed(" + lee.getErrorCode() + "): " + formatError(lee));
             }
             connected = false;
         }
@@ -154,7 +154,7 @@ class UnixDomainSocket extends Socket {
             }
             connected = true;
         } catch (LastErrorException lee) {
-            throw new IOException("native connect() failed : " + formatError(lee));
+            throw new IOException("native connect() failed(" + lee.getErrorCode() + "): " + formatError(lee));
         }
         is = new UnixSocketInputStream();
         os = new UnixSocketOutputStream();
@@ -250,7 +250,7 @@ class UnixDomainSocket extends Socket {
                     return recv(fd, bytesEntry, len, 0);
                 }
             } catch (LastErrorException lee) {
-                throw new IOException("native read() failed : " + formatError(lee));
+                throw new IOException("native read() failed(" + lee.getErrorCode() + "): " + formatError(lee));
             }
         }
 
@@ -297,7 +297,7 @@ class UnixDomainSocket extends Socket {
                     throw new IOException("can't write " + len + "bytes");
                 }
             } catch (LastErrorException lee) {
-                throw new IOException("native write() failed : " + formatError(lee));
+                throw new IOException("native write() failed(" + lee.getErrorCode() + "): " + formatError(lee));
             }
         }
 
