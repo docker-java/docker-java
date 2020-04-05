@@ -264,7 +264,7 @@ public final class OkDockerHttpClient implements DockerHttpClient {
         @Override
         public void close() {
             boolean previous = CLOSING.get();
-            CLOSING.set(true);
+            // CLOSING.set(true);
             try {
                 try {
                     call.cancel();
