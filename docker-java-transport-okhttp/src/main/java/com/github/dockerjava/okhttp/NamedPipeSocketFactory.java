@@ -1,5 +1,6 @@
 package com.github.dockerjava.okhttp;
 
+import com.github.dockerjava.okhttp.OkDockerHttpClient.OkResponse;
 import com.sun.jna.platform.win32.Kernel32;
 
 import javax.net.SocketFactory;
@@ -61,16 +62,25 @@ class NamedPipeSocketFactory extends SocketFactory {
                 is = new InputStream() {
                     @Override
                     public int read(byte[] bytes, int off, int len) throws IOException {
+                        if (OkResponse.CLOSING.get()) {
+                            return 0;
+                        }
                         return file.read(bytes, off, len);
                     }
 
                     @Override
                     public int read() throws IOException {
+                        if (OkResponse.CLOSING.get()) {
+                            return 0;
+                        }
                         return file.read();
                     }
 
                     @Override
                     public int read(byte[] bytes) throws IOException {
+                        if (OkResponse.CLOSING.get()) {
+                            return 0;
+                        }
                         return file.read(bytes);
                     }
                 };

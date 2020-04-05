@@ -3,7 +3,6 @@ package com.github.dockerjava.okhttp;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerHttpClient;
 import com.github.dockerjava.core.SSLConfig;
-import okhttp3.Call;
 import okhttp3.ConnectionPool;
 import okhttp3.Dns;
 import okhttp3.HttpUrl;
@@ -13,8 +12,6 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import okio.BufferedSink;
 import okio.Okio;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.X509TrustManager;
@@ -210,7 +207,11 @@ public final class OkDockerHttpClient implements DockerHttpClient {
             clientToUse = streamingClient;
         }
 
-        return new OkResponse(clientToUse.newCall(requestBuilder.build()));
+        try {
+            return new OkResponse(clientToUse.newCall(requestBuilder.build()).execute());
+        } catch (IOException e) {
+            throw new UncheckedIOException("Error while executing " + request, e);
+        }
     }
 
     @Override
@@ -224,19 +225,12 @@ public final class OkDockerHttpClient implements DockerHttpClient {
 
     static class OkResponse implements Response {
 
-        private static final Logger LOGGER = LoggerFactory.getLogger(OkResponse.class);
-
-        private final Call call;
+        static final ThreadLocal<Boolean> CLOSING = ThreadLocal.withInitial(() -> false);
 
         private final okhttp3.Response response;
 
-        OkResponse(Call call) {
-            this.call = call;
-            try {
-                this.response = call.execute();
-            } catch (IOException e) {
-                throw new UncheckedIOException("Error while executing " + call.request(), e);
-            }
+        OkResponse(okhttp3.Response response) {
+            this.response = response;
         }
 
         @Override
@@ -261,16 +255,12 @@ public final class OkDockerHttpClient implements DockerHttpClient {
 
         @Override
         public void close() {
-            try {
-                call.cancel();
-            } catch (Exception e) {
-                LOGGER.debug("Failed to cancel the call {}", call, e);
-            }
-
+            boolean previous = CLOSING.get();
+            CLOSING.set(true);
             try {
                 response.close();
-            } catch (Exception e) {
-                LOGGER.debug("Failed to close the response", e);
+            } finally {
+                CLOSING.set(previous);
             }
         }
     }
