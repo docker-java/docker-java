@@ -14,13 +14,13 @@ class NamedPipeSocket extends Socket {
 
     private final String socketFileName;
 
-    RandomAccessFile file;
+    private RandomAccessFile file;
 
-    InputStream is;
+    private InputStream is;
 
-    OutputStream os;
+    private OutputStream os;
 
-    public NamedPipeSocket(String socketFileName) {
+    NamedPipeSocket(String socketFileName) {
         this.socketFileName = socketFileName;
     }
 
