@@ -1,6 +1,7 @@
 package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.command.ListContainersCmd;
+import com.github.dockerjava.api.command.ListContainersSpec;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.core.util.FiltersBuilder;
 
@@ -17,57 +18,58 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, List<Container>> implements
         ListContainersCmd {
 
-    private Integer limit = -1;
+    private ListContainersSpec spec;
 
-    private Boolean showSize, showAll = false;
-
-    private String sinceId, beforeId;
-
-    private FiltersBuilder filters = new FiltersBuilder();
+    private final FiltersBuilder filters = new FiltersBuilder();
 
     public ListContainersCmdImpl(ListContainersCmd.Exec exec) {
+        this(exec, ListContainersSpec.builder().build());
+    }
+
+    ListContainersCmdImpl(ListContainersCmd.Exec exec, ListContainersSpec spec) {
         super(exec);
+        this.spec = spec;
     }
 
     @Override
     public Integer getLimit() {
-        return limit;
+        return spec.getLimit();
     }
 
     @Override
     public Boolean hasShowSizeEnabled() {
-        return showSize;
+        return spec.hasShowSizeEnabled();
     }
 
     @Override
     public Boolean hasShowAllEnabled() {
-        return showAll;
+        return spec.hasShowAllEnabled();
     }
 
     @Override
     public String getSinceId() {
-        return sinceId;
+        return spec.getSinceId();
     }
 
     @Override
     public String getBeforeId() {
-        return beforeId;
+        return spec.getBeforeId();
     }
 
     @Override
     public Map<String, List<String>> getFilters() {
-        return filters.build();
+        return spec.getFilters();
     }
 
     @Override
     public ListContainersCmd withShowAll(Boolean showAll) {
-        this.showAll = showAll;
+        this.spec = spec.withHasShowAllEnabled(showAll);
         return this;
     }
 
     @Override
     public ListContainersCmd withShowSize(Boolean showSize) {
-        this.showSize = showSize;
+        this.spec = spec.withHasShowSizeEnabled(showSize);
         return this;
     }
 
@@ -75,21 +77,21 @@ public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, Lis
     public ListContainersCmd withLimit(Integer limit) {
         checkNotNull(limit, "limit was not specified");
         checkArgument(limit > 0, "limit must be greater 0");
-        this.limit = limit;
+        this.spec = spec.withLimit(limit);
         return this;
     }
 
     @Override
     public ListContainersCmd withSince(String since) {
         checkNotNull(since, "since was not specified");
-        this.sinceId = since;
+        this.spec = spec.withSinceId(since);
         return this;
     }
 
     @Override
     public ListContainersCmd withBefore(String before) {
         checkNotNull(before, "before was not specified");
-        this.beforeId = before;
+        this.spec = spec.withBeforeId(before);
         return this;
     }
 
@@ -124,9 +126,15 @@ public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, Lis
     }
 
     @Override
+    public ListContainersCmd withStatusFilter(Collection<String> status) {
+        return withFilter("status", status);
+    }
+
+    @Override
     public ListContainersCmd withLabelFilter(Map<String, String> labels) {
         checkNotNull(labels, "labels was not specified");
         this.filters.withLabels(labels);
+        this.spec = spec.withFilters(this.filters.build());
         return this;
     }
 
@@ -134,6 +142,7 @@ public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, Lis
     public ListContainersCmd withExitedFilter(Integer exited) {
         checkNotNull(exited, "exited was not specified");
         this.filters.withFilter("exited", exited.toString());
+        this.spec = spec.withFilters(this.filters.build());
         return this;
     }
 
@@ -141,13 +150,7 @@ public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, Lis
     public ListContainersCmd withFilter(String filterName, Collection<String> filterValues) {
         checkNotNull(filterValues, filterName + " was not specified");
         this.filters.withFilter(filterName, filterValues);
-        return this;
-    }
-
-    @Override
-    public ListContainersCmd withStatusFilter(Collection<String> status) {
-        checkNotNull(status, "status was not specified");
-        this.filters.withFilter("status", status);
+        this.spec = spec.withFilters(this.filters.build());
         return this;
     }
 }

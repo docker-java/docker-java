@@ -27,10 +27,8 @@ import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
-public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerResponse> {
-
-    @CheckForNull
-    AuthConfig getAuthConfig();
+@DockerCommand
+public interface CreateContainerCmd extends CreateContainer, SyncDockerCmd<CreateContainerResponse> {
 
     /**
      * While using swarm classic, you can provide an optional auth config which will be used to pull images from a private registry,
@@ -78,37 +76,19 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
      */
     CreateContainerCmd withAliases(String... aliases);
 
-    @CheckForNull
-    String[] getCmd();
-
     CreateContainerCmd withCmd(String... cmd);
 
     CreateContainerCmd withCmd(List<String> cmd);
 
-    @CheckForNull
-    HealthCheck getHealthcheck();
-
     CreateContainerCmd withHealthcheck(HealthCheck healthCheck);
-
-    @CheckForNull
-    Boolean getArgsEscaped();
 
     CreateContainerCmd withArgsEscaped(Boolean argsEscaped);
 
-    @CheckForNull
-    String getDomainName();
-
     CreateContainerCmd withDomainName(String domainName);
-
-    @CheckForNull
-    String[] getEntrypoint();
 
     CreateContainerCmd withEntrypoint(String... entrypoint);
 
     CreateContainerCmd withEntrypoint(List<String> entrypoint);
-
-    @CheckForNull
-    String[] getEnv();
 
     /**
      * Adds environment-variables. NB: Not additive, i.e. in case of multiple calls to the method, only the most recent
@@ -126,35 +106,17 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
      */
     CreateContainerCmd withEnv(List<String> env);
 
-    @CheckForNull
-    ExposedPort[] getExposedPorts();
-
     CreateContainerCmd withExposedPorts(List<ExposedPort> exposedPorts);
 
     CreateContainerCmd withExposedPorts(ExposedPort... exposedPorts);
 
-    @CheckForNull
-    String getStopSignal();
-
     CreateContainerCmd withStopSignal(String stopSignal);
-
-    @CheckForNull
-    Integer getStopTimeout();
 
     CreateContainerCmd withStopTimeout(Integer stopTimeout);
 
-    @CheckForNull
-    String getHostName();
-
     CreateContainerCmd withHostName(String hostName);
 
-    @CheckForNull
-    String getImage();
-
     CreateContainerCmd withImage(String image);
-
-    @CheckForNull
-    String getIpv4Address();
 
     CreateContainerCmd withIpv4Address(String ipv4Address);
 
@@ -189,13 +151,7 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     CreateContainerCmd withIpv6Address(String ipv6Address);
 
-    @CheckForNull
-    Map<String, String> getLabels();
-
     CreateContainerCmd withLabels(Map<String, String> labels);
-
-    @CheckForNull
-    String getMacAddress();
 
     CreateContainerCmd withMacAddress(String macAddress);
 
@@ -296,9 +252,6 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     CreateContainerCmd withName(String name);
 
-    @CheckForNull
-    String[] getPortSpecs();
-
     CreateContainerCmd withPortSpecs(String... portSpecs);
 
     CreateContainerCmd withPortSpecs(List<String> portSpecs);
@@ -321,9 +274,6 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     String getUser();
 
     CreateContainerCmd withUser(String user);
-
-    @CheckForNull
-    Volume[] getVolumes();
 
     CreateContainerCmd withVolumes(Volume... volumes);
 
@@ -354,38 +304,17 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
 
     CreateContainerCmd withWorkingDir(String workingDir);
 
-    @CheckForNull
-    Boolean isAttachStderr();
-
     CreateContainerCmd withAttachStderr(Boolean attachStderr);
-
-    @CheckForNull
-    Boolean isAttachStdin();
 
     CreateContainerCmd withAttachStdin(Boolean attachStdin);
 
-    @CheckForNull
-    Boolean isAttachStdout();
-
     CreateContainerCmd withAttachStdout(Boolean attachStdout);
-
-    @CheckForNull
-    Boolean isNetworkDisabled();
 
     CreateContainerCmd withNetworkDisabled(Boolean disableNetwork);
 
-    @CheckForNull
-    Boolean isStdInOnce();
-
     CreateContainerCmd withStdInOnce(Boolean stdInOnce);
 
-    @CheckForNull
-    Boolean isStdinOpen();
-
     CreateContainerCmd withStdinOpen(Boolean stdinOpen);
-
-    @CheckForNull
-    Boolean isTty();
 
     CreateContainerCmd withTty(Boolean tty);
 
@@ -485,9 +414,6 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
         return withCapDrop(capDrop.toArray(new Capability[capDrop.size()]));
     }
 
-
-    @CheckForNull
-    List<String> getOnBuild();
 
     CreateContainerCmd withOnBuild(List<String> onBuild);
 

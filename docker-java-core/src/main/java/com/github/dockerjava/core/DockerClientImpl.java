@@ -93,6 +93,7 @@ import com.github.dockerjava.core.command.CreateNetworkCmdImpl;
 import com.github.dockerjava.core.command.CreateSecretCmdImpl;
 import com.github.dockerjava.core.command.CreateServiceCmdImpl;
 import com.github.dockerjava.core.command.CreateVolumeCmdImpl;
+import com.github.dockerjava.core.command.DefaultContainerCommands;
 import com.github.dockerjava.core.command.DisconnectFromNetworkCmdImpl;
 import com.github.dockerjava.core.command.EventsCmdImpl;
 import com.github.dockerjava.core.command.ExecCreateCmdImpl;
@@ -243,6 +244,10 @@ public class DockerClientImpl implements Closeable, DockerClient {
                 .withPassword(dockerClientConfig.getRegistryPassword())
                 .withEmail(dockerClientConfig.getRegistryEmail())
                 .withRegistryAddress(dockerClientConfig.getRegistryUrl());
+    }
+
+    public ContainerCommands containers() {
+        return new DefaultContainerCommands(dockerCmdExecFactory);
     }
 
     /**

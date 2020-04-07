@@ -1,6 +1,5 @@
 package com.github.dockerjava.api.command;
 
-import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 import com.github.dockerjava.api.exception.NotFoundException;
@@ -15,13 +14,8 @@ import com.github.dockerjava.api.exception.NotModifiedException;
  *            - Timeout in seconds before killing the container. Defaults to 10 seconds.
  *
  */
-public interface StopContainerCmd extends SyncDockerCmd<Void> {
-
-    @CheckForNull
-    String getContainerId();
-
-    @CheckForNull
-    Integer getTimeout();
+@DockerCommand
+public interface StopContainerCmd extends StopContainer, SyncDockerCmd<Void> {
 
     StopContainerCmd withContainerId(@Nonnull String containerId);
 

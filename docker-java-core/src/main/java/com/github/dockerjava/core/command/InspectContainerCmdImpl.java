@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.command.InspectContainerSpec;
 import com.github.dockerjava.api.exception.NotFoundException;
 
 /**
@@ -12,35 +13,43 @@ import com.github.dockerjava.api.exception.NotFoundException;
 public class InspectContainerCmdImpl extends AbstrDockerCmd<InspectContainerCmd, InspectContainerResponse> implements
         InspectContainerCmd {
 
-    private String containerId;
-    private boolean size;
+    private InspectContainerSpec spec;
 
     public InspectContainerCmdImpl(InspectContainerCmd.Exec exec, String containerId) {
-        super(exec);
-        withContainerId(containerId);
+        this(
+            exec,
+            InspectContainerSpec.builder()
+                .containerId(containerId)
+                .build()
+        );
+    }
+
+    InspectContainerCmdImpl(InspectContainerCmd.Exec inspectContainerCmdExec, InspectContainerSpec spec) {
+        super(inspectContainerCmdExec);
+        this.spec = spec;
     }
 
     @Override
     public String getContainerId() {
-        return containerId;
+        return spec.getContainerId();
     }
 
     @Override
     public InspectContainerCmd withContainerId(String containerId) {
         checkNotNull(containerId, "containerId was not specified");
-        this.containerId = containerId;
+        this.spec = spec.withContainerId(containerId);
         return this;
     }
 
     @Override
     public InspectContainerCmd withSize(Boolean showSize) {
-        this.size = showSize;
+        this.spec = spec.withSize(showSize);
         return this;
     }
 
     @Override
     public Boolean getSize() {
-        return size;
+        return spec.getSize();
     }
 
     /**

@@ -1,6 +1,5 @@
 package com.github.dockerjava.api.command;
 
-import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 import com.github.dockerjava.api.exception.NotFoundException;
@@ -10,10 +9,8 @@ import com.github.dockerjava.api.exception.NotModifiedException;
  * Start a container.
  *
  */
-public interface StartContainerCmd extends SyncDockerCmd<Void> {
-
-    @CheckForNull
-    String getContainerId();
+@DockerCommand
+public interface StartContainerCmd extends StartContainer, SyncDockerCmd<Void> {
 
     StartContainerCmd withContainerId(@Nonnull String containerId);
 
