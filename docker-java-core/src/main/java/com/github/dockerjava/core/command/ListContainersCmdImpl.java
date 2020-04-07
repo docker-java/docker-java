@@ -18,18 +18,17 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, List<Container>> implements
         ListContainersCmd {
 
-    private ListContainersSpec spec = ListContainersSpec.builder().build();
+    private ListContainersSpec spec;
 
     private final FiltersBuilder filters = new FiltersBuilder();
 
     public ListContainersCmdImpl(ListContainersCmd.Exec exec) {
-        super(exec);
+        this(exec, ListContainersSpec.builder().build());
     }
 
-    @Override
-    public ListContainersCmd fromSpec(ListContainersSpec spec) {
+    ListContainersCmdImpl(ListContainersCmd.Exec exec, ListContainersSpec spec) {
+        super(exec);
         this.spec = spec;
-        return this;
     }
 
     @Override

@@ -22,14 +22,12 @@ public class StopContainerCmdImpl extends AbstrDockerCmd<StopContainerCmd, Void>
     private StopContainerSpec spec;
 
     public StopContainerCmdImpl(StopContainerCmd.Exec exec, String containerId) {
-        super(exec);
-        spec = StopContainerSpec.of(containerId);
+        this(exec, StopContainerSpec.of(containerId));
     }
 
-    @Override
-    public StopContainerCmd fromSpec(StopContainerSpec spec) {
+    StopContainerCmdImpl(StopContainerCmd.Exec exec, StopContainerSpec spec) {
+        super(exec);
         this.spec = spec;
-        return this;
     }
 
     @Override

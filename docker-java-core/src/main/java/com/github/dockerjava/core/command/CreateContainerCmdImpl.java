@@ -41,16 +41,18 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     private List<String> aliases = null;
 
     public CreateContainerCmdImpl(CreateContainerCmd.Exec exec, AuthConfig authConfig, String image) {
-        super(exec);
-        this.spec = CreateContainerSpec.builder()
+        this(
+            exec,
+            CreateContainerSpec.builder()
                 .image(image)
                 .authConfig(authConfig)
-                .build();
+                .build()
+        );
     }
 
-    public CreateContainerCmdImpl fromSpec(CreateContainerSpec spec) {
-        this.spec = spec;
-        return this;
+    CreateContainerCmdImpl(CreateContainerCmd.Exec createContainerCmdExec, CreateContainerSpec spec) {
+        super(createContainerCmdExec);
+        this.spec = CreateContainerSpec.copyOf(spec);
     }
 
     public AuthConfig getAuthConfig() {

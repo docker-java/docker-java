@@ -13,22 +13,6 @@ import java.util.Map;
 @DockerCommand
 public interface ListContainersCmd extends ListContainers, SyncDockerCmd<List<Container>> {
 
-    default ListContainersCmd fromSpec(ListContainersSpec spec) {
-        ListContainersCmd listContainersCmd = this;
-        Map<String, List<String>> filters = spec.getFilters();
-        if (filters != null) {
-            for (Map.Entry<String, List<String>> entry : filters.entrySet()) {
-                listContainersCmd = listContainersCmd.withFilter(entry.getKey(), entry.getValue());
-            }
-        }
-        return listContainersCmd
-                .withBefore(spec.getBeforeId())
-                .withLimit(spec.getLimit())
-                .withSince(spec.getSinceId())
-                .withShowAll(spec.hasShowAllEnabled())
-                .withShowSize(spec.hasShowSizeEnabled());
-    }
-
     /**
      * @param before
      *            - Show only containers created before Id, include non-running ones.

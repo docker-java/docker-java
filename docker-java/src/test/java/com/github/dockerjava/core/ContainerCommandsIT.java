@@ -1,6 +1,7 @@
 package com.github.dockerjava.core;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.AttachContainerSpec;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.CreateContainerSpec;
@@ -10,7 +11,6 @@ import com.github.dockerjava.api.command.StopContainerSpec;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.cmd.CmdIT;
-import com.github.dockerjava.core.command.AttachContainerResultCallback;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -43,7 +43,7 @@ public class ContainerCommandsIT extends CmdIT {
 
     @Before
     public void setUp() {
-        containerCommands = dockerRule.getClient().containerCommands();
+        containerCommands = dockerRule.getClient().containers();
     }
 
     @Test
@@ -55,7 +55,7 @@ public class ContainerCommandsIT extends CmdIT {
         );
 
         LOG.info("Created container {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(emptyOrNullString()));
 
         InspectContainerResponse containerInfo = containerCommands.inspect(container.getId());
         assertEquals(container.getId(), containerInfo.getId());
@@ -73,25 +73,27 @@ public class ContainerCommandsIT extends CmdIT {
 
         CountDownLatch latch = new CountDownLatch(5);
 
-        containerCommands.attach(
+        try (
+            ResultCallback.Adapter<Frame> callback = containerCommands.attach(
                 AttachContainerSpec.builder()
-                        .containerId(container.getId())
-                        .hasStdoutEnabled(true)
-                        .hasStderrEnabled(true)
-                        .hasFollowStreamEnabled(true)
-                        .build(),
-                new AttachContainerResultCallback() {
+                    .containerId(container.getId())
+                    .hasStdoutEnabled(true)
+                    .hasStderrEnabled(true)
+                    .hasFollowStreamEnabled(true)
+                    .build(),
+                new ResultCallback.Adapter<Frame>() {
                     @Override
                     public void onNext(Frame item) {
                         super.onNext(item);
                         latch.countDown();
                     }
                 }
-        );
-
-        containerCommands.start(container.getId());
-
-        assertTrue(latch.await(10, TimeUnit.SECONDS));
+            )
+        ) {
+            callback.awaitStarted(10, TimeUnit.SECONDS);
+            containerCommands.start(container.getId());
+            assertTrue(latch.await(10, TimeUnit.SECONDS));
+        }
 
         containerCommands.stop(
                 StopContainerSpec.builder()

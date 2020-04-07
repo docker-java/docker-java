@@ -30,11 +30,6 @@ import static java.util.Objects.requireNonNull;
 @DockerCommand
 public interface CreateContainerCmd extends CreateContainer, SyncDockerCmd<CreateContainerResponse> {
 
-    default CreateContainerCmd fromSpec(CreateContainerSpec spec) {
-        // TODO populate from spec?
-        throw new IllegalStateException("Not supported");
-    }
-
     /**
      * While using swarm classic, you can provide an optional auth config which will be used to pull images from a private registry,
      * if the swarm node does not already have the docker image.

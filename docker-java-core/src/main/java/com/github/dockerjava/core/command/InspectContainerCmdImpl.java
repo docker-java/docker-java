@@ -16,17 +16,17 @@ public class InspectContainerCmdImpl extends AbstrDockerCmd<InspectContainerCmd,
     private InspectContainerSpec spec;
 
     public InspectContainerCmdImpl(InspectContainerCmd.Exec exec, String containerId) {
-        super(exec);
-
-        this.spec = InspectContainerSpec.builder()
+        this(
+            exec,
+            InspectContainerSpec.builder()
                 .containerId(containerId)
-                .build();
+                .build()
+        );
     }
 
-    @Override
-    public InspectContainerCmd fromSpec(InspectContainerSpec spec) {
+    InspectContainerCmdImpl(InspectContainerCmd.Exec inspectContainerCmdExec, InspectContainerSpec spec) {
+        super(inspectContainerCmdExec);
         this.spec = spec;
-        return this;
     }
 
     @Override

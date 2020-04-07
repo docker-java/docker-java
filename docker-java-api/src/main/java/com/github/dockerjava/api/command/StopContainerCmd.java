@@ -17,12 +17,6 @@ import com.github.dockerjava.api.exception.NotModifiedException;
 @DockerCommand
 public interface StopContainerCmd extends StopContainer, SyncDockerCmd<Void> {
 
-    default StopContainerCmd fromSpec(StopContainerSpec spec) {
-        return this
-                .withContainerId(spec.getContainerId())
-                .withTimeout(spec.getTimeout());
-    }
-
     StopContainerCmd withContainerId(@Nonnull String containerId);
 
     StopContainerCmd withTimeout(Integer timeout);

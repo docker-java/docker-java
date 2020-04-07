@@ -12,11 +12,6 @@ import com.github.dockerjava.api.exception.NotModifiedException;
 @DockerCommand
 public interface StartContainerCmd extends StartContainer, SyncDockerCmd<Void> {
 
-    default StartContainerCmd fromSpec(StartContainerSpec spec) {
-        return this
-                .withContainerId(spec.getContainerId());
-    }
-
     StartContainerCmd withContainerId(@Nonnull String containerId);
 
     /**

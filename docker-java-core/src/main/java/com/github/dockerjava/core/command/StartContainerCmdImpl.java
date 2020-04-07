@@ -15,14 +15,12 @@ public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Voi
     private StartContainerSpec spec;
 
     public StartContainerCmdImpl(StartContainerCmd.Exec exec, String containerId) {
-        super(exec);
-        this.spec = StartContainerSpec.of(containerId);
+        this(exec, StartContainerSpec.of(containerId));
     }
 
-    @Override
-    public StartContainerCmd fromSpec(StartContainerSpec spec) {
+    StartContainerCmdImpl(StartContainerCmd.Exec startContainerCmdExec, StartContainerSpec spec) {
+        super(startContainerCmdExec);
         this.spec = spec;
-        return this;
     }
 
     @Override

@@ -14,97 +14,93 @@ import com.github.dockerjava.api.model.Frame;
 public class AttachContainerCmdImpl extends AbstrAsyncDockerCmd<AttachContainerCmd, Frame>
         implements AttachContainerCmd {
 
-    private AttachContainerSpec request;
+    private AttachContainerSpec spec;
 
     public AttachContainerCmdImpl(AttachContainerCmd.Exec exec, String containerId) {
-        super(exec);
-        this.request = AttachContainerSpec.builder()
-                .containerId(containerId)
-                .build();
+        this(exec, AttachContainerSpec.of(containerId));
     }
 
-    @Override
-    public AttachContainerCmd fromSpec(AttachContainerSpec spec) {
-        this.request = spec;
-        return this;
+    AttachContainerCmdImpl(AttachContainerCmd.Exec exec, AttachContainerSpec spec) {
+        super(exec);
+        this.spec = spec;
     }
 
     @Override
     public String getContainerId() {
-        return request.getContainerId();
+        return spec.getContainerId();
     }
 
     @Override
     public Boolean hasLogsEnabled() {
-        return request.hasLogsEnabled();
+        return spec.hasLogsEnabled();
     }
 
     @Override
     public Boolean hasFollowStreamEnabled() {
-        return request.hasFollowStreamEnabled();
+        return spec.hasFollowStreamEnabled();
     }
 
     @Override
     public Boolean hasTimestampsEnabled() {
-        return request.hasTimestampsEnabled();
+        return spec.hasTimestampsEnabled();
     }
 
     @Override
     public Boolean hasStdoutEnabled() {
-        return request.hasStdoutEnabled();
+        return spec.hasStdoutEnabled();
     }
 
     @Override
     public Boolean hasStderrEnabled() {
-        return request.hasStderrEnabled();
+        return spec.hasStderrEnabled();
     }
 
     @Override
     public InputStream getStdin() {
-        return request.getStdin();
+        return spec.getStdin();
     }
 
     @Override
     public AttachContainerCmd withContainerId(String containerId) {
         checkNotNull(containerId, "containerId was not specified");
-        this.request = request.withContainerId(containerId);
+        this.spec = spec.withContainerId(containerId);
         return this;
     }
 
     @Override
     public AttachContainerCmd withFollowStream(Boolean followStream) {
-        this.request = request.withHasFollowStreamEnabled(followStream);
+        this.spec = spec.withHasFollowStreamEnabled(followStream);
         return this;
     }
 
     @Override
     public AttachContainerCmd withTimestamps(Boolean timestamps) {
-        this.request = request.withHasTimestampsEnabled(timestamps);
+        this.spec = spec.withHasTimestampsEnabled(timestamps);
         return this;
     }
 
     @Override
     public AttachContainerCmd withStdOut(Boolean stdout) {
-        this.request = request.withHasStdoutEnabled(stdout);
+        this.spec = spec.withHasStdoutEnabled(stdout);
         return this;
     }
 
     @Override
     public AttachContainerCmd withStdErr(Boolean stderr) {
-        this.request = request.withHasStderrEnabled(stderr);
+        this.spec = spec.withHasStderrEnabled(stderr);
         return this;
     }
 
     @Override
     public AttachContainerCmd withStdIn(InputStream stdin) {
         checkNotNull(stdin, "stdin was not specified");
-        this.request = request.withStdin(stdin);
+        this.spec = spec.withStdin(stdin);
         return this;
     }
 
     @Override
     public AttachContainerCmd withLogs(Boolean logs) {
-        this.request = request.withHasLogsEnabled(logs);
+        this.spec = spec.withHasLogsEnabled(logs);
         return this;
     }
 }

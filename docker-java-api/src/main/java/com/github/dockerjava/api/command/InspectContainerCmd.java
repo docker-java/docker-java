@@ -7,12 +7,6 @@ import com.github.dockerjava.api.exception.NotFoundException;
 @DockerCommand
 public interface InspectContainerCmd extends InspectContainer, SyncDockerCmd<InspectContainerResponse> {
 
-    default InspectContainerCmd fromSpec(InspectContainerSpec spec) {
-        return this
-                .withContainerId(spec.getContainerId())
-                .withSize(spec.getSize());
-    }
-
     InspectContainerCmd withContainerId(@Nonnull String containerId);
 
     InspectContainerCmd withSize(Boolean showSize);

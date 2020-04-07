@@ -25,17 +25,6 @@ import com.github.dockerjava.api.model.Frame;
 @DockerCommand
 public interface AttachContainerCmd extends AttachContainer, AsyncDockerCmd<AttachContainerCmd, Frame> {
 
-    default AttachContainerCmd fromSpec(AttachContainerSpec spec) {
-        return this
-                .withFollowStream(spec.hasFollowStreamEnabled())
-                .withStdErr(spec.hasStderrEnabled())
-                .withStdOut(spec.hasStdoutEnabled())
-                .withLogs(spec.hasLogsEnabled())
-                .withStdIn(spec.getStdin())
-                .withContainerId(spec.getContainerId())
-                .withTimestamps(spec.hasTimestampsEnabled());
-    }
-
     AttachContainerCmd withContainerId(@Nonnull String containerId);
 
     /**
