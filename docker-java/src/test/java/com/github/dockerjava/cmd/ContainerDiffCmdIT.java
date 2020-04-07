@@ -4,7 +4,6 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.ChangeLog;
-import com.github.dockerjava.core.command.WaitContainerResultCallback;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,9 +12,10 @@ import java.util.List;
 
 import static ch.lambdaj.Lambda.selectUnique;
 import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
 
@@ -26,10 +26,10 @@ public class ContainerDiffCmdIT extends CmdIT {
     public void testContainerDiff() throws DockerException {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("touch", "/test").exec();
         LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
-        int exitCode = dockerRule.getClient().waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback())
+        int exitCode = dockerRule.getClient().waitContainerCmd(container.getId()).start()
                 .awaitStatusCode();
         assertThat(exitCode, equalTo(0));
 

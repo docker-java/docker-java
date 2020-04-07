@@ -1,11 +1,11 @@
 package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.StreamType;
-import com.github.dockerjava.core.command.AttachContainerResultCallback;
 import org.junit.Assume;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,7 +27,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -57,7 +57,7 @@ public class AttachContainerCmdIT extends CmdIT {
                 .exec();
 
         LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
@@ -73,21 +73,23 @@ public class AttachContainerCmdIT extends CmdIT {
             }
         };
 
-        PipedOutputStream out = new PipedOutputStream();
-        PipedInputStream in = new PipedInputStream(out);
-
-        dockerClient.attachContainerCmd(container.getId())
+        try (
+            PipedOutputStream out = new PipedOutputStream();
+            PipedInputStream in = new PipedInputStream(out);
+        ) {
+            dockerClient.attachContainerCmd(container.getId())
                 .withStdErr(true)
                 .withStdOut(true)
                 .withFollowStream(true)
                 .withStdIn(in)
                 .exec(callback);
 
-        out.write((snippet + "\n").getBytes());
-        out.flush();
+            out.write((snippet + "\n").getBytes());
+            out.flush();
 
-        callback.awaitCompletion(15, SECONDS);
-        callback.close();
+            callback.awaitCompletion(15, SECONDS);
+            callback.close();
+        }
 
         assertThat(callback.toString(), containsString(snippet));
     }
@@ -104,7 +106,7 @@ public class AttachContainerCmdIT extends CmdIT {
                 .exec();
 
         LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
@@ -140,7 +142,7 @@ public class AttachContainerCmdIT extends CmdIT {
         CreateContainerResponse container = dockerClient.createContainerCmd(imageId).withTty(true).exec();
 
         LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
@@ -181,7 +183,7 @@ public class AttachContainerCmdIT extends CmdIT {
                 .exec();
 
         LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
@@ -207,7 +209,7 @@ public class AttachContainerCmdIT extends CmdIT {
     }
 
     /**
-     * {@link AttachContainerResultCallback#onComplete()} should be called immediately after
+     * {@link ResultCallback#onComplete()} should be called immediately after
      * container exit. It was broken for Netty and TLS connection.
      */
     @Test
@@ -222,11 +224,11 @@ public class AttachContainerCmdIT extends CmdIT {
 
         CountDownLatch gotLine = new CountDownLatch(1);
         try (
-                AttachContainerResultCallback resultCallback = dockerClient.attachContainerCmd(container.getId())
+                ResultCallback.Adapter<Frame> resultCallback = dockerClient.attachContainerCmd(container.getId())
                         .withStdOut(true)
                         .withStdErr(true)
                         .withFollowStream(true)
-                        .exec(new AttachContainerTestCallback() {
+                        .exec(new ResultCallback.Adapter<Frame>() {
                             @Override
                             public void onNext(Frame item) {
                                 LOG.info("Got frame: {}", item);
@@ -255,7 +257,7 @@ public class AttachContainerCmdIT extends CmdIT {
         }
     }
 
-    public static class AttachContainerTestCallback extends AttachContainerResultCallback {
+    public static class AttachContainerTestCallback extends ResultCallback.Adapter<Frame> {
         private StringBuffer log = new StringBuffer();
 
         @Override

@@ -1,6 +1,8 @@
 package com.github.dockerjava.cmd.swarm;
 
+import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.ContainerSpec;
 import com.github.dockerjava.api.model.EndpointResolutionMode;
 import com.github.dockerjava.api.model.EndpointSpec;
@@ -16,9 +18,14 @@ import com.github.dockerjava.api.model.ServiceSpec;
 import com.github.dockerjava.api.model.SwarmSpec;
 import com.github.dockerjava.api.model.TaskSpec;
 import com.github.dockerjava.api.model.TmpfsOptions;
+import com.github.dockerjava.junit.PrivateRegistryRule;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +41,19 @@ public class CreateServiceCmdExecIT extends SwarmCmdIT {
 
     public static final Logger LOG = LoggerFactory.getLogger(CreateServiceCmdExecIT.class);
     private static final String SERVICE_NAME = "theservice";
+
+    @ClassRule
+    public static PrivateRegistryRule REGISTRY = new PrivateRegistryRule();
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+    private AuthConfig authConfig;
+
+    @Before
+    public void beforeTest() throws Exception {
+        super.beforeTest();
+        authConfig = REGISTRY.getAuthConfig();
+    }
 
     @Test
     public void testCreateService() throws DockerException {
@@ -131,5 +151,53 @@ public class CreateServiceCmdExecIT extends SwarmCmdIT {
         assertThat(mounts, hasSize(1));
         assertThat(mounts.get(0), is(tmpMount));
         dockerRule.getClient().removeServiceCmd(SERVICE_NAME).exec();
+    }
+
+    @Test
+    public void testCreateServiceWithValidAuth() throws DockerException {
+        dockerRule.getClient().initializeSwarmCmd(new SwarmSpec())
+                .withListenAddr("127.0.0.1")
+                .withAdvertiseAddr("127.0.0.1")
+                .exec();
+
+        dockerRule.getClient().createServiceCmd(new ServiceSpec()
+                .withName(SERVICE_NAME)
+                .withTaskTemplate(new TaskSpec()
+                        .withContainerSpec(new ContainerSpec()
+                                .withImage(DEFAULT_IMAGE))))
+                .withAuthConfig(authConfig)
+                .exec();
+
+        List<Service> services = dockerRule.getClient().listServicesCmd()
+                .withNameFilter(Lists.newArrayList(SERVICE_NAME))
+                .exec();
+
+        assertThat(services, hasSize(1));
+
+        dockerRule.getClient().removeServiceCmd(SERVICE_NAME).exec();
+    }
+
+    @Test
+    public void testCreateServiceWithInvalidAuth() throws DockerException {
+        dockerRule.getClient().initializeSwarmCmd(new SwarmSpec())
+                .withListenAddr("127.0.0.1")
+                .withAdvertiseAddr("127.0.0.1")
+                .exec();
+
+        AuthConfig invalidAuthConfig = new AuthConfig()
+                .withUsername("testuser")
+                .withPassword("testwrongpassword")
+                .withEmail("foo@bar.de")
+                .withRegistryAddress(authConfig.getRegistryAddress());
+
+        exception.expect(ConflictException.class);
+
+        dockerRule.getClient().createServiceCmd(new ServiceSpec()
+                .withName(SERVICE_NAME)
+                .withTaskTemplate(new TaskSpec()
+                        .withContainerSpec(new ContainerSpec()
+                                .withImage(DEFAULT_IMAGE))))
+                .withAuthConfig(invalidAuthConfig)
+                .exec();
     }
 }

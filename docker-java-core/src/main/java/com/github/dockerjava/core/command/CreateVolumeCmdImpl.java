@@ -19,6 +19,9 @@ public class CreateVolumeCmdImpl extends AbstrDockerCmd<CreateVolumeCmd, CreateV
     @JsonProperty("Name")
     private String name;
 
+    @JsonProperty("Labels")
+    private Map<String, String> labels;
+
     @JsonProperty("Driver")
     private String driver;
 
@@ -35,6 +38,11 @@ public class CreateVolumeCmdImpl extends AbstrDockerCmd<CreateVolumeCmd, CreateV
     }
 
     @Override
+    public Map<String, String> getLabels() {
+        return labels;
+    }
+
+    @Override
     public String getDriver() {
         return driver;
     }
@@ -48,6 +56,13 @@ public class CreateVolumeCmdImpl extends AbstrDockerCmd<CreateVolumeCmd, CreateV
     public CreateVolumeCmdImpl withName(String name) {
         checkNotNull(name, "name was not specified");
         this.name = name;
+        return this;
+    }
+
+    @Override
+    public CreateVolumeCmdImpl withLabels(Map<String, String> labels) {
+        checkNotNull(labels, "labels was not specified");
+        this.labels = labels;
         return this;
     }
 

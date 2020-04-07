@@ -4,7 +4,6 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.Container;
-import com.github.dockerjava.core.command.WaitContainerResultCallback;
 import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -24,12 +23,12 @@ public class RemoveContainerCmdImplIT extends CmdIT {
     
 
     @Test
-    public void removeContainer() throws DockerException {
+    public void removeContainer() throws Exception {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("true").exec();
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
-        dockerRule.getClient().waitContainerCmd(container.getId()).exec(new WaitContainerResultCallback()).awaitStatusCode();
+        dockerRule.getClient().waitContainerCmd(container.getId()).start().awaitStatusCode();
 
         LOG.info("Removing container: {}", container.getId());
         dockerRule.getClient().removeContainerCmd(container.getId()).exec();

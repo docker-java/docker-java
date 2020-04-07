@@ -2,6 +2,13 @@ Change Log
 ===
 
 
+## 3.2.0
+- **Changelog is not maintained in this file. Please follow git diff or github releases.**
+- Library was split into multiple modules to get ability to choose transports.
+Okhttp was added (say thanks to @bsideup).
+- Various cleanup, tests de-duplication internally. Planned binary compatibility breakage was reverted by @testcontainers project, so migration should work smoothly. Please switch to non-deprecated methods.
+- Appeared various new commands and Fields(command options for existing commands).
+
 ## 3.1.2
 - update unix-socket to 2.2.0
 - Remove `JacksonJaxbJsonProvider` from `FiltersEncoder`

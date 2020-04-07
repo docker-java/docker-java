@@ -2,12 +2,11 @@ package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.api.exception.DockerClientException;
-import com.github.dockerjava.api.exception.InternalServerErrorException;
+import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.core.RemoteApiVersion;
-import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.junit.PrivateRegistryRule;
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -65,7 +64,7 @@ public class PullImageCmdIT extends CmdIT {
         LOG.info("Pulling image: {}", testImage);
 
         dockerRule.getClient().pullImageCmd(testImage)
-                .exec(new PullImageResultCallback())
+                .start()
                 .awaitCompletion(30, TimeUnit.SECONDS);
 
         info = dockerRule.getClient().infoCmd().exec();
@@ -89,7 +88,7 @@ public class PullImageCmdIT extends CmdIT {
 
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pullImageCmd("xvxcv/foo")
-                .exec(new PullImageResultCallback())
+                .start()
                 .awaitCompletion(30, TimeUnit.SECONDS);
     }
 
@@ -102,7 +101,7 @@ public class PullImageCmdIT extends CmdIT {
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pullImageCmd(imgName)
                 .withAuthConfig(authConfig)
-                .exec(new PullImageResultCallback())
+                .start()
                 .awaitCompletion(30, TimeUnit.SECONDS);
     }
 
@@ -115,7 +114,7 @@ public class PullImageCmdIT extends CmdIT {
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pullImageCmd(imgName)
                 .withAuthConfig(authConfig)
-                .exec(new PullImageResultCallback())
+                .start()
                 .awaitCompletion(30, TimeUnit.SECONDS);
     }
 
@@ -127,14 +126,14 @@ public class PullImageCmdIT extends CmdIT {
 
         if (isNotSwarm(dockerRule.getClient()) && getVersion(dockerRule.getClient())
                 .isGreaterOrEqual(RemoteApiVersion.VERSION_1_30)) {
-            exception.expect(InternalServerErrorException.class);
+            exception.expect(DockerException.class);
         } else {
             exception.expect(DockerClientException.class);
         }
 
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pullImageCmd(imgName)
-                .exec(new PullImageResultCallback())
+                .start()
                 .awaitCompletion(30, TimeUnit.SECONDS);
     }
 
@@ -152,7 +151,7 @@ public class PullImageCmdIT extends CmdIT {
 
         if (isNotSwarm(dockerRule.getClient()) && getVersion(dockerRule.getClient())
                 .isGreaterOrEqual(RemoteApiVersion.VERSION_1_30)) {
-            exception.expect(InternalServerErrorException.class);
+            exception.expect(DockerException.class);
         } else {
             exception.expect(DockerClientException.class);
         }
@@ -160,7 +159,7 @@ public class PullImageCmdIT extends CmdIT {
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pullImageCmd(imgName)
                 .withAuthConfig(invalidAuthConfig)
-                .exec(new PullImageResultCallback())
+                .start()
                 .awaitCompletion(30, TimeUnit.SECONDS);
     }
 }

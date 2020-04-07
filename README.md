@@ -1,7 +1,6 @@
 [![Join the chat at https://gitter.im/docker-java/docker-java](https://badges.gitter.im/docker-java/docker-java.svg)](https://gitter.im/docker-java/docker-java?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.docker-java/docker-java.svg)](https://mvnrepository.com/artifact/com.github.docker-java/docker-java)
 [![Bintray](https://api.bintray.com/packages/kostyasha/maven/com.github.docker-java%3Adocker-java/images/download.svg)](https://bintray.com/kostyasha/maven/com.github.docker-java%3Adocker-java/_latestVersion) 
-[![Reference Status](https://www.versioneye.com/java/com.github.docker-java:docker-java/reference_badge.svg?style=flat)](https://www.versioneye.com/java/com.github.docker-java:docker-java/references)
 [![Build Status](https://travis-ci.org/docker-java/docker-java.svg?branch=master)](https://travis-ci.org/docker-java/docker-java)
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/9177/badge.svg?flat=1)](https://scan.coverity.com/projects/9177)
 [![codecov.io](http://codecov.io/github/docker-java/docker-java/coverage.svg?branch=master)](http://codecov.io/github/docker-java/docker-java?branch=master)
@@ -12,10 +11,6 @@
 
 Java API client for [Docker](http://docs.docker.io/ "Docker")
 
-<b>The current implementation is based on Jersey 2.x and therefore classpath incompatible with older Jersey 1.x dependent libraries!</b>
-
-Developer forum for [docker-java](https://groups.google.com/forum/?#!forum/docker-java-dev "docker-java")
-
 [Changelog](https://github.com/docker-java/docker-java/blob/master/CHANGELOG.md)<br/>
 [Wiki](https://github.com/docker-java/docker-java/wiki)
 
@@ -23,7 +18,7 @@ Developer forum for [docker-java](https://groups.google.com/forum/?#!forum/docke
 
 ###### Prerequisites:
 
-* Java min 1.7
+* Java min 1.8
 * Maven 3
 
 Build and run integration tests as follows:
@@ -52,7 +47,14 @@ For secure tls (https) communication:
     DOCKER_CERT_PATH=/Users/marcus/.docker/machine/machines/docker-1.11.2
 
 ### Latest release version
-Supports a subset of the Docker Remote API [v1.37](https://docs.docker.com/engine/api/v1.37/), Docker Server version since 1.12.6
+[Maven repository modules](https://mvnrepository.com/artifact/com.github.docker-java)
+
+Since 3.2.0 project provides 3 transports:
+- `docker-java-transport-jersey` (doesn't support streams)
+- `docker-java-transport-netty`
+- `docker-java-transport-okhttp`
+
+For backward compatibility `docker-java` module keeping dependency only on jersey and netty transports. 
 
     <dependency>
           <groupId>com.github.docker-java</groupId>
@@ -75,7 +77,7 @@ You can find the latest development version including javadoc and source files o
 
 ## Documentation
 
-For code examples, please look at the [Wiki](https://github.com/docker-java/docker-java/wiki) or [Test cases](https://github.com/docker-java/docker-java/tree/master/src/test/java/com/github/dockerjava/core/command "Test cases")
+For code examples, please look at the [Wiki](https://github.com/docker-java/docker-java/wiki) or [Test cases](https://github.com/docker-java/docker-java/tree/master/docker-java/src/test/java/com/github/dockerjava/core/command "Test cases")
 
 ## Configuration
 
@@ -139,4 +141,3 @@ In `$HOME/.docker-java.properties`
 ##### Class Path
 
 In the class path at `/docker-java.properties`
-    

@@ -17,6 +17,7 @@ import com.github.dockerjava.core.async.ResultCallbackTemplate;
  * @author Marcus Linke
  *
  */
+@Deprecated
 public class BuildImageResultCallback extends ResultCallbackTemplate<BuildImageResultCallback, BuildResponseItem> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BuildImageResultCallback.class);

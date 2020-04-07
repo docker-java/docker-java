@@ -1,9 +1,8 @@
 package com.github.dockerjava.cmd;
 
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Event;
-import com.github.dockerjava.core.command.EventsResultCallback;
-import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.utils.TestUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -120,7 +119,7 @@ public class EventsCmdIT extends CmdIT {
     private int generateEvents() throws Exception {
         String testImage = "busybox:latest";
 
-        dockerRule.getClient().pullImageCmd(testImage).exec(new PullImageResultCallback()).awaitSuccess();
+        dockerRule.getClient().pullImageCmd(testImage).start().awaitCompletion();
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(testImage).withCmd("sleep", "9999").exec();
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
         dockerRule.getClient().stopContainerCmd(container.getId()).withTimeout(1).exec();
@@ -136,7 +135,7 @@ public class EventsCmdIT extends CmdIT {
         return 5;
     }
 
-    private class EventsTestCallback extends EventsResultCallback {
+    private class EventsTestCallback extends ResultCallback.Adapter<Event> {
 
         private final CountDownLatch countDownLatch;
 

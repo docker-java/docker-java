@@ -19,6 +19,7 @@ import com.github.dockerjava.core.async.ResultCallbackTemplate;
  * @author Marcus Linke
  *
  */
+@Deprecated
 public class WaitContainerResultCallback extends ResultCallbackTemplate<WaitContainerResultCallback, WaitResponse> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WaitContainerResultCallback.class);

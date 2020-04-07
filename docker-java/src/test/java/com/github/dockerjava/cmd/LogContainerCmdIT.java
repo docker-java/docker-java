@@ -3,7 +3,6 @@ package com.github.dockerjava.cmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.StreamType;
-import com.github.dockerjava.core.command.WaitContainerResultCallback;
 import com.github.dockerjava.utils.LogContainerTestCallback;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -12,10 +11,11 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -32,7 +32,7 @@ public class LogContainerCmdIT extends CmdIT {
                 .exec();
 
         LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId())
             .exec();
@@ -63,7 +63,7 @@ public class LogContainerCmdIT extends CmdIT {
                 .exec();
 
         LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId())
             .exec();
@@ -82,7 +82,7 @@ public class LogContainerCmdIT extends CmdIT {
 
         assertTrue(loggingCallback.toString().contains("hello"));
 
-        assertEquals(loggingCallback.getCollectedFrames().get(0).getStreamType(), StreamType.STDOUT);
+        assertEquals(StreamType.STDOUT, loggingCallback.getCollectedFrames().get(0).getStreamType());
     }
 
     @Test
@@ -92,7 +92,7 @@ public class LogContainerCmdIT extends CmdIT {
             @Override
             public void onError(Throwable throwable) {
 
-                assertEquals(throwable.getClass().getName(), NotFoundException.class.getName());
+                assertEquals(NotFoundException.class.getName(), throwable.getClass().getName());
 
                 try {
                     // close the callback to prevent the call to onComplete
@@ -124,12 +124,12 @@ public class LogContainerCmdIT extends CmdIT {
                 .exec();
 
         LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         int exitCode = dockerRule.getClient().waitContainerCmd(container.getId())
-                .exec(new WaitContainerResultCallback())
+                .start()
                 .awaitStatusCode();
 
         assertThat(exitCode, equalTo(0));
@@ -173,14 +173,14 @@ public class LogContainerCmdIT extends CmdIT {
                 .exec();
 
         LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         int timestamp = (int) (System.currentTimeMillis() / 1000);
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         int exitCode = dockerRule.getClient().waitContainerCmd(container.getId())
-                .exec(new WaitContainerResultCallback())
+                .start()
                 .awaitStatusCode();
 
         assertThat(exitCode, equalTo(0));

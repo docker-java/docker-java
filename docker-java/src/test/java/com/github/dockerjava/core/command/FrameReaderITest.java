@@ -1,6 +1,7 @@
 package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.StreamType;
 import com.github.dockerjava.core.DockerClientBuilder;
@@ -46,7 +47,7 @@ public class FrameReaderITest {
 
         // wait for the container to be successfully executed
         int exitCode = dockerClient.waitContainerCmd(dockerfileFixture.getContainerId())
-                .exec(new WaitContainerResultCallback()).awaitStatusCode();
+                .start().awaitStatusCode();
         assertEquals(0, exitCode);
 
         final List<Frame> loggingFrames = getLoggingFrames();
@@ -96,7 +97,7 @@ public class FrameReaderITest {
 
     }
 
-    public static class FrameReaderITestCallback extends LogContainerResultCallback {
+    public static class FrameReaderITestCallback extends ResultCallback.Adapter<Frame> {
 
         public List<Frame> frames = new ArrayList<>();
 

@@ -24,7 +24,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
@@ -80,9 +80,9 @@ public class InfoTest {
 
         assertThat(info.getExperimentalBuild(), is(false));
 
-        assertThat(info.getHttpProxy(), isEmptyString());
-        assertThat(info.getHttpsProxy(), isEmptyString());
-        assertThat(info.getNoProxy(), isEmptyString());
+        assertThat(info.getHttpProxy(), is(emptyString()));
+        assertThat(info.getHttpsProxy(), is(emptyString()));
+        assertThat(info.getNoProxy(), is(emptyString()));
         assertThat(info.getOomKillDisable(), is(true));
         assertThat(info.getOsType(), equalTo("linux"));
 
@@ -234,9 +234,9 @@ public class InfoTest {
 
         assertThat(info.getExperimentalBuild(), is(false));
 
-        assertThat(info.getHttpProxy(), isEmptyString());
-        assertThat(info.getHttpsProxy(), isEmptyString());
-        assertThat(info.getNoProxy(), isEmptyString());
+        assertThat(info.getHttpProxy(), is(emptyString()));
+        assertThat(info.getHttpsProxy(), is(emptyString()));
+        assertThat(info.getNoProxy(), is(emptyString()));
         assertThat(info.getOomKillDisable(), is(true));
         assertThat(info.getOsType(), equalTo("linux"));
 

@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>com.github.docker-java</groupId>
 		<artifactId>docker-java-parent</artifactId>
-		<version>3.2.0-SNAPSHOT</version>
+		<version>3.2.2-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<artifactId>docker-java-transport-netty</artifactId>
-	<packaging>bundle</packaging>
+	<packaging>jar</packaging>
 
 	<name>docker-java-transport-netty</name>
 	<url>https://github.com/docker-java/docker-java</url>
@@ -17,9 +17,9 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>${groupId}</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>docker-java-core</artifactId>
-			<version>${version}</version>
+			<version>${project.version}</version>
 		</dependency>
 
         <dependency>

@@ -6,6 +6,14 @@ import java.io.Closeable;
  * Result callback
  */
 public interface ResultCallback<A_RES_T> extends Closeable {
+
+    class Adapter<A_RES_T> extends ResultCallbackTemplate<Adapter<A_RES_T>, A_RES_T> {
+        @Override
+        public void onNext(A_RES_T object) {
+
+        }
+    }
+
     /**
      * Called when the async processing starts respectively when the response arrives from the server. The passed {@link Closeable} can be
      * used to close/interrupt the processing.

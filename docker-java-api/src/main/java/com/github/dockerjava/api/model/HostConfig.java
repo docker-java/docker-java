@@ -113,6 +113,12 @@ public class HostConfig implements Serializable {
     private List<String> deviceCgroupRules;
 
     /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_40}
+     */
+    @JsonProperty("DeviceRequests")
+    private List<DeviceRequest> deviceRequests;
+
+    /**
      * @since {@link RemoteApiVersion#VERSION_1_25}
      */
     @JsonProperty("DiskQuota")
@@ -1034,6 +1040,16 @@ public class HostConfig implements Serializable {
 
     public HostConfig withDeviceCgroupRules(List<String> deviceCgroupRules) {
         this.deviceCgroupRules = deviceCgroupRules;
+        return this;
+    }
+
+    @CheckForNull
+    public List<DeviceRequest> getDeviceRequests() {
+        return deviceRequests;
+    }
+
+    public HostConfig withDeviceRequests(List<DeviceRequest> deviceRequests) {
+        this.deviceRequests = deviceRequests;
         return this;
     }
 

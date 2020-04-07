@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>com.github.docker-java</groupId>
 		<artifactId>docker-java-parent</artifactId>
-		<version>3.2.0-SNAPSHOT</version>
+		<version>3.2.2-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<artifactId>docker-java</artifactId>
-	<packaging>bundle</packaging>
+	<packaging>jar</packaging>
 
 	<name>docker-java</name>
 	<url>https://github.com/docker-java/docker-java</url>
@@ -17,19 +17,19 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>${groupId}</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>docker-java-core</artifactId>
-			<version>${version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>${groupId}</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>docker-java-transport-jersey</artifactId>
-			<version>${version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>${groupId}</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>docker-java-transport-netty</artifactId>
-			<version>${version}</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
@@ -40,9 +40,15 @@
 
 		<!-- /// Test /////////////////////////// -->
 		<dependency>
-			<groupId>${groupId}</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>docker-java-transport-okhttp</artifactId>
-			<version>${version}</version>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>docker-java-transport-httpclient5</artifactId>
+			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -102,7 +108,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<version>4.13</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -113,7 +119,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>${maven-surefire-plugin.version}</version>
 				<configuration>
 					<trimStackTrace>false</trimStackTrace>
 					<rerunFailingTestsCount>3</rerunFailingTestsCount>
@@ -150,32 +155,6 @@
 						<Export-Package>!com.github.dockerjava.jaxrs.*,!com.github.dockerjava.netty.*,com.github.dockerjava.*</Export-Package>
 						<Import-Package>org.newsclub.net.unix;resolution:="optional",*</Import-Package>
 					</instructions>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<!-- use with "mvn -DskipTests clean package japicmp:cmp" -->
-				<groupId>com.github.siom79.japicmp</groupId>
-				<artifactId>japicmp-maven-plugin</artifactId>
-				<version>0.14.1</version>
-				<configuration>
-					<oldVersion>
-						<dependency>
-							<groupId>com.github.docker-java</groupId>
-							<artifactId>docker-java</artifactId>
-							<version>3.1.0</version>
-							<type>jar</type>
-						</dependency>
-					</oldVersion>
-					<newVersion>
-						<file>
-							<path>${project.build.directory}/${project.artifactId}-${project.version}.jar</path>
-						</file>
-					</newVersion>
-					<parameter>
-						<accessModifier>public</accessModifier>
-						<onlyBinaryIncompatible>true</onlyBinaryIncompatible>
-					</parameter>
 				</configuration>
 			</plugin>
 		</plugins>

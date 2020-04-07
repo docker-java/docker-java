@@ -1,6 +1,11 @@
 package com.github.dockerjava.cmd;
 
+import com.github.dockerjava.api.command.DelegatingDockerCmdExecFactory;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
+import com.github.dockerjava.core.DefaultDockerCmdExecFactory;
+import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.DockerClientConfigAware;
+import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
 import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory;
 import com.github.dockerjava.junit.DockerRule;
 import com.github.dockerjava.junit.category.Integration;
@@ -23,19 +28,45 @@ public abstract class CmdIT {
         NETTY(true) {
             @Override
             public DockerCmdExecFactory createExecFactory() {
-                return new NettyDockerCmdExecFactory().withConnectTimeout(10 * 1000);
+                return new NettyDockerCmdExecFactory().withConnectTimeout(30 * 1000);
             }
         },
         JERSEY(false) {
             @Override
             public DockerCmdExecFactory createExecFactory() {
-                return new JerseyDockerCmdExecFactory().withConnectTimeout(10 * 1000);
+                return new JerseyDockerCmdExecFactory().withConnectTimeout(30 * 1000);
             }
         },
         OKHTTP(true) {
             @Override
             public DockerCmdExecFactory createExecFactory() {
-                return new OkHttpDockerCmdExecFactory();
+                return new OkHttpDockerCmdExecFactory().withConnectTimeout(30 * 1000);
+            }
+        },
+        HTTPCLIENT5(true) {
+            @Override
+            public DockerCmdExecFactory createExecFactory() {
+                class FakeFactory extends DelegatingDockerCmdExecFactory implements DockerClientConfigAware {
+
+                    private DefaultDockerCmdExecFactory dockerCmdExecFactory;
+
+                    @Override
+                    public final DockerCmdExecFactory getDockerCmdExecFactory() {
+                        return dockerCmdExecFactory;
+                    }
+
+                    @Override
+                    public void init(DockerClientConfig dockerClientConfig) {
+                        dockerCmdExecFactory = new DefaultDockerCmdExecFactory(
+                            new ApacheDockerHttpClient.Factory()
+                                .dockerClientConfig(dockerClientConfig)
+                                .build(),
+                            dockerClientConfig.getObjectMapper()
+                        );
+                        dockerCmdExecFactory.init(dockerClientConfig);
+                    }
+                }
+                return new FakeFactory();
             }
         };
 

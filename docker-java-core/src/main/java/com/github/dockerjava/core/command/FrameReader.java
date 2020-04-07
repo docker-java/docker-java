@@ -14,6 +14,7 @@ import javax.annotation.CheckForNull;
  * <p/>
  * See: {@link }http://docs.docker.com/v1.6/reference/api/docker_remote_api_v1.13/#attach-to-a-container}
  */
+@Deprecated
 public class FrameReader implements AutoCloseable {
 
     private static final int HEADER_SIZE = 8;

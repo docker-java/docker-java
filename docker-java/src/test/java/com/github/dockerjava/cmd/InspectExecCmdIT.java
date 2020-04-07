@@ -17,8 +17,8 @@ import java.security.SecureRandom;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_22;
 import static com.github.dockerjava.utils.TestUtils.getVersion;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
@@ -35,7 +35,7 @@ public class InspectExecCmdIT extends CmdIT {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999")
                 .withName(containerName).exec();
         LOG.info("Created container {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
@@ -43,7 +43,7 @@ public class InspectExecCmdIT extends CmdIT {
         ExecCreateCmdResponse checkFileExec1 = dockerRule.getClient().execCreateCmd(container.getId()).withAttachStdout(true)
                 .withAttachStderr(true).withCmd("test", "-e", "/marker").exec();
         LOG.info("Created exec {}", checkFileExec1.toString());
-        assertThat(checkFileExec1.getId(), not(isEmptyString()));
+        assertThat(checkFileExec1.getId(), not(is(emptyString())));
         dockerRule.getClient().execStartCmd(checkFileExec1.getId()).withDetach(false)
                 .exec(new ExecStartResultCallback(System.out, System.err)).awaitCompletion();
         InspectExecResponse first = dockerRule.getClient().inspectExecCmd(checkFileExec1.getId()).exec();
@@ -54,7 +54,7 @@ public class InspectExecCmdIT extends CmdIT {
         ExecCreateCmdResponse touchFileExec = dockerRule.getClient().execCreateCmd(container.getId()).withAttachStdout(true)
                 .withAttachStderr(true).withCmd("touch", "/marker").exec();
         LOG.info("Created exec {}", touchFileExec.toString());
-        assertThat(touchFileExec.getId(), not(isEmptyString()));
+        assertThat(touchFileExec.getId(), not(is(emptyString())));
         dockerRule.getClient().execStartCmd(touchFileExec.getId()).withDetach(false)
                 .exec(new ExecStartResultCallback(System.out, System.err)).awaitCompletion();
         InspectExecResponse second = dockerRule.getClient().inspectExecCmd(touchFileExec.getId()).exec();
@@ -65,7 +65,7 @@ public class InspectExecCmdIT extends CmdIT {
         ExecCreateCmdResponse checkFileExec2 = dockerRule.getClient().execCreateCmd(container.getId()).withAttachStdout(true)
                 .withAttachStderr(true).withCmd("test", "-e", "/marker").exec();
         LOG.info("Created exec {}", checkFileExec2.toString());
-        assertThat(checkFileExec2.getId(), not(isEmptyString()));
+        assertThat(checkFileExec2.getId(), not(is(emptyString())));
         dockerRule.getClient().execStartCmd(checkFileExec2.getId()).withDetach(false)
                 .exec(new ExecStartResultCallback(System.out, System.err)).awaitCompletion();
         InspectExecResponse third = dockerRule.getClient().inspectExecCmd(checkFileExec2.getId()).exec();
@@ -87,14 +87,14 @@ public class InspectExecCmdIT extends CmdIT {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999")
                 .withName(containerName).exec();
         LOG.info("Created container {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         ExecCreateCmdResponse exec = dockerRule.getClient().execCreateCmd(container.getId()).withAttachStdout(true)
                 .withAttachStderr(true).withCmd("/bin/bash").exec();
         LOG.info("Created exec {}", exec.toString());
-        assertThat(exec.getId(), not(isEmptyString()));
+        assertThat(exec.getId(), not(is(emptyString())));
 
         InspectExecResponse inspectExecResponse = dockerRule.getClient().inspectExecCmd(exec.getId()).exec();
 

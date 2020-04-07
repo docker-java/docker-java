@@ -1,7 +1,12 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.github.dockerjava.api.command.BuildImageCmd;
+import com.github.dockerjava.api.model.AuthConfigurations;
+import com.github.dockerjava.api.model.BuildResponseItem;
+import com.github.dockerjava.core.dockerfile.Dockerfile;
+import com.github.dockerjava.core.util.FilePathUtil;
 
+import javax.annotation.CheckForNull;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,13 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.github.dockerjava.api.command.BuildImageCmd;
-import com.github.dockerjava.api.model.AuthConfigurations;
-import com.github.dockerjava.api.model.BuildResponseItem;
-import com.github.dockerjava.core.dockerfile.Dockerfile;
-import com.github.dockerjava.core.util.FilePathUtil;
-
-import javax.annotation.CheckForNull;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Build an image from Dockerfile.
@@ -71,6 +70,8 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     private String platform;
 
     private String target;
+
+    private Set<String> extraHosts;
 
     public BuildImageCmdImpl(BuildImageCmd.Exec exec) {
         super(exec);
@@ -216,6 +217,11 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @Override
     public Long getShmsize() {
         return shmsize;
+    }
+
+    @Override
+    public Set<String> getExtraHosts() {
+        return extraHosts;
     }
 
     // setters
@@ -399,6 +405,12 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @Override
     public BuildImageCmd withTarget(String target) {
         this.target = target;
+        return this;
+    }
+
+    @Override
+    public BuildImageCmd withExtraHosts(Set<String> extraHosts) {
+        this.extraHosts = extraHosts;
         return this;
     }
 

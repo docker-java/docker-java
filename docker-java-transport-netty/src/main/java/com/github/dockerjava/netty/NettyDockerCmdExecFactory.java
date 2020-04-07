@@ -1,6 +1,7 @@
 package com.github.dockerjava.netty;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Objects.nonNull;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -58,7 +59,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
  * @see https://docs.docker.com/engine/reference/api/docker_remote_api_v1.21/#attach-to-a-container
  * @see https://docs.docker.com/engine/reference/api/docker_remote_api_v1.21/#exec-start
  */
-public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory implements DockerCmdExecFactory {
+public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
 
     private static String threadPrefix = "dockerjava-netty";
 
@@ -88,10 +89,6 @@ public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory impl
         }
     };
 
-    private Integer connectTimeout = null;
-
-    private Integer readTimeout = null;
-
     @Override
     public void init(DockerClientConfig dockerClientConfig) {
         super.init(dockerClientConfig);
@@ -101,13 +98,18 @@ public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory impl
         String scheme = dockerClientConfig.getDockerHost().getScheme();
         String host = "";
 
-        if ("unix".equals(scheme)) {
-            nettyInitializer = new UnixDomainSocketInitializer();
-            host = "DUMMY";
-        } else if ("tcp".equals(scheme)) {
-            nettyInitializer = new InetSocketInitializer();
-            host = dockerClientConfig.getDockerHost().getHost() + ":"
-                + Integer.toString(dockerClientConfig.getDockerHost().getPort());
+        switch (scheme) {
+            case "unix":
+                nettyInitializer = new UnixDomainSocketInitializer();
+                host = "DUMMY";
+                break;
+            case "tcp":
+                nettyInitializer = new InetSocketInitializer();
+                host = dockerClientConfig.getDockerHost().getHost() + ":"
+                    + Integer.toString(dockerClientConfig.getDockerHost().getPort());
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported protocol scheme: " + dockerClientConfig.getDockerHost());
         }
 
         eventLoopGroup = nettyInitializer.init(bootstrap, dockerClientConfig);
@@ -287,29 +289,13 @@ public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory impl
         eventLoopGroup.shutdownGracefully();
     }
 
-    /**
-     * Configure connection timeout in milliseconds
-     */
-    public NettyDockerCmdExecFactory withConnectTimeout(Integer connectTimeout) {
-        this.connectTimeout = connectTimeout;
-        return this;
-    }
-
-    /**
-     * Configure read timeout in milliseconds
-     */
-    public NettyDockerCmdExecFactory withReadTimeout(Integer readTimeout) {
-        this.readTimeout = readTimeout;
-        return this;
-    }
-
     private <T extends Channel> T configure(T channel) {
         ChannelConfig channelConfig = channel.config();
 
-        if (connectTimeout != null) {
+        if (nonNull(connectTimeout)) {
             channelConfig.setConnectTimeoutMillis(connectTimeout);
         }
-        if (readTimeout != null) {
+        if (nonNull(readTimeout)) {
             channel.pipeline().addLast("readTimeoutHandler", new ReadTimeoutHandler());
         }
 

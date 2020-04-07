@@ -13,8 +13,9 @@ import java.security.SecureRandom;
 
 import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
 import static com.github.dockerjava.utils.TestUtils.asString;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -31,7 +32,7 @@ public class ExecStartCmdIT extends CmdIT {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("top")
                 .withName(containerName).exec();
         LOG.info("Created container {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
@@ -59,7 +60,7 @@ public class ExecStartCmdIT extends CmdIT {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999")
                 .withName(containerName).exec();
         LOG.info("Created container {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
@@ -83,7 +84,7 @@ public class ExecStartCmdIT extends CmdIT {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999")
                 .withName(containerName).exec();
         LOG.info("Created container {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 

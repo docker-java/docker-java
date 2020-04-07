@@ -59,6 +59,7 @@ import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
+import com.github.dockerjava.api.command.SaveImagesCmd;
 import com.github.dockerjava.api.command.SearchImagesCmd;
 import com.github.dockerjava.api.command.StartContainerCmd;
 import com.github.dockerjava.api.command.StatsCmd;
@@ -130,6 +131,7 @@ import com.github.dockerjava.core.exec.RemoveVolumeCmdExec;
 import com.github.dockerjava.core.exec.RenameContainerCmdExec;
 import com.github.dockerjava.core.exec.RestartContainerCmdExec;
 import com.github.dockerjava.core.exec.SaveImageCmdExec;
+import com.github.dockerjava.core.exec.SaveImagesCmdExec;
 import com.github.dockerjava.core.exec.SearchImagesCmdExec;
 import com.github.dockerjava.core.exec.StartContainerCmdExec;
 import com.github.dockerjava.core.exec.StatsCmdExec;
@@ -149,6 +151,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public abstract class AbstractDockerCmdExecFactory implements DockerCmdExecFactory, DockerClientConfigAware {
 
     private DockerClientConfig dockerClientConfig;
+
+    protected Integer connectTimeout;
+    protected Integer readTimeout;
 
     protected DockerClientConfig getDockerClientConfig() {
         checkNotNull(dockerClientConfig,
@@ -170,6 +175,22 @@ public abstract class AbstractDockerCmdExecFactory implements DockerCmdExecFacto
     @Override
     public CopyArchiveToContainerCmd.Exec createCopyArchiveToContainerCmdExec() {
         return new CopyArchiveToContainerCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    /**
+     * Configure connection timeout in milliseconds
+     */
+    public AbstractDockerCmdExecFactory withConnectTimeout(Integer connectTimeout) {
+        this.connectTimeout = connectTimeout;
+        return this;
+    }
+
+    /**
+     * Configure read timeout in milliseconds
+     */
+    public AbstractDockerCmdExecFactory withReadTimeout(Integer readTimeout) {
+        this.readTimeout = readTimeout;
+        return this;
     }
 
     @Override
@@ -205,6 +226,11 @@ public abstract class AbstractDockerCmdExecFactory implements DockerCmdExecFacto
     @Override
     public SaveImageCmd.Exec createSaveImageCmdExec() {
         return new SaveImageCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public SaveImagesCmd.Exec createSaveImagesCmdExec() {
+        return new SaveImagesCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override

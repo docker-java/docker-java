@@ -8,8 +8,6 @@ import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.core.DockerClientBuilder;
-import com.github.dockerjava.core.command.BuildImageResultCallback;
-import com.github.dockerjava.core.command.PushImageResultCallback;
 import org.junit.rules.ExternalResource;
 
 import java.io.File;
@@ -42,7 +40,7 @@ public class PrivateRegistryRule extends ExternalResource {
 
         dockerClient.pushImageCmd(imgNameWithTag)
                 .withAuthConfig(authConfig)
-                .exec(new PushImageResultCallback())
+                .start()
                 .awaitCompletion(30, TimeUnit.SECONDS);
 
         dockerClient.removeImageCmd(imgNameWithTag).exec();
@@ -75,7 +73,7 @@ public class PrivateRegistryRule extends ExternalResource {
 
         String registryImageId = dockerClient.buildImageCmd(baseDir)
                 .withNoCache(true)
-                .exec(new BuildImageResultCallback())
+                .start()
                 .awaitImageId();
 
         InspectImageResponse inspectImageResponse = dockerClient.inspectImageCmd(registryImageId).exec();

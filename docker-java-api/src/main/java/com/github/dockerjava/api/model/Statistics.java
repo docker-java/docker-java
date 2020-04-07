@@ -20,6 +20,9 @@ public class Statistics implements Serializable {
     @JsonProperty("read")
     private String read;
 
+    @JsonProperty("preread")
+    private String preread;
+
     /**
      * @since Docker Remote API 1.21
      */
@@ -43,6 +46,9 @@ public class Statistics implements Serializable {
     @JsonProperty("cpu_stats")
     private CpuStatsConfig cpuStats;
 
+    @JsonProperty("num_procs")
+    private Long numProcs;
+
     /**
      * @since Docker Remote API 1.19
      */
@@ -57,6 +63,10 @@ public class Statistics implements Serializable {
 
     public String getRead() {
         return read;
+    }
+
+    public String getPreread() {
+        return preread;
     }
 
     /**
@@ -77,6 +87,10 @@ public class Statistics implements Serializable {
 
     public CpuStatsConfig getCpuStats() {
         return cpuStats;
+    }
+
+    public Long getNumProcs() {
+        return numProcs;
     }
 
     /**

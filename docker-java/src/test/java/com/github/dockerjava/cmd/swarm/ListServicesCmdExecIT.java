@@ -29,7 +29,7 @@ public class ListServicesCmdExecIT extends SwarmCmdIT {
     private static final String LABEL_VALUE = "test";
 
     @Test
-    public void testListServices() throws DockerException {
+    public void testListServices() throws Exception {
         DockerClient docker1 = startDockerInDocker();
         docker1.initializeSwarmCmd(new SwarmSpec()).exec();
         Map<String, String> serviceLabels = Collections.singletonMap(LABEL_KEY, LABEL_VALUE);

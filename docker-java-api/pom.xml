@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>com.github.docker-java</groupId>
 		<artifactId>docker-java-parent</artifactId>
-		<version>3.2.0-SNAPSHOT</version>
+		<version>3.2.2-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<artifactId>docker-java-api</artifactId>
-	<packaging>bundle</packaging>
+	<packaging>jar</packaging>
 
 	<name>docker-java-api</name>
 	<url>https://github.com/docker-java/docker-java</url>
@@ -45,7 +45,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.10</version>
+			<version>1.18.12</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
