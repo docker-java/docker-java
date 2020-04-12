@@ -386,7 +386,9 @@ public class DelegatingDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     @Override
-    public InspectPluginCmd.Exec createInspectPluginCmdExec() { return getDockerCmdExecFactory().createInspectPluginCmdExec(); }
+    public InspectPluginCmd.Exec createInspectPluginCmdExec() {
+        return getDockerCmdExecFactory().createInspectPluginCmdExec();
+    }
 
     @Override
     public void close() throws IOException {
