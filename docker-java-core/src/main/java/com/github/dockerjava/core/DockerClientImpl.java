@@ -13,6 +13,7 @@ import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateImageCmd;
 import com.github.dockerjava.api.command.CreateNetworkCmd;
+import com.github.dockerjava.api.command.CreatePluginCmd;
 import com.github.dockerjava.api.command.CreateSecretCmd;
 import com.github.dockerjava.api.command.CreateServiceCmd;
 import com.github.dockerjava.api.command.CreateVolumeCmd;
@@ -27,6 +28,7 @@ import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
 import com.github.dockerjava.api.command.InspectNetworkCmd;
+import com.github.dockerjava.api.command.InspectPluginCmd;
 import com.github.dockerjava.api.command.InspectServiceCmd;
 import com.github.dockerjava.api.command.InspectSwarmCmd;
 import com.github.dockerjava.api.command.InspectVolumeCmd;
@@ -36,6 +38,7 @@ import com.github.dockerjava.api.command.LeaveSwarmCmd;
 import com.github.dockerjava.api.command.ListContainersCmd;
 import com.github.dockerjava.api.command.ListImagesCmd;
 import com.github.dockerjava.api.command.ListNetworksCmd;
+import com.github.dockerjava.api.command.ListPluginsCmd;
 import com.github.dockerjava.api.command.ListSecretsCmd;
 import com.github.dockerjava.api.command.ListServicesCmd;
 import com.github.dockerjava.api.command.ListSwarmNodesCmd;
@@ -52,6 +55,7 @@ import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.command.RemoveContainerCmd;
 import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.command.RemoveNetworkCmd;
+import com.github.dockerjava.api.command.RemovePluginCmd;
 import com.github.dockerjava.api.command.RemoveSecretCmd;
 import com.github.dockerjava.api.command.RemoveServiceCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
@@ -90,6 +94,7 @@ import com.github.dockerjava.core.command.CopyFileFromContainerCmdImpl;
 import com.github.dockerjava.core.command.CreateContainerCmdImpl;
 import com.github.dockerjava.core.command.CreateImageCmdImpl;
 import com.github.dockerjava.core.command.CreateNetworkCmdImpl;
+import com.github.dockerjava.core.command.CreatePluginCmdImpl;
 import com.github.dockerjava.core.command.CreateSecretCmdImpl;
 import com.github.dockerjava.core.command.CreateServiceCmdImpl;
 import com.github.dockerjava.core.command.CreateVolumeCmdImpl;
@@ -103,6 +108,7 @@ import com.github.dockerjava.core.command.InpectNetworkCmdImpl;
 import com.github.dockerjava.core.command.InspectContainerCmdImpl;
 import com.github.dockerjava.core.command.InspectExecCmdImpl;
 import com.github.dockerjava.core.command.InspectImageCmdImpl;
+import com.github.dockerjava.core.command.InspectPluginCmdImpl;
 import com.github.dockerjava.core.command.InspectServiceCmdImpl;
 import com.github.dockerjava.core.command.InspectSwarmCmdImpl;
 import com.github.dockerjava.core.command.InspectVolumeCmdImpl;
@@ -112,6 +118,7 @@ import com.github.dockerjava.core.command.LeaveSwarmCmdImpl;
 import com.github.dockerjava.core.command.ListContainersCmdImpl;
 import com.github.dockerjava.core.command.ListImagesCmdImpl;
 import com.github.dockerjava.core.command.ListNetworksCmdImpl;
+import com.github.dockerjava.core.command.ListPluginsCmdImpl;
 import com.github.dockerjava.core.command.ListSecretsCmdImpl;
 import com.github.dockerjava.core.command.ListServicesCmdImpl;
 import com.github.dockerjava.core.command.ListSwarmNodesCmdImpl;
@@ -128,6 +135,7 @@ import com.github.dockerjava.core.command.PushImageCmdImpl;
 import com.github.dockerjava.core.command.RemoveContainerCmdImpl;
 import com.github.dockerjava.core.command.RemoveImageCmdImpl;
 import com.github.dockerjava.core.command.RemoveNetworkCmdImpl;
+import com.github.dockerjava.core.command.RemovePluginCmdImpl;
 import com.github.dockerjava.core.command.RemoveSecretCmdImpl;
 import com.github.dockerjava.core.command.RemoveServiceCmdImpl;
 import com.github.dockerjava.core.command.RemoveVolumeCmdImpl;
@@ -644,6 +652,26 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public ListTasksCmd listTasksCmd() {
         return new ListTasksCmdImpl(getDockerCmdExecFactory().listTasksCmdExec());
+    }
+
+    @Override
+    public ListPluginsCmd listPluginsCmd() {
+        return new ListPluginsCmdImpl(getDockerCmdExecFactory().listPluginsCmdExec());
+    }
+
+    @Override
+    public CreatePluginCmd createPluginCmd(@Nonnull String name) {
+        return new CreatePluginCmdImpl(getDockerCmdExecFactory().createPluginCmdExec(), name);
+    }
+
+    @Override
+    public InspectPluginCmd inspectPluginCmd(String name) {
+        return new InspectPluginCmdImpl(getDockerCmdExecFactory().createInspectPluginCmdExec(), name);
+    }
+
+    @Override
+    public RemovePluginCmd removePluginCmd(String name) {
+        return new RemovePluginCmdImpl(getDockerCmdExecFactory().createRemovePluginCmdExec(), name);
     }
 
     @Override

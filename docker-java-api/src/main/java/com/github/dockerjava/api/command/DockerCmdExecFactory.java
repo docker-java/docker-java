@@ -232,6 +232,14 @@ public interface DockerCmdExecFactory extends Closeable {
      */
     RemoveSecretCmd.Exec createRemoveSecretCmdExec();
 
+    ListPluginsCmd.Exec listPluginsCmdExec();
+
+    InspectPluginCmd.Exec createInspectPluginCmdExec();
+
+    RemovePluginCmd.Exec createRemovePluginCmdExec();
+
+    CreatePluginCmd.Exec createPluginCmdExec();
+
     @Override
     void close() throws IOException;
 

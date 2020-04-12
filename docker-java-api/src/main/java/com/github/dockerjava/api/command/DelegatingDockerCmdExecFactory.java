@@ -371,6 +371,24 @@ public class DelegatingDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     @Override
+    public ListPluginsCmd.Exec listPluginsCmdExec() {
+        return getDockerCmdExecFactory().listPluginsCmdExec();
+    }
+
+    @Override
+    public CreatePluginCmd.Exec createPluginCmdExec() {
+        return getDockerCmdExecFactory().createPluginCmdExec();
+    }
+
+    @Override
+    public RemovePluginCmd.Exec createRemovePluginCmdExec() {
+        return getDockerCmdExecFactory().createRemovePluginCmdExec();
+    }
+
+    @Override
+    public InspectPluginCmd.Exec createInspectPluginCmdExec() { return getDockerCmdExecFactory().createInspectPluginCmdExec(); }
+
+    @Override
     public void close() throws IOException {
         getDockerCmdExecFactory().close();
     }
