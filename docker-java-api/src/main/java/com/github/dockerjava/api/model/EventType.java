@@ -27,6 +27,7 @@ public enum EventType {
     IMAGE("image"),
     NETWORK("network"),
     PLUGIN("plugin"),
+    SERVICE("service"),
     VOLUME("volume");
 
     private static final Map<String, EventType> EVENT_TYPES = new HashMap<>();
