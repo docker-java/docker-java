@@ -1,5 +1,7 @@
 package com.github.dockerjava.core.util;
 
+import com.github.dockerjava.api.model.EventType;
+
 import com.google.common.base.Strings;
 
 import java.util.ArrayList;
@@ -62,6 +64,19 @@ public class FiltersBuilder {
 
     public List<String> getContainer() {
         return getFilter("container");
+    }
+
+    /**
+     * Filter by event types
+     *
+     * @param eventTypes
+     *            array of event types
+     */
+    public FiltersBuilder withEventTypes(EventType... eventTypes) {
+        for (EventType eventType: eventTypes) {
+            withFilter("type", eventType.getValue());
+        }
+        return this;
     }
 
     /**
