@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.annotation.CheckForNull;
 
 import com.github.dockerjava.api.model.Event;
+import com.github.dockerjava.api.model.EventType;
 
 /**
  * Get events
@@ -32,6 +33,12 @@ public interface EventsCmd extends AsyncDockerCmd<EventsCmd, Event> {
      *            - event to filter (pull | create | attach | start | stop | kill)
      */
     EventsCmd withEventFilter(String... event);
+
+    /**
+     * @param eventTypes
+     *            - event types to filter
+     */
+    EventsCmd withEventTypeFilter(EventTypes... eventTypes);
 
     /**
      * @param image
