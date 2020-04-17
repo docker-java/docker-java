@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.model.Event;
+import com.github.dockerjava.api.model.EventType;
 import com.github.dockerjava.core.util.FiltersBuilder;
 
 /**
@@ -54,6 +55,13 @@ public class EventsCmdImpl extends AbstrAsyncDockerCmd<EventsCmd, Event> impleme
     public EventsCmd withEventFilter(String... event) {
         checkNotNull(event, "event have not been specified");
         this.filters.withFilter("event", event);
+        return this;
+    }
+    
+    @Override
+    public EventsCmd withEventTypeFilter(EventType... eventTypes) {
+        checkNotNull(eventTypes, "event types have not been specified");
+        this.filters.withEventTypes(eventTypes);
         return this;
     }
 
