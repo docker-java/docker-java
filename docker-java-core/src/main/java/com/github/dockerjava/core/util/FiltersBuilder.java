@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Representation of Docker filters.
@@ -73,9 +75,10 @@ public class FiltersBuilder {
      *            array of event types
      */
     public FiltersBuilder withEventTypes(EventType... eventTypes) {
-        for (EventType eventType: eventTypes) {
-            withFilter("type", eventType.getValue());
-        }
+        withFilter("type",
+            Stream.of(eventTypes)
+                .map(EventType::getValue)
+                .collect(Collectors.toList()));
         return this;
     }
 
