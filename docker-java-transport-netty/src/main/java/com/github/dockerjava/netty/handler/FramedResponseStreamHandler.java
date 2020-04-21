@@ -64,23 +64,23 @@ public class FramedResponseStreamHandler extends SimpleChannelInboundHandler<Byt
         return length;
     }
 
-	private int readHeader(byte[] buf) {
-		int length = Math.min(rawBuffer.readableBytes(), HEADER_SIZE);
-		rawBuffer.readBytes(buf, 0, length);
-		/**
-		 * When the TTY setting is enabled in POST /containers/create, the stream is not
-		 * multiplexed. The data exchanged over the hijacked connection is simply the
-		 * raw data from the process PTY and client's stdin.
-		 */
-		streamType = streamType(header[0]);
-		if (!streamType.equals(StreamType.RAW)) {
-			rawBuffer.discardReadBytes();
-		} else {
-			rawBuffer.resetReaderIndex();
-		}
-		return length;
-	}    
-    
+    private int readHeader(byte[] buf) {
+        int length = Math.min(rawBuffer.readableBytes(), HEADER_SIZE);
+        rawBuffer.readBytes(buf, 0, length);
+        /**
+         * When the TTY setting is enabled in POST /containers/create, the stream is not
+         * multiplexed. The data exchanged over the hijacked connection is simply the
+         * raw data from the process PTY and client's stdin.
+         */
+        streamType = streamType(header[0]);
+        if (!streamType.equals(StreamType.RAW)) {
+            rawBuffer.discardReadBytes();
+        } else {
+            rawBuffer.resetReaderIndex();
+        }
+        return length;
+    }
+
     private Frame decode() {
         if (headerCnt < HEADER_SIZE) {
 
