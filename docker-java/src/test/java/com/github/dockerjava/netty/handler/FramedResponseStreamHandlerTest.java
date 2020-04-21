@@ -89,6 +89,21 @@ public class FramedResponseStreamHandlerTest {
     // Assert result
     assertEquals(responseHandler.frames.get(0).toString(), "RAW: ");
   }
+  
+  @Test
+  public void channelReadRawStream() throws Exception {
+
+    // Arrange
+    final MockedResponseHandler responseHandler = new MockedResponseHandler();
+    final FramedResponseStreamHandler objectUnderTest = new FramedResponseStreamHandler(responseHandler);
+    byte[] msg = "HELLO WORLD!".getBytes();
+
+    // Act
+    objectUnderTest.channelRead0(Mockito.mock(ChannelHandlerContext.class), Unpooled.wrappedBuffer(msg));
+
+    // Assert result
+    assertEquals(responseHandler.frames.get(0).toString(), "RAW: HELLO WORLD!");
+  }
 
   @Test
   public void channelRead0emptyNonRaw() throws Exception {

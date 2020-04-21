@@ -1,7 +1,5 @@
 package com.github.dockerjava.netty.handler;
 
-import java.util.Arrays;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -66,23 +64,32 @@ public class FramedResponseStreamHandler extends SimpleChannelInboundHandler<Byt
         return length;
     }
 
+	private int readHeader(byte[] buf) {
+		int length = Math.min(rawBuffer.readableBytes(), HEADER_SIZE);
+		rawBuffer.readBytes(buf, 0, length);
+		/**
+		 * When the TTY setting is enabled in POST /containers/create, the stream is not
+		 * multiplexed. The data exchanged over the hijacked connection is simply the
+		 * raw data from the process PTY and client's stdin.
+		 */
+		streamType = streamType(header[0]);
+		if (!streamType.equals(StreamType.RAW)) {
+			rawBuffer.discardReadBytes();
+		} else {
+			rawBuffer.resetReaderIndex();
+		}
+		return length;
+	}    
+    
     private Frame decode() {
         if (headerCnt < HEADER_SIZE) {
 
-            int headerCount = read(header, headerCnt, HEADER_SIZE - headerCnt);
-
+            int headerCount = readHeader(header);
             if (headerCount == 0) {
                 return null;
             }
 
             headerCnt += headerCount;
-
-            streamType = streamType(header[0]);
-
-            if (streamType.equals(StreamType.RAW)) {
-                return new Frame(streamType, Arrays.copyOf(header, headerCount));
-            }
-
             if (headerCnt < HEADER_SIZE) {
                 return null;
             }
