@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.exception.DockerClientException;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -29,6 +30,12 @@ public class ServicePlacement implements Serializable {
     private List<SwarmNodePlatform> platforms;
 
     /**
+     * @since 1.40
+     */
+    @JsonProperty("MaxReplicas")
+    private int maxReplicas = 0;
+
+    /**
      * @see #constraints
      */
     @CheckForNull
@@ -54,4 +61,32 @@ public class ServicePlacement implements Serializable {
     public void setPlatforms(List<SwarmNodePlatform> platforms) {
         this.platforms = platforms;
     }
+
+    /**
+     * Specifies the maximum amount of replicas / tasks that can run on one node.
+     * 0 means unlimited replicas per node.
+     *
+     * @param maxReplicas Max number of replicas
+     * @return This instance of ServicePlacement
+     */
+    public ServicePlacement withMaxReplicas(int maxReplicas) throws DockerClientException {
+        if (maxReplicas >= 0) {
+            this.maxReplicas = maxReplicas;
+
+        } else {
+            throw new DockerClientException("The Value for MaxReplicas must be greater or equal to 0");
+        }
+
+        return this;
+    }
+
+    /**
+     * Getter for maxReplicas
+     *
+     * @return The maximum amount of replicas / tasks that can run on one node.
+     */
+    public int getMaxReplicas() {
+        return this.maxReplicas;
+    }
+
 }
