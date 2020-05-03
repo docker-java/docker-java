@@ -1065,4 +1065,23 @@ public class CreateContainerCmdIT extends CmdIT {
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
         assertThat(inspectContainerResponse.getHostConfig().getTmpFs().get("/tmp"), equalTo("rw,noexec,nosuid,size=50m"));
     }
+
+    @Test
+    public void createContainerWithNanoCPUs() throws DockerException {
+        Long nanoCPUs = 1000000000L;
+
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+            .withCmd("sleep", "9999")
+            .withHostConfig(newHostConfig()
+                .withNanoCPUs(nanoCPUs))
+            .exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(is(emptyString())));
+
+        InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
+
+        assertThat(inspectContainerResponse.getHostConfig().getNanoCPUs(), is(nanoCPUs));
+    }
 }
