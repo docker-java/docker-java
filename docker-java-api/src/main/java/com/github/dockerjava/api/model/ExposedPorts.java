@@ -35,7 +35,9 @@ public class ExposedPorts implements Serializable {
 
     @JsonValue
     public Map<String, Object> toPrimitive() {
-        return Stream.of(exposedPorts).collect(Collectors.toMap(
+        return Stream.of(exposedPorts)
+            .distinct()
+            .collect(Collectors.toMap(
                 ExposedPort::toString,
                 __ -> new Object()
         ));
