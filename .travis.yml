@@ -37,3 +37,10 @@ before_install:
 
 script:
   - mvn verify
+
+after_script:
+  - wget -q https://get.cimate.io/release/linux/cimate
+  - chmod +x cimate
+  - export CIMATE_PROJECT_ID=lodr9d83
+  - export CIMATE_CI_KEY="TravisCI / $TRAVIS_JOB_NAME"
+  - ./cimate "**/TEST-*.xml"
