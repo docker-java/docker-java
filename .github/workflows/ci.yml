@@ -3,7 +3,6 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  name: ${{marix.name}}
   build:
     runs-on: ubuntu-16.04
     strategy:
