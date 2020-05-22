@@ -30,10 +30,12 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 8
-      - name: Build with Maven
+      - name: Init Swarm mode
         run: |
           docker swarm init
-          ./mvnw --no-transfer-progress verify
+          docker info
+      - name: Build with Maven
+        run: ./mvnw --no-transfer-progress verify
       - name: Aggregate test reports with ciMate
         if: always()
         env:
