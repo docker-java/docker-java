@@ -27,8 +27,8 @@ jobs:
           DOCKER_HOST: ${{matrix.dockerHost}}
         run: .travis/travis-before-install.sh
       - name: Build with Maven
-        env:
-          DOCKER_HOST: ${{matrix.dockerHost}}
+#        env:
+#          DOCKER_HOST: ${{matrix.dockerHost}}
         run: ./mvnw --no-transfer-progress verify
       - name: Aggregate test reports with ciMate
         if: always()
