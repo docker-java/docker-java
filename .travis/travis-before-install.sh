@@ -8,8 +8,8 @@ DOCKER_HOST="${DOCKER_HOST:-}"
 
 export HOST_PORT="2375"
 
-rm -f "docker-java/src/test/resources/logback.xml"
-mv "docker-java/src/test/resources/travis-logback.xml" "docker-java/src/test/resources/logback-test.xml"
+# rm -f "docker-java/src/test/resources/logback.xml"
+# mv "docker-java/src/test/resources/travis-logback.xml" "docker-java/src/test/resources/logback-test.xml"
 
 if [[ -n $DOCKER_VERSION ]]; then
     sudo -E apt-get -q -y --purge remove docker-engine docker-ce
