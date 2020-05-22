@@ -2,17 +2,17 @@
 
 set -exu
 
-set +u
-
-cat <<EOF > "${HOME}/.docker-java.properties"
-registry.username=${registry_username}
-registry.password=${registry_password}
-registry.email=${registry_email}
-registry.url=https://index.docker.io/v1/
-
-EOF
-
-set -u
+#set +u
+#
+#cat <<EOF > "${HOME}/.docker-java.properties"
+#registry.username=${registry_username}
+#registry.password=${registry_password}
+#registry.email=${registry_email}
+#registry.url=https://index.docker.io/v1/
+#
+#EOF
+#
+#set -u
 
 SWARM_VERSION="${SWARM_VERSION:-}"
 DOCKER_VERSION="${DOCKER_VERSION:-}"
