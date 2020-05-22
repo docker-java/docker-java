@@ -29,7 +29,7 @@ jobs:
       - name: Build with Maven
         env:
           DOCKER_HOST: ${{matrix.dockerHost}}
-        run: ./mvnw --no-transfer-progress clean verify
+        run: ./mvnw --no-transfer-progress verify
       - name: Aggregate test reports with ciMate
         if: always()
         env:
