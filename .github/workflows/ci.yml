@@ -4,7 +4,17 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-16.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: "default" }
+          - { name: "over TCP", dockerHost: "tcp://127.0.0.1:2375" }
+          - { name: "Docker 17.06.2", dockerVersion: "17.06.2~ce-0~ubuntu" }
+          - { name: "Docker 18.06.3", dockerVersion: "18.06.3~ce~3-0~ubuntu" }
+          - { name: "Docker Swarm", swarmVersion: "1.2.8" }
+
     steps:
       - uses: actions/checkout@v1
       - name: Set up JDK 8
@@ -12,35 +22,18 @@ jobs:
         with:
           java-version: 8
       - name: Build with Maven
-        run: ./mvnw --no-transfer-progress verify
+        env:
+          DOCKER_HOST: ${{matrix.dockerHost}}
+          DOCKER_VERSION: ${{matrix.dockerVersion}}
+          SWARM_VERSION: ${{matrix.swarmVersion}}
+        run: |
+          . .travis/travis-before-install.sh
+          ./mvnw --no-transfer-progress verify
       - name: Aggregate test reports with ciMate
         if: always()
         env:
           CIMATE_PROJECT_ID: lodr9d83
-          CIMATE_CI_KEY: "CI / main"
-        run: |
-          wget -q https://get.cimate.io/release/linux/cimate
-          chmod +x cimate
-          ./cimate "**/TEST-*.xml"
-  swarm:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - name: Set up JDK 8
-        uses: actions/setup-java@v1
-        with:
-          java-version: 8
-      - name: Init Swarm mode
-        run: |
-          docker swarm init
-          docker info
-      - name: Build with Maven
-        run: ./mvnw --no-transfer-progress verify
-      - name: Aggregate test reports with ciMate
-        if: always()
-        env:
-          CIMATE_PROJECT_ID: lodr9d83
-          CIMATE_CI_KEY: "CI / Swarm"
+          CIMATE_CI_KEY: "CI / {{matrix.name}}"
         run: |
           wget -q https://get.cimate.io/release/linux/cimate
           chmod +x cimate

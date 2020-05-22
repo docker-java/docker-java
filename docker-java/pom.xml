@@ -139,7 +139,6 @@
 					</execution>
 				</executions>
 				<configuration>
-					<printSummary>false</printSummary>
 					<trimStackTrace>false</trimStackTrace>
 					<rerunFailingTestsCount>5</rerunFailingTestsCount>
 					<groups>com.github.dockerjava.junit.category.Integration</groups>
