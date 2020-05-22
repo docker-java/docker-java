@@ -2,14 +2,23 @@
 
 set -exu
 
+set +u
+
+cat <<EOF > "${HOME}/.docker-java.properties"
+registry.username=${registry_username}
+registry.password=${registry_password}
+registry.email=${registry_email}
+registry.url=https://index.docker.io/v1/
+
+EOF
+
+set -u
+
 SWARM_VERSION="${SWARM_VERSION:-}"
 DOCKER_VERSION="${DOCKER_VERSION:-}"
 DOCKER_HOST="${DOCKER_HOST:-}"
 
 export HOST_PORT="2375"
-
-# rm -f "docker-java/src/test/resources/logback.xml"
-# mv "docker-java/src/test/resources/travis-logback.xml" "docker-java/src/test/resources/logback-test.xml"
 
 if [[ -n $DOCKER_VERSION ]]; then
     sudo -E apt-get -q -y --purge remove docker-engine docker-ce
@@ -20,39 +29,6 @@ if [[ -n $DOCKER_VERSION ]]; then
     sudo apt-cache madison docker-ce
     sudo apt-get install "docker-ce=$DOCKER_VERSION"
 fi
-
-if [[ -n $DOCKER_HOST ]]; then
-    sudo mkdir -p /etc/systemd/system/docker.service.d/
-
-    echo "
-[Service]
-ExecStart=
-ExecStart=/usr/bin/dockerd -H unix:///var/run/docker.sock -H tcp://0.0.0.0:${HOST_PORT}
-    " | sudo tee -a /etc/systemd/system/docker.service.d/override.conf
-
-    sudo systemctl daemon-reload
-    sudo service docker restart || sudo journalctl -xe
-    sudo service docker status
-fi
-
-while (! docker ps ); do
-  # Docker takes a few seconds to initialize
-  echo "Waiting for Docker to launch..."
-  sleep 1
-done
-
-docker version
-docker info
-
-set +u
-
-cat <<EOF > "${HOME}/.docker-java.properties"
-registry.username=${registry_username}
-registry.password=${registry_password}
-registry.email=${registry_email}
-registry.url=https://index.docker.io/v1/
-
-EOF
 
 if [[ -n $SWARM_VERSION ]]; then
     export SWARM_PORT="2377"
@@ -99,4 +75,23 @@ if [[ -n $SWARM_VERSION ]]; then
 
     # test via swarm
     docker pull busybox
+elif [[ -n $DOCKER_HOST ]]; then
+    sudo mkdir -p /etc/systemd/system/docker.service.d/
+
+    echo "
+[Service]
+ExecStart=
+ExecStart=/usr/bin/dockerd -H unix:///var/run/docker.sock -H tcp://0.0.0.0:${HOST_PORT}
+    " | sudo tee -a /etc/systemd/system/docker.service.d/override.conf
+
+    sudo systemctl daemon-reload
+    sudo service docker restart || sudo journalctl -xe
+    sudo service docker status
 fi
+
+while (! docker ps ); do
+  echo "Waiting for Docker to launch..."
+  sleep 1
+done
+docker version
+docker info
