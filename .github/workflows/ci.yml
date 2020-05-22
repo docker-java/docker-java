@@ -29,12 +29,12 @@ jobs:
       - name: Build with Maven
         env:
           DOCKER_HOST: ${{matrix.dockerHost}}
-        run: ./mvnw --no-transfer-progress verify
+        run: ./mvnw --no-transfer-progress clean verify
       - name: Aggregate test reports with ciMate
         if: always()
         env:
           CIMATE_PROJECT_ID: lodr9d83
-          CIMATE_CI_KEY: "CI / {{matrix.name}}"
+          CIMATE_CI_KEY: "CI / ${{matrix.name}}"
         run: |
           wget -q https://get.cimate.io/release/linux/cimate
           chmod +x cimate
