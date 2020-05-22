@@ -36,7 +36,7 @@ before_install:
   - ./.travis/travis-before-install.sh
 
 script:
-  - mvn --no-transfer-progress -q verify
+  - mvn -B --no-transfer-progress verify
 
 after_script:
   - wget -q https://get.cimate.io/release/linux/cimate
