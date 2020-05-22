@@ -2,6 +2,8 @@
 
 set -exu
 
+rm -f "${HOME}/.docker-java.properties"
+
 #set +u
 #
 #cat <<EOF > "${HOME}/.docker-java.properties"
