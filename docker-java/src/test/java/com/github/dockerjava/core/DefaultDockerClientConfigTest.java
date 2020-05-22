@@ -91,13 +91,16 @@ public class DefaultDockerClientConfigTest {
     }
 
     @Test
-    public void emptpyHost() {
+    public void emptyHost() {
         Map<String, String> env = new HashMap<>();
-        env.put(DefaultDockerClientConfig.DOCKER_HOST, "");
+        env.put(DefaultDockerClientConfig.DOCKER_HOST, " ");
 
         DefaultDockerClientConfig config = buildConfig(env, new Properties());
 
-        assertEquals(config.getDockerHost(), DefaultDockerClientConfig.createDefaultConfigBuilder().build().getDockerHost());
+        assertEquals(
+            config.getDockerHost().toString(),
+            DefaultDockerClientConfig.DEFAULT_PROPERTIES.get(DefaultDockerClientConfig.DOCKER_HOST)
+        );
     }
 
     private DefaultDockerClientConfig buildConfig(Map<String, String> env, Properties systemProperties) {

@@ -56,7 +56,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
     private static final Set<String> CONFIG_KEYS = new HashSet<>();
 
-    private static final Properties DEFAULT_PROPERTIES = new Properties();
+    static final Properties DEFAULT_PROPERTIES = new Properties();
 
     static {
         CONFIG_KEYS.add(DOCKER_HOST);
