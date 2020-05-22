@@ -31,7 +31,7 @@ if [[ -n $DOCKER_VERSION ]]; then
 fi
 
 if [[ -n $SWARM_VERSION ]]; then
-    export DOCKE_HOST=
+    export DOCKER_HOST=
     export SWARM_PORT="2377"
     export HOST_IP="$(ip a show dev eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)"
 
