@@ -8,8 +8,8 @@ jobs:
     strategy:
         matrix:
             include:
-                - { }
-                - { swarmVersion: "1.2.8" }
+              - { swarmVersion: "" }
+              - { swarmVersion: "1.2.8" }
 
     steps:
     - uses: actions/checkout@v1
