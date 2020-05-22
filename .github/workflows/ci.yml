@@ -25,6 +25,7 @@ jobs:
         env:
           DOCKER_VERSION: ${{matrix.dockerVersion}}
           SWARM_VERSION: ${{matrix.swarmVersion}}
+          DOCKER_HOST: ${{matrix.dockerHost}}
         run: .travis/travis-before-install.sh
       - name: Build with Maven
         env:
