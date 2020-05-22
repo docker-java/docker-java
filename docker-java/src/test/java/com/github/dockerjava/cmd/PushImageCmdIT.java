@@ -14,6 +14,7 @@ import org.junit.rules.ExpectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.dockerjava.utils.TestUtils.getVersion;
@@ -30,15 +31,12 @@ public class PushImageCmdIT extends CmdIT {
     @ClassRule
     public static PrivateRegistryRule REGISTRY = new PrivateRegistryRule();
 
-    private String username;
-
     @Rule
     public ExpectedException exception = ExpectedException.none();
     private AuthConfig authConfig;
 
     @Before
     public void beforeTest() throws Exception {
-        username = dockerRule.getClient().authConfig().getUsername();
         authConfig = REGISTRY.getAuthConfig();
     }
 
@@ -81,7 +79,7 @@ public class PushImageCmdIT extends CmdIT {
             exception.expect(NotFoundException.class);
         }
 
-        dockerRule.getClient().pushImageCmd(username + "/xxx")
+        dockerRule.getClient().pushImageCmd(UUID.randomUUID().toString().replace("-", ""))
                 .start()
                 .awaitCompletion(30, TimeUnit.SECONDS); // exclude infinite await sleep
 
