@@ -22,7 +22,7 @@ jobs:
         env:
           SWARM_VERSION: ${{matrix.swarmVersion}}
         run: |
-          .travis/travis-before-install.sh
+          . .travis/travis-before-install.sh
           ./mvnw --no-transfer-progress verify
       - name: Aggregate test reports with ciMate
         if: always()
