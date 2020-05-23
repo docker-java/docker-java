@@ -150,6 +150,7 @@ import com.github.dockerjava.core.command.VersionCmdImpl;
 import com.github.dockerjava.core.command.WaitContainerCmdImpl;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
@@ -196,6 +197,27 @@ public class DockerClientImpl implements Closeable, DockerClient {
         return new DockerClientImpl(serverUrl);
     }
 
+    public DockerClientImpl withHttpClient(DockerHttpClient httpClient) {
+        return withDockerCmdExecFactory(new DefaultDockerCmdExecFactory(httpClient, dockerClientConfig.getObjectMapper()));
+    }
+
+    /**
+     *
+     * @return {@link DockerHttpClient} or null if not set
+     */
+    @Nullable
+    public DockerHttpClient getHttpClient() {
+        if (dockerCmdExecFactory instanceof DefaultDockerCmdExecFactory) {
+            return ((DefaultDockerCmdExecFactory) dockerCmdExecFactory).getDockerHttpClient();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @deprecated use {{@link #withHttpClient(DockerHttpClient)}}
+     */
+    @Deprecated
     public DockerClientImpl withDockerCmdExecFactory(DockerCmdExecFactory dockerCmdExecFactory) {
         checkNotNull(dockerCmdExecFactory, "dockerCmdExecFactory was not specified");
         this.dockerCmdExecFactory = dockerCmdExecFactory;
@@ -205,6 +227,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
         return this;
     }
 
+    @Deprecated
     private DockerCmdExecFactory getDockerCmdExecFactory() {
         checkNotNull(dockerCmdExecFactory, "dockerCmdExecFactory was not specified");
         return dockerCmdExecFactory;

@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.github.docker-java</groupId>
 		<artifactId>docker-java-parent</artifactId>
-		<version>3.2.1-SNAPSHOT</version>
+		<version>3.2.2-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -42,6 +42,12 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>docker-java-transport-okhttp</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>docker-java-transport-httpclient5</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
@@ -105,6 +111,11 @@
 			<version>4.13</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.awaitility</groupId>
+			<artifactId>awaitility</artifactId>
+			<version>4.0.1</version>
+		</dependency>
 	</dependencies>
 
 
@@ -136,7 +147,6 @@
 					<trimStackTrace>false</trimStackTrace>
 					<rerunFailingTestsCount>5</rerunFailingTestsCount>
 					<groups>com.github.dockerjava.junit.category.Integration</groups>
-					<excludedGroups>com.github.dockerjava.junit.category.AuthIntegration,com.github.dockerjava.junit.category.SwarmModeIntegration</excludedGroups>
 				</configuration>
 			</plugin>
 
@@ -149,32 +159,6 @@
 						<Export-Package>!com.github.dockerjava.jaxrs.*,!com.github.dockerjava.netty.*,com.github.dockerjava.*</Export-Package>
 						<Import-Package>org.newsclub.net.unix;resolution:="optional",*</Import-Package>
 					</instructions>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<!-- use with "mvn -DskipTests clean package japicmp:cmp" -->
-				<groupId>com.github.siom79.japicmp</groupId>
-				<artifactId>japicmp-maven-plugin</artifactId>
-				<version>0.14.1</version>
-				<configuration>
-					<oldVersion>
-						<dependency>
-							<groupId>com.github.docker-java</groupId>
-							<artifactId>docker-java</artifactId>
-							<version>3.1.0</version>
-							<type>jar</type>
-						</dependency>
-					</oldVersion>
-					<newVersion>
-						<file>
-							<path>${project.build.directory}/${project.artifactId}-${project.version}.jar</path>
-						</file>
-					</newVersion>
-					<parameter>
-						<accessModifier>public</accessModifier>
-						<onlyBinaryIncompatible>true</onlyBinaryIncompatible>
-					</parameter>
 				</configuration>
 			</plugin>
 		</plugins>

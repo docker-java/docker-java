@@ -73,21 +73,23 @@ public class AttachContainerCmdIT extends CmdIT {
             }
         };
 
-        PipedOutputStream out = new PipedOutputStream();
-        PipedInputStream in = new PipedInputStream(out);
-
-        dockerClient.attachContainerCmd(container.getId())
+        try (
+            PipedOutputStream out = new PipedOutputStream();
+            PipedInputStream in = new PipedInputStream(out);
+        ) {
+            dockerClient.attachContainerCmd(container.getId())
                 .withStdErr(true)
                 .withStdOut(true)
                 .withFollowStream(true)
                 .withStdIn(in)
                 .exec(callback);
 
-        out.write((snippet + "\n").getBytes());
-        out.flush();
+            out.write((snippet + "\n").getBytes());
+            out.flush();
 
-        callback.awaitCompletion(15, SECONDS);
-        callback.close();
+            callback.awaitCompletion(15, SECONDS);
+            callback.close();
+        }
 
         assertThat(callback.toString(), containsString(snippet));
     }

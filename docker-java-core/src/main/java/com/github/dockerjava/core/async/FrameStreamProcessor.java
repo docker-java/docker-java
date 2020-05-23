@@ -16,6 +16,8 @@ import com.github.dockerjava.core.command.FrameReader;
  * @author Marcus Linke
  *
  */
+@SuppressWarnings("unused")
+@Deprecated
 public class FrameStreamProcessor implements ResponseStreamProcessor<Frame> {
 
     @Override

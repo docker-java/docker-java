@@ -54,7 +54,7 @@ public class StartContainerCmdIT extends CmdIT {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withVolumes(volume1, volume2)
                 .withCmd("true")
                 .withHostConfig(newHostConfig()
-                        .withBinds(new Bind("/src/webapp1", volume1, ro), new Bind("/src/webapp2", volume2)))
+                        .withBinds(new Bind("/tmp/webapp1", volume1, ro), new Bind("/tmp/webapp2", volume2)))
                 .exec();
 
         LOG.info("Created container {}", container.toString());
@@ -78,9 +78,9 @@ public class StartContainerCmdIT extends CmdIT {
         assertThat(mounts, hasSize(2));
 
         final InspectContainerResponse.Mount mount1 = new InspectContainerResponse.Mount()
-                .withRw(false).withMode("ro").withDestination(volume1).withSource("/src/webapp1");
+                .withRw(false).withMode("ro").withDestination(volume1).withSource("/tmp/webapp1");
         final InspectContainerResponse.Mount mount2 = new InspectContainerResponse.Mount()
-                .withRw(true).withMode("rw").withDestination(volume2).withSource("/src/webapp2");
+                .withRw(true).withMode("rw").withDestination(volume2).withSource("/tmp/webapp2");
 
         assertThat(mounts, containsInAnyOrder(mount1, mount2));
     }
@@ -96,7 +96,7 @@ public class StartContainerCmdIT extends CmdIT {
         CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999")
                 .withName(container1Name)
                 .withHostConfig(newHostConfig()
-                        .withBinds(new Bind("/src/webapp1", volume1), new Bind("/src/webapp2", volume2)))
+                        .withBinds(new Bind("/tmp/webapp1", volume1), new Bind("/tmp/webapp2", volume2)))
                 .exec();
         LOG.info("Created container1 {}", container1.toString());
 

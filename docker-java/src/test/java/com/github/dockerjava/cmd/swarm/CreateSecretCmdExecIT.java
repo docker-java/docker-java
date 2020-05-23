@@ -4,7 +4,6 @@ import com.github.dockerjava.api.command.CreateSecretResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.Secret;
 import com.github.dockerjava.api.model.SecretSpec;
-import com.github.dockerjava.api.model.SwarmSpec;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.RandomStringUtils;
 import org.hamcrest.collection.IsCollectionWithSize;
@@ -20,15 +19,9 @@ import static org.hamcrest.Matchers.notNullValue;
 public class CreateSecretCmdExecIT extends SwarmCmdIT {
 
     public static final Logger LOG = LoggerFactory.getLogger(CreateSecretCmdExecIT.class);
-    private static final String SERVICE_NAME = "theservice";
 
     @Test
     public void testCreateSecret() throws DockerException {
-        dockerRule.getClient().initializeSwarmCmd(new SwarmSpec())
-                .withListenAddr("127.0.0.1")
-                .withAdvertiseAddr("127.0.0.1")
-                .exec();
-
         int length = 10;
         boolean useLetters = true;
         boolean useNumbers = false;
