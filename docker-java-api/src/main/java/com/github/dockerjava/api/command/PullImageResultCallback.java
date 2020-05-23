@@ -90,8 +90,10 @@ public class PullImageResultCallback extends ResultCallback.Adapter<PullResponse
 
     private void checkDockerClientPullSuccessful() {
         if (latestItem == null) {
-            throw new DockerClientException("Could not pull image");
-        } else if (!latestItem.isPullSuccessIndicated()) {
+            return;
+        }
+
+        if (!latestItem.isPullSuccessIndicated()) {
             throw new DockerClientException("Could not pull image: " + messageFromPullResult(latestItem));
         }
     }

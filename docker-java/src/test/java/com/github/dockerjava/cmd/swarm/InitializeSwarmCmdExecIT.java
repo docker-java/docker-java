@@ -1,7 +1,6 @@
 package com.github.dockerjava.cmd.swarm;
 
 import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.api.exception.NotAcceptableException;
 import com.github.dockerjava.api.model.Swarm;
 import com.github.dockerjava.api.model.SwarmCAConfig;
 import com.github.dockerjava.api.model.SwarmDispatcherConfig;
@@ -21,10 +20,15 @@ public class InitializeSwarmCmdExecIT extends SwarmCmdIT {
 
     public static final Logger LOG = LoggerFactory.getLogger(InitializeSwarmCmdExecIT.class);
 
+    @Override
+    protected boolean shouldInitializeByDefault() {
+        return false;
+    }
+
     @Test
     public void initializeSwarm() throws DockerException {
         SwarmSpec swarmSpec = new SwarmSpec()
-                .withName("swarm")
+                .withName("default")
                 .withDispatcher(new SwarmDispatcherConfig()
                         .withHeartbeatPeriod(10000000L)
                 ).withOrchestration(new SwarmOrchestration()
@@ -49,10 +53,9 @@ public class InitializeSwarmCmdExecIT extends SwarmCmdIT {
         assertThat(swarm.getSpec(), is(equalTo(swarmSpec)));
     }
 
-    @Test(expected = NotAcceptableException.class)
+    @Test(expected = DockerException.class)
     public void initializingSwarmThrowsWhenAlreadyInSwarm() throws DockerException {
-        SwarmSpec swarmSpec = new SwarmSpec()
-                .withName("swarm");
+        SwarmSpec swarmSpec = new SwarmSpec();
 
         dockerRule.getClient().initializeSwarmCmd(swarmSpec)
                 .withListenAddr("127.0.0.1")
