@@ -1,6 +1,5 @@
 package com.github.dockerjava.cmd.swarm;
 
-import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.SwarmNode;
 import com.github.dockerjava.api.model.SwarmNodeAvailability;
 import com.github.dockerjava.api.model.SwarmNodeSpec;
@@ -16,17 +15,16 @@ import static org.hamcrest.Matchers.is;
 public class UpdateSwarmNodeIT extends SwarmCmdIT {
     @Test
     public void testUpdateSwarmNode() throws Exception {
-        DockerClient docker1 = startDockerInDocker();
-        docker1.initializeSwarmCmd(new SwarmSpec()).exec();
-        List<SwarmNode> nodes = docker1.listSwarmNodesCmd().exec();
+        dockerRule.getClient().initializeSwarmCmd(new SwarmSpec()).exec();
+        List<SwarmNode> nodes = dockerRule.getClient().listSwarmNodesCmd().exec();
         assertThat(1, is(nodes.size()));
         SwarmNode node = nodes.get(0);
         assertThat(SwarmNodeState.READY, is(node.getStatus().getState()));
         //update the node availability
         SwarmNodeSpec nodeSpec = node.getSpec().withAvailability(SwarmNodeAvailability.PAUSE);
-        docker1.updateSwarmNodeCmd().withSwarmNodeId(node.getId()).withVersion(node.getVersion().getIndex())
+        dockerRule.getClient().updateSwarmNodeCmd().withSwarmNodeId(node.getId()).withVersion(node.getVersion().getIndex())
                 .withSwarmNodeSpec(nodeSpec).exec();
-        nodes = docker1.listSwarmNodesCmd().exec();
+        nodes = dockerRule.getClient().listSwarmNodesCmd().exec();
         assertThat(nodes.size(), is(1));
         assertThat(nodes.get(0).getSpec().getAvailability(), is(SwarmNodeAvailability.PAUSE));
     }

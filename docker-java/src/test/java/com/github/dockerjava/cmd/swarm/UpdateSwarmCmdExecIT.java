@@ -1,7 +1,6 @@
 package com.github.dockerjava.cmd.swarm;
 
 import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.api.exception.NotAcceptableException;
 import com.github.dockerjava.api.model.Swarm;
 import com.github.dockerjava.api.model.SwarmCAConfig;
 import com.github.dockerjava.api.model.SwarmDispatcherConfig;
@@ -22,11 +21,12 @@ public class UpdateSwarmCmdExecIT extends SwarmCmdIT {
 
     public static final Logger LOG = LoggerFactory.getLogger(UpdateSwarmCmdExecIT.class);
 
+    @Test
     public void updateSwarm() throws DockerException {
-        SwarmSpec firstSpec = new SwarmSpec().withName("firstSpec");
+        SwarmSpec firstSpec = new SwarmSpec().withName("default");
 
         SwarmSpec secondSpec = new SwarmSpec()
-                .withName("secondSpec")
+                .withName("default")
                 .withDispatcher(new SwarmDispatcherConfig()
                         .withHeartbeatPeriod(10000000L)
                 ).withOrchestration(new SwarmOrchestration()
@@ -60,13 +60,10 @@ public class UpdateSwarmCmdExecIT extends SwarmCmdIT {
         assertThat(swarm.getSpec(), is(equalTo(secondSpec)));
     }
 
-    @Test(expected = NotAcceptableException.class)
+    @Test(expected = DockerException.class)
     public void updatingSwarmThrowsWhenNotInSwarm() throws DockerException {
-        SwarmSpec swarmSpec = new SwarmSpec()
-                .withName("swarm");
-
-        dockerRule.getClient().updateSwarmCmd(swarmSpec)
-                .withVersion(1l)
+        dockerRule.getClient().updateSwarmCmd(new SwarmSpec())
+                .withVersion(1L)
                 .exec();
     }
 
