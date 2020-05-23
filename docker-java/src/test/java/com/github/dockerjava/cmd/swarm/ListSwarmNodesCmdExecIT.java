@@ -11,7 +11,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class ListSwarmNodesCmdExecIT extends SwarmCmdIT {
+public class ListSwarmNodesCmdExecIT extends MultiNodeSwarmCmdIT {
     @Test
     public void testListSwarmNodes() throws Exception {
         DockerClient docker = startDockerInDocker();
