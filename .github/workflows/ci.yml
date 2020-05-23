@@ -14,7 +14,7 @@ jobs:
           - { name: "default" }
           - { name: "over TCP", dockerHost: "tcp://127.0.0.1:2375" }
           - { name: "Docker 18.06.3", dockerVersion: "18.06.3~ce~3-0~ubuntu" }
-          - { name: "Docker Swarm", swarmVersion: "1.2.8" }
+          - { name: "Docker Swarm Mode", swarmMode: "true" }
 
     steps:
       - uses: actions/checkout@v1
@@ -25,15 +25,13 @@ jobs:
       - name: Configure Docker
         env:
           DOCKER_VERSION: ${{matrix.dockerVersion}}
-          SWARM_VERSION: ${{matrix.swarmVersion}}
+          SWARM_MODE: ${{matrix.swarmMode}}
           DOCKER_HOST: ${{matrix.dockerHost}}
-        run: .travis/travis-before-install.sh
+        run: .ci/setup_docker.sh
       - name: Build with Maven
         env:
           DOCKER_HOST: ${{matrix.dockerHost}}
-        run: |
-          echo "DOCKER_HOST='$DOCKER_HOST'"
-          ./mvnw --no-transfer-progress verify
+        run: ./mvnw --no-transfer-progress verify
       - name: Aggregate test reports with ciMate
         if: always()
         env:
