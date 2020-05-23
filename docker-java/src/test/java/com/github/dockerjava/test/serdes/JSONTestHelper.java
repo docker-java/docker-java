@@ -33,7 +33,16 @@ import static org.junit.Assert.assertNotNull;
  */
 public class JSONTestHelper {
 
-    static final ObjectMapper MAPPER = DefaultDockerClientConfig.createDefaultConfigBuilder().build().getObjectMapper();
+    static final ObjectMapper MAPPER;
+
+    static {
+        try {
+            MAPPER = DefaultDockerClientConfig.createDefaultConfigBuilder().build().getObjectMapper();
+        } catch (Throwable e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 
     /**
      * Reads JSON String from the specified resource
