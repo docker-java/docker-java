@@ -2,25 +2,10 @@
 
 set -exu
 
-rm -f "${HOME}/.docker-java.properties"
-
-#set +u
-#
-#cat <<EOF > "${HOME}/.docker-java.properties"
-#registry.username=${registry_username}
-#registry.password=${registry_password}
-#registry.email=${registry_email}
-#registry.url=https://index.docker.io/v1/
-#
-#EOF
-#
-#set -u
-
 SWARM_VERSION="${SWARM_VERSION:-}"
 DOCKER_VERSION="${DOCKER_VERSION:-}"
 DOCKER_HOST="${DOCKER_HOST:-}"
 
-export HOST_PORT="2375"
 
 if [[ -n $DOCKER_VERSION ]]; then
     sudo -E apt-get -q -y --purge remove docker-engine docker-ce
@@ -34,6 +19,7 @@ fi
 
 if [[ -n $SWARM_VERSION ]]; then
     export DOCKER_HOST=
+    export HOST_PORT="2375"
     export SWARM_PORT="2377"
     export HOST_IP="$(ip a show dev eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)"
 
@@ -78,13 +64,14 @@ if [[ -n $SWARM_VERSION ]]; then
 
     # test via swarm
     docker pull busybox
+    docker run --rm hello-world
 elif [[ -n $DOCKER_HOST ]]; then
     sudo mkdir -p /etc/systemd/system/docker.service.d/
 
     echo "
 [Service]
 ExecStart=
-ExecStart=/usr/bin/dockerd -H unix:///var/run/docker.sock -H tcp://0.0.0.0:${HOST_PORT}
+ExecStart=/usr/bin/dockerd -H $DOCKER_HOST
     " | sudo tee -a /etc/systemd/system/docker.service.d/override.conf
 
     sudo systemctl daemon-reload
