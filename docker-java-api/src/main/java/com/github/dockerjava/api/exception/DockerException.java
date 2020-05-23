@@ -13,12 +13,13 @@ public class DockerException extends RuntimeException {
     private int httpStatus = 0;
 
     public DockerException(String message, int httpStatus) {
-        super(message);
+        super(String.format("Status %d: %s", httpStatus, message));
         this.httpStatus = httpStatus;
     }
 
     public DockerException(String message, int httpStatus, Throwable cause) {
-        super(message, cause);
+        super(String.format("Status %d: %s", httpStatus, message), cause);
+        this.httpStatus = httpStatus;
     }
 
     public int getHttpStatus() {

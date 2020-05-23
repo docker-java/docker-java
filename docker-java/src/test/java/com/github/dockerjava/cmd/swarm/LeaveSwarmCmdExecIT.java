@@ -1,7 +1,6 @@
 package com.github.dockerjava.cmd.swarm;
 
 import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.api.exception.NotAcceptableException;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.api.model.LocalNodeState;
 import com.github.dockerjava.api.model.SwarmSpec;
@@ -15,15 +14,18 @@ import static org.hamcrest.Matchers.is;
 public class LeaveSwarmCmdExecIT extends SwarmCmdIT {
 
     public static final Logger LOG = LoggerFactory.getLogger(LeaveSwarmCmdExecIT.class);
-    
+
+    @Override
+    protected boolean shouldInitializeByDefault() {
+        return false;
+    }
+
     @Test
     public void leaveSwarmAsMaster() throws DockerException {
-        SwarmSpec swarmSpec = new SwarmSpec().withName("firstSpec");
-        dockerRule.getClient().initializeSwarmCmd(swarmSpec)
+        dockerRule.getClient().initializeSwarmCmd(new SwarmSpec())
                 .withListenAddr("127.0.0.1")
                 .withAdvertiseAddr("127.0.0.1")
                 .exec();
-        LOG.info("Initialized swarm: {}", swarmSpec.toString());
 
         Info info = dockerRule.getClient().infoCmd().exec();
         LOG.info("Inspected docker: {}", info.toString());
@@ -42,7 +44,7 @@ public class LeaveSwarmCmdExecIT extends SwarmCmdIT {
 
     }
 
-    @Test(expected = NotAcceptableException.class)
+    @Test(expected = DockerException.class)
     public void leavingSwarmThrowsWhenNotInSwarm() throws DockerException {
         dockerRule.getClient().leaveSwarmCmd().exec();
     }
