@@ -16,3 +16,8 @@ ij_java_names_count_to_use_import_on_demand = 9999
 [{*.pom,*.xml}]
 indent_style = tab
 ij_xml_attribute_wrap = off
+
+
+[*.{yaml,yml}]
+indent_size = 2
+ij_yaml_keep_indents_on_empty_lines = false
