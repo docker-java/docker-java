@@ -20,6 +20,11 @@ public class InitializeSwarmCmdExecIT extends SwarmCmdIT {
 
     public static final Logger LOG = LoggerFactory.getLogger(InitializeSwarmCmdExecIT.class);
 
+    @Override
+    protected boolean shouldInitializeByDefault() {
+        return false;
+    }
+
     @Test
     public void initializeSwarm() throws DockerException {
         SwarmSpec swarmSpec = new SwarmSpec()

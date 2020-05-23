@@ -14,7 +14,12 @@ import static org.hamcrest.Matchers.is;
 public class LeaveSwarmCmdExecIT extends SwarmCmdIT {
 
     public static final Logger LOG = LoggerFactory.getLogger(LeaveSwarmCmdExecIT.class);
-    
+
+    @Override
+    protected boolean shouldInitializeByDefault() {
+        return false;
+    }
+
     @Test
     public void leaveSwarmAsMaster() throws DockerException {
         dockerRule.getClient().initializeSwarmCmd(new SwarmSpec())

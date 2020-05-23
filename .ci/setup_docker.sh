@@ -2,7 +2,6 @@
 
 set -exu
 
-SWARM_MODE="${SWARM_MODE:-}"
 DOCKER_VERSION="${DOCKER_VERSION:-}"
 DOCKER_HOST="${DOCKER_HOST:-}"
 
@@ -16,11 +15,7 @@ if [[ -n $DOCKER_VERSION ]]; then
     sudo apt-get install "docker-ce=$DOCKER_VERSION"
 fi
 
-if [[ -n $SWARM_MODE ]]; then
-    export HOST_IP="$(ip a show dev eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)"
-
-    docker swarm init --advertise-addr $HOST_IP
-elif [[ -n $DOCKER_HOST ]]; then
+if [[ -n $DOCKER_HOST ]]; then
     sudo mkdir -p /etc/systemd/system/docker.service.d/
 
     echo "

@@ -15,7 +15,6 @@ import com.github.dockerjava.api.model.Service;
 import com.github.dockerjava.api.model.ServiceModeConfig;
 import com.github.dockerjava.api.model.ServiceReplicatedModeOptions;
 import com.github.dockerjava.api.model.ServiceSpec;
-import com.github.dockerjava.api.model.SwarmSpec;
 import com.github.dockerjava.api.model.TaskSpec;
 import com.github.dockerjava.api.model.TmpfsOptions;
 import com.github.dockerjava.junit.PrivateRegistryRule;
@@ -53,10 +52,6 @@ public class CreateServiceCmdExecIT extends SwarmCmdIT {
     @Before
     public final void setUpCreateServiceCmdExecIT() throws Exception {
         authConfig = REGISTRY.getAuthConfig();
-        dockerRule.getClient().initializeSwarmCmd(new SwarmSpec())
-            .withListenAddr("127.0.0.1")
-            .withAdvertiseAddr("127.0.0.1")
-            .exec();
     }
 
     @Test

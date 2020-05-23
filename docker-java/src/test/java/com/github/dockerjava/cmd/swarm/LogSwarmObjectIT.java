@@ -7,7 +7,6 @@ import com.github.dockerjava.api.model.ServiceReplicatedModeOptions;
 import com.github.dockerjava.api.model.ServiceRestartCondition;
 import com.github.dockerjava.api.model.ServiceRestartPolicy;
 import com.github.dockerjava.api.model.ServiceSpec;
-import com.github.dockerjava.api.model.SwarmSpec;
 import com.github.dockerjava.api.model.Task;
 import com.github.dockerjava.api.model.TaskSpec;
 import com.github.dockerjava.api.model.TaskState;
@@ -28,7 +27,6 @@ public class LogSwarmObjectIT extends SwarmCmdIT {
     @Test
     public void testLogsCmd() throws InterruptedException, IOException {
         String snippet = "hello world";
-        dockerRule.getClient().initializeSwarmCmd(new SwarmSpec()).exec();
         TaskSpec taskSpec = new TaskSpec().withContainerSpec(
                 new ContainerSpec().withImage("busybox").withCommand(Arrays.asList("echo", snippet)))
                 .withRestartPolicy(new ServiceRestartPolicy().withCondition(ServiceRestartCondition.NONE));

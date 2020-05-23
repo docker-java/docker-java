@@ -6,12 +6,10 @@ import com.github.dockerjava.api.model.ContainerSpec;
 import com.github.dockerjava.api.model.ServiceModeConfig;
 import com.github.dockerjava.api.model.ServiceReplicatedModeOptions;
 import com.github.dockerjava.api.model.ServiceSpec;
-import com.github.dockerjava.api.model.SwarmSpec;
 import com.github.dockerjava.api.model.Task;
 import com.github.dockerjava.api.model.TaskSpec;
 import com.github.dockerjava.api.model.TaskState;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,14 +30,6 @@ public class ListTasksCmdExecIT extends SwarmCmdIT {
     private final String SERVICE_NAME = "inspect_task";
     private static final String TASK_LABEL_KEY = "com.github.dockerjava.usage";
     private static final String TASK_LABEL_VALUE = "test";
-
-    @Before
-    public void setUp() {
-        dockerRule.getClient().initializeSwarmCmd(new SwarmSpec())
-            .withListenAddr("127.0.0.1")
-            .withAdvertiseAddr("127.0.0.1")
-            .exec();
-    }
 
     @After
     public void tearDown() {

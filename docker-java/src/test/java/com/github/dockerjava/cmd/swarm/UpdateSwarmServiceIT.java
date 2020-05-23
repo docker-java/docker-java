@@ -7,7 +7,6 @@ import com.github.dockerjava.api.model.Service;
 import com.github.dockerjava.api.model.ServiceModeConfig;
 import com.github.dockerjava.api.model.ServiceReplicatedModeOptions;
 import com.github.dockerjava.api.model.ServiceSpec;
-import com.github.dockerjava.api.model.SwarmSpec;
 import com.github.dockerjava.api.model.TaskSpec;
 import com.google.common.collect.Lists;
 import org.junit.Test;
@@ -21,7 +20,6 @@ import static org.hamcrest.Matchers.is;
 public class UpdateSwarmServiceIT extends SwarmCmdIT {
     @Test
     public void testUpdateServiceReplicate() throws Exception {
-        dockerRule.getClient().initializeSwarmCmd(new SwarmSpec()).exec();
         //create network
         String networkId = dockerRule.getClient().createNetworkCmd().withName("networkname").withDriver("overlay")
                 .withIpam(new Network.Ipam().withDriver("default")).exec().getId();

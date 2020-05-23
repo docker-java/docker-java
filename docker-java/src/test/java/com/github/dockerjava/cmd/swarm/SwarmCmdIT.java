@@ -2,6 +2,7 @@ package com.github.dockerjava.cmd.swarm;
 
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotAcceptableException;
+import com.github.dockerjava.api.model.SwarmSpec;
 import com.github.dockerjava.cmd.CmdIT;
 import com.github.dockerjava.junit.category.Integration;
 import com.github.dockerjava.junit.category.SwarmModeIntegration;
@@ -19,6 +20,16 @@ public abstract class SwarmCmdIT extends CmdIT {
     public final void setUpSwarmCmdIT() {
         assumeThat(dockerRule, isGreaterOrEqual(VERSION_1_24));
         leaveIfInSwarm();
+        if (shouldInitializeByDefault()) {
+            dockerRule.getClient().initializeSwarmCmd(new SwarmSpec())
+                .withListenAddr("127.0.0.1")
+                .withAdvertiseAddr("127.0.0.1")
+                .exec();
+        }
+    }
+
+    protected boolean shouldInitializeByDefault() {
+        return true;
     }
 
     private void leaveIfInSwarm() {

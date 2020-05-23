@@ -6,7 +6,6 @@ import com.github.dockerjava.api.model.Service;
 import com.github.dockerjava.api.model.ServiceModeConfig;
 import com.github.dockerjava.api.model.ServiceReplicatedModeOptions;
 import com.github.dockerjava.api.model.ServiceSpec;
-import com.github.dockerjava.api.model.SwarmSpec;
 import com.github.dockerjava.api.model.TaskSpec;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -28,7 +27,6 @@ public class ListServicesCmdExecIT extends SwarmCmdIT {
 
     @Test
     public void testListServices() throws Exception {
-        dockerRule.getClient().initializeSwarmCmd(new SwarmSpec()).exec();
         Map<String, String> serviceLabels = Collections.singletonMap(LABEL_KEY, LABEL_VALUE);
         CreateServiceResponse response = dockerRule.getClient().createServiceCmd(new ServiceSpec()
                 .withLabels(serviceLabels)

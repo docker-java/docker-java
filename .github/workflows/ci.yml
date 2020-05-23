@@ -14,7 +14,6 @@ jobs:
           - { name: "default" }
           - { name: "over TCP", dockerHost: "tcp://127.0.0.1:2375" }
           - { name: "Docker 18.06.3", dockerVersion: "18.06.3~ce~3-0~ubuntu" }
-          - { name: "Docker Swarm Mode", swarmMode: "true" }
 
     steps:
       - uses: actions/checkout@v1
@@ -25,7 +24,6 @@ jobs:
       - name: Configure Docker
         env:
           DOCKER_VERSION: ${{matrix.dockerVersion}}
-          SWARM_MODE: ${{matrix.swarmMode}}
           DOCKER_HOST: ${{matrix.dockerHost}}
         run: .ci/setup_docker.sh
       - name: Build with Maven
