@@ -14,7 +14,7 @@ jobs:
           - { name: "default" }
           - { name: "over TCP", dockerHost: "tcp://127.0.0.1:2375" }
           - { name: "Docker 18.06.3", dockerVersion: "18.06.3~ce~3-0~ubuntu" }
-          - { name: "Docker Swarm", dockerHost: "tcp://127.0.0.1:2377", swarmVersion: "1.2.8" }
+          - { name: "Docker Swarm", swarmVersion: "1.2.8" }
 
     steps:
       - uses: actions/checkout@v1
