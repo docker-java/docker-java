@@ -1,7 +1,7 @@
 package com.github.dockerjava.cmd.swarm;
 
+import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.api.exception.NotAcceptableException;
 import com.github.dockerjava.api.model.Swarm;
 import com.github.dockerjava.api.model.SwarmCAConfig;
 import com.github.dockerjava.api.model.SwarmDispatcherConfig;
@@ -22,9 +22,10 @@ public class InitializeSwarmCmdExecIT extends SwarmCmdIT {
     public static final Logger LOG = LoggerFactory.getLogger(InitializeSwarmCmdExecIT.class);
 
     @Test
-    public void initializeSwarm() throws DockerException {
+    public void initializeSwarm() throws Exception {
+        DockerClient dockerClient = startDockerInDocker();
         SwarmSpec swarmSpec = new SwarmSpec()
-                .withName("swarm")
+                .withName("default")
                 .withDispatcher(new SwarmDispatcherConfig()
                         .withHeartbeatPeriod(10000000L)
                 ).withOrchestration(new SwarmOrchestration()
@@ -38,30 +39,23 @@ public class InitializeSwarmCmdExecIT extends SwarmCmdIT {
                         .withLogEntriesForSlowFollowers(200)
                 ).withTaskDefaults(new TaskDefaults());
 
-        dockerRule.getClient().initializeSwarmCmd(swarmSpec)
+        dockerClient.initializeSwarmCmd(swarmSpec)
                 .withListenAddr("127.0.0.1")
                 .withAdvertiseAddr("127.0.0.1")
                 .exec();
         LOG.info("Initialized swarm: {}", swarmSpec.toString());
 
-        Swarm swarm = dockerRule.getClient().inspectSwarmCmd().exec();
+        Swarm swarm = dockerClient.inspectSwarmCmd().exec();
         LOG.info("Inspected swarm: {}", swarm.toString());
         assertThat(swarm.getSpec(), is(equalTo(swarmSpec)));
     }
 
-    @Test(expected = NotAcceptableException.class)
+    @Test(expected = DockerException.class)
     public void initializingSwarmThrowsWhenAlreadyInSwarm() throws DockerException {
-        SwarmSpec swarmSpec = new SwarmSpec()
-                .withName("swarm");
-
-        dockerRule.getClient().initializeSwarmCmd(swarmSpec)
-                .withListenAddr("127.0.0.1")
-                .withAdvertiseAddr("127.0.0.1")
-                .exec();
-        LOG.info("Initialized swarm: {}", swarmSpec.toString());
+        DockerClient dockerClient = startSwarm();
 
         // Initializing a swarm if already in swarm mode should fail
-        dockerRule.getClient().initializeSwarmCmd(swarmSpec)
+        dockerClient.initializeSwarmCmd(new SwarmSpec())
                 .withListenAddr("127.0.0.1")
                 .exec();
     }
