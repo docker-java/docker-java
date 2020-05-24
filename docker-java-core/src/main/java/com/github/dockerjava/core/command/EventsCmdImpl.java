@@ -7,7 +7,6 @@ import java.util.Map;
 
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.model.Event;
-import com.github.dockerjava.api.model.EventType;
 import com.github.dockerjava.core.util.FiltersBuilder;
 
 /**

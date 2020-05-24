@@ -1,7 +1,5 @@
 package com.github.dockerjava.core.util;
 
-import com.github.dockerjava.api.model.EventType;
-
 import com.google.common.base.Strings;
 
 import java.util.ArrayList;
