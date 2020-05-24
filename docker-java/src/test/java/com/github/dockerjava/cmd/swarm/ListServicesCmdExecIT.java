@@ -1,5 +1,6 @@
 package com.github.dockerjava.cmd.swarm;
 
+import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateServiceResponse;
 import com.github.dockerjava.api.model.ContainerSpec;
 import com.github.dockerjava.api.model.Service;
@@ -27,8 +28,9 @@ public class ListServicesCmdExecIT extends SwarmCmdIT {
 
     @Test
     public void testListServices() throws Exception {
+        DockerClient dockerClient = startSwarm();
         Map<String, String> serviceLabels = Collections.singletonMap(LABEL_KEY, LABEL_VALUE);
-        CreateServiceResponse response = dockerRule.getClient().createServiceCmd(new ServiceSpec()
+        CreateServiceResponse response = dockerClient.createServiceCmd(new ServiceSpec()
                 .withLabels(serviceLabels)
                 .withName(SERVICE_NAME)
                 .withMode(new ServiceModeConfig().withReplicated(
@@ -41,14 +43,14 @@ public class ListServicesCmdExecIT extends SwarmCmdIT {
                 .exec();
         String serviceId = response.getId();
         //filtering with service id
-        List<Service> services = dockerRule.getClient().listServicesCmd().withIdFilter(Collections.singletonList(serviceId)).exec();
+        List<Service> services = dockerClient.listServicesCmd().withIdFilter(Collections.singletonList(serviceId)).exec();
         assertThat(services, hasSize(1));
         //filtering with service name
-        services = dockerRule.getClient().listServicesCmd().withNameFilter(Collections.singletonList(SERVICE_NAME)).exec();
+        services = dockerClient.listServicesCmd().withNameFilter(Collections.singletonList(SERVICE_NAME)).exec();
         assertThat(services, hasSize(1));
         //filter labels
-        services = dockerRule.getClient().listServicesCmd().withLabelFilter(serviceLabels).exec();
+        services = dockerClient.listServicesCmd().withLabelFilter(serviceLabels).exec();
         assertThat(services, hasSize(1));
-        dockerRule.getClient().removeServiceCmd(SERVICE_NAME).exec();
+        dockerClient.removeServiceCmd(SERVICE_NAME).exec();
     }
 }
