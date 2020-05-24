@@ -36,8 +36,7 @@ public interface EventsCmd extends AsyncDockerCmd<EventsCmd, Event> {
     EventsCmd withEventFilter(String... event);
 
     /**
-     * @param eventTypes
-     *            - event types to filter
+     * @param eventTypes event types to filter
      */
     EventsCmd withEventTypeFilter(String... eventTypes);
 
