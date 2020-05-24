@@ -14,6 +14,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.awaitility.Awaitility.await;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -31,15 +32,16 @@ public class UpdateSwarmServiceIT extends SwarmCmdIT {
                 .withNetworks(Lists.newArrayList(new NetworkAttachmentConfig().withTarget(networkId)))
                 .withName("worker");
         String serviceId = dockerRule.getClient().createServiceCmd(serviceSpec).exec().getId();
-        //list the service
-        List<Service> services = dockerRule.getClient().listServicesCmd().withIdFilter(Arrays.asList(serviceId)).exec();
-        assertThat(services.size(), is(1));
-        Service service = services.get(0);
-        ServiceSpec updateServiceSpec = service.getSpec()
+        await().untilAsserted(() -> {
+            List<Service> services = dockerRule.getClient().listServicesCmd().withIdFilter(Arrays.asList(serviceId)).exec();
+            assertThat(services.size(), is(1));
+            Service service = services.get(0);
+            ServiceSpec updateServiceSpec = service.getSpec()
                 .withMode(new ServiceModeConfig().withReplicated(new ServiceReplicatedModeOptions().withReplicas(2)));
-        dockerRule.getClient().updateServiceCmd(service.getId(), updateServiceSpec).withVersion(service.getVersion().getIndex()).exec();
-        //verify the replicate
-        Service updateService = dockerRule.getClient().listServicesCmd().withIdFilter(Arrays.asList(serviceId)).exec().get(0);
-        assertThat(updateService.getSpec().getMode().getReplicated().getReplicas(), is(2L));
+            dockerRule.getClient().updateServiceCmd(service.getId(), updateServiceSpec).withVersion(service.getVersion().getIndex()).exec();
+            //verify the replicate
+            Service updateService = dockerRule.getClient().listServicesCmd().withIdFilter(Arrays.asList(serviceId)).exec().get(0);
+            assertThat(updateService.getSpec().getMode().getReplicated().getReplicas(), is(2L));
+        });
     }
 }

@@ -51,8 +51,10 @@ public class ListTasksCmdExecIT extends SwarmCmdIT {
                 .exec();
         String serviceId = response.getId();
         //filtering with service id
-        List<Task> tasks = dockerRule.getClient().listTasksCmd().withServiceFilter(serviceId).exec();
-        assertThat(tasks, hasSize(2));
+        List<Task> tasks = await().until(
+            () -> dockerRule.getClient().listTasksCmd().withServiceFilter(serviceId).exec(),
+            hasSize(2)
+        );
         String taskId = tasks.get(0).getId();
         String secondTaskId = tasks.get(1).getId();
         //filtering with unique id
