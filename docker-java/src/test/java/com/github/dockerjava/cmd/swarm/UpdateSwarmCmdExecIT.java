@@ -1,5 +1,6 @@
 package com.github.dockerjava.cmd.swarm;
 
+import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.Swarm;
 import com.github.dockerjava.api.model.SwarmCAConfig;
@@ -23,6 +24,8 @@ public class UpdateSwarmCmdExecIT extends SwarmCmdIT {
 
     @Test
     public void updateSwarm() throws DockerException {
+        DockerClient dockerClient = startSwarm();
+
         SwarmSpec newSpec = new SwarmSpec()
                 .withName("default")
                 .withDispatcher(new SwarmDispatcherConfig()
@@ -38,23 +41,24 @@ public class UpdateSwarmCmdExecIT extends SwarmCmdIT {
                         .withLogEntriesForSlowFollowers(200)
                 ).withTaskDefaults(new TaskDefaults());
 
-        Swarm swarm = dockerRule.getClient().inspectSwarmCmd().exec();
+        Swarm swarm = dockerClient.inspectSwarmCmd().exec();
         LOG.info("Inspected swarm: {}", swarm.toString());
         assertThat(swarm.getSpec(), is(not(equalTo(newSpec))));
 
-        dockerRule.getClient().updateSwarmCmd(newSpec)
+        dockerClient.updateSwarmCmd(newSpec)
                 .withVersion(swarm.getVersion().getIndex())
                 .exec();
         LOG.info("Updated swarm: {}", newSpec.toString());
 
-        swarm = dockerRule.getClient().inspectSwarmCmd().exec();
+        swarm = dockerClient.inspectSwarmCmd().exec();
         LOG.info("Inspected swarm: {}", swarm.toString());
         assertThat(swarm.getSpec(), is(equalTo(newSpec)));
     }
 
     @Test(expected = DockerException.class)
-    public void updatingSwarmThrowsWhenNotInSwarm() throws DockerException {
-        dockerRule.getClient().updateSwarmCmd(new SwarmSpec())
+    public void updatingSwarmThrowsWhenNotInSwarm() throws Exception {
+        DockerClient dockerClient = startDockerInDocker();
+        dockerClient.updateSwarmCmd(new SwarmSpec())
                 .withVersion(1L)
                 .exec();
     }
