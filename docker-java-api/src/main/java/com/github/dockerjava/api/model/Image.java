@@ -1,10 +1,12 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  *
@@ -28,11 +30,23 @@ public class Image implements Serializable {
     @JsonProperty("RepoTags")
     private String[] repoTags;
 
+    @JsonProperty("RepoDigests")
+    private String[] repoDigests;
+
     @JsonProperty("Size")
     private Long size;
 
     @JsonProperty("VirtualSize")
     private Long virtualSize;
+
+    @JsonProperty("SharedSize")
+    private Long sharedSize;
+
+    @JsonProperty("Labels")
+    public Map<String, String> labels;
+
+    @JsonProperty("Containers")
+    private Integer containers;
 
     public String getId() {
         return id;
@@ -40,6 +54,10 @@ public class Image implements Serializable {
 
     public String[] getRepoTags() {
         return repoTags;
+    }
+
+    public String[] getRepoDigests() {
+        return repoDigests;
     }
 
     public String getParentId() {
@@ -56,5 +74,18 @@ public class Image implements Serializable {
 
     public Long getVirtualSize() {
         return virtualSize;
+    }
+
+
+    public Long getSharedSize() {
+        return sharedSize;
+    }
+
+    public Map<String, String> getLabels() {
+        return labels;
+    }
+
+    public Integer getContainers() {
+        return containers;
     }
 }

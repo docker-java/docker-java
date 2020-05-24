@@ -11,6 +11,7 @@ import java.util.Map;
  * @since 1.24
  */
 public enum EventType {
+    CONFIG("config"),
     /**
      * @since 1.24
      */
@@ -26,7 +27,10 @@ public enum EventType {
      */
     IMAGE("image"),
     NETWORK("network"),
+    NODE("node"),
     PLUGIN("plugin"),
+    SECRET("secret"),
+    SERVICE("service"),
     VOLUME("volume");
 
     private static final Map<String, EventType> EVENT_TYPES = new HashMap<>();
