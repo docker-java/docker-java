@@ -74,10 +74,9 @@ public class FiltersBuilder {
      * @param eventTypes
      *            array of event types
      */
-    public FiltersBuilder withEventTypes(EventType... eventTypes) {
+    public FiltersBuilder withEventTypes(String... eventTypes) {
         withFilter("type",
             Stream.of(eventTypes)
-                .map(EventType::getValue)
                 .collect(Collectors.toList()));
         return this;
     }
