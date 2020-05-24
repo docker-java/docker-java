@@ -32,6 +32,7 @@ jobs:
         run: ./mvnw --no-transfer-progress verify
       - name: Aggregate test reports with ciMate
         if: always()
+        continue-on-error: true
         env:
           CIMATE_PROJECT_ID: lodr9d83
           CIMATE_CI_KEY: "CI / ${{matrix.name}}"

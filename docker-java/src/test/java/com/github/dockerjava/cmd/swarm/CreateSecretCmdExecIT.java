@@ -1,7 +1,7 @@
 package com.github.dockerjava.cmd.swarm;
 
+import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateSecretResponse;
-import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.Secret;
 import com.github.dockerjava.api.model.SecretSpec;
 import com.google.common.collect.Lists;
@@ -21,27 +21,28 @@ public class CreateSecretCmdExecIT extends SwarmCmdIT {
     public static final Logger LOG = LoggerFactory.getLogger(CreateSecretCmdExecIT.class);
 
     @Test
-    public void testCreateSecret() throws DockerException {
+    public void testCreateSecret() throws Exception {
+        DockerClient dockerClient = startSwarm();
         int length = 10;
         boolean useLetters = true;
         boolean useNumbers = false;
         String secretName = RandomStringUtils.random(length, useLetters, useNumbers);
-        CreateSecretResponse exec = dockerRule.getClient().createSecretCmd(new SecretSpec().withName(secretName).withData("mon secret en clair")).exec();
+        CreateSecretResponse exec = dockerClient.createSecretCmd(new SecretSpec().withName(secretName).withData("mon secret en clair")).exec();
         assertThat(exec, notNullValue());
         assertThat(exec.getId(), notNullValue());
         LOG.info("Secret created with ID {}", exec.getId());
 
 
-        List<Secret> secrets = dockerRule.getClient().listSecretsCmd()
+        List<Secret> secrets = dockerClient.listSecretsCmd()
                 .withNameFilter(Lists.newArrayList(secretName))
                 .exec();
 
         assertThat(secrets, IsCollectionWithSize.hasSize(1));
 
-        dockerRule.getClient().removeSecretCmd(secrets.get(0).getId())
+        dockerClient.removeSecretCmd(secrets.get(0).getId())
                 .exec();
         LOG.info("Secret removed with ID {}", exec.getId());
-        List<Secret> secretsAfterRemoved = dockerRule.getClient().listSecretsCmd()
+        List<Secret> secretsAfterRemoved = dockerClient.listSecretsCmd()
                 .withNameFilter(Lists.newArrayList(secretName))
                 .exec();
 
