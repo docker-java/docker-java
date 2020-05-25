@@ -69,8 +69,7 @@ public class FiltersBuilder {
     /**
      * Filter by event types
      *
-     * @param eventTypes
-     *            array of event types
+     * @param eventTypes an array of event types
      */
     public FiltersBuilder withEventTypes(String... eventTypes) {
         withFilter("type",
