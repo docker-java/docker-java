@@ -544,29 +544,6 @@ public class StartContainerCmdIT extends CmdIT {
     }
 
     @Test
-    public void startContainerWithNanoCPUs() throws DockerException {
-        Long nanoCPUs = 1000000000L;
-        
-        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-            .withCmd("sleep", "9999")
-            .withHostConfig(newHostConfig()
-                .withNanoCPUs(nanoCPUs))
-            .exec();
-
-        LOG.info("Created container {}", container.toString());
-
-        assertThat(container.getId(), not(is(emptyString())));
-
-        dockerRule.getClient().startContainerCmd(container.getId()).exec();
-
-        InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
-
-        assertThat(inspectContainerResponse.getState().getRunning(), is(true));
-
-        assertThat(inspectContainerResponse.getHostConfig().getNanoCPUs(), is(nanoCPUs));
-    }
-
-    @Test
     public void existingHostConfigIsPreservedByBlankStartCmd() throws DockerException {
 
         String dnsServer = "8.8.8.8";
