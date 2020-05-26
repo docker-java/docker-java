@@ -56,7 +56,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
     private static final Set<String> CONFIG_KEYS = new HashSet<>();
 
-    private static final Properties DEFAULT_PROPERTIES = new Properties();
+    static final Properties DEFAULT_PROPERTIES = new Properties();
 
     static {
         CONFIG_KEYS.add(DOCKER_HOST);
@@ -169,13 +169,19 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
         // special case which is a sensible default
         if (env.containsKey(DOCKER_HOST)) {
-            overriddenProperties.setProperty(DOCKER_HOST, env.get(DOCKER_HOST));
+            String value = env.get(DOCKER_HOST);
+            if (value != null && value.trim().length() != 0) {
+                overriddenProperties.setProperty(DOCKER_HOST, value);
+            }
         }
 
         for (Map.Entry<String, String> envEntry : env.entrySet()) {
             String envKey = envEntry.getKey();
             if (CONFIG_KEYS.contains(envKey)) {
-                overriddenProperties.setProperty(envKey, envEntry.getValue());
+                String value = envEntry.getValue();
+                if (value != null && value.trim().length() != 0) {
+                    overriddenProperties.setProperty(envKey, value);
+                }
             }
         }
 

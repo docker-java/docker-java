@@ -1,7 +1,7 @@
 package com.github.dockerjava.cmd.swarm;
 
+import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.api.exception.NotAcceptableException;
 import com.github.dockerjava.api.model.Swarm;
 import com.github.dockerjava.api.model.SwarmCAConfig;
 import com.github.dockerjava.api.model.SwarmDispatcherConfig;
@@ -22,11 +22,12 @@ public class UpdateSwarmCmdExecIT extends SwarmCmdIT {
 
     public static final Logger LOG = LoggerFactory.getLogger(UpdateSwarmCmdExecIT.class);
 
+    @Test
     public void updateSwarm() throws DockerException {
-        SwarmSpec firstSpec = new SwarmSpec().withName("firstSpec");
+        DockerClient dockerClient = startSwarm();
 
-        SwarmSpec secondSpec = new SwarmSpec()
-                .withName("secondSpec")
+        SwarmSpec newSpec = new SwarmSpec()
+                .withName("default")
                 .withDispatcher(new SwarmDispatcherConfig()
                         .withHeartbeatPeriod(10000000L)
                 ).withOrchestration(new SwarmOrchestration()
@@ -40,33 +41,25 @@ public class UpdateSwarmCmdExecIT extends SwarmCmdIT {
                         .withLogEntriesForSlowFollowers(200)
                 ).withTaskDefaults(new TaskDefaults());
 
-        dockerRule.getClient().initializeSwarmCmd(firstSpec)
-                .withListenAddr("127.0.0.1")
-                .withAdvertiseAddr("127.0.0.1")
-                .exec();
-        LOG.info("Initialized swarm: {}", firstSpec.toString());
-
-        Swarm swarm = dockerRule.getClient().inspectSwarmCmd().exec();
+        Swarm swarm = dockerClient.inspectSwarmCmd().exec();
         LOG.info("Inspected swarm: {}", swarm.toString());
-        assertThat(swarm.getSpec(), is(not(equalTo(secondSpec))));
+        assertThat(swarm.getSpec(), is(not(equalTo(newSpec))));
 
-        dockerRule.getClient().updateSwarmCmd(secondSpec)
+        dockerClient.updateSwarmCmd(newSpec)
                 .withVersion(swarm.getVersion().getIndex())
                 .exec();
-        LOG.info("Updated swarm: {}", secondSpec.toString());
+        LOG.info("Updated swarm: {}", newSpec.toString());
 
-        swarm = dockerRule.getClient().inspectSwarmCmd().exec();
+        swarm = dockerClient.inspectSwarmCmd().exec();
         LOG.info("Inspected swarm: {}", swarm.toString());
-        assertThat(swarm.getSpec(), is(equalTo(secondSpec)));
+        assertThat(swarm.getSpec(), is(equalTo(newSpec)));
     }
 
-    @Test(expected = NotAcceptableException.class)
-    public void updatingSwarmThrowsWhenNotInSwarm() throws DockerException {
-        SwarmSpec swarmSpec = new SwarmSpec()
-                .withName("swarm");
-
-        dockerRule.getClient().updateSwarmCmd(swarmSpec)
-                .withVersion(1l)
+    @Test(expected = DockerException.class)
+    public void updatingSwarmThrowsWhenNotInSwarm() throws Exception {
+        DockerClient dockerClient = startDockerInDocker();
+        dockerClient.updateSwarmCmd(new SwarmSpec())
+                .withVersion(1L)
                 .exec();
     }
 

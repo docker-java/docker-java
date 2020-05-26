@@ -1,14 +1,16 @@
 package com.github.dockerjava.cmd.swarm;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.exception.ConflictException;
-import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.api.exception.NotAcceptableException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
+import com.github.dockerjava.api.model.PullResponseItem;
+import com.github.dockerjava.api.model.SwarmSpec;
 import com.github.dockerjava.cmd.CmdIT;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
@@ -18,41 +20,54 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.experimental.categories.Category;
 
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import static com.github.dockerjava.api.model.HostConfig.newHostConfig;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_24;
 import static com.github.dockerjava.junit.DockerMatchers.isGreaterOrEqual;
+import static org.awaitility.Awaitility.await;
 import static org.junit.Assume.assumeThat;
 
 @Category({SwarmModeIntegration.class, Integration.class})
 public abstract class SwarmCmdIT extends CmdIT {
-    protected DockerClient secondDockerClient;
-    private int numberOfDockersInDocker = 0;
 
-    private static final int PORT_START = 2378;
-    private static final String DOCKER_IN_DOCKER_CONTAINER_PREFIX = "docker";
-    private static final String NETWORK_NAME = "dind-network";
     private static final String DOCKER_IN_DOCKER_IMAGE_REPOSITORY = "docker";
+
     private static final String DOCKER_IN_DOCKER_IMAGE_TAG = "17.12-dind";
 
+    private static final String DOCKER_IN_DOCKER_CONTAINER_PREFIX = "docker";
+
+    private static final String NETWORK_NAME = "dind-network";
+
+    private final AtomicInteger numberOfDockersInDocker = new AtomicInteger();
+
+    private final Set<String> startedContainerIds = new HashSet<>();
+
     @Before
-    public void beforeTest() throws Exception {
+    public final void setUpMultiNodeSwarmCmdIT() throws Exception {
         assumeThat(dockerRule, isGreaterOrEqual(VERSION_1_24));
     }
 
-    @Before
-    public void beforeMethod() {
-        leaveIfInSwarm();
+    protected DockerClient startSwarm() {
+        DockerClient dockerClient;
+        try {
+            dockerClient = startDockerInDocker();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        dockerClient.initializeSwarmCmd(new SwarmSpec()).exec();
+        return dockerClient;
     }
 
     @After
-    public void afterMethod() {
-        removeDockersInDocker();
-    }
-
-    protected void removeDockersInDocker() {
-        for (int i = 1; i <= numberOfDockersInDocker; i++) {
+    public final void tearDownMultiNodeSwarmCmdIT() {
+        for (String containerId : startedContainerIds) {
             try {
-                dockerRule.getClient().removeContainerCmd(DOCKER_IN_DOCKER_CONTAINER_PREFIX + i).withForce(true).exec();
+                dockerRule.getClient().removeContainerCmd(containerId).withForce(true).exec();
             } catch (NotFoundException e) {
                 // container does not exist
             }
@@ -63,75 +78,67 @@ public abstract class SwarmCmdIT extends CmdIT {
         } catch (NotFoundException e) {
             // network does not exist
         }
-
-        numberOfDockersInDocker = 0;
     }
 
     protected DockerClient startDockerInDocker() throws InterruptedException {
-        numberOfDockersInDocker++;
-        String name = DOCKER_IN_DOCKER_CONTAINER_PREFIX + numberOfDockersInDocker;
-
-        // Delete if already exists
-        try {
-            dockerRule.getClient().removeContainerCmd(name).withForce(true).exec();
-        } catch (NotFoundException e) {
-            // container does not exist
-        }
-
         // Create network if not already exists
+        DockerClient hostDockerClient = dockerRule.getClient();
         try {
-            dockerRule.getClient().inspectNetworkCmd().withNetworkId(NETWORK_NAME).exec();
+            hostDockerClient.inspectNetworkCmd().withNetworkId(NETWORK_NAME).exec();
         } catch (NotFoundException e) {
             try {
-                dockerRule.getClient().createNetworkCmd().withName(NETWORK_NAME).exec();
+                hostDockerClient.createNetworkCmd().withName(NETWORK_NAME).exec();
             } catch (ConflictException e2) {
                 // already exists
             }
         }
 
-        dockerRule.getClient().pullImageCmd(DOCKER_IN_DOCKER_IMAGE_REPOSITORY)
+        try (
+            ResultCallback.Adapter<PullResponseItem> callback = hostDockerClient.pullImageCmd(DOCKER_IN_DOCKER_IMAGE_REPOSITORY)
                 .withTag(DOCKER_IN_DOCKER_IMAGE_TAG)
                 .start()
-                .awaitCompletion();
-
-        int port = PORT_START + (numberOfDockersInDocker - 1);
-        CreateContainerResponse response = dockerRule.getClient()
-                .createContainerCmd(DOCKER_IN_DOCKER_IMAGE_REPOSITORY + ":" + DOCKER_IN_DOCKER_IMAGE_TAG)
-                .withHostConfig(newHostConfig()
-                        .withNetworkMode(NETWORK_NAME)
-                        .withPortBindings(new PortBinding(
-                                Ports.Binding.bindIpAndPort("127.0.0.1", port),
-                                ExposedPort.tcp(2375)))
-                        .withPrivileged(true))
-                .withName(name)
-                .withAliases(name)
-
-                .exec();
-
-        dockerRule.getClient().startContainerCmd(response.getId()).exec();
-
-        return initializeDockerClient(port);
-    }
-
-    private DockerClient initializeDockerClient(int port) {
-        DefaultDockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder()
-                .withRegistryUrl("https://index.docker.io/v1/")
-                .withDockerHost("tcp://localhost:" + port).build();
-        return DockerClientBuilder.getInstance(config)
-                .withDockerCmdExecFactory(getFactoryType().createExecFactory())
-                .build();
-    }
-
-    private void leaveIfInSwarm() {
-        try {
-            // force in case this is a swarm manager
-            dockerRule.getClient().leaveSwarmCmd().withForceEnabled(true).exec();
-        } catch (NotAcceptableException e) {
-            // do nothing, node is not part of a swarm
-        } catch (DockerException ex) {
-            if (!ex.getMessage().contains("node is not part of a swarm")) {
-                throw ex;
-            }
+        ) {
+            callback.awaitCompletion();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+
+        ExposedPort exposedPort = ExposedPort.tcp(2375);
+        CreateContainerResponse response = hostDockerClient
+            .createContainerCmd(DOCKER_IN_DOCKER_IMAGE_REPOSITORY + ":" + DOCKER_IN_DOCKER_IMAGE_TAG)
+            .withHostConfig(newHostConfig()
+                .withNetworkMode(NETWORK_NAME)
+                .withPortBindings(new PortBinding(
+                    Ports.Binding.bindIp("127.0.0.1"),
+                    exposedPort))
+                .withPrivileged(true))
+            .withAliases(DOCKER_IN_DOCKER_CONTAINER_PREFIX + numberOfDockersInDocker.incrementAndGet())
+            .exec();
+
+        String containerId = response.getId();
+        startedContainerIds.add(containerId);
+
+        hostDockerClient.startContainerCmd(containerId).exec();
+
+        InspectContainerResponse inspectContainerResponse = hostDockerClient.inspectContainerCmd(containerId).exec();
+
+        Ports.Binding binding = inspectContainerResponse.getNetworkSettings().getPorts().getBindings().get(exposedPort)[0];
+
+        DockerClient dockerClient = initializeDockerClient(binding);
+
+        await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
+            dockerClient.pingCmd().exec();
+        });
+
+        return dockerClient;
+    }
+
+    private DockerClient initializeDockerClient(Ports.Binding binding) {
+        DefaultDockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder()
+            .withRegistryUrl("https://index.docker.io/v1/")
+            .withDockerHost("tcp://" + binding).build();
+        return DockerClientBuilder.getInstance(config)
+            .withDockerCmdExecFactory(getFactoryType().createExecFactory())
+            .build();
     }
 }
