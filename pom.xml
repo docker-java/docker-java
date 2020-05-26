@@ -93,6 +93,7 @@
 		<module>docker-java-transport-jersey</module>
 		<module>docker-java-transport-okhttp</module>
 		<module>docker-java-transport-httpclient5</module>
+		<module>docker-java-transport-ssh</module>
 		<module>docker-java</module>
 	</modules>
 

@@ -99,6 +99,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
     private URI checkDockerHostScheme(URI dockerHost) {
         switch (dockerHost.getScheme()) {
+            case "ssh":
             case "tcp":
             case "unix":
             case "npipe":
