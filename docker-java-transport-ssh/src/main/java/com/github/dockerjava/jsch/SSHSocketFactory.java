@@ -7,6 +7,8 @@ import com.jcraft.jsch.ChannelDirectStreamLocal;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.net.SocketFactory;
 import java.io.IOException;
@@ -19,6 +21,8 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class SSHSocketFactory extends SocketFactory {
+
+    private static Logger logger = LoggerFactory.getLogger(SSHSocketFactory.class);
 
     private final Session session;
     private final SSHDockerConfig config;
@@ -67,21 +71,26 @@ public class SSHSocketFactory extends SocketFactory {
             private void connect(int timeout) throws IOException {
                 try {
                     if (config.isUseTcp()) {
-                        channel = session.getStreamForwarder("127.0.0.1", config.getTcpPort() != null ? config.getTcpPort() : 2375);
+                        final int port = config.getTcpPort() != null ? config.getTcpPort() : 2375;
+                        channel = session.getStreamForwarder("127.0.0.1", port);
+                        logger.debug("Using channel direct-tcpip with 127.0.0.1:{}", port);
                     } else if (config.isUseSocat() || unixSocketOnWindows()) {
                         // forward docker socket via socat
                         socatContainer = SocatHandler.startSocat(session);
                         final ContainerPort containerPort = socatContainer.getPorts()[0];
                         Objects.requireNonNull(containerPort);
                         channel = session.getStreamForwarder(containerPort.getIp(), containerPort.getPublicPort());
+                        logger.debug("Using channel direct-tcpip with socat on port {}", containerPort.getPublicPort());
                     } else if (config.isUseSocket()) {
                         // directly forward docker socket
                         channel = session.openChannel("direct-streamlocal@openssh.com");
                         ((ChannelDirectStreamLocal) channel).setSocketPath(config.getSocketPath());
+                        logger.debug("Using channel direct-streamlocal on {}", config.getSocketPath());
                     } else {
                         // only 18.09 and up
                         channel = session.openChannel("exec");
                         ((ChannelExec) channel).setCommand("docker system dial-stdio");
+                        logger.debug("Using dialer command");
                     }
 
                     inputStream = channel.getInputStream();

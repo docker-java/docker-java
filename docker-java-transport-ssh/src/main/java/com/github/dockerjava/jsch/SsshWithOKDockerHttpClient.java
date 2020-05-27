@@ -192,9 +192,9 @@ public final class SsshWithOKDockerHttpClient implements DockerHttpClient {
 
         URI dockerHost = dockerClientConfig.getDockerHost();
 
-        this.session = connectSSH(dockerHost, connectTimeout != null ? connectTimeout : 0);
-
         if ("ssh".equals(dockerHost.getScheme())) {
+
+            this.session = connectSSH(dockerHost, connectTimeout != null ? connectTimeout : 0);
 
             final SSHSocketFactory socketFactory = new SSHSocketFactory(session, sshDockerConfig);
 

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -37,7 +38,8 @@ import static org.junit.jupiter.api.Assertions.fail;
  * PreferredAuthentications publickey
  * </pre>
  */
-class SocatHandlerTest {
+@EnabledIfEnvironmentVariable(named = "DOCKER_HOST", matches = "ssh://.*")
+class SocatHandlerIT {
 
     private static Session session;
     private Container container;
