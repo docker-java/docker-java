@@ -2,13 +2,25 @@
 
 set -exu
 
-whoami
+sudo apt-get upgrade
+sudo apt-get update
+sudo apt-get install openssh-server
+sudo service ssh start
 
-which ssh
+mkdir -p ~/.ssh
+cd ~/.ssh
+ssh-keygen -q -t rsa -N "" -f jsch
+cat jsch.pub >> authorized_keys
+chmod 640 authorized_keys
+sudo service ssh restart
 
-ls -lsa ~/.ssh
+cat <<EOT >> config
+Host junit-host
+	HostName localhost
+	StrictHostKeyChecking no
+	IdentityFile ~/.ssh/jsch
+	PreferredAuthentications publickey
+EOT
 
-ssh localhost
-
-exit 1
+ssh -q junit-host exit
 
