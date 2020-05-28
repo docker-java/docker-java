@@ -11,7 +11,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { name: "ssh-default" , dockerHost: "ssh://junit-host"}
+          - { name: "ssh-default" , clientDockerHost: "ssh://junit-host"}
           #- { name: "ssh-19.03.9" , dockerVersion: "19.03.9~3-0~ubuntu-bionic", dockerHost: "ssh://junit-host"}
 
     steps:
@@ -29,5 +29,5 @@ jobs:
         run: .ci/setup_ssh_config.sh
       - name: Build with Maven
         env:
-          DOCKER_HOST: ${{matrix.dockerHost}}
+          DOCKER_HOST: ${{clientDockerHost}}
         run: ./mvnw --no-transfer-progress verify
