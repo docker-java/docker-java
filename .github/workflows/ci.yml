@@ -2,7 +2,7 @@ name: CI
 
 on:
   pull_request: {}
-  push: { branches: [ master ] }
+  push: { branches: [ ssh-ci ] }
 
 jobs:
   build:
@@ -11,9 +11,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { name: "default" }
-          - { name: "over TCP", dockerHost: "tcp://127.0.0.1:2375" }
-          - { name: "Docker 18.06.3", dockerVersion: "18.06.3~ce~3-0~ubuntu" }
+          - { name: "ssh-default" , dockerHost: "ssh://junit-host"}
+          #- { name: "ssh-19.03.9" , dockerVersion: "19.03.9~3-0~ubuntu-bionic", dockerHost: "ssh://junit-host"}
 
     steps:
       - uses: actions/checkout@v1
@@ -26,17 +25,9 @@ jobs:
           DOCKER_VERSION: ${{matrix.dockerVersion}}
           DOCKER_HOST: ${{matrix.dockerHost}}
         run: .ci/setup_docker.sh
+      - name: ssh config
+        run: .ci/setup_ssh_config.sh
       - name: Build with Maven
         env:
           DOCKER_HOST: ${{matrix.dockerHost}}
         run: ./mvnw --no-transfer-progress verify
-      - name: Aggregate test reports with ciMate
-        if: always()
-        continue-on-error: true
-        env:
-          CIMATE_PROJECT_ID: lodr9d83
-          CIMATE_CI_KEY: "CI / ${{matrix.name}}"
-        run: |
-          wget -q https://get.cimate.io/release/linux/cimate
-          chmod +x cimate
-          ./cimate "**/TEST-*.xml"
