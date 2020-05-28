@@ -29,5 +29,5 @@ jobs:
         run: .ci/setup_ssh_config.sh
       - name: Build with Maven
         env:
-          DOCKER_HOST: ${{clientDockerHost}}
+          DOCKER_HOST: ${{matrix.clientDockerHost}}
         run: ./mvnw --no-transfer-progress verify

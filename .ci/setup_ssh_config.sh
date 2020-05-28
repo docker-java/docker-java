@@ -4,7 +4,9 @@ set -exu
 
 whoami
 
-cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+which ssh
+
+ls -lsa ~/.ssh
 
 ssh localhost
 
