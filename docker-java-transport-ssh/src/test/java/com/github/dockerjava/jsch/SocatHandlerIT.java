@@ -17,6 +17,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * This test relies on ~/.ssh/config which needs an entry for Host junit-host
+ * This test relies on ~/.ssh/config which needs an entry for Host setup in the env variable DOCKER_HOST
  * <p>
  * config could look like:
  * <p>
@@ -45,7 +47,7 @@ class SocatHandlerIT {
     private Container container;
 
     @BeforeAll
-    static void init() throws JSchException, IOException {
+    static void init() throws JSchException, IOException, URISyntaxException {
         final JSch jSch = new JSch();
         JSch.setLogger(new JschLogger());
         final String configFile = System.getProperty("user.home") + File.separator + ".ssh" + File.separator + "config";
@@ -55,7 +57,7 @@ class SocatHandlerIT {
             jSch.setConfigRepository(openSSHConfig);
 
         }
-        session = jSch.getSession("vm");
+        session = jSch.getSession(new URI(System.getenv("DOCKER_HOST")).getHost());
         session.connect(500);
     }
 

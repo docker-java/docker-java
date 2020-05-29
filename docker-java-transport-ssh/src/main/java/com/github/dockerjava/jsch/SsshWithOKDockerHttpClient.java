@@ -30,6 +30,7 @@ import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public final class SsshWithOKDockerHttpClient implements DockerHttpClient {
@@ -137,6 +138,7 @@ public final class SsshWithOKDockerHttpClient implements DockerHttpClient {
         }
 
         public SsshWithOKDockerHttpClient build() throws IOException, JSchException {
+            Objects.requireNonNull(dockerClientConfig, "dockerClientConfig not provided");
             return new SsshWithOKDockerHttpClient(
                 dockerClientConfig,
                 readTimeout,

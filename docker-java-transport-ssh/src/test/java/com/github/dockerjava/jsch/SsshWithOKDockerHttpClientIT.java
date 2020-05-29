@@ -17,9 +17,7 @@ class SsshWithOKDockerHttpClientIT {
     @Test
     void pingViaDialer() throws IOException, JSchException {
 
-        final DefaultDockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder()
-            .withDockerHost("ssh://junit-host")
-            .build();
+        final DefaultDockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
 
         try (final DockerHttpClient dockerHttpClient = new SsshWithOKDockerHttpClient.Factory().dockerClientConfig(dockerClientConfig).build()) {
 
@@ -33,9 +31,7 @@ class SsshWithOKDockerHttpClientIT {
     @Test
     void pingViaSocket() throws IOException, JSchException {
 
-        final DefaultDockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder()
-            .withDockerHost("ssh://junit-host")
-            .build();
+        final DefaultDockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
 
         try (final DockerHttpClient dockerHttpClient = new SsshWithOKDockerHttpClient.Factory()
             .useSocket()
@@ -51,9 +47,7 @@ class SsshWithOKDockerHttpClientIT {
     @Test
     void pingViaSocat() throws IOException, JSchException {
 
-        final DefaultDockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder()
-            .withDockerHost("ssh://junit-host")
-            .build();
+        final DefaultDockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
 
         try (final DockerHttpClient dockerHttpClient = new SsshWithOKDockerHttpClient.Factory()
             .useSocat()
