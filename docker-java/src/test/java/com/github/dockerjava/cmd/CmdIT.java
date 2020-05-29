@@ -2,24 +2,20 @@ package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.command.DelegatingDockerCmdExecFactory;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
-import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DefaultDockerCmdExecFactory;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientConfigAware;
 import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
 import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory;
-import com.github.dockerjava.jsch.SsshWithOKDockerHttpClient;
 import com.github.dockerjava.junit.DockerRule;
 import com.github.dockerjava.junit.category.Integration;
 import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
 import com.github.dockerjava.okhttp.OkHttpDockerCmdExecFactory;
-import com.jcraft.jsch.JSchException;
 import org.junit.Rule;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.io.IOException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -29,53 +25,12 @@ import java.util.stream.Stream;
 @Category(Integration.class)
 @RunWith(Parameterized.class)
 public abstract class CmdIT {
+
     public enum FactoryType {
         SSH(true, true) {
             @Override
             public DockerCmdExecFactory createExecFactory() {
-                class FakeFactory extends DelegatingDockerCmdExecFactory implements DockerClientConfigAware {
-
-                    private DefaultDockerCmdExecFactory dockerCmdExecFactory;
-
-                    @Override
-                    public final DockerCmdExecFactory getDockerCmdExecFactory() {
-                        return dockerCmdExecFactory;
-                    }
-
-                    @Override
-                    public void init(DockerClientConfig dockerClientConfig) {
-
-                        final SsshWithOKDockerHttpClient.Factory factory = new SsshWithOKDockerHttpClient.Factory()
-                            .dockerClientConfig(dockerClientConfig);
-
-                        final DefaultDockerClientConfig defaultDockerClientConfig = DefaultDockerClientConfig
-                            .createDefaultConfigBuilder()
-                            .withRegistryUrl(dockerClientConfig.getRegistryUrl())
-                            .build();
-
-                        if (!"ssh".equalsIgnoreCase(defaultDockerClientConfig.getDockerHost().getScheme())) {
-                            throw new RuntimeException("This FactoryType is supposed to test ssh connections.");
-                        }
-
-                        if (!dockerClientConfig.getDockerHost().equals(defaultDockerClientConfig.getDockerHost())) {
-                            // Docker Host was overwritten i.e. from com.github.dockerjava.cmd.swarm.SwarmCmdIT.initializeDockerClient
-                            // so we still use ssh connection and use inner binding to tcp
-                            if ("tcp".equalsIgnoreCase(dockerClientConfig.getDockerHost().getScheme())) {
-                                factory
-                                    .dockerClientConfig(defaultDockerClientConfig)
-                                    .useTcp(dockerClientConfig.getDockerHost().getPort());
-                            }
-                        }
-
-                        try {
-                            dockerCmdExecFactory = new DefaultDockerCmdExecFactory(factory.build(), defaultDockerClientConfig.getObjectMapper());
-                        } catch (IOException | JSchException e) {
-                            throw new RuntimeException(e);
-                        }
-                        dockerCmdExecFactory.init(defaultDockerClientConfig);
-                    }
-                }
-                return new FakeFactory();
+                return new SSHClientFactory();
             }
         },
         NETTY(true, false) {
