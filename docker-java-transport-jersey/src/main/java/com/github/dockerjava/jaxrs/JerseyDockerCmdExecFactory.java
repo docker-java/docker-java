@@ -6,7 +6,7 @@ import com.github.dockerjava.core.DefaultDockerCmdExecFactory;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientConfigAware;
 import com.github.dockerjava.core.DockerClientImpl;
-import com.github.dockerjava.core.DockerHttpClient;
+import com.github.dockerjava.transport.DockerHttpClient;
 import org.glassfish.jersey.client.RequestEntityProcessing;
 
 import javax.ws.rs.client.ClientRequestFilter;
@@ -37,7 +37,9 @@ public class JerseyDockerCmdExecFactory extends DelegatingDockerCmdExecFactory i
 
     @Override
     public void init(DockerClientConfig dockerClientConfig) {
-        clientFactory = clientFactory.dockerClientConfig(dockerClientConfig);
+        clientFactory = clientFactory
+            .dockerHost(dockerClientConfig.getDockerHost())
+            .sslConfig(dockerClientConfig.getSSLConfig());
         dockerCmdExecFactory = new DefaultDockerCmdExecFactory(
             clientFactory.build(),
             dockerClientConfig.getObjectMapper()

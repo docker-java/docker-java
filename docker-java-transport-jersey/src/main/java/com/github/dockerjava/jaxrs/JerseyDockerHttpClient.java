@@ -1,11 +1,9 @@
 package com.github.dockerjava.jaxrs;
 
-import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.DockerHttpClient;
-import com.github.dockerjava.core.SSLConfig;
+import com.github.dockerjava.transport.DockerHttpClient;
+import com.github.dockerjava.transport.SSLConfig;
 import com.github.dockerjava.jaxrs.filter.ResponseStatusExceptionFilter;
 import com.github.dockerjava.jaxrs.filter.SelectiveLoggingFilter;
 import org.apache.http.client.config.RequestConfig;
@@ -42,12 +40,15 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public final class JerseyDockerHttpClient implements DockerHttpClient {
 
     public static final class Factory {
 
-        private DockerClientConfig dockerClientConfig = null;
+        private URI dockerHost = null;
+
+        private SSLConfig sslConfig = null;
 
         private Integer readTimeout = null;
 
@@ -65,8 +66,13 @@ public final class JerseyDockerHttpClient implements DockerHttpClient {
 
         private RequestEntityProcessing requestEntityProcessing;
 
-        public Factory dockerClientConfig(DockerClientConfig value) {
-            this.dockerClientConfig = value;
+        public Factory dockerHost(URI value) {
+            this.dockerHost = Objects.requireNonNull(value, "dockerHost");
+            return this;
+        }
+
+        public Factory sslConfig(SSLConfig value) {
+            this.sslConfig = value;
             return this;
         }
 
@@ -112,7 +118,8 @@ public final class JerseyDockerHttpClient implements DockerHttpClient {
 
         public JerseyDockerHttpClient build() {
             return new JerseyDockerHttpClient(
-                dockerClientConfig,
+                dockerHost,
+                sslConfig,
                 maxTotalConnections,
                 maxPerRouteConnections,
                 connectionRequestTimeout,
@@ -134,7 +141,8 @@ public final class JerseyDockerHttpClient implements DockerHttpClient {
     private final URI originalUri;
 
     private JerseyDockerHttpClient(
-        DockerClientConfig dockerClientConfig,
+        URI dockerHost,
+        SSLConfig sslConfig,
         Integer maxTotalConnections,
         Integer maxPerRouteConnections,
         Integer connectionRequestTimeout,
@@ -152,11 +160,11 @@ public final class JerseyDockerHttpClient implements DockerHttpClient {
             clientConfig.property(ClientProperties.REQUEST_ENTITY_PROCESSING, requestEntityProcessing);
         }
 
-        clientConfig.register(new ResponseStatusExceptionFilter(dockerClientConfig.getObjectMapper()));
+        clientConfig.register(new ResponseStatusExceptionFilter());
         // clientConfig.register(JsonClientFilter.class);
         RequestConfig.Builder requestConfigBuilder = RequestConfig.custom();
 
-        clientConfig.register(new JacksonJsonProvider(dockerClientConfig.getObjectMapper()));
+        // clientConfig.register(new JacksonJsonProvider(dockerClientConfig.getObjectMapper()));
 
         // logging may disabled via log level
         clientConfig.register(new SelectiveLoggingFilter(LOGGER, true));
@@ -187,12 +195,9 @@ public final class JerseyDockerHttpClient implements DockerHttpClient {
             }
         }
 
-        URI dockerHost = dockerClientConfig.getDockerHost();
-
         SSLContext sslContext = null;
 
         try {
-            final SSLConfig sslConfig = dockerClientConfig.getSSLConfig();
             if (sslConfig != null) {
                 sslContext = sslConfig.getSSLContext();
             }

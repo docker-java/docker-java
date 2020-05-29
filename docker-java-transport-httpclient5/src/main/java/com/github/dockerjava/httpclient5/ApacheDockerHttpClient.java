@@ -1,8 +1,7 @@
 package com.github.dockerjava.httpclient5;
 
-import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.DockerHttpClient;
-import com.github.dockerjava.core.SSLConfig;
+import com.github.dockerjava.transport.SSLConfig;
+import com.github.dockerjava.transport.DockerHttpClient;
 import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
@@ -44,16 +43,23 @@ public final class ApacheDockerHttpClient implements DockerHttpClient {
 
     public static final class Factory {
 
-        private DockerClientConfig dockerClientConfig = null;
+        private URI dockerHost = null;
 
-        public Factory dockerClientConfig(DockerClientConfig value) {
-            this.dockerClientConfig = value;
+        private SSLConfig sslConfig = null;
+
+        public Factory dockerHost(URI value) {
+            this.dockerHost = Objects.requireNonNull(value, "dockerHost");
+            return this;
+        }
+
+        public Factory sslConfig(SSLConfig value) {
+            this.sslConfig = value;
             return this;
         }
 
         public ApacheDockerHttpClient build() {
-            Objects.requireNonNull(dockerClientConfig, "dockerClientConfig");
-            return new ApacheDockerHttpClient(dockerClientConfig);
+            Objects.requireNonNull(dockerHost, "dockerHost");
+            return new ApacheDockerHttpClient(dockerHost, sslConfig);
         }
     }
 
@@ -61,10 +67,11 @@ public final class ApacheDockerHttpClient implements DockerHttpClient {
 
     private final HttpHost host;
 
-    private ApacheDockerHttpClient(DockerClientConfig dockerClientConfig) {
-        Registry<ConnectionSocketFactory> socketFactoryRegistry = createConnectionSocketFactoryRegistry(dockerClientConfig);
-
-        URI dockerHost = dockerClientConfig.getDockerHost();
+    private ApacheDockerHttpClient(
+        URI dockerHost,
+        SSLConfig sslConfig
+    ) {
+        Registry<ConnectionSocketFactory> socketFactoryRegistry = createConnectionSocketFactoryRegistry(sslConfig, dockerHost);
 
         switch (dockerHost.getScheme()) {
             case "unix":
@@ -106,10 +113,12 @@ public final class ApacheDockerHttpClient implements DockerHttpClient {
             .build();
     }
 
-    private Registry<ConnectionSocketFactory> createConnectionSocketFactoryRegistry(DockerClientConfig dockerClientConfig) {
+    private Registry<ConnectionSocketFactory> createConnectionSocketFactoryRegistry(
+        SSLConfig sslConfig,
+        URI dockerHost
+    ) {
         RegistryBuilder<ConnectionSocketFactory> socketFactoryRegistryBuilder = RegistryBuilder.create();
 
-        SSLConfig sslConfig = dockerClientConfig.getSSLConfig();
         if (sslConfig != null) {
             try {
                 SSLContext sslContext = sslConfig.getSSLContext();
@@ -127,16 +136,12 @@ public final class ApacheDockerHttpClient implements DockerHttpClient {
             .register("unix", new PlainConnectionSocketFactory() {
                 @Override
                 public Socket createSocket(HttpContext context) throws IOException {
-                    URI dockerHost = dockerClientConfig.getDockerHost();
-
                     return new UnixDomainSocket(dockerHost.getPath());
                 }
             })
             .register("npipe", new PlainConnectionSocketFactory() {
                 @Override
                 public Socket createSocket(HttpContext context) {
-                    URI dockerHost = dockerClientConfig.getDockerHost();
-
                     return new NamedPipeSocket(dockerHost.getPath());
                 }
             })

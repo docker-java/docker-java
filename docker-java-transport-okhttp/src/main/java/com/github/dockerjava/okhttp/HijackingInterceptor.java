@@ -1,6 +1,6 @@
 package com.github.dockerjava.okhttp;
 
-import com.github.dockerjava.core.DockerHttpClient;
+import com.github.dockerjava.transport.DockerHttpClient;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;

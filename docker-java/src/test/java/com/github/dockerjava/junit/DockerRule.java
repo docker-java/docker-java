@@ -13,6 +13,7 @@ import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.cmd.CmdIT;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
+import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.utils.LogContainerTestCallback;
 import org.junit.rules.ExternalResource;
 import org.junit.runner.Description;
@@ -31,6 +32,8 @@ public class DockerRule extends ExternalResource {
     public static final Logger LOG = LoggerFactory.getLogger(DockerRule.class);
     public static final String DEFAULT_IMAGE = "busybox:latest";
 
+    private final DefaultDockerClientConfig dockerClientConfig = config();
+
     private DockerClient dockerClient;
 
     private CmdIT cmdIT;
@@ -45,6 +48,9 @@ public class DockerRule extends ExternalResource {
         this.cmdIT = cmdIT;
     }
 
+    public DockerClientConfig getConfig() {
+        return dockerClientConfig;
+    }
 
     public DockerClient getClient() {
         if (dockerClient != null) {
@@ -84,7 +90,7 @@ public class DockerRule extends ExternalResource {
             }
         };
 
-        return dockerClient = DockerClientBuilder.getInstance(config())
+        return dockerClient = DockerClientBuilder.getInstance(dockerClientConfig)
                 .withDockerCmdExecFactory(execFactory)
                 .build();
     }
