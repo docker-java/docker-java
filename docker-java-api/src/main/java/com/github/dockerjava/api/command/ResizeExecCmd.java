@@ -18,8 +18,7 @@ public interface ResizeExecCmd extends SyncDockerCmd<Void> {
     ResizeExecCmd withSize(int height, int width);
 
     /**
-     * @throws NotFoundException
-     *             No such exec instance
+     * @throws NotFoundException no such exec instance
      */
     @Override
     Void exec() throws NotFoundException;

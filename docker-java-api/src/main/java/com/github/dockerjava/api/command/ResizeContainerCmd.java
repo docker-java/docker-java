@@ -19,8 +19,7 @@ public interface ResizeContainerCmd extends SyncDockerCmd<Void> {
     ResizeContainerCmd withSize(int height, int width);
 
     /**
-     * @throws NotFoundException
-     *             No such container instance
+     * @throws NotFoundException no such container instance
      */
     @Override
     Void exec() throws NotFoundException;

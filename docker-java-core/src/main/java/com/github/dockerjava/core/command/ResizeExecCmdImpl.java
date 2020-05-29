@@ -7,7 +7,6 @@ import com.github.dockerjava.api.exception.NotFoundException;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-@JsonInclude(Include.NON_NULL)
 public class ResizeExecCmdImpl extends AbstrDockerCmd<ResizeExecCmd, Void> implements ResizeExecCmd {
 
     private String execId;
@@ -51,8 +50,7 @@ public class ResizeExecCmdImpl extends AbstrDockerCmd<ResizeExecCmd, Void> imple
     }
 
     /**
-     * @throws NotFoundException
-     *             No such exec instance
+     * @throws NotFoundException no such exec instance
      */
     @Override
     public Void exec() throws NotFoundException {
