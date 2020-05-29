@@ -164,8 +164,6 @@ public final class JerseyDockerHttpClient implements DockerHttpClient {
         // clientConfig.register(JsonClientFilter.class);
         RequestConfig.Builder requestConfigBuilder = RequestConfig.custom();
 
-        // clientConfig.register(new JacksonJsonProvider(dockerClientConfig.getObjectMapper()));
-
         // logging may disabled via log level
         clientConfig.register(new SelectiveLoggingFilter(LOGGER, true));
 
