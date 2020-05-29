@@ -25,8 +25,8 @@ jobs:
           DOCKER_VERSION: ${{matrix.dockerVersion}}
           DOCKER_HOST: ${{matrix.dockerHost}}
         run: .ci/setup_docker.sh
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v2
+      #- name: Setup tmate session
+      #  uses: mxschmitt/action-tmate@v2
       - name: ssh config
         run: .ci/setup_ssh_config.sh
       - name: Build with Maven
