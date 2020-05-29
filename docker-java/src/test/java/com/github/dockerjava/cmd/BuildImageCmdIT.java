@@ -11,7 +11,6 @@ import com.github.dockerjava.junit.PrivateRegistryRule;
 import net.jcip.annotations.NotThreadSafe;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -38,9 +37,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assume.assumeThat;
@@ -52,8 +51,8 @@ import static org.junit.Assume.assumeThat;
 public class BuildImageCmdIT extends CmdIT {
     public static final Logger LOG = LoggerFactory.getLogger(BuildImageCmd.class);
 
-    @ClassRule
-    public static PrivateRegistryRule REGISTRY = new PrivateRegistryRule();
+    @Rule
+    public PrivateRegistryRule REGISTRY = new PrivateRegistryRule(this);
 
     @Rule
     public TemporaryFolder folder = new TemporaryFolder(new File("target/"));

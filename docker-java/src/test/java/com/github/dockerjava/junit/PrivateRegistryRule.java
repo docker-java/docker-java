@@ -7,6 +7,8 @@ import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
+import com.github.dockerjava.cmd.CmdIT;
+import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import org.junit.rules.ExternalResource;
 
@@ -21,14 +23,15 @@ import static org.hamcrest.Matchers.nullValue;
 
 public class PrivateRegistryRule extends ExternalResource {
 
-    private final DockerClient dockerClient;
+    private final CmdIT testInstance;
 
+    private DockerClient dockerClient;
     private AuthConfig authConfig;
 
     private String containerId;
 
-    public PrivateRegistryRule() {
-        this.dockerClient = DockerClientBuilder.getInstance().build();
+    public PrivateRegistryRule(CmdIT test) {
+        this.testInstance = test;
     }
 
     public AuthConfig getAuthConfig() {
@@ -64,6 +67,10 @@ public class PrivateRegistryRule extends ExternalResource {
      */
     @Override
     protected void before() throws Throwable {
+
+        this.dockerClient = DockerClientBuilder.getInstance(DefaultDockerClientConfig.createDefaultConfigBuilder().build())
+            .withDockerCmdExecFactory(testInstance.getFactoryType().createExecFactory())
+            .build();
 
         int port = 5050;
 

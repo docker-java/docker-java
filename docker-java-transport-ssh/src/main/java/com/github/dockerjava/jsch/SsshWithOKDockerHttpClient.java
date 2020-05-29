@@ -209,7 +209,9 @@ public final class SsshWithOKDockerHttpClient implements DockerHttpClient {
                         return Dns.SYSTEM.lookup(hostname);
                     }
                 });
-        } else throw new IllegalArgumentException("this implementation only supports ssh connection scheme.");
+        } else {
+            throw new IllegalArgumentException("this implementation only supports ssh connection scheme.");
+        }
 
         boolean isSSL = false;
         SSLConfig sslConfig = dockerClientConfig.getSSLConfig();
