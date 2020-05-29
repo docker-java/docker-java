@@ -148,6 +148,7 @@ import com.github.dockerjava.core.command.UpdateSwarmCmdImpl;
 import com.github.dockerjava.core.command.UpdateSwarmNodeCmdImpl;
 import com.github.dockerjava.core.command.VersionCmdImpl;
 import com.github.dockerjava.core.command.WaitContainerCmdImpl;
+import com.github.dockerjava.transport.DockerHttpClient;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

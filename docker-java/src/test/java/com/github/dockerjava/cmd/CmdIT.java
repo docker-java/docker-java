@@ -59,7 +59,8 @@ public abstract class CmdIT {
                     public void init(DockerClientConfig dockerClientConfig) {
                         dockerCmdExecFactory = new DefaultDockerCmdExecFactory(
                             new ApacheDockerHttpClient.Factory()
-                                .dockerClientConfig(dockerClientConfig)
+                                .dockerHost(dockerClientConfig.getDockerHost())
+                                .sslConfig(dockerClientConfig.getSSLConfig())
                                 .build(),
                             dockerClientConfig.getObjectMapper()
                         );
