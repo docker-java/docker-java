@@ -228,7 +228,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     /**
-     * @deprecated use {@link #withHttpClient(DockerHttpClient)}
+     * @deprecated use {@link #getInstance(DockerClientConfig, DockerHttpClient)}
      */
     @Deprecated
     public DockerClientImpl withDockerCmdExecFactory(DockerCmdExecFactory dockerCmdExecFactory) {
