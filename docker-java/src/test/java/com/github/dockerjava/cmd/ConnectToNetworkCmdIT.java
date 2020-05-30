@@ -10,7 +10,7 @@ import net.jcip.annotations.ThreadSafe;
 import org.junit.Test;
 
 import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
-import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
+import static com.github.dockerjava.core.DockerRule.DEFAULT_IMAGE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.core.Is.is;

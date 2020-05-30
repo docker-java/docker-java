@@ -167,7 +167,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
 
     private final DockerClientConfig dockerClientConfig;
 
-    private DockerCmdExecFactory dockerCmdExecFactory;
+    DockerCmdExecFactory dockerCmdExecFactory;
 
     DockerClientImpl(DockerClientConfig dockerClientConfig) {
         checkNotNull(dockerClientConfig, "config was not specified");
