@@ -41,18 +41,18 @@ import java.util.stream.Stream;
 
 public final class ApacheDockerHttpClient implements DockerHttpClient {
 
-    public static final class Factory {
+    public static final class Builder {
 
         private URI dockerHost = null;
 
         private SSLConfig sslConfig = null;
 
-        public Factory dockerHost(URI value) {
+        public Builder dockerHost(URI value) {
             this.dockerHost = Objects.requireNonNull(value, "dockerHost");
             return this;
         }
 
-        public Factory sslConfig(SSLConfig value) {
+        public Builder sslConfig(SSLConfig value) {
             this.sslConfig = value;
             return this;
         }

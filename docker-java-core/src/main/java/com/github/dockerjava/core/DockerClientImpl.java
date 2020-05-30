@@ -167,38 +167,50 @@ public class DockerClientImpl implements Closeable, DockerClient {
 
     private final DockerClientConfig dockerClientConfig;
 
-    private DockerCmdExecFactory dockerCmdExecFactory;
+    DockerCmdExecFactory dockerCmdExecFactory;
 
-    private DockerClientImpl() {
-        this(DefaultDockerClientConfig.createDefaultConfigBuilder().build());
-    }
-
-    private DockerClientImpl(String serverUrl) {
-        this(configWithServerUrl(serverUrl));
-    }
-
-    private DockerClientImpl(DockerClientConfig dockerClientConfig) {
+    DockerClientImpl(DockerClientConfig dockerClientConfig) {
         checkNotNull(dockerClientConfig, "config was not specified");
         this.dockerClientConfig = dockerClientConfig;
     }
 
-    private static DockerClientConfig configWithServerUrl(String serverUrl) {
-        return DefaultDockerClientConfig.createDefaultConfigBuilder().withDockerHost(serverUrl).build();
-    }
-
+    /**
+     *
+     * @deprecated use {@link #getInstance(DockerClientConfig, DockerHttpClient)}
+     */
+    @Deprecated
     public static DockerClientImpl getInstance() {
-        return new DockerClientImpl();
+        return new DockerClientImpl(DefaultDockerClientConfig.createDefaultConfigBuilder().build());
     }
 
+    /**
+     *
+     * @deprecated use {@link #getInstance(DockerClientConfig, DockerHttpClient)}
+     */
+    @Deprecated
     public static DockerClientImpl getInstance(DockerClientConfig dockerClientConfig) {
         return new DockerClientImpl(dockerClientConfig);
     }
 
-    public static DockerClientImpl getInstance(String serverUrl) {
-        return new DockerClientImpl(serverUrl);
+    public static DockerClient getInstance(DockerClientConfig dockerClientConfig, DockerHttpClient dockerHttpClient) {
+        return new DockerClientImpl(dockerClientConfig)
+            .withHttpClient(dockerHttpClient);
     }
 
-    public DockerClientImpl withHttpClient(DockerHttpClient httpClient) {
+    /**
+     *
+     * @deprecated use {@link #getInstance(DockerClientConfig, DockerHttpClient)}
+     */
+    @Deprecated
+    public static DockerClientImpl getInstance(String serverUrl) {
+        return new DockerClientImpl(
+            DefaultDockerClientConfig.createDefaultConfigBuilder()
+                .withDockerHost(serverUrl)
+                .build()
+        );
+    }
+
+    DockerClientImpl withHttpClient(DockerHttpClient httpClient) {
         return withDockerCmdExecFactory(new DefaultDockerCmdExecFactory(httpClient, dockerClientConfig.getObjectMapper()));
     }
 
@@ -216,7 +228,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     /**
-     * @deprecated use {@link #withHttpClient(DockerHttpClient)}
+     * @deprecated use {@link #getInstance(DockerClientConfig, DockerHttpClient)}
      */
     @Deprecated
     public DockerClientImpl withDockerCmdExecFactory(DockerCmdExecFactory dockerCmdExecFactory) {

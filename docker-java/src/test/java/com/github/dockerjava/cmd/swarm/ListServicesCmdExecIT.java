@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
+import static com.github.dockerjava.core.DockerRule.DEFAULT_IMAGE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 
