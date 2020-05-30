@@ -5,6 +5,7 @@ import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.core.DefaultDockerCmdExecFactory;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientConfigAware;
+import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.transport.DockerHttpClient;
 import org.glassfish.jersey.client.RequestEntityProcessing;
 
@@ -14,7 +15,7 @@ import javax.ws.rs.client.ClientResponseFilter;
 //import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 // see https://github.com/docker-java/docker-java/issues/196
 /**
- * @deprecated use {@link JerseyDockerHttpClient} with {@link DockerClientImpl#withHttpClient(DockerHttpClient)}
+ * @deprecated use {@link JerseyDockerHttpClient} with {@link DockerClientImpl#getInstance(DockerClientConfig, DockerHttpClient)}
  */
 @Deprecated
 public class JerseyDockerCmdExecFactory extends DelegatingDockerCmdExecFactory implements DockerClientConfigAware {

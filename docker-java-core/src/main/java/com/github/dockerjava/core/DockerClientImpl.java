@@ -174,14 +174,34 @@ public class DockerClientImpl implements Closeable, DockerClient {
         this.dockerClientConfig = dockerClientConfig;
     }
 
+    /**
+     *
+     * @deprecated use {@link #getInstance(DockerClientConfig, DockerHttpClient)}
+     */
+    @Deprecated
     public static DockerClientImpl getInstance() {
         return new DockerClientImpl(DefaultDockerClientConfig.createDefaultConfigBuilder().build());
     }
 
+    /**
+     *
+     * @deprecated use {@link #getInstance(DockerClientConfig, DockerHttpClient)}
+     */
+    @Deprecated
     public static DockerClientImpl getInstance(DockerClientConfig dockerClientConfig) {
         return new DockerClientImpl(dockerClientConfig);
     }
 
+    public static DockerClient getInstance(DockerClientConfig dockerClientConfig, DockerHttpClient dockerHttpClient) {
+        return new DockerClientImpl(dockerClientConfig)
+            .withHttpClient(dockerHttpClient);
+    }
+
+    /**
+     *
+     * @deprecated use {@link #getInstance(DockerClientConfig, DockerHttpClient)}
+     */
+    @Deprecated
     public static DockerClientImpl getInstance(String serverUrl) {
         return new DockerClientImpl(
             DefaultDockerClientConfig.createDefaultConfigBuilder()
@@ -190,7 +210,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
         );
     }
 
-    public DockerClientImpl withHttpClient(DockerHttpClient httpClient) {
+    DockerClientImpl withHttpClient(DockerHttpClient httpClient) {
         return withDockerCmdExecFactory(new DefaultDockerCmdExecFactory(httpClient, dockerClientConfig.getObjectMapper()));
     }
 

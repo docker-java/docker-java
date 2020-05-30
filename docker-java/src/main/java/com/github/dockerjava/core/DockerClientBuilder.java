@@ -83,25 +83,28 @@ public class DockerClientBuilder {
     }
 
     public DockerClient build() {
-        DockerClientImpl dockerClient = DockerClientImpl.getInstance(dockerClientConfig);
         if (dockerHttpClient != null) {
-            dockerClient.withHttpClient(dockerHttpClient);
+            return DockerClientImpl.getInstance(
+                dockerClientConfig,
+                dockerHttpClient
+            );
         } else if (dockerCmdExecFactory != null) {
-            dockerClient.withDockerCmdExecFactory(dockerCmdExecFactory);
+            return DockerClientImpl.getInstance(dockerClientConfig)
+                .withDockerCmdExecFactory(dockerCmdExecFactory);
         } else {
             Logger log = LoggerFactory.getLogger(DockerClientBuilder.class);
             log.warn(
                 "'dockerHttpClient' should be set." +
                     "Falling back to Jersey, will be an error in future releases."
             );
-            dockerClient.withHttpClient(
+
+            return DockerClientImpl.getInstance(
+                dockerClientConfig,
                 new JerseyDockerHttpClient.Builder()
                     .dockerHost(dockerClientConfig.getDockerHost())
                     .sslConfig(dockerClientConfig.getSSLConfig())
                     .build()
             );
         }
-
-        return dockerClient;
     }
 }
