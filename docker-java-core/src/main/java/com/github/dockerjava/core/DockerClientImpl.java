@@ -169,25 +169,13 @@ public class DockerClientImpl implements Closeable, DockerClient {
 
     private DockerCmdExecFactory dockerCmdExecFactory;
 
-    private DockerClientImpl() {
-        this(DefaultDockerClientConfig.createDefaultConfigBuilder().build());
-    }
-
-    private DockerClientImpl(String serverUrl) {
-        this(configWithServerUrl(serverUrl));
-    }
-
-    private DockerClientImpl(DockerClientConfig dockerClientConfig) {
+    DockerClientImpl(DockerClientConfig dockerClientConfig) {
         checkNotNull(dockerClientConfig, "config was not specified");
         this.dockerClientConfig = dockerClientConfig;
     }
 
-    private static DockerClientConfig configWithServerUrl(String serverUrl) {
-        return DefaultDockerClientConfig.createDefaultConfigBuilder().withDockerHost(serverUrl).build();
-    }
-
     public static DockerClientImpl getInstance() {
-        return new DockerClientImpl();
+        return new DockerClientImpl(DefaultDockerClientConfig.createDefaultConfigBuilder().build());
     }
 
     public static DockerClientImpl getInstance(DockerClientConfig dockerClientConfig) {
@@ -195,7 +183,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     public static DockerClientImpl getInstance(String serverUrl) {
-        return new DockerClientImpl(serverUrl);
+        return new DockerClientImpl(
+            DefaultDockerClientConfig.createDefaultConfigBuilder()
+                .withDockerHost(serverUrl)
+                .build()
+        );
     }
 
     public DockerClientImpl withHttpClient(DockerHttpClient httpClient) {

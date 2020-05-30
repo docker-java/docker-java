@@ -44,7 +44,7 @@ import java.util.Objects;
 
 public final class JerseyDockerHttpClient implements DockerHttpClient {
 
-    public static final class Factory {
+    public static final class Builder {
 
         private URI dockerHost = null;
 
@@ -66,52 +66,52 @@ public final class JerseyDockerHttpClient implements DockerHttpClient {
 
         private RequestEntityProcessing requestEntityProcessing;
 
-        public Factory dockerHost(URI value) {
+        public Builder dockerHost(URI value) {
             this.dockerHost = Objects.requireNonNull(value, "dockerHost");
             return this;
         }
 
-        public Factory sslConfig(SSLConfig value) {
+        public Builder sslConfig(SSLConfig value) {
             this.sslConfig = value;
             return this;
         }
 
-        public Factory readTimeout(Integer value) {
+        public Builder readTimeout(Integer value) {
             this.readTimeout = value;
             return this;
         }
 
-        public Factory connectTimeout(Integer value) {
+        public Builder connectTimeout(Integer value) {
             this.connectTimeout = value;
             return this;
         }
 
-        public Factory maxTotalConnections(Integer value) {
+        public Builder maxTotalConnections(Integer value) {
             this.maxTotalConnections = value;
             return this;
         }
 
-        public Factory maxPerRouteConnections(Integer value) {
+        public Builder maxPerRouteConnections(Integer value) {
             this.maxPerRouteConnections = value;
             return this;
         }
 
-        public Factory connectionRequestTimeout(Integer value) {
+        public Builder connectionRequestTimeout(Integer value) {
             this.connectionRequestTimeout = value;
             return this;
         }
 
-        public Factory clientResponseFilters(ClientResponseFilter[] value) {
+        public Builder clientResponseFilters(ClientResponseFilter[] value) {
             this.clientResponseFilters = value;
             return this;
         }
 
-        public Factory clientRequestFilters(ClientRequestFilter[] value) {
+        public Builder clientRequestFilters(ClientRequestFilter[] value) {
             this.clientRequestFilters = value;
             return this;
         }
 
-        public Factory requestEntityProcessing(RequestEntityProcessing value) {
+        public Builder requestEntityProcessing(RequestEntityProcessing value) {
             this.requestEntityProcessing = value;
             return this;
         }

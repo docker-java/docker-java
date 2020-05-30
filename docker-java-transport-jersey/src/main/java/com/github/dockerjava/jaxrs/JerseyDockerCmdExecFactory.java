@@ -5,7 +5,6 @@ import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.core.DefaultDockerCmdExecFactory;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientConfigAware;
-import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.transport.DockerHttpClient;
 import org.glassfish.jersey.client.RequestEntityProcessing;
 
@@ -20,7 +19,7 @@ import javax.ws.rs.client.ClientResponseFilter;
 @Deprecated
 public class JerseyDockerCmdExecFactory extends DelegatingDockerCmdExecFactory implements DockerClientConfigAware {
 
-    private JerseyDockerHttpClient.Factory clientFactory = new JerseyDockerHttpClient.Factory();
+    private JerseyDockerHttpClient.Builder clientBuilder = new JerseyDockerHttpClient.Builder();
 
     @Deprecated
     protected Integer connectTimeout;
@@ -37,11 +36,11 @@ public class JerseyDockerCmdExecFactory extends DelegatingDockerCmdExecFactory i
 
     @Override
     public void init(DockerClientConfig dockerClientConfig) {
-        clientFactory = clientFactory
+        clientBuilder = clientBuilder
             .dockerHost(dockerClientConfig.getDockerHost())
             .sslConfig(dockerClientConfig.getSSLConfig());
         dockerCmdExecFactory = new DefaultDockerCmdExecFactory(
-            clientFactory.build(),
+            clientBuilder.build(),
             dockerClientConfig.getObjectMapper()
         );
         dockerCmdExecFactory.init(dockerClientConfig);
@@ -51,7 +50,7 @@ public class JerseyDockerCmdExecFactory extends DelegatingDockerCmdExecFactory i
      * Configure connection timeout in milliseconds
      */
     public JerseyDockerCmdExecFactory withConnectTimeout(Integer connectTimeout) {
-        clientFactory = clientFactory.connectTimeout(connectTimeout);
+        clientBuilder = clientBuilder.connectTimeout(connectTimeout);
         this.connectTimeout = connectTimeout;
         return this;
     }
@@ -60,38 +59,38 @@ public class JerseyDockerCmdExecFactory extends DelegatingDockerCmdExecFactory i
      * Configure read timeout in milliseconds
      */
     public JerseyDockerCmdExecFactory withReadTimeout(Integer readTimeout) {
-        clientFactory = clientFactory.readTimeout(readTimeout);
+        clientBuilder = clientBuilder.readTimeout(readTimeout);
         this.readTimeout = readTimeout;
         return this;
     }
 
     public JerseyDockerCmdExecFactory withMaxTotalConnections(Integer maxTotalConnections) {
-        clientFactory = clientFactory.maxTotalConnections(maxTotalConnections);
+        clientBuilder = clientBuilder.maxTotalConnections(maxTotalConnections);
         return this;
     }
 
     public JerseyDockerCmdExecFactory withMaxPerRouteConnections(Integer maxPerRouteConnections) {
-        clientFactory = clientFactory.maxPerRouteConnections(maxPerRouteConnections);
+        clientBuilder = clientBuilder.maxPerRouteConnections(maxPerRouteConnections);
         return this;
     }
 
     public JerseyDockerCmdExecFactory withConnectionRequestTimeout(Integer connectionRequestTimeout) {
-        clientFactory = clientFactory.connectionRequestTimeout(connectionRequestTimeout);
+        clientBuilder = clientBuilder.connectionRequestTimeout(connectionRequestTimeout);
         return this;
     }
 
     public JerseyDockerCmdExecFactory withClientResponseFilters(ClientResponseFilter... clientResponseFilter) {
-        clientFactory = clientFactory.clientResponseFilters(clientResponseFilter);
+        clientBuilder = clientBuilder.clientResponseFilters(clientResponseFilter);
         return this;
     }
 
     public JerseyDockerCmdExecFactory withClientRequestFilters(ClientRequestFilter... clientRequestFilters) {
-        clientFactory = clientFactory.clientRequestFilters(clientRequestFilters);
+        clientBuilder = clientBuilder.clientRequestFilters(clientRequestFilters);
         return this;
     }
 
     public JerseyDockerCmdExecFactory withRequestEntityProcessing(RequestEntityProcessing requestEntityProcessing) {
-        clientFactory = clientFactory.requestEntityProcessing(requestEntityProcessing);
+        clientBuilder = clientBuilder.requestEntityProcessing(requestEntityProcessing);
         return this;
     }
 }

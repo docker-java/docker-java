@@ -7,19 +7,21 @@ import com.github.dockerjava.api.command.CreateNetworkCmd;
 import com.github.dockerjava.api.command.CreateNetworkResponse;
 import com.github.dockerjava.api.command.CreateVolumeCmd;
 import com.github.dockerjava.api.command.CreateVolumeResponse;
-import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.cmd.CmdIT;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
-import com.github.dockerjava.core.DockerClientBuilder;
+import com.github.dockerjava.core.DockerClientDelegate;
 import com.github.dockerjava.utils.LogContainerTestCallback;
+import lombok.experimental.Delegate;
 import org.junit.rules.ExternalResource;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
+import java.io.Closeable;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
@@ -50,43 +52,45 @@ public class DockerRule extends ExternalResource {
         if (dockerClient != null) {
             return dockerClient;
         }
-        DockerCmdExecFactory execFactory = new DockerCmdExecFactoryDelegate(
-                cmdIT.getFactoryType().createExecFactory()
-        ) {
+
+        dockerClient = new DockerClientDelegate(cmdIT.getFactoryType().createDockerClient(config())) {
             @Override
-            public CreateContainerCmd.Exec createCreateContainerCmdExec() {
-                CreateContainerCmd.Exec exec = super.createCreateContainerCmdExec();
-                return command -> {
-                    CreateContainerResponse response = exec.exec(command);
-                    createdContainerIds.add(response.getId());
-                    return response;
+            public CreateContainerCmd createContainerCmd(@Nonnull String image) {
+                return new CreateContainerCmdDelegate(super.createContainerCmd(image)) {
+                    @Override
+                    public CreateContainerResponse exec() throws NotFoundException, ConflictException {
+                        CreateContainerResponse response = super.exec();
+                        createdContainerIds.add(response.getId());
+                        return response;
+                    }
                 };
             }
 
             @Override
-            public CreateNetworkCmd.Exec createCreateNetworkCmdExec() {
-                CreateNetworkCmd.Exec exec = super.createCreateNetworkCmdExec();
-                return command -> {
-                    CreateNetworkResponse response = exec.exec(command);
-                    createdNetworkIds.add(response.getId());
-                    return response;
+            public CreateNetworkCmd createNetworkCmd() {
+                return new CreateNetworkCmdDelegate(super.createNetworkCmd()) {
+                    @Override
+                    public CreateNetworkResponse exec() {
+                        CreateNetworkResponse response = super.exec();
+                        createdNetworkIds.add(response.getId());
+                        return response;
+                    }
                 };
             }
 
             @Override
-            public CreateVolumeCmd.Exec createCreateVolumeCmdExec() {
-                CreateVolumeCmd.Exec exec = super.createCreateVolumeCmdExec();
-                return command -> {
-                    CreateVolumeResponse response = exec.exec(command);
-                    createdVolumeNames.add(response.getName());
-                    return response;
+            public CreateVolumeCmd createVolumeCmd() {
+                return new CreateVolumeCmdDelegate(super.createVolumeCmd()) {
+                    @Override
+                    public CreateVolumeResponse exec() {
+                        CreateVolumeResponse response = super.exec();
+                        createdVolumeNames.add(response.getName());
+                        return response;
+                    }
                 };
             }
         };
-
-        return dockerClient = DockerClientBuilder.getInstance(config())
-                .withDockerCmdExecFactory(execFactory)
-                .build();
+        return dockerClient;
     }
 
     @Override
@@ -213,6 +217,48 @@ public class DockerRule extends ExternalResource {
                     .exec();
         } catch (NotFoundException ex) {
             // ignore
+        }
+    }
+
+    private static class CreateContainerCmdDelegate implements CreateContainerCmd {
+        @Delegate(excludes = Closeable.class)
+        private final CreateContainerCmd delegate;
+
+        private CreateContainerCmdDelegate(CreateContainerCmd delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        public void close() {
+            delegate.close();
+        }
+    }
+
+    private static class CreateNetworkCmdDelegate implements CreateNetworkCmd {
+        @Delegate(excludes = Closeable.class)
+        private final CreateNetworkCmd delegate;
+
+        private CreateNetworkCmdDelegate(CreateNetworkCmd delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        public void close() {
+            delegate.close();
+        }
+    }
+
+    private static class CreateVolumeCmdDelegate implements CreateVolumeCmd {
+        @Delegate(excludes = Closeable.class)
+        private final CreateVolumeCmd delegate;
+
+        private CreateVolumeCmdDelegate(CreateVolumeCmd delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        public void close() {
+            delegate.close();
         }
     }
 }

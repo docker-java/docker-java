@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 
 public final class OkDockerHttpClient implements DockerHttpClient {
 
-    public static final class Factory {
+    public static final class Builder {
 
         private URI dockerHost = null;
 
@@ -40,27 +40,27 @@ public final class OkDockerHttpClient implements DockerHttpClient {
 
         private Boolean retryOnConnectionFailure = null;
 
-        public Factory dockerHost(URI value) {
+        public Builder dockerHost(URI value) {
             this.dockerHost = Objects.requireNonNull(value, "dockerHost");
             return this;
         }
 
-        public Factory sslConfig(SSLConfig value) {
+        public Builder sslConfig(SSLConfig value) {
             this.sslConfig = value;
             return this;
         }
 
-        public Factory readTimeout(Integer value) {
+        public Builder readTimeout(Integer value) {
             this.readTimeout = value;
             return this;
         }
 
-        public Factory connectTimeout(Integer value) {
+        public Builder connectTimeout(Integer value) {
             this.connectTimeout = value;
             return this;
         }
 
-        Factory retryOnConnectionFailure(Boolean value) {
+        Builder retryOnConnectionFailure(Boolean value) {
             this.retryOnConnectionFailure = value;
             return this;
         }
