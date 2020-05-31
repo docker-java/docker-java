@@ -64,7 +64,7 @@ public class DockerClientBuilder {
     /**
      * Note that this method overrides {@link DockerHttpClient} if it was previously set
      *
-     * @deprecated use {@link #withHttpClient(DockerHttpClient)}
+     * @deprecated use {@link #withDockerHttpClient(DockerHttpClient)}
      */
     @Deprecated
     public DockerClientBuilder withDockerCmdExecFactory(DockerCmdExecFactory dockerCmdExecFactory) {
