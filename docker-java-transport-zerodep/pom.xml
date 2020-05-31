@@ -1,0 +1,104 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.github.docker-java</groupId>
+		<artifactId>docker-java-parent</artifactId>
+		<version>3.2.2-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>docker-java-transport-zerodep</artifactId>
+	<packaging>jar</packaging>
+
+	<name>docker-java-transport-zerodep</name>
+	<url>https://github.com/docker-java/docker-java</url>
+	<description>Java API Client for Docker</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>docker-java-transport-httpclient5</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.github.siom79.japicmp</groupId>
+				<artifactId>japicmp-maven-plugin</artifactId>
+				<configuration>
+					<!-- TODO remove once this module is released -->
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Export-Package>com.github.dockerjava.zerodep.*</Export-Package>
+					</instructions>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<configuration>
+					<createDependencyReducedPom>true</createDependencyReducedPom>
+					<promoteTransitiveDependencies>true</promoteTransitiveDependencies>
+					<createSourcesJar>true</createSourcesJar>
+
+					<artifactSet>
+						<excludes>
+							<exclude>com.github.docker-java:docker-java-transport</exclude>
+							<exclude>net.java.dev.jna:jna-platform</exclude>
+							<exclude>net.java.dev.jna:*</exclude>
+							<exclude>org.slf4j:slf4j-api</exclude>
+						</excludes>
+					</artifactSet>
+					<filters>
+						<filter>
+							<artifact>com.github.docker-java:docker-java-transport-httpclient5</artifact>
+							<excludes>
+								<exclude>com/github/dockerjava/httpclient5/ApacheDockerHttpClient.class</exclude>
+								<exclude>com/github/dockerjava/httpclient5/ApacheDockerHttpClient$*</exclude>
+							</excludes>
+						</filter>
+						<filter>
+							<artifact>org.apache.httpcomponents.client5:httpclient5</artifact>
+							<excludes>
+								<exclude>mozilla/*</exclude>
+							</excludes>
+						</filter>
+					</filters>
+					<relocations>
+						<relocation>
+							<pattern>org.apache</pattern>
+							<shadedPattern>com.github.dockerjava.zerodep.shaded.org.apache</shadedPattern>
+						</relocation>
+						<relocation>
+							<pattern>com.github.dockerjava.httpclient5</pattern>
+							<shadedPattern>com.github.dockerjava.zerodep</shadedPattern>
+						</relocation>
+					</relocations>
+					<transformers>
+						<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+					</transformers>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
