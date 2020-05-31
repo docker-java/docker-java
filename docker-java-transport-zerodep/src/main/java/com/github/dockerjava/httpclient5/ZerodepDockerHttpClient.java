@@ -5,7 +5,8 @@ import com.github.dockerjava.transport.SSLConfig;
 import java.net.URI;
 import java.util.Objects;
 
-public final class ApacheDockerHttpClient extends ApacheDockerHttpClientImpl {
+@SuppressWarnings("unused")
+public final class ZerodepDockerHttpClient extends ApacheDockerHttpClientImpl {
 
     public static final class Builder {
 
@@ -23,13 +24,13 @@ public final class ApacheDockerHttpClient extends ApacheDockerHttpClientImpl {
             return this;
         }
 
-        public ApacheDockerHttpClient build() {
+        public ZerodepDockerHttpClient build() {
             Objects.requireNonNull(dockerHost, "dockerHost");
-            return new ApacheDockerHttpClient(dockerHost, sslConfig);
+            return new ZerodepDockerHttpClient(dockerHost, sslConfig);
         }
     }
 
-    private ApacheDockerHttpClient(URI dockerHost, SSLConfig sslConfig) {
+    protected ZerodepDockerHttpClient(URI dockerHost, SSLConfig sslConfig) {
         super(dockerHost, sslConfig);
     }
 }
