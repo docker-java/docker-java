@@ -79,7 +79,7 @@ public class PushImageCmdIT extends CmdIT {
             exception.expect(NotFoundException.class);
         }
 
-        dockerRule.getClient().pushImageCmd("local/" + UUID.randomUUID().toString().replace("-", ""))
+        dockerRule.getClient().pushImageCmd(UUID.randomUUID().toString().replace("-", ""))
                 .start()
                 .awaitCompletion(30, TimeUnit.SECONDS); // exclude infinite await sleep
 
