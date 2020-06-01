@@ -55,7 +55,8 @@ public class ExposedPortsTest {
         ExposedPorts ports = new ExposedPorts(
             new ExposedPort(80, InternetProtocol.UDP),
             new ExposedPort(80),
-            new ExposedPort(80));
+            new ExposedPort(80)
+        );
 
         assertThat(ports, notNullValue());
         assertThat(ports.getExposedPorts(), arrayWithSize(3));
