@@ -13,7 +13,6 @@ import com.github.dockerjava.api.model.PullResponseItem;
 import com.github.dockerjava.api.model.SwarmSpec;
 import com.github.dockerjava.cmd.CmdIT;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
-import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.junit.category.Integration;
 import com.github.dockerjava.junit.category.SwarmModeIntegration;
 import org.junit.After;
@@ -137,8 +136,6 @@ public abstract class SwarmCmdIT extends CmdIT {
         DefaultDockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder()
             .withRegistryUrl("https://index.docker.io/v1/")
             .withDockerHost("tcp://" + binding).build();
-        return DockerClientBuilder.getInstance(config)
-            .withDockerCmdExecFactory(getFactoryType().createExecFactory())
-            .build();
+        return getFactoryType().createDockerClient(config);
     }
 }

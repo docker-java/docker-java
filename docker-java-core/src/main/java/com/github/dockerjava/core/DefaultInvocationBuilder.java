@@ -14,6 +14,7 @@ import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.exception.NotModifiedException;
 import com.github.dockerjava.api.exception.UnauthorizedException;
 import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.transport.DockerHttpClient;
 import org.apache.commons.io.IOUtils;
 
 import java.io.ByteArrayInputStream;

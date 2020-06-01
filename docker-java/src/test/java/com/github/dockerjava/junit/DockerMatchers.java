@@ -2,6 +2,7 @@ package com.github.dockerjava.junit;
 
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Volume;
+import com.github.dockerjava.core.DockerRule;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.hamcrest.CustomTypeSafeMatcher;
 import org.hamcrest.Description;

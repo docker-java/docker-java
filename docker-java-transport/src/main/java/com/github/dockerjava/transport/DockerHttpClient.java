@@ -1,4 +1,4 @@
-package com.github.dockerjava.core;
+package com.github.dockerjava.transport;
 
 import org.immutables.value.Value;
 
