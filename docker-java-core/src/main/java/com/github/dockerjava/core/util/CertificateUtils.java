@@ -89,11 +89,13 @@ public class CertificateUtils {
 
             JcaX509CertificateConverter certificateConverter = new JcaX509CertificateConverter()
                     .setProvider(BouncyCastleProvider.PROVIDER_NAME);
-            Object certObj = pemParser.readObject();
+            Object certObj;
 
-            if (certObj instanceof X509CertificateHolder) {
-                X509CertificateHolder certificateHolder = (X509CertificateHolder) certObj;
-                certificates.add(certificateConverter.getCertificate(certificateHolder));
+            while ((certObj = pemParser.readObject()) != null) {
+                if (certObj instanceof X509CertificateHolder) {
+                    X509CertificateHolder certificateHolder = (X509CertificateHolder) certObj;
+                    certificates.add(certificateConverter.getCertificate(certificateHolder));
+                }
             }
 
             return certificates;
