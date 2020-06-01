@@ -53,7 +53,7 @@ public class SwarmNodeStatus implements Serializable {
     }
 
     /**
-     * @see #state
+     * @see #address
      */
     public SwarmNodeStatus withAddress(String address) {
         this.address = address;
