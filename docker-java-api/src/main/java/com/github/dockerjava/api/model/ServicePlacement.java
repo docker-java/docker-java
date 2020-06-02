@@ -74,7 +74,7 @@ public class ServicePlacement implements Serializable {
             this.maxReplicas = maxReplicas;
 
         } else {
-            throw new DockerClientException("The Value for MaxReplicas must be greater or equal to 0");
+            throw new IllegalArgumentException("The Value for MaxReplicas must be greater or equal to 0");
         }
 
         return this;
