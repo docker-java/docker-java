@@ -115,7 +115,7 @@ public class EventsCmdIT extends CmdIT {
     }
 
     @Test
-    public void testEventStreamingWithEventTypeFilter() throws Exception {
+    public void testEventStreamingWithContainerEventTypeFilter() throws Exception {
         assumeNotSwarm("", dockerRule);
 
         String startTime = getEpochTime();
@@ -136,6 +136,32 @@ public class EventsCmdIT extends CmdIT {
         // we should only get "start" events here
         for (Event event : events) {
             assertThat("Received event: " + event, event.getAction(), is("start"));
+            assertThat("Received event: " + event, event.getType(), is(EventType.CONTAINER));
+        }
+    }
+
+    @Test
+    public void testEventStreamingWithImageEventTypeFilter() throws Exception {
+        assumeNotSwarm("", dockerRule);
+
+        String startTime = getEpochTime();
+        int expectedEvents = 1;
+
+        EventsTestCallback eventCallback = new EventsTestCallback(expectedEvents);
+
+        dockerRule.getClient().eventsCmd()
+            .withSince(startTime)
+            .withEventTypeFilter(EventType.IMAGE)
+            .exec(eventCallback);
+
+        generateEvents();
+
+        List<Event> events = eventCallback.awaitExpectedEvents(30, TimeUnit.SECONDS);
+
+        // we should only get "pull" events here
+        for (Event event : events) {
+            assertThat("Received event: " + event, event.getAction(), is("pull"));
+            assertThat("Received event: " + event, event.getType(), is(EventType.IMAGE));
         }
     }
 
