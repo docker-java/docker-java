@@ -3,6 +3,7 @@ package com.github.dockerjava.cmd;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Event;
+import com.github.dockerjava.api.model.EventType;
 import com.github.dockerjava.utils.TestUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -102,6 +103,31 @@ public class EventsCmdIT extends CmdIT {
                 .withSince(startTime)
                 .withEventFilter("start")
                 .exec(eventCallback);
+
+        generateEvents();
+
+        List<Event> events = eventCallback.awaitExpectedEvents(30, TimeUnit.SECONDS);
+
+        // we should only get "start" events here
+        for (Event event : events) {
+            assertThat("Received event: " + event, event.getAction(), is("start"));
+        }
+    }
+
+    @Test
+    public void testEventStreamingWithEventTypeFilter() throws Exception {
+        assumeNotSwarm("", dockerRule);
+
+        String startTime = getEpochTime();
+        int expectedEvents = 1;
+
+        EventsTestCallback eventCallback = new EventsTestCallback(expectedEvents);
+
+        dockerRule.getClient().eventsCmd()
+            .withSince(startTime)
+            .withEventTypeFilter(EventType.CONTAINER)
+            .withEventFilter("start")
+            .exec(eventCallback);
 
         generateEvents();
 
