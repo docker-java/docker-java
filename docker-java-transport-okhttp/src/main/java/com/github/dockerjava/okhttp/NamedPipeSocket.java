@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousByteChannel;
+import java.nio.channels.AsynchronousCloseException;
 import java.nio.channels.AsynchronousFileChannel;
 import java.nio.channels.Channels;
 import java.nio.channels.CompletionHandler;
@@ -102,6 +103,10 @@ class NamedPipeSocket extends Socket {
 
                 @Override
                 public void failed(Throwable exc, A attachment) {
+                    if (exc instanceof AsynchronousCloseException) {
+                        handler.completed(-1, attachment);
+                        return;
+                    }
                     handler.failed(exc, attachment);
                 }
             });
@@ -143,6 +148,10 @@ class NamedPipeSocket extends Socket {
 
             @Override
             public void failed(Throwable exc, Object attachment) {
+                if (exc instanceof AsynchronousCloseException) {
+                    complete(-1);
+                    return;
+                }
                 completeExceptionally(exc);
             }
         }
