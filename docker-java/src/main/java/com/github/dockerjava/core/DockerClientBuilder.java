@@ -2,51 +2,109 @@ package com.github.dockerjava.core;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
-import com.github.dockerjava.core.DefaultDockerClientConfig.Builder;
 import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory;
+import com.github.dockerjava.jaxrs.JerseyDockerHttpClient;
+import com.github.dockerjava.transport.DockerHttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DockerClientBuilder {
 
-    private DockerClientImpl dockerClient = null;
+    private final DockerClientConfig dockerClientConfig;
 
     private DockerCmdExecFactory dockerCmdExecFactory = null;
 
-    private DockerClientBuilder(DockerClientImpl dockerClient) {
-        this.dockerClient = dockerClient;
+    private DockerHttpClient dockerHttpClient = null;
+
+    private DockerClientBuilder(DockerClientConfig dockerClientConfig) {
+        this.dockerClientConfig = dockerClientConfig;
     }
 
     public static DockerClientBuilder getInstance() {
-        return new DockerClientBuilder(DockerClientImpl.getInstance());
+        return new DockerClientBuilder(
+            DefaultDockerClientConfig.createDefaultConfigBuilder().build()
+        );
     }
 
-    public static DockerClientBuilder getInstance(Builder dockerClientConfigBuilder) {
+    /**
+     *
+     * @deprecated use {@link #getInstance(DockerClientConfig)}
+     */
+    @Deprecated
+    public static DockerClientBuilder getInstance(DefaultDockerClientConfig.Builder dockerClientConfigBuilder) {
         return getInstance(dockerClientConfigBuilder.build());
     }
 
     public static DockerClientBuilder getInstance(DockerClientConfig dockerClientConfig) {
-        return new DockerClientBuilder(DockerClientImpl.getInstance(dockerClientConfig));
+        return new DockerClientBuilder(dockerClientConfig);
     }
 
+    /**
+     *
+     * @deprecated use {@link DefaultDockerClientConfig.Builder#withDockerHost(String)}
+     */
+    @Deprecated
     public static DockerClientBuilder getInstance(String serverUrl) {
-        return new DockerClientBuilder(DockerClientImpl.getInstance(serverUrl));
+        return new DockerClientBuilder(
+            DefaultDockerClientConfig.createDefaultConfigBuilder()
+                .withDockerHost(serverUrl)
+                .build()
+        );
     }
 
+    /**
+     *
+     * @deprecated no replacement, use one of {@link DockerHttpClient}
+     */
+    @Deprecated
     public static DockerCmdExecFactory getDefaultDockerCmdExecFactory() {
         return new JerseyDockerCmdExecFactory();
     }
 
+    /**
+     * Note that this method overrides {@link DockerHttpClient} if it was previously set
+     *
+     * @deprecated use {@link #withDockerHttpClient(DockerHttpClient)}
+     */
+    @Deprecated
     public DockerClientBuilder withDockerCmdExecFactory(DockerCmdExecFactory dockerCmdExecFactory) {
         this.dockerCmdExecFactory = dockerCmdExecFactory;
+        this.dockerHttpClient = null;
+        return this;
+    }
+
+    /**
+     * Note that this method overrides {@link DockerCmdExecFactory} if it was previously set
+     */
+    public DockerClientBuilder withDockerHttpClient(DockerHttpClient dockerHttpClient) {
+        this.dockerCmdExecFactory = null;
+        this.dockerHttpClient = dockerHttpClient;
         return this;
     }
 
     public DockerClient build() {
-        if (dockerCmdExecFactory != null) {
-            dockerClient.withDockerCmdExecFactory(dockerCmdExecFactory);
+        if (dockerHttpClient != null) {
+            return DockerClientImpl.getInstance(
+                dockerClientConfig,
+                dockerHttpClient
+            );
+        } else if (dockerCmdExecFactory != null) {
+            return DockerClientImpl.getInstance(dockerClientConfig)
+                .withDockerCmdExecFactory(dockerCmdExecFactory);
         } else {
-            dockerClient.withDockerCmdExecFactory(getDefaultDockerCmdExecFactory());
-        }
+            Logger log = LoggerFactory.getLogger(DockerClientBuilder.class);
+            log.warn(
+                "'dockerHttpClient' should be set." +
+                    "Falling back to Jersey, will be an error in future releases."
+            );
 
-        return dockerClient;
+            return DockerClientImpl.getInstance(
+                dockerClientConfig,
+                new JerseyDockerHttpClient.Builder()
+                    .dockerHost(dockerClientConfig.getDockerHost())
+                    .sslConfig(dockerClientConfig.getSSLConfig())
+                    .build()
+            );
+        }
     }
 }

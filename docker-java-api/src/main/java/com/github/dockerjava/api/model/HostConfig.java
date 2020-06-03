@@ -70,7 +70,7 @@ public class HostConfig implements Serializable {
     @JsonProperty("MemorySwappiness")
     private Long memorySwappiness;
 
-    @JsonProperty("NanoCPUs")
+    @JsonProperty("NanoCpus")
     private Long nanoCPUs;
 
     @JsonProperty("CapAdd")

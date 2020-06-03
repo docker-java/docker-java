@@ -138,4 +138,19 @@ public class InspectContainerCmdIT extends CmdIT {
 
         assertFalse(inspectContainerResponse.getNetworkSettings().getHairpinMode());
     }
+
+    @Test
+    public void inspectContainerNanoCPUs() throws DockerException {
+
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
+            .withCmd("env").exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(is(emptyString())));
+
+        InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
+
+        assertThat(inspectContainerResponse.getHostConfig().getNanoCPUs(), is(0L));
+    }
 }
