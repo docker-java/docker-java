@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -115,53 +116,33 @@ public class EventsCmdIT extends CmdIT {
     }
 
     @Test
-    public void testEventStreamingWithContainerEventTypeFilter() throws Exception {
+    public void testEventStreamingWithEventTypeFilter() throws Exception {
         assumeNotSwarm("", dockerRule);
 
         String startTime = getEpochTime();
-        int expectedEvents = 1;
-
-        EventsTestCallback eventCallback = new EventsTestCallback(expectedEvents);
-
-        dockerRule.getClient().eventsCmd()
-            .withSince(startTime)
-            .withEventTypeFilter(EventType.CONTAINER)
-            .withEventFilter("start")
-            .exec(eventCallback);
-
         generateEvents();
+        String endTime = getEpochTime();
 
-        List<Event> events = eventCallback.awaitExpectedEvents(30, TimeUnit.SECONDS);
+        for (EventType eventType : EventType.values()) {
+            List<Event> events = new CopyOnWriteArrayList<>();
+            try (
+                ResultCallback.Adapter<?> eventCallback = dockerRule.getClient().eventsCmd()
+                    .withSince(startTime)
+                    .withUntil(endTime)
+                    .withEventTypeFilter(eventType)
+                    .exec(new ResultCallback.Adapter<Event>() {
+                        @Override
+                        public void onNext(Event event) {
+                            events.add(event);
+                        }
+                    })
+            ) {
+                eventCallback.awaitCompletion(30, TimeUnit.SECONDS);
 
-        // we should only get "start" events here
-        for (Event event : events) {
-            assertThat("Received event: " + event, event.getAction(), is("start"));
-            assertThat("Received event: " + event, event.getType(), is(EventType.CONTAINER));
-        }
-    }
-
-    @Test
-    public void testEventStreamingWithImageEventTypeFilter() throws Exception {
-        assumeNotSwarm("", dockerRule);
-
-        String startTime = getEpochTime();
-        int expectedEvents = 1;
-
-        EventsTestCallback eventCallback = new EventsTestCallback(expectedEvents);
-
-        dockerRule.getClient().eventsCmd()
-            .withSince(startTime)
-            .withEventTypeFilter(EventType.IMAGE)
-            .exec(eventCallback);
-
-        generateEvents();
-
-        List<Event> events = eventCallback.awaitExpectedEvents(30, TimeUnit.SECONDS);
-
-        // we should only get "pull" events here
-        for (Event event : events) {
-            assertThat("Received event: " + event, event.getAction(), is("pull"));
-            assertThat("Received event: " + event, event.getType(), is(EventType.IMAGE));
+                for (Event event : events) {
+                    assertThat("Received event: " + event, event.getType(), is(eventType));
+                }
+            }
         }
     }
 
