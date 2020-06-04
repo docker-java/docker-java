@@ -3,7 +3,8 @@ name: Release
 on:
   release:
     types:
-      - published
+      - prereleased
+      - released
 
 jobs:
   build:
