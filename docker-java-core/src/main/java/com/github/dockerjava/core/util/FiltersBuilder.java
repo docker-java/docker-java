@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Representation of Docker filters.
@@ -62,6 +64,16 @@ public class FiltersBuilder {
 
     public List<String> getContainer() {
         return getFilter("container");
+    }
+
+    /**
+     * Filter by event types
+     *
+     * @param eventTypes an array of event types
+     */
+    public FiltersBuilder withEventTypes(String... eventTypes) {
+        withFilter("type", Stream.of(eventTypes).collect(Collectors.toList()));
+        return this;
     }
 
     /**

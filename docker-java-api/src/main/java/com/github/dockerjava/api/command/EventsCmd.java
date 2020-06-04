@@ -2,10 +2,12 @@ package com.github.dockerjava.api.command;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import javax.annotation.CheckForNull;
 
 import com.github.dockerjava.api.model.Event;
+import com.github.dockerjava.api.model.EventType;
 
 /**
  * Get events
@@ -32,6 +34,24 @@ public interface EventsCmd extends AsyncDockerCmd<EventsCmd, Event> {
      *            - event to filter (pull | create | attach | start | stop | kill)
      */
     EventsCmd withEventFilter(String... event);
+
+    /**
+     * @param eventTypes event types to filter
+     */
+    EventsCmd withEventTypeFilter(String... eventTypes);
+
+    /**
+     * This provides a type safe version of {@link #withEventTypeFilter(String...)}.
+     *
+     * @param eventTypes event types to filter
+     */
+    default EventsCmd withEventTypeFilter(EventType... eventTypes) {
+        return withEventTypeFilter(
+            Stream.of(eventTypes)
+                .map(EventType::getValue)
+                .toArray(String[]::new)
+        );
+    }
 
     /**
      * @param image
