@@ -4,7 +4,6 @@ import com.sun.jna.Native;
 import com.sun.jna.win32.StdCallLibrary;
 import com.sun.jna.win32.W32APIOptions;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -16,6 +15,7 @@ import java.nio.channels.AsynchronousCloseException;
 import java.nio.channels.AsynchronousFileChannel;
 import java.nio.channels.Channels;
 import java.nio.channels.CompletionHandler;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.concurrent.CompletableFuture;
@@ -57,7 +57,7 @@ class NamedPipeSocket extends Socket {
                     )
                 );
                 break;
-            } catch (FileNotFoundException e) {
+            } catch (NoSuchFileException e) {
                 if (System.currentTimeMillis() - startedAt >= timeout) {
                     throw new RuntimeException(e);
                 } else {
