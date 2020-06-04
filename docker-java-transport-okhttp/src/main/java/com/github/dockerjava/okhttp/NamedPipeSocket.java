@@ -1,4 +1,4 @@
-package com.github.dockerjava.httpclient5;
+package com.github.dockerjava.okhttp;
 
 import com.sun.jna.Native;
 import com.sun.jna.win32.StdCallLibrary;
@@ -46,6 +46,7 @@ class NamedPipeSocket extends Socket {
     @Override
     public void connect(SocketAddress endpoint, int timeout) throws IOException {
         long startedAt = System.currentTimeMillis();
+
         timeout = Math.max(timeout, 10_000);
         while (true) {
             try {
