@@ -1,7 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
@@ -10,6 +9,7 @@ import java.io.Serializable;
  * container with the aliased name {@link #getAlias()}. This involves creating an entry in <code>/etc/hosts</code> and some environment
  * variables in the target container as well as creating a network bridge between both containers.
  */
+@EqualsAndHashCode
 public class Link implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -69,21 +69,6 @@ public class Link implements Serializable {
         } catch (final Exception e) {
             throw new IllegalArgumentException("Error parsing Link '" + serialized + "'");
         }
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (obj instanceof Link) {
-            final Link other = (Link) obj;
-            return new EqualsBuilder().append(name, other.getName()).append(alias, other.getAlias()).isEquals();
-        } else {
-            return super.equals(obj);
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(name).append(alias).toHashCode();
     }
 
     /**

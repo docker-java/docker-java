@@ -58,6 +58,7 @@ import com.github.dockerjava.api.command.ResizeContainerCmd;
 import com.github.dockerjava.api.command.ResizeExecCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
+import com.github.dockerjava.api.command.SaveImagesCmd;
 import com.github.dockerjava.api.command.SearchImagesCmd;
 import com.github.dockerjava.api.command.StartContainerCmd;
 import com.github.dockerjava.api.command.StatsCmd;
@@ -138,6 +139,12 @@ public interface DockerClient extends Closeable {
      *            The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
      */
     SaveImageCmd saveImageCmd(@Nonnull String name);
+
+    /**
+     * Command to download multiple images at once.
+     * @return command (builder)
+     */
+    SaveImagesCmd saveImagesCmd();
 
     /**
      * * CONTAINER API *

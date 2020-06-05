@@ -56,6 +56,8 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
     private static final Set<String> CONFIG_KEYS = new HashSet<>();
 
+    static final Properties DEFAULT_PROPERTIES = new Properties();
+
     static {
         CONFIG_KEYS.add(DOCKER_HOST);
         CONFIG_KEYS.add(DOCKER_TLS_VERIFY);
@@ -66,6 +68,11 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
         CONFIG_KEYS.add(REGISTRY_PASSWORD);
         CONFIG_KEYS.add(REGISTRY_EMAIL);
         CONFIG_KEYS.add(REGISTRY_URL);
+
+        DEFAULT_PROPERTIES.put(DOCKER_HOST, "unix:///var/run/docker.sock");
+        DEFAULT_PROPERTIES.put(DOCKER_CONFIG, "${user.home}/.docker");
+        DEFAULT_PROPERTIES.put(REGISTRY_URL, "https://index.docker.io/v1/");
+        DEFAULT_PROPERTIES.put(REGISTRY_USERNAME, "${user.name}");
     }
 
     private final URI dockerHost;
@@ -91,23 +98,28 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
     }
 
     private URI checkDockerHostScheme(URI dockerHost) {
-        if ("tcp".equals(dockerHost.getScheme()) || "unix".equals(dockerHost.getScheme())) {
-            return dockerHost;
-        } else {
-            throw new DockerClientException("Unsupported protocol scheme found: '" + dockerHost
-                    + "'. Only 'tcp://' or 'unix://' supported.");
+        switch (dockerHost.getScheme()) {
+            case "tcp":
+            case "unix":
+            case "npipe":
+                return dockerHost;
+            default:
+                throw new DockerClientException("Unsupported protocol scheme found: '" + dockerHost);
         }
     }
 
     private static Properties loadIncludedDockerProperties(Properties systemProperties) {
+        Properties p = new Properties();
+        p.putAll(DEFAULT_PROPERTIES);
         try (InputStream is = DefaultDockerClientConfig.class.getResourceAsStream("/" + DOCKER_JAVA_PROPERTIES)) {
-            Properties p = new Properties();
-            p.load(is);
-            replaceProperties(p, systemProperties);
-            return p;
+            if (is != null) {
+                p.load(is);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        replaceProperties(p, systemProperties);
+        return p;
     }
 
     private static void replaceProperties(Properties properties, Properties replacements) {
@@ -156,13 +168,19 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
         // special case which is a sensible default
         if (env.containsKey(DOCKER_HOST)) {
-            overriddenProperties.setProperty(DOCKER_HOST, env.get(DOCKER_HOST));
+            String value = env.get(DOCKER_HOST);
+            if (value != null && value.trim().length() != 0) {
+                overriddenProperties.setProperty(DOCKER_HOST, value);
+            }
         }
 
         for (Map.Entry<String, String> envEntry : env.entrySet()) {
             String envKey = envEntry.getKey();
             if (CONFIG_KEYS.contains(envKey)) {
-                overriddenProperties.setProperty(envKey, envEntry.getValue());
+                String value = envEntry.getValue();
+                if (value != null && value.trim().length() != 0) {
+                    overriddenProperties.setProperty(envKey, value);
+                }
             }
         }
 
@@ -242,7 +260,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
     public DockerConfigFile getDockerConfig() {
         if (dockerConfig == null) {
             try {
-                dockerConfig = DockerConfigFile.loadConfig(getDockerConfigPath());
+                dockerConfig = DockerConfigFile.loadConfig(getObjectMapper(), getDockerConfigPath());
             } catch (IOException e) {
                 throw new DockerClientException("Failed to parse docker configuration file", e);
             }

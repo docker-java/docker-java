@@ -1,16 +1,14 @@
 package com.github.dockerjava.api.model;
 
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
 
-@JsonInclude(Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class AuthConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -142,60 +140,4 @@ public class AuthConfig implements Serializable {
     public void setStackOrchestrator(String stackOrchestrator) {
         this.stackOrchestrator = stackOrchestrator;
     }
-
-    @Override
-    public String toString() {
-        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
-
-    // CHECKSTYLE:OFF
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((auth == null) ? 0 : auth.hashCode());
-        result = prime * result + ((email == null) ? 0 : email.hashCode());
-        result = prime * result + ((password == null) ? 0 : password.hashCode());
-        result = prime * result + ((registryAddress == null) ? 0 : registryAddress.hashCode());
-        result = prime * result + ((username == null) ? 0 : username.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        AuthConfig other = (AuthConfig) obj;
-        if (auth == null) {
-            if (other.auth != null)
-                return false;
-        } else if (!auth.equals(other.auth))
-            return false;
-        if (email == null) {
-            if (other.email != null)
-                return false;
-        } else if (!email.equals(other.email))
-            return false;
-        if (password == null) {
-            if (other.password != null)
-                return false;
-        } else if (!password.equals(other.password))
-            return false;
-        if (registryAddress == null) {
-            if (other.registryAddress != null)
-                return false;
-        } else if (!registryAddress.equals(other.registryAddress))
-            return false;
-        if (username == null) {
-            if (other.username != null)
-                return false;
-        } else if (!username.equals(other.username))
-            return false;
-        return true;
-    }
-    // CHECKSTYLE:ON
 }

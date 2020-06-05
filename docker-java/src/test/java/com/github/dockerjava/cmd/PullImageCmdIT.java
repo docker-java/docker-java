@@ -2,13 +2,13 @@ package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.api.exception.DockerClientException;
-import com.github.dockerjava.api.exception.InternalServerErrorException;
+import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.core.RemoteApiVersion;
-import com.github.dockerjava.core.command.PullImageResultCallback;
-import com.github.dockerjava.utils.RegistryUtils;
+import com.github.dockerjava.junit.PrivateRegistryRule;
+import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -25,6 +25,9 @@ import static org.hamcrest.Matchers.notNullValue;
 
 public class PullImageCmdIT extends CmdIT {
     private static final Logger LOG = LoggerFactory.getLogger(PullImageCmdIT.class);
+
+    @ClassRule
+    public static PrivateRegistryRule REGISTRY = new PrivateRegistryRule();
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
@@ -61,7 +64,7 @@ public class PullImageCmdIT extends CmdIT {
         LOG.info("Pulling image: {}", testImage);
 
         dockerRule.getClient().pullImageCmd(testImage)
-                .exec(new PullImageResultCallback())
+                .start()
                 .awaitCompletion(30, TimeUnit.SECONDS);
 
         info = dockerRule.getClient().infoCmd().exec();
@@ -85,80 +88,78 @@ public class PullImageCmdIT extends CmdIT {
 
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pullImageCmd("xvxcv/foo")
-                .exec(new PullImageResultCallback())
+                .start()
                 .awaitCompletion(30, TimeUnit.SECONDS);
     }
 
     @Test
     public void testPullImageWithValidAuth() throws Exception {
-        AuthConfig authConfig = RegistryUtils.runPrivateRegistry(dockerRule.getClient());
+        AuthConfig authConfig = REGISTRY.getAuthConfig();
 
-        String imgName = RegistryUtils.createPrivateImage(dockerRule, "pull-image-with-valid-auth");
+        String imgName = REGISTRY.createPrivateImage("pull-image-with-valid-auth");
 
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pullImageCmd(imgName)
                 .withAuthConfig(authConfig)
-                .exec(new PullImageResultCallback())
+                .start()
                 .awaitCompletion(30, TimeUnit.SECONDS);
     }
 
     @Test
     public void testPullImageWithValidAuthAndEmail() throws Exception {
-        AuthConfig authConfig = RegistryUtils.runPrivateRegistry(dockerRule.getClient())
-                .withEmail("foo@bar.de");
+        AuthConfig authConfig = REGISTRY.getAuthConfig().withEmail("foo@bar.de");
 
-        String imgName = RegistryUtils.createPrivateImage(dockerRule, "pull-image-with-valid-auth");
+        String imgName = REGISTRY.createPrivateImage("pull-image-with-valid-auth");
 
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pullImageCmd(imgName)
                 .withAuthConfig(authConfig)
-                .exec(new PullImageResultCallback())
+                .start()
                 .awaitCompletion(30, TimeUnit.SECONDS);
     }
 
     @Test
     public void testPullImageWithNoAuth() throws Exception {
-        RegistryUtils.runPrivateRegistry(dockerRule.getClient());
+        AuthConfig authConfig = REGISTRY.getAuthConfig();
 
-        String imgName = RegistryUtils.createPrivateImage(dockerRule, "pull-image-with-no-auth");
+        String imgName = REGISTRY.createPrivateImage("pull-image-with-no-auth");
 
         if (isNotSwarm(dockerRule.getClient()) && getVersion(dockerRule.getClient())
                 .isGreaterOrEqual(RemoteApiVersion.VERSION_1_30)) {
-            exception.expect(InternalServerErrorException.class);
+            exception.expect(DockerException.class);
         } else {
             exception.expect(DockerClientException.class);
         }
 
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pullImageCmd(imgName)
-                .exec(new PullImageResultCallback())
+                .start()
                 .awaitCompletion(30, TimeUnit.SECONDS);
     }
 
 
     @Test
     public void testPullImageWithInvalidAuth() throws Exception {
-        AuthConfig validAuthConfig = RegistryUtils.runPrivateRegistry(dockerRule.getClient());
-
-        AuthConfig authConfig = new AuthConfig()
+        AuthConfig authConfig = REGISTRY.getAuthConfig();
+        AuthConfig invalidAuthConfig = new AuthConfig()
                 .withUsername("testuser")
                 .withPassword("testwrongpassword")
                 .withEmail("foo@bar.de")
-                .withRegistryAddress(validAuthConfig.getRegistryAddress());
+                .withRegistryAddress(authConfig.getRegistryAddress());
 
-        String imgName = RegistryUtils.createPrivateImage(dockerRule, "pull-image-with-invalid-auth");
+        String imgName = REGISTRY.createPrivateImage("pull-image-with-invalid-auth");
 
         if (isNotSwarm(dockerRule.getClient()) && getVersion(dockerRule.getClient())
                 .isGreaterOrEqual(RemoteApiVersion.VERSION_1_30)) {
-            exception.expect(InternalServerErrorException.class);
+            exception.expect(DockerException.class);
         } else {
             exception.expect(DockerClientException.class);
         }
 
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pullImageCmd(imgName)
-                .withAuthConfig(authConfig)
-                .exec(new PullImageResultCallback())
+                .withAuthConfig(invalidAuthConfig)
+                .start()
                 .awaitCompletion(30, TimeUnit.SECONDS);
     }
 }

@@ -2,15 +2,15 @@ package com.github.dockerjava.api.command;
 
 import java.util.List;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.model.NetworkSettings;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode
+@ToString
 public class InspectExecResponse {
     @JsonProperty("ID")
     private String id;
@@ -34,7 +34,7 @@ public class InspectExecResponse {
     private Boolean canRemove;
 
     @JsonProperty("ExitCode")
-    private Integer exitCode;
+    private Long exitCode;
 
     @JsonProperty("ProcessConfig")
     private ProcessConfig processConfig;
@@ -62,7 +62,7 @@ public class InspectExecResponse {
      * @since {@link RemoteApiVersion#VERSION_1_25}
      */
     @JsonProperty("Pid")
-    private Integer pid;
+    private Long pid;
 
     public String getId() {
         return id;
@@ -84,7 +84,15 @@ public class InspectExecResponse {
         return running;
     }
 
+    /**
+     * @deprecated use {@link #getExitCodeLong()}
+     */
+    @Deprecated
     public Integer getExitCode() {
+        return exitCode != null ? exitCode.intValue() : null;
+    }
+
+    public Long getExitCodeLong() {
         return exitCode;
     }
 
@@ -126,18 +134,24 @@ public class InspectExecResponse {
 
     /**
      * @see #pid
+     * @deprecated use {@link #getPidLong()}
      */
     @CheckForNull
+    @Deprecated
     public Integer getPid() {
+        return pid != null ? pid.intValue() : null;
+    }
+
+    /**
+     * @see #pid
+     */
+    @CheckForNull
+    public Long getPidLong() {
         return pid;
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @EqualsAndHashCode
+    @ToString
     public class ProcessConfig {
 
         @JsonProperty("arguments")
@@ -174,14 +188,8 @@ public class InspectExecResponse {
         public String getUser() {
             return user;
         }
-
-        @Override
-        public String toString() {
-            return ToStringBuilder.reflectionToString(this);
-        }
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public class Container {
 
         @JsonProperty("NetworkSettings")

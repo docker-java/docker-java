@@ -1,7 +1,5 @@
 package com.github.dockerjava.core.command;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.github.dockerjava.api.command.ResizeContainerCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
 

@@ -60,6 +60,7 @@ import com.github.dockerjava.api.command.ResizeContainerCmd;
 import com.github.dockerjava.api.command.ResizeExecCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
+import com.github.dockerjava.api.command.SaveImagesCmd;
 import com.github.dockerjava.api.command.SearchImagesCmd;
 import com.github.dockerjava.api.command.StartContainerCmd;
 import com.github.dockerjava.api.command.StatsCmd;
@@ -137,6 +138,7 @@ import com.github.dockerjava.core.command.ResizeContainerCmdImpl;
 import com.github.dockerjava.core.command.ResizeExecCmdImpl;
 import com.github.dockerjava.core.command.RestartContainerCmdImpl;
 import com.github.dockerjava.core.command.SaveImageCmdImpl;
+import com.github.dockerjava.core.command.SaveImagesCmdImpl;
 import com.github.dockerjava.core.command.SearchImagesCmdImpl;
 import com.github.dockerjava.core.command.StartContainerCmdImpl;
 import com.github.dockerjava.core.command.StatsCmdImpl;
@@ -152,6 +154,7 @@ import com.github.dockerjava.core.command.VersionCmdImpl;
 import com.github.dockerjava.core.command.WaitContainerCmdImpl;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
@@ -198,6 +201,27 @@ public class DockerClientImpl implements Closeable, DockerClient {
         return new DockerClientImpl(serverUrl);
     }
 
+    public DockerClientImpl withHttpClient(DockerHttpClient httpClient) {
+        return withDockerCmdExecFactory(new DefaultDockerCmdExecFactory(httpClient, dockerClientConfig.getObjectMapper()));
+    }
+
+    /**
+     *
+     * @return {@link DockerHttpClient} or null if not set
+     */
+    @Nullable
+    public DockerHttpClient getHttpClient() {
+        if (dockerCmdExecFactory instanceof DefaultDockerCmdExecFactory) {
+            return ((DefaultDockerCmdExecFactory) dockerCmdExecFactory).getDockerHttpClient();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @deprecated use {@link #withHttpClient(DockerHttpClient)}
+     */
+    @Deprecated
     public DockerClientImpl withDockerCmdExecFactory(DockerCmdExecFactory dockerCmdExecFactory) {
         checkNotNull(dockerCmdExecFactory, "dockerCmdExecFactory was not specified");
         this.dockerCmdExecFactory = dockerCmdExecFactory;
@@ -207,6 +231,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
         return this;
     }
 
+    @Deprecated
     private DockerCmdExecFactory getDockerCmdExecFactory() {
         checkNotNull(dockerCmdExecFactory, "dockerCmdExecFactory was not specified");
         return dockerCmdExecFactory;
@@ -285,6 +310,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public SaveImageCmd saveImageCmd(String name) {
         return new SaveImageCmdImpl(getDockerCmdExecFactory().createSaveImageCmdExec(), name);
+    }
+
+    @Override
+    public SaveImagesCmd saveImagesCmd() {
+        return new SaveImagesCmdImpl(getDockerCmdExecFactory().createSaveImagesCmdExec());
     }
 
     @Override

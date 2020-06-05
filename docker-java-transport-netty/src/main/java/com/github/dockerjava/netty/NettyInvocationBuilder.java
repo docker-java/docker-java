@@ -3,10 +3,10 @@ package com.github.dockerjava.netty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.InvocationBuilder;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
 import com.github.dockerjava.netty.handler.FramedResponseStreamHandler;
@@ -80,7 +80,19 @@ public class NettyInvocationBuilder implements InvocationBuilder {
 
     private Map<String, String> headers = new HashMap<>();
 
+    private final ObjectMapper objectMapper;
+
+    @Deprecated
     public NettyInvocationBuilder(ChannelProvider channelProvider, String resource) {
+        this(
+                DefaultDockerClientConfig.createDefaultConfigBuilder().build().getObjectMapper(),
+                channelProvider,
+                resource
+        );
+    }
+
+    public NettyInvocationBuilder(ObjectMapper objectMapper, ChannelProvider channelProvider, String resource) {
+        this.objectMapper = objectMapper;
         this.channelProvider = channelProvider;
         this.resource = resource;
     }
@@ -99,17 +111,20 @@ public class NettyInvocationBuilder implements InvocationBuilder {
 
         HttpRequestProvider requestProvider = httpDeleteRequestProvider();
 
-        ResponseCallback<Void> callback = new ResponseCallback<>();
+        try (ResponseCallback<Void> callback = new ResponseCallback<>()) {
 
-        HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, callback);
+            HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, callback);
 
-        Channel channel = getChannel();
+            Channel channel = getChannel();
 
-        channel.pipeline().addLast(responseHandler);
+            channel.pipeline().addLast(responseHandler);
 
-        sendRequest(requestProvider, channel);
+            sendRequest(requestProvider, channel);
 
-        callback.awaitResult();
+            callback.awaitResult();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void get(ResultCallback<Frame> resultCallback) {
@@ -129,12 +144,13 @@ public class NettyInvocationBuilder implements InvocationBuilder {
     }
 
     public <T> T get(TypeReference<T> typeReference) {
+        try (ResponseCallback<T> callback = new ResponseCallback<>()) {
+            get(typeReference, callback);
 
-        ResponseCallback<T> callback = new ResponseCallback<>();
-
-        get(typeReference, callback);
-
-        return callback.awaitResult();
+            return callback.awaitResult();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public <T> void get(TypeReference<T> typeReference, ResultCallback<T> resultCallback) {
@@ -143,7 +159,9 @@ public class NettyInvocationBuilder implements InvocationBuilder {
 
         Channel channel = getChannel();
 
-        JsonResponseCallbackHandler<T> jsonResponseHandler = new JsonResponseCallbackHandler<>(typeReference,
+        JsonResponseCallbackHandler<T> jsonResponseHandler = new JsonResponseCallbackHandler<>(
+                objectMapper,
+                typeReference,
                 resultCallback);
 
         HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, resultCallback);
@@ -253,12 +271,13 @@ public class NettyInvocationBuilder implements InvocationBuilder {
     }
 
     public <T> T post(final Object entity, TypeReference<T> typeReference) {
+        try (ResponseCallback<T> callback = new ResponseCallback<>()) {
+            post(entity, typeReference, callback);
 
-        ResponseCallback<T> callback = new ResponseCallback<>();
-
-        post(entity, typeReference, callback);
-
-        return callback.awaitResult();
+            return callback.awaitResult();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public <T> void post(final Object entity, TypeReference<T> typeReference, final ResultCallback<T> resultCallback) {
@@ -267,7 +286,9 @@ public class NettyInvocationBuilder implements InvocationBuilder {
 
         Channel channel = getChannel();
 
-        JsonResponseCallbackHandler<T> jsonResponseHandler = new JsonResponseCallbackHandler<>(typeReference,
+        JsonResponseCallbackHandler<T> jsonResponseHandler = new JsonResponseCallbackHandler<>(
+                objectMapper,
+                typeReference,
                 resultCallback);
 
         HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, resultCallback);
@@ -317,8 +338,6 @@ public class NettyInvocationBuilder implements InvocationBuilder {
 
             byte[] bytes;
             try {
-                ObjectMapper objectMapper = new ObjectMapper();
-                objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
                 bytes = objectMapper.writeValueAsBytes(entity);
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
@@ -358,12 +377,13 @@ public class NettyInvocationBuilder implements InvocationBuilder {
     }
 
     public <T> T post(TypeReference<T> typeReference, InputStream body) {
+        try (ResponseCallback<T> callback = new ResponseCallback<>()) {
+            post(typeReference, callback, body);
 
-        ResponseCallback<T> callback = new ResponseCallback<>();
-
-        post(typeReference, callback, body);
-
-        return callback.awaitResult();
+            return callback.awaitResult();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public <T> void post(TypeReference<T> typeReference, ResultCallback<T> resultCallback, InputStream body) {
@@ -371,7 +391,9 @@ public class NettyInvocationBuilder implements InvocationBuilder {
 
         Channel channel = getChannel();
 
-        JsonResponseCallbackHandler<T> jsonResponseHandler = new JsonResponseCallbackHandler<>(typeReference,
+        JsonResponseCallbackHandler<T> jsonResponseHandler = new JsonResponseCallbackHandler<>(
+                objectMapper,
+                typeReference,
                 resultCallback);
 
         HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, resultCallback);
@@ -448,28 +470,30 @@ public class NettyInvocationBuilder implements InvocationBuilder {
 
         Channel channel = getChannel();
 
-        ResponseCallback<Void> resultCallback = new ResponseCallback<>();
+        try (ResponseCallback<Void> resultCallback = new ResponseCallback<>()) {
+            HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, resultCallback);
 
-        HttpResponseHandler responseHandler = new HttpResponseHandler(requestProvider, resultCallback);
+            channel.pipeline().addLast(new ChunkedWriteHandler());
+            channel.pipeline().addLast(responseHandler);
 
-        channel.pipeline().addLast(new ChunkedWriteHandler());
-        channel.pipeline().addLast(responseHandler);
+            HttpRequest request = requestProvider.getHttpRequest(resource);
 
-        HttpRequest request = requestProvider.getHttpRequest(resource);
+            // don't accept FullHttpRequest here
+            if (request instanceof FullHttpRequest) {
+                throw new DockerClientException("fatal: request is instance of FullHttpRequest");
+            }
 
-        // don't accept FullHttpRequest here
-        if (request instanceof FullHttpRequest) {
-            throw new DockerClientException("fatal: request is instance of FullHttpRequest");
+            request.headers().set(HttpHeaderNames.TRANSFER_ENCODING, HttpHeaderValues.CHUNKED);
+            request.headers().remove(HttpHeaderNames.CONTENT_LENGTH);
+            request.headers().set(HttpHeaderNames.CONTENT_TYPE, mediaType.getMediaType());
+
+            channel.write(request);
+            channel.write(new ChunkedStream(new BufferedInputStream(body, 1024 * 1024)));
+            channel.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT);
+
+            resultCallback.awaitResult();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-
-        request.headers().set(HttpHeaderNames.TRANSFER_ENCODING, HttpHeaderValues.CHUNKED);
-        request.headers().remove(HttpHeaderNames.CONTENT_LENGTH);
-        request.headers().set(HttpHeaderNames.CONTENT_TYPE, mediaType.getMediaType());
-
-        channel.write(request);
-        channel.write(new ChunkedStream(new BufferedInputStream(body, 1024 * 1024)));
-        channel.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT);
-
-        resultCallback.awaitResult();
     }
 }

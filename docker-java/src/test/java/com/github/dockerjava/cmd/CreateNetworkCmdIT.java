@@ -17,7 +17,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeThat;
 
@@ -44,7 +44,7 @@ public class CreateNetworkCmdIT extends CmdIT {
         assumeNotSwarm("no network in swarm", dockerRule);
 
         String networkName = "networkIpam" + dockerRule.getKind();
-        String subnet = getFactoryType() == FactoryType.JERSEY ? "10.67.79.0/24" : "10.67.90.0/24";
+        String subnet = "10.67." + (79 + getFactoryType().ordinal()) + ".0/24";
 
         Network.Ipam ipam = new Network.Ipam().withConfig(new Network.Ipam.Config().withSubnet(subnet));
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd().withName(networkName).withIpam(ipam).exec();

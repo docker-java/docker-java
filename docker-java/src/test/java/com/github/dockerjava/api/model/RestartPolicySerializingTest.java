@@ -1,6 +1,6 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dockerjava.test.serdes.JSONTestHelper;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -10,40 +10,39 @@ import static org.junit.Assert.assertEquals;
  * <code>docker run --restart xxx</code>.
  */
 public class RestartPolicySerializingTest {
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     // --restart no
     public void noRestart() throws Exception {
-        String json = objectMapper.writeValueAsString(RestartPolicy.noRestart());
+        String json = JSONTestHelper.getMapper().writeValueAsString(RestartPolicy.noRestart());
         assertEquals(json, "{\"MaximumRetryCount\":0,\"Name\":\"\"}");
     }
 
     @Test
     // --restart always
     public void alwaysRestart() throws Exception {
-        String json = objectMapper.writeValueAsString(RestartPolicy.alwaysRestart());
+        String json = JSONTestHelper.getMapper().writeValueAsString(RestartPolicy.alwaysRestart());
         assertEquals(json, "{\"MaximumRetryCount\":0,\"Name\":\"always\"}");
     }
 
     @Test
     // --restart unless-stopped
     public void unlessStoppedRestart() throws Exception {
-        String json = objectMapper.writeValueAsString(RestartPolicy.unlessStoppedRestart());
+        String json = JSONTestHelper.getMapper().writeValueAsString(RestartPolicy.unlessStoppedRestart());
         assertEquals(json, "{\"MaximumRetryCount\":0,\"Name\":\"unless-stopped\"}");
     }
 
     @Test
     // --restart on-failure
     public void onFailureRestart() throws Exception {
-        String json = objectMapper.writeValueAsString(RestartPolicy.onFailureRestart(0));
+        String json = JSONTestHelper.getMapper().writeValueAsString(RestartPolicy.onFailureRestart(0));
         assertEquals(json, "{\"MaximumRetryCount\":0,\"Name\":\"on-failure\"}");
     }
 
     @Test
     // --restart on-failure:2
     public void onFailureRestartWithCount() throws Exception {
-        String json = objectMapper.writeValueAsString(RestartPolicy.onFailureRestart(2));
+        String json = JSONTestHelper.getMapper().writeValueAsString(RestartPolicy.onFailureRestart(2));
         assertEquals(json, "{\"MaximumRetryCount\":2,\"Name\":\"on-failure\"}");
     }
 

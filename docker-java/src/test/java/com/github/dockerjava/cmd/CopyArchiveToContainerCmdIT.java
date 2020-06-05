@@ -3,7 +3,6 @@ package com.github.dockerjava.cmd;
 import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.core.command.WaitContainerResultCallback;
 import com.github.dockerjava.core.util.CompressArchiveUtil;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
@@ -72,7 +71,7 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
 
     private void assertFileCopied(CreateContainerResponse container) throws IOException {
         try (InputStream response = dockerRule.getClient().copyArchiveFromContainerCmd(container.getId(), "testReadFile").exec()) {
-            boolean bytesAvailable = response.available() > 0;
+            boolean bytesAvailable = response.read() != -1;
             assertTrue( "The file was not copied to the container.", bytesAvailable);
         }
     }
@@ -138,7 +137,7 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
                 .exec();
         // await exid code
         int exitCode = dockerRule.getClient().waitContainerCmd(container.getId())
-                .exec(new WaitContainerResultCallback())
+                .start()
                 .awaitStatusCode();
         // check result
         assertThat(exitCode, equalTo(0));

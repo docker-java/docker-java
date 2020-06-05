@@ -9,8 +9,9 @@ import org.slf4j.LoggerFactory;
 import java.security.SecureRandom;
 
 import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 
 public class ExecCreateCmdImplIT extends CmdIT {
@@ -26,13 +27,13 @@ public class ExecCreateCmdImplIT extends CmdIT {
 
         LOG.info("Created container {}", container.toString());
 
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         ExecCreateCmdResponse execCreateCmdResponse = dockerRule.getClient().execCreateCmd(container.getId())
                 .withCmd("touch", "file.log").exec();
 
-        assertThat(execCreateCmdResponse.getId(), not(isEmptyString()));
+        assertThat(execCreateCmdResponse.getId(), not(is(emptyString())));
     }
 }

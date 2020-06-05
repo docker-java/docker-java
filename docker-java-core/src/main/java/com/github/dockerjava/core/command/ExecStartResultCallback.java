@@ -1,19 +1,20 @@
 package com.github.dockerjava.core.command;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
+import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.core.async.ResultCallbackTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dockerjava.api.model.Frame;
-import com.github.dockerjava.core.async.ResultCallbackTemplate;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  *
  * @author Marcus Linke
  *
+ * @deprecated use {@link com.github.dockerjava.api.async.ResultCallback.Adapter}
  */
+@Deprecated
 public class ExecStartResultCallback extends ResultCallbackTemplate<ExecStartResultCallback, Frame> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecStartResultCallback.class);

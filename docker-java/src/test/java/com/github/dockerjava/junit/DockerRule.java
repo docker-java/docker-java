@@ -1,14 +1,18 @@
 package com.github.dockerjava.junit;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.command.CreateContainerCmd;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.CreateNetworkCmd;
+import com.github.dockerjava.api.command.CreateNetworkResponse;
+import com.github.dockerjava.api.command.CreateVolumeCmd;
+import com.github.dockerjava.api.command.CreateVolumeResponse;
+import com.github.dockerjava.api.command.DockerCmdExecFactory;
+import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.cmd.CmdIT;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
-import com.github.dockerjava.core.command.BuildImageResultCallback;
-import com.github.dockerjava.core.command.PullImageResultCallback;
-import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory;
-import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
 import com.github.dockerjava.utils.LogContainerTestCallback;
 import org.junit.rules.ExternalResource;
 import org.junit.runner.Description;
@@ -17,9 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-
-import static com.github.dockerjava.cmd.CmdIT.FactoryType.JERSEY;
-import static com.github.dockerjava.cmd.CmdIT.FactoryType.NETTY;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Kanstantsin Shautsou
@@ -28,10 +31,15 @@ public class DockerRule extends ExternalResource {
     public static final Logger LOG = LoggerFactory.getLogger(DockerRule.class);
     public static final String DEFAULT_IMAGE = "busybox:latest";
 
-    private DockerClient nettyClient;
-    private DockerClient jerseyClient;
+    private DockerClient dockerClient;
 
     private CmdIT cmdIT;
+
+    private final Set<String> createdContainerIds = new HashSet<>();
+
+    private final Set<String> createdNetworkIds = new HashSet<>();
+
+    private final Set<String> createdVolumeNames = new HashSet<>();
 
     public DockerRule(CmdIT cmdIT) {
         this.cmdIT = cmdIT;
@@ -39,26 +47,46 @@ public class DockerRule extends ExternalResource {
 
 
     public DockerClient getClient() {
-        if (cmdIT.getFactoryType() == NETTY) {
-            if (nettyClient == null) {
-                nettyClient = DockerClientBuilder.getInstance(config())
-                        .withDockerCmdExecFactory((new NettyDockerCmdExecFactory())
-                                .withConnectTimeout(10 * 1000))
-                        .build();
-            }
-
-            return nettyClient;
-        } else if (cmdIT.getFactoryType() == JERSEY) {
-            if (jerseyClient == null) {
-                jerseyClient = DockerClientBuilder.getInstance(config())
-                        .withDockerCmdExecFactory((new JerseyDockerCmdExecFactory())
-                                .withConnectTimeout(10 * 1000))
-                        .build();
-            }
-            return jerseyClient;
+        if (dockerClient != null) {
+            return dockerClient;
         }
+        DockerCmdExecFactory execFactory = new DockerCmdExecFactoryDelegate(
+                cmdIT.getFactoryType().createExecFactory()
+        ) {
+            @Override
+            public CreateContainerCmd.Exec createCreateContainerCmdExec() {
+                CreateContainerCmd.Exec exec = super.createCreateContainerCmdExec();
+                return command -> {
+                    CreateContainerResponse response = exec.exec(command);
+                    createdContainerIds.add(response.getId());
+                    return response;
+                };
+            }
 
-        throw new IllegalStateException("Why factory type is not set?");
+            @Override
+            public CreateNetworkCmd.Exec createCreateNetworkCmdExec() {
+                CreateNetworkCmd.Exec exec = super.createCreateNetworkCmdExec();
+                return command -> {
+                    CreateNetworkResponse response = exec.exec(command);
+                    createdNetworkIds.add(response.getId());
+                    return response;
+                };
+            }
+
+            @Override
+            public CreateVolumeCmd.Exec createCreateVolumeCmdExec() {
+                CreateVolumeCmd.Exec exec = super.createCreateVolumeCmdExec();
+                return command -> {
+                    CreateVolumeResponse response = exec.exec(command);
+                    createdVolumeNames.add(response.getName());
+                    return response;
+                };
+            }
+        };
+
+        return dockerClient = DockerClientBuilder.getInstance(config())
+                .withDockerCmdExecFactory(execFactory)
+                .build();
     }
 
     @Override
@@ -79,8 +107,8 @@ public class DockerRule extends ExternalResource {
             // need to block until image is pulled completely
             getClient().pullImageCmd("busybox")
                     .withTag("latest")
-                    .exec(new PullImageResultCallback())
-                    .awaitSuccess();
+                    .start()
+                    .awaitCompletion();
         }
 
 //        assertThat(getClient(), notNullValue());
@@ -90,6 +118,48 @@ public class DockerRule extends ExternalResource {
     @Override
     protected void after() {
 //        LOG.debug("======================= END OF AFTERTEST =======================");
+        createdContainerIds.parallelStream().forEach(containerId -> {
+            try {
+                dockerClient.removeContainerCmd(containerId)
+                        .withForce(true)
+                        .withRemoveVolumes(true)
+                        .exec();
+            } catch (ConflictException | NotFoundException ignored) {
+            } catch (Throwable e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
+                LOG.debug("Failed to remove container {}", containerId, e);
+            }
+        });
+        createdNetworkIds.parallelStream().forEach(networkId -> {
+            try {
+                dockerClient.removeNetworkCmd(networkId).exec();
+            } catch (ConflictException | NotFoundException ignored) {
+            } catch (Throwable e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
+                LOG.debug("Failed to remove network {}", networkId, e);
+            }
+        });
+        createdVolumeNames.parallelStream().forEach(volumeName -> {
+            try {
+                dockerClient.removeVolumeCmd(volumeName).exec();
+            } catch (ConflictException | NotFoundException ignored) {
+            } catch (Throwable e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
+                LOG.debug("Failed to remove volume {}", volumeName, e);
+            }
+        });
+
+        try {
+            dockerClient.close();
+        } catch (Exception e) {
+            LOG.warn("Failed to close the DockerClient", e);
+        }
     }
 
     private static DefaultDockerClientConfig config() {
@@ -109,7 +179,7 @@ public class DockerRule extends ExternalResource {
     public String buildImage(File baseDir) throws Exception {
         return getClient().buildImageCmd(baseDir)
                 .withNoCache(true)
-                .exec(new BuildImageResultCallback())
+                .start()
                 .awaitImageId();
     }
 
@@ -122,13 +192,7 @@ public class DockerRule extends ExternalResource {
     }
 
     public String getKind() {
-        if (cmdIT.getFactoryType() == NETTY) {
-            return "netty";
-        } else if (cmdIT.getFactoryType() == JERSEY) {
-            return "jersey";
-        }
-
-        return "default";
+        return cmdIT.getFactoryType().name().toLowerCase();
     }
 
     public void ensureContainerRemoved(String container1Name) {

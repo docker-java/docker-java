@@ -1,11 +1,8 @@
 package com.github.dockerjava.api.command;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 
@@ -13,7 +10,8 @@ import javax.annotation.CheckForNull;
  * part of {@link GraphDriver}
  * @author Kanstantsin Shautsou
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode
+@ToString
 public class GraphData {
 
     @JsonProperty("RootDir")
@@ -109,20 +107,5 @@ public class GraphData {
     public GraphData withDir(String dir) {
         this.dir = dir;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
-    }
-
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

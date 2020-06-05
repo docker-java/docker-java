@@ -1,9 +1,7 @@
 package com.github.dockerjava.api.command;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class HealthStateLog {
 
     @JsonProperty("Start")
@@ -13,7 +11,7 @@ public class HealthStateLog {
     private String end;
 
     @JsonProperty("ExitCode")
-    private Integer exitCode;
+    private Long exitCode;
 
     @JsonProperty("Output")
     private String output;
@@ -26,7 +24,16 @@ public class HealthStateLog {
         return end;
     }
 
+    /**
+     *
+     * @deprecated use {@link #getExitCodeLong()}
+     */
+    @Deprecated
     public Integer getExitCode() {
+        return exitCode != null ? exitCode.intValue() : null;
+    }
+
+    public Long getExitCodeLong() {
         return exitCode;
     }
 

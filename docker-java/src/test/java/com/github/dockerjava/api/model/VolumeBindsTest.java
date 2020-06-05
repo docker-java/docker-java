@@ -1,19 +1,32 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dockerjava.test.serdes.JSONTestHelper;
 import org.junit.Test;
 
 import java.io.IOException;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class VolumeBindsTest {
+
+    @Test
+    public void usesToJson() throws Exception {
+        VolumeBinds binds = new VolumeBinds(
+                new VolumeBind("/bar", "/foo"),
+                new VolumeBind("/bop", "/bip")
+        );
+        String json = JSONTestHelper.getMapper().writeValueAsString(binds);
+
+        assertThat(json, is("{\"/foo\":\"/bar\",\"/bip\":\"/bop\"}"));
+    }
+
     @Test
     public void t() throws IOException {
         String s = "{\"/data\":\"/some/path\"}";
-        ObjectMapper objectMapper = new ObjectMapper();
-        VolumeBinds volumeBinds = objectMapper.readValue(s, VolumeBinds.class);
+        VolumeBinds volumeBinds = JSONTestHelper.getMapper().readValue(s, VolumeBinds.class);
         VolumeBind[] binds = volumeBinds.getBinds();
         assertEquals(binds.length, 1);
         assertEquals(binds[0].getHostPath(), "/some/path");
@@ -23,8 +36,7 @@ public class VolumeBindsTest {
     @Test(expected = JsonMappingException.class)
     public void t1() throws IOException {
         String s = "{\"/data\": {} }";
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.readValue(s, VolumeBinds.class);
+        JSONTestHelper.getMapper().readValue(s, VolumeBinds.class);
     }
 
 }

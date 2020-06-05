@@ -1,13 +1,9 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
@@ -21,8 +17,8 @@ import static java.util.Objects.requireNonNull;
  * Used in `/containers/create`, and in inspect container.
  * TODO exclude usage for 2 different models.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class HostConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -74,7 +70,7 @@ public class HostConfig implements Serializable {
     @JsonProperty("MemorySwappiness")
     private Long memorySwappiness;
 
-    @JsonProperty("NanoCPUs")
+    @JsonProperty("NanoCpus")
     private Long nanoCPUs;
 
     @JsonProperty("CapAdd")
@@ -115,6 +111,12 @@ public class HostConfig implements Serializable {
 
     @JsonProperty("DeviceCgroupRules")
     private List<String> deviceCgroupRules;
+
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_40}
+     */
+    @JsonProperty("DeviceRequests")
+    private List<DeviceRequest> deviceRequests;
 
     /**
      * @since {@link RemoteApiVersion#VERSION_1_25}
@@ -1042,6 +1044,16 @@ public class HostConfig implements Serializable {
     }
 
     @CheckForNull
+    public List<DeviceRequest> getDeviceRequests() {
+        return deviceRequests;
+    }
+
+    public HostConfig withDeviceRequests(List<DeviceRequest> deviceRequests) {
+        this.deviceRequests = deviceRequests;
+        return this;
+    }
+
+    @CheckForNull
     public Long getNanoCPUs() {
         return nanoCPUs;
     }
@@ -1229,20 +1241,5 @@ public class HostConfig implements Serializable {
     public HostConfig withCpuRealtimeRuntime(Long cpuRealtimeRuntime) {
         this.cpuRealtimeRuntime = cpuRealtimeRuntime;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
-    }
-
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

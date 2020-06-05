@@ -1,10 +1,8 @@
 package com.github.dockerjava.core.command;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.github.dockerjava.api.command.StartContainerCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.exception.NotModifiedException;
@@ -12,7 +10,6 @@ import com.github.dockerjava.api.exception.NotModifiedException;
 /**
  * Start a container
  */
-@JsonInclude(NON_EMPTY)
 public class StartContainerCmdImpl extends AbstrDockerCmd<StartContainerCmd, Void> implements StartContainerCmd {
 
     @JsonIgnore

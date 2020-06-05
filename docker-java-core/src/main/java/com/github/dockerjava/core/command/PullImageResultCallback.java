@@ -18,7 +18,9 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Marcus Linke
  *
+ * @deprecated use {@link com.github.dockerjava.api.command.PullImageResultCallback}
  */
+@Deprecated
 public class PullImageResultCallback extends ResultCallbackTemplate<PullImageResultCallback, PullResponseItem> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PullImageResultCallback.class);

@@ -3,20 +3,21 @@
  */
 package com.github.dockerjava.core.command;
 
-import java.util.concurrent.TimeUnit;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.BuildResponseItem;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  *
  * @author Marcus Linke
  *
+ * @deprecated use {@link com.github.dockerjava.api.command.BuildImageResultCallback}
  */
+@Deprecated
 public class BuildImageResultCallback extends ResultCallbackTemplate<BuildImageResultCallback, BuildResponseItem> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BuildImageResultCallback.class);

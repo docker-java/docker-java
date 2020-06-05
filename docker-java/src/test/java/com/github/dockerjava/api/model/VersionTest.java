@@ -1,8 +1,8 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.core.RemoteApiVersion;
+import com.github.dockerjava.test.serdes.JSONTestHelper;
 import org.junit.Test;
 
 import java.util.Collections;
@@ -23,8 +23,7 @@ public class VersionTest {
 
     @Test
     public void testSerDer1() throws Exception {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(Version.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(Version.class);
 
         final Version version = testRoundTrip(RemoteApiVersion.VERSION_1_22,
                 "/version/1.json",
@@ -45,8 +44,7 @@ public class VersionTest {
 
     @Test
     public void version_1_38() throws Exception {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(Version.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(Version.class);
 
         final Version version = testRoundTrip(RemoteApiVersion.VERSION_1_38,
                 "/version/lcow.json",

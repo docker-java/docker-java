@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.command;
 
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.PullResponseItem;
 
@@ -40,6 +41,11 @@ public interface PullImageCmd extends AsyncDockerCmd<PullImageCmd, PullResponseI
     PullImageCmd withRegistry(String registry);
 
     PullImageCmd withAuthConfig(AuthConfig authConfig);
+
+    @Override
+    default ResultCallback.Adapter<PullResponseItem> start() {
+        return exec(new PullImageResultCallback());
+    }
 
     interface Exec extends DockerCmdAsyncExec<PullImageCmd, PullResponseItem> {
     }

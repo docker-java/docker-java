@@ -1,28 +1,16 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.ObjectCodec;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.node.NullNode;
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.builder.EqualsBuilder;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.EqualsAndHashCode;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import static org.apache.commons.lang.StringUtils.isEmpty;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * A container for port bindings, made available as a {@link Map} via its {@link #getBindings()} method.
@@ -34,8 +22,6 @@ import static org.apache.commons.lang.StringUtils.isEmpty;
  * @see NetworkSettings#getPorts()
  */
 @SuppressWarnings(value = "checkstyle:equalshashcode")
-@JsonDeserialize(using = Ports.Deserializer.class)
-@JsonSerialize(using = Ports.Serializer.class)
 public class Ports implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -66,7 +52,10 @@ public class Ports implements Serializable {
     public void bind(ExposedPort exposedPort, Binding binding) {
         if (ports.containsKey(exposedPort)) {
             Binding[] bindings = ports.get(exposedPort);
-            ports.put(exposedPort, (Binding[]) ArrayUtils.add(bindings, binding));
+            Binding[] newBindings = new Binding[bindings.length + 1];
+            System.arraycopy(bindings, 0, newBindings, 0, bindings.length);
+            newBindings[newBindings.length - 1] = binding;
+            ports.put(exposedPort, newBindings);
         } else {
             if (binding == null) {
                 ports.put(exposedPort, null);
@@ -117,7 +106,9 @@ public class Ports implements Serializable {
      * @see Ports#bind(ExposedPort, Binding)
      * @see ExposedPort
      */
-    public static class Binding {
+    @EqualsAndHashCode
+    public static class Binding implements Serializable {
+        private static final long serialVersionUID = 1L;
 
         /**
          * Creates a {@link Binding} for the given {@link #getHostPortSpec() port spec}, leaving the {@link #getHostIp() IP address}
@@ -186,7 +177,7 @@ public class Ports implements Serializable {
          * @see ExposedPort
          */
         public Binding(String hostIp, String hostPortSpec) {
-            this.hostIp = isEmpty(hostIp) ? null : hostIp;
+            this.hostIp = hostIp == null || hostIp.length() == 0 ? null : hostIp;
             this.hostPortSpec = hostPortSpec;
         }
 
@@ -248,7 +239,7 @@ public class Ports implements Serializable {
          */
         @Override
         public String toString() {
-            if (isEmpty(hostIp)) {
+            if (hostIp == null || hostIp.length() == 0) {
                 return hostPortSpec;
             } else if (hostPortSpec == null) {
                 return hostIp;
@@ -256,73 +247,42 @@ public class Ports implements Serializable {
                 return hostIp + ":" + hostPortSpec;
             }
         }
+    }
 
-        @Override
-        public boolean equals(Object obj) {
-            if (obj instanceof Binding) {
-                Binding other = (Binding) obj;
-                return new EqualsBuilder().append(hostIp, other.getHostIp()).append(hostPortSpec, other.getHostPortSpec())
-                        .isEquals();
+    @JsonCreator
+    public static Ports fromPrimitive(Map<String, List<Map<String, String>>> map) {
+        Ports out = new Ports();
+        for (Entry<String, List<Map<String, String>>> entry : map.entrySet()) {
+            ExposedPort exposedPort = ExposedPort.parse(entry.getKey());
+
+            if (entry.getValue() == null) {
+                out.bind(exposedPort, null);
             } else {
-                return super.equals(obj);
-            }
-        }
-    }
-
-    public static class Deserializer extends JsonDeserializer<Ports> {
-        @Override
-        public Ports deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-                throws IOException, JsonProcessingException {
-
-            Ports out = new Ports();
-            ObjectCodec oc = jsonParser.getCodec();
-            JsonNode node = oc.readTree(jsonParser);
-            for (Iterator<Map.Entry<String, JsonNode>> it = node.fields(); it.hasNext();) {
-
-                Map.Entry<String, JsonNode> portNode = it.next();
-                JsonNode bindingsArray = portNode.getValue();
-                if (bindingsArray.equals(NullNode.getInstance())) {
-                    out.bind(ExposedPort.parse(portNode.getKey()), null);
-                } else {
-                    for (int i = 0; i < bindingsArray.size(); i++) {
-                        JsonNode bindingNode = bindingsArray.get(i);
-                        if (!bindingNode.equals(NullNode.getInstance())) {
-                            String hostIp = bindingNode.get("HostIp").textValue();
-                            String hostPort = bindingNode.get("HostPort").textValue();
-                            out.bind(ExposedPort.parse(portNode.getKey()), new Binding(hostIp, hostPort));
-                        }
-                    }
+                for (Map<String, String> binding : entry.getValue()) {
+                    out.bind(exposedPort, new Binding(binding.get("HostIp"), binding.get("HostPort")));
                 }
             }
-            return out;
         }
+        return out;
     }
 
-    public static class Serializer extends JsonSerializer<Ports> {
-
-        @Override
-        public void serialize(Ports portBindings, JsonGenerator jsonGen, SerializerProvider serProvider)
-                throws IOException, JsonProcessingException {
-
-            jsonGen.writeStartObject();
-            for (Entry<ExposedPort, Binding[]> entry : portBindings.getBindings().entrySet()) {
-                jsonGen.writeFieldName(entry.getKey().toString());
-                if (entry.getValue() != null) {
-                    jsonGen.writeStartArray();
-                    for (Binding binding : entry.getValue()) {
-                        jsonGen.writeStartObject();
-                        jsonGen.writeStringField("HostIp", binding.getHostIp() == null ? "" : binding.getHostIp());
-                        jsonGen.writeStringField("HostPort", binding.getHostPortSpec() == null ? "" : binding.getHostPortSpec());
-                        jsonGen.writeEndObject();
-                    }
-                    jsonGen.writeEndArray();
-                } else {
-                    jsonGen.writeNull();
-                }
-            }
-            jsonGen.writeEndObject();
-        }
-
+    @JsonValue
+    public Map<String, List<Map<String, String>>> toPrimitive() {
+        // Use reduce-like collect to be able to put nulls into the values
+        return ports.entrySet().stream().collect(
+                HashMap::new,
+                (map, entry) -> {
+                    List<Map<String, String>> value = entry.getValue() == null ? null : Stream.of(entry.getValue())
+                            .map(binding -> {
+                                Map<String, String> result = new HashMap<>();
+                                result.put("HostIp", binding.getHostIp() == null ? "" : binding.getHostIp());
+                                result.put("HostPort", binding.getHostPortSpec() == null ? "" : binding.getHostPortSpec());
+                                return result;
+                            })
+                            .collect(Collectors.toList());
+                    map.put(entry.getKey().toString(), value);
+                },
+                HashMap::putAll
+        );
     }
-
 }

@@ -5,23 +5,23 @@ import java.util.Map;
 
 import javax.annotation.CheckForNull;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Representation of a Docker statistics.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class Statistics implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("read")
     private String read;
+
+    @JsonProperty("preread")
+    private String preread;
 
     /**
      * @since Docker Remote API 1.21
@@ -46,6 +46,9 @@ public class Statistics implements Serializable {
     @JsonProperty("cpu_stats")
     private CpuStatsConfig cpuStats;
 
+    @JsonProperty("num_procs")
+    private Long numProcs;
+
     /**
      * @since Docker Remote API 1.19
      */
@@ -60,6 +63,10 @@ public class Statistics implements Serializable {
 
     public String getRead() {
         return read;
+    }
+
+    public String getPreread() {
+        return preread;
     }
 
     /**
@@ -82,6 +89,10 @@ public class Statistics implements Serializable {
         return cpuStats;
     }
 
+    public Long getNumProcs() {
+        return numProcs;
+    }
+
     /**
      * The cpu statistic of last read, which is used for calculating the cpu usage percent.
      * It is not the exact copy of the {@link #getCpuStats()}.
@@ -100,10 +111,5 @@ public class Statistics implements Serializable {
 
     public PidsStatsConfig getPidsStats() {
         return pidsStats;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
     }
 }

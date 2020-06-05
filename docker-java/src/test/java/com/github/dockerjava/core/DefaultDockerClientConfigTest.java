@@ -90,6 +90,19 @@ public class DefaultDockerClientConfigTest {
         assertEquals(config, EXAMPLE_CONFIG);
     }
 
+    @Test
+    public void emptyHost() {
+        Map<String, String> env = new HashMap<>();
+        env.put(DefaultDockerClientConfig.DOCKER_HOST, " ");
+
+        DefaultDockerClientConfig config = buildConfig(env, new Properties());
+
+        assertEquals(
+            config.getDockerHost().toString(),
+            DefaultDockerClientConfig.DEFAULT_PROPERTIES.get(DefaultDockerClientConfig.DOCKER_HOST)
+        );
+    }
+
     private DefaultDockerClientConfig buildConfig(Map<String, String> env, Properties systemProperties) {
         return DefaultDockerClientConfig.createDefaultConfigBuilder(env, systemProperties).build();
     }
@@ -174,6 +187,12 @@ public class DefaultDockerClientConfigTest {
     @Test()
     public void testUnixHostScheme() throws Exception {
         new DefaultDockerClientConfig(URI.create("unix://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
+                null);
+    }
+
+    @Test()
+    public void testNpipeHostScheme() throws Exception {
+        new DefaultDockerClientConfig(URI.create("npipe://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
                 null);
     }
 

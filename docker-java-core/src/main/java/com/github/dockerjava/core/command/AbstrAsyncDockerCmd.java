@@ -9,7 +9,7 @@ import com.github.dockerjava.api.command.DockerCmdAsyncExec;
 public abstract class AbstrAsyncDockerCmd<CMD_T extends AsyncDockerCmd<CMD_T, A_RES_T>, A_RES_T> implements
         AsyncDockerCmd<CMD_T, A_RES_T> {
 
-    protected DockerCmdAsyncExec<CMD_T, A_RES_T> execution;
+    protected transient DockerCmdAsyncExec<CMD_T, A_RES_T> execution;
 
     public AbstrAsyncDockerCmd(DockerCmdAsyncExec<CMD_T, A_RES_T> execution) {
         checkNotNull(execution, "execution was not specified");

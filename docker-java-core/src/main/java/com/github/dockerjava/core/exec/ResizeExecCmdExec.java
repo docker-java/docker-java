@@ -18,8 +18,8 @@ public class ResizeExecCmdExec extends AbstrSyncDockerCmdExec<ResizeExecCmd, Voi
 
     @Override
     protected Void execute(ResizeExecCmd command) {
-        WebTarget webResource = getBaseResource().path("/exec/{id}/resize").resolveTemplate("id",
-                command.getExecId()).queryParam("h", command.getHeight()).queryParam("w", command.getWidth());
+        WebTarget webResource = getBaseResource().path("/exec/{id}/resize")
+            .resolveTemplate("id", command.getExecId()).queryParam("h", command.getHeight()).queryParam("w", command.getWidth());
 
         LOGGER.trace("POST: {}", webResource);
 

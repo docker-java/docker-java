@@ -1,12 +1,9 @@
 package com.github.dockerjava.api.command;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.model.ContainerConfig;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.util.List;
@@ -16,7 +13,8 @@ import java.util.List;
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  *
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode
+@ToString
 public class InspectImageResponse {
 
     @JsonProperty("Architecture")
@@ -371,20 +369,5 @@ public class InspectImageResponse {
     public InspectImageResponse withRootFS(RootFS rootFS) {
         this.rootFS = rootFS;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
-    }
-
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

@@ -13,6 +13,7 @@ public class CacheFromEncoder {
     private CacheFromEncoder() {
     }
 
+    // This instance MUST NOT be used for domain-specific serialization of the docker-java types
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public static String jsonEncode(Collection<String> imageIds) {

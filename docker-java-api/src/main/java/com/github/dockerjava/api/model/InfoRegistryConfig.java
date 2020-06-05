@@ -1,10 +1,8 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
@@ -14,7 +12,8 @@ import java.util.Map;
 /**
  * @since ~{@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_20}
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode
+@ToString
 public final class InfoRegistryConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -78,26 +77,14 @@ public final class InfoRegistryConfig implements Serializable {
         return this;
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-       return EqualsBuilder.reflectionEquals(this, o);
-    }
-
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
-
     /**
      * @since ~{@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_20}
      */
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class IndexConfig {
+    @EqualsAndHashCode
+    @ToString
+    public static final class IndexConfig implements Serializable {
+        private static final long serialVersionUID = 1L;
+
         @JsonProperty("Mirrors")
         private List<String> mirrors;
 
@@ -172,21 +159,6 @@ public final class InfoRegistryConfig implements Serializable {
         public IndexConfig withSecure(Boolean secure) {
             this.secure = secure;
             return this;
-        }
-
-        @Override
-        public String toString() {
-            return ToStringBuilder.reflectionToString(this);
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            return EqualsBuilder.reflectionEquals(this, o);
-        }
-
-        @Override
-        public int hashCode() {
-            return HashCodeBuilder.reflectionHashCode(this);
         }
     }
 }

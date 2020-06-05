@@ -10,6 +10,9 @@ public interface CreateVolumeCmd extends SyncDockerCmd<CreateVolumeResponse> {
     String getName();
 
     @CheckForNull
+    Map<String, String> getLabels();
+
+    @CheckForNull
     String getDriver();
 
     @CheckForNull
@@ -20,6 +23,12 @@ public interface CreateVolumeCmd extends SyncDockerCmd<CreateVolumeResponse> {
      *            - The new volume’s name. If not specified, Docker generates a name.
      */
     CreateVolumeCmd withName(String name);
+
+    /**
+     * @param labels
+     *            - A mapping of labels keys and values. Labels are a mechanism for applying metadata to Docker objects.
+     */
+    CreateVolumeCmd withLabels(Map<String, String> labels);
 
     /**
      * @param driver

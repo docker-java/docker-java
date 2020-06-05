@@ -1,12 +1,12 @@
 package com.github.dockerjava.cmd;
 
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.core.command.UpdateContainerCmdImpl;
+import com.github.dockerjava.test.serdes.JSONTestHelper;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -82,8 +82,7 @@ public class UpdateContainerCmdIT extends CmdIT {
     @Ignore("impossible to serder because model bundled in cmd")
     @Test
     public void serDerDocs1() throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(UpdateContainerCmdImpl.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(UpdateContainerCmdImpl.class);
 
         final UpdateContainerCmdImpl upd = testRoundTrip(VERSION_1_22,
                 "/containers/container/update/docs.json",

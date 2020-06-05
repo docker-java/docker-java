@@ -9,6 +9,7 @@ import javax.ws.rs.client.ClientResponseContext;
 import javax.ws.rs.client.ClientResponseFilter;
 import javax.ws.rs.core.MediaType;
 
+import com.github.dockerjava.core.DefaultDockerClientConfig;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +32,21 @@ import com.github.dockerjava.api.exception.UnauthorizedException;
  * @author Marcus Linke
  *
  */
+@Deprecated
 public class ResponseStatusExceptionFilter implements ClientResponseFilter {
 
     private static final Logger LOG = LoggerFactory.getLogger(ResponseStatusExceptionFilter.class);
+
+    private final ObjectMapper objectMapper;
+
+    @Deprecated
+    public ResponseStatusExceptionFilter() {
+        this(DefaultDockerClientConfig.createDefaultConfigBuilder().build().getObjectMapper());
+    }
+
+    public ResponseStatusExceptionFilter(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     @Override
     public void filter(ClientRequestContext requestContext, ClientResponseContext responseContext) throws IOException {
@@ -84,7 +97,7 @@ public class ResponseStatusExceptionFilter implements ClientResponseFilter {
 
                 if (MediaType.APPLICATION_JSON_TYPE.equals(mediaType)) {
                     try {
-                        JsonNode node = new ObjectMapper().readTree(message);
+                        JsonNode node = objectMapper.readTree(message);
                         if (node != null) {
                             JsonNode messageNode = node.get("message");
                             if (messageNode != null && messageNode.isTextual()) {

@@ -2,11 +2,12 @@ package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.EqualsAndHashCode;
 
 import javax.annotation.Nonnull;
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * Represents a bind mounted volume in a Docker container.
@@ -20,8 +21,21 @@ import java.io.Serializable;
  *
  * @see Bind
  */
+@EqualsAndHashCode
 public class Volume implements Serializable {
     private static final long serialVersionUID = 1L;
+
+    /**
+     * Handles the {@code { "Destination" : { "path" : "/path/to/mount" } }} variant.
+     * @param path the destination path of the bind mounted volume
+     * @return a volume instance referring to the given path.
+     * @deprecated use {@link #parse(Map)}
+     */
+    @Nonnull
+    @Deprecated
+    public static Volume parse(@JsonProperty("path") String path) {
+        return new Volume(path);
+    }
 
     /**
      * Handles the {@code { "Destination" : { "path" : "/path/to/mount" } }} variant.
@@ -30,8 +44,8 @@ public class Volume implements Serializable {
      */
     @Nonnull
     @JsonCreator
-    public static Volume parse(@JsonProperty("path") String path) {
-        return new Volume(path);
+    public static Volume parse(Map<String, String> primitive) {
+        return new Volume(primitive.get("path"));
     }
 
     private String path;
@@ -50,23 +64,8 @@ public class Volume implements Serializable {
     }
 
     @Override
+    @JsonValue
     public String toString() {
         return getPath();
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Volume) {
-            Volume other = (Volume) obj;
-            return new EqualsBuilder().append(path, other.getPath()).isEquals();
-        } else {
-            return super.equals(obj);
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(path).toHashCode();
-    }
-
 }

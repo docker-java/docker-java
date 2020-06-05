@@ -4,6 +4,7 @@
 package com.github.dockerjava.core;
 
 import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.test.serdes.JSONTestHelper;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -12,7 +13,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class DockerConfigFileTest {
     @Rule
@@ -156,7 +157,7 @@ public class DockerConfigFileTest {
     }
 
     private DockerConfigFile runTest(String testFileName) throws IOException {
-        return DockerConfigFile.loadConfig(new File(FILESROOT, testFileName).getAbsolutePath());
+        return DockerConfigFile.loadConfig(JSONTestHelper.getMapper(), new File(FILESROOT, testFileName).getAbsolutePath());
     }
 
 }

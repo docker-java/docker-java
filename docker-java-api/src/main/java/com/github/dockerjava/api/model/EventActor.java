@@ -1,9 +1,8 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
@@ -13,6 +12,8 @@ import java.util.Map;
  * @author Kanstantsin Shautsou
  * @since 1.22
  */
+@EqualsAndHashCode
+@ToString
 public class EventActor implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -58,20 +59,5 @@ public class EventActor implements Serializable {
     public EventActor withAttributes(Map<String, String> attributes) {
         this.attributes = attributes;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
-    }
-
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

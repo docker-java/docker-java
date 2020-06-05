@@ -1,27 +1,14 @@
 package com.github.dockerjava.api.model;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.ObjectCodec;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.node.NullNode;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
-@JsonSerialize(using = ExposedPorts.Serializer.class)
-@JsonDeserialize(using = ExposedPorts.Deserializer.class)
 public class ExposedPorts implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -39,40 +26,19 @@ public class ExposedPorts implements Serializable {
         return exposedPorts;
     }
 
-    public static class Serializer extends JsonSerializer<ExposedPorts> {
-
-        @Override
-        public void serialize(ExposedPorts exposedPorts, JsonGenerator jsonGen, SerializerProvider serProvider)
-                throws IOException, JsonProcessingException {
-
-            jsonGen.writeStartObject();
-            for (ExposedPort exposedPort : exposedPorts.getExposedPorts()) {
-                jsonGen.writeFieldName(exposedPort.toString());
-                jsonGen.writeStartObject();
-                jsonGen.writeEndObject();
-            }
-            jsonGen.writeEndObject();
-        }
-
+    @JsonCreator
+    public static ExposedPorts fromPrimitive(Map<String, Object> object) {
+        return new ExposedPorts(
+                object.keySet().stream().map(ExposedPort::parse).toArray(ExposedPort[]::new)
+        );
     }
 
-    public static class Deserializer extends JsonDeserializer<ExposedPorts> {
-        @Override
-        public ExposedPorts deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-                throws IOException, JsonProcessingException {
-
-            List<ExposedPort> exposedPorts = new ArrayList<>();
-            ObjectCodec oc = jsonParser.getCodec();
-            JsonNode node = oc.readTree(jsonParser);
-            for (Iterator<Map.Entry<String, JsonNode>> it = node.fields(); it.hasNext();) {
-
-                Map.Entry<String, JsonNode> field = it.next();
-                if (!field.getValue().equals(NullNode.getInstance())) {
-                    exposedPorts.add(ExposedPort.parse(field.getKey()));
-                }
-            }
-            return new ExposedPorts(exposedPorts.toArray(new ExposedPort[0]));
-        }
+    @JsonValue
+    public Map<String, Object> toPrimitive() {
+        return Stream.of(exposedPorts).collect(Collectors.toMap(
+                ExposedPort::toString,
+                __ -> new Object()
+        ));
     }
 
 }

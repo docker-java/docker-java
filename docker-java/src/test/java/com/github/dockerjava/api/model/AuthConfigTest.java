@@ -1,8 +1,8 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.core.RemoteApiVersion;
+import com.github.dockerjava.test.serdes.JSONTestHelper;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -24,8 +24,7 @@ public class AuthConfigTest {
 
     @Test
     public void serderDocs1() throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(AuthConfig.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(AuthConfig.class);
 
         final AuthConfig authConfig = testRoundTrip(RemoteApiVersion.VERSION_1_22,
                 "/other/AuthConfig/docs1.json",
@@ -46,8 +45,7 @@ public class AuthConfigTest {
 
     @Test
     public void serderDocs2() throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(AuthConfig.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(AuthConfig.class);
 
         final AuthConfig authConfig = testRoundTrip(RemoteApiVersion.VERSION_1_22,
                 "/other/AuthConfig/docs2.json",
@@ -65,8 +63,7 @@ public class AuthConfigTest {
 
     @Test
     public void compatibleWithIdentitytoken() throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(AuthConfig.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(AuthConfig.class);
         final AuthConfig authConfig = testRoundTrip(RemoteApiVersion.VERSION_1_23,
                 "/other/AuthConfig/docs1.json",
                 type
@@ -82,8 +79,7 @@ public class AuthConfigTest {
 
     @Test
     public void shouldNotFailWithStackOrchestratorInConfig() throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(AuthConfig.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(AuthConfig.class);
         final AuthConfig authConfig = testRoundTrip(RemoteApiVersion.VERSION_1_25,
                 "/other/AuthConfig/orchestrators.json",
                 type

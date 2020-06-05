@@ -26,6 +26,11 @@ public interface WaitContainerCmd extends AsyncDockerCmd<WaitContainerCmd, WaitR
     @Override
     <T extends ResultCallback<WaitResponse>> T exec(T resultCallback);
 
+    @Override
+    default WaitContainerResultCallback start() {
+        return exec(new WaitContainerResultCallback());
+    }
+
     interface Exec extends DockerCmdAsyncExec<WaitContainerCmd, WaitResponse> {
     }
 

@@ -1,25 +1,12 @@
 package com.github.dockerjava.api.model;
 
-import java.io.IOException;
 import java.io.Serializable;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.EqualsAndHashCode;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.ObjectCodec;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-@JsonSerialize(using = VolumesFrom.Serializer.class)
-@JsonDeserialize(using = VolumesFrom.Deserializer.class)
+@EqualsAndHashCode
 public class VolumesFrom implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -53,6 +40,7 @@ public class VolumesFrom implements Serializable {
      * @throws IllegalArgumentException
      *             if the specification cannot be parsed
      */
+    @JsonCreator
     public static VolumesFrom parse(String serialized) {
         try {
             String[] parts = serialized.split(":");
@@ -73,22 +61,6 @@ public class VolumesFrom implements Serializable {
         }
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof VolumesFrom) {
-            VolumesFrom other = (VolumesFrom) obj;
-            return new EqualsBuilder().append(container, other.getContainer())
-                    .append(accessMode, other.getAccessMode()).isEquals();
-        } else {
-            return super.equals(obj);
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(container).append(accessMode).toHashCode();
-    }
-
     /**
      * Returns a string representation of this {@link VolumesFrom} suitable for inclusion in a JSON message. The format is
      * <code>&lt;container&gt;:&lt;access mode&gt;</code>, like the argument in {@link #parse(String)}.
@@ -96,32 +68,9 @@ public class VolumesFrom implements Serializable {
      * @return a string representation of this {@link VolumesFrom}
      */
     @Override
+    @JsonValue
     public String toString() {
         return container + ":" + accessMode.toString();
-    }
-
-    public static class Serializer extends JsonSerializer<VolumesFrom> {
-
-        @Override
-        public void serialize(VolumesFrom volumeFrom, JsonGenerator jsonGen, SerializerProvider serProvider)
-                throws IOException, JsonProcessingException {
-
-            jsonGen.writeString(volumeFrom.toString());
-
-        }
-
-    }
-
-    public static class Deserializer extends JsonDeserializer<VolumesFrom> {
-        @Override
-        public VolumesFrom deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-                throws IOException, JsonProcessingException {
-
-            ObjectCodec oc = jsonParser.getCodec();
-            JsonNode node = oc.readTree(jsonParser);
-            return VolumesFrom.parse(node.asText());
-
-        }
     }
 
 }

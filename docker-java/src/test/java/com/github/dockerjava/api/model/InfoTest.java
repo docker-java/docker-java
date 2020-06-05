@@ -1,9 +1,9 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.model.InfoRegistryConfig.IndexConfig;
 import com.github.dockerjava.core.RemoteApiVersion;
+import com.github.dockerjava.test.serdes.JSONTestHelper;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
@@ -24,7 +24,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
@@ -35,8 +35,7 @@ public class InfoTest {
 
     @Test
     public void serder1Json() throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(Info.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(Info.class);
 
         final Info info = testRoundTrip(VERSION_1_22,
                 "info/1.json",
@@ -81,9 +80,9 @@ public class InfoTest {
 
         assertThat(info.getExperimentalBuild(), is(false));
 
-        assertThat(info.getHttpProxy(), isEmptyString());
-        assertThat(info.getHttpsProxy(), isEmptyString());
-        assertThat(info.getNoProxy(), isEmptyString());
+        assertThat(info.getHttpProxy(), is(emptyString()));
+        assertThat(info.getHttpsProxy(), is(emptyString()));
+        assertThat(info.getNoProxy(), is(emptyString()));
         assertThat(info.getOomKillDisable(), is(true));
         assertThat(info.getOsType(), equalTo("linux"));
 
@@ -175,8 +174,7 @@ public class InfoTest {
 
     @Test
     public void serder2Json() throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(Info.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(Info.class);
 
         final Info info = testRoundTrip(VERSION_1_22,
                 "info/2.json",
@@ -236,9 +234,9 @@ public class InfoTest {
 
         assertThat(info.getExperimentalBuild(), is(false));
 
-        assertThat(info.getHttpProxy(), isEmptyString());
-        assertThat(info.getHttpsProxy(), isEmptyString());
-        assertThat(info.getNoProxy(), isEmptyString());
+        assertThat(info.getHttpProxy(), is(emptyString()));
+        assertThat(info.getHttpsProxy(), is(emptyString()));
+        assertThat(info.getNoProxy(), is(emptyString()));
         assertThat(info.getOomKillDisable(), is(true));
         assertThat(info.getOsType(), equalTo("linux"));
 
@@ -332,8 +330,7 @@ public class InfoTest {
 
     @Test
     public void info_1_38() throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(Info.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(Info.class);
 
         final Info info = testRoundTrip(RemoteApiVersion.VERSION_1_38,
                 "info/lcow.json",

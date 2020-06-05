@@ -11,7 +11,6 @@ Import-Template:
  com.google.common.*;version="${guava.version:short}",
  io.netty.*;version="${netty.version:default}";resolution:=optional,
  javax.ws.rs.*;version="[2.0.0, 2.1.0)",
- org.apache.commons.codec.*;version="${commons-codec.version:short}",
  org.apache.commons.compress.*;version="${commons-compress.version:short}",
  org.apache.commons.io.*;version="${commons-io.version:short}",
  org.apache.commons.lang.*;version="${commons-lang.version:short}",

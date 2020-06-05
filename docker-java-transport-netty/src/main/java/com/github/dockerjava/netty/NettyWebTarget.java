@@ -13,6 +13,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.WebTarget;
 import com.google.common.collect.ImmutableSet;
 import io.netty.handler.codec.http.HttpConstants;
@@ -28,7 +29,6 @@ import com.google.common.collect.ImmutableMap;
  * @author Marcus Linke
  */
 public class NettyWebTarget implements WebTarget {
-    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private final ChannelProvider channelProvider;
 
@@ -45,16 +45,40 @@ public class NettyWebTarget implements WebTarget {
 
     private static final String PATH_SEPARATOR = "/";
 
+    private final ObjectMapper objectMapper;
+
+    @Deprecated
     public NettyWebTarget(ChannelProvider channelProvider, String host) {
-        this(channelProvider, host, ImmutableList.<String>of(), ImmutableMap.<String, String>of(),
-                ImmutableMap.<String, Set<String>>of());
+        this(
+                DefaultDockerClientConfig.createDefaultConfigBuilder().build().getObjectMapper(),
+                channelProvider,
+                host,
+                ImmutableList.of(),
+                ImmutableMap.of(),
+                ImmutableMap.of()
+        );
     }
 
-    private NettyWebTarget(ChannelProvider channelProvider,
-                      String host,
-                      ImmutableList<String> path,
-                      ImmutableMap<String, String> queryParams,
-                      ImmutableMap<String, Set<String>> queryParamsSet) {
+    public NettyWebTarget(ObjectMapper objectMapper, ChannelProvider channelProvider, String host) {
+        this(
+                objectMapper,
+                channelProvider,
+                host,
+                ImmutableList.of(),
+                ImmutableMap.of(),
+                ImmutableMap.of()
+        );
+    }
+
+    private NettyWebTarget(
+            ObjectMapper objectMapper,
+            ChannelProvider channelProvider,
+            String host,
+            ImmutableList<String> path,
+            ImmutableMap<String, String> queryParams,
+            ImmutableMap<String, Set<String>> queryParamsSet
+    ) {
+        this.objectMapper = objectMapper;
         this.channelProvider = channelProvider;
         this.host = host;
         this.path = path;
@@ -69,7 +93,7 @@ public class NettyWebTarget implements WebTarget {
             newPath.addAll(Arrays.asList(StringUtils.split(component, PATH_SEPARATOR)));
         }
 
-        return new NettyWebTarget(channelProvider, host, newPath.build(), queryParams, queryParamsSet);
+        return new NettyWebTarget(objectMapper, channelProvider, host, newPath.build(), queryParams, queryParamsSet);
     }
 
     public NettyInvocationBuilder request() {
@@ -90,7 +114,7 @@ public class NettyWebTarget implements WebTarget {
             resource = resource + "?" + StringUtils.join(params, "&");
         }
 
-        return new NettyInvocationBuilder(channelProvider, resource)
+        return new NettyInvocationBuilder(objectMapper, channelProvider, resource)
             .header("Host", host);
     }
 
@@ -112,7 +136,7 @@ public class NettyWebTarget implements WebTarget {
             component = component.replaceAll("\\{" + name + "\\}", value.toString());
             newPath.add(component);
         }
-        return new NettyWebTarget(channelProvider, host, newPath.build(), queryParams, queryParamsSet);
+        return new NettyWebTarget(objectMapper, channelProvider, host, newPath.build(), queryParams, queryParamsSet);
     }
 
     public NettyWebTarget queryParam(String name, Object value) {
@@ -120,7 +144,7 @@ public class NettyWebTarget implements WebTarget {
         if (value != null) {
             builder.put(name, value.toString());
         }
-        return new NettyWebTarget(channelProvider, host, path, builder.build(), queryParamsSet);
+        return new NettyWebTarget(objectMapper, channelProvider, host, path, builder.build(), queryParamsSet);
     }
 
     public NettyWebTarget queryParamsSet(String name, Set<?> values) {
@@ -132,14 +156,14 @@ public class NettyWebTarget implements WebTarget {
             }
             builder.put(name, valueBuilder.build());
         }
-        return new NettyWebTarget(channelProvider, host, path, queryParams, builder.build());
+        return new NettyWebTarget(objectMapper, channelProvider, host, path, queryParams, builder.build());
     }
 
     public NettyWebTarget queryParamsJsonMap(String name, Map<String, String> values) {
         if (values != null && !values.isEmpty()) {
             try {
                 // when param value is JSON string
-                return queryParam(name, MAPPER.writeValueAsString(values));
+                return queryParam(name, objectMapper.writeValueAsString(values));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

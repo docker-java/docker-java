@@ -1,9 +1,8 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,8 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class Network implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -93,13 +92,10 @@ public class Network implements Serializable {
         return labels;
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class ContainerNetworkConfig {
+    @EqualsAndHashCode
+    @ToString
+    public static class ContainerNetworkConfig implements Serializable {
+        private static final long serialVersionUID = 1L;
 
         @JsonProperty("EndpointID")
         private String endpointId;
@@ -128,15 +124,12 @@ public class Network implements Serializable {
         public String getIpv6Address() {
             return ipv6Address;
         }
-
-        @Override
-        public String toString() {
-            return ToStringBuilder.reflectionToString(this);
-        }
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Ipam {
+    @EqualsAndHashCode
+    @ToString
+    public static class Ipam implements Serializable {
+        private static final long serialVersionUID = 1L;
 
         @JsonProperty("Driver")
         private String driver;
@@ -174,13 +167,8 @@ public class Network implements Serializable {
             return this;
         }
 
-        @Override
-        public String toString() {
-            return ToStringBuilder.reflectionToString(this);
-        }
-
-        @JsonIgnoreProperties(ignoreUnknown = true)
-        public static class Config {
+        public static class Config implements Serializable {
+            private static final long serialVersionUID = 1L;
 
             @JsonProperty("Subnet")
             private String subnet;

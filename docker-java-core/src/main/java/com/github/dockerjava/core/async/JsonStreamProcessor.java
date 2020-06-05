@@ -9,32 +9,45 @@ import java.io.InputStream;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.dockerjava.api.async.ResultCallback;
+import com.github.dockerjava.core.DefaultDockerClientConfig;
 
 /**
  *
  * @author Marcus Linke
  *
  */
+@SuppressWarnings("unused")
+@Deprecated
 public class JsonStreamProcessor<T> implements ResponseStreamProcessor<T> {
 
     private static final JsonFactory JSON_FACTORY = new JsonFactory();
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private final TypeReference<T> typeReference;
 
-    private final Class<T> clazz;
+    private final ObjectMapper objectMapper;
 
+    @Deprecated
     public JsonStreamProcessor(Class<T> clazz) {
-        this.clazz = clazz;
+        this(
+                DefaultDockerClientConfig.createDefaultConfigBuilder().build().getObjectMapper(),
+                new TypeReference<T>() {
+                }
+        );
+    }
+
+    public JsonStreamProcessor(ObjectMapper objectMapper, TypeReference<T> typeReference) {
+        this.typeReference = typeReference;
+        this.objectMapper = objectMapper.copy().enable(JsonParser.Feature.AUTO_CLOSE_SOURCE);
     }
 
     @Override
     public void processResponseStream(InputStream response, ResultCallback<T> resultCallback) {
 
         resultCallback.onStart(response);
-        OBJECT_MAPPER.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
 
         try {
             JsonParser jp = JSON_FACTORY.createParser(response);
@@ -42,10 +55,10 @@ public class JsonStreamProcessor<T> implements ResponseStreamProcessor<T> {
             JsonToken nextToken = jp.nextToken();
             while (!closed && nextToken != null && nextToken != JsonToken.END_OBJECT) {
                 try {
-                    ObjectNode objectNode = OBJECT_MAPPER.readTree(jp);
+                    ObjectNode objectNode = objectMapper.readTree(jp);
                     // exclude empty item serialization into class #461
                     if (!objectNode.isEmpty(null)) {
-                        T next = OBJECT_MAPPER.treeToValue(objectNode, clazz);
+                        T next = objectMapper.convertValue(objectNode, typeReference);
                         resultCallback.onNext(next);
                     }
                 } catch (Exception e) {

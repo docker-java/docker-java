@@ -1,15 +1,10 @@
 package com.github.dockerjava.api.model;
 
 import static java.util.Objects.requireNonNull;
-import static org.apache.commons.lang.BooleanUtils.isNotTrue;
-import static org.apache.commons.lang.StringUtils.isEmpty;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.Nonnull;
 import java.io.Serializable;
@@ -17,7 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-@JsonInclude(Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class Device implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -89,7 +85,7 @@ public class Device implements Serializable {
             }
         }
 
-        if (isEmpty(dst)) {
+        if (dst == null || dst.length() == 0) {
             dst = src;
         }
 
@@ -108,13 +104,13 @@ public class Device implements Serializable {
         validModes.put("w", true);
         validModes.put("m", true);
 
-        if (isEmpty(deviceMode)) {
+        if (deviceMode == null || deviceMode.length() == 0) {
             return false;
         }
 
         for (char ch : deviceMode.toCharArray()) {
             final String mode = String.valueOf(ch);
-            if (isNotTrue(validModes.get(mode))) {
+            if (!Boolean.TRUE.equals(validModes.get(mode))) {
                 return false; // wrong mode
             }
             validModes.put(mode, false);
@@ -122,28 +118,4 @@ public class Device implements Serializable {
 
         return true;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Device) {
-            Device other = (Device) obj;
-            return new EqualsBuilder()
-                    .append(cGroupPermissions, other.getcGroupPermissions())
-                    .append(pathInContainer, other.getPathInContainer())
-                    .append(pathOnHost, other.getPathOnHost())
-                    .isEquals();
-        } else {
-            return super.equals(obj);
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder()
-                .append(cGroupPermissions)
-                .append(pathInContainer)
-                .append(pathOnHost)
-                .toHashCode();
-    }
-
 }

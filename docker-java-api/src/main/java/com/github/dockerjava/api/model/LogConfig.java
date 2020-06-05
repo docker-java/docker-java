@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
@@ -18,6 +20,8 @@ import java.util.Map;
  * docker will ignore them. In most cases setting the config option to null will suffice. Consult the docker remote API for a more detailed
  * and up-to-date explanation of the available types and their options.
  */
+@EqualsAndHashCode
+@ToString
 public class LogConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -62,6 +66,7 @@ public class LogConfig implements Serializable {
     public enum LoggingType {
         NONE("none"),
         DEFAULT("json-file"),
+        LOCAL("local"),
         ETWLOGS("etwlogs"),
         JSON_FILE("json-file"),
         SYSLOG("syslog"),

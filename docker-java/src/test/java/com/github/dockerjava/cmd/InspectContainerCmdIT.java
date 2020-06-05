@@ -21,7 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
@@ -42,7 +42,7 @@ public class InspectContainerCmdIT extends CmdIT {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("top")
                 .withName(containerName).exec();
         LOG.info("Created container {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         InspectContainerResponse containerInfo = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
         assertEquals(containerInfo.getId(), container.getId());
@@ -90,7 +90,7 @@ public class InspectContainerCmdIT extends CmdIT {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("top")
                 .withName(containerName).exec();
         LOG.info("Created container {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         InspectContainerCmd command = dockerRule.getClient().inspectContainerCmd(container.getId()).withSize(true);
         assertTrue(command.getSize());
@@ -117,7 +117,7 @@ public class InspectContainerCmdIT extends CmdIT {
 
         LOG.info("Created container {}", container.toString());
 
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
 
@@ -132,10 +132,25 @@ public class InspectContainerCmdIT extends CmdIT {
 
         LOG.info("Created container {}", container.toString());
 
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
 
         assertFalse(inspectContainerResponse.getNetworkSettings().getHairpinMode());
+    }
+
+    @Test
+    public void inspectContainerNanoCPUs() throws DockerException {
+
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
+            .withCmd("env").exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(is(emptyString())));
+
+        InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
+
+        assertThat(inspectContainerResponse.getHostConfig().getNanoCPUs(), is(0L));
     }
 }

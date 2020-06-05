@@ -13,7 +13,9 @@ import com.github.dockerjava.core.async.ResultCallbackTemplate;
  *
  * @author Marcus Linke
  *
+ * @deprecated use {@link com.github.dockerjava.api.async.ResultCallback.Adapter}
  */
+@Deprecated
 public class EventsResultCallback extends ResultCallbackTemplate<EventsResultCallback, Event> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EventsResultCallback.class);

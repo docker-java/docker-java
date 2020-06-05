@@ -1,19 +1,18 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class Task implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -228,58 +227,6 @@ public class Task implements Serializable {
     public Task withDesiredState(TaskState desiredState) {
         this.desiredState = desiredState;
         return this;
-    }
-
-    @Override
-    public boolean equals(java.lang.Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Task task = (Task) o;
-        return Objects.equals(this.id, task.id) &&
-                Objects.equals(this.version, task.version) &&
-                Objects.equals(this.createdAt, task.createdAt) &&
-                Objects.equals(this.updatedAt, task.updatedAt) &&
-                Objects.equals(this.name, task.name) &&
-                Objects.equals(this.labels, task.labels) &&
-                Objects.equals(this.spec, task.spec) &&
-                Objects.equals(this.serviceId, task.serviceId) &&
-                Objects.equals(this.slot, task.slot) &&
-                Objects.equals(this.nodeId, task.nodeId) &&
-                Objects.equals(this.assignedGenericResources, task.assignedGenericResources) &&
-                Objects.equals(this.status, task.status) &&
-                Objects.equals(this.desiredState, task.desiredState);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, version, createdAt, updatedAt, name, labels, spec, serviceId, slot,
-                nodeId, assignedGenericResources, status, desiredState);
-    }
-
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("class Task {\n");
-        sb.append("    ID: ").append(toIndentedString(id)).append("\n");
-        sb.append("    version: ").append(toIndentedString(version)).append("\n");
-        sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
-        sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
-        sb.append("    name: ").append(toIndentedString(name)).append("\n");
-        sb.append("    labels: ").append(toIndentedString(labels)).append("\n");
-        sb.append("    spec: ").append(toIndentedString(spec)).append("\n");
-        sb.append("    serviceId: ").append(toIndentedString(serviceId)).append("\n");
-        sb.append("    slot: ").append(toIndentedString(slot)).append("\n");
-        sb.append("    nodeId: ").append(toIndentedString(nodeId)).append("\n");
-        sb.append("    assignedGenericResources: ").append(toIndentedString(assignedGenericResources)).append("\n");
-        sb.append("    status: ").append(toIndentedString(status)).append("\n");
-        sb.append("    desiredState: ").append(toIndentedString(desiredState)).append("\n");
-        sb.append("}");
-        return sb.toString();
     }
 
     /**

@@ -1,8 +1,8 @@
 package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.model.ContainerConfig;
+import com.github.dockerjava.test.serdes.JSONTestHelper;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
@@ -28,8 +28,7 @@ import static org.hamcrest.Matchers.nullValue;
 public class InspectImageResponseTest {
     @Test
     public void serder1_22Json() throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(InspectImageResponse.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(InspectImageResponse.class);
 
         final InspectImageResponse inspectImage = testRoundTrip(VERSION_1_22,
                 "images/image1/inspect1.json",
@@ -85,7 +84,7 @@ public class InspectImageResponseTest {
         assertThat(inspectImage, notNullValue());
         assertThat(inspectImage.getArch(), is("amd64"));
         assertThat(inspectImage.getAuthor(), is("hack@worldticket.net"));
-        assertThat(inspectImage.getComment(), isEmptyString());
+        assertThat(inspectImage.getComment(), is(emptyString()));
 
         assertThat(inspectImage.getConfig(), notNullValue());
         assertThat(inspectImage.getConfig(), equalTo(config));
@@ -99,7 +98,7 @@ public class InspectImageResponseTest {
         assertThat(inspectImage.getDockerVersion(), is("0.8.1"));
         assertThat(inspectImage.getId(), is("sha256:ee45fe0d1fcdf1a0f9c2d1e36c6f4b3202bbb2032f14d7c9312b27bfcf6aee24"));
         assertThat(inspectImage.getOs(), is("linux"));
-        assertThat(inspectImage.getParent(), isEmptyString());
+        assertThat(inspectImage.getParent(), is(emptyString()));
         assertThat(inspectImage.getSize(), is(0L));
 
         assertThat(inspectImage.getRepoTags(), hasSize(1));
@@ -138,8 +137,7 @@ public class InspectImageResponseTest {
 
     @Test
     public void serder1_22_doc() throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(InspectImageResponse.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(InspectImageResponse.class);
 
         final InspectImageResponse inspectImage = testRoundTrip(VERSION_1_22,
                 "images/docImage/doc.json",
@@ -164,8 +162,7 @@ public class InspectImageResponseTest {
 
     @Test
     public void serder1_22_inspect_doc() throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(InspectImageResponse.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(InspectImageResponse.class);
 
         final InspectImageResponse inspectImage = testRoundTrip(VERSION_1_22,
                 "images/docImage/inspect_doc.json",
@@ -193,8 +190,7 @@ public class InspectImageResponseTest {
 
     @Test
     public void testOverlayNetworkRootDir() throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(InspectImageResponse.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(InspectImageResponse.class);
 
         final InspectImageResponse inspectImage = testRoundTrip(VERSION_1_22, "images/overlay/inspectOverlay.json", type);
 
@@ -210,8 +206,7 @@ public class InspectImageResponseTest {
 
     @Test
     public void inspectWindowsImage() throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(InspectImageResponse.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(InspectImageResponse.class);
 
         final InspectImageResponse inspectImage = testRoundTrip(VERSION_1_25,
                 "images/windowsImage/doc.json",

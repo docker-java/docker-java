@@ -3,9 +3,9 @@
  */
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -15,7 +15,8 @@ import java.util.Map;
  * @author Marcus Linke
  *
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode
+@ToString
 public class NetworkSettings implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -198,10 +199,5 @@ public class NetworkSettings implements Serializable {
      */
     public Integer getGlobalIPv6PrefixLen() {
         return globalIPv6PrefixLen;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
     }
 }

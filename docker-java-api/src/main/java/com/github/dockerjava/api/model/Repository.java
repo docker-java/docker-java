@@ -1,5 +1,8 @@
 package com.github.dockerjava.api.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -7,6 +10,8 @@ import java.net.URL;
 /**
  * A repository or image name.
  */
+@EqualsAndHashCode
+@ToString
 public class Repository implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -30,13 +35,6 @@ public class Repository implements Serializable {
      */
     public URL getURL() throws MalformedURLException {
         return new URL("http://" + name);
-    }
-
-    @Override
-    public String toString() {
-        return "Repository{" +
-                "name='" + name + '\'' +
-                '}';
     }
 
     public String getPath() {

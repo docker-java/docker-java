@@ -11,6 +11,7 @@ import javax.ws.rs.core.Response;
  *
  * @author Marcus Linke
  */
+@Deprecated
 public class WrappedResponseInputStream extends InputStream {
 
     private Response response;

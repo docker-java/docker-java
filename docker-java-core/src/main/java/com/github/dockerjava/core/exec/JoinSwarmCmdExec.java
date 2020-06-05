@@ -8,6 +8,8 @@ import com.github.dockerjava.core.WebTarget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 public class JoinSwarmCmdExec extends AbstrSyncDockerCmdExec<JoinSwarmCmd, Void>
         implements JoinSwarmCmd.Exec {
 
@@ -22,8 +24,11 @@ public class JoinSwarmCmdExec extends AbstrSyncDockerCmdExec<JoinSwarmCmd, Void>
         WebTarget webResource = getBaseResource().path("/swarm/join");
 
         LOGGER.trace("POST: {} ", webResource);
-        webResource.request().accept(MediaType.APPLICATION_JSON)
-                .post(command);
+        try {
+            webResource.request().accept(MediaType.APPLICATION_JSON).post(command).close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return null;
     }
 }

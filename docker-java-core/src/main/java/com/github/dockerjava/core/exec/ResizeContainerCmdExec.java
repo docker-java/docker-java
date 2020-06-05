@@ -18,8 +18,8 @@ public class ResizeContainerCmdExec extends AbstrSyncDockerCmdExec<ResizeContain
     @Override
     protected Void execute(ResizeContainerCmd command) {
         WebTarget webResource = getBaseResource().path("/containers/{id}/resize")
-                .resolveTemplate("id", command.getContainerId()).queryParam("h", command.getHeight())
-                .queryParam("w", command.getWidth());
+            .resolveTemplate("id", command.getContainerId()).queryParam("h", command.getHeight())
+            .queryParam("w", command.getWidth());
 
         LOGGER.trace("POST: {}", webResource);
 

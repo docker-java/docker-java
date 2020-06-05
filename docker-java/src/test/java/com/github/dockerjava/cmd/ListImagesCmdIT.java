@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.emptyArray;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertTrue;
@@ -38,7 +38,7 @@ public class ListImagesCmdIT extends CmdIT {
         Image img = images.get(0);
         assertThat(img.getCreated(), is(greaterThan(0L)));
         assertThat(img.getVirtualSize(), is(greaterThan(0L)));
-        assertThat(img.getId(), not(isEmptyString()));
+        assertThat(img.getId(), not(is(emptyString())));
         assertThat(img.getRepoTags(), not(emptyArray()));
     }
 
@@ -66,7 +66,7 @@ public class ListImagesCmdIT extends CmdIT {
     private String createDanglingImage() {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999").exec();
         LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         LOG.info("Committing container {}", container.toString());

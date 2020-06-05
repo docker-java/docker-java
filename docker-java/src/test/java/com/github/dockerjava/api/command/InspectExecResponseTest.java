@@ -1,15 +1,15 @@
 package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.core.RemoteApiVersion;
+import com.github.dockerjava.test.serdes.JSONTestHelper;
 import org.junit.Test;
 
 import static com.github.dockerjava.test.serdes.JSONSamples.testRoundTrip;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
 
@@ -20,8 +20,7 @@ public class InspectExecResponseTest {
 
     @Test
     public void test_1_22_SerDer1() throws Exception {
-        final ObjectMapper mapper = new ObjectMapper();
-        final JavaType type = mapper.getTypeFactory().constructType(InspectExecResponse.class);
+        final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(InspectExecResponse.class);
 
         final InspectExecResponse execResponse = testRoundTrip(RemoteApiVersion.VERSION_1_22,
                 "/exec/ID/1.json",
@@ -41,7 +40,7 @@ public class InspectExecResponseTest {
         assertThat(processConfig.getEntryPoint(), is("/bin/bash"));
         assertThat(processConfig.getArguments(), hasSize(0));
         assertThat(processConfig.isPrivileged(), is(false));
-        assertThat(processConfig.getUser(), isEmptyString());
+        assertThat(processConfig.getUser(), is(emptyString()));
 
 
         assertThat(execResponse.isOpenStdin(), is(false));
@@ -51,6 +50,6 @@ public class InspectExecResponseTest {
         assertThat(execResponse.getContainerID(),
                 is("ffa39805f089af3099e36452a985481f96170a9dff40be69d34d1722c7660d38"));
 
-        assertThat(execResponse.getDetachKeys(), isEmptyString());
+        assertThat(execResponse.getDetachKeys(), is(emptyString()));
     }
 }

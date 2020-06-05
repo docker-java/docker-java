@@ -1,0 +1,23 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+max_line_length = 140
+indent_style = space
+indent_size = 4
+tab_width = 4
+insert_final_newline = true
+
+[*.java]
+ij_java_class_count_to_use_import_on_demand = 9999
+ij_java_names_count_to_use_import_on_demand = 9999
+
+[{*.pom,*.xml}]
+indent_style = tab
+ij_xml_attribute_wrap = off
+
+
+[*.{yaml,yml}]
+indent_size = 2
+ij_yaml_keep_indents_on_empty_lines = false

@@ -93,7 +93,7 @@ public class HttpResponseStreamHandlerTest {
         });
 
         firstWrite.await();
-        assertTrue(inputStream.available() > 0);
+        assertTrue(inputStream.read() != -1);
 
         // second write should have started
         Thread.sleep(500L);

@@ -1,9 +1,8 @@
 package com.github.dockerjava.api.model;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -12,7 +11,8 @@ import java.io.Serializable;
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  *
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode
+@ToString
 public class ChangeLog implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -28,10 +28,5 @@ public class ChangeLog implements Serializable {
 
     public Integer getKind() {
         return kind;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
     }
 }

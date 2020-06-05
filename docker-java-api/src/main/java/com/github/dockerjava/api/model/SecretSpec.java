@@ -1,23 +1,19 @@
 package com.github.dockerjava.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
+import java.util.Base64;
 import java.util.Map;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_25}
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class SecretSpec implements Serializable {
     public static final long serialVersionUID = 1L;
 
@@ -65,7 +61,7 @@ public class SecretSpec implements Serializable {
      * @see #data
      */
     public SecretSpec withData(String data) {
-        this.data = Base64.encodeBase64String(data.getBytes());
+        this.data = Base64.getEncoder().encodeToString(data.getBytes());
         return this;
     }
 
@@ -84,20 +80,4 @@ public class SecretSpec implements Serializable {
     public Map<String, String> getLabels() {
         return labels;
     }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
-    }
-
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
-
 }

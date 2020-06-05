@@ -8,6 +8,8 @@ import com.github.dockerjava.core.WebTarget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 /**
  * Update swarmNode spec
  */
@@ -27,8 +29,11 @@ public class UpdateSwarmNodeCmdExec extends AbstrSyncDockerCmdExec<UpdateSwarmNo
                 .queryParam("version", command.getVersion());
 
         LOGGER.trace("POST: {}", webResource);
-        webResource.request().accept(MediaType.APPLICATION_JSON)
-                .post(command.getSwarmNodeSpec());
+        try {
+            webResource.request().accept(MediaType.APPLICATION_JSON).post(command.getSwarmNodeSpec()).close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return null;
     }
 }

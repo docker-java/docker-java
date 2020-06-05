@@ -2,35 +2,21 @@ package com.github.dockerjava.api.model;
 
 import static com.github.dockerjava.api.model.InternetProtocol.TCP;
 import static com.github.dockerjava.api.model.InternetProtocol.UDP;
+import static com.github.dockerjava.api.model.InternetProtocol.SCTP;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.Map.Entry;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.ObjectCodec;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.node.NullNode;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.github.dockerjava.api.model.Ports.Binding;
+import lombok.EqualsAndHashCode;
 
 /**
  * Represents a container port that Docker exposes to external clients. The port is defined by its {@link #getPort() port number} and an
  * {@link InternetProtocol}. It can be published by Docker by {@link Ports#bind(ExposedPort, Binding) binding} it to a host port,
  * represented by a {@link Binding}.
  */
-@JsonDeserialize(using = ExposedPort.Deserializer.class)
-@JsonSerialize(using = ExposedPort.Serializer.class)
+@EqualsAndHashCode
 public class ExposedPort implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -65,7 +51,7 @@ public class ExposedPort implements Serializable {
      * Creates an {@link ExposedPort} for the given parameters.
      *
      * @param scheme
-     *            the {@link #getScheme() scheme}, <code>tcp</code> or <code>udp</code>
+     *            the {@link #getScheme() scheme}, <code>tcp</code>, <code>udp</code> or <code>sctp</code>
      * @param port
      *            the {@link #getPort() port number}
      * @deprecated use {@link #ExposedPort(int, InternetProtocol)}
@@ -83,7 +69,7 @@ public class ExposedPort implements Serializable {
     }
 
     /**
-     * @return the scheme (internet protocol), <code>tcp</code> or <code>udp</code>
+     * @return the scheme (internet protocol), <code>tcp</code>, <code>udp</code> or <code>sctp</code>
      * @deprecated use {@link #getProtocol()}
      */
     @Deprecated
@@ -113,6 +99,14 @@ public class ExposedPort implements Serializable {
     }
 
     /**
+     * Creates an {@link ExposedPort} for {@link InternetProtocol#SCTP}. This is a shortcut for
+     * <code>new ExposedPort(port, {@link InternetProtocol#SCTP})</code>
+     */
+    public static ExposedPort sctp(int port) {
+        return new ExposedPort(port, SCTP);
+    }
+
+    /**
      * Parses a textual port specification (as used by the Docker CLI) to an {@link ExposedPort}.
      *
      * @param serialized
@@ -121,6 +115,7 @@ public class ExposedPort implements Serializable {
      * @throws IllegalArgumentException
      *             if the specification cannot be parsed
      */
+    @JsonCreator
     public static ExposedPort parse(String serialized) throws IllegalArgumentException {
         try {
             String[] parts = serialized.split("/");
@@ -144,51 +139,8 @@ public class ExposedPort implements Serializable {
      * @return a string representation of this {@link ExposedPort}
      */
     @Override
+    @JsonValue
     public String toString() {
         return port + "/" + protocol.toString();
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof ExposedPort) {
-            ExposedPort other = (ExposedPort) obj;
-            return new EqualsBuilder().append(protocol, other.getProtocol()).append(port, other.getPort()).isEquals();
-        } else {
-            return super.equals(obj);
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(protocol).append(port).toHashCode();
-    }
-
-    public static class Deserializer extends JsonDeserializer<ExposedPort> {
-        @Override
-        public ExposedPort deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-                throws IOException, JsonProcessingException {
-            ObjectCodec oc = jsonParser.getCodec();
-            JsonNode node = oc.readTree(jsonParser);
-            if (!node.equals(NullNode.getInstance())) {
-                Entry<String, JsonNode> field = node.fields().next();
-                return ExposedPort.parse(field.getKey());
-            } else {
-                return null;
-            }
-        }
-    }
-
-    public static class Serializer extends JsonSerializer<ExposedPort> {
-
-        @Override
-        public void serialize(ExposedPort exposedPort, JsonGenerator jsonGen, SerializerProvider serProvider)
-                throws IOException, JsonProcessingException {
-
-            jsonGen.writeStartObject();
-            jsonGen.writeFieldName(exposedPort.toString());
-            jsonGen.writeEndObject();
-        }
-
-    }
-
 }
