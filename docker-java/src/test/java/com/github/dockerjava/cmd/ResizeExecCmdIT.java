@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import java.security.SecureRandom;
 import java.util.concurrent.TimeUnit;
 
-import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
@@ -22,7 +21,7 @@ public class ResizeExecCmdIT extends CmdIT {
     public void resizeExecTest() throws Exception {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
-        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withUser("root")
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withUser("root")
                 .withCmd("sleep", "9999").withName(containerName).exec();
 
         LOG.info("Created container {}", container.toString());
