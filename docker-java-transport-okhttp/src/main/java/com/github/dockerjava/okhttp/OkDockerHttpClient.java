@@ -1,8 +1,7 @@
 package com.github.dockerjava.okhttp;
 
-import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.DockerHttpClient;
-import com.github.dockerjava.core.SSLConfig;
+import com.github.dockerjava.transport.DockerHttpClient;
+import com.github.dockerjava.transport.SSLConfig;
 import okhttp3.ConnectionPool;
 import okhttp3.Dns;
 import okhttp3.HttpUrl;
@@ -24,13 +23,16 @@ import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public final class OkDockerHttpClient implements DockerHttpClient {
 
-    public static final class Factory {
+    public static final class Builder {
 
-        private DockerClientConfig dockerClientConfig = null;
+        private URI dockerHost = null;
+
+        private SSLConfig sslConfig = null;
 
         private Integer readTimeout = null;
 
@@ -38,29 +40,36 @@ public final class OkDockerHttpClient implements DockerHttpClient {
 
         private Boolean retryOnConnectionFailure = null;
 
-        public Factory dockerClientConfig(DockerClientConfig value) {
-            this.dockerClientConfig = value;
+        public Builder dockerHost(URI value) {
+            this.dockerHost = Objects.requireNonNull(value, "dockerHost");
             return this;
         }
 
-        public Factory readTimeout(Integer value) {
+        public Builder sslConfig(SSLConfig value) {
+            this.sslConfig = value;
+            return this;
+        }
+
+        public Builder readTimeout(Integer value) {
             this.readTimeout = value;
             return this;
         }
 
-        public Factory connectTimeout(Integer value) {
+        public Builder connectTimeout(Integer value) {
             this.connectTimeout = value;
             return this;
         }
 
-        Factory retryOnConnectionFailure(Boolean value) {
+        Builder retryOnConnectionFailure(Boolean value) {
             this.retryOnConnectionFailure = value;
             return this;
         }
 
         public OkDockerHttpClient build() {
+            Objects.requireNonNull(dockerHost, "dockerHost");
             return new OkDockerHttpClient(
-                dockerClientConfig,
+                dockerHost,
+                sslConfig,
                 readTimeout,
                 connectTimeout,
                 retryOnConnectionFailure
@@ -77,7 +86,8 @@ public final class OkDockerHttpClient implements DockerHttpClient {
     private final HttpUrl baseUrl;
 
     private OkDockerHttpClient(
-        DockerClientConfig dockerClientConfig,
+        URI dockerHost,
+        SSLConfig sslConfig,
         Integer readTimeout,
         Integer connectTimeout,
         Boolean retryOnConnectionFailure
@@ -99,7 +109,6 @@ public final class OkDockerHttpClient implements DockerHttpClient {
             clientBuilder.retryOnConnectionFailure(retryOnConnectionFailure);
         }
 
-        URI dockerHost = dockerClientConfig.getDockerHost();
         switch (dockerHost.getScheme()) {
             case "unix":
             case "npipe":
@@ -125,7 +134,6 @@ public final class OkDockerHttpClient implements DockerHttpClient {
         }
 
         boolean isSSL = false;
-        SSLConfig sslConfig = dockerClientConfig.getSSLConfig();
         if (sslConfig != null) {
             try {
                 SSLContext sslContext = sslConfig.getSSLContext();

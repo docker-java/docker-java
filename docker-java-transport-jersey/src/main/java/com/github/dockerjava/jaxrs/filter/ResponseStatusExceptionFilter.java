@@ -1,22 +1,7 @@
 package com.github.dockerjava.jaxrs.filter;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
-
-import javax.ws.rs.client.ClientRequestContext;
-import javax.ws.rs.client.ClientResponseContext;
-import javax.ws.rs.client.ClientResponseFilter;
-import javax.ws.rs.core.MediaType;
-
-import com.github.dockerjava.core.DefaultDockerClientConfig;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.github.dockerjava.api.exception.BadRequestException;
 import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.DockerException;
@@ -25,6 +10,17 @@ import com.github.dockerjava.api.exception.NotAcceptableException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.exception.NotModifiedException;
 import com.github.dockerjava.api.exception.UnauthorizedException;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ws.rs.client.ClientRequestContext;
+import javax.ws.rs.client.ClientResponseContext;
+import javax.ws.rs.client.ClientResponseFilter;
+import javax.ws.rs.core.MediaType;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 
 /**
  * This {@link ClientResponseFilter} implementation detects http status codes and throws {@link DockerException}s
@@ -41,7 +37,7 @@ public class ResponseStatusExceptionFilter implements ClientResponseFilter {
 
     @Deprecated
     public ResponseStatusExceptionFilter() {
-        this(DefaultDockerClientConfig.createDefaultConfigBuilder().build().getObjectMapper());
+        this(new ObjectMapper());
     }
 
     public ResponseStatusExceptionFilter(ObjectMapper objectMapper) {

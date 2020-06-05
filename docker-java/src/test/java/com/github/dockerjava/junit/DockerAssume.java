@@ -1,6 +1,7 @@
 package com.github.dockerjava.junit;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.core.DockerRule;
 
 import static com.github.dockerjava.utils.TestUtils.isSwarm;
 import static org.junit.Assume.assumeFalse;

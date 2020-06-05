@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.PushImageCmd;
-import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.PushResponseItem;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.InvocationBuilder;
@@ -22,17 +21,11 @@ public class PushImageCmdExec extends AbstrAsyncDockerCmdExec<PushImageCmd, Push
         super(baseResource, dockerClientConfig);
     }
 
-    private String name(PushImageCmd command) {
-        String name = command.getName();
-        AuthConfig authConfig = command.getAuthConfig();
-        return (name.contains("/") || authConfig == null) ? name : authConfig.getUsername();
-    }
-
     @Override
     protected Void execute0(PushImageCmd command, ResultCallback<PushResponseItem> resultCallback) {
-
-        WebTarget webResource = getBaseResource().path("/images/" + name(command) + "/push").queryParam("tag",
-                command.getTag());
+        WebTarget webResource = getBaseResource().path("/images/{imageName}/push")
+            .resolveTemplate("imageName", command.getName())
+            .queryParam("tag", command.getTag());
 
         LOGGER.trace("POST: {}", webResource);
 

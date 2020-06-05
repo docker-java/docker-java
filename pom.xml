@@ -94,10 +94,12 @@
 	<modules>
 		<module>docker-java-api</module>
 		<module>docker-java-core</module>
+		<module>docker-java-transport</module>
 		<module>docker-java-transport-netty</module>
 		<module>docker-java-transport-jersey</module>
 		<module>docker-java-transport-okhttp</module>
 		<module>docker-java-transport-httpclient5</module>
+		<module>docker-java-transport-zerodep</module>
 		<module>docker-java</module>
 	</modules>
 

@@ -58,6 +58,13 @@ public class EventsCmdImpl extends AbstrAsyncDockerCmd<EventsCmd, Event> impleme
     }
 
     @Override
+    public EventsCmd withEventTypeFilter(String... eventTypes) {
+        checkNotNull(eventTypes, "event types have not been specified");
+        this.filters.withEventTypes(eventTypes);
+        return this;
+    }
+
+    @Override
     public EventsCmd withLabelFilter(String... label) {
         checkNotNull(label, "label have not been specified");
         this.filters.withLabels(label);
