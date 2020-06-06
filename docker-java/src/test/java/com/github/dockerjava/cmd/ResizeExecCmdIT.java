@@ -11,41 +11,38 @@ import java.security.SecureRandom;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.equalTo;
+
 
 public class ResizeExecCmdIT extends CmdIT {
     private static final Logger LOG = LoggerFactory.getLogger(ResizeExecCmdIT.class);
 
+    private static final int TTY_HEIGHT = 30;
+    private static final int TTY_WIDTH = 120;
+
     @Test
-    public void resizeExecTest() throws Exception {
+    public void resizeExecInstanceTtyTest() throws Exception {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withUser("root")
                 .withCmd("sleep", "9999").withName(containerName).exec();
 
-        LOG.info("Created container {}", container.toString());
-
-        assertThat(container.getId(), not(isEmptyString()));
-
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
+        // wait until tty size changed to target size
         ExecCreateCmdResponse execCreateCmdResponse = dockerRule.getClient().execCreateCmd(container.getId()).withTty(true)
-                 .withAttachStdout(true).withAttachStderr(true).withCmd("top").exec();
+            .withAttachStdout(true).withAttachStderr(true)
+            .withCmd("sh", "-c", String.format("until stty size | grep '%d %d'; do : ; done", TTY_HEIGHT, TTY_WIDTH)).exec();
 
         final ExecStartResultCallback execStartResultCallback = new ExecStartResultCallback(System.out, System.err);
 
-        Thread execThread = new Thread(() -> {
-            try {
-                execStartResultCallback.awaitCompletion();
-            } catch (InterruptedException ignored) {
-            }
-        });
+        dockerRule.getClient().execStartCmd(execCreateCmdResponse.getId()).exec(execStartResultCallback).awaitStarted();
 
-        dockerRule.getClient().execStartCmd(execCreateCmdResponse.getId()).exec(execStartResultCallback);
-        execThread.start();
-        Thread.sleep(TimeUnit.SECONDS.toMillis(3));
+        dockerRule.getClient().resizeExecCmd(execCreateCmdResponse.getId()).withSize(TTY_HEIGHT, TTY_WIDTH).exec();
 
-        dockerRule.getClient().resizeExecCmd(execCreateCmdResponse.getId()).withSize(30, 120).exec();
+        // time out, exec instance resize failed
+        boolean waitResult = execStartResultCallback.awaitCompletion(10, TimeUnit.SECONDS);
+
+        assertThat(waitResult, equalTo(true));
     }
 }
