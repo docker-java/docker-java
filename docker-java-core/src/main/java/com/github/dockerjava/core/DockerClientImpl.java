@@ -56,6 +56,8 @@ import com.github.dockerjava.api.command.RemoveSecretCmd;
 import com.github.dockerjava.api.command.RemoveServiceCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
+import com.github.dockerjava.api.command.ResizeContainerCmd;
+import com.github.dockerjava.api.command.ResizeExecCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
 import com.github.dockerjava.api.command.SaveImagesCmd;
@@ -132,6 +134,8 @@ import com.github.dockerjava.core.command.RemoveSecretCmdImpl;
 import com.github.dockerjava.core.command.RemoveServiceCmdImpl;
 import com.github.dockerjava.core.command.RemoveVolumeCmdImpl;
 import com.github.dockerjava.core.command.RenameContainerCmdImpl;
+import com.github.dockerjava.core.command.ResizeContainerCmdImpl;
+import com.github.dockerjava.core.command.ResizeExecCmdImpl;
 import com.github.dockerjava.core.command.RestartContainerCmdImpl;
 import com.github.dockerjava.core.command.SaveImageCmdImpl;
 import com.github.dockerjava.core.command.SaveImagesCmdImpl;
@@ -387,6 +391,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
+    public ResizeExecCmd resizeExecCmd(@Nonnull String execId) {
+        return new ResizeExecCmdImpl(getDockerCmdExecFactory().createResizeExecCmdExec(), execId);
+    }
+
+    @Override
     public RemoveContainerCmd removeContainerCmd(String containerId) {
         return new RemoveContainerCmdImpl(getDockerCmdExecFactory().createRemoveContainerCmdExec(), containerId);
     }
@@ -462,6 +471,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public RestartContainerCmd restartContainerCmd(String containerId) {
         return new RestartContainerCmdImpl(getDockerCmdExecFactory().createRestartContainerCmdExec(), containerId);
+    }
+
+    @Override
+    public ResizeContainerCmd resizeContainerCmd(@Nonnull String containerId) {
+        return new ResizeContainerCmdImpl(getDockerCmdExecFactory().createResizeContainerCmdExec(), containerId);
     }
 
     @Override

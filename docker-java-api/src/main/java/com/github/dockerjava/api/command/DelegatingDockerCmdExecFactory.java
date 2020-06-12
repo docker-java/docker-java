@@ -26,8 +26,18 @@ public class DelegatingDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     @Override
+    public ResizeContainerCmd.Exec createResizeContainerCmdExec() {
+        return getDockerCmdExecFactory().createResizeContainerCmdExec();
+    }
+
+    @Override
     public ExecCreateCmd.Exec createExecCmdExec() {
         return getDockerCmdExecFactory().createExecCmdExec();
+    }
+
+    @Override
+    public ResizeExecCmd.Exec createResizeExecCmdExec() {
+        return getDockerCmdExecFactory().createResizeExecCmdExec();
     }
 
     @Override
