@@ -5,7 +5,9 @@ package com.github.dockerjava.core;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
@@ -52,6 +54,8 @@ public class GoLangFileMatch {
 
     private static final String PATTERN_CHARS_TO_ESCAPE = "\\.[]{}()*+-?^$|";
 
+    private static final Map<String, Pattern> PATTERNS = new HashMap<>();
+
     public static boolean match(List<String> patterns, File file) {
         return !match(patterns, file.getPath()).isEmpty();
     }
@@ -74,7 +78,7 @@ public class GoLangFileMatch {
     }
 
     public static boolean match(String pattern, String name) {
-        return buildPattern(pattern).matcher(name).matches();
+        return PATTERNS.computeIfAbsent(pattern, GoLangFileMatch::buildPattern).matcher(name).matches();
     }
 
     private static Pattern buildPattern(String pattern) {
