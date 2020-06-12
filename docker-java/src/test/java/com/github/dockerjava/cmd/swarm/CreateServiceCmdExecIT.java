@@ -1,5 +1,6 @@
 package com.github.dockerjava.cmd.swarm;
 
+import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.AuthConfig;
@@ -32,7 +33,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Collections;
 import java.util.List;
 
-import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
+import static com.github.dockerjava.core.DockerRule.DEFAULT_IMAGE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -49,32 +50,35 @@ public class CreateServiceCmdExecIT extends SwarmCmdIT {
     public ExpectedException exception = ExpectedException.none();
     private AuthConfig authConfig;
 
+    private DockerClient dockerClient;
+
     @Before
     public final void setUpCreateServiceCmdExecIT() throws Exception {
         authConfig = REGISTRY.getAuthConfig();
+        dockerClient = startSwarm();
     }
 
     @Test
     public void testCreateService() throws DockerException {
-        dockerRule.getClient().createServiceCmd(new ServiceSpec()
+        dockerClient.createServiceCmd(new ServiceSpec()
                 .withName(SERVICE_NAME)
                 .withTaskTemplate(new TaskSpec()
                         .withContainerSpec(new ContainerSpec()
                                 .withImage(DEFAULT_IMAGE))))
                 .exec();
 
-        List<Service> services = dockerRule.getClient().listServicesCmd()
+        List<Service> services = dockerClient.listServicesCmd()
                 .withNameFilter(Lists.newArrayList(SERVICE_NAME))
                 .exec();
 
         assertThat(services, hasSize(1));
 
-        dockerRule.getClient().removeServiceCmd(SERVICE_NAME).exec();
+        dockerClient.removeServiceCmd(SERVICE_NAME).exec();
     }
 
     @Test
     public void testCreateServiceWithNetworks() {
-        String networkId = dockerRule.getClient().createNetworkCmd().withName("networkname")
+        String networkId = dockerClient.createNetworkCmd().withName("networkname")
                 .withDriver("overlay")
                 .withIpam(new Network.Ipam()
                         .withDriver("default"))
@@ -104,9 +108,9 @@ public class CreateServiceCmdExecIT extends SwarmCmdIT {
                                 .withProtocol(PortConfigProtocol.TCP)
                         )));
 
-        dockerRule.getClient().createServiceCmd(spec).exec();
+        dockerClient.createServiceCmd(spec).exec();
 
-        List<Service> services = dockerRule.getClient().listServicesCmd()
+        List<Service> services = dockerClient.listServicesCmd()
                 .withNameFilter(Lists.newArrayList(SERVICE_NAME))
                 .exec();
 
@@ -114,34 +118,34 @@ public class CreateServiceCmdExecIT extends SwarmCmdIT {
 
         assertThat(services.get(0).getSpec(), is(spec));
 
-        dockerRule.getClient().removeServiceCmd(SERVICE_NAME).exec();
+        dockerClient.removeServiceCmd(SERVICE_NAME).exec();
     }
 
     @Test
     public void testCreateServiceWithTmpfs() {
         Mount tmpMount = new Mount().withTmpfsOptions(new TmpfsOptions().withSizeBytes(600L)).withTarget("/tmp/foo");
 
-        dockerRule.getClient().createServiceCmd(new ServiceSpec()
+        dockerClient.createServiceCmd(new ServiceSpec()
                 .withName(SERVICE_NAME)
                 .withTaskTemplate(new TaskSpec()
                         .withContainerSpec(new ContainerSpec().withImage(DEFAULT_IMAGE).withMounts(Collections.singletonList(tmpMount)))))
                 .exec();
 
-        List<Service> services = dockerRule.getClient().listServicesCmd()
+        List<Service> services = dockerClient.listServicesCmd()
                 .withNameFilter(Lists.newArrayList(SERVICE_NAME))
                 .exec();
 
         assertThat(services, hasSize(1));
-        List<Mount> mounts = dockerRule.getClient().inspectServiceCmd(SERVICE_NAME).exec().getSpec().getTaskTemplate()
+        List<Mount> mounts = dockerClient.inspectServiceCmd(SERVICE_NAME).exec().getSpec().getTaskTemplate()
                 .getContainerSpec().getMounts();
         assertThat(mounts, hasSize(1));
         assertThat(mounts.get(0), is(tmpMount));
-        dockerRule.getClient().removeServiceCmd(SERVICE_NAME).exec();
+        dockerClient.removeServiceCmd(SERVICE_NAME).exec();
     }
 
     @Test
     public void testCreateServiceWithValidAuth() throws DockerException {
-        dockerRule.getClient().createServiceCmd(new ServiceSpec()
+        dockerClient.createServiceCmd(new ServiceSpec()
                 .withName(SERVICE_NAME)
                 .withTaskTemplate(new TaskSpec()
                         .withContainerSpec(new ContainerSpec()
@@ -149,13 +153,13 @@ public class CreateServiceCmdExecIT extends SwarmCmdIT {
                 .withAuthConfig(authConfig)
                 .exec();
 
-        List<Service> services = dockerRule.getClient().listServicesCmd()
+        List<Service> services = dockerClient.listServicesCmd()
                 .withNameFilter(Lists.newArrayList(SERVICE_NAME))
                 .exec();
 
         assertThat(services, hasSize(1));
 
-        dockerRule.getClient().removeServiceCmd(SERVICE_NAME).exec();
+        dockerClient.removeServiceCmd(SERVICE_NAME).exec();
     }
 
     @Test
@@ -169,7 +173,7 @@ public class CreateServiceCmdExecIT extends SwarmCmdIT {
 
         exception.expect(ConflictException.class);
 
-        dockerRule.getClient().createServiceCmd(new ServiceSpec()
+        dockerClient.createServiceCmd(new ServiceSpec()
                 .withName(SERVICE_NAME)
                 .withTaskTemplate(new TaskSpec()
                         .withContainerSpec(new ContainerSpec()

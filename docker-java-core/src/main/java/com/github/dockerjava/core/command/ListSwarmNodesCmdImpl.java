@@ -44,14 +44,14 @@ public class ListSwarmNodesCmdImpl extends AbstrDockerCmd<ListSwarmNodesCmd, Lis
     @Override
     public ListSwarmNodesCmd withMembershipFilter(List<String> memberships) {
         checkNotNull(memberships, "memberships was not specified");
-        this.filters.withNames(memberships);
+        this.filters.withMemberships(memberships);
         return this;
     }
 
     @Override
     public ListSwarmNodesCmd withRoleFilter(List<String> roles) {
         checkNotNull(roles, "roles was not specified");
-        this.filters.withNames(roles);
+        this.filters.withRoles(roles);
         return this;
     }
 }

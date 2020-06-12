@@ -17,7 +17,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-public class JoinSwarmCmdExecIT extends MultiNodeSwarmCmdIT {
+public class JoinSwarmCmdExecIT extends SwarmCmdIT {
 
     public static final Logger LOG = LoggerFactory.getLogger(JoinSwarmCmdExecIT.class);
 

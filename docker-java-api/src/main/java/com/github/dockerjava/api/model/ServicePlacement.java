@@ -29,6 +29,12 @@ public class ServicePlacement implements Serializable {
     private List<SwarmNodePlatform> platforms;
 
     /**
+     * @since 1.40
+     */
+    @JsonProperty("MaxReplicas")
+    private Integer maxReplicas;
+
+    /**
      * @see #constraints
      */
     @CheckForNull
@@ -54,4 +60,31 @@ public class ServicePlacement implements Serializable {
     public void setPlatforms(List<SwarmNodePlatform> platforms) {
         this.platforms = platforms;
     }
+
+    /**
+     * Specifies the maximum amount of replicas / tasks that can run on one node.
+     * 0 means unlimited replicas per node.
+     *
+     * @param maxReplicas Max number of replicas
+     * @return This instance of ServicePlacement
+     * @throws IllegalArgumentException if maxReplicas is less than 0
+     */
+    public ServicePlacement withMaxReplicas(int maxReplicas) {
+        if (maxReplicas < 0) {
+            throw new IllegalArgumentException("The Value for MaxReplicas must be greater or equal to 0");
+        }
+
+        this.maxReplicas = maxReplicas;
+        return this;
+    }
+
+    /**
+     * Getter for maxReplicas
+     *
+     * @return The maximum amount of replicas / tasks that can run on one node.
+     */
+    public Integer getMaxReplicas() {
+        return this.maxReplicas;
+    }
+
 }

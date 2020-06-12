@@ -1,6 +1,7 @@
 package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.InternalServerErrorException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.Image;
@@ -67,7 +68,7 @@ public class DockerfileFixture implements AutoCloseable {
             LOGGER.info("removing repository {}", repository);
             try {
                 client.removeImageCmd(repository).withForce(true).exec();
-            } catch (NotFoundException | InternalServerErrorException e) {
+            } catch (DockerException e) {
                 LOGGER.info("ignoring {}", e.getMessage());
             }
             repository = null;

@@ -6,15 +6,15 @@ import com.github.dockerjava.core.DefaultDockerCmdExecFactory;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientConfigAware;
 import com.github.dockerjava.core.DockerClientImpl;
-import com.github.dockerjava.core.DockerHttpClient;
+import com.github.dockerjava.transport.DockerHttpClient;
 
 /**
- * @deprecated use {@link OkDockerHttpClient} with {@link DockerClientImpl#withHttpClient(DockerHttpClient)}
+ * @deprecated use {@link OkDockerHttpClient} with {@link DockerClientImpl#getInstance(DockerClientConfig, DockerHttpClient)}
  */
 @Deprecated
 public class OkHttpDockerCmdExecFactory extends DelegatingDockerCmdExecFactory implements DockerClientConfigAware {
 
-    private OkDockerHttpClient.Factory clientFactory = new OkDockerHttpClient.Factory();
+    private OkDockerHttpClient.Builder clientBuilder = new OkDockerHttpClient.Builder();
 
     @Deprecated
     protected Integer connectTimeout;
@@ -28,7 +28,7 @@ public class OkHttpDockerCmdExecFactory extends DelegatingDockerCmdExecFactory i
      * Configure connection timeout in milliseconds
      */
     public OkHttpDockerCmdExecFactory withConnectTimeout(Integer connectTimeout) {
-        clientFactory = clientFactory.connectTimeout(connectTimeout);
+        clientBuilder = clientBuilder.connectTimeout(connectTimeout);
         this.connectTimeout = connectTimeout;
         return this;
     }
@@ -37,13 +37,13 @@ public class OkHttpDockerCmdExecFactory extends DelegatingDockerCmdExecFactory i
      * Configure read timeout in milliseconds
      */
     public OkHttpDockerCmdExecFactory withReadTimeout(Integer readTimeout) {
-        clientFactory = clientFactory.readTimeout(readTimeout);
+        clientBuilder = clientBuilder.readTimeout(readTimeout);
         this.readTimeout = readTimeout;
         return this;
     }
 
     public OkHttpDockerCmdExecFactory setRetryOnConnectionFailure(Boolean retryOnConnectionFailure) {
-        this.clientFactory = clientFactory.retryOnConnectionFailure(retryOnConnectionFailure);
+        this.clientBuilder = clientBuilder.retryOnConnectionFailure(retryOnConnectionFailure);
         return this;
     }
 
@@ -54,9 +54,11 @@ public class OkHttpDockerCmdExecFactory extends DelegatingDockerCmdExecFactory i
 
     @Override
     public void init(DockerClientConfig dockerClientConfig) {
-        clientFactory = clientFactory.dockerClientConfig(dockerClientConfig);
+        clientBuilder = clientBuilder
+            .dockerHost(dockerClientConfig.getDockerHost())
+            .sslConfig(dockerClientConfig.getSSLConfig());
         dockerCmdExecFactory = new DefaultDockerCmdExecFactory(
-            clientFactory.build(),
+            clientBuilder.build(),
             dockerClientConfig.getObjectMapper()
         );
         dockerCmdExecFactory.init(dockerClientConfig);

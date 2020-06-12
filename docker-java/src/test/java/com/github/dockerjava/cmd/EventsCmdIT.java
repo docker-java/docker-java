@@ -3,6 +3,7 @@ package com.github.dockerjava.cmd;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Event;
+import com.github.dockerjava.api.model.EventType;
 import com.github.dockerjava.utils.TestUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -110,6 +112,37 @@ public class EventsCmdIT extends CmdIT {
         // we should only get "start" events here
         for (Event event : events) {
             assertThat("Received event: " + event, event.getAction(), is("start"));
+        }
+    }
+
+    @Test
+    public void testEventStreamingWithEventTypeFilter() throws Exception {
+        assumeNotSwarm("", dockerRule);
+
+        String startTime = getEpochTime();
+        generateEvents();
+        String endTime = getEpochTime();
+
+        for (EventType eventType : EventType.values()) {
+            List<Event> events = new CopyOnWriteArrayList<>();
+            try (
+                ResultCallback.Adapter<?> eventCallback = dockerRule.getClient().eventsCmd()
+                    .withSince(startTime)
+                    .withUntil(endTime)
+                    .withEventTypeFilter(eventType)
+                    .exec(new ResultCallback.Adapter<Event>() {
+                        @Override
+                        public void onNext(Event event) {
+                            events.add(event);
+                        }
+                    })
+            ) {
+                eventCallback.awaitCompletion(30, TimeUnit.SECONDS);
+
+                for (Event event : events) {
+                    assertThat("Received event: " + event, event.getType(), is(eventType));
+                }
+            }
         }
     }
 

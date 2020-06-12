@@ -6,10 +6,13 @@ import org.apache.commons.compress.utils.Lists;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.aMapWithSize;
 import static org.hamcrest.Matchers.arrayContainingInAnyOrder;
+import static org.hamcrest.Matchers.arrayWithSize;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class ExposedPortsTest {
@@ -45,5 +48,20 @@ public class ExposedPortsTest {
             new ExposedPort(123, InternetProtocol.UDP),
             new ExposedPort(3868, InternetProtocol.SCTP)
         ));
+    }
+
+    @Test
+    public void usesFromJsonWithDuplicate() throws Exception {
+        ExposedPorts ports = new ExposedPorts(
+            new ExposedPort(80, InternetProtocol.UDP),
+            new ExposedPort(80),
+            new ExposedPort(80)
+        );
+
+        assertThat(ports, notNullValue());
+        assertThat(ports.getExposedPorts(), arrayWithSize(3));
+
+        Map<String, Object> map = ports.toPrimitive();
+        assertThat(map, aMapWithSize(2));
     }
 }
