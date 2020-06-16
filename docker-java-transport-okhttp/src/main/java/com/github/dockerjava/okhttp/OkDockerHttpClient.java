@@ -11,6 +11,8 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import okio.BufferedSink;
 import okio.Okio;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.X509TrustManager;
@@ -27,6 +29,8 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public final class OkDockerHttpClient implements DockerHttpClient {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(OkDockerHttpClient.class);
 
     public static final class Builder {
 
@@ -267,6 +271,8 @@ public final class OkDockerHttpClient implements DockerHttpClient {
             CLOSING.set(true);
             try {
                 response.close();
+            } catch (Exception e) {
+                LOGGER.debug("Failed to close the response", e);
             } finally {
                 CLOSING.set(previous);
             }
