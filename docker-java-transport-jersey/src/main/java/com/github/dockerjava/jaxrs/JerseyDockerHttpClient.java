@@ -378,7 +378,11 @@ public final class JerseyDockerHttpClient implements DockerHttpClient {
 
         @Override
         public void close() {
-            response.close();
+            try {
+                response.close();
+            } catch (Exception e) {
+                LOGGER.debug("Failed to close the response", e);
+            }
         }
     }
 }
