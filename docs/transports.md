@@ -4,7 +4,7 @@
 | | |
 |---|---|
 | Maven coordinates | `com.github.docker-java:docker-java-transport-httpclient5` |
-| Stabilitty | 🙂|
+| Stability | 🙂|
 | Long term support plans | ✅ |
 | Unix sockets support | ✅ |
 | Windows Npipe support | ✅ |
@@ -18,7 +18,7 @@ It has everything to become the default transport of docker-java in future relea
 | | |
 |---|---|
 | Maven coordinates | `com.github.docker-java:docker-java-transport-zerodep` |
-| Stabilitty | 🙂|
+| Stability | 🙂|
 | Long term support plans | ✅ |
 | Unix sockets support | ✅ |
 | Windows Npipe support | ✅ |
@@ -32,7 +32,7 @@ Note: due to the implementation details, it cannot be true "0 dependencies" modu
 | | |
 |---|---|
 | Maven coordinates | `com.github.docker-java:docker-java-transport-okhttp` |
-| Stabilitty | 🧐|
+| Stability | 🧐|
 | Long term support plans | ❓ |
 | Unix sockets support | ✅ |
 | Windows Npipe support | ✅ |
@@ -46,7 +46,7 @@ OkHttp's migration to Kotlin and the need to use internal APIs for doing stdin h
 | | |
 |---|---|
 | Maven coordinates | `com.github.docker-java:docker-java-transport-netty` |
-| Stabilitty | 🧐|
+| Stability | 🧐|
 | Long term support plans | ❌ |
 | Unix sockets support | ✅ |
 | Windows Npipe support | ❌ |
@@ -62,7 +62,7 @@ The community may decide to pick it up and continue the development as a 3rd par
 | | |
 |---|---|
 | Maven coordinates | `com.github.docker-java:docker-java-transport-jersey` |
-| Stabilitty | 🙃|
+| Stability | 🙃|
 | Long term support plans | ❌ |
 | Unix sockets support | ✅ |
 | Windows Npipe support | ❌ |
