@@ -15,7 +15,7 @@ import java.nio.channels.AsynchronousCloseException;
 import java.nio.channels.AsynchronousFileChannel;
 import java.nio.channels.Channels;
 import java.nio.channels.CompletionHandler;
-import java.nio.file.NoSuchFileException;
+import java.nio.file.FileSystemException;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.concurrent.CompletableFuture;
@@ -58,7 +58,7 @@ class NamedPipeSocket extends Socket {
                     )
                 );
                 break;
-            } catch (NoSuchFileException e) {
+            } catch (FileSystemException e) {
                 if (System.currentTimeMillis() - startedAt >= timeout) {
                     throw new RuntimeException(e);
                 } else {
