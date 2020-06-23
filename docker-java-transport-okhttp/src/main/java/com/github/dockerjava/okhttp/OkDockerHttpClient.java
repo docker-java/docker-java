@@ -271,7 +271,7 @@ public final class OkDockerHttpClient implements DockerHttpClient {
             CLOSING.set(true);
             try {
                 response.close();
-            } catch (Exception e) {
+            } catch (Exception | AssertionError e) {
                 LOGGER.debug("Failed to close the response", e);
             } finally {
                 CLOSING.set(previous);
