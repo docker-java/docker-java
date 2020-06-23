@@ -7,6 +7,8 @@ import com.github.dockerjava.core.WebTarget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 
 public class ResizeExecCmdExec extends AbstrSyncDockerCmdExec<ResizeExecCmd, Void> implements ResizeExecCmd.Exec {
 
@@ -23,7 +25,11 @@ public class ResizeExecCmdExec extends AbstrSyncDockerCmdExec<ResizeExecCmd, Voi
 
         LOGGER.trace("POST: {}", webResource);
 
-        webResource.request().accept(MediaType.APPLICATION_JSON).post(null);
+        try {
+            webResource.request().accept(MediaType.APPLICATION_JSON).post(null).close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return null;
     }

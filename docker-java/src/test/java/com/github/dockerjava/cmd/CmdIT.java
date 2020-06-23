@@ -39,11 +39,13 @@ public abstract class CmdIT {
             public DockerClientImpl createDockerClient(DockerClientConfig config) {
                 return (DockerClientImpl) DockerClientBuilder.getInstance(config)
                     .withDockerHttpClient(
-                        new JerseyDockerHttpClient.Builder()
-                            .dockerHost(config.getDockerHost())
-                            .sslConfig(config.getSSLConfig())
-                            .connectTimeout(30 * 1000)
-                            .build()
+                        new TrackingDockerHttpClient(
+                            new JerseyDockerHttpClient.Builder()
+                                .dockerHost(config.getDockerHost())
+                                .sslConfig(config.getSSLConfig())
+                                .connectTimeout(30 * 1000)
+                                .build()
+                        )
                     )
                     .build();
             }
@@ -53,11 +55,13 @@ public abstract class CmdIT {
             public DockerClientImpl createDockerClient(DockerClientConfig config) {
                 return (DockerClientImpl) DockerClientBuilder.getInstance(config)
                     .withDockerHttpClient(
-                        new OkDockerHttpClient.Builder()
-                            .dockerHost(config.getDockerHost())
-                            .sslConfig(config.getSSLConfig())
-                            .connectTimeout(30 * 100)
-                            .build()
+                        new TrackingDockerHttpClient(
+                            new OkDockerHttpClient.Builder()
+                                .dockerHost(config.getDockerHost())
+                                .sslConfig(config.getSSLConfig())
+                                .connectTimeout(30 * 100)
+                                .build()
+                        )
                     )
                     .build();
             }
@@ -67,10 +71,12 @@ public abstract class CmdIT {
             public DockerClientImpl createDockerClient(DockerClientConfig config) {
                 return (DockerClientImpl) DockerClientBuilder.getInstance(config)
                     .withDockerHttpClient(
-                        new ApacheDockerHttpClient.Builder()
-                            .dockerHost(config.getDockerHost())
-                            .sslConfig(config.getSSLConfig())
-                            .build()
+                        new TrackingDockerHttpClient(
+                            new ApacheDockerHttpClient.Builder()
+                                .dockerHost(config.getDockerHost())
+                                .sslConfig(config.getSSLConfig())
+                                .build()
+                        )
                     )
                     .build();
             }
@@ -110,4 +116,6 @@ public abstract class CmdIT {
     @Rule
     public DockerRule dockerRule = new DockerRule( this);
 
+    @Rule
+    public DockerHttpClientLeakDetector leakDetector = new DockerHttpClientLeakDetector();
 }

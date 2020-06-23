@@ -16,13 +16,19 @@ public class SaveImageCmdIT extends CmdIT {
     @Test
     public void saveImage() throws Exception {
 
-        InputStream image = IOUtils.toBufferedInputStream(dockerRule.getClient().saveImageCmd("busybox").exec());
-        assertThat(image.read(), not(-1));
+        try (
+            InputStream inputStream = dockerRule.getClient().saveImageCmd("busybox").exec();
+            InputStream image = IOUtils.toBufferedInputStream(inputStream)
+        ) {
+            assertThat(image.read(), not(-1));
+        }
 
-        InputStream image2 = IOUtils.toBufferedInputStream(dockerRule.getClient().saveImageCmd("busybox").withTag("latest").exec());
-        assertThat(image2.read(), not(-1));
-
-
+        try (
+            InputStream inputStream = dockerRule.getClient().saveImageCmd("busybox").withTag("latest").exec();
+            InputStream image2 = IOUtils.toBufferedInputStream(inputStream)
+        ) {
+            assertThat(image2.read(), not(-1));
+        }
     }
 
 }

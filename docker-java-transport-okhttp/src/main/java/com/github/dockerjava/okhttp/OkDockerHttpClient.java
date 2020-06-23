@@ -2,6 +2,7 @@ package com.github.dockerjava.okhttp;
 
 import com.github.dockerjava.transport.DockerHttpClient;
 import com.github.dockerjava.transport.SSLConfig;
+import okhttp3.Call;
 import okhttp3.ConnectionPool;
 import okhttp3.Dns;
 import okhttp3.HttpUrl;
@@ -219,9 +220,11 @@ public final class OkDockerHttpClient implements DockerHttpClient {
             clientToUse = streamingClient;
         }
 
+        Call call = clientToUse.newCall(requestBuilder.build());
         try {
-            return new OkResponse(clientToUse.newCall(requestBuilder.build()).execute());
+            return new OkResponse(call);
         } catch (IOException e) {
+            call.cancel();
             throw new UncheckedIOException("Error while executing " + request, e);
         }
     }
@@ -239,10 +242,13 @@ public final class OkDockerHttpClient implements DockerHttpClient {
 
         static final ThreadLocal<Boolean> CLOSING = ThreadLocal.withInitial(() -> false);
 
+        private final Call call;
+
         private final okhttp3.Response response;
 
-        OkResponse(okhttp3.Response response) {
-            this.response = response;
+        OkResponse(Call call) throws IOException {
+            this.call = call;
+            this.response = call.execute();
         }
 
         @Override
@@ -270,6 +276,7 @@ public final class OkDockerHttpClient implements DockerHttpClient {
             boolean previous = CLOSING.get();
             CLOSING.set(true);
             try {
+                call.cancel();
                 response.close();
             } catch (Exception | AssertionError e) {
                 LOGGER.debug("Failed to close the response", e);
