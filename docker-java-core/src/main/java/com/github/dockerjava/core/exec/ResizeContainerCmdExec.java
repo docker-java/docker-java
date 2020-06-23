@@ -7,6 +7,8 @@ import com.github.dockerjava.core.WebTarget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 public class ResizeContainerCmdExec extends AbstrSyncDockerCmdExec<ResizeContainerCmd, Void> implements ResizeContainerCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ResizeContainerCmdExec.class);
@@ -23,7 +25,11 @@ public class ResizeContainerCmdExec extends AbstrSyncDockerCmdExec<ResizeContain
 
         LOGGER.trace("POST: {}", webResource);
 
-        webResource.request().accept(MediaType.APPLICATION_JSON).post(command);
+        try {
+            webResource.request().accept(MediaType.APPLICATION_JSON).post(command).close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return null;
     }
