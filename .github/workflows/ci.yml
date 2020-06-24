@@ -15,7 +15,7 @@ jobs:
           - { name: "over TCP", dockerHost: "tcp://127.0.0.1:2375" }
           - { name: "Docker 18.06.3", dockerVersion: "18.06.3~ce~3-0~ubuntu" }
           - { name: "ssh-default" , clientDockerHost: "ssh://junit-host"}
-          - { name: "ssh-19.03.9" , dockerVersion: "19.03.9~3-0~ubuntu-bionic", clientDockerHost: "ssh://junit-host"}
+          - { name: "ssh-19.03.9" , dockerVersion: "5:19.03.12~3-0~ubuntu-bionic", clientDockerHost: "ssh://junit-host"}
 
     steps:
       - uses: actions/checkout@v2
@@ -34,10 +34,16 @@ jobs:
       - name: Build with Maven (SSH)
         env:
           DOCKER_HOST: ${{matrix.clientDockerHost}}
-        run: ./mvnw --no-transfer-progress verify
+        run: ./mvnw --no-transfer-progress -fae verify
         if: startsWith(matrix.name,'ssh')
       - name: Build with Maven
         env:
           DOCKER_HOST: ${{matrix.dockerHost}}
         run: ./mvnw --no-transfer-progress verify
-        if: startsWith(matrix.name,'ssh')!=true
+        # if: startsWith(matrix.name,'ssh')!=true
+        if: false
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.name }}-testresults
+          path: **/TEST-*.xml
+        if: always()
