@@ -40,4 +40,4 @@ jobs:
         env:
           DOCKER_HOST: ${{matrix.dockerHost}}
         run: ./mvnw --no-transfer-progress verify
-        if: !startsWith(matrix.name,'ssh')
+        if: startsWith(matrix.name,'ssh')!=true
