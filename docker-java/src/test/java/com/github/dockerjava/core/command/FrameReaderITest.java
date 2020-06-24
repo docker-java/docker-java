@@ -4,6 +4,8 @@ import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.StreamType;
+import com.github.dockerjava.cmd.SSHClientFactory;
+import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.junit.category.Integration;
 import org.junit.After;
@@ -30,9 +32,16 @@ public class FrameReaderITest {
 
     @Before
     public void beforeTest() throws Exception {
-        dockerClient = DockerClientBuilder.getInstance().build();
+        dockerClient = getDockerClient();
         dockerfileFixture = new DockerfileFixture(dockerClient, "frameReaderDockerfile");
         dockerfileFixture.open();
+    }
+
+    private DockerClient getDockerClient() {
+        if ("ssh".equalsIgnoreCase(DefaultDockerClientConfig.createDefaultConfigBuilder().build().getDockerHost().getScheme())) {
+            return new SSHClientFactory().build();
+        }
+        return DockerClientBuilder.getInstance().build();
     }
 
     @After
@@ -47,13 +56,13 @@ public class FrameReaderITest {
 
         // wait for the container to be successfully executed
         int exitCode = dockerClient.waitContainerCmd(dockerfileFixture.getContainerId())
-                .start().awaitStatusCode();
+            .start().awaitStatusCode();
         assertEquals(0, exitCode);
 
         final List<Frame> loggingFrames = getLoggingFrames();
         final Frame outFrame = new Frame(StreamType.STDOUT, "to stdout\n".getBytes());
         final Frame errFrame = new Frame(StreamType.STDERR, "to stderr\n".getBytes());
-        
+
         assertThat(loggingFrames, containsInAnyOrder(outFrame, errFrame));
         assertThat(loggingFrames, hasSize(2));
     }
@@ -63,10 +72,10 @@ public class FrameReaderITest {
         FrameReaderITestCallback collectFramesCallback = new FrameReaderITestCallback();
 
         dockerClient.logContainerCmd(dockerfileFixture.getContainerId()).withStdOut(true).withStdErr(true)
-                .withTailAll()
-                // we can't follow stream here as it blocks reading from resulting InputStream infinitely
-                // .withFollowStream()
-                .exec(collectFramesCallback).awaitCompletion();
+            .withTailAll()
+            // we can't follow stream here as it blocks reading from resulting InputStream infinitely
+            // .withFollowStream()
+            .exec(collectFramesCallback).awaitCompletion();
 
         return collectFramesCallback.frames;
     }

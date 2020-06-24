@@ -30,7 +30,6 @@ import com.github.dockerjava.junit.PrivateRegistryRule;
 import com.github.dockerjava.utils.TestUtils;
 import net.jcip.annotations.NotThreadSafe;
 import org.apache.commons.io.FileUtils;
-import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -78,8 +77,8 @@ import static org.junit.Assume.assumeThat;
 public class CreateContainerCmdIT extends CmdIT {
     public static final Logger LOG = LoggerFactory.getLogger(CreateContainerCmdIT.class);
 
-    @ClassRule
-    public static PrivateRegistryRule REGISTRY = new PrivateRegistryRule();
+    @Rule
+    public PrivateRegistryRule REGISTRY = new PrivateRegistryRule(this);
 
     @Rule
     public TemporaryFolder tempDir = new TemporaryFolder(new File("target/"));

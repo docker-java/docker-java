@@ -15,14 +15,10 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 @EnabledIfEnvironmentVariable(named = "DOCKER_HOST", matches = "ssh://.*")
 class SsshWithOKDockerHttpClientIT {
 
-    private static final String SSH_JUNIT_HOST = "ssh://junit-host";
-
     @Test
     void pingViaDialer() throws IOException, JSchException {
 
-        final DefaultDockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder()
-            .withDockerHost(SSH_JUNIT_HOST)
-            .build();
+        final DefaultDockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
 
         try (final DockerHttpClient dockerHttpClient = new SsshWithOKDockerHttpClient.Factory().dockerClientConfig(dockerClientConfig).build()) {
 
@@ -35,9 +31,7 @@ class SsshWithOKDockerHttpClientIT {
     @Test
     void pingViaSocket() throws IOException, JSchException {
 
-        final DefaultDockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder()
-            .withDockerHost(SSH_JUNIT_HOST)
-            .build();
+        final DefaultDockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
 
         try (final DockerHttpClient dockerHttpClient = new SsshWithOKDockerHttpClient.Factory()
             .useSocket()
@@ -52,9 +46,7 @@ class SsshWithOKDockerHttpClientIT {
     @Test
     void pingViaSocat() throws IOException, JSchException {
 
-        final DefaultDockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder()
-            .withDockerHost(SSH_JUNIT_HOST)
-            .build();
+        final DefaultDockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
 
         try (final DockerHttpClient dockerHttpClient = new SsshWithOKDockerHttpClient.Factory()
             .useSocat()

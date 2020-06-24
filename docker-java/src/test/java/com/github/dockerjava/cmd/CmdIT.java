@@ -16,6 +16,8 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.Arrays;
 
 /**
@@ -24,8 +26,9 @@ import java.util.Arrays;
 @Category(Integration.class)
 @RunWith(Parameterized.class)
 public abstract class CmdIT {
+
     public enum FactoryType {
-        SSH(true) {
+        SSH(true, true) {
             @Override
             public DockerClientImpl createDockerClient(DockerClientConfig config) {
                 final DefaultDockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder()
@@ -47,7 +50,7 @@ public abstract class CmdIT {
                 }
             }
         },
-        NETTY(true) {
+        NETTY(true, false) {
             @Override
             public DockerClientImpl createDockerClient(DockerClientConfig config) {
                 return (DockerClientImpl) DockerClientBuilder.getInstance(config)
@@ -58,7 +61,7 @@ public abstract class CmdIT {
                     .build();
             }
         },
-        JERSEY(false) {
+        JERSEY(false, false) {
             @Override
             public DockerClientImpl createDockerClient(DockerClientConfig config) {
                 return (DockerClientImpl) DockerClientBuilder.getInstance(config)
@@ -74,7 +77,7 @@ public abstract class CmdIT {
                     .build();
             }
         },
-        OKHTTP(true) {
+        OKHTTP(true, false) {
             @Override
             public DockerClientImpl createDockerClient(DockerClientConfig config) {
                 return (DockerClientImpl) DockerClientBuilder.getInstance(config)
@@ -90,7 +93,7 @@ public abstract class CmdIT {
                     .build();
             }
         },
-        HTTPCLIENT5(true) {
+        HTTPCLIENT5(true, false) {
             @Override
             public DockerClientImpl createDockerClient(DockerClientConfig config) {
                 return (DockerClientImpl) DockerClientBuilder.getInstance(config)
@@ -108,10 +111,12 @@ public abstract class CmdIT {
 
         private final String subnetPrefix;
         private final boolean supportsStdinAttach;
+        private final boolean supportsSSH;
 
-        FactoryType(boolean supportsStdinAttach) {
+        FactoryType(boolean supportsStdinAttach, boolean supportsSSH) {
             this.subnetPrefix = "10." + (100 + ordinal()) + ".";
             this.supportsStdinAttach = supportsStdinAttach;
+            this.supportsSSH = supportsSSH;
         }
 
         public String getSubnetPrefix() {
@@ -128,9 +133,9 @@ public abstract class CmdIT {
     @Parameterized.Parameters(name = "{index}:{0}")
     public static Iterable<FactoryType> data() {
         if (System.getenv("DOCKER_HOST").matches("ssh://.*")) {
-            return Arrays.asList(FactoryType.values()).subList(0, 1);
+            return Stream.of(FactoryType.values()).filter(f -> f.supportsSSH).collect(Collectors.toList());
         } else {
-            return Arrays.asList(FactoryType.values()).subList(1, FactoryType.values().length);
+            return Stream.of(FactoryType.values()).filter(f -> !f.supportsSSH).collect(Collectors.toList());
         }
     }
 
