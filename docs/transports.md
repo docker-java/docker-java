@@ -24,7 +24,7 @@ It has everything to become the default transport of docker-java in future relea
 | Windows Npipe support | ✅ |
 | Stdin attachment support | ✅ |
 
-The idea of this transport is to provide a transport that supports 100% of the features without having to sorry about transitive dependencies.
+The idea of this transport is to provide a transport that supports 100% of the features without having to worry about transitive dependencies.
 
 Note: due to the implementation details, it cannot be true "0 dependencies" module, so it needs to depend on `slf4j-api` and JNA.
 
