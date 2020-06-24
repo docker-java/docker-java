@@ -1,8 +1,9 @@
 package com.github.dockerjava.jsch;
 
+import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
-import com.github.dockerjava.core.DockerHttpClient;
+import com.github.dockerjava.transport.DockerHttpClient;
 import com.jcraft.jsch.JSchException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
@@ -14,17 +15,18 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 @EnabledIfEnvironmentVariable(named = "DOCKER_HOST", matches = "ssh://.*")
 class SsshWithOKDockerHttpClientIT {
 
+    private static final String SSH_JUNIT_HOST = "ssh://junit-host";
+
     @Test
     void pingViaDialer() throws IOException, JSchException {
 
         final DefaultDockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder()
-            .withDockerHost("ssh://junit-host")
+            .withDockerHost(SSH_JUNIT_HOST)
             .build();
 
         try (final DockerHttpClient dockerHttpClient = new SsshWithOKDockerHttpClient.Factory().dockerClientConfig(dockerClientConfig).build()) {
 
-            final DockerClientImpl dockerClient = DockerClientImpl.getInstance(dockerClientConfig)
-                .withHttpClient(dockerHttpClient);
+            final DockerClient dockerClient = DockerClientImpl.getInstance(dockerClientConfig,dockerHttpClient);
 
             assertDoesNotThrow(() -> dockerClient.pingCmd().exec());
         }
@@ -34,15 +36,14 @@ class SsshWithOKDockerHttpClientIT {
     void pingViaSocket() throws IOException, JSchException {
 
         final DefaultDockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder()
-            .withDockerHost("ssh://junit-host")
+            .withDockerHost(SSH_JUNIT_HOST)
             .build();
 
         try (final DockerHttpClient dockerHttpClient = new SsshWithOKDockerHttpClient.Factory()
             .useSocket()
             .dockerClientConfig(dockerClientConfig).build()) {
 
-            final DockerClientImpl dockerClient = DockerClientImpl.getInstance(dockerClientConfig)
-                .withHttpClient(dockerHttpClient);
+            final DockerClient dockerClient = DockerClientImpl.getInstance(dockerClientConfig,dockerHttpClient);
 
             assertDoesNotThrow(() -> dockerClient.pingCmd().exec());
         }
@@ -52,7 +53,7 @@ class SsshWithOKDockerHttpClientIT {
     void pingViaSocat() throws IOException, JSchException {
 
         final DefaultDockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder()
-            .withDockerHost("ssh://junit-host")
+            .withDockerHost(SSH_JUNIT_HOST)
             .build();
 
         try (final DockerHttpClient dockerHttpClient = new SsshWithOKDockerHttpClient.Factory()
@@ -60,8 +61,7 @@ class SsshWithOKDockerHttpClientIT {
             .dockerClientConfig(dockerClientConfig)
             .build()) {
 
-            final DockerClientImpl dockerClient = DockerClientImpl.getInstance(dockerClientConfig)
-                .withHttpClient(dockerHttpClient);
+            final DockerClient dockerClient = DockerClientImpl.getInstance(dockerClientConfig,dockerHttpClient);
 
             assertDoesNotThrow(() -> dockerClient.pingCmd().exec());
         }

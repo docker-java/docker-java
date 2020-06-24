@@ -1,9 +1,7 @@
-package com.github.dockerjava.junit;
+package com.github.dockerjava.core;
 
 import com.github.dockerjava.api.command.DelegatingDockerCmdExecFactory;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
-import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.DockerClientConfigAware;
 
 class DockerCmdExecFactoryDelegate extends DelegatingDockerCmdExecFactory implements DockerClientConfigAware {
 

@@ -57,6 +57,8 @@ import com.github.dockerjava.api.command.RemoveServiceCmd;
 import com.github.dockerjava.api.command.RemoveSwarmNodeCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
+import com.github.dockerjava.api.command.ResizeContainerCmd;
+import com.github.dockerjava.api.command.ResizeExecCmd;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.command.SaveImageCmd;
 import com.github.dockerjava.api.command.SaveImagesCmd;
@@ -129,6 +131,8 @@ import com.github.dockerjava.core.exec.RemoveServiceCmdExec;
 import com.github.dockerjava.core.exec.RemoveSwarmNodeCmdExec;
 import com.github.dockerjava.core.exec.RemoveVolumeCmdExec;
 import com.github.dockerjava.core.exec.RenameContainerCmdExec;
+import com.github.dockerjava.core.exec.ResizeContainerCmdExec;
+import com.github.dockerjava.core.exec.ResizeExecCmdExec;
 import com.github.dockerjava.core.exec.RestartContainerCmdExec;
 import com.github.dockerjava.core.exec.SaveImageCmdExec;
 import com.github.dockerjava.core.exec.SaveImagesCmdExec;
@@ -304,8 +308,18 @@ public abstract class AbstractDockerCmdExecFactory implements DockerCmdExecFacto
     }
 
     @Override
+    public ResizeContainerCmd.Exec createResizeContainerCmdExec() {
+        return new ResizeContainerCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
     public ExecStartCmd.Exec createExecStartCmdExec() {
         return new ExecStartCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public ResizeExecCmd.Exec createResizeExecCmdExec() {
+        return new ResizeExecCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override

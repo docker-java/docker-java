@@ -1,25 +1,21 @@
 package com.github.dockerjava.cmd;
 
-import com.github.dockerjava.api.command.DelegatingDockerCmdExecFactory;
-import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
-import com.github.dockerjava.core.DefaultDockerCmdExecFactory;
+import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.DockerClientConfigAware;
+import com.github.dockerjava.core.DockerClientImpl;
+import com.github.dockerjava.core.DockerRule;
 import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
-import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory;
+import com.github.dockerjava.jaxrs.JerseyDockerHttpClient;
 import com.github.dockerjava.jsch.SsshWithOKDockerHttpClient;
-import com.github.dockerjava.junit.DockerRule;
 import com.github.dockerjava.junit.category.Integration;
 import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
-import com.github.dockerjava.okhttp.OkHttpDockerCmdExecFactory;
-import com.jcraft.jsch.JSchException;
+import com.github.dockerjava.okhttp.OkDockerHttpClient;
 import org.junit.Rule;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -31,81 +27,82 @@ public abstract class CmdIT {
     public enum FactoryType {
         SSH(true) {
             @Override
-            public DockerCmdExecFactory createExecFactory() {
-                class FakeFactory extends DelegatingDockerCmdExecFactory implements DockerClientConfigAware {
-
-                    private DefaultDockerCmdExecFactory dockerCmdExecFactory;
-
-                    @Override
-                    public final DockerCmdExecFactory getDockerCmdExecFactory() {
-                        return dockerCmdExecFactory;
-                    }
-
-                    @Override
-                    public void init(DockerClientConfig dockerClientConfig) {
-
-                        final DefaultDockerClientConfig defaultDockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder()
-                            .withDockerHost("ssh://junit-host")
-                            .build();
-
-                        try {
-                            dockerCmdExecFactory = new DefaultDockerCmdExecFactory(
+            public DockerClientImpl createDockerClient(DockerClientConfig config) {
+                final DefaultDockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder()
+                    .withDockerHost("ssh://junit-host")
+                    .build();
+                try {
+                    return (DockerClientImpl) DockerClientBuilder.getInstance(config)
+                        .withDockerHttpClient(
+                            new TrackingDockerHttpClient(
                                 new SsshWithOKDockerHttpClient.Factory()
-                                    .dockerClientConfig(defaultDockerClientConfig)
-                                    .build(),
-                                defaultDockerClientConfig.getObjectMapper()
-                            );
-                        } catch (IOException | JSchException e) {
-                            throw new RuntimeException(e);
-                        }
-                        dockerCmdExecFactory.init(defaultDockerClientConfig);
-                    }
+                                    .dockerClientConfig(dockerClientConfig)
+                                    .connectTimeout(30 * 100)
+                                    .build()
+                            )
+                        )
+                        .build();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
-                return new FakeFactory();
             }
         },
         NETTY(true) {
             @Override
-            public DockerCmdExecFactory createExecFactory() {
-                return new NettyDockerCmdExecFactory().withConnectTimeout(30 * 1000);
+            public DockerClientImpl createDockerClient(DockerClientConfig config) {
+                return (DockerClientImpl) DockerClientBuilder.getInstance(config)
+                    .withDockerCmdExecFactory(
+                        new NettyDockerCmdExecFactory()
+                            .withConnectTimeout(30 * 1000)
+                    )
+                    .build();
             }
         },
         JERSEY(false) {
             @Override
-            public DockerCmdExecFactory createExecFactory() {
-                return new JerseyDockerCmdExecFactory().withConnectTimeout(30 * 1000);
+            public DockerClientImpl createDockerClient(DockerClientConfig config) {
+                return (DockerClientImpl) DockerClientBuilder.getInstance(config)
+                    .withDockerHttpClient(
+                        new TrackingDockerHttpClient(
+                            new JerseyDockerHttpClient.Builder()
+                                .dockerHost(config.getDockerHost())
+                                .sslConfig(config.getSSLConfig())
+                                .connectTimeout(30 * 1000)
+                                .build()
+                        )
+                    )
+                    .build();
             }
         },
         OKHTTP(true) {
             @Override
-            public DockerCmdExecFactory createExecFactory() {
-                return new OkHttpDockerCmdExecFactory().withConnectTimeout(30 * 1000);
+            public DockerClientImpl createDockerClient(DockerClientConfig config) {
+                return (DockerClientImpl) DockerClientBuilder.getInstance(config)
+                    .withDockerHttpClient(
+                        new TrackingDockerHttpClient(
+                            new OkDockerHttpClient.Builder()
+                                .dockerHost(config.getDockerHost())
+                                .sslConfig(config.getSSLConfig())
+                                .connectTimeout(30 * 100)
+                                .build()
+                        )
+                    )
+                    .build();
             }
         },
         HTTPCLIENT5(true) {
             @Override
-            public DockerCmdExecFactory createExecFactory() {
-                class FakeFactory extends DelegatingDockerCmdExecFactory implements DockerClientConfigAware {
-
-                    private DefaultDockerCmdExecFactory dockerCmdExecFactory;
-
-                    @Override
-                    public final DockerCmdExecFactory getDockerCmdExecFactory() {
-                        return dockerCmdExecFactory;
-                    }
-
-                    @Override
-                    public void init(DockerClientConfig dockerClientConfig) {
-                        dockerCmdExecFactory = new DefaultDockerCmdExecFactory(
-                            new ApacheDockerHttpClient.Factory()
-                                .dockerClientConfig(dockerClientConfig)
-                                .build(),
-                            dockerClientConfig.getObjectMapper()
-                        );
-                        dockerCmdExecFactory.init(dockerClientConfig);
-                    }
-                }
-                return new FakeFactory();
+            public DockerClientImpl createDockerClient(DockerClientConfig config) {
+                return (DockerClientImpl) DockerClientBuilder.getInstance(config)
+                    .withDockerHttpClient(
+                        new TrackingDockerHttpClient(
+                            new ApacheDockerHttpClient.Builder()
+                                .dockerHost(config.getDockerHost())
+                                .sslConfig(config.getSSLConfig())
+                                .build()
+                        )
+                    )
+                    .build();
             }
         };
 
@@ -125,7 +122,7 @@ public abstract class CmdIT {
             return supportsStdinAttach;
         }
 
-        public abstract DockerCmdExecFactory createExecFactory();
+        public abstract DockerClientImpl createDockerClient(DockerClientConfig config);
     }
 
     @Parameterized.Parameters(name = "{index}:{0}")
@@ -147,4 +144,6 @@ public abstract class CmdIT {
     @Rule
     public DockerRule dockerRule = new DockerRule(this);
 
+    @Rule
+    public DockerHttpClientLeakDetector leakDetector = new DockerHttpClientLeakDetector();
 }

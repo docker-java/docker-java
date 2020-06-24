@@ -15,7 +15,10 @@ public class SaveImagesCmdIT extends CmdIT {
 
     @Test
     public void saveNoImages() throws Exception {
-        try(final InputStream image = IOUtils.toBufferedInputStream(dockerRule.getClient().saveImagesCmd().exec())){
+        try (
+            InputStream inputStream = dockerRule.getClient().saveImagesCmd().exec();
+            InputStream image = IOUtils.toBufferedInputStream(inputStream)
+        ){
             assertThat(image.read(), not(-1));
         }
 
@@ -23,8 +26,10 @@ public class SaveImagesCmdIT extends CmdIT {
 
     @Test
     public void saveImagesWithNameAndTag() throws Exception {
-
-        try(final InputStream image = IOUtils.toBufferedInputStream(dockerRule.getClient().saveImagesCmd().withImage("busybox", "latest").exec())) {
+        try (
+            InputStream inputStream = dockerRule.getClient().saveImagesCmd().withImage("busybox", "latest").exec();
+            InputStream image = IOUtils.toBufferedInputStream(inputStream)
+        ) {
             assertThat(image.read(), not(-1));
         }
 
@@ -32,12 +37,14 @@ public class SaveImagesCmdIT extends CmdIT {
 
     @Test
     public void saveMultipleImages() throws Exception {
-
-        try(final InputStream image = IOUtils.toBufferedInputStream(dockerRule.getClient().saveImagesCmd()
-            // Not a real life use-case but "busybox" is the only one I dare to assume is really there.
-            .withImage("busybox", "latest")
-            .withImage("busybox", "latest")
-            .exec())) {
+        try (
+            InputStream inputStream = dockerRule.getClient().saveImagesCmd()
+                // Not a real life use-case but "busybox" is the only one I dare to assume is really there.
+                .withImage("busybox", "latest")
+                .withImage("busybox", "latest")
+                .exec();
+            InputStream image = IOUtils.toBufferedInputStream(inputStream)
+        ) {
             assertThat(image.read(), not(-1));
         }
     }

@@ -27,7 +27,7 @@
 		<dependency>
 			<groupId>com.github.mwiede</groupId>
 			<artifactId>jsch</artifactId>
-			<version>0.1.56</version>
+			<version>0.1.59</version>
 		</dependency>
 
 		<!-- testing -->

@@ -1,8 +1,8 @@
 package com.github.dockerjava.okhttp;
 
-import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.DockerHttpClient;
-import com.github.dockerjava.core.SSLConfig;
+import com.github.dockerjava.transport.DockerHttpClient;
+import com.github.dockerjava.transport.SSLConfig;
+import okhttp3.Call;
 import okhttp3.ConnectionPool;
 import okhttp3.Dns;
 import okhttp3.HttpUrl;
@@ -12,6 +12,8 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import okio.BufferedSink;
 import okio.Okio;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.X509TrustManager;
@@ -24,13 +26,18 @@ import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public final class OkDockerHttpClient implements DockerHttpClient {
 
-    public static final class Factory {
+    private static final Logger LOGGER = LoggerFactory.getLogger(OkDockerHttpClient.class);
 
-        private DockerClientConfig dockerClientConfig = null;
+    public static final class Builder {
+
+        private URI dockerHost = null;
+
+        private SSLConfig sslConfig = null;
 
         private Integer readTimeout = null;
 
@@ -38,29 +45,36 @@ public final class OkDockerHttpClient implements DockerHttpClient {
 
         private Boolean retryOnConnectionFailure = null;
 
-        public Factory dockerClientConfig(DockerClientConfig value) {
-            this.dockerClientConfig = value;
+        public Builder dockerHost(URI value) {
+            this.dockerHost = Objects.requireNonNull(value, "dockerHost");
             return this;
         }
 
-        public Factory readTimeout(Integer value) {
+        public Builder sslConfig(SSLConfig value) {
+            this.sslConfig = value;
+            return this;
+        }
+
+        public Builder readTimeout(Integer value) {
             this.readTimeout = value;
             return this;
         }
 
-        public Factory connectTimeout(Integer value) {
+        public Builder connectTimeout(Integer value) {
             this.connectTimeout = value;
             return this;
         }
 
-        Factory retryOnConnectionFailure(Boolean value) {
+        Builder retryOnConnectionFailure(Boolean value) {
             this.retryOnConnectionFailure = value;
             return this;
         }
 
         public OkDockerHttpClient build() {
+            Objects.requireNonNull(dockerHost, "dockerHost");
             return new OkDockerHttpClient(
-                dockerClientConfig,
+                dockerHost,
+                sslConfig,
                 readTimeout,
                 connectTimeout,
                 retryOnConnectionFailure
@@ -77,7 +91,8 @@ public final class OkDockerHttpClient implements DockerHttpClient {
     private final HttpUrl baseUrl;
 
     private OkDockerHttpClient(
-        DockerClientConfig dockerClientConfig,
+        URI dockerHost,
+        SSLConfig sslConfig,
         Integer readTimeout,
         Integer connectTimeout,
         Boolean retryOnConnectionFailure
@@ -99,7 +114,6 @@ public final class OkDockerHttpClient implements DockerHttpClient {
             clientBuilder.retryOnConnectionFailure(retryOnConnectionFailure);
         }
 
-        URI dockerHost = dockerClientConfig.getDockerHost();
         switch (dockerHost.getScheme()) {
             case "unix":
             case "npipe":
@@ -125,7 +139,6 @@ public final class OkDockerHttpClient implements DockerHttpClient {
         }
 
         boolean isSSL = false;
-        SSLConfig sslConfig = dockerClientConfig.getSSLConfig();
         if (sslConfig != null) {
             try {
                 SSLContext sslContext = sslConfig.getSSLContext();
@@ -207,9 +220,11 @@ public final class OkDockerHttpClient implements DockerHttpClient {
             clientToUse = streamingClient;
         }
 
+        Call call = clientToUse.newCall(requestBuilder.build());
         try {
-            return new OkResponse(clientToUse.newCall(requestBuilder.build()).execute());
+            return new OkResponse(call);
         } catch (IOException e) {
+            call.cancel();
             throw new UncheckedIOException("Error while executing " + request, e);
         }
     }
@@ -227,10 +242,13 @@ public final class OkDockerHttpClient implements DockerHttpClient {
 
         static final ThreadLocal<Boolean> CLOSING = ThreadLocal.withInitial(() -> false);
 
+        private final Call call;
+
         private final okhttp3.Response response;
 
-        OkResponse(okhttp3.Response response) {
-            this.response = response;
+        OkResponse(Call call) throws IOException {
+            this.call = call;
+            this.response = call.execute();
         }
 
         @Override
@@ -258,7 +276,10 @@ public final class OkDockerHttpClient implements DockerHttpClient {
             boolean previous = CLOSING.get();
             CLOSING.set(true);
             try {
+                call.cancel();
                 response.close();
+            } catch (Exception | AssertionError e) {
+                LOGGER.debug("Failed to close the response", e);
             } finally {
                 CLOSING.set(previous);
             }

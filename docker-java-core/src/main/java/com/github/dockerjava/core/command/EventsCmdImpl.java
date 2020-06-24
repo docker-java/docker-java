@@ -1,13 +1,13 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.github.dockerjava.api.command.EventsCmd;
+import com.github.dockerjava.api.model.Event;
+import com.github.dockerjava.core.util.FiltersBuilder;
 
 import java.util.List;
 import java.util.Map;
 
-import com.github.dockerjava.api.command.EventsCmd;
-import com.github.dockerjava.api.model.Event;
-import com.github.dockerjava.core.util.FiltersBuilder;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Stream docker events
@@ -54,6 +54,13 @@ public class EventsCmdImpl extends AbstrAsyncDockerCmd<EventsCmd, Event> impleme
     public EventsCmd withEventFilter(String... event) {
         checkNotNull(event, "event have not been specified");
         this.filters.withFilter("event", event);
+        return this;
+    }
+
+    @Override
+    public EventsCmd withEventTypeFilter(String... eventTypes) {
+        checkNotNull(eventTypes, "event types have not been specified");
+        this.filters.withEventTypes(eventTypes);
         return this;
     }
 

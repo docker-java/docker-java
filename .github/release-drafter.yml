@@ -3,15 +3,15 @@ name-template: '$NEXT_PATCH_VERSION 🌈'
 categories:
   - title: '🚀 Features'
     labels:
-      - 'feature'
-      - 'enhancement'
+      - 'type/feature'
+  - title: '📈 Enhancements'
+    labels:
+      - 'type/enhancement'
   - title: '🐛 Bug Fixes'
     labels:
-      - 'fix'
-      - 'bugfix'
-      - 'bug'
+      - 'type/bug'
   - title: '🧰 Maintenance'
-    label: 'chore'
+    label: 'type/housekeeping'
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 template: |
   ## Changes

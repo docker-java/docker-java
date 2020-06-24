@@ -3,6 +3,7 @@ package com.github.dockerjava.core;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.StreamType;
+import com.github.dockerjava.transport.DockerHttpClient;
 
 import java.io.InputStream;
 import java.util.Arrays;

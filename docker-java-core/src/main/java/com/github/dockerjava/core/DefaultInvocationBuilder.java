@@ -14,9 +14,11 @@ import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.exception.NotModifiedException;
 import com.github.dockerjava.api.exception.UnauthorizedException;
 import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.transport.DockerHttpClient;
 import org.apache.commons.io.IOUtils;
 
 import java.io.ByteArrayInputStream;
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -98,7 +100,17 @@ class DefaultInvocationBuilder implements InvocationBuilder {
             .body(encode(entity))
             .build();
 
-        return execute(request).getBody();
+        DockerHttpClient.Response response = execute(request);
+        return new FilterInputStream(response.getBody()) {
+            @Override
+            public void close() throws IOException {
+                try {
+                    super.close();
+                } finally {
+                    response.close();
+                }
+            }
+        };
     }
 
     @Override
@@ -187,7 +199,17 @@ class DefaultInvocationBuilder implements InvocationBuilder {
             .method(DockerHttpClient.Request.Method.GET)
             .build();
 
-        return execute(request).getBody();
+        DockerHttpClient.Response response = execute(request);
+        return new FilterInputStream(response.getBody()) {
+            @Override
+            public void close() throws IOException {
+                try {
+                    super.close();
+                } finally {
+                    response.close();
+                }
+            }
+        };
     }
 
     @Override
@@ -243,8 +265,12 @@ class DefaultInvocationBuilder implements InvocationBuilder {
         Consumer<DockerHttpClient.Response> sourceConsumer
     ) {
         Thread thread = new Thread(() -> {
+            Thread streamingThread = Thread.currentThread();
             try (DockerHttpClient.Response response = execute(request)) {
-                callback.onStart(response);
+                callback.onStart(() -> {
+                    streamingThread.interrupt();
+                    response.close();
+                });
 
                 sourceConsumer.accept(response);
                 callback.onComplete();

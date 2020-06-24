@@ -1,8 +1,8 @@
 package com.github.dockerjava.jsch;
 
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.DockerHttpClient;
 import com.github.dockerjava.core.SSLConfig;
+import com.github.dockerjava.transport.DockerHttpClient;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.OpenSSHConfig;

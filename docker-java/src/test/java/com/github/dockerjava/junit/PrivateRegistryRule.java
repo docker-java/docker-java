@@ -8,13 +8,14 @@ import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.core.DockerClientBuilder;
+import com.github.dockerjava.core.DockerRule;
 import org.junit.rules.ExternalResource;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.dockerjava.api.model.HostConfig.newHostConfig;
-import static com.github.dockerjava.junit.DockerRule.DEFAULT_IMAGE;
+import static com.github.dockerjava.core.DockerRule.DEFAULT_IMAGE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;

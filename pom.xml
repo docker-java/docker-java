@@ -42,6 +42,11 @@
 			<name>Konstantin Pelykh</name>
 			<email>kpelykh@gmail.com</email>
 		</developer>
+		<developer>
+			<id>bsideup</id>
+			<name>Sergei Egorov</name>
+			<email>bsideup@gmail.com</email>
+		</developer>
 	</developers>
 
 	<properties>
@@ -89,21 +94,15 @@
 	<modules>
 		<module>docker-java-api</module>
 		<module>docker-java-core</module>
+		<module>docker-java-transport</module>
 		<module>docker-java-transport-netty</module>
 		<module>docker-java-transport-jersey</module>
 		<module>docker-java-transport-okhttp</module>
 		<module>docker-java-transport-httpclient5</module>
+		<module>docker-java-transport-zerodep</module>
 		<module>docker-java-transport-ssh</module>
 		<module>docker-java</module>
 	</modules>
-
-	<distributionManagement>
-		<repository>
-			<id>bintray-docker-java-releases</id>
-			<name>docker-java-releases</name>
-			<url>https://api.bintray.com/maven/docker-java/releases/docker-java/;publish=0</url>
-		</repository>
-	</distributionManagement>
 
 	<build>
 		<pluginManagement>

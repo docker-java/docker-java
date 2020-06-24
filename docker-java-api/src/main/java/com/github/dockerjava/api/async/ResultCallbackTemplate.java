@@ -87,10 +87,18 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
      */
     @SuppressWarnings("unchecked")
     public RC_T awaitCompletion() throws InterruptedException {
-        completed.await();
-        // eventually (re)throws RuntimeException
-        throwFirstError();
-        return (RC_T) this;
+        try {
+            completed.await();
+            // eventually (re)throws RuntimeException
+            throwFirstError();
+            return (RC_T) this;
+        } finally {
+            try {
+                close();
+            } catch (IOException e) {
+                LOGGER.debug("Failed to close", e);
+            }
+        }
     }
 
     /**
@@ -99,9 +107,17 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
      *         before {@link ResultCallback#onComplete()} was called.
      */
     public boolean awaitCompletion(long timeout, TimeUnit timeUnit) throws InterruptedException {
-        boolean result = completed.await(timeout, timeUnit);
-        throwFirstError();
-        return result;
+        try {
+            boolean result = completed.await(timeout, timeUnit);
+            throwFirstError();
+            return result;
+        } finally {
+            try {
+                close();
+            } catch (IOException e) {
+                LOGGER.debug("Failed to close", e);
+            }
+        }
     }
 
     /**

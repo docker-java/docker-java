@@ -11,6 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.KeyStore;
 import java.security.Security;
+import java.security.cert.Certificate;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -84,6 +86,20 @@ public class CertificateUtilsTest {
         assertThat(keyStore.size(), is(2));
         assertThat(keyStore.isCertificateEntry("ca-1"), is(true));
         assertThat(keyStore.isCertificateEntry("ca-2"), is(true));
+    }
+
+    @Test
+    public void readCert() throws Exception {
+        String certpem = readFileAsString("caTest/single_ca.pem");
+        List<Certificate> certs = CertificateUtils.loadCertificates(certpem);
+        assertThat(certs.size(), is(1));
+    }
+
+    @Test
+    public void readMultipleCerts() throws Exception {
+        String certpem = readFileAsString("caTest/multiple_ca.pem");
+        List<Certificate> certs = CertificateUtils.loadCertificates(certpem);
+        assertThat(certs.size(), is(2));
     }
 
     private String readFileAsString(String path) throws IOException {
