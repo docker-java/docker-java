@@ -45,5 +45,5 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.name }}-testresults
-          path: **/TEST-*.xml
+          path: '**/TEST-*.xml'
         if: always()
