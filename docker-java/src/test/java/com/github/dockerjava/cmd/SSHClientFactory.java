@@ -1,27 +1,19 @@
 package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.DelegatingDockerCmdExecFactory;
-import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
-import com.github.dockerjava.core.DefaultDockerCmdExecFactory;
+import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientConfigAware;
-import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.jsch.SsshWithOKDockerHttpClient;
+import com.github.dockerjava.transport.DockerHttpClient;
 import com.jcraft.jsch.JSchException;
 
 import java.io.IOException;
 
-public class SSHClientFactory extends DelegatingDockerCmdExecFactory implements DockerClientConfigAware {
+public class SSHClientFactory implements DockerClientConfigAware {
 
-    private DefaultDockerCmdExecFactory dockerCmdExecFactory;
-    private SsshWithOKDockerHttpClient httpClient;
-
-    @Override
-    public final DockerCmdExecFactory getDockerCmdExecFactory() {
-        return dockerCmdExecFactory;
-    }
+    private DockerHttpClient httpClient;
 
     @Override
     public void init(DockerClientConfig dockerClientConfig) {
@@ -51,24 +43,31 @@ public class SSHClientFactory extends DelegatingDockerCmdExecFactory implements 
 
         try {
             httpClient = factory.build();
-            dockerCmdExecFactory = new DefaultDockerCmdExecFactory(httpClient, defaultDockerClientConfig.getObjectMapper());
         } catch (IOException | JSchException e) {
             throw new RuntimeException(e);
         }
-        dockerCmdExecFactory.init(defaultDockerClientConfig);
     }
 
-    public SSHClientFactory withDockerClientConfig(DockerClientConfig config) {
+    SSHClientFactory withDockerClientConfig(DockerClientConfig config) {
         init(config);
         return this;
     }
 
     public DockerClient build() {
+
+        final DefaultDockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder()
+            .withRegistryUrl("https://index.docker.io/v1/")
+            .build();
+
         if (httpClient == null) {
-            init(DefaultDockerClientConfig.createDefaultConfigBuilder()
-                .withRegistryUrl("https://index.docker.io/v1/")
-                .build());
+            init(config);
         }
-        return DockerClientImpl.getInstance().withHttpClient(httpClient);
+
+        return DockerClientBuilder.getInstance()
+            .withDockerHttpClient(
+                new TrackingDockerHttpClient(
+                    httpClient
+                )
+            ).build();
     }
 }

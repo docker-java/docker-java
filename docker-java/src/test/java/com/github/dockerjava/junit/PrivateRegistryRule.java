@@ -9,7 +9,6 @@ import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.cmd.CmdIT;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
-import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerRule;
 import org.junit.rules.ExternalResource;
 
@@ -43,9 +42,9 @@ public class PrivateRegistryRule extends ExternalResource {
         String imgNameWithTag = createTestImage(tagName);
 
         dockerClient.pushImageCmd(imgNameWithTag)
-                .withAuthConfig(authConfig)
-                .start()
-                .awaitCompletion(30, TimeUnit.SECONDS);
+            .withAuthConfig(authConfig)
+            .start()
+            .awaitCompletion(30, TimeUnit.SECONDS);
 
         dockerClient.removeImageCmd(imgNameWithTag).exec();
 
@@ -69,9 +68,7 @@ public class PrivateRegistryRule extends ExternalResource {
     @Override
     protected void before() throws Throwable {
 
-        this.dockerClient = DockerClientBuilder.getInstance(DefaultDockerClientConfig.createDefaultConfigBuilder().build())
-            .withDockerCmdExecFactory(testInstance.getFactoryType().createExecFactory())
-            .build();
+        this.dockerClient = testInstance.getFactoryType().createDockerClient(DefaultDockerClientConfig.createDefaultConfigBuilder().build());
 
         int port = 5050;
 
@@ -80,26 +77,26 @@ public class PrivateRegistryRule extends ExternalResource {
         File baseDir = new File(DockerRule.class.getResource("/privateRegistry").getFile());
 
         String registryImageId = dockerClient.buildImageCmd(baseDir)
-                .withNoCache(true)
-                .start()
-                .awaitImageId();
+            .withNoCache(true)
+            .start()
+            .awaitImageId();
 
         InspectImageResponse inspectImageResponse = dockerClient.inspectImageCmd(registryImageId).exec();
         assertThat(inspectImageResponse, not(nullValue()));
         DockerRule.LOG.info("Image Inspect: {}", inspectImageResponse.toString());
 
         dockerClient.tagImageCmd(registryImageId, imageName, "2")
-                .withForce().exec();
+            .withForce().exec();
 
         // see https://github.com/docker/distribution/blob/master/docs/deploying.md#native-basic-auth
         CreateContainerResponse testregistry = dockerClient
-                .createContainerCmd(imageName + ":2")
-                .withHostConfig(newHostConfig()
-                        .withPortBindings(new PortBinding(Ports.Binding.bindPort(port), ExposedPort.tcp(5000))))
-                .withEnv("REGISTRY_AUTH=htpasswd", "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm",
-                        "REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd", "REGISTRY_LOG_LEVEL=debug",
-                        "REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt", "REGISTRY_HTTP_TLS_KEY=/certs/domain.key")
-                .exec();
+            .createContainerCmd(imageName + ":2")
+            .withHostConfig(newHostConfig()
+                .withPortBindings(new PortBinding(Ports.Binding.bindPort(port), ExposedPort.tcp(5000))))
+            .withEnv("REGISTRY_AUTH=htpasswd", "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm",
+                "REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd", "REGISTRY_LOG_LEVEL=debug",
+                "REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt", "REGISTRY_HTTP_TLS_KEY=/certs/domain.key")
+            .exec();
 
         containerId = testregistry.getId();
         dockerClient.startContainerCmd(containerId).exec();
@@ -109,18 +106,18 @@ public class PrivateRegistryRule extends ExternalResource {
 
         // credentials as configured in /auth/htpasswd
         authConfig = new AuthConfig()
-                .withUsername("testuser")
-                .withPassword("testpassword")
-                .withRegistryAddress("localhost:" + port);
+            .withUsername("testuser")
+            .withPassword("testpassword")
+            .withRegistryAddress("localhost:" + port);
     }
 
     @Override
     protected void after() {
         if (containerId != null) {
             dockerClient.removeContainerCmd(containerId)
-                    .withForce(true)
-                    .withRemoveVolumes(true)
-                    .exec();
+                .withForce(true)
+                .withRemoveVolumes(true)
+                .exec();
         }
     }
 }

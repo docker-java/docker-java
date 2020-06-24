@@ -1,13 +1,11 @@
 package com.github.dockerjava.cmd;
 
-import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.core.DockerRule;
 import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
 import com.github.dockerjava.jaxrs.JerseyDockerHttpClient;
-import com.github.dockerjava.jsch.SsshWithOKDockerHttpClient;
 import com.github.dockerjava.junit.category.Integration;
 import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
 import com.github.dockerjava.okhttp.OkDockerHttpClient;
@@ -18,7 +16,6 @@ import org.junit.runners.Parameterized;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.Arrays;
 
 /**
  * @author Kanstantsin Shautsou
@@ -31,23 +28,9 @@ public abstract class CmdIT {
         SSH(true, true) {
             @Override
             public DockerClientImpl createDockerClient(DockerClientConfig config) {
-                final DefaultDockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder()
-                    .withDockerHost("ssh://junit-host")
+                return (DockerClientImpl) new SSHClientFactory().
+                    withDockerClientConfig(config)
                     .build();
-                try {
-                    return (DockerClientImpl) DockerClientBuilder.getInstance(config)
-                        .withDockerHttpClient(
-                            new TrackingDockerHttpClient(
-                                new SsshWithOKDockerHttpClient.Factory()
-                                    .dockerClientConfig(dockerClientConfig)
-                                    .connectTimeout(30 * 100)
-                                    .build()
-                            )
-                        )
-                        .build();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
             }
         },
         NETTY(true, false) {
