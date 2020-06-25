@@ -142,7 +142,6 @@
 					<trimStackTrace>false</trimStackTrace>
 					<rerunFailingTestsCount>3</rerunFailingTestsCount>
 					<excludedGroups>com.github.dockerjava.junit.category.Integration</excludedGroups>
-					<testFailureIgnore>true</testFailureIgnore>
 				</configuration>
 			</plugin>
 
@@ -162,7 +161,6 @@
 					<trimStackTrace>false</trimStackTrace>
 					<rerunFailingTestsCount>5</rerunFailingTestsCount>
 					<groups>com.github.dockerjava.junit.category.Integration</groups>
-					<testFailureIgnore>true</testFailureIgnore>
 				</configuration>
 			</plugin>
 
