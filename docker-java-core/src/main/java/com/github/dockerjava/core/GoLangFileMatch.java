@@ -59,8 +59,8 @@ public class GoLangFileMatch {
     private static final String PATTERN_CHARS_TO_ESCAPE = "\\.[]{}()*+-?^$|";
 
     private static final LoadingCache<String, Pattern> PATTERN_CACHE = CacheBuilder.newBuilder()
-        .expireAfterWrite(1, TimeUnit.HOURS) // ttl 1 hour
-        .maximumSize(50) // max 50 entries
+        .expireAfterAccess(1, TimeUnit.HOURS)
+        .maximumSize(10_000)
         .build(CacheLoader.from(GoLangFileMatch::buildPattern));
 
     public static boolean match(List<String> patterns, File file) {
