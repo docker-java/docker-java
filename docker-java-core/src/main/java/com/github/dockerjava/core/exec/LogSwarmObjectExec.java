@@ -38,6 +38,7 @@ public class LogSwarmObjectExec extends AbstrAsyncDockerCmdExec<LogSwarmObjectCm
         webTarget = booleanQueryParam(webTarget, "stdout", command.getStdout());
         webTarget = booleanQueryParam(webTarget, "stderr", command.getStderr());
         webTarget = booleanQueryParam(webTarget, "follow", command.getFollow());
+        webTarget = booleanQueryParam(webTarget, "details", command.getDetails());
 
         LOGGER.trace("GET: {}", webTarget);
 
