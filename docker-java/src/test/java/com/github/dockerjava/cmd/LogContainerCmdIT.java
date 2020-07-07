@@ -1,15 +1,19 @@
 package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.StreamType;
 import com.github.dockerjava.utils.LogContainerTestCallback;
+import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.time.OffsetDateTime;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -196,5 +200,37 @@ public class LogContainerCmdIT extends CmdIT {
         loggingCallback.awaitCompletion();
 
         assertThat(loggingCallback.toString(), containsString(snippet));
+    }
+
+    @Test
+    public void asyncLogContainerWithUntil() throws Exception {
+
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
+            .withCmd("/bin/sh", "-c", "while true; do echo hello; sleep 1; done")
+            .exec();
+
+        LOG.info("Created container: {}", container.toString());
+        assertThat(container.getId(), not(is(emptyString())));
+
+        dockerRule.getClient().startContainerCmd(container.getId()).exec();
+
+        Thread.sleep(5000);
+
+        int timestamp = (int) (System.currentTimeMillis() / 1000);
+
+        LogContainerTestCallback loggingCallback = new LogContainerTestCallback();
+
+        dockerRule.getClient().logContainerCmd(container.getId())
+            .withStdErr(true)
+            .withStdOut(true)
+            .withUntil(timestamp)
+            .exec(loggingCallback);
+
+        loggingCallback.awaitCompletion();
+
+        String logs = loggingCallback.toString();
+        assertThat(loggingCallback.toString(), containsString("hello"));
+        assertEquals(5, StringUtils.countMatches(logs, "hello"));
+
     }
 }
