@@ -213,10 +213,12 @@ public class LogContainerCmdIT extends CmdIT {
         assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
-
         Thread.sleep(5000);
 
         int timestamp = (int) (System.currentTimeMillis() / 1000);
+
+        Thread.sleep(2000);
+        dockerRule.getClient().stopContainerCmd(container.getId()).exec();
 
         LogContainerTestCallback loggingCallback = new LogContainerTestCallback();
 
@@ -228,9 +230,23 @@ public class LogContainerCmdIT extends CmdIT {
 
         loggingCallback.awaitCompletion();
 
-        String logs = loggingCallback.toString();
-        assertThat(loggingCallback.toString(), containsString("hello"));
-        assertEquals(5, StringUtils.countMatches(logs, "hello"));
+        String logs_until = loggingCallback.toString();
+        assertThat(logs_until, containsString("hello"));
+        assertEquals(5, StringUtils.countMatches(logs_until,"hello"));
 
+        loggingCallback = new LogContainerTestCallback();
+
+        dockerRule.getClient().logContainerCmd(container.getId())
+            .withStdErr(true)
+            .withStdOut(true)
+            .exec(loggingCallback);
+
+        loggingCallback.awaitCompletion();
+
+        String logs = loggingCallback.toString();
+        assertThat(logs, containsString("hello"));
+
+        assertTrue(logs.length() > logs_until.length());
     }
+
 }
