@@ -882,16 +882,15 @@ public class CreateContainerCmdIT extends CmdIT {
     @Test
     public void createContainerWithLogConfig() throws DockerException {
 
-        LogConfig logConfig = new LogConfig(LogConfig.LoggingType.NONE, null);
+        LogConfig logConfig = new LogConfig(LogConfig.NONE, null);
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withHostConfig(newHostConfig().withLogConfig(logConfig))
                 .exec();
 
         LOG.info("Created container {}", container.toString());
-        assertThat(container.getId(), not(isEmptyString()));
+        assertThat(container.getId(), not(is(emptyString())));
 
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
-        assertThat(inspectContainerResponse.getHostConfig().getLogConfig().type, is(LogConfig.LoggingType.NONE));
         assertThat(inspectContainerResponse.getHostConfig().getLogConfig().getLoggingType(), equalTo(LogConfig.NONE));
     }
 
