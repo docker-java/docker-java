@@ -99,21 +99,20 @@ public class Device implements Serializable {
      * @link https://github.com/docker/docker/blob/6b4a46f28266031ce1a1315f17fb69113a06efe1/runconfig/opts/parse.go#L796
      */
     private static boolean validDeviceMode(String deviceMode) {
-        Map<String, Boolean> validModes = new HashMap<>(3);
-        validModes.put("r", true);
-        validModes.put("w", true);
-        validModes.put("m", true);
-
         if (deviceMode == null || deviceMode.length() == 0) {
             return false;
         }
 
+        Map<Character, Boolean> validModes = new HashMap<>((int) ((deviceMode.length() + 3) / 0.75) + 1);
+        validModes.put('r', true);
+        validModes.put('w', true);
+        validModes.put('m', true);
+
         for (char ch : deviceMode.toCharArray()) {
-            final String mode = String.valueOf(ch);
-            if (!Boolean.TRUE.equals(validModes.get(mode))) {
+            if (!Boolean.TRUE.equals(validModes.get(ch))) {
                 return false; // wrong mode
             }
-            validModes.put(mode, false);
+            validModes.put(ch, false);
         }
 
         return true;
