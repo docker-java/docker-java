@@ -26,6 +26,7 @@ public class LogConfig implements Serializable {
 
     public static final String NONE = "none";
     public static final String DEFAULT = "json-file";
+    public static final String LOCAL = "local";
     public static final String ETWLOGS = "etwlogs";
     public static final String JSON_FILE = "json-file";
     public static final String SYSLOG = "syslog";
