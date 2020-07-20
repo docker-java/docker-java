@@ -6,8 +6,14 @@ package com.github.dockerjava.core;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import com.google.common.util.concurrent.UncheckedExecutionException;
 import org.apache.commons.lang.StringUtils;
 
 import com.github.dockerjava.core.exception.GoLangFileMatchException;
@@ -52,6 +58,11 @@ public class GoLangFileMatch {
 
     private static final String PATTERN_CHARS_TO_ESCAPE = "\\.[]{}()*+-?^$|";
 
+    private static final LoadingCache<String, Pattern> PATTERN_CACHE = CacheBuilder.newBuilder()
+        .expireAfterAccess(1, TimeUnit.HOURS)
+        .maximumSize(10_000)
+        .build(CacheLoader.from(GoLangFileMatch::buildPattern));
+
     public static boolean match(List<String> patterns, File file) {
         return !match(patterns, file.getPath()).isEmpty();
     }
@@ -74,7 +85,11 @@ public class GoLangFileMatch {
     }
 
     public static boolean match(String pattern, String name) {
-        return buildPattern(pattern).matcher(name).matches();
+        try {
+            return PATTERN_CACHE.get(pattern).matcher(name).matches();
+        } catch (ExecutionException | UncheckedExecutionException e) {
+            throw new GoLangFileMatchException(e.getCause().getMessage());
+        }
     }
 
     private static Pattern buildPattern(String pattern) {
