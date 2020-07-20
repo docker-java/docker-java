@@ -38,23 +38,21 @@ class HijackingInterceptor implements Interceptor {
         chain.call().timeout().clearTimeout().clearDeadline();
 
         Exchange exchange = ((RealInterceptorChain) chain).exchange();
-        Thread thread;
-        try (RealWebSocket.Streams streams = exchange.newWebSocketStreams()) {
-            thread = new Thread(() -> {
-                try (BufferedSink sink = streams.sink) {
-                    while (sink.isOpen()) {
-                        int aByte = stdin.read();
-                        if (aByte < 0) {
-                            break;
-                        }
-                        sink.writeByte(aByte);
-                        sink.flush();
+        RealWebSocket.Streams streams = exchange.newWebSocketStreams();
+        Thread thread = new Thread(() -> {
+            try (BufferedSink sink = streams.sink) {
+                while (sink.isOpen()) {
+                    int aByte = stdin.read();
+                    if (aByte < 0) {
+                        break;
                     }
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    sink.writeByte(aByte);
+                    sink.flush();
                 }
-            });
-        }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
         thread.setName("jsch-hijack-streaming-" + System.identityHashCode(request));
         thread.setDaemon(true);
         thread.start();
