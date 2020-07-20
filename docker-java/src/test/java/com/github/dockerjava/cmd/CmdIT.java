@@ -28,8 +28,8 @@ public abstract class CmdIT {
         SSH(true, true) {
             @Override
             public DockerClientImpl createDockerClient(DockerClientConfig config) {
-                return (DockerClientImpl) new SSHClientFactory().
-                    withDockerClientConfig(config)
+                return (DockerClientImpl) new SSHClientFactory()
+                    .withDockerClientConfig(config)
                     .build();
             }
         },

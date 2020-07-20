@@ -13,16 +13,17 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @EnabledIfEnvironmentVariable(named = "DOCKER_HOST", matches = "ssh://.*")
-class SsshWithOKDockerHttpClientIT {
+class JschDockerHttpClientIT {
 
     @Test
     void pingViaDialer() throws IOException, JSchException {
 
         final DefaultDockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
 
-        try (final DockerHttpClient dockerHttpClient = new SsshWithOKDockerHttpClient.Factory().dockerClientConfig(dockerClientConfig).build()) {
+        try (final DockerHttpClient dockerHttpClient = new JschDockerHttpClient.Builder()
+            .dockerHost(dockerClientConfig.getDockerHost()).build()) {
 
-            final DockerClient dockerClient = DockerClientImpl.getInstance(dockerClientConfig,dockerHttpClient);
+            final DockerClient dockerClient = DockerClientImpl.getInstance(dockerClientConfig, dockerHttpClient);
 
             assertDoesNotThrow(() -> dockerClient.pingCmd().exec());
         }
@@ -33,11 +34,12 @@ class SsshWithOKDockerHttpClientIT {
 
         final DefaultDockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
 
-        try (final DockerHttpClient dockerHttpClient = new SsshWithOKDockerHttpClient.Factory()
+        try (final DockerHttpClient dockerHttpClient = new JschDockerHttpClient.Builder()
             .useSocket()
-            .dockerClientConfig(dockerClientConfig).build()) {
+            .dockerHost(dockerClientConfig.getDockerHost())
+            .build()) {
 
-            final DockerClient dockerClient = DockerClientImpl.getInstance(dockerClientConfig,dockerHttpClient);
+            final DockerClient dockerClient = DockerClientImpl.getInstance(dockerClientConfig, dockerHttpClient);
 
             assertDoesNotThrow(() -> dockerClient.pingCmd().exec());
         }
@@ -48,12 +50,12 @@ class SsshWithOKDockerHttpClientIT {
 
         final DefaultDockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
 
-        try (final DockerHttpClient dockerHttpClient = new SsshWithOKDockerHttpClient.Factory()
+        try (final DockerHttpClient dockerHttpClient = new JschDockerHttpClient.Builder()
             .useSocat()
-            .dockerClientConfig(dockerClientConfig)
+            .dockerHost(dockerClientConfig.getDockerHost())
             .build()) {
 
-            final DockerClient dockerClient = DockerClientImpl.getInstance(dockerClientConfig,dockerHttpClient);
+            final DockerClient dockerClient = DockerClientImpl.getInstance(dockerClientConfig, dockerHttpClient);
 
             assertDoesNotThrow(() -> dockerClient.pingCmd().exec());
         }

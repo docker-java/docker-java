@@ -5,7 +5,7 @@ import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientConfigAware;
-import com.github.dockerjava.jsch.SsshWithOKDockerHttpClient;
+import com.github.dockerjava.jsch.JschDockerHttpClient;
 import com.github.dockerjava.transport.DockerHttpClient;
 import com.jcraft.jsch.JSchException;
 
@@ -18,9 +18,9 @@ public class SSHClientFactory implements DockerClientConfigAware {
     @Override
     public void init(DockerClientConfig dockerClientConfig) {
 
-        final SsshWithOKDockerHttpClient.Factory factory = new SsshWithOKDockerHttpClient.Factory()
+        final JschDockerHttpClient.Builder builder = new JschDockerHttpClient.Builder()
             .connectTimeout(30 * 1000)
-            .dockerClientConfig(dockerClientConfig);
+            .dockerHost(dockerClientConfig.getDockerHost());
 
         final DefaultDockerClientConfig defaultDockerClientConfig = DefaultDockerClientConfig
             .createDefaultConfigBuilder()
@@ -35,14 +35,14 @@ public class SSHClientFactory implements DockerClientConfigAware {
             // Docker Host was overwritten i.e. from com.github.dockerjava.cmd.swarm.SwarmCmdIT.initializeDockerClient
             // so we still use ssh connection and use inner binding to tcp
             if ("tcp".equalsIgnoreCase(dockerClientConfig.getDockerHost().getScheme())) {
-                factory
-                    .dockerClientConfig(defaultDockerClientConfig)
+                builder
+                    .dockerHost(defaultDockerClientConfig.getDockerHost())
                     .useTcp(dockerClientConfig.getDockerHost().getPort());
             }
         }
 
         try {
-            httpClient = factory.build();
+            httpClient = builder.build();
         } catch (IOException | JSchException e) {
             throw new RuntimeException(e);
         }

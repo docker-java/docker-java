@@ -76,7 +76,7 @@ class SocatHandlerIT {
     @org.junit.jupiter.api.Test
     @Timeout(value = 10)
     void startSocatAndPing() throws IOException, JSchException {
-        container = SocatHandler.startSocat(session);
+        container = SocatHandler.startSocat(session, "");
         assertNotNull(container);
         assertEquals("200", ping(container));
     }

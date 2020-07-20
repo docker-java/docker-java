@@ -4,8 +4,9 @@ import com.jcraft.jsch.Session;
 import okhttp3.Interceptor;
 
 import java.io.File;
+import java.util.Hashtable;
 
-public class SSHDockerConfig {
+class JschDockerConfig {
 
     static final String VAR_RUN_DOCKER_SOCK = "/var/run/docker.sock";
 
@@ -17,6 +18,8 @@ public class SSHDockerConfig {
     private boolean useTcp;
     private boolean useSocket;
     private Integer tcpPort;
+    private Hashtable jschConfig;
+    private String socatFlags;
 
     public Integer getTcpPort() {
         return tcpPort;
@@ -25,7 +28,6 @@ public class SSHDockerConfig {
     public void setTcpPort(Integer tcpPort) {
         this.tcpPort = tcpPort;
     }
-
 
     public String getSocketPath() {
         return socketPath;
@@ -81,5 +83,21 @@ public class SSHDockerConfig {
 
     public void setUseSocket(boolean useSocket) {
         this.useSocket = useSocket;
+    }
+
+    public void setJschConfig(Hashtable jschConfig) {
+        this.jschConfig = jschConfig;
+    }
+
+    public Hashtable getJschConfig() {
+        return jschConfig;
+    }
+
+    public String getSocatFlags() {
+        return socatFlags != null ? socatFlags : "";
+    }
+
+    public void setSocatFlags(String socatFlags) {
+        this.socatFlags = socatFlags;
     }
 }

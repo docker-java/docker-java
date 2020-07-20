@@ -1,12 +1,12 @@
 package com.github.dockerjava.jsch;
 
-import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.SSLConfig;
 import com.github.dockerjava.transport.DockerHttpClient;
+import com.github.dockerjava.transport.SSLConfig;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.OpenSSHConfig;
 import com.jcraft.jsch.Session;
+import okhttp3.Call;
 import okhttp3.ConnectionPool;
 import okhttp3.Dns;
 import okhttp3.HttpUrl;
@@ -17,6 +17,8 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import okio.BufferedSink;
 import okio.Okio;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.X509TrustManager;
@@ -28,16 +30,21 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.security.cert.X509Certificate;
 import java.util.Collections;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-public final class SsshWithOKDockerHttpClient implements DockerHttpClient {
+public final class JschDockerHttpClient implements DockerHttpClient {
 
-    public static final class Factory {
+    private static final Logger LOGGER = LoggerFactory.getLogger(JschDockerHttpClient.class);
 
-        private DockerClientConfig dockerClientConfig = null;
+    public static final class Builder {
+
+        private URI dockerHost = null;
+
+        private SSLConfig sslConfig = null;
 
         private Integer readTimeout = null;
 
@@ -45,37 +52,42 @@ public final class SsshWithOKDockerHttpClient implements DockerHttpClient {
 
         private Boolean retryOnConnectionFailure = null;
 
-        final SSHDockerConfig sshDockerConfig = new SSHDockerConfig();
+        final JschDockerConfig jschDockerConfig = new JschDockerConfig();
 
-        public Factory dockerClientConfig(DockerClientConfig value) {
-            this.dockerClientConfig = value;
+        public Builder dockerHost(URI value) {
+            this.dockerHost = Objects.requireNonNull(value, "dockerHost");
             return this;
         }
 
-        public Factory readTimeout(Integer value) {
+        public Builder sslConfig(SSLConfig sslConfig) {
+            this.sslConfig = sslConfig;
+            return this;
+        }
+
+        public Builder readTimeout(Integer value) {
             this.readTimeout = value;
             return this;
         }
 
-        public Factory connectTimeout(Integer value) {
+        public Builder connectTimeout(Integer value) {
             this.connectTimeout = value;
             return this;
         }
 
-        Factory retryOnConnectionFailure(Boolean value) {
+        Builder retryOnConnectionFailure(Boolean value) {
             this.retryOnConnectionFailure = value;
             return this;
         }
 
         /**
-         * use socket and overwrite default socket path {@link SSHDockerConfig#VAR_RUN_DOCKER_SOCK}
+         * use socket and overwrite default socket path {@link JschDockerConfig#VAR_RUN_DOCKER_SOCK}
          *
          * @param socketPath
          * @return
          */
-        public Factory useSocket(String socketPath) {
-            this.sshDockerConfig.setUseSocket(true);
-            this.sshDockerConfig.setSocketPath(socketPath);
+        public Builder useSocket(String socketPath) {
+            this.jschDockerConfig.setUseSocket(true);
+            this.jschDockerConfig.setSocketPath(socketPath);
             return this;
         }
 
@@ -85,8 +97,8 @@ public final class SsshWithOKDockerHttpClient implements DockerHttpClient {
          * @param session
          * @return
          */
-        public Factory sshSession(Session session) {
-            this.sshDockerConfig.setSession(session);
+        public Builder sshSession(Session session) {
+            this.jschDockerConfig.setSession(session);
             return this;
         }
 
@@ -96,8 +108,8 @@ public final class SsshWithOKDockerHttpClient implements DockerHttpClient {
          * @param identityFile
          * @return
          */
-        public Factory identityFile(File identityFile) {
-            this.sshDockerConfig.setIdentityFile(identityFile);
+        public Builder identityFile(File identityFile) {
+            this.jschDockerConfig.setIdentityFile(identityFile);
             return this;
         }
 
@@ -107,44 +119,67 @@ public final class SsshWithOKDockerHttpClient implements DockerHttpClient {
          * @param privateKey private key filename
          * @return
          */
-        public Factory identity(String privateKey) {
+        public Builder identity(String privateKey) {
             return identityFile(new File(System.getProperty("user.home") + File.separator + ".ssh" + File.separator + privateKey));
         }
 
-        public Factory interceptor(Interceptor interceptor) {
-            this.sshDockerConfig.setInterceptor(interceptor);
+        /**
+         * pass config which is used for {@link Session#setConfig(Hashtable)}
+         *
+         * @param jschConfig
+         * @return
+         */
+        public Builder jschConfig(Hashtable jschConfig) {
+            this.jschDockerConfig.setJschConfig(jschConfig);
             return this;
         }
 
-        public Factory useSocket() {
-            this.sshDockerConfig.setUseSocket(true);
+        public Builder interceptor(Interceptor interceptor) {
+            this.jschDockerConfig.setInterceptor(interceptor);
             return this;
         }
 
-        public Factory useSocat() {
-            this.sshDockerConfig.setUseSocat(true);
+        public Builder useSocket() {
+            this.jschDockerConfig.setUseSocket(true);
             return this;
         }
 
-        public Factory useTcp() {
-            this.sshDockerConfig.setUseTcp(true);
+        public Builder useSocat() {
+            this.jschDockerConfig.setUseSocat(true);
             return this;
         }
 
-        public Factory useTcp(int port) {
-            this.sshDockerConfig.setUseTcp(true);
-            this.sshDockerConfig.setTcpPort(port);
+        /**
+         * allows to set additional flags for the socat call, i.e. -v
+         *
+         * @param socatFlags
+         * @return
+         */
+        public Builder socatFlags(String socatFlags) {
+            this.jschDockerConfig.setSocatFlags(socatFlags);
             return this;
         }
 
-        public SsshWithOKDockerHttpClient build() throws IOException, JSchException {
-            Objects.requireNonNull(dockerClientConfig, "dockerClientConfig not provided");
-            return new SsshWithOKDockerHttpClient(
-                dockerClientConfig,
+        public Builder useTcp() {
+            this.jschDockerConfig.setUseTcp(true);
+            return this;
+        }
+
+        public Builder useTcp(int port) {
+            this.jschDockerConfig.setUseTcp(true);
+            this.jschDockerConfig.setTcpPort(port);
+            return this;
+        }
+
+        public JschDockerHttpClient build() throws IOException, JSchException {
+            Objects.requireNonNull(dockerHost, "dockerHost not provided");
+            return new JschDockerHttpClient(
+                dockerHost,
+                sslConfig,
                 readTimeout,
                 connectTimeout,
                 retryOnConnectionFailure,
-                sshDockerConfig);
+                jschDockerConfig);
         }
     }
 
@@ -158,22 +193,22 @@ public final class SsshWithOKDockerHttpClient implements DockerHttpClient {
 
     private Session session;
     private boolean externalSession = false;
-    private final File identityFile;
 
-    private SsshWithOKDockerHttpClient(
-        DockerClientConfig dockerClientConfig,
+    private JschDockerHttpClient(
+        URI dockerHostUri,
+        SSLConfig sslConfig,
         Integer readTimeout,
         Integer connectTimeout,
         Boolean retryOnConnectionFailure,
-        SSHDockerConfig sshDockerConfig) throws IOException, JSchException {
+        JschDockerConfig jschDockerConfig) throws IOException, JSchException {
 
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
-            //.addNetworkInterceptor(new HijackingInterceptor())
+            .addNetworkInterceptor(new HijackingInterceptor())
             .readTimeout(0, TimeUnit.MILLISECONDS)
             .retryOnConnectionFailure(true);
 
-        if (sshDockerConfig.getInterceptor() != null) {
-            clientBuilder.addInterceptor(sshDockerConfig.getInterceptor());
+        if (jschDockerConfig.getInterceptor() != null) {
+            clientBuilder.addInterceptor(jschDockerConfig.getInterceptor());
         }
 
         if (readTimeout != null) {
@@ -188,17 +223,14 @@ public final class SsshWithOKDockerHttpClient implements DockerHttpClient {
             clientBuilder.retryOnConnectionFailure(retryOnConnectionFailure);
         }
 
-        this.session = sshDockerConfig.getSession();
-        this.externalSession = sshDockerConfig.getSession() != null;
-        this.identityFile = sshDockerConfig.getIdentityFile();
+        this.session = jschDockerConfig.getSession();
+        this.externalSession = jschDockerConfig.getSession() != null;
 
-        URI dockerHost = dockerClientConfig.getDockerHost();
+        if ("ssh".equals(dockerHostUri.getScheme())) {
 
-        if ("ssh".equals(dockerHost.getScheme())) {
+            this.session = connectSSH(dockerHostUri, connectTimeout != null ? connectTimeout : 0, jschDockerConfig);
 
-            this.session = connectSSH(dockerHost, connectTimeout != null ? connectTimeout : 0);
-
-            final SSHSocketFactory socketFactory = new SSHSocketFactory(session, sshDockerConfig);
+            final JSchSocketFactory socketFactory = new JSchSocketFactory(session, jschDockerConfig);
 
             clientBuilder.socketFactory(socketFactory);
 
@@ -215,13 +247,10 @@ public final class SsshWithOKDockerHttpClient implements DockerHttpClient {
             throw new IllegalArgumentException("this implementation only supports ssh connection scheme.");
         }
 
-        boolean isSSL = false;
-        SSLConfig sslConfig = dockerClientConfig.getSSLConfig();
         if (sslConfig != null) {
             try {
                 SSLContext sslContext = sslConfig.getSSLContext();
                 if (sslContext != null) {
-                    isSSL = true;
                     clientBuilder.sslSocketFactory(sslContext.getSocketFactory(), new TrustAllX509TrustManager());
                 }
             } catch (Exception e) {
@@ -233,29 +262,8 @@ public final class SsshWithOKDockerHttpClient implements DockerHttpClient {
 
         streamingClient = client.newBuilder().build();
 
-        initBaseUrl(dockerHost, isSSL);
-    }
-
-    private void initBaseUrl(URI dockerHost, boolean isSSL) {
-        HttpUrl.Builder baseUrlBuilder;
-
-        switch (dockerHost.getScheme()) {
-            case "ssh":
-                // der http Host und Port spielen keine Rolle, da das Socket geforwarded wird....
-                baseUrlBuilder = new HttpUrl.Builder()
-                    .scheme("http")
-                    .host("127.0.0.1");
-                break;
-            case "tcp":
-                baseUrlBuilder = new HttpUrl.Builder()
-                    .scheme(isSSL ? "https" : "http")
-                    .host(dockerHost.getHost())
-                    .port(dockerHost.getPort());
-                break;
-            default:
-                baseUrlBuilder = HttpUrl.get(dockerHost.toString()).newBuilder();
-        }
-        baseUrl = baseUrlBuilder.build();
+        // we always use socketFactory, therefore we only need:
+        baseUrl = new HttpUrl.Builder().scheme("http").host("127.0.0.1").build();
     }
 
     private RequestBody toRequestBody(Request request) {
@@ -273,16 +281,15 @@ public final class SsshWithOKDockerHttpClient implements DockerHttpClient {
                 }
             };
         }
-        switch (request.method()) {
-            case "POST":
-                return RequestBody.create(null, "");
-            default:
-                return null;
+        if ("POST".equals(request.method())) {
+            return RequestBody.create(null, "");
         }
+        return null;
     }
 
     @Override
     public Response execute(Request request) {
+
         String url = baseUrl.toString();
         if (url.endsWith("/") && request.path().startsWith("/")) {
             url = url.substring(0, url.length() - 1);
@@ -302,20 +309,25 @@ public final class SsshWithOKDockerHttpClient implements DockerHttpClient {
             clientToUse = streamingClient;
         }
 
+        Call call = clientToUse.newCall(requestBuilder.build());
         try {
-            return new OkResponse(clientToUse.newCall(requestBuilder.build()).execute());
+            return new OkResponse(call);
         } catch (IOException e) {
+            call.cancel();
             throw new UncheckedIOException("Error while executing " + request, e);
         }
     }
 
     @Override
-    public void close() throws IOException {
-        disconnectSSH();
-        for (OkHttpClient clientToClose : new OkHttpClient[]{client, streamingClient}) {
-            clientToClose.dispatcher().cancelAll();
-            clientToClose.dispatcher().executorService().shutdown();
-            clientToClose.connectionPool().evictAll();
+    public void close() {
+        try {
+            disconnectSSH();
+        } finally {
+            for (OkHttpClient clientToClose : new OkHttpClient[]{client, streamingClient}) {
+                clientToClose.dispatcher().cancelAll();
+                clientToClose.dispatcher().executorService().shutdown();
+                clientToClose.connectionPool().evictAll();
+            }
         }
     }
 
@@ -323,10 +335,13 @@ public final class SsshWithOKDockerHttpClient implements DockerHttpClient {
 
         static final ThreadLocal<Boolean> CLOSING = ThreadLocal.withInitial(() -> false);
 
+        private final Call call;
+
         private final okhttp3.Response response;
 
-        OkResponse(okhttp3.Response response) {
-            this.response = response;
+        OkResponse(Call call) throws IOException {
+            this.call = call;
+            this.response = call.execute();
         }
 
         @Override
@@ -354,7 +369,10 @@ public final class SsshWithOKDockerHttpClient implements DockerHttpClient {
             boolean previous = CLOSING.get();
             CLOSING.set(true);
             try {
+                call.cancel();
                 response.close();
+            } catch (Exception | AssertionError e) {
+                LOGGER.debug("Failed to close the response", e);
             } finally {
                 CLOSING.set(previous);
             }
@@ -364,12 +382,12 @@ public final class SsshWithOKDockerHttpClient implements DockerHttpClient {
     static class TrustAllX509TrustManager implements X509TrustManager {
         @Override
         public void checkClientTrusted(X509Certificate[] x509Certificates, String s) {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void checkServerTrusted(X509Certificate[] x509Certificates, String s) {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -378,7 +396,8 @@ public final class SsshWithOKDockerHttpClient implements DockerHttpClient {
         }
     }
 
-    private Session connectSSH(URI connectionString, int connectTimeout) throws IOException, JSchException {
+    private Session connectSSH(URI connectionString, int connectTimeout, JschDockerConfig jschDockerConfig)
+        throws IOException, JSchException {
 
         if (session != null && session.isConnected()) {
             return session;
@@ -397,19 +416,21 @@ public final class SsshWithOKDockerHttpClient implements DockerHttpClient {
         final int port = connectionString.getPort() > 0 ? connectionString.getPort() : 22;
         final Session newSession = jSch.getSession(connectionString.getUserInfo(), connectionString.getHost(), port);
 
-        newSession.setConfig("StrictHostKeyChecking", "no");
         // https://stackoverflow.com/questions/10881981/sftp-connection-through-java-asking-for-weird-authentication
         newSession.setConfig("PreferredAuthentications", "publickey");
 
-        if (identityFile != null) {
-            jSch.addIdentity(identityFile.getAbsolutePath());
+        if (jschDockerConfig.getJschConfig() != null) {
+            newSession.setConfig(jschDockerConfig.getJschConfig());
+        }
+
+        if (jschDockerConfig.getIdentityFile() != null) {
+            jSch.addIdentity(jschDockerConfig.getIdentityFile().getAbsolutePath());
         }
 
         newSession.connect(connectTimeout);
 
         return newSession;
     }
-
 
     private void disconnectSSH() {
         if (!externalSession) {

@@ -21,12 +21,12 @@ public class SocatHandler {
     private SocatHandler() {
     }
 
-    public static Container startSocat(Session session) throws JSchException, IOException {
+    public static Container startSocat(Session session, String socatFlags) throws JSchException, IOException {
 
         final String command = " docker run -d " +
             " -p 127.0.0.1:0:" + INTERNAL_SOCAT_PORT +
             " -v /var/run/docker.sock:/var/run/docker.sock " +
-            "  alpine/socat " +
+            "  alpine/socat " + socatFlags +
             "  tcp-listen:" + INTERNAL_SOCAT_PORT + ",fork,reuseaddr unix-connect:/var/run/docker.sock";
 
         final String containerId = runCommand(session, command);
@@ -75,36 +75,37 @@ public class SocatHandler {
 
             channel.connect();
 
+            StringBuilder outputBuffer = new StringBuilder();
+            StringBuilder errorBuffer = new StringBuilder();
+
+            byte[] tmp = new byte[1024];
             while (true) {
 
+                while (in.available() > 0) {
+                    int i = in.read(tmp, 0, 1024);
+                    if (i < 0) break;
+                    outputBuffer.append(new String(tmp, 0, i, Charset.defaultCharset()));
+                }
+
+                while (errStream.available() > 0) {
+                    int i = errStream.read(tmp, 0, 1024);
+                    if (i < 0) break;
+                    errorBuffer.append(new String(tmp, Charset.defaultCharset()));
+                }
+
                 if (channel.isClosed()) {
-
-                    String response = null;
-                    String errorMessage = null;
-
-                    while (in.available() > 0) {
-                        byte[] tmp = new byte[1024];
-                        int i = in.read(tmp, 0, 1024);
-                        if (i < 0) break;
-                        response = new String(tmp, 0, i, Charset.defaultCharset());
-                    }
-
-                    while (errStream.available() > 0) {
-                        byte[] tmp = new byte[1024];
-                        int i = errStream.read(tmp, 0, 1024);
-                        if (i < 0) break;
-                        errorMessage = new String(tmp, Charset.defaultCharset());
-                    }
+                    // https://stackoverflow.com/a/47554723/2290153
+                    if ((in.available() > 0) || (errStream.available() > 0)) continue;
 
                     logger.debug("exit-status: {}", channel.getExitStatus());
-                    logger.debug("stderr:{}", errorMessage);
-                    logger.debug("stdout: {}", response);
+                    logger.debug("stderr:{}", errorBuffer);
+                    logger.debug("stdout: {}", outputBuffer);
 
                     if (channel.getExitStatus() == 0) {
-                        return response;
+                        return outputBuffer.toString();
                     } else {
                         throw new RuntimeException("command ended in exit-status:" + channel.getExitStatus() +
-                            " with error message: " + errorMessage);
+                            " with error message: " + errorBuffer.toString());
                     }
                 }
                 Thread.sleep(50);
