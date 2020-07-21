@@ -55,7 +55,6 @@ class SocatHandlerIT {
         if (file.exists()) {
             final OpenSSHConfig openSSHConfig = OpenSSHConfig.parseFile(file.getAbsolutePath());
             jSch.setConfigRepository(openSSHConfig);
-
         }
         session = jSch.getSession(new URI(System.getenv("DOCKER_HOST")).getHost());
         session.connect(500);
@@ -74,7 +73,7 @@ class SocatHandlerIT {
     }
 
     @org.junit.jupiter.api.Test
-    @Timeout(value = 10)
+    @Timeout(value = 20)
     void startSocatAndPing() throws IOException, JSchException {
         container = SocatHandler.startSocat(session, "");
         assertNotNull(container);
