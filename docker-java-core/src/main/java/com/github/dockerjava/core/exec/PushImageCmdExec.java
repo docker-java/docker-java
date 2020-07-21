@@ -1,5 +1,8 @@
 package com.github.dockerjava.core.exec;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.PushImageCmd;
@@ -8,8 +11,6 @@ import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.InvocationBuilder;
 import com.github.dockerjava.core.MediaType;
 import com.github.dockerjava.core.WebTarget;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class PushImageCmdExec extends AbstrAsyncDockerCmdExec<PushImageCmd, PushResponseItem> implements
         PushImageCmd.Exec {

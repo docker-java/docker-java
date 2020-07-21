@@ -2,10 +2,10 @@ package com.github.dockerjava.jaxrs;
 
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.exception.DockerException;
-import com.github.dockerjava.jaxrs.filter.ResponseStatusExceptionFilter;
-import com.github.dockerjava.jaxrs.filter.SelectiveLoggingFilter;
 import com.github.dockerjava.transport.DockerHttpClient;
 import com.github.dockerjava.transport.SSLConfig;
+import com.github.dockerjava.jaxrs.filter.ResponseStatusExceptionFilter;
+import com.github.dockerjava.jaxrs.filter.SelectiveLoggingFilter;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;

@@ -1,12 +1,13 @@
 package com.github.dockerjava.api.command;
 
-import com.github.dockerjava.api.model.Event;
-import com.github.dockerjava.api.model.EventType;
-
-import javax.annotation.CheckForNull;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
+
+import javax.annotation.CheckForNull;
+
+import com.github.dockerjava.api.model.Event;
+import com.github.dockerjava.api.model.EventType;
 
 /**
  * Get events
