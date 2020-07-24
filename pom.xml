@@ -3,7 +3,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<!--Comment one -->
 	<!-- comment 2 -->
-	<groupId>com.github.docker-java</groupId>
+	<!-- comment 2 -->	
+<groupId>com.github.docker-java</groupId>
 	<artifactId>docker-java-parent</artifactId>
 	<packaging>pom</packaging>
 	<version>3.2.2-SNAPSHOT</version>
