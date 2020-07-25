@@ -1,2 +1,8 @@
-largedir
-!largedir/directory_70/file_1
+largesubdir
+!largesubdir/directory_70/file_1
+!largesubdir/directory_120/file_11
+!largesubdir/directory_134/file_22
+!largesubdir/directory_136/file_42
+!largesubdir/directory_137/file_10
+!largesubdir/directory_137/file_1
+!largesubdir/directory_140/file_20

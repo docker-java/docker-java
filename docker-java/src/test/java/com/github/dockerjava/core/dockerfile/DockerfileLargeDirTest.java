@@ -11,7 +11,6 @@ import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class DockerfileLargeDirTest {
 
@@ -21,8 +20,8 @@ public class DockerfileLargeDirTest {
         final Dockerfile dockerfile = new Dockerfile(dockerfilePath.toFile(), dockerfilePath.getParent().toFile());
         Stopwatch stopwatch = com.google.common.base.Stopwatch.createStarted();
         Dockerfile.ScannedResult parse = dockerfile.parse();
-        assertTrue("scan finishes in under 3 seconds", stopwatch.elapsed(TimeUnit.MILLISECONDS) < 3000);
-        assertEquals("three files were added", 3, parse.filesToAdd.size());
+        assertEquals("scan finishes in under 5 seconds", 5000,  Math.max(stopwatch.elapsed(TimeUnit.MILLISECONDS), 5000));
+        assertEquals("9 files were added", 9, parse.filesToAdd.size());
     }
 
     @SneakyThrows
