@@ -4,10 +4,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -78,7 +82,7 @@ public class Dockerfile {
         }
 
         Collection<Optional<? extends DockerfileStatement>> optionals = Collections2.transform(dockerFileContent,
-                new LineTransformer());
+            new LineTransformer());
 
         return Optional.presentInstances(optionals);
     }
@@ -100,7 +104,7 @@ public class Dockerfile {
                     ignores.add(pattern);
                 } catch (GoLangFileMatchException e) {
                     throw new DockerClientException(String.format(
-                            "Invalid pattern '%s' on line %s in .dockerignore file", pattern, lineNumber));
+                        "Invalid pattern '%s' on line %s in .dockerignore file", pattern, lineNumber));
                 }
             }
         }
@@ -132,7 +136,7 @@ public class Dockerfile {
                 final String archiveNameWithOutExtension = UUID.randomUUID().toString();
 
                 dockerFolderTar = CompressArchiveUtil.archiveTARFiles(directory, filesToAdd,
-                        archiveNameWithOutExtension);
+                    archiveNameWithOutExtension);
 
                 final FileInputStream tarInputStream = FileUtils.openInputStream(dockerFolderTar);
                 final File tarFile = dockerFolderTar;
@@ -180,7 +184,7 @@ public class Dockerfile {
 
             if (matchingIgnorePattern != null) {
                 throw new DockerClientException(String.format(
-                        "Dockerfile is excluded by pattern '%s' in .dockerignore file", matchingIgnorePattern));
+                    "Dockerfile is excluded by pattern '%s' in .dockerignore file", matchingIgnorePattern));
             }
 
             addFilesInDirectory(baseDirectory);
@@ -201,23 +205,42 @@ public class Dockerfile {
                 throw new DockerClientException("Failed to read build context directory: " + baseDirectory.getAbsolutePath());
             }
 
-            if (files.length != 0) {
-                for (File f : files) {
-                    if (f.isDirectory()) {
-                        addFilesInDirectory(f);
-                    } else if (effectiveMatchingIgnorePattern(f) == null) {
-                        filesToAdd.add(f);
-                    }
-                }
-                // base directory should at least contains Dockerfile, but better check
-            } else if (!isBaseDirectory(directory)) {
-                // add empty directory
-                filesToAdd.add(directory);
+            try (final Stream<File> pathStream = Files.walk(directory.toPath())
+                .parallel()
+                .filter(this::isNotIgnored)
+                .map(Path::toFile)
+            ) {
+                filesToAdd.addAll(pathStream.collect(Collectors.toList()));
+            } catch (IOException e) {
+                throw new DockerClientException("Failed to walk directory", e);
             }
+
         }
 
-        private boolean isBaseDirectory(File directory) {
-            return directory.compareTo(baseDirectory) == 0;
+        private boolean isNotIgnored(Path path) {
+            if (Files.isRegularFile(path)) {
+                return isEffectivelyNotIgnored(path);
+            }
+            if (Files.isDirectory(path)) {
+                try {
+                    return isEmptyDirectory(path) && !isBaseDirectory(path) && isEffectivelyNotIgnored(path);
+                } catch (IOException e) {
+                    throw new DockerClientException("Failed to list directory", e);
+                }
+            }
+            return false;
+        }
+
+        private boolean isEmptyDirectory(Path path) throws IOException {
+            return Files.list(path).count() == 0;
+        }
+
+        private boolean isEffectivelyNotIgnored(Path path) {
+            return effectiveMatchingIgnorePattern(path.toFile()) == null;
+        }
+
+        private boolean isBaseDirectory(Path directory) {
+            return directory.equals(baseDirectory.toPath());
         }
 
         /**
@@ -236,7 +259,7 @@ public class Dockerfile {
                     }
                 } catch (GoLangFileMatchException e) {
                     throw new DockerClientException(String.format(
-                            "Invalid pattern '%s' on line %s in .dockerignore file", pattern, lineNumber));
+                        "Invalid pattern '%s' on line %s in .dockerignore file", pattern, lineNumber));
                 }
             }
 
@@ -260,6 +283,6 @@ public class Dockerfile {
             String lastMatchingPattern = matchingPattern.get(matchingPattern.size() - 1);
 
             return !lastMatchingPattern.startsWith("!") ? lastMatchingPattern : null;
-         }
+        }
     }
 }
