@@ -81,7 +81,7 @@ public class Dockerfile {
         }
 
         Collection<Optional<? extends DockerfileStatement>> optionals = Collections2.transform(dockerFileContent,
-            new LineTransformer());
+                new LineTransformer());
 
         return Optional.presentInstances(optionals);
     }
@@ -103,7 +103,7 @@ public class Dockerfile {
                     ignores.add(pattern);
                 } catch (GoLangFileMatchException e) {
                     throw new DockerClientException(String.format(
-                        "Invalid pattern '%s' on line %s in .dockerignore file", pattern, lineNumber));
+                            "Invalid pattern '%s' on line %s in .dockerignore file", pattern, lineNumber));
                 }
             }
         }
@@ -135,7 +135,7 @@ public class Dockerfile {
                 final String archiveNameWithOutExtension = UUID.randomUUID().toString();
 
                 dockerFolderTar = CompressArchiveUtil.archiveTARFiles(directory, filesToAdd,
-                    archiveNameWithOutExtension);
+                        archiveNameWithOutExtension);
 
                 final FileInputStream tarInputStream = FileUtils.openInputStream(dockerFolderTar);
                 final File tarFile = dockerFolderTar;
@@ -183,7 +183,7 @@ public class Dockerfile {
 
             if (matchingIgnorePattern != null) {
                 throw new DockerClientException(String.format(
-                    "Dockerfile is excluded by pattern '%s' in .dockerignore file", matchingIgnorePattern));
+                        "Dockerfile is excluded by pattern '%s' in .dockerignore file", matchingIgnorePattern));
             }
 
             addFilesInDirectory(baseDirectory);
@@ -258,7 +258,7 @@ public class Dockerfile {
                     }
                 } catch (GoLangFileMatchException e) {
                     throw new DockerClientException(String.format(
-                        "Invalid pattern '%s' on line %s in .dockerignore file", pattern, lineNumber));
+                            "Invalid pattern '%s' on line %s in .dockerignore file", pattern, lineNumber));
                 }
             }
 
