@@ -21,7 +21,6 @@ import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.core.GoLangFileMatch;
 import com.github.dockerjava.core.exception.GoLangFileMatchException;
 import com.github.dockerjava.core.util.CompressArchiveUtil;
-import com.github.dockerjava.core.util.FilePathUtil;
 import com.google.common.base.Function;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Optional;
@@ -272,7 +271,7 @@ public class Dockerfile {
          */
         private String effectiveMatchingIgnorePattern(File file) {
             // normalize path to replace '/' to '\' on Windows
-            String relativeFilename = FilenameUtils.normalize(FilePathUtil.relativize(baseDirectory, file));
+            final String relativeFilename = FilenameUtils.normalize(relativizeToBaseDirectory(file));
 
             List<String> matchingPattern = matchingIgnorePatterns(relativeFilename);
 
@@ -283,6 +282,10 @@ public class Dockerfile {
             String lastMatchingPattern = matchingPattern.get(matchingPattern.size() - 1);
 
             return !lastMatchingPattern.startsWith("!") ? lastMatchingPattern : null;
+        }
+
+        private String relativizeToBaseDirectory(File file) {
+            return baseDirectory.toPath().toUri().relativize(file.toPath().toUri()).getPath();
         }
     }
 }
