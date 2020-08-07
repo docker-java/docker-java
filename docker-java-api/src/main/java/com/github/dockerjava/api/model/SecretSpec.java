@@ -60,9 +60,16 @@ public class SecretSpec implements Serializable {
     /**
      * @see #data
      */
-    public SecretSpec withData(String data) {
-        this.data = Base64.getEncoder().encodeToString(data.getBytes());
+    public SecretSpec withData(byte[] data) {
+        this.data = Base64.getEncoder().encodeToString(data);
         return this;
+    }
+
+    /**
+     * @see #data
+     */
+    public SecretSpec withData(String data) {
+        return this.withData(data.getBytes());
     }
 
     /**
