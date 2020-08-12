@@ -112,6 +112,8 @@ class UnixDomainSocket extends Socket {
     public static native int send(int fd, byte[] buffer, int count, int flags)
             throws LastErrorException;
 
+    public static native int shutdown(int fd, boolean read, boolean write) throws LastErrorException;
+
     public static native int close(int fd) throws LastErrorException;
 
     public static native String strerror(int errno);
@@ -196,8 +198,12 @@ class UnixDomainSocket extends Socket {
         // do nothing
     }
 
-    public void shutdownOutput() {
-        // do nothing
+    public void shutdownOutput() throws IOException {
+        try {
+            shutdown(fd, true, false);
+        } catch (LastErrorException lee) {
+            throw new IOException("native shutdown() failed : " + formatError(lee));
+        }
     }
 
     public static class SockAddr extends Structure {

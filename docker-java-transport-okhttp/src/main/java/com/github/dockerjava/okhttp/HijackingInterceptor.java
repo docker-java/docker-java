@@ -44,6 +44,7 @@ class HijackingInterceptor implements Interceptor {
                 while (sink.isOpen()) {
                     int aByte = stdin.read();
                     if (aByte < 0) {
+                        sink.close();
                         break;
                     }
                     sink.writeByte(aByte);

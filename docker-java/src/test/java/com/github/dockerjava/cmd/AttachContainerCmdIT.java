@@ -6,6 +6,7 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.StreamType;
+import com.github.dockerjava.utils.LogContainerTestCallback;
 import org.junit.Assume;
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,6 +19,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.io.PrintStream;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -254,6 +256,76 @@ public class AttachContainerCmdIT extends CmdIT {
             assertTrue("Should get first line quickly after the start", gotLine.await(15, SECONDS));
 
             resultCallback.awaitCompletion(5, SECONDS);
+        }
+    }
+
+    /**
+     * The process in Docker container should receive EOF when reading its
+     * stdin after the corresponding stream is closed on docker-java side in
+     * case when the container has been created with StdinOnce flag set to
+     * true.
+     */
+    @Test
+    public void closeStdinWithStdinOnce() throws Exception {
+        Assume.assumeTrue("supports stdin attach", getFactoryType().supportsStdinAttach());
+        Assume.assumeFalse("not fixed for Apache HttpClient 5.0", getFactoryType().equals(FactoryType.HTTPCLIENT5));
+
+        DockerClient dockerClient = dockerRule.getClient();
+
+        File baseDir = new File(Thread.currentThread().getContextClassLoader()
+            .getResource("closeStdinWithStdinOnce").getFile());
+
+        String imageId = dockerRule.buildImage(baseDir);
+
+        CreateContainerResponse container = dockerClient.createContainerCmd(imageId)
+            .withStdinOpen(true)
+            .withStdInOnce(true)
+            .exec();
+        LOG.info("Created container: {}", container.toString());
+
+        String lastLineToStdout = "The last line to stdout";
+        CountDownLatch gotLastLineMarker = new CountDownLatch(1);
+        PipedOutputStream stdinSource = new PipedOutputStream();
+        PipedInputStream stdin = new PipedInputStream(stdinSource);
+
+        try (
+            ResultCallback.Adapter<Frame> resultCallback = dockerClient.attachContainerCmd(container.getId())
+                .withStdOut(true)
+                .withStdErr(true)
+                .withStdIn(stdin)
+                .withFollowStream(true)
+                .exec(new LogContainerTestCallback() {
+                    @Override
+                    public void onNext(Frame frame) {
+                        super.onNext(frame);
+                        if (log.toString().contains(lastLineToStdout)) {
+                            gotLastLineMarker.countDown();
+                        }
+                    }
+                })
+        ) {
+            resultCallback.awaitStarted(5, SECONDS);
+            LOG.info("Attach started");
+
+            dockerClient.startContainerCmd(container.getId()).exec();
+            LOG.info("Container started");
+
+            new Thread(() -> {
+                try (PrintStream printStream = new PrintStream(stdinSource, true)) {
+                    // pass the marker line to let the script echo it after stdin is closed
+                    printStream.println(lastLineToStdout);
+                    // pass several random lines to container's stdin
+                    for (int i = 1; i < 10; i++) {
+                        printStream.println(i + " line");
+                    }
+                }
+                // note that at this point stdin pipe stream to Docker container is closed
+            }).start();
+
+            assertTrue("Stdout should still function after closing stdin", gotLastLineMarker.await(15, SECONDS));
+
+            assertTrue("The script should finish quickly after stdin is closed on docker-java side",
+                resultCallback.awaitCompletion(15, SECONDS));
         }
     }
 
