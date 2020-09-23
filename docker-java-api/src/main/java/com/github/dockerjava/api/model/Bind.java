@@ -103,7 +103,7 @@ public class Bind implements Serializable {
                     return new Bind(parts[0], new Volume(parts[1]));
                 }
                 case 4: {
-                    parts = new String[]{parts[0] +":"+ parts[1], parts[2], parts[3]};
+                    parts = new String[]{parts[0] + ":" + parts[1], parts[2], parts[3]};
                 }
                 case 3: {
                     String[] flags = parts[2].split(",");
