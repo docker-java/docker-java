@@ -12,16 +12,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.collection.IsArrayWithSize.arrayWithSize;
 
 public class CreateSecretCmdExecIT extends SwarmCmdIT {
 
     public static final Logger LOG = LoggerFactory.getLogger(CreateSecretCmdExecIT.class);
 
     @Test
-    public void testCreateSecret() throws Exception {
+    public void testCreateSecret() {
         DockerClient dockerClient = startSwarm();
         int length = 10;
         boolean useLetters = true;
@@ -49,4 +53,39 @@ public class CreateSecretCmdExecIT extends SwarmCmdIT {
         assertThat(secretsAfterRemoved, IsCollectionWithSize.hasSize(0));
     }
 
+    @Test
+    public void testCreateSecretWithBinaryData() {
+        DockerClient dockerClient = startSwarm();
+
+        byte[] bytes = new byte[10];
+        new Random().nextBytes(bytes);
+
+        String secretName = UUID.randomUUID().toString();
+        CreateSecretResponse exec = dockerClient.createSecretCmd(
+            new SecretSpec()
+                .withName(secretName)
+                .withData(bytes))
+            .exec();
+
+        assertThat(exec, notNullValue());
+        assertThat(exec.getId(), notNullValue());
+
+        LOG.info("Secret created with ID {}", exec.getId());
+
+        List<Secret> secrets = dockerClient.listSecretsCmd()
+            .withNameFilter(Lists.newArrayList(secretName))
+            .exec();
+
+        assertThat(secrets, IsCollectionWithSize.hasSize(1));
+
+        dockerClient.removeSecretCmd(secrets.get(0).getId()).exec();
+
+        LOG.info("Secret removed with ID {}", exec.getId());
+
+        List<Secret> secretsAfterRemoved = dockerClient.listSecretsCmd()
+            .withNameFilter(Lists.newArrayList(secretName))
+            .exec();
+
+        assertThat(secretsAfterRemoved, IsCollectionWithSize.hasSize(0));
+    }
 }
