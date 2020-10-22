@@ -232,20 +232,12 @@ class UnixDomainSocket extends Socket {
         public int read(byte[] bytesEntry, int off, int len) throws IOException {
             try {
                 if (off > 0) {
-                    int bytes = 0;
-                    int remainingLength = len;
-                    int size;
                     byte[] data = new byte[(len < 10240) ? len : 10240];
-                    do {
-                        size = recv(fd, data, (remainingLength < 10240) ? remainingLength : 10240, 0);
-                        if (size > 0) {
-                            System.arraycopy(data, 0, bytesEntry, off, size);
-                            bytes += size;
-                            off += size;
-                            remainingLength -= size;
-                        }
-                    } while ((remainingLength > 0) && (size > 0));
-                    return bytes;
+                    int size = recv(fd, data, (len < 10240) ? len : 10240, 0);
+                    if (size > 0) {
+                        System.arraycopy(data, 0, bytesEntry, off, size);
+                    }
+                    return size;
                 } else {
                     return recv(fd, bytesEntry, len, 0);
                 }
