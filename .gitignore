@@ -6,6 +6,7 @@
 .project
 .settings
 .classpath
+.factorypath
 
 # Ignore all build/dist directories
 target

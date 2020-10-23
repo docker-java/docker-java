@@ -13,6 +13,8 @@ public final class ApacheDockerHttpClient extends ApacheDockerHttpClientImpl {
 
         private SSLConfig sslConfig = null;
 
+        private ConnectionPoolConfig connectionPoolConf = null;
+
         public Builder dockerHost(URI value) {
             this.dockerHost = Objects.requireNonNull(value, "dockerHost");
             return this;
@@ -23,13 +25,18 @@ public final class ApacheDockerHttpClient extends ApacheDockerHttpClientImpl {
             return this;
         }
 
+        public Builder connectionPool(ConnectionPoolConfig conf) {
+            this.connectionPoolConf = conf;
+            return this;
+        }
+
         public ApacheDockerHttpClient build() {
             Objects.requireNonNull(dockerHost, "dockerHost");
-            return new ApacheDockerHttpClient(dockerHost, sslConfig);
+            return new ApacheDockerHttpClient(dockerHost, sslConfig, connectionPoolConf);
         }
     }
 
-    private ApacheDockerHttpClient(URI dockerHost, SSLConfig sslConfig) {
-        super(dockerHost, sslConfig);
+    private ApacheDockerHttpClient(URI dockerHost, SSLConfig sslConfig, ConnectionPoolConfig connectionPoolConfig) {
+        super(dockerHost, sslConfig, connectionPoolConfig);
     }
 }
