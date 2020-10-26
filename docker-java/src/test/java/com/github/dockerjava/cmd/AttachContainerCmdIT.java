@@ -258,7 +258,7 @@ public class AttachContainerCmdIT extends CmdIT {
     }
 
     public static class AttachContainerTestCallback extends ResultCallback.Adapter<Frame> {
-        private StringBuffer log = new StringBuffer();
+        private final StringBuffer log = new StringBuffer();
 
         @Override
         public void onNext(Frame item) {
