@@ -75,7 +75,7 @@ public class AttachContainerCmdIT extends CmdIT {
 
         try (
             PipedOutputStream out = new PipedOutputStream();
-            PipedInputStream in = new PipedInputStream(out);
+            PipedInputStream in = new PipedInputStream(out)
         ) {
             dockerClient.attachContainerCmd(container.getId())
                 .withStdErr(true)
@@ -115,7 +115,7 @@ public class AttachContainerCmdIT extends CmdIT {
             public void onNext(Frame frame) {
                 assertThat(frame.getStreamType(), equalTo(StreamType.STDOUT));
                 super.onNext(frame);
-            };
+            }
         };
 
         dockerClient.attachContainerCmd(container.getId())
@@ -151,7 +151,7 @@ public class AttachContainerCmdIT extends CmdIT {
             public void onNext(Frame frame) {
                 assertThat(frame.getStreamType(), equalTo(StreamType.RAW));
                 super.onNext(frame);
-            };
+            }
         };
 
         dockerClient.attachContainerCmd(container.getId())
@@ -192,7 +192,7 @@ public class AttachContainerCmdIT extends CmdIT {
             public void onNext(Frame frame) {
                 assertThat(frame.getStreamType(), equalTo(StreamType.STDOUT));
                 super.onNext(frame);
-            };
+            }
         };
 
         InputStream stdin = new ByteArrayInputStream("".getBytes());
