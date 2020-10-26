@@ -3,7 +3,6 @@ package com.github.dockerjava.cmd;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.StreamType;
 import org.junit.Assume;
@@ -53,17 +52,14 @@ public class AttachContainerCmdIT extends CmdIT {
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
             .withCmd("/bin/sh", "-c", "sleep 1 && read line && echo $line")
             .withTty(false)
+            .withAttachStdin(true)
+            .withAttachStdout(true)
+            .withAttachStderr(true)
             .withStdinOpen(true)
             .exec();
 
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(is(emptyString())));
-
-        dockerClient.startContainerCmd(container.getId()).exec();
-
-        InspectContainerResponse inspectContainerResponse = dockerClient.inspectContainerCmd(container.getId()).exec();
-
-        assertThat(inspectContainerResponse.getState().getRunning(), is(true));
 
         AttachContainerTestCallback callback = new AttachContainerTestCallback() {
             @Override
@@ -84,6 +80,8 @@ public class AttachContainerCmdIT extends CmdIT {
                 .withStdIn(in)
                 .exec(callback);
 
+            dockerClient.startContainerCmd(container.getId()).exec();
+
             out.write((snippet + "\n").getBytes());
             out.flush();
 
@@ -103,12 +101,12 @@ public class AttachContainerCmdIT extends CmdIT {
         CreateContainerResponse container = dockerClient.createContainerCmd(DEFAULT_IMAGE)
             .withCmd("echo", snippet)
             .withTty(false)
+            .withAttachStdout(true)
+            .withAttachStderr(true)
             .exec();
 
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(is(emptyString())));
-
-        dockerClient.startContainerCmd(container.getId()).exec();
 
         AttachContainerTestCallback callback = new AttachContainerTestCallback() {
             @Override
@@ -123,8 +121,11 @@ public class AttachContainerCmdIT extends CmdIT {
             .withStdOut(true)
             .withFollowStream(true)
             .withLogs(true)
-            .exec(callback)
-            .awaitCompletion(30, TimeUnit.SECONDS);
+            .exec(callback);
+
+        dockerClient.startContainerCmd(container.getId()).exec();
+
+        callback.awaitCompletion(30, TimeUnit.SECONDS);
         callback.close();
 
         assertThat(callback.toString(), containsString(snippet));
@@ -139,12 +140,15 @@ public class AttachContainerCmdIT extends CmdIT {
 
         String imageId = dockerRule.buildImage(baseDir);
 
-        CreateContainerResponse container = dockerClient.createContainerCmd(imageId).withTty(true).exec();
+        CreateContainerResponse container = dockerClient.createContainerCmd(imageId)
+            .withTty(true)
+            .withAttachStdout(true)
+            .withAttachStderr(true)
+            .exec();
 
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(is(emptyString())));
 
-        dockerClient.startContainerCmd(container.getId()).exec();
 
         AttachContainerTestCallback callback = new AttachContainerTestCallback() {
             @Override
@@ -158,8 +162,11 @@ public class AttachContainerCmdIT extends CmdIT {
             .withStdErr(true)
             .withStdOut(true)
             .withFollowStream(true)
-            .exec(callback)
-            .awaitCompletion(15, TimeUnit.SECONDS);
+            .exec(callback);
+
+        dockerClient.startContainerCmd(container.getId()).exec();
+
+        callback.awaitCompletion(15, TimeUnit.SECONDS);
         callback.close();
 
         LOG.debug("log: {}", callback.toString());
@@ -180,12 +187,13 @@ public class AttachContainerCmdIT extends CmdIT {
         CreateContainerResponse container = dockerClient.createContainerCmd(DEFAULT_IMAGE)
             .withCmd("echo", snippet)
             .withTty(false)
+            .withAttachStdin(true)
+            .withAttachStdout(true)
+            .withAttachStderr(true)
             .exec();
 
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(is(emptyString())));
-
-        dockerClient.startContainerCmd(container.getId()).exec();
 
         AttachContainerTestCallback callback = new AttachContainerTestCallback() {
             @Override
@@ -203,8 +211,11 @@ public class AttachContainerCmdIT extends CmdIT {
             .withFollowStream(true)
             .withLogs(true)
             .withStdIn(stdin)
-            .exec(callback)
-            .awaitCompletion(30, TimeUnit.SECONDS);
+            .exec(callback);
+
+        dockerClient.startContainerCmd(container.getId()).exec();
+
+        callback.awaitCompletion(30, TimeUnit.SECONDS);
         callback.close();
     }
 
@@ -219,6 +230,8 @@ public class AttachContainerCmdIT extends CmdIT {
         CreateContainerResponse container = dockerClient.createContainerCmd(DEFAULT_IMAGE)
             .withCmd("echo", "hello")
             .withTty(false)
+            .withAttachStdout(true)
+            .withAttachStderr(true)
             .exec();
         LOG.info("Created container: {}", container.toString());
 
