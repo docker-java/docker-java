@@ -231,24 +231,16 @@ class UnixDomainSocket extends Socket {
         public int read(byte[] bytesEntry, int off, int len) throws IOException {
             try {
                 if (off > 0) {
-                    int bytes = 0;
-                    int remainingLength = len;
-                    int size;
                     byte[] data = new byte[(len < 10240) ? len : 10240];
-                    do {
-                        if (!isConnected()) {
-                            return -1;
-                        }
-                        size = UnixDomainSocket.read(fd, data, (remainingLength < 10240) ? remainingLength : 10240);
-                        if (size <= 0) {
-                            return -1;
-                        }
-                        System.arraycopy(data, 0, bytesEntry, off, size);
-                        bytes += size;
-                        off += size;
-                        remainingLength -= size;
-                    } while ((remainingLength > 0) && (size > 0));
-                    return bytes;
+                    if (!isConnected()) {
+                        return -1;
+                    }
+                    int size = UnixDomainSocket.read(fd, data, (len < 10240) ? len : 10240);
+                    if (size <= 0) {
+                        return -1;
+                    }
+                    System.arraycopy(data, 0, bytesEntry, off, size);
+                    return size;
                 } else {
                     if (!isConnected()) {
                         return -1;
