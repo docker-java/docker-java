@@ -50,7 +50,7 @@ public class AttachContainerCmdIT extends CmdIT {
         String snippet = "hello world";
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
-            .withCmd("/bin/sh", "-c", "sleep 1 && read line && echo $line")
+            .withCmd("/bin/sh", "-c", "read line && echo $line")
             .withTty(false)
             .withAttachStdin(true)
             .withAttachStdout(true)
