@@ -233,7 +233,7 @@ class UnixDomainSocket extends Socket {
             try {
                 if (off > 0) {
                     byte[] data = new byte[(len < 10240) ? len : 10240];
-                    int size = recv(fd, data, (len < 10240) ? len : 10240, 0);
+                    int size = recv(fd, data, data.length, 0);
                     if (size > 0) {
                         System.arraycopy(data, 0, bytesEntry, off, size);
                     }

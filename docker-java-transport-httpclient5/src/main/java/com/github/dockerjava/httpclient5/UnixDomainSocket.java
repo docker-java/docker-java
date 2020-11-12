@@ -235,7 +235,7 @@ class UnixDomainSocket extends Socket {
                     if (!isConnected()) {
                         return -1;
                     }
-                    int size = UnixDomainSocket.read(fd, data, (len < 10240) ? len : 10240);
+                    int size = UnixDomainSocket.read(fd, data, data.length);
                     if (size <= 0) {
                         return -1;
                     }
