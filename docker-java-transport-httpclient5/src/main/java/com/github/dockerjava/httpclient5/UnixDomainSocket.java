@@ -257,7 +257,7 @@ class UnixDomainSocket extends Socket {
         public int read() throws IOException {
             byte[] bytes = new byte[1];
             int bytesRead = read(bytes);
-            if (bytesRead == 0) {
+            if (bytesRead <= 0) {
                 return -1;
             }
             return bytes[0] & 0xff;
