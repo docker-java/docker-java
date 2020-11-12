@@ -229,12 +229,12 @@ class UnixDomainSocket extends Socket {
 
         @Override
         public int read(byte[] bytesEntry, int off, int len) throws IOException {
+            if (!isConnected()) {
+                return -1;
+            }
             try {
                 if (off > 0) {
                     byte[] data = new byte[(len < 10240) ? len : 10240];
-                    if (!isConnected()) {
-                        return -1;
-                    }
                     int size = UnixDomainSocket.read(fd, data, data.length);
                     if (size <= 0) {
                         return -1;
@@ -242,9 +242,6 @@ class UnixDomainSocket extends Socket {
                     System.arraycopy(data, 0, bytesEntry, off, size);
                     return size;
                 } else {
-                    if (!isConnected()) {
-                        return -1;
-                    }
                     int size = UnixDomainSocket.read(fd, bytesEntry, len);
                     if (size <= 0) {
                         return -1;
