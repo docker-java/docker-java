@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
+import java.util.concurrent.CountDownLatch;
 import java.util.function.Consumer;
 
 class DefaultInvocationBuilder implements InvocationBuilder {
@@ -264,7 +265,11 @@ class DefaultInvocationBuilder implements InvocationBuilder {
         ResultCallback<T> callback,
         Consumer<DockerHttpClient.Response> sourceConsumer
     ) {
+        CountDownLatch threadStarted = new CountDownLatch(1);
+
         Thread thread = new Thread(() -> {
+            threadStarted.countDown();
+
             Thread streamingThread = Thread.currentThread();
             try (DockerHttpClient.Response response = execute(request)) {
                 callback.onStart(() -> {
@@ -281,6 +286,13 @@ class DefaultInvocationBuilder implements InvocationBuilder {
         thread.setDaemon(true);
 
         thread.start();
+
+        try {
+            // wait while the thread is actually started to let the request a better chances to be executed prior to a next request
+            threadStarted.await();
+        } catch (InterruptedException ignored) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     private InputStream encode(Object entity) {
