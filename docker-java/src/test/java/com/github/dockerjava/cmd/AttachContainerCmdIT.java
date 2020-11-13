@@ -164,6 +164,11 @@ public class AttachContainerCmdIT extends CmdIT {
             .withFollowStream(true)
             .exec(callback);
 
+        // The delay above is the workaround for #1492 issue for this test executed on Jersey or HttpClient5 transport implementations.
+        // Without the delay HTTP requests are sometimes performed in the reverse order ('start' and then 'attach').
+        // This results in the lost data from stdout and stderr streams of the container process and leads to the test failure.
+        Thread.sleep(5000L);
+
         dockerClient.startContainerCmd(container.getId()).exec();
 
         callback.awaitCompletion(15, TimeUnit.SECONDS);
