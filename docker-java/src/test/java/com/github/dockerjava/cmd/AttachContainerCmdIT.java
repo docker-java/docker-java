@@ -80,6 +80,9 @@ public class AttachContainerCmdIT extends CmdIT {
                 .withStdIn(in)
                 .exec(callback);
 
+            assertTrue("Processing of the response should start shortly after executing `attachContainerCmd`",
+                callback.awaitStarted(5, SECONDS));
+
             dockerClient.startContainerCmd(container.getId()).exec();
 
             out.write((snippet + "\n").getBytes());
@@ -123,6 +126,9 @@ public class AttachContainerCmdIT extends CmdIT {
             .withLogs(true)
             .exec(callback);
 
+        assertTrue("Processing of the response should start shortly after executing `attachContainerCmd`",
+            callback.awaitStarted(5, SECONDS));
+
         dockerClient.startContainerCmd(container.getId()).exec();
 
         callback.awaitCompletion(30, TimeUnit.SECONDS);
@@ -163,6 +169,9 @@ public class AttachContainerCmdIT extends CmdIT {
             .withStdOut(true)
             .withFollowStream(true)
             .exec(callback);
+
+        assertTrue("Processing of the response should start shortly after executing `attachContainerCmd`",
+            callback.awaitStarted(5, SECONDS));
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
@@ -212,6 +221,9 @@ public class AttachContainerCmdIT extends CmdIT {
             .withLogs(true)
             .withStdIn(stdin)
             .exec(callback);
+
+        assertTrue("Processing of the response should start shortly after executing `attachContainerCmd`",
+            callback.awaitStarted(5, SECONDS));
 
         dockerClient.startContainerCmd(container.getId()).exec();
 
