@@ -21,6 +21,7 @@ import org.apache.hc.core5.http.config.Registry;
 import org.apache.hc.core5.http.config.RegistryBuilder;
 import org.apache.hc.core5.http.impl.DefaultContentLengthStrategy;
 import org.apache.hc.core5.http.impl.io.EmptyInputStream;
+import org.apache.hc.core5.http.io.entity.ByteArrayEntity;
 import org.apache.hc.core5.http.io.entity.InputStreamEntity;
 import org.apache.hc.core5.http.protocol.BasicHttpContext;
 import org.apache.hc.core5.http.protocol.HttpContext;
@@ -134,9 +135,14 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
 
         request.headers().forEach(httpUriRequest::addHeader);
 
-        InputStream body = request.body();
-        if (body != null) {
-            httpUriRequest.setEntity(new InputStreamEntity(body, null));
+        byte[] bodyBytes = request.bodyBytes();
+        if (bodyBytes != null) {
+            httpUriRequest.setEntity(new ByteArrayEntity(bodyBytes, null));
+        } else {
+            InputStream body = request.body();
+            if (body != null) {
+                httpUriRequest.setEntity(new InputStreamEntity(body, null));
+            }
         }
 
         if (request.hijackedInput() != null) {

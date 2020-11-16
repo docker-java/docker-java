@@ -304,7 +304,11 @@ public final class JerseyDockerHttpClient implements DockerHttpClient {
         }
     }
 
-    private Entity<InputStream> toEntity(Request request) {
+    private Entity<?> toEntity(Request request) {
+        byte[] bodyBytes = request.bodyBytes();
+        if (bodyBytes != null) {
+            return Entity.json(bodyBytes);
+        }
         InputStream body = request.body();
         if (body != null) {
             return Entity.entity(body, MediaType.APPLICATION_JSON_TYPE);
