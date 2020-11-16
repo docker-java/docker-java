@@ -265,12 +265,12 @@ class DefaultInvocationBuilder implements InvocationBuilder {
         ResultCallback<T> callback,
         Consumer<DockerHttpClient.Response> sourceConsumer
     ) {
-        CountDownLatch onStart = new CountDownLatch(1);
+        CountDownLatch responseReceived = new CountDownLatch(1);
 
         Thread thread = new Thread(() -> {
             Thread streamingThread = Thread.currentThread();
             try (DockerHttpClient.Response response = execute(request)) {
-                onStart.countDown();
+                responseReceived.countDown();
 
                 callback.onStart(() -> {
                     streamingThread.interrupt();
@@ -282,7 +282,7 @@ class DefaultInvocationBuilder implements InvocationBuilder {
             } catch (Exception e) {
                 callback.onError(e);
             } finally {
-                onStart.countDown();
+                responseReceived.countDown();
             }
         }, "docker-java-stream-" + Objects.hashCode(request));
         thread.setDaemon(true);
@@ -290,7 +290,7 @@ class DefaultInvocationBuilder implements InvocationBuilder {
         thread.start();
 
         try {
-            onStart.await();
+            responseReceived.await();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
