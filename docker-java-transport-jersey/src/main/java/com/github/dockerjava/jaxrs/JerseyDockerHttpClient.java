@@ -165,7 +165,7 @@ public final class JerseyDockerHttpClient implements DockerHttpClient {
         RequestConfig.Builder requestConfigBuilder = RequestConfig.custom();
 
         // logging may disabled via log level
-        clientConfig.register(new SelectiveLoggingFilter(LOGGER, true));
+        clientConfig.register(new SelectiveLoggingFilter(LOGGER, false));
 
         if (readTimeout != null) {
             requestConfigBuilder.setSocketTimeout(readTimeout);
