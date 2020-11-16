@@ -222,11 +222,6 @@ public class AttachContainerCmdIT extends CmdIT {
             .withStdIn(stdin)
             .exec(callback);
 
-        assertTrue("Processing of the response should start shortly after executing `attachContainerCmd`",
-            callback.awaitStarted(5, SECONDS));
-
-        dockerClient.startContainerCmd(container.getId()).exec();
-
         callback.awaitCompletion(30, TimeUnit.SECONDS);
         callback.close();
     }
