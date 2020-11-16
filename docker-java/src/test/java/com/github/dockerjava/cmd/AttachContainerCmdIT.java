@@ -28,8 +28,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * @author Kanstantsin Shautsou
@@ -221,6 +220,11 @@ public class AttachContainerCmdIT extends CmdIT {
             .withLogs(true)
             .withStdIn(stdin)
             .exec(callback);
+
+        assertFalse("Processing of the response is not expected to be started" +
+            " because `attachContainerCmd` with stdin is not supported", callback.awaitStarted(5, SECONDS));
+
+        dockerClient.startContainerCmd(container.getId()).exec();
 
         callback.awaitCompletion(30, TimeUnit.SECONDS);
         callback.close();
