@@ -27,6 +27,113 @@ public class BindTest {
     }
 
     @Test
+    public void parseReadWriteWindows() {
+        Bind bind = Bind.parse("C:\\host:/container:rw");
+        assertThat(bind.getPath(), is("C:\\host"));
+        assertThat(bind.getVolume().getPath(), is("/container"));
+        assertThat(bind.getAccessMode(), is(rw));
+        assertThat(bind.getSecMode(), is(SELContext.none));
+        assertThat(bind.getNoCopy(), nullValue());
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT_MODE));
+    }
+
+    @Test
+    public void parseReadWriteNoCopyWindows() {
+        Bind bind = Bind.parse("C:\\host:/container:rw,nocopy");
+        assertThat(bind.getPath(), is("C:\\host"));
+        assertThat(bind.getVolume().getPath(), is("/container"));
+        assertThat(bind.getAccessMode(), is(rw));
+        assertThat(bind.getSecMode(), is(SELContext.none));
+        assertThat(bind.getNoCopy(), is(true));
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT_MODE));
+    }
+
+    @Test
+    public void parseReadWriteSharedWindows() {
+        Bind bind = Bind.parse("C:\\host:/container:rw,shared");
+        assertThat(bind.getPath(), is("C:\\host"));
+        assertThat(bind.getVolume().getPath(), is("/container"));
+        assertThat(bind.getAccessMode(), is(rw));
+        assertThat(bind.getSecMode(), is(SELContext.none));
+        assertThat(bind.getNoCopy(), nullValue());
+        assertThat(bind.getPropagationMode(), is(PropagationMode.SHARED));
+    }
+
+    @Test
+    public void parseReadWriteSlaveWindows() {
+        Bind bind = Bind.parse("C:\\host:/container:rw,slave");
+        assertThat(bind.getPath(), is("C:\\host"));
+        assertThat(bind.getVolume().getPath(), is("/container"));
+        assertThat(bind.getAccessMode(), is(rw));
+        assertThat(bind.getSecMode(), is(SELContext.none));
+        assertThat(bind.getNoCopy(), nullValue());
+        assertThat(bind.getPropagationMode(), is(PropagationMode.SLAVE));
+    }
+
+    @Test
+    public void parseReadWritePrivateWindows() {
+        Bind bind = Bind.parse("C:\\host:/container:rw,private");
+        assertThat(bind.getPath(), is("C:\\host"));
+        assertThat(bind.getVolume().getPath(), is("/container"));
+        assertThat(bind.getAccessMode(), is(rw));
+        assertThat(bind.getSecMode(), is(SELContext.none));
+        assertThat(bind.getNoCopy(), nullValue());
+        assertThat(bind.getPropagationMode(), is(PropagationMode.PRIVATE));
+    }
+
+    @Test
+    public void parseReadOnlyWindows() {
+        Bind bind = Bind.parse("C:\\host:/container:ro");
+        assertThat(bind.getPath(), is("C:\\host"));
+        assertThat(bind.getVolume().getPath(), is("/container"));
+        assertThat(bind.getAccessMode(), is(ro));
+        assertThat(bind.getSecMode(), is(SELContext.none));
+        assertThat(bind.getNoCopy(), nullValue());
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT_MODE));
+    }
+
+    @Test
+    public void parseSELOnlyWindows() {
+        Bind bind = Bind.parse("C:\\host:/container:Z");
+        assertThat(bind.getPath(), is("C:\\host"));
+        assertThat(bind.getVolume().getPath(), is("/container"));
+        assertThat(bind.getAccessMode(), is(AccessMode.DEFAULT));
+        assertThat(bind.getSecMode(), is(SELContext.single));
+        assertThat(bind.getNoCopy(), nullValue());
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT_MODE));
+
+        bind = Bind.parse("C:\\host:/container:z");
+        assertThat(bind.getPath(), is("C:\\host"));
+        assertThat(bind.getVolume().getPath(), is("/container"));
+        assertThat(bind.getAccessMode(), is(AccessMode.DEFAULT));
+        assertThat(bind.getSecMode(), is(SELContext.shared));
+        assertThat(bind.getNoCopy(), nullValue());
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT_MODE));
+    }
+
+    @Test
+    public void parseReadWriteSELWindows() {
+        Bind bind = Bind.parse("C:\\host:/container:rw,Z");
+        assertThat(bind.getPath(), is("C:\\host"));
+        assertThat(bind.getVolume().getPath(), is("/container"));
+        assertThat(bind.getAccessMode(), is(rw));
+        assertThat(bind.getSecMode(), is(SELContext.single));
+        assertThat(bind.getNoCopy(), nullValue());
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT_MODE));
+    }
+
+    @Test
+    public void parseReadOnlySELWindows() {
+        Bind bind = Bind.parse("C:\\host:/container:ro,z");
+        assertThat(bind.getPath(), is("C:\\host"));
+        assertThat(bind.getVolume().getPath(), is("/container"));
+        assertThat(bind.getAccessMode(), is(ro));
+        assertThat(bind.getSecMode(), is(SELContext.shared));
+        assertThat(bind.getNoCopy(), nullValue());
+        assertThat(bind.getPropagationMode(), is(PropagationMode.DEFAULT_MODE));
+    }
+
+    @Test
     public void parseReadWrite() {
         Bind bind = Bind.parse("/host:/container:rw");
         assertThat(bind.getPath(), is("/host"));

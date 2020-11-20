@@ -97,7 +97,8 @@ public class Bind implements Serializable {
      */
     public static Bind parse(String serialized) {
         try {
-            String[] parts = serialized.split(":");
+            // Split by ':' but not ':\' (Windows-style path)
+            String[] parts = serialized.split(":(?!\\\\)");
             switch (parts.length) {
             case 2: {
                 return new Bind(parts[0], new Volume(parts[1]));
