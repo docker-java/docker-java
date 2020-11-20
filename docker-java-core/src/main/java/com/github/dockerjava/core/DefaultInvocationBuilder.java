@@ -17,7 +17,6 @@ import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.transport.DockerHttpClient;
 import org.apache.commons.io.IOUtils;
 
-import java.io.ByteArrayInputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -97,7 +96,7 @@ class DefaultInvocationBuilder implements InvocationBuilder {
         DockerHttpClient.Request request = requestBuilder
             .method(DockerHttpClient.Request.Method.POST)
             .putHeader("content-type", "application/json")
-            .body(encode(entity))
+            .bodyBytes(encode(entity))
             .build();
 
         DockerHttpClient.Response response = execute(request);
@@ -119,7 +118,7 @@ class DefaultInvocationBuilder implements InvocationBuilder {
             DockerHttpClient.Request request = requestBuilder
                 .method(DockerHttpClient.Request.Method.POST)
                 .putHeader("content-type", "application/json")
-                .body(new ByteArrayInputStream(objectMapper.writeValueAsBytes(entity)))
+                .bodyBytes(encode(entity))
                 .build();
 
             try (DockerHttpClient.Response response = execute(request)) {
@@ -132,11 +131,17 @@ class DefaultInvocationBuilder implements InvocationBuilder {
 
     @Override
     public <T> void post(Object entity, TypeReference<T> typeReference, ResultCallback<T> resultCallback) {
-        try {
-            post(typeReference, resultCallback, new ByteArrayInputStream(objectMapper.writeValueAsBytes(entity)));
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        DockerHttpClient.Request request = requestBuilder
+            .method(DockerHttpClient.Request.Method.POST)
+            .putHeader("content-type", "application/json")
+            .bodyBytes(encode(entity))
+            .build();
+
+        executeAndStream(
+            request,
+            resultCallback,
+            new JsonSink<>(typeReference, resultCallback)
+        );
     }
 
     @Override
@@ -150,17 +155,12 @@ class DefaultInvocationBuilder implements InvocationBuilder {
 
     @Override
     public void post(Object entity, InputStream stdin, ResultCallback<Frame> resultCallback) {
-        final DockerHttpClient.Request request;
-        try {
-            request = requestBuilder
-                .method(DockerHttpClient.Request.Method.POST)
-                .putHeader("content-type", "application/json")
-                .body(new ByteArrayInputStream(objectMapper.writeValueAsBytes(entity)))
-                .hijackedInput(stdin)
-                .build();
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        DockerHttpClient.Request request = requestBuilder
+            .method(DockerHttpClient.Request.Method.POST)
+            .putHeader("content-type", "application/json")
+            .bodyBytes(encode(entity))
+            .hijackedInput(stdin)
+            .build();
 
         executeAndStream(
             request,
@@ -283,13 +283,13 @@ class DefaultInvocationBuilder implements InvocationBuilder {
         thread.start();
     }
 
-    private InputStream encode(Object entity) {
+    private byte[] encode(Object entity) {
         if (entity == null) {
             return null;
         }
 
         try {
-            return new ByteArrayInputStream(objectMapper.writeValueAsBytes(entity));
+            return objectMapper.writeValueAsBytes(entity);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
