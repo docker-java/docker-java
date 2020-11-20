@@ -133,6 +133,7 @@ class DefaultInvocationBuilder implements InvocationBuilder {
     public <T> void post(Object entity, TypeReference<T> typeReference, ResultCallback<T> resultCallback) {
         DockerHttpClient.Request request = requestBuilder
             .method(DockerHttpClient.Request.Method.POST)
+            .putHeader("content-type", "application/json")
             .bodyBytes(encode(entity))
             .build();
 
