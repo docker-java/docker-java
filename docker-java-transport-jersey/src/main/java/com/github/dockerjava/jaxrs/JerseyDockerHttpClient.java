@@ -54,9 +54,9 @@ public final class JerseyDockerHttpClient implements DockerHttpClient {
 
         private Integer connectTimeout = null;
 
-        private Integer maxTotalConnections = null;
+        private Integer maxTotalConnections = Integer.MAX_VALUE;
 
-        private Integer maxPerRouteConnections = null;
+        private Integer maxPerRouteConnections = Integer.MAX_VALUE;
 
         private Integer connectionRequestTimeout = null;
 

@@ -13,7 +13,7 @@ public final class ApacheDockerHttpClient extends ApacheDockerHttpClientImpl {
 
         private SSLConfig sslConfig = null;
 
-        private ConnectionPoolConfig connectionPoolConf = null;
+        private int maxConnections = Integer.MAX_VALUE;
 
         public Builder dockerHost(URI value) {
             this.dockerHost = Objects.requireNonNull(value, "dockerHost");
@@ -25,18 +25,18 @@ public final class ApacheDockerHttpClient extends ApacheDockerHttpClientImpl {
             return this;
         }
 
-        public Builder connectionPool(ConnectionPoolConfig conf) {
-            this.connectionPoolConf = conf;
+        public Builder maxConnections(int value) {
+            this.maxConnections = value;
             return this;
         }
 
         public ApacheDockerHttpClient build() {
             Objects.requireNonNull(dockerHost, "dockerHost");
-            return new ApacheDockerHttpClient(dockerHost, sslConfig, connectionPoolConf);
+            return new ApacheDockerHttpClient(dockerHost, sslConfig, maxConnections);
         }
     }
 
-    private ApacheDockerHttpClient(URI dockerHost, SSLConfig sslConfig, ConnectionPoolConfig connectionPoolConfig) {
-        super(dockerHost, sslConfig, connectionPoolConfig);
+    private ApacheDockerHttpClient(URI dockerHost, SSLConfig sslConfig, int maxConnections) {
+        super(dockerHost, sslConfig, maxConnections);
     }
 }

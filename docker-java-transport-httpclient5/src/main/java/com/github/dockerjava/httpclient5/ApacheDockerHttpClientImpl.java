@@ -46,7 +46,7 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
     protected ApacheDockerHttpClientImpl(
         URI dockerHost,
         SSLConfig sslConfig,
-        ConnectionPoolConfig connectionPoolConf
+        int maxConnections
     ) {
         Registry<ConnectionSocketFactory> socketFactoryRegistry = createConnectionSocketFactoryRegistry(sslConfig, dockerHost);
 
@@ -85,13 +85,8 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
                 null
             )
         );
-        if (connectionPoolConf != null) {
-            Integer maxConnections = connectionPoolConf.getMaxConnections();
-            if (maxConnections != null) {
-                connectionManager.setMaxTotal(maxConnections);
-                connectionManager.setDefaultMaxPerRoute(maxConnections);
-            }
-        }
+        connectionManager.setMaxTotal(maxConnections);
+        connectionManager.setDefaultMaxPerRoute(maxConnections);
         httpClient = HttpClients.custom()
             .setRequestExecutor(new HijackingHttpRequestExecutor(null))
             .setConnectionManager(connectionManager)
