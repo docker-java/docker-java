@@ -97,41 +97,39 @@ public class Bind implements Serializable {
      */
     public static Bind parse(String serialized) {
         try {
-            String[] parts = serialized.split(":");
+            // Split by ':' but not ':\' (Windows-style path)
+            String[] parts = serialized.split(":(?!\\\\)");
             switch (parts.length) {
-                case 2: {
-                    return new Bind(parts[0], new Volume(parts[1]));
-                }
-                case 4: {
-                    parts = new String[]{parts[0] + ":" + parts[1], parts[2], parts[3]};
-                }
-                case 3: {
-                    String[] flags = parts[2].split(",");
-                    AccessMode accessMode = AccessMode.DEFAULT;
-                    SELContext seMode = SELContext.DEFAULT;
-                    Boolean nocopy = null;
-                    PropagationMode propagationMode = PropagationMode.DEFAULT_MODE;
-                    for (String p : flags) {
-                        if (p.length() == 2) {
-                            accessMode = AccessMode.valueOf(p.toLowerCase());
-                        } else if ("nocopy".equals(p)) {
-                            nocopy = true;
-                        } else if (PropagationMode.SHARED.toString().equals(p)) {
-                            propagationMode = PropagationMode.SHARED;
-                        } else if (PropagationMode.SLAVE.toString().equals(p)) {
-                            propagationMode = PropagationMode.SLAVE;
-                        } else if (PropagationMode.PRIVATE.toString().equals(p)) {
-                            propagationMode = PropagationMode.PRIVATE;
-                        } else {
-                            seMode = SELContext.fromString(p);
-                        }
+            case 2: {
+                return new Bind(parts[0], new Volume(parts[1]));
+            }
+            case 3: {
+                String[] flags = parts[2].split(",");
+                AccessMode accessMode = AccessMode.DEFAULT;
+                SELContext seMode = SELContext.DEFAULT;
+                Boolean nocopy = null;
+                PropagationMode propagationMode = PropagationMode.DEFAULT_MODE;
+                for (String p : flags) {
+                    if (p.length() == 2) {
+                        accessMode = AccessMode.valueOf(p.toLowerCase());
+                    } else if ("nocopy".equals(p)) {
+                        nocopy = true;
+                    } else if (PropagationMode.SHARED.toString().equals(p)) {
+                        propagationMode = PropagationMode.SHARED;
+                    } else if (PropagationMode.SLAVE.toString().equals(p)) {
+                        propagationMode = PropagationMode.SLAVE;
+                    } else if (PropagationMode.PRIVATE.toString().equals(p)) {
+                        propagationMode = PropagationMode.PRIVATE;
+                    } else {
+                        seMode = SELContext.fromString(p);
                     }
+                }
 
-                    return new Bind(parts[0], new Volume(parts[1]), accessMode, seMode, nocopy, propagationMode);
-                }
-                default: {
-                    throw new IllegalArgumentException();
-                }
+                return new Bind(parts[0], new Volume(parts[1]), accessMode, seMode, nocopy, propagationMode);
+            }
+            default: {
+                throw new IllegalArgumentException();
+            }
             }
         } catch (Exception e) {
             throw new IllegalArgumentException("Error parsing Bind '" + serialized + "'", e);
