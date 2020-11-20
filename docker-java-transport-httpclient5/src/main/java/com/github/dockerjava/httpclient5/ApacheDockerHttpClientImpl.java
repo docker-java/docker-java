@@ -41,12 +41,12 @@ import java.util.stream.Stream;
 class ApacheDockerHttpClientImpl implements DockerHttpClient {
 
     private final CloseableHttpClient httpClient;
-
     private final HttpHost host;
 
     protected ApacheDockerHttpClientImpl(
         URI dockerHost,
-        SSLConfig sslConfig
+        SSLConfig sslConfig,
+        int maxConnections
     ) {
         Registry<ConnectionSocketFactory> socketFactoryRegistry = createConnectionSocketFactoryRegistry(sslConfig, dockerHost);
 
@@ -66,27 +66,30 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
                 host = HttpHost.create(dockerHost);
         }
 
+        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(
+            socketFactoryRegistry,
+            new ManagedHttpClientConnectionFactory(
+                null,
+                null,
+                null,
+                null,
+                message -> {
+                    Header transferEncodingHeader = message.getFirstHeader(HttpHeaders.TRANSFER_ENCODING);
+                    if (transferEncodingHeader != null) {
+                        if ("identity".equalsIgnoreCase(transferEncodingHeader.getValue())) {
+                            return ContentLengthStrategy.UNDEFINED;
+                        }
+                    }
+                    return DefaultContentLengthStrategy.INSTANCE.determineLength(message);
+                },
+                null
+            )
+        );
+        connectionManager.setMaxTotal(maxConnections);
+        connectionManager.setDefaultMaxPerRoute(maxConnections);
         httpClient = HttpClients.custom()
             .setRequestExecutor(new HijackingHttpRequestExecutor(null))
-            .setConnectionManager(new PoolingHttpClientConnectionManager(
-                socketFactoryRegistry,
-                new ManagedHttpClientConnectionFactory(
-                    null,
-                    null,
-                    null,
-                    null,
-                    message -> {
-                        Header transferEncodingHeader = message.getFirstHeader(HttpHeaders.TRANSFER_ENCODING);
-                        if (transferEncodingHeader != null) {
-                            if ("identity".equalsIgnoreCase(transferEncodingHeader.getValue())) {
-                                return ContentLengthStrategy.UNDEFINED;
-                            }
-                        }
-                        return DefaultContentLengthStrategy.INSTANCE.determineLength(message);
-                    },
-                    null
-                )
-            ))
+            .setConnectionManager(connectionManager)
             .build();
     }
 

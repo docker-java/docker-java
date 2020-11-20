@@ -14,6 +14,8 @@ public final class ZerodepDockerHttpClient extends ApacheDockerHttpClientImpl {
 
         private SSLConfig sslConfig = null;
 
+        private int maxConnections = Integer.MAX_VALUE;
+
         public Builder dockerHost(URI value) {
             this.dockerHost = Objects.requireNonNull(value, "dockerHost");
             return this;
@@ -24,13 +26,18 @@ public final class ZerodepDockerHttpClient extends ApacheDockerHttpClientImpl {
             return this;
         }
 
+        public Builder maxConnections(int value) {
+            this.maxConnections = value;
+            return this;
+        }
+
         public ZerodepDockerHttpClient build() {
             Objects.requireNonNull(dockerHost, "dockerHost");
-            return new ZerodepDockerHttpClient(dockerHost, sslConfig);
+            return new ZerodepDockerHttpClient(dockerHost, sslConfig, maxConnections);
         }
     }
 
-    protected ZerodepDockerHttpClient(URI dockerHost, SSLConfig sslConfig) {
-        super(dockerHost, sslConfig);
+    protected ZerodepDockerHttpClient(URI dockerHost, SSLConfig sslConfig, int maxConnections) {
+        super(dockerHost, sslConfig, maxConnections);
     }
 }
