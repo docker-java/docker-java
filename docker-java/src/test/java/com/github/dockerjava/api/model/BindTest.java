@@ -134,6 +134,20 @@ public class BindTest {
     }
 
     @Test
+    public void parseReadWriteWindowsWsl() {
+        Bind bind = Bind.parse("C:/host:/container");
+        assertThat(bind.getPath(), is("C:/host"));
+        assertThat(bind.getVolume().getPath(), is("/container"));
+    }
+
+    @Test
+    public void parseReadWriteLinuxCapital() {
+        Bind bind = Bind.parse("/host/DIR:/container");
+        assertThat(bind.getPath(), is("/host/DIR"));
+        assertThat(bind.getVolume().getPath(), is("/container"));
+    }
+
+    @Test
     public void parseReadWrite() {
         Bind bind = Bind.parse("/host:/container:rw");
         assertThat(bind.getPath(), is("/host"));
