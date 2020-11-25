@@ -8,10 +8,9 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static com.github.dockerjava.test.serdes.JSONSamples.testRoundTrip;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 
@@ -89,4 +88,23 @@ public class AuthConfigTest {
         assertThat(authConfig.getStackOrchestrator(), is("kubernetes"));
     }
 
+    @Test
+    public void toStringDoesNotContainSensitiveStrings() {
+        AuthConfig authConfig = new AuthConfig()
+            .withAuth("authValue")
+            .withEmail("emailValue")
+            .withPassword("passwordValue")
+            .withIdentityToken("identityTokenValue")
+            .withRegistrytoken("registryTokenValue")
+            .withRegistryAddress("registryAddressValue");
+        String toStringValue = authConfig.toString();
+
+        assertThat(toStringValue, not(containsString("authValue")));
+        assertThat(toStringValue, not(containsString("passwordValue")));
+        assertThat(toStringValue, not(containsString("identityTokenValue")));
+        assertThat(toStringValue, not(containsString("registryTokenValue")));
+
+        assertThat(toStringValue, containsString("emailValue"));
+        assertThat(toStringValue, containsString("registryAddressValue"));
+    }
 }

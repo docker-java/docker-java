@@ -2,13 +2,11 @@ package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
 
 @EqualsAndHashCode
-@ToString
 public class AuthConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -139,5 +137,24 @@ public class AuthConfig implements Serializable {
      */
     public void setStackOrchestrator(String stackOrchestrator) {
         this.stackOrchestrator = stackOrchestrator;
+    }
+
+    @Override
+    public String toString() {
+        return "AuthConfig{" +
+            "username='" + username + '\'' +
+            ", password='" + obfuscated(password) + '\'' +
+            ", email='" + email + '\'' +
+            ", registryAddress='" + registryAddress + '\'' +
+            ", auth='" + obfuscated(auth) + '\'' +
+            ", registrytoken='" + obfuscated(registrytoken) + '\'' +
+            ", identitytoken='" + obfuscated(identitytoken) + '\'' +
+            ", stackOrchestrator='" + stackOrchestrator + '\'' +
+            '}';
+    }
+
+    private static String obfuscated(String value) {
+        boolean isBlank = value == null || value.isEmpty();
+        return isBlank ? "blank" : "hidden non-blank value";
     }
 }
