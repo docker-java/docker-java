@@ -8,7 +8,7 @@ import javax.annotation.CheckForNull;
 import java.io.Serializable;
 
 @EqualsAndHashCode
-@ToString
+@ToString(onlyExplicitlyIncluded = true)
 public class AuthConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -20,15 +20,18 @@ public class AuthConfig implements Serializable {
     public static final String DEFAULT_SERVER_ADDRESS = "https://index.docker.io/v1/";
 
     @JsonProperty("username")
+    @ToString.Include
     private String username;
 
     @JsonProperty("password")
     private String password;
 
     @JsonProperty("email")
+    @ToString.Include
     private String email;
 
     @JsonProperty("serveraddress")
+    @ToString.Include
     private String registryAddress = DEFAULT_SERVER_ADDRESS;
 
     @JsonProperty("auth")
@@ -50,6 +53,7 @@ public class AuthConfig implements Serializable {
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_25}
      */
     @JsonProperty("stackOrchestrator")
+    @ToString.Include
     private String stackOrchestrator;
 
     public String getUsername() {
