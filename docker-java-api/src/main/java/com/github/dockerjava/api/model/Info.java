@@ -232,6 +232,9 @@ public class Info implements Serializable {
     @JsonProperty("Isolation")
     private String isolation;
 
+    @JsonProperty("SecurityOptions")
+    private List<String> securityOptions;
+
     /**
      * @see #architecture
      */
@@ -1062,5 +1065,9 @@ public class Info implements Serializable {
     public Info withIsolation(String isolation) {
         this.isolation = isolation;
         return this;
+    }
+
+    public List<String> getSecurityOptions() {
+        return securityOptions;
     }
 }
