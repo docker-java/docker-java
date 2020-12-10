@@ -79,6 +79,11 @@ public final class DefaultDockerCmdExecFactory extends AbstractDockerCmdExecFact
                 resource = "/" + resource;
             }
 
+            RemoteApiVersion apiVersion = getDockerClientConfig().getApiVersion();
+            if (apiVersion != RemoteApiVersion.UNKNOWN_VERSION) {
+                resource = "/" + apiVersion.asWebPathPart() + resource;
+            }
+
             if (!queryParams.isEmpty()) {
                 Escaper urlFormParameterEscaper = UrlEscapers.urlFormParameterEscaper();
                 resource = queryParams.asMap().entrySet().stream()
