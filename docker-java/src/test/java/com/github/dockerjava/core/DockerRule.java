@@ -178,6 +178,7 @@ public class DockerRule extends ExternalResource {
 
     public static DefaultDockerClientConfig config(String password) {
         DefaultDockerClientConfig.Builder builder = DefaultDockerClientConfig.createDefaultConfigBuilder()
+                .withApiVersion(RemoteApiVersion.VERSION_1_40)
                 .withRegistryUrl("https://index.docker.io/v1/");
         if (password != null) {
             builder = builder.withRegistryPassword(password);
