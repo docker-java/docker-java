@@ -236,6 +236,35 @@ public interface DockerCmdExecFactory extends Closeable {
      */
     RemoveSecretCmd.Exec createRemoveSecretCmdExec();
 
+    /**
+     * Command to list all configs.
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_30}
+     */
+    ListConfigsCmd.Exec createListConfigsCmdExec();
+
+    /**
+     * Command to inspect a config in a docker swarm. Only applicable if docker runs in swarm mode.
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_30}
+     */
+    InspectConfigCmd.Exec createInspectConfigCmdExec();
+
+    /**
+     * Command to create a new config in a docker swarm. Only applicable if docker runs in swarm mode.
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_30}
+     */
+    CreateConfigCmd.Exec createCreateConfigCmdExec();
+
+    /**
+     * Command to remove a config in a docker swarm. Only applicable if docker runs in swarm mode.
+     *
+     * @since {@link RemoteApiVersion#VERSION_1_30}
+     */
+    RemoveConfigCmd.Exec createRemoveConfigCmdExec();
+
+
     @Override
     void close() throws IOException;
 
