@@ -41,6 +41,7 @@ import com.github.dockerjava.api.command.ListServicesCmd;
 import com.github.dockerjava.api.command.ListSwarmNodesCmd;
 import com.github.dockerjava.api.command.ListTasksCmd;
 import com.github.dockerjava.api.command.ListVolumesCmd;
+import com.github.dockerjava.api.command.LoadImageAsyncCmd;
 import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.api.command.LogContainerCmd;
 import com.github.dockerjava.api.command.LogSwarmObjectCmd;
@@ -119,6 +120,7 @@ import com.github.dockerjava.core.command.ListServicesCmdImpl;
 import com.github.dockerjava.core.command.ListSwarmNodesCmdImpl;
 import com.github.dockerjava.core.command.ListTasksCmdImpl;
 import com.github.dockerjava.core.command.ListVolumesCmdImpl;
+import com.github.dockerjava.core.command.LoadImageAsyncCmdImpl;
 import com.github.dockerjava.core.command.LoadImageCmdImpl;
 import com.github.dockerjava.core.command.LogContainerCmdImpl;
 import com.github.dockerjava.core.command.LogSwarmObjectImpl;
@@ -338,6 +340,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public LoadImageCmd loadImageCmd(@Nonnull InputStream imageStream) {
         return new LoadImageCmdImpl(getDockerCmdExecFactory().createLoadImageCmdExec(), imageStream);
+    }
+
+    @Override
+    public LoadImageAsyncCmd loadImageAsyncCmd(@Nonnull InputStream imageStream) {
+        return new LoadImageAsyncCmdImpl(getDockerCmdExecFactory().createLoadImageAsyncCmdExec(), imageStream);
     }
 
     @Override

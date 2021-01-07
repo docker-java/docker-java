@@ -41,6 +41,7 @@ import com.github.dockerjava.api.command.ListServicesCmd;
 import com.github.dockerjava.api.command.ListSwarmNodesCmd;
 import com.github.dockerjava.api.command.ListTasksCmd;
 import com.github.dockerjava.api.command.ListVolumesCmd;
+import com.github.dockerjava.api.command.LoadImageAsyncCmd;
 import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.api.command.LogContainerCmd;
 import com.github.dockerjava.api.command.LogSwarmObjectCmd;
@@ -94,6 +95,7 @@ import com.github.dockerjava.core.exec.DisconnectFromNetworkCmdExec;
 import com.github.dockerjava.core.exec.EventsCmdExec;
 import com.github.dockerjava.core.exec.ExecCreateCmdExec;
 import com.github.dockerjava.core.exec.ExecStartCmdExec;
+import com.github.dockerjava.core.exec.LoadImageAsyncCmdExec;
 import com.github.dockerjava.core.exec.ResizeContainerCmdExec;
 import com.github.dockerjava.core.exec.ResizeExecCmdExec;
 import com.github.dockerjava.core.exec.InfoCmdExec;
@@ -245,6 +247,11 @@ public abstract class AbstractDockerCmdExecFactory implements DockerCmdExecFacto
     @Override
     public LoadImageCmd.Exec createLoadImageCmdExec() {
         return new LoadImageCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public LoadImageAsyncCmd.Exec createLoadImageAsyncCmdExec() {
+        return new LoadImageAsyncCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
