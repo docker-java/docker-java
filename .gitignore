@@ -10,6 +10,7 @@
 
 # Ignore all build/dist directories
 target
+*/dependency-reduced-pom.xml
 
 # Ignore InteliJ Idea project files
 .idea/
