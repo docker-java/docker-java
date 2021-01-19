@@ -6,14 +6,15 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ${{matrix.os}}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - { name: "default" }
-          - { name: "over TCP", dockerHost: "tcp://127.0.0.1:2375" }
-          - { name: "Docker 18.06.3", dockerVersion: "18.06.3~ce~3-0~ubuntu" }
+          - { name: "default", os: "ubuntu-18.04" }
+          - { name: "over TCP", dockerHost: "tcp://127.0.0.1:2375", os: "ubuntu-18.04" }
+          - { name: "Docker 18.06.3", dockerVersion: "18.06.3~ce~3-0~ubuntu", os: "ubuntu-18.04" }
+          - { name: "Windows", os: "windows-2019" }
 
     steps:
       - uses: actions/checkout@v2
@@ -22,6 +23,7 @@ jobs:
         with:
           java-version: 8
       - name: Configure Docker
+        if: startsWith(matrix.os, 'ubuntu')
         env:
           DOCKER_VERSION: ${{matrix.dockerVersion}}
           DOCKER_HOST: ${{matrix.dockerHost}}
@@ -31,7 +33,7 @@ jobs:
           DOCKER_HOST: ${{matrix.dockerHost}}
         run: ./mvnw --no-transfer-progress verify
       - name: Aggregate test reports with ciMate
-        if: always()
+        if: startsWith(matrix.os, 'ubuntu')
         continue-on-error: true
         env:
           CIMATE_PROJECT_ID: lodr9d83
