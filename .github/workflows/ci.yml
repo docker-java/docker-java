@@ -28,6 +28,8 @@ jobs:
           DOCKER_VERSION: ${{matrix.dockerVersion}}
           DOCKER_HOST: ${{matrix.dockerHost}}
         run: .ci/setup_docker.sh
+      - name: Print Docker info
+        run: docker info
       - name: Build with Maven
         env:
           DOCKER_HOST: ${{matrix.dockerHost}}
