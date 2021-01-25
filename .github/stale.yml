@@ -1,7 +1,7 @@
 
-daysUntilStale: 30
+daysUntilStale: 90
 
-daysUntilClose: 7
+daysUntilClose: 30
 
 exemptLabels:
   - resolution/acknowledged
