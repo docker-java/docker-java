@@ -12,8 +12,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Creates a new config
  */
-public class CreateConfigCmdImpl extends AbstrDockerCmd<CreateConfigCmd, CreateConfigResponse> implements
-    CreateConfigCmd {
+public class CreateConfigCmdImpl extends AbstrDockerCmd<CreateConfigCmd, CreateConfigResponse> implements CreateConfigCmd {
 
     @JsonProperty("Name")
     private String name;

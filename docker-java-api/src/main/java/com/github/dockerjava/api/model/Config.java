@@ -1,6 +1,8 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -10,8 +12,11 @@ import java.util.Date;
  *
  * @since {@link RemoteApiVersion#VERSION_1_30}
  */
+@ToString
+@EqualsAndHashCode
 public class Config implements Serializable {
-    public static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * @since 1.30
@@ -35,7 +40,7 @@ public class Config implements Serializable {
      * @since 1.30
      */
     @JsonProperty("Spec")
-    private ServiceSpec spec;
+    private ConfigSpec spec;
 
     /**
      * @since 1.30
@@ -67,11 +72,11 @@ public class Config implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public ServiceSpec getSpec() {
+    public ConfigSpec getSpec() {
         return spec;
     }
 
-    public void setSpec(ServiceSpec spec) {
+    public void setSpec(ConfigSpec spec) {
         this.spec = spec;
     }
 

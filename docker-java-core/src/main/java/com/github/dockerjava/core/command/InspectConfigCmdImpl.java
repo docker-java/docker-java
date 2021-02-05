@@ -9,8 +9,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Inspect the details of a config.
  */
-public class InspectConfigCmdImpl extends AbstrDockerCmd<InspectConfigCmd, Config> implements
-        InspectConfigCmd {
+public class InspectConfigCmdImpl extends AbstrDockerCmd<InspectConfigCmd, Config> implements InspectConfigCmd {
 
     private String configId;
 

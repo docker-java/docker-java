@@ -19,18 +19,17 @@ public class InspectConfigCmdIT extends SwarmCmdIT {
 
     @Test
     public void inspectConfig() throws DockerException {
+        DockerClient dockerClient = startSwarm();
 
         String configName = RandomStringUtils.random(10, true, false);
 
-        DockerClient dockerClient = startSwarm();
         CreateConfigResponse configResponse = dockerClient.createConfigCmd()
             .withName(configName)
             .withData("configuration data".getBytes()).exec();
-        assertThat(configResponse, notNullValue());
-        assertThat(configResponse.getId(), notNullValue());
         LOG.info("Config created with ID {}", configResponse.getId());
 
         Config config = dockerClient.inspectConfigCmd(configResponse.getId()).exec();
-        assertEquals(config.getId(), config.getId());
+        assertEquals(configResponse.getId(), config.getId());
+        assertEquals(configName, config.getSpec().getName());
     }
 }

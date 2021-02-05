@@ -12,8 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public class ListConfigsCmdExec extends AbstrSyncDockerCmdExec<ListConfigsCmd, List<Config>> implements
-    ListConfigsCmd.Exec {
+public class ListConfigsCmdExec extends AbstrSyncDockerCmdExec<ListConfigsCmd, List<Config>> implements ListConfigsCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ListConfigsCmdExec.class);
 

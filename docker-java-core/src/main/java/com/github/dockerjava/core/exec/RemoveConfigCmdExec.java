@@ -7,8 +7,7 @@ import com.github.dockerjava.core.WebTarget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RemoveConfigCmdExec extends AbstrSyncDockerCmdExec<RemoveConfigCmd, Void> implements
-        RemoveConfigCmd.Exec {
+public class RemoveConfigCmdExec extends AbstrSyncDockerCmdExec<RemoveConfigCmd, Void> implements RemoveConfigCmd.Exec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RemoveConfigCmdExec.class);
 
