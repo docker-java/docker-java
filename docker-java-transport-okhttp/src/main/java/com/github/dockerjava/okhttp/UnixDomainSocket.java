@@ -230,24 +230,24 @@ class UnixDomainSocket extends Socket {
 
         @Override
         public int read(byte[] bytesEntry, int off, int len) throws IOException {
+            if (!isConnected()) {
+                return -1;
+            }
             try {
                 if (off > 0) {
-                    int bytes = 0;
-                    int remainingLength = len;
-                    int size;
                     byte[] data = new byte[(len < 10240) ? len : 10240];
-                    do {
-                        size = recv(fd, data, (remainingLength < 10240) ? remainingLength : 10240, 0);
-                        if (size > 0) {
-                            System.arraycopy(data, 0, bytesEntry, off, size);
-                            bytes += size;
-                            off += size;
-                            remainingLength -= size;
-                        }
-                    } while ((remainingLength > 0) && (size > 0));
-                    return bytes;
+                    int size = recv(fd, data, data.length, 0);
+                    if (size <= 0) {
+                        return -1;
+                    }
+                    System.arraycopy(data, 0, bytesEntry, off, size);
+                    return size;
                 } else {
-                    return recv(fd, bytesEntry, len, 0);
+                    int size = recv(fd, bytesEntry, len, 0);
+                    if (size <= 0) {
+                        return -1;
+                    }
+                    return size;
                 }
             } catch (LastErrorException lee) {
                 throw new IOException("native read() failed : " + formatError(lee));
@@ -258,7 +258,7 @@ class UnixDomainSocket extends Socket {
         public int read() throws IOException {
             byte[] bytes = new byte[1];
             int bytesRead = read(bytes);
-            if (bytesRead == 0) {
+            if (bytesRead <= 0) {
                 return -1;
             }
             return bytes[0] & 0xff;
@@ -266,6 +266,9 @@ class UnixDomainSocket extends Socket {
 
         @Override
         public int read(byte[] bytes) throws IOException {
+            if (!isConnected()) {
+                return -1;
+            }
             return read(bytes, 0, bytes.length);
         }
     }

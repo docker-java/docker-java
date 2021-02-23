@@ -46,11 +46,7 @@ public class DockerRule extends ExternalResource {
     }
 
 
-    public DockerClient getClient() {
-        if (dockerClient != null) {
-            return dockerClient;
-        }
-
+    public DockerClient newClient() {
         DockerClientImpl dockerClient = cmdIT.getFactoryType().createDockerClient(config());
         DockerHttpClient dockerHttpClient = dockerClient.getHttpClient();
 
@@ -88,12 +84,19 @@ public class DockerRule extends ExternalResource {
             }
         );
 
-        return this.dockerClient = new DockerClientDelegate(dockerClient) {
+        return new DockerClientDelegate(dockerClient) {
             @Override
             public DockerHttpClient getHttpClient() {
                 return dockerHttpClient;
             }
         };
+    }
+
+    public DockerClient getClient() {
+        if (dockerClient != null) {
+            return dockerClient;
+        }
+        return this.dockerClient = newClient();
     }
 
     @Override
@@ -175,6 +178,7 @@ public class DockerRule extends ExternalResource {
 
     public static DefaultDockerClientConfig config(String password) {
         DefaultDockerClientConfig.Builder builder = DefaultDockerClientConfig.createDefaultConfigBuilder()
+                .withApiVersion(RemoteApiVersion.VERSION_1_30)
                 .withRegistryUrl("https://index.docker.io/v1/");
         if (password != null) {
             builder = builder.withRegistryPassword(password);

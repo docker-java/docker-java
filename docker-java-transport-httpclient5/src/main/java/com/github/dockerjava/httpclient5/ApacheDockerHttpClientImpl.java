@@ -21,6 +21,7 @@ import org.apache.hc.core5.http.config.Registry;
 import org.apache.hc.core5.http.config.RegistryBuilder;
 import org.apache.hc.core5.http.impl.DefaultContentLengthStrategy;
 import org.apache.hc.core5.http.impl.io.EmptyInputStream;
+import org.apache.hc.core5.http.io.entity.ByteArrayEntity;
 import org.apache.hc.core5.http.io.entity.InputStreamEntity;
 import org.apache.hc.core5.http.protocol.BasicHttpContext;
 import org.apache.hc.core5.http.protocol.HttpContext;
@@ -41,12 +42,12 @@ import java.util.stream.Stream;
 class ApacheDockerHttpClientImpl implements DockerHttpClient {
 
     private final CloseableHttpClient httpClient;
-
     private final HttpHost host;
 
     protected ApacheDockerHttpClientImpl(
         URI dockerHost,
-        SSLConfig sslConfig
+        SSLConfig sslConfig,
+        int maxConnections
     ) {
         Registry<ConnectionSocketFactory> socketFactoryRegistry = createConnectionSocketFactoryRegistry(sslConfig, dockerHost);
 
@@ -66,27 +67,30 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
                 host = HttpHost.create(dockerHost);
         }
 
+        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(
+            socketFactoryRegistry,
+            new ManagedHttpClientConnectionFactory(
+                null,
+                null,
+                null,
+                null,
+                message -> {
+                    Header transferEncodingHeader = message.getFirstHeader(HttpHeaders.TRANSFER_ENCODING);
+                    if (transferEncodingHeader != null) {
+                        if ("identity".equalsIgnoreCase(transferEncodingHeader.getValue())) {
+                            return ContentLengthStrategy.UNDEFINED;
+                        }
+                    }
+                    return DefaultContentLengthStrategy.INSTANCE.determineLength(message);
+                },
+                null
+            )
+        );
+        connectionManager.setMaxTotal(maxConnections);
+        connectionManager.setDefaultMaxPerRoute(maxConnections);
         httpClient = HttpClients.custom()
             .setRequestExecutor(new HijackingHttpRequestExecutor(null))
-            .setConnectionManager(new PoolingHttpClientConnectionManager(
-                socketFactoryRegistry,
-                new ManagedHttpClientConnectionFactory(
-                    null,
-                    null,
-                    null,
-                    null,
-                    message -> {
-                        Header transferEncodingHeader = message.getFirstHeader(HttpHeaders.TRANSFER_ENCODING);
-                        if (transferEncodingHeader != null) {
-                            if ("identity".equalsIgnoreCase(transferEncodingHeader.getValue())) {
-                                return ContentLengthStrategy.UNDEFINED;
-                            }
-                        }
-                        return DefaultContentLengthStrategy.INSTANCE.determineLength(message);
-                    },
-                    null
-                )
-            ))
+            .setConnectionManager(connectionManager)
             .build();
     }
 
@@ -134,9 +138,14 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
 
         request.headers().forEach(httpUriRequest::addHeader);
 
-        InputStream body = request.body();
-        if (body != null) {
-            httpUriRequest.setEntity(new InputStreamEntity(body, null));
+        byte[] bodyBytes = request.bodyBytes();
+        if (bodyBytes != null) {
+            httpUriRequest.setEntity(new ByteArrayEntity(bodyBytes, null));
+        } else {
+            InputStream body = request.body();
+            if (body != null) {
+                httpUriRequest.setEntity(new InputStreamEntity(body, null));
+            }
         }
 
         if (request.hijackedInput() != null) {

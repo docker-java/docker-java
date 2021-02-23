@@ -381,6 +381,26 @@ public class DelegatingDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     @Override
+    public ListConfigsCmd.Exec createListConfigsCmdExec() {
+        return getDockerCmdExecFactory().createListConfigsCmdExec();
+    }
+
+    @Override
+    public CreateConfigCmd.Exec createCreateConfigCmdExec() {
+        return getDockerCmdExecFactory().createCreateConfigCmdExec();
+    }
+
+    @Override
+    public InspectConfigCmd.Exec createInspectConfigCmdExec() {
+        return getDockerCmdExecFactory().createInspectConfigCmdExec();
+    }
+
+    @Override
+    public RemoveConfigCmd.Exec createRemoveConfigCmdExec() {
+        return getDockerCmdExecFactory().createRemoveConfigCmdExec();
+    }
+
+    @Override
     public void close() throws IOException {
         getDockerCmdExecFactory().close();
     }

@@ -177,6 +177,11 @@ public final class OkDockerHttpClient implements DockerHttpClient {
     }
 
     private RequestBody toRequestBody(Request request) {
+        byte[] bodyBytes = request.bodyBytes();
+        if (bodyBytes != null) {
+            return RequestBody.create(null, bodyBytes);
+        }
+
         InputStream body = request.body();
         if (body != null) {
             return new RequestBody() {

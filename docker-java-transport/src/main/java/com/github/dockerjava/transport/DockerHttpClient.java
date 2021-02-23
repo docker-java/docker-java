@@ -4,6 +4,7 @@ import org.immutables.value.Value;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.ByteArrayInputStream;
 import java.io.Closeable;
 import java.io.InputStream;
 import java.util.List;
@@ -70,7 +71,16 @@ public interface DockerHttpClient extends Closeable {
         public abstract String path();
 
         @Nullable
-        public abstract InputStream body();
+        @Value.Default
+        public InputStream body() {
+            byte[] bodyBytes = bodyBytes();
+            return bodyBytes != null
+                ? new ByteArrayInputStream(bodyBytes)
+                : null;
+        }
+
+        @Nullable
+        public abstract byte[] bodyBytes();
 
         @Nullable
         public abstract InputStream hijackedInput();

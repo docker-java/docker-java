@@ -137,7 +137,7 @@ public class ContainerSpec implements Serializable {
      * @since 1.26
      * A test to perform to check that the container is healthy.
      */
-    @JsonProperty("HealthCheck")
+    @JsonProperty("Healthcheck")
     private HealthCheck healthCheck;
 
     /**

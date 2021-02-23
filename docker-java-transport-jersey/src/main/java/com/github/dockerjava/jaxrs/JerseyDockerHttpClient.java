@@ -54,9 +54,9 @@ public final class JerseyDockerHttpClient implements DockerHttpClient {
 
         private Integer connectTimeout = null;
 
-        private Integer maxTotalConnections = null;
+        private Integer maxTotalConnections = Integer.MAX_VALUE;
 
-        private Integer maxPerRouteConnections = null;
+        private Integer maxPerRouteConnections = Integer.MAX_VALUE;
 
         private Integer connectionRequestTimeout = null;
 
@@ -165,7 +165,7 @@ public final class JerseyDockerHttpClient implements DockerHttpClient {
         RequestConfig.Builder requestConfigBuilder = RequestConfig.custom();
 
         // logging may disabled via log level
-        clientConfig.register(new SelectiveLoggingFilter(LOGGER, true));
+        clientConfig.register(new SelectiveLoggingFilter(LOGGER, false));
 
         if (readTimeout != null) {
             requestConfigBuilder.setSocketTimeout(readTimeout);
@@ -304,7 +304,11 @@ public final class JerseyDockerHttpClient implements DockerHttpClient {
         }
     }
 
-    private Entity<InputStream> toEntity(Request request) {
+    private Entity<?> toEntity(Request request) {
+        byte[] bodyBytes = request.bodyBytes();
+        if (bodyBytes != null) {
+            return Entity.json(bodyBytes);
+        }
         InputStream body = request.body();
         if (body != null) {
             return Entity.entity(body, MediaType.APPLICATION_JSON_TYPE);
