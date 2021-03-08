@@ -55,6 +55,10 @@ public class Task implements Serializable {
     @JsonProperty("DesiredState")
     private TaskState desiredState = null;
 
+    @JsonProperty("NetworksAttachments")
+    private List<NetworkAttachment> networkAttachments;
+
+
     /**
      * The ID of the task.
      *
@@ -163,6 +167,16 @@ public class Task implements Serializable {
     public String getNodeId() {
         return nodeId;
     }
+
+    /**
+     * Gets the network attachments
+     *
+     * @return networkAttachments
+     */
+    public List<NetworkAttachment> getNetworkAttachments() {
+        return networkAttachments;
+    }
+
 
     public Task withId(String id) {
         this.id = id;

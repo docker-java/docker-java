@@ -27,6 +27,7 @@ import com.github.dockerjava.api.command.InspectImageCmd;
 import com.github.dockerjava.api.command.InspectNetworkCmd;
 import com.github.dockerjava.api.command.InspectServiceCmd;
 import com.github.dockerjava.api.command.InspectSwarmCmd;
+import com.github.dockerjava.api.command.InspectTaskCmd;
 import com.github.dockerjava.api.command.InspectVolumeCmd;
 import com.github.dockerjava.api.command.JoinSwarmCmd;
 import com.github.dockerjava.api.command.KillContainerCmd;
@@ -392,6 +393,13 @@ public interface DockerClient extends Closeable {
      * @since 1.24
      */
     ListTasksCmd listTasksCmd();
+
+    /**
+     * Inspects a single task of a service.
+     * @param taskId The ID of the task to inspect
+     * @return command
+     */
+    InspectTaskCmd inspectTaskCmd(String taskId);
 
     /**
      * Command to get service log

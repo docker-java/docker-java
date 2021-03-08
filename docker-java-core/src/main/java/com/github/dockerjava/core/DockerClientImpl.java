@@ -29,6 +29,7 @@ import com.github.dockerjava.api.command.InspectImageCmd;
 import com.github.dockerjava.api.command.InspectNetworkCmd;
 import com.github.dockerjava.api.command.InspectServiceCmd;
 import com.github.dockerjava.api.command.InspectSwarmCmd;
+import com.github.dockerjava.api.command.InspectTaskCmd;
 import com.github.dockerjava.api.command.InspectVolumeCmd;
 import com.github.dockerjava.api.command.JoinSwarmCmd;
 import com.github.dockerjava.api.command.KillContainerCmd;
@@ -107,6 +108,7 @@ import com.github.dockerjava.core.command.InspectExecCmdImpl;
 import com.github.dockerjava.core.command.InspectImageCmdImpl;
 import com.github.dockerjava.core.command.InspectServiceCmdImpl;
 import com.github.dockerjava.core.command.InspectSwarmCmdImpl;
+import com.github.dockerjava.core.command.InspectTaskCmdImpl;
 import com.github.dockerjava.core.command.InspectVolumeCmdImpl;
 import com.github.dockerjava.core.command.JoinSwarmCmdImpl;
 import com.github.dockerjava.core.command.KillContainerCmdImpl;
@@ -671,6 +673,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public ListTasksCmd listTasksCmd() {
         return new ListTasksCmdImpl(getDockerCmdExecFactory().listTasksCmdExec());
+    }
+
+    @Override
+    public InspectTaskCmd inspectTaskCmd(String taskId) {
+        return new InspectTaskCmdImpl(getDockerCmdExecFactory().inspectTaskCmdExec(), taskId);
     }
 
     @Override

@@ -29,6 +29,7 @@ import com.github.dockerjava.api.command.InspectNetworkCmd;
 import com.github.dockerjava.api.command.InspectServiceCmd;
 import com.github.dockerjava.api.command.InspectSwarmCmd;
 import com.github.dockerjava.api.command.InspectSwarmNodeCmd;
+import com.github.dockerjava.api.command.InspectTaskCmd;
 import com.github.dockerjava.api.command.InspectVolumeCmd;
 import com.github.dockerjava.api.command.JoinSwarmCmd;
 import com.github.dockerjava.api.command.KillContainerCmd;
@@ -94,6 +95,7 @@ import com.github.dockerjava.core.exec.DisconnectFromNetworkCmdExec;
 import com.github.dockerjava.core.exec.EventsCmdExec;
 import com.github.dockerjava.core.exec.ExecCreateCmdExec;
 import com.github.dockerjava.core.exec.ExecStartCmdExec;
+import com.github.dockerjava.core.exec.InspectTaskCmdExec;
 import com.github.dockerjava.core.exec.ResizeContainerCmdExec;
 import com.github.dockerjava.core.exec.ResizeExecCmdExec;
 import com.github.dockerjava.core.exec.InfoCmdExec;
@@ -533,6 +535,11 @@ public abstract class AbstractDockerCmdExecFactory implements DockerCmdExecFacto
     @Override
     public ListTasksCmd.Exec listTasksCmdExec() {
         return new ListTasksCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public InspectTaskCmd.Exec inspectTaskCmdExec() {
+        return new InspectTaskCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override

@@ -9,7 +9,7 @@ public interface InspectTaskCmd extends SyncDockerCmd<Task> {
     @CheckForNull
     String getTaskId();
 
-    InspectTaskCmd withTaskId();
+    InspectTaskCmd withTaskId(String taskId);
 
     @Override
     Task exec() throws NotFoundException;

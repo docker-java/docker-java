@@ -208,6 +208,8 @@ public interface DockerCmdExecFactory extends Closeable {
      */
     ListTasksCmd.Exec listTasksCmdExec();
 
+    InspectTaskCmd.Exec inspectTaskCmdExec();
+
     /**
      * Delete unused content (containers, images, volumes, networks, build relicts)
      *
