@@ -47,6 +47,21 @@ public class PortBindingTest {
     }
 
     @Test
+    public void macOSdynamicPortCase1() {
+        assertEquals(new PortBinding(Binding.empty(), TCP_8080), PortBinding.parse("0.0.0.0:0:8080"));
+    }
+
+    @Test
+    public void macOSdynamicPortCase2b() {
+        assertEquals(new PortBinding(Binding.parse("80"), TCP_8080), PortBinding.parse("0.0.0.0:80:8080"));
+    }
+
+    @Test
+    public void macOSdynamicPortCase3() {
+        assertEquals(new PortBinding(Binding.parse("127.0.0.1"), TCP_8080), PortBinding.parse("127.0.0.1:0:8080"));
+    }
+
+    @Test
     @Ignore
     public void parseInvalidInput() {
         expectedEx.expect(IllegalArgumentException.class);

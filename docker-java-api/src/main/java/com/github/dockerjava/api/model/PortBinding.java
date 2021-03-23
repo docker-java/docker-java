@@ -43,7 +43,17 @@ public class PortBinding implements Serializable {
             switch (parts.length) {
                 case 3:
                     // 127.0.0.1:80:8080/tcp
-                    return createFromSubstrings(parts[0] + ":" + parts[1], parts[2]);
+                    // 0.0.0.0:0:8080/tcp
+                    if (parts[0].equals("0.0.0.0"))
+                        if (parts[1].equals("0"))
+                            return createFromSubstrings("", parts[2]);
+                        else
+                            return createFromSubstrings(parts[1], parts[2]);
+                    else
+                        if (parts[1].equals("0"))
+                            return createFromSubstrings(parts[0], parts[2]);
+                        else
+                            return createFromSubstrings(parts[0] + ":" + parts[1], parts[2]);
                 case 2:
                     // 80:8080 // 127.0.0.1::8080
                     return createFromSubstrings(parts[0], parts[1]);
