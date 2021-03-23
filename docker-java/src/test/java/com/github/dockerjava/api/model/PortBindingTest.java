@@ -17,47 +17,53 @@ public class PortBindingTest {
 
     @Test
     public void fullDefinition() {
-        assertEquals(PortBinding.parse("127.0.0.1:80:8080/tcp"),
-                new PortBinding(Binding.bindIpAndPort("127.0.0.1", 80), TCP_8080));
+        assertEquals(new PortBinding(Binding.bindIpAndPort("127.0.0.1", 80), TCP_8080),
+            PortBinding.parse("127.0.0.1:80:8080/tcp"));
     }
 
     @Test
     public void noProtocol() {
-        assertEquals(PortBinding.parse("127.0.0.1:80:8080"), new PortBinding(Binding.bindIpAndPort("127.0.0.1", 80), TCP_8080));
+        assertEquals(new PortBinding(Binding.bindIpAndPort("127.0.0.1", 80), TCP_8080),
+            PortBinding.parse("127.0.0.1:80:8080"));
     }
 
     @Test
     public void noHostIp() {
-        assertEquals(PortBinding.parse("80:8080/tcp"), new PortBinding(Binding.bindPort(80), TCP_8080));
+        assertEquals(new PortBinding(Binding.bindPort(80), TCP_8080), PortBinding.parse("80:8080/tcp"));
     }
 
     @Test
     public void portsOnly() {
-        assertEquals(PortBinding.parse("80:8080"), new PortBinding(Binding.bindPort(80), TCP_8080));
+        assertEquals(new PortBinding(Binding.bindPort(80), TCP_8080), PortBinding.parse("80:8080"));
     }
 
     @Test
     public void exposedPortOnly() {
-        assertEquals(PortBinding.parse("8080"), new PortBinding(Binding.empty(), TCP_8080));
+        assertEquals(new PortBinding(Binding.empty(), TCP_8080), PortBinding.parse("8080"));
+    }
+
+    @Test
+    public void dynamicPort() {
+        assertEquals(new PortBinding(Binding.empty(), TCP_8080), PortBinding.parse(":8080/tcp"));
     }
 
     @Test
     public void dynamicHostPort() {
-        assertEquals(PortBinding.parse("127.0.0.1::8080"), new PortBinding(Binding.bindIp("127.0.0.1"), TCP_8080));
+        assertEquals(new PortBinding(Binding.bindIp("127.0.0.1"), TCP_8080), PortBinding.parse("127.0.0.1::8080"));
     }
 
     @Test
-    public void macOSdynamicPortCase1() {
+    public void allIfacesdynamicPort() {
         assertEquals(new PortBinding(Binding.empty(), TCP_8080), PortBinding.parse("0.0.0.0:0:8080"));
     }
 
     @Test
-    public void macOSdynamicPortCase2b() {
+    public void allIfacesPortOnly() {
         assertEquals(new PortBinding(Binding.parse("80"), TCP_8080), PortBinding.parse("0.0.0.0:80:8080"));
     }
 
     @Test
-    public void macOSdynamicPortCase3() {
+    public void macOSdynamicPort() {
         assertEquals(new PortBinding(Binding.parse("127.0.0.1"), TCP_8080), PortBinding.parse("127.0.0.1:0:8080"));
     }
 
