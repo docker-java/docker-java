@@ -49,6 +49,9 @@
 								<sourceCompatible>true</sourceCompatible>
 							</overrideCompatibilityChangeParameter>
 						</overrideCompatibilityChangeParameters>
+						<excludes>
+							<exclude>com.github.dockerjava.okhttp.UnixDomainSocket$SockAddr</exclude>
+						</excludes>
 					</parameter>
 				</configuration>
 			</plugin>
