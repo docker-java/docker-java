@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -278,6 +279,56 @@ public class AttachContainerCmdIT extends CmdIT {
             assertTrue("Should get first line quickly after the start", gotLine.await(15, SECONDS));
 
             resultCallback.awaitCompletion(5, SECONDS);
+        }
+    }
+
+    /**
+     * The process in Docker container should receive EOF when reading its
+     * stdin after the corresponding stream is closed on docker-java side in
+     * case when the container has been created with StdinOnce flag set to
+     * true.
+     */
+    @Test
+    public void closeStdinWithStdinOnce() throws Exception {
+        Assume.assumeTrue("supports stdin attach", getFactoryType().supportsStdinAttach());
+
+        DockerClient dockerClient = dockerRule.getClient();
+
+        CreateContainerResponse container = dockerClient.createContainerCmd(DEFAULT_IMAGE)
+            .withStdinOpen(true)
+            .withStdInOnce(true)
+            .withCmd("sh", "-c", "read -r line; echo Done")
+            .exec();
+
+        CountDownLatch done = new CountDownLatch(1);
+        PipedOutputStream stdin = new PipedOutputStream();
+
+        try (
+            ResultCallback.Adapter<Frame> resultCallback = dockerClient.attachContainerCmd(container.getId())
+                .withStdIn(new PipedInputStream(stdin))
+                .withStdOut(true)
+                .withFollowStream(true)
+                .exec(new ResultCallback.Adapter<Frame>() {
+                    @Override
+                    public void onNext(Frame frame) {
+                        if (frame.toString().contains("Done")) {
+                            done.countDown();
+                        }
+                    }
+                })
+        ) {
+            resultCallback.awaitStarted(5, SECONDS);
+            dockerClient.startContainerCmd(container.getId()).exec();
+
+            stdin.write("Hello".getBytes(StandardCharsets.UTF_8));
+            stdin.close();
+
+            assertTrue("Should detect closed stdin", done.await(5, SECONDS));
+
+            assertTrue(
+                "The script should finish quickly after stdin is closed on docker-java side",
+                resultCallback.awaitCompletion(5, SECONDS)
+            );
         }
     }
 

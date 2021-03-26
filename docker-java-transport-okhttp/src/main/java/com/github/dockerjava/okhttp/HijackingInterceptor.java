@@ -49,6 +49,7 @@ class HijackingInterceptor implements Interceptor {
                     sink.writeByte(aByte);
                     sink.emit();
                 }
+                exchange.connection().socket().shutdownOutput();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
