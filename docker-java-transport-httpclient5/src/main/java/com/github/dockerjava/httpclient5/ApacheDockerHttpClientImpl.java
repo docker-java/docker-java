@@ -93,6 +93,7 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
         httpClient = HttpClients.custom()
             .setRequestExecutor(new HijackingHttpRequestExecutor(null))
             .setConnectionManager(connectionManager)
+            .disableConnectionState()
             .build();
     }
 
