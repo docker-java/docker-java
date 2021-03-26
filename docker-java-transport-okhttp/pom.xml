@@ -31,7 +31,7 @@
 		<dependency>
 			<groupId>net.java.dev.jna</groupId>
 			<artifactId>jna-platform</artifactId>
-			<version>5.5.0</version>
+			<version>5.8.0</version>
 		</dependency>
 	</dependencies>
 
@@ -49,6 +49,9 @@
 								<sourceCompatible>true</sourceCompatible>
 							</overrideCompatibilityChangeParameter>
 						</overrideCompatibilityChangeParameters>
+						<excludes>
+							<exclude>com.github.dockerjava.okhttp.UnixDomainSocket$SockAddr</exclude>
+						</excludes>
 					</parameter>
 				</configuration>
 			</plugin>
