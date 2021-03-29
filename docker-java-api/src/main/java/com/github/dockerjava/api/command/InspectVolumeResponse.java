@@ -46,7 +46,7 @@ public class InspectVolumeResponse {
     }
 
     public Map<String, String> getOptions() {
-		return options;
-	}    
-    
+        return options;
+    }
+
 }
