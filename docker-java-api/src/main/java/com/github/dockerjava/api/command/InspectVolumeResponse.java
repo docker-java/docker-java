@@ -26,6 +26,9 @@ public class InspectVolumeResponse {
     @JsonProperty("Mountpoint")
     private String mountpoint;
 
+    @JsonProperty("Options")
+    private Map<String, String> options;
+
     public String getName() {
         return name;
     }
@@ -41,4 +44,9 @@ public class InspectVolumeResponse {
     public String getMountpoint() {
         return mountpoint;
     }
+
+    public Map<String, String> getOptions() {
+		return options;
+	}    
+    
 }
