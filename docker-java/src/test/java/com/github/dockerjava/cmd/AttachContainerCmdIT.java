@@ -291,6 +291,7 @@ public class AttachContainerCmdIT extends CmdIT {
     @Test
     public void closeStdinWithStdinOnce() throws Exception {
         Assume.assumeTrue("supports stdin attach", getFactoryType().supportsStdinAttach());
+        Assume.assumeFalse("not fixed for OkHttp", getFactoryType().equals(FactoryType.OKHTTP));
 
         DockerClient dockerClient = dockerRule.getClient();
 
