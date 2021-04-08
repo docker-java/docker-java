@@ -29,6 +29,13 @@
 			<version>2.8.2</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna</artifactId>
+			<version>5.8.0</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

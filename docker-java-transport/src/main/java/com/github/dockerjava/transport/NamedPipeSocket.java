@@ -1,4 +1,4 @@
-package com.github.dockerjava.httpclient5;
+package com.github.dockerjava.transport;
 
 import com.sun.jna.Native;
 import com.sun.jna.win32.StdCallLibrary;
@@ -21,13 +21,13 @@ import java.nio.file.StandardOpenOption;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
-class NamedPipeSocket extends Socket {
+public class NamedPipeSocket extends Socket {
 
     private final String socketFileName;
 
     private AsynchronousFileByteChannel channel;
 
-    NamedPipeSocket(String socketFileName) {
+    public NamedPipeSocket(String socketFileName) {
         this.socketFileName = socketFileName;
     }
 

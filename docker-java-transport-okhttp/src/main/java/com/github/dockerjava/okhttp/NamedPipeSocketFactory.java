@@ -1,5 +1,7 @@
 package com.github.dockerjava.okhttp;
 
+import com.github.dockerjava.transport.NamedPipeSocket;
+
 import javax.net.SocketFactory;
 import java.net.InetAddress;
 import java.net.Socket;
