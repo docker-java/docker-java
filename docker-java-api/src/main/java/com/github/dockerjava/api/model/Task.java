@@ -1,6 +1,8 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonAnySetter; 
+import com.fasterxml.jackson.annotation.JsonAnyGetter; 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -54,6 +56,18 @@ public class Task implements Serializable {
 
     @JsonProperty("DesiredState")
     private TaskState desiredState = null;
+    
+    private Map<String, Object> unrecognizedFields = new HashMap<>();
+
+    @JsonAnyGetter
+    public Map<String, Object> getUnrecognizedFields() {
+        return this.unrecognizedFields;
+    }
+
+    @JsonAnySetter
+    public void setUnrecognizedFields(String key, Object value) {
+        this.unrecognizedFields.put(key, value);
+    }
 
     /**
      * The ID of the task.
