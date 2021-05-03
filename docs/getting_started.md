@@ -90,6 +90,7 @@ DockerClientConfig config = ...;
 DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
     .dockerHost(config.getDockerHost())
     .sslConfig(config.getSSLConfig())
+    .maxConnections(100)
     .build();
 ```
 
