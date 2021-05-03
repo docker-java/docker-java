@@ -2,9 +2,12 @@ package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -23,16 +26,10 @@ public class Task implements Serializable {
     private ObjectVersion version = null;
 
     @JsonProperty("CreatedAt")
-    private String createdAt = null;
+    private Date createdAt = null;
 
     @JsonProperty("UpdatedAt")
-    private String updatedAt = null;
-
-    @JsonProperty("Name")
-    private String name = null;
-
-    @JsonProperty("Labels")
-    private Map<String, String> labels = null;
+    private Date updatedAt = null;
 
     @JsonProperty("Spec")
     private TaskSpec spec = null;
@@ -82,7 +79,7 @@ public class Task implements Serializable {
      *
      * @return createdAt
      **/
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
@@ -91,27 +88,8 @@ public class Task implements Serializable {
      *
      * @return updatedAt
      **/
-    public String getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
-    }
-
-    /**
-     * Name of the task.
-     *
-     * @return name
-     **/
-
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * User-defined key/value metadata.
-     *
-     * @return labels
-     **/
-    public Map<String, String> getLabels() {
-        return labels;
     }
 
     /**
@@ -169,7 +147,7 @@ public class Task implements Serializable {
     }
 
     /**
-     * Gets the network attachments
+     * Getter for the network attachments
      *
      * @return networkAttachments
      */
@@ -188,23 +166,13 @@ public class Task implements Serializable {
         return this;
     }
 
-    public Task withCreatedAt(String createdAt) {
+    public Task withCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
         return this;
     }
 
-    public Task withUpdatedAt(String updatedAt) {
+    public Task withUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
-        return this;
-    }
-
-    public Task withName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public Task withLabels(Map<String, String> labels) {
-        this.labels = labels;
         return this;
     }
 
