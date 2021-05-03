@@ -6,7 +6,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import javax.annotation.CheckForNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
