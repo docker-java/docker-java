@@ -29,6 +29,9 @@ public class TaskStatus implements Serializable {
     @JsonProperty("ContainerStatus")
     private TaskStatusContainerStatus containerStatus = null;
 
+    @JsonProperty("PortStatus")
+    private PortStatus portStatus = null;
+
     public String getTimestamp() {
         return timestamp;
     }
@@ -71,6 +74,15 @@ public class TaskStatus implements Serializable {
 
     public TaskStatus withContainerStatus(TaskStatusContainerStatus containerStatus) {
         this.containerStatus = containerStatus;
+        return this;
+    }
+
+    public PortStatus getPortStatus() {
+        return portStatus;
+    }
+
+    public TaskStatus withPortStatus(PortStatus portStatus) {
+        this.portStatus = portStatus;
         return this;
     }
 }
