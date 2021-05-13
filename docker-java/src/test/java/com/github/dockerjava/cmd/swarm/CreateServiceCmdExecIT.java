@@ -22,7 +22,6 @@ import com.github.dockerjava.junit.PrivateRegistryRule;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -43,8 +42,8 @@ public class CreateServiceCmdExecIT extends SwarmCmdIT {
     public static final Logger LOG = LoggerFactory.getLogger(CreateServiceCmdExecIT.class);
     private static final String SERVICE_NAME = "theservice";
 
-    @ClassRule
-    public static PrivateRegistryRule REGISTRY = new PrivateRegistryRule();
+    @Rule
+    public PrivateRegistryRule REGISTRY = new PrivateRegistryRule(this);
 
     @Rule
     public ExpectedException exception = ExpectedException.none();

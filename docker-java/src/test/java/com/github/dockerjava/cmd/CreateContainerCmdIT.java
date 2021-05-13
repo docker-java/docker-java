@@ -30,7 +30,6 @@ import com.github.dockerjava.junit.PrivateRegistryRule;
 import com.github.dockerjava.utils.TestUtils;
 import net.jcip.annotations.NotThreadSafe;
 import org.apache.commons.io.FileUtils;
-import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -50,23 +49,23 @@ import java.util.concurrent.TimeUnit;
 import static com.github.dockerjava.api.model.Capability.MKNOD;
 import static com.github.dockerjava.api.model.Capability.NET_ADMIN;
 import static com.github.dockerjava.api.model.HostConfig.newHostConfig;
+import static com.github.dockerjava.core.DockerRule.DEFAULT_IMAGE;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_23;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_24;
 import static com.github.dockerjava.junit.DockerMatchers.isGreaterOrEqual;
 import static com.github.dockerjava.junit.DockerMatchers.mountedVolumes;
-import static com.github.dockerjava.core.DockerRule.DEFAULT_IMAGE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItemInArray;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.startsWith;
@@ -78,8 +77,8 @@ import static org.junit.Assume.assumeThat;
 public class CreateContainerCmdIT extends CmdIT {
     public static final Logger LOG = LoggerFactory.getLogger(CreateContainerCmdIT.class);
 
-    @ClassRule
-    public static PrivateRegistryRule REGISTRY = new PrivateRegistryRule();
+    @Rule
+    public PrivateRegistryRule REGISTRY = new PrivateRegistryRule(this);
 
     @Rule
     public TemporaryFolder tempDir = new TemporaryFolder(new File("target/"));
