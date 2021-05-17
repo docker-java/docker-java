@@ -63,7 +63,7 @@
 		<httpclient.version>4.5.12</httpclient.version><!-- 4.5.1-4.5.2 broken -->
 		<commons-compress.version>1.20</commons-compress.version>
 		<commons-codec.version>1.11</commons-codec.version>
-		<commons-io.version>2.6</commons-io.version>
+		<commons-io.version>2.7</commons-io.version>
 		<commons-lang.version>2.6</commons-lang.version>
 		<slf4j-api.version>1.7.30</slf4j-api.version>
 
