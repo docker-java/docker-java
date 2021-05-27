@@ -28,7 +28,7 @@ class DockerObjectArchTest {
             .and().areNotAnnotatedWith(Deprecated.class)
             .and().doNotImplement(ResultCallback.class)
             .and().doNotImplement(DockerCmdExecFactory.class)
-            .and().doNotBelongToAnyOf(DockerObjectAccessor.class)
+            .and().doNotBelongToAnyOf(DockerObjectAccessor.class, Binds.class, Links.class, VolumesFrom.class)
             .should().beAssignableTo(DockerObject.class)
             .check(CLASSES);
     }

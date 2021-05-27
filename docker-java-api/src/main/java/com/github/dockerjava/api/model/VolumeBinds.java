@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class VolumeBinds extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

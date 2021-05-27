@@ -13,7 +13,7 @@ import java.util.Date;
  * @since {@link RemoteApiVersion#VERSION_1_30}
  */
 @ToString
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 public class Config extends DockerObject implements Serializable {
 
     private static final long serialVersionUID = 1L;

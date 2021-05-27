@@ -9,7 +9,7 @@ import java.util.Optional;
 /**
  * @author magnayn
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class Identifier extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

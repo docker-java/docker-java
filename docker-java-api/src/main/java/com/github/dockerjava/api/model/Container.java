@@ -15,7 +15,7 @@ import java.util.Map;
  *
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class Container extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

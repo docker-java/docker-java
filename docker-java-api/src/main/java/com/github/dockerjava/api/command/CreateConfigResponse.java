@@ -8,7 +8,7 @@ import lombok.ToString;
 /**
  * The response of a {@link CreateConfigCmd}
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class CreateConfigResponse extends DockerObject {
     @JsonProperty("ID")

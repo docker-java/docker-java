@@ -11,7 +11,7 @@ import lombok.ToString;
  * @author Ryan Campbell (ryan.campbell@gmail.com)
  *
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class CreateImageResponse extends DockerObject {
 

@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 // This is not going to be serialized
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class VolumesRW extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

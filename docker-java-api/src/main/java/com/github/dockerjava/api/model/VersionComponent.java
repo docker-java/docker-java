@@ -14,7 +14,7 @@ import java.util.Map;
  * @since {@link RemoteApiVersion#VERSION_1_35}
  * @author Dmitry Tretyakov
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class VersionComponent extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;

@@ -14,7 +14,7 @@ import java.io.Serializable;
  * same base version, only one of the requests can succeed. As a result, two separate update requests that
  * happen at the same time will not unintentionally overwrite each other.
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 public class ObjectVersion extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 

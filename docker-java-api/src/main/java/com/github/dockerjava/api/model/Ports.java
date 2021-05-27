@@ -22,7 +22,7 @@ import java.util.stream.Stream;
  * @see HostConfig#getPortBindings()
  * @see NetworkSettings#getPorts()
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class Ports extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -108,7 +108,7 @@ public class Ports extends DockerObject implements Serializable {
      * @see Ports#bind(ExposedPort, Binding)
      * @see ExposedPort
      */
-    @EqualsAndHashCode(callSuper = true)
+    @EqualsAndHashCode
     public static class Binding extends DockerObject implements Serializable {
         private static final long serialVersionUID = 1L;
 

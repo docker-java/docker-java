@@ -8,7 +8,7 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import java.io.Serializable;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString(onlyExplicitlyIncluded = true)
 public class AuthResponse extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

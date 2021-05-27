@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @since {@link RemoteApiVersion#VERSION_1_35}
  * @author Dmitry Tretyakov
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class VersionPlatform extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;

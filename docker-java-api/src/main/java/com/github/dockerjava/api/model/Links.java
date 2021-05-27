@@ -6,12 +6,8 @@ import java.util.stream.Stream;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
-@EqualsAndHashCode(callSuper = true)
-@ToString
-public class Links extends DockerObject implements Serializable {
+public class Links implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final Link[] links;

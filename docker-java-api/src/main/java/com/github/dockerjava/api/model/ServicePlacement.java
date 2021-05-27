@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class ServicePlacement extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;

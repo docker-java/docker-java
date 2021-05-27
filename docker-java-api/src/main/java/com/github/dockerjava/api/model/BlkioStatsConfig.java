@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author Yuting Liu
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class BlkioStatsConfig extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

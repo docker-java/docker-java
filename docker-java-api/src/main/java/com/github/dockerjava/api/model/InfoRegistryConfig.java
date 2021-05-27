@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * @since ~{@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_20}
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public final class InfoRegistryConfig extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -80,7 +80,7 @@ public final class InfoRegistryConfig extends DockerObject implements Serializab
     /**
      * @since ~{@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_20}
      */
-    @EqualsAndHashCode(callSuper = true)
+    @EqualsAndHashCode
     @ToString
     public static final class IndexConfig extends DockerObject implements Serializable {
         private static final long serialVersionUID = 1L;

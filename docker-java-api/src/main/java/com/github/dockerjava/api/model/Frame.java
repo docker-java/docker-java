@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Represents a logging frame.
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 public class Frame extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 

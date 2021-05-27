@@ -23,7 +23,7 @@ import java.util.Map;
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  *
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class InspectContainerResponse extends DockerObject {
 
@@ -250,7 +250,7 @@ public class InspectContainerResponse extends DockerObject {
         return platform;
     }
 
-    @EqualsAndHashCode(callSuper = true)
+    @EqualsAndHashCode
     @ToString
     public class ContainerState extends DockerObject {
 
@@ -455,7 +455,7 @@ public class InspectContainerResponse extends DockerObject {
         }
     }
 
-    @EqualsAndHashCode(callSuper = true)
+    @EqualsAndHashCode
     @ToString
     public static class Mount extends DockerObject {
 
@@ -580,7 +580,7 @@ public class InspectContainerResponse extends DockerObject {
         }
     }
 
-    @EqualsAndHashCode(callSuper = true)
+    @EqualsAndHashCode
     @ToString
     public class Node extends DockerObject {
 

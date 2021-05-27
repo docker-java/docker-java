@@ -10,7 +10,7 @@ import java.io.Serializable;
  * BlkioStat is not documented in pubic docker swapper.yaml yet, reference:
  * https://github.com/moby/moby/blob/master/api/types/stats.go
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class BlkioStatEntry extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

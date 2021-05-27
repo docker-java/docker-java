@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class ExposedPorts extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

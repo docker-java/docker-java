@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author Marcus Linke
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class InspectVolumeResponse extends DockerObject {
 

@@ -13,7 +13,7 @@ import javax.annotation.CheckForNull;
  * @author Kanstantsin Shautsou
  * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_21}
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class GraphDriver extends DockerObject {
     /**

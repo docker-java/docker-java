@@ -10,7 +10,7 @@ import java.io.Serializable;
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class ServiceRestartPolicy extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;

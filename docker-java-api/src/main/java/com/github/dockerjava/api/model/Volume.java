@@ -21,7 +21,7 @@ import java.util.Map;
  *
  * @see Bind
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 public class Volume extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 

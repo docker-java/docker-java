@@ -15,7 +15,7 @@ import java.io.Serializable;
  * existing port bindings from a container configuration in {@link NetworkSettings#getPorts()} and {@link HostConfig#getPortBindings()}. In
  * that context, a <code>Map&lt;ExposedPort, Binding[]&gt;</code> is used.</i>
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class PortBinding extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

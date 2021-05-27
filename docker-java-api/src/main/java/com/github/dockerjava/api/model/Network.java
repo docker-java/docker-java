@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class Network extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -92,7 +92,7 @@ public class Network extends DockerObject implements Serializable {
         return labels;
     }
 
-    @EqualsAndHashCode(callSuper = true)
+    @EqualsAndHashCode
     @ToString
     public static class ContainerNetworkConfig extends DockerObject implements Serializable {
         private static final long serialVersionUID = 1L;
@@ -126,7 +126,7 @@ public class Network extends DockerObject implements Serializable {
         }
     }
 
-    @EqualsAndHashCode(callSuper = true)
+    @EqualsAndHashCode
     @ToString
     public static class Ipam extends DockerObject implements Serializable {
         private static final long serialVersionUID = 1L;
@@ -167,7 +167,7 @@ public class Network extends DockerObject implements Serializable {
             return this;
         }
 
-        @EqualsAndHashCode(callSuper = true)
+        @EqualsAndHashCode
         @ToString
         public static class Config extends DockerObject implements Serializable {
             private static final long serialVersionUID = 1L;

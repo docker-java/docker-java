@@ -7,7 +7,7 @@ import lombok.ToString;
 
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class HealthState extends DockerObject {
 

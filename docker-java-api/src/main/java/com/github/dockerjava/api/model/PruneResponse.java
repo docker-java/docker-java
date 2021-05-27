@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * Delete unused content (containers, images, volumes, networks, build relicts)
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class PruneResponse extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

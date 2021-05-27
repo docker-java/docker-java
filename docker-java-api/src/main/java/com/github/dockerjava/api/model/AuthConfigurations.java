@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class AuthConfigurations extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

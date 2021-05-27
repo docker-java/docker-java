@@ -12,7 +12,7 @@ import java.io.Serializable;
  *
  * @author Yuting Liu
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class StatisticNetworksConfig extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

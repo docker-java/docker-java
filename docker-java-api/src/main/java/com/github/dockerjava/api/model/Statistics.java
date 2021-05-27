@@ -12,7 +12,7 @@ import lombok.ToString;
 /**
  * Representation of a Docker statistics.
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class Statistics extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

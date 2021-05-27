@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  *
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class ChangeLog extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

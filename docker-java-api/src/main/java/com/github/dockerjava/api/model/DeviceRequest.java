@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class DeviceRequest extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;

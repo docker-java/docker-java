@@ -10,7 +10,7 @@ import java.net.URL;
 /**
  * A repository or image name.
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class Repository extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

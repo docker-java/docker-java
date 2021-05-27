@@ -17,7 +17,7 @@ import static java.util.Objects.requireNonNull;
  * Used in `/containers/create`, and in inspect container.
  * TODO exclude usage for 2 different models.
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class HostConfig extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

@@ -14,7 +14,7 @@ import java.util.List;
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  *
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class InspectImageResponse extends DockerObject {
 

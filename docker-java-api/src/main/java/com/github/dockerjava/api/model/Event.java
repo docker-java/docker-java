@@ -11,7 +11,7 @@ import java.io.Serializable;
 /**
  * Representation of a Docker event.
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class Event extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

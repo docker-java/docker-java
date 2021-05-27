@@ -6,7 +6,7 @@ import lombok.ToString;
 
 import java.io.Serializable;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class BlkioWeightDevice extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;

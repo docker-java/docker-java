@@ -11,7 +11,7 @@ import lombok.ToString;
  *
  * @author Marcus Linke
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class ListVolumesResponse extends DockerObject {
 

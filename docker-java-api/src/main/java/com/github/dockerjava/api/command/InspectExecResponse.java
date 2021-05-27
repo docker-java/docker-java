@@ -10,7 +10,7 @@ import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class InspectExecResponse extends DockerObject {
     @JsonProperty("ID")
@@ -151,7 +151,7 @@ public class InspectExecResponse extends DockerObject {
         return pid;
     }
 
-    @EqualsAndHashCode(callSuper = true)
+    @EqualsAndHashCode
     @ToString
     public class ProcessConfig extends DockerObject {
 
@@ -191,7 +191,7 @@ public class InspectExecResponse extends DockerObject {
         }
     }
 
-    @EqualsAndHashCode(callSuper = true)
+    @EqualsAndHashCode
     @ToString
     public class Container extends DockerObject {
 

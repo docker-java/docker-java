@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class TaskStatus extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

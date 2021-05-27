@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * A node as returned by the /events API, for instance, when Swarm is used.
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class Node extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

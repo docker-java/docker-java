@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * @since {@link RemoteApiVersion#VERSION_1_30}
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class ConfigSpec extends DockerObject implements Serializable {
 

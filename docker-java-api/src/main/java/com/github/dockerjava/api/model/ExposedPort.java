@@ -16,7 +16,7 @@ import lombok.EqualsAndHashCode;
  * {@link InternetProtocol}. It can be published by Docker by {@link Ports#bind(ExposedPort, Binding) binding} it to a host port,
  * represented by a {@link Binding}.
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 public class ExposedPort extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 

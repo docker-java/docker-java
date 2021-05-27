@@ -15,7 +15,7 @@ import java.util.Map;
  * @author Marcus Linke
  *
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class NetworkSettings extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

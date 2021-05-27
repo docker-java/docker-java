@@ -18,7 +18,7 @@ import java.util.List;
  * @see ContainerNetworkSettings
  * @author Kanstantsin Shautsou
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class ContainerNetwork extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -283,7 +283,7 @@ public class ContainerNetwork extends DockerObject implements Serializable {
     /**
      * Docker named it EndpointIPAMConfig
      */
-    @EqualsAndHashCode(callSuper = true)
+    @EqualsAndHashCode
     @ToString
     public static class Ipam extends DockerObject implements Serializable {
         private static final long serialVersionUID = 1L;

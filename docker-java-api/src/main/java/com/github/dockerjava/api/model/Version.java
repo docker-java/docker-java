@@ -15,7 +15,7 @@ import java.util.List;
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  * @see VersionCmd
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class Version extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

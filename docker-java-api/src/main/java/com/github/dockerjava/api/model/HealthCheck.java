@@ -26,7 +26,7 @@ import java.util.List;
  *
  * @author cdancy
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class HealthCheck extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

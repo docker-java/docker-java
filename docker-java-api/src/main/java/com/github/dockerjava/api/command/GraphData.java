@@ -11,7 +11,7 @@ import javax.annotation.CheckForNull;
  * part of {@link GraphDriver}
  * @author Kanstantsin Shautsou
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class GraphData extends DockerObject {
 

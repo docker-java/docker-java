@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @since {@link RemoteApiVersion#VERSION_1_25}
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class ContainerDNSConfig extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

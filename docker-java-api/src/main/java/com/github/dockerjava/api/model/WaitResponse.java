@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * Represents a wait container command response
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class WaitResponse extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

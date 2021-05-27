@@ -11,7 +11,7 @@ import java.io.Serializable;
 /**
  * Represents a pull response stream item
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class ResponseItem extends DockerObject implements Serializable {
     private static final long serialVersionUID = -5187169652557467828L;
@@ -116,7 +116,7 @@ public class ResponseItem extends DockerObject implements Serializable {
         return getError() != null || getErrorDetail() != null;
     }
 
-    @EqualsAndHashCode(callSuper = true)
+    @EqualsAndHashCode
     @ToString
     public static class ProgressDetail extends DockerObject implements Serializable {
         private static final long serialVersionUID = -1954994695645715264L;
@@ -146,7 +146,7 @@ public class ResponseItem extends DockerObject implements Serializable {
         }
     }
 
-    @EqualsAndHashCode(callSuper = true)
+    @EqualsAndHashCode
     @ToString
     public static class ErrorDetail extends DockerObject implements Serializable {
         private static final long serialVersionUID = -9136704865403084083L;
@@ -168,7 +168,7 @@ public class ResponseItem extends DockerObject implements Serializable {
         }
     }
 
-    @EqualsAndHashCode(callSuper = true)
+    @EqualsAndHashCode
     @ToString
     public static class AuxDetail extends DockerObject implements Serializable {
         private static final long serialVersionUID = 1L;

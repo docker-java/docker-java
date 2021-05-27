@@ -8,7 +8,7 @@ import lombok.ToString;
 /**
  * The response of a {@link CreateSecretCmd}
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class CreateSecretResponse extends DockerObject {
     @JsonProperty("ID")

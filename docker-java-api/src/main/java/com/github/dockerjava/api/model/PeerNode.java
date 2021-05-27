@@ -10,7 +10,7 @@ import java.io.Serializable;
 /**
  * @since 1.24
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class PeerNode extends DockerObject implements Serializable {
 

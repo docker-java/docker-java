@@ -4,7 +4,7 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 public class VolumeBind extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 

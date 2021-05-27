@@ -5,7 +5,7 @@ import com.github.dockerjava.api.model.DockerObject;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class CreateNetworkResponse extends DockerObject {
 

@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * @author ben
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class DriverStatus extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

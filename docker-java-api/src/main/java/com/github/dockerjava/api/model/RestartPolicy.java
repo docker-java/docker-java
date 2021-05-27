@@ -27,7 +27,7 @@ import static java.util.Objects.requireNonNull;
  * @author Marcus Linke
  *
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class RestartPolicy extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

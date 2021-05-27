@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author Dmitry Tretyakov
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class RootFS extends DockerObject {
 

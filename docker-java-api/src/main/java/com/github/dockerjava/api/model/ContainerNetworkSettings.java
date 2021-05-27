@@ -13,7 +13,7 @@ import java.util.Map;
  * @see Container
  * @since {@link RemoteApiVersion#VERSION_1_22}
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class ContainerNetworkSettings extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

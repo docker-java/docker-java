@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class Device extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

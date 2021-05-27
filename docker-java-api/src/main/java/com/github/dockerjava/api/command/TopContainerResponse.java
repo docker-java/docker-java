@@ -10,7 +10,7 @@ import lombok.ToString;
  * @author Marcus Linke
  *
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class TopContainerResponse extends DockerObject {
 

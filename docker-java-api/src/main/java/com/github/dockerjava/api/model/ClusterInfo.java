@@ -14,7 +14,7 @@ import java.util.Date;
  *
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class ClusterInfo extends DockerObject implements Serializable {
 

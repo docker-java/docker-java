@@ -12,7 +12,7 @@ import java.util.Map;
  * @author Kanstantsin Shautsou
  * @since 1.22
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 public class EventActor extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;

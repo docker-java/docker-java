@@ -7,7 +7,7 @@ import lombok.ToString;
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString(onlyExplicitlyIncluded = true)
 public class AuthConfig extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
