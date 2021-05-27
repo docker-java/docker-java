@@ -1,7 +1,6 @@
 package com.github.dockerjava.httpclient5;
 
 import com.github.dockerjava.transport.DockerHttpClient;
-import com.github.dockerjava.transport.DomainSocket;
 import com.github.dockerjava.transport.NamedPipeSocket;
 import com.github.dockerjava.transport.SSLConfig;
 import com.github.dockerjava.transport.UnixSocket;
