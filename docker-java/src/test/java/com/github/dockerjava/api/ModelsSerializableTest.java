@@ -40,9 +40,7 @@ public class ModelsSerializableTest {
             PushResponseItem.class.getName(),
             ResponseItem.class.getName(),
             ResponseItem.ErrorDetail.class.getName(),
-            ResponseItem.ProgressDetail.class.getName(),
-            DockerObject.class.getName(),
-            DockerObjectAccessor.class.getName()
+            ResponseItem.ProgressDetail.class.getName()
     );
 
     @Test
@@ -53,7 +51,11 @@ public class ModelsSerializableTest {
                 continue;
             }
 
-            if (classInfo.getName().endsWith("Test")) {
+            if (
+                classInfo.getName().endsWith("Test")
+                    || DockerObject.class.getName().equals(classInfo.getName())
+                    || DockerObjectAccessor.class.getName().equals(classInfo.getName())
+            ) {
                 continue;
             }
 
