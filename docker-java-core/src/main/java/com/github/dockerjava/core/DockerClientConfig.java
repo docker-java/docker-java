@@ -19,6 +19,10 @@ import com.github.dockerjava.api.model.AuthConfigurations;
  */
 public interface DockerClientConfig {
 
+    static ObjectMapper getDefaultObjectMapper() {
+        return DefaultObjectMapperHolder.INSTANCE.getObjectMapper().copy();
+    }
+
     URI getDockerHost();
 
     RemoteApiVersion getApiVersion();
@@ -41,7 +45,7 @@ public interface DockerClientConfig {
     SSLConfig getSSLConfig();
 
     default ObjectMapper getObjectMapper() {
-        return DefaultObjectMapperHolder.INSTANCE.getObjectMapper().copy();
+        return getDefaultObjectMapper();
     }
 }
 
