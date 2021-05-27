@@ -2,6 +2,8 @@ package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.List;
@@ -9,7 +11,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ExposedPorts implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+@ToString
+public class ExposedPorts extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private ExposedPort[] exposedPorts;

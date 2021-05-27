@@ -11,9 +11,9 @@ import java.io.Serializable;
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class SwarmNodeManagerStatus implements Serializable {
+public class SwarmNodeManagerStatus extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;
 
     /**

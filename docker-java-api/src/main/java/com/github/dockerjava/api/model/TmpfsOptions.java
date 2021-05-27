@@ -9,9 +9,9 @@ import java.io.Serializable;
 /**
  * @since {@link RemoteApiVersion#VERSION_1_29}
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class TmpfsOptions implements Serializable {
+public class TmpfsOptions extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
     @JsonProperty("SizeBytes")
     //The size for the tmpfs mount in bytes.

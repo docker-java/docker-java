@@ -9,9 +9,9 @@ import java.io.Serializable;
 /**
  * @since {@link RemoteApiVersion#VERSION_1_30}
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class ConfigSpec implements Serializable {
+public class ConfigSpec extends DockerObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

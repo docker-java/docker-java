@@ -8,8 +8,12 @@ import java.util.stream.Stream;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-public class Volumes implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+@ToString
+public class Volumes extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Volume[] volumes;

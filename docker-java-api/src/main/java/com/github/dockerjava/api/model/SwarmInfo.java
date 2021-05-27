@@ -11,9 +11,9 @@ import java.util.List;
 /**
  * @since 1.24
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class SwarmInfo implements Serializable {
+public class SwarmInfo extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;
 
     /**

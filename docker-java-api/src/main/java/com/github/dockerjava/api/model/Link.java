@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.model;
 
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -9,8 +10,9 @@ import java.io.Serializable;
  * container with the aliased name {@link #getAlias()}. This involves creating an entry in <code>/etc/hosts</code> and some environment
  * variables in the target container as well as creating a network bridge between both containers.
  */
-@EqualsAndHashCode
-public class Link implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+@ToString
+public class Link extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final String name;

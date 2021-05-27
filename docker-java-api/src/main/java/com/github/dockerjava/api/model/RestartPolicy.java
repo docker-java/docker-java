@@ -2,6 +2,7 @@ package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -26,8 +27,9 @@ import static java.util.Objects.requireNonNull;
  * @author Marcus Linke
  *
  */
-@EqualsAndHashCode
-public class RestartPolicy implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+@ToString
+public class RestartPolicy extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("MaximumRetryCount")

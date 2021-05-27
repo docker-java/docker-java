@@ -13,9 +13,9 @@ import java.io.Serializable;
  * @since {@link RemoteApiVersion#VERSION_1_35}
  * @author Dmitry Tretyakov
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class VersionPlatform implements Serializable {
+public class VersionPlatform extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;
 
     @JsonProperty("Name")

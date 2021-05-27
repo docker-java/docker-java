@@ -8,9 +8,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class DeviceRequest implements Serializable {
+public class DeviceRequest extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;
 
     @JsonProperty("Driver")

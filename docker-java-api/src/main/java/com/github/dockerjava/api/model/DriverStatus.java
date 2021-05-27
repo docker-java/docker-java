@@ -9,9 +9,9 @@ import java.io.Serializable;
 /**
  * @author ben
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class DriverStatus implements Serializable {
+public class DriverStatus extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("Root Dir")

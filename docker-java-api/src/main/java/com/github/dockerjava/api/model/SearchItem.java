@@ -11,9 +11,9 @@ import java.io.Serializable;
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  *
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class SearchItem implements Serializable {
+public class SearchItem extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("star_count")

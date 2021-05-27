@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
@@ -13,7 +14,8 @@ import java.io.Serializable;
  * same base version, only one of the requests can succeed. As a result, two separate update requests that
  * happen at the same time will not unintentionally overwrite each other.
  */
-public class ObjectVersion implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+public class ObjectVersion extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("Index")

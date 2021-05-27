@@ -6,9 +6,9 @@ import lombok.ToString;
 
 import java.io.Serializable;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class BlkioRateDevice implements Serializable {
+public class BlkioRateDevice extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;
 
     @JsonProperty("Path")

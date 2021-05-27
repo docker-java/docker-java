@@ -12,9 +12,9 @@ import java.util.Map;
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class SwarmNodeEngineDescription implements Serializable {
+public class SwarmNodeEngineDescription extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;
 
     /**

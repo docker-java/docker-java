@@ -26,9 +26,9 @@ import java.util.List;
  *
  * @author cdancy
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class HealthCheck implements Serializable {
+public class HealthCheck extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("Interval")

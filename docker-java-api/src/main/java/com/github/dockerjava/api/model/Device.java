@@ -12,9 +12,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class Device implements Serializable {
+public class Device extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("CgroupPermissions")

@@ -10,9 +10,9 @@ import java.util.Map;
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class VolumeOptions implements Serializable {
+public class VolumeOptions extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

@@ -11,9 +11,9 @@ import java.io.Serializable;
 /**
  * Represents a pull response stream item
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class ResponseItem implements Serializable {
+public class ResponseItem extends DockerObject implements Serializable {
     private static final long serialVersionUID = -5187169652557467828L;
 
     @JsonProperty("stream")
@@ -116,9 +116,9 @@ public class ResponseItem implements Serializable {
         return getError() != null || getErrorDetail() != null;
     }
 
-    @EqualsAndHashCode
+    @EqualsAndHashCode(callSuper = true)
     @ToString
-    public static class ProgressDetail implements Serializable {
+    public static class ProgressDetail extends DockerObject implements Serializable {
         private static final long serialVersionUID = -1954994695645715264L;
 
         @JsonProperty("current")
@@ -146,9 +146,9 @@ public class ResponseItem implements Serializable {
         }
     }
 
-    @EqualsAndHashCode
+    @EqualsAndHashCode(callSuper = true)
     @ToString
-    public static class ErrorDetail implements Serializable {
+    public static class ErrorDetail extends DockerObject implements Serializable {
         private static final long serialVersionUID = -9136704865403084083L;
 
         @JsonProperty("code")
@@ -168,9 +168,9 @@ public class ResponseItem implements Serializable {
         }
     }
 
-    @EqualsAndHashCode
+    @EqualsAndHashCode(callSuper = true)
     @ToString
-    public static class AuxDetail implements Serializable {
+    public static class AuxDetail extends DockerObject implements Serializable {
         private static final long serialVersionUID = 1L;
 
         @JsonProperty("Size")

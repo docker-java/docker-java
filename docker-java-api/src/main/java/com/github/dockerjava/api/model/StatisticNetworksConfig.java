@@ -12,9 +12,9 @@ import java.io.Serializable;
  *
  * @author Yuting Liu
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class StatisticNetworksConfig implements Serializable {
+public class StatisticNetworksConfig extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("rx_bytes")

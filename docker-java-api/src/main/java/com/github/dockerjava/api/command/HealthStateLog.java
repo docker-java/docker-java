@@ -1,8 +1,13 @@
 package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.model.DockerObject;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-public class HealthStateLog {
+@EqualsAndHashCode(callSuper = true)
+@ToString
+public class HealthStateLog extends DockerObject {
 
     @JsonProperty("Start")
     private String start;

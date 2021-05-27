@@ -12,9 +12,9 @@ import java.util.Map;
  * @author Kanstantsin Shautsou
  * @since 1.22
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class EventActor implements Serializable {
+public class EventActor extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

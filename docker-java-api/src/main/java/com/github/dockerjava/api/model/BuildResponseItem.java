@@ -1,10 +1,14 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Represents a build response stream item
  */
+@EqualsAndHashCode(callSuper = true)
+@ToString
 public class BuildResponseItem extends ResponseItem {
     private static final long serialVersionUID = -1252904184236343612L;
 

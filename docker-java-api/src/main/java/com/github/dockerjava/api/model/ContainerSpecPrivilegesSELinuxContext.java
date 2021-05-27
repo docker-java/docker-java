@@ -11,9 +11,9 @@ import java.io.Serializable;
  *
  * @since {@link RemoteApiVersion#VERSION_1_29}
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class ContainerSpecPrivilegesSELinuxContext implements Serializable {
+public class ContainerSpecPrivilegesSELinuxContext extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
     @JsonProperty("Disable")
     private Boolean disable;

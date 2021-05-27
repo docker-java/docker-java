@@ -3,6 +3,7 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -21,8 +22,9 @@ import java.util.stream.Stream;
  * @see HostConfig#getPortBindings()
  * @see NetworkSettings#getPorts()
  */
-@SuppressWarnings(value = "checkstyle:equalshashcode")
-public class Ports implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+@ToString
+public class Ports extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final Map<ExposedPort, Binding[]> ports = new HashMap<>();
@@ -106,8 +108,8 @@ public class Ports implements Serializable {
      * @see Ports#bind(ExposedPort, Binding)
      * @see ExposedPort
      */
-    @EqualsAndHashCode
-    public static class Binding implements Serializable {
+    @EqualsAndHashCode(callSuper = true)
+    public static class Binding extends DockerObject implements Serializable {
         private static final long serialVersionUID = 1L;
 
         /**

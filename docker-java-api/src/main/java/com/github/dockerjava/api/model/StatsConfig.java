@@ -7,9 +7,9 @@ import lombok.ToString;
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class StatsConfig implements Serializable {
+public class StatsConfig extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("active_anon")

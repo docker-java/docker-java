@@ -20,9 +20,9 @@ import java.util.Map;
  * docker will ignore them. In most cases setting the config option to null will suffice. Consult the docker remote API for a more detailed
  * and up-to-date explanation of the available types and their options.
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class LogConfig implements Serializable {
+public class LogConfig extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("Type")

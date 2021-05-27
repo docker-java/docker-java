@@ -9,9 +9,9 @@ import java.io.Serializable;
 /**
  * Delete unused content (containers, images, volumes, networks, build relicts)
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class PruneResponse implements Serializable {
+public class PruneResponse extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("SpaceReclaimed")

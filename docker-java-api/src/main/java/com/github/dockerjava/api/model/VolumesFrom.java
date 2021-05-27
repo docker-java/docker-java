@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode
-public class VolumesFrom implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+public class VolumesFrom extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String container;

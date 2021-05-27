@@ -13,9 +13,9 @@ import java.util.Map;
  * @see Container
  * @since {@link RemoteApiVersion#VERSION_1_22}
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class ContainerNetworkSettings implements Serializable {
+public class ContainerNetworkSettings extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

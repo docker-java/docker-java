@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.model.DockerObject;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -12,9 +13,9 @@ import javax.annotation.CheckForNull;
  * @author Kanstantsin Shautsou
  * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_21}
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class GraphDriver {
+public class GraphDriver extends DockerObject {
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_21}
      */

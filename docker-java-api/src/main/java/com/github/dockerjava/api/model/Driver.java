@@ -11,9 +11,9 @@ import java.util.Map;
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class Driver implements Serializable {
+public class Driver extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

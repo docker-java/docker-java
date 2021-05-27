@@ -12,9 +12,9 @@ import java.io.Serializable;
  *
  * @author Yuting Liu
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class CpuStatsConfig implements Serializable {
+public class CpuStatsConfig extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("cpu_usage")

@@ -14,9 +14,9 @@ import java.util.Map;
  *
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class ContainerConfig implements Serializable {
+public class ContainerConfig extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("AttachStderr")

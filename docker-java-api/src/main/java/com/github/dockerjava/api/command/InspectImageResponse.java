@@ -2,6 +2,7 @@ package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.model.ContainerConfig;
+import com.github.dockerjava.api.model.DockerObject;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -13,9 +14,9 @@ import java.util.List;
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  *
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class InspectImageResponse {
+public class InspectImageResponse extends DockerObject {
 
     @JsonProperty("Architecture")
     private String arch;

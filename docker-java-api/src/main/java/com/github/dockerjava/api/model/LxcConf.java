@@ -1,10 +1,14 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
 
-public class LxcConf implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+@ToString
+public class LxcConf extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("Key")

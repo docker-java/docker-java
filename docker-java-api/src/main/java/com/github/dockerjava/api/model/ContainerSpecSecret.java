@@ -11,9 +11,9 @@ import java.io.Serializable;
  *
  * @since {@link RemoteApiVersion#VERSION_1_26}
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class ContainerSpecSecret implements Serializable {
+public class ContainerSpecSecret extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("File")

@@ -10,9 +10,9 @@ import java.io.Serializable;
 /**
  * @since 1.24
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class PeerNode implements Serializable {
+public class PeerNode extends DockerObject implements Serializable {
 
     public static final long serialVersionUID = 1L;
 

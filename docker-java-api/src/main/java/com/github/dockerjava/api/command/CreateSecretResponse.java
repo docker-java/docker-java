@@ -1,15 +1,16 @@
 package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.model.DockerObject;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
  * The response of a {@link CreateSecretCmd}
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class CreateSecretResponse {
+public class CreateSecretResponse extends DockerObject {
     @JsonProperty("ID")
     private String id;
 

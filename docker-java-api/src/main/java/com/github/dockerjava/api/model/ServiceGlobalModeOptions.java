@@ -8,10 +8,10 @@ import java.io.Serializable;
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
 @SuppressWarnings("checkstyle:hideutilityclassconstructor")
-public class ServiceGlobalModeOptions implements Serializable {
+public class ServiceGlobalModeOptions extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;
 
     // Intentionally left blank, there are no options for this mode

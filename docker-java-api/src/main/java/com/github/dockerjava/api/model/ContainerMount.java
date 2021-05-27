@@ -11,9 +11,9 @@ import java.io.Serializable;
  * @author Yuting Liu
  * @see Container
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class ContainerMount implements Serializable {
+public class ContainerMount extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("Name")

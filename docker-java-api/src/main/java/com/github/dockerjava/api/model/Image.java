@@ -13,9 +13,9 @@ import java.util.Map;
  * @author Konstantin Pelykh (kpelykh@gmail.com)
  *
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class Image implements Serializable {
+public class Image extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("Created")

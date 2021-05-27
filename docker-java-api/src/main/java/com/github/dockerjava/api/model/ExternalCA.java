@@ -11,9 +11,9 @@ import java.util.Map;
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class ExternalCA implements Serializable {
+public class ExternalCA extends DockerObject implements Serializable {
 
     public static final long serialVersionUID = 1L;
 

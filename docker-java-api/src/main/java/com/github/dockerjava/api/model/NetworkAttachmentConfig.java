@@ -11,9 +11,9 @@ import java.util.List;
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class NetworkAttachmentConfig implements Serializable {
+public class NetworkAttachmentConfig extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;
 
     /**

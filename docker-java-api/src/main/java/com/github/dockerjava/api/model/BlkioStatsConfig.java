@@ -13,9 +13,9 @@ import java.util.List;
  *
  * @author Yuting Liu
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
-public class BlkioStatsConfig implements Serializable {
+public class BlkioStatsConfig extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("io_service_bytes_recursive")
