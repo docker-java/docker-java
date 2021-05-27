@@ -2,6 +2,8 @@ package com.github.dockerjava.api;
 
 import com.github.dockerjava.api.model.Binds;
 import com.github.dockerjava.api.model.BuildResponseItem;
+import com.github.dockerjava.api.model.DockerObject;
+import com.github.dockerjava.api.model.DockerObjectAccessor;
 import com.github.dockerjava.api.model.PullResponseItem;
 import com.github.dockerjava.api.model.PushResponseItem;
 import com.github.dockerjava.api.model.ResponseItem;
@@ -24,6 +26,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.object.IsCompatibleType.typeCompatibleWith;
 
 /**
+ * TODO use ArchUnit
+ *
  * @author Kanstantsin Shautsou
  */
 public class ModelsSerializableTest {
@@ -36,7 +40,9 @@ public class ModelsSerializableTest {
             PushResponseItem.class.getName(),
             ResponseItem.class.getName(),
             ResponseItem.ErrorDetail.class.getName(),
-            ResponseItem.ProgressDetail.class.getName()
+            ResponseItem.ProgressDetail.class.getName(),
+            DockerObject.class.getName(),
+            DockerObjectAccessor.class.getName()
     );
 
     @Test
