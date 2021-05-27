@@ -1,8 +1,11 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.CreateConfigResponse;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
+import com.tngtech.archunit.base.DescribedPredicate;
+import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
@@ -28,7 +31,15 @@ class DockerObjectArchTest {
             .and().areNotAnnotatedWith(Deprecated.class)
             .and().doNotImplement(ResultCallback.class)
             .and().doNotImplement(DockerCmdExecFactory.class)
-            .and().doNotBelongToAnyOf(DockerObjectAccessor.class, Binds.class, Links.class, VolumesFrom.class)
+            .and().doNotBelongToAnyOf(DockerObjectAccessor.class)
+            .and(new DescribedPredicate<JavaClass>("not @JsonCreator-based object") {
+                @Override
+                public boolean apply(JavaClass input) {
+                    return input.getAllMethods().stream().noneMatch(method -> {
+                        return method.isAnnotatedWith(JsonCreator.class);
+                    });
+                }
+            })
             .should().beAssignableTo(DockerObject.class)
             .check(CLASSES);
     }

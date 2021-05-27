@@ -3,7 +3,6 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.EqualsAndHashCode;
 
 import javax.annotation.Nonnull;
 import java.io.Serializable;
@@ -21,8 +20,7 @@ import java.util.Map;
  *
  * @see Bind
  */
-@EqualsAndHashCode
-public class Volume extends DockerObject implements Serializable {
+public class Volume implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

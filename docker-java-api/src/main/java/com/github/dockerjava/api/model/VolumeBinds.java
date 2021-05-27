@@ -7,12 +7,10 @@ import java.util.stream.Stream;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-@EqualsAndHashCode
 @ToString
-public class VolumeBinds extends DockerObject implements Serializable {
+public class VolumeBinds implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final VolumeBind[] binds;

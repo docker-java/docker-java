@@ -9,15 +9,13 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.github.dockerjava.api.model.Ports.Binding;
-import lombok.EqualsAndHashCode;
 
 /**
  * Represents a container port that Docker exposes to external clients. The port is defined by its {@link #getPort() port number} and an
  * {@link InternetProtocol}. It can be published by Docker by {@link Ports#bind(ExposedPort, Binding) binding} it to a host port,
  * represented by a {@link Binding}.
  */
-@EqualsAndHashCode
-public class ExposedPort extends DockerObject implements Serializable {
+public class ExposedPort implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final InternetProtocol protocol;
