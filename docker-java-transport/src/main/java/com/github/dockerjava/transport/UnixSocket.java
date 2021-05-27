@@ -67,7 +67,7 @@ public class UnixSocket extends AbstractSocket {
 
     public static Socket get(String dockerHost) throws IOException {
         try {
-            Class unixDomainSocketAddress = unixDomainSocketAddress = Class.forName("java.net.UnixDomainSocketAddress");
+            Class unixDomainSocketAddress = Class.forName("java.net.UnixDomainSocketAddress");
             SocketAddress address =
                 (SocketAddress) unixDomainSocketAddress.getMethod("of", String.class)
                     .invoke(null, dockerHost);
