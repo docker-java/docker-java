@@ -13,7 +13,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.dockerjava.api.async.ResultCallback;
-import com.github.dockerjava.core.DefaultDockerClientConfig;
+import com.github.dockerjava.core.DockerClientConfig;
 
 /**
  *
@@ -33,7 +33,7 @@ public class JsonStreamProcessor<T> implements ResponseStreamProcessor<T> {
     @Deprecated
     public JsonStreamProcessor(Class<T> clazz) {
         this(
-                DefaultDockerClientConfig.createDefaultConfigBuilder().build().getObjectMapper(),
+                DockerClientConfig.getDefaultObjectMapper(),
                 new TypeReference<T>() {
                 }
         );
