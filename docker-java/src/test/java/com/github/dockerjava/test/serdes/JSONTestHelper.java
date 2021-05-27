@@ -17,7 +17,7 @@ package com.github.dockerjava.test.serdes;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.core.DefaultDockerClientConfig;
+import com.github.dockerjava.core.DockerClientConfig;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
@@ -37,7 +37,7 @@ public class JSONTestHelper {
 
     static {
         try {
-            MAPPER = DefaultDockerClientConfig.createDefaultConfigBuilder().build().getObjectMapper();
+            MAPPER = DockerClientConfig.getDefaultObjectMapper();
         } catch (Throwable e) {
             e.printStackTrace();
             throw e;
