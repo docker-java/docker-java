@@ -1,6 +1,6 @@
 package com.github.dockerjava.okhttp;
 
-import com.github.dockerjava.transport.UnixSocket;
+import com.github.dockerjava.transport.DomainSocket;
 
 import javax.net.SocketFactory;
 import java.io.IOException;
@@ -18,7 +18,7 @@ class UnixSocketFactory extends SocketFactory {
     @Override
     public Socket createSocket() {
         try {
-            return UnixSocket.get(socketPath);
+            return DomainSocket.get(socketPath);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
