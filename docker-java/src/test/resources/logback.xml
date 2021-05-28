@@ -7,9 +7,10 @@
     </appender>
 
     <logger name="com.github.dockerjava" level="DEBUG"/>
-    <logger name="com.github.dockerjava.jaxrs" level="DEBUG"/>
-    <logger name="com.github.dockerjava.netty" level="DEBUG"/>
-    <logger name="org.apache.http.impl.conn" level="DEBUG"/>
+    <logger name="com.github.dockerjava.jaxrs" level="INFO"/>
+    <logger name="com.github.dockerjava.netty" level="INFO"/>
+    <logger name="com.github.dockerjava.httpclient5" level="INFO"/>
+    <logger name="com.github.dockerjava.okhttp" level="INFO"/>
 
 
     <root level="INFO">
