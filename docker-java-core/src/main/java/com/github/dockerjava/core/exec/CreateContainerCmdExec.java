@@ -27,6 +27,10 @@ public class CreateContainerCmdExec extends AbstrSyncDockerCmdExec<CreateContain
             webResource = webResource.queryParam("name", command.getName());
         }
 
+        if (command.getPlatform() != null) {
+            webResource = webResource.queryParam("platform", command.getPlatform());
+        }
+
         LOGGER.trace("POST: {} ", webResource);
         return resourceWithOptionalAuthConfig(command.getAuthConfig(), webResource.request())
                 .accept(MediaType.APPLICATION_JSON)

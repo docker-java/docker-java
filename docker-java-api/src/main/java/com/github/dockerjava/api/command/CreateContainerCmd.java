@@ -1006,6 +1006,11 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
         return this;
     }
 
+    @CheckForNull
+    String getPlatform();
+
+    CreateContainerCmd withPlatform(String platform);
+
     /**
      * @throws NotFoundException No such container
      * @throws ConflictException Named container already exists
