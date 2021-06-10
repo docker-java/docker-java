@@ -42,6 +42,7 @@ import com.github.dockerjava.api.command.ListServicesCmd;
 import com.github.dockerjava.api.command.ListSwarmNodesCmd;
 import com.github.dockerjava.api.command.ListTasksCmd;
 import com.github.dockerjava.api.command.ListVolumesCmd;
+import com.github.dockerjava.api.command.LoadImageAsyncCmd;
 import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.api.command.LogContainerCmd;
 import com.github.dockerjava.api.command.LogSwarmObjectCmd;
@@ -129,6 +130,13 @@ public interface DockerClient extends Closeable {
      * @since {@link RemoteApiVersion#VERSION_1_7}
      */
     LoadImageCmd loadImageCmd(@Nonnull InputStream imageStream);
+
+    /**
+     * Loads a tarball with a set of images and tags into a Docker repository and get response
+     * @param imageStream stream of the tarball file
+     * @return created command
+     */
+    LoadImageAsyncCmd loadImageAsyncCmd(@Nonnull InputStream imageStream);
 
     SearchImagesCmd searchImagesCmd(@Nonnull String term);
 

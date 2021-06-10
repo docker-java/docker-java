@@ -27,6 +27,8 @@ public interface DockerCmdExecFactory extends Closeable {
 
     LoadImageCmd.Exec createLoadImageCmdExec();
 
+    LoadImageAsyncCmd.Exec createLoadImageAsyncCmdExec();
+
     SearchImagesCmd.Exec createSearchImagesCmdExec();
 
     RemoveImageCmd.Exec createRemoveImageCmdExec();

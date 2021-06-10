@@ -2,6 +2,7 @@ package com.github.dockerjava.api;
 
 import com.github.dockerjava.api.model.Binds;
 import com.github.dockerjava.api.model.BuildResponseItem;
+import com.github.dockerjava.api.model.LoadImageAsyncResponseItem;
 import com.github.dockerjava.api.model.PullResponseItem;
 import com.github.dockerjava.api.model.PushResponseItem;
 import com.github.dockerjava.api.model.ResponseItem;
@@ -35,6 +36,7 @@ public class ModelsSerializableTest {
             PullResponseItem.class.getName(),
             PushResponseItem.class.getName(),
             ResponseItem.class.getName(),
+            LoadImageAsyncResponseItem.class.getName(),
             ResponseItem.ErrorDetail.class.getName(),
             ResponseItem.ProgressDetail.class.getName()
     );

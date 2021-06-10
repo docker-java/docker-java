@@ -76,6 +76,11 @@ public class DelegatingDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     @Override
+    public LoadImageAsyncCmd.Exec createLoadImageAsyncCmdExec() {
+        return getDockerCmdExecFactory().createLoadImageAsyncCmdExec();
+    }
+
+    @Override
     public SearchImagesCmd.Exec createSearchImagesCmdExec() {
         return getDockerCmdExecFactory().createSearchImagesCmdExec();
     }
