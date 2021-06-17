@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.Frame;
-import com.github.dockerjava.core.DefaultDockerClientConfig;
+import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.InvocationBuilder;
 import com.github.dockerjava.core.async.ResultCallbackTemplate;
 import com.github.dockerjava.netty.handler.FramedResponseStreamHandler;
@@ -85,7 +85,7 @@ public class NettyInvocationBuilder implements InvocationBuilder {
     @Deprecated
     public NettyInvocationBuilder(ChannelProvider channelProvider, String resource) {
         this(
-                DefaultDockerClientConfig.createDefaultConfigBuilder().build().getObjectMapper(),
+                DockerClientConfig.getDefaultObjectMapper(),
                 channelProvider,
                 resource
         );
