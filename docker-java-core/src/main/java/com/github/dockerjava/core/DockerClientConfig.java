@@ -127,7 +127,7 @@ class DockerObjectDeserializer extends DelegatingDeserializer {
     @Override
     @SuppressWarnings({"deprecation", "unchecked"})
     public Object deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-        JsonNode jsonNode = ctxt.readTree(p);
+        JsonNode jsonNode = p.readValueAsTree();
 
         Object deserializedObject = originalMapper.treeToValue(jsonNode, beanDescription.getBeanClass());
 
