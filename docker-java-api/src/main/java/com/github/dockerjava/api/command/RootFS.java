@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.model.DockerObject;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -14,7 +15,7 @@ import java.util.List;
  */
 @EqualsAndHashCode
 @ToString
-public class RootFS {
+public class RootFS extends DockerObject {
 
     @JsonProperty("Type")
     private String type;

@@ -15,7 +15,7 @@ import java.util.List;
  */
 @EqualsAndHashCode
 @ToString
-public class CpuUsageConfig implements Serializable {
+public class CpuUsageConfig extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("total_usage")

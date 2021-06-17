@@ -13,7 +13,7 @@ import java.util.List;
  */
 @EqualsAndHashCode
 @ToString
-public class SwarmInfo implements Serializable {
+public class SwarmInfo extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;
 
     /**

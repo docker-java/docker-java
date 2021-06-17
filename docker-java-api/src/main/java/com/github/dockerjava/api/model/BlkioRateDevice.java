@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @EqualsAndHashCode
 @ToString
-public class BlkioRateDevice implements Serializable {
+public class BlkioRateDevice extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;
 
     @JsonProperty("Path")

@@ -17,7 +17,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode
 @ToString
-public class PortBinding implements Serializable {
+public class PortBinding extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final Binding binding;

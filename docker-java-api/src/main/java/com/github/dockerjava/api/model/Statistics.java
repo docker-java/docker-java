@@ -14,7 +14,7 @@ import lombok.ToString;
  */
 @EqualsAndHashCode
 @ToString
-public class Statistics implements Serializable {
+public class Statistics extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("read")

@@ -7,7 +7,9 @@ import java.util.stream.Stream;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.ToString;
 
+@ToString
 public class VolumeBinds implements Serializable {
     private static final long serialVersionUID = 1L;
 

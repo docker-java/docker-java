@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode
 @ToString
-public class EndpointVirtualIP implements Serializable {
+public class EndpointVirtualIP extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;
 
     /**

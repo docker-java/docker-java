@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode
 @ToString
-public class PeerNode implements Serializable {
+public class PeerNode extends DockerObject implements Serializable {
 
     public static final long serialVersionUID = 1L;
 

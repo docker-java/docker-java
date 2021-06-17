@@ -28,7 +28,7 @@ import java.util.List;
  */
 @EqualsAndHashCode
 @ToString
-public class HealthCheck implements Serializable {
+public class HealthCheck extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("Interval")

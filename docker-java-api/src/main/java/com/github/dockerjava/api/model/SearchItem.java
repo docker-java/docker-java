@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode
 @ToString
-public class SearchItem implements Serializable {
+public class SearchItem extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("star_count")
