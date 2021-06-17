@@ -5,6 +5,7 @@ import com.github.dockerjava.transport.DomainSocket;
 import com.github.dockerjava.transport.NamedPipeSocket;
 import com.github.dockerjava.transport.SSLConfig;
 import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
+import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
@@ -36,8 +37,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 import java.net.URI;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -49,7 +52,9 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
     protected ApacheDockerHttpClientImpl(
         URI dockerHost,
         SSLConfig sslConfig,
-        int maxConnections
+        int maxConnections,
+        Duration connectionTimeout,
+        Duration responseTimeout
     ) {
         Registry<ConnectionSocketFactory> socketFactoryRegistry = createConnectionSocketFactoryRegistry(sslConfig, dockerHost);
 
@@ -90,9 +95,18 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
         );
         connectionManager.setMaxTotal(maxConnections);
         connectionManager.setDefaultMaxPerRoute(maxConnections);
+        RequestConfig.Builder defaultRequest = RequestConfig.custom();
+        if (connectionTimeout != null) {
+            defaultRequest.setConnectTimeout(connectionTimeout.toNanos(), TimeUnit.NANOSECONDS);
+        }
+        if (responseTimeout != null) {
+            defaultRequest.setResponseTimeout(responseTimeout.toNanos(), TimeUnit.NANOSECONDS);
+        }
+
         httpClient = HttpClients.custom()
             .setRequestExecutor(new HijackingHttpRequestExecutor(null))
             .setConnectionManager(connectionManager)
+            .setDefaultRequestConfig(defaultRequest.build())
             .disableConnectionState()
             .build();
     }
