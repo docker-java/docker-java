@@ -1007,7 +1007,9 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     }
 
     @CheckForNull
-    String getPlatform();
+    default String getPlatform() {
+        return null;
+    }
 
     CreateContainerCmd withPlatform(String platform);
 
