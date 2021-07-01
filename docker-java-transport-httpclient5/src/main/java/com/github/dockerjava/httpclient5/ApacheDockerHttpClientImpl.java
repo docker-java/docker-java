@@ -1,9 +1,9 @@
 package com.github.dockerjava.httpclient5;
 
 import com.github.dockerjava.transport.DockerHttpClient;
-import com.github.dockerjava.transport.DomainSocket;
 import com.github.dockerjava.transport.NamedPipeSocket;
 import com.github.dockerjava.transport.SSLConfig;
+import com.github.dockerjava.transport.UnixSocket;
 import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -134,7 +134,7 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
             .register("unix", new PlainConnectionSocketFactory() {
                 @Override
                 public Socket createSocket(HttpContext context) throws IOException {
-                    return DomainSocket.get(dockerHost.getPath());
+                    return UnixSocket.get(dockerHost.getPath());
                 }
             })
             .register("npipe", new PlainConnectionSocketFactory() {
