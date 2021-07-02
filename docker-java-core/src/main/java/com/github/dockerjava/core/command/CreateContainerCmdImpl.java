@@ -133,6 +133,8 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     private AuthConfig authConfig;
 
+    private String platform;
+
     public CreateContainerCmdImpl(CreateContainerCmd.Exec exec, AuthConfig authConfig, String image) {
         super(exec);
         withAuthConfig(authConfig);
@@ -550,6 +552,18 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     public CreateContainerCmdImpl withOnBuild(List<String> onBuild) {
         this.onBuild = onBuild;
+        return this;
+    }
+
+    @CheckForNull
+    @Override
+    public String getPlatform() {
+        return platform;
+    }
+
+    @Override
+    public CreateContainerCmd withPlatform(String platform) {
+        this.platform = platform;
         return this;
     }
 

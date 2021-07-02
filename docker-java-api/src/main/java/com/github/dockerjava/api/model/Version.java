@@ -17,7 +17,7 @@ import java.util.List;
  */
 @EqualsAndHashCode
 @ToString
-public class Version implements Serializable {
+public class Version extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("ApiVersion")

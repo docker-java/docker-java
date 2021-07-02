@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode
 @ToString
-public class SwarmOrchestration implements Serializable {
+public class SwarmOrchestration extends DockerObject implements Serializable {
 
     public static final long serialVersionUID = 1L;
 

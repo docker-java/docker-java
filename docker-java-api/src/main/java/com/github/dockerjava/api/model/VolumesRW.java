@@ -7,8 +7,10 @@ import java.util.stream.Stream;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.ToString;
 
 // This is not going to be serialized
+@ToString
 public class VolumesRW implements Serializable {
     private static final long serialVersionUID = 1L;
 

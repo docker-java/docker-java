@@ -16,7 +16,7 @@ import java.util.Date;
  */
 @EqualsAndHashCode
 @ToString
-public class ClusterInfo implements Serializable {
+public class ClusterInfo extends DockerObject implements Serializable {
 
     public static final long serialVersionUID = 1L;
 

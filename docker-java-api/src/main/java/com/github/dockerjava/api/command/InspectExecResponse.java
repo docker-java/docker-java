@@ -3,6 +3,7 @@ package com.github.dockerjava.api.command;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.model.DockerObject;
 import com.github.dockerjava.api.model.NetworkSettings;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -11,7 +12,7 @@ import javax.annotation.CheckForNull;
 
 @EqualsAndHashCode
 @ToString
-public class InspectExecResponse {
+public class InspectExecResponse extends DockerObject {
     @JsonProperty("ID")
     private String id;
 
@@ -152,7 +153,7 @@ public class InspectExecResponse {
 
     @EqualsAndHashCode
     @ToString
-    public class ProcessConfig {
+    public class ProcessConfig extends DockerObject {
 
         @JsonProperty("arguments")
         private List<String> arguments;
@@ -190,7 +191,9 @@ public class InspectExecResponse {
         }
     }
 
-    public class Container {
+    @EqualsAndHashCode
+    @ToString
+    public class Container extends DockerObject {
 
         @JsonProperty("NetworkSettings")
         private NetworkSettings networkSettings;

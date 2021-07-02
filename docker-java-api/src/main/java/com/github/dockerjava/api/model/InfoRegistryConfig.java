@@ -14,7 +14,7 @@ import java.util.Map;
  */
 @EqualsAndHashCode
 @ToString
-public final class InfoRegistryConfig implements Serializable {
+public final class InfoRegistryConfig extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("IndexConfigs")
@@ -82,7 +82,7 @@ public final class InfoRegistryConfig implements Serializable {
      */
     @EqualsAndHashCode
     @ToString
-    public static final class IndexConfig implements Serializable {
+    public static final class IndexConfig extends DockerObject implements Serializable {
         private static final long serialVersionUID = 1L;
 
         @JsonProperty("Mirrors")

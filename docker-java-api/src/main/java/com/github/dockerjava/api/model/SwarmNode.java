@@ -16,7 +16,7 @@ import java.util.Date;
  */
 @EqualsAndHashCode
 @ToString
-public class SwarmNode implements Serializable {
+public class SwarmNode extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;
 
     /**

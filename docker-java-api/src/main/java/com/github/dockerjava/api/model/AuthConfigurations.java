@@ -5,8 +5,12 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-public class AuthConfigurations implements Serializable {
+@EqualsAndHashCode
+@ToString
+public class AuthConfigurations extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("configs")
