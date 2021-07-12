@@ -361,6 +361,11 @@ public class DelegatingDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     @Override
+    public InspectTaskCmd.Exec inspectTaskCmdExec() {
+        return getDockerCmdExecFactory().inspectTaskCmdExec();
+    }
+
+    @Override
     public PruneCmd.Exec pruneCmdExec() {
         return getDockerCmdExecFactory().pruneCmdExec();
     }

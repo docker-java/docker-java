@@ -5,8 +5,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
@@ -23,16 +23,10 @@ public class Task extends DockerObject implements Serializable {
     private ObjectVersion version = null;
 
     @JsonProperty("CreatedAt")
-    private String createdAt = null;
+    private Date createdAt = null;
 
     @JsonProperty("UpdatedAt")
-    private String updatedAt = null;
-
-    @JsonProperty("Name")
-    private String name = null;
-
-    @JsonProperty("Labels")
-    private Map<String, String> labels = null;
+    private Date updatedAt = null;
 
     @JsonProperty("Spec")
     private TaskSpec spec = null;
@@ -54,6 +48,10 @@ public class Task extends DockerObject implements Serializable {
 
     @JsonProperty("DesiredState")
     private TaskState desiredState = null;
+
+    @JsonProperty("NetworksAttachments")
+    private List<NetworkAttachment> networkAttachments;
+
 
     /**
      * The ID of the task.
@@ -78,7 +76,7 @@ public class Task extends DockerObject implements Serializable {
      *
      * @return createdAt
      **/
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
@@ -87,27 +85,8 @@ public class Task extends DockerObject implements Serializable {
      *
      * @return updatedAt
      **/
-    public String getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
-    }
-
-    /**
-     * Name of the task.
-     *
-     * @return name
-     **/
-
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * User-defined key/value metadata.
-     *
-     * @return labels
-     **/
-    public Map<String, String> getLabels() {
-        return labels;
     }
 
     /**
@@ -164,6 +143,16 @@ public class Task extends DockerObject implements Serializable {
         return nodeId;
     }
 
+    /**
+     * Getter for the network attachments
+     *
+     * @return networkAttachments
+     */
+    public List<NetworkAttachment> getNetworkAttachments() {
+        return networkAttachments;
+    }
+
+
     public Task withId(String id) {
         this.id = id;
         return this;
@@ -174,23 +163,13 @@ public class Task extends DockerObject implements Serializable {
         return this;
     }
 
-    public Task withCreatedAt(String createdAt) {
+    public Task withCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
         return this;
     }
 
-    public Task withUpdatedAt(String updatedAt) {
+    public Task withUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
-        return this;
-    }
-
-    public Task withName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public Task withLabels(Map<String, String> labels) {
-        this.labels = labels;
         return this;
     }
 
