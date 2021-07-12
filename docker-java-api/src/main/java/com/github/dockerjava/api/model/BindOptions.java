@@ -11,7 +11,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode
 @ToString
-public class BindOptions implements Serializable {
+public class BindOptions extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

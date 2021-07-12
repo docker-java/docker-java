@@ -13,7 +13,7 @@ import java.util.List;
  */
 @EqualsAndHashCode
 @ToString
-public class NetworkAttachmentConfig implements Serializable {
+public class NetworkAttachmentConfig extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;
 
     /**

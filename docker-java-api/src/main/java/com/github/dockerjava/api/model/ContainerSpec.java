@@ -16,7 +16,7 @@ import java.util.Map;
  */
 @EqualsAndHashCode
 @ToString
-public class ContainerSpec implements Serializable {
+public class ContainerSpec extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;
 
     /**

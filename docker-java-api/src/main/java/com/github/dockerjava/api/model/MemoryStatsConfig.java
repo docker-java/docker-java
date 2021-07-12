@@ -1,6 +1,8 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
@@ -10,7 +12,9 @@ import java.io.Serializable;
  *
  * @author Yuting Liu
  */
-public class MemoryStatsConfig implements Serializable {
+@EqualsAndHashCode
+@ToString
+public class MemoryStatsConfig extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("stats")

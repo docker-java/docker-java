@@ -1,10 +1,14 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
 
-public class ErrorDetail implements Serializable {
+@EqualsAndHashCode
+@ToString
+public class ErrorDetail extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty

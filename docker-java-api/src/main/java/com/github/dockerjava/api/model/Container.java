@@ -17,7 +17,7 @@ import java.util.Map;
  */
 @EqualsAndHashCode
 @ToString
-public class Container implements Serializable {
+public class Container extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("Command")

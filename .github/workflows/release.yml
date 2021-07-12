@@ -21,4 +21,4 @@ jobs:
       - name: Deploy with Maven
         env:
           MAVEN_DEPLOYMENT_REPOSITORY: ${{ secrets.MAVEN_DEPLOYMENT_REPOSITORY }}
-        run: ./mvnw deploy -DaltReleaseDeploymentRepository="$MAVEN_DEPLOYMENT_REPOSITORY"
+        run: ./mvnw deploy -DaltReleaseDeploymentRepository="$MAVEN_DEPLOYMENT_REPOSITORY" -DskipTests

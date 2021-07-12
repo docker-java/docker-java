@@ -1,8 +1,11 @@
 package com.github.dockerjava.api.model;
 
+import lombok.EqualsAndHashCode;
+
 import java.io.Serializable;
 
-public class VolumeBind implements Serializable {
+@EqualsAndHashCode
+public class VolumeBind extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final String hostPath;

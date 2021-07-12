@@ -15,7 +15,7 @@ import java.util.List;
  */
 @EqualsAndHashCode
 @ToString
-public class BlkioStatsConfig implements Serializable {
+public class BlkioStatsConfig extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("io_service_bytes_recursive")

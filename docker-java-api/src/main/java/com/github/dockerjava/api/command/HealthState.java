@@ -1,9 +1,15 @@
 package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.model.DockerObject;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import java.util.List;
 
-public class HealthState {
+@EqualsAndHashCode
+@ToString
+public class HealthState extends DockerObject {
 
     @JsonProperty("Status")
     private String status;

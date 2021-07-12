@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode
 @ToString
-public class ContainerSpecPrivilegesSELinuxContext implements Serializable {
+public class ContainerSpecPrivilegesSELinuxContext extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
     @JsonProperty("Disable")
     private Boolean disable;
