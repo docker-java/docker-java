@@ -10,7 +10,7 @@ import java.util.Map;
 
 @EqualsAndHashCode
 @ToString
-public class DeviceRequest implements Serializable {
+public class DeviceRequest extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;
 
     @JsonProperty("Driver")

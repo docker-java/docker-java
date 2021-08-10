@@ -13,7 +13,7 @@ import java.util.List;
  */
 @EqualsAndHashCode
 @ToString
-public class ServicePlacement implements Serializable {
+public class ServicePlacement extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;
 
     /**

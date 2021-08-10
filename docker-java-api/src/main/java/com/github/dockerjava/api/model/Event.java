@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode
 @ToString
-public class Event implements Serializable {
+public class Event extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

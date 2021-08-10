@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode
 @ToString
-public class ContainerSpecPrivilegesCredential implements Serializable {
+public class ContainerSpecPrivilegesCredential extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

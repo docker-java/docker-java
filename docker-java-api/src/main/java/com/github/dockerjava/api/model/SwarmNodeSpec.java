@@ -14,7 +14,7 @@ import java.util.Map;
  */
 @EqualsAndHashCode
 @ToString
-public class SwarmNodeSpec implements Serializable {
+public class SwarmNodeSpec extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;
 
     /**

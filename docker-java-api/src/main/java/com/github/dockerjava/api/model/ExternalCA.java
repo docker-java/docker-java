@@ -13,7 +13,7 @@ import java.util.Map;
  */
 @EqualsAndHashCode
 @ToString
-public class ExternalCA implements Serializable {
+public class ExternalCA extends DockerObject implements Serializable {
 
     public static final long serialVersionUID = 1L;
 

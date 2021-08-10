@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.model.DockerObject;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -11,7 +12,7 @@ import lombok.ToString;
  */
 @EqualsAndHashCode
 @ToString
-public class CreateContainerResponse {
+public class CreateContainerResponse extends DockerObject {
 
     @JsonProperty("Id")
     private String id;

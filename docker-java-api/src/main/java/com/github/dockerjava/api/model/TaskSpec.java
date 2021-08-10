@@ -13,7 +13,7 @@ import java.util.List;
  */
 @EqualsAndHashCode
 @ToString
-public class TaskSpec implements Serializable {
+public class TaskSpec extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;
 
     /**

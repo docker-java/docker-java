@@ -17,7 +17,7 @@ import java.util.Map;
  */
 @EqualsAndHashCode
 @ToString
-public class NetworkSettings implements Serializable {
+public class NetworkSettings extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("Bridge")

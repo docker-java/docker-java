@@ -14,7 +14,7 @@ import java.util.List;
  */
 @EqualsAndHashCode
 @ToString
-public class ContainerDNSConfig implements Serializable {
+public class ContainerDNSConfig extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("Nameservers")

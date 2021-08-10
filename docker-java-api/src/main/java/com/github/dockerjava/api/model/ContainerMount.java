@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode
 @ToString
-public class ContainerMount implements Serializable {
+public class ContainerMount extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("Name")

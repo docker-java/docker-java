@@ -13,6 +13,7 @@ import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.ContainerNetwork;
 import com.github.dockerjava.api.model.Device;
+import com.github.dockerjava.api.model.DockerObjectAccessor;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.HostConfig;
@@ -1083,5 +1084,28 @@ public class CreateContainerCmdIT extends CmdIT {
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
 
         assertThat(inspectContainerResponse.getHostConfig().getNanoCPUs(), is(nanoCPUs));
+    }
+
+    @Test
+    public void overrideHostConfigWithRawValues() {
+        HostConfig hostConfig = new HostConfig()
+            .withNanoCPUs(1_000_000_000L);
+
+        DockerObjectAccessor.overrideRawValue(
+            hostConfig,
+            "NanoCPUs",
+            500_000_000L
+        );
+
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+            .withCmd("sleep", "9999")
+            .withHostConfig(hostConfig)
+            .exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
+
+        assertThat(inspectContainerResponse.getHostConfig().getNanoCPUs(), is(500_000_000L));
     }
 }

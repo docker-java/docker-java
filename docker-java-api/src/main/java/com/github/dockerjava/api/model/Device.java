@@ -14,7 +14,7 @@ import java.util.StringTokenizer;
 
 @EqualsAndHashCode
 @ToString
-public class Device implements Serializable {
+public class Device extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("CgroupPermissions")

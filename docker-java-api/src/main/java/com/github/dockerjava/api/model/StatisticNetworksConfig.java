@@ -14,7 +14,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode
 @ToString
-public class StatisticNetworksConfig implements Serializable {
+public class StatisticNetworksConfig extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("rx_bytes")

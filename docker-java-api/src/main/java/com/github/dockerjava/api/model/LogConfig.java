@@ -22,7 +22,7 @@ import java.util.Map;
  */
 @EqualsAndHashCode
 @ToString
-public class LogConfig implements Serializable {
+public class LogConfig extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("Type")

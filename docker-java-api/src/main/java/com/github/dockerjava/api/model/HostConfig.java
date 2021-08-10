@@ -19,7 +19,7 @@ import static java.util.Objects.requireNonNull;
  */
 @EqualsAndHashCode
 @ToString
-public class HostConfig implements Serializable {
+public class HostConfig extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private static final List<String> PREDEFINED_NETWORKS = Arrays.asList("bridge", "host", "none");
