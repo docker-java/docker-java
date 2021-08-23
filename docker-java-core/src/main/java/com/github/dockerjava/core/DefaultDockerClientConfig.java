@@ -114,9 +114,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
         p.putAll(DEFAULT_PROPERTIES);
         try (InputStream is = DefaultDockerClientConfig.class.getResourceAsStream("/" + DOCKER_JAVA_PROPERTIES)) {
             if (is != null) {
-                Properties loadedProperties = new Properties();
-                loadedProperties.load(is);
-                p.putAll(loadedProperties);
+                p.load(is);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -157,9 +155,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
                 "." + DOCKER_JAVA_PROPERTIES);
         if (usersDockerPropertiesFile.isFile()) {
             try (FileInputStream in = new FileInputStream(usersDockerPropertiesFile)) {
-                Properties loadedProperties = new Properties();
-                loadedProperties.load(in);
-                overriddenProperties.putAll(loadedProperties);
+                overriddenProperties.load(in);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
