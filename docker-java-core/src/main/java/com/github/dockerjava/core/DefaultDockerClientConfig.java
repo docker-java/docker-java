@@ -357,6 +357,14 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             return this;
         }
 
+        /**
+         *  Considered default if dockerHost is set to the default value.
+         */
+        public final boolean hasDefaultDockerHost() {
+            URI defaultDockerHost = URI.create(DEFAULT_PROPERTIES.getProperty(DOCKER_HOST));
+            return this.dockerHost.equals(defaultDockerHost);
+        }
+
         public final Builder withApiVersion(RemoteApiVersion apiVersion) {
             this.apiVersion = apiVersion.getVersion();
             return this;

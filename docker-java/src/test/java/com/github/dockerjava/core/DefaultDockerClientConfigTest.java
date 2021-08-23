@@ -225,6 +225,49 @@ public class DefaultDockerClientConfigTest {
     }
 
     @Test
+    public void hasDefaultDockerHostRespectsSetter() {
+        DefaultDockerClientConfig.Builder builder = DefaultDockerClientConfig.createDefaultConfigBuilder();
+        assertThat(builder.hasDefaultDockerHost(), is(true));
+
+        builder.withDockerHost("tcp://foo");
+        assertThat(builder.hasDefaultDockerHost(), is(false));
+    }
+
+    @Test
+    public void hasDefaultDockerHostRespectsSystemProperties() {
+        Properties systemProperties = new Properties();
+        systemProperties.put(DefaultDockerClientConfig.DOCKER_HOST, "tcp://foo");
+
+        DefaultDockerClientConfig.Builder builder =  DefaultDockerClientConfig.createDefaultConfigBuilder(Collections.emptyMap(), systemProperties);
+
+        assertThat(builder.hasDefaultDockerHost(), is(false));
+    }
+
+    @Test
+    public void hasDefaultDockerHostRespectsEnv() {
+        Map<String, String> env = new HashMap<>();
+        env.put(DefaultDockerClientConfig.DOCKER_HOST, "tcp://foo");
+
+        DefaultDockerClientConfig.Builder builder =  DefaultDockerClientConfig.createDefaultConfigBuilder(env, new Properties());
+
+        assertThat(builder.hasDefaultDockerHost(), is(false));
+    }
+
+    @Test
+    public void hasDefaultDockerHostConsideredAsDefaultIfSetToDefault() {
+        String defaultDockerHost = DefaultDockerClientConfig.DEFAULT_PROPERTIES
+            .getProperty(DefaultDockerClientConfig.DOCKER_HOST);
+
+        Map<String, String> env = new HashMap<>();
+        env.put(DefaultDockerClientConfig.DOCKER_HOST, defaultDockerHost);
+
+        DefaultDockerClientConfig.Builder builder =  DefaultDockerClientConfig.createDefaultConfigBuilder(env, new Properties());
+
+        assertThat(builder.hasDefaultDockerHost(), is(true));
+    }
+
+
+    @Test
     public void testGetAuthConfigurationsFromDockerCfg() throws URISyntaxException {
         File cfgFile = new File(Resources.getResource("com.github.dockerjava.core/registry.v1").toURI());
         DefaultDockerClientConfig clientConfig = new DefaultDockerClientConfig(URI.create(
