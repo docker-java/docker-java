@@ -98,8 +98,8 @@ public class DefaultDockerClientConfigTest {
         DefaultDockerClientConfig config = buildConfig(env, new Properties());
 
         assertEquals(
-            config.getDockerHost().toString(),
-            DefaultDockerClientConfig.DEFAULT_PROPERTIES.get(DefaultDockerClientConfig.DOCKER_HOST)
+            DefaultDockerClientConfig.DEFAULT_DOCKER_HOST,
+            config.getDockerHost().toString()
         );
     }
 
@@ -223,6 +223,46 @@ public class DefaultDockerClientConfigTest {
         builder.withDockerTlsVerify("1");
         assertThat((Boolean) field.get(builder), is(true));
     }
+
+    @Test
+    public void dockerHostSetExplicitlyOnSetter() {
+        DefaultDockerClientConfig.Builder builder = DefaultDockerClientConfig.createDefaultConfigBuilder(Collections.emptyMap(), new Properties());
+        assertThat(builder.isDockerHostSetExplicitly(), is(false));
+
+        builder.withDockerHost("tcp://foo");
+        assertThat(builder.isDockerHostSetExplicitly(), is(true));
+    }
+
+    @Test
+    public void dockerHostSetExplicitlyOnSystemProperty() {
+        Properties systemProperties = new Properties();
+        systemProperties.put(DefaultDockerClientConfig.DOCKER_HOST, "tcp://foo");
+
+        DefaultDockerClientConfig.Builder builder =  DefaultDockerClientConfig.createDefaultConfigBuilder(Collections.emptyMap(), systemProperties);
+
+        assertThat(builder.isDockerHostSetExplicitly(), is(true));
+    }
+
+    @Test
+    public void dockerHostSetExplicitlyOnEnv() {
+        Map<String, String> env = new HashMap<>();
+        env.put(DefaultDockerClientConfig.DOCKER_HOST, "tcp://foo");
+
+        DefaultDockerClientConfig.Builder builder =  DefaultDockerClientConfig.createDefaultConfigBuilder(env, new Properties());
+
+        assertThat(builder.isDockerHostSetExplicitly(), is(true));
+    }
+
+    @Test
+    public void dockerHostSetExplicitlyIfSetToDefaultByUser() {
+        Map<String, String> env = new HashMap<>();
+        env.put(DefaultDockerClientConfig.DOCKER_HOST, DefaultDockerClientConfig.DEFAULT_DOCKER_HOST);
+
+        DefaultDockerClientConfig.Builder builder =  DefaultDockerClientConfig.createDefaultConfigBuilder(env, new Properties());
+
+        assertThat(builder.isDockerHostSetExplicitly(), is(true));
+    }
+
 
     @Test
     public void testGetAuthConfigurationsFromDockerCfg() throws URISyntaxException {
