@@ -324,7 +324,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
     }
 
     public static class Builder {
-        private String dockerHost;
+        private URI dockerHost;
 
         private String apiVersion, registryUsername, registryPassword, registryEmail, registryUrl, dockerConfig,
                 dockerCertPath;
@@ -339,8 +339,12 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
          * registry.email, DOCKER_CERT_PATH, and DOCKER_CONFIG.
          */
         public Builder withProperties(Properties p) {
-            return withDockerHost(p.getProperty(DOCKER_HOST))
-                    .withDockerTlsVerify(p.getProperty(DOCKER_TLS_VERIFY))
+
+            if (p.getProperty(DOCKER_HOST) != null) {
+                withDockerHost(p.getProperty(DOCKER_HOST));
+            }
+
+            return withDockerTlsVerify(p.getProperty(DOCKER_TLS_VERIFY))
                     .withDockerConfig(p.getProperty(DOCKER_CONFIG))
                     .withDockerCertPath(p.getProperty(DOCKER_CERT_PATH))
                     .withApiVersion(p.getProperty(API_VERSION))
@@ -354,7 +358,8 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
          * configure DOCKER_HOST
          */
         public final Builder withDockerHost(String dockerHost) {
-            this.dockerHost = dockerHost;
+            checkNotNull(dockerHost, "uri was not specified");
+            this.dockerHost = URI.create(dockerHost);
             return this;
         }
 
@@ -440,8 +445,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
                 sslConfig = customSslConfig;
             }
 
-            String dockerHostToUse = (!StringUtils.isEmpty(dockerHost)) ? dockerHost : DEFAULT_DOCKER_HOST;
-            URI dockerHostUri = URI.create(dockerHostToUse);
+            URI dockerHostUri = (dockerHost != null) ? dockerHost : URI.create(DEFAULT_DOCKER_HOST);
 
             return new DefaultDockerClientConfig(dockerHostUri, dockerConfig, apiVersion, registryUrl, registryUsername,
                     registryPassword, registryEmail, sslConfig);
