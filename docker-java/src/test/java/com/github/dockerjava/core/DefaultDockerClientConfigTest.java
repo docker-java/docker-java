@@ -225,42 +225,42 @@ public class DefaultDockerClientConfigTest {
     }
 
     @Test
-    public void dockerHostExplicitOnSetter() {
+    public void dockerHostSetExplicitlyOnSetter() {
         DefaultDockerClientConfig.Builder builder = DefaultDockerClientConfig.createDefaultConfigBuilder();
-        assertThat(builder.isDockerHostSetExplicit(), is(false));
+        assertThat(builder.isDockerHostSetExplicitly(), is(false));
 
         builder.withDockerHost("tcp://foo");
-        assertThat(builder.isDockerHostSetExplicit(), is(true));
+        assertThat(builder.isDockerHostSetExplicitly(), is(true));
     }
 
     @Test
-    public void dockerHostExplicitOnSystemProperty() {
+    public void dockerHostSetExplicitlyOnSystemProperty() {
         Properties systemProperties = new Properties();
         systemProperties.put(DefaultDockerClientConfig.DOCKER_HOST, "tcp://foo");
 
         DefaultDockerClientConfig.Builder builder =  DefaultDockerClientConfig.createDefaultConfigBuilder(Collections.emptyMap(), systemProperties);
 
-        assertThat(builder.isDockerHostSetExplicit(), is(true));
+        assertThat(builder.isDockerHostSetExplicitly(), is(true));
     }
 
     @Test
-    public void dockerHostExplicitOnEnv() {
+    public void dockerHostSetExplicitlyOnEnv() {
         Map<String, String> env = new HashMap<>();
         env.put(DefaultDockerClientConfig.DOCKER_HOST, "tcp://foo");
 
         DefaultDockerClientConfig.Builder builder =  DefaultDockerClientConfig.createDefaultConfigBuilder(env, new Properties());
 
-        assertThat(builder.isDockerHostSetExplicit(), is(true));
+        assertThat(builder.isDockerHostSetExplicitly(), is(true));
     }
 
     @Test
-    public void dockerHostExplicitIfSetToDefaultByUser() {
+    public void dockerHostSetExplicitlyIfSetToDefaultByUser() {
         Map<String, String> env = new HashMap<>();
         env.put(DefaultDockerClientConfig.DOCKER_HOST, DefaultDockerClientConfig.DEFAULT_DOCKER_HOST);
 
         DefaultDockerClientConfig.Builder builder =  DefaultDockerClientConfig.createDefaultConfigBuilder(env, new Properties());
 
-        assertThat(builder.isDockerHostSetExplicit(), is(true));
+        assertThat(builder.isDockerHostSetExplicitly(), is(true));
     }
 
 

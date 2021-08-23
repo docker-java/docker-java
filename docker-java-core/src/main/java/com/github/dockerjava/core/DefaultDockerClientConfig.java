@@ -417,7 +417,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             return this;
         }
 
-        public final boolean isDockerHostSetExplicit() {
+        public final boolean isDockerHostSetExplicitly() {
             return dockerHost != null;
         }
 
