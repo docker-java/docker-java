@@ -98,8 +98,8 @@ public class DefaultDockerClientConfigTest {
         DefaultDockerClientConfig config = buildConfig(env, new Properties());
 
         assertEquals(
-            config.getDockerHost().toString(),
-            DefaultDockerClientConfig.DEFAULT_PROPERTIES.get(DefaultDockerClientConfig.DOCKER_HOST)
+            DefaultDockerClientConfig.DEFAULT_DOCKER_HOST,
+            config.getDockerHost().toString()
         );
     }
 
@@ -255,11 +255,8 @@ public class DefaultDockerClientConfigTest {
 
     @Test
     public void dockerHostExplicitIfSetToDefaultByUser() {
-        String defaultDockerHost = DefaultDockerClientConfig.DEFAULT_PROPERTIES
-            .getProperty(DefaultDockerClientConfig.DOCKER_HOST);
-
         Map<String, String> env = new HashMap<>();
-        env.put(DefaultDockerClientConfig.DOCKER_HOST, defaultDockerHost);
+        env.put(DefaultDockerClientConfig.DOCKER_HOST, DefaultDockerClientConfig.DEFAULT_DOCKER_HOST);
 
         DefaultDockerClientConfig.Builder builder =  DefaultDockerClientConfig.createDefaultConfigBuilder(env, new Properties());
 

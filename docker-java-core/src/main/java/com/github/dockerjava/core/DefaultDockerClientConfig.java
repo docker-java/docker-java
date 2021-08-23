@@ -57,7 +57,8 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
     private static final Set<String> CONFIG_KEYS = new HashSet<>();
 
     static final Properties DEFAULT_PROPERTIES = new Properties();
-    public static final String DOCKER_HOST_SET_EXPLICIT = "DOCKER_HOST_EXPLICIT";
+
+    static final String DEFAULT_DOCKER_HOST = "unix:///var/run/docker.sock";
 
     static {
         CONFIG_KEYS.add(DOCKER_HOST);
@@ -70,11 +71,9 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
         CONFIG_KEYS.add(REGISTRY_EMAIL);
         CONFIG_KEYS.add(REGISTRY_URL);
 
-        DEFAULT_PROPERTIES.put(DOCKER_HOST, "unix:///var/run/docker.sock");
         DEFAULT_PROPERTIES.put(DOCKER_CONFIG, "${user.home}/.docker");
         DEFAULT_PROPERTIES.put(REGISTRY_URL, "https://index.docker.io/v1/");
         DEFAULT_PROPERTIES.put(REGISTRY_USERNAME, "${user.name}");
-        DEFAULT_PROPERTIES.put(DOCKER_HOST_SET_EXPLICIT, "false");
     }
 
     private final URI dockerHost;
@@ -117,7 +116,6 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             if (is != null) {
                 Properties loadedProperties = new Properties();
                 loadedProperties.load(is);
-                checkAndMarkSettingDockerHost(loadedProperties);
                 p.putAll(loadedProperties);
             }
         } catch (IOException e) {
@@ -127,15 +125,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
         return p;
     }
 
-    private static void checkAndMarkSettingDockerHost(Properties properties) {
-        if (properties.containsKey(DOCKER_HOST)) {
-            properties.setProperty(DOCKER_HOST_SET_EXPLICIT, "true");
-        }
-    }
-
     private static void replaceProperties(Properties properties, Properties replacements) {
-        checkAndMarkSettingDockerHost(replacements);
-
         for (Object objectKey : properties.keySet()) {
             String key = objectKey.toString();
             properties.setProperty(key, replaceProperties(properties.getProperty(key), replacements));
@@ -169,7 +159,6 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             try (FileInputStream in = new FileInputStream(usersDockerPropertiesFile)) {
                 Properties loadedProperties = new Properties();
                 loadedProperties.load(in);
-                checkAndMarkSettingDockerHost(loadedProperties);
                 overriddenProperties.putAll(loadedProperties);
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -187,7 +176,6 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             String value = env.get(DOCKER_HOST);
             if (value != null && value.trim().length() != 0) {
                 overriddenProperties.setProperty(DOCKER_HOST, value);
-                overriddenProperties.setProperty(DOCKER_HOST_SET_EXPLICIT, "true");
             }
         }
 
@@ -219,10 +207,6 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             if (systemProperties.containsKey(key)) {
                 overriddenProperties.setProperty(key, systemProperties.getProperty(key));
             }
-        }
-
-        if (systemProperties.containsKey(DOCKER_HOST)) {
-            overriddenProperties.setProperty(DOCKER_HOST_SET_EXPLICIT, "true");
         }
 
         return overriddenProperties;
@@ -344,14 +328,12 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
     }
 
     public static class Builder {
-        private URI dockerHost;
+        private String dockerHost;
 
         private String apiVersion, registryUsername, registryPassword, registryEmail, registryUrl, dockerConfig,
                 dockerCertPath;
 
         private Boolean dockerTlsVerify;
-
-        private Boolean dockerHostSetExplicit;
 
         private SSLConfig customSslConfig = null;
 
@@ -369,17 +351,14 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
                     .withRegistryUsername(p.getProperty(REGISTRY_USERNAME))
                     .withRegistryPassword(p.getProperty(REGISTRY_PASSWORD))
                     .withRegistryEmail(p.getProperty(REGISTRY_EMAIL))
-                    .withRegistryUrl(p.getProperty(REGISTRY_URL))
-                    .withDockerHostSetExplicit(p.getProperty(DOCKER_HOST_SET_EXPLICIT));
+                    .withRegistryUrl(p.getProperty(REGISTRY_URL));
         }
 
         /**
          * configure DOCKER_HOST
          */
         public final Builder withDockerHost(String dockerHost) {
-            checkNotNull(dockerHost, "uri was not specified");
-            this.dockerHost = URI.create(dockerHost);
-            this.dockerHostSetExplicit = true;
+            this.dockerHost = dockerHost;
             return this;
         }
 
@@ -438,13 +417,8 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             return this;
         }
 
-        private Builder withDockerHostSetExplicit(String explicitDockerHost) {
-            this.dockerHostSetExplicit = Boolean.parseBoolean(explicitDockerHost);
-            return this;
-        }
-
         public final boolean isDockerHostSetExplicit() {
-            return dockerHostSetExplicit;
+            return dockerHost != null;
         }
 
         /**
@@ -470,7 +444,10 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
                 sslConfig = customSslConfig;
             }
 
-            return new DefaultDockerClientConfig(dockerHost, dockerConfig, apiVersion, registryUrl, registryUsername,
+            String dockerHostToUse = (!StringUtils.isEmpty(dockerHost)) ? dockerHost : DEFAULT_DOCKER_HOST;
+            URI dockerHostUri = URI.create(dockerHostToUse);
+
+            return new DefaultDockerClientConfig(dockerHostUri, dockerConfig, apiVersion, registryUrl, registryUsername,
                     registryPassword, registryEmail, sslConfig);
         }
 
