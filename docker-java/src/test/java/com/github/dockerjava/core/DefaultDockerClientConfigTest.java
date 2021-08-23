@@ -226,7 +226,7 @@ public class DefaultDockerClientConfigTest {
 
     @Test
     public void dockerHostSetExplicitlyOnSetter() {
-        DefaultDockerClientConfig.Builder builder = DefaultDockerClientConfig.createDefaultConfigBuilder();
+        DefaultDockerClientConfig.Builder builder = DefaultDockerClientConfig.createDefaultConfigBuilder(Collections.emptyMap(), new Properties());
         assertThat(builder.isDockerHostSetExplicitly(), is(false));
 
         builder.withDockerHost("tcp://foo");
