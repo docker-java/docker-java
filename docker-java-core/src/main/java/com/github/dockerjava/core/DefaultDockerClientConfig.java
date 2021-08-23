@@ -204,7 +204,6 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
                 overriddenProperties.setProperty(key, systemProperties.getProperty(key));
             }
         }
-
         return overriddenProperties;
     }
 
