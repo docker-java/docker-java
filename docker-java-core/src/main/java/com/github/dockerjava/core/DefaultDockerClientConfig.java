@@ -57,6 +57,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
     private static final Set<String> CONFIG_KEYS = new HashSet<>();
 
     static final Properties DEFAULT_PROPERTIES = new Properties();
+    public static final String DOCKER_HOST_IMPLICIT = "DOCKER_HOST_IMPLICIT";
 
     static {
         CONFIG_KEYS.add(DOCKER_HOST);
@@ -73,6 +74,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
         DEFAULT_PROPERTIES.put(DOCKER_CONFIG, "${user.home}/.docker");
         DEFAULT_PROPERTIES.put(REGISTRY_URL, "https://index.docker.io/v1/");
         DEFAULT_PROPERTIES.put(REGISTRY_USERNAME, "${user.name}");
+        DEFAULT_PROPERTIES.put(DOCKER_HOST_IMPLICIT, "true");
     }
 
     private final URI dockerHost;
@@ -113,7 +115,10 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
         p.putAll(DEFAULT_PROPERTIES);
         try (InputStream is = DefaultDockerClientConfig.class.getResourceAsStream("/" + DOCKER_JAVA_PROPERTIES)) {
             if (is != null) {
-                p.load(is);
+                Properties loadedProperties = new Properties();
+                loadedProperties.load(is);
+                checkAndMarkSettingDockerHost(loadedProperties);
+                p.putAll(loadedProperties);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -122,7 +127,15 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
         return p;
     }
 
+    private static void checkAndMarkSettingDockerHost(Properties properties) {
+        if (properties.containsKey(DOCKER_HOST)) {
+            properties.setProperty(DOCKER_HOST_IMPLICIT, "false");
+        }
+    }
+
     private static void replaceProperties(Properties properties, Properties replacements) {
+        checkAndMarkSettingDockerHost(replacements);
+
         for (Object objectKey : properties.keySet()) {
             String key = objectKey.toString();
             properties.setProperty(key, replaceProperties(properties.getProperty(key), replacements));
@@ -154,7 +167,10 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
                 "." + DOCKER_JAVA_PROPERTIES);
         if (usersDockerPropertiesFile.isFile()) {
             try (FileInputStream in = new FileInputStream(usersDockerPropertiesFile)) {
-                overriddenProperties.load(in);
+                Properties loadedProperties = new Properties();
+                loadedProperties.load(in);
+                checkAndMarkSettingDockerHost(loadedProperties);
+                overriddenProperties.putAll(loadedProperties);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -171,6 +187,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             String value = env.get(DOCKER_HOST);
             if (value != null && value.trim().length() != 0) {
                 overriddenProperties.setProperty(DOCKER_HOST, value);
+                overriddenProperties.setProperty(DOCKER_HOST_IMPLICIT, "false");
             }
         }
 
@@ -203,6 +220,11 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
                 overriddenProperties.setProperty(key, systemProperties.getProperty(key));
             }
         }
+
+        if (systemProperties.containsKey(DOCKER_HOST)) {
+            overriddenProperties.setProperty(DOCKER_HOST_IMPLICIT, "false");
+        }
+
         return overriddenProperties;
     }
 
@@ -329,6 +351,8 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
         private Boolean dockerTlsVerify;
 
+        private Boolean implicitDockerHost;
+
         private SSLConfig customSslConfig = null;
 
         /**
@@ -345,7 +369,8 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
                     .withRegistryUsername(p.getProperty(REGISTRY_USERNAME))
                     .withRegistryPassword(p.getProperty(REGISTRY_PASSWORD))
                     .withRegistryEmail(p.getProperty(REGISTRY_EMAIL))
-                    .withRegistryUrl(p.getProperty(REGISTRY_URL));
+                    .withRegistryUrl(p.getProperty(REGISTRY_URL))
+                    .withImplicitDockerHost(p.getProperty(DOCKER_HOST_IMPLICIT));
         }
 
         /**
@@ -354,15 +379,8 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
         public final Builder withDockerHost(String dockerHost) {
             checkNotNull(dockerHost, "uri was not specified");
             this.dockerHost = URI.create(dockerHost);
+            this.implicitDockerHost = false;
             return this;
-        }
-
-        /**
-         *  Considered default if dockerHost is set to the default value.
-         */
-        public final boolean hasDefaultDockerHost() {
-            URI defaultDockerHost = URI.create(DEFAULT_PROPERTIES.getProperty(DOCKER_HOST));
-            return this.dockerHost.equals(defaultDockerHost);
         }
 
         public final Builder withApiVersion(RemoteApiVersion apiVersion) {
@@ -418,6 +436,15 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
         public final Builder withDockerTlsVerify(Boolean dockerTlsVerify) {
             this.dockerTlsVerify = dockerTlsVerify;
             return this;
+        }
+
+        private Builder withImplicitDockerHost(String implicitDockerHost) {
+            this.implicitDockerHost = Boolean.parseBoolean(implicitDockerHost);
+            return this;
+        }
+
+        public final boolean usesImplicitDockerHost() {
+            return implicitDockerHost;
         }
 
         /**

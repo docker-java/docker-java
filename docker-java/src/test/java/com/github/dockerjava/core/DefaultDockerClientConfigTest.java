@@ -225,36 +225,36 @@ public class DefaultDockerClientConfigTest {
     }
 
     @Test
-    public void hasDefaultDockerHostRespectsSetter() {
+    public void usesImplicitDockerHostRespectsSetter() {
         DefaultDockerClientConfig.Builder builder = DefaultDockerClientConfig.createDefaultConfigBuilder();
-        assertThat(builder.hasDefaultDockerHost(), is(true));
+        assertThat(builder.usesImplicitDockerHost(), is(true));
 
         builder.withDockerHost("tcp://foo");
-        assertThat(builder.hasDefaultDockerHost(), is(false));
+        assertThat(builder.usesImplicitDockerHost(), is(false));
     }
 
     @Test
-    public void hasDefaultDockerHostRespectsSystemProperties() {
+    public void usesImplicittDockerHostRespectsSystemProperties() {
         Properties systemProperties = new Properties();
         systemProperties.put(DefaultDockerClientConfig.DOCKER_HOST, "tcp://foo");
 
         DefaultDockerClientConfig.Builder builder =  DefaultDockerClientConfig.createDefaultConfigBuilder(Collections.emptyMap(), systemProperties);
 
-        assertThat(builder.hasDefaultDockerHost(), is(false));
+        assertThat(builder.usesImplicitDockerHost(), is(false));
     }
 
     @Test
-    public void hasDefaultDockerHostRespectsEnv() {
+    public void usesImplicitDockerHostRespectsEnv() {
         Map<String, String> env = new HashMap<>();
         env.put(DefaultDockerClientConfig.DOCKER_HOST, "tcp://foo");
 
         DefaultDockerClientConfig.Builder builder =  DefaultDockerClientConfig.createDefaultConfigBuilder(env, new Properties());
 
-        assertThat(builder.hasDefaultDockerHost(), is(false));
+        assertThat(builder.usesImplicitDockerHost(), is(false));
     }
 
     @Test
-    public void hasDefaultDockerHostConsideredAsDefaultIfSetToDefault() {
+    public void usesImplicitDockerHostConsidersAsNotImplicitIfSetToDefaultByUser() {
         String defaultDockerHost = DefaultDockerClientConfig.DEFAULT_PROPERTIES
             .getProperty(DefaultDockerClientConfig.DOCKER_HOST);
 
@@ -263,7 +263,7 @@ public class DefaultDockerClientConfigTest {
 
         DefaultDockerClientConfig.Builder builder =  DefaultDockerClientConfig.createDefaultConfigBuilder(env, new Properties());
 
-        assertThat(builder.hasDefaultDockerHost(), is(true));
+        assertThat(builder.usesImplicitDockerHost(), is(false));
     }
 
 
