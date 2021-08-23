@@ -57,7 +57,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
     private static final Set<String> CONFIG_KEYS = new HashSet<>();
 
     static final Properties DEFAULT_PROPERTIES = new Properties();
-    public static final String DOCKER_HOST_IMPLICIT = "DOCKER_HOST_IMPLICIT";
+    public static final String DOCKER_HOST_SET_EXPLICIT = "DOCKER_HOST_EXPLICIT";
 
     static {
         CONFIG_KEYS.add(DOCKER_HOST);
@@ -74,7 +74,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
         DEFAULT_PROPERTIES.put(DOCKER_CONFIG, "${user.home}/.docker");
         DEFAULT_PROPERTIES.put(REGISTRY_URL, "https://index.docker.io/v1/");
         DEFAULT_PROPERTIES.put(REGISTRY_USERNAME, "${user.name}");
-        DEFAULT_PROPERTIES.put(DOCKER_HOST_IMPLICIT, "true");
+        DEFAULT_PROPERTIES.put(DOCKER_HOST_SET_EXPLICIT, "false");
     }
 
     private final URI dockerHost;
@@ -129,7 +129,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
     private static void checkAndMarkSettingDockerHost(Properties properties) {
         if (properties.containsKey(DOCKER_HOST)) {
-            properties.setProperty(DOCKER_HOST_IMPLICIT, "false");
+            properties.setProperty(DOCKER_HOST_SET_EXPLICIT, "true");
         }
     }
 
@@ -187,7 +187,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             String value = env.get(DOCKER_HOST);
             if (value != null && value.trim().length() != 0) {
                 overriddenProperties.setProperty(DOCKER_HOST, value);
-                overriddenProperties.setProperty(DOCKER_HOST_IMPLICIT, "false");
+                overriddenProperties.setProperty(DOCKER_HOST_SET_EXPLICIT, "true");
             }
         }
 
@@ -222,7 +222,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
         }
 
         if (systemProperties.containsKey(DOCKER_HOST)) {
-            overriddenProperties.setProperty(DOCKER_HOST_IMPLICIT, "false");
+            overriddenProperties.setProperty(DOCKER_HOST_SET_EXPLICIT, "true");
         }
 
         return overriddenProperties;
@@ -351,7 +351,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
         private Boolean dockerTlsVerify;
 
-        private Boolean implicitDockerHost;
+        private Boolean dockerHostSetExplicit;
 
         private SSLConfig customSslConfig = null;
 
@@ -370,7 +370,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
                     .withRegistryPassword(p.getProperty(REGISTRY_PASSWORD))
                     .withRegistryEmail(p.getProperty(REGISTRY_EMAIL))
                     .withRegistryUrl(p.getProperty(REGISTRY_URL))
-                    .withImplicitDockerHost(p.getProperty(DOCKER_HOST_IMPLICIT));
+                    .withDockerHostSetExplicit(p.getProperty(DOCKER_HOST_SET_EXPLICIT));
         }
 
         /**
@@ -379,7 +379,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
         public final Builder withDockerHost(String dockerHost) {
             checkNotNull(dockerHost, "uri was not specified");
             this.dockerHost = URI.create(dockerHost);
-            this.implicitDockerHost = false;
+            this.dockerHostSetExplicit = true;
             return this;
         }
 
@@ -438,13 +438,13 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             return this;
         }
 
-        private Builder withImplicitDockerHost(String implicitDockerHost) {
-            this.implicitDockerHost = Boolean.parseBoolean(implicitDockerHost);
+        private Builder withDockerHostSetExplicit(String explicitDockerHost) {
+            this.dockerHostSetExplicit = Boolean.parseBoolean(explicitDockerHost);
             return this;
         }
 
-        public final boolean usesImplicitDockerHost() {
-            return implicitDockerHost;
+        public final boolean isDockerHostSetExplicit() {
+            return dockerHostSetExplicit;
         }
 
         /**
