@@ -21,7 +21,6 @@ import java.util.stream.Stream;
  * @see HostConfig#getPortBindings()
  * @see NetworkSettings#getPorts()
  */
-@SuppressWarnings(value = "checkstyle:equalshashcode")
 public class Ports implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -107,7 +106,7 @@ public class Ports implements Serializable {
      * @see ExposedPort
      */
     @EqualsAndHashCode
-    public static class Binding implements Serializable {
+    public static class Binding extends DockerObject implements Serializable {
         private static final long serialVersionUID = 1L;
 
         /**

@@ -12,7 +12,7 @@ import java.net.URL;
  */
 @EqualsAndHashCode
 @ToString
-public class Repository implements Serializable {
+public class Repository extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public final String name;

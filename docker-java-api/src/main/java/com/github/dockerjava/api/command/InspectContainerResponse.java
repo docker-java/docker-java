@@ -3,6 +3,7 @@ package com.github.dockerjava.api.command;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.model.ContainerConfig;
+import com.github.dockerjava.api.model.DockerObject;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.NetworkSettings;
 import com.github.dockerjava.api.model.Volume;
@@ -24,7 +25,7 @@ import java.util.Map;
  */
 @EqualsAndHashCode
 @ToString
-public class InspectContainerResponse {
+public class InspectContainerResponse extends DockerObject {
 
     @JsonProperty("Args")
     private String[] args;
@@ -251,7 +252,7 @@ public class InspectContainerResponse {
 
     @EqualsAndHashCode
     @ToString
-    public class ContainerState {
+    public class ContainerState extends DockerObject {
 
         /**
          * @since {@link RemoteApiVersion#VERSION_1_20}
@@ -456,7 +457,7 @@ public class InspectContainerResponse {
 
     @EqualsAndHashCode
     @ToString
-    public static class Mount {
+    public static class Mount extends DockerObject {
 
         /**
          * @since {@link RemoteApiVersion#VERSION_1_20}
@@ -581,7 +582,7 @@ public class InspectContainerResponse {
 
     @EqualsAndHashCode
     @ToString
-    public class Node {
+    public class Node extends DockerObject {
 
         @JsonProperty("ID")
         private String id;

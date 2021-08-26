@@ -17,7 +17,7 @@ import static java.util.Objects.requireNonNull;
 @JsonPropertyOrder({"Name", "Soft", "Hard"})
 @EqualsAndHashCode
 @ToString
-public class Ulimit implements Serializable {
+public class Ulimit extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("Name")

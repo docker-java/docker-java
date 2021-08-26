@@ -11,7 +11,7 @@ import java.util.Optional;
  */
 @EqualsAndHashCode
 @ToString
-public class Identifier implements Serializable {
+public class Identifier extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public final Repository repository;

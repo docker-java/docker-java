@@ -91,6 +91,8 @@ DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
     .dockerHost(config.getDockerHost())
     .sslConfig(config.getSSLConfig())
     .maxConnections(100)
+    .connectionTimeout(Duration.ofSeconds(30))
+    .responseTimeout(Duration.ofSeconds(45))
     .build();
 ```
 

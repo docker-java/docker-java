@@ -16,7 +16,7 @@ import java.util.Map;
  */
 @EqualsAndHashCode
 @ToString
-public class ContainerConfig implements Serializable {
+public class ContainerConfig extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("AttachStderr")

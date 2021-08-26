@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode
 @ToString
-public class VersionPlatform implements Serializable {
+public class VersionPlatform extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;
 
     @JsonProperty("Name")
