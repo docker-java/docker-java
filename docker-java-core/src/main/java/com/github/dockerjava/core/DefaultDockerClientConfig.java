@@ -59,6 +59,8 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
     static final Properties DEFAULT_PROPERTIES = new Properties();
 
     static final String DEFAULT_DOCKER_HOST = "unix:///var/run/docker.sock";
+    
+    static final String WINDOWS_DEFAULT_DOCKER_HOST = "npipe:////./pipe/docker_engine";
 
     static {
         CONFIG_KEYS.add(DOCKER_HOST);
@@ -444,7 +446,8 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
                 sslConfig = customSslConfig;
             }
 
-            URI dockerHostUri = (dockerHost != null) ? dockerHost : URI.create(DEFAULT_DOCKER_HOST);
+            String defaultHost = SystemUtils.IS_OS_WINDOWS ? WINDOWS_DEFAULT_DOCKER_HOST : DEFAULT_DOCKER_HOST;
+            URI dockerHostUri = (dockerHost != null) ? dockerHost : URI.create(defaultHost);
 
             return new DefaultDockerClientConfig(dockerHostUri, dockerConfig, apiVersion, registryUrl, registryUsername,
                     registryPassword, registryEmail, sslConfig);
