@@ -11,12 +11,34 @@ import java.nio.channels.Channels;
 import java.nio.channels.SocketChannel;
 
 public class UnixSocket extends AbstractSocket {
+
+    /**
+     * Return a new {@link Socket} for the given path. Will use JDK's {@link java.net.UnixDomainSocketAddress}
+     * if available and fallback to {@link DomainSocket} otherwise.
+     *
+     * @param path the path to the domain socket
+     * @return a {@link Socket} instance
+     * @throws IOException if the socket cannot be opened
+     */
+    public static Socket get(String path) throws IOException {
+        try {
+            return new UnixSocket(path);
+        } catch (Exception e) {
+            //noinspection deprecation
+            return DomainSocket.get(path);
+        }
+    }
+
     private final SocketAddress socketAddress;
+
     private final SocketChannel socketChannel;
 
-    public UnixSocket(SocketAddress address) throws IOException {
-        this.socketAddress = address;
-        this.socketChannel = SocketChannel.open(address);
+    private UnixSocket(String path) throws Exception {
+        Class<?> unixDomainSocketAddress = Class.forName("java.net.UnixDomainSocketAddress");
+        this.socketAddress =
+            (SocketAddress) unixDomainSocketAddress.getMethod("of", String.class)
+                .invoke(null, path);
+        this.socketChannel = SocketChannel.open(this.socketAddress);
     }
 
     @Override
@@ -63,17 +85,5 @@ public class UnixSocket extends AbstractSocket {
     public void close() throws IOException {
         super.close();
         this.socketChannel.close();
-    }
-
-    public static Socket get(String dockerHost) throws IOException {
-        try {
-            Class unixDomainSocketAddress = Class.forName("java.net.UnixDomainSocketAddress");
-            SocketAddress address =
-                (SocketAddress) unixDomainSocketAddress.getMethod("of", String.class)
-                    .invoke(null, dockerHost);
-            return new UnixSocket(address);
-        } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            return DomainSocket.get(dockerHost);
-        }
     }
 }
