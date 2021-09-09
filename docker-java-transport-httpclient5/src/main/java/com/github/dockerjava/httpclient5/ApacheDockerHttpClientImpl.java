@@ -24,11 +24,13 @@ import org.apache.hc.core5.http.config.Registry;
 import org.apache.hc.core5.http.config.RegistryBuilder;
 import org.apache.hc.core5.http.impl.DefaultContentLengthStrategy;
 import org.apache.hc.core5.http.impl.io.EmptyInputStream;
+import org.apache.hc.core5.http.io.SocketConfig;
 import org.apache.hc.core5.http.io.entity.ByteArrayEntity;
 import org.apache.hc.core5.http.io.entity.InputStreamEntity;
 import org.apache.hc.core5.http.protocol.BasicHttpContext;
 import org.apache.hc.core5.http.protocol.HttpContext;
 import org.apache.hc.core5.net.URIAuthority;
+import org.apache.hc.core5.util.Timeout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,6 +94,12 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
                 },
                 null
             )
+        );
+        // See https://github.com/docker-java/docker-java/pull/1590#issuecomment-870581289
+        connectionManager.setDefaultSocketConfig(
+            SocketConfig.copy(SocketConfig.DEFAULT)
+                .setSoTimeout(Timeout.ZERO_MILLISECONDS)
+                .build()
         );
         connectionManager.setMaxTotal(maxConnections);
         connectionManager.setDefaultMaxPerRoute(maxConnections);
