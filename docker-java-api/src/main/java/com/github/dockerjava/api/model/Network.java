@@ -12,7 +12,7 @@ import java.util.Map;
 
 @EqualsAndHashCode
 @ToString
-public class Network implements Serializable {
+public class Network extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("Id")
@@ -94,7 +94,7 @@ public class Network implements Serializable {
 
     @EqualsAndHashCode
     @ToString
-    public static class ContainerNetworkConfig implements Serializable {
+    public static class ContainerNetworkConfig extends DockerObject implements Serializable {
         private static final long serialVersionUID = 1L;
 
         @JsonProperty("EndpointID")
@@ -128,7 +128,7 @@ public class Network implements Serializable {
 
     @EqualsAndHashCode
     @ToString
-    public static class Ipam implements Serializable {
+    public static class Ipam extends DockerObject implements Serializable {
         private static final long serialVersionUID = 1L;
 
         @JsonProperty("Driver")
@@ -167,7 +167,9 @@ public class Network implements Serializable {
             return this;
         }
 
-        public static class Config implements Serializable {
+        @EqualsAndHashCode
+        @ToString
+        public static class Config extends DockerObject implements Serializable {
             private static final long serialVersionUID = 1L;
 
             @JsonProperty("Subnet")

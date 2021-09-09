@@ -14,7 +14,7 @@ import java.util.Map;
  */
 @EqualsAndHashCode
 @ToString
-public class EventActor implements Serializable {
+public class EventActor extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

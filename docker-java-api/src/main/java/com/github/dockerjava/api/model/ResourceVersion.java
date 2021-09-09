@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode
 @ToString
-public class ResourceVersion implements Serializable {
+public class ResourceVersion extends DockerObject implements Serializable {
 
     public static final long serialVersionUID = 1L;
 

@@ -13,7 +13,7 @@ import java.util.Date;
  */
 @EqualsAndHashCode
 @ToString
-public class ServiceUpdateStatus implements Serializable {
+public class ServiceUpdateStatus extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;
 
     /**

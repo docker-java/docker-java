@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode
 @ToString
-public class ServiceModeConfig implements Serializable {
+public class ServiceModeConfig extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;
 
     /**

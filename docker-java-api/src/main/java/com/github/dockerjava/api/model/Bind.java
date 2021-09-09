@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.model;
 
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -9,7 +10,8 @@ import java.io.Serializable;
  * The Bind can be in read only or read write access mode.
  */
 @EqualsAndHashCode
-public class Bind implements Serializable {
+@ToString
+public class Bind extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String path;

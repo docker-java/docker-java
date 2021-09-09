@@ -11,7 +11,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode
 @ToString
-public class TmpfsOptions implements Serializable {
+public class TmpfsOptions extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
     @JsonProperty("SizeBytes")
     //The size for the tmpfs mount in bytes.

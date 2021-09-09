@@ -1,6 +1,8 @@
 package com.github.dockerjava.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -10,7 +12,9 @@ import java.util.Date;
  *
  * @since {@link RemoteApiVersion#VERSION_1_25}
  */
-public class Secret implements Serializable {
+@EqualsAndHashCode
+@ToString
+public class Secret extends DockerObject implements Serializable {
     public static final long serialVersionUID = 1L;
 
     /**

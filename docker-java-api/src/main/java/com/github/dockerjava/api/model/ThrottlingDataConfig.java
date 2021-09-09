@@ -14,7 +14,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode
 @ToString
-public class ThrottlingDataConfig implements Serializable {
+public class ThrottlingDataConfig extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("periods")

@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dockerjava.api.model.DockerObject;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -12,7 +13,7 @@ import java.util.Map;
  */
 @EqualsAndHashCode
 @ToString
-public class InspectVolumeResponse {
+public class InspectVolumeResponse extends DockerObject {
 
     @JsonProperty("Name")
     private String name;
