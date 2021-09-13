@@ -13,11 +13,20 @@ public enum PropagationMode {
     /** shared */
     SHARED("shared"),
 
+    /** rshared */
+    RSHARED("rshared"),
+
     /** slave */
     SLAVE("slave"),
 
+    /** rslave */
+    RSLAVE("rslave"),
+
     /** private */
-    PRIVATE("private");
+    PRIVATE("private"),
+
+    /** rprivate */
+    RPRIVATE("rprivate");
 
     /**
      * The default {@link PropagationMode}: {@link #DEFAULT}
@@ -39,10 +48,16 @@ public enum PropagationMode {
         switch (v) {
         case "shared":
             return SHARED;
+        case "rshared":
+            return RSHARED;
         case "slave":
             return SLAVE;
+        case "rslave":
+            return RSLAVE;
         case "private":
             return PRIVATE;
+        case "rprivate":
+            return RPRIVATE;
         default:
             return DEFAULT;
         }
