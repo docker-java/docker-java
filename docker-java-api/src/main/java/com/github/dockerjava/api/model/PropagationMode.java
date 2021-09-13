@@ -26,8 +26,7 @@ public enum PropagationMode {
     PRIVATE("private"),
 
     /** rprivate */
-    RPRIVATE("rprivate"),
-    ;
+    RPRIVATE("rprivate");
 
     /**
      * The default {@link PropagationMode}: {@link #DEFAULT}
