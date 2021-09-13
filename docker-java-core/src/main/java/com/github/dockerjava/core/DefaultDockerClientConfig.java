@@ -6,6 +6,7 @@ import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.core.NameParser.HostnameReposName;
 import com.github.dockerjava.core.NameParser.ReposTag;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -58,6 +59,10 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
     static final Properties DEFAULT_PROPERTIES = new Properties();
 
+    static final String DEFAULT_DOCKER_HOST = "unix:///var/run/docker.sock";
+
+    static final String WINDOWS_DEFAULT_DOCKER_HOST = "npipe:////./pipe/docker_engine";
+
     static {
         CONFIG_KEYS.add(DOCKER_HOST);
         CONFIG_KEYS.add(DOCKER_TLS_VERIFY);
@@ -69,7 +74,6 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
         CONFIG_KEYS.add(REGISTRY_EMAIL);
         CONFIG_KEYS.add(REGISTRY_URL);
 
-        DEFAULT_PROPERTIES.put(DOCKER_HOST, "unix:///var/run/docker.sock");
         DEFAULT_PROPERTIES.put(DOCKER_CONFIG, "${user.home}/.docker");
         DEFAULT_PROPERTIES.put(REGISTRY_URL, "https://index.docker.io/v1/");
         DEFAULT_PROPERTIES.put(REGISTRY_USERNAME, "${user.name}");
@@ -337,8 +341,12 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
          * registry.email, DOCKER_CERT_PATH, and DOCKER_CONFIG.
          */
         public Builder withProperties(Properties p) {
-            return withDockerHost(p.getProperty(DOCKER_HOST))
-                    .withDockerTlsVerify(p.getProperty(DOCKER_TLS_VERIFY))
+
+            if (p.getProperty(DOCKER_HOST) != null) {
+                withDockerHost(p.getProperty(DOCKER_HOST));
+            }
+
+            return withDockerTlsVerify(p.getProperty(DOCKER_TLS_VERIFY))
                     .withDockerConfig(p.getProperty(DOCKER_CONFIG))
                     .withDockerCertPath(p.getProperty(DOCKER_CERT_PATH))
                     .withApiVersion(p.getProperty(API_VERSION))
@@ -412,6 +420,10 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             return this;
         }
 
+        public final boolean isDockerHostSetExplicitly() {
+            return dockerHost != null;
+        }
+
         /**
          * Overrides the default {@link SSLConfig} that is used when calling {@link Builder#withDockerTlsVerify(java.lang.Boolean)} and
          * {@link Builder#withDockerCertPath(String)}. This way it is possible to pass a custom {@link SSLConfig} to the resulting
@@ -435,7 +447,11 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
                 sslConfig = customSslConfig;
             }
 
-            return new DefaultDockerClientConfig(dockerHost, dockerConfig, apiVersion, registryUrl, registryUsername,
+            URI dockerHostUri = dockerHost != null
+                ? dockerHost
+                : URI.create(SystemUtils.IS_OS_WINDOWS ? WINDOWS_DEFAULT_DOCKER_HOST : DEFAULT_DOCKER_HOST);
+
+            return new DefaultDockerClientConfig(dockerHostUri, dockerConfig, apiVersion, registryUrl, registryUsername,
                     registryPassword, registryEmail, sslConfig);
         }
 

@@ -47,7 +47,7 @@ public interface CreateNetworkCmd extends SyncDockerCmd<CreateNetworkResponse> {
     /** Name of the network driver to use. Defaults to <code>bridge</code>. */
     CreateNetworkCmd withDriver(String driver);
 
-    /** Ipam config, such es subnet, gateway and ip range of the network */
+    /** Ipam config, such as subnet, gateway and ip range of the network */
     CreateNetworkCmd withIpam(Ipam ipam);
 
     /** Driver specific options */
