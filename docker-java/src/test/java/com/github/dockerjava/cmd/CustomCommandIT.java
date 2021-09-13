@@ -1,6 +1,7 @@
 package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.core.DockerClientImpl;
+import com.github.dockerjava.core.DockerRule;
 import com.github.dockerjava.transport.DockerHttpClient;
 import com.github.dockerjava.transport.DockerHttpClient.Request;
 import com.github.dockerjava.transport.DockerHttpClient.Response;
@@ -17,7 +18,8 @@ public class CustomCommandIT extends CmdIT {
 
     @Test
     public void testCustomCommand() throws Exception {
-        DockerHttpClient httpClient = ((DockerClientImpl) dockerRule.getClient()).getHttpClient();
+        DockerClientImpl dockerClient = getFactoryType().createDockerClient(DockerRule.config(null));
+        DockerHttpClient httpClient = dockerClient.getHttpClient();
 
         Assume.assumeNotNull(httpClient);
 
