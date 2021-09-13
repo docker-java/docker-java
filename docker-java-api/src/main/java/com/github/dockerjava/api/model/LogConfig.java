@@ -76,7 +76,8 @@ public class LogConfig extends DockerObject implements Serializable {
         AWSLOGS("awslogs"),
         DB("db"), // Synology specific driver
         SPLUNK("splunk"),
-        GCPLOGS("gcplogs");
+        GCPLOGS("gcplogs"),
+        LOKI("loki");
 
         private String type;
 
