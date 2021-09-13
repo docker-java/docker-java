@@ -1,6 +1,7 @@
 package com.github.dockerjava.core;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.DockerClientDelegate;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.CreateNetworkCmd;
@@ -48,7 +49,6 @@ public class DockerRule extends ExternalResource {
 
     public DockerClient newClient() {
         DockerClientImpl dockerClient = cmdIT.getFactoryType().createDockerClient(config());
-        DockerHttpClient dockerHttpClient = dockerClient.getHttpClient();
 
         dockerClient.withDockerCmdExecFactory(
             new DockerCmdExecFactoryDelegate(dockerClient.dockerCmdExecFactory) {
@@ -84,10 +84,10 @@ public class DockerRule extends ExternalResource {
             }
         );
 
-        return new DockerClientDelegate(dockerClient) {
+        return new DockerClientDelegate() {
             @Override
-            public DockerHttpClient getHttpClient() {
-                return dockerHttpClient;
+            protected DockerClient getDockerClient() {
+                return dockerClient;
             }
         };
     }
