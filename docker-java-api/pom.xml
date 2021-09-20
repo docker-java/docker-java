@@ -60,7 +60,7 @@
 		<dependency>
 			<groupId>com.tngtech.archunit</groupId>
 			<artifactId>archunit</artifactId>
-			<version>0.18.0</version>
+			<version>0.21.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
