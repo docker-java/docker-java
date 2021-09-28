@@ -8,6 +8,8 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import com.github.dockerjava.api.command.LogContainerCmd;
 import com.github.dockerjava.api.model.Frame;
 
+import javax.annotation.CheckForNull;
+
 /**
  * Get container logs
  *
@@ -24,6 +26,8 @@ import com.github.dockerjava.api.model.Frame;
  * @param since
  *            - UNIX timestamp (integer) to filter logs. Specifying a timestamp will only output log-entries since that timestamp. Default:
  *            0 (unfiltered)
+ * @param until
+ *            - Only return logs before this time, as a UNIX timestamp. Default: 0
  */
 public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Frame> implements LogContainerCmd {
 
@@ -31,7 +35,7 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
 
     private Boolean followStream, timestamps, stdout, stderr;
 
-    private Integer tail, since;
+    private Integer tail, since, until;
 
     public LogContainerCmdImpl(LogContainerCmd.Exec exec, String containerId) {
         super(exec);
@@ -71,6 +75,11 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
     @Override
     public Integer getSince() {
         return since;
+    }
+
+    @Override
+    public Integer getUntil() {
+        return until;
     }
 
     @Override
@@ -119,6 +128,12 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
     @Override
     public LogContainerCmd withSince(Integer since) {
         this.since = since;
+        return this;
+    }
+
+    @Override
+    public LogContainerCmd withUntil(Integer until) {
+        this.until = until;
         return this;
     }
 
