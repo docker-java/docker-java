@@ -30,6 +30,7 @@ import org.apache.hc.core5.http.io.entity.InputStreamEntity;
 import org.apache.hc.core5.http.protocol.BasicHttpContext;
 import org.apache.hc.core5.http.protocol.HttpContext;
 import org.apache.hc.core5.net.URIAuthority;
+import org.apache.hc.core5.util.TimeValue;
 import org.apache.hc.core5.util.Timeout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -101,6 +102,7 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
                 .setSoTimeout(Timeout.ZERO_MILLISECONDS)
                 .build()
         );
+        connectionManager.setValidateAfterInactivity(TimeValue.NEG_ONE_SECOND);
         connectionManager.setMaxTotal(maxConnections);
         connectionManager.setDefaultMaxPerRoute(maxConnections);
         RequestConfig.Builder defaultRequest = RequestConfig.custom();
