@@ -16,4 +16,7 @@ public enum MountType {
     @JsonProperty("tmpfs")
     TMPFS
 
+    @JsonProperty("npipe")
+    NPIPE
+
 }
