@@ -61,7 +61,7 @@
 		<jackson.version>2.10.3</jackson.version>
 		<jackson-jaxrs.version>2.10.3</jackson-jaxrs.version>
 		<httpclient.version>4.5.12</httpclient.version><!-- 4.5.1-4.5.2 broken -->
-		<commons-compress.version>1.20</commons-compress.version>
+		<commons-compress.version>1.21</commons-compress.version>
 		<commons-codec.version>1.11</commons-codec.version>
 		<commons-io.version>2.6</commons-io.version>
 		<commons-lang.version>2.6</commons-lang.version>
@@ -93,6 +93,7 @@
 
 	<modules>
 		<module>docker-java-api</module>
+		<module>docker-java-bom</module>
 		<module>docker-java-core</module>
 		<module>docker-java-transport</module>
 		<module>docker-java-transport-netty</module>

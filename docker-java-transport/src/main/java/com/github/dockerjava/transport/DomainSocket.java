@@ -130,7 +130,9 @@ public abstract class DomainSocket extends AbstractSocket {
      * @param path the path to the domain socket
      * @return a {@link DomainSocket} instance
      * @throws IOException if the socket cannot be opened
+     * @deprecated use {@link UnixSocket#get(String)}
      */
+    @Deprecated
     public static DomainSocket get(String path) throws IOException {
         if (Platform.isMac() || isBsdPlatform()) {
             return new BsdDomainSocket(path);
