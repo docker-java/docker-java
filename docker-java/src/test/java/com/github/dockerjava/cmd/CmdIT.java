@@ -23,49 +23,49 @@ import java.util.Arrays;
 @RunWith(Parameterized.class)
 public abstract class CmdIT {
     public enum FactoryType {
-        NETTY(true) {
-            @Override
-            public DockerClientImpl createDockerClient(DockerClientConfig config) {
-                return (DockerClientImpl) DockerClientBuilder.getInstance(config)
-                    .withDockerCmdExecFactory(
-                        new NettyDockerCmdExecFactory()
-                            .withConnectTimeout(30 * 1000)
-                    )
-                    .build();
-            }
-        },
-        JERSEY(false) {
-            @Override
-            public DockerClientImpl createDockerClient(DockerClientConfig config) {
-                return (DockerClientImpl) DockerClientBuilder.getInstance(config)
-                    .withDockerHttpClient(
-                        new TrackingDockerHttpClient(
-                            new JerseyDockerHttpClient.Builder()
-                                .dockerHost(config.getDockerHost())
-                                .sslConfig(config.getSSLConfig())
-                                .connectTimeout(30 * 1000)
-                                .build()
-                        )
-                    )
-                    .build();
-            }
-        },
-        OKHTTP(true) {
-            @Override
-            public DockerClientImpl createDockerClient(DockerClientConfig config) {
-                return (DockerClientImpl) DockerClientBuilder.getInstance(config)
-                    .withDockerHttpClient(
-                        new TrackingDockerHttpClient(
-                            new OkDockerHttpClient.Builder()
-                                .dockerHost(config.getDockerHost())
-                                .sslConfig(config.getSSLConfig())
-                                .connectTimeout(30 * 100)
-                                .build()
-                        )
-                    )
-                    .build();
-            }
-        },
+//        NETTY(true) {
+//            @Override
+//            public DockerClientImpl createDockerClient(DockerClientConfig config) {
+//                return (DockerClientImpl) DockerClientBuilder.getInstance(config)
+//                    .withDockerCmdExecFactory(
+//                        new NettyDockerCmdExecFactory()
+//                            .withConnectTimeout(30 * 1000)
+//                    )
+//                    .build();
+//            }
+//        },
+//        JERSEY(false) {
+//            @Override
+//            public DockerClientImpl createDockerClient(DockerClientConfig config) {
+//                return (DockerClientImpl) DockerClientBuilder.getInstance(config)
+//                    .withDockerHttpClient(
+//                        new TrackingDockerHttpClient(
+//                            new JerseyDockerHttpClient.Builder()
+//                                .dockerHost(config.getDockerHost())
+//                                .sslConfig(config.getSSLConfig())
+//                                .connectTimeout(30 * 1000)
+//                                .build()
+//                        )
+//                    )
+//                    .build();
+//            }
+//        },
+//        OKHTTP(true) {
+//            @Override
+//            public DockerClientImpl createDockerClient(DockerClientConfig config) {
+//                return (DockerClientImpl) DockerClientBuilder.getInstance(config)
+//                    .withDockerHttpClient(
+//                        new TrackingDockerHttpClient(
+//                            new OkDockerHttpClient.Builder()
+//                                .dockerHost(config.getDockerHost())
+//                                .sslConfig(config.getSSLConfig())
+//                                .connectTimeout(30 * 100)
+//                                .build()
+//                        )
+//                    )
+//                    .build();
+//            }
+//        },
         HTTPCLIENT5(true) {
             @Override
             public DockerClientImpl createDockerClient(DockerClientConfig config) {
