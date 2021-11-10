@@ -41,7 +41,9 @@ public class RemoveSwarmNodeCmdExecIT extends SwarmCmdIT {
         assertThat(2, is(nodes.size()));
         Optional<SwarmNode> firstWorkNode = nodes.stream().filter(node -> node.getSpec().getRole() == SwarmNodeRole.WORKER)
                                                  .findFirst();
-        dockerClient.removeSwarmNodeCmd(firstWorkNode.get().getId()).exec();
+        dockerClient.removeSwarmNodeCmd(firstWorkNode.get().getId())
+                    .withForce(true)
+                    .exec();
         nodes = dockerClient.listSwarmNodesCmd().exec();
         assertThat(nodes.size(), is(1));
     }
