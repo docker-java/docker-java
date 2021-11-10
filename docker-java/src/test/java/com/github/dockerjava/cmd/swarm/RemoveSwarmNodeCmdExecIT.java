@@ -20,7 +20,7 @@ public class RemoveSwarmNodeCmdExecIT extends SwarmCmdIT {
     private static final Logger LOGGER = LoggerFactory.getLogger(RemoveSwarmNodeCmdExecIT.class);
 
     @Test
-    public void testUpdateSwarmNode() throws Exception {
+    public void testRemoveSwarmNode() throws Exception {
         DockerClient dockerClient = startSwarm();
         Swarm swarm = dockerClient.inspectSwarmCmd().exec();
 
