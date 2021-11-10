@@ -15,12 +15,6 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-/**
- * Remove swarm node cmd test
- *
- * @author 訾明华
- * @since 2021-11-10
- */
 public class RemoveSwarmNodeCmdExecIT extends SwarmCmdIT {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RemoveSwarmNodeCmdExecIT.class);
