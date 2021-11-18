@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier;
@@ -68,7 +69,8 @@ enum DefaultObjectMapperHolder {
     private final ObjectMapper objectMapper = new ObjectMapper()
             // TODO .setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL)
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-            .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+            .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+            .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS);
 
     {
         ObjectMapper originalObjectMapper = objectMapper.copy();
