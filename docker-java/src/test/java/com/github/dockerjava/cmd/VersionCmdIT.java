@@ -2,7 +2,7 @@ package com.github.dockerjava.cmd;
 
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.Version;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

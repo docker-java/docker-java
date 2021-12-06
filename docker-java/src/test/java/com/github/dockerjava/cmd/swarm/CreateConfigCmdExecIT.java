@@ -2,7 +2,7 @@ package com.github.dockerjava.cmd.swarm;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateConfigResponse;
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
