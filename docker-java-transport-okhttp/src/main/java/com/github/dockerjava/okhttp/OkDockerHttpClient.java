@@ -168,7 +168,8 @@ public final class OkDockerHttpClient implements DockerHttpClient {
                 baseUrlBuilder = new HttpUrl.Builder()
                     .scheme(isSSL ? "https" : "http")
                     .host(dockerHost.getHost())
-                    .port(dockerHost.getPort());
+                    .port(dockerHost.getPort())
+                    .addPathSegment(dockerHost.getPath());
                 break;
             default:
                 baseUrlBuilder = HttpUrl.get(dockerHost.toString()).newBuilder();
