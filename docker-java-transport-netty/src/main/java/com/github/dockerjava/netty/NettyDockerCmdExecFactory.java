@@ -16,7 +16,7 @@ import javax.net.ssl.SSLParameters;
 
 import com.github.dockerjava.core.AbstractDockerCmdExecFactory;
 import com.github.dockerjava.core.WebTarget;
-import org.apache.commons.lang.SystemUtils;
+import org.apache.commons.lang3.SystemUtils;
 
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.core.DockerClientConfig;
