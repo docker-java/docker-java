@@ -6,14 +6,13 @@
 .project
 .settings
 .classpath
+.factorypath
 
 # Ignore all build/dist directories
 target
 
 # Ignore InteliJ Idea project files
-.idea
-!.idea/codeStyleSettings.xml
-!.idea/encodings.xml
+.idea/
 *.iml
 *.iws
 *.ipr
