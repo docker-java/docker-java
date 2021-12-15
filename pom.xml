@@ -1,16 +1,356 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
-    <artifactId>docker-java</artifactId>
-    <version>1.0-SNAPSHOT</version>
+	<groupId>com.github.docker-java</groupId>
+	<artifactId>docker-java-parent</artifactId>
+	<packaging>pom</packaging>
+	<version>0-SNAPSHOT</version>
 
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
+	<name>docker-java-parent</name>
+	<url>https://github.com/docker-java/docker-java</url>
+	<description>Java API Client for Docker</description>
+
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<connection>scm:git:git@github.com:docker-java/docker-java.git</connection>
+		<url>git@github.com:docker-java/docker-java.git</url>
+		<developerConnection>scm:git:git@github.com:docker-java/docker-java.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+
+	<developers>
+		<developer>
+			<id>marcuslinke</id>
+			<name>Marcus Linke</name>
+			<email>marcus.linke@gmx.de</email>
+		</developer>
+		<developer>
+			<id>kostyasha</id>
+			<name>Kanstantsin Shautsou</name>
+			<email>kanstantsin.sha@gmail.com</email>
+		</developer>
+		<developer>
+			<id>kpelykh</id>
+			<name>Konstantin Pelykh</name>
+			<email>kpelykh@gmail.com</email>
+		</developer>
+		<developer>
+			<id>bsideup</id>
+			<name>Sergei Egorov</name>
+			<email>bsideup@gmail.com</email>
+		</developer>
+	</developers>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<jdk.debug>true</jdk.debug>
+		<jdk.optimize>false</jdk.optimize>
+		<jdk.source>1.8</jdk.source>
+		<jdk.target>1.8</jdk.target>
+
+		<jersey.version>2.30.1</jersey.version>
+		<jackson.version>2.10.3</jackson.version>
+		<jackson-jaxrs.version>2.10.3</jackson-jaxrs.version>
+		<httpclient.version>4.5.12</httpclient.version><!-- 4.5.1-4.5.2 broken -->
+		<commons-compress.version>1.21</commons-compress.version>
+		<commons-codec.version>1.11</commons-codec.version>
+		<commons-io.version>2.6</commons-io.version>
+		<commons-lang3.version>3.12.0</commons-lang3.version>
+		<slf4j-api.version>1.7.30</slf4j-api.version>
+
+		<bouncycastle.version>1.64</bouncycastle.version>
+		<junixsocket.version>2.3.2</junixsocket.version>
+		<guava.version>19.0</guava.version> <!-- todo remove from project -->
+
+		<!-- test dependencies -->
+		<logback.version>1.2.3</logback.version>
+		<netty.version>4.1.46.Final</netty.version>
+		<hamcrest.library.version>2.2</hamcrest.library.version>
+		<hamcrest.jpa-matchers>1.8</hamcrest.jpa-matchers>
+		<lambdaj.version>2.3.3</lambdaj.version>
+		<mockito.version>3.3.0</mockito.version>
+
+
+		<maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
+		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+		<maven-release-plugin.version>3.0.0-M1</maven-release-plugin.version>
+		<maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
+		<maven-failsafe-plugin.version>3.0.0-M4</maven-failsafe-plugin.version>
+		<maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
+		<maven-bundlor-plugin.version>1.1.2.RELEASE</maven-bundlor-plugin.version>
+		<maven-build-helper-plugin.version>3.0.0</maven-build-helper-plugin.version>
+		<nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
+	</properties>
+
+	<modules>
+		<module>docker-java-api</module>
+		<module>docker-java-bom</module>
+		<module>docker-java-core</module>
+		<module>docker-java-transport</module>
+		<module>docker-java-transport-netty</module>
+		<module>docker-java-transport-jersey</module>
+		<module>docker-java-transport-okhttp</module>
+		<module>docker-java-transport-httpclient5</module>
+		<module>docker-java-transport-zerodep</module>
+		<module>docker-java</module>
+	</modules>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>3.0.0-M1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-gpg-plugin</artifactId>
+					<version>1.6</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>3.0.0-M1</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>${maven-surefire-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven-compiler-plugin.version}</version>
+					<configuration>
+						<source>${jdk.source}</source>
+						<target>${jdk.target}</target>
+						<debug>${jdk.debug}</debug>
+						<optimize>${jdk.optimize}</optimize>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>${maven-jar-plugin.version}</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>test-jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>${maven-antrun-plugin.version}</version>
+					<executions>
+						<execution>
+							<phase>validate</phase>
+							<goals>
+								<goal>run</goal>
+							</goals>
+							<configuration>
+								<tasks>
+									<echo>*******************************************************************</echo>
+									<echo>*******************************************************************</echo>
+									<echo>[project.name] : ${project.name}</echo>
+									<echo>[project.basedir] : ${project.basedir}</echo>
+									<echo>[project.version] : ${project.version}</echo>
+									<echo>[project.artifactId] ${project.artifactId}</echo>
+									<echo>[project.build.directory] ${project.build.directory}</echo>
+									<echo>[jdk.source] : ${jdk.source}</echo>
+									<echo>[jdk.target] : ${jdk.target}</echo>
+									<echo>[jdk.debug] : ${jdk.debug}</echo>
+									<echo>[jdk.optimize] : ${jdk.optimize}</echo>
+									<echo>[source encoding]: ${project.build.sourceEncoding}</echo>
+									<echo>[LocalRepository] : ${settings.localRepository}</echo>
+									<echo>*******************************************************************</echo>
+									<echo>*******************************************************************</echo>
+								</tasks>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>3.0.1</version>
+					<executions>
+						<execution>
+							<id>attach-sources</id>
+							<goals>
+								<goal>jar-no-fork</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>2.10.4</version>
+					<configuration>
+						<additionalparam>-Xdoclint:none</additionalparam>
+					</configuration>
+					<executions>
+						<execution>
+							<id>attach-javadocs</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.felix</groupId>
+					<artifactId>maven-bundle-plugin</artifactId>
+					<version>4.2.1</version>
+				</plugin>
+
+
+				<plugin>
+					<!-- use with "mvn -DskipTests clean verify" -->
+					<groupId>com.github.siom79.japicmp</groupId>
+					<artifactId>japicmp-maven-plugin</artifactId>
+					<version>0.14.3</version>
+					<configuration>
+						<oldVersion>
+							<dependency>
+								<groupId>com.github.docker-java</groupId>
+								<artifactId>${project.artifactId}</artifactId>
+								<version>3.2.0</version>
+								<type>jar</type>
+							</dependency>
+						</oldVersion>
+						<newVersion>
+							<file>
+								<path>${project.build.directory}/${project.artifactId}-${project.version}.jar</path>
+							</file>
+						</newVersion>
+						<parameter>
+							<breakBuildOnBinaryIncompatibleModifications>true</breakBuildOnBinaryIncompatibleModifications>
+							<accessModifier>public</accessModifier>
+							<onlyBinaryIncompatible>true</onlyBinaryIncompatible>
+							<overrideCompatibilityChangeParameters>
+								<overrideCompatibilityChangeParameter>
+									<compatibilityChange>METHOD_NEW_DEFAULT</compatibilityChange>
+									<binaryCompatible>true</binaryCompatible>
+									<sourceCompatible>true</sourceCompatible>
+								</overrideCompatibilityChangeParameter>
+								<overrideCompatibilityChangeParameter>
+									<compatibilityChange>METHOD_ABSTRACT_NOW_DEFAULT</compatibilityChange>
+									<binaryCompatible>true</binaryCompatible>
+									<sourceCompatible>true</sourceCompatible>
+								</overrideCompatibilityChangeParameter>
+							</overrideCompatibilityChangeParameters>
+						</parameter>
+					</configuration>
+					<executions>
+						<execution>
+							<phase>verify</phase>
+							<goals>
+								<goal>cmp</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>docker-java-analyses</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-checkstyle-plugin</artifactId>
+						<version>2.17</version>
+						<executions>
+							<execution>
+								<id>checkstyle</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>check</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<encoding>UTF-8</encoding>
+							<failOnViolation>true</failOnViolation>
+							<logViolationsToConsole>true</logViolationsToConsole>
+							<linkXRef>false</linkXRef>
+							<!-- if some IDE has integration and requires other place, propose
+								it -->
+							<configLocation>
+								${maven.multiModuleProjectDirectory}/src/test/resources/checkstyle/checkstyle-config.xml
+							</configLocation>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>
