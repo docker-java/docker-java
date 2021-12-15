@@ -14,6 +14,10 @@ public enum MountType {
 
     //@since 1.29
     @JsonProperty("tmpfs")
-    TMPFS
+    TMPFS,
+
+    //@since 1.40
+    @JsonProperty("npipe")
+    NPIPE
 
 }
