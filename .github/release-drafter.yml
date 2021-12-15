@@ -1,0 +1,19 @@
+tag-template: $NEXT_PATCH_VERSION
+name-template: '$NEXT_PATCH_VERSION 🌈'
+categories:
+  - title: '🚀 Features'
+    labels:
+      - 'type/feature'
+  - title: '📈 Enhancements'
+    labels:
+      - 'type/enhancement'
+  - title: '🐛 Bug Fixes'
+    labels:
+      - 'type/bug'
+  - title: '🧰 Maintenance'
+    label: 'type/housekeeping'
+change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
+template: |
+  ## Changes
+
+  $CHANGES

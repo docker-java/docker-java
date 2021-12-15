@@ -1,8 +1,94 @@
 Change Log
 ===
-## 3.1.0 WIP
+
+
+## 3.2.0
+- **Changelog is not maintained in this file. Please follow git diff or github releases.**
+- Library was split into multiple modules to get ability to choose transports.
+Okhttp was added (say thanks to @bsideup).
+- Various cleanup, tests de-duplication internally. Planned binary compatibility breakage was reverted by @testcontainers project, so migration should work smoothly. Please switch to non-deprecated methods.
+- Appeared various new commands and Fields(command options for existing commands).
+
+## 3.1.2
+- update unix-socket to 2.2.0
+- Remove `JacksonJaxbJsonProvider` from `FiltersEncoder`
+- BuildImageCmdImpl: Fix an exception message
+- Add support for target parameter in BuildImgCmd
+- Add prune operations
+- Updating Jackson due to CVEs
+- Make StatsConfig public
+- Set 3 mb as limit for json responce. 
+
+## 3.1.1
+- Patch save image with tag
+- [api/healthcheck] startPeriod is now a long
+
+## 3.1.0 
+- Release
+
+## 3.1.0-rc-8
+- Do awaitCompletion upon socket close exception
+- Fix `X-Registry-Auth` base64 encoding
+
+## 3.1.0-rc-7
+- Fix NPE when docker config file doesn't exist
+
+## 3.1.0-rc-6
+- Add resize feature to container and exec
+- Update part of apis to 1.37
+- Update dependencies
+- Fix No serializer found for class com.githubdockerjava.api.model.ServiceGlobalModeOptions
+- Add HostConfig.StorageOpt and ExecCreateCmd.Env
+- Added GCPLOGS enum LoggingType
+- Stop proxying HostConfig class (static helper provided)
+- Add ExecCreateCmd.Env
+- Add failcnt into memorystatsconfig
+- Support some missing Engine APIs
+- Added memory swappiness to create container command.
+- Fix for ignore all files except specified
+
+## 3.1.0-rc-5
+- Add missing properties in InspectContainer response
+- Add withFilter methods in ListNetworksCmd & ListVolumesCmd
+- Add WorkingDir property in containers exec
+- Add isolation property support in Info response
+- Support platform option in image build/create/pull commands
+- Add OSVersion and RootFS support in InspectImageResponse
+- Fix double-marshalling of cachefrom
+- make AuthConfig compatible with indentitytoken
+- Allow netty to handle compressed response bodies
+
+## 3.1.0-rc-4
+- Update deps
+- fix HTTP/1.1 compliance (missing Host header)
+- support rollback_completed value in ServiceUpdateState
+- Add Privileged property to ExecCreateCmd
+- Encode spaces as %20 rather than + in URL params
+- Add tmpfs mount support since v1.29
+- Add support for swarm service/task logs
+- Add mapping annotations to custom constructor 
+- Support network mode as part of the docker build
+- support "rollback" as value for UpdateFailureAction
+- Add "Pid" field to InspectExecResponse
+- Add DiskQuota to HostConfig and CreateContainerCmd
+- Add AutoRemove to HostConfig
+- follow symbolic links when walking dir
+- Use path from the configured docker host instead of hardcoded "/var/run/docker.sock" in netty factory
+- Configure JerseyDockerCmdExecFactory to avoid chunked encoding 
+
+## 3.1.0-rc-3
+- export TmpFs configuration for HostConfig and DockerClient
+- avoid double encoding for url query string
+
+## 3.1.0-rc-2
+- https://github.com/docker-java/docker-java/pulls?q=is%3Apr+milestone%3A3.1.0-rc-2+is%3Aclosed
+
+## 3.1.0-rc-1
+  A lot of changes...
 - Swarm Mode support.
 - Classic swarm support.
+- various netty improvements
+- Implement AbstractDockerCmdExecFactory 
  
  
 ## 3.0.14

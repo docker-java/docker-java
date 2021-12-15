@@ -1,0 +1,93 @@
+{
+  "Architecture": "x86_64",
+  "BridgeNfIp6tables": true,
+  "BridgeNfIptables": true,
+  "CPUSet": false,
+  "CPUShares": false,
+  "CgroupDriver": "",
+  "ClusterAdvertise": "",
+  "ClusterStore": "",
+  "ContainerdCommit": {
+    "Expected": "",
+    "ID": ""
+  },
+  "Containers": 3,
+  "ContainersPaused": 0,
+  "ContainersRunning": 0,
+  "ContainersStopped": 3,
+  "CpuCfsPeriod": false,
+  "CpuCfsQuota": false,
+  "Debug": true,
+  "DefaultRuntime": "",
+  "DockerRootDir": "C:\\ProgramData\\Docker",
+  "Driver": "windowsfilter (windows) lcow (linux)",
+  "DriverStatus": [["Windows", ""], ["LCOW", ""]],
+  "ExperimentalBuild": true,
+  "GenericResources": null,
+  "HttpProxy": "",
+  "HttpsProxy": "",
+  "ID": "ZOGT:VB24:YEPZ:Y7HU:JHPB:WNUE:UYQG:7YRY:VLZV:FLWV:R65B:ICZG",
+  "IPv4Forwarding": true,
+  "Images": 2,
+  "IndexServerAddress": "https://index.docker.io/v1/",
+  "InitBinary": "",
+  "InitCommit": {
+    "Expected": "",
+    "ID": ""
+  },
+  "Isolation": "hyperv",
+  "KernelMemory": false,
+  "KernelVersion": "10.0 17134 (17134.1.amd64fre.rs4_release.180410-1804)",
+  "Labels": [],
+  "LiveRestoreEnabled": false,
+  "LoggingDriver": "json-file",
+  "MemTotal": 68684476416,
+  "MemoryLimit": false,
+  "NCPU": 8,
+  "NEventsListener": 1,
+  "NFd": -1,
+  "NGoroutines": 28,
+  "Name": "somename",
+  "NoProxy": "",
+  "OSType": "windows",
+  "OomKillDisable": false,
+  "OperatingSystem": "Windows 10 Pro Version 1803 (OS Build 17134.228)",
+  "Plugins": {
+    "Authorization": null,
+    "Log": ["awslogs", "etwlogs", "fluentd", "gelf", "json-file", "logentries", "splunk", "syslog"],
+    "Network": ["ics", "l2bridge", "l2tunnel", "nat", "null", "overlay", "transparent"],
+    "Volume": ["local"]
+  },
+  "RegistryConfig": {
+    "AllowNondistributableArtifactsCIDRs": [],
+    "AllowNondistributableArtifactsHostnames": [],
+    "IndexConfigs": {
+      "docker.io": {
+        "Mirrors": [],
+        "Name": "docker.io",
+        "Official": true,
+        "Secure": true
+      }
+    },
+    "InsecureRegistryCIDRs": ["127.0.0.0/8"],
+    "Mirrors": []
+  },
+  "RuncCommit": {
+    "Expected": "",
+    "ID": ""
+  },
+  "Runtimes": null,
+  "SecurityOptions": [],
+  "ServerVersion": "18.06.1-ce",
+  "SwapLimit": false,
+  "Swarm": {
+    "ControlAvailable": false,
+    "Error": "",
+    "LocalNodeState": "inactive",
+    "NodeAddr": "",
+    "NodeID": "",
+    "RemoteManagers": null
+  },
+  "SystemStatus": null,
+  "SystemTime": "2018-09-14T09:40:05.1369294+02:00"
+}
