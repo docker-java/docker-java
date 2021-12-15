@@ -5,6 +5,7 @@ import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.google.common.io.Resources;
 import org.apache.commons.lang3.SerializationUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.junit.Test;
 
 import java.io.File;
@@ -97,8 +98,11 @@ public class DefaultDockerClientConfigTest {
 
         DefaultDockerClientConfig config = buildConfig(env, new Properties());
 
+        String expectedDefaultHost = SystemUtils.IS_OS_WINDOWS ? DefaultDockerClientConfig.WINDOWS_DEFAULT_DOCKER_HOST
+            : DefaultDockerClientConfig.DEFAULT_DOCKER_HOST;
+
         assertEquals(
-            DefaultDockerClientConfig.DEFAULT_DOCKER_HOST,
+            expectedDefaultHost,
             config.getDockerHost().toString()
         );
     }
@@ -119,7 +123,9 @@ public class DefaultDockerClientConfigTest {
         DefaultDockerClientConfig config = buildConfig(Collections.<String, String> emptyMap(), systemProperties);
 
         // then the cert path is as expected
-        assertEquals(config.getDockerHost(), URI.create("unix:///var/run/docker.sock"));
+        URI expectedDefaultURI = SystemUtils.IS_OS_WINDOWS ? URI.create(DefaultDockerClientConfig.WINDOWS_DEFAULT_DOCKER_HOST)
+            : URI.create(DefaultDockerClientConfig.DEFAULT_DOCKER_HOST);
+        assertEquals(config.getDockerHost(), expectedDefaultURI);
         assertEquals(config.getRegistryUsername(), "someUserName");
         assertEquals(config.getRegistryUrl(), AuthConfig.DEFAULT_SERVER_ADDRESS);
         assertEquals(config.getApiVersion(), RemoteApiVersion.unknown());

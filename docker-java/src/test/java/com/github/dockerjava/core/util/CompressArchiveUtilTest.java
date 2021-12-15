@@ -2,6 +2,7 @@ package com.github.dockerjava.core.util;
 
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.lang3.SystemUtils;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -22,6 +23,7 @@ import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeFalse;
 
 public class CompressArchiveUtilTest {
 
@@ -69,6 +71,7 @@ public class CompressArchiveUtilTest {
 
     @Test
     public void tarWithSymbolicLinkFileAsInput() throws IOException {
+        assumeSymbolicLinksAreUnrestrictedByDefault();
         Path archiveSourceFile = tempFolder.getRoot().toPath().resolve("symlinkFile");
         Path linkTargetFile = tempFolder.newFile("link-target").toPath();
         Files.createSymbolicLink(archiveSourceFile, linkTargetFile);
@@ -139,6 +142,7 @@ public class CompressArchiveUtilTest {
 
     @Test
     public void tarWithfolderAsInputAndNestedSymbolicLinkFile() throws Exception {
+        assumeSymbolicLinksAreUnrestrictedByDefault();
         Path archiveSourceDir = tempFolder.newFolder("archive-source").toPath();
         Path linkTargetFile = tempFolder.newFile("link-target").toPath();
         Path symlinkFile = archiveSourceDir.resolve("symlinkFile");
@@ -160,6 +164,7 @@ public class CompressArchiveUtilTest {
 
     @Test
     public void tarWithfolderAsInputAndNestedSymbolicLinkDir() throws Exception {
+        assumeSymbolicLinksAreUnrestrictedByDefault();
         Path archiveSourceDir = tempFolder.newFolder("archive-source").toPath();
         Path linkTargetDir = tempFolder.newFolder("link-target").toPath();
         Path symlinkFile = archiveSourceDir.resolve("symlinkFile");
@@ -204,6 +209,7 @@ public class CompressArchiveUtilTest {
 
     @Test
     public void archiveTARFilesWithSymbolicLinkFile() throws Exception {
+        assumeSymbolicLinksAreUnrestrictedByDefault();
         Path linkTargetFile = tempFolder.newFile("link-target").toPath();
         Path symlinkFile = tempFolder.getRoot().toPath().resolve("symlinkFile");
         Files.createSymbolicLink(symlinkFile, linkTargetFile);
@@ -215,6 +221,7 @@ public class CompressArchiveUtilTest {
 
     @Test
     public void archiveTARFilesWithSymbolicLinkDir() throws Exception {
+        assumeSymbolicLinksAreUnrestrictedByDefault();
         Path linkTargetDir = tempFolder.newFolder("link-target").toPath();
         Path symlinkFile = tempFolder.getRoot().toPath().resolve("symlinkFile");
         Files.createSymbolicLink(symlinkFile, linkTargetDir);
@@ -316,5 +323,9 @@ public class CompressArchiveUtilTest {
             }
         }
         return numberOfEntries;
+    }
+
+    private static void assumeSymbolicLinksAreUnrestrictedByDefault(){
+        assumeFalse(SystemUtils.IS_OS_WINDOWS);
     }
 }
