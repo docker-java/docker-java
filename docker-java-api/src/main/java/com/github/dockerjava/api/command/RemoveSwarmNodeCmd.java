@@ -18,7 +18,7 @@ public interface RemoveSwarmNodeCmd extends SyncDockerCmd<Void> {
     @CheckForNull
     Boolean hasForceEnabled();
 
-    RemoveSwarmNodeCmd withContainerId(@Nonnull String containerId);
+    RemoveSwarmNodeCmd withSwarmNodeId(@Nonnull String swarmNodeId);
 
     RemoveSwarmNodeCmd withForce(Boolean force);
 

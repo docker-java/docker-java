@@ -56,6 +56,7 @@ import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.command.RemoveNetworkCmd;
 import com.github.dockerjava.api.command.RemoveSecretCmd;
 import com.github.dockerjava.api.command.RemoveServiceCmd;
+import com.github.dockerjava.api.command.RemoveSwarmNodeCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.api.command.ResizeContainerCmd;
@@ -421,6 +422,11 @@ public class DockerClientDelegate implements DockerClient {
     @Override
     public UpdateSwarmNodeCmd updateSwarmNodeCmd() {
         return getDockerClient().updateSwarmNodeCmd();
+    }
+
+    @Override
+    public RemoveSwarmNodeCmd removeSwarmNodeCmd(String swarmNodeId) {
+        return getDockerClient().removeSwarmNodeCmd(swarmNodeId);
     }
 
     @Override
