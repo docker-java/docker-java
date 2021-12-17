@@ -206,7 +206,7 @@ public class LogContainerCmdIT extends CmdIT {
                 .withStdErr(true)
                 .withStdOut(true)
                 .withSince(timestamp)
-                .withUntil(timestamp +  1000)
+                .withUntil(timestamp + 1000)
                 .exec(loggingCallback);
 
         loggingCallback.awaitCompletion();
