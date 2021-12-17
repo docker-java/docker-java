@@ -25,6 +25,8 @@ import com.github.dockerjava.api.model.Frame;
  * @param since
  *            - UNIX timestamp (integer) to filter logs. Specifying a timestamp will only output log-entries since that timestamp. Default:
  *            0 (unfiltered)
+ * @param until
+ *            - Only return logs before this time, as a UNIX timestamp. Default: 0
  */
 public interface LogContainerCmd extends AsyncDockerCmd<LogContainerCmd, Frame> {
 
@@ -49,6 +51,9 @@ public interface LogContainerCmd extends AsyncDockerCmd<LogContainerCmd, Frame> 
     @CheckForNull
     Integer getSince();
 
+    @CheckForNull
+    Integer getUntil();
+
     LogContainerCmd withContainerId(@Nonnull String containerId);
 
     /**
@@ -68,6 +73,8 @@ public interface LogContainerCmd extends AsyncDockerCmd<LogContainerCmd, Frame> 
     LogContainerCmd withTail(Integer tail);
 
     LogContainerCmd withSince(Integer since);
+
+    LogContainerCmd withUntil(Integer until);
 
     /**
      * @throws com.github.dockerjava.api.NotFoundException
