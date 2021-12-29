@@ -17,9 +17,9 @@ public class RemoveSwarmNodeCmdImpl extends AbstrDockerCmd<RemoveSwarmNodeCmd, V
 
     private Boolean force;
 
-    public RemoveSwarmNodeCmdImpl(RemoveSwarmNodeCmd.Exec exec, String containerId) {
+    public RemoveSwarmNodeCmdImpl(RemoveSwarmNodeCmd.Exec exec, String swarmNodeId) {
         super(exec);
-        withContainerId(containerId);
+        withSwarmNodeId(swarmNodeId);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class RemoveSwarmNodeCmdImpl extends AbstrDockerCmd<RemoveSwarmNodeCmd, V
     }
 
     @Override
-    public RemoveSwarmNodeCmd withContainerId(@Nonnull String swarmNodeId) {
+    public RemoveSwarmNodeCmd withSwarmNodeId(@Nonnull String swarmNodeId) {
         checkNotNull(swarmNodeId, "swarmNodeId was not specified");
         this.swarmNodeId = swarmNodeId;
         return this;

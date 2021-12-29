@@ -6,7 +6,7 @@ import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.Secret;
 import com.github.dockerjava.api.model.SecretSpec;
 import com.google.common.collect.Lists;
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

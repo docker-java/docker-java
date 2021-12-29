@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.CheckForNull;
 
 import static com.github.dockerjava.core.util.CacheFromEncoder.jsonEncode;
-import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, BuildResponseItem> implements
         BuildImageCmd.Exec {

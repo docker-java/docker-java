@@ -1,6 +1,6 @@
 package com.github.dockerjava.core;
 
-import org.apache.commons.lang.SerializationUtils;
+import org.apache.commons.lang3.SerializationUtils;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
