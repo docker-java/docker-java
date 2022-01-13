@@ -265,6 +265,20 @@ public class LogContainerCmdIT extends CmdIT {
     public void asyncLongDockerLogCmd() throws Exception {
         // Create a new client to not affect other tests
         DockerClient client = dockerRule.newClient();
+        String testImage = "icevivek/logreader";
+
+        // Pulling image icevivek/logreader
+        try {
+            client.inspectImageCmd(testImage).exec();
+        } catch (NotFoundException e) {
+            LOG.info("Pulling image ");
+            // need to block until image is pulled completely
+            client.pullImageCmd("icevivek/logreader")
+                .withTag("latest")
+                .start()
+                .awaitCompletion();
+        }
+
         CreateContainerResponse container = client.createContainerCmd("icevivek/logreader")
             .exec();
 
