@@ -260,4 +260,51 @@ public class LogContainerCmdIT extends CmdIT {
             executor.shutdownNow();
         }
     }
+
+    @Test(timeout = 10_000)
+    public void asyncLongDockerLogCmd() throws Exception {
+        // Create a new client to not affect other tests
+        DockerClient client = dockerRule.newClient();
+        CreateContainerResponse container = client.createContainerCmd("icevivek/logreader")
+            .exec();
+
+        client.startContainerCmd(container.getId()).exec();
+
+        // Simulate 100 simultaneous connections
+        int connections = 100;
+
+        ExecutorService executor = Executors.newFixedThreadPool(connections);
+        try {
+            List<Frame> firstFrames = new CopyOnWriteArrayList<>();
+            executor.invokeAll(
+                LongStream.range(0, connections).<Callable<Object>>mapToObj(__ -> {
+                    return () -> {
+                        return client.logContainerCmd(container.getId())
+                            .withStdOut(true)
+                            .withFollowStream(true)
+                            .exec(new ResultCallback.Adapter<Frame>() {
+
+                                final AtomicBoolean first = new AtomicBoolean(true);
+
+                                @Override
+                                public void onNext(Frame object) {
+                                    if (first.compareAndSet(true, false)) {
+                                        firstFrames.add(object);
+                                    }
+                                    super.onNext(object);
+                                }
+                            });
+                    };
+                }).collect(Collectors.toList())
+            );
+
+            await().atMost(30, TimeUnit.SECONDS).untilAsserted(() -> {
+                assertThat(firstFrames, hasSize(connections));
+            });
+
+            assertThat(firstFrames.size(), is(187));
+        } finally {
+            executor.shutdownNow();
+        }
+    }
 }
