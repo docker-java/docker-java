@@ -65,18 +65,17 @@ class FramedInputStreamConsumer implements Consumer<DockerHttpClient.Response> {
                     bytesToRead |= (readByte & 0xff) << (8 * (3 - i));
                 }
 
-                byte[] payload = new byte[bytesToRead];
                 do {
-                    int readBytes = body.read(payload, 0, Math.min(payload.length, bytesToRead));
+                    int readBytes = body.read(buffer, 0, Math.min(buffer.length, bytesToRead));
                     if (readBytes < 0) {
                         // TODO log?
                         return;
                     }
 
-                    if (readBytes == payload.length) {
-                        resultCallback.onNext(new Frame(streamType, payload));
+                    if (readBytes == buffer.length) {
+                        resultCallback.onNext(new Frame(streamType, buffer));
                     } else {
-                        resultCallback.onNext(new Frame(streamType, Arrays.copyOf(payload, readBytes)));
+                        resultCallback.onNext(new Frame(streamType, Arrays.copyOf(buffer, readBytes)));
                     }
                     bytesToRead -= readBytes;
                 } while (bytesToRead > 0);
@@ -99,3 +98,4 @@ class FramedInputStreamConsumer implements Consumer<DockerHttpClient.Response> {
         }
     }
 }
+
