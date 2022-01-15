@@ -262,7 +262,7 @@ public class LogContainerCmdIT extends CmdIT {
     }
 
     @Test
-    public void asyncLongDockerLogCmd() throws Exception {
+    public void asyncLogContainerWithTailAll() throws Exception {
         // Create a new client to not affect other tests
         String testImage = "icevivek/logreader";
 
@@ -272,7 +272,7 @@ public class LogContainerCmdIT extends CmdIT {
         } catch (NotFoundException e) {
             LOG.info("Pulling image ");
             // need to block until image is pulled completely
-            dockerRule.getClient().pullImageCmd("testImage")
+            dockerRule.getClient().pullImageCmd(testImage)
                 .withTag("latest")
                 .start()
                 .awaitCompletion(30, TimeUnit.SECONDS);
@@ -295,6 +295,6 @@ public class LogContainerCmdIT extends CmdIT {
 
         loggingCallback.awaitCompletion(30, TimeUnit.SECONDS);
 
-        assertThat(loggingCallback.getCollectedFrames(), hasSize(188));
+        assertThat(loggingCallback.getCollectedFrames(), hasSize(187));
     }
 }
