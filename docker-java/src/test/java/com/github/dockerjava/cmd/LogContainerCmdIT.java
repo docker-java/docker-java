@@ -261,64 +261,40 @@ public class LogContainerCmdIT extends CmdIT {
         }
     }
 
-    @Test(timeout = 10_000)
+    @Test
     public void asyncLongDockerLogCmd() throws Exception {
         // Create a new client to not affect other tests
-        DockerClient client = dockerRule.newClient();
         String testImage = "icevivek/logreader";
 
         // Pulling image icevivek/logreader
         try {
-            client.inspectImageCmd(testImage).exec();
+            dockerRule.getClient().inspectImageCmd(testImage).exec();
         } catch (NotFoundException e) {
             LOG.info("Pulling image ");
             // need to block until image is pulled completely
-            client.pullImageCmd("icevivek/logreader")
+            dockerRule.getClient().pullImageCmd("testImage")
                 .withTag("latest")
                 .start()
-                .awaitCompletion();
+                .awaitCompletion(30, TimeUnit.SECONDS);
         }
 
-        CreateContainerResponse container = client.createContainerCmd("icevivek/logreader")
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("icevivek/logreader")
             .exec();
 
-        client.startContainerCmd(container.getId()).exec();
+        dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
-        // Simulate 100 simultaneous connections
-        int connections = 100;
+        LogContainerTestCallback loggingCallback = new LogContainerTestCallback(true);
 
-        ExecutorService executor = Executors.newFixedThreadPool(connections);
-        try {
-            List<Frame> firstFrames = new CopyOnWriteArrayList<>();
-            executor.invokeAll(
-                LongStream.range(0, connections).<Callable<Object>>mapToObj(__ -> {
-                    return () -> {
-                        return client.logContainerCmd(container.getId())
-                            .withStdOut(true)
-                            .withFollowStream(true)
-                            .exec(new ResultCallback.Adapter<Frame>() {
+        // this essentially test the since=0 case
+        dockerRule.getClient().logContainerCmd(container.getId())
+            .withStdErr(true)
+            .withStdOut(true)
+            .withFollowStream(true)
+            .withTailAll()
+            .exec(loggingCallback);
 
-                                final AtomicBoolean first = new AtomicBoolean(true);
+        loggingCallback.awaitCompletion(30, TimeUnit.SECONDS);
 
-                                @Override
-                                public void onNext(Frame object) {
-                                    if (first.compareAndSet(true, false)) {
-                                        firstFrames.add(object);
-                                    }
-                                    super.onNext(object);
-                                }
-                            });
-                    };
-                }).collect(Collectors.toList())
-            );
-
-            await().atMost(30, TimeUnit.SECONDS).untilAsserted(() -> {
-                assertThat(firstFrames, hasSize(connections));
-            });
-
-            assertThat(firstFrames.size(), is(187));
-        } finally {
-            executor.shutdownNow();
-        }
+        assertThat(loggingCallback.getCollectedFrames(), hasSize(188));
     }
 }
