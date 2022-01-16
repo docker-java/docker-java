@@ -58,6 +58,7 @@ import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.command.RemoveNetworkCmd;
 import com.github.dockerjava.api.command.RemoveSecretCmd;
 import com.github.dockerjava.api.command.RemoveServiceCmd;
+import com.github.dockerjava.api.command.RemoveSwarmNodeCmd;
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.command.RenameContainerCmd;
 import com.github.dockerjava.api.command.ResizeContainerCmd;
@@ -140,6 +141,7 @@ import com.github.dockerjava.core.command.RemoveImageCmdImpl;
 import com.github.dockerjava.core.command.RemoveNetworkCmdImpl;
 import com.github.dockerjava.core.command.RemoveSecretCmdImpl;
 import com.github.dockerjava.core.command.RemoveServiceCmdImpl;
+import com.github.dockerjava.core.command.RemoveSwarmNodeCmdImpl;
 import com.github.dockerjava.core.command.RemoveVolumeCmdImpl;
 import com.github.dockerjava.core.command.RenameContainerCmdImpl;
 import com.github.dockerjava.core.command.ResizeContainerCmdImpl;
@@ -614,6 +616,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public UpdateSwarmNodeCmd updateSwarmNodeCmd() {
         return new UpdateSwarmNodeCmdImpl(getDockerCmdExecFactory().updateSwarmNodeCmdExec());
+    }
+
+    @Override
+    public RemoveSwarmNodeCmd removeSwarmNodeCmd(String swarmNodeId) {
+        return new RemoveSwarmNodeCmdImpl(getDockerCmdExecFactory().removeSwarmNodeCmdExec(), swarmNodeId);
     }
 
     @Override

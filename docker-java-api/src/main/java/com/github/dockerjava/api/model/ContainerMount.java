@@ -106,7 +106,7 @@ public class ContainerMount extends DockerObject implements Serializable {
      */
     @CheckForNull
     public String getMode() {
-        return driver;
+        return mode;
     }
 
     /**
