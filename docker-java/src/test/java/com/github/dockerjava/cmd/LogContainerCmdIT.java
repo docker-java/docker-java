@@ -276,7 +276,7 @@ public class LogContainerCmdIT extends CmdIT {
         } catch (NotFoundException e) {
             LOG.info("Pulling image ");
             // need to block until image is pulled completely
-            dockerRule.getClient().pullImageCmd("testImage")
+            dockerRule.getClient().pullImageCmd(testImage)
                 .withTag("latest")
                 .start()
                 .awaitCompletion(30, TimeUnit.SECONDS);
