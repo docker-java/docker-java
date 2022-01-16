@@ -261,4 +261,41 @@ public class LogContainerCmdIT extends CmdIT {
             executor.shutdownNow();
         }
     }
+
+    @Test
+    public void asyncLogContainerWithTailAll() throws Exception {
+        // Create a new client to not affect other tests
+        String testImage = "icevivek/logreader";
+
+        // Pulling image icevivek/logreader
+        try {
+            dockerRule.getClient().inspectImageCmd(testImage).exec();
+        } catch (NotFoundException e) {
+            LOG.info("Pulling image ");
+            // need to block until image is pulled completely
+            dockerRule.getClient().pullImageCmd(testImage)
+                .withTag("latest")
+                .start()
+                .awaitCompletion(30, TimeUnit.SECONDS);
+        }
+
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("icevivek/logreader")
+            .exec();
+
+        dockerRule.getClient().startContainerCmd(container.getId()).exec();
+
+        LogContainerTestCallback loggingCallback = new LogContainerTestCallback(true);
+
+        // this essentially test the since=0 case
+        dockerRule.getClient().logContainerCmd(container.getId())
+            .withStdErr(true)
+            .withStdOut(true)
+            .withFollowStream(true)
+            .withTailAll()
+            .exec(loggingCallback);
+
+        loggingCallback.awaitCompletion(30, TimeUnit.SECONDS);
+
+        assertEquals(loggingCallback.getCollectedFrames().size(), 187);
+    }
 }
