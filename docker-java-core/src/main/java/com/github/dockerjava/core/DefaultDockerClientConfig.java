@@ -5,12 +5,12 @@ import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.core.NameParser.HostnameReposName;
 import com.github.dockerjava.core.NameParser.ReposTag;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.SystemUtils;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -26,7 +26,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.apache.commons.lang.BooleanUtils.isTrue;
+import static org.apache.commons.lang3.BooleanUtils.isTrue;
 
 /**
  * Respects some of the docker CLI options. See https://docs.docker.com/engine/reference/commandline/cli/#environment-variables

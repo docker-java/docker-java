@@ -17,7 +17,7 @@ import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.WebTarget;
 import com.google.common.collect.ImmutableSet;
 import io.netty.handler.codec.http.HttpConstants;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
