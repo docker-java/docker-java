@@ -98,7 +98,8 @@ public class CompressArchiveUtil {
         tarFile.deleteOnExit();
         try (TarArchiveOutputStream tos = new TarArchiveOutputStream(new GZIPOutputStream(new BufferedOutputStream(
                 new FileOutputStream(tarFile))))) {
-            tos.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU);
+            tos.setLongFileMode(TarArchiveOutputStream.LONGFILE_POSIX);
+            tos.setBigNumberMode(TarArchiveOutputStream.BIGNUMBER_POSIX);
             for (File file : files) {
                 // relativize with method using Path otherwise method with File resolves the symlinks
                 // and this is not want we want. If the file is a symlink, the relativized path should
