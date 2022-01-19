@@ -264,7 +264,6 @@ public class LogContainerCmdIT extends CmdIT {
         }
     }
 
-
     @Test
     public void asyncLogContainerWithTailAll() throws Exception {
         // Create a new client to not affect other tests
@@ -284,6 +283,7 @@ public class LogContainerCmdIT extends CmdIT {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("icevivek/logreader")
             .exec();
+        int timestamp = (int) (System.currentTimeMillis() / 1000);
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
@@ -294,11 +294,12 @@ public class LogContainerCmdIT extends CmdIT {
             .withStdErr(true)
             .withStdOut(true)
             .withFollowStream(true)
-            .withTailAll()
+            .withTimestamps(true)
+            .withSince(timestamp - 24 * 60 * 60 * 1000)
             .exec(loggingCallback);
 
         loggingCallback.awaitCompletion(30, TimeUnit.SECONDS);
 
-        assertThat(loggingCallback.getCollectedFrames(), hasSize(187));
+        assertEquals(187, loggingCallback.getCollectedFrames().size());
     }
 }
