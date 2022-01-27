@@ -77,7 +77,7 @@
 		<hamcrest.library.version>2.2</hamcrest.library.version>
 		<hamcrest.jpa-matchers>1.8</hamcrest.jpa-matchers>
 		<lambdaj.version>2.3.3</lambdaj.version>
-		<mockito.version>3.3.0</mockito.version>
+		<mockito.version>4.3.1</mockito.version>
 
 
 		<maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
@@ -236,7 +236,7 @@
 					<!-- use with "mvn -DskipTests clean verify" -->
 					<groupId>com.github.siom79.japicmp</groupId>
 					<artifactId>japicmp-maven-plugin</artifactId>
-					<version>0.14.3</version>
+					<version>0.15.4</version>
 					<configuration>
 						<oldVersion>
 							<dependency>
