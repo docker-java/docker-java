@@ -281,25 +281,20 @@ public class LogContainerCmdIT extends CmdIT {
                 .awaitCompletion(30, TimeUnit.SECONDS);
         }
 
-        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("icevivek/logreader")
-            .exec();
-        int timestamp = (int) (System.currentTimeMillis() / 1000);
-
-        dockerRule.getClient().startContainerCmd(container.getId()).exec();
-
         LogContainerTestCallback loggingCallback = new LogContainerTestCallback(true);
 
-        // this essentially test the since=0 case
-        dockerRule.getClient().logContainerCmd(container.getId())
-            .withStdErr(true)
-            .withStdOut(true)
-            .withFollowStream(true)
-            .withTimestamps(true)
-            .withSince(timestamp - 24 * 60 * 60 * 1000)
-            .exec(loggingCallback);
+        for (int i = 0; i < 5; ++i) {
+            CreateContainerResponse container = dockerRule.getClient().createContainerCmd("icevivek/logreader").exec();
+            dockerRule.getClient().startContainerCmd(container.getId()).exec();
+            // this essentially test the since=0 case
+            dockerRule.getClient().logContainerCmd(container.getId())
+                .withStdErr(true)
+                .withStdOut(true)
+                .withFollowStream(true)
+                .exec(loggingCallback)
+                .awaitCompletion();
+        }
 
-        loggingCallback.awaitCompletion(30, TimeUnit.SECONDS);
-
-        assertEquals(187, loggingCallback.getCollectedFrames().size());
+        assertEquals(748, loggingCallback.getCollectedFrames().size());
     }
 }
