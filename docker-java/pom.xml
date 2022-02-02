@@ -171,9 +171,6 @@
 					<trimStackTrace>false</trimStackTrace>
 					<rerunFailingTestsCount>5</rerunFailingTestsCount>
 					<groups>com.github.dockerjava.junit.category.Integration</groups>
-					<excludes>
-						<exclude>**/LogContainerCmdIT.java</exclude>
-					</excludes>
 				</configuration>
 			</plugin>
 
