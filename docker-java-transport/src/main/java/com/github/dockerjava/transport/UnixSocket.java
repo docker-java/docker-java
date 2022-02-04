@@ -6,8 +6,10 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
+import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.SocketChannel;
+import java.nio.channels.WritableByteChannel;
 
 public class UnixSocket extends AbstractSocket {
 
@@ -67,7 +69,7 @@ public class UnixSocket extends AbstractSocket {
             throw new SocketException("Socket output is shutdown");
         }
 
-        return Channels.newOutputStream(socketChannel);
+        return Channels.newOutputStream(new WrappedWritableByteChannel());
     }
 
     @Override
@@ -84,5 +86,23 @@ public class UnixSocket extends AbstractSocket {
     public void close() throws IOException {
         super.close();
         this.socketChannel.close();
+    }
+
+    private class WrappedWritableByteChannel implements WritableByteChannel {
+
+        @Override
+        public int write(ByteBuffer src) throws IOException {
+            return UnixSocket.this.socketChannel.write(src);
+        }
+
+        @Override
+        public boolean isOpen() {
+            return UnixSocket.this.socketChannel.isOpen();
+        }
+
+        @Override
+        public void close() throws IOException {
+            UnixSocket.this.socketChannel.close();
+        }
     }
 }
