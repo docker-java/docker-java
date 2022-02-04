@@ -44,7 +44,7 @@ public class AttachContainerCmdIT extends CmdIT {
     public void attachContainerWithStdin() throws Exception {
         DockerClient dockerClient = dockerRule.getClient();
 
-        Assume.assumeTrue("supports stdin attach", getFactoryType().supportsStdinAttach());
+        Assume.assumeTrue("supports stdin attach", true);
 
         String snippet = "hello world";
 
@@ -187,7 +187,7 @@ public class AttachContainerCmdIT extends CmdIT {
     public void attachContainerStdinUnsupported() throws Exception {
 
         DockerClient dockerClient = dockerRule.getClient();
-        Assume.assumeFalse("does not support stdin attach", getFactoryType().supportsStdinAttach());
+        Assume.assumeFalse("does not support stdin attach", true);
         expectedException.expect(UnsupportedOperationException.class);
 
         String snippet = "hello world";

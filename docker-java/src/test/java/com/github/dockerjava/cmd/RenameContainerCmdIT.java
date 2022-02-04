@@ -31,7 +31,7 @@ public class RenameContainerCmdIT extends CmdIT {
         String name1 = inspectContainerResponse.getName();
 
         dockerRule.getClient().renameContainerCmd(container.getId())
-                .withName(dockerRule.getKind() + "renameContainer")
+                .withName("" + "renameContainer")
                 .exec();
 
         InspectContainerResponse inspectContainerResponse2 = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
@@ -47,7 +47,7 @@ public class RenameContainerCmdIT extends CmdIT {
     @Test(expected = NotFoundException.class)
     public void renameExistingContainer() throws DockerException, InterruptedException {
         dockerRule.getClient().renameContainerCmd("non-existing")
-                .withName(dockerRule.getKind() + "renameExistingContainer")
+                .withName("" + "renameExistingContainer")
                 .exec();
     }
 }

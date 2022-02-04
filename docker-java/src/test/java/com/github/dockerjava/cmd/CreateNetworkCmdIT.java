@@ -28,7 +28,7 @@ public class CreateNetworkCmdIT extends CmdIT {
     public void createNetwork() throws DockerException {
         assumeNotSwarm("no network in swarm", dockerRule);
 
-        String networkName = "createNetwork" + dockerRule.getKind();
+        String networkName = "createNetwork";
 
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd().withName(networkName).exec();
 
@@ -43,8 +43,8 @@ public class CreateNetworkCmdIT extends CmdIT {
     public void createNetworkWithIpamConfig() throws DockerException {
         assumeNotSwarm("no network in swarm", dockerRule);
 
-        String networkName = "networkIpam" + dockerRule.getKind();
-        String subnet = "10.67." + (79 + getFactoryType().ordinal()) + ".0/24";
+        String networkName = "networkIpam";
+        String subnet = "10.67.79.0/24";
 
         Network.Ipam ipam = new Network.Ipam().withConfig(new Network.Ipam.Config().withSubnet(subnet));
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd().withName(networkName).withIpam(ipam).exec();
@@ -61,7 +61,7 @@ public class CreateNetworkCmdIT extends CmdIT {
     public void createAttachableNetwork() throws DockerException {
         assumeThat("API version should be > 1.24", dockerRule, isGreaterOrEqual(VERSION_1_25));
 
-        String networkName = "createAttachableNetwork" + dockerRule.getKind();
+        String networkName = "createAttachableNetwork";
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd()
                 .withName(networkName)
                 .withAttachable(true)
@@ -77,9 +77,9 @@ public class CreateNetworkCmdIT extends CmdIT {
         assumeNotSwarm("no network in swarm?", dockerRule);
         assumeThat("API version should be >= 1.21", dockerRule, isGreaterOrEqual(VERSION_1_21));
 
-        String networkName = "createNetworkWithLabel" + dockerRule.getKind();
+        String networkName = "createNetworkWithLabel";
         Map<String, String> labels = new HashMap<>();
-        labels.put("com.example.usage" + dockerRule.getKind(), "test");
+        labels.put("com.example.usage", "test");
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd().withName(networkName).withLabels(labels).exec();
         assertNotNull(createNetworkResponse.getId());
         Network network = dockerRule.getClient().inspectNetworkCmd().withNetworkId(createNetworkResponse.getId()).exec();

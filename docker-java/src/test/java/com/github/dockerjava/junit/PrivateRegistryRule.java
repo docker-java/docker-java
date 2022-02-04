@@ -7,8 +7,8 @@ import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
+import com.github.dockerjava.cmd.CmdIT;
 import com.github.dockerjava.core.DockerRule;
-import com.github.dockerjava.core.DockerClientBuilder;
 import org.junit.rules.ExternalResource;
 
 import java.io.File;
@@ -29,7 +29,7 @@ public class PrivateRegistryRule extends ExternalResource {
     private String containerId;
 
     public PrivateRegistryRule() {
-        this.dockerClient = DockerClientBuilder.getInstance().build();
+        this.dockerClient = CmdIT.createDockerClient(DockerRule.config(null));
     }
 
     public AuthConfig getAuthConfig() {
