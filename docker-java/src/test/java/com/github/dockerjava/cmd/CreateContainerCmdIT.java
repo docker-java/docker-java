@@ -487,7 +487,7 @@ public class CreateContainerCmdIT extends CmdIT {
     public void createContainerWithCustomIp() throws DockerException {
         String containerName1 = "containerCustomIplink_";
         String networkName = "customIpNet";
-        String subnetPrefix = "10.100." + "101";
+        String subnetPrefix = "10.100.101";
 
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd()
                 .withIpam(new Network.Ipam()
@@ -812,7 +812,7 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Test
     public void createContainerWithULimits() throws DockerException {
-        String containerName = "containerulimit" + "";
+        String containerName = "containerulimit";
         Ulimit[] ulimits = {new Ulimit("nproc", 709, 1026), new Ulimit("nofile", 1024, 4096)};
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
@@ -834,7 +834,7 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Test
     public void createContainerWithIntegerBoundsExceedingULimit() throws DockerException {
-        String containerName = "containercoreulimit" + "";
+        String containerName = "containercoreulimit";
         Ulimit[] ulimits = {new Ulimit("core", 99999999998L, 99999999999L)};
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
