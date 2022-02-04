@@ -51,6 +51,7 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
 
     private final CloseableHttpClient httpClient;
     private final HttpHost host;
+    private final String pathPrefix;
 
     protected ApacheDockerHttpClientImpl(
         URI dockerHost,
@@ -64,9 +65,14 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
         switch (dockerHost.getScheme()) {
             case "unix":
             case "npipe":
+                pathPrefix = "";
                 host = new HttpHost(dockerHost.getScheme(), "localhost", 2375);
                 break;
             case "tcp":
+                String rawPath = dockerHost.getRawPath();
+                pathPrefix = rawPath.endsWith("/")
+                    ? rawPath.substring(0, rawPath.length() - 1)
+                    : rawPath;
                 host = new HttpHost(
                     socketFactoryRegistry.lookup("https") != null ? "https" : "http",
                     dockerHost.getHost(),
@@ -74,6 +80,7 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
                 );
                 break;
             default:
+                pathPrefix = "";
                 host = HttpHost.create(dockerHost);
         }
 
@@ -159,7 +166,7 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
     @Override
     public Response execute(Request request) {
         HttpContext context = new BasicHttpContext();
-        HttpUriRequestBase httpUriRequest = new HttpUriRequestBase(request.method(), URI.create(request.path()));
+        HttpUriRequestBase httpUriRequest = new HttpUriRequestBase(request.method(), URI.create(pathPrefix + request.path()));
         httpUriRequest.setScheme(host.getSchemeName());
         httpUriRequest.setAuthority(new URIAuthority(host.getHostName(), host.getPort()));
 
