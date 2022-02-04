@@ -60,7 +60,7 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
 
     private CreateContainerResponse prepareContainerForCopy(String method) {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withName("docker-java-itest-copyToContainer" + method + "")
+                .withName("docker-java-itest-copyToContainer" + method)
                 .exec();
         LOG.info("Created container: {}", container);
         assertThat(container.getId(), not(isEmptyOrNullString()));

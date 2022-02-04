@@ -14,7 +14,6 @@ import org.junit.Test;
 import org.testcontainers.DockerClientFactory;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.dockerclient.TransportConfig;
-import org.testcontainers.utility.TestcontainersConfiguration;
 
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
@@ -24,14 +23,6 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class DockerHttpClientTCK {
-
-    static {
-        String value = TestcontainersConfiguration.getInstance().getEnvVarOrProperty("dockerconfig.source", "auto");
-
-        if (value == null) {
-            throw new IllegalStateException("Value is null!");
-        }
-    }
 
     protected abstract DockerHttpClient createDockerHttpClient(URI dockerHost, SSLConfig sslConfig);
 
