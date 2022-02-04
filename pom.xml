@@ -67,7 +67,7 @@
 		<commons-lang.version>2.6</commons-lang.version>
 		<slf4j-api.version>1.7.30</slf4j-api.version>
 
-		<bouncycastle.version>1.69</bouncycastle.version>
+		<bouncycastle.version>1.70</bouncycastle.version>
 		<junixsocket.version>2.3.2</junixsocket.version>
 		<guava.version>19.0</guava.version> <!-- todo remove from project -->
 
