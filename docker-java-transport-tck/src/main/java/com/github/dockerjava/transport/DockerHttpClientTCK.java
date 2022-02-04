@@ -23,7 +23,7 @@ public abstract class DockerHttpClientTCK {
     @Test
     public final void testPath() throws Exception {
         try (MockWebServer server = new MockWebServer()) {
-            String dockerHost = server.url("/%20path/").toString()
+            String dockerHost = server.url("/%20some/path/").toString()
                 .replace("http://", "tcp://");
 
             try (DockerHttpClient client = createDockerHttpClient(dockerHost)) {
@@ -31,7 +31,7 @@ public abstract class DockerHttpClientTCK {
                 ping(client);
                 assertThat(server.takeRequest().getPath())
                     .as("recorded path")
-                    .isEqualTo("/%20path/_ping");
+                    .isEqualTo("/%20some/path/_ping");
             }
         }
     }
