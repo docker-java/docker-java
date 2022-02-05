@@ -26,7 +26,7 @@ jobs:
         env:
           DOCKER_VERSION: ${{matrix.dockerVersion}}
           DOCKER_HOST: ${{matrix.dockerHost}}
-          TESTCONTAINERS_DOCKERCONFIG_SOURCE: auto
+          TESTCONTAINERS_DOCKERCONFIG_SOURCE: autoIgnoringUserProperties
         run: .ci/setup_docker.sh
       - name: Build with Maven
         env:
