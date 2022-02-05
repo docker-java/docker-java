@@ -13,6 +13,7 @@ import okhttp3.mockwebserver.MockWebServer;
 import org.junit.Test;
 import org.testcontainers.DockerClientFactory;
 import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.dockerclient.EnvironmentAndSystemPropertyClientProviderStrategy;
 import org.testcontainers.dockerclient.TransportConfig;
 
 import java.io.PipedInputStream;
@@ -23,6 +24,10 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class DockerHttpClientTCK {
+
+    static {
+        new EnvironmentAndSystemPropertyClientProviderStrategy();
+    }
 
     protected abstract DockerHttpClient createDockerHttpClient(URI dockerHost, SSLConfig sslConfig);
 
