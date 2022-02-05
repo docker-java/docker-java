@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
 
@@ -102,7 +103,10 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
     }
 
     private URI checkDockerHostScheme(URI dockerHost) {
-        switch (dockerHost.getScheme()) {
+        if (dockerHost == null) {
+            throw new DockerClientException("'dockerHost' is null");
+        }
+        switch (Objects.toString(dockerHost.getScheme())) {
             case "tcp":
             case "unix":
             case "npipe":

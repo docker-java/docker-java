@@ -30,5 +30,6 @@ jobs:
       - name: Build with Maven
         env:
           DOCKER_HOST: ${{matrix.dockerHost}}
-          TESTCONTAINERS_DOCKERCONFIG_SOURCE: auto
-        run: ./mvnw --no-transfer-progress verify
+        run: |
+          [[ -z "$DOCKER_HOST" ]] && unset DOCKER_HOST
+          ./mvnw --no-transfer-progress verify
