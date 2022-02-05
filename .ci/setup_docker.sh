@@ -21,7 +21,7 @@ if [[ -n $DOCKER_HOST ]]; then
     echo "
 [Service]
 ExecStart=
-ExecStart=/usr/bin/dockerd -H $DOCKER_HOST
+ExecStart=/usr/bin/dockerd -H $DOCKER_HOST -H unix:///var/run/docker.sock
     " | sudo tee -a /etc/systemd/system/docker.service.d/override.conf
 
     sudo systemctl daemon-reload
