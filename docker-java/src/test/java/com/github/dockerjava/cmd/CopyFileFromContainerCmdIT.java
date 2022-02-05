@@ -28,7 +28,7 @@ public class CopyFileFromContainerCmdIT extends CmdIT {
 
         assumeNotSwarm("", dockerRule);
 
-        String containerName = "copyFileFromContainer" + dockerRule.getKind();
+        String containerName = "copyFileFromContainer";
         dockerRule.ensureContainerRemoved(containerName);
 
         // TODO extract this into a shared method

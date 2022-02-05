@@ -44,8 +44,6 @@ public class AttachContainerCmdIT extends CmdIT {
     public void attachContainerWithStdin() throws Exception {
         DockerClient dockerClient = dockerRule.getClient();
 
-        Assume.assumeTrue("supports stdin attach", getFactoryType().supportsStdinAttach());
-
         String snippet = "hello world";
 
         CreateContainerResponse container = dockerClient.createContainerCmd("busybox")
@@ -181,53 +179,6 @@ public class AttachContainerCmdIT extends CmdIT {
 
         // HexDump.dump(collectFramesCallback.toString().getBytes(), 0, System.out, 0);
         assertThat(callback.toString(), containsString("stdout\r\nstderr"));
-    }
-
-    @Test
-    public void attachContainerStdinUnsupported() throws Exception {
-
-        DockerClient dockerClient = dockerRule.getClient();
-        Assume.assumeFalse("does not support stdin attach", getFactoryType().supportsStdinAttach());
-        expectedException.expect(UnsupportedOperationException.class);
-
-        String snippet = "hello world";
-
-        CreateContainerResponse container = dockerClient.createContainerCmd(DEFAULT_IMAGE)
-            .withCmd("echo", snippet)
-            .withTty(false)
-            .withAttachStdin(true)
-            .withAttachStdout(true)
-            .withAttachStderr(true)
-            .exec();
-
-        LOG.info("Created container: {}", container.toString());
-        assertThat(container.getId(), not(is(emptyString())));
-
-        AttachContainerTestCallback callback = new AttachContainerTestCallback() {
-            @Override
-            public void onNext(Frame frame) {
-                assertThat(frame.getStreamType(), equalTo(StreamType.STDOUT));
-                super.onNext(frame);
-            }
-        };
-
-        InputStream stdin = new ByteArrayInputStream("".getBytes());
-
-        dockerClient.attachContainerCmd(container.getId())
-            .withStdErr(true)
-            .withStdOut(true)
-            .withFollowStream(true)
-            .withLogs(true)
-            .withStdIn(stdin)
-            .exec(callback);
-
-        assertFalse("Processing of the response is not expected to be started" +
-            " because `attachContainerCmd` with stdin is not supported", callback.awaitStarted(5, SECONDS));
-
-        dockerClient.startContainerCmd(container.getId()).exec();
-
-        callback.awaitCompletion(30, TimeUnit.SECONDS);
-        callback.close();
     }
 
     /**

@@ -60,7 +60,7 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
 
     private CreateContainerResponse prepareContainerForCopy(String method) {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withName("docker-java-itest-copyToContainer" + method + dockerRule.getKind())
+                .withName("docker-java-itest-copyToContainer" + method)
                 .exec();
         LOG.info("Created container: {}", container);
         assertThat(container.getId(), not(isEmptyOrNullString()));
@@ -125,7 +125,7 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
         // script to be copied to the container's home dir and then executes it
         String containerCmd = "sleep 3; /home/" + scriptPath.getFileName().toString();
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withName("copyFileWithExecutivePerm" + dockerRule.getKind())
+                .withName("copyFileWithExecutivePerm")
                 .withCmd("/bin/sh", "-c", containerCmd)
                 .exec();
         // start the container

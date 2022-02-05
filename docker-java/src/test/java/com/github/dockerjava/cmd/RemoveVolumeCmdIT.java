@@ -17,7 +17,7 @@ public class RemoveVolumeCmdIT extends CmdIT {
     @Test(expected = NotFoundException.class)
     public void removeVolume() throws DockerException {
 
-        String volumeName = "volume1" + dockerRule.getKind();
+        String volumeName = "volume1";
 
         CreateVolumeResponse createVolumeResponse = dockerRule.getClient().createVolumeCmd()
                 .withName(volumeName)

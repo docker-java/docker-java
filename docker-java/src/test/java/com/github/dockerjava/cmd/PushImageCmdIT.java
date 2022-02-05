@@ -48,7 +48,7 @@ public class PushImageCmdIT extends CmdIT {
         assertThat(container.getId(), not(is(emptyString())));
 
         LOG.info("Committing container: {}", container.toString());
-        String imgName = authConfig.getRegistryAddress() + "/" + dockerRule.getKind() + "-push-latest";
+        String imgName = authConfig.getRegistryAddress() + "/push-latest";
         String imageId = dockerRule.getClient().commitCmd(container.getId())
                 .withRepository(imgName)
                 .exec();

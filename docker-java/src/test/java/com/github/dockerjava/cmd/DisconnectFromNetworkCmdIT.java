@@ -19,7 +19,7 @@ public class DisconnectFromNetworkCmdIT extends CmdIT {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999").exec();
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
-        CreateNetworkResponse network = dockerRule.getClient().createNetworkCmd().withName("disconnectNetwork" + dockerRule.getKind()).exec();
+        CreateNetworkResponse network = dockerRule.getClient().createNetworkCmd().withName("disconnectNetwork").exec();
 
         dockerRule.getClient().connectToNetworkCmd().withNetworkId(network.getId()).withContainerId(container.getId()).exec();
 
@@ -38,11 +38,11 @@ public class DisconnectFromNetworkCmdIT extends CmdIT {
     public void forceDisconnectFromNetwork() throws InterruptedException {
         assumeNotSwarm("no network in swarm", dockerRule);
 
-        CreateNetworkResponse network = dockerRule.getClient().createNetworkCmd().withName("testNetwork2" + dockerRule.getKind()).exec();
+        CreateNetworkResponse network = dockerRule.getClient().createNetworkCmd().withName("testNetwork2").exec();
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
                 .withHostConfig(newHostConfig()
-                        .withNetworkMode("testNetwork2" + dockerRule.getKind()))
+                        .withNetworkMode("testNetwork2"))
                 .withCmd("sleep", "9999")
                 .exec();
 
