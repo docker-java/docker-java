@@ -54,7 +54,8 @@ public class CompressArchiveUtil {
             outputStream = new GzipCompressorOutputStream(outputStream);
         }
         TarArchiveOutputStream tarArchiveOutputStream = new TarArchiveOutputStream(outputStream);
-        tarArchiveOutputStream.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU);
+        tarArchiveOutputStream.setLongFileMode(TarArchiveOutputStream.LONGFILE_POSIX);
+        tarArchiveOutputStream.setBigNumberMode(TarArchiveOutputStream.BIGNUMBER_POSIX);
         return tarArchiveOutputStream;
     }
 
