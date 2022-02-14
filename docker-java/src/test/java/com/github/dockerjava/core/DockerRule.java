@@ -37,8 +37,10 @@ public class DockerRule extends ExternalResource {
 
     private final Set<String> createdVolumeNames = new HashSet<>();
 
+    private final DefaultDockerClientConfig config = config();
+
     public DockerClient newClient() {
-        DockerClientImpl dockerClient = CmdIT.createDockerClient(config());
+        DockerClientImpl dockerClient = CmdIT.createDockerClient(config);
 
         dockerClient.withDockerCmdExecFactory(
             new DockerCmdExecFactoryDelegate(dockerClient.dockerCmdExecFactory) {
@@ -80,6 +82,10 @@ public class DockerRule extends ExternalResource {
                 return dockerClient;
             }
         };
+    }
+
+    public DefaultDockerClientConfig getConfig() {
+        return config;
     }
 
     public DockerClient getClient() {
