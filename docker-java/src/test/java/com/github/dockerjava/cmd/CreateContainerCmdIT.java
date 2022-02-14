@@ -1,6 +1,9 @@
 package com.github.dockerjava.cmd;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.dockerjava.api.async.ResultCallback;
+import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.CreateNetworkResponse;
 import com.github.dockerjava.api.command.CreateVolumeResponse;
@@ -70,6 +73,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
@@ -1107,5 +1111,18 @@ public class CreateContainerCmdIT extends CmdIT {
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
 
         assertThat(inspectContainerResponse.getHostConfig().getNanoCPUs(), is(500_000_000L));
+    }
+
+    @Test
+    public void shouldNotEncodeAuth() {
+        CreateContainerCmd cmd = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+            .withAuthConfig(new AuthConfig().withEmail("test@test.com"))
+            .withCmd("sleep", "9999");
+
+        ObjectMapper objectMapper = dockerRule.getConfig().getObjectMapper();
+
+        ObjectNode jsonNode = objectMapper.valueToTree(cmd);
+
+        assertThat(jsonNode.get("authConfig"), nullValue());
     }
 }
