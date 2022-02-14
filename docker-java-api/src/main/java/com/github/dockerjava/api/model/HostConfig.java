@@ -292,6 +292,9 @@ public class HostConfig extends DockerObject implements Serializable {
     @JsonProperty("ConsoleSize")
     private List<Integer> consoleSize;
 
+    @JsonProperty("CgroupnsMode")
+    private String cgroupnsMode;
+
     @JsonIgnore
     public Bind[] getBinds() {
         return (binds == null) ? new Bind[0] : binds.getBinds();
@@ -1190,6 +1193,16 @@ public class HostConfig extends DockerObject implements Serializable {
 
     public HostConfig withUsernsMode(String usernsMode) {
         this.usernsMode = usernsMode;
+        return this;
+    }
+
+    @CheckForNull
+    public String getCgroupnsMode() {
+        return cgroupnsMode;
+    }
+
+    public HostConfig withCgroupnsMode(String cgroupnsMode) {
+        this.cgroupnsMode = cgroupnsMode;
         return this;
     }
 
