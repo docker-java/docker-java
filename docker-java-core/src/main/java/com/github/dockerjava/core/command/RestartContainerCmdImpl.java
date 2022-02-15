@@ -42,7 +42,7 @@ public class RestartContainerCmdImpl extends AbstrDockerCmd<RestartContainerCmd,
     }
 
     @Override
-    public RestartContainerCmd withtTimeout(Integer timeout) {
+    public RestartContainerCmd withTimeout(Integer timeout) {
         checkNotNull(timeout, "timeout was not specified");
         checkArgument(timeout >= 0, "timeout must be greater or equal 0");
         this.timeout = timeout;
