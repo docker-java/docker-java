@@ -80,8 +80,7 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
                 );
                 break;
             default:
-                pathPrefix = "";
-                host = HttpHost.create(dockerHost);
+                throw new IllegalArgumentException("Unsupported protocol scheme: " + dockerHost);
         }
 
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(
