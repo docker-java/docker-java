@@ -66,7 +66,7 @@ public class CopyArchiveFromContainerCmdIT extends CmdIT {
         assertThat(container.getId(), not(isEmptyOrNullString()));
 
         Path temp = Files.createTempFile("", ".tar.gz");
-        Path binaryFile = Paths.get("src/test/resources/testCopyFromArchive/binary.dat");
+        Path binaryFile = Paths.get(ClassLoader.getSystemResource("testCopyFromArchive/binary.dat").toURI());
         CompressArchiveUtil.tar(binaryFile, temp, true, false);
 
         try (InputStream uploadStream = Files.newInputStream(temp)) {
