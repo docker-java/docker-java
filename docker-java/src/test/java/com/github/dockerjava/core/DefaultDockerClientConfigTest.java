@@ -175,7 +175,7 @@ public class DefaultDockerClientConfigTest {
 
     @Test()
     public void testAnyHostScheme() throws Exception {
-        URI dockerHost = URI.create(UUID.randomUUID().toString().replace("-", "") + "://foo");
+        URI dockerHost = URI.create("a" + UUID.randomUUID().toString().replace("-", "") + "://foo");
         new DefaultDockerClientConfig(dockerHost, "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
             null);
     }
