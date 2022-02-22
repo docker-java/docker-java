@@ -80,7 +80,6 @@
 		<mockito.version>3.3.0</mockito.version>
 
 
-		<maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
 		<maven-release-plugin.version>3.0.0-M1</maven-release-plugin.version>
 		<maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
@@ -104,6 +103,20 @@
 		<module>docker-java-transport-zerodep</module>
 		<module>docker-java</module>
 	</modules>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>bnd_snapshot_remove_after_release</id>
+			<url>https://bndtools.jfrog.io/bndtools/libs-snapshot/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<layout>default</layout>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</pluginRepository>
+	</pluginRepositories>
 
 	<build>
 		<pluginManagement>
@@ -153,11 +166,19 @@
 				</plugin>
 
 				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-jar-plugin</artifactId>
-					<version>${maven-jar-plugin.version}</version>
+					<groupId>biz.aQute.bnd</groupId>
+					<artifactId>bnd-maven-plugin</artifactId>
+					<version>6.3.0-SNAPSHOT</version>
+					<extensions>true</extensions>
 					<executions>
 						<execution>
+							<id>bnd-jar</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>	
+						<execution>
+							<id>bnd-test-jar</id>
 							<goals>
 								<goal>test-jar</goal>
 							</goals>
@@ -226,11 +247,6 @@
 						</execution>
 					</executions>
 				</plugin>
-				<plugin>
-					<groupId>org.apache.felix</groupId>
-					<artifactId>maven-bundle-plugin</artifactId>
-					<version>4.2.1</version>
-				</plugin>
 
 
 				<plugin>
@@ -282,6 +298,16 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
+			<plugin>
+				<groupId>biz.aQute.bnd</groupId>
+				<artifactId>bnd-maven-plugin</artifactId>
+				<configuration>
+					<bnd><![CDATA[
+					Bundle-Name: ${project.name}
+					Bundle-SymbolicName: com.github.${project.name}
+					]]></bnd>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>

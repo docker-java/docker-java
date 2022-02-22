@@ -58,15 +58,14 @@
 					<skip>true</skip>
 				</configuration>
 			</plugin>
-
 			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<extensions>true</extensions>
+				<groupId>biz.aQute.bnd</groupId>
+				<artifactId>bnd-maven-plugin</artifactId>
 				<configuration>
-					<instructions>
-						<Export-Package>com.github.dockerjava.httpclient5.*</Export-Package>
-					</instructions>
+					<bnd><![CDATA[
+					Export-Package: \
+						com.github.dockerjava.httpclient5.*
+					]]></bnd>
 				</configuration>
 			</plugin>
 		</plugins>

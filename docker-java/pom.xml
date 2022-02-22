@@ -175,16 +175,27 @@
 			</plugin>
 
 			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<extensions>true</extensions>
+				<groupId>biz.aQute.bnd</groupId>
+				<artifactId>bnd-maven-plugin</artifactId>
 				<configuration>
-					<instructions>
-						<Export-Package>!com.github.dockerjava.jaxrs.*,!com.github.dockerjava.netty.*,com.github.dockerjava.*</Export-Package>
-						<Import-Package>org.newsclub.net.unix;resolution:="optional",*</Import-Package>
-					</instructions>
+						<skip>false</skip>
+						<bnd><![CDATA[
+						-privatepackage: \
+							com.github.dockerjava.jaxrs.*,\
+							com.github.dockerjava.netty.*
+						Export-Package: \
+							com.github.dockerjava.api.*,\
+							com.github.dockerjava.core.*
+						Import-Package: \
+							!javax.annotation,\
+							!javax.net.ssl,\
+							!edu.umd.cs.findbugs.annotations\
+							org.newsclub.net.unix;resolution:="optional",\
+							*
+						]]></bnd>
 				</configuration>
 			</plugin>
+			
 		</plugins>
 	</build>
 </project>
