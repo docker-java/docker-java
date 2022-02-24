@@ -35,6 +35,20 @@
 		</dependency>
 
 		<dependency>
+		    <groupId>org.osgi</groupId>
+		    <artifactId>org.osgi.service.component.annotations</artifactId>
+		    <version>1.5.0</version>
+		    <scope>provided</scope>
+		</dependency>
+
+		<dependency>
+		    <groupId>org.osgi</groupId>
+		    <artifactId>org.osgi.service.metatype.annotations</artifactId>
+		    <version>1.4.1</version>
+		    <scope>provided</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>net.java.dev.jna</groupId>
 			<artifactId>jna</artifactId>
 			<version>5.8.0</version>

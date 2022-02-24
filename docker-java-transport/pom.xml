@@ -36,6 +36,13 @@
 			<version>5.8.0</version>
 			<scope>provided</scope>
 		</dependency>
+		
+		<dependency>
+		    <groupId>org.osgi</groupId>
+		    <artifactId>org.osgi.service.component.annotations</artifactId>
+		    <version>1.5.0</version>
+		    <scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
