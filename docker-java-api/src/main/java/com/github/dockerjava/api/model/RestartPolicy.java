@@ -36,7 +36,7 @@ public class RestartPolicy extends DockerObject implements Serializable {
     private Integer maximumRetryCount = 0;
 
     @JsonProperty("Name")
-    private String name = "";
+    private String name = "no";
 
     public RestartPolicy() {
     }
@@ -132,7 +132,6 @@ public class RestartPolicy extends DockerObject implements Serializable {
      */
     @Override
     public String toString() {
-        String result = name.isEmpty() ? "no" : name;
-        return maximumRetryCount > 0 ? result + ":" + maximumRetryCount : result;
+        return maximumRetryCount > 0 ? name + ":" + maximumRetryCount : name;
     }
 }

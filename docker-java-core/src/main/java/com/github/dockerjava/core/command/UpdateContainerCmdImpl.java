@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.command.UpdateContainerCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.api.model.RestartPolicy;
 import com.github.dockerjava.api.model.UpdateContainerResponse;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -54,6 +55,9 @@ public class UpdateContainerCmdImpl extends AbstrDockerCmd<UpdateContainerCmd, U
 
     @JsonProperty("KernelMemory")
     private Long kernelMemory;
+
+    @JsonProperty("RestartPolicy")
+    private RestartPolicy restartPolicy;
 
     public UpdateContainerCmdImpl(UpdateContainerCmd.Exec exec, String containerId) {
         super(exec);
@@ -234,6 +238,22 @@ public class UpdateContainerCmdImpl extends AbstrDockerCmd<UpdateContainerCmd, U
      */
     public UpdateContainerCmd withMemorySwap(Long memorySwap) {
         this.memorySwap = memorySwap;
+        return this;
+    }
+
+    /**
+     * @see #restartPolicy
+     */
+    @CheckForNull
+    public RestartPolicy getRestartPolicy() {
+        return restartPolicy;
+    }
+
+    /**
+     * @see #restartPolicy
+     */
+    public UpdateContainerCmd withRestartPolicy(RestartPolicy restartPolicy) {
+        this.restartPolicy = restartPolicy;
         return this;
     }
 

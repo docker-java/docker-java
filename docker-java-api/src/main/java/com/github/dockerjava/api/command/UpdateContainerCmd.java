@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.model.UpdateContainerResponse;
+import com.github.dockerjava.api.model.RestartPolicy;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -64,6 +65,11 @@ public interface UpdateContainerCmd extends SyncDockerCmd<UpdateContainerRespons
     Long getMemorySwap();
 
     UpdateContainerCmd withMemorySwap(Long memorySwap);
+
+    @CheckForNull
+    RestartPolicy getRestartPolicy();
+
+    UpdateContainerCmd withRestartPolicy(RestartPolicy restartPolicy);
 
     interface Exec extends DockerCmdSyncExec<UpdateContainerCmd, UpdateContainerResponse> {
     }

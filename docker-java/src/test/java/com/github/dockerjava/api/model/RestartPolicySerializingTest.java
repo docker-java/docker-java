@@ -15,7 +15,7 @@ public class RestartPolicySerializingTest {
     // --restart no
     public void noRestart() throws Exception {
         String json = JSONTestHelper.getMapper().writeValueAsString(RestartPolicy.noRestart());
-        assertEquals(json, "{\"MaximumRetryCount\":0,\"Name\":\"\"}");
+        assertEquals(json, "{\"MaximumRetryCount\":0,\"Name\":\"no\"}");
     }
 
     @Test
