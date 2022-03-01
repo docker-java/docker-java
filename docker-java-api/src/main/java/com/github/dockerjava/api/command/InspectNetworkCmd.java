@@ -14,7 +14,12 @@ import javax.annotation.Nonnull;
 public interface InspectNetworkCmd extends SyncDockerCmd<Network> {
 
     @CheckForNull
+    Boolean hasVerbose();
+
+    @CheckForNull
     String getNetworkId();
+
+    InspectNetworkCmd withVerbose(Boolean verbose);
 
     InspectNetworkCmd withNetworkId(@Nonnull String networkId);
 

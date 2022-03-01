@@ -8,13 +8,26 @@ public class InpectNetworkCmdImpl extends AbstrDockerCmd<InspectNetworkCmd, Netw
 
     private String networkId;
 
+    private Boolean verbose = false;
+
     public InpectNetworkCmdImpl(DockerCmdSyncExec<InspectNetworkCmd, Network> exec) {
         super(exec);
     }
 
     @Override
+    public Boolean hasVerbose() {
+        return this.verbose;
+    }
+
+    @Override
     public String getNetworkId() {
         return networkId;
+    }
+
+    @Override
+    public InspectNetworkCmd withVerbose(Boolean verbose) {
+        this.verbose = verbose;
+        return this;
     }
 
     @Override
