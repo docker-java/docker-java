@@ -69,7 +69,7 @@ public abstract class DockerHttpClientTCK {
         try (MockWebServer server = new MockWebServer()) {
             String dockerHost = server.url("/%20some/path/").toString()
                 .replace("http://", "tcp://");
-
+            
             try (DockerHttpClient client = createDockerHttpClient(dockerHost)) {
                 server.enqueue(new MockResponse().setResponseCode(200));
                 ping(client);

@@ -26,7 +26,7 @@ public class NameParser {
     private static final Pattern RepositoryNameComponentRegexp = Pattern.compile("[a-z0-9]+(?:[._-][a-z0-9]+)*");
 
     private static final Pattern RepositoryNameComponentAnchoredRegexp = Pattern.compile("^"
-            + RepositoryNameComponentRegexp.pattern() + "$");
+        + RepositoryNameComponentRegexp.pattern() + "$");
 
     // CHECKSTYLE:ON
 
@@ -35,16 +35,17 @@ public class NameParser {
     // + "/)*" + RepositoryNameComponentRegexp.pattern());
 
     public static ReposTag parseRepositoryTag(String name) {
-        int n = name.lastIndexOf(':');
-        if (n < 0) {
+        //changed variable name to increase understandability.
+        int lastindex = name.lastIndexOf(':');
+        if (lastindex < 0) {
             return new ReposTag(name, "");
         }
-        String tag = name.substring(n + 1);
+        String tag = name.substring(lastindex + 1);
         if (StringUtils.containsIgnoreCase(name, SHA256_SEPARATOR)) {
             return new ReposTag(name, "");
         }
         if (!tag.contains("/")) {
-            return new ReposTag(name.substring(0, n), tag);
+            return new ReposTag(name.substring(0, lastindex), tag);
         }
         return new ReposTag(name, "");
     }
@@ -85,7 +86,7 @@ public class NameParser {
 
         if (name.length() > RepositoryNameTotalLengthMax) {
             throw new InvalidRepositoryNameException(String.format("Repository name \"%s\" is longer than "
-                    + RepositoryNameTotalLengthMax, name));
+                + RepositoryNameTotalLengthMax, name));
         }
 
         String[] components = name.split("/");
@@ -93,7 +94,7 @@ public class NameParser {
         for (String component : components) {
             if (!RepositoryNameComponentAnchoredRegexp.matcher(component).matches()) {
                 throw new InvalidRepositoryNameException(String.format(
-                        "Repository name \"%s\" is invalid. Component: %s", name, component));
+                    "Repository name \"%s\" is invalid. Component: %s", name, component));
             }
         }
     }
@@ -105,7 +106,7 @@ public class NameParser {
 
         String[] nameParts = reposName.split("/", 2);
         if (nameParts.length == 1
-                || (!nameParts[0].contains(".") && !nameParts[0].contains(":") && !nameParts[0].equals("localhost"))) {
+            || (!nameParts[0].contains(".") && !nameParts[0].contains(":") && !nameParts[0].equals("localhost"))) {
             return new HostnameReposName(AuthConfig.DEFAULT_SERVER_ADDRESS, reposName);
         }
 
@@ -113,7 +114,7 @@ public class NameParser {
         reposName = nameParts[1];
         if (hostname.contains("index.docker.io")) {
             throw new InvalidRepositoryNameException(String.format("Invalid repository name, try \"%s\" instead",
-                    reposName));
+                reposName));
         }
         if (StringUtils.containsIgnoreCase(reposName, SHA256_SEPARATOR)) {
             reposName = StringUtils.substringBeforeLast(reposName, SHA256_SEPARATOR);
@@ -138,7 +139,7 @@ public class NameParser {
             if (obj instanceof HostnameReposName) {
                 HostnameReposName other = (HostnameReposName) obj;
                 return new EqualsBuilder().append(hostname, other.hostname).append(reposName, other.reposName)
-                        .isEquals();
+                    .isEquals();
             } else {
                 return false;
             }

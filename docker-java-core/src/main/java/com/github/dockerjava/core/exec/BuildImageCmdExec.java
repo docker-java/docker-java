@@ -28,7 +28,7 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
     private InvocationBuilder resourceWithOptionalAuthConfig(BuildImageCmd command, InvocationBuilder request) {
         final AuthConfigurations authConfigs = firstNonNull(command.getBuildAuthConfigs(), getBuildAuthConfigs());
         if (authConfigs != null && !authConfigs.getConfigs().isEmpty()) {
-            request = request.header("X-Registry-Config", registryConfigs(authConfigs));
+            request = request.header("X-Registry-Config", dockerClientConfig.registryConfigs(authConfigs, this));
         }
         return request;
     }

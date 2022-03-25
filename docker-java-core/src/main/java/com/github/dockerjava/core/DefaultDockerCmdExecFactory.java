@@ -86,18 +86,23 @@ public final class DefaultDockerCmdExecFactory extends AbstractDockerCmdExecFact
 
             if (!queryParams.isEmpty()) {
                 Escaper urlFormParameterEscaper = UrlEscapers.urlFormParameterEscaper();
-                resource = queryParams.asMap().entrySet().stream()
-                    .flatMap(entry -> {
-                        return entry.getValue().stream().map(s -> {
-                            return entry.getKey() + "=" + urlFormParameterEscaper.escape(s);
-                        });
-                    })
-                    .collect(Collectors.joining("&", resource + "?", ""));
+
+                resource = getCollect(resource, urlFormParameterEscaper);
             }
 
             return new DefaultInvocationBuilder(
                 dockerHttpClient, objectMapper, resource
             );
+        }
+
+        private String getCollect(String resource, Escaper urlFormParameterEscaper) {
+            return queryParams.asMap().entrySet().stream()
+                .flatMap(entry -> {
+                    return entry.getValue().stream().map(s -> {
+                        return entry.getKey() + "=" + urlFormParameterEscaper.escape(s);
+                    });
+                })
+                .collect(Collectors.joining("&", resource + "?", ""));
         }
 
         @Override

@@ -97,9 +97,7 @@ public class Task extends DockerObject implements Serializable {
      * @return name
      **/
 
-    public String getName() {
-        return name;
-    }
+
 
     /**
      * User-defined key/value metadata.

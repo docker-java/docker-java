@@ -15,14 +15,21 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier;
 import com.fasterxml.jackson.databind.deser.std.DelegatingDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.DockerObject;
 import com.github.dockerjava.api.model.DockerObjectAccessor;
+import com.github.dockerjava.core.exec.AbstrDockerCmdExec;
+import com.google.common.io.BaseEncoding;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
+
+import static com.github.dockerjava.core.RemoteApiVersion.UNKNOWN_VERSION;
+import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_19;
 
 /**
  * Interface that describes the docker client configuration.
@@ -59,6 +66,29 @@ public interface DockerClientConfig {
 
     default ObjectMapper getObjectMapper() {
         return getDefaultObjectMapper();
+    }
+
+    @Nonnull
+    default String registryConfigs(@Nonnull AuthConfigurations authConfigs, AbstrDockerCmdExec abstrDockerCmdExec) {
+        try {
+            final String json;
+            final RemoteApiVersion apiVersion = getApiVersion();
+            ObjectMapper objectMapper = getObjectMapper();
+
+            if (apiVersion.equals(UNKNOWN_VERSION)) {
+                ObjectNode rootNode = objectMapper.valueToTree(authConfigs.getConfigs()); // all registries
+                final ObjectNode authNodes = objectMapper.valueToTree(authConfigs); // wrapped in "configs":{}
+                rootNode.setAll(authNodes); // merge 2 variants
+                json = rootNode.toString();
+            } else if (apiVersion.isGreaterOrEqual(VERSION_1_19)) {
+                json = objectMapper.writeValueAsString(authConfigs.getConfigs());
+            } else {
+                json = objectMapper.writeValueAsString(authConfigs);
+            }
+            return BaseEncoding.base64Url().encode(json.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 

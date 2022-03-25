@@ -17,4 +17,10 @@ public abstract class DockerObject {
     public Map<String, Object> getRawValues() {
         return Collections.unmodifiableMap(this.rawValues);
     }
+
+    public String getName() {
+        String name = "";
+        return name;
+    }
+
 }

@@ -43,9 +43,7 @@ public class Ulimit extends DockerObject implements Serializable {
         this.hard = hard;
     }
 
-    public String getName() {
-        return name;
-    }
+
 
     @Deprecated
     @JsonIgnore
