@@ -171,7 +171,7 @@ public class StartContainerCmdIT extends CmdIT {
 
     @Test
     public void startContainerWithPortBindings() throws DockerException {
-        int baseport = 20_000 + (getFactoryType().ordinal() * 1000);
+        int baseport = 20_000;
 
         ExposedPort tcp22 = ExposedPort.tcp(22);
         ExposedPort tcp23 = ExposedPort.tcp(23);
@@ -267,8 +267,8 @@ public class StartContainerCmdIT extends CmdIT {
 
     @Test
     public void startContainerWithLinkingDeprecated() throws DockerException {
-        String container1Name = "containerWithLink1" + dockerRule.getKind();
-        String container2Name = "containerWithLink2" + dockerRule.getKind();
+        String container1Name = "containerWithLink1";
+        String container2Name = "containerWithLink2";
         dockerRule.ensureContainerRemoved(container1Name);
         dockerRule.ensureContainerRemoved(container2Name);
 
@@ -328,8 +328,8 @@ public class StartContainerCmdIT extends CmdIT {
 
     @Test
     public void startContainerWithLinking() throws DockerException {
-        String container1Name = "containerWithLinking1" + dockerRule.getKind();
-        String container2Name = "containerWithLinking2" + dockerRule.getKind();
+        String container1Name = "containerWithLinking1";
+        String container2Name = "containerWithLinking2";
         dockerRule.ensureContainerRemoved(container1Name);
         dockerRule.ensureContainerRemoved(container2Name);
 

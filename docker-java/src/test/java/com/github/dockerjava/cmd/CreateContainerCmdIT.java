@@ -1,6 +1,9 @@
 package com.github.dockerjava.cmd;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.dockerjava.api.async.ResultCallback;
+import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.CreateNetworkResponse;
 import com.github.dockerjava.api.command.CreateVolumeResponse;
@@ -70,6 +73,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
@@ -364,7 +368,7 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Test(expected = ConflictException.class)
     public void createContainerWithName() throws DockerException {
-        String containerName = "container_" + dockerRule.getKind();
+        String containerName = "container_";
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withName(containerName)
@@ -386,8 +390,8 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Test
     public void createContainerWithLink() throws DockerException {
-        String containerName1 = "containerWithlink_" + dockerRule.getKind();
-        String containerName2 = "container2Withlink_" + dockerRule.getKind();
+        String containerName1 = "containerWithlink_";
+        String containerName2 = "container2Withlink_";
 
         CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("sleep", "9999")
                 .withName(containerName1).exec();
@@ -437,9 +441,9 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Test
     public void createContainerWithLinkInCustomNetwork() throws DockerException {
-        String containerName1 = "containerCustomlink_" + dockerRule.getKind();
-        String containerName2 = "containerCustom2link_" + dockerRule.getKind();
-        String networkName = "linkNetcustom" + dockerRule.getKind();
+        String containerName1 = "containerCustomlink_";
+        String containerName2 = "containerCustom2link_";
+        String networkName = "linkNetcustom";
 
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd()
                 .withName(networkName)
@@ -485,9 +489,9 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Test
     public void createContainerWithCustomIp() throws DockerException {
-        String containerName1 = "containerCustomIplink_" + dockerRule.getKind();
-        String networkName = "customIpNet" + dockerRule.getKind();
-        String subnetPrefix = getFactoryType().getSubnetPrefix() + "101";
+        String containerName1 = "containerCustomIplink_";
+        String networkName = "customIpNet";
+        String subnetPrefix = "10.100.101";
 
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd()
                 .withIpam(new Network.Ipam()
@@ -523,8 +527,8 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Test
     public void createContainerWithAlias() throws DockerException {
-        String containerName1 = "containerAlias_" + dockerRule.getKind();
-        String networkName = "aliasNet" + dockerRule.getKind();
+        String containerName1 = "containerAlias_";
+        String networkName = "aliasNet";
 
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd()
                 .withName(networkName)
@@ -538,7 +542,7 @@ public class CreateContainerCmdIT extends CmdIT {
                         .withNetworkMode(networkName))
                 .withCmd("sleep", "9999")
                 .withName(containerName1)
-                .withAliases("server" + dockerRule.getKind())
+                .withAliases("server")
                 .exec();
 
         assertThat(container.getId(), not(is(emptyString())));
@@ -549,7 +553,7 @@ public class CreateContainerCmdIT extends CmdIT {
                 .exec();
 
         ContainerNetwork aliasNet = inspectContainerResponse.getNetworkSettings().getNetworks().get(networkName);
-        assertThat(aliasNet.getAliases(), hasItem("server" + dockerRule.getKind()));
+        assertThat(aliasNet.getAliases(), hasItem("server"));
     }
 
     @Test
@@ -597,7 +601,7 @@ public class CreateContainerCmdIT extends CmdIT {
     public void createContainerWithEntrypoint() throws DockerException {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withName("containerEntrypoint" + dockerRule.getKind())
+                .withName("containerEntrypoint")
                 .withEntrypoint("sleep", "9999").exec();
 
         LOG.info("Created container {}", container.toString());
@@ -616,7 +620,7 @@ public class CreateContainerCmdIT extends CmdIT {
         String[] extraHosts = {"dockerhost:127.0.0.1", "otherhost:10.0.0.1"};
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withName("containerextrahosts" + dockerRule.getKind())
+                .withName("containerextrahosts")
                 .withHostConfig(newHostConfig()
                         .withExtraHosts(extraHosts)).exec();
 
@@ -650,7 +654,7 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Test
     public void createContainerWithPortBindings() throws DockerException {
-        int baseport = 10_000 + (getFactoryType().ordinal() * 1000);
+        int baseport = 10_000;
 
         ExposedPort tcp22 = ExposedPort.tcp(22);
         ExposedPort tcp23 = ExposedPort.tcp(23);
@@ -687,8 +691,8 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Test
     public void createContainerWithLinking() throws DockerException {
-        String containerName1 = "containerWithlinking_" + dockerRule.getKind();
-        String containerName2 = "container2Withlinking_" + dockerRule.getKind();
+        String containerName1 = "containerWithlinking_";
+        String containerName2 = "container2Withlinking_";
 
         CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withCmd("sleep", "9999")
@@ -812,7 +816,7 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Test
     public void createContainerWithULimits() throws DockerException {
-        String containerName = "containerulimit" + dockerRule.getKind();
+        String containerName = "containerulimit";
         Ulimit[] ulimits = {new Ulimit("nproc", 709, 1026), new Ulimit("nofile", 1024, 4096)};
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
@@ -834,7 +838,7 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Test
     public void createContainerWithIntegerBoundsExceedingULimit() throws DockerException {
-        String containerName = "containercoreulimit" + dockerRule.getKind();
+        String containerName = "containercoreulimit";
         Ulimit[] ulimits = {new Ulimit("core", 99999999998L, 99999999999L)};
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
@@ -1107,5 +1111,18 @@ public class CreateContainerCmdIT extends CmdIT {
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
 
         assertThat(inspectContainerResponse.getHostConfig().getNanoCPUs(), is(500_000_000L));
+    }
+
+    @Test
+    public void shouldNotEncodeAuth() {
+        CreateContainerCmd cmd = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+            .withAuthConfig(new AuthConfig().withEmail("test@test.com"))
+            .withCmd("sleep", "9999");
+
+        ObjectMapper objectMapper = dockerRule.getConfig().getObjectMapper();
+
+        ObjectNode jsonNode = objectMapper.valueToTree(cmd);
+
+        assertThat(jsonNode.get("authConfig"), nullValue());
     }
 }

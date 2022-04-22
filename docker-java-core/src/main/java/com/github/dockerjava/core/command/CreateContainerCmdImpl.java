@@ -1,6 +1,6 @@
 package com.github.dockerjava.core.command;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
@@ -30,6 +30,13 @@ import static java.util.Collections.singletonMap;
  * Creates a new container.
  * `/containers/create`
  */
+@JsonAutoDetect(
+    fieldVisibility = JsonAutoDetect.Visibility.NONE,
+    setterVisibility = JsonAutoDetect.Visibility.NONE,
+    getterVisibility = JsonAutoDetect.Visibility.NONE,
+    isGetterVisibility = JsonAutoDetect.Visibility.NONE,
+    creatorVisibility = JsonAutoDetect.Visibility.NONE
+)
 public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, CreateContainerResponse> implements
         CreateContainerCmd {
 
@@ -122,13 +129,10 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @JsonProperty("NetworkingConfig")
     private NetworkingConfig networkingConfig;
 
-    @JsonIgnore
     private String ipv4Address = null;
 
-    @JsonIgnore
     private String ipv6Address = null;
 
-    @JsonIgnore
     private List<String> aliases = null;
 
     private AuthConfig authConfig;
@@ -151,7 +155,6 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
-    @JsonIgnore
     public List<String> getAliases() {
         return aliases;
     }
@@ -256,7 +259,6 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
-    @JsonIgnore
     public ExposedPort[] getExposedPorts() {
         return exposedPorts.getExposedPorts();
     }
@@ -277,7 +279,6 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     /**
      * @see #stopSignal
      */
-    @JsonIgnore
     @Override
     public String getStopSignal() {
         return stopSignal;
@@ -326,7 +327,6 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
-    @JsonIgnore
     public Map<String, String> getLabels() {
         return labels;
     }
@@ -430,7 +430,6 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     }
 
     @Override
-    @JsonIgnore
     public Volume[] getVolumes() {
         return volumes.getVolumes();
     }

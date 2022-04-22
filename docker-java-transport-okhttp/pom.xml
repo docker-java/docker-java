@@ -30,8 +30,15 @@
 
 		<dependency>
 			<groupId>net.java.dev.jna</groupId>
-			<artifactId>jna-platform</artifactId>
+			<artifactId>jna</artifactId>
 			<version>5.8.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>docker-java-transport-tck</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

@@ -136,6 +136,6 @@ public abstract class SwarmCmdIT extends CmdIT {
         DefaultDockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder()
             .withRegistryUrl("https://index.docker.io/v1/")
             .withDockerHost("tcp://" + binding).build();
-        return getFactoryType().createDockerClient(config);
+        return createDockerClient(config);
     }
 }

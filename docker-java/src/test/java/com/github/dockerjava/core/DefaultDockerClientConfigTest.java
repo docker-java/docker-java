@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -172,28 +173,11 @@ public class DefaultDockerClientConfigTest {
                 new LocalDirectorySSLConfig(dockerCertPath()));
     }
 
-    @Test(expected = DockerClientException.class)
-    public void testWrongHostScheme() throws Exception {
-        new DefaultDockerClientConfig(URI.create("http://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
-                null);
-    }
-
     @Test()
-    public void testTcpHostScheme() throws Exception {
-        new DefaultDockerClientConfig(URI.create("tcp://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
-                null);
-    }
-
-    @Test()
-    public void testUnixHostScheme() throws Exception {
-        new DefaultDockerClientConfig(URI.create("unix://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
-                null);
-    }
-
-    @Test()
-    public void testNpipeHostScheme() throws Exception {
-        new DefaultDockerClientConfig(URI.create("npipe://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
-                null);
+    public void testAnyHostScheme() throws Exception {
+        URI dockerHost = URI.create("a" + UUID.randomUUID().toString().replace("-", "") + "://foo");
+        new DefaultDockerClientConfig(dockerHost, "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
+            null);
     }
 
     @Test

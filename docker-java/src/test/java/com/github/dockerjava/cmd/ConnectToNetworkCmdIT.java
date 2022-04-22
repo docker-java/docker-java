@@ -26,7 +26,7 @@ public class ConnectToNetworkCmdIT extends CmdIT {
     @Test
     public void connectToNetwork() throws InterruptedException {
         assumeNotSwarm("no network in swarm", dockerRule);
-        String networkName = "connectToNetwork" + dockerRule.getKind();
+        String networkName = "connectToNetwork";
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("sleep", "9999").exec();
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
@@ -48,8 +48,8 @@ public class ConnectToNetworkCmdIT extends CmdIT {
     public void connectToNetworkWithContainerNetwork() throws InterruptedException {
         assumeNotSwarm("no network in swarm", dockerRule);
 
-        final String subnetPrefix = getFactoryType().getSubnetPrefix() + "100";
-        final String networkName = "ContainerWithNetwork" + dockerRule.getKind();
+        final String subnetPrefix = "10.100.100";
+        final String networkName = "ContainerWithNetwork";
         final String containerIp = subnetPrefix + ".100";
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
@@ -74,7 +74,7 @@ public class ConnectToNetworkCmdIT extends CmdIT {
             .withNetworkId(network.getId())
             .withContainerId(container.getId())
             .withContainerNetwork(new ContainerNetwork()
-                .withAliases("aliasName" + dockerRule.getKind())
+                .withAliases("aliasName")
                 .withIpamConfig(new ContainerNetwork.Ipam()
                     .withIpv4Address(containerIp)))
             .exec();
@@ -89,7 +89,7 @@ public class ConnectToNetworkCmdIT extends CmdIT {
 
         ContainerNetwork testNetwork = inspectContainerResponse.getNetworkSettings().getNetworks().get(networkName);
         assertNotNull(testNetwork);
-        assertThat(testNetwork.getAliases(), hasItem("aliasName" + dockerRule.getKind()));
+        assertThat(testNetwork.getAliases(), hasItem("aliasName"));
         assertThat(testNetwork.getGateway(), is(subnetPrefix + ".1"));
         assertThat(testNetwork.getIpAddress(), is(containerIp));
     }

@@ -96,6 +96,7 @@
 		<module>docker-java-bom</module>
 		<module>docker-java-core</module>
 		<module>docker-java-transport</module>
+		<module>docker-java-transport-tck</module>
 		<module>docker-java-transport-netty</module>
 		<module>docker-java-transport-jersey</module>
 		<module>docker-java-transport-okhttp</module>
@@ -236,7 +237,7 @@
 					<!-- use with "mvn -DskipTests clean verify" -->
 					<groupId>com.github.siom79.japicmp</groupId>
 					<artifactId>japicmp-maven-plugin</artifactId>
-					<version>0.14.3</version>
+					<version>0.15.4</version>
 					<configuration>
 						<oldVersion>
 							<dependency>

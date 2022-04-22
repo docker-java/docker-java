@@ -169,9 +169,13 @@ public final class OkDockerHttpClient implements DockerHttpClient {
                     .scheme(isSSL ? "https" : "http")
                     .host(dockerHost.getHost())
                     .port(dockerHost.getPort());
+
+                if (dockerHost.getPath().length() > 0) {
+                    baseUrlBuilder = baseUrlBuilder.encodedPath(dockerHost.getPath());
+                }
                 break;
             default:
-                baseUrlBuilder = HttpUrl.get(dockerHost.toString()).newBuilder();
+                throw new IllegalArgumentException("Unsupported protocol scheme: " + dockerHost);
         }
         baseUrl = baseUrlBuilder.build();
     }

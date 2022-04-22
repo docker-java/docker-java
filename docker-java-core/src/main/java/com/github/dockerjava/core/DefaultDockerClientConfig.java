@@ -102,14 +102,10 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
     }
 
     private URI checkDockerHostScheme(URI dockerHost) {
-        switch (dockerHost.getScheme()) {
-            case "tcp":
-            case "unix":
-            case "npipe":
-                return dockerHost;
-            default:
-                throw new DockerClientException("Unsupported protocol scheme found: '" + dockerHost);
+        if (dockerHost == null) {
+            throw new DockerClientException("'dockerHost' is null");
         }
+        return dockerHost;
     }
 
     private static Properties loadIncludedDockerProperties(Properties systemProperties) {

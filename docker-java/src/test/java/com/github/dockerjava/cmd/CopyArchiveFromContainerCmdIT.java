@@ -33,7 +33,7 @@ public class CopyArchiveFromContainerCmdIT extends CmdIT {
     public void copyFromContainer() throws Exception {
         // TODO extract this into a shared method
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withName("copyFromContainer" + dockerRule.getKind())
+                .withName("copyFromContainer")
                 .withCmd("touch", "/copyFromContainer")
                 .exec();
 
@@ -59,7 +59,7 @@ public class CopyArchiveFromContainerCmdIT extends CmdIT {
     @Test
     public void copyFromContainerBinaryFile() throws Exception {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withName("copyFromContainerBinaryFile" + dockerRule.getKind())
+                .withName("copyFromContainerBinaryFile")
                 .exec();
 
         LOG.info("Created container: {}", container);

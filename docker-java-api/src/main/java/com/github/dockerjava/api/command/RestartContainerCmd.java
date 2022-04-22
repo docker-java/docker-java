@@ -22,7 +22,15 @@ public interface RestartContainerCmd extends SyncDockerCmd<Void> {
 
     RestartContainerCmd withContainerId(@Nonnull String containerId);
 
-    RestartContainerCmd withtTimeout(Integer timeout);
+    /**
+     * @deprecated wrong name, use {@link #withTimeout(Integer)}
+     */
+    @Deprecated
+    default RestartContainerCmd withtTimeout(Integer timeout) {
+        return withTimeout(timeout);
+    }
+
+    RestartContainerCmd withTimeout(Integer timeout);
 
     /**
      * @throws NotFoundException

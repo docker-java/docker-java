@@ -68,6 +68,20 @@
 			<artifactId>junixsocket-native-common</artifactId>
 			<version>${junixsocket.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>1.7.30</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>docker-java-transport-tck</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
