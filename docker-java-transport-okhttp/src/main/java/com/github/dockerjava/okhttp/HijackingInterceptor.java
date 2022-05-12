@@ -5,7 +5,6 @@ import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.internal.connection.Exchange;
-import okhttp3.internal.http.RealInterceptorChain;
 import okhttp3.internal.ws.RealWebSocket;
 import okio.BufferedSink;
 
@@ -37,25 +36,29 @@ class HijackingInterceptor implements Interceptor {
 
         chain.call().timeout().clearTimeout().clearDeadline();
 
-        Exchange exchange = ((RealInterceptorChain) chain).exchange();
-        RealWebSocket.Streams streams = exchange.newWebSocketStreams();
-        Thread thread = new Thread(() -> {
-            try (BufferedSink sink = streams.sink) {
-                while (sink.isOpen()) {
-                    int aByte = stdin.read();
-                    if (aByte < 0) {
-                        break;
+        Exchange exchange = response.exchange();
+
+        if (exchange != null) {
+            RealWebSocket.Streams streams = exchange.newWebSocketStreams();
+            Thread thread = new Thread(() -> {
+                try (BufferedSink sink = streams.getSink()) {
+                    while (sink.isOpen()) {
+                        int aByte = stdin.read();
+                        if (aByte < 0) {
+                            break;
+                        }
+                        sink.writeByte(aByte);
+                        sink.emit();
                     }
-                    sink.writeByte(aByte);
-                    sink.emit();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
-        thread.setName("okhttp-hijack-streaming-" + System.identityHashCode(request));
-        thread.setDaemon(true);
-        thread.start();
+            });
+            thread.setName("okhttp-hijack-streaming-" + System.identityHashCode(request));
+            thread.setDaemon(true);
+            thread.start();
+        }
+
         return response;
     }
 }
