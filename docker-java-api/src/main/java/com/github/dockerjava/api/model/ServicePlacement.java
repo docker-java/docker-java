@@ -23,6 +23,12 @@ public class ServicePlacement extends DockerObject implements Serializable {
     private List<String> constraints;
 
     /**
+     * @since 1.28
+     */
+    @JsonProperty("Preferences")
+    private List<ServicePlacementPreference> preferences;
+
+    /**
      * @since 1.30
      */
     @JsonProperty("Platforms")
@@ -47,6 +53,22 @@ public class ServicePlacement extends DockerObject implements Serializable {
      */
     public ServicePlacement withConstraints(List<String> constraints) {
         this.constraints = constraints;
+        return this;
+    }
+
+    /**
+     * @see #preferences
+     */
+    @CheckForNull
+    public List<ServicePlacementPreference> getPreferences() {
+        return preferences;
+    }
+
+    /**
+     * @see #preferences
+     */
+    public ServicePlacement withPreferences(List<ServicePlacementPreference> preferences) {
+        this.preferences = preferences;
         return this;
     }
 
