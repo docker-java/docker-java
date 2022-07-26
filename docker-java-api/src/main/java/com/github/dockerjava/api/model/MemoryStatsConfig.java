@@ -32,6 +32,15 @@ public class MemoryStatsConfig extends DockerObject implements Serializable {
     @JsonProperty("limit")
     private Long limit;
 
+    @JsonProperty("commitbytes")
+    private Long commitbytes;
+
+    @JsonProperty("commitpeakbytes")
+    private Long commitpeakbytes;
+
+    @JsonProperty("privateworkingset")
+    private Long privateworkingset;
+
     /**
      * @see #stats
      */
@@ -69,5 +78,26 @@ public class MemoryStatsConfig extends DockerObject implements Serializable {
     @CheckForNull
     public Long getLimit() {
         return limit;
+    }
+
+    /**
+     * @see #commitbytes
+     */
+    public Long getCommitbytes() {
+        return commitbytes;
+    }
+
+    /**
+     * @see #commitpeakbytes
+     */
+    public Long getCommitpeakbytes() {
+        return commitpeakbytes;
+    }
+
+    /**
+     * @see #privateworkingset
+     */
+    public Long getPrivateworkingset() {
+        return privateworkingset;
     }
 }

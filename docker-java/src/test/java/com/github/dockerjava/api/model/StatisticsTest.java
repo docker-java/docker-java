@@ -83,6 +83,9 @@ public class StatisticsTest {
 
         assertThat(memoryStats.getLimit(), is(2095874048L));
         assertThat(memoryStats.getFailcnt(), is(0L));
+        assertThat(memoryStats.getPrivateworkingset(), is(206008320L));
+        assertThat(memoryStats.getCommitbytes(), is(252903424L));
+        assertThat(memoryStats.getCommitpeakbytes(), is(325029888L));
 
         final BlkioStatsConfig blkioStats = statistics.getBlkioStats();
         assertThat(blkioStats.getIoServiceBytesRecursive(), Matchers.<BlkioStatEntry>hasSize(5));

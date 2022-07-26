@@ -172,7 +172,11 @@
       "writeback":0
     },
     "limit":2095874048,
-    "failcnt":0
+    "failcnt":0,
+    "commitbytes":252903424,
+    "commitpeakbytes":325029888,
+    "privateworkingset":206008320
+
   },
   "name":"/gallant_hamilton",
   "id":"b581d78b03e41d81c9fe941f03f5d35e23733ff96370456b58d2906e002b0deb",
