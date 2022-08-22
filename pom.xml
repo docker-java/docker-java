@@ -65,7 +65,7 @@
 		<commons-codec.version>1.11</commons-codec.version>
 		<commons-io.version>2.6</commons-io.version>
 		<commons-lang3.version>3.12.0</commons-lang3.version>
-		<slf4j-api.version>1.7.30</slf4j-api.version>
+		<slf4j-api.version>2.0.0</slf4j-api.version>
 
 		<bouncycastle.version>1.64</bouncycastle.version>
 		<junixsocket.version>2.3.2</junixsocket.version>
