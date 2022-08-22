@@ -161,6 +161,11 @@ public class ContainerSpec extends DockerObject implements Serializable {
     @JsonProperty("Configs")
     private List<ContainerSpecConfig> configs;
 
+    /**
+     * @since 1.37
+     * Run an init inside the container that forwards signals and reaps processes.
+     * This field is omitted if empty, and the default (as configured on the daemon) is used.
+     */
     @JsonProperty("Init")
     private Boolean init;
 
