@@ -161,6 +161,9 @@ public class ContainerSpec extends DockerObject implements Serializable {
     @JsonProperty("Configs")
     private List<ContainerSpecConfig> configs;
 
+    @JsonProperty("Init")
+    private Boolean init;
+
     /**
      * @see #image
      */
@@ -433,6 +436,15 @@ public class ContainerSpec extends DockerObject implements Serializable {
 
     public ContainerSpec withConfigs(List<ContainerSpecConfig> configs) {
         this.configs = configs;
+        return this;
+    }
+
+    public Boolean getInit() {
+        return init;
+    }
+
+    public ContainerSpec withInit(Boolean init) {
+        this.init = init;
         return this;
     }
 }
