@@ -237,7 +237,7 @@
 					<!-- use with "mvn -DskipTests clean verify" -->
 					<groupId>com.github.siom79.japicmp</groupId>
 					<artifactId>japicmp-maven-plugin</artifactId>
-					<version>0.15.4</version>
+					<version>0.16.0</version>
 					<configuration>
 						<oldVersion>
 							<dependency>
