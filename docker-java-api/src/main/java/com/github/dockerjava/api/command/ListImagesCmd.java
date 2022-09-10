@@ -44,6 +44,13 @@ public interface ListImagesCmd extends SyncDockerCmd<List<Image>> {
      */
     ListImagesCmd withLabelFilter(Map<String, String> labels);
 
+    /**
+     * Filter images by reference
+     *
+     * @param reference string in the form {@code <image-name>[:<tag>]}
+     */
+    ListImagesCmd withReferenceFilter(String reference);
+
     interface Exec extends DockerCmdSyncExec<ListImagesCmd, List<Image>> {
     }
 

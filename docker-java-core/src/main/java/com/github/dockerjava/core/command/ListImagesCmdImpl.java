@@ -72,6 +72,13 @@ public class ListImagesCmdImpl extends AbstrDockerCmd<ListImagesCmd, List<Image>
     }
 
     @Override
+    public ListImagesCmd withReferenceFilter(String reference) {
+        checkNotNull(reference, "reference filter not specified");
+        filters.withFilter("reference", reference);
+        return this;
+    }
+
+    @Override
     public String getImageNameFilter() {
         return this.imageNameFilter;
     }

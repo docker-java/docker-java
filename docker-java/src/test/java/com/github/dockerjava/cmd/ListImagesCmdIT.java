@@ -15,6 +15,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyArray;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
@@ -52,6 +53,13 @@ public class ListImagesCmdIT extends CmdIT {
         assertThat(images.size(), is(greaterThan(0)));
         Boolean imageInFilteredList = isImageInFilteredList(images, imageId);
         assertTrue(imageInFilteredList);
+    }
+
+    @Test
+    public void listImagesWithReferenceFilter() throws DockerException {
+        List<Image> images = dockerRule.getClient().listImagesCmd().withReferenceFilter("busybox")
+            .exec();
+        assertThat(images, hasSize(1));
     }
 
     private boolean isImageInFilteredList(List<Image> images, String expectedImageId) {
