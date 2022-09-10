@@ -23,6 +23,7 @@ import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.LogConfig;
 import com.github.dockerjava.api.model.Network;
+import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.Ports.Binding;
 import com.github.dockerjava.api.model.RestartPolicy;
@@ -1124,5 +1125,19 @@ public class CreateContainerCmdIT extends CmdIT {
         ObjectNode jsonNode = objectMapper.valueToTree(cmd);
 
         assertThat(jsonNode.get("authConfig"), nullValue());
+    }
+
+    @Test
+    public void shouldHandleANetworkAliasWithoutACustomNetworkGracefully() {
+        HostConfig config = newHostConfig()
+            .withPortBindings(new PortBinding(Ports.Binding.bindPort(8080), new ExposedPort(8081)));
+
+        // Should not throw
+        dockerRule.getClient()
+            .createContainerCmd(DEFAULT_IMAGE)
+            .withAliases("hello-world")
+            .withHostConfig(config)
+            .withCmd("sleep", "9999")
+            .exec();
     }
 }

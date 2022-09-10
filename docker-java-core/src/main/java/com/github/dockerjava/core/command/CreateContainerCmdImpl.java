@@ -600,7 +600,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
             containerNetwork.withAliases(aliases);
         }
 
-        if (containerNetwork != null) {
+        if (containerNetwork != null && hostConfig.getNetworkMode() != null) {
             networkingConfig = new NetworkingConfig()
                     .withEndpointsConfig(singletonMap(hostConfig.getNetworkMode(), containerNetwork));
         }
