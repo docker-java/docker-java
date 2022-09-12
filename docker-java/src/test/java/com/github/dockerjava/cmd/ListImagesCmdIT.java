@@ -4,6 +4,7 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.api.model.Info;
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,9 +58,13 @@ public class ListImagesCmdIT extends CmdIT {
 
     @Test
     public void listImagesWithReferenceFilter() throws DockerException {
-        List<Image> images = dockerRule.getClient().listImagesCmd().withReferenceFilter("busybox")
+        String tag = "" + RandomUtils.nextInt(0, Integer.MAX_VALUE);
+
+        dockerRule.getClient().tagImageCmd("busybox:latest", "docker-java/busybox", tag).exec();
+        List<Image> images = dockerRule.getClient().listImagesCmd().withReferenceFilter("docker-java/busybox")
             .exec();
         assertThat(images, hasSize(1));
+        dockerRule.getClient().removeImageCmd("docker-java/busybox:" + tag).exec();
     }
 
     private boolean isImageInFilteredList(List<Image> images, String expectedImageId) {
