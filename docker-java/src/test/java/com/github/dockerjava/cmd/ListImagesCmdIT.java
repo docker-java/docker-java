@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
 import java.util.List;
 
 import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
@@ -62,6 +63,17 @@ public class ListImagesCmdIT extends CmdIT {
 
         dockerRule.getClient().tagImageCmd("busybox:latest", "docker-java/busybox", tag).exec();
         List<Image> images = dockerRule.getClient().listImagesCmd().withReferenceFilter("docker-java/busybox")
+            .exec();
+        assertThat(images, hasSize(1));
+        dockerRule.getClient().removeImageCmd("docker-java/busybox:" + tag).exec();
+    }
+
+    @Test
+    public void listImagesWithFilter() throws DockerException {
+        String tag = "" + RandomUtils.nextInt(0, Integer.MAX_VALUE);
+
+        dockerRule.getClient().tagImageCmd("busybox:latest", "docker-java/busybox", tag).exec();
+        List<Image> images = dockerRule.getClient().listImagesCmd().withFilter("reference", Collections.singletonList("docker-java/busybox"))
             .exec();
         assertThat(images, hasSize(1));
         dockerRule.getClient().removeImageCmd("docker-java/busybox:" + tag).exec();

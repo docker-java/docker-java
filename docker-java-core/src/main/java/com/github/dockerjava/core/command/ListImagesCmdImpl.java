@@ -2,6 +2,9 @@ package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +49,7 @@ public class ListImagesCmdImpl extends AbstrDockerCmd<ListImagesCmd, List<Image>
     @Override
     public ListImagesCmd withDanglingFilter(Boolean dangling) {
         checkNotNull(dangling, "dangling have not been specified");
-        filters.withFilter("dangling", dangling.toString());
+        withFilter("dangling", Collections.singletonList(dangling.toString()));
         return this;
     }
 
@@ -74,7 +77,15 @@ public class ListImagesCmdImpl extends AbstrDockerCmd<ListImagesCmd, List<Image>
     @Override
     public ListImagesCmd withReferenceFilter(String reference) {
         checkNotNull(reference, "reference filter not specified");
-        filters.withFilter("reference", reference);
+        withFilter("reference", Collections.singletonList(reference));
+        return this;
+    }
+
+    @Override
+    public ListImagesCmd withFilter(String key, Collection<String> values) {
+        checkNotNull(key, "key not specified");
+        checkNotNull(values, "values not specified");
+        filters.withFilter(key, values);
         return this;
     }
 

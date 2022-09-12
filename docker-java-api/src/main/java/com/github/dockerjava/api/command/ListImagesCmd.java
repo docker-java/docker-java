@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.command;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -50,6 +51,8 @@ public interface ListImagesCmd extends SyncDockerCmd<List<Image>> {
      * @param reference string in the form {@code <image-name>[:<tag>]}
      */
     ListImagesCmd withReferenceFilter(String reference);
+
+    ListImagesCmd withFilter(String key, Collection<String> values);
 
     interface Exec extends DockerCmdSyncExec<ListImagesCmd, List<Image>> {
     }
