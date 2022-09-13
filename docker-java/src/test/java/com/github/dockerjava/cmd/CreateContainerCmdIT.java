@@ -1129,14 +1129,11 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Test
     public void shouldHandleANetworkAliasWithoutACustomNetworkGracefully() {
-        HostConfig config = newHostConfig()
-            .withPortBindings(new PortBinding(Ports.Binding.bindPort(8080), new ExposedPort(8081)));
-
         // Should not throw
         dockerRule.getClient()
             .createContainerCmd(DEFAULT_IMAGE)
             .withAliases("hello-world")
-            .withHostConfig(config)
+            .withHostConfig(newHostConfig())
             .withCmd("sleep", "9999")
             .exec();
     }
