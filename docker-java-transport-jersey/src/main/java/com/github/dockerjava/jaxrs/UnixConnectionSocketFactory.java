@@ -71,7 +71,7 @@ class UnixConnectionSocketFactory implements ConnectionSocketFactory {
             final InetSocketAddress remoteAddress, final InetSocketAddress localAddress, final HttpContext context)
             throws IOException {
         try {
-            socket.connect(new AFUNIXSocketAddress(socketFile), connectTimeout);
+            socket.connect(AFUNIXSocketAddress.of(socketFile), connectTimeout);
         } catch (SocketTimeoutException e) {
             throw new ConnectTimeoutException(e, null, remoteAddress.getAddress());
         }
