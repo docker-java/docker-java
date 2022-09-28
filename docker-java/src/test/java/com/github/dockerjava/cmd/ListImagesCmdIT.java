@@ -62,10 +62,14 @@ public class ListImagesCmdIT extends CmdIT {
         String tag = "" + RandomUtils.nextInt(0, Integer.MAX_VALUE);
 
         dockerRule.getClient().tagImageCmd("busybox:latest", "docker-java/busybox", tag).exec();
-        List<Image> images = dockerRule.getClient().listImagesCmd().withReferenceFilter("docker-java/busybox")
-            .exec();
-        assertThat(images, hasSize(1));
-        dockerRule.getClient().removeImageCmd("docker-java/busybox:" + tag).exec();
+        try {
+            List<Image> images = dockerRule.getClient().listImagesCmd().withReferenceFilter("docker-java/busybox")
+                .exec();
+            assertThat(images, hasSize(1));
+        }
+        finally {
+            dockerRule.getClient().removeImageCmd("docker-java/busybox:" + tag).exec();
+        }
     }
 
     @Test
@@ -73,10 +77,14 @@ public class ListImagesCmdIT extends CmdIT {
         String tag = "" + RandomUtils.nextInt(0, Integer.MAX_VALUE);
 
         dockerRule.getClient().tagImageCmd("busybox:latest", "docker-java/busybox", tag).exec();
-        List<Image> images = dockerRule.getClient().listImagesCmd().withFilter("reference", Collections.singletonList("docker-java/busybox"))
-            .exec();
-        assertThat(images, hasSize(1));
-        dockerRule.getClient().removeImageCmd("docker-java/busybox:" + tag).exec();
+        try {
+            List<Image> images = dockerRule.getClient().listImagesCmd().withFilter("reference", Collections.singletonList("docker-java/busybox"))
+                .exec();
+            assertThat(images, hasSize(1));
+        }
+        finally {
+            dockerRule.getClient().removeImageCmd("docker-java/busybox:" + tag).exec();
+        }
     }
 
     private boolean isImageInFilteredList(List<Image> images, String expectedImageId) {
