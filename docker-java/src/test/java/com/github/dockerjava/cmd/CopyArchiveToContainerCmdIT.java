@@ -16,8 +16,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -152,19 +150,18 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
 
     @Test
     public void copyFileWithUIDGID() throws Exception {
-        Path withDir = Files.createTempDirectory("copyFileWithUIDGID");
         Path with = Files.createFile(Files.createTempDirectory("copyFileWithUIDGID").resolve("uidgid.with"));
         Files.write(with, "with".getBytes());
 
-        Path withoutDir = Files.createTempDirectory("copyFileWithUIDGID");
         Path without = Files.createFile(Files.createTempDirectory("copyFileWithUIDGID").resolve("uidgid.without"));
-        Files.write(without, "with".getBytes());
+        Files.write(without, "without".getBytes());
 
-        String containerCmd = "while [ ! -f /home/uidgid.with ]; do true; done && echo uid=$(id -u) && stat -c %n:%u /home/uidgid.with /home/uidgid.without";
+        String containerCmd = "while [ ! -f /home/uidgid.with ]; do true; done && stat -c %n:%u /home/uidgid.with /home/uidgid.without";
+        Long syncUserUid = 4L; // sync user in busybox uses uid=4
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
                 .withName("copyFileWithUIDGID")
                 .withCmd("/bin/sh", "-c", containerCmd)
-                .withUser("sync")
+                .withUser(syncUserUid.toString())
                 .exec();
         // start the container
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
@@ -197,12 +194,7 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
         loggingCallback.awaitCompletion(3, TimeUnit.SECONDS);
         String containerOutput = loggingCallback.toString();
 
-        Matcher uidMatcher = Pattern.compile("uid=(\\d+)").matcher(containerOutput);
-        assertThat(String.format("cannot read effective uid on container from '%s'", containerOutput), uidMatcher.find(), equalTo(true));
-        assertThat(String.format("cannot read effective uid on container from '%s'", containerOutput), uidMatcher.groupCount(), equalTo(1));
-        Long containerEffectiveUid = Long.parseLong(uidMatcher.group(1));
-
-        assertThat(containerOutput, containsString(String.format("/home/uidgid.with:%d", containerEffectiveUid)));
+        assertThat(containerOutput, containsString(String.format("/home/uidgid.with:%d", syncUserUid)));
 
         Long hostUid = getHostUidIfPossible();
         assumeThat("could not get the uid on host platform", hostUid, notNullValue(Long.class));
