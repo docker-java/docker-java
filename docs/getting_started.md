@@ -18,9 +18,6 @@ The builder is available and allows you to configure every property of the clien
 ```java
 import com.github.dockerjava.core.DockerClientConfig
 import com.github.dockerjava.core.DefaultDockerClientConfig
-
-...
-
 DockerClientConfig standard = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
 ```
 
