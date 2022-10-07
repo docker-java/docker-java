@@ -57,6 +57,7 @@
 		<jdk.source>1.8</jdk.source>
 		<jdk.target>1.8</jdk.target>
 
+		<bnd.version>6.3.1</bnd.version>
 		<jersey.version>2.30.1</jersey.version>
 		<jackson.version>2.10.3</jackson.version>
 		<jackson-jaxrs.version>2.10.3</jackson-jaxrs.version>
@@ -80,7 +81,6 @@
 		<mockito.version>3.3.0</mockito.version>
 
 
-		<maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
 		<maven-release-plugin.version>3.0.0-M1</maven-release-plugin.version>
 		<maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
@@ -153,23 +153,24 @@
 				</plugin>
 
 				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-jar-plugin</artifactId>
-					<version>${maven-jar-plugin.version}</version>
+					<groupId>biz.aQute.bnd</groupId>
+					<artifactId>bnd-maven-plugin</artifactId>
+					<version>${bnd.version}</version>
+					<extensions>true</extensions>
 					<executions>
 						<execution>
+							<id>bnd-jar</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>	
+						<execution>
+							<id>bnd-test-jar</id>
 							<goals>
 								<goal>test-jar</goal>
 							</goals>
 						</execution>
 					</executions>
-					<configuration>
-						<archive>
-							<manifestEntries>
-								<Automatic-Module-Name>${automatic.module.name}</Automatic-Module-Name>
-							</manifestEntries>
-						</archive>
-					</configuration>
 				</plugin>
 
 				<plugin>
@@ -220,25 +221,23 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>2.10.4</version>
-					<configuration>
-						<additionalparam>-Xdoclint:none</additionalparam>
-					</configuration>
+					<version>3.4.1</version>
 					<executions>
 						<execution>
 							<id>attach-javadocs</id>
+							<phase>verify</phase>
 							<goals>
 								<goal>jar</goal>
 							</goals>
 						</execution>
 					</executions>
+					<configuration>
+						<detectJavaApiLink>false</detectJavaApiLink>
+						<doclint>none</doclint>
+						<notimestamp>true</notimestamp>
+						<sourcepath>src/main/java,target/generated-sources/annotations</sourcepath>
+					</configuration>
 				</plugin>
-				<plugin>
-					<groupId>org.apache.felix</groupId>
-					<artifactId>maven-bundle-plugin</artifactId>
-					<version>4.2.1</version>
-				</plugin>
-
 
 				<plugin>
 					<!-- use with "mvn -DskipTests clean verify" -->
@@ -289,6 +288,19 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
+			<plugin>
+				<groupId>biz.aQute.bnd</groupId>
+				<artifactId>bnd-maven-plugin</artifactId>
+				<configuration>
+					<bnd><![CDATA[
+					Bundle-Name: ${project.name}
+					Bundle-SymbolicName: ${symbolic.name}
+					Automatic-Module-Name: ${symbolic.name}
+					-jpms-module-info: ${symbolic.name}
+					${bnd.instruction}
+					]]></bnd>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>

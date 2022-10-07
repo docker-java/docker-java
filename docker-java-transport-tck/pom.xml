@@ -16,7 +16,7 @@
 	<description>Java API Client for Docker</description>
 
 	<properties>
-		<automatic.module.name>com.github.dockerjava.transport.tck</automatic.module.name>
+		<symbolic.name>com.github.dockerjava.transport.tck</symbolic.name>
 	</properties>
 
 	<dependencies>
