@@ -170,8 +170,7 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 /**
  * @author Konstantin Pelykh (kpelykh@gmail.com)
@@ -184,8 +183,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
     DockerCmdExecFactory dockerCmdExecFactory;
 
     DockerClientImpl(DockerClientConfig dockerClientConfig) {
-        checkNotNull(dockerClientConfig, "config was not specified");
-        this.dockerClientConfig = dockerClientConfig;
+        this.dockerClientConfig = Objects.requireNonNull(dockerClientConfig, "config was not specified");
     }
 
     /**
@@ -246,7 +244,7 @@ public class DockerClientImpl implements Closeable, DockerClient {
      */
     @Deprecated
     public DockerClientImpl withDockerCmdExecFactory(DockerCmdExecFactory dockerCmdExecFactory) {
-        checkNotNull(dockerCmdExecFactory, "dockerCmdExecFactory was not specified");
+        Objects.requireNonNull(dockerCmdExecFactory, "dockerCmdExecFactory was not specified");
         this.dockerCmdExecFactory = dockerCmdExecFactory;
         if (dockerCmdExecFactory instanceof DockerClientConfigAware) {
             ((DockerClientConfigAware) dockerCmdExecFactory).init(dockerClientConfig);
@@ -256,14 +254,14 @@ public class DockerClientImpl implements Closeable, DockerClient {
 
     @Deprecated
     private DockerCmdExecFactory getDockerCmdExecFactory() {
-        checkNotNull(dockerCmdExecFactory, "dockerCmdExecFactory was not specified");
+        Objects.requireNonNull(dockerCmdExecFactory, "dockerCmdExecFactory was not specified");
         return dockerCmdExecFactory;
     }
 
     @Override
     public AuthConfig authConfig() {
-        checkNotNull(dockerClientConfig.getRegistryUsername(), "Configured username is null.");
-        checkNotNull(dockerClientConfig.getRegistryUrl(), "Configured serverAddress is null.");
+        Objects.requireNonNull(dockerClientConfig.getRegistryUsername(), "Configured username is null.");
+        Objects.requireNonNull(dockerClientConfig.getRegistryUrl(), "Configured serverAddress is null.");
 
         return new AuthConfig()
                 .withUsername(dockerClientConfig.getRegistryUsername())

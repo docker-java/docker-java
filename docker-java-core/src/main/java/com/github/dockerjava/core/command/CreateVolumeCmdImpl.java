@@ -1,8 +1,7 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.util.Map;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.command.CreateVolumeCmd;
@@ -54,28 +53,28 @@ public class CreateVolumeCmdImpl extends AbstrDockerCmd<CreateVolumeCmd, CreateV
 
     @Override
     public CreateVolumeCmdImpl withName(String name) {
-        checkNotNull(name, "name was not specified");
+        Objects.requireNonNull(name, "name was not specified");
         this.name = name;
         return this;
     }
 
     @Override
     public CreateVolumeCmdImpl withLabels(Map<String, String> labels) {
-        checkNotNull(labels, "labels was not specified");
+        Objects.requireNonNull(labels, "labels was not specified");
         this.labels = labels;
         return this;
     }
 
     @Override
     public CreateVolumeCmdImpl withDriver(String driver) {
-        checkNotNull(driver, "driver was not specified");
+        Objects.requireNonNull(driver, "driver was not specified");
         this.driver = driver;
         return this;
     }
 
     @Override
     public CreateVolumeCmd withDriverOpts(Map<String, String> driverOpts) {
-        checkNotNull(driverOpts, "driverOpts was not specified");
+        Objects.requireNonNull(driverOpts, "driverOpts was not specified");
         this.driverOpts = driverOpts;
         return this;
     }

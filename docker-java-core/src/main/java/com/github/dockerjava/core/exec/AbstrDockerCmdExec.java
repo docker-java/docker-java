@@ -13,10 +13,10 @@ import com.google.common.io.BaseEncoding;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.util.Objects;
 
 import static com.github.dockerjava.core.RemoteApiVersion.UNKNOWN_VERSION;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_19;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class AbstrDockerCmdExec {
 
@@ -25,10 +25,8 @@ public abstract class AbstrDockerCmdExec {
     private final transient WebTarget baseResource;
 
     public AbstrDockerCmdExec(WebTarget baseResource, DockerClientConfig dockerClientConfig) {
-        checkNotNull(baseResource, "baseResource was not specified");
-        checkNotNull(dockerClientConfig, "dockerClientConfig was not specified");
-        this.baseResource = baseResource;
-        this.dockerClientConfig = dockerClientConfig;
+        this.baseResource = Objects.requireNonNull(baseResource, "baseResource was not specified");
+        this.dockerClientConfig = Objects.requireNonNull(dockerClientConfig, "dockerClientConfig was not specified");
     }
 
     protected WebTarget getBaseResource() {

@@ -22,10 +22,10 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static org.apache.commons.lang3.BooleanUtils.isTrue;
 
 /**
@@ -356,7 +356,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
          * configure DOCKER_HOST
          */
         public final Builder withDockerHost(String dockerHost) {
-            checkNotNull(dockerHost, "uri was not specified");
+            Objects.requireNonNull(dockerHost, "uri was not specified");
             this.dockerHost = URI.create(dockerHost);
             return this;
         }

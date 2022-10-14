@@ -1,10 +1,10 @@
 package com.github.dockerjava.core.command;
 
+import java.util.Objects;
+
 import com.github.dockerjava.api.command.InspectServiceCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.Service;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Inspect the details of a container.
@@ -26,8 +26,7 @@ public class InspectServiceCmdImpl extends AbstrDockerCmd<InspectServiceCmd, Ser
 
     @Override
     public InspectServiceCmd withServiceId(String serviceId) {
-        checkNotNull(serviceId, "serviceId was not specified");
-        this.serviceId = serviceId;
+        this.serviceId = Objects.requireNonNull(serviceId, "serviceId was not specified");
         return this;
     }
 

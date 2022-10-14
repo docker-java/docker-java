@@ -1,9 +1,10 @@
 package com.github.dockerjava.core.command;
 
+import java.util.Objects;
+
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectExecResponse;
 import com.github.dockerjava.api.exception.NotFoundException;
-import com.google.common.base.Preconditions;
 
 public class InspectExecCmdImpl extends AbstrDockerCmd<InspectExecCmd, InspectExecResponse> implements InspectExecCmd {
     private String execId;
@@ -20,8 +21,7 @@ public class InspectExecCmdImpl extends AbstrDockerCmd<InspectExecCmd, InspectEx
 
     @Override
     public InspectExecCmd withExecId(String execId) {
-        Preconditions.checkNotNull(execId, "execId was not specified");
-        this.execId = execId;
+        this.execId = Objects.requireNonNull(execId, "execId was not specified");
         return this;
     }
 

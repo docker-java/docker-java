@@ -1,8 +1,7 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.io.InputStream;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -37,8 +36,7 @@ public class ExecStartCmdImpl extends AbstrAsyncDockerCmd<ExecStartCmd, Frame> i
 
     @Override
     public ExecStartCmd withExecId(String execId) {
-        checkNotNull(execId, "execId was not specified");
-        this.execId = execId;
+        this.execId = Objects.requireNonNull(execId, "execId was not specified");
         return this;
     }
 

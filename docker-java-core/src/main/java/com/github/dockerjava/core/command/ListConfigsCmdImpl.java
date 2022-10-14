@@ -6,8 +6,7 @@ import com.github.dockerjava.api.model.Config;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 /**
  * List configs.
@@ -26,8 +25,7 @@ public class ListConfigsCmdImpl extends AbstrDockerCmd<ListConfigsCmd, List<Conf
     }
 
     public ListConfigsCmd withFilters(Map<String, List<String>> filters) {
-        checkNotNull(filters, "filters was not specified");
-        this.filters = filters;
+        this.filters = Objects.requireNonNull(filters, "filters was not specified");
         return this;
     }
 }

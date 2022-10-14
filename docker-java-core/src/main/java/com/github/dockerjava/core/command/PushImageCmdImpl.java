@@ -1,6 +1,6 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.model.AuthConfig;
@@ -42,8 +42,7 @@ public class PushImageCmdImpl extends AbstrAsyncDockerCmd<PushImageCmd, PushResp
      */
     @Override
     public PushImageCmd withName(String name) {
-        checkNotNull(name, "name was not specified");
-        this.name = name;
+        this.name = Objects.requireNonNull(name, "name was not specified");
         return this;
     }
 
@@ -53,8 +52,7 @@ public class PushImageCmdImpl extends AbstrAsyncDockerCmd<PushImageCmd, PushResp
      */
     @Override
     public PushImageCmd withTag(String tag) {
-        checkNotNull(tag, "tag was not specified");
-        this.tag = tag;
+        this.tag = Objects.requireNonNull(tag, "tag was not specified");
         return this;
     }
 

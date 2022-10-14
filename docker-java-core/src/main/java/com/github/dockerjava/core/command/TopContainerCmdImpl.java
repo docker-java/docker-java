@@ -1,6 +1,6 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 import com.github.dockerjava.api.command.TopContainerCmd;
 import com.github.dockerjava.api.command.TopContainerResponse;
@@ -33,15 +33,13 @@ public class TopContainerCmdImpl extends AbstrDockerCmd<TopContainerCmd, TopCont
 
     @Override
     public TopContainerCmd withContainerId(String containerId) {
-        checkNotNull(containerId, "containerId was not specified");
-        this.containerId = containerId;
+        this.containerId = Objects.requireNonNull(containerId, "containerId was not specified");
         return this;
     }
 
     @Override
     public TopContainerCmd withPsArgs(String psArgs) {
-        checkNotNull(psArgs, "psArgs was not specified");
-        this.psArgs = psArgs;
+        this.psArgs = Objects.requireNonNull(psArgs, "psArgs was not specified");
         return this;
     }
 

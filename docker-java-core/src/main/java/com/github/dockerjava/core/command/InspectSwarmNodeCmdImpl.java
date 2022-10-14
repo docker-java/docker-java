@@ -6,7 +6,7 @@ import com.github.dockerjava.api.model.SwarmNode;
 
 import javax.annotation.CheckForNull;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 /**
  * Inspect the details of a swarmNode.
@@ -29,8 +29,7 @@ public class InspectSwarmNodeCmdImpl extends AbstrDockerCmd<InspectSwarmNodeCmd,
 
     @Override
     public InspectSwarmNodeCmd withSwarmNodeId(String swarmNodeId) {
-        checkNotNull(swarmNodeId, "swarmNodeId was not specified");
-        this.swarmNodeId = swarmNodeId;
+        this.swarmNodeId = Objects.requireNonNull(swarmNodeId, "swarmNodeId was not specified");
         return this;
     }
 

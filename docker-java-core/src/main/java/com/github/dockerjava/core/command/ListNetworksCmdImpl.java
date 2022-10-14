@@ -7,8 +7,7 @@ import com.github.dockerjava.core.util.FiltersBuilder;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 public class ListNetworksCmdImpl extends AbstrDockerCmd<ListNetworksCmd, List<Network>> implements ListNetworksCmd {
 
@@ -37,7 +36,7 @@ public class ListNetworksCmdImpl extends AbstrDockerCmd<ListNetworksCmd, List<Ne
 
     @Override
     public ListNetworksCmd withFilter(String filterName, Collection<String> filterValues) {
-        checkNotNull(filterValues, filterName + " was not specified");
+        Objects.requireNonNull(filterValues, filterName + " was not specified");
         this.filtersBuilder.withFilter(filterName, filterValues);
         return this;
     }

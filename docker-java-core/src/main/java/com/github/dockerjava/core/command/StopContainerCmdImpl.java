@@ -1,7 +1,8 @@
 package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.Objects;
 
 import com.github.dockerjava.api.command.StopContainerCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
@@ -39,14 +40,13 @@ public class StopContainerCmdImpl extends AbstrDockerCmd<StopContainerCmd, Void>
 
     @Override
     public StopContainerCmd withContainerId(String containerId) {
-        checkNotNull(containerId, "containerId was not specified");
-        this.containerId = containerId;
+        this.containerId = Objects.requireNonNull(containerId, "containerId was not specified");
         return this;
     }
 
     @Override
     public StopContainerCmd withTimeout(Integer timeout) {
-        checkNotNull(timeout, "timeout was not specified");
+        Objects.requireNonNull(timeout, "timeout was not specified");
         checkArgument(timeout >= 0, "timeout must be greater or equal 0");
         this.timeout = timeout;
         return this;

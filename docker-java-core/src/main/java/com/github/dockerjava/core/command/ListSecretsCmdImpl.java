@@ -6,8 +6,7 @@ import com.github.dockerjava.core.util.FiltersBuilder;
 
 import java.util.List;
 import java.util.Map;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 /**
  * List services.
@@ -28,21 +27,21 @@ public class ListSecretsCmdImpl extends AbstrDockerCmd<ListSecretsCmd, List<Secr
 
     @Override
     public ListSecretsCmd withIdFilter(List<String> ids) {
-        checkNotNull(ids, "ids was not specified");
+        Objects.requireNonNull(ids, "ids was not specified");
         this.filters.withFilter("id", ids);
         return this;
     }
 
     @Override
     public ListSecretsCmd withNameFilter(List<String> names) {
-        checkNotNull(names, "names was not specified");
+        Objects.requireNonNull(names, "names was not specified");
         this.filters.withFilter("name", names);
         return this;
     }
 
     @Override
     public ListSecretsCmd withLabelFilter(Map<String, String> labels) {
-        checkNotNull(labels, "labels was not specified");
+        Objects.requireNonNull(labels, "labels was not specified");
         this.filters.withLabels(labels);
         return this;
     }

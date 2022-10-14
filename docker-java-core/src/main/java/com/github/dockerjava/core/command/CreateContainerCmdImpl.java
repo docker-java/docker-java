@@ -22,8 +22,8 @@ import javax.annotation.CheckForNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Collections.singletonMap;
 
 /**
@@ -167,7 +167,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withAliases(List<String> aliases) {
-        checkNotNull(aliases, "aliases was not specified");
+        Objects.requireNonNull(aliases, "aliases was not specified");
         this.aliases = aliases;
         return this;
     }
@@ -180,14 +180,14 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withCmd(String... cmd) {
-        checkNotNull(cmd, "cmd was not specified");
+        Objects.requireNonNull(cmd, "cmd was not specified");
         this.cmd = cmd;
         return this;
     }
 
     @Override
     public CreateContainerCmd withCmd(List<String> cmd) {
-        checkNotNull(cmd, "cmd was not specified");
+        Objects.requireNonNull(cmd, "cmd was not specified");
         return withCmd(cmd.toArray(new String[0]));
     }
 
@@ -217,7 +217,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withDomainName(String domainName) {
-        checkNotNull(domainName, "no domainName was specified");
+        Objects.requireNonNull(domainName, "no domainName was specified");
         this.domainName = domainName;
         return this;
     }
@@ -229,14 +229,14 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withEntrypoint(String... entrypoint) {
-        checkNotNull(entrypoint, "entrypoint was not specified");
+        Objects.requireNonNull(entrypoint, "entrypoint was not specified");
         this.entrypoint = entrypoint;
         return this;
     }
 
     @Override
     public CreateContainerCmd withEntrypoint(List<String> entrypoint) {
-        checkNotNull(entrypoint, "entrypoint was not specified");
+        Objects.requireNonNull(entrypoint, "entrypoint was not specified");
         return withEntrypoint(entrypoint.toArray(new String[0]));
     }
 
@@ -247,14 +247,14 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withEnv(String... env) {
-        checkNotNull(env, "env was not specified");
+        Objects.requireNonNull(env, "env was not specified");
         this.env = env;
         return this;
     }
 
     @Override
     public CreateContainerCmd withEnv(List<String> env) {
-        checkNotNull(env, "env was not specified");
+        Objects.requireNonNull(env, "env was not specified");
         return withEnv(env.toArray(new String[0]));
     }
 
@@ -265,14 +265,14 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withExposedPorts(ExposedPort... exposedPorts) {
-        checkNotNull(exposedPorts, "exposedPorts was not specified");
+        Objects.requireNonNull(exposedPorts, "exposedPorts was not specified");
         this.exposedPorts = new ExposedPorts(exposedPorts);
         return this;
     }
 
     @Override
     public CreateContainerCmd withExposedPorts(List<ExposedPort> exposedPorts) {
-        checkNotNull(exposedPorts, "exposedPorts was not specified");
+        Objects.requireNonNull(exposedPorts, "exposedPorts was not specified");
         return withExposedPorts(exposedPorts.toArray(new ExposedPort[0]));
     }
 
@@ -286,7 +286,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withStopSignal(String stopSignal) {
-        checkNotNull(stopSignal, "stopSignal wasn't specified.");
+        Objects.requireNonNull(stopSignal, "stopSignal wasn't specified.");
         this.stopSignal = stopSignal;
         return this;
     }
@@ -309,7 +309,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withHostName(String hostName) {
-        checkNotNull(hostName, "no hostName was specified");
+        Objects.requireNonNull(hostName, "no hostName was specified");
         this.hostName = hostName;
         return this;
     }
@@ -321,7 +321,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withImage(String image) {
-        checkNotNull(image, "no image was specified");
+        Objects.requireNonNull(image, "no image was specified");
         this.image = image;
         return this;
     }
@@ -333,7 +333,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withLabels(Map<String, String> labels) {
-        checkNotNull(labels, "labels was not specified");
+        Objects.requireNonNull(labels, "labels was not specified");
         this.labels = labels;
         return this;
     }
@@ -345,7 +345,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withMacAddress(String macAddress) {
-        checkNotNull(macAddress, "macAddress was not specified");
+        Objects.requireNonNull(macAddress, "macAddress was not specified");
         this.macAddress = macAddress;
         return this;
     }
@@ -358,7 +358,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withName(String name) {
-        checkNotNull(name, "name was not specified");
+        Objects.requireNonNull(name, "name was not specified");
         this.name = name;
         return this;
     }
@@ -370,14 +370,14 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withPortSpecs(String... portSpecs) {
-        checkNotNull(portSpecs, "portSpecs was not specified");
+        Objects.requireNonNull(portSpecs, "portSpecs was not specified");
         this.portSpecs = portSpecs;
         return this;
     }
 
     @Override
     public CreateContainerCmd withPortSpecs(List<String> portSpecs) {
-        checkNotNull(portSpecs, "portSpecs was not specified");
+        Objects.requireNonNull(portSpecs, "portSpecs was not specified");
         return withPortSpecs(portSpecs.toArray(new String[0]));
     }
 
@@ -388,7 +388,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withUser(String user) {
-        checkNotNull(user, "user was not specified");
+        Objects.requireNonNull(user, "user was not specified");
         this.user = user;
         return this;
     }
@@ -400,7 +400,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withAttachStderr(Boolean attachStderr) {
-        checkNotNull(attachStderr, "attachStderr was not specified");
+        Objects.requireNonNull(attachStderr, "attachStderr was not specified");
         this.attachStderr = attachStderr;
         return this;
     }
@@ -412,7 +412,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withAttachStdin(Boolean attachStdin) {
-        checkNotNull(attachStdin, "attachStdin was not specified");
+        Objects.requireNonNull(attachStdin, "attachStdin was not specified");
         this.attachStdin = attachStdin;
         return this;
     }
@@ -424,7 +424,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withAttachStdout(Boolean attachStdout) {
-        checkNotNull(attachStdout, "attachStdout was not specified");
+        Objects.requireNonNull(attachStdout, "attachStdout was not specified");
         this.attachStdout = attachStdout;
         return this;
     }
@@ -436,14 +436,14 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withVolumes(Volume... volumes) {
-        checkNotNull(volumes, "volumes was not specified");
+        Objects.requireNonNull(volumes, "volumes was not specified");
         this.volumes = new Volumes(volumes);
         return this;
     }
 
     @Override
     public CreateContainerCmd withVolumes(List<Volume> volumes) {
-        checkNotNull(volumes, "volumes was not specified");
+        Objects.requireNonNull(volumes, "volumes was not specified");
         return withVolumes(volumes.toArray(new Volume[0]));
     }
 
@@ -454,7 +454,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withWorkingDir(String workingDir) {
-        checkNotNull(workingDir, "workingDir was not specified");
+        Objects.requireNonNull(workingDir, "workingDir was not specified");
         this.workingDir = workingDir;
         return this;
     }
@@ -466,7 +466,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withNetworkDisabled(Boolean disableNetwork) {
-        checkNotNull(disableNetwork, "disableNetwork was not specified");
+        Objects.requireNonNull(disableNetwork, "disableNetwork was not specified");
         this.networkDisabled = disableNetwork;
         return this;
     }
@@ -479,7 +479,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withStdInOnce(Boolean stdInOnce) {
-        checkNotNull(stdInOnce, "no stdInOnce was specified");
+        Objects.requireNonNull(stdInOnce, "no stdInOnce was specified");
         this.stdInOnce = stdInOnce;
         return this;
     }
@@ -491,7 +491,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withStdinOpen(Boolean stdinOpen) {
-        checkNotNull(stdinOpen, "no stdinOpen was specified");
+        Objects.requireNonNull(stdinOpen, "no stdinOpen was specified");
         this.stdinOpen = stdinOpen;
         return this;
     }
@@ -504,7 +504,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withTty(Boolean tty) {
-        checkNotNull(tty, "no tty was specified");
+        Objects.requireNonNull(tty, "no tty was specified");
         this.tty = tty;
         return this;
     }
@@ -527,7 +527,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withIpv4Address(String ipv4Address) {
-        checkNotNull(ipv4Address, "no ipv4Address was specified");
+        Objects.requireNonNull(ipv4Address, "no ipv4Address was specified");
         this.ipv4Address = ipv4Address;
         return this;
     }
@@ -539,7 +539,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
 
     @Override
     public CreateContainerCmd withIpv6Address(String ipv6Address) {
-        checkNotNull(ipv6Address, "no ipv6Address was specified");
+        Objects.requireNonNull(ipv6Address, "no ipv6Address was specified");
         this.ipv6Address = ipv6Address;
         return this;
     }

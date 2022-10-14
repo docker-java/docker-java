@@ -3,10 +3,10 @@ package com.github.dockerjava.core.command;
 import com.github.dockerjava.api.command.RemoveSwarmNodeCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
 
+import java.util.Objects;
+
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Remove a container.
@@ -36,8 +36,7 @@ public class RemoveSwarmNodeCmdImpl extends AbstrDockerCmd<RemoveSwarmNodeCmd, V
 
     @Override
     public RemoveSwarmNodeCmd withSwarmNodeId(@Nonnull String swarmNodeId) {
-        checkNotNull(swarmNodeId, "swarmNodeId was not specified");
-        this.swarmNodeId = swarmNodeId;
+        this.swarmNodeId = Objects.requireNonNull(swarmNodeId, "swarmNodeId was not specified");
         return this;
     }
 

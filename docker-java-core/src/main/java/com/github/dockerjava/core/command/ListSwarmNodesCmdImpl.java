@@ -7,8 +7,7 @@ import com.github.dockerjava.core.util.SwarmNodesFiltersBuilder;
 
 import java.util.List;
 import java.util.Map;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 /**
  * List SwarmNodes
@@ -29,28 +28,28 @@ public class ListSwarmNodesCmdImpl extends AbstrDockerCmd<ListSwarmNodesCmd, Lis
 
     @Override
     public ListSwarmNodesCmd withIdFilter(List<String> ids) {
-        checkNotNull(ids, "ids was not specified");
+        Objects.requireNonNull(ids, "ids was not specified");
         this.filters.withIds(ids);
         return this;
     }
 
     @Override
     public ListSwarmNodesCmd withNameFilter(List<String> names) {
-        checkNotNull(names, "names was not specified");
+        Objects.requireNonNull(names, "names was not specified");
         this.filters.withNames(names);
         return this;
     }
 
     @Override
     public ListSwarmNodesCmd withMembershipFilter(List<String> memberships) {
-        checkNotNull(memberships, "memberships was not specified");
+        Objects.requireNonNull(memberships, "memberships was not specified");
         this.filters.withMemberships(memberships);
         return this;
     }
 
     @Override
     public ListSwarmNodesCmd withRoleFilter(List<String> roles) {
-        checkNotNull(roles, "roles was not specified");
+        Objects.requireNonNull(roles, "roles was not specified");
         this.filters.withRoles(roles);
         return this;
     }
