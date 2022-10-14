@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class LoadResponseItem extends ResponseItem {
 
+    private static final long serialVersionUID = 1L;
+
     private static final String IMPORT_SUCCESS = "Loaded image:";
 
     /**
@@ -16,5 +18,16 @@ public class LoadResponseItem extends ResponseItem {
         }
 
         return getStream().contains(IMPORT_SUCCESS);
+    }
+
+    @JsonIgnore
+    public String getMessage() {
+        if (!isBuildSuccessIndicated()) {
+            return null;
+        } else if (getStream().contains(IMPORT_SUCCESS)) {
+            return getStream();
+        }
+
+        return null;
     }
 }
