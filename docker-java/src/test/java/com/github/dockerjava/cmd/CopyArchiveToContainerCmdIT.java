@@ -4,6 +4,7 @@ import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.core.util.CompressArchiveUtil;
+import com.github.dockerjava.utils.LogContainerTestCallback;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -14,12 +15,16 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeThat;
 
 public class CopyArchiveToContainerCmdIT extends CmdIT {
     public static final Logger LOG = LoggerFactory.getLogger(CopyArchiveToContainerCmdIT.class);
@@ -143,4 +148,71 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
         assertThat(exitCode, equalTo(0));
     }
 
+    @Test
+    public void copyFileWithUIDGID() throws Exception {
+        Path with = Files.createFile(Files.createTempDirectory("copyFileWithUIDGID").resolve("uidgid.with"));
+        Files.write(with, "with".getBytes());
+
+        Path without = Files.createFile(Files.createTempDirectory("copyFileWithUIDGID").resolve("uidgid.without"));
+        Files.write(without, "without".getBytes());
+
+        String containerCmd = "while [ ! -f /home/uidgid.with ]; do true; done && stat -c %n:%u /home/uidgid.with /home/uidgid.without";
+        Long syncUserUid = 4L; // sync user in busybox uses uid=4
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
+                .withName("copyFileWithUIDGID")
+                .withCmd("/bin/sh", "-c", containerCmd)
+                .withUser(syncUserUid.toString())
+                .exec();
+        // start the container
+        dockerRule.getClient().startContainerCmd(container.getId()).exec();
+
+        dockerRule.getClient().copyArchiveToContainerCmd(container.getId())
+                .withRemotePath("/home/")
+                .withHostResource(without.toString())
+                .withCopyUIDGID(false)
+                .exec();
+        dockerRule.getClient().copyArchiveToContainerCmd(container.getId())
+                .withRemotePath("/home/")
+                .withHostResource(with.toString())
+                .withCopyUIDGID(true)
+                .exec();
+
+        // await exit code
+        int exitCode = dockerRule.getClient().waitContainerCmd(container.getId())
+                .start()
+                .awaitStatusCode();
+        // check result
+        assertThat(exitCode, equalTo(0));
+
+        LogContainerTestCallback loggingCallback = new LogContainerTestCallback(true);
+
+        dockerRule.getClient().logContainerCmd(container.getId())
+            .withStdOut(true)
+            .withTailAll()
+            .exec(loggingCallback);
+
+        loggingCallback.awaitCompletion(3, TimeUnit.SECONDS);
+        String containerOutput = loggingCallback.toString();
+
+        assertThat(containerOutput, containsString(String.format("/home/uidgid.with:%d", syncUserUid)));
+
+        Long hostUid = getHostUidIfPossible();
+        assumeThat("could not get the uid on host platform", hostUid, notNullValue(Long.class));
+        assertThat(containerOutput, containsString(String.format("/home/uidgid.without:%d", hostUid)));
+    }
+
+    private static Long getHostUidIfPossible() {
+        try {
+            Class<?> unixSystemClazz = Class.forName("com.sun.security.auth.module.UnixSystem");
+            Object unixSystem = unixSystemClazz.newInstance();
+            Object uid = unixSystemClazz.getMethod("getUid").invoke(unixSystem);
+            if (uid == null) {
+                return null;
+            }
+
+            return uid instanceof Long ? (Long) uid : Long.parseLong(uid.toString());
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }
