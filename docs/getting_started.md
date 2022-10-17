@@ -16,10 +16,15 @@ You will need an instance of `DockerClientConfig` to tell the library how to acc
 
 The builder is available and allows you to configure every property of the client:
 ```java
+import com.github.dockerjava.core.DockerClientConfig
+import com.github.dockerjava.core.DefaultDockerClientConfig
 DockerClientConfig standard = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
 ```
 
 ```java
+import com.github.dockerjava.core.DockerClientConfig
+import com.github.dockerjava.core.DefaultDockerClientConfig
+
 DockerClientConfig custom = DefaultDockerClientConfig.createDefaultConfigBuilder()
     .withDockerHost("tcp://docker.somewhere.tld:2376")
     .withDockerTlsVerify(true)
