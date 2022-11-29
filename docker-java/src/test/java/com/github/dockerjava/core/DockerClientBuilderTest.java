@@ -1,7 +1,11 @@
 package com.github.dockerjava.core;
 
 
+import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
+import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
+import com.github.dockerjava.transport.DockerHttpClient;
+import java.time.Duration;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -73,4 +77,33 @@ public class DockerClientBuilderTest {
             return exception;
         }
     }
+
+    public static void main(String[] args) {
+        // This is what we want to just work
+        DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder()
+            .withDockerHost("unix:///Users/simon/.colima/default/docker.sock")
+            .build();
+
+        DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
+            .dockerHost(config.getDockerHost())
+            .sslConfig(config.getSSLConfig())
+            .maxConnections(100)
+            .connectionTimeout(Duration.ofSeconds(30))
+            .responseTimeout(Duration.ofSeconds(45))
+            .build();
+
+        DockerClient dockerClient = DockerClientImpl.getInstance(config, httpClient);
+
+        dockerClient.pingCmd().exec();
+        System.out.println("Containers:");
+        dockerClient.listContainersCmd().exec().stream().forEach(container -> {
+            System.out.println(container.getCommand());
+        });
+        System.out.println("Images:");
+        dockerClient.listImagesCmd().exec().stream().forEach(image -> {
+            System.out.println(image.getId());
+        });
+
+    }
+
 }
