@@ -54,6 +54,10 @@ public class DockerConfigFile {
         this.currentContext = currentContext;
     }
 
+    public String getCurrentContext() {
+        return currentContext;
+    }
+
     @CheckForNull
     public AuthConfig resolveAuthConfig(@CheckForNull String hostname) {
         if (StringUtils.isEmpty(hostname) || AuthConfig.DEFAULT_SERVER_ADDRESS.equals(hostname)) {

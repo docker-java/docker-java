@@ -87,11 +87,12 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
     private final RemoteApiVersion apiVersion;
 
-    private DockerConfigFile dockerConfig = null;
+    private final DockerConfigFile dockerConfig;
 
-    DefaultDockerClientConfig(URI dockerHost, String dockerConfigPath, String apiVersion, String registryUrl,
-            String registryUsername, String registryPassword, String registryEmail, SSLConfig sslConfig) {
+    DefaultDockerClientConfig(URI dockerHost, DockerConfigFile dockerConfigFile, String dockerConfigPath, String apiVersion, String registryUrl,
+                              String registryUsername, String registryPassword, String registryEmail, SSLConfig sslConfig) {
         this.dockerHost = checkDockerHostScheme(dockerHost);
+        this.dockerConfig = dockerConfigFile;
         this.dockerConfigPath = dockerConfigPath;
         this.apiVersion = RemoteApiVersion.parseConfigWithDefault(apiVersion);
         this.sslConfig = sslConfig;
@@ -258,13 +259,6 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
     @Nonnull
     public DockerConfigFile getDockerConfig() {
-        if (dockerConfig == null) {
-            try {
-                dockerConfig = DockerConfigFile.loadConfig(getObjectMapper(), getDockerConfigPath());
-            } catch (IOException e) {
-                throw new DockerClientException("Failed to parse docker configuration file", e);
-            }
-        }
         return dockerConfig;
     }
 
@@ -443,12 +437,33 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
                 sslConfig = customSslConfig;
             }
 
+            final DockerConfigFile dockerConfigFile = readDockerConfig();
+
             URI dockerHostUri = dockerHost != null
                 ? dockerHost
-                : URI.create(SystemUtils.IS_OS_WINDOWS ? WINDOWS_DEFAULT_DOCKER_HOST : DEFAULT_DOCKER_HOST);
+                : dockerHostFromContextOrDefault(dockerConfigFile);
 
-            return new DefaultDockerClientConfig(dockerHostUri, dockerConfig, apiVersion, registryUrl, registryUsername,
+            return new DefaultDockerClientConfig(dockerHostUri, dockerConfigFile, dockerConfig, apiVersion, registryUrl, registryUsername,
                     registryPassword, registryEmail, sslConfig);
+        }
+
+        private DockerConfigFile readDockerConfig() {
+            try {
+                return DockerConfigFile.loadConfig(DockerClientConfig.getDefaultObjectMapper(), dockerConfig);
+            } catch (IOException e) {
+                throw new DockerClientException("Failed to parse docker configuration file", e);
+            }
+        }
+
+        private static URI dockerHostFromContextOrDefault(DockerConfigFile dockerConfigFile) {
+            final String currentContext = dockerConfigFile.getCurrentContext();
+            if (currentContext != null) {
+                System.out.println("Reading context from " + currentContext);
+                // TODO: Read the context
+                return URI.create("unix:///Users/simon/.colima/default/docker.sock");
+            } else {
+                return URI.create(SystemUtils.IS_OS_WINDOWS ? WINDOWS_DEFAULT_DOCKER_HOST : DEFAULT_DOCKER_HOST);
+            }
         }
 
         private String checkDockerCertPath(String dockerCertPath) {

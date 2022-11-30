@@ -3,6 +3,7 @@ package com.github.dockerjava.core;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
+import com.github.dockerjava.api.model.PushResponseItem;
 import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
 import com.github.dockerjava.transport.DockerHttpClient;
 import java.time.Duration;
@@ -80,9 +81,7 @@ public class DockerClientBuilderTest {
 
     public static void main(String[] args) {
         // This is what we want to just work
-        DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder()
-            .withDockerHost("unix:///Users/simon/.colima/default/docker.sock")
-            .build();
+        DefaultDockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
 
         DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
             .dockerHost(config.getDockerHost())

@@ -12,7 +12,8 @@ public class DockerClientImplTest {
     @Test
     public void configuredInstanceAuthConfig() throws Exception {
         // given a config with null serverAddress
-        DefaultDockerClientConfig dockerClientConfig = new DefaultDockerClientConfig(URI.create("tcp://foo"), null, null, null, "", "", "", null);
+        DefaultDockerClientConfig dockerClientConfig = new DefaultDockerClientConfig(URI.create("tcp://foo"),
+            new DockerConfigFile(), null, null, null, "", "", "", null);
         DockerClientImpl dockerClient = DockerClientImpl.getInstance(dockerClientConfig);
 
         // when we get the auth config

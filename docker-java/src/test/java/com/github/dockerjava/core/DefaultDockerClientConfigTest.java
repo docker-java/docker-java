@@ -1,6 +1,5 @@
 package com.github.dockerjava.core;
 
-import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.google.common.io.Resources;
@@ -32,7 +31,7 @@ public class DefaultDockerClientConfigTest {
 
         String dockerCertPath = dockerCertPath();
 
-        return new DefaultDockerClientConfig(URI.create("tcp://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
+        return new DefaultDockerClientConfig(URI.create("tcp://foo"), new DockerConfigFile(), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
                 new LocalDirectorySSLConfig(dockerCertPath));
     }
 
@@ -161,7 +160,7 @@ public class DefaultDockerClientConfigTest {
 
     @Test()
     public void testSslContextEmpty() throws Exception {
-        new DefaultDockerClientConfig(URI.create("tcp://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
+        new DefaultDockerClientConfig(URI.create("tcp://foo"), new DockerConfigFile(), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
                 null);
     }
 
@@ -169,14 +168,14 @@ public class DefaultDockerClientConfigTest {
 
     @Test()
     public void testTlsVerifyAndCertPath() throws Exception {
-        new DefaultDockerClientConfig(URI.create("tcp://foo"), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
+        new DefaultDockerClientConfig(URI.create("tcp://foo"), new DockerConfigFile(), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
                 new LocalDirectorySSLConfig(dockerCertPath()));
     }
 
     @Test()
     public void testAnyHostScheme() throws Exception {
         URI dockerHost = URI.create("a" + UUID.randomUUID().toString().replace("-", "") + "://foo");
-        new DefaultDockerClientConfig(dockerHost, "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
+        new DefaultDockerClientConfig(dockerHost, new DockerConfigFile(), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
             null);
     }
 
@@ -252,7 +251,7 @@ public class DefaultDockerClientConfigTest {
     public void testGetAuthConfigurationsFromDockerCfg() throws URISyntaxException {
         File cfgFile = new File(Resources.getResource("com.github.dockerjava.core/registry.v1").toURI());
         DefaultDockerClientConfig clientConfig = new DefaultDockerClientConfig(URI.create(
-            "unix://foo"), cfgFile.getAbsolutePath(), "apiVersion", "registryUrl", "registryUsername", "registryPassword",
+            "unix://foo"), new DockerConfigFile(), cfgFile.getAbsolutePath(), "apiVersion", "registryUrl", "registryUsername", "registryPassword",
             "registryEmail", null);
 
         AuthConfigurations authConfigurations = clientConfig.getAuthConfigurations();
@@ -268,7 +267,7 @@ public class DefaultDockerClientConfigTest {
     public void testGetAuthConfigurationsFromConfigJson() throws URISyntaxException {
         File cfgFile = new File(Resources.getResource("com.github.dockerjava.core/registry.v2").toURI());
         DefaultDockerClientConfig clientConfig = new DefaultDockerClientConfig(URI.create(
-            "unix://foo"), cfgFile.getAbsolutePath(), "apiVersion", "registryUrl", "registryUsername", "registryPassword",
+            "unix://foo"), new DockerConfigFile(), cfgFile.getAbsolutePath(), "apiVersion", "registryUrl", "registryUsername", "registryPassword",
             "registryEmail", null);
 
         AuthConfigurations authConfigurations = clientConfig.getAuthConfigurations();
