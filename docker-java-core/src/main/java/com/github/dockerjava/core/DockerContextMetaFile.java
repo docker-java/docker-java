@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Stream;
 import javax.annotation.CheckForNull;
 
 public class DockerContextMetaFile {
@@ -34,8 +37,24 @@ public class DockerContextMetaFile {
         }
     }
 
-    public static void loadAllContextMetaFiles() {
-        // TODO
+    public static DockerContextMetaFile loadContextMetaOrNull(ObjectMapper objectMapper, File dockerContextMetaFile) {
+        try {
+            loadContextMeta(objectMapper, dockerContextMetaFile)
+        } catch (Exception exception) {
+            return null;
+        }
+    }
+
+    public static Stream<DockerContextMetaFile> loadAllContextMetaFiles(ObjectMapper objectMapper, File dockerConfigPath) throws IOException {
+        final File contextPath = new File(dockerConfigPath, "contexts/meta");
+        File[] files = contextPath.listFiles();
+        if (files == null) {
+            return Stream.of();
+        }
+        return Arrays.stream(files)
+            .map(dir -> new File(dir, "meta.json"))
+            .map(file -> loadContextMetaOrNull(objectMapper, file))
+            .filter(Objects::nonNull);
     }
 
     public static void findContextMetaFile(String context) {
@@ -43,6 +62,9 @@ public class DockerContextMetaFile {
     }
     
     public static void main(String[] args) {
+        // TODO: We should support the DOCKER_CONTEXT env var as per https://docs.docker.com/engine/context/working-with-contexts/
+        loadAllContextMetaFiles(new File("/Users/simon/.docker"));
+
         ObjectMapper mapper = DefaultObjectMapperHolder.INSTANCE.getObjectMapper().copy();
         try {
             DockerContextMetaFile dockerContextMetaFile = loadContextMeta(mapper,
