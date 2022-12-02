@@ -1,10 +1,12 @@
 package com.github.dockerjava.core;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.core.NameParser.HostnameReposName;
 import com.github.dockerjava.core.NameParser.ReposTag;
+import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -455,15 +457,13 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             }
         }
 
-        private static URI dockerHostFromContextOrDefault(DockerConfigFile dockerConfigFile) {
+        private URI dockerHostFromContextOrDefault(DockerConfigFile dockerConfigFile) {
             final String currentContext = dockerConfigFile.getCurrentContext();
-            if (currentContext != null) {
-                System.out.println("Reading context from " + currentContext);
-                // TODO: Read the context
-                return URI.create("unix:///Users/simon/.colima/default/docker.sock");
-            } else {
-                return URI.create(SystemUtils.IS_OS_WINDOWS ? WINDOWS_DEFAULT_DOCKER_HOST : DEFAULT_DOCKER_HOST);
-            }
+            return URI.create(Optional.ofNullable(currentContext)
+                .flatMap(context -> DockerContextMetaFile.findContextMetaFile(
+                    DockerClientConfig.getDefaultObjectMapper(), new File(dockerConfig), context))
+                .flatMap(DockerContextMetaFile::host)
+                .orElse(SystemUtils.IS_OS_WINDOWS ? WINDOWS_DEFAULT_DOCKER_HOST : DEFAULT_DOCKER_HOST));
         }
 
         private String checkDockerCertPath(String dockerCertPath) {

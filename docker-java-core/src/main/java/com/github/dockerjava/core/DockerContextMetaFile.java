@@ -6,8 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
-import javax.annotation.CheckForNull;
 
 public class DockerContextMetaFile {
     @JsonProperty("Name")
@@ -29,23 +29,21 @@ public class DockerContextMetaFile {
         }
     }
 
-    public static DockerContextMetaFile loadContextMeta(ObjectMapper objectMapper, File dockerContextMetaFile) throws IOException {
-        try {
-            return objectMapper.readValue(dockerContextMetaFile, DockerContextMetaFile.class);
-        } catch (IOException e) {
-            throw new IOException("Failed to parse docker context meta file " + dockerContextMetaFile, e);
+    public Optional<String> host() {
+        if (endpoints != null && endpoints.docker != null) {
+            return Optional.ofNullable(endpoints.docker.host);
         }
+        return Optional.empty();
     }
 
-    public static DockerContextMetaFile loadContextMetaOrNull(ObjectMapper objectMapper, File dockerContextMetaFile) {
-        try {
-            loadContextMeta(objectMapper, dockerContextMetaFile)
-        } catch (Exception exception) {
-            return null;
-        }
+    public static Optional<DockerContextMetaFile> findContextMetaFile(ObjectMapper objectMapper, File dockerConfigPath, String context) {
+        return loadAllContextMetaFiles(objectMapper, dockerConfigPath)
+            .filter(metaFile -> metaFile.endpoints != null && metaFile.endpoints.docker != null)
+            .filter(metaFile -> Objects.equals(metaFile.name, context))
+            .findFirst();
     }
 
-    public static Stream<DockerContextMetaFile> loadAllContextMetaFiles(ObjectMapper objectMapper, File dockerConfigPath) throws IOException {
+    public static Stream<DockerContextMetaFile> loadAllContextMetaFiles(ObjectMapper objectMapper, File dockerConfigPath) {
         final File contextPath = new File(dockerConfigPath, "contexts/meta");
         File[] files = contextPath.listFiles();
         if (files == null) {
@@ -57,21 +55,28 @@ public class DockerContextMetaFile {
             .filter(Objects::nonNull);
     }
 
-    public static void findContextMetaFile(String context) {
-        // TODO
-    }
-    
-    public static void main(String[] args) {
-        // TODO: We should support the DOCKER_CONTEXT env var as per https://docs.docker.com/engine/context/working-with-contexts/
-        loadAllContextMetaFiles(new File("/Users/simon/.docker"));
-
-        ObjectMapper mapper = DefaultObjectMapperHolder.INSTANCE.getObjectMapper().copy();
+    public static DockerContextMetaFile loadContextMetaOrNull(ObjectMapper objectMapper, File dockerContextMetaFile) {
         try {
-            DockerContextMetaFile dockerContextMetaFile = loadContextMeta(mapper,
-                new File("/Users/simon/.docker/contexts/meta/f24fd3749c1368328e2b149bec149cb6795619f244c5b584e844961215dadd16/meta.json"));
-            System.out.println(dockerContextMetaFile.endpoints.docker.host);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            return loadContextMeta(objectMapper, dockerContextMetaFile);
+        } catch (Exception exception) {
+            return null;
         }
+    }
+
+    public static DockerContextMetaFile loadContextMeta(ObjectMapper objectMapper, File dockerContextMetaFile) throws IOException {
+        try {
+            return objectMapper.readValue(dockerContextMetaFile, DockerContextMetaFile.class);
+        } catch (IOException e) {
+            throw new IOException("Failed to parse docker context meta file " + dockerContextMetaFile, e);
+        }
+    }
+
+    public static void main(String[] args) {
+        ObjectMapper mapper = DefaultObjectMapperHolder.INSTANCE.getObjectMapper().copy();
+        String host = findContextMetaFile(mapper, new File("/Users/simon/.docker"), "colima")
+            .map(file -> file.endpoints.docker.host)
+            .orElse(null);
+
+        System.out.printf("Host is %s\n", host);
     }
 }

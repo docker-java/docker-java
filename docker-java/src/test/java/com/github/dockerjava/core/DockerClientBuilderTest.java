@@ -80,7 +80,6 @@ public class DockerClientBuilderTest {
     }
 
     public static void main(String[] args) {
-        // This is what we want to just work
         DefaultDockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
 
         DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
