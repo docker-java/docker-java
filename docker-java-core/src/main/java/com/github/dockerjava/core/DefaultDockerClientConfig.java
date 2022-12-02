@@ -1,6 +1,5 @@
 package com.github.dockerjava.core;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
@@ -91,8 +90,9 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
     private final DockerConfigFile dockerConfig;
 
-    DefaultDockerClientConfig(URI dockerHost, DockerConfigFile dockerConfigFile, String dockerConfigPath, String apiVersion, String registryUrl,
-                              String registryUsername, String registryPassword, String registryEmail, SSLConfig sslConfig) {
+    DefaultDockerClientConfig(URI dockerHost, DockerConfigFile dockerConfigFile, String dockerConfigPath, String apiVersion,
+                              String registryUrl, String registryUsername, String registryPassword, String registryEmail,
+                              SSLConfig sslConfig) {
         this.dockerHost = checkDockerHostScheme(dockerHost);
         this.dockerConfig = dockerConfigFile;
         this.dockerConfigPath = dockerConfigPath;
