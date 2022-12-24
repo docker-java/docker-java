@@ -41,7 +41,7 @@ public class PullImageResultCallback extends ResultCallback.Adapter<PullResponse
             handleDockerClientResponse(item);
         }
 
-        LOGGER.debug(item.toString());
+        LOGGER.debug("{}", item);
     }
 
     private void checkForDockerSwarmResponse(PullResponseItem item) {
