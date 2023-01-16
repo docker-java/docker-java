@@ -2,14 +2,16 @@ package com.github.dockerjava.core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Objects;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 public class DockerContextMetaFile {
+    private static HashFunction metaHashFunction = Hashing.sha256();
+
     @JsonProperty("Name")
     String name;
 
@@ -36,23 +38,14 @@ public class DockerContextMetaFile {
         return Optional.empty();
     }
 
-    public static Optional<DockerContextMetaFile> findContextMetaFile(ObjectMapper objectMapper, File dockerConfigPath, String context) {
-        return loadAllContextMetaFiles(objectMapper, dockerConfigPath)
-            .filter(metaFile -> metaFile.endpoints != null && metaFile.endpoints.docker != null)
-            .filter(metaFile -> Objects.equals(metaFile.name, context))
-            .findFirst();
-    }
-
-    public static Stream<DockerContextMetaFile> loadAllContextMetaFiles(ObjectMapper objectMapper, File dockerConfigPath) {
-        final File contextPath = new File(dockerConfigPath, "contexts/meta");
-        File[] files = contextPath.listFiles();
-        if (files == null) {
-            return Stream.of();
-        }
-        return Arrays.stream(files)
-            .map(dir -> new File(dir, "meta.json"))
-            .map(file -> loadContextMetaOrNull(objectMapper, file))
-            .filter(Objects::nonNull);
+    public static Optional<DockerContextMetaFile> loadContextMetaFile(ObjectMapper objectMapper, File dockerConfigPath, String context) {
+        final File path = dockerConfigPath.toPath()
+            .resolve("contexts")
+            .resolve("meta")
+            .resolve(metaHashFunction.hashString(context, StandardCharsets.UTF_8).toString())
+            .resolve("meta.json")
+            .toFile();
+        return Optional.ofNullable(loadContextMetaOrNull(objectMapper, path));
     }
 
     public static DockerContextMetaFile loadContextMetaOrNull(ObjectMapper objectMapper, File dockerContextMetaFile) {
@@ -73,7 +66,8 @@ public class DockerContextMetaFile {
 
     public static void main(String[] args) {
         ObjectMapper mapper = DefaultObjectMapperHolder.INSTANCE.getObjectMapper().copy();
-        String host = findContextMetaFile(mapper, new File("/Users/simon/.docker"), "colima")
+        Optional<DockerContextMetaFile> colima = loadContextMetaFile(mapper, new File("/Users/simon/.docker"), "colima");
+        String host = colima
             .map(file -> file.endpoints.docker.host)
             .orElse(null);
 
