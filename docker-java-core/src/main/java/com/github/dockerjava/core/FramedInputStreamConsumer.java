@@ -72,12 +72,12 @@ class FramedInputStreamConsumer implements Consumer<DockerHttpClient.Response> {
                         return;
                     }
 
-                    if (readBytes == buffer.length) {
-                        resultCallback.onNext(new Frame(streamType, buffer));
-                    } else {
-                        resultCallback.onNext(new Frame(streamType, Arrays.copyOf(buffer, readBytes)));
-                    }
                     bytesToRead -= readBytes;
+                    if (readBytes == buffer.length) {
+                        resultCallback.onNext(new Frame(streamType, buffer, bytesToRead == 0));
+                    } else {
+                        resultCallback.onNext(new Frame(streamType, Arrays.copyOf(buffer, readBytes), bytesToRead == 0));
+                    }
                 } while (bytesToRead > 0);
             }
         } catch (Exception e) {

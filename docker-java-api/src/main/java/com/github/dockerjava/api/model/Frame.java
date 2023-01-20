@@ -15,9 +15,18 @@ public class Frame extends DockerObject implements Serializable {
 
     private final byte[] payload;
 
+    private final boolean isComplete;
+
     public Frame(StreamType streamType, byte[] payload) {
         this.streamType = streamType;
         this.payload = payload;
+        this.isComplete = true;
+    }
+
+    public Frame(StreamType streamType, byte[] payload, boolean isComplete) {
+        this.streamType = streamType;
+        this.payload = payload;
+        this.isComplete = isComplete;
     }
 
     public StreamType getStreamType() {
@@ -28,8 +37,12 @@ public class Frame extends DockerObject implements Serializable {
         return payload;
     }
 
+    public  boolean getIsComplete() {
+        return isComplete;
+    }
+
     @Override
     public String toString() {
-        return String.format("%s: %s", streamType, new String(payload).trim());
+        return String.format("%s: %s; isComplete: %s", streamType, new String(payload).trim(), isComplete);
     }
 }
