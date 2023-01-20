@@ -43,6 +43,6 @@ public class Frame extends DockerObject implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("%s: %s; isComplete: %s", streamType, new String(payload).trim(), isComplete);
+        return String.format("%s: %s", streamType, new String(payload).trim());
     }
 }
