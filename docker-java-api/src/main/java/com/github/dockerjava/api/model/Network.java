@@ -97,6 +97,12 @@ public class Network extends DockerObject implements Serializable {
     public static class ContainerNetworkConfig extends DockerObject implements Serializable {
         private static final long serialVersionUID = 1L;
 
+        /**
+         * @since {@link RemoteApiVersion#VERSION_1_30}
+         */
+        @JsonProperty("Name")
+        private String name;
+
         @JsonProperty("EndpointID")
         private String endpointId;
 
@@ -108,6 +114,10 @@ public class Network extends DockerObject implements Serializable {
 
         @JsonProperty("IPv6Address")
         private String ipv6Address;
+
+        public String getName() {
+            return name;
+        }
 
         public String getEndpointId() {
             return endpointId;
