@@ -69,6 +69,20 @@ public class DefaultDockerClientConfigTest {
     }
 
     @Test
+    public void environmentDockerContext() throws Exception {
+        // given docker context
+        Map<String, String> env = new HashMap<>();
+        env.put(DefaultDockerClientConfig.DOCKER_CONTEXT, "testcontext");
+
+        // when you build a config
+        DefaultDockerClientConfig config = buildConfig(env, new Properties());
+
+        // Then we want the host specified by the context. But hey, where is that even going to come from? We haven't set up any test
+        // fixtures for the context....
+        assertEquals("thetestcontexthost.com", config.getDockerHost());
+    }
+
+    @Test
     public void environment() throws Exception {
 
         // given a default config in env properties

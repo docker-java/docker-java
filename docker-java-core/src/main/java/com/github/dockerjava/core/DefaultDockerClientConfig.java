@@ -38,6 +38,8 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
     public static final String DOCKER_HOST = "DOCKER_HOST";
 
+    public static final String DOCKER_CONTEXT = "DOCKER_CONTEXT";
+
     public static final String DOCKER_TLS_VERIFY = "DOCKER_TLS_VERIFY";
 
     public static final String DOCKER_CONFIG = "DOCKER_CONFIG";
