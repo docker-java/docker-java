@@ -69,17 +69,34 @@ public class DefaultDockerClientConfigTest {
     }
 
     @Test
-    public void environmentDockerContext() throws Exception {
-        // given docker context
+    public void dockerContextFromConfig() throws Exception {
+        // given home directory with docker contexts configured
+        Properties systemProperties = new Properties();
+        systemProperties.setProperty("user.home", "target/test-classes/dockerContextHomeDir");
+
+        // and an empty environment
         Map<String, String> env = new HashMap<>();
-        env.put(DefaultDockerClientConfig.DOCKER_CONTEXT, "testcontext");
 
         // when you build a config
-        DefaultDockerClientConfig config = buildConfig(env, new Properties());
+        DefaultDockerClientConfig config = buildConfig(env, systemProperties);
 
-        // Then we want the host specified by the context. But hey, where is that even going to come from? We haven't set up any test
-        // fixtures for the context....
-        assertEquals("thetestcontexthost.com", config.getDockerHost());
+        assertEquals(URI.create("unix:///configcontext.sock"), config.getDockerHost());
+    }
+
+    @Test
+    public void dockerContextFromEnvironmentVariable() throws Exception {
+        // given home directory with docker contexts
+        Properties systemProperties = new Properties();
+        systemProperties.setProperty("user.home", "target/test-classes/dockerContextHomeDir");
+
+        // and an environment variable that overrides docker context
+        Map<String, String> env = new HashMap<>();
+        env.put(DefaultDockerClientConfig.DOCKER_CONTEXT, "envvarcontext");
+
+        // when you build a config
+        DefaultDockerClientConfig config = buildConfig(env, systemProperties);
+
+        assertEquals(URI.create("unix:///envvarcontext.sock"), config.getDockerHost());
     }
 
     @Test
