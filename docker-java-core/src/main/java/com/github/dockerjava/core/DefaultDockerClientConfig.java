@@ -179,6 +179,13 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             }
         }
 
+        if (env.containsKey(DOCKER_CONTEXT)) {
+            String value = env.get(DOCKER_CONTEXT);
+            if (value != null && value.trim().length() != 0) {
+                overriddenProperties.setProperty(DOCKER_CONTEXT, value);
+            }
+        }
+
         for (Map.Entry<String, String> envEntry : env.entrySet()) {
             String envKey = envEntry.getKey();
             if (CONFIG_KEYS.contains(envKey)) {
@@ -323,7 +330,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
         private URI dockerHost;
 
         private String apiVersion, registryUsername, registryPassword, registryEmail, registryUrl, dockerConfig,
-                dockerCertPath;
+                dockerCertPath, dockerContext;
 
         private Boolean dockerTlsVerify;
 
@@ -341,6 +348,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             }
 
             return withDockerTlsVerify(p.getProperty(DOCKER_TLS_VERIFY))
+                    .withDockerContext(p.getProperty(DOCKER_CONTEXT))
                     .withDockerConfig(p.getProperty(DOCKER_CONFIG))
                     .withDockerCertPath(p.getProperty(DOCKER_CERT_PATH))
                     .withApiVersion(p.getProperty(API_VERSION))
@@ -399,6 +407,11 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             return this;
         }
 
+        public final Builder withDockerContext(String dockerContext) {
+            this.dockerContext = dockerContext;
+            return this;
+        }
+
         public final Builder withDockerTlsVerify(String dockerTlsVerify) {
             if (dockerTlsVerify != null) {
                 String trimmed = dockerTlsVerify.trim();
@@ -443,9 +456,10 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
             final DockerConfigFile dockerConfigFile = readDockerConfig();
 
+            final String context = (dockerContext != null) ? dockerContext : dockerConfigFile.getCurrentContext();
             URI dockerHostUri = dockerHost != null
                 ? dockerHost
-                : dockerHostFromContextOrDefault(dockerConfigFile);
+                : dockerHostFromContextOrDefault(context);
 
             return new DefaultDockerClientConfig(dockerHostUri, dockerConfigFile, dockerConfig, apiVersion, registryUrl, registryUsername,
                     registryPassword, registryEmail, sslConfig);
@@ -459,9 +473,8 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             }
         }
 
-        private URI dockerHostFromContextOrDefault(DockerConfigFile dockerConfigFile) {
-            final String currentContext = dockerConfigFile.getCurrentContext();
-            return URI.create(Optional.ofNullable(currentContext)
+        private URI dockerHostFromContextOrDefault(String dockerContext) {
+            return URI.create(Optional.ofNullable(dockerContext)
                 .flatMap(context -> DockerContextMetaFile.loadContextMetaFile(
                     DockerClientConfig.getDefaultObjectMapper(), new File(dockerConfig), context))
                 .flatMap(DockerContextMetaFile::host)
