@@ -98,7 +98,7 @@ public class Network extends DockerObject implements Serializable {
         private static final long serialVersionUID = 1L;
 
         /**
-         * @since {@link RemoteApiVersion#VERSION_1_30}
+         * @since {@link RemoteApiVersion#VERSION_1_22}
          */
         @JsonProperty("Name")
         private String name;
