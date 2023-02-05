@@ -3,6 +3,7 @@ package com.github.dockerjava.core;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.google.common.io.Resources;
+import java.io.IOException;
 import org.apache.commons.lang3.SerializationUtils;
 import org.junit.Test;
 
@@ -26,13 +27,26 @@ import static org.junit.Assert.assertNull;
 public class DefaultDockerClientConfigTest {
 
     public static final DefaultDockerClientConfig EXAMPLE_CONFIG = newExampleConfig();
+    public static final DefaultDockerClientConfig EXAMPLE_CONFIG_FULLY_LOADED = newExampleConfigFullyLoaded();
 
     private static DefaultDockerClientConfig newExampleConfig() {
-
         String dockerCertPath = dockerCertPath();
+        return new DefaultDockerClientConfig(URI.create("tcp://foo"), null, "dockerConfig", "apiVersion", "registryUrl",
+            "registryUsername", "registryPassword", "registryEmail",
+            new LocalDirectorySSLConfig(dockerCertPath));
+    }
 
-        return new DefaultDockerClientConfig(URI.create("tcp://foo"), new DockerConfigFile(), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
+    private static DefaultDockerClientConfig newExampleConfigFullyLoaded() {
+        try {
+            String dockerCertPath = dockerCertPath();
+            String dockerConfig = "dockerConfig";
+            DockerConfigFile loadedConfigFile = DockerConfigFile.loadConfig(DockerClientConfig.getDefaultObjectMapper(), dockerConfig);
+            return new DefaultDockerClientConfig(URI.create("tcp://foo"), loadedConfigFile, dockerConfig, "apiVersion", "registryUrl",
+                "registryUsername", "registryPassword", "registryEmail",
                 new LocalDirectorySSLConfig(dockerCertPath));
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
     }
 
     private static String homeDir() {
@@ -118,7 +132,7 @@ public class DefaultDockerClientConfigTest {
         DefaultDockerClientConfig config = buildConfig(env, new Properties());
 
         // then we get the example object
-        assertEquals(config, EXAMPLE_CONFIG);
+        assertEquals(EXAMPLE_CONFIG_FULLY_LOADED, config);
     }
 
     @Test
@@ -177,7 +191,7 @@ public class DefaultDockerClientConfigTest {
         DefaultDockerClientConfig config = buildConfig(Collections.<String, String> emptyMap(), systemProperties);
 
         // then it is the same as the example
-        assertEquals(config, EXAMPLE_CONFIG);
+        assertEquals(EXAMPLE_CONFIG_FULLY_LOADED, config);
 
     }
 
@@ -279,10 +293,12 @@ public class DefaultDockerClientConfigTest {
 
 
     @Test
-    public void testGetAuthConfigurationsFromDockerCfg() throws URISyntaxException {
+    public void testGetAuthConfigurationsFromDockerCfg() throws URISyntaxException, IOException {
         File cfgFile = new File(Resources.getResource("com.github.dockerjava.core/registry.v1").toURI());
+        DockerConfigFile dockerConfigFile =
+            DockerConfigFile.loadConfig(DockerClientConfig.getDefaultObjectMapper(), cfgFile.getAbsolutePath());
         DefaultDockerClientConfig clientConfig = new DefaultDockerClientConfig(URI.create(
-            "unix://foo"), new DockerConfigFile(), cfgFile.getAbsolutePath(), "apiVersion", "registryUrl", "registryUsername", "registryPassword",
+            "unix://foo"), dockerConfigFile, cfgFile.getAbsolutePath(), "apiVersion", "registryUrl", "registryUsername", "registryPassword",
             "registryEmail", null);
 
         AuthConfigurations authConfigurations = clientConfig.getAuthConfigurations();
@@ -295,10 +311,12 @@ public class DefaultDockerClientConfigTest {
     }
 
     @Test
-    public void testGetAuthConfigurationsFromConfigJson() throws URISyntaxException {
+    public void testGetAuthConfigurationsFromConfigJson() throws URISyntaxException, IOException {
         File cfgFile = new File(Resources.getResource("com.github.dockerjava.core/registry.v2").toURI());
+        DockerConfigFile dockerConfigFile =
+            DockerConfigFile.loadConfig(DockerClientConfig.getDefaultObjectMapper(), cfgFile.getAbsolutePath());
         DefaultDockerClientConfig clientConfig = new DefaultDockerClientConfig(URI.create(
-            "unix://foo"), new DockerConfigFile(), cfgFile.getAbsolutePath(), "apiVersion", "registryUrl", "registryUsername", "registryPassword",
+            "unix://foo"), dockerConfigFile, cfgFile.getAbsolutePath(), "apiVersion", "registryUrl", "registryUsername", "registryPassword",
             "registryEmail", null);
 
         AuthConfigurations authConfigurations = clientConfig.getAuthConfigurations();
