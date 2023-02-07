@@ -459,7 +459,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             final String context = (dockerContext != null) ? dockerContext : dockerConfigFile.getCurrentContext();
             URI dockerHostUri = dockerHost != null
                 ? dockerHost
-                : dockerHostFromContextOrDefault(context);
+                : resolveDockerHost(context);
 
             return new DefaultDockerClientConfig(dockerHostUri, dockerConfigFile, dockerConfig, apiVersion, registryUrl, registryUsername,
                     registryPassword, registryEmail, sslConfig);
@@ -473,9 +473,9 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             }
         }
 
-        private URI dockerHostFromContextOrDefault(String dockerContext) {
+        private URI resolveDockerHost(String dockerContext) {
             return URI.create(Optional.ofNullable(dockerContext)
-                .flatMap(context -> DockerContextMetaFile.loadContextMetaFile(
+                .flatMap(context -> DockerContextMetaFile.resolveContextMetaFile(
                     DockerClientConfig.getDefaultObjectMapper(), new File(dockerConfig), context))
                 .flatMap(DockerContextMetaFile::host)
                 .orElse(SystemUtils.IS_OS_WINDOWS ? WINDOWS_DEFAULT_DOCKER_HOST : DEFAULT_DOCKER_HOST));

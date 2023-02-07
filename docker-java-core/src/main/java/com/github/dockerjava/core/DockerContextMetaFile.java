@@ -38,25 +38,25 @@ public class DockerContextMetaFile {
         return Optional.empty();
     }
 
-    public static Optional<DockerContextMetaFile> loadContextMetaFile(ObjectMapper objectMapper, File dockerConfigPath, String context) {
+    public static Optional<DockerContextMetaFile> resolveContextMetaFile(ObjectMapper objectMapper, File dockerConfigPath, String context) {
         final File path = dockerConfigPath.toPath()
             .resolve("contexts")
             .resolve("meta")
             .resolve(metaHashFunction.hashString(context, StandardCharsets.UTF_8).toString())
             .resolve("meta.json")
             .toFile();
-        return Optional.ofNullable(loadContextMetaOrNull(objectMapper, path));
+        return Optional.ofNullable(loadContextMeta(objectMapper, path));
     }
 
-    public static DockerContextMetaFile loadContextMetaOrNull(ObjectMapper objectMapper, File dockerContextMetaFile) {
+    public static DockerContextMetaFile loadContextMeta(ObjectMapper objectMapper, File dockerContextMetaFile) {
         try {
-            return loadContextMeta(objectMapper, dockerContextMetaFile);
+            return parseContextMeta(objectMapper, dockerContextMetaFile);
         } catch (Exception exception) {
             return null;
         }
     }
 
-    public static DockerContextMetaFile loadContextMeta(ObjectMapper objectMapper, File dockerContextMetaFile) throws IOException {
+    public static DockerContextMetaFile parseContextMeta(ObjectMapper objectMapper, File dockerContextMetaFile) throws IOException {
         try {
             return objectMapper.readValue(dockerContextMetaFile, DockerContextMetaFile.class);
         } catch (IOException e) {
