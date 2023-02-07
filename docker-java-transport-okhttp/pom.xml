@@ -53,6 +53,7 @@
 				<artifactId>japicmp-maven-plugin</artifactId>
 				<configuration>
 					<parameter>
+						<ignoreMissingClasses>true</ignoreMissingClasses>
 						<overrideCompatibilityChangeParameters>
 							<overrideCompatibilityChangeParameter>
 								<compatibilityChange>SUPERCLASS_REMOVED</compatibilityChange>
