@@ -3,7 +3,7 @@ package com.github.dockerjava.jaxrs.util;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 
 /**
  * This is a wrapper around {@link Response} that acts as a {@link InputStream}. When this {@link WrappedResponseInputStream} is closed it
