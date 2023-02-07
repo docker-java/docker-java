@@ -45,18 +45,18 @@ public class DockerContextMetaFile {
             .resolve(metaHashFunction.hashString(context, StandardCharsets.UTF_8).toString())
             .resolve("meta.json")
             .toFile();
-        return Optional.ofNullable(loadContextMeta(objectMapper, path));
+        return Optional.ofNullable(loadContextMetaFile(objectMapper, path));
     }
 
-    public static DockerContextMetaFile loadContextMeta(ObjectMapper objectMapper, File dockerContextMetaFile) {
+    public static DockerContextMetaFile loadContextMetaFile(ObjectMapper objectMapper, File dockerContextMetaFile) {
         try {
-            return parseContextMeta(objectMapper, dockerContextMetaFile);
+            return parseContextMetaFile(objectMapper, dockerContextMetaFile);
         } catch (Exception exception) {
             return null;
         }
     }
 
-    public static DockerContextMetaFile parseContextMeta(ObjectMapper objectMapper, File dockerContextMetaFile) throws IOException {
+    public static DockerContextMetaFile parseContextMetaFile(ObjectMapper objectMapper, File dockerContextMetaFile) throws IOException {
         try {
             return objectMapper.readValue(dockerContextMetaFile, DockerContextMetaFile.class);
         } catch (IOException e) {
