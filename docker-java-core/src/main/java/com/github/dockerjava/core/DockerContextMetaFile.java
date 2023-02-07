@@ -63,14 +63,4 @@ public class DockerContextMetaFile {
             throw new IOException("Failed to parse docker context meta file " + dockerContextMetaFile, e);
         }
     }
-
-    public static void main(String[] args) {
-        ObjectMapper mapper = DefaultObjectMapperHolder.INSTANCE.getObjectMapper().copy();
-        Optional<DockerContextMetaFile> colima = loadContextMetaFile(mapper, new File("/Users/simon/.docker"), "colima");
-        String host = colima
-            .map(file -> file.endpoints.docker.host)
-            .orElse(null);
-
-        System.out.printf("Host is %s\n", host);
-    }
 }
