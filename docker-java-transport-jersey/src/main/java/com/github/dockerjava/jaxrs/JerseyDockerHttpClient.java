@@ -42,6 +42,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * @deprecated use Apache HttpClient 5-based transport
+ */
+@Deprecated
 public final class JerseyDockerHttpClient implements DockerHttpClient {
 
     public static final class Builder {
