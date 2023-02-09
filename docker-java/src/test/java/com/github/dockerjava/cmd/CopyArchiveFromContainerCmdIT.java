@@ -78,7 +78,7 @@ public class CopyArchiveFromContainerCmdIT extends CmdIT {
         try (TarArchiveInputStream tarInputStream = new TarArchiveInputStream(response)) {
             TarArchiveEntry nextTarEntry = tarInputStream.getNextTarEntry();
 
-            assertEquals(nextTarEntry.getName(), "binary.dat");
+            assertEquals("binary.dat", nextTarEntry.getName());
             try (InputStream binaryFileInputStream = Files.newInputStream(binaryFile, StandardOpenOption.READ)) {
                 assertTrue(IOUtils.contentEquals(binaryFileInputStream, tarInputStream));
             }

@@ -14,27 +14,27 @@ public class RestartPolicyParsingTest {
 
     @Test
     public void noRestart() throws Exception {
-        assertEquals(RestartPolicy.parse("no"), RestartPolicy.noRestart());
+        assertEquals(RestartPolicy.noRestart(), RestartPolicy.parse("no"));
     }
 
     @Test
     public void alwaysRestart() throws Exception {
-        assertEquals(RestartPolicy.parse("always"), RestartPolicy.alwaysRestart());
+        assertEquals(RestartPolicy.alwaysRestart(), RestartPolicy.parse("always"));
     }
 
     @Test
     public void unlessStoppedRestart() throws Exception {
-        assertEquals(RestartPolicy.parse("unless-stopped"), RestartPolicy.unlessStoppedRestart());
+        assertEquals(RestartPolicy.unlessStoppedRestart(), RestartPolicy.parse("unless-stopped"));
     }
 
     @Test
     public void onFailureRestart() throws Exception {
-        assertEquals(RestartPolicy.parse("on-failure"), RestartPolicy.onFailureRestart(0));
+        assertEquals(RestartPolicy.onFailureRestart(0), RestartPolicy.parse("on-failure"));
     }
 
     @Test
     public void onFailureRestartWithCount() throws Exception {
-        assertEquals(RestartPolicy.parse("on-failure:2"), RestartPolicy.onFailureRestart(2));
+        assertEquals(RestartPolicy.onFailureRestart(2), RestartPolicy.parse("on-failure:2"));
     }
 
     @Test

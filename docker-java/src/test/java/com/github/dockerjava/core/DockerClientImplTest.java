@@ -22,7 +22,7 @@ public class DockerClientImplTest {
             throw new AssertionError();
         } catch (NullPointerException e) {
             // then we get a NPE with expected message
-            assertEquals(e.getMessage(), "Configured serverAddress is null.");
+            assertEquals("Configured serverAddress is null.", e.getMessage());
         }
     }
 

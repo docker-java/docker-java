@@ -31,12 +31,12 @@ public class NettyWebTargetTest {
         NettyWebTarget anotherWebTarget = emptyWebTarget.path("/containers/{id}/attach")
                 .resolveTemplate("id", "2cfada4e3c07").queryParam("stdin", "true");
 
-        assertEquals(new NettyWebTarget(JSONTestHelper.getMapper(), channelProvider, "DUMMY"), emptyWebTarget);
+        assertEquals(emptyWebTarget, new NettyWebTarget(JSONTestHelper.getMapper(), channelProvider, "DUMMY"));
 
-        assertEquals(new NettyWebTarget(JSONTestHelper.getMapper(), channelProvider, "DUMMY").path("/containers/d03da378b592/attach")
-                .queryParam("logs", "true"), initWebTarget);
+        assertEquals(initWebTarget, new NettyWebTarget(JSONTestHelper.getMapper(), channelProvider, "DUMMY").path("/containers/d03da378b592/attach")
+                .queryParam("logs", "true"));
 
-        assertEquals(new NettyWebTarget(JSONTestHelper.getMapper(), channelProvider, "DUMMY").path("/containers/2cfada4e3c07/attach")
-                .queryParam("stdin", "true"), anotherWebTarget);
+        assertEquals(anotherWebTarget, new NettyWebTarget(JSONTestHelper.getMapper(), channelProvider, "DUMMY").path("/containers/2cfada4e3c07/attach")
+                .queryParam("stdin", "true"));
     }
 }

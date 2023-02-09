@@ -61,7 +61,7 @@ public class AttachContainerCmdIT extends CmdIT {
         AttachContainerTestCallback callback = new AttachContainerTestCallback() {
             @Override
             public void onNext(Frame frame) {
-                assertEquals(frame.getStreamType(), StreamType.STDOUT);
+                assertEquals(StreamType.STDOUT, frame.getStreamType());
                 super.onNext(frame);
             }
         };

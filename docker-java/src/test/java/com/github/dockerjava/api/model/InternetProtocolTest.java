@@ -13,22 +13,22 @@ public class InternetProtocolTest {
 
     @Test
     public void defaultProtocol() {
-        assertEquals(InternetProtocol.DEFAULT, TCP);
+        assertEquals(TCP, InternetProtocol.DEFAULT);
     }
 
     @Test
     public void stringify() {
-        assertEquals(TCP.toString(), "tcp");
+        assertEquals("tcp", TCP.toString());
     }
 
     @Test
     public void parseUpperCase() {
-        assertEquals(InternetProtocol.parse("TCP"), TCP);
+        assertEquals(TCP, InternetProtocol.parse("TCP"));
     }
 
     @Test
     public void parseLowerCase() {
-        assertEquals(InternetProtocol.parse("tcp"), TCP);
+        assertEquals(TCP, InternetProtocol.parse("tcp"));
     }
 
     @Test

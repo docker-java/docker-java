@@ -79,7 +79,7 @@ public class DefaultDockerClientConfigTest {
         // when you build a config
         DefaultDockerClientConfig config = buildConfig(env, systemProperties);
 
-        assertEquals(config.getDockerHost(), URI.create("tcp://baz:8768"));
+        assertEquals(URI.create("tcp://baz:8768"), config.getDockerHost());
     }
 
     @Test
@@ -164,11 +164,11 @@ public class DefaultDockerClientConfigTest {
         DefaultDockerClientConfig config = buildConfig(Collections.<String, String> emptyMap(), systemProperties);
 
         // then the cert path is as expected
-        assertEquals(config.getDockerHost(), URI.create("unix:///var/run/docker.sock"));
-        assertEquals(config.getRegistryUsername(), "someUserName");
-        assertEquals(config.getRegistryUrl(), AuthConfig.DEFAULT_SERVER_ADDRESS);
-        assertEquals(config.getApiVersion(), RemoteApiVersion.unknown());
-        assertEquals(config.getDockerConfigPath(), homeDir() + "/.docker");
+        assertEquals(URI.create("unix:///var/run/docker.sock"), config.getDockerHost());
+        assertEquals("someUserName", config.getRegistryUsername());
+        assertEquals(AuthConfig.DEFAULT_SERVER_ADDRESS, config.getRegistryUrl());
+        assertEquals(RemoteApiVersion.unknown(), config.getApiVersion());
+        assertEquals(homeDir() + "/.docker", config.getDockerConfigPath());
         assertNull(config.getSSLConfig());
     }
 

@@ -32,10 +32,10 @@ public class HttpResponseStreamHandlerTest {
         ChannelHandlerContext ctx = Mockito.mock(ChannelHandlerContext.class);
         ByteBuf buffer = generateByteBuf();
         ByteBuf readBuffer = buffer.copy();
-        assertEquals(buffer.refCnt(), 1);
+        assertEquals(1, buffer.refCnt());
         streamHandler.channelRead(ctx, buffer);
         streamHandler.channelInactive(ctx);
-        assertEquals(buffer.refCnt(), 0);
+        assertEquals(0, buffer.refCnt());
         try (InputStream inputStream = callback.getInputStream()) {
             assertTrue(IOUtils.contentEquals(inputStream, new ByteBufInputStream(readBuffer)));
         }
@@ -49,10 +49,10 @@ public class HttpResponseStreamHandlerTest {
         ChannelHandlerContext ctx = Mockito.mock(ChannelHandlerContext.class);
         ByteBuf buffer = generateByteBuf();
         ByteBuf readBuffer = buffer.copy();
-        assertEquals(buffer.refCnt(), 1);
+        assertEquals(1, buffer.refCnt());
         streamHandler.channelRead(ctx, buffer);
         streamHandler.channelInactive(ctx);
-        assertEquals(buffer.refCnt(), 0);
+        assertEquals(0, buffer.refCnt());
         try (InputStream inputStream = callback.getInputStream()) {
             for (int i = 0; i < readBuffer.readableBytes(); i++) {
                 int b = inputStream.read();
