@@ -84,7 +84,7 @@ public class WaitContainerCmdIT extends CmdIT {
     }
 
     @Test
-    public void testWaitContainerTimeout() throws Exception {
+    public void testWaitContainerTimeout() {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "10").exec();
 

@@ -17,12 +17,12 @@ public class NettyWebTargetTest {
     private ChannelProvider channelProvider;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void verifyImmutability() throws Exception {
+    public void verifyImmutability() {
         NettyWebTarget emptyWebTarget = new NettyWebTarget(JSONTestHelper.getMapper(), channelProvider, "DUMMY");
 
         NettyWebTarget initWebTarget = emptyWebTarget.path("/containers/{id}/attach").resolveTemplate("id", "d03da378b592")

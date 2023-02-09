@@ -58,12 +58,12 @@ public class DefaultDockerClientConfigTest {
     }
 
     @Test
-    public void equals() throws Exception {
+    public void equals() {
         assertEquals(EXAMPLE_CONFIG, newExampleConfig());
     }
 
     @Test
-    public void environmentDockerHost() throws Exception {
+    public void environmentDockerHost() {
 
         // given docker host in env
         Map<String, String> env = new HashMap<>();
@@ -83,7 +83,7 @@ public class DefaultDockerClientConfigTest {
     }
 
     @Test
-    public void dockerContextFromConfig() throws Exception {
+    public void dockerContextFromConfig() {
         // given home directory with docker contexts configured
         Properties systemProperties = new Properties();
         systemProperties.setProperty("user.home", "target/test-classes/dockerContextHomeDir");
@@ -98,7 +98,7 @@ public class DefaultDockerClientConfigTest {
     }
 
     @Test
-    public void dockerContextFromEnvironmentVariable() throws Exception {
+    public void dockerContextFromEnvironmentVariable() {
         // given home directory with docker contexts
         Properties systemProperties = new Properties();
         systemProperties.setProperty("user.home", "target/test-classes/dockerContextHomeDir");
@@ -114,7 +114,7 @@ public class DefaultDockerClientConfigTest {
     }
 
     @Test
-    public void environment() throws Exception {
+    public void environment() {
 
         // given a default config in env properties
         Map<String, String> env = new HashMap<>();
@@ -153,7 +153,7 @@ public class DefaultDockerClientConfigTest {
     }
 
     @Test
-    public void defaults() throws Exception {
+    public void defaults() {
 
         // given default cert path
         Properties systemProperties = new Properties();
@@ -173,7 +173,7 @@ public class DefaultDockerClientConfigTest {
     }
 
     @Test
-    public void systemProperties() throws Exception {
+    public void systemProperties() {
 
         // given system properties based on the example
         Properties systemProperties = new Properties();
@@ -204,7 +204,7 @@ public class DefaultDockerClientConfigTest {
     }
 
     @Test()
-    public void testSslContextEmpty() throws Exception {
+    public void testSslContextEmpty() {
         new DefaultDockerClientConfig(URI.create("tcp://foo"), new DockerConfigFile(), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
                 null);
     }
@@ -212,13 +212,13 @@ public class DefaultDockerClientConfigTest {
 
 
     @Test()
-    public void testTlsVerifyAndCertPath() throws Exception {
+    public void testTlsVerifyAndCertPath() {
         new DefaultDockerClientConfig(URI.create("tcp://foo"), new DockerConfigFile(), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
                 new LocalDirectorySSLConfig(dockerCertPath()));
     }
 
     @Test()
-    public void testAnyHostScheme() throws Exception {
+    public void testAnyHostScheme() {
         URI dockerHost = URI.create("a" + UUID.randomUUID().toString().replace("-", "") + "://foo");
         new DefaultDockerClientConfig(dockerHost, new DockerConfigFile(), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
             null);

@@ -44,7 +44,7 @@ public class StartContainerCmdIT extends CmdIT {
     public static final Logger LOG = LoggerFactory.getLogger(StartContainerCmdIT.class);
 
     @Test
-    public void startContainerWithVolumes() throws Exception {
+    public void startContainerWithVolumes() {
 
         // see http://docs.docker.io/use/working_with_volumes/
         Volume volume1 = new Volume("/opt/webapp1");

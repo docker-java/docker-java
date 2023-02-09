@@ -30,7 +30,7 @@ public class CopyArchiveFromContainerCmdIT extends CmdIT {
     public static final Logger LOG = LoggerFactory.getLogger(CopyArchiveFromContainerCmdIT.class);
 
     @Test
-    public void copyFromContainer() throws Exception {
+    public void copyFromContainer() {
         // TODO extract this into a shared method
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withName("copyFromContainer")
@@ -51,7 +51,7 @@ public class CopyArchiveFromContainerCmdIT extends CmdIT {
     }
 
     @Test(expected = NotFoundException.class)
-    public void copyFromNonExistingContainer() throws Exception {
+    public void copyFromNonExistingContainer() {
 
         dockerRule.getClient().copyArchiveFromContainerCmd("non-existing", "/test").exec();
     }

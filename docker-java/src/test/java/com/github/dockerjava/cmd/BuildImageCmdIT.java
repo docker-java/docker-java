@@ -163,21 +163,21 @@ public class BuildImageCmdIT extends CmdIT {
     }
 
     @Test(expected = DockerClientException.class)
-    public void dockerignoreDockerfileIgnored() throws Exception {
+    public void dockerignoreDockerfileIgnored() {
         File baseDir = fileFromBuildTestResource("dockerignore/DockerfileIgnored");
 
         dockerRule.getClient().buildImageCmd(baseDir).withNoCache(true).start().awaitImageId();
     }
 
     @Test
-    public void dockerignoreDockerfileNotIgnored() throws Exception {
+    public void dockerignoreDockerfileNotIgnored() {
         File baseDir = fileFromBuildTestResource("dockerignore/DockerfileNotIgnored");
 
         dockerRule.getClient().buildImageCmd(baseDir).withNoCache(true).start().awaitImageId();
     }
 
     @Test(expected = DockerClientException.class)
-    public void dockerignoreInvalidDockerIgnorePattern() throws Exception {
+    public void dockerignoreInvalidDockerIgnorePattern() {
         File baseDir = fileFromBuildTestResource("dockerignore/InvalidDockerignorePattern");
 
         dockerRule.getClient().buildImageCmd(baseDir).withNoCache(true).start().awaitImageId();
@@ -241,7 +241,7 @@ public class BuildImageCmdIT extends CmdIT {
     }
 
     @Test
-    public void buildArgs() throws Exception {
+    public void buildArgs() {
         File baseDir = fileFromBuildTestResource("buildArgs");
 
         String imageId = dockerRule.getClient().buildImageCmd(baseDir).withNoCache(true).withBuildArg("testArg", "abc !@#$%^&*()_+")
@@ -256,7 +256,7 @@ public class BuildImageCmdIT extends CmdIT {
     }
 
     @Test
-    public void labels() throws Exception {
+    public void labels() {
         assumeThat("API version should be >= 1.23", dockerRule, isGreaterOrEqual(VERSION_1_23));
 
         File baseDir = fileFromBuildTestResource("labels");
@@ -274,7 +274,7 @@ public class BuildImageCmdIT extends CmdIT {
     }
 
     @Test
-    public void multipleTags() throws Exception {
+    public void multipleTags() {
         assumeThat("API version should be >= 1.23", dockerRule, isGreaterOrEqual(VERSION_1_21));
 
 
@@ -295,7 +295,7 @@ public class BuildImageCmdIT extends CmdIT {
     }
 
     @Test
-    public void cacheFrom() throws Exception {
+    public void cacheFrom() {
         assumeThat(dockerRule, isGreaterOrEqual(VERSION_1_27));
 
         File baseDir1 = fileFromBuildTestResource("CacheFrom/test1");

@@ -21,7 +21,7 @@ public class CreateSecretCmdExecIT extends SwarmCmdIT {
     public static final Logger LOG = LoggerFactory.getLogger(CreateSecretCmdExecIT.class);
 
     @Test
-    public void testCreateSecret() throws Exception {
+    public void testCreateSecret() {
         DockerClient dockerClient = startSwarm();
         int length = 10;
         boolean useLetters = true;
