@@ -1,12 +1,7 @@
 package com.github.dockerjava.core;
 
 
-import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
-import com.github.dockerjava.api.model.PushResponseItem;
-import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
-import com.github.dockerjava.transport.DockerHttpClient;
-import java.time.Duration;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -39,7 +34,7 @@ public class DockerClientBuilderTest {
 
         parallel(AMOUNT, runnable);
         // set contains all required unique instances
-        assertEquals(instances.size(), AMOUNT);
+        assertEquals(AMOUNT, instances.size());
     }
 
     public static void parallel(int threads, final Runnable task) throws Exception {

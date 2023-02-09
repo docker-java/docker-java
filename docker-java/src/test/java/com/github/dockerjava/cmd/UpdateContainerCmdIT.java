@@ -31,7 +31,7 @@ public class UpdateContainerCmdIT extends CmdIT {
 
 
     @Test
-    public void updateContainer() throws DockerException, IOException {
+    public void updateContainer() throws DockerException {
         assumeThat("API version should be >= 1.22", dockerRule, isGreaterOrEqual(VERSION_1_22));
 
         CreateContainerResponse response = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)

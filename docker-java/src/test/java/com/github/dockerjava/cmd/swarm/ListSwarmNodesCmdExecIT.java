@@ -12,7 +12,7 @@ import static org.hamcrest.Matchers.is;
 
 public class ListSwarmNodesCmdExecIT extends SwarmCmdIT {
     @Test
-    public void testListSwarmNodes() throws Exception {
+    public void testListSwarmNodes() {
         DockerClient dockerClient = startSwarm();
 
         List<SwarmNode> nodes = dockerClient.listSwarmNodesCmd().exec();
@@ -20,7 +20,7 @@ public class ListSwarmNodesCmdExecIT extends SwarmCmdIT {
     }
 
     @Test
-    public void testListSwarmNodesWithIdFilter() throws Exception {
+    public void testListSwarmNodesWithIdFilter() {
         DockerClient dockerClient = startSwarm();
 
         List<SwarmNode> nodes = dockerClient.listSwarmNodesCmd().exec();
@@ -39,7 +39,7 @@ public class ListSwarmNodesCmdExecIT extends SwarmCmdIT {
     }
 
     @Test
-    public void testListSwarmNodesWithNameFilter() throws Exception {
+    public void testListSwarmNodesWithNameFilter() {
         DockerClient dockerClient = startSwarm();
 
         List<SwarmNode> nodes = dockerClient.listSwarmNodesCmd().exec();
@@ -58,7 +58,7 @@ public class ListSwarmNodesCmdExecIT extends SwarmCmdIT {
     }
 
     @Test
-    public void testListSwarmNodesWithMembershipFilter() throws Exception {
+    public void testListSwarmNodesWithMembershipFilter() {
         DockerClient dockerClient = startSwarm();
 
         List<SwarmNode> nodesWithAcceptedMembership = dockerClient.listSwarmNodesCmd()
@@ -73,7 +73,7 @@ public class ListSwarmNodesCmdExecIT extends SwarmCmdIT {
     }
 
     @Test
-    public void testListSwarmNodesWithRoleFilter() throws Exception {
+    public void testListSwarmNodesWithRoleFilter() {
         DockerClient dockerClient = startSwarm();
 
         List<SwarmNode> nodesWithManagerRole = dockerClient.listSwarmNodesCmd()

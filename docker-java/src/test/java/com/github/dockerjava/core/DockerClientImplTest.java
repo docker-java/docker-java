@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 public class DockerClientImplTest {
 
     @Test
-    public void configuredInstanceAuthConfig() throws Exception {
+    public void configuredInstanceAuthConfig() {
         // given a config with null serverAddress
         DefaultDockerClientConfig dockerClientConfig = new DefaultDockerClientConfig(URI.create("tcp://foo"),
             new DockerConfigFile(), null, null, null, "", "", "", null);
@@ -22,12 +22,12 @@ public class DockerClientImplTest {
             throw new AssertionError();
         } catch (NullPointerException e) {
             // then we get a NPE with expected message
-            assertEquals(e.getMessage(), "Configured serverAddress is null.");
+            assertEquals("Configured serverAddress is null.", e.getMessage());
         }
     }
 
     @Test
-    public void defaultInstanceAuthConfig() throws Exception {
+    public void defaultInstanceAuthConfig() {
 
         System.setProperty("user.home", "target/test-classes/someHomeDir");
 

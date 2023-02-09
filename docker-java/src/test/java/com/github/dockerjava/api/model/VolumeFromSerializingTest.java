@@ -18,7 +18,7 @@ public class VolumeFromSerializingTest {
     @Test
     public void serializing() throws Exception {
         VolumesFrom volumeFrom = new VolumesFrom("container1", AccessMode.ro);
-        assertEquals(JSONTestHelper.getMapper().writeValueAsString(volumeFrom), json);
+        assertEquals(json, JSONTestHelper.getMapper().writeValueAsString(volumeFrom));
     }
 
 }

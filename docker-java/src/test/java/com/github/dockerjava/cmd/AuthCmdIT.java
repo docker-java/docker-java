@@ -19,7 +19,7 @@ import static org.junit.Assume.assumeThat;
 public class AuthCmdIT extends CmdIT {
 
     @Test
-    public void testAuth() throws Exception {
+    public void testAuth() {
         assumeThat("Fails on 1.22. Temporary disabled.", dockerRule, apiVersionGreater(VERSION_1_22));
 
         AuthResponse response = dockerRule.getClient().authCmd().exec();
@@ -30,7 +30,7 @@ public class AuthCmdIT extends CmdIT {
 
     @Ignore("Disabled because of 500/InternalServerException")
     @Test
-    public void testAuthInvalid() throws Exception {
+    public void testAuthInvalid() {
         assertThrows("Wrong login/password, please try again", UnauthorizedException.class, () -> {
             DockerClientBuilder.getInstance(dockerRule.config("garbage"))
                 .build()

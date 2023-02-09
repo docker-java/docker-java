@@ -45,7 +45,7 @@ public class RenameContainerCmdIT extends CmdIT {
     }
 
     @Test(expected = NotFoundException.class)
-    public void renameExistingContainer() throws DockerException, InterruptedException {
+    public void renameExistingContainer() throws DockerException {
         dockerRule.getClient().renameContainerCmd("non-existing")
                 .withName("renameExistingContainer")
                 .exec();

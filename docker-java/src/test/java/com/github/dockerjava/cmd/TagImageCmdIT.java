@@ -11,7 +11,7 @@ public class TagImageCmdIT extends CmdIT {
     public static final Logger LOG = LoggerFactory.getLogger(TagImageCmdIT.class);
 
     @Test
-    public void tagImage() throws Exception {
+    public void tagImage() {
         String tag = "" + RandomUtils.nextInt(0, Integer.MAX_VALUE);
 
         dockerRule.getClient().tagImageCmd("busybox:latest", "docker-java/busybox", tag).exec();
@@ -20,7 +20,7 @@ public class TagImageCmdIT extends CmdIT {
     }
 
     @Test(expected = NotFoundException.class)
-    public void tagNonExistingImage() throws Exception {
+    public void tagNonExistingImage() {
 
         String tag = "" + RandomUtils.nextInt(0, Integer.MAX_VALUE);
         dockerRule.getClient().tagImageCmd("non-existing", "docker-java/busybox", tag).exec();

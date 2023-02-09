@@ -13,32 +13,32 @@ public class RestartPolicyParsingTest {
 
 
     @Test
-    public void noRestart() throws Exception {
-        assertEquals(RestartPolicy.parse("no"), RestartPolicy.noRestart());
+    public void noRestart() {
+        assertEquals(RestartPolicy.noRestart(), RestartPolicy.parse("no"));
     }
 
     @Test
-    public void alwaysRestart() throws Exception {
-        assertEquals(RestartPolicy.parse("always"), RestartPolicy.alwaysRestart());
+    public void alwaysRestart() {
+        assertEquals(RestartPolicy.alwaysRestart(), RestartPolicy.parse("always"));
     }
 
     @Test
-    public void unlessStoppedRestart() throws Exception {
-        assertEquals(RestartPolicy.parse("unless-stopped"), RestartPolicy.unlessStoppedRestart());
+    public void unlessStoppedRestart() {
+        assertEquals(RestartPolicy.unlessStoppedRestart(), RestartPolicy.parse("unless-stopped"));
     }
 
     @Test
-    public void onFailureRestart() throws Exception {
-        assertEquals(RestartPolicy.parse("on-failure"), RestartPolicy.onFailureRestart(0));
+    public void onFailureRestart() {
+        assertEquals(RestartPolicy.onFailureRestart(0), RestartPolicy.parse("on-failure"));
     }
 
     @Test
-    public void onFailureRestartWithCount() throws Exception {
-        assertEquals(RestartPolicy.parse("on-failure:2"), RestartPolicy.onFailureRestart(2));
+    public void onFailureRestartWithCount() {
+        assertEquals(RestartPolicy.onFailureRestart(2), RestartPolicy.parse("on-failure:2"));
     }
 
     @Test
-    public void illegalSyntax() throws Exception {
+    public void illegalSyntax() {
         expectedEx.expect(IllegalArgumentException.class);
         expectedEx.expectMessage("Error parsing RestartPolicy 'nonsense'");
 
@@ -46,7 +46,7 @@ public class RestartPolicyParsingTest {
     }
 
     @Test
-    public void illegalRetryCount() throws Exception {
+    public void illegalRetryCount() {
         expectedEx.expect(IllegalArgumentException.class);
         expectedEx.expectMessage("Error parsing RestartPolicy 'on-failure:X'");
 

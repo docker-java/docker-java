@@ -24,7 +24,7 @@ public class RemoveImageCmdIT extends CmdIT {
     public static final Logger LOG = LoggerFactory.getLogger(RemoveImageCmdIT.class);
     
     @Test
-    public void removeImage() throws DockerException, InterruptedException {
+    public void removeImage() throws DockerException {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999").exec();
         LOG.info("Created container: {}", container.toString());
@@ -47,7 +47,7 @@ public class RemoveImageCmdIT extends CmdIT {
     }
 
     @Test(expected = NotFoundException.class)
-    public void removeNonExistingImage() throws DockerException, InterruptedException {
+    public void removeNonExistingImage() throws DockerException {
 
         dockerRule.getClient().removeImageCmd("non-existing").exec();
     }
