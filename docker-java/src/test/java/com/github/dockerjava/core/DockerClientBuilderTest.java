@@ -1,12 +1,7 @@
 package com.github.dockerjava.core;
 
 
-import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
-import com.github.dockerjava.api.model.PushResponseItem;
-import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
-import com.github.dockerjava.transport.DockerHttpClient;
-import java.time.Duration;
 import org.junit.Test;
 
 import java.util.ArrayList;

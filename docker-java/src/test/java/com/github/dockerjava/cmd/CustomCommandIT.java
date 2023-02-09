@@ -1,6 +1,5 @@
 package com.github.dockerjava.cmd;
 
-import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.core.DockerRule;
 import com.github.dockerjava.transport.DockerHttpClient;
 import com.github.dockerjava.transport.DockerHttpClient.Request;
