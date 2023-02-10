@@ -54,7 +54,7 @@ public class DeviceTest {
     }};
 
     @Test
-    public void testParse() throws Exception {
+    public void testParse() {
         assertThat(Device.parse("/dev/sda:/dev/xvdc:r"),
                 equalTo(new Device("r", "/dev/xvdc", "/dev/sda")));
 

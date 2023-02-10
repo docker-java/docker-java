@@ -21,7 +21,7 @@ import static org.junit.Assert.assertEquals;
 public class NameParserTest {
 
     @Test
-    public void testValidateRepoName() throws Exception {
+    public void testValidateRepoName() {
         NameParser.validateRepoName("repository");
         NameParser.validateRepoName("namespace/repository");
         NameParser.validateRepoName("namespace-with-dashes/repository");
@@ -33,118 +33,118 @@ public class NameParserTest {
     }
 
     @Test(expected = InvalidRepositoryNameException.class)
-    public void testValidateRepoNameEmpty() throws Exception {
+    public void testValidateRepoNameEmpty() {
         NameParser.validateRepoName("");
     }
 
     @Test(expected = InvalidRepositoryNameException.class)
-    public void testValidateRepoNameExceedsMaxLength() throws Exception {
+    public void testValidateRepoNameExceedsMaxLength() {
         NameParser.validateRepoName(StringUtils.repeat("repository", 255));
     }
 
     @Test(expected = InvalidRepositoryNameException.class)
-    public void testValidateRepoNameEndWithDash() throws Exception {
+    public void testValidateRepoNameEndWithDash() {
         NameParser.validateRepoName("repository-");
     }
 
     @Test(expected = InvalidRepositoryNameException.class)
-    public void testValidateRepoNameStartWithDash() throws Exception {
+    public void testValidateRepoNameStartWithDash() {
         NameParser.validateRepoName("-repository");
     }
 
     @Test(expected = InvalidRepositoryNameException.class)
-    public void testValidateRepoNameEndWithDot() throws Exception {
+    public void testValidateRepoNameEndWithDot() {
         NameParser.validateRepoName("repository.");
     }
 
     @Test(expected = InvalidRepositoryNameException.class)
-    public void testValidateRepoNameStartWithDot() throws Exception {
+    public void testValidateRepoNameStartWithDot() {
         NameParser.validateRepoName(".repository");
     }
 
     @Test(expected = InvalidRepositoryNameException.class)
-    public void testValidateRepoNameEndWithUnderscore() throws Exception {
+    public void testValidateRepoNameEndWithUnderscore() {
         NameParser.validateRepoName("repository_");
     }
 
     @Test(expected = InvalidRepositoryNameException.class)
-    public void testValidateRepoNameStartWithUnderscore() throws Exception {
+    public void testValidateRepoNameStartWithUnderscore() {
         NameParser.validateRepoName("_repository");
     }
 
     @Test(expected = InvalidRepositoryNameException.class)
-    public void testValidateRepoNameWithColon() throws Exception {
+    public void testValidateRepoNameWithColon() {
         NameParser.validateRepoName("repository:with:colon");
     }
 
     @Test
-    public void testResolveSimpleRepositoryName() throws Exception {
+    public void testResolveSimpleRepositoryName() {
         HostnameReposName resolved = NameParser.resolveRepositoryName("repository");
-        assertEquals(resolved, new HostnameReposName(AuthConfig.DEFAULT_SERVER_ADDRESS, "repository"));
+        assertEquals(new HostnameReposName(AuthConfig.DEFAULT_SERVER_ADDRESS, "repository"), resolved);
     }
 
     @Test
-    public void testResolveRepositoryNameWithNamespace() throws Exception {
+    public void testResolveRepositoryNameWithNamespace() {
         HostnameReposName resolved = NameParser.resolveRepositoryName("namespace/repository");
-        assertEquals(resolved, new HostnameReposName(AuthConfig.DEFAULT_SERVER_ADDRESS, "namespace/repository"));
+        assertEquals(new HostnameReposName(AuthConfig.DEFAULT_SERVER_ADDRESS, "namespace/repository"), resolved);
     }
 
     @Test
-    public void testResolveRepositoryNameWithNamespaceAndSHA256() throws Exception {
+    public void testResolveRepositoryNameWithNamespaceAndSHA256() {
         HostnameReposName resolved = NameParser.resolveRepositoryName("namespace/repository@sha256:sha256");
-        assertEquals(resolved, new HostnameReposName(AuthConfig.DEFAULT_SERVER_ADDRESS, "namespace/repository@sha256:sha256"));
+        assertEquals(new HostnameReposName(AuthConfig.DEFAULT_SERVER_ADDRESS, "namespace/repository@sha256:sha256"), resolved);
     }
 
     @Test
-    public void testResolveRepositoryNameWithNamespaceAndHostname() throws Exception {
+    public void testResolveRepositoryNameWithNamespaceAndHostname() {
         HostnameReposName resolved = NameParser.resolveRepositoryName("localhost:5000/namespace/repository");
-        assertEquals(resolved, new HostnameReposName("localhost:5000", "namespace/repository"));
+        assertEquals(new HostnameReposName("localhost:5000", "namespace/repository"), resolved);
     }
 
     @Test
-    public void testResolveRepositoryNameWithNamespaceAndHostnameAndSHA256() throws Exception {
+    public void testResolveRepositoryNameWithNamespaceAndHostnameAndSHA256() {
         HostnameReposName resolved = NameParser.resolveRepositoryName("localhost:5000/namespace/repository@sha256:sha256");
-        assertEquals(resolved, new HostnameReposName("localhost:5000", "namespace/repository"));
+        assertEquals(new HostnameReposName("localhost:5000", "namespace/repository"), resolved);
     }
 
     @Test(expected = InvalidRepositoryNameException.class)
-    public void testResolveRepositoryNameWithIndex() throws Exception {
+    public void testResolveRepositoryNameWithIndex() {
         NameParser.resolveRepositoryName("index.docker.io/repository");
     }
 
     @Test
-    public void testResolveReposTagWithoutTagSimple() throws Exception {
+    public void testResolveReposTagWithoutTagSimple() {
         ReposTag resolved = NameParser.parseRepositoryTag("repository");
-        assertEquals(resolved, new ReposTag("repository", ""));
+        assertEquals(new ReposTag("repository", ""), resolved);
 
         resolved = NameParser.parseRepositoryTag("namespace/repository");
-        assertEquals(resolved, new ReposTag("namespace/repository", ""));
+        assertEquals(new ReposTag("namespace/repository", ""), resolved);
 
         resolved = NameParser.parseRepositoryTag("localhost:5000/namespace/repository");
-        assertEquals(resolved, new ReposTag("localhost:5000/namespace/repository", ""));
+        assertEquals(new ReposTag("localhost:5000/namespace/repository", ""), resolved);
     }
 
     @Test
-    public void testResolveReposTagWithTag() throws Exception {
+    public void testResolveReposTagWithTag() {
         ReposTag resolved = NameParser.parseRepositoryTag("repository:tag");
-        assertEquals(resolved, new ReposTag("repository", "tag"));
+        assertEquals(new ReposTag("repository", "tag"), resolved);
 
         resolved = NameParser.parseRepositoryTag("namespace/repository:tag");
-        assertEquals(resolved, new ReposTag("namespace/repository", "tag"));
+        assertEquals(new ReposTag("namespace/repository", "tag"), resolved);
 
         resolved = NameParser.parseRepositoryTag("localhost:5000/namespace/repository:tag");
-        assertEquals(resolved, new ReposTag("localhost:5000/namespace/repository", "tag"));
+        assertEquals(new ReposTag("localhost:5000/namespace/repository", "tag"), resolved);
     }
 
     @Test
-    public void testResolveReposTagWithSHA256() throws Exception {
+    public void testResolveReposTagWithSHA256() {
         ReposTag resolved = NameParser.parseRepositoryTag("repository@sha256:sha256");
-        assertEquals(resolved, new ReposTag("repository@sha256:sha256", ""));
+        assertEquals(new ReposTag("repository@sha256:sha256", ""), resolved);
 
         resolved = NameParser.parseRepositoryTag("namespace/repository@sha256:sha256");
-        assertEquals(resolved, new ReposTag("namespace/repository@sha256:sha256", ""));
+        assertEquals(new ReposTag("namespace/repository@sha256:sha256", ""), resolved);
 
         resolved = NameParser.parseRepositoryTag("localhost:5000/namespace/repository@sha256:sha256");
-        assertEquals(resolved, new ReposTag("localhost:5000/namespace/repository@sha256:sha256", ""));
+        assertEquals(new ReposTag("localhost:5000/namespace/repository@sha256:sha256", ""), resolved);
     }
 }

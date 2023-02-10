@@ -85,7 +85,7 @@ public class GoLangFileMatchTest {
     public MatchTestCase testCase;
 
     @Test
-    public void testMatch() throws IOException {
+    public void testMatch() {
         String pattern = testCase.pattern;
         String s = testCase.s;
         if (GoLangFileMatch.IS_WINDOWS) {

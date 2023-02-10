@@ -52,7 +52,7 @@ public class CreateNetworkCmdIT extends CmdIT {
         assertNotNull(createNetworkResponse.getId());
 
         Network network = dockerRule.getClient().inspectNetworkCmd().withNetworkId(createNetworkResponse.getId()).exec();
-        assertEquals(network.getName(), networkName);
+        assertEquals(networkName, network.getName());
         assertEquals("bridge", network.getDriver());
         assertEquals(subnet, network.getIpam().getConfig().iterator().next().getSubnet());
     }
@@ -83,6 +83,6 @@ public class CreateNetworkCmdIT extends CmdIT {
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd().withName(networkName).withLabels(labels).exec();
         assertNotNull(createNetworkResponse.getId());
         Network network = dockerRule.getClient().inspectNetworkCmd().withNetworkId(createNetworkResponse.getId()).exec();
-        assertEquals(network.getLabels(), labels);
+        assertEquals(labels, network.getLabels());
     }
 }

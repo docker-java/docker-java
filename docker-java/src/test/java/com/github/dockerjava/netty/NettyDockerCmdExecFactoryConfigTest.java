@@ -56,8 +56,8 @@ public class NettyDockerCmdExecFactoryConfigTest {
 
             List<HttpRequest> requests = server.getRequests();
 
-            assertEquals(requests.size(), 1);
-            assertEquals(requests.get(0).uri(), "/v1.23/version");
+            assertEquals(1, requests.size());
+            assertEquals("/v1.23/version", requests.get(0).uri());
         } finally {
             server.stop();
         }
@@ -83,8 +83,8 @@ public class NettyDockerCmdExecFactoryConfigTest {
 
             List<HttpRequest> requests = server.getRequests();
 
-            assertEquals(requests.size(), 1);
-            assertEquals(requests.get(0).uri(), "/version");
+            assertEquals(1, requests.size());
+            assertEquals("/version", requests.get(0).uri());
         } finally {
             server.stop();
         }

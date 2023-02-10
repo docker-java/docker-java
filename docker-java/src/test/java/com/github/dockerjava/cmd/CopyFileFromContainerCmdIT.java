@@ -23,7 +23,7 @@ public class CopyFileFromContainerCmdIT extends CmdIT {
     public static final Logger LOG = LoggerFactory.getLogger(CopyFileFromContainerCmdIT.class);
 
     @Test
-    public void copyFromContainer() throws Exception {
+    public void copyFromContainer() {
         assumeThat("Doesn't work since 1.24", dockerRule, not(isGreaterOrEqual(VERSION_1_24)));
 
         assumeNotSwarm("", dockerRule);
@@ -51,7 +51,7 @@ public class CopyFileFromContainerCmdIT extends CmdIT {
     }
 
     @Test(expected = NotFoundException.class)
-    public void copyFromNonExistingContainer() throws Exception {
+    public void copyFromNonExistingContainer() {
 
         dockerRule.getClient().copyFileFromContainerCmd("non-existing", "/test").exec();
     }

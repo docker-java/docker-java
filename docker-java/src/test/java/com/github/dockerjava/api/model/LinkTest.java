@@ -14,15 +14,15 @@ public class LinkTest {
     @Test
     public void parse() {
         Link link = Link.parse("name:alias");
-        assertEquals(link.getName(), "name");
-        assertEquals(link.getAlias(), "alias");
+        assertEquals("name", link.getName());
+        assertEquals("alias", link.getAlias());
     }
 
     @Test
     public void parseWithContainerNames() {
         Link link = Link.parse("/name:/conatiner/alias");
-        assertEquals(link.getName(), "name");
-        assertEquals(link.getAlias(), "alias");
+        assertEquals("name", link.getName());
+        assertEquals("alias", link.getAlias());
     }
 
     @Test
@@ -43,7 +43,7 @@ public class LinkTest {
 
     @Test
     public void stringify() {
-        assertEquals(Link.parse("name:alias").toString(), "name:alias");
+        assertEquals("name:alias", Link.parse("name:alias").toString());
     }
 
 }

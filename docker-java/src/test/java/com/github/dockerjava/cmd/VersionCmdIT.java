@@ -22,7 +22,7 @@ public class VersionCmdIT extends CmdIT {
         assertTrue(version.getGoVersion().length() > 0);
         assertTrue(version.getVersion().length() > 0);
 
-        assertEquals(StringUtils.split(version.getVersion(), ".").length, 3);
+        assertEquals(3, StringUtils.split(version.getVersion(), ".").length);
 
     }
 

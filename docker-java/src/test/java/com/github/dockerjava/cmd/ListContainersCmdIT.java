@@ -59,7 +59,7 @@ public class ListContainersCmdIT extends CmdIT {
     }
 
     @Test
-    public void testListContainers() throws Exception {
+    public void testListContainers() {
         List<Container> containers = dockerRule.getClient().listContainersCmd()
                 .withLabelFilter(testLabel)
                 .withShowAll(true)
@@ -106,7 +106,7 @@ public class ListContainersCmdIT extends CmdIT {
     }
 
     @Test
-    public void testListContainersWithLabelsFilter() throws Exception {
+    public void testListContainersWithLabelsFilter() {
         // list with filter by Map label
         dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("echo")
                 .withLabels(testLabel)
@@ -138,7 +138,7 @@ public class ListContainersCmdIT extends CmdIT {
     }
 
     @Test
-    public void testNameFilter() throws Exception {
+    public void testNameFilter() {
         String testUUID = testLabel.get("test");
 
         String id1, id2;
@@ -165,7 +165,7 @@ public class ListContainersCmdIT extends CmdIT {
     }
 
     @Test
-    public void testIdsFilter() throws Exception {
+    public void testIdsFilter() {
         String id1, id2;
         id1 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withLabels(testLabel)
@@ -188,7 +188,7 @@ public class ListContainersCmdIT extends CmdIT {
     }
 
     @Test
-    public void testStatusFilter() throws Exception {
+    public void testStatusFilter() {
         String id1, id2;
         id1 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withCmd("sh", "-c", "sleep 99999")
@@ -247,7 +247,7 @@ public class ListContainersCmdIT extends CmdIT {
     }
 
     @Test
-    public void testVolumeFilter() throws Exception {
+    public void testVolumeFilter() {
         String id;
         dockerRule.getClient().createVolumeCmd()
                 .withName("TestFilterVolume")
@@ -276,7 +276,7 @@ public class ListContainersCmdIT extends CmdIT {
     }
 
     @Test
-    public void testNetworkFilter() throws Exception {
+    public void testNetworkFilter() {
         String id;
         dockerRule.getClient().createNetworkCmd()
                 .withName("TestFilterNetwork")
@@ -337,7 +337,7 @@ public class ListContainersCmdIT extends CmdIT {
     }
 
     @Test
-    public void testExitedFilter() throws Exception {
+    public void testExitedFilter() {
         dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withLabels(testLabel)
                 .exec();

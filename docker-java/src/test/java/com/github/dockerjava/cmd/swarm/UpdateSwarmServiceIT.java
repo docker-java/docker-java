@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.is;
 
 public class UpdateSwarmServiceIT extends SwarmCmdIT {
     @Test
-    public void testUpdateServiceReplicate() throws Exception {
+    public void testUpdateServiceReplicate() {
         DockerClient dockerClient = startSwarm();
         //create network
         String networkId = dockerClient.createNetworkCmd().withName("networkname").withDriver("overlay")

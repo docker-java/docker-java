@@ -51,7 +51,7 @@ public class ExposedPortsTest {
     }
 
     @Test
-    public void usesFromJsonWithDuplicate() throws Exception {
+    public void usesFromJsonWithDuplicate() {
         ExposedPorts ports = new ExposedPorts(
             new ExposedPort(80, InternetProtocol.UDP),
             new ExposedPort(80),

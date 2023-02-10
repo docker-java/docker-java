@@ -87,7 +87,7 @@ public class FramedResponseStreamHandlerTest {
     objectUnderTest.channelRead0(Mockito.mock(ChannelHandlerContext.class), Unpooled.wrappedBuffer(msg));
 
     // Assert result
-    assertEquals(responseHandler.frames.get(0).toString(), "RAW: ");
+    assertEquals("RAW: ", responseHandler.frames.get(0).toString());
   }
 
   @Test
@@ -117,7 +117,7 @@ public class FramedResponseStreamHandlerTest {
     objectUnderTest.channelRead0(Mockito.mock(ChannelHandlerContext.class), Unpooled.wrappedBuffer(msg));
 
     // Assert result
-    assertEquals(responseHandler.frames.get(0).toString(), "STDIN: ");
+    assertEquals("STDIN: ", responseHandler.frames.get(0).toString());
   }
 
   @Test
@@ -132,7 +132,7 @@ public class FramedResponseStreamHandlerTest {
     objectUnderTest.channelRead0(Mockito.mock(ChannelHandlerContext.class), Unpooled.wrappedBuffer(msg));
 
     // Assert result
-    assertEquals(responseHandler.frames.get(0).toString(), "STDOUT: ");
+    assertEquals("STDOUT: ", responseHandler.frames.get(0).toString());
   }
 
   @Test
@@ -147,7 +147,7 @@ public class FramedResponseStreamHandlerTest {
     objectUnderTest.channelRead0(Mockito.mock(ChannelHandlerContext.class), Unpooled.wrappedBuffer(msg));
 
     // Assert result
-    assertEquals(responseHandler.frames.get(0).toString(), "STDERR: ");
+    assertEquals("STDERR: ", responseHandler.frames.get(0).toString());
   }
 
   @Test
@@ -162,7 +162,7 @@ public class FramedResponseStreamHandlerTest {
     objectUnderTest.channelRead0(Mockito.mock(ChannelHandlerContext.class), Unpooled.wrappedBuffer(msg));
 
     // Assert result
-    assertEquals(responseHandler.frames.get(0).toString(), "STDOUT: ");
+    assertEquals("STDOUT: ", responseHandler.frames.get(0).toString());
   }
 
   @Test
@@ -179,6 +179,6 @@ public class FramedResponseStreamHandlerTest {
     objectUnderTest.exceptionCaught(Mockito.mock(ChannelHandlerContext.class), throwable);
 
     // Assert result
-    assertEquals(responseHandler.exceptions.get(0).getCause(), exception);
+    assertEquals(exception, responseHandler.exceptions.get(0).getCause());
   }
 }

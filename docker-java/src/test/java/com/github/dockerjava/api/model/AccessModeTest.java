@@ -15,17 +15,17 @@ public class AccessModeTest {
 
     @Test
     public void defaultAccessMode() {
-        assertEquals(AccessMode.DEFAULT, rw);
+        assertEquals(rw, AccessMode.DEFAULT);
     }
 
     @Test
     public void stringify() {
-        assertEquals(AccessMode.rw.toString(), "rw");
+        assertEquals("rw", AccessMode.rw.toString());
     }
 
     @Test
     public void fromString() {
-        assertEquals(AccessMode.valueOf("rw"), rw);
+        assertEquals(rw, AccessMode.valueOf("rw"));
     }
 
     @Test

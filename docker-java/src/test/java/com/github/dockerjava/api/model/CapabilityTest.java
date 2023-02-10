@@ -11,13 +11,13 @@ public class CapabilityTest {
     @Test
     public void serializeCapability() throws Exception {
         String json = JSONTestHelper.getMapper().writeValueAsString(Capability.ALL);
-        assertEquals(json, "\"ALL\"");
+        assertEquals("\"ALL\"", json);
     }
 
     @Test
     public void deserializeCapability() throws Exception {
         Capability capability = JSONTestHelper.getMapper().readValue("\"ALL\"", Capability.class);
-        assertEquals(capability, Capability.ALL);
+        assertEquals(Capability.ALL, capability);
     }
 
     @Test(expected = JsonMappingException.class)

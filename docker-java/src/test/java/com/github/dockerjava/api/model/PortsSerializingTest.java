@@ -19,12 +19,12 @@ public class PortsSerializingTest {
     public void deserializingPortWithMultipleBindings() throws Exception {
         Ports ports = JSONTestHelper.getMapper().readValue(jsonWithDoubleBindingForOnePort, Ports.class);
         Map<ExposedPort, Binding[]> map = ports.getBindings();
-        assertEquals(map.size(), 1);
+        assertEquals(1, map.size());
 
         Binding[] bindings = map.get(ExposedPort.tcp(80));
-        assertEquals(bindings.length, 2);
-        assertEquals(bindings[0], new Binding("10.0.0.1", "80"));
-        assertEquals(bindings[1], new Binding("10.0.0.2", "80"));
+        assertEquals(2, bindings.length);
+        assertEquals(new Binding("10.0.0.1", "80"), bindings[0]);
+        assertEquals(new Binding("10.0.0.2", "80"), bindings[1]);
     }
 
     @Test
@@ -32,20 +32,20 @@ public class PortsSerializingTest {
         Ports ports = new Ports();
         ports.bind(ExposedPort.tcp(80), new Binding("10.0.0.1", "80"));
         ports.bind(ExposedPort.tcp(80), new Binding("10.0.0.2", "80"));
-        assertEquals(JSONTestHelper.getMapper().writeValueAsString(ports), jsonWithDoubleBindingForOnePort);
+        assertEquals(jsonWithDoubleBindingForOnePort, JSONTestHelper.getMapper().writeValueAsString(ports));
     }
 
     @Test
     public void serializingEmptyBinding() throws Exception {
         Ports ports = new Ports(ExposedPort.tcp(80), new Binding(null, null));
-        assertEquals(JSONTestHelper.getMapper().writeValueAsString(ports), "{\"80/tcp\":[{\"HostIp\":\"\",\"HostPort\":\"\"}]}");
+        assertEquals("{\"80/tcp\":[{\"HostIp\":\"\",\"HostPort\":\"\"}]}", JSONTestHelper.getMapper().writeValueAsString(ports));
     }
 
     @Test
     public void deserializingPortWithNullBindings() throws Exception {
         Ports ports = JSONTestHelper.getMapper().readValue(jsonWithNullBindingForOnePort, Ports.class);
         Map<ExposedPort, Binding[]> map = ports.getBindings();
-        assertEquals(map.size(), 1);
+        assertEquals(1, map.size());
 
         assertNull(map.get(ExposedPort.tcp(80)));
     }
@@ -54,6 +54,6 @@ public class PortsSerializingTest {
     public void serializingWithNullBindings() throws Exception {
         Ports ports = new Ports();
         ports.bind(ExposedPort.tcp(80), null);
-        assertEquals(JSONTestHelper.getMapper().writeValueAsString(ports), jsonWithNullBindingForOnePort);
+        assertEquals(jsonWithNullBindingForOnePort, JSONTestHelper.getMapper().writeValueAsString(ports));
     }
 }
