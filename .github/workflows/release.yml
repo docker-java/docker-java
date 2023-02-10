@@ -17,7 +17,7 @@ jobs:
           java-version: 8
       - name: Set version
         run: ./mvnw versions:set -DnewVersion="${{github.event.release.tag_name}}"
-      # TODO check master's CI status
+      # TODO check main's CI status
       - name: Deploy with Maven
         env:
           MAVEN_DEPLOYMENT_REPOSITORY: ${{ secrets.MAVEN_DEPLOYMENT_REPOSITORY }}
