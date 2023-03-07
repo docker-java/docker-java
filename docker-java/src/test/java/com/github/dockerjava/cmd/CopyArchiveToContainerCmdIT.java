@@ -82,7 +82,7 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
     }
 
     @Test(expected = NotFoundException.class)
-    public void copyToNonExistingContainer() throws Exception {
+    public void copyToNonExistingContainer() {
 
         dockerRule.getClient().copyArchiveToContainerCmd("non-existing").withHostResource("src/test/resources/testReadFile").exec();
     }

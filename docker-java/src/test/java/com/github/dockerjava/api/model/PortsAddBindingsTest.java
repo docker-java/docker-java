@@ -36,9 +36,9 @@ public class PortsAddBindingsTest {
 
         Map<ExposedPort, Binding[]> bindings = ports.getBindings();
         // two keys with one value each
-        assertEquals(bindings.size(), 2);
-        assertArrayEquals(bindings.get(TCP_80), new Binding[] {BINDING_8080});
-        assertArrayEquals(bindings.get(TCP_90), new Binding[] {BINDING_9090});
+        assertEquals(2, bindings.size());
+        assertArrayEquals(new Binding[] {BINDING_8080}, bindings.get(TCP_80));
+        assertArrayEquals(new Binding[] {BINDING_9090}, bindings.get(TCP_90));
     }
 
     @Test
@@ -47,8 +47,8 @@ public class PortsAddBindingsTest {
 
         Map<ExposedPort, Binding[]> bindings = ports.getBindings();
         // one key with two values
-        assertEquals(bindings.size(), 1);
-        assertArrayEquals(bindings.get(TCP_80), new Binding[] {BINDING_8080, BINDING_9090});
+        assertEquals(1, bindings.size());
+        assertArrayEquals(new Binding[] {BINDING_8080, BINDING_9090}, bindings.get(TCP_80));
     }
 
     @Test
@@ -56,7 +56,7 @@ public class PortsAddBindingsTest {
         ports.add(new PortBinding(null, TCP_80));
         Map<ExposedPort, Binding[]> bindings = ports.getBindings();
         // one key with two values
-        assertEquals(bindings.size(), 1);
+        assertEquals(1, bindings.size());
         assertNull(bindings.get(TCP_80));
     }
 }

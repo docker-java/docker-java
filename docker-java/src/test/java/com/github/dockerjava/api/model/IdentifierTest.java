@@ -17,26 +17,26 @@ public class IdentifierTest {
         Identifier i3A = Identifier.fromCompoundString("10.0.0.1:123/jim:latest");
 
         assertTrue(!i1.tag.isPresent());
-        assertEquals(i1.repository.name, "10.0.0.1/jim");
+        assertEquals("10.0.0.1/jim", i1.repository.name);
 
         assertTrue(i2.tag.isPresent());
-        assertEquals(i2.tag.get(), "123");
-        assertEquals(i2.repository.name, "10.0.0.1/jim");
+        assertEquals("123", i2.tag.get());
+        assertEquals("10.0.0.1/jim", i2.repository.name);
 
         assertTrue(i3.tag.isPresent());
-        assertEquals(i3.tag.get(), "124");
-        assertEquals(i3.repository.name, "10.0.0.1:123/jim");
-        assertEquals(i3.repository.getURL().getPort(), 123);
-        assertEquals(i3A.tag.get(), "latest");
+        assertEquals("124", i3.tag.get());
+        assertEquals("10.0.0.1:123/jim", i3.repository.name);
+        assertEquals(123, i3.repository.getURL().getPort());
+        assertEquals("latest", i3A.tag.get());
 
         Identifier i4 = Identifier.fromCompoundString("centos:latest");
         assertTrue(i4.tag.isPresent());
-        assertEquals(i4.tag.get(), "latest");
+        assertEquals("latest", i4.tag.get());
 
         Identifier i5 = Identifier.fromCompoundString("busybox");
         assertTrue(!i5.tag.isPresent());
 
         Identifier i6 = Identifier.fromCompoundString("10.0.0.1:5000/my-test-image:1234");
-        assertEquals(i6.repository.getPath(), "my-test-image");
+        assertEquals("my-test-image", i6.repository.getPath());
     }
 }

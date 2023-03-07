@@ -241,7 +241,7 @@ public class CompressArchiveUtilTest {
         TarArchiveEntry tarArchiveEntry = getTarArchiveEntry(archive, fileName);
         assertNotNull(tarArchiveEntry);
         assertTrue(tarArchiveEntry.isFile());
-        assertEquals("should be executable", (tarArchiveEntry.getMode() & 0755), 0755);
+        assertEquals("should be executable", 0755, (tarArchiveEntry.getMode() & 0755));
     }
 
     private static void assertTarArchiveEntryIsSymlink(File archive, String fileName, String expectedTarget) throws IOException {
