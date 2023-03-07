@@ -14,7 +14,7 @@ jobs:
           - { name: "default", javaVersion: 8 }
           - { name: "default", javaVersion: 17 }
           - { name: "over TCP", dockerHost: "tcp://127.0.0.1:2375", javaVersion: 8 }
-          - { name: "Docker 19.03.10", dockerVersion: "docker-ce_19.03.10~3-0~ubuntu-focal_amd64", javaVersion: 8 }
+          - { name: "Docker 20.10.13", dockerVersion: "5:20.10.13~3-0~ubuntu-jammy", javaVersion: 8 }
 
     steps:
       - uses: actions/checkout@v3
