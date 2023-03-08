@@ -47,8 +47,8 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
     public void copyStreamToContainer() throws Exception {
         CreateContainerResponse container = prepareContainerForCopy("2");
         dockerRule.getClient().copyArchiveToContainerCmd(container.getId())
-            .withHostResource(Paths.get(ClassLoader.getSystemResource("testReadFile").toURI()).toString())
-            .exec();
+                .withHostResource(Paths.get(ClassLoader.getSystemResource("testReadFile").toURI()).toString())
+                .exec();
         assertFileCopied(container);
     }
 
@@ -56,7 +56,7 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
     public void copyStreamToContainerTwice() throws Exception {
         CreateContainerResponse container = prepareContainerForCopy("rerun");
         CopyArchiveToContainerCmd copyArchiveToContainerCmd = dockerRule.getClient().copyArchiveToContainerCmd(container.getId())
-            .withHostResource(Paths.get(ClassLoader.getSystemResource("testReadFile").toURI()).toString());
+                .withHostResource(Paths.get(ClassLoader.getSystemResource("testReadFile").toURI()).toString());
         copyArchiveToContainerCmd.exec();
         assertFileCopied(container);
         //run again to make sure no DockerClientException
@@ -82,9 +82,9 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
     }
 
     @Test(expected = NotFoundException.class)
-    public void copyToNonExistingContainer() {
+    public void copyToNonExistingContainer() throws Exception {
         dockerRule.getClient().copyArchiveToContainerCmd("non-existing")
-            .withHostResource(Paths.get(ClassLoader.getSystemResource("testReadFile").toURI()).toString()).exec();
+                .withHostResource(Paths.get(ClassLoader.getSystemResource("testReadFile").toURI()).toString()).exec();
     }
 
     @Test
@@ -113,7 +113,7 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
         // cleanup dir
         FileUtils.deleteDirectory(localDir.toFile());
     }
-    
+
     @Test
     public void copyFileWithExecutePermission() throws Exception {
         // create script file, add permission to execute
