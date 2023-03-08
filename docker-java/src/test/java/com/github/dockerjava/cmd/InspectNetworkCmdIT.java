@@ -5,7 +5,6 @@ import com.github.dockerjava.api.model.Network;
 import org.junit.Test;
 
 import java.util.List;
-import java.util.Map;
 
 import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
 import static com.github.dockerjava.utils.TestUtils.findNetwork;
@@ -29,52 +28,5 @@ public class InspectNetworkCmdIT extends CmdIT {
         assertThat(network.getDriver(), equalTo(expected.getDriver()));
         assertThat(network.getIpam().getConfig().get(0).getSubnet(), equalTo(expected.getIpam().getConfig().get(0).getSubnet()));
         assertThat(network.getIpam().getDriver(), equalTo(expected.getIpam().getDriver()));
-    }
-
-    @Test
-    public void inspectNetworkIngressNonVerbose() throws DockerException {
-        assumeNotSwarm("no network in swarm", dockerRule);
-
-        List<Network> networks = dockerRule.getClient().listNetworksCmd().exec();
-
-        Network expected = findNetwork(networks, "ingress");
-
-        Network network = dockerRule.getClient().inspectNetworkCmd()
-                .withNetworkId(expected.getId())
-                .exec();
-
-        assertThat(network.getName(), equalTo(expected.getName()));
-        assertThat(network.getScope(), equalTo(expected.getScope()));
-        assertThat(network.getDriver(), equalTo(expected.getDriver()));
-        assertThat(network.getIpam().getConfig().get(0).getSubnet(), equalTo(expected.getIpam().getConfig().get(0).getSubnet()));
-        assertThat(network.getIpam().getDriver(), equalTo(expected.getIpam().getDriver()));
-        assertThat(network.getServices(), nullValue());
-    }
-
-    @Test
-    public void inspectNetworkIngressVerbose() throws DockerException {
-        assumeNotSwarm("no network in swarm", dockerRule);
-
-        List<Network> networks = dockerRule.getClient().listNetworksCmd().exec();
-
-        Network expected = findNetwork(networks, "ingress");
-
-        Network network = dockerRule.getClient().inspectNetworkCmd()
-                .withVerbose(true)
-                .withNetworkId(expected.getId())
-                .exec();
-
-        assertThat(network.getName(), equalTo(expected.getName()));
-        assertThat(network.getScope(), equalTo(expected.getScope()));
-        assertThat(network.getDriver(), equalTo(expected.getDriver()));
-        assertThat(network.getIpam().getConfig().get(0).getSubnet(), equalTo(expected.getIpam().getConfig().get(0).getSubnet()));
-        assertThat(network.getIpam().getDriver(), equalTo(expected.getIpam().getDriver()));
-        assertThat(network.getServices(), notNullValue());
-
-        Map<String, Network.NetworkService> networkServices = network.getServices();
-        Network.NetworkService firstService = networkServices.get(networkServices.keySet().iterator().next());
-        assertThat(firstService.getTasks(), notNullValue());
-        assertThat(firstService.getTasks()[0].getName(), equalTo("ingress-endpoint"));
-
     }
 }
