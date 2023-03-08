@@ -16,13 +16,13 @@ public class ExposedPortTest {
     @Test
     public void parsePortAndProtocol() {
         ExposedPort exposedPort = ExposedPort.parse("80/tcp");
-        assertEquals(exposedPort, new ExposedPort(80, TCP));
+        assertEquals(new ExposedPort(80, TCP), exposedPort);
     }
 
     @Test
     public void parsePortOnly() {
         ExposedPort exposedPort = ExposedPort.parse("80");
-        assertEquals(exposedPort, new ExposedPort(80, DEFAULT));
+        assertEquals(new ExposedPort(80, DEFAULT), exposedPort);
     }
 
     @Test
@@ -43,7 +43,7 @@ public class ExposedPortTest {
 
     @Test
     public void stringify() {
-        assertEquals(ExposedPort.parse("80/tcp").toString(), "80/tcp");
+        assertEquals("80/tcp", ExposedPort.parse("80/tcp").toString());
     }
 
 }

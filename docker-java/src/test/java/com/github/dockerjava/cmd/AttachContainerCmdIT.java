@@ -5,16 +5,13 @@ import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.StreamType;
-import org.junit.Assume;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.concurrent.CountDownLatch;
@@ -61,7 +58,7 @@ public class AttachContainerCmdIT extends CmdIT {
         AttachContainerTestCallback callback = new AttachContainerTestCallback() {
             @Override
             public void onNext(Frame frame) {
-                assertEquals(frame.getStreamType(), StreamType.STDOUT);
+                assertEquals(StreamType.STDOUT, frame.getStreamType());
                 super.onNext(frame);
             }
         };

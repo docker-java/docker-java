@@ -21,13 +21,13 @@ import static org.hamcrest.Matchers.is;
 
 public class UpdateSwarmServiceIT extends SwarmCmdIT {
     @Test
-    public void testUpdateServiceReplicate() throws Exception {
+    public void testUpdateServiceReplicate() {
         DockerClient dockerClient = startSwarm();
         //create network
         String networkId = dockerClient.createNetworkCmd().withName("networkname").withDriver("overlay")
                 .withIpam(new Network.Ipam().withDriver("default")).exec().getId();
         TaskSpec taskSpec = new TaskSpec().withContainerSpec(
-                new ContainerSpec().withImage("busybox").withArgs(Arrays.asList("sleep", "3600")));
+                new ContainerSpec().withImage("busybox").withArgs(Arrays.asList("sleep", "3600")).withInit(true));
         ServiceSpec serviceSpec = new ServiceSpec()
                 .withMode(new ServiceModeConfig().withReplicated(new ServiceReplicatedModeOptions().withReplicas(1)))
                 .withTaskTemplate(taskSpec)

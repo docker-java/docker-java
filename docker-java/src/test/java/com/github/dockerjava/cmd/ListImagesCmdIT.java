@@ -4,10 +4,12 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.api.model.Info;
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
 import java.util.List;
 
 import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
@@ -15,6 +17,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyArray;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
@@ -52,6 +55,36 @@ public class ListImagesCmdIT extends CmdIT {
         assertThat(images.size(), is(greaterThan(0)));
         Boolean imageInFilteredList = isImageInFilteredList(images, imageId);
         assertTrue(imageInFilteredList);
+    }
+
+    @Test
+    public void listImagesWithReferenceFilter() throws DockerException {
+        String tag = "" + RandomUtils.nextInt(0, Integer.MAX_VALUE);
+
+        dockerRule.getClient().tagImageCmd("busybox:latest", "docker-java/busybox", tag).exec();
+        try {
+            List<Image> images = dockerRule.getClient().listImagesCmd().withReferenceFilter("docker-java/busybox")
+                .exec();
+            assertThat(images, hasSize(1));
+        }
+        finally {
+            dockerRule.getClient().removeImageCmd("docker-java/busybox:" + tag).exec();
+        }
+    }
+
+    @Test
+    public void listImagesWithFilter() throws DockerException {
+        String tag = "" + RandomUtils.nextInt(0, Integer.MAX_VALUE);
+
+        dockerRule.getClient().tagImageCmd("busybox:latest", "docker-java/busybox", tag).exec();
+        try {
+            List<Image> images = dockerRule.getClient().listImagesCmd().withFilter("reference", Collections.singletonList("docker-java/busybox"))
+                .exec();
+            assertThat(images, hasSize(1));
+        }
+        finally {
+            dockerRule.getClient().removeImageCmd("docker-java/busybox:" + tag).exec();
+        }
     }
 
     private boolean isImageInFilteredList(List<Image> images, String expectedImageId) {

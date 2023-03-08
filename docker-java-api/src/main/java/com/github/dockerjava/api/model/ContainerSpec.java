@@ -162,6 +162,14 @@ public class ContainerSpec extends DockerObject implements Serializable {
     private List<ContainerSpecConfig> configs;
 
     /**
+     * @since 1.38
+     * Run an init inside the container that forwards signals and reaps processes.
+     * This field is omitted if empty, and the default (as configured on the daemon) is used.
+     */
+    @JsonProperty("Init")
+    private Boolean init;
+
+    /**
      * @see #image
      */
     @CheckForNull
@@ -433,6 +441,15 @@ public class ContainerSpec extends DockerObject implements Serializable {
 
     public ContainerSpec withConfigs(List<ContainerSpecConfig> configs) {
         this.configs = configs;
+        return this;
+    }
+
+    public Boolean getInit() {
+        return init;
+    }
+
+    public ContainerSpec withInit(Boolean init) {
+        this.init = init;
         return this;
     }
 }

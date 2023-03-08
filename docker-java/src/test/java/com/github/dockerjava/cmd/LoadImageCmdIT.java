@@ -1,5 +1,6 @@
 package com.github.dockerjava.cmd;
 
+import com.github.dockerjava.api.command.LoadImageCallback;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.utils.TestResources;
 import net.jcip.annotations.NotThreadSafe;
@@ -51,6 +52,19 @@ public class LoadImageCmdIT extends CmdIT {
         assertThat("Can't find expected image after loading from a tar archive!", image, notNullValue());
         assertThat("Image after loading from a tar archive has wrong tags!",
                 asList(image.getRepoTags()), equalTo(singletonList("docker-java/load:1.0")));
+    }
+
+    @Test
+    public void loadImageFromTarAsync() throws Exception {
+        try (InputStream uploadStream = Files.newInputStream(TestResources.getApiImagesLoadTestTarball())) {
+            dockerRule.getClient().loadImageAsyncCmd(uploadStream).exec(new LoadImageCallback()).awaitMessage();
+        }
+
+        final Image image = findImageWithId(expectedImageId, dockerRule.getClient().listImagesCmd().exec());
+
+        assertThat("Can't find expected image after loading from a tar archive!", image, notNullValue());
+        assertThat("Image after loading from a tar archive has wrong tags!",
+                   asList(image.getRepoTags()), equalTo(singletonList("docker-java/load:1.0")));
     }
 
     private Image findImageWithId(final String id, final List<Image> images) {

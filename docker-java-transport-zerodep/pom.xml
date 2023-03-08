@@ -15,6 +15,10 @@
 	<url>https://github.com/docker-java/docker-java</url>
 	<description>Java API Client for Docker</description>
 
+	<properties>
+		<automatic.module.name>com.github.dockerjava.transport.zerodep</automatic.module.name>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>

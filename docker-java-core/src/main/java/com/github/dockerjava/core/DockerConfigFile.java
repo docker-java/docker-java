@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
+import java.util.Objects;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -29,6 +30,9 @@ public class DockerConfigFile {
     @JsonProperty
     private final Map<String, AuthConfig> auths;
 
+    @JsonProperty
+    private String currentContext;
+
     public DockerConfigFile() {
         this(new HashMap<>());
     }
@@ -44,6 +48,14 @@ public class DockerConfigFile {
 
     void addAuthConfig(AuthConfig config) {
         auths.put(config.getRegistryAddress(), config);
+    }
+
+    void setCurrentContext(String currentContext) {
+        this.currentContext = currentContext;
+    }
+
+    public String getCurrentContext() {
+        return currentContext;
     }
 
     @CheckForNull
@@ -104,6 +116,9 @@ public class DockerConfigFile {
                 return false;
         } else if (!auths.equals(other.auths))
             return false;
+        if (!Objects.equals(currentContext, other.currentContext)) {
+            return false;
+        }
         return true;
     }
 
@@ -111,7 +126,7 @@ public class DockerConfigFile {
 
     @Override
     public String toString() {
-        return "DockerConfigFile [auths=" + auths + "]";
+        return "DockerConfigFile [auths=" + auths + ", currentContext='" + currentContext + "']";
     }
 
     @Nonnull

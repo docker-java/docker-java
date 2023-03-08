@@ -53,7 +53,7 @@ public class CreateServiceCmdExecIT extends SwarmCmdIT {
     private DockerClient dockerClient;
 
     @Before
-    public final void setUpCreateServiceCmdExecIT() throws Exception {
+    public final void setUpCreateServiceCmdExecIT() {
         authConfig = REGISTRY.getAuthConfig();
         dockerClient = startSwarm();
     }

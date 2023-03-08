@@ -79,7 +79,7 @@ public class InspectExecCmdIT extends CmdIT {
     }
 
     @Test
-    public void inspectExecNetworkSettings() throws IOException {
+    public void inspectExecNetworkSettings() {
         final RemoteApiVersion apiVersion = getVersion(dockerRule.getClient());
 
         String containerName = "generated_" + new SecureRandom().nextInt();

@@ -66,7 +66,7 @@ public class LogContainerCmdIT extends CmdIT {
 
         assertTrue(loggingCallback.toString().contains("hello"));
 
-        assertEquals(loggingCallback.getCollectedFrames().get(0).getStreamType(), StreamType.RAW);
+        assertEquals(StreamType.RAW, loggingCallback.getCollectedFrames().get(0).getStreamType());
     }
 
     @Test

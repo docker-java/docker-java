@@ -19,6 +19,10 @@ public enum Capability {
      */
     AUDIT_CONTROL,
     /**
+     * Allow reading the audit log via multicast netlink socket.
+     */
+    AUDIT_READ,
+    /**
      * Write records to kernel auditing log.
      */
     AUDIT_WRITE,
@@ -26,6 +30,14 @@ public enum Capability {
      * Employ features that can block system suspend.
      */
     BLOCK_SUSPEND,
+    /**
+     * Allow creating BPF maps, loading BPF Type Format (BTF) data, retrieve JITed code of BPF programs, and more.
+     */
+    BPF,
+    /**
+     * Allow checkpoint/restore related operations. Introduced in kernel 5.9.
+     */
+    CHECKPOINT_RESTORE,
     /**
      * Make arbitrary changes to file UIDs and GIDs (see chown(2)).
      */
@@ -120,6 +132,10 @@ public enum Capability {
      * </ul>
      */
     NET_RAW,
+    /**
+     * Allow system performance and observability privileged operations using perf_events, i915_perf and other kernel subsystems
+     */
+    PERFMON,
     /**
      * Set file capabilities.
      */

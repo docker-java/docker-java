@@ -34,7 +34,7 @@ public class DockerClientBuilderTest {
 
         parallel(AMOUNT, runnable);
         // set contains all required unique instances
-        assertEquals(instances.size(), AMOUNT);
+        assertEquals(AMOUNT, instances.size());
     }
 
     public static void parallel(int threads, final Runnable task) throws Exception {

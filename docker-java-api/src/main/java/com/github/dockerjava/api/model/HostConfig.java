@@ -848,6 +848,7 @@ public class HostConfig extends DockerObject implements Serializable {
      * <li>'host': use the host network stack inside the container. Note: the host mode gives the container full access to local system
      * services such as D-bus and is therefore considered insecure.</li>
      * </ul>
+     * Any other value is interpreted as a custom network's name for this container to connect to.
      */
     public HostConfig withNetworkMode(String networkMode) {
         this.networkMode = networkMode;

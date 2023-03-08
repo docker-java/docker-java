@@ -7,6 +7,6 @@ import static org.junit.Assert.assertEquals;
 public class VolumeTest {
     @Test
     public void getPath() {
-        assertEquals(new Volume("/path").getPath(), "/path");
+        assertEquals("/path", new Volume("/path").getPath());
     }
 }

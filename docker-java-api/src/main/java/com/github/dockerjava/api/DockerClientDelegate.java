@@ -42,6 +42,7 @@ import com.github.dockerjava.api.command.ListServicesCmd;
 import com.github.dockerjava.api.command.ListSwarmNodesCmd;
 import com.github.dockerjava.api.command.ListTasksCmd;
 import com.github.dockerjava.api.command.ListVolumesCmd;
+import com.github.dockerjava.api.command.LoadImageAsyncCmd;
 import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.api.command.LogContainerCmd;
 import com.github.dockerjava.api.command.LogSwarmObjectCmd;
@@ -151,6 +152,11 @@ public class DockerClientDelegate implements DockerClient {
     @Override
     public LoadImageCmd loadImageCmd(@Nonnull InputStream imageStream) {
         return getDockerClient().loadImageCmd(imageStream);
+    }
+
+    @Override
+    public LoadImageAsyncCmd loadImageAsyncCmd(@Nonnull InputStream imageStream) {
+        return getDockerClient().loadImageAsyncCmd(imageStream);
     }
 
     @Override

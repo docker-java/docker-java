@@ -1125,4 +1125,15 @@ public class CreateContainerCmdIT extends CmdIT {
 
         assertThat(jsonNode.get("authConfig"), nullValue());
     }
+
+    @Test
+    public void shouldHandleANetworkAliasWithoutACustomNetworkGracefully() {
+        // Should not throw
+        dockerRule.getClient()
+            .createContainerCmd(DEFAULT_IMAGE)
+            .withAliases("hello-world")
+            .withHostConfig(newHostConfig())
+            .withCmd("sleep", "9999")
+            .exec();
+    }
 }

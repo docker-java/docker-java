@@ -15,6 +15,10 @@
 	<url>https://github.com/docker-java/docker-java</url>
 	<description>Java API Client for Docker</description>
 
+	<properties>
+		<automatic.module.name>com.github.dockerjava.transport.httpclient5</automatic.module.name>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -37,7 +41,7 @@
 		<dependency>
 			<groupId>net.java.dev.jna</groupId>
 			<artifactId>jna</artifactId>
-			<version>5.8.0</version>
+			<version>5.12.1</version>
 		</dependency>
 
 		<dependency>

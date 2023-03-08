@@ -1,0 +1,12 @@
+{
+    "Name": "configcontext",
+    "Metadata": {
+        "Description": "configcontext"
+    },
+    "Endpoints": {
+        "docker": {
+            "Host": "unix:///configcontext.sock",
+            "SkipTLSVerify": false
+        }
+    }
+}

@@ -16,6 +16,7 @@ public interface CopyArchiveToContainerCmd extends SyncDockerCmd<Void> {
 
     boolean isDirChildrenOnly();
 
+    boolean isCopyUIDGID();
     /**
      * Set container's id
      *
@@ -48,6 +49,14 @@ public interface CopyArchiveToContainerCmd extends SyncDockerCmd<Void> {
      *            flag to know if non directory can be overwritten
      */
     CopyArchiveToContainerCmd withNoOverwriteDirNonDir(boolean noOverwriteDirNonDir);
+
+    /**
+     * If set to true then ownership is set to the user and primary group at the destination
+     *
+     * @param copyUIDGID
+     *            flag to know if ownership should be set to the user and primary group at the destination
+     */
+    CopyArchiveToContainerCmd withCopyUIDGID(boolean copyUIDGID);
 
     /**
      * If this flag is set to true, all children of the local directory will be copied to the remote without the root directory. For ex: if
