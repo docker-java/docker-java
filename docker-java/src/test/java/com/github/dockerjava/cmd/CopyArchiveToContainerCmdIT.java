@@ -33,7 +33,7 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
     public void copyFileToContainer() throws Exception {
         CreateContainerResponse container = prepareContainerForCopy("1");
         Path temp = Files.createTempFile("", ".tar.gz");
-        CompressArchiveUtil.tar(Paths.get("src/test/resources/testReadFile"), temp, true, false);
+        CompressArchiveUtil.tar(Paths.get(ClassLoader.getSystemResource("testReadFile").toURI()), temp, true, false);
         try (InputStream uploadStream = Files.newInputStream(temp)) {
             dockerRule.getClient()
                     .copyArchiveToContainerCmd(container.getId())
@@ -47,7 +47,7 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
     public void copyStreamToContainer() throws Exception {
         CreateContainerResponse container = prepareContainerForCopy("2");
         dockerRule.getClient().copyArchiveToContainerCmd(container.getId())
-                .withHostResource("src/test/resources/testReadFile")
+                .withHostResource(Paths.get(ClassLoader.getSystemResource("testReadFile").toURI()).toString())
                 .exec();
         assertFileCopied(container);
     }
@@ -55,8 +55,8 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
     @Test
     public void copyStreamToContainerTwice() throws Exception {
         CreateContainerResponse container = prepareContainerForCopy("rerun");
-        CopyArchiveToContainerCmd copyArchiveToContainerCmd=dockerRule.getClient().copyArchiveToContainerCmd(container.getId())
-                .withHostResource("src/test/resources/testReadFile");
+        CopyArchiveToContainerCmd copyArchiveToContainerCmd = dockerRule.getClient().copyArchiveToContainerCmd(container.getId())
+                .withHostResource(Paths.get(ClassLoader.getSystemResource("testReadFile").toURI()).toString());
         copyArchiveToContainerCmd.exec();
         assertFileCopied(container);
         //run again to make sure no DockerClientException
@@ -82,9 +82,9 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
     }
 
     @Test(expected = NotFoundException.class)
-    public void copyToNonExistingContainer() {
-
-        dockerRule.getClient().copyArchiveToContainerCmd("non-existing").withHostResource("src/test/resources/testReadFile").exec();
+    public void copyToNonExistingContainer() throws Exception {
+        dockerRule.getClient().copyArchiveToContainerCmd("non-existing")
+                .withHostResource(Paths.get(ClassLoader.getSystemResource("testReadFile").toURI()).toString()).exec();
     }
 
     @Test
@@ -113,7 +113,7 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
         // cleanup dir
         FileUtils.deleteDirectory(localDir.toFile());
     }
-    
+
     @Test
     public void copyFileWithExecutePermission() throws Exception {
         // create script file, add permission to execute
