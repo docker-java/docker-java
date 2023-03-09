@@ -30,7 +30,7 @@ public class CopyArchiveFromContainerCmdIT extends CmdIT {
     public static final Logger LOG = LoggerFactory.getLogger(CopyArchiveFromContainerCmdIT.class);
 
     @Test
-    public void copyFromContainer() throws Exception {
+    public void copyFromContainer() {
         // TODO extract this into a shared method
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withName("copyFromContainer")
@@ -51,7 +51,7 @@ public class CopyArchiveFromContainerCmdIT extends CmdIT {
     }
 
     @Test(expected = NotFoundException.class)
-    public void copyFromNonExistingContainer() throws Exception {
+    public void copyFromNonExistingContainer() {
 
         dockerRule.getClient().copyArchiveFromContainerCmd("non-existing", "/test").exec();
     }
@@ -66,7 +66,7 @@ public class CopyArchiveFromContainerCmdIT extends CmdIT {
         assertThat(container.getId(), not(isEmptyOrNullString()));
 
         Path temp = Files.createTempFile("", ".tar.gz");
-        Path binaryFile = Paths.get("src/test/resources/testCopyFromArchive/binary.dat");
+        Path binaryFile = Paths.get(ClassLoader.getSystemResource("testCopyFromArchive/binary.dat").toURI());
         CompressArchiveUtil.tar(binaryFile, temp, true, false);
 
         try (InputStream uploadStream = Files.newInputStream(temp)) {
@@ -78,7 +78,7 @@ public class CopyArchiveFromContainerCmdIT extends CmdIT {
         try (TarArchiveInputStream tarInputStream = new TarArchiveInputStream(response)) {
             TarArchiveEntry nextTarEntry = tarInputStream.getNextTarEntry();
 
-            assertEquals(nextTarEntry.getName(), "binary.dat");
+            assertEquals("binary.dat", nextTarEntry.getName());
             try (InputStream binaryFileInputStream = Files.newInputStream(binaryFile, StandardOpenOption.READ)) {
                 assertTrue(IOUtils.contentEquals(binaryFileInputStream, tarInputStream));
             }

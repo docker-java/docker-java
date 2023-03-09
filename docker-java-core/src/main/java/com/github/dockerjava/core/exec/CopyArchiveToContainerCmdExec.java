@@ -28,7 +28,9 @@ public class CopyArchiveToContainerCmdExec extends AbstrSyncDockerCmdExec<CopyAr
         InputStream streamToUpload = command.getTarInputStream();
 
         webResource.queryParam("path", command.getRemotePath())
-                .queryParam("noOverwriteDirNonDir", command.isNoOverwriteDirNonDir()).request()
+                .queryParam("noOverwriteDirNonDir", command.isNoOverwriteDirNonDir())
+                .queryParam("copyUIDGID", command.isCopyUIDGID())
+                .request()
                 .put(streamToUpload, MediaType.APPLICATION_X_TAR);
 
         return null;

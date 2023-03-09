@@ -28,9 +28,9 @@ public class VolumeBindsTest {
         String s = "{\"/data\":\"/some/path\"}";
         VolumeBinds volumeBinds = JSONTestHelper.getMapper().readValue(s, VolumeBinds.class);
         VolumeBind[] binds = volumeBinds.getBinds();
-        assertEquals(binds.length, 1);
-        assertEquals(binds[0].getHostPath(), "/some/path");
-        assertEquals(binds[0].getContainerPath(), "/data");
+        assertEquals(1, binds.length);
+        assertEquals("/some/path", binds[0].getHostPath());
+        assertEquals("/data", binds[0].getContainerPath());
     }
 
     @Test(expected = JsonMappingException.class)

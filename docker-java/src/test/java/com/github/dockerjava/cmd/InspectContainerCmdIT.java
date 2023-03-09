@@ -45,7 +45,7 @@ public class InspectContainerCmdIT extends CmdIT {
         assertThat(container.getId(), not(is(emptyString())));
 
         InspectContainerResponse containerInfo = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
-        assertEquals(containerInfo.getId(), container.getId());
+        assertEquals(container.getId(), containerInfo.getId());
 
     }
 

@@ -18,8 +18,8 @@ public class RestartPolicyToStringTest {
     public String policy;
 
     @Test
-    public void serializationWithoutCount() throws Exception {
-        assertEquals(RestartPolicy.parse(policy).toString(), policy);
+    public void serializationWithoutCount() {
+        assertEquals(policy, RestartPolicy.parse(policy).toString());
     }
 
 }

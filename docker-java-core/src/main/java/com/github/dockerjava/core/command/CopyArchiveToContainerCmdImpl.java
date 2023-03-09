@@ -30,6 +30,8 @@ public class CopyArchiveToContainerCmdImpl extends AbstrDockerCmd<CopyArchiveToC
 
     private boolean dirChildrenOnly = false;
 
+    private boolean copyUIDGID = false;
+
     public CopyArchiveToContainerCmdImpl(CopyArchiveToContainerCmd.Exec exec, String containerId) {
         super(exec);
         withContainerId(containerId);
@@ -50,6 +52,12 @@ public class CopyArchiveToContainerCmdImpl extends AbstrDockerCmd<CopyArchiveToC
     @Override
     public CopyArchiveToContainerCmd withNoOverwriteDirNonDir(boolean noOverwriteDirNonDir) {
         this.noOverwriteDirNonDir = noOverwriteDirNonDir;
+        return this;
+    }
+
+    @Override
+    public CopyArchiveToContainerCmd withCopyUIDGID(boolean copyUIDGID) {
+        this.copyUIDGID = copyUIDGID;
         return this;
     }
 
@@ -102,9 +110,14 @@ public class CopyArchiveToContainerCmdImpl extends AbstrDockerCmd<CopyArchiveToC
     }
 
     @Override
+    public boolean isCopyUIDGID() {
+        return this.copyUIDGID;
+    }
+
+    @Override
     public String toString() {
-        return new ToStringBuilder(this).append("cp ").append(hostResource).append(" ").append(containerId).append(":")
-                .append(remotePath).toString();
+        return new ToStringBuilder(this).append("cp ").append(String.format("-a=%b ", isCopyUIDGID()))
+            .append(hostResource).append(" ").append(containerId).append(":").append(remotePath).toString();
     }
 
     /**

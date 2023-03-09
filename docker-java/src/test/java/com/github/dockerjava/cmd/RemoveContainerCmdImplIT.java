@@ -23,7 +23,7 @@ public class RemoveContainerCmdImplIT extends CmdIT {
     
 
     @Test
-    public void removeContainer() throws Exception {
+    public void removeContainer() {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("true").exec();
 

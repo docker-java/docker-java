@@ -151,6 +151,14 @@ public class DockerConfigFileTest {
     }
 
     @Test
+    public void validDockerConfigWithCurrentContext() throws IOException {
+        DockerConfigFile expected = new DockerConfigFile();
+        expected.setCurrentContext("expectedContext");
+
+        assertThat(runTest("validDockerConfigWithCurrentContext"), is(expected));
+    }
+
+    @Test
     public void nonExistent() throws IOException {
         DockerConfigFile expected = new DockerConfigFile();
         assertThat(runTest("idontexist"), is(expected));

@@ -56,11 +56,11 @@ public class InspectContainerResponseTest {
         final InspectContainerResponse response = responses[0];
 
         // Check volumes: https://github.com/docker-java/docker-java/issues/211
-        assertEquals(response.getVolumes().length, 2);
-        assertEquals(response.getVolumesRW().length, 2);
-        assertEquals(response.getVolumes()[1].getContainerPath(), "/bar/foo/myvol2");
-        assertEquals(response.getVolumes()[1].getHostPath(), "/path2");
-        assertEquals(response.getVolumesRW()[1].getVolume().getPath(), "/bar/foo/myvol2");
+        assertEquals(2, response.getVolumes().length);
+        assertEquals(2, response.getVolumesRW().length);
+        assertEquals("/bar/foo/myvol2" ,response.getVolumes()[1].getContainerPath());
+        assertEquals("/path2", response.getVolumes()[1].getHostPath());
+        assertEquals("/bar/foo/myvol2", response.getVolumesRW()[1].getVolume().getPath());
         assertFalse(response.getVolumesRW()[1].getAccessMode().toBoolean());
         assertTrue(response.getVolumesRW()[0].getAccessMode().toBoolean());
         assertThat(response.getLogPath(), is("/mnt/sda1/var/lib/docker/containers/469e5edd8d5b33e3c905a7ffc97360ec6ee211d6782815fbcd144568045819e1/469e5edd8d5b33e3c905a7ffc97360ec6ee211d6782815fbcd144568045819e1-json.log"));
@@ -76,11 +76,11 @@ public class InspectContainerResponseTest {
             type
         );
 
-        assertEquals(response.getState().getHealth().getStatus(), "healthy");
-        assertEquals(response.getState().getHealth().getFailingStreak(), new Integer(0));
-        assertEquals(response.getState().getHealth().getLog().size(), 2);
-        assertEquals(response.getState().getHealth().getLog().get(0).getOutput(), "Hello");
-        assertEquals(response.getState().getHealth().getLog().get(1).getOutput(), "World");
+        assertEquals("healthy", response.getState().getHealth().getStatus());
+        assertEquals(new Integer(0), response.getState().getHealth().getFailingStreak());
+        assertEquals(2, response.getState().getHealth().getLog().size());
+        assertEquals("Hello", response.getState().getHealth().getLog().get(0).getOutput());
+        assertEquals("World", response.getState().getHealth().getLog().get(1).getOutput());
     }
 
     @Test
@@ -108,11 +108,11 @@ public class InspectContainerResponseTest {
         final InspectContainerResponse response = responses[0];
 
         final List<InspectContainerResponse.Mount> mounts = response.getMounts();
-        assertEquals(mounts.size(), 1);
+        assertEquals(1, mounts.size());
 
         final InspectContainerResponse.Mount mount = mounts.get(0);
         final Volume volume = mount.getDestination();
-        assertEquals(volume.getPath(), "/var/lib/postgresql/data");
+        assertEquals("/var/lib/postgresql/data", volume.getPath());
     }
 
     @Test
@@ -124,11 +124,11 @@ public class InspectContainerResponseTest {
         final InspectContainerResponse response = responses[0];
 
         final List<InspectContainerResponse.Mount> mounts = response.getMounts();
-        assertEquals(mounts.size(), 1);
+        assertEquals(1, mounts.size());
 
         final InspectContainerResponse.Mount mount = mounts.get(0);
         final Volume volume = mount.getDestination();
-        assertEquals(volume.getPath(), "/srv/test");
+        assertEquals("/srv/test", volume.getPath());
     }
 
     @Test

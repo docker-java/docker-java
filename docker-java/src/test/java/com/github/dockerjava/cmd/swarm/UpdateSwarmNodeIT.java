@@ -14,7 +14,7 @@ import static org.hamcrest.Matchers.is;
 
 public class UpdateSwarmNodeIT extends SwarmCmdIT {
     @Test
-    public void testUpdateSwarmNode() throws Exception {
+    public void testUpdateSwarmNode() {
         DockerClient dockerClient = startSwarm();
         List<SwarmNode> nodes = dockerClient.listSwarmNodesCmd().exec();
         assertThat(1, is(nodes.size()));

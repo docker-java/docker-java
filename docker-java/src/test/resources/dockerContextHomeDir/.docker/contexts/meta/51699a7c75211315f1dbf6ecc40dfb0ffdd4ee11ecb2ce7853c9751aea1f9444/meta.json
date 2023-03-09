@@ -1,0 +1,12 @@
+{
+    "Name": "envvarcontext",
+    "Metadata": {
+        "Description": "envvarcontext"
+    },
+    "Endpoints": {
+        "docker": {
+            "Host": "unix:///envvarcontext.sock",
+            "SkipTLSVerify": false
+        }
+    }
+}

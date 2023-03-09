@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 public class AuthConfigTest {
 
     @Test
-    public void defaultServerAddress() throws Exception {
+    public void defaultServerAddress() {
         assertEquals(new AuthConfig().getRegistryAddress(), "https://index.docker.io/v1/");
     }
 

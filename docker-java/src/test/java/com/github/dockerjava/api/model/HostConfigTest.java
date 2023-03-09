@@ -8,7 +8,7 @@ import static org.hamcrest.Matchers.equalTo;
 public class HostConfigTest {
 
     @Test
-    public void testNewObjectsEqual() throws Exception {
+    public void testNewObjectsEqual() {
         assertThat(HostConfig.newHostConfig(),
                 equalTo(HostConfig.newHostConfig()));
     }

@@ -34,7 +34,7 @@ public class FrameReaderTest {
 
     @Test
     public void stdInBytesFrameReturnsFrame() throws Exception {
-        assertEquals(nextFrame(0, 0, 0, 0, 0, 0, 0, 0), new Frame(StreamType.STDIN, new byte[0]));
+        assertEquals(new Frame(StreamType.STDIN, new byte[0]), nextFrame(0, 0, 0, 0, 0, 0, 0, 0));
     }
 
     private Frame nextFrame(int... bytes) throws IOException {
@@ -44,12 +44,12 @@ public class FrameReaderTest {
 
     @Test
     public void stdOutBytesFrameReturnsFrame() throws Exception {
-        assertEquals(nextFrame(1, 0, 0, 0, 0, 0, 0, 0), new Frame(StreamType.STDOUT, new byte[0]));
+        assertEquals(new Frame(StreamType.STDOUT, new byte[0]), nextFrame(1, 0, 0, 0, 0, 0, 0, 0));
     }
 
     @Test
     public void stdErrBytesFrameReturnsFrame() throws Exception {
-        assertEquals(nextFrame(2, 0, 0, 0, 0, 0, 0, 0), new Frame(StreamType.STDERR, new byte[0]));
+        assertEquals(new Frame(StreamType.STDERR, new byte[0]), nextFrame(2, 0, 0, 0, 0, 0, 0, 0));
     }
 
     private void setBytes(int... bytes) {
