@@ -76,7 +76,7 @@
 		<hamcrest.library.version>2.2</hamcrest.library.version>
 		<hamcrest.jpa-matchers>1.8</hamcrest.jpa-matchers>
 		<lambdaj.version>2.3.3</lambdaj.version>
-		<mockito.version>3.3.0</mockito.version>
+		<mockito.version>5.2.0</mockito.version>
 
 
 		<maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
