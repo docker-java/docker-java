@@ -1,10 +1,9 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import com.github.dockerjava.api.command.ListVolumesCmd;
 import com.github.dockerjava.api.command.ListVolumesResponse;
@@ -30,14 +29,14 @@ public class ListVolumesCmdImpl extends AbstrDockerCmd<ListVolumesCmd, ListVolum
 
     @Override
     public ListVolumesCmd withDanglingFilter(Boolean dangling) {
-        checkNotNull(dangling, "dangling have not been specified");
+        Objects.requireNonNull(dangling, "dangling have not been specified");
         this.filters.withFilter("dangling", dangling.toString());
         return this;
     }
 
     @Override
     public ListVolumesCmd withFilter(String filterName, Collection<String> filterValues) {
-        checkNotNull(filterValues, filterName + " was not specified");
+        Objects.requireNonNull(filterValues, filterName + " was not specified");
         this.filters.withFilter(filterName, filterValues);
         return this;
     }

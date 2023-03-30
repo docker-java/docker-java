@@ -1,8 +1,7 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.io.InputStream;
+import java.util.Objects;
 
 import com.github.dockerjava.api.command.LoadImageCmd;
 
@@ -32,8 +31,7 @@ public class LoadImageCmdImpl extends AbstrDockerCmd<LoadImageCmd, Void> impleme
      */
     @Override
     public LoadImageCmdImpl withImageStream(@Nonnull InputStream imageStream) {
-        checkNotNull(imageStream, "imageStream was not specified");
-        this.imageStream = imageStream;
+        this.imageStream = Objects.requireNonNull(imageStream, "imageStream was not specified");
         return this;
     }
 }

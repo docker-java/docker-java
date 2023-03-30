@@ -7,8 +7,7 @@ import com.google.common.collect.ImmutableList;
 import javax.annotation.Nonnull;
 import java.io.InputStream;
 import java.util.List;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 public class SaveImagesCmdImpl extends AbstrDockerCmd<SaveImagesCmd, InputStream> implements SaveImagesCmd {
 
@@ -17,10 +16,8 @@ public class SaveImagesCmdImpl extends AbstrDockerCmd<SaveImagesCmd, InputStream
         private final String tag;
 
         private TaggedImageImpl(String name, String tag) {
-            checkNotNull(name, "image name was not specified");
-            checkNotNull(tag, "image tag was not specified");
-            this.name = name;
-            this.tag = tag;
+            this.name = Objects.requireNonNull(name, "image name was not specified");
+            this.tag = Objects.requireNonNull(tag, "image tag was not specified");
         }
 
         @Override

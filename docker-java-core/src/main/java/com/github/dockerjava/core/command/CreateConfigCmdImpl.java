@@ -6,8 +6,7 @@ import com.github.dockerjava.api.command.CreateConfigResponse;
 
 import java.util.Base64;
 import java.util.Map;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 /**
  * Creates a new config
@@ -44,22 +43,20 @@ public class CreateConfigCmdImpl extends AbstrDockerCmd<CreateConfigCmd, CreateC
 
     @Override
     public CreateConfigCmd withName(String name) {
-        checkNotNull(name, "name was not specified");
-        this.name = name;
+        this.name = Objects.requireNonNull(name, "name was not specified");
         return this;
     }
 
     @Override
     public CreateConfigCmd withData(byte[] data) {
-        checkNotNull(data, "data was not specified");
+        Objects.requireNonNull(data, "data was not specified");
         this.data = Base64.getEncoder().encodeToString(data);
         return this;
     }
 
     @Override
     public CreateConfigCmd withLabels(Map<String, String> labels) {
-        checkNotNull(labels, "labels was not specified");
-        this.labels = labels;
+        this.labels = Objects.requireNonNull(labels, "labels was not specified");
         return this;
     }
 

@@ -1,9 +1,8 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Objects;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -24,8 +23,7 @@ public abstract class AbstrDockerCmd<CMD_T extends DockerCmd<RES_T>, RES_T> impl
     protected transient DockerCmdSyncExec<CMD_T, RES_T> execution;
 
     public AbstrDockerCmd(DockerCmdSyncExec<CMD_T, RES_T> execution) {
-        checkNotNull(execution, "execution was not specified");
-        this.execution = execution;
+        this.execution = Objects.requireNonNull(execution, "execution was not specified");
     }
 
     @Override

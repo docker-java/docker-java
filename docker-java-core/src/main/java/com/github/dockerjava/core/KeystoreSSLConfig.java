@@ -1,7 +1,5 @@
 package com.github.dockerjava.core;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,6 +12,7 @@ import java.security.SecureRandom;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Objects;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -37,8 +36,7 @@ public class KeystoreSSLConfig implements SSLConfig, Serializable {
      */
     public KeystoreSSLConfig(KeyStore keystore, String keystorePassword) {
         this.keystorePassword = keystorePassword;
-        checkNotNull(keystore);
-        this.keystore = keystore;
+        this.keystore = Objects.requireNonNull(keystore);
     }
 
     /**
@@ -54,8 +52,8 @@ public class KeystoreSSLConfig implements SSLConfig, Serializable {
      */
     public KeystoreSSLConfig(File pfxFile, String password) throws KeyStoreException, IOException,
             CertificateException, NoSuchAlgorithmException {
-        checkNotNull(pfxFile);
-        checkNotNull(password);
+        Objects.requireNonNull(pfxFile);
+        Objects.requireNonNull(password);
         keystore = KeyStore.getInstance("pkcs12");
         try (FileInputStream fs = new FileInputStream(pfxFile)) {
             keystore.load(fs, password.toCharArray());

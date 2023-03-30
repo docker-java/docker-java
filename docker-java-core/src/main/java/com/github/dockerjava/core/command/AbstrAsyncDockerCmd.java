@@ -1,6 +1,6 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.AsyncDockerCmd;
@@ -12,8 +12,7 @@ public abstract class AbstrAsyncDockerCmd<CMD_T extends AsyncDockerCmd<CMD_T, A_
     protected transient DockerCmdAsyncExec<CMD_T, A_RES_T> execution;
 
     public AbstrAsyncDockerCmd(DockerCmdAsyncExec<CMD_T, A_RES_T> execution) {
-        checkNotNull(execution, "execution was not specified");
-        this.execution = execution;
+        this.execution = Objects.requireNonNull(execution, "execution was not specified");
     }
 
     @Override

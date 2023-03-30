@@ -1,6 +1,6 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 import com.github.dockerjava.api.command.WaitContainerCmd;
 import com.github.dockerjava.api.model.WaitResponse;
@@ -27,8 +27,7 @@ public class WaitContainerCmdImpl extends AbstrAsyncDockerCmd<WaitContainerCmd, 
 
     @Override
     public WaitContainerCmd withContainerId(String containerId) {
-        checkNotNull(containerId, "containerId was not specified");
-        this.containerId = containerId;
+        this.containerId = Objects.requireNonNull(containerId, "containerId was not specified");
         return this;
     }
 

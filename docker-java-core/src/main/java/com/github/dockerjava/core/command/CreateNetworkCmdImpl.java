@@ -2,6 +2,7 @@ package com.github.dockerjava.core.command;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.command.CreateNetworkCmd;
@@ -9,8 +10,6 @@ import com.github.dockerjava.api.command.CreateNetworkResponse;
 import com.github.dockerjava.api.command.DockerCmdSyncExec;
 import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.api.model.Network.Ipam;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 public class CreateNetworkCmdImpl extends AbstrDockerCmd<CreateNetworkCmd, CreateNetworkResponse>
         implements CreateNetworkCmd {
@@ -147,7 +146,7 @@ public class CreateNetworkCmdImpl extends AbstrDockerCmd<CreateNetworkCmd, Creat
      */
     @Override
     public CreateNetworkCmd withLabels(Map<String, String> labels) {
-        checkNotNull(labels, "labels was not specified");
+        Objects.requireNonNull(labels, "labels was not specified");
         this.labels = labels;
         return this;
     }

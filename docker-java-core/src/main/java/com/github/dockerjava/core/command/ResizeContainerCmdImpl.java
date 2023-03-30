@@ -3,7 +3,7 @@ package com.github.dockerjava.core.command;
 import com.github.dockerjava.api.command.ResizeContainerCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 public class ResizeContainerCmdImpl extends AbstrDockerCmd<ResizeContainerCmd, Void> implements ResizeContainerCmd {
 
@@ -35,8 +35,7 @@ public class ResizeContainerCmdImpl extends AbstrDockerCmd<ResizeContainerCmd, V
 
     @Override
     public ResizeContainerCmd withContainerId(String containerId) {
-        checkNotNull(containerId, "containerId was not specified");
-        this.containerId = containerId;
+        this.containerId = Objects.requireNonNull(containerId, "containerId was not specified");
         return this;
     }
 
