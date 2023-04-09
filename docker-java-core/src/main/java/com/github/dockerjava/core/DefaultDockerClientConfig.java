@@ -441,7 +441,32 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             return this;
         }
 
+        private void applyContextConfiguration(final String context) {
+            final Optional<DockerContextMetaFile> dockerContextMetaFile =
+                Optional.ofNullable(context)
+                    .flatMap(ctx -> DockerContextMetaFile.resolveContextMetaFile(DockerClientConfig.getDefaultObjectMapper(),
+                            new File(dockerConfig), ctx));
+
+            if (dockerContextMetaFile.isPresent()) {
+                final Optional<DockerContextMetaFile.Endpoints.Docker> docker =
+                    dockerContextMetaFile.map(f -> f.endpoints).map(e -> e.docker);
+                if (dockerHost == null) {
+                    dockerHost = docker.map(d -> d.host).map(URI::create).orElse(null);
+                }
+                if (dockerCertPath == null) {
+                    dockerCertPath = dockerContextMetaFile.map(f -> f.storage).map(s -> s.tlsPath)
+                        .filter(f -> new File(f).exists()).orElse(null);
+                    if (dockerCertPath != null) {
+                        dockerTlsVerify = docker.map(d -> !d.skipTLSVerify).orElse(true);
+                    }
+                }
+            }
+        }
+
         public DefaultDockerClientConfig build() {
+            final DockerConfigFile dockerConfigFile = readDockerConfig();
+            final String context = (dockerContext != null) ? dockerContext : dockerConfigFile.getCurrentContext();
+            applyContextConfiguration(context);
 
             SSLConfig sslConfig = null;
 
@@ -454,12 +479,9 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
                 sslConfig = customSslConfig;
             }
 
-            final DockerConfigFile dockerConfigFile = readDockerConfig();
-
-            final String context = (dockerContext != null) ? dockerContext : dockerConfigFile.getCurrentContext();
             URI dockerHostUri = dockerHost != null
                 ? dockerHost
-                : resolveDockerHost(context);
+                : URI.create(SystemUtils.IS_OS_WINDOWS ? WINDOWS_DEFAULT_DOCKER_HOST : DEFAULT_DOCKER_HOST);
 
             return new DefaultDockerClientConfig(dockerHostUri, dockerConfigFile, dockerConfig, apiVersion, registryUrl, registryUsername,
                     registryPassword, registryEmail, sslConfig);
@@ -471,14 +493,6 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             } catch (IOException e) {
                 throw new DockerClientException("Failed to parse docker configuration file", e);
             }
-        }
-
-        private URI resolveDockerHost(String dockerContext) {
-            return URI.create(Optional.ofNullable(dockerContext)
-                .flatMap(context -> DockerContextMetaFile.resolveContextMetaFile(
-                    DockerClientConfig.getDefaultObjectMapper(), new File(dockerConfig), context))
-                .flatMap(DockerContextMetaFile::host)
-                .orElse(SystemUtils.IS_OS_WINDOWS ? WINDOWS_DEFAULT_DOCKER_HOST : DEFAULT_DOCKER_HOST));
         }
 
         private String checkDockerCertPath(String dockerCertPath) {

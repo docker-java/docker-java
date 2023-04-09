@@ -1,0 +1,15 @@
+{
+    "Name": "remote",
+    "Metadata": {
+        "Description": "remote"
+    },
+    "Endpoints": {
+        "docker": {
+            "Host": "tcp://remote:2376",
+            "SkipTLSVerify": false
+        }
+    },
+    "Storage": {
+        "TLSPath": "target/test-classes/com/github/dockerjava/core/util/CertificateUtilsTest/allFilesExist"
+    }
+}

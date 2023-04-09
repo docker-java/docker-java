@@ -18,6 +18,9 @@ public class DockerContextMetaFile {
     @JsonProperty("Endpoints")
     Endpoints endpoints;
 
+    @JsonProperty("Storage")
+    Storage storage;
+
     public static class Endpoints {
         @JsonProperty("docker")
         Docker docker;
@@ -31,11 +34,12 @@ public class DockerContextMetaFile {
         }
     }
 
-    public Optional<String> host() {
-        if (endpoints != null && endpoints.docker != null) {
-            return Optional.ofNullable(endpoints.docker.host);
-        }
-        return Optional.empty();
+    public static class Storage {
+
+        @JsonProperty("TLSPath")
+        String tlsPath;
+        @JsonProperty("MetadataPath")
+        String metadataPath;
     }
 
     public static Optional<DockerContextMetaFile> resolveContextMetaFile(ObjectMapper objectMapper, File dockerConfigPath, String context) {
