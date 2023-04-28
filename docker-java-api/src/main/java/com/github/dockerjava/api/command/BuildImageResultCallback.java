@@ -31,7 +31,7 @@ public class BuildImageResultCallback extends ResultCallbackTemplate<BuildImageR
         } else if (item.isErrorIndicated()) {
             this.error = item.getError();
         }
-        LOGGER.debug(item.toString());
+        LOGGER.debug("{}", item);
     }
 
     /**

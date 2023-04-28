@@ -48,14 +48,12 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
             this.firstError = throwable;
         }
 
+        LOGGER.debug("Error during callback", throwable);
+
         try {
-            LOGGER.error("Error during callback", throwable);
-        } finally {
-            try {
-                close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
