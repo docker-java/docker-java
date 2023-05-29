@@ -445,19 +445,20 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             final Optional<DockerContextMetaFile> dockerContextMetaFile =
                 Optional.ofNullable(context)
                     .flatMap(ctx -> DockerContextMetaFile.resolveContextMetaFile(DockerClientConfig.getDefaultObjectMapper(),
-                            new File(dockerConfig), ctx));
+                            new File(this.dockerConfig), ctx));
 
             if (dockerContextMetaFile.isPresent()) {
-                final Optional<DockerContextMetaFile.Endpoints.Docker> docker =
-                    dockerContextMetaFile.map(f -> f.endpoints).map(e -> e.docker);
-                if (dockerHost == null) {
-                    dockerHost = docker.map(d -> d.host).map(URI::create).orElse(null);
+                final Optional<DockerContextMetaFile.Endpoints.Docker> dockerEndpoint =
+                    dockerContextMetaFile.map(metaFile -> metaFile.endpoints).map(endpoint -> endpoint.docker);
+                if (this.dockerHost == null) {
+                    this.dockerHost = dockerEndpoint.map(endpoint -> endpoint.host).map(URI::create).orElse(null);
                 }
-                if (dockerCertPath == null) {
-                    dockerCertPath = dockerContextMetaFile.map(f -> f.storage).map(s -> s.tlsPath)
-                        .filter(f -> new File(f).exists()).orElse(null);
-                    if (dockerCertPath != null) {
-                        dockerTlsVerify = docker.map(d -> !d.skipTLSVerify).orElse(true);
+                if (this.dockerCertPath == null) {
+                    this.dockerCertPath = dockerContextMetaFile.map(metaFile -> metaFile.storage)
+                        .map(storage -> storage.tlsPath)
+                        .filter(file -> new File(file).exists()).orElse(null);
+                    if (this.dockerCertPath != null) {
+                        this.dockerTlsVerify = dockerEndpoint.map(endpoint -> !endpoint.skipTLSVerify).orElse(true);
                     }
                 }
             }
