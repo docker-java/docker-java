@@ -23,6 +23,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class DefaultDockerClientConfigTest {
 
@@ -111,6 +112,25 @@ public class DefaultDockerClientConfigTest {
         DefaultDockerClientConfig config = buildConfig(env, systemProperties);
 
         assertEquals(URI.create("unix:///envvarcontext.sock"), config.getDockerHost());
+    }
+
+    @Test
+    public void dockerContextWithDockerHostAndTLS() {
+        // given home directory with docker contexts
+        Properties systemProperties = new Properties();
+        systemProperties.setProperty("user.home", "target/test-classes/dockerContextHomeDir");
+
+        // and an environment variable that overrides docker context
+        Map<String, String> env = new HashMap<>();
+        env.put(DefaultDockerClientConfig.DOCKER_CONTEXT, "remote");
+
+        // when you build a config
+        DefaultDockerClientConfig config = buildConfig(env, systemProperties);
+
+        assertEquals(URI.create("tcp://remote:2376"), config.getDockerHost());
+        assertTrue("SSL config is set", config.getSSLConfig() instanceof LocalDirectorySSLConfig);
+        assertEquals("target/test-classes/com/github/dockerjava/core/util/CertificateUtilsTest/allFilesExist",
+            ((LocalDirectorySSLConfig)config.getSSLConfig()).getDockerCertPath());
     }
 
     @Test
