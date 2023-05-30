@@ -1,6 +1,6 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 import com.github.dockerjava.api.command.InspectImageCmd;
 import com.github.dockerjava.api.command.InspectImageResponse;
@@ -26,8 +26,7 @@ public class InspectImageCmdImpl extends AbstrDockerCmd<InspectImageCmd, Inspect
 
     @Override
     public InspectImageCmd withImageId(String imageId) {
-        checkNotNull(imageId, "imageId was not specified");
-        this.imageId = imageId;
+        this.imageId = Objects.requireNonNull(imageId, "imageId was not specified");
         return this;
     }
 

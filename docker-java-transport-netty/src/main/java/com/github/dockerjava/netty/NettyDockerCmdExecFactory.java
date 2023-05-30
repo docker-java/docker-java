@@ -1,6 +1,5 @@
 package com.github.dockerjava.netty;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Objects.nonNull;
 
 import java.io.IOException;
@@ -9,6 +8,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
 import java.security.Security;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLEngine;
@@ -284,7 +284,7 @@ public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
 
     @Override
     public void close() throws IOException {
-        checkNotNull(eventLoopGroup, "Factory not initialized. You probably forgot to call init()!");
+        Objects.requireNonNull(eventLoopGroup, "Factory not initialized. You probably forgot to call init()!");
 
         eventLoopGroup.shutdownGracefully();
     }
@@ -331,7 +331,7 @@ public class NettyDockerCmdExecFactory extends AbstractDockerCmdExecFactory {
     }
 
     protected WebTarget getBaseResource() {
-        checkNotNull(baseResource, "Factory not initialized, baseResource not set. You probably forgot to call init()!");
+        Objects.requireNonNull(baseResource, "Factory not initialized, baseResource not set. You probably forgot to call init()!");
         return baseResource;
     }
 }

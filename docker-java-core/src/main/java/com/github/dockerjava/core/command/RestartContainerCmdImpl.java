@@ -1,7 +1,8 @@
 package com.github.dockerjava.core.command;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.Objects;
 
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
@@ -36,14 +37,14 @@ public class RestartContainerCmdImpl extends AbstrDockerCmd<RestartContainerCmd,
 
     @Override
     public RestartContainerCmd withContainerId(String containerId) {
-        checkNotNull(containerId, "containerId was not specified");
+        Objects.requireNonNull(containerId, "containerId was not specified");
         this.containerId = containerId;
         return this;
     }
 
     @Override
     public RestartContainerCmd withTimeout(Integer timeout) {
-        checkNotNull(timeout, "timeout was not specified");
+        Objects.requireNonNull(timeout, "timeout was not specified");
         checkArgument(timeout >= 0, "timeout must be greater or equal 0");
         this.timeout = timeout;
         return this;

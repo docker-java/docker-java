@@ -1,9 +1,9 @@
 package com.github.dockerjava.core.command;
 
+import java.util.Objects;
+
 import com.github.dockerjava.api.command.RemoveConfigCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Remove a config.
@@ -24,8 +24,7 @@ public class RemoveConfigCmdImpl extends AbstrDockerCmd<RemoveConfigCmd, Void> i
 
     @Override
     public RemoveConfigCmd withConfigId(String configId) {
-        checkNotNull(configId, "configId was not specified");
-        this.configId = configId;
+        this.configId = Objects.requireNonNull(configId, "configId was not specified");
         return this;
     }
 

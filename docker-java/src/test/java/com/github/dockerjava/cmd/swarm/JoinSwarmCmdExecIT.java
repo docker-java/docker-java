@@ -43,7 +43,7 @@ public class JoinSwarmCmdExecIT extends SwarmCmdIT {
     }
 
     @Test
-    public void joinSwarmAsWorker() throws Exception {
+    public void joinSwarmAsWorker() {
         SwarmJoinTokens tokens = initSwarmOnDocker(docker1);
 
         docker2.joinSwarmCmd()
@@ -58,7 +58,7 @@ public class JoinSwarmCmdExecIT extends SwarmCmdIT {
     }
 
     @Test
-    public void joinSwarmAsManager() throws DockerException, InterruptedException {
+    public void joinSwarmAsManager() throws DockerException {
         SwarmJoinTokens tokens = initSwarmOnDocker(docker1);
 
         docker2.joinSwarmCmd()
@@ -73,7 +73,7 @@ public class JoinSwarmCmdExecIT extends SwarmCmdIT {
     }
 
     @Test(expected = DockerException.class)
-    public void joinSwarmIfAlreadyInSwarm() throws Exception {
+    public void joinSwarmIfAlreadyInSwarm() {
         SwarmJoinTokens tokens = initSwarmOnDocker(docker1);
 
         initSwarmOnDocker(docker2);

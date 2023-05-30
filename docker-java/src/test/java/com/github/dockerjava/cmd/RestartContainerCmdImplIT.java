@@ -45,7 +45,7 @@ public class RestartContainerCmdImplIT extends CmdIT {
     }
 
     @Test(expected = NotFoundException.class)
-    public void restartNonExistingContainer() throws DockerException, InterruptedException {
+    public void restartNonExistingContainer() throws DockerException {
 
         dockerRule.getClient().restartContainerCmd("non-existing").exec();
     }

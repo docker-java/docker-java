@@ -7,9 +7,9 @@ import com.github.dockerjava.core.util.FiltersBuilder;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * List containers.
@@ -73,7 +73,7 @@ public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, Lis
 
     @Override
     public ListContainersCmd withLimit(Integer limit) {
-        checkNotNull(limit, "limit was not specified");
+        Objects.requireNonNull(limit, "limit was not specified");
         checkArgument(limit > 0, "limit must be greater 0");
         this.limit = limit;
         return this;
@@ -81,15 +81,13 @@ public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, Lis
 
     @Override
     public ListContainersCmd withSince(String since) {
-        checkNotNull(since, "since was not specified");
-        this.sinceId = since;
+        this.sinceId = Objects.requireNonNull(since, "since was not specified");
         return this;
     }
 
     @Override
     public ListContainersCmd withBefore(String before) {
-        checkNotNull(before, "before was not specified");
-        this.beforeId = before;
+        this.beforeId = Objects.requireNonNull(before, "before was not specified");
         return this;
     }
 
@@ -125,28 +123,28 @@ public class ListContainersCmdImpl extends AbstrDockerCmd<ListContainersCmd, Lis
 
     @Override
     public ListContainersCmd withLabelFilter(Map<String, String> labels) {
-        checkNotNull(labels, "labels was not specified");
+        Objects.requireNonNull(labels, "labels was not specified");
         this.filters.withLabels(labels);
         return this;
     }
 
     @Override
     public ListContainersCmd withExitedFilter(Integer exited) {
-        checkNotNull(exited, "exited was not specified");
+        Objects.requireNonNull(exited, "exited was not specified");
         this.filters.withFilter("exited", exited.toString());
         return this;
     }
 
     @Override
     public ListContainersCmd withFilter(String filterName, Collection<String> filterValues) {
-        checkNotNull(filterValues, filterName + " was not specified");
+        Objects.requireNonNull(filterValues, filterName + " was not specified");
         this.filters.withFilter(filterName, filterValues);
         return this;
     }
 
     @Override
     public ListContainersCmd withStatusFilter(Collection<String> status) {
-        checkNotNull(status, "status was not specified");
+        Objects.requireNonNull(status, "status was not specified");
         this.filters.withFilter("status", status);
         return this;
     }

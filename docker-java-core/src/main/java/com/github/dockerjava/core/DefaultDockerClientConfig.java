@@ -5,6 +5,7 @@ import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.core.NameParser.HostnameReposName;
 import com.github.dockerjava.core.NameParser.ReposTag;
+import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -22,10 +23,10 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static org.apache.commons.lang3.BooleanUtils.isTrue;
 
 /**
@@ -36,6 +37,8 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
     private static final long serialVersionUID = 1L;
 
     public static final String DOCKER_HOST = "DOCKER_HOST";
+
+    public static final String DOCKER_CONTEXT = "DOCKER_CONTEXT";
 
     public static final String DOCKER_TLS_VERIFY = "DOCKER_TLS_VERIFY";
 
@@ -87,11 +90,13 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
     private final RemoteApiVersion apiVersion;
 
-    private DockerConfigFile dockerConfig = null;
+    private final DockerConfigFile dockerConfig;
 
-    DefaultDockerClientConfig(URI dockerHost, String dockerConfigPath, String apiVersion, String registryUrl,
-            String registryUsername, String registryPassword, String registryEmail, SSLConfig sslConfig) {
+    DefaultDockerClientConfig(URI dockerHost, DockerConfigFile dockerConfigFile, String dockerConfigPath, String apiVersion,
+                              String registryUrl, String registryUsername, String registryPassword, String registryEmail,
+                              SSLConfig sslConfig) {
         this.dockerHost = checkDockerHostScheme(dockerHost);
+        this.dockerConfig = dockerConfigFile;
         this.dockerConfigPath = dockerConfigPath;
         this.apiVersion = RemoteApiVersion.parseConfigWithDefault(apiVersion);
         this.sslConfig = sslConfig;
@@ -171,6 +176,13 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             String value = env.get(DOCKER_HOST);
             if (value != null && value.trim().length() != 0) {
                 overriddenProperties.setProperty(DOCKER_HOST, value);
+            }
+        }
+
+        if (env.containsKey(DOCKER_CONTEXT)) {
+            String value = env.get(DOCKER_CONTEXT);
+            if (value != null && value.trim().length() != 0) {
+                overriddenProperties.setProperty(DOCKER_CONTEXT, value);
             }
         }
 
@@ -258,13 +270,6 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
     @Nonnull
     public DockerConfigFile getDockerConfig() {
-        if (dockerConfig == null) {
-            try {
-                dockerConfig = DockerConfigFile.loadConfig(getObjectMapper(), getDockerConfigPath());
-            } catch (IOException e) {
-                throw new DockerClientException("Failed to parse docker configuration file", e);
-            }
-        }
         return dockerConfig;
     }
 
@@ -325,7 +330,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
         private URI dockerHost;
 
         private String apiVersion, registryUsername, registryPassword, registryEmail, registryUrl, dockerConfig,
-                dockerCertPath;
+                dockerCertPath, dockerContext;
 
         private Boolean dockerTlsVerify;
 
@@ -343,6 +348,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             }
 
             return withDockerTlsVerify(p.getProperty(DOCKER_TLS_VERIFY))
+                    .withDockerContext(p.getProperty(DOCKER_CONTEXT))
                     .withDockerConfig(p.getProperty(DOCKER_CONFIG))
                     .withDockerCertPath(p.getProperty(DOCKER_CERT_PATH))
                     .withApiVersion(p.getProperty(API_VERSION))
@@ -356,7 +362,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
          * configure DOCKER_HOST
          */
         public final Builder withDockerHost(String dockerHost) {
-            checkNotNull(dockerHost, "uri was not specified");
+            Objects.requireNonNull(dockerHost, "uri was not specified");
             this.dockerHost = URI.create(dockerHost);
             return this;
         }
@@ -401,6 +407,11 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             return this;
         }
 
+        public final Builder withDockerContext(String dockerContext) {
+            this.dockerContext = dockerContext;
+            return this;
+        }
+
         public final Builder withDockerTlsVerify(String dockerTlsVerify) {
             if (dockerTlsVerify != null) {
                 String trimmed = dockerTlsVerify.trim();
@@ -430,7 +441,33 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             return this;
         }
 
+        private void applyContextConfiguration(final String context) {
+            final Optional<DockerContextMetaFile> dockerContextMetaFile =
+                Optional.ofNullable(context)
+                    .flatMap(ctx -> DockerContextMetaFile.resolveContextMetaFile(DockerClientConfig.getDefaultObjectMapper(),
+                            new File(this.dockerConfig), ctx));
+
+            if (dockerContextMetaFile.isPresent()) {
+                final Optional<DockerContextMetaFile.Endpoints.Docker> dockerEndpoint =
+                    dockerContextMetaFile.map(metaFile -> metaFile.endpoints).map(endpoint -> endpoint.docker);
+                if (this.dockerHost == null) {
+                    this.dockerHost = dockerEndpoint.map(endpoint -> endpoint.host).map(URI::create).orElse(null);
+                }
+                if (this.dockerCertPath == null) {
+                    this.dockerCertPath = dockerContextMetaFile.map(metaFile -> metaFile.storage)
+                        .map(storage -> storage.tlsPath)
+                        .filter(file -> new File(file).exists()).orElse(null);
+                    if (this.dockerCertPath != null) {
+                        this.dockerTlsVerify = dockerEndpoint.map(endpoint -> !endpoint.skipTLSVerify).orElse(true);
+                    }
+                }
+            }
+        }
+
         public DefaultDockerClientConfig build() {
+            final DockerConfigFile dockerConfigFile = readDockerConfig();
+            final String context = (dockerContext != null) ? dockerContext : dockerConfigFile.getCurrentContext();
+            applyContextConfiguration(context);
 
             SSLConfig sslConfig = null;
 
@@ -447,14 +484,22 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
                 ? dockerHost
                 : URI.create(SystemUtils.IS_OS_WINDOWS ? WINDOWS_DEFAULT_DOCKER_HOST : DEFAULT_DOCKER_HOST);
 
-            return new DefaultDockerClientConfig(dockerHostUri, dockerConfig, apiVersion, registryUrl, registryUsername,
+            return new DefaultDockerClientConfig(dockerHostUri, dockerConfigFile, dockerConfig, apiVersion, registryUrl, registryUsername,
                     registryPassword, registryEmail, sslConfig);
+        }
+
+        private DockerConfigFile readDockerConfig() {
+            try {
+                return DockerConfigFile.loadConfig(DockerClientConfig.getDefaultObjectMapper(), dockerConfig);
+            } catch (IOException e) {
+                throw new DockerClientException("Failed to parse docker configuration file", e);
+            }
         }
 
         private String checkDockerCertPath(String dockerCertPath) {
             if (StringUtils.isEmpty(dockerCertPath)) {
                 throw new DockerClientException(
-                        "Enabled TLS verification (DOCKER_TLS_VERIFY=1) but certifate path (DOCKER_CERT_PATH) is not defined.");
+                        "Enabled TLS verification (DOCKER_TLS_VERIFY=1) but certificate path (DOCKER_CERT_PATH) is not defined.");
             }
 
             File certPath = new File(dockerCertPath);

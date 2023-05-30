@@ -1,10 +1,10 @@
 package com.github.dockerjava.core.command;
 
 
+import java.util.Objects;
+
 import com.github.dockerjava.api.command.UpdateSwarmCmd;
 import com.github.dockerjava.api.model.SwarmSpec;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Update a swarm.
@@ -62,8 +62,7 @@ public class UpdateSwarmCmdImpl extends AbstrDockerCmd<UpdateSwarmCmd, Void> imp
 
     @Override
     public UpdateSwarmCmd withSwarmSpec(SwarmSpec swarmSpec) {
-        checkNotNull(swarmSpec, "swarmSpec was not specified");
-        this.swarmSpec = swarmSpec;
+        this.swarmSpec = Objects.requireNonNull(swarmSpec, "swarmSpec was not specified");
         return this;
     }
 }

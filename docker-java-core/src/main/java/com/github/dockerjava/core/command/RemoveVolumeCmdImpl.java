@@ -1,6 +1,6 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 import com.github.dockerjava.api.command.RemoveVolumeCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
@@ -26,8 +26,7 @@ public class RemoveVolumeCmdImpl extends AbstrDockerCmd<RemoveVolumeCmd, Void> i
 
     @Override
     public RemoveVolumeCmd withName(String name) {
-        checkNotNull(name, "name was not specified");
-        this.name = name;
+        this.name = Objects.requireNonNull(name, "name was not specified");
         return this;
     }
 

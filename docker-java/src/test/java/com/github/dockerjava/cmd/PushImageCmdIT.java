@@ -36,7 +36,7 @@ public class PushImageCmdIT extends CmdIT {
     private AuthConfig authConfig;
 
     @Before
-    public void beforeTest() throws Exception {
+    public void beforeTest() {
         authConfig = REGISTRY.getAuthConfig();
     }
 

@@ -1,9 +1,9 @@
 package com.github.dockerjava.core.command;
 
+import java.util.Objects;
+
 import com.github.dockerjava.api.command.ResizeExecCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 public class ResizeExecCmdImpl extends AbstrDockerCmd<ResizeExecCmd, Void> implements ResizeExecCmd {
 
@@ -35,8 +35,7 @@ public class ResizeExecCmdImpl extends AbstrDockerCmd<ResizeExecCmd, Void> imple
 
     @Override
     public ResizeExecCmd withExecId(String execId) {
-        checkNotNull(execId, "execId was not specified");
-        this.execId = execId;
+        this.execId = Objects.requireNonNull(execId, "execId was not specified");
         return this;
     }
 

@@ -1,8 +1,7 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.io.InputStream;
+import java.util.Objects;
 
 import com.github.dockerjava.api.command.CreateImageCmd;
 import com.github.dockerjava.api.command.CreateImageResponse;
@@ -54,7 +53,7 @@ public class CreateImageCmdImpl extends AbstrDockerCmd<CreateImageCmd, CreateIma
      */
     @Override
     public CreateImageCmdImpl withRepository(String repository) {
-        checkNotNull(repository, "repository was not specified");
+        Objects.requireNonNull(repository, "repository was not specified");
         this.repository = repository;
         return this;
     }
@@ -65,7 +64,7 @@ public class CreateImageCmdImpl extends AbstrDockerCmd<CreateImageCmd, CreateIma
      */
     @Override
     public CreateImageCmdImpl withImageStream(InputStream imageStream) {
-        checkNotNull(imageStream, "imageStream was not specified");
+        Objects.requireNonNull(imageStream, "imageStream was not specified");
         this.imageStream = imageStream;
         return this;
     }
@@ -76,7 +75,7 @@ public class CreateImageCmdImpl extends AbstrDockerCmd<CreateImageCmd, CreateIma
      */
     @Override
     public CreateImageCmdImpl withTag(String tag) {
-        checkNotNull(tag, "tag was not specified");
+        Objects.requireNonNull(tag, "tag was not specified");
         this.tag = tag;
         return this;
     }

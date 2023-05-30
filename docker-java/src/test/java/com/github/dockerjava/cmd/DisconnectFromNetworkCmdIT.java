@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 public class DisconnectFromNetworkCmdIT extends CmdIT {
 
     @Test
-    public void disconnectFromNetwork() throws InterruptedException {
+    public void disconnectFromNetwork() {
         assumeNotSwarm("no network in swarm", dockerRule);
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999").exec();
@@ -35,7 +35,7 @@ public class DisconnectFromNetworkCmdIT extends CmdIT {
     }
 
     @Test
-    public void forceDisconnectFromNetwork() throws InterruptedException {
+    public void forceDisconnectFromNetwork() {
         assumeNotSwarm("no network in swarm", dockerRule);
 
         CreateNetworkResponse network = dockerRule.getClient().createNetworkCmd().withName("testNetwork2").exec();

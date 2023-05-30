@@ -1,6 +1,6 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 import com.github.dockerjava.api.command.PauseContainerCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
@@ -28,8 +28,7 @@ public class PauseContainerCmdImpl extends AbstrDockerCmd<PauseContainerCmd, Voi
 
     @Override
     public PauseContainerCmd withContainerId(String containerId) {
-        checkNotNull(containerId, "containerId was not specified");
-        this.containerId = containerId;
+        this.containerId = Objects.requireNonNull(containerId, "containerId was not specified");
         return this;
     }
 

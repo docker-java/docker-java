@@ -47,7 +47,7 @@ public abstract class SwarmCmdIT extends CmdIT {
     private final Set<String> startedContainerIds = new HashSet<>();
 
     @Before
-    public final void setUpMultiNodeSwarmCmdIT() throws Exception {
+    public final void setUpMultiNodeSwarmCmdIT() {
         assumeThat(dockerRule, isGreaterOrEqual(VERSION_1_24));
     }
 

@@ -1,6 +1,6 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -82,8 +82,7 @@ public class LogContainerCmdImpl extends AbstrAsyncDockerCmd<LogContainerCmd, Fr
 
     @Override
     public LogContainerCmd withContainerId(String containerId) {
-        checkNotNull(containerId, "containerId was not specified");
-        this.containerId = containerId;
+        this.containerId = Objects.requireNonNull(containerId, "containerId was not specified");
         return this;
     }
 

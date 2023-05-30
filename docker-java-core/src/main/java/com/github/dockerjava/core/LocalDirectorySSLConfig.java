@@ -1,7 +1,5 @@
 package com.github.dockerjava.core;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.io.File;
 import java.io.Serializable;
 import java.nio.file.Files;
@@ -9,6 +7,7 @@ import java.nio.file.Paths;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.security.Security;
+import java.util.Objects;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -29,8 +28,7 @@ public class LocalDirectorySSLConfig implements SSLConfig, Serializable {
     private final String dockerCertPath;
 
     public LocalDirectorySSLConfig(String dockerCertPath) {
-        checkNotNull(dockerCertPath);
-        this.dockerCertPath = dockerCertPath;
+        this.dockerCertPath = Objects.requireNonNull(dockerCertPath);
     }
 
     public String getDockerCertPath() {

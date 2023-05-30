@@ -1,8 +1,7 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.io.InputStream;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
@@ -42,15 +41,13 @@ public class CopyFileFromContainerCmdImpl extends AbstrDockerCmd<CopyFileFromCon
 
     @Override
     public CopyFileFromContainerCmdImpl withContainerId(String containerId) {
-        checkNotNull(containerId, "containerId was not specified");
-        this.containerId = containerId;
+        this.containerId = Objects.requireNonNull(containerId, "containerId was not specified");
         return this;
     }
 
     @Override
     public CopyFileFromContainerCmdImpl withResource(String resource) {
-        checkNotNull(resource, "resource was not specified");
-        this.resource = resource;
+        this.resource = Objects.requireNonNull(resource, "resource was not specified");
         return this;
     }
 
@@ -61,8 +58,7 @@ public class CopyFileFromContainerCmdImpl extends AbstrDockerCmd<CopyFileFromCon
 
     @Override
     public CopyFileFromContainerCmdImpl withHostPath(String hostPath) {
-        checkNotNull(hostPath, "hostPath was not specified");
-        this.hostPath = hostPath;
+        this.hostPath = Objects.requireNonNull(hostPath, "hostPath was not specified");
         return this;
     }
 

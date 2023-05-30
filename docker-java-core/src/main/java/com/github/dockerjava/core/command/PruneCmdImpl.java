@@ -9,8 +9,7 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 /**
  * Delete unused content (containers, images, volumes, networks, build relicts)
@@ -69,28 +68,28 @@ public class PruneCmdImpl extends AbstrDockerCmd<PruneCmd, PruneResponse> implem
 
     @Override
     public PruneCmd withPruneType(final PruneType pruneType) {
-        checkNotNull(pruneType, "pruneType has not been specified");
+        Objects.requireNonNull(pruneType, "pruneType has not been specified");
         this.pruneType = pruneType;
         return this;
     }
 
     @Override
     public PruneCmd withDangling(Boolean dangling) {
-        checkNotNull(dangling, "dangling has not been specified");
+        Objects.requireNonNull(dangling, "dangling has not been specified");
         filters.withFilter("dangling", dangling ? "1" : "0");
         return this;
     }
 
     @Override
     public PruneCmd withUntilFilter(final String until) {
-        checkNotNull(until, "until has not been specified");
+        Objects.requireNonNull(until, "until has not been specified");
         filters.withUntil(until);
         return this;
     }
 
     @Override
     public PruneCmd withLabelFilter(final String... labels) {
-        checkNotNull(labels, "labels have not been specified");
+        Objects.requireNonNull(labels, "labels have not been specified");
         filters.withLabels(labels);
         return this;
     }

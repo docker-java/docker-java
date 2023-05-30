@@ -2,11 +2,11 @@ name: CI
 
 on:
   pull_request: {}
-  push: { branches: [ master ] }
+  push: { branches: [ main ] }
 
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
@@ -14,14 +14,15 @@ jobs:
           - { name: "default", javaVersion: 8 }
           - { name: "default", javaVersion: 17 }
           - { name: "over TCP", dockerHost: "tcp://127.0.0.1:2375", javaVersion: 8 }
-          - { name: "Docker 18.06.3", dockerVersion: "18.06.3~ce~3-0~ubuntu", javaVersion: 8 }
+          - { name: "Docker 19.03.9", dockerVersion: "5:19.03.9~3-0~ubuntu-focal", javaVersion: 8 }
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up JDK
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
           java-version: ${{matrix.javaVersion}}
+          distribution: temurin
       - name: Configure Docker
         env:
           DOCKER_VERSION: ${{matrix.dockerVersion}}

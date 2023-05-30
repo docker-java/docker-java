@@ -1,6 +1,6 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 import com.github.dockerjava.api.command.StatsCmd;
 import com.github.dockerjava.api.model.Statistics;
@@ -21,8 +21,7 @@ public class StatsCmdImpl extends AbstrAsyncDockerCmd<StatsCmd, Statistics> impl
 
     @Override
     public StatsCmd withContainerId(String containerId) {
-        checkNotNull(containerId, "containerId was not specified");
-        this.containerId = containerId;
+        this.containerId = Objects.requireNonNull(containerId, "containerId was not specified");
         return this;
     }
 

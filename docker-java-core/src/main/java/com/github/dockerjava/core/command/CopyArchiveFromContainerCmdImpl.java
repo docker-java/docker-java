@@ -1,8 +1,7 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.io.InputStream;
+import java.util.Objects;
 
 import com.github.dockerjava.api.command.CopyArchiveFromContainerCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
@@ -37,15 +36,13 @@ public class CopyArchiveFromContainerCmdImpl extends AbstrDockerCmd<CopyArchiveF
 
     @Override
     public CopyArchiveFromContainerCmdImpl withContainerId(String containerId) {
-        checkNotNull(containerId, "containerId was not specified");
-        this.containerId = containerId;
+        this.containerId = Objects.requireNonNull(containerId, "containerId was not specified");
         return this;
     }
 
     @Override
     public CopyArchiveFromContainerCmdImpl withResource(String resource) {
-        checkNotNull(resource, "resource was not specified");
-        this.resource = resource;
+        this.resource = Objects.requireNonNull(resource, "resource was not specified");
         return this;
     }
 
@@ -56,8 +53,7 @@ public class CopyArchiveFromContainerCmdImpl extends AbstrDockerCmd<CopyArchiveF
 
     @Override
     public CopyArchiveFromContainerCmdImpl withHostPath(String hostPath) {
-        checkNotNull(hostPath, "hostPath was not specified");
-        this.hostPath = hostPath;
+        this.hostPath = Objects.requireNonNull(hostPath, "hostPath was not specified");
         return this;
     }
 

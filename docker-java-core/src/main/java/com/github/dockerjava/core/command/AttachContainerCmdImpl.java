@@ -1,8 +1,7 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.io.InputStream;
+import java.util.Objects;
 
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.model.Frame;
@@ -61,7 +60,7 @@ public class AttachContainerCmdImpl extends AbstrAsyncDockerCmd<AttachContainerC
 
     @Override
     public AttachContainerCmd withContainerId(String containerId) {
-        checkNotNull(containerId, "containerId was not specified");
+        Objects.requireNonNull(containerId, "containerId was not specified");
         this.containerId = containerId;
         return this;
     }
@@ -92,8 +91,7 @@ public class AttachContainerCmdImpl extends AbstrAsyncDockerCmd<AttachContainerC
 
     @Override
     public AttachContainerCmd withStdIn(InputStream stdin) {
-        checkNotNull(stdin, "stdin was not specified");
-        this.stdin = stdin;
+        this.stdin = Objects.requireNonNull(stdin, "stdin was not specified");
         return this;
     }
 

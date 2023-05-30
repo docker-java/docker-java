@@ -4,7 +4,7 @@ import com.github.dockerjava.api.command.CreateSecretCmd;
 import com.github.dockerjava.api.command.CreateSecretResponse;
 import com.github.dockerjava.api.model.SecretSpec;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 /**
  * Creates a new secret
@@ -16,7 +16,7 @@ public class CreateSecretCmdImpl extends AbstrDockerCmd<CreateSecretCmd, CreateS
 
     public CreateSecretCmdImpl(Exec exec, SecretSpec secretSpec) {
         super(exec);
-        checkNotNull(secretSpec, "secretSpec was not specified");
+        Objects.requireNonNull(secretSpec, "secretSpec was not specified");
         withSecretSpec(secretSpec);
     }
 
@@ -27,7 +27,7 @@ public class CreateSecretCmdImpl extends AbstrDockerCmd<CreateSecretCmd, CreateS
 
     @Override
     public CreateSecretCmd withSecretSpec(SecretSpec secretSpec) {
-        checkNotNull(secretSpec, "secretSpec was not specified");
+        Objects.requireNonNull(secretSpec, "secretSpec was not specified");
         this.secretSpec = secretSpec;
         return this;
     }
