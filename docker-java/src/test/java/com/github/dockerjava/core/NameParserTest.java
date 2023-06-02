@@ -30,6 +30,7 @@ public class NameParserTest {
         NameParser.validateRepoName("namespace/repository.with.dots");
         NameParser.validateRepoName("namespace_with_underscores/repository");
         NameParser.validateRepoName("namespace/repository_with_underscores");
+        NameParser.validateRepoName("virtual-registry/namespace/repository");
     }
 
     @Test(expected = InvalidRepositoryNameException.class)
@@ -84,6 +85,24 @@ public class NameParserTest {
     }
 
     @Test
+    public void testResolveRepositoryNameWithTag() {
+        HostnameReposName resolved = NameParser.resolveRepositoryName("repository:tag");
+        assertEquals(new HostnameReposName(AuthConfig.DEFAULT_SERVER_ADDRESS, "repository"), resolved);
+    }
+
+    @Test
+    public void testResolveRepositoryNameWithSHA256() {
+        HostnameReposName resolved = NameParser.resolveRepositoryName("repository@sha256:sha256");
+        assertEquals(new HostnameReposName(AuthConfig.DEFAULT_SERVER_ADDRESS, "repository"), resolved);
+    }
+
+    @Test
+    public void testResolveRepositoryNameWithTagAndSHA256() {
+        HostnameReposName resolved = NameParser.resolveRepositoryName("repository:tag@sha256:sha256");
+        assertEquals(new HostnameReposName(AuthConfig.DEFAULT_SERVER_ADDRESS, "repository"), resolved);
+    }
+
+    @Test
     public void testResolveRepositoryNameWithNamespace() {
         HostnameReposName resolved = NameParser.resolveRepositoryName("namespace/repository");
         assertEquals(new HostnameReposName(AuthConfig.DEFAULT_SERVER_ADDRESS, "namespace/repository"), resolved);
@@ -92,7 +111,7 @@ public class NameParserTest {
     @Test
     public void testResolveRepositoryNameWithNamespaceAndSHA256() {
         HostnameReposName resolved = NameParser.resolveRepositoryName("namespace/repository@sha256:sha256");
-        assertEquals(new HostnameReposName(AuthConfig.DEFAULT_SERVER_ADDRESS, "namespace/repository@sha256:sha256"), resolved);
+        assertEquals(new HostnameReposName(AuthConfig.DEFAULT_SERVER_ADDRESS, "namespace/repository"), resolved);
     }
 
     @Test
@@ -104,6 +123,17 @@ public class NameParserTest {
     @Test
     public void testResolveRepositoryNameWithNamespaceAndHostnameAndSHA256() {
         HostnameReposName resolved = NameParser.resolveRepositoryName("localhost:5000/namespace/repository@sha256:sha256");
+        assertEquals(new HostnameReposName("localhost:5000", "namespace/repository"), resolved);
+    }
+
+    @Test
+    public void testResolveRepositoryNameWithNamespaceAndHostnameAndTag() {
+        HostnameReposName resolved = NameParser.resolveRepositoryName("localhost:5000/namespace/repository:tag");
+        assertEquals(new HostnameReposName("localhost:5000", "namespace/repository"), resolved);
+    }
+    @Test
+    public void testResolveRepositoryNameWithNamespaceAndHostnameAndTagAndSHA256() {
+        HostnameReposName resolved = NameParser.resolveRepositoryName("localhost:5000/namespace/repository:tag@sha256:sha256");
         assertEquals(new HostnameReposName("localhost:5000", "namespace/repository"), resolved);
     }
 
@@ -146,5 +176,17 @@ public class NameParserTest {
 
         resolved = NameParser.parseRepositoryTag("localhost:5000/namespace/repository@sha256:sha256");
         assertEquals(new ReposTag("localhost:5000/namespace/repository@sha256:sha256", ""), resolved);
+    }
+
+    @Test
+    public void testResolveReposTagWithTagAndSHA256() {
+        ReposTag resolved = NameParser.parseRepositoryTag("repository:tag@sha256:sha256");
+        assertEquals(new ReposTag("repository:tag@sha256:sha256", ""), resolved);
+
+        resolved = NameParser.parseRepositoryTag("namespace/repository:tag@sha256:sha256");
+        assertEquals(new ReposTag("namespace/repository:tag@sha256:sha256", ""), resolved);
+
+        resolved = NameParser.parseRepositoryTag("localhost:5000/namespace/repository:tag@sha256:sha256");
+        assertEquals(new ReposTag("localhost:5000/namespace/repository:tag@sha256:sha256", ""), resolved);
     }
 }
