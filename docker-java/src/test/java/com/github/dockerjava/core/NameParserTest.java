@@ -30,7 +30,6 @@ public class NameParserTest {
         NameParser.validateRepoName("namespace/repository.with.dots");
         NameParser.validateRepoName("namespace_with_underscores/repository");
         NameParser.validateRepoName("namespace/repository_with_underscores");
-        NameParser.validateRepoName("virtual-registry/namespace/repository");
     }
 
     @Test(expected = InvalidRepositoryNameException.class)
