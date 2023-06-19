@@ -27,7 +27,7 @@ public class WaitContainerResultCallback extends ResultCallbackTemplate<WaitCont
     @Override
     public void onNext(WaitResponse waitResponse) {
         this.waitResponse = waitResponse;
-        LOGGER.debug(waitResponse.toString());
+        LOGGER.debug("{}", waitResponse);
     }
 
     /**
