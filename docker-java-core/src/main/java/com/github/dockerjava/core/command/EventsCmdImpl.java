@@ -1,9 +1,8 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.model.Event;
@@ -38,42 +37,42 @@ public class EventsCmdImpl extends AbstrAsyncDockerCmd<EventsCmd, Event> impleme
 
     @Override
     public EventsCmd withContainerFilter(String... container) {
-        checkNotNull(container, "container have not been specified");
+        Objects.requireNonNull(container, "container have not been specified");
         this.filters.withContainers(container);
         return this;
     }
 
     @Override
     public EventsCmd withImageFilter(String... image) {
-        checkNotNull(image, "image have not been specified");
+        Objects.requireNonNull(image, "image have not been specified");
         this.filters.withImages(image);
         return this;
     }
 
     @Override
     public EventsCmd withEventFilter(String... event) {
-        checkNotNull(event, "event have not been specified");
+        Objects.requireNonNull(event, "event have not been specified");
         this.filters.withFilter("event", event);
         return this;
     }
 
     @Override
     public EventsCmd withEventTypeFilter(String... eventTypes) {
-        checkNotNull(eventTypes, "event types have not been specified");
+        Objects.requireNonNull(eventTypes, "event types have not been specified");
         this.filters.withEventTypes(eventTypes);
         return this;
     }
 
     @Override
     public EventsCmd withLabelFilter(String... label) {
-        checkNotNull(label, "label have not been specified");
+        Objects.requireNonNull(label, "label have not been specified");
         this.filters.withLabels(label);
         return this;
     }
 
     @Override
     public EventsCmd withLabelFilter(Map<String, String> labels) {
-        checkNotNull(labels, "labels have not been specified");
+        Objects.requireNonNull(labels, "labels have not been specified");
         this.filters.withLabels(labels);
         return this;
     }

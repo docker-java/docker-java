@@ -1,8 +1,7 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.io.InputStream;
+import java.util.Objects;
 
 import com.github.dockerjava.api.command.SaveImageCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
@@ -33,8 +32,7 @@ public class SaveImageCmdImpl extends AbstrDockerCmd<SaveImageCmd, InputStream> 
      */
     @Override
     public SaveImageCmd withName(String name) {
-        checkNotNull(name, "name was not specified");
-        this.name = name;
+        this.name = Objects.requireNonNull(name, "name was not specified");
         return this;
     }
 
@@ -44,8 +42,7 @@ public class SaveImageCmdImpl extends AbstrDockerCmd<SaveImageCmd, InputStream> 
      */
     @Override
     public SaveImageCmd withTag(String tag) {
-        checkNotNull(tag, "tag was not specified");
-        this.tag = tag;
+        this.tag = Objects.requireNonNull(tag, "tag was not specified");
         return this;
     }
 

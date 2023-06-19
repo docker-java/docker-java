@@ -1,5 +1,7 @@
 package com.github.dockerjava.core;
 
+import java.util.Objects;
+
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
 import com.github.dockerjava.api.command.BuildImageCmd;
@@ -160,8 +162,6 @@ import com.github.dockerjava.core.exec.UpdateSwarmNodeCmdExec;
 import com.github.dockerjava.core.exec.VersionCmdExec;
 import com.github.dockerjava.core.exec.WaitContainerCmdExec;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 public abstract class AbstractDockerCmdExecFactory implements DockerCmdExecFactory, DockerClientConfigAware {
 
     private DockerClientConfig dockerClientConfig;
@@ -170,15 +170,14 @@ public abstract class AbstractDockerCmdExecFactory implements DockerCmdExecFacto
     protected Integer readTimeout;
 
     protected DockerClientConfig getDockerClientConfig() {
-        checkNotNull(dockerClientConfig,
+        Objects.requireNonNull(dockerClientConfig,
                 "Factor not initialized, dockerClientConfig not set. You probably forgot to call init()!");
         return dockerClientConfig;
     }
 
     @Override
     public void init(DockerClientConfig dockerClientConfig) {
-        checkNotNull(dockerClientConfig, "config was not specified");
-        this.dockerClientConfig = dockerClientConfig;
+        this.dockerClientConfig = Objects.requireNonNull(dockerClientConfig, "config was not specified");
     }
 
     @Override

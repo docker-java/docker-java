@@ -1,6 +1,6 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 import com.github.dockerjava.api.command.KillContainerCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
@@ -29,15 +29,13 @@ public class KillContainerCmdImpl extends AbstrDockerCmd<KillContainerCmd, Void>
 
     @Override
     public KillContainerCmd withContainerId(String containerId) {
-        checkNotNull(containerId, "containerId was not specified");
-        this.containerId = containerId;
+        this.containerId = Objects.requireNonNull(containerId, "containerId was not specified");
         return this;
     }
 
     @Override
     public KillContainerCmd withSignal(String signal) {
-        checkNotNull(signal, "signal was not specified");
-        this.signal = signal;
+        this.signal = Objects.requireNonNull(signal, "signal was not specified");
         return this;
     }
 

@@ -23,10 +23,10 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static org.apache.commons.lang3.BooleanUtils.isTrue;
 
 /**
@@ -362,7 +362,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
          * configure DOCKER_HOST
          */
         public final Builder withDockerHost(String dockerHost) {
-            checkNotNull(dockerHost, "uri was not specified");
+            Objects.requireNonNull(dockerHost, "uri was not specified");
             this.dockerHost = URI.create(dockerHost);
             return this;
         }
@@ -441,7 +441,33 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             return this;
         }
 
+        private void applyContextConfiguration(final String context) {
+            final Optional<DockerContextMetaFile> dockerContextMetaFile =
+                Optional.ofNullable(context)
+                    .flatMap(ctx -> DockerContextMetaFile.resolveContextMetaFile(DockerClientConfig.getDefaultObjectMapper(),
+                            new File(this.dockerConfig), ctx));
+
+            if (dockerContextMetaFile.isPresent()) {
+                final Optional<DockerContextMetaFile.Endpoints.Docker> dockerEndpoint =
+                    dockerContextMetaFile.map(metaFile -> metaFile.endpoints).map(endpoint -> endpoint.docker);
+                if (this.dockerHost == null) {
+                    this.dockerHost = dockerEndpoint.map(endpoint -> endpoint.host).map(URI::create).orElse(null);
+                }
+                if (this.dockerCertPath == null) {
+                    this.dockerCertPath = dockerContextMetaFile.map(metaFile -> metaFile.storage)
+                        .map(storage -> storage.tlsPath)
+                        .filter(file -> new File(file).exists()).orElse(null);
+                    if (this.dockerCertPath != null) {
+                        this.dockerTlsVerify = dockerEndpoint.map(endpoint -> !endpoint.skipTLSVerify).orElse(true);
+                    }
+                }
+            }
+        }
+
         public DefaultDockerClientConfig build() {
+            final DockerConfigFile dockerConfigFile = readDockerConfig();
+            final String context = (dockerContext != null) ? dockerContext : dockerConfigFile.getCurrentContext();
+            applyContextConfiguration(context);
 
             SSLConfig sslConfig = null;
 
@@ -454,12 +480,9 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
                 sslConfig = customSslConfig;
             }
 
-            final DockerConfigFile dockerConfigFile = readDockerConfig();
-
-            final String context = (dockerContext != null) ? dockerContext : dockerConfigFile.getCurrentContext();
             URI dockerHostUri = dockerHost != null
                 ? dockerHost
-                : resolveDockerHost(context);
+                : URI.create(SystemUtils.IS_OS_WINDOWS ? WINDOWS_DEFAULT_DOCKER_HOST : DEFAULT_DOCKER_HOST);
 
             return new DefaultDockerClientConfig(dockerHostUri, dockerConfigFile, dockerConfig, apiVersion, registryUrl, registryUsername,
                     registryPassword, registryEmail, sslConfig);
@@ -471,14 +494,6 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             } catch (IOException e) {
                 throw new DockerClientException("Failed to parse docker configuration file", e);
             }
-        }
-
-        private URI resolveDockerHost(String dockerContext) {
-            return URI.create(Optional.ofNullable(dockerContext)
-                .flatMap(context -> DockerContextMetaFile.resolveContextMetaFile(
-                    DockerClientConfig.getDefaultObjectMapper(), new File(dockerConfig), context))
-                .flatMap(DockerContextMetaFile::host)
-                .orElse(SystemUtils.IS_OS_WINDOWS ? WINDOWS_DEFAULT_DOCKER_HOST : DEFAULT_DOCKER_HOST));
         }
 
         private String checkDockerCertPath(String dockerCertPath) {

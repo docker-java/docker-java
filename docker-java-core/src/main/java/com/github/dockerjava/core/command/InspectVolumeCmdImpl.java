@@ -1,6 +1,6 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 import com.github.dockerjava.api.command.InspectVolumeCmd;
 import com.github.dockerjava.api.command.InspectVolumeResponse;
@@ -26,8 +26,7 @@ public class InspectVolumeCmdImpl extends AbstrDockerCmd<InspectVolumeCmd, Inspe
 
     @Override
     public InspectVolumeCmd withName(String name) {
-        checkNotNull(name, "name was not specified");
-        this.name = name;
+        this.name = Objects.requireNonNull(name, "name was not specified");
         return this;
     }
 

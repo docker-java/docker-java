@@ -1,10 +1,10 @@
 package com.github.dockerjava.core.command;
 
+import java.util.Objects;
+
 import com.github.dockerjava.api.command.PullImageCmd;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.PullResponseItem;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  *
@@ -54,15 +54,13 @@ public class PullImageCmdImpl extends AbstrAsyncDockerCmd<PullImageCmd, PullResp
 
     @Override
     public PullImageCmd withRepository(String repository) {
-        checkNotNull(repository, "repository was not specified");
-        this.repository = repository;
+        this.repository = Objects.requireNonNull(repository, "repository was not specified");
         return this;
     }
 
     @Override
     public PullImageCmd withTag(String tag) {
-        checkNotNull(tag, "tag was not specified");
-        this.tag = tag;
+        this.tag = Objects.requireNonNull(tag, "tag was not specified");
         return this;
     }
 
@@ -74,8 +72,7 @@ public class PullImageCmdImpl extends AbstrAsyncDockerCmd<PullImageCmd, PullResp
 
     @Override
     public PullImageCmd withRegistry(String registry) {
-        checkNotNull(registry, "registry was not specified");
-        this.registry = registry;
+        this.registry = Objects.requireNonNull(registry, "registry was not specified");
         return this;
     }
 

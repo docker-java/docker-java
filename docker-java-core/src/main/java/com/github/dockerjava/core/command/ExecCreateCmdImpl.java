@@ -1,8 +1,7 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.command.ExecCreateCmd;
@@ -59,8 +58,7 @@ public class ExecCreateCmdImpl extends AbstrDockerCmd<ExecCreateCmd, ExecCreateC
 
     @Override
     public ExecCreateCmd withContainerId(String containerId) {
-        checkNotNull(containerId, "containerId was not specified");
-        this.containerId = containerId;
+        this.containerId = Objects.requireNonNull(containerId, "containerId was not specified");
         return this;
     }
 

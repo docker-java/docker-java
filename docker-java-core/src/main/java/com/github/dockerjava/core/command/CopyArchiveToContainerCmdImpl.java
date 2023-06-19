@@ -1,12 +1,11 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -40,15 +39,13 @@ public class CopyArchiveToContainerCmdImpl extends AbstrDockerCmd<CopyArchiveToC
 
     @Override
     public CopyArchiveToContainerCmd withContainerId(String containerId) {
-        checkNotNull(containerId, "containerId was not specified");
-        this.containerId = containerId;
+        this.containerId = Objects.requireNonNull(containerId, "containerId was not specified");
         return this;
     }
 
     @Override
     public CopyArchiveToContainerCmd withHostResource(String hostResource) {
-        checkNotNull(hostResource, "hostResource was not specified");
-        this.hostResource = hostResource;
+        this.hostResource = Objects.requireNonNull(hostResource, "hostResource was not specified");
         return this;
     }
 
@@ -66,15 +63,13 @@ public class CopyArchiveToContainerCmdImpl extends AbstrDockerCmd<CopyArchiveToC
 
     @Override
     public CopyArchiveToContainerCmd withRemotePath(String remotePath) {
-        checkNotNull(remotePath, "remotePath was not specified");
-        this.remotePath = remotePath;
+        this.remotePath = Objects.requireNonNull(remotePath, "remotePath was not specified");
         return this;
     }
 
     @Override
     public CopyArchiveToContainerCmd withTarInputStream(InputStream tarInputStream) {
-        checkNotNull(tarInputStream, "tarInputStream was not specified");
-        this.tarInputStream = tarInputStream;
+        this.tarInputStream = Objects.requireNonNull(tarInputStream, "tarInputStream was not specified");
         return this;
     }
 

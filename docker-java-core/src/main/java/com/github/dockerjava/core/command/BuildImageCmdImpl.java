@@ -13,9 +13,8 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Build an image from Dockerfile.
@@ -79,7 +78,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     public BuildImageCmdImpl(BuildImageCmd.Exec exec, File dockerFileOrFolder) {
         super(exec);
-        checkNotNull(dockerFileOrFolder, "dockerFolder is null");
+        Objects.requireNonNull(dockerFileOrFolder, "dockerFolder is null");
 
         if (dockerFileOrFolder.isDirectory()) {
             withBaseDirectory(dockerFileOrFolder);
@@ -91,7 +90,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     public BuildImageCmdImpl(BuildImageCmd.Exec exec, InputStream tarInputStream) {
         super(exec);
-        checkNotNull(tarInputStream, "tarInputStream is null");
+        Objects.requireNonNull(tarInputStream, "tarInputStream is null");
         withTarInputStream(tarInputStream);
     }
 
@@ -232,8 +231,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @Deprecated
     @Override
     public BuildImageCmdImpl withTag(String tag) {
-        checkNotNull(tag, "Tag is null");
-        this.tag = tag;
+        this.tag = Objects.requireNonNull(tag, "Tag is null");
         return this;
     }
 
@@ -328,7 +326,7 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     @Override
     public BuildImageCmdImpl withDockerfile(File dockerfile) {
-        checkNotNull(dockerfile);
+        Objects.requireNonNull(dockerfile);
         if (!dockerfile.exists()) {
             throw new IllegalArgumentException("Dockerfile does not exist");
         }
@@ -353,22 +351,19 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     @Override
     public BuildImageCmd withDockerfilePath(String dockerfilePath) {
-        checkNotNull(dockerfilePath, "dockerfilePath is null");
-        this.dockerFilePath = dockerfilePath;
+        this.dockerFilePath = Objects.requireNonNull(dockerfilePath, "dockerfilePath is null");
         return this;
     }
 
     @Override
     public BuildImageCmdImpl withTarInputStream(InputStream tarInputStream) {
-        checkNotNull(tarInputStream, "tarInputStream is null");
-        this.tarInputStream = tarInputStream;
+        this.tarInputStream = Objects.requireNonNull(tarInputStream, "tarInputStream is null");
         return this;
     }
 
     @Override
     public BuildImageCmd withBuildAuthConfigs(AuthConfigurations authConfigs) {
-        checkNotNull(authConfigs, "authConfig is null");
-        this.buildAuthConfigs = authConfigs;
+        this.buildAuthConfigs = Objects.requireNonNull(authConfigs, "authConfig is null");
         return this;
     }
 

@@ -5,8 +5,7 @@ import com.github.dockerjava.api.model.LoadResponseItem;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 public class LoadImageAsyncCmdImpl extends AbstrAsyncDockerCmd<LoadImageAsyncCmd, LoadResponseItem> implements LoadImageAsyncCmd {
 
@@ -24,7 +23,7 @@ public class LoadImageAsyncCmdImpl extends AbstrAsyncDockerCmd<LoadImageAsyncCmd
 
     @Override
     public LoadImageAsyncCmd withImageStream(InputStream imageStream) {
-        checkNotNull(imageStream, "imageStream was not specified");
+        Objects.requireNonNull(imageStream, "imageStream was not specified");
         this.inputStream = imageStream;
         return this;
     }

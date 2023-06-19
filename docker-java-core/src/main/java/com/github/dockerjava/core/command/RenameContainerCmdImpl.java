@@ -5,7 +5,7 @@ import com.github.dockerjava.api.exception.NotFoundException;
 
 import javax.annotation.Nonnull;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 public class RenameContainerCmdImpl extends AbstrDockerCmd<RenameContainerCmd, Void> implements RenameContainerCmd {
 
@@ -30,15 +30,13 @@ public class RenameContainerCmdImpl extends AbstrDockerCmd<RenameContainerCmd, V
 
     @Override
     public RenameContainerCmd withContainerId(@Nonnull String containerId) {
-        checkNotNull(containerId, "containerId was not specified");
-        this.containerId = containerId;
+        this.containerId = Objects.requireNonNull(containerId, "containerId was not specified");
         return this;
     }
 
     @Override
     public RenameContainerCmd withName(@Nonnull String name) {
-        checkNotNull(name, "name was not specified");
-        this.name = name;
+        this.name = Objects.requireNonNull(name, "name was not specified");
         return this;
     }
 

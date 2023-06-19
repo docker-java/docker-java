@@ -3,7 +3,7 @@ package com.github.dockerjava.core.command;
 import com.github.dockerjava.api.command.RemoveSecretCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 /**
  * Remove a secret.
@@ -24,8 +24,7 @@ public class RemoveSecretCmdImpl extends AbstrDockerCmd<RemoveSecretCmd, Void> i
 
     @Override
     public RemoveSecretCmd withSecretId(String secretId) {
-        checkNotNull(secretId, "secretId was not specified");
-        this.secretId = secretId;
+        this.secretId = Objects.requireNonNull(secretId, "secretId was not specified");
         return this;
     }
 

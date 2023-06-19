@@ -1,8 +1,7 @@
 package com.github.dockerjava.core.command;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.util.Map;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dockerjava.api.command.CommitCmd;
@@ -90,8 +89,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     @Override
     public CommitCmdImpl withContainerId(String containerId) {
-        checkNotNull(containerId, "containerId was not specified");
-        this.containerId = containerId;
+        this.containerId = Objects.requireNonNull(containerId, "containerId was not specified");
         return this;
     }
 
@@ -140,8 +138,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     @Override
     public CommitCmdImpl withCmd(String... cmd) {
-        checkNotNull(cmd, "cmd was not specified");
-        this.cmd = cmd;
+        this.cmd = Objects.requireNonNull(cmd, "cmd was not specified");
         return this;
     }
 
@@ -153,29 +150,25 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     @Override
     public CommitCmdImpl withAuthor(String author) {
-        checkNotNull(author, "author was not specified");
-        this.author = author;
+        this.author = Objects.requireNonNull(author, "author was not specified");
         return this;
     }
 
     @Override
     public CommitCmdImpl withMessage(String message) {
-        checkNotNull(message, "message was not specified");
-        this.message = message;
+        this.message = Objects.requireNonNull(message, "message was not specified");
         return this;
     }
 
     @Override
     public CommitCmdImpl withTag(String tag) {
-        checkNotNull(tag, "tag was not specified");
-        this.tag = tag;
+        this.tag = Objects.requireNonNull(tag, "tag was not specified");
         return this;
     }
 
     @Override
     public CommitCmdImpl withRepository(String repository) {
-        checkNotNull(repository, "repository was not specified");
-        this.repository = repository;
+        this.repository = Objects.requireNonNull(repository, "repository was not specified");
         return this;
     }
 
@@ -192,8 +185,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     @Override
     public CommitCmdImpl withEnv(String... env) {
-        checkNotNull(env, "env was not specified");
-        this.env = env;
+        this.env = Objects.requireNonNull(env, "env was not specified");
         return this;
     }
 
@@ -215,8 +207,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     @Override
     public CommitCmdImpl withExposedPorts(ExposedPorts exposedPorts) {
-        checkNotNull(exposedPorts, "exposedPorts was not specified");
-        this.exposedPorts = exposedPorts;
+        this.exposedPorts = Objects.requireNonNull(exposedPorts, "exposedPorts was not specified");
         return this;
     }
 
@@ -227,8 +218,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     @Override
     public CommitCmdImpl withHostname(String hostname) {
-        checkNotNull(hostname, "hostname was not specified");
-        this.hostname = hostname;
+        this.hostname = Objects.requireNonNull(hostname, "hostname was not specified");
         return this;
     }
 
@@ -239,8 +229,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     @Override
     public CommitCmdImpl withMemory(Integer memory) {
-        checkNotNull(memory, "memory was not specified");
-        this.memory = memory;
+        this.memory = Objects.requireNonNull(memory, "memory was not specified");
         return this;
     }
 
@@ -251,8 +240,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     @Override
     public CommitCmdImpl withMemorySwap(Integer memorySwap) {
-        checkNotNull(memorySwap, "memorySwap was not specified");
-        this.memorySwap = memorySwap;
+        this.memorySwap = Objects.requireNonNull(memorySwap, "memorySwap was not specified");
         return this;
     }
 
@@ -263,8 +251,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     @Override
     public CommitCmdImpl withOpenStdin(Boolean openStdin) {
-        checkNotNull(openStdin, "openStdin was not specified");
-        this.openStdin = openStdin;
+        this.openStdin = Objects.requireNonNull(openStdin, "openStdin was not specified");
         return this;
     }
 
@@ -275,8 +262,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     @Override
     public CommitCmdImpl withPortSpecs(String... portSpecs) {
-        checkNotNull(portSpecs, "portSpecs was not specified");
-        this.portSpecs = portSpecs;
+        this.portSpecs = Objects.requireNonNull(portSpecs, "portSpecs was not specified");
         return this;
     }
 
@@ -309,8 +295,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     @Override
     public CommitCmdImpl withUser(String user) {
-        checkNotNull(user, "user was not specified");
-        this.user = user;
+        this.user = Objects.requireNonNull(user, "user was not specified");
         return this;
     }
 
@@ -321,8 +306,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     @Override
     public CommitCmdImpl withVolumes(Volumes volumes) {
-        checkNotNull(volumes, "volumes was not specified");
-        this.volumes = volumes;
+        this.volumes = Objects.requireNonNull(volumes, "volumes was not specified");
         return this;
     }
 
@@ -333,8 +317,7 @@ public class CommitCmdImpl extends AbstrDockerCmd<CommitCmd, String> implements 
 
     @Override
     public CommitCmdImpl withWorkingDir(String workingDir) {
-        checkNotNull(workingDir, "workingDir was not specified");
-        this.workingDir = workingDir;
+        this.workingDir = Objects.requireNonNull(workingDir, "workingDir was not specified");
         return this;
     }
 
