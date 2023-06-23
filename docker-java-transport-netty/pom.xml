@@ -17,7 +17,46 @@
 
 	<properties>
 		<automatic.module.name>com.github.dockerjava.transport.netty</automatic.module.name>
+		<osmaven.version>1.7.1</osmaven.version>
 	</properties>
+
+	<profiles>
+		<profile>
+			<id>mac</id>
+			<activation>
+				<os>
+					<!-- Automatically active on mac with native extensions -->
+					<family>mac</family>
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>io.netty</groupId>
+					<artifactId>netty-transport-native-kqueue</artifactId>
+					<version>${netty.version}</version>
+					<classifier>${os.detected.classifier}</classifier>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>linux</id>
+			<activation>
+				<os>
+					<!-- Automatically active on linux with native extensions -->
+					<family>unix</family>
+					<name>linux</name>
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>io.netty</groupId>
+					<artifactId>netty-transport-native-epoll</artifactId>
+					<version>${netty.version}</version>
+					<classifier>${os.detected.classifier}</classifier>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 
 	<dependencies>
 		<dependency>
@@ -25,37 +64,32 @@
 			<artifactId>docker-java-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-codec-http</artifactId>
-            <version>${netty.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-handler</artifactId>
-            <version>${netty.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-handler-proxy</artifactId>
-            <version>${netty.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-transport-native-epoll</artifactId>
-            <version>${netty.version}</version>
-            <classifier>linux-x86_64</classifier>
-        </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-transport-native-kqueue</artifactId>
-            <version>${netty.version}</version>
-            <classifier>osx-x86_64</classifier>
-        </dependency>
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-codec-http</artifactId>
+			<version>${netty.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-handler</artifactId>
+			<version>${netty.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-handler-proxy</artifactId>
+			<version>${netty.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
+		<extensions>
+			<!-- Use os-maven-plugin extension similar to netty-all to support native dependencies classifier -->
+			<extension>
+				<groupId>kr.motd.maven</groupId>
+				<artifactId>os-maven-plugin</artifactId>
+				<version>${osmaven.version}</version>
+			</extension>
+		</extensions>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.felix</groupId>
