@@ -448,7 +448,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
                             new File(this.dockerConfig), ctx));
             final Optional<File> dockerContextTLSFile =
                 Optional.ofNullable(context)
-                    .flatMap(ctx -> DockerContextMetaFile.resolveContextTLSFile(new File(dockerConfig), ctx));
+                    .flatMap(ctx -> DockerContextMetaFile.resolveContextTLSFile(new File(this.dockerConfig), ctx));
 
             if (dockerContextMetaFile.isPresent()) {
                 final Optional<DockerContextMetaFile.Endpoints.Docker> dockerEndpoint =
