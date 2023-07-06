@@ -446,6 +446,9 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
                 Optional.ofNullable(context)
                     .flatMap(ctx -> DockerContextMetaFile.resolveContextMetaFile(DockerClientConfig.getDefaultObjectMapper(),
                             new File(this.dockerConfig), ctx));
+            final Optional<File> dockerContextTLSFile =
+                Optional.ofNullable(context)
+                    .flatMap(ctx -> DockerContextMetaFile.resolveContextTLSFile(new File(this.dockerConfig), ctx));
 
             if (dockerContextMetaFile.isPresent()) {
                 final Optional<DockerContextMetaFile.Endpoints.Docker> dockerEndpoint =
@@ -453,14 +456,10 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
                 if (this.dockerHost == null) {
                     this.dockerHost = dockerEndpoint.map(endpoint -> endpoint.host).map(URI::create).orElse(null);
                 }
-                if (this.dockerCertPath == null) {
-                    this.dockerCertPath = dockerContextMetaFile.map(metaFile -> metaFile.storage)
-                        .map(storage -> storage.tlsPath)
-                        .filter(file -> new File(file).exists()).orElse(null);
-                    if (this.dockerCertPath != null) {
-                        this.dockerTlsVerify = dockerEndpoint.map(endpoint -> !endpoint.skipTLSVerify).orElse(true);
-                    }
-                }
+            }
+            if (dockerContextTLSFile.isPresent() && this.dockerCertPath == null) {
+                this.dockerCertPath = dockerContextTLSFile.get().getAbsolutePath();
+                this.dockerTlsVerify = true;
             }
         }
 
