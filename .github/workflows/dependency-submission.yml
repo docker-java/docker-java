@@ -1,0 +1,19 @@
+name: Dependency Submission
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  dependency_submission:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 8
+          distribution: temurin
+      - name: Submit Dependency Snapshot
+        uses: advanced-security/maven-dependency-submission-action@v3
