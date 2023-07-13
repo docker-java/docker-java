@@ -164,6 +164,12 @@ public class DockerConfigFileTest {
         assertThat(runTest("idontexist"), is(expected));
     }
 
+    @Test
+    public void validJsonAuthsNull() throws IOException {
+        DockerConfigFile expected = new DockerConfigFile();
+        assertThat(runTest("validJsonAuthsNull"), is(expected));
+    }
+
     private DockerConfigFile runTest(String testFileName) throws IOException {
         return DockerConfigFile.loadConfig(JSONTestHelper.getMapper(), new File(FILESROOT, testFileName).getAbsolutePath());
     }
