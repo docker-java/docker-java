@@ -120,11 +120,11 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
         }
 
         httpClient = HttpClients.custom()
+            .useSystemProperties()
             .setRequestExecutor(new HijackingHttpRequestExecutor(null))
             .setConnectionManager(connectionManager)
             .setDefaultRequestConfig(defaultRequest.build())
             .disableConnectionState()
-            .useSystemProperties()
             .build();
     }
 
