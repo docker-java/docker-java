@@ -59,7 +59,8 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
         SSLConfig sslConfig,
         int maxConnections,
         Duration connectionTimeout,
-        Duration responseTimeout
+        Duration responseTimeout,
+        Duration connectionKeepAlive
     ) {
         Registry<ConnectionSocketFactory> socketFactoryRegistry = createConnectionSocketFactoryRegistry(sslConfig, dockerHost);
 
@@ -118,6 +119,9 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
         }
         if (responseTimeout != null) {
             defaultRequest.setResponseTimeout(responseTimeout.toNanos(), TimeUnit.NANOSECONDS);
+        }
+        if (connectionKeepAlive != null) {
+            defaultRequest.setDefaultKeepAlive(connectionKeepAlive.toNanos(), TimeUnit.NANOSECONDS);
         }
 
         httpClient = HttpClients.custom()
