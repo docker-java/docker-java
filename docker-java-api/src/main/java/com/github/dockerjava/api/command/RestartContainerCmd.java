@@ -8,9 +8,8 @@ import com.github.dockerjava.api.exception.NotFoundException;
 /**
  * Restart a running container.
  *
- * @param timeout
- *            - Timeout in seconds before killing the container. Defaults to 10 seconds.
- *
+ * @param signal  - Signal to send to the container as an integer or string (e.g. SIGINT).
+ * @param timeout - Timeout in seconds before killing the container. Defaults to 10 seconds.
  */
 public interface RestartContainerCmd extends SyncDockerCmd<Void> {
 
@@ -19,6 +18,9 @@ public interface RestartContainerCmd extends SyncDockerCmd<Void> {
 
     @CheckForNull
     Integer getTimeout();
+
+    @CheckForNull
+    String getSignal();
 
     RestartContainerCmd withContainerId(@Nonnull String containerId);
 
@@ -32,9 +34,10 @@ public interface RestartContainerCmd extends SyncDockerCmd<Void> {
 
     RestartContainerCmd withTimeout(Integer timeout);
 
+    RestartContainerCmd withSignal(String signal);
+
     /**
-     * @throws NotFoundException
-     *             No such container
+     * @throws NotFoundException No such container
      */
     @Override
     Void exec() throws NotFoundException;

@@ -7,18 +7,21 @@ import java.util.Objects;
 import com.github.dockerjava.api.command.RestartContainerCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
 
+import javax.annotation.CheckForNull;
+
 /**
  * Restart a running container.
  *
- * @param timeout
- *            - Timeout in seconds before killing the container. Defaults to 10 seconds.
- *
+ * @param signal  - Signal to send to the container as an integer or string (e.g. SIGINT).
+ * @param timeout - Timeout in seconds before killing the container. Defaults to 10 seconds.
  */
 public class RestartContainerCmdImpl extends AbstrDockerCmd<RestartContainerCmd, Void> implements RestartContainerCmd {
 
     private String containerId;
 
     private Integer timeout = 10;
+
+    private String signal;
 
     public RestartContainerCmdImpl(RestartContainerCmd.Exec exec, String containerId) {
         super(exec);
@@ -33,6 +36,12 @@ public class RestartContainerCmdImpl extends AbstrDockerCmd<RestartContainerCmd,
     @Override
     public Integer getTimeout() {
         return timeout;
+    }
+
+    @CheckForNull
+    @Override
+    public String getSignal() {
+        return signal;
     }
 
     @Override
@@ -50,9 +59,15 @@ public class RestartContainerCmdImpl extends AbstrDockerCmd<RestartContainerCmd,
         return this;
     }
 
+    @Override
+    public RestartContainerCmd withSignal(String signal) {
+        Objects.requireNonNull(signal, "signal was not specified");
+        this.signal = signal;
+        return this;
+    }
+
     /**
-     * @throws NotFoundException
-     *             No such container
+     * @throws NotFoundException No such container
      */
     @Override
     public Void exec() throws NotFoundException {
