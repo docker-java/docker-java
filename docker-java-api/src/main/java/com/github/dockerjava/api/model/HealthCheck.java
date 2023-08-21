@@ -35,7 +35,7 @@ public class HealthCheck extends DockerObject implements Serializable {
     private Long interval;
 
     @JsonProperty("Timeout")
-    private Long timeout; // in nanoseconds
+    private Long timeout;
 
     /**
      * @since 1.26
