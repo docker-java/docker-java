@@ -103,7 +103,7 @@ public class HealthCheck extends DockerObject implements Serializable {
         return startPeriod;
     }
 
-    /***
+    /**
      * Set startPeriod in nanoseconds
      * @return this
      */
