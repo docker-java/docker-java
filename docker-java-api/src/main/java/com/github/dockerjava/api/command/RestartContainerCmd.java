@@ -19,6 +19,9 @@ public interface RestartContainerCmd extends SyncDockerCmd<Void> {
     @CheckForNull
     Integer getTimeout();
 
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_42}
+     */
     @CheckForNull
     String getSignal();
 

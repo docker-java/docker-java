@@ -38,6 +38,9 @@ public class RestartContainerCmdImpl extends AbstrDockerCmd<RestartContainerCmd,
         return timeout;
     }
 
+    /**
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_42}
+     */
     @CheckForNull
     @Override
     public String getSignal() {
