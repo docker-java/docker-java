@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static com.github.dockerjava.core.DockerRule.DEFAULT_IMAGE;
+import static com.github.dockerjava.utils.TestUtils.getVersion;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
@@ -55,22 +56,33 @@ public class RestartContainerCmdImplIT extends CmdIT {
             .withRegistryUrl("https://index.docker.io/v1/")
             .build();
         try (DockerClient dockerClient = createDockerClient(dockerClientConfig)) {
-            CreateContainerResponse createCommandResponse = dockerClient
+            if (!getVersion(dockerClient).isGreaterOrEqual(RemoteApiVersion.VERSION_1_42)) {
+                LOG.info("API version is less than 1.42. Skipping test.");
+                return;
+            }
+            String expectedUserSignal = "10";
+            String initialCommandWithTrap = "trap 'echo \"exit trapped\"' %s; sleep 9999;";
+            final String containerId = dockerClient
                 .createContainerCmd(DEFAULT_IMAGE)
                 .withCmd(
                     "/bin/sh",
                     "-c",
-                    "trap 'echo \"exit trapped\"; exit 1' 10; sleep 9999;")
-                .exec();
-            final String containerId = createCommandResponse.getId();
+                    String.format(initialCommandWithTrap, expectedUserSignal))
+                .exec()
+                .getId();
             assertThat(containerId, not(is(emptyString())));
             dockerClient.startContainerCmd(containerId).exec();
 
-            dockerClient.restartContainerCmd(containerId).withSignal("10").exec();
+            // Restart container without signal
+            dockerClient.restartContainerCmd(containerId).exec();
             String log = dockerRule.containerLog(containerId);
+            assertThat(log.trim(), emptyString());
+
+            dockerClient.restartContainerCmd(containerId).withSignal(expectedUserSignal).exec();
+            log = dockerRule.containerLog(containerId);
             assertThat(log.trim(), is("exit trapped"));
 
-            dockerClient.killContainerCmd(containerId).exec();
+            dockerClient.removeContainerCmd(containerId).withForce(true).withRemoveVolumes(true).exec();
         }
     }
 
