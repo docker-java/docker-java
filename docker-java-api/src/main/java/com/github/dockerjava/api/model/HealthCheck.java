@@ -32,10 +32,10 @@ public class HealthCheck extends DockerObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("Interval")
-    private Long interval;
+    private Long interval; // in nanoseconds
 
     @JsonProperty("Timeout")
-    private Long timeout;
+    private Long timeout; // in nanoseconds
 
     /**
      * @since 1.26
@@ -53,7 +53,7 @@ public class HealthCheck extends DockerObject implements Serializable {
      * @since 1.26
      */
     @JsonProperty("StartPeriod")
-    private Long startPeriod;
+    private Long startPeriod; // in nanoseconds
 
     public Long getInterval() {
         return interval;
@@ -63,11 +63,19 @@ public class HealthCheck extends DockerObject implements Serializable {
         return timeout;
     }
 
+    /***
+     * Set interval in nanoseconds
+     * @return this
+     */
     public HealthCheck withInterval(Long interval) {
         this.interval = interval;
         return this;
     }
 
+    /***
+     * Set timeout in nanoseconds
+     * @return this
+     */
     public HealthCheck withTimeout(Long timeout) {
         this.timeout = timeout;
         return this;
@@ -95,6 +103,10 @@ public class HealthCheck extends DockerObject implements Serializable {
         return startPeriod;
     }
 
+    /***
+     * Set startPeriod in nanoseconds
+     * @return this
+     */
     public HealthCheck withStartPeriod(Long startPeriod) {
         this.startPeriod = startPeriod;
         return this;
