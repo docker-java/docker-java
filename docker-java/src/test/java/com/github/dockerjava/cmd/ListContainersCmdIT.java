@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static ch.lambdaj.Lambda.filter;
 import static com.github.dockerjava.api.model.HostConfig.newHostConfig;
@@ -243,14 +244,15 @@ public class ListContainersCmdIT extends CmdIT {
     }
 
     @Test
-    public void shouldFilterByExitedStatus() {
+    public void shouldFilterByExitedStatus() throws InterruptedException {
         String containerId = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withCmd("sh", "-c", "sleep 99999")
                 .withLabels(testLabel)
                 .exec()
                 .getId();
         dockerRule.getClient().startContainerCmd(containerId).exec();
-        dockerRule.getClient().killContainerCmd(containerId).exec();
+        dockerRule.getClient().stopContainerCmd(containerId).exec();
+        dockerRule.getClient().waitContainerCmd(containerId).start().awaitCompletion(15, TimeUnit.SECONDS);
 
         List<Container> filteredContainers = dockerRule.getClient().listContainersCmd()
                 .withShowAll(true)
