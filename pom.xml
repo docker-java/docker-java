@@ -67,7 +67,7 @@
 		<slf4j-api.version>1.7.30</slf4j-api.version>
 
 		<bouncycastle.version>1.76</bouncycastle.version>
-		<junixsocket.version>2.6.1</junixsocket.version>
+		<junixsocket.version>2.7.1</junixsocket.version>
 		<guava.version>19.0</guava.version> <!-- todo remove from project -->
 
 		<!-- test dependencies -->
