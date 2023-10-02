@@ -128,7 +128,7 @@ public class InspectContainerResponse extends DockerObject {
         return sizeRootFs;
     }
 
-    public Inte ger getSizeRw() {
+    public Integer getSizeRw() {
         return sizeRw;
     }
 
