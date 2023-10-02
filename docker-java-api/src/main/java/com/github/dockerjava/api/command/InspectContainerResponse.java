@@ -63,7 +63,7 @@ public class InspectContainerResponse extends DockerObject {
     @JsonProperty("SizeRootFs")
     private Integer sizeRootFs;
 
-    @JsonPropertY("SizeRw")
+    @JsonProperty("SizeRw")
     private Integer sizeRw;
 
     @JsonProperty("Image")
