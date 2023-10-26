@@ -6,6 +6,7 @@ import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.core.util.CompressArchiveUtil;
 import com.github.dockerjava.utils.LogContainerTestCallback;
 import org.apache.commons.io.FileUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -148,6 +149,7 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
         assertThat(exitCode, equalTo(0));
     }
 
+    @Ignore("Docker issue https://github.com/moby/moby/issues/46388")
     @Test
     public void copyFileWithUIDGID() throws Exception {
         Path with = Files.createFile(Files.createTempDirectory("copyFileWithUIDGID").resolve("uidgid.with"));
