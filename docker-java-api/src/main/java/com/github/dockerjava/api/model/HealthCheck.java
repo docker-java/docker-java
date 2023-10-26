@@ -65,7 +65,7 @@ public class HealthCheck extends DockerObject implements Serializable {
 
     /**
      * Set interval in nanoseconds
-     * @return this
+     * @return this {@link HealthCheck} instance
      */
     public HealthCheck withInterval(Long interval) {
         this.interval = interval;
