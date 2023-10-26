@@ -74,7 +74,7 @@ public class HealthCheck extends DockerObject implements Serializable {
 
     /**
      * Set timeout in nanoseconds
-     * @return this
+     * @return this {@link HealthCheck} instance
      */
     public HealthCheck withTimeout(Long timeout) {
         this.timeout = timeout;
