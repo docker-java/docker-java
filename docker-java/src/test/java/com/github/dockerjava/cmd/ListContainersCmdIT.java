@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static ch.lambdaj.Lambda.filter;
 import static com.github.dockerjava.api.model.HostConfig.newHostConfig;
@@ -188,16 +189,8 @@ public class ListContainersCmdIT extends CmdIT {
     }
 
     @Test
-    public void testStatusFilter() {
-        String id1, id2;
-        id1 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withCmd("sh", "-c", "sleep 99999")
-                .withLabels(testLabel)
-                .exec()
-                .getId();
-
-        id2 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withCmd("sh", "-c", "sleep 99999")
+    public void shouldFilterByCreatedStatus() {
+        String containerId = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withLabels(testLabel)
                 .exec()
                 .getId();
@@ -208,42 +201,67 @@ public class ListContainersCmdIT extends CmdIT {
                 .withStatusFilter(singletonList("created"))
                 .exec();
 
-        assertThat(filteredContainers.size(), is(2));
-        assertThat(filteredContainers.get(1).getId(), isOneOf(id1, id2));
+        assertThat(filteredContainers.size(), is(1));
+        assertThat(filteredContainers.get(0).getId(), is(containerId));
+    }
 
-        dockerRule.getClient().startContainerCmd(id1).exec();
+    @Test
+    public void shouldFilterByRunningStatus() {
+        String containerId = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+                .withLabels(testLabel)
+                .exec()
+                .getId();
+        dockerRule.getClient().startContainerCmd(containerId).exec();
 
-        filteredContainers = dockerRule.getClient().listContainersCmd()
+        List<Container> filteredContainers = dockerRule.getClient().listContainersCmd()
                 .withShowAll(true)
                 .withLabelFilter(testLabel)
                 .withStatusFilter(singletonList("running"))
                 .exec();
 
         assertThat(filteredContainers.size(), is(1));
-        assertThat(filteredContainers.get(0).getId(), is(id1));
+        assertThat(filteredContainers.get(0).getId(), is(containerId));
+    }
 
-        dockerRule.getClient().pauseContainerCmd(id1).exec();
+    @Test
+    public void shouldFilterByPausedStatus() {
+        String containerId = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+                .withCmd("sh", "-c", "sleep 99999")
+                .withLabels(testLabel)
+                .exec()
+                .getId();
+        dockerRule.getClient().startContainerCmd(containerId).exec();
+        dockerRule.getClient().pauseContainerCmd(containerId).exec();
 
-        filteredContainers = dockerRule.getClient().listContainersCmd()
+        List<Container> filteredContainers = dockerRule.getClient().listContainersCmd()
                 .withShowAll(true)
                 .withLabelFilter(testLabel)
                 .withStatusFilter(singletonList("paused"))
                 .exec();
 
         assertThat(filteredContainers.size(), is(1));
-        assertThat(filteredContainers.get(0).getId(), is(id1));
+        assertThat(filteredContainers.get(0).getId(), is(containerId));
+    }
 
-        dockerRule.getClient().unpauseContainerCmd(id1).exec();
-        dockerRule.getClient().stopContainerCmd(id1).exec();
+    @Test
+    public void shouldFilterByExitedStatus() throws InterruptedException {
+        String containerId = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+                .withCmd("sh", "-c", "sleep 99999")
+                .withLabels(testLabel)
+                .exec()
+                .getId();
+        dockerRule.getClient().startContainerCmd(containerId).exec();
+        dockerRule.getClient().stopContainerCmd(containerId).exec();
+        dockerRule.getClient().waitContainerCmd(containerId).start().awaitCompletion(15, TimeUnit.SECONDS);
 
-        filteredContainers = dockerRule.getClient().listContainersCmd()
+        List<Container> filteredContainers = dockerRule.getClient().listContainersCmd()
                 .withShowAll(true)
                 .withLabelFilter(testLabel)
                 .withStatusFilter(singletonList("exited"))
                 .exec();
 
         assertThat(filteredContainers.size(), is(1));
-        assertThat(filteredContainers.get(0).getId(), is(id1));
+        assertThat(filteredContainers.get(0).getId(), is(containerId));
     }
 
     @Test
