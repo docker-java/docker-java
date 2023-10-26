@@ -105,7 +105,7 @@ public class HealthCheck extends DockerObject implements Serializable {
 
     /**
      * Set startPeriod in nanoseconds
-     * @return this
+     * @return this {@link HealthCheck} instance
      */
     public HealthCheck withStartPeriod(Long startPeriod) {
         this.startPeriod = startPeriod;
