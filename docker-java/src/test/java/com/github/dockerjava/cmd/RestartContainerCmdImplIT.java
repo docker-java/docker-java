@@ -12,12 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static com.github.dockerjava.core.DockerRule.DEFAULT_IMAGE;
-import static com.github.dockerjava.utils.TestUtils.getVersion;
+import static com.github.dockerjava.junit.DockerMatchers.isGreaterOrEqual;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assume.assumeThat;
 
 public class RestartContainerCmdImplIT extends CmdIT {
     public static final Logger LOG = LoggerFactory.getLogger(RestartContainerCmdImplIT.class);
@@ -51,15 +52,13 @@ public class RestartContainerCmdImplIT extends CmdIT {
 
     @Test
     public void restartContainerWithSignal() throws Exception {
+        assumeThat("API version should be >= 1.42", dockerRule, isGreaterOrEqual(RemoteApiVersion.VERSION_1_42));
+
         DefaultDockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder()
             .withApiVersion(RemoteApiVersion.VERSION_1_42)
             .withRegistryUrl("https://index.docker.io/v1/")
             .build();
         try (DockerClient dockerClient = createDockerClient(dockerClientConfig)) {
-            if (!getVersion(dockerClient).isGreaterOrEqual(RemoteApiVersion.VERSION_1_42)) {
-                LOG.info("API version is less than 1.42. Skipping test.");
-                return;
-            }
             String expectedUserSignal = "10";
             String initialCommandWithTrap = "trap 'echo \"exit trapped\"' %s; sleep 9999;";
             final String containerId = dockerClient
