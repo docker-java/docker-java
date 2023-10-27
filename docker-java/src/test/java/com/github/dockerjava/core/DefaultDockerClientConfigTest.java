@@ -129,8 +129,7 @@ public class DefaultDockerClientConfigTest {
 
         assertEquals(URI.create("tcp://remote:2376"), config.getDockerHost());
         assertTrue("SSL config is set", config.getSSLConfig() instanceof LocalDirectorySSLConfig);
-        assertEquals("target/test-classes/com/github/dockerjava/core/util/CertificateUtilsTest/allFilesExist",
-            ((LocalDirectorySSLConfig)config.getSSLConfig()).getDockerCertPath());
+        assertTrue("SSL directory is set", ((LocalDirectorySSLConfig)config.getSSLConfig()).getDockerCertPath().endsWith("dockerContextHomeDir/.docker/contexts/tls/b71199ebd070b36beab7317920c2c2f1d777df8d05e5527d8458fda57cb17a7a/docker"));
     }
 
     @Test

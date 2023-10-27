@@ -6,6 +6,7 @@
       "postgres"
     ],
     "SizeRootFs" : null,
+    "SizeRw" : null,
     "HostConfig" : {
       "KernelMemory" : 0,
       "MemorySwappiness" : -1,

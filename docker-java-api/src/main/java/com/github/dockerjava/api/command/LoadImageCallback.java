@@ -22,7 +22,7 @@ public class LoadImageCallback extends ResultCallbackTemplate<LoadImageCallback,
             this.error = item.getError();
         }
 
-        LOGGER.debug(item.toString());
+        LOGGER.debug("{}", item);
     }
 
     public String awaitMessage() {

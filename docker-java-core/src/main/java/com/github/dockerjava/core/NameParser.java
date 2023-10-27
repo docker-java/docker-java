@@ -22,6 +22,7 @@ public class NameParser {
     private static final int RepositoryNameTotalLengthMax = 255;
 
     private static final String SHA256_SEPARATOR = "@sha256:";
+    private static final String COLON_SEPARATOR = ":";
 
     private static final Pattern RepositoryNameComponentRegexp = Pattern.compile("[a-z0-9]+(?:[._-][a-z0-9]+)*");
 
@@ -106,6 +107,13 @@ public class NameParser {
         String[] nameParts = reposName.split("/", 2);
         if (nameParts.length == 1
                 || (!nameParts[0].contains(".") && !nameParts[0].contains(":") && !nameParts[0].equals("localhost"))) {
+            if (StringUtils.containsIgnoreCase(reposName, SHA256_SEPARATOR)) {
+                reposName = StringUtils.substringBeforeLast(reposName, SHA256_SEPARATOR);
+            }
+
+            if (StringUtils.contains(reposName, COLON_SEPARATOR)) {
+                reposName = StringUtils.substringBeforeLast(reposName, COLON_SEPARATOR);
+            }
             return new HostnameReposName(AuthConfig.DEFAULT_SERVER_ADDRESS, reposName);
         }
 
@@ -117,6 +125,10 @@ public class NameParser {
         }
         if (StringUtils.containsIgnoreCase(reposName, SHA256_SEPARATOR)) {
             reposName = StringUtils.substringBeforeLast(reposName, SHA256_SEPARATOR);
+        }
+
+        if (StringUtils.contains(reposName, COLON_SEPARATOR)) {
+            reposName = StringUtils.substringBeforeLast(reposName, COLON_SEPARATOR);
         }
 
         validateRepoName(reposName);
