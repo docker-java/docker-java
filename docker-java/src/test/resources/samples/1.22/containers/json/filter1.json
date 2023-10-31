@@ -10,6 +10,7 @@
     "Created": 1455662451,
     "Ports": [],
     "SizeRootFs": 1113554,
+    "SizeRw": 0,
     "Labels": {},
     "Status": "Up Less than a second",
     "HostConfig": {

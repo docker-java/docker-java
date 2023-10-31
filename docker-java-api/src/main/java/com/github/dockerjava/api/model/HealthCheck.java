@@ -63,11 +63,19 @@ public class HealthCheck extends DockerObject implements Serializable {
         return timeout;
     }
 
+    /**
+     * Set interval in nanoseconds
+     * @return this {@link HealthCheck} instance
+     */
     public HealthCheck withInterval(Long interval) {
         this.interval = interval;
         return this;
     }
 
+    /**
+     * Set timeout in nanoseconds
+     * @return this {@link HealthCheck} instance
+     */
     public HealthCheck withTimeout(Long timeout) {
         this.timeout = timeout;
         return this;
@@ -95,6 +103,10 @@ public class HealthCheck extends DockerObject implements Serializable {
         return startPeriod;
     }
 
+    /**
+     * Set startPeriod in nanoseconds
+     * @return this {@link HealthCheck} instance
+     */
     public HealthCheck withStartPeriod(Long startPeriod) {
         this.startPeriod = startPeriod;
         return this;

@@ -1,6 +1,7 @@
 package com.github.dockerjava.core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.model.AuthConfig;
@@ -28,7 +29,7 @@ public class DockerConfigFile {
     };
 
     @JsonProperty
-    private final Map<String, AuthConfig> auths;
+    private Map<String, AuthConfig> auths;
 
     @JsonProperty
     private String currentContext;
@@ -44,6 +45,11 @@ public class DockerConfigFile {
     @Nonnull
     public Map<String, AuthConfig> getAuths() {
         return auths;
+    }
+
+    @JsonSetter
+    public void setAuths(Map<String, AuthConfig> authConfigMap) {
+        auths = (authConfigMap == null || authConfigMap.size() == 0) ? new HashMap<>() : authConfigMap;
     }
 
     void addAuthConfig(AuthConfig config) {

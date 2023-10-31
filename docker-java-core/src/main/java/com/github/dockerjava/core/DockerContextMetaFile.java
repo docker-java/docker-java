@@ -18,8 +18,6 @@ public class DockerContextMetaFile {
     @JsonProperty("Endpoints")
     Endpoints endpoints;
 
-    @JsonProperty("Storage")
-    Storage storage;
 
     public static class Endpoints {
         @JsonProperty("docker")
@@ -34,13 +32,6 @@ public class DockerContextMetaFile {
         }
     }
 
-    public static class Storage {
-
-        @JsonProperty("TLSPath")
-        String tlsPath;
-        @JsonProperty("MetadataPath")
-        String metadataPath;
-    }
 
     public static Optional<DockerContextMetaFile> resolveContextMetaFile(ObjectMapper objectMapper, File dockerConfigPath, String context) {
         final File path = dockerConfigPath.toPath()
@@ -50,6 +41,16 @@ public class DockerContextMetaFile {
             .resolve("meta.json")
             .toFile();
         return Optional.ofNullable(loadContextMetaFile(objectMapper, path));
+    }
+
+    public static Optional<File> resolveContextTLSFile(File dockerConfigPath, String context) {
+        final File path = dockerConfigPath.toPath()
+            .resolve("contexts")
+            .resolve("tls")
+            .resolve(metaHashFunction.hashString(context, StandardCharsets.UTF_8).toString())
+            .resolve("docker")
+            .toFile();
+        return  Optional.ofNullable(path).filter(File::exists);
     }
 
     public static DockerContextMetaFile loadContextMetaFile(ObjectMapper objectMapper, File dockerContextMetaFile) {
