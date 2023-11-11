@@ -16,7 +16,9 @@
 	<description>Java API Client for Docker</description>
 
 	<properties>
-		<automatic.module.name>com.github.dockerjava.transport.httpclient5</automatic.module.name>
+		<symbolic.name>com.github.dockerjava.transport.httpclient5</symbolic.name>
+		<bnd.instruction>Export-Package: \
+							com.github.dockerjava.httpclient5.*</bnd.instruction>
 	</properties>
 
 	<dependencies>
@@ -60,17 +62,6 @@
 				<configuration>
 					<!-- TODO remove once this module is released -->
 					<skip>true</skip>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<extensions>true</extensions>
-				<configuration>
-					<instructions>
-						<Export-Package>com.github.dockerjava.httpclient5.*</Export-Package>
-					</instructions>
 				</configuration>
 			</plugin>
 		</plugins>

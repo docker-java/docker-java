@@ -16,7 +16,9 @@
 	<description>Java API Client for Docker</description>
 
 	<properties>
-		<automatic.module.name>com.github.dockerjava.transport.zerodep</automatic.module.name>
+		<symbolic.name>com.github.dockerjava.transport.zerodep</symbolic.name>
+		<bnd.instruction>Export-Package: \
+							com.github.dockerjava.httpclient5</bnd.instruction>
 	</properties>
 
 	<dependencies>
@@ -35,17 +37,6 @@
 				<configuration>
 					<!-- TODO remove once this module is released -->
 					<skip>true</skip>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<extensions>true</extensions>
-				<configuration>
-					<instructions>
-						<Export-Package>com.github.dockerjava.zerodep.*</Export-Package>
-					</instructions>
 				</configuration>
 			</plugin>
 

@@ -16,7 +16,9 @@
 	<description>Java API Client for Docker</description>
 
 	<properties>
-		<automatic.module.name>com.github.dockerjava.core</automatic.module.name>
+		<symbolic.name>com.github.dockerjava.core</symbolic.name>
+		<bnd.instruction>Export-Package: \
+							com.github.dockerjava.core.*</bnd.instruction>
 	</properties>
 
 	<dependencies>
@@ -83,16 +85,6 @@
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<extensions>true</extensions>
-				<configuration>
-					<instructions>
-						<Export-Package>com.github.dockerjava.core.*</Export-Package>
-					</instructions>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
