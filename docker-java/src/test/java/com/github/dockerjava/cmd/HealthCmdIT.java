@@ -3,13 +3,13 @@ package com.github.dockerjava.cmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.HealthState;
 import com.github.dockerjava.api.command.InspectContainerResponse;
-import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.HealthCheck;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -27,11 +27,11 @@ public class HealthCmdIT extends CmdIT {
     private final Logger LOG = LoggerFactory.getLogger(HealthCmdIT.class);
 
     @Test
-    public void healthiness() throws DockerException, Exception {
+    public void healthiness() {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
             .withCmd("nc", "-l",  "-p", "8080")
             .withHealthcheck(new HealthCheck()
-                .withTest(Arrays.asList("sh", "-c", "netstat -ltn | grep 8080"))
+                .withTest(Arrays.asList("CMD", "sh", "-c", "netstat -ltn | grep 8080"))
                 .withInterval(TimeUnit.SECONDS.toNanos(1))
                 .withTimeout(TimeUnit.MINUTES.toNanos(1))
                 .withStartPeriod(TimeUnit.SECONDS.toNanos(30))
@@ -42,7 +42,7 @@ public class HealthCmdIT extends CmdIT {
         assertThat(container.getId(), not(is(emptyString())));
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
-        HealthState healthState = await().atMost(60L, TimeUnit.SECONDS).until(
+        HealthState healthState = await().pollInterval(Duration.ofSeconds(5)).atMost(60L, TimeUnit.SECONDS).until(
             () -> {
                 InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
                 return inspectContainerResponse.getState().getHealth();
@@ -54,13 +54,13 @@ public class HealthCmdIT extends CmdIT {
     }
 
     @Test
-    public void healthiness_startInterval() throws Exception {
+    public void healthiness_startInterval() {
         assumeThat("API version should be >= 1.44", dockerRule, isGreaterOrEqual(RemoteApiVersion.VERSION_1_44));
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
             .withCmd("nc", "-l",  "-p", "8080")
             .withHealthcheck(new HealthCheck()
-                .withTest(Arrays.asList("sh", "-c", "netstat -ltn | grep 8080"))
+                .withTest(Arrays.asList("CMD", "sh", "-c", "netstat -ltn | grep 8080"))
                 .withInterval(TimeUnit.SECONDS.toNanos(1))
                 .withTimeout(TimeUnit.MINUTES.toNanos(1))
                 .withStartPeriod(TimeUnit.SECONDS.toNanos(30))
