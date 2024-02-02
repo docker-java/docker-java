@@ -55,6 +55,12 @@ public class HealthCheck extends DockerObject implements Serializable {
     @JsonProperty("StartPeriod")
     private Long startPeriod;
 
+    /**
+     * @since 1.44
+     */
+    @JsonProperty("StartInterval")
+    private Long startInterval;
+
     public Long getInterval() {
         return interval;
     }
@@ -109,6 +115,19 @@ public class HealthCheck extends DockerObject implements Serializable {
      */
     public HealthCheck withStartPeriod(Long startPeriod) {
         this.startPeriod = startPeriod;
+        return this;
+    }
+
+    public Long getStartInterval() {
+        return startInterval;
+    }
+
+    /**
+     * Set startInterval in nanoseconds
+     * @return this {@link HealthCheck} instance
+     */
+    public HealthCheck withStartInterval(Long startInterval) {
+        this.startInterval = startInterval;
         return this;
     }
 }

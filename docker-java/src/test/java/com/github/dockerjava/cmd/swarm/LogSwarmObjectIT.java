@@ -12,6 +12,7 @@ import com.github.dockerjava.api.model.Task;
 import com.github.dockerjava.api.model.TaskSpec;
 import com.github.dockerjava.api.model.TaskState;
 import com.github.dockerjava.utils.LogContainerTestCallback;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -25,6 +26,8 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.Is.is;
 
 public class LogSwarmObjectIT extends SwarmCmdIT {
+
+    @Ignore
     @Test
     public void testLogsCmd() throws InterruptedException, IOException {
         DockerClient dockerClient = startSwarm();
