@@ -61,10 +61,10 @@ public class InspectContainerResponse extends DockerObject {
     private String id;
 
     @JsonProperty("SizeRootFs")
-    private Long sizeRootFs;
+    private Integer sizeRootFs;
 
     @JsonProperty("SizeRw")
-    private Long sizeRw;
+    private Integer sizeRw;
 
     @JsonProperty("Image")
     private String imageId;
@@ -124,11 +124,11 @@ public class InspectContainerResponse extends DockerObject {
         return id;
     }
 
-    public Long getSizeRootFs() {
+    public Integer getSizeRootFs() {
         return sizeRootFs;
     }
 
-    public Long getSizeRw() {
+    public Integer getSizeRw() {
         return sizeRw;
     }
 
