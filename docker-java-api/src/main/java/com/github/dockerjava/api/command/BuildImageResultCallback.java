@@ -67,14 +67,14 @@ public class BuildImageResultCallback extends ResultCallbackTemplate<BuildImageR
     }
 
     private String getImageId() {
+        if (error != null) {
+            throw new DockerClientException("Could not build image: " + error);
+        }
+
         if (imageId != null) {
             return imageId;
         }
 
-        if (error == null) {
-            throw new DockerClientException("Could not build image");
-        }
-
-        throw new DockerClientException("Could not build image: " + error);
+        throw new DockerClientException("Could not build image");
     }
 }

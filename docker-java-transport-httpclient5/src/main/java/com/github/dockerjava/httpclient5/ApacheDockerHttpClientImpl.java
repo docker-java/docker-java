@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URI;
 import java.time.Duration;
@@ -147,16 +148,30 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
         return socketFactoryRegistryBuilder
             .register("tcp", PlainConnectionSocketFactory.INSTANCE)
             .register("http", PlainConnectionSocketFactory.INSTANCE)
-            .register("unix", new PlainConnectionSocketFactory() {
+            .register("unix", new ConnectionSocketFactory() {
                 @Override
                 public Socket createSocket(HttpContext context) throws IOException {
                     return UnixSocket.get(dockerHost.getPath());
                 }
+
+                @Override
+                public Socket connectSocket(TimeValue timeValue, Socket socket, HttpHost httpHost, InetSocketAddress inetSocketAddress,
+                                            InetSocketAddress inetSocketAddress1, HttpContext httpContext) throws IOException {
+                    return PlainConnectionSocketFactory.INSTANCE.connectSocket(timeValue, socket, httpHost, inetSocketAddress,
+                        inetSocketAddress1, httpContext);
+                }
             })
-            .register("npipe", new PlainConnectionSocketFactory() {
+            .register("npipe", new ConnectionSocketFactory() {
                 @Override
                 public Socket createSocket(HttpContext context) {
                     return new NamedPipeSocket(dockerHost.getPath());
+                }
+
+                @Override
+                public Socket connectSocket(TimeValue timeValue, Socket socket, HttpHost httpHost, InetSocketAddress inetSocketAddress,
+                                            InetSocketAddress inetSocketAddress1, HttpContext httpContext) throws IOException {
+                    return PlainConnectionSocketFactory.INSTANCE.connectSocket(timeValue, socket, httpHost, inetSocketAddress,
+                        inetSocketAddress1, httpContext);
                 }
             })
             .build();
