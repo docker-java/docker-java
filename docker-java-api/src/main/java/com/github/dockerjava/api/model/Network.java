@@ -48,6 +48,9 @@ public class Network extends DockerObject implements Serializable {
     @JsonProperty("Labels")
     public Map<String, String> labels;
 
+    @JsonProperty("Services")
+    private Map<String, NetworkService> services;
+
     public String getId() {
         return id;
     }
@@ -90,6 +93,10 @@ public class Network extends DockerObject implements Serializable {
 
     public Map<String, String> getLabels() {
         return labels;
+    }
+
+    public Map<String, NetworkService> getServices() {
+        return services;
     }
 
     @EqualsAndHashCode
@@ -227,6 +234,74 @@ public class Network extends DockerObject implements Serializable {
 
             public void setNetworkID(String networkID) {
                 this.networkID = networkID;
+            }
+        }
+    }
+
+    @EqualsAndHashCode
+    @ToString
+    public static class NetworkService extends DockerObject implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        @JsonProperty("VIP")
+        private String vip;
+
+        @JsonProperty("Ports")
+        private int[] ports;
+
+        @JsonProperty("LocalLBIndex")
+        private int localLBIndex;
+
+        @JsonProperty("Tasks")
+        private NetworkTask[] tasks;
+
+        public String getVip() {
+            return vip;
+        }
+
+        public int[] getPorts() {
+            return ports;
+        }
+
+        public int getLocalLBIndex() {
+            return localLBIndex;
+        }
+
+        public NetworkTask[] getTasks() {
+            return tasks;
+        }
+
+        @EqualsAndHashCode
+        @ToString
+        public static class NetworkTask extends DockerObject implements Serializable {
+            private static final long serialVersionUID = 1L;
+
+            @JsonProperty("Name")
+            private String name;
+
+            @JsonProperty("EndpointID")
+            private String endpointId;
+
+            @JsonProperty("EndpointIP")
+            private String endpointIp;
+
+            @JsonProperty("Info")
+            private Map<String, String> info;
+
+            public String getName() {
+                return name;
+            }
+
+            public String getEndpointId() {
+                return endpointId;
+            }
+
+            public String getEndpointIp() {
+                return endpointIp;
+            }
+
+            public Map<String, String> getInfo() {
+                return info;
             }
         }
     }

@@ -9,7 +9,7 @@ import java.util.List;
 import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
 import static com.github.dockerjava.utils.TestUtils.findNetwork;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 
 public class InspectNetworkCmdIT extends CmdIT {
 
