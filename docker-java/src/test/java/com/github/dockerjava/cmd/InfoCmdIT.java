@@ -48,6 +48,7 @@ public class InfoCmdIT extends CmdIT {
         assertThat(dockerInfo.getImages(), notNullValue());
         assertThat(dockerInfo.getImages(), greaterThan(0));
         assertThat(dockerInfo.getDebug(), notNullValue());
+        assertThat(dockerInfo.getRuntimes(), notNullValue());
 
         if (isNotSwarm(dockerClient)) {
             assertThat(dockerInfo.getNFd(), greaterThan(0));

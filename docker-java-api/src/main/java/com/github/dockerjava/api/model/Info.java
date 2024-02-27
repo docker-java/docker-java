@@ -235,6 +235,9 @@ public class Info extends DockerObject implements Serializable {
     @JsonProperty("SecurityOptions")
     private List<String> securityOptions;
 
+    @JsonProperty("Runtimes")
+    private Map<String, RuntimeInfo> runtimes;
+
     /**
      * @see #architecture
      */
@@ -1069,5 +1072,12 @@ public class Info extends DockerObject implements Serializable {
 
     public List<String> getSecurityOptions() {
         return securityOptions;
+    }
+
+    /**
+     * @see #runtimes
+     */
+    public Map<String, RuntimeInfo> getRuntimes() {
+        return runtimes;
     }
 }
