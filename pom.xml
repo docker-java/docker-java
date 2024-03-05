@@ -61,7 +61,7 @@
 		<jackson.version>2.10.3</jackson.version>
 		<jackson-jaxrs.version>2.10.3</jackson-jaxrs.version>
 		<httpclient.version>4.5.12</httpclient.version><!-- 4.5.1-4.5.2 broken -->
-		<commons-compress.version>1.21</commons-compress.version>
+		<commons-compress.version>1.26.0</commons-compress.version>
 		<commons-io.version>2.13.0</commons-io.version>
 		<commons-lang3.version>3.12.0</commons-lang3.version>
 		<slf4j-api.version>1.7.30</slf4j-api.version>
