@@ -3,6 +3,7 @@ package com.github.dockerjava.transport;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
@@ -24,7 +25,8 @@ public class UnixSocket extends AbstractSocket {
     public static Socket get(String path) throws IOException {
         try {
             return new UnixSocket(path);
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException |
+                 IllegalAccessException e) {
             //noinspection deprecation
             return DomainSocket.get(path);
         }
@@ -34,7 +36,8 @@ public class UnixSocket extends AbstractSocket {
 
     private final SocketChannel socketChannel;
 
-    private UnixSocket(String path) throws Exception {
+    private UnixSocket(String path) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException,
+        IllegalAccessException, IOException {
         Class<?> unixDomainSocketAddress = Class.forName("java.net.UnixDomainSocketAddress");
         this.socketAddress =
             (SocketAddress) unixDomainSocketAddress.getMethod("of", String.class)
