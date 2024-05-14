@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @since {@link RemoteApiVersion#VERSION_1_24}
  */
 public class DiscreteResourceSpec extends GenericResource<Integer> implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     /**
      * @since 1.24
