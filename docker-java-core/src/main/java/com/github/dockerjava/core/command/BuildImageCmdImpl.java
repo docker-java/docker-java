@@ -72,6 +72,8 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     private Set<String> extraHosts;
 
+    private String version;
+
     public BuildImageCmdImpl(BuildImageCmd.Exec exec) {
         super(exec);
     }
@@ -221,6 +223,11 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @Override
     public Set<String> getExtraHosts() {
         return extraHosts;
+    }
+
+    @Override
+    public String getVersion() {
+        return version;
     }
 
     // setters
@@ -406,6 +413,12 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @Override
     public BuildImageCmd withExtraHosts(Set<String> extraHosts) {
         this.extraHosts = extraHosts;
+        return this;
+    }
+
+    @Override
+    public BuildImageCmd withVersion(String version) {
+        this.version = version;
         return this;
     }
 

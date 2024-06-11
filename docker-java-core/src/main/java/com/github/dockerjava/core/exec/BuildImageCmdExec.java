@@ -55,6 +55,10 @@ public class BuildImageCmdExec extends AbstrAsyncDockerCmdExec<BuildImageCmd, Bu
             webTarget = webTarget.queryParam("dockerfile", dockerFilePath);
         }
 
+        if (command.getVersion() != null) {
+            webTarget = webTarget.queryParam("version", command.getVersion());
+        }
+
         if (command.getTags() != null && !command.getTags().isEmpty()) {
             webTarget = webTarget.queryParamsSet("t", command.getTags());
         } else if (isNotBlank(command.getTag())) {
