@@ -330,11 +330,11 @@ public class ListContainersCmdIT extends CmdIT {
         DockerAssume.assumeNotSwarm(dockerRule.getClient());
 
         dockerRule.getClient().pullImageCmd("busybox")
-                .withTag("1.24")
+                .withTag("1.35")
                 .start()
                 .awaitCompletion();
 
-        dockerRule.getClient().createContainerCmd("busybox:1.24")
+        dockerRule.getClient().createContainerCmd("busybox:1.35")
                 .withLabels(testLabel)
                 .exec();
 
