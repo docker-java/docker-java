@@ -36,7 +36,7 @@ public class PullResponseItem extends ResponseItem {
                 getStatus().contains(IMAGE_UP_TO_DATE) ||
                 getStatus().contains(DOWNLOADED_NEWER_IMAGE) ||
                 getStatus().contains(LEGACY_REGISTRY) ||
-                getStatus().contains(DOWNLOADED_SWARM)||
+                getStatus().contains(DOWNLOADED_SWARM) ||
                 getStatus().contains(ALREADY_EXISTS)
         );
     }
