@@ -5,6 +5,8 @@ import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.core.NameParser.HostnameReposName;
 import com.github.dockerjava.core.NameParser.ReposTag;
+
+import java.util.Map.Entry;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
@@ -128,9 +130,11 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
     }
 
     private static void replaceProperties(Properties properties, Properties replacements) {
-        for (Object objectKey : properties.keySet()) {
-            String key = objectKey.toString();
-            properties.setProperty(key, replaceProperties(properties.getProperty(key), replacements));
+        for (Entry<Object, Object> next : properties.entrySet()) {
+            final String key = next.getKey().toString();
+            // no next.getValue here because it does not have the same semantics as getProperty (defaults handling)
+            final String value = properties.getProperty(key);
+            next.setValue(replaceProperties(value, replacements));
         }
     }
 
