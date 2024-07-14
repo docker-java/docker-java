@@ -5,13 +5,18 @@ import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.ContainerSpec;
+import com.github.dockerjava.api.model.DiscreteResourceSpec;
 import com.github.dockerjava.api.model.EndpointResolutionMode;
 import com.github.dockerjava.api.model.EndpointSpec;
+import com.github.dockerjava.api.model.GenericResource;
 import com.github.dockerjava.api.model.Mount;
+import com.github.dockerjava.api.model.NamedResourceSpec;
 import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.api.model.NetworkAttachmentConfig;
 import com.github.dockerjava.api.model.PortConfig;
 import com.github.dockerjava.api.model.PortConfigProtocol;
+import com.github.dockerjava.api.model.ResourceRequirements;
+import com.github.dockerjava.api.model.ResourceSpecs;
 import com.github.dockerjava.api.model.Service;
 import com.github.dockerjava.api.model.ServiceModeConfig;
 import com.github.dockerjava.api.model.ServiceReplicatedModeOptions;
@@ -21,6 +26,7 @@ import com.github.dockerjava.api.model.TmpfsOptions;
 import com.github.dockerjava.junit.PrivateRegistryRule;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import lombok.val;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Ignore;
@@ -35,6 +41,7 @@ import java.util.List;
 
 import static com.github.dockerjava.core.DockerRule.DEFAULT_IMAGE;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
@@ -180,5 +187,38 @@ public class CreateServiceCmdExecIT extends SwarmCmdIT {
                                 .withImage(DEFAULT_IMAGE))))
                 .withAuthConfig(invalidAuthConfig)
                 .exec();
+    }
+
+    @Test
+    public void testCreateServiceWithGenericResources() throws DockerException {
+        List<GenericResource<?>> genericResources = Lists.newArrayList(
+            new NamedResourceSpec().withKind("gpu").withValue("nonexistent-gpu-brand"),
+            new DiscreteResourceSpec().withKind("arbitrary-resource").withValue(42)
+        );
+        dockerClient.createServiceCmd(new ServiceSpec()
+                .withName(SERVICE_NAME)
+                .withTaskTemplate(new TaskSpec()
+                    .withContainerSpec(new ContainerSpec()
+                        .withImage(DEFAULT_IMAGE))
+                    .withResources(new ResourceRequirements()
+                        .withReservations(new ResourceSpecs()
+                            .withGenericResources(genericResources)))))
+            .exec();
+
+        List<Service> services = dockerClient.listServicesCmd()
+            .withNameFilter(Lists.newArrayList(SERVICE_NAME))
+            .exec();
+
+        assertThat(services, hasSize(1));
+
+        List<GenericResource<?>> createdGenericResources = services.get(0)
+            .getSpec()
+            .getTaskTemplate()
+            .getResources()
+            .getReservations()
+            .getGenericResources();
+        assertThat(createdGenericResources, equalTo(genericResources));
+
+        dockerClient.removeServiceCmd(SERVICE_NAME).exec();
     }
 }
