@@ -24,6 +24,10 @@ public class RestartContainerCmdExec extends AbstrSyncDockerCmdExec<RestartConta
         WebTarget webResource = getBaseResource().path("/containers/{id}/restart").resolveTemplate("id",
                 command.getContainerId());
 
+        if (command.getSignal() != null) {
+            webResource = webResource.queryParam("signal", command.getSignal());
+        }
+
         if (command.getTimeout() != null) {
             webResource = webResource.queryParam("t", String.valueOf(command.getTimeout()));
         }

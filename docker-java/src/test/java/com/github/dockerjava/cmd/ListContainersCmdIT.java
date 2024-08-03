@@ -26,11 +26,12 @@ import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.emptyString;
-import static org.hamcrest.Matchers.isOneOf;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.oneOf;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertEquals;
 import static org.testinfected.hamcrest.jpa.PersistenceMatchers.hasField;
@@ -161,8 +162,8 @@ public class ListContainersCmdIT extends CmdIT {
                 .exec();
 
         assertThat(filteredContainers.size(), is(2));
-        assertThat(filteredContainers.get(0).getId(), isOneOf(id1, id2));
-        assertThat(filteredContainers.get(1).getId(), isOneOf(id1, id2));
+        assertThat(filteredContainers.get(0).getId(), is(oneOf(id1, id2)));
+        assertThat(filteredContainers.get(1).getId(), is(oneOf(id1, id2)));
     }
 
     @Test
@@ -184,8 +185,8 @@ public class ListContainersCmdIT extends CmdIT {
                 .exec();
 
         assertThat(filteredContainers.size(), is(2));
-        assertThat(filteredContainers.get(0).getId(), isOneOf(id1, id2));
-        assertThat(filteredContainers.get(1).getId(), isOneOf(id1, id2));
+        assertThat(filteredContainers.get(0).getId(), is(oneOf(id1, id2)));
+        assertThat(filteredContainers.get(1).getId(), is(oneOf(id1, id2)));
     }
 
     @Test
@@ -219,7 +220,7 @@ public class ListContainersCmdIT extends CmdIT {
                 .withStatusFilter(singletonList("running"))
                 .exec();
 
-        assertThat(filteredContainers.size(), is(1));
+        assertThat(filteredContainers, hasSize(1));
         assertThat(filteredContainers.get(0).getId(), is(containerId));
     }
 
@@ -239,7 +240,7 @@ public class ListContainersCmdIT extends CmdIT {
                 .withStatusFilter(singletonList("paused"))
                 .exec();
 
-        assertThat(filteredContainers.size(), is(1));
+        assertThat(filteredContainers, hasSize(1));
         assertThat(filteredContainers.get(0).getId(), is(containerId));
     }
 
@@ -260,7 +261,7 @@ public class ListContainersCmdIT extends CmdIT {
                 .withStatusFilter(singletonList("exited"))
                 .exec();
 
-        assertThat(filteredContainers.size(), is(1));
+        assertThat(filteredContainers, hasSize(1));
         assertThat(filteredContainers.get(0).getId(), is(containerId));
     }
 
@@ -289,7 +290,7 @@ public class ListContainersCmdIT extends CmdIT {
                 .withVolumeFilter(singletonList("TestFilterVolume"))
                 .exec();
 
-        assertThat(filteredContainers.size(), is(1));
+        assertThat(filteredContainers, hasSize(1));
         assertThat(filteredContainers.get(0).getId(), is(id));
     }
 
@@ -329,11 +330,11 @@ public class ListContainersCmdIT extends CmdIT {
         DockerAssume.assumeNotSwarm(dockerRule.getClient());
 
         dockerRule.getClient().pullImageCmd("busybox")
-                .withTag("1.24")
+                .withTag("1.35")
                 .start()
                 .awaitCompletion();
 
-        dockerRule.getClient().createContainerCmd("busybox:1.24")
+        dockerRule.getClient().createContainerCmd("busybox:1.35")
                 .withLabels(testLabel)
                 .exec();
 
