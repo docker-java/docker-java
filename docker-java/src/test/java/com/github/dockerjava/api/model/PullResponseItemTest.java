@@ -30,6 +30,14 @@ import static org.junit.Assert.assertTrue;
  */
 public class PullResponseItemTest {
     @Test
+    public void imageAlreadyExists() throws IOException {
+        PullResponseItem response = testRoundTrip(PullResponseJSONSamples.pullImageResponse_alreadyExists,
+                PullResponseItem.class);
+        assertTrue(response.isPullSuccessIndicated());
+        assertFalse(response.isErrorIndicated());
+    }
+
+    @Test
     public void pullNewerImage() throws IOException {
         PullResponseItem response = testRoundTrip(PullResponseJSONSamples.pullImageResponse_newerImage,
                 PullResponseItem.class);

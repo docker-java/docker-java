@@ -10,6 +10,7 @@ import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
 import static com.github.dockerjava.utils.TestUtils.findNetwork;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
 
 public class InspectNetworkCmdIT extends CmdIT {
 
@@ -28,5 +29,6 @@ public class InspectNetworkCmdIT extends CmdIT {
         assertThat(network.getDriver(), equalTo(expected.getDriver()));
         assertThat(network.getIpam().getConfig().get(0).getSubnet(), equalTo(expected.getIpam().getConfig().get(0).getSubnet()));
         assertThat(network.getIpam().getDriver(), equalTo(expected.getIpam().getDriver()));
+        assertThat(network.getCreated().getTime(), greaterThan(0L));
     }
 }
