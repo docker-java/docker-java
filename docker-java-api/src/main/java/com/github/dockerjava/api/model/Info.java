@@ -97,6 +97,12 @@ public class Info extends DockerObject implements Serializable {
     @JsonProperty("LoggingDriver")
     private String loggingDriver;
 
+    @JsonProperty("CgroupDriver")
+    private String cGroupDriver;
+
+    @JsonProperty("CgroupVersion")
+    private String cGroupVersion;
+
     /**
      * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_20}
      */
@@ -487,10 +493,42 @@ public class Info extends DockerObject implements Serializable {
     }
 
     /**
+     * @see #cGroupDriver
+     */
+    @CheckForNull
+    public String getCGroupDriver() {
+        return cGroupDriver;
+    }
+
+    /**
+     * @see #cGroupVersion
+     */
+    @CheckForNull
+    public String getCGroupVersion() {
+        return cGroupVersion;
+    }
+
+    /**
      * @see #loggingDriver
      */
     public Info withLoggingDriver(String loggingDriver) {
         this.loggingDriver = loggingDriver;
+        return this;
+    }
+
+    /**
+     * @see #cGroupDriver
+     */
+    public Info withCGroupDriver(String cGroupDriver) {
+        this.cGroupDriver = cGroupDriver;
+        return this;
+    }
+
+    /**
+     * @see #cGroupVersion
+     */
+    public Info withCGroupVersion(String cGroupVersion) {
+        this.cGroupVersion = cGroupVersion;
         return this;
     }
 
