@@ -182,6 +182,9 @@ public class ResponseItem extends DockerObject implements Serializable {
         @JsonProperty("Digest")
         private String digest;
 
+        @JsonProperty("ID")
+        private String id;
+
         @CheckForNull
         public Integer getSize() {
             return size;
@@ -195,6 +198,11 @@ public class ResponseItem extends DockerObject implements Serializable {
         @CheckForNull
         public String getDigest() {
             return digest;
+        }
+
+        @CheckForNull
+        public String getId() {
+            return id;
         }
     }
 }

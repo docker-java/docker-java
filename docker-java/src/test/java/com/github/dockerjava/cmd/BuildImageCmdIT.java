@@ -241,6 +241,22 @@ public class BuildImageCmdIT extends CmdIT {
     }
 
     @Test
+    public void withBuildKit() {
+        File baseDir = fileFromBuildTestResource("mount");
+
+        String imageId = dockerRule.getClient()
+            .buildImageCmd(baseDir)
+            .withNoCache(true)
+            .withVersion("2")
+            .start()
+            .awaitImageId();
+
+        InspectImageResponse inspectImageResponse = dockerRule.getClient().inspectImageCmd(imageId).exec();
+        assertThat(inspectImageResponse, not(nullValue()));
+        LOG.info("Image Inspect: {}", inspectImageResponse.toString());
+    }
+
+    @Test
     public void buildArgs() {
         File baseDir = fileFromBuildTestResource("buildArgs");
 

@@ -3,6 +3,7 @@ package com.github.dockerjava.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import java.util.Objects;
 
 /**
  * Represents a build response stream item
@@ -20,6 +21,11 @@ public class BuildResponseItem extends ResponseItem {
      */
     @JsonIgnore
     public boolean isBuildSuccessIndicated() {
+        // checking the new format
+        if (Objects.equals(getId(), "moby.image.id")) {
+            return true;
+        }
+
         if (isErrorIndicated() || getStream() == null) {
             return false;
         }
@@ -31,6 +37,10 @@ public class BuildResponseItem extends ResponseItem {
     public String getImageId() {
         if (!isBuildSuccessIndicated()) {
             return null;
+        }
+
+        if (Objects.equals(getId(), "moby.image.id")) {
+            return getAux().getId().replaceFirst(SHA256, "").trim();
         }
 
         if (getStream().startsWith(SHA256)) {
