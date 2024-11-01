@@ -7,10 +7,10 @@ import com.github.dockerjava.transport.UnixSocket;
 
 import org.apache.hc.client5.http.SystemDefaultDnsResolver;
 import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
+import org.apache.hc.client5.http.config.ConnectionConfig;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.DefaultSchemePortResolver;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.io.DefaultHttpClientConnectionOperator;
 import org.apache.hc.client5.http.impl.io.ManagedHttpClientConnectionFactory;
@@ -18,6 +18,7 @@ import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
 import org.apache.hc.client5.http.io.HttpClientConnectionOperator;
 import org.apache.hc.client5.http.ssl.DefaultClientTlsStrategy;
 import org.apache.hc.client5.http.ssl.TlsSocketStrategy;
+import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.ConnectionClosedException;
 import org.apache.hc.core5.http.ContentLengthStrategy;
 import org.apache.hc.core5.http.Header;
@@ -25,12 +26,12 @@ import org.apache.hc.core5.http.HttpHeaders;
 import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.http.NameValuePair;
 import org.apache.hc.core5.http.impl.DefaultContentLengthStrategy;
-import org.apache.hc.core5.http.impl.io.EmptyInputStream;
 import org.apache.hc.core5.http.io.SocketConfig;
 import org.apache.hc.core5.http.io.entity.ByteArrayEntity;
+import org.apache.hc.core5.http.io.entity.EmptyInputStream;
 import org.apache.hc.core5.http.io.entity.InputStreamEntity;
-import org.apache.hc.core5.http.protocol.BasicHttpContext;
 import org.apache.hc.core5.http.protocol.HttpContext;
+import org.apache.hc.core5.http.protocol.HttpCoreContext;
 import org.apache.hc.core5.net.URIAuthority;
 import org.apache.hc.core5.util.TimeValue;
 import org.apache.hc.core5.util.Timeout;
@@ -119,21 +120,19 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
                 .setSoTimeout(Timeout.ZERO_MILLISECONDS)
                 .build()
         );
-        connectionManager.setValidateAfterInactivity(TimeValue.NEG_ONE_SECOND);
         connectionManager.setMaxTotal(maxConnections);
         connectionManager.setDefaultMaxPerRoute(maxConnections);
-        RequestConfig.Builder defaultRequest = RequestConfig.custom();
-        if (connectionTimeout != null) {
-            defaultRequest.setConnectTimeout(connectionTimeout.toNanos(), TimeUnit.NANOSECONDS);
-        }
-        if (responseTimeout != null) {
-            defaultRequest.setResponseTimeout(responseTimeout.toNanos(), TimeUnit.NANOSECONDS);
-        }
+        connectionManager.setDefaultConnectionConfig(ConnectionConfig.custom()
+            .setValidateAfterInactivity(TimeValue.NEG_ONE_SECOND)
+            .setConnectTimeout(connectionTimeout != null ? Timeout.of(connectionTimeout.toNanos(), TimeUnit.NANOSECONDS) : null)
+            .build());
 
         httpClient = HttpClients.custom()
             .setRequestExecutor(new HijackingHttpRequestExecutor(null))
             .setConnectionManager(connectionManager)
-            .setDefaultRequestConfig(defaultRequest.build())
+            .setDefaultRequestConfig(RequestConfig.custom()
+                .setResponseTimeout(responseTimeout != null ? Timeout.of(responseTimeout.toNanos(), TimeUnit.NANOSECONDS) : null)
+                .build())
             .disableConnectionState()
             .build();
     }
@@ -163,7 +162,7 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
 
     @Override
     public Response execute(Request request) {
-        HttpContext context = new BasicHttpContext();
+        HttpContext context = new HttpCoreContext();
         HttpUriRequestBase httpUriRequest = new HttpUriRequestBase(request.method(), URI.create(pathPrefix + request.path()));
         httpUriRequest.setScheme(host.getSchemeName());
         httpUriRequest.setAuthority(new URIAuthority(host.getHostName(), host.getPort()));
@@ -187,7 +186,7 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
         }
 
         try {
-            CloseableHttpResponse response = httpClient.execute(host, httpUriRequest, context);
+            ClassicHttpResponse response = httpClient.executeOpen(host, httpUriRequest, context);
 
             return new ApacheResponse(httpUriRequest, response);
         } catch (IOException e) {
@@ -206,9 +205,9 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
 
         private final HttpUriRequestBase request;
 
-        private final CloseableHttpResponse response;
+        private final ClassicHttpResponse response;
 
-        ApacheResponse(HttpUriRequestBase httpUriRequest, CloseableHttpResponse response) {
+        ApacheResponse(HttpUriRequestBase httpUriRequest, ClassicHttpResponse response) {
             this.request = httpUriRequest;
             this.response = response;
         }
