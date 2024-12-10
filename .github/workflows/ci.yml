@@ -16,7 +16,7 @@ jobs:
           - { name: "default", javaVersion: 17 }
           - { name: "default", javaVersion: 21 }
           - { name: "over TCP", dockerHost: "tcp://127.0.0.1:2375", javaVersion: 8 }
-          - { name: "Docker 19.03.9", dockerVersion: "5:19.03.9~3-0~ubuntu-focal", javaVersion: 8 }
+          - { name: "Docker 19.03.9", dockerVersion: "v19.03.9", javaVersion: 8 }
 
     steps:
       - uses: actions/checkout@v4
@@ -26,10 +26,12 @@ jobs:
           java-version: ${{matrix.javaVersion}}
           distribution: temurin
       - name: Configure Docker
+        uses: docker/setup-docker-action@v4
+        with:
+          version: ${{matrix.dockerVersion}}
+          channel: stable
         env:
-          DOCKER_VERSION: ${{matrix.dockerVersion}}
           DOCKER_HOST: ${{matrix.dockerHost}}
-        run: .ci/setup_docker.sh
       - name: Build with Maven
         env:
           DOCKER_HOST: ${{matrix.dockerHost}}
