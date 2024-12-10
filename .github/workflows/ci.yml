@@ -30,8 +30,6 @@ jobs:
         with:
           version: ${{matrix.dockerVersion}}
           channel: stable
-        env:
-          DOCKER_HOST: ${{matrix.dockerHost}}
       - name: Build with Maven
         env:
           DOCKER_HOST: ${{matrix.dockerHost}}
