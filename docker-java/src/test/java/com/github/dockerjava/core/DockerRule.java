@@ -27,7 +27,7 @@ import java.util.Set;
  */
 public class DockerRule extends ExternalResource {
     public static final Logger LOG = LoggerFactory.getLogger(DockerRule.class);
-    public static final String DEFAULT_IMAGE = "busybox:1.36.0";
+    public static final String DEFAULT_IMAGE = "busybox:latest";
 
     private DockerClient dockerClient;
 
