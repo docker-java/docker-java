@@ -12,10 +12,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { name: "default", javaVersion: 8 }
-          - { name: "default", javaVersion: 17 }
-          - { name: "default", javaVersion: 21 }
-          - { name: "over TCP", dockerHost: "tcp://127.0.0.1:2375", javaVersion: 8 }
+          - { name: "default", dockerVersion: "v26.1.0", javaVersion: 8 }
+          - { name: "default", dockerVersion: "v26.1.0", javaVersion: 17 }
+          - { name: "default", dockerVersion: "v26.1.0", javaVersion: 21 }
+          - { name: "over TCP", dockerVersion: "v26.1.0", dockerHost: "tcp://127.0.0.1:2375", javaVersion: 8 }
           - { name: "Docker 19.03.9", dockerVersion: "v19.03.9", javaVersion: 8 }
 
     steps:
