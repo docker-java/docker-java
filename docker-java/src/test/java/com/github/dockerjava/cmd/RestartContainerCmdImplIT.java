@@ -60,7 +60,7 @@ public class RestartContainerCmdImplIT extends CmdIT {
             .build();
         try (DockerClient dockerClient = createDockerClient(dockerClientConfig)) {
             String expectedUserSignal = "10";
-            String initialCommandWithTrap = "trap 'echo \"exit trapped\"' %s; sleep 9999;";
+            String initialCommandWithTrap = "trap 'echo \"exit trapped\"' %s; while :; do sleep 1; done";
             final String containerId = dockerClient
                 .createContainerCmd(DEFAULT_IMAGE)
                 .withCmd(
