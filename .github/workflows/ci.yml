@@ -30,6 +30,10 @@ jobs:
         with:
           version: ${{matrix.dockerVersion}}
           channel: stable
+          daemon-config: |
+            {
+              "hosts": ["unix:///var/run/docker.sock", "tcp://127.0.0.1:2375"]
+            }
       - name: Build with Maven
         env:
           DOCKER_HOST: ${{matrix.dockerHost}}
