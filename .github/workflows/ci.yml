@@ -24,16 +24,15 @@ jobs:
           java-version: ${{matrix.javaVersion}}
           distribution: temurin
       - name: Configure Docker
+        id: setup_docker
         uses: docker/setup-docker-action@v4
         with:
           version: ${{matrix.dockerVersion}}
           channel: stable
       - name: Build with Maven
         env:
-          DOCKER_HOST: ${{matrix.dockerHost}}
-        run: |
-          [[ -z "$DOCKER_HOST" ]] && unset DOCKER_HOST
-          ./mvnw --no-transfer-progress verify
+          DOCKER_HOST: ${{steps.setup_docker.outputs.sock}}
+        run: ./mvnw --no-transfer-progress verify
 
   tcp:
     runs-on: ubuntu-20.04
