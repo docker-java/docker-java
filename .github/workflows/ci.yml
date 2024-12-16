@@ -45,7 +45,7 @@ jobs:
           distribution: temurin
       - name: Configure Docker
         id: setup_docker
-        uses: crazy-max/docker-setup-docker-action@expose-tcp-input
+        uses: docker/setup-docker-action@v4
         with:
           channel: stable
           tcp-port: 2375
