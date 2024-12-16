@@ -53,19 +53,3 @@ jobs:
         env:
           DOCKER_HOST: ${{steps.setup_docker.outputs.tcp}}
         run: ./mvnw --no-transfer-progress verify
-
-  context:
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: 8
-          distribution: temurin
-      - name: Build with Maven
-        env:
-          DOCKER_CONTEXT: setup-docker-action
-        run: |
-          [[ -z "$DOCKER_HOST" ]] && unset DOCKER_HOST
-          ./mvnw --no-transfer-progress verify
