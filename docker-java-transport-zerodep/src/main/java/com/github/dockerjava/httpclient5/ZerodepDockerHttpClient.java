@@ -20,6 +20,8 @@ public final class ZerodepDockerHttpClient extends ApacheDockerHttpClientImpl {
 
         private Duration responseTimeout;
 
+        private Duration connectionKeepAlive;
+
         public Builder dockerHost(URI value) {
             this.dockerHost = Objects.requireNonNull(value, "dockerHost");
             return this;
@@ -45,14 +47,20 @@ public final class ZerodepDockerHttpClient extends ApacheDockerHttpClientImpl {
             return this;
         }
 
+        public Builder connectionKeepAlive(Duration connectionKeepAlive) {
+            this.connectionKeepAlive = connectionKeepAlive;
+            return this;
+        }
+
         public ZerodepDockerHttpClient build() {
             Objects.requireNonNull(dockerHost, "dockerHost");
-            return new ZerodepDockerHttpClient(dockerHost, sslConfig, maxConnections, connectionTimeout, responseTimeout);
+            return new ZerodepDockerHttpClient(dockerHost, sslConfig, maxConnections, connectionTimeout, responseTimeout,
+                connectionKeepAlive);
         }
     }
 
     private ZerodepDockerHttpClient(URI dockerHost, SSLConfig sslConfig, int maxConnections, Duration connectionTimeout,
-        Duration responseTimeout) {
-        super(dockerHost, sslConfig, maxConnections, connectionTimeout, responseTimeout);
+        Duration responseTimeout, Duration connectionKeepAlive) {
+        super(dockerHost, sslConfig, maxConnections, connectionTimeout, responseTimeout, connectionKeepAlive);
     }
 }
