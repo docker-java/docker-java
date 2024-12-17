@@ -100,9 +100,9 @@ public class InspectContainerCmdIT extends CmdIT {
         // TODO check swarm
         if (isNotSwarm(dockerRule.getClient())) {
             assertNotNull(containerInfo.getSizeRootFs());
-            assertTrue(containerInfo.getSizeRootFs().intValue() > 0);
+            assertTrue(containerInfo.getSizeRootFs() > 0L);
             assertNotNull(containerInfo.getSizeRw());
-            assertTrue(containerInfo.getSizeRw().intValue() == 0);
+            assertEquals(0L, containerInfo.getSizeRw().longValue());
         }
     }
 
