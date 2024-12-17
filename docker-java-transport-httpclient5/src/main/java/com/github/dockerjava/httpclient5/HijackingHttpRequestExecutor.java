@@ -44,7 +44,7 @@ class HijackingHttpRequestExecutor extends HttpRequestExecutor {
 
         InputStream hijackedInput = (InputStream) context.getAttribute(HIJACKED_INPUT_ATTRIBUTE);
         if (hijackedInput != null) {
-            return executeHijacked(request, conn, context, hijackedInput);
+            return executeHijacked(request, conn, (HttpCoreContext) context, hijackedInput);
         }
 
         return super.execute(request, conn, informationCallback, context);
@@ -53,12 +53,12 @@ class HijackingHttpRequestExecutor extends HttpRequestExecutor {
     private ClassicHttpResponse executeHijacked(
         ClassicHttpRequest request,
         HttpClientConnection conn,
-        HttpContext context,
+        HttpCoreContext context,
         InputStream hijackedInput
     ) throws HttpException, IOException {
         try {
-            context.setAttribute(HttpCoreContext.SSL_SESSION, conn.getSSLSession());
-            context.setAttribute(HttpCoreContext.CONNECTION_ENDPOINT, conn.getEndpointDetails());
+            context.setSSLSession(conn.getSSLSession());
+            context.setEndpointDetails(conn.getEndpointDetails());
             final ProtocolVersion transportVersion = request.getVersion();
             if (transportVersion != null) {
                 context.setProtocolVersion(transportVersion);
