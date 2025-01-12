@@ -6,6 +6,7 @@ import lombok.ToString;
 
 import javax.annotation.CheckForNull;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
@@ -26,6 +27,12 @@ public class ResourceSpecs extends DockerObject implements Serializable {
      */
     @JsonProperty("NanoCPUs")
     private Long nanoCPUs;
+
+    /**
+     * @since 1.24
+     */
+    @JsonProperty("GenericResources")
+    private List<GenericResource<?>> genericResources;
 
     /**
      * @see #memoryBytes
@@ -56,6 +63,22 @@ public class ResourceSpecs extends DockerObject implements Serializable {
      */
     public ResourceSpecs withNanoCPUs(long nanoCPUs) {
         this.nanoCPUs = nanoCPUs;
+        return this;
+    }
+
+    /**
+     * @see #genericResources
+     */
+    @CheckForNull
+    public List<GenericResource<?>> getGenericResources() {
+        return genericResources;
+    }
+
+    /**
+     * @see #genericResources
+     */
+    public ResourceSpecs withGenericResources(List<GenericResource<?>> genericResources) {
+        this.genericResources = genericResources;
         return this;
     }
 }
