@@ -38,13 +38,13 @@ public class ListTasksCmdExecIT extends SwarmCmdIT {
         CreateServiceResponse response = dockerClient.createServiceCmd(new ServiceSpec()
                 .withName(SERVICE_NAME)
                 .withMode(new ServiceModeConfig().withReplicated(
-                        new ServiceReplicatedModeOptions()
-                                .withReplicas(2)
+                    new ServiceReplicatedModeOptions()
+                        .withReplicas(2)
                 ))
                 .withTaskTemplate(new TaskSpec()
-                        .withContainerSpec(new ContainerSpec()
-                                .withImage(DEFAULT_IMAGE))).withLabels(taskLabels))
-                .exec();
+                    .withContainerSpec(new ContainerSpec()
+                        .withImage(DEFAULT_IMAGE))).withLabels(taskLabels))
+            .exec();
         String serviceId = response.getId();
         //filtering with service id
         List<Task> tasks = await().until(

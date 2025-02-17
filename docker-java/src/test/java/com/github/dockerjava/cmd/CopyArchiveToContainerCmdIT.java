@@ -37,9 +37,9 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
         CompressArchiveUtil.tar(Paths.get(ClassLoader.getSystemResource("testReadFile").toURI()), temp, true, false);
         try (InputStream uploadStream = Files.newInputStream(temp)) {
             dockerRule.getClient()
-                    .copyArchiveToContainerCmd(container.getId())
-                    .withTarInputStream(uploadStream)
-                    .exec();
+                .copyArchiveToContainerCmd(container.getId())
+                .withTarInputStream(uploadStream)
+                .exec();
             assertFileCopied(container);
         }
     }
@@ -48,8 +48,8 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
     public void copyStreamToContainer() throws Exception {
         CreateContainerResponse container = prepareContainerForCopy("2");
         dockerRule.getClient().copyArchiveToContainerCmd(container.getId())
-                .withHostResource(Paths.get(ClassLoader.getSystemResource("testReadFile").toURI()).toString())
-                .exec();
+            .withHostResource(Paths.get(ClassLoader.getSystemResource("testReadFile").toURI()).toString())
+            .exec();
         assertFileCopied(container);
     }
 
@@ -57,7 +57,7 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
     public void copyStreamToContainerTwice() throws Exception {
         CreateContainerResponse container = prepareContainerForCopy("rerun");
         CopyArchiveToContainerCmd copyArchiveToContainerCmd = dockerRule.getClient().copyArchiveToContainerCmd(container.getId())
-                .withHostResource(Paths.get(ClassLoader.getSystemResource("testReadFile").toURI()).toString());
+            .withHostResource(Paths.get(ClassLoader.getSystemResource("testReadFile").toURI()).toString());
         copyArchiveToContainerCmd.exec();
         assertFileCopied(container);
         //run again to make sure no DockerClientException
@@ -66,8 +66,8 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
 
     private CreateContainerResponse prepareContainerForCopy(String method) {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withName("docker-java-itest-copyToContainer" + method)
-                .exec();
+            .withName("docker-java-itest-copyToContainer" + method)
+            .exec();
         LOG.info("Created container: {}", container);
         assertThat(container.getId(), not(isEmptyOrNullString()));
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
@@ -78,18 +78,18 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
     private void assertFileCopied(CreateContainerResponse container) throws IOException {
         try (InputStream response = dockerRule.getClient().copyArchiveFromContainerCmd(container.getId(), "testReadFile").exec()) {
             boolean bytesAvailable = response.read() != -1;
-            assertTrue( "The file was not copied to the container.", bytesAvailable);
+            assertTrue("The file was not copied to the container.", bytesAvailable);
         }
     }
 
     @Test(expected = NotFoundException.class)
     public void copyToNonExistingContainer() throws Exception {
         dockerRule.getClient().copyArchiveToContainerCmd("non-existing")
-                .withHostResource(Paths.get(ClassLoader.getSystemResource("testReadFile").toURI()).toString()).exec();
+            .withHostResource(Paths.get(ClassLoader.getSystemResource("testReadFile").toURI()).toString()).exec();
     }
 
     @Test
-    public void copyDirWithLastAddedTarEntryEmptyDir() throws Exception{
+    public void copyDirWithLastAddedTarEntryEmptyDir() throws Exception {
         // create a temp dir
         Path localDir = Files.createTempDirectory(null);
         localDir.toFile().deleteOnExit();
@@ -102,14 +102,14 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
 
         // create a test container
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withCmd("sleep", "9999")
-                .exec();
+            .withCmd("sleep", "9999")
+            .exec();
         // start the container
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
         // copy data from local dir to container
         dockerRule.getClient().copyArchiveToContainerCmd(container.getId())
-                .withHostResource(localDir.toString())
-                .exec();
+            .withHostResource(localDir.toString())
+            .exec();
 
         // cleanup dir
         FileUtils.deleteDirectory(localDir.toFile());
@@ -120,7 +120,7 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
         // create script file, add permission to execute
         Path scriptPath = Files.createTempFile("run", ".sh");
         boolean executable = scriptPath.toFile().setExecutable(true, false);
-        if (!executable){
+        if (!executable) {
             throw new Exception("Execute permission on file not set!");
         }
         String snippet = "Running script with execute permission.";
@@ -131,20 +131,20 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
         // script to be copied to the container's home dir and then executes it
         String containerCmd = "sleep 3; /home/" + scriptPath.getFileName().toString();
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withName("copyFileWithExecutivePerm")
-                .withCmd("/bin/sh", "-c", containerCmd)
-                .exec();
+            .withName("copyFileWithExecutivePerm")
+            .withCmd("/bin/sh", "-c", containerCmd)
+            .exec();
         // start the container
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
         // copy script to container home dir
         dockerRule.getClient().copyArchiveToContainerCmd(container.getId())
-                .withRemotePath("/home")
-                .withHostResource(scriptPath.toString())
-                .exec();
+            .withRemotePath("/home")
+            .withHostResource(scriptPath.toString())
+            .exec();
         // await exid code
         int exitCode = dockerRule.getClient().waitContainerCmd(container.getId())
-                .start()
-                .awaitStatusCode();
+            .start()
+            .awaitStatusCode();
         // check result
         assertThat(exitCode, equalTo(0));
     }
@@ -161,28 +161,28 @@ public class CopyArchiveToContainerCmdIT extends CmdIT {
         String containerCmd = "while [ ! -f /home/uidgid.with ]; do true; done && stat -c %n:%u /home/uidgid.with /home/uidgid.without";
         Long syncUserUid = 4L; // sync user in busybox uses uid=4
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withName("copyFileWithUIDGID")
-                .withCmd("/bin/sh", "-c", containerCmd)
-                .withUser(syncUserUid.toString())
-                .exec();
+            .withName("copyFileWithUIDGID")
+            .withCmd("/bin/sh", "-c", containerCmd)
+            .withUser(syncUserUid.toString())
+            .exec();
         // start the container
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         dockerRule.getClient().copyArchiveToContainerCmd(container.getId())
-                .withRemotePath("/home/")
-                .withHostResource(without.toString())
-                .withCopyUIDGID(false)
-                .exec();
+            .withRemotePath("/home/")
+            .withHostResource(without.toString())
+            .withCopyUIDGID(false)
+            .exec();
         dockerRule.getClient().copyArchiveToContainerCmd(container.getId())
-                .withRemotePath("/home/")
-                .withHostResource(with.toString())
-                .withCopyUIDGID(true)
-                .exec();
+            .withRemotePath("/home/")
+            .withHostResource(with.toString())
+            .withCopyUIDGID(true)
+            .exec();
 
         // await exit code
         int exitCode = dockerRule.getClient().waitContainerCmd(container.getId())
-                .start()
-                .awaitStatusCode();
+            .start()
+            .awaitStatusCode();
         // check result
         assertThat(exitCode, equalTo(0));
 

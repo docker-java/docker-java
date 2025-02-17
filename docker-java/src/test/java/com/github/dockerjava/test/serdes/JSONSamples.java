@@ -43,7 +43,7 @@ public class JSONSamples {
      * but via {@link TypeReference}
      */
     public static <TClass> TClass testRoundTrip(TClass item, JavaType type)
-            throws IOException, AssertionError {
+        throws IOException, AssertionError {
         String serialized1 = JSONTestHelper.getMapper().writeValueAsString(item);
         JsonNode json1 = JSONTestHelper.getMapper().readTree(serialized1);
 

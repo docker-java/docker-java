@@ -18,7 +18,7 @@ public class SaveImagesCmdIT extends CmdIT {
         try (
             InputStream inputStream = dockerRule.getClient().saveImagesCmd().exec();
             InputStream image = IOUtils.toBufferedInputStream(inputStream)
-        ){
+        ) {
             assertThat(image.read(), not(-1));
         }
 

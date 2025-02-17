@@ -30,23 +30,20 @@
 			<artifactId>docker-java-transport</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
-			<version>3.24.2</version>
+			<version>${assertj-core.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>mockwebserver</artifactId>
-			<version>3.14.9</version>
+			<version>${okhttp.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>testcontainers</artifactId>
-			<version>1.19.1</version>
+			<version>${testcontainers.version}</version>
 		</dependency>
 
 		<dependency>

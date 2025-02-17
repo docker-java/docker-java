@@ -13,16 +13,16 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class RemoveVolumeCmdIT extends CmdIT {
 
-   
+
     @Test(expected = NotFoundException.class)
     public void removeVolume() throws DockerException {
 
         String volumeName = "volume1";
 
         CreateVolumeResponse createVolumeResponse = dockerRule.getClient().createVolumeCmd()
-                .withName(volumeName)
-                .withDriver("local")
-                .withLabels(Collections.singletonMap("is-timelord", "yes")).exec();
+            .withName(volumeName)
+            .withDriver("local")
+            .withLabels(Collections.singletonMap("is-timelord", "yes")).exec();
 
         assertThat(createVolumeResponse.getName(), equalTo(volumeName));
         assertThat(createVolumeResponse.getDriver(), equalTo("local"));

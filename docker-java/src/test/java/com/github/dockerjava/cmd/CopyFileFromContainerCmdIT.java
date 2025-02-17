@@ -33,9 +33,9 @@ public class CopyFileFromContainerCmdIT extends CmdIT {
 
         // TODO extract this into a shared method
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withName(containerName)
-                .withCmd("touch", "/copyFileFromContainer")
-                .exec();
+            .withName(containerName)
+            .withCmd("touch", "/copyFileFromContainer")
+            .exec();
 
         LOG.info("Created container: {}", container);
         assertThat(container.getId(), not(isEmptyOrNullString()));

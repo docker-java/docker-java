@@ -47,9 +47,9 @@ public class EventsCmdIT extends CmdIT {
         EventsTestCallback eventCallback = new EventsTestCallback(expectedEvents);
 
         dockerRule.getClient().eventsCmd()
-                .withSince(startTime)
-                .withUntil(endTime)
-                .exec(eventCallback);
+            .withSince(startTime)
+            .withUntil(endTime)
+            .exec(eventCallback);
 
         List<Event> events = eventCallback.awaitExpectedEvents(30, TimeUnit.SECONDS);
 
@@ -66,8 +66,8 @@ public class EventsCmdIT extends CmdIT {
         EventsTestCallback eventCallback = new EventsTestCallback(expectedEvents);
 
         dockerRule.getClient().eventsCmd()
-                .withSince(startTime)
-                .exec(eventCallback);
+            .withSince(startTime)
+            .exec(eventCallback);
 
         generateEvents();
 
@@ -101,9 +101,9 @@ public class EventsCmdIT extends CmdIT {
         EventsTestCallback eventCallback = new EventsTestCallback(expectedEvents);
 
         dockerRule.getClient().eventsCmd()
-                .withSince(startTime)
-                .withEventFilter("start")
-                .exec(eventCallback);
+            .withSince(startTime)
+            .withEventFilter("start")
+            .exec(eventCallback);
 
         generateEvents();
 

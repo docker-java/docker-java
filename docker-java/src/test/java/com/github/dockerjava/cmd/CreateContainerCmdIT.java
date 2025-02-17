@@ -54,23 +54,23 @@ import java.util.concurrent.TimeUnit;
 import static com.github.dockerjava.api.model.Capability.MKNOD;
 import static com.github.dockerjava.api.model.Capability.NET_ADMIN;
 import static com.github.dockerjava.api.model.HostConfig.newHostConfig;
+import static com.github.dockerjava.core.DockerRule.DEFAULT_IMAGE;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_23;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_24;
 import static com.github.dockerjava.junit.DockerMatchers.isGreaterOrEqual;
 import static com.github.dockerjava.junit.DockerMatchers.mountedVolumes;
-import static com.github.dockerjava.core.DockerRule.DEFAULT_IMAGE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItemInArray;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
@@ -98,7 +98,7 @@ public class CreateContainerCmdIT extends CmdIT {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("env")
-                .withName(containerName).exec();
+            .withName(containerName).exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -113,8 +113,8 @@ public class CreateContainerCmdIT extends CmdIT {
         Volume volume = new Volume("/var/log");
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withVolumes(volume)
-                .withCmd("true").exec();
+            .withVolumes(volume)
+            .withCmd("true").exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -137,7 +137,7 @@ public class CreateContainerCmdIT extends CmdIT {
         Volume volume = new Volume("/srv/test");
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withVolumes(volume)
-                .withCmd("true").exec();
+            .withCmd("true").exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -167,16 +167,16 @@ public class CreateContainerCmdIT extends CmdIT {
 
         // create a running container with bind mounts
         CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withCmd("sleep", "9999")
-                .withName(container1Name)
-                .withHostConfig(newHostConfig()
-                        .withBinds(bind1, bind2))
-                .exec();
+            .withCmd("sleep", "9999")
+            .withName(container1Name)
+            .withHostConfig(newHostConfig()
+                .withBinds(bind1, bind2))
+            .exec();
 
         LOG.info("Created container1 {}", container1.toString());
 
         InspectContainerResponse inspectContainerResponse1 = dockerRule.getClient().inspectContainerCmd(container1.getId())
-                .exec();
+            .exec();
 
         assertThat(Arrays.asList(inspectContainerResponse1.getHostConfig().getBinds()), containsInAnyOrder(bind1, bind2));
 
@@ -184,19 +184,19 @@ public class CreateContainerCmdIT extends CmdIT {
 
         // create a second container with volumes from first container
         CreateContainerResponse container2 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withCmd("sleep", "9999")
-                .withHostConfig(newHostConfig()
-                        .withVolumesFrom(new VolumesFrom(container1Name)))
-                .exec();
+            .withCmd("sleep", "9999")
+            .withHostConfig(newHostConfig()
+                .withVolumesFrom(new VolumesFrom(container1Name)))
+            .exec();
 
         LOG.info("Created container2 {}", container2.toString());
 
         InspectContainerResponse inspectContainerResponse2 = dockerRule.getClient().inspectContainerCmd(container2.getId())
-                .exec();
+            .exec();
 
         // No volumes are created, the information is just stored in .HostConfig.VolumesFrom
         assertThat(inspectContainerResponse2.getHostConfig().getVolumesFrom(),
-                hasItemInArray(new VolumesFrom(container1Name)));
+            hasItemInArray(new VolumesFrom(container1Name)));
         assertThat(inspectContainerResponse1, mountedVolumes(containsInAnyOrder(volume1, volume2)));
 
         // To ensure that the information stored in VolumesFrom really is considered
@@ -210,7 +210,7 @@ public class CreateContainerCmdIT extends CmdIT {
         inspectContainerResponse2 = dockerRule.getClient().inspectContainerCmd(container2.getId()).exec();
 
         assertThat(inspectContainerResponse2.getHostConfig().getVolumesFrom(), hasItemInArray(new VolumesFrom(
-                container1Name)));
+            container1Name)));
 
         assertThat(inspectContainerResponse2, mountedVolumes(containsInAnyOrder(volume1, volume2)));
     }
@@ -220,9 +220,9 @@ public class CreateContainerCmdIT extends CmdIT {
         final String testVariable = "VARIABLE=success";
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withEnv(testVariable)
-                .withCmd("env")
-                .exec();
+            .withEnv(testVariable)
+            .withCmd("env")
+            .exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -244,10 +244,10 @@ public class CreateContainerCmdIT extends CmdIT {
         final String testVariable2 = "VARIABLE2=success2";
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withEnv(testVariable1)
-                .withEnv(testVariable2)
-                .withCmd("env")
-                .exec();
+            .withEnv(testVariable1)
+            .withEnv(testVariable2)
+            .withCmd("env")
+            .exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -270,10 +270,10 @@ public class CreateContainerCmdIT extends CmdIT {
         final String[] testVariables2 = {"VARIABLE3=success3", "VARIABLE4=success4"};
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withEnv(testVariables1)
-                .withEnv(testVariables2)
-                .withCmd("env")
-                .exec();
+            .withEnv(testVariables1)
+            .withEnv(testVariables2)
+            .withCmd("env")
+            .exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -304,9 +304,9 @@ public class CreateContainerCmdIT extends CmdIT {
         final String testVariable2 = "VARIABLE2=success2";
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withEnv(testVariable1, testVariable2)
-                .withCmd("env")
-                .exec();
+            .withEnv(testVariable1, testVariable2)
+            .withCmd("env")
+            .exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -328,9 +328,9 @@ public class CreateContainerCmdIT extends CmdIT {
         final String[] testVariables = {"VARIABLE1=success1", "VARIABLE2=success2"};
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withEnv(testVariables)
-                .withCmd("env")
-                .exec();
+            .withEnv(testVariables)
+            .withCmd("env")
+            .exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -351,7 +351,7 @@ public class CreateContainerCmdIT extends CmdIT {
     public void createContainerWithHostname() throws Exception {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withHostName("docker-java")
-                .withCmd("env").exec();
+            .withCmd("env").exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -371,8 +371,8 @@ public class CreateContainerCmdIT extends CmdIT {
         String containerName = "container_";
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withName(containerName)
-                .withCmd("env").exec();
+            .withName(containerName)
+            .withCmd("env").exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -383,9 +383,9 @@ public class CreateContainerCmdIT extends CmdIT {
         assertThat(inspectContainerResponse.getName(), equalTo("/" + containerName));
 
         dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withName(containerName)
-                .withCmd("env")
-                .exec();
+            .withName(containerName)
+            .withCmd("env")
+            .exec();
     }
 
     @Test
@@ -394,38 +394,38 @@ public class CreateContainerCmdIT extends CmdIT {
         String containerName2 = "container2Withlink_";
 
         CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("sleep", "9999")
-                .withName(containerName1).exec();
+            .withName(containerName1).exec();
         LOG.info("Created container1 {}", container1.toString());
         assertThat(container1.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container1.getId()).exec();
 
         InspectContainerResponse inspectContainerResponse1 = dockerRule.getClient().inspectContainerCmd(container1.getId())
-                .exec();
+            .exec();
         LOG.info("Container1 Inspect: {}", inspectContainerResponse1.toString());
         assertThat(inspectContainerResponse1.getState().getRunning(), is(true));
 
         CreateContainerResponse container2 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withName(containerName2)
-                .withCmd("env")
-                .withHostConfig(newHostConfig()
-                        .withLinks(new Link(containerName1, "container1Link")))
-                .exec();
+            .withCmd("env")
+            .withHostConfig(newHostConfig()
+                .withLinks(new Link(containerName1, "container1Link")))
+            .exec();
         LOG.info("Created container {}", container2.toString());
         assertThat(container2.getId(), not(is(emptyString())));
 
         InspectContainerResponse inspectContainerResponse2 = dockerRule.getClient().inspectContainerCmd(container2.getId())
-                .exec();
+            .exec();
         assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[]{new Link(containerName1,
-                "container1Link")}));
+            "container1Link")}));
     }
 
     @Test
     public void createContainerWithMemorySwappiness() throws DockerException {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withCmd("sleep", "9999")
-                .withHostConfig(newHostConfig()
-                        .withMemorySwappiness(42L))
-                .exec();
+            .withCmd("sleep", "9999")
+            .withHostConfig(newHostConfig()
+                .withMemorySwappiness(42L))
+            .exec();
         assertThat(container.getId(), not(is(emptyString())));
         LOG.info("Created container {}", container.toString());
 
@@ -433,8 +433,8 @@ public class CreateContainerCmdIT extends CmdIT {
         LOG.info("Started container {}", container.toString());
 
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient()
-                .inspectContainerCmd(container.getId())
-                .exec();
+            .inspectContainerCmd(container.getId())
+            .exec();
         LOG.info("Container Inspect: {}", inspectContainerResponse.toString());
         assertSame(42L, inspectContainerResponse.getHostConfig().getMemorySwappiness());
     }
@@ -446,41 +446,41 @@ public class CreateContainerCmdIT extends CmdIT {
         String networkName = "linkNetcustom";
 
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd()
-                .withName(networkName)
-                .withDriver("bridge")
-                .exec();
+            .withName(networkName)
+            .withDriver("bridge")
+            .exec();
 
         assertNotNull(createNetworkResponse.getId());
 
         CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withHostConfig(newHostConfig()
-                        .withNetworkMode(networkName))
-                .withCmd("sleep", "9999")
-                .withName(containerName1)
-                .exec();
+            .withHostConfig(newHostConfig()
+                .withNetworkMode(networkName))
+            .withCmd("sleep", "9999")
+            .withName(containerName1)
+            .exec();
 
         assertThat(container1.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container1.getId()).exec();
 
         InspectContainerResponse inspectContainerResponse1 = dockerRule.getClient().inspectContainerCmd(container1.getId())
-                .exec();
+            .exec();
         LOG.info("Container1 Inspect: {}", inspectContainerResponse1.toString());
         assertThat(inspectContainerResponse1.getState().getRunning(), is(true));
 
         CreateContainerResponse container2 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withHostConfig(newHostConfig()
-                        .withLinks(new Link(containerName1, containerName1 + "Link"))
-                        .withNetworkMode(networkName))
-                .withName(containerName2)
-                .withCmd("env")
-                .exec();
+            .withHostConfig(newHostConfig()
+                .withLinks(new Link(containerName1, containerName1 + "Link"))
+                .withNetworkMode(networkName))
+            .withName(containerName2)
+            .withCmd("env")
+            .exec();
 
         LOG.info("Created container {}", container2.toString());
         assertThat(container2.getId(), not(is(emptyString())));
 
         InspectContainerResponse inspectContainerResponse2 = dockerRule.getClient().inspectContainerCmd(container2.getId())
-                .exec();
+            .exec();
 
         ContainerNetwork linkNet = inspectContainerResponse2.getNetworkSettings().getNetworks().get(networkName);
         assertNotNull(linkNet);
@@ -494,30 +494,30 @@ public class CreateContainerCmdIT extends CmdIT {
         String subnetPrefix = "10.100.101";
 
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd()
-                .withIpam(new Network.Ipam()
-                        .withConfig(new Network.Ipam.Config()
-                                .withSubnet(subnetPrefix + ".0/24")))
-                .withDriver("bridge")
-                .withName(networkName)
-                .exec();
+            .withIpam(new Network.Ipam()
+                .withConfig(new Network.Ipam.Config()
+                    .withSubnet(subnetPrefix + ".0/24")))
+            .withDriver("bridge")
+            .withName(networkName)
+            .exec();
 
         assertNotNull(createNetworkResponse.getId());
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withHostConfig(newHostConfig()
-                        .withNetworkMode(networkName))
-                .withCmd("sleep", "9999")
-                .withName(containerName1)
-                .withIpv4Address(subnetPrefix + ".100")
-                .exec();
+            .withHostConfig(newHostConfig()
+                .withNetworkMode(networkName))
+            .withCmd("sleep", "9999")
+            .withName(containerName1)
+            .withIpv4Address(subnetPrefix + ".100")
+            .exec();
 
         assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient()
-                .inspectContainerCmd(container.getId())
-                .exec();
+            .inspectContainerCmd(container.getId())
+            .exec();
 
         ContainerNetwork customIpNet = inspectContainerResponse.getNetworkSettings().getNetworks().get(networkName);
         assertNotNull(customIpNet);
@@ -531,26 +531,26 @@ public class CreateContainerCmdIT extends CmdIT {
         String networkName = "aliasNet";
 
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd()
-                .withName(networkName)
-                .withDriver("bridge")
-                .exec();
+            .withName(networkName)
+            .withDriver("bridge")
+            .exec();
 
         assertNotNull(createNetworkResponse.getId());
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withHostConfig(newHostConfig()
-                        .withNetworkMode(networkName))
-                .withCmd("sleep", "9999")
-                .withName(containerName1)
-                .withAliases("server")
-                .exec();
+            .withHostConfig(newHostConfig()
+                .withNetworkMode(networkName))
+            .withCmd("sleep", "9999")
+            .withName(containerName1)
+            .withAliases("server")
+            .exec();
 
         assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId())
-                .exec();
+            .exec();
 
         ContainerNetwork aliasNet = inspectContainerResponse.getNetworkSettings().getNetworks().get(networkName);
         assertThat(aliasNet.getAliases(), hasItem("server"));
@@ -560,10 +560,10 @@ public class CreateContainerCmdIT extends CmdIT {
     public void createContainerWithCapAddAndCapDrop() throws DockerException {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withHostConfig(newHostConfig()
-                        .withCapAdd(NET_ADMIN)
-                        .withCapDrop(MKNOD))
-                .exec();
+            .withHostConfig(newHostConfig()
+                .withCapAdd(NET_ADMIN)
+                .withCapDrop(MKNOD))
+            .exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -583,9 +583,9 @@ public class CreateContainerCmdIT extends CmdIT {
         String anotherDnsServer = "8.8.4.4";
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("true")
-                .withHostConfig(newHostConfig()
-                        .withDns(aDnsServer, anotherDnsServer))
-                .exec();
+            .withHostConfig(newHostConfig()
+                .withDns(aDnsServer, anotherDnsServer))
+            .exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -594,15 +594,15 @@ public class CreateContainerCmdIT extends CmdIT {
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
 
         assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getDns()),
-                contains(aDnsServer, anotherDnsServer));
+            contains(aDnsServer, anotherDnsServer));
     }
 
     @Test
     public void createContainerWithEntrypoint() throws DockerException {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withName("containerEntrypoint")
-                .withEntrypoint("sleep", "9999").exec();
+            .withName("containerEntrypoint")
+            .withEntrypoint("sleep", "9999").exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -620,9 +620,9 @@ public class CreateContainerCmdIT extends CmdIT {
         String[] extraHosts = {"dockerhost:127.0.0.1", "otherhost:10.0.0.1"};
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withName("containerextrahosts")
-                .withHostConfig(newHostConfig()
-                        .withExtraHosts(extraHosts)).exec();
+            .withName("containerextrahosts")
+            .withHostConfig(newHostConfig()
+                .withExtraHosts(extraHosts)).exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -631,16 +631,16 @@ public class CreateContainerCmdIT extends CmdIT {
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
 
         assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getExtraHosts()),
-                containsInAnyOrder("dockerhost:127.0.0.1", "otherhost:10.0.0.1"));
+            containsInAnyOrder("dockerhost:127.0.0.1", "otherhost:10.0.0.1"));
     }
 
     @Test
     public void createContainerWithDevices() throws DockerException {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("sleep", "9999")
-                .withHostConfig(newHostConfig()
-                        .withDevices(new Device("rwm", "/dev/nulo", "/dev/zero")))
-                .exec();
+            .withHostConfig(newHostConfig()
+                .withDevices(new Device("rwm", "/dev/nulo", "/dev/zero")))
+            .exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -649,7 +649,7 @@ public class CreateContainerCmdIT extends CmdIT {
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
 
         assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getDevices()), contains(new Device("rwm",
-                "/dev/nulo", "/dev/zero")));
+            "/dev/nulo", "/dev/zero")));
     }
 
     @Test
@@ -665,10 +665,10 @@ public class CreateContainerCmdIT extends CmdIT {
         portBindings.bind(tcp23, Binding.bindPort(baseport + 24));
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("true")
-                .withExposedPorts(tcp22, tcp23)
-                .withHostConfig(newHostConfig()
-                        .withPortBindings(portBindings))
-                .exec();
+            .withExposedPorts(tcp22, tcp23)
+            .withHostConfig(newHostConfig()
+                .withPortBindings(portBindings))
+            .exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -679,13 +679,13 @@ public class CreateContainerCmdIT extends CmdIT {
         assertThat(Arrays.asList(inspectContainerResponse.getConfig().getExposedPorts()), contains(tcp22, tcp23));
 
         assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp22)[0],
-                is(equalTo(Binding.bindPort(baseport + 22))));
+            is(equalTo(Binding.bindPort(baseport + 22))));
 
         assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23)[0],
-                is(equalTo(Binding.bindPort(baseport + 23))));
+            is(equalTo(Binding.bindPort(baseport + 23))));
 
         assertThat(inspectContainerResponse.getHostConfig().getPortBindings().getBindings().get(tcp23)[1],
-                is(equalTo(Binding.bindPort(baseport + 24))));
+            is(equalTo(Binding.bindPort(baseport + 24))));
 
     }
 
@@ -695,8 +695,8 @@ public class CreateContainerCmdIT extends CmdIT {
         String containerName2 = "container2Withlinking_";
 
         CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withCmd("sleep", "9999")
-                .withName(containerName1).exec();
+            .withCmd("sleep", "9999")
+            .withName(containerName1).exec();
 
         LOG.info("Created container1 {}", container1.toString());
         assertThat(container1.getId(), not(is(emptyString())));
@@ -704,7 +704,7 @@ public class CreateContainerCmdIT extends CmdIT {
         dockerRule.getClient().startContainerCmd(container1.getId()).exec();
 
         InspectContainerResponse inspectContainerResponse1 = dockerRule.getClient().inspectContainerCmd(container1.getId())
-                .exec();
+            .exec();
         LOG.info("Container1 Inspect: {}", inspectContainerResponse1.toString());
 
         assertThat(inspectContainerResponse1.getConfig(), is(notNullValue()));
@@ -720,16 +720,16 @@ public class CreateContainerCmdIT extends CmdIT {
         }
 
         CreateContainerResponse container2 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("sleep", "9999")
-                .withName(containerName2)
-                .withHostConfig(newHostConfig()
-                        .withLinks(new Link(containerName1, containerName1 + "Link")))
-                .exec();
+            .withName(containerName2)
+            .withHostConfig(newHostConfig()
+                .withLinks(new Link(containerName1, containerName1 + "Link")))
+            .exec();
 
         LOG.info("Created container2 {}", container2.toString());
         assertThat(container2.getId(), not(is(emptyString())));
 
         InspectContainerResponse inspectContainerResponse2 = dockerRule.getClient().inspectContainerCmd(container2.getId())
-                .exec();
+            .exec();
         LOG.info("Container2 Inspect: {}", inspectContainerResponse2.toString());
 
         assertThat(inspectContainerResponse2.getConfig(), is(notNullValue()));
@@ -737,7 +737,7 @@ public class CreateContainerCmdIT extends CmdIT {
         assertThat(inspectContainerResponse2.getHostConfig(), is(notNullValue()));
         assertThat(inspectContainerResponse2.getHostConfig().getLinks(), is(notNullValue()));
         assertThat(inspectContainerResponse2.getHostConfig().getLinks(), equalTo(new Link[]{new Link(containerName1,
-                containerName1 + "Link")}));
+            containerName1 + "Link")}));
         assertThat(inspectContainerResponse2.getId(), startsWith(container2.getId()));
         assertThat(inspectContainerResponse2.getName(), equalTo("/" + containerName2));
         assertThat(inspectContainerResponse2.getImageId(), not(is(emptyString())));
@@ -750,7 +750,7 @@ public class CreateContainerCmdIT extends CmdIT {
         RestartPolicy restartPolicy = RestartPolicy.onFailureRestart(5);
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("sleep", "9999")
-                .withHostConfig(newHostConfig().withRestartPolicy(restartPolicy)).exec();
+            .withHostConfig(newHostConfig().withRestartPolicy(restartPolicy)).exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -765,7 +765,7 @@ public class CreateContainerCmdIT extends CmdIT {
     public void createContainerWithPidMode() throws DockerException {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("true")
-                .withHostConfig(newHostConfig().withPidMode("host")).exec();
+            .withHostConfig(newHostConfig().withPidMode("host")).exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -786,9 +786,9 @@ public class CreateContainerCmdIT extends CmdIT {
     public void createContainerWithNetworkMode() throws DockerException {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("true")
-                .withHostConfig(newHostConfig()
-                        .withNetworkMode("host"))
-                .exec();
+            .withHostConfig(newHostConfig()
+                .withNetworkMode("host"))
+            .exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -803,7 +803,7 @@ public class CreateContainerCmdIT extends CmdIT {
     public void createContainerWithMacAddress() throws DockerException {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withMacAddress("00:80:41:ae:fd:7e").withCmd("true").exec();
+            .withMacAddress("00:80:41:ae:fd:7e").withCmd("true").exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -820,10 +820,10 @@ public class CreateContainerCmdIT extends CmdIT {
         Ulimit[] ulimits = {new Ulimit("nproc", 709, 1026), new Ulimit("nofile", 1024, 4096)};
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withName(containerName)
-                .withHostConfig(newHostConfig()
-                        .withUlimits(ulimits))
-                .exec();
+            .withName(containerName)
+            .withHostConfig(newHostConfig()
+                .withUlimits(ulimits))
+            .exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -832,7 +832,7 @@ public class CreateContainerCmdIT extends CmdIT {
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
 
         assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getUlimits()),
-                containsInAnyOrder(new Ulimit("nproc", 709, 1026), new Ulimit("nofile", 1024, 4096)));
+            containsInAnyOrder(new Ulimit("nproc", 709, 1026), new Ulimit("nofile", 1024, 4096)));
 
     }
 
@@ -842,10 +842,10 @@ public class CreateContainerCmdIT extends CmdIT {
         Ulimit[] ulimits = {new Ulimit("core", 99999999998L, 99999999999L)};
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withName(containerName)
-                .withHostConfig(newHostConfig()
-                        .withUlimits(ulimits))
-                .exec();
+            .withName(containerName)
+            .withHostConfig(newHostConfig()
+                .withUlimits(ulimits))
+            .exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -854,7 +854,7 @@ public class CreateContainerCmdIT extends CmdIT {
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
 
         assertThat(Arrays.asList(inspectContainerResponse.getHostConfig().getUlimits()),
-                contains(new Ulimit("core", 99999999998L, 99999999999L)));
+            contains(new Ulimit("core", 99999999998L, 99999999999L)));
 
     }
 
@@ -866,7 +866,7 @@ public class CreateContainerCmdIT extends CmdIT {
         labels.put("com.github.dockerjava.Boolean", "true");
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("sleep", "9999")
-                .withLabels(labels).exec();
+            .withLabels(labels).exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -879,8 +879,8 @@ public class CreateContainerCmdIT extends CmdIT {
 
         // swarm adds 3d label
         assertThat(inspectContainerResponse.getConfig().getLabels(), allOf(
-                hasEntry("com.github.dockerjava.null", ""),
-                hasEntry("com.github.dockerjava.Boolean", "true")
+            hasEntry("com.github.dockerjava.null", ""),
+            hasEntry("com.github.dockerjava.Boolean", "true")
         ));
     }
 
@@ -889,9 +889,9 @@ public class CreateContainerCmdIT extends CmdIT {
 
         LogConfig logConfig = new LogConfig(LogConfig.LoggingType.NONE, null);
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withHostConfig(newHostConfig()
-                        .withLogConfig(logConfig))
-                .exec();
+            .withHostConfig(newHostConfig()
+                .withLogConfig(logConfig))
+            .exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -911,11 +911,11 @@ public class CreateContainerCmdIT extends CmdIT {
         Integer signal = 10; // SIGUSR1 in busybox
 
         CreateContainerResponse resp = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withCmd("/bin/sh", "-c", "trap 'echo \"exit trapped 10\"; exit 10' USR1; while true; do sleep 1; done")
-                .withAttachStdin(true)
-                .withTty(true)
-                .withStopSignal(signal.toString())
-                .exec();
+            .withCmd("/bin/sh", "-c", "trap 'echo \"exit trapped 10\"; exit 10' USR1; while true; do sleep 1; done")
+            .withAttachStdin(true)
+            .withTty(true)
+            .withStopSignal(signal.toString())
+            .exec();
         final String containerId = resp.getId();
         assertThat(containerId, not(is(emptyString())));
         dockerRule.getClient().startContainerCmd(containerId).exec();
@@ -933,11 +933,11 @@ public class CreateContainerCmdIT extends CmdIT {
         StringBuilder stringBuilder = new StringBuilder();
         final StringBuilderLogReader callback = new StringBuilderLogReader(stringBuilder);
         dockerRule.getClient().logContainerCmd(containerId)
-                .withStdErr(true)
-                .withStdOut(true)
-                .withTailAll()
-                .exec(callback)
-                .awaitCompletion();
+            .withStdErr(true)
+            .withStdOut(true)
+            .withTailAll()
+            .exec(callback)
+            .awaitCompletion();
 
         String log = callback.builder.toString();
         assertThat(log.trim(), is("exit trapped 10"));
@@ -960,9 +960,9 @@ public class CreateContainerCmdIT extends CmdIT {
     @Test
     public void createContainerWithCgroupParent() throws DockerException {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withHostConfig(newHostConfig()
-                        .withCgroupParent("/parent"))
-                .exec();
+            .withHostConfig(newHostConfig()
+                .withCgroupParent("/parent"))
+            .exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -978,7 +978,7 @@ public class CreateContainerCmdIT extends CmdIT {
     public void createContainerWithShmSize() throws DockerException {
         HostConfig hostConfig = new HostConfig().withShmSize(96 * FileUtils.ONE_MB);
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withHostConfig(hostConfig).withCmd("true").exec();
+            .withHostConfig(hostConfig).withCmd("true").exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -996,7 +996,7 @@ public class CreateContainerCmdIT extends CmdIT {
 
         HostConfig hostConfig = new HostConfig().withPidsLimit(2L);
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withHostConfig(hostConfig).withCmd("true").exec();
+            .withHostConfig(hostConfig).withCmd("true").exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -1015,7 +1015,7 @@ public class CreateContainerCmdIT extends CmdIT {
         Map<String, String> labels = new HashMap<>();
         labels.put("com.example.label", "test");
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd().withName(networkName)
-                .withLabels(labels).withAttachable(true).exec();
+            .withLabels(labels).withAttachable(true).exec();
         String networkId = createNetworkResponse.getId();
         CreateContainerResponse createContainerResponse = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withLabels(labels).withCmd("true").exec();
         String containerId = createContainerResponse.getId();
@@ -1038,8 +1038,8 @@ public class CreateContainerCmdIT extends CmdIT {
         String imgName = REGISTRY.createPrivateImage("create-container-with-valid-auth");
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(imgName)
-                .withAuthConfig(authConfig)
-                .exec();
+            .withAuthConfig(authConfig)
+            .exec();
 
         assertThat(container.getId(), is(notNullValue()));
     }
@@ -1057,13 +1057,13 @@ public class CreateContainerCmdIT extends CmdIT {
         }
 
         dockerRule.getClient().createContainerCmd(imgName)
-                .exec();
+            .exec();
     }
 
     @Test
     public void createContainerWithTmpFs() throws DockerException {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("sleep", "9999")
-                .withHostConfig(new HostConfig().withTmpFs(Collections.singletonMap("/tmp", "rw,noexec,nosuid,size=50m"))).exec();
+            .withHostConfig(new HostConfig().withTmpFs(Collections.singletonMap("/tmp", "rw,noexec,nosuid,size=50m"))).exec();
 
         assertThat(container.getId(), not(is(emptyString())));
 

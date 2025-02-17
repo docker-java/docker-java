@@ -34,11 +34,11 @@ public class LogSwarmObjectIT extends SwarmCmdIT {
         String snippet = "hello world";
         TaskSpec taskSpec = new TaskSpec().withContainerSpec(
                 new ContainerSpec().withImage("busybox").withCommand(Arrays.asList("echo", snippet)))
-                .withRestartPolicy(new ServiceRestartPolicy().withCondition(ServiceRestartCondition.NONE));
+            .withRestartPolicy(new ServiceRestartPolicy().withCondition(ServiceRestartCondition.NONE));
         ServiceSpec serviceSpec = new ServiceSpec()
-                .withMode(new ServiceModeConfig().withReplicated(new ServiceReplicatedModeOptions().withReplicas(1)))
-                .withTaskTemplate(taskSpec)
-                .withName("log-worker");
+            .withMode(new ServiceModeConfig().withReplicated(new ServiceReplicatedModeOptions().withReplicas(1)))
+            .withTaskTemplate(taskSpec)
+            .withName("log-worker");
         String serviceId = dockerClient.createServiceCmd(serviceSpec).exec().getId();
         int since = (int) System.currentTimeMillis() / 1000;
         //wait the service to end

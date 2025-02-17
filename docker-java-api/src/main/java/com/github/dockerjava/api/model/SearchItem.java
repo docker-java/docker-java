@@ -7,9 +7,7 @@ import lombok.ToString;
 import java.io.Serializable;
 
 /**
- *
  * @author Konstantin Pelykh (kpelykh@gmail.com)
- *
  */
 @EqualsAndHashCode
 @ToString

@@ -23,7 +23,6 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- *
  * @author cdancy
  */
 @EqualsAndHashCode
@@ -71,6 +70,7 @@ public class HealthCheck extends DockerObject implements Serializable {
 
     /**
      * Set interval in nanoseconds
+     *
      * @return this {@link HealthCheck} instance
      */
     public HealthCheck withInterval(Long interval) {
@@ -80,6 +80,7 @@ public class HealthCheck extends DockerObject implements Serializable {
 
     /**
      * Set timeout in nanoseconds
+     *
      * @return this {@link HealthCheck} instance
      */
     public HealthCheck withTimeout(Long timeout) {
@@ -111,6 +112,7 @@ public class HealthCheck extends DockerObject implements Serializable {
 
     /**
      * Set startPeriod in nanoseconds
+     *
      * @return this {@link HealthCheck} instance
      */
     public HealthCheck withStartPeriod(Long startPeriod) {
@@ -124,6 +126,7 @@ public class HealthCheck extends DockerObject implements Serializable {
 
     /**
      * Set startInterval in nanoseconds
+     *
      * @return this {@link HealthCheck} instance
      */
     public HealthCheck withStartInterval(Long startInterval) {

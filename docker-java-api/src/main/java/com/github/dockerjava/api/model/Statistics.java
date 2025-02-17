@@ -1,13 +1,12 @@
 package com.github.dockerjava.api.model;
 
-import java.io.Serializable;
-import java.util.Map;
-
-import javax.annotation.CheckForNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import javax.annotation.CheckForNull;
+import java.io.Serializable;
+import java.util.Map;
 
 /**
  * Representation of a Docker statistics.

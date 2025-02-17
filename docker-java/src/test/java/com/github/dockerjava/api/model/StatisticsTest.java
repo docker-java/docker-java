@@ -10,10 +10,10 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import static com.github.dockerjava.test.serdes.JSONSamples.testRoundTrip;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.core.IsEqual.equalTo;
 
 /**
  * @author Yuting Liu
@@ -25,8 +25,8 @@ public class StatisticsTest {
         final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(Statistics.class);
 
         final Statistics statistics = testRoundTrip(RemoteApiVersion.VERSION_1_27,
-                "containers/container/stats/stats1.json",
-                type
+            "containers/container/stats/stats1.json",
+            type
         );
 
         assertThat(statistics.getRead(), equalTo("2017-12-06T00:42:03.8352972Z"));

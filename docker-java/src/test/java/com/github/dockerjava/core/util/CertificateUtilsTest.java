@@ -19,7 +19,7 @@ import static org.hamcrest.core.Is.is;
 
 public class CertificateUtilsTest {
     private static final String baseDir = CertificateUtilsTest.class.getResource(
-            CertificateUtilsTest.class.getSimpleName() + "/").getFile();
+        CertificateUtilsTest.class.getSimpleName() + "/").getFile();
 
     @BeforeClass
     public static void init() {

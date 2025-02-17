@@ -14,9 +14,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
+import static com.github.dockerjava.core.DockerRule.DEFAULT_IMAGE;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_22;
 import static com.github.dockerjava.junit.DockerMatchers.isGreaterOrEqual;
-import static com.github.dockerjava.core.DockerRule.DEFAULT_IMAGE;
 import static com.github.dockerjava.test.serdes.JSONSamples.testRoundTrip;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -35,8 +35,8 @@ public class UpdateContainerCmdIT extends CmdIT {
         assumeThat("API version should be >= 1.22", dockerRule, isGreaterOrEqual(VERSION_1_22));
 
         CreateContainerResponse response = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withCmd("sleep", "9999")
-                .exec();
+            .withCmd("sleep", "9999")
+            .exec();
 
         String containerId = response.getId();
         dockerRule.getClient().startContainerCmd(containerId).exec();
@@ -46,17 +46,17 @@ public class UpdateContainerCmdIT extends CmdIT {
         final Long memory = inspectBefore.getHostConfig().getMemory();
 
         dockerRule.getClient().updateContainerCmd(containerId)
-                .withBlkioWeight(300)
-                .withCpuShares(512)
-                .withCpuPeriod(100000)
-                .withCpuQuota(50000)
+            .withBlkioWeight(300)
+            .withCpuShares(512)
+            .withCpuPeriod(100000)
+            .withCpuQuota(50000)
 //                .withCpusetCpus("0") // depends on env
-                .withCpusetMems("0")
+            .withCpusetMems("0")
 //                .withMemory(209715200L + 2L)
 //                .withMemorySwap(514288000L) Your kernel does not support swap limit capabilities, memory limited without swap.
 //                .withMemoryReservation(209715200L)
 //                .withKernelMemory(52428800) Can not update kernel memory to a running container, please stop it first.
-                .exec();
+            .exec();
 
         // true only on docker toolbox (1.10.1)
 //        assertThat(updateResponse.getWarnings(), hasSize(1));
@@ -85,8 +85,8 @@ public class UpdateContainerCmdIT extends CmdIT {
         final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(UpdateContainerCmdImpl.class);
 
         final UpdateContainerCmdImpl upd = testRoundTrip(VERSION_1_22,
-                "/containers/container/update/docs.json",
-                type
+            "/containers/container/update/docs.json",
+            type
         );
 
         assertThat(upd, notNullValue());

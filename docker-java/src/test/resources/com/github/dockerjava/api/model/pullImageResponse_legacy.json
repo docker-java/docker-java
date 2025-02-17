@@ -1,1 +1,3 @@
-{"status":"docker.com/xxxxcv/ccccxx: this image was pulled from a legacy registry.  Important: This registry version will not be supported in future versions of docker."}
+{
+    "status": "docker.com/xxxxcv/ccccxx: this image was pulled from a legacy registry.  Important: This registry version will not be supported in future versions of docker."
+}

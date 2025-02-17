@@ -21,6 +21,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>net.jcip</groupId>
+			<artifactId>jcip-annotations</artifactId>
+			<version>${jcip-annotations.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>docker-java-core</artifactId>
 			<version>${project.version}</version>
@@ -35,13 +40,11 @@
 			<artifactId>docker-java-transport-netty</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>${slf4j-api.version}</version>
 		</dependency>
-
 		<!-- /// Test /////////////////////////// -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -61,21 +64,18 @@
 			<version>${logback.version}</version>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>${logback.version}</version>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-library</artifactId>
 			<version>${hamcrest.library.version}</version>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>com.googlecode.lambdaj</groupId>
 			<artifactId>lambdaj</artifactId>
@@ -88,14 +88,12 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
 		<dependency>
 			<groupId>org.testinfected.hamcrest-matchers</groupId>
 			<artifactId>jpa-matchers</artifactId>
 			<version>${hamcrest.jpa-matchers}</version>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
@@ -104,29 +102,27 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.google.code.findbugs</groupId>
-			<artifactId>annotations</artifactId>
-			<version>3.0.1u2</version>
-			<scope>provided</scope>
+			<groupId>com.github.spotbugs</groupId>
+			<artifactId>spotbugs-annotations</artifactId>
+			<version>4.9.1</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.13</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.awaitility</groupId>
 			<artifactId>awaitility</artifactId>
-			<version>4.0.1</version>
+			<version>${awaitility.version}</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<!-- Force the version to 2.8.8 to ensure the compatibility with old projects -->
-			<version>2.8.8</version>
+			<version>${jackson.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -134,7 +130,7 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
 			<!-- Force the version to 2.8.8 to ensure the compatibility with old projects -->
-			<version>2.8.8</version>
+			<version>${jackson.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -184,7 +180,8 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Export-Package>!com.github.dockerjava.jaxrs.*,!com.github.dockerjava.netty.*,com.github.dockerjava.*</Export-Package>
+						<Export-Package>!com.github.dockerjava.jaxrs.*,!com.github.dockerjava.netty.*,com.github.dockerjava.*
+						</Export-Package>
 						<Import-Package>org.newsclub.net.unix;resolution:="optional",*</Import-Package>
 					</instructions>
 				</configuration>

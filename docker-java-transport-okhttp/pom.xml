@@ -25,19 +25,16 @@
 			<artifactId>docker-java-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>okhttp</artifactId>
-			<version>3.14.9</version>
+			<version>${okhttp.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>net.java.dev.jna</groupId>
 			<artifactId>jna</artifactId>
-			<version>5.13.0</version>
+			<version>${jna.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>docker-java-transport-tck</artifactId>
@@ -51,6 +48,7 @@
 			<plugin>
 				<groupId>com.github.siom79.japicmp</groupId>
 				<artifactId>japicmp-maven-plugin</artifactId>
+				<version>${japicmp-maven-plugin.version}</version>
 				<configuration>
 					<parameter>
 						<overrideCompatibilityChangeParameters>

@@ -3,18 +3,21 @@
 ## Dependencies
 
 To start using `docker-java` , you need to add at least two dependencies:
+
 1. `com.github.docker-java:docker-java-core` for the `DockerClient`
-1. one of `com.github.docker-java:docker-java-transport-*` to communicate with the Docker daemon. See [Available Transports](./transports.md) for more info.
+1. one of `com.github.docker-java:docker-java-transport-*` to communicate with the Docker daemon.
+   See [Available Transports](./transports.md) for more info.
 
-The latest available version: 
+The latest available version:
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.docker-java/docker-java.svg)](https://mvnrepository.com/artifact/com.github.docker-java/docker-java)
-
 
 ## Instantiating a `DockerClientConfig`
 
-You will need an instance of `DockerClientConfig` to tell the library how to access Docker, which credentials to use to pull from Docker registries, etc etc.
+You will need an instance of `DockerClientConfig` to tell the library how to access Docker, which credentials to use to pull from Docker
+registries, etc etc.
 
 The builder is available and allows you to configure every property of the client:
+
 ```java
 import com.github.dockerjava.core.DockerClientConfig
 import com.github.dockerjava.core.DefaultDockerClientConfig
@@ -85,10 +88,13 @@ In the class path at `/docker-java.properties`
 
 ### Jackson
 
-Should you need to customize the Jackson's `ObjectMapper` used by `docker-java`, you can create your own `DockerClientConfig` and override `DockerClientConfig#getObjectMapper()`.
+Should you need to customize the Jackson's `ObjectMapper` used by `docker-java`, you can create your own `DockerClientConfig` and override
+`DockerClientConfig#getObjectMapper()`.
 
 ## Instantiating a `DockerHttpClient`
+
 Once you decided which transport to use, you will need to instantiate an HTTP client:
+
 ```java
 DockerClientConfig config = ...;
 
@@ -104,6 +110,7 @@ DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
 Please refer to selected transport's builder for other available configuration options (like timeouts).
 
 Once you have an HTTP client, you can make raw requests to the Docker daemon directly:
+
 ```java
 Request request = Request.builder()
     .method(Request.Method.GET)
@@ -119,11 +126,13 @@ try (Response response = httpClient.execute(request)) {
 ## Instantiating a `DockerClient`
 
 To get an instance of `DockerClient`, you need to pass both `DockerClientConfig` and `DockerHttpClient`:
+
 ```java
 DockerClient dockerClient = DockerClientImpl.getInstance(config, httpClient);
 ```
 
 Once you have it, you can start executing Docker commands:
+
 ```java
 dockerClient.pingCmd().exec();
 ```

@@ -31,7 +31,7 @@ public class HealthCmdIT extends CmdIT {
     @Test
     public void healthiness() {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-            .withCmd("nc", "-l",  "-p", "8080")
+            .withCmd("nc", "-l", "-p", "8080")
             .withHealthcheck(new HealthCheck()
                 .withTest(Arrays.asList("CMD", "sh", "-c", "netstat -ltn | grep 8080"))
                 .withInterval(TimeUnit.SECONDS.toNanos(1))
@@ -57,7 +57,7 @@ public class HealthCmdIT extends CmdIT {
         assumeThat("API version should be >= 1.44", dockerRule, isGreaterOrEqual(RemoteApiVersion.VERSION_1_44));
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-            .withCmd("nc", "-l",  "-p", "8080")
+            .withCmd("nc", "-l", "-p", "8080")
             .withHealthcheck(new HealthCheck()
                 .withTest(Arrays.asList("CMD", "sh", "-c", "netstat -ltn | grep 8080"))
                 .withInterval(TimeUnit.SECONDS.toNanos(5))

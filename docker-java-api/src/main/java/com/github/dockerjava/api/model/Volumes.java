@@ -1,14 +1,14 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.ToString;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.ToString;
 
 @ToString
 public class Volumes implements Serializable {
@@ -31,15 +31,15 @@ public class Volumes implements Serializable {
     @JsonCreator
     public static Volumes fromPrimitive(Map<String, Object> map) {
         return new Volumes(
-                map.keySet().stream().map(Volume::new).toArray(Volume[]::new)
+            map.keySet().stream().map(Volume::new).toArray(Volume[]::new)
         );
     }
 
     @JsonValue
     public Map<String, Object> toPrimitive() {
         return Stream.of(volumes).collect(Collectors.toMap(
-                Volume::getPath,
-                __ -> new Object()
+            Volume::getPath,
+            __ -> new Object()
         ));
     }
 

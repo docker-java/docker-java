@@ -35,7 +35,7 @@ public class DockerfileFixture implements AutoCloseable {
         LOGGER.info("building {}", directory);
 
         client.buildImageCmd(new File("src/test/resources", directory)).withNoCache(true)
-                .start().awaitImageId();
+            .start().awaitImageId();
 
         Image lastCreatedImage = client.listImagesCmd().exec().get(0);
 
@@ -57,7 +57,7 @@ public class DockerfileFixture implements AutoCloseable {
             LOGGER.info("removing container {}", containerId);
             try {
                 client.removeContainerCmd(containerId).withForce(true) // stop too
-                        .exec();
+                    .exec();
             } catch (NotFoundException | InternalServerErrorException ignored) {
                 LOGGER.info("ignoring {}", ignored.getMessage());
             }

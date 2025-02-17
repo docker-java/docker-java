@@ -13,10 +13,10 @@ import java.util.Map;
 
 import static com.github.dockerjava.core.DockerRule.DEFAULT_IMAGE;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
 import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
@@ -28,8 +28,8 @@ public class CommitCmdIT extends CmdIT {
     @Test
     public void commit() throws DockerException, InterruptedException {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withCmd("touch", "/test")
-                .exec();
+            .withCmd("touch", "/test")
+            .exec();
 
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(is(emptyString())));
@@ -58,24 +58,24 @@ public class CommitCmdIT extends CmdIT {
     public void commitWithLabels() throws DockerException {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withCmd("touch", "/test")
-                .exec();
+            .withCmd("touch", "/test")
+            .exec();
 
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(is(emptyString())));
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         Integer status = dockerRule.getClient().waitContainerCmd(container.getId())
-                .start()
-                .awaitStatusCode();
+            .start()
+            .awaitStatusCode();
 
         assertThat(status, is(0));
 
         LOG.info("Committing container: {}", container.toString());
         Map<String, String> labels = ImmutableMap.of("label1", "abc", "label2", "123");
         String imageId = dockerRule.getClient().commitCmd(container.getId())
-                .withLabels(labels)
-                .exec();
+            .withLabels(labels)
+            .exec();
 
         InspectImageResponse inspectImageResponse = dockerRule.getClient().inspectImageCmd(imageId).exec();
         LOG.info("Image Inspect: {}", inspectImageResponse.toString());

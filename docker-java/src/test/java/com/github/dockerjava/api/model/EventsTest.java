@@ -26,8 +26,8 @@ public class EventsTest {
         final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(Event.class);
 
         final Event event = testRoundTrip(RemoteApiVersion.VERSION_1_24,
-                "/events/docs1.json",
-                type
+            "/events/docs1.json",
+            type
         );
 
         assertThat(event, notNullValue());
@@ -45,18 +45,18 @@ public class EventsTest {
         attributes.put("name", "my-container");
 
         final EventActor actor = new EventActor()
-                .withId("ede54ee1afda366ab42f824e8a5ffd195155d853ceaec74a927f249ea270c743")
-                .withAttributes(attributes);
+            .withId("ede54ee1afda366ab42f824e8a5ffd195155d853ceaec74a927f249ea270c743")
+            .withAttributes(attributes);
 
         final Event event1 = new Event()
-                .withType(CONTAINER)
-                .withStatus("create")
-                .withId("ede54ee1afda366ab42f824e8a5ffd195155d853ceaec74a927f249ea270c743")
-                .withFrom("alpine")
-                .withTime(1461943101L)
-                .withTimenano(1461943101381709551L)
-                .withAction("create")
-                .withEventActor(actor);
+            .withType(CONTAINER)
+            .withStatus("create")
+            .withId("ede54ee1afda366ab42f824e8a5ffd195155d853ceaec74a927f249ea270c743")
+            .withFrom("alpine")
+            .withTime(1461943101L)
+            .withTimenano(1461943101381709551L)
+            .withAction("create")
+            .withEventActor(actor);
 
         assertThat(event1, equalTo(event));
     }

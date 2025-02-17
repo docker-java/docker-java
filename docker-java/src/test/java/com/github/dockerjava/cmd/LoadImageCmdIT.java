@@ -22,7 +22,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 public class LoadImageCmdIT extends CmdIT {
 
     private String expectedImageId;
-    
+
     @Before
     public void beforeMethod() {
         expectedImageId = "sha256:56031f66eb0cef2e2e5cb2d1dabafaa0ebcd0a18a507d313b5bdb8c0472c5eba";
@@ -51,7 +51,7 @@ public class LoadImageCmdIT extends CmdIT {
 
         assertThat("Can't find expected image after loading from a tar archive!", image, notNullValue());
         assertThat("Image after loading from a tar archive has wrong tags!",
-                asList(image.getRepoTags()), equalTo(singletonList("docker-java/load:1.0")));
+            asList(image.getRepoTags()), equalTo(singletonList("docker-java/load:1.0")));
     }
 
     @Test
@@ -64,7 +64,7 @@ public class LoadImageCmdIT extends CmdIT {
 
         assertThat("Can't find expected image after loading from a tar archive!", image, notNullValue());
         assertThat("Image after loading from a tar archive has wrong tags!",
-                   asList(image.getRepoTags()), equalTo(singletonList("docker-java/load:1.0")));
+            asList(image.getRepoTags()), equalTo(singletonList("docker-java/load:1.0")));
     }
 
     private Image findImageWithId(final String id, final List<Image> images) {

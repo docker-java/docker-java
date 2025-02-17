@@ -34,7 +34,7 @@ public class JoinSwarmCmdExecIT extends SwarmCmdIT {
     private SwarmJoinTokens initSwarmOnDocker(DockerClient docker) {
         SwarmSpec swarmSpec = new SwarmSpec();
         docker.initializeSwarmCmd(swarmSpec)
-                .exec();
+            .exec();
         LOG.info("Initialized swarm docker1: {}", swarmSpec.toString());
 
         Swarm swarm = docker.inspectSwarmCmd().exec();
@@ -47,9 +47,9 @@ public class JoinSwarmCmdExecIT extends SwarmCmdIT {
         SwarmJoinTokens tokens = initSwarmOnDocker(docker1);
 
         docker2.joinSwarmCmd()
-                .withRemoteAddrs(Lists.newArrayList("docker1"))
-                .withJoinToken(tokens.getWorker())
-                .exec();
+            .withRemoteAddrs(Lists.newArrayList("docker1"))
+            .withJoinToken(tokens.getWorker())
+            .exec();
         LOG.info("docker2 joined docker1's swarm");
 
         Info info = docker2.infoCmd().exec();
@@ -62,9 +62,9 @@ public class JoinSwarmCmdExecIT extends SwarmCmdIT {
         SwarmJoinTokens tokens = initSwarmOnDocker(docker1);
 
         docker2.joinSwarmCmd()
-                .withRemoteAddrs(Lists.newArrayList("docker1"))
-                .withJoinToken(tokens.getManager())
-                .exec();
+            .withRemoteAddrs(Lists.newArrayList("docker1"))
+            .withJoinToken(tokens.getManager())
+            .exec();
         LOG.info("docker2 joined docker1's swarm");
 
         Info info = docker2.infoCmd().exec();
@@ -79,8 +79,8 @@ public class JoinSwarmCmdExecIT extends SwarmCmdIT {
         initSwarmOnDocker(docker2);
 
         docker2.joinSwarmCmd()
-                .withRemoteAddrs(Lists.newArrayList("docker1"))
-                .withJoinToken(tokens.getWorker())
-                .exec();
+            .withRemoteAddrs(Lists.newArrayList("docker1"))
+            .withJoinToken(tokens.getWorker())
+            .exec();
     }
 }

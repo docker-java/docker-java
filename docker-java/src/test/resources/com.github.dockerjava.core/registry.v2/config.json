@@ -1,7 +1,7 @@
 {
-  "auths": {
-    "https://test.docker.io/v2/": {
-      "auth": "dXNlcjpwYXNzd29yZA=="
+    "auths": {
+        "https://test.docker.io/v2/": {
+            "auth": "dXNlcjpwYXNzd29yZA=="
+        }
     }
-  }
 }

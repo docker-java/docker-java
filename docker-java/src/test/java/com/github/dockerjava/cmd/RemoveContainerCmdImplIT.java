@@ -20,7 +20,7 @@ import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
 public class RemoveContainerCmdImplIT extends CmdIT {
 
     public static final Logger LOG = LoggerFactory.getLogger(RemoveContainerCmdImplIT.class);
-    
+
 
     @Test
     public void removeContainer() {

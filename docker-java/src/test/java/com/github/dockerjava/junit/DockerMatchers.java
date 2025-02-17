@@ -58,8 +58,8 @@ public class DockerMatchers {
             @Override
             protected void describeMismatchSafely(DockerRule rule, Description mismatchDescription) {
                 mismatchDescription
-                        .appendText(" was ")
-                        .appendText(getVersion(rule.getClient()).toString());
+                    .appendText(" was ")
+                    .appendText(getVersion(rule.getClient()).toString());
             }
         };
     }

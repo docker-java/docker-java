@@ -18,10 +18,10 @@ import java.util.UUID;
 import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
 import static com.github.dockerjava.utils.TestUtils.isSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
@@ -40,7 +40,7 @@ public class InspectContainerCmdIT extends CmdIT {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("top")
-                .withName(containerName).exec();
+            .withName(containerName).exec();
         LOG.info("Created container {}", container.toString());
         assertThat(container.getId(), not(is(emptyString())));
 
@@ -53,14 +53,14 @@ public class InspectContainerCmdIT extends CmdIT {
     public void inspectContainerNodeProperty() throws DockerException {
         Map<String, String> label = Collections.singletonMap("inspectContainerNodeProperty", UUID.randomUUID().toString());
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withLabels(label)
-                .exec();
+            .withLabels(label)
+            .exec();
 
         Container containerResult = dockerRule.getClient().listContainersCmd()
-                .withShowAll(true)
-                .withLabelFilter(label)
-                .exec()
-                .get(0);
+            .withShowAll(true)
+            .withLabelFilter(label)
+            .exec()
+            .get(0);
 
         String name = containerResult.getNames()[0];
 
@@ -88,7 +88,7 @@ public class InspectContainerCmdIT extends CmdIT {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("top")
-                .withName(containerName).exec();
+            .withName(containerName).exec();
         LOG.info("Created container {}", container.toString());
         assertThat(container.getId(), not(is(emptyString())));
 
@@ -115,7 +115,7 @@ public class InspectContainerCmdIT extends CmdIT {
     public void inspectContainerRestartCount() throws DockerException {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withCmd("env").exec();
+            .withCmd("env").exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -130,7 +130,7 @@ public class InspectContainerCmdIT extends CmdIT {
     public void inspectContainerNetworkSettings() throws DockerException {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withCmd("env").exec();
+            .withCmd("env").exec();
 
         LOG.info("Created container {}", container.toString());
 

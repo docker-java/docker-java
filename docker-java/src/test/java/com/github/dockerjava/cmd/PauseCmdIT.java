@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.not;
 
 public class PauseCmdIT extends CmdIT {
     public static final Logger LOG = LoggerFactory.getLogger(PauseCmdIT.class);
-    
+
     @Test
     public void pauseRunningContainer() {
 

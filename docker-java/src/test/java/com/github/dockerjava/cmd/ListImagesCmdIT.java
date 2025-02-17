@@ -15,11 +15,11 @@ import java.util.List;
 import static com.github.dockerjava.utils.TestUtils.isNotSwarm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyArray;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertTrue;
@@ -49,7 +49,7 @@ public class ListImagesCmdIT extends CmdIT {
     public void listImagesWithDanglingFilter() throws DockerException {
         String imageId = createDanglingImage();
         List<Image> images = dockerRule.getClient().listImagesCmd().withDanglingFilter(true).withShowAll(true)
-                .exec();
+            .exec();
         assertThat(images, notNullValue());
         LOG.info("Images List: {}", images);
         assertThat(images.size(), is(greaterThan(0)));
@@ -66,8 +66,7 @@ public class ListImagesCmdIT extends CmdIT {
             List<Image> images = dockerRule.getClient().listImagesCmd().withReferenceFilter("docker-java/busybox")
                 .exec();
             assertThat(images, hasSize(1));
-        }
-        finally {
+        } finally {
             dockerRule.getClient().removeImageCmd("docker-java/busybox:" + tag).exec();
         }
     }
@@ -81,8 +80,7 @@ public class ListImagesCmdIT extends CmdIT {
             List<Image> images = dockerRule.getClient().listImagesCmd().withFilter("reference", Collections.singletonList("docker-java/busybox"))
                 .exec();
             assertThat(images, hasSize(1));
-        }
-        finally {
+        } finally {
             dockerRule.getClient().removeImageCmd("docker-java/busybox:" + tag).exec();
         }
     }

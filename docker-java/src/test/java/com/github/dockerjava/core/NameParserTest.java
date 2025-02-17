@@ -13,10 +13,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
- *
- *
  * @author Marcus Linke
- *
  */
 public class NameParserTest {
 
@@ -130,6 +127,7 @@ public class NameParserTest {
         HostnameReposName resolved = NameParser.resolveRepositoryName("localhost:5000/namespace/repository:tag");
         assertEquals(new HostnameReposName("localhost:5000", "namespace/repository"), resolved);
     }
+
     @Test
     public void testResolveRepositoryNameWithNamespaceAndHostnameAndTagAndSHA256() {
         HostnameReposName resolved = NameParser.resolveRepositoryName("localhost:5000/namespace/repository:tag@sha256:sha256");

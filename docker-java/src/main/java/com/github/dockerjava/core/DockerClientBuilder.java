@@ -27,7 +27,6 @@ public class DockerClientBuilder {
     }
 
     /**
-     *
      * @deprecated use {@link #getInstance(DockerClientConfig)}
      */
     @Deprecated
@@ -40,7 +39,6 @@ public class DockerClientBuilder {
     }
 
     /**
-     *
      * @deprecated use {@link DefaultDockerClientConfig.Builder#withDockerHost(String)}
      */
     @Deprecated
@@ -53,7 +51,6 @@ public class DockerClientBuilder {
     }
 
     /**
-     *
      * @deprecated no replacement, use one of {@link DockerHttpClient}
      */
     @Deprecated

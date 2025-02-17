@@ -5,7 +5,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.annotation.CheckForNull;
-
 import java.io.Serializable;
 
 /**

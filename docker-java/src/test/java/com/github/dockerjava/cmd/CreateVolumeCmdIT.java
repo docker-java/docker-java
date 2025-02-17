@@ -18,7 +18,7 @@ public class CreateVolumeCmdIT extends CmdIT {
         String volumeName = "volume1";
 
         CreateVolumeResponse createVolumeResponse = dockerRule.getClient().createVolumeCmd().withName(volumeName)
-                .withDriver("local").withLabels(Collections.singletonMap("is-timelord", "yes")).exec();
+            .withDriver("local").withLabels(Collections.singletonMap("is-timelord", "yes")).exec();
 
         assertThat(createVolumeResponse.getName(), equalTo(volumeName));
         assertThat(createVolumeResponse.getDriver(), equalTo("local"));
@@ -32,7 +32,7 @@ public class CreateVolumeCmdIT extends CmdIT {
         String volumeName = "volume1";
 
         CreateVolumeResponse createVolumeResponse1 = dockerRule.getClient().createVolumeCmd().withName(volumeName)
-                .withDriver("local").withLabels(Collections.singletonMap("is-timelord", "yes")).exec();
+            .withDriver("local").withLabels(Collections.singletonMap("is-timelord", "yes")).exec();
 
         assertThat(createVolumeResponse1.getName(), equalTo(volumeName));
         assertThat(createVolumeResponse1.getDriver(), equalTo("local"));
@@ -40,7 +40,7 @@ public class CreateVolumeCmdIT extends CmdIT {
         assertThat(createVolumeResponse1.getMountpoint(), containsString("/volume1/"));
 
         CreateVolumeResponse createVolumeResponse2 = dockerRule.getClient().createVolumeCmd().withName(volumeName)
-                .withDriver("local").withLabels(Collections.singletonMap("is-timelord", "yes")).exec();
+            .withDriver("local").withLabels(Collections.singletonMap("is-timelord", "yes")).exec();
 
         assertThat(createVolumeResponse2.getName(), equalTo(volumeName));
         assertThat(createVolumeResponse2.getDriver(), equalTo("local"));

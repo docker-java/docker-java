@@ -1,11 +1,11 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Stream;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 
 public class Links implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -27,7 +27,7 @@ public class Links implements Serializable {
     @JsonCreator
     public static Links fromPrimitive(String[] links) {
         return new Links(
-                Stream.of(links).map(Link::parse).toArray(Link[]::new)
+            Stream.of(links).map(Link::parse).toArray(Link[]::new)
         );
     }
 

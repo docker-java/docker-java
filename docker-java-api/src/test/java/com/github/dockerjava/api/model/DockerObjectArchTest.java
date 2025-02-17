@@ -34,7 +34,7 @@ class DockerObjectArchTest {
             .and().doNotBelongToAnyOf(DockerObjectAccessor.class)
             .and(new DescribedPredicate<JavaClass>("not @JsonCreator-based object") {
                 @Override
-                public boolean apply(JavaClass input) {
+                public boolean test(JavaClass input) {
                     return input.getAllMethods().stream().noneMatch(method -> {
                         return method.isAnnotatedWith(JsonCreator.class);
                     });

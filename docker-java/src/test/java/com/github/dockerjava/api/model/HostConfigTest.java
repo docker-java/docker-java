@@ -10,6 +10,6 @@ public class HostConfigTest {
     @Test
     public void testNewObjectsEqual() {
         assertThat(HostConfig.newHostConfig(),
-                equalTo(HostConfig.newHostConfig()));
+            equalTo(HostConfig.newHostConfig()));
     }
 }

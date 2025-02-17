@@ -3,18 +3,18 @@ package com.github.dockerjava.api.model;
 import com.github.dockerjava.test.serdes.JSONTestHelper;
 import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class LinksTest {
 
     @Test
     public void usesToJson() throws Exception {
         Links links = new Links(
-                new Link("/foo", "/bar"),
-                new Link("bip", "bop")
+            new Link("/foo", "/bar"),
+            new Link("bip", "bop")
         );
         String json = JSONTestHelper.getMapper().writeValueAsString(links);
 
@@ -27,8 +27,8 @@ public class LinksTest {
 
         assertThat(links, notNullValue());
         assertThat(links.getLinks(), arrayContaining(
-                new Link("foo", "bar"),
-                new Link("bip", "bop")
+            new Link("foo", "bar"),
+            new Link("bip", "bop")
         ));
     }
 

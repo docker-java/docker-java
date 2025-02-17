@@ -37,10 +37,10 @@ class HijackingInterceptor implements Interceptor {
 
         chain.call().timeout().clearTimeout().clearDeadline();
 
-        Exchange exchange = ((RealInterceptorChain) chain).exchange();
+        Exchange exchange = ((RealInterceptorChain) chain).getExchange$okhttp();
         RealWebSocket.Streams streams = exchange.newWebSocketStreams();
         Thread thread = new Thread(() -> {
-            try (BufferedSink sink = streams.sink) {
+            try (BufferedSink sink = streams.getSink()) {
                 while (sink.isOpen()) {
                     int aByte = stdin.read();
                     if (aByte < 0) {

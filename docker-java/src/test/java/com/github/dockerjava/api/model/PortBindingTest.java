@@ -18,7 +18,7 @@ public class PortBindingTest {
     @Test
     public void fullDefinition() {
         assertEquals(PortBinding.parse("127.0.0.1:80:8080/tcp"),
-                new PortBinding(Binding.bindIpAndPort("127.0.0.1", 80), TCP_8080));
+            new PortBinding(Binding.bindIpAndPort("127.0.0.1", 80), TCP_8080));
     }
 
     @Test

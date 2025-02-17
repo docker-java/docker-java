@@ -24,11 +24,11 @@ import static com.github.dockerjava.api.model.HostConfig.newHostConfig;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.oneOf;
@@ -51,9 +51,9 @@ public class ListContainersCmdIT extends CmdIT {
     public void tearDown() {
         //remove all containers created by this test
         List<Container> containers = dockerRule.getClient().listContainersCmd()
-                .withLabelFilter(testLabel)
-                .withShowAll(true)
-                .exec();
+            .withLabelFilter(testLabel)
+            .withShowAll(true)
+            .exec();
 
         for (Container container : containers) {
             removeContainer(container.getId());
@@ -63,18 +63,18 @@ public class ListContainersCmdIT extends CmdIT {
     @Test
     public void testListContainers() {
         List<Container> containers = dockerRule.getClient().listContainersCmd()
-                .withLabelFilter(testLabel)
-                .withShowAll(true)
-                .exec();
+            .withLabelFilter(testLabel)
+            .withShowAll(true)
+            .exec();
         assertThat(containers, notNullValue());
         LOG.info("Container List: {}", containers);
 
         int size = containers.size();
 
         CreateContainerResponse container1 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withLabels(testLabel)
-                .withCmd("echo")
-                .exec();
+            .withLabels(testLabel)
+            .withCmd("echo")
+            .exec();
         assertThat(container1.getId(), not(is(emptyString())));
 
         InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container1.getId()).exec();
@@ -84,9 +84,9 @@ public class ListContainersCmdIT extends CmdIT {
         LOG.info("container id: " + container1.getId());
 
         List<Container> containers2 = dockerRule.getClient().listContainersCmd()
-                .withLabelFilter(testLabel)
-                .withShowAll(true)
-                .exec();
+            .withLabelFilter(testLabel)
+            .withShowAll(true)
+            .exec();
         for (Container container : containers2) {
             LOG.info("listContainer: id=" + container.getId() + " image=" + container.getImage());
         }
@@ -111,13 +111,13 @@ public class ListContainersCmdIT extends CmdIT {
     public void testListContainersWithLabelsFilter() {
         // list with filter by Map label
         dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withCmd("echo")
-                .withLabels(testLabel)
-                .exec();
+            .withLabels(testLabel)
+            .exec();
 
         List<Container> filteredContainersByMap = dockerRule.getClient().listContainersCmd()
-                .withShowAll(true)
-                .withLabelFilter(testLabel)
-                .exec();
+            .withShowAll(true)
+            .withLabelFilter(testLabel)
+            .exec();
 
         assertThat(filteredContainersByMap.size(), is(1));
 
@@ -127,9 +127,9 @@ public class ListContainersCmdIT extends CmdIT {
 
         // List by string label
         List<Container> filteredContainers = dockerRule.getClient().listContainersCmd()
-                .withShowAll(true)
-                .withLabelFilter(singletonList("test=" + testLabel.get("test")))
-                .exec();
+            .withShowAll(true)
+            .withLabelFilter(singletonList("test=" + testLabel.get("test")))
+            .exec();
 
         assertThat(filteredContainers.size(), is(1));
 
@@ -145,21 +145,21 @@ public class ListContainersCmdIT extends CmdIT {
 
         String id1, id2;
         id1 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withLabels(testLabel)
-                .withName("nameFilterTest1-" + testUUID)
-                .exec()
-                .getId();
+            .withLabels(testLabel)
+            .withName("nameFilterTest1-" + testUUID)
+            .exec()
+            .getId();
 
         id2 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withLabels(testLabel)
-                .withName("nameFilterTest2-" + testUUID)
-                .exec()
-                .getId();
+            .withLabels(testLabel)
+            .withName("nameFilterTest2-" + testUUID)
+            .exec()
+            .getId();
 
         List<Container> filteredContainers = dockerRule.getClient().listContainersCmd()
-                .withShowAll(true)
-                .withNameFilter(asList("nameFilterTest1-" + testUUID, "nameFilterTest2-" + testUUID))
-                .exec();
+            .withShowAll(true)
+            .withNameFilter(asList("nameFilterTest1-" + testUUID, "nameFilterTest2-" + testUUID))
+            .exec();
 
         assertThat(filteredContainers.size(), is(2));
         assertThat(filteredContainers.get(0).getId(), is(oneOf(id1, id2)));
@@ -170,19 +170,19 @@ public class ListContainersCmdIT extends CmdIT {
     public void testIdsFilter() {
         String id1, id2;
         id1 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withLabels(testLabel)
-                .exec()
-                .getId();
+            .withLabels(testLabel)
+            .exec()
+            .getId();
 
         id2 = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withLabels(testLabel)
-                .exec()
-                .getId();
+            .withLabels(testLabel)
+            .exec()
+            .getId();
 
         List<Container> filteredContainers = dockerRule.getClient().listContainersCmd()
-                .withShowAll(true)
-                .withIdFilter(asList(id1, id2))
-                .exec();
+            .withShowAll(true)
+            .withIdFilter(asList(id1, id2))
+            .exec();
 
         assertThat(filteredContainers.size(), is(2));
         assertThat(filteredContainers.get(0).getId(), is(oneOf(id1, id2)));
@@ -192,15 +192,15 @@ public class ListContainersCmdIT extends CmdIT {
     @Test
     public void shouldFilterByCreatedStatus() {
         String containerId = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withLabels(testLabel)
-                .exec()
-                .getId();
+            .withLabels(testLabel)
+            .exec()
+            .getId();
 
         List<Container> filteredContainers = dockerRule.getClient().listContainersCmd()
-                .withShowAll(true)
-                .withLabelFilter(testLabel)
-                .withStatusFilter(singletonList("created"))
-                .exec();
+            .withShowAll(true)
+            .withLabelFilter(testLabel)
+            .withStatusFilter(singletonList("created"))
+            .exec();
 
         assertThat(filteredContainers.size(), is(1));
         assertThat(filteredContainers.get(0).getId(), is(containerId));
@@ -209,16 +209,16 @@ public class ListContainersCmdIT extends CmdIT {
     @Test
     public void shouldFilterByRunningStatus() {
         String containerId = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withLabels(testLabel)
-                .exec()
-                .getId();
+            .withLabels(testLabel)
+            .exec()
+            .getId();
         dockerRule.getClient().startContainerCmd(containerId).exec();
 
         List<Container> filteredContainers = dockerRule.getClient().listContainersCmd()
-                .withShowAll(true)
-                .withLabelFilter(testLabel)
-                .withStatusFilter(singletonList("running"))
-                .exec();
+            .withShowAll(true)
+            .withLabelFilter(testLabel)
+            .withStatusFilter(singletonList("running"))
+            .exec();
 
         assertThat(filteredContainers, hasSize(1));
         assertThat(filteredContainers.get(0).getId(), is(containerId));
@@ -227,18 +227,18 @@ public class ListContainersCmdIT extends CmdIT {
     @Test
     public void shouldFilterByPausedStatus() {
         String containerId = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withCmd("sh", "-c", "sleep 99999")
-                .withLabels(testLabel)
-                .exec()
-                .getId();
+            .withCmd("sh", "-c", "sleep 99999")
+            .withLabels(testLabel)
+            .exec()
+            .getId();
         dockerRule.getClient().startContainerCmd(containerId).exec();
         dockerRule.getClient().pauseContainerCmd(containerId).exec();
 
         List<Container> filteredContainers = dockerRule.getClient().listContainersCmd()
-                .withShowAll(true)
-                .withLabelFilter(testLabel)
-                .withStatusFilter(singletonList("paused"))
-                .exec();
+            .withShowAll(true)
+            .withLabelFilter(testLabel)
+            .withStatusFilter(singletonList("paused"))
+            .exec();
 
         assertThat(filteredContainers, hasSize(1));
         assertThat(filteredContainers.get(0).getId(), is(containerId));
@@ -247,19 +247,19 @@ public class ListContainersCmdIT extends CmdIT {
     @Test
     public void shouldFilterByExitedStatus() throws InterruptedException {
         String containerId = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withCmd("sh", "-c", "sleep 99999")
-                .withLabels(testLabel)
-                .exec()
-                .getId();
+            .withCmd("sh", "-c", "sleep 99999")
+            .withLabels(testLabel)
+            .exec()
+            .getId();
         dockerRule.getClient().startContainerCmd(containerId).exec();
         dockerRule.getClient().stopContainerCmd(containerId).exec();
         dockerRule.getClient().waitContainerCmd(containerId).start().awaitCompletion(15, TimeUnit.SECONDS);
 
         List<Container> filteredContainers = dockerRule.getClient().listContainersCmd()
-                .withShowAll(true)
-                .withLabelFilter(testLabel)
-                .withStatusFilter(singletonList("exited"))
-                .exec();
+            .withShowAll(true)
+            .withLabelFilter(testLabel)
+            .withStatusFilter(singletonList("exited"))
+            .exec();
 
         assertThat(filteredContainers, hasSize(1));
         assertThat(filteredContainers.get(0).getId(), is(containerId));
@@ -269,26 +269,26 @@ public class ListContainersCmdIT extends CmdIT {
     public void testVolumeFilter() {
         String id;
         dockerRule.getClient().createVolumeCmd()
-                .withName("TestFilterVolume")
-                .withDriver("local")
-                .exec();
+            .withName("TestFilterVolume")
+            .withDriver("local")
+            .exec();
 
         id = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withLabels(testLabel)
-                .withHostConfig(newHostConfig()
-                        .withBinds(new Bind("TestFilterVolume", new Volume("/test"))))
-                .exec()
-                .getId();
+            .withLabels(testLabel)
+            .withHostConfig(newHostConfig()
+                .withBinds(new Bind("TestFilterVolume", new Volume("/test"))))
+            .exec()
+            .getId();
 
         dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withLabels(testLabel)
-                .exec();
+            .withLabels(testLabel)
+            .exec();
 
         List<Container> filteredContainers = dockerRule.getClient().listContainersCmd()
-                .withShowAll(true)
-                .withLabelFilter(testLabel)
-                .withVolumeFilter(singletonList("TestFilterVolume"))
-                .exec();
+            .withShowAll(true)
+            .withLabelFilter(testLabel)
+            .withVolumeFilter(singletonList("TestFilterVolume"))
+            .exec();
 
         assertThat(filteredContainers, hasSize(1));
         assertThat(filteredContainers.get(0).getId(), is(id));
@@ -298,26 +298,26 @@ public class ListContainersCmdIT extends CmdIT {
     public void testNetworkFilter() {
         String id;
         dockerRule.getClient().createNetworkCmd()
-                .withName("TestFilterNetwork")
-                .withDriver("bridge")
-                .exec();
+            .withName("TestFilterNetwork")
+            .withDriver("bridge")
+            .exec();
 
         id = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withLabels(testLabel)
-                .withHostConfig(newHostConfig()
-                        .withNetworkMode("TestFilterNetwork"))
-                .exec()
-                .getId();
+            .withLabels(testLabel)
+            .withHostConfig(newHostConfig()
+                .withNetworkMode("TestFilterNetwork"))
+            .exec()
+            .getId();
 
         dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withLabels(testLabel)
-                .exec();
+            .withLabels(testLabel)
+            .exec();
 
         List<Container> filteredContainers = dockerRule.getClient().listContainersCmd()
-                .withShowAll(true)
-                .withLabelFilter(testLabel)
-                .withNetworkFilter(singletonList("TestFilterNetwork"))
-                .exec();
+            .withShowAll(true)
+            .withLabelFilter(testLabel)
+            .withNetworkFilter(singletonList("TestFilterNetwork"))
+            .exec();
 
         assertThat(filteredContainers.size(), is(1));
         assertThat(filteredContainers.get(0).getId(), is(id));
@@ -330,26 +330,26 @@ public class ListContainersCmdIT extends CmdIT {
         DockerAssume.assumeNotSwarm(dockerRule.getClient());
 
         dockerRule.getClient().pullImageCmd("busybox")
-                .withTag("1.35")
-                .start()
-                .awaitCompletion();
+            .withTag("1.35")
+            .start()
+            .awaitCompletion();
 
         dockerRule.getClient().createContainerCmd("busybox:1.35")
-                .withLabels(testLabel)
-                .exec();
+            .withLabels(testLabel)
+            .exec();
 
         String imageId = dockerRule.getClient().inspectImageCmd(DEFAULT_IMAGE).exec().getId();
 
         String id = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withLabels(testLabel)
-                .exec()
-                .getId();
+            .withLabels(testLabel)
+            .exec()
+            .getId();
 
         List<Container> filteredContainers = dockerRule.getClient().listContainersCmd()
-                .withLabelFilter(testLabel)
-                .withShowAll(true)
-                .withAncestorFilter(singletonList(imageId))
-                .exec();
+            .withLabelFilter(testLabel)
+            .withShowAll(true)
+            .withAncestorFilter(singletonList(imageId))
+            .exec();
 
         assertThat(filteredContainers.size(), is(1));
         assertThat(filteredContainers.get(0).getId(), is(id));
@@ -358,27 +358,27 @@ public class ListContainersCmdIT extends CmdIT {
     @Test
     public void testExitedFilter() {
         dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withLabels(testLabel)
-                .exec();
+            .withLabels(testLabel)
+            .exec();
 
         String id = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
-                .withLabels(testLabel)
-                .withCmd("sh", "-c", "exit 42")
-                .exec()
-                .getId();
+            .withLabels(testLabel)
+            .withCmd("sh", "-c", "exit 42")
+            .exec()
+            .getId();
 
         dockerRule.getClient().startContainerCmd(id).exec();
 
         Integer status = dockerRule.getClient().waitContainerCmd(id).start()
-                .awaitStatusCode();
+            .awaitStatusCode();
 
         assertThat(status, is(42));
 
         List<Container> filteredContainers = dockerRule.getClient().listContainersCmd()
-                .withLabelFilter(testLabel)
-                .withShowAll(true)
-                .withExitedFilter(42)
-                .exec();
+            .withLabelFilter(testLabel)
+            .withShowAll(true)
+            .withExitedFilter(42)
+            .exec();
 
         assertThat(filteredContainers.size(), is(1));
         assertThat(filteredContainers.get(0).getId(), is(id));
@@ -388,7 +388,8 @@ public class ListContainersCmdIT extends CmdIT {
         if (id != null) {
             try {
                 dockerRule.getClient().removeContainerCmd(id).withForce(true).exec();
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
     }
 }

@@ -32,6 +32,7 @@
 			<plugin>
 				<groupId>com.github.siom79.japicmp</groupId>
 				<artifactId>japicmp-maven-plugin</artifactId>
+				<version>${japicmp-maven-plugin.version}</version>
 				<configuration>
 					<!-- TODO remove once this module is released -->
 					<skip>true</skip>

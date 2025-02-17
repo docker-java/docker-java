@@ -23,7 +23,7 @@ public class DockerfileAddMultipleFilesTest {
         Collection<String> filesToAdd = transform(result.filesToAdd, TO_FILE_NAMES);
 
         assertThat(filesToAdd,
-                   containsInAnyOrder("Dockerfile", "foo.jar"));
+            containsInAnyOrder("Dockerfile", "foo.jar"));
     }
 
     @Test
@@ -34,7 +34,7 @@ public class DockerfileAddMultipleFilesTest {
         Collection<String> filesToAdd = transform(result.filesToAdd, TO_FILE_NAMES);
 
         assertThat(filesToAdd,
-                containsInAnyOrder("Dockerfile", ".dockerignore", "README.md", "README-grand.md", "b.txt"));
+            containsInAnyOrder("Dockerfile", ".dockerignore", "README.md", "README-grand.md", "b.txt"));
     }
 
     @Test
@@ -70,6 +70,6 @@ public class DockerfileAddMultipleFilesTest {
 
     private File fileFromBuildTestResource(String resource) {
         return new File(Thread.currentThread().getContextClassLoader()
-                .getResource("buildTests/" + resource).getFile());
+            .getResource("buildTests/" + resource).getFile());
     }
 }

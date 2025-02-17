@@ -41,18 +41,18 @@ public class DisconnectFromNetworkCmdIT extends CmdIT {
         CreateNetworkResponse network = dockerRule.getClient().createNetworkCmd().withName("testNetwork2").exec();
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withHostConfig(newHostConfig()
-                        .withNetworkMode("testNetwork2"))
-                .withCmd("sleep", "9999")
-                .exec();
+            .withHostConfig(newHostConfig()
+                .withNetworkMode("testNetwork2"))
+            .withCmd("sleep", "9999")
+            .exec();
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         dockerRule.getClient().disconnectFromNetworkCmd()
-                .withNetworkId(network.getId())
-                .withContainerId(container.getId())
-                .withForce(true)
-                .exec();
+            .withNetworkId(network.getId())
+            .withContainerId(container.getId())
+            .withForce(true)
+            .exec();
 
         Network updatedNetwork = dockerRule.getClient().inspectNetworkCmd().withNetworkId(network.getId()).exec();
         assertFalse(updatedNetwork.getContainers().containsKey(container.getId()));

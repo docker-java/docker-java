@@ -34,17 +34,17 @@ public class CreateSecretCmdExecIT extends SwarmCmdIT {
 
 
         List<Secret> secrets = dockerClient.listSecretsCmd()
-                .withNameFilter(Lists.newArrayList(secretName))
-                .exec();
+            .withNameFilter(Lists.newArrayList(secretName))
+            .exec();
 
         assertThat(secrets, IsCollectionWithSize.hasSize(1));
 
         dockerClient.removeSecretCmd(secrets.get(0).getId())
-                .exec();
+            .exec();
         LOG.info("Secret removed with ID {}", exec.getId());
         List<Secret> secretsAfterRemoved = dockerClient.listSecretsCmd()
-                .withNameFilter(Lists.newArrayList(secretName))
-                .exec();
+            .withNameFilter(Lists.newArrayList(secretName))
+            .exec();
 
         assertThat(secretsAfterRemoved, IsCollectionWithSize.hasSize(0));
     }

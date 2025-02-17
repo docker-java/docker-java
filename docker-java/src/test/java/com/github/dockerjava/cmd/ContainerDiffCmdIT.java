@@ -14,8 +14,8 @@ import static ch.lambdaj.Lambda.selectUnique;
 import static com.github.dockerjava.core.DockerRule.DEFAULT_IMAGE;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.emptyString;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
 
@@ -30,7 +30,7 @@ public class ContainerDiffCmdIT extends CmdIT {
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         int exitCode = dockerRule.getClient().waitContainerCmd(container.getId()).start()
-                .awaitStatusCode();
+            .awaitStatusCode();
         assertThat(exitCode, equalTo(0));
 
         List<ChangeLog> filesystemDiff = dockerRule.getClient().containerDiffCmd(container.getId()).exec();

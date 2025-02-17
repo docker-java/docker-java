@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 public class VersionCmdIT extends CmdIT {
     public static final Logger LOG = LoggerFactory.getLogger(VersionCmdIT.class);
 
-    
+
     @Test
     public void version() throws DockerException {
         Version version = dockerRule.getClient().versionCmd().exec();

@@ -4,9 +4,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.CheckForNull;
 
 import com.github.dockerjava.api.model.Image;
+
+import javax.annotation.CheckForNull;
 
 /**
  * List images

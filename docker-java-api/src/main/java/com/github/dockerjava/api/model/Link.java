@@ -22,10 +22,8 @@ public class Link extends DockerObject implements Serializable {
     /**
      * Creates a {@link Link} for the container with the given name and an aliased name for use in the target container.
      *
-     * @param name
-     *            the name of the container that you want to link into the target container
-     * @param alias
-     *            the aliased name under which the linked container will be available in the target container
+     * @param name  the name of the container that you want to link into the target container
+     * @param alias the aliased name under which the linked container will be available in the target container
      */
     public Link(final String name, final String alias) {
         this.name = name;
@@ -49,11 +47,9 @@ public class Link extends DockerObject implements Serializable {
     /**
      * Parses a textual link specification (as used by the Docker CLI) to a {@link Link}.
      *
-     * @param serialized
-     *            the specification, e.g. <code>name:alias</code> or <code>/name1:/name2/alias</code>
+     * @param serialized the specification, e.g. <code>name:alias</code> or <code>/name1:/name2/alias</code>
      * @return a {@link Link} matching the specification
-     * @throws IllegalArgumentException
-     *             if the specification cannot be parsed
+     * @throws IllegalArgumentException if the specification cannot be parsed
      */
     public static Link parse(final String serialized) throws IllegalArgumentException {
         try {

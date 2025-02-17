@@ -46,12 +46,10 @@ public class JSONTestHelper {
 
     /**
      * Reads JSON String from the specified resource
-     * 
-     * @param resource
-     *            JSON File
+     *
+     * @param resource JSON File
      * @return JSON String
-     * @throws IOException
-     *             JSON Conversion error
+     * @throws IOException JSON Conversion error
      */
     public static String readString(JSONResourceRef resource) throws IOException {
         try (InputStream istream = resource.getResourceClass().getResourceAsStream(resource.getFileName())) {
@@ -64,16 +62,12 @@ public class JSONTestHelper {
 
     /**
      * Reads item from the resource.
-     * 
-     * @param <TClass>
-     *            Data class to be read
-     * @param resource
-     *            Resource reference
-     * @param tclass
-     *            Class entry
+     *
+     * @param <TClass> Data class to be read
+     * @param resource Resource reference
+     * @param tclass   Class entry
      * @return Item
-     * @throws IOException
-     *             JSON conversion error
+     * @throws IOException JSON conversion error
      */
     public static <TClass> TClass readObject(JSONResourceRef resource, Class<TClass> tclass) throws IOException {
         String str = readString(resource);
@@ -82,21 +76,16 @@ public class JSONTestHelper {
 
     /**
      * Basic serialization-deserialization consistency test for the resource.
-     * 
-     * @param <TClass>
-     *            Data class
-     * @param resource
-     *            Resource reference
-     * @param tclass
-     *            Class entry
-     * @throws IOException
-     *             JSON conversion error
-     * @throws AssertionError
-     *             Validation error
+     *
+     * @param <TClass> Data class
+     * @param resource Resource reference
+     * @param tclass   Class entry
      * @return Deserialized object after the roundtrip
+     * @throws IOException    JSON conversion error
+     * @throws AssertionError Validation error
      */
     public static <TClass> TClass testRoundTrip(JSONResourceRef resource, Class<TClass> tclass) throws IOException,
-            AssertionError {
+        AssertionError {
         TClass item = readObject(resource, tclass);
         assertNotNull(item);
         return testRoundTrip(item, tclass);
@@ -104,16 +93,12 @@ public class JSONTestHelper {
 
     /**
      * Performs roundtrip test for the specified class.
-     * 
-     * @param <TClass>
-     *            Item class
-     * @param item
-     *            Item to be checked
+     *
+     * @param <TClass> Item class
+     * @param item     Item to be checked
      * @return Deserialized object after the roundtrip
-     * @throws IOException
-     *             JSON Conversion error
-     * @throws AssertionError
-     *             Validation error
+     * @throws IOException    JSON Conversion error
+     * @throws AssertionError Validation error
      */
     @SuppressWarnings("unchecked")
     public static <TClass> TClass testRoundTrip(TClass item) throws IOException, AssertionError {
@@ -122,18 +107,13 @@ public class JSONTestHelper {
 
     /**
      * Performs roundtrip test for the specified class.
-     * 
-     * @param <TClass>
-     *            Item class
-     * @param item
-     *            Item to be checked
-     * @param asclass
-     *            Class to be used during conversions
+     *
+     * @param <TClass> Item class
+     * @param item     Item to be checked
+     * @param asclass  Class to be used during conversions
      * @return Deserialized object after the roundtrip
-     * @throws IOException
-     *             JSON Conversion error
-     * @throws AssertionError
-     *             Validation error
+     * @throws IOException    JSON Conversion error
+     * @throws AssertionError Validation error
      */
     public static <TClass> TClass testRoundTrip(TClass item, Class<TClass> asclass) throws IOException, AssertionError {
         String serialized1 = MAPPER.writeValueAsString(item);

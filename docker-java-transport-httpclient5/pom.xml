@@ -25,17 +25,15 @@
 			<artifactId>docker-java-transport</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.httpcomponents.client5</groupId>
 			<artifactId>httpclient5</artifactId>
-			<version>5.0.3</version>
+			<version>${httpclient5.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>net.java.dev.jna</groupId>
 			<artifactId>jna</artifactId>
-			<version>5.13.0</version>
+			<version>${jna.version}</version>
 		</dependency>
 
 		<dependency>
@@ -51,6 +49,8 @@
 			<plugin>
 				<groupId>com.github.siom79.japicmp</groupId>
 				<artifactId>japicmp-maven-plugin</artifactId>
+				<version>${japicmp-maven-plugin.version}</version>
+
 				<configuration>
 					<!-- TODO remove once this module is released -->
 					<skip>true</skip>

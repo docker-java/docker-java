@@ -50,38 +50,38 @@ public class PushImageCmdIT extends CmdIT {
         LOG.info("Committing container: {}", container.toString());
         String imgName = authConfig.getRegistryAddress() + "/push-latest";
         String imageId = dockerRule.getClient().commitCmd(container.getId())
-                .withRepository(imgName)
-                .exec();
+            .withRepository(imgName)
+            .exec();
 
         // we have to block until image is pushed
         dockerRule.getClient().pushImageCmd(imgName)
-                .withAuthConfig(authConfig)
-                .start()
-                .awaitCompletion(30, TimeUnit.SECONDS);
+            .withAuthConfig(authConfig)
+            .start()
+            .awaitCompletion(30, TimeUnit.SECONDS);
 
         LOG.info("Removing image: {}", imageId);
         dockerRule.getClient().removeImageCmd(imageId).exec();
 
         dockerRule.getClient().pullImageCmd(imgName)
-                .withTag("latest")
-                .withAuthConfig(authConfig)
-                .start()
-                .awaitCompletion(30, TimeUnit.SECONDS);
+            .withTag("latest")
+            .withAuthConfig(authConfig)
+            .start()
+            .awaitCompletion(30, TimeUnit.SECONDS);
     }
 
     @Test
     public void pushNonExistentImage() throws Exception {
 
         if (isNotSwarm(dockerRule.getClient()) && getVersion(dockerRule.getClient())
-                .isGreaterOrEqual(RemoteApiVersion.VERSION_1_24)) {
+            .isGreaterOrEqual(RemoteApiVersion.VERSION_1_24)) {
             exception.expect(DockerClientException.class);
         } else {
             exception.expect(NotFoundException.class);
         }
 
         dockerRule.getClient().pushImageCmd(UUID.randomUUID().toString().replace("-", ""))
-                .start()
-                .awaitCompletion(30, TimeUnit.SECONDS); // exclude infinite await sleep
+            .start()
+            .awaitCompletion(30, TimeUnit.SECONDS); // exclude infinite await sleep
 
     }
 
@@ -91,9 +91,9 @@ public class PushImageCmdIT extends CmdIT {
 
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pushImageCmd(imgName)
-                .withAuthConfig(authConfig)
-                .start()
-                .awaitCompletion(30, TimeUnit.SECONDS);
+            .withAuthConfig(authConfig)
+            .start()
+            .awaitCompletion(30, TimeUnit.SECONDS);
     }
 
     @Test
@@ -104,17 +104,17 @@ public class PushImageCmdIT extends CmdIT {
 
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pushImageCmd(imgName)
-                .start()
-                .awaitCompletion(30, TimeUnit.SECONDS);
+            .start()
+            .awaitCompletion(30, TimeUnit.SECONDS);
     }
 
     @Test
     public void testPushImageWithInvalidAuth() throws Exception {
         AuthConfig invalidAuthConfig = new AuthConfig()
-                .withUsername("testuser")
-                .withPassword("testwrongpassword")
-                .withEmail("foo@bar.de")
-                .withRegistryAddress(authConfig.getRegistryAddress());
+            .withUsername("testuser")
+            .withPassword("testwrongpassword")
+            .withEmail("foo@bar.de")
+            .withRegistryAddress(authConfig.getRegistryAddress());
 
         String imgName = REGISTRY.createTestImage("push-image-with-invalid-auth");
 
@@ -122,8 +122,8 @@ public class PushImageCmdIT extends CmdIT {
 
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pushImageCmd(imgName)
-                .withAuthConfig(invalidAuthConfig)
-                .start()
-                .awaitCompletion(30, TimeUnit.SECONDS);
+            .withAuthConfig(invalidAuthConfig)
+            .start()
+            .awaitCompletion(30, TimeUnit.SECONDS);
     }
 }

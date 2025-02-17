@@ -23,8 +23,8 @@ public class ContainerTest {
         final CollectionType type = JSONTestHelper.getMapper().getTypeFactory().constructCollectionType(List.class, Container.class);
 
         final List<Container> containers = testRoundTrip(RemoteApiVersion.VERSION_1_22,
-                "containers/json/filter1.json",
-                type
+            "containers/json/filter1.json",
+            type
         );
 
         assertThat(containers.size(), equalTo(1));
@@ -32,7 +32,7 @@ public class ContainerTest {
         final Container container = containers.get(0);
 
         assertThat(container.getImageId(),
-                equalTo("sha256:0cb40641836c461bc97c793971d84d758371ed682042457523e4ae701efe7ec9"));
+            equalTo("sha256:0cb40641836c461bc97c793971d84d758371ed682042457523e4ae701efe7ec9"));
         assertThat(container.getSizeRootFs(), equalTo(1113554L));
 
         final ContainerHostConfig hostConfig = container.getHostConfig();

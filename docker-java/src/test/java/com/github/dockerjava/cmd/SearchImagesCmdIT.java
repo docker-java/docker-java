@@ -11,7 +11,9 @@ import java.util.List;
 
 import static ch.lambdaj.Lambda.filter;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
 import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
 
 public class SearchImagesCmdIT extends CmdIT {

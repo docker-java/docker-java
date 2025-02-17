@@ -19,7 +19,7 @@ import com.github.dockerjava.test.serdes.JSONResourceRef;
 
 /**
  * References test resources and provides basic tests functionality.
- * 
+ *
  * @author Oleg Nenashev
  */
 public enum CommandJSONSamples implements JSONResourceRef {

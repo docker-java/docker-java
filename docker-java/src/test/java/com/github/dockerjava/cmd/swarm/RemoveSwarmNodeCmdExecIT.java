@@ -26,18 +26,18 @@ public class RemoveSwarmNodeCmdExecIT extends SwarmCmdIT {
 
         DockerClient docker2 = startDockerInDocker();
         docker2.joinSwarmCmd()
-               .withRemoteAddrs(Lists.newArrayList("docker1"))
-               .withJoinToken(swarm.getJoinTokens().getWorker())
-               .exec();
+            .withRemoteAddrs(Lists.newArrayList("docker1"))
+            .withJoinToken(swarm.getJoinTokens().getWorker())
+            .exec();
         LOGGER.info("docker2 joined docker's swarm");
 
         List<SwarmNode> nodes = dockerClient.listSwarmNodesCmd().exec();
         assertThat(2, is(nodes.size()));
         Optional<SwarmNode> firstWorkNode = nodes.stream().filter(node -> node.getSpec().getRole() == SwarmNodeRole.WORKER)
-                                                 .findFirst();
+            .findFirst();
         dockerClient.removeSwarmNodeCmd(firstWorkNode.get().getId())
-                    .withForce(true)
-                    .exec();
+            .withForce(true)
+            .exec();
         nodes = dockerClient.listSwarmNodesCmd().exec();
         assertThat(nodes.size(), is(1));
     }

@@ -2,7 +2,8 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.docker-java/docker-java.svg)](https://mvnrepository.com/artifact/com.github.docker-java/docker-java)
 [![codecov.io](http://codecov.io/github/docker-java/docker-java/coverage.svg?branch=main)](http://codecov.io/github/docker-java/docker-java?branch=master)
 [![License](http://img.shields.io/:license-apache-blue.svg?style=flat)](https://github.com/docker-java/docker-java/blob/main/LICENSE)
-# docker-java 
+
+# docker-java
 
 Java API client for [Docker](http://docs.docker.io/ "Docker")
 
