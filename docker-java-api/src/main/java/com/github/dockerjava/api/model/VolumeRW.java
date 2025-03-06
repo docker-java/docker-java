@@ -1,13 +1,13 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.EqualsAndHashCode;
+
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.EqualsAndHashCode;
 
 /**
  * Represents a bind mounted volume in a Docker container.

@@ -3,8 +3,8 @@ package com.github.dockerjava.api.model;
 import com.github.dockerjava.test.serdes.JSONTestHelper;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 public class BindPropagationTest {
 

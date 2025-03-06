@@ -3,11 +3,11 @@ package com.github.dockerjava.core;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.google.common.io.Resources;
-import java.io.IOException;
 import org.apache.commons.lang3.SerializationUtils;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -129,7 +129,7 @@ public class DefaultDockerClientConfigTest {
 
         assertEquals(URI.create("tcp://remote:2376"), config.getDockerHost());
         assertTrue("SSL config is set", config.getSSLConfig() instanceof LocalDirectorySSLConfig);
-        assertTrue("SSL directory is set", ((LocalDirectorySSLConfig)config.getSSLConfig()).getDockerCertPath().endsWith("dockerContextHomeDir/.docker/contexts/tls/b71199ebd070b36beab7317920c2c2f1d777df8d05e5527d8458fda57cb17a7a/docker"));
+        assertTrue("SSL directory is set", ((LocalDirectorySSLConfig) config.getSSLConfig()).getDockerCertPath().endsWith("dockerContextHomeDir/.docker/contexts/tls/b71199ebd070b36beab7317920c2c2f1d777df8d05e5527d8458fda57cb17a7a/docker"));
     }
 
     @Test
@@ -180,7 +180,7 @@ public class DefaultDockerClientConfigTest {
         systemProperties.setProperty("user.home", homeDir());
 
         // when you build config
-        DefaultDockerClientConfig config = buildConfig(Collections.<String, String> emptyMap(), systemProperties);
+        DefaultDockerClientConfig config = buildConfig(Collections.<String, String>emptyMap(), systemProperties);
 
         // then the cert path is as expected
         assertEquals(URI.create("unix:///var/run/docker.sock"), config.getDockerHost());
@@ -207,7 +207,7 @@ public class DefaultDockerClientConfigTest {
         systemProperties.put(DefaultDockerClientConfig.DOCKER_TLS_VERIFY, "1");
 
         // when you build new config
-        DefaultDockerClientConfig config = buildConfig(Collections.<String, String> emptyMap(), systemProperties);
+        DefaultDockerClientConfig config = buildConfig(Collections.<String, String>emptyMap(), systemProperties);
 
         // then it is the same as the example
         assertEquals(EXAMPLE_CONFIG_FULLY_LOADED, config);
@@ -225,15 +225,14 @@ public class DefaultDockerClientConfigTest {
     @Test()
     public void testSslContextEmpty() {
         new DefaultDockerClientConfig(URI.create("tcp://foo"), new DockerConfigFile(), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
-                null);
+            null);
     }
-
 
 
     @Test()
     public void testTlsVerifyAndCertPath() {
         new DefaultDockerClientConfig(URI.create("tcp://foo"), new DockerConfigFile(), "dockerConfig", "apiVersion", "registryUrl", "registryUsername", "registryPassword", "registryEmail",
-                new LocalDirectorySSLConfig(dockerCertPath()));
+            new LocalDirectorySSLConfig(dockerCertPath()));
     }
 
     @Test()
@@ -285,7 +284,7 @@ public class DefaultDockerClientConfigTest {
         Properties systemProperties = new Properties();
         systemProperties.put(DefaultDockerClientConfig.DOCKER_HOST, "tcp://foo");
 
-        DefaultDockerClientConfig.Builder builder =  DefaultDockerClientConfig.createDefaultConfigBuilder(Collections.emptyMap(), systemProperties);
+        DefaultDockerClientConfig.Builder builder = DefaultDockerClientConfig.createDefaultConfigBuilder(Collections.emptyMap(), systemProperties);
 
         assertThat(builder.isDockerHostSetExplicitly(), is(true));
     }
@@ -295,7 +294,7 @@ public class DefaultDockerClientConfigTest {
         Map<String, String> env = new HashMap<>();
         env.put(DefaultDockerClientConfig.DOCKER_HOST, "tcp://foo");
 
-        DefaultDockerClientConfig.Builder builder =  DefaultDockerClientConfig.createDefaultConfigBuilder(env, new Properties());
+        DefaultDockerClientConfig.Builder builder = DefaultDockerClientConfig.createDefaultConfigBuilder(env, new Properties());
 
         assertThat(builder.isDockerHostSetExplicitly(), is(true));
     }
@@ -305,7 +304,7 @@ public class DefaultDockerClientConfigTest {
         Map<String, String> env = new HashMap<>();
         env.put(DefaultDockerClientConfig.DOCKER_HOST, DefaultDockerClientConfig.DEFAULT_DOCKER_HOST);
 
-        DefaultDockerClientConfig.Builder builder =  DefaultDockerClientConfig.createDefaultConfigBuilder(env, new Properties());
+        DefaultDockerClientConfig.Builder builder = DefaultDockerClientConfig.createDefaultConfigBuilder(env, new Properties());
 
         assertThat(builder.isDockerHostSetExplicitly(), is(true));
     }

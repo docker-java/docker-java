@@ -25,14 +25,14 @@ public class UpdateSwarmServiceIT extends SwarmCmdIT {
         DockerClient dockerClient = startSwarm();
         //create network
         String networkId = dockerClient.createNetworkCmd().withName("networkname").withDriver("overlay")
-                .withIpam(new Network.Ipam().withDriver("default")).exec().getId();
+            .withIpam(new Network.Ipam().withDriver("default")).exec().getId();
         TaskSpec taskSpec = new TaskSpec().withContainerSpec(
-                new ContainerSpec().withImage("busybox").withArgs(Arrays.asList("sleep", "3600")).withInit(true));
+            new ContainerSpec().withImage("busybox").withArgs(Arrays.asList("sleep", "3600")).withInit(true));
         ServiceSpec serviceSpec = new ServiceSpec()
-                .withMode(new ServiceModeConfig().withReplicated(new ServiceReplicatedModeOptions().withReplicas(1)))
-                .withTaskTemplate(taskSpec)
-                .withNetworks(Lists.newArrayList(new NetworkAttachmentConfig().withTarget(networkId)))
-                .withName("worker");
+            .withMode(new ServiceModeConfig().withReplicated(new ServiceReplicatedModeOptions().withReplicas(1)))
+            .withTaskTemplate(taskSpec)
+            .withNetworks(Lists.newArrayList(new NetworkAttachmentConfig().withTarget(networkId)))
+            .withName("worker");
         String serviceId = dockerClient.createServiceCmd(serviceSpec).exec().getId();
         await().untilAsserted(() -> {
             List<Service> services = dockerClient.listServicesCmd().withIdFilter(Arrays.asList(serviceId)).exec();

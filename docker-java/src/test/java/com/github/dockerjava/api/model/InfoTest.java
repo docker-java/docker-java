@@ -21,10 +21,10 @@ import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
@@ -38,15 +38,15 @@ public class InfoTest {
         final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(Info.class);
 
         final Info info = testRoundTrip(VERSION_1_22,
-                "info/1.json",
-                type
+            "info/1.json",
+            type
         );
 
         final List<List<String>> driverStatus = asList(
-                asList("Root Dir", "/mnt/sda1/var/lib/docker/aufs"),
-                asList("Backing Filesystem", "extfs"),
-                asList("Dirs", "31"),
-                asList("Dirperm1 Supported", "true")
+            asList("Root Dir", "/mnt/sda1/var/lib/docker/aufs"),
+            asList("Backing Filesystem", "extfs"),
+            asList("Dirs", "31"),
+            asList("Dirperm1 Supported", "true")
         );
 
         final Map<String, List<String>> plugins = new LinkedHashMap<>();
@@ -95,7 +95,7 @@ public class InfoTest {
         final Map<String, IndexConfig> indexConfigs = registryConfig.getIndexConfigs();
         assertThat(indexConfigs, notNullValue());
         final IndexConfig indexConfig = new IndexConfig().withMirrors(null).withName("docker.io")
-                .withSecure(true).withOfficial(true);
+            .withSecure(true).withOfficial(true);
         assertThat(indexConfigs, hasEntry("docker.io", indexConfig));
         assertThat(registryConfig.getMirrors(), nullValue());
 
@@ -112,62 +112,61 @@ public class InfoTest {
         assertThat(info.getOomKillDisable(), is(true));
         assertThat(info.getLoggingDriver(), is("json-file"));
         assertThat(info.getOperatingSystem(),
-                is("Boot2Docker 1.10.1 (TCL 6.4.1); master : b03e158 - Thu Feb 11 22:34:01 UTC 2016"));
+            is("Boot2Docker 1.10.1 (TCL 6.4.1); master : b03e158 - Thu Feb 11 22:34:01 UTC 2016"));
         assertThat(info.getClusterStore(), is(""));
 
 
         final Info withInfo = new Info().withArchitecture("x86_64")
-                .withContainers(2)
-                .withContainersRunning(2)
-                .withContainersPaused(10)
-                .withContainersStopped(3)
-                .withImages(13)
-                .withId("HLN2:5SBU:SRQR:CQI6:AB52:LZZ2:DED5:REDM:BU73:JFHE:R37A:5HMX")
-                .withDriver("aufs")
-                .withDriverStatuses(driverStatus)
-                .withSystemStatus(null)
-                .withPlugins(plugins)
-                .withMemoryLimit(true)
-                .withSwapLimit(true)
-                .withCpuCfsPeriod(true)
-                .withCpuCfsQuota(true)
-                .withCpuShares(true)
-                .withCpuSet(true)
-                .withIPv4Forwarding(true)
-                .withBridgeNfIptables(true)
-                .withBridgeNfIp6tables(true)
-                .withDebug(true)
-                .withNFd(24)
-                .withOomKillDisable(true)
-                .withNGoroutines(40)
-                .withSystemTime("2016-02-17T14:56:35.212841831Z")
-                .withExecutionDriver("native-0.2")
-                .withLoggingDriver("json-file")
-                .withNEventsListener(0)
-                .withKernelVersion("4.1.17-boot2docker")
-                .withOperatingSystem("Boot2Docker 1.10.1 (TCL 6.4.1); master : b03e158 - Thu Feb 11 22:34:01 UTC 2016")
-                .withOsType("linux")
-                .withIndexServerAddress("https://index.docker.io/v1/")
-                .withRegistryConfig(registryConfig)
-                .withInitSha1("")
-                .withInitPath("/usr/local/bin/docker")
-                .withNCPU(1)
-                .withMemTotal(1044574208L)
-                .withDockerRootDir("/mnt/sda1/var/lib/docker")
-                .withHttpProxy("")
-                .withHttpsProxy("")
-                .withNoProxy("")
-                .withName("docker-java")
-                .withLabels(new String[]{"provider=virtualbox"})
-                .withExperimentalBuild(false)
-                .withServerVersion("1.10.1")
-                .withClusterStore("")
-                .withClusterAdvertise("")
-                //shredinger-fields
-                .withDiscoveryBackend(null)
-                .withOomScoreAdj(null)
-                .withSockets(null)
-                ;
+            .withContainers(2)
+            .withContainersRunning(2)
+            .withContainersPaused(10)
+            .withContainersStopped(3)
+            .withImages(13)
+            .withId("HLN2:5SBU:SRQR:CQI6:AB52:LZZ2:DED5:REDM:BU73:JFHE:R37A:5HMX")
+            .withDriver("aufs")
+            .withDriverStatuses(driverStatus)
+            .withSystemStatus(null)
+            .withPlugins(plugins)
+            .withMemoryLimit(true)
+            .withSwapLimit(true)
+            .withCpuCfsPeriod(true)
+            .withCpuCfsQuota(true)
+            .withCpuShares(true)
+            .withCpuSet(true)
+            .withIPv4Forwarding(true)
+            .withBridgeNfIptables(true)
+            .withBridgeNfIp6tables(true)
+            .withDebug(true)
+            .withNFd(24)
+            .withOomKillDisable(true)
+            .withNGoroutines(40)
+            .withSystemTime("2016-02-17T14:56:35.212841831Z")
+            .withExecutionDriver("native-0.2")
+            .withLoggingDriver("json-file")
+            .withNEventsListener(0)
+            .withKernelVersion("4.1.17-boot2docker")
+            .withOperatingSystem("Boot2Docker 1.10.1 (TCL 6.4.1); master : b03e158 - Thu Feb 11 22:34:01 UTC 2016")
+            .withOsType("linux")
+            .withIndexServerAddress("https://index.docker.io/v1/")
+            .withRegistryConfig(registryConfig)
+            .withInitSha1("")
+            .withInitPath("/usr/local/bin/docker")
+            .withNCPU(1)
+            .withMemTotal(1044574208L)
+            .withDockerRootDir("/mnt/sda1/var/lib/docker")
+            .withHttpProxy("")
+            .withHttpsProxy("")
+            .withNoProxy("")
+            .withName("docker-java")
+            .withLabels(new String[]{"provider=virtualbox"})
+            .withExperimentalBuild(false)
+            .withServerVersion("1.10.1")
+            .withClusterStore("")
+            .withClusterAdvertise("")
+            //shredinger-fields
+            .withDiscoveryBackend(null)
+            .withOomScoreAdj(null)
+            .withSockets(null);
 
         assertThat(info, is(withInfo));
     }
@@ -177,30 +176,30 @@ public class InfoTest {
         final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(Info.class);
 
         final Info info = testRoundTrip(VERSION_1_22,
-                "info/2.json",
-                type
+            "info/2.json",
+            type
         );
 
         final List<List<String>> driverStatus = asList(
-                asList("Pool Name", "docker-253:2-17567992-pool"),
-                asList("Pool Blocksize", "65.54 kB"),
-                asList("Base Device Size", "107.4 GB"),
-                asList("Backing Filesystem", "ext4"),
-                asList("Data file", "/dev/loop0"),
-                asList("Metadata file", "/dev/loop1"),
-                asList("Data Space Used", "3.89 GB"),
-                asList("Data Space Total", "107.4 GB"),
-                asList("Data Space Available", "103.5 GB"),
-                asList("Metadata Space Used", "5.46 MB"),
-                asList("Metadata Space Total", "2.147 GB"),
-                asList("Metadata Space Available", "2.142 GB"),
-                asList("Udev Sync Supported", "true"),
-                asList("Deferred Removal Enabled", "false"),
-                asList("Deferred Deletion Enabled", "false"),
-                asList("Deferred Deleted Device Count", "0"),
-                asList("Data loop file", "/var/lib/docker/devicemapper/devicemapper/data"),
-                asList("Metadata loop file", "/var/lib/docker/devicemapper/devicemapper/metadata"),
-                asList("Library Version", "1.02.107-RHEL7 (2015-12-01)")
+            asList("Pool Name", "docker-253:2-17567992-pool"),
+            asList("Pool Blocksize", "65.54 kB"),
+            asList("Base Device Size", "107.4 GB"),
+            asList("Backing Filesystem", "ext4"),
+            asList("Data file", "/dev/loop0"),
+            asList("Metadata file", "/dev/loop1"),
+            asList("Data Space Used", "3.89 GB"),
+            asList("Data Space Total", "107.4 GB"),
+            asList("Data Space Available", "103.5 GB"),
+            asList("Metadata Space Used", "5.46 MB"),
+            asList("Metadata Space Total", "2.147 GB"),
+            asList("Metadata Space Available", "2.142 GB"),
+            asList("Udev Sync Supported", "true"),
+            asList("Deferred Removal Enabled", "false"),
+            asList("Deferred Deletion Enabled", "false"),
+            asList("Deferred Deleted Device Count", "0"),
+            asList("Data loop file", "/var/lib/docker/devicemapper/devicemapper/data"),
+            asList("Metadata loop file", "/var/lib/docker/devicemapper/devicemapper/metadata"),
+            asList("Library Version", "1.02.107-RHEL7 (2015-12-01)")
         );
 
         final Map<String, List<String>> plugins = new LinkedHashMap<>();
@@ -249,10 +248,10 @@ public class InfoTest {
         final Map<String, IndexConfig> indexConfigs = registryConfig.getIndexConfigs();
         assertThat(indexConfigs, notNullValue());
         final IndexConfig indexConfig = new IndexConfig().withMirrors(null).withName("docker.io")
-                .withSecure(true).withOfficial(true);
+            .withSecure(true).withOfficial(true);
         assertThat(indexConfigs, hasEntry("docker.io", indexConfig));
         final IndexConfig indexConfig2 = new IndexConfig().withMirrors(Collections.<String>emptyList()).withName("somehost:80")
-                .withSecure(false).withOfficial(false);
+            .withSecure(false).withOfficial(false);
         assertThat(indexConfigs, hasEntry("somehost:80", indexConfig2));
         assertThat(registryConfig.getMirrors(), nullValue());
 
@@ -273,57 +272,56 @@ public class InfoTest {
 
 
         final Info withInfo = new Info().withArchitecture("x86_64")
-                .withContainers(2)
-                .withContainersRunning(0)
-                .withContainersPaused(0)
-                .withContainersStopped(2)
-                .withImages(55)
-                .withId("H52J:52LG:YP4W:EHKY:SRK5:RYG6:ETWR:7AR3:MTFJ:PC6C:4YF2:NTN2")
-                .withDriver("devicemapper")
-                .withDriverStatuses(driverStatus)
-                .withSystemStatus(null)
-                .withPlugins(plugins)
-                .withMemoryLimit(true)
-                .withSwapLimit(true)
-                .withCpuCfsPeriod(true)
-                .withCpuCfsQuota(true)
-                .withCpuShares(true)
-                .withCpuSet(true)
-                .withIPv4Forwarding(true)
-                .withBridgeNfIptables(false)
-                .withBridgeNfIp6tables(false)
-                .withDebug(false)
-                .withNFd(13)
-                .withOomKillDisable(true)
-                .withNGoroutines(30)
-                .withSystemTime("2016-03-20T17:32:06.598846244+01:00")
-                .withExecutionDriver("native-0.2")
-                .withLoggingDriver("json-file")
-                .withNEventsListener(0)
-                .withKernelVersion("3.10.0-327.10.1.el7.x86_64")
-                .withOperatingSystem("Red Hat Enterprise Linux Workstation 7.2 (Maipo)")
-                .withOsType("linux")
-                .withIndexServerAddress("https://index.docker.io/v1/")
-                .withRegistryConfig(registryConfig)
-                .withInitSha1("672d65f3cf8816fbda421afeed7e52c0ca17d5e7")
-                .withInitPath("/usr/libexec/docker/dockerinit")
-                .withNCPU(8)
-                .withMemTotal(33350918144L)
-                .withDockerRootDir("/var/lib/docker")
-                .withHttpProxy("")
-                .withHttpsProxy("")
-                .withNoProxy("")
-                .withName("somename")
-                .withLabels(null)
-                .withExperimentalBuild(false)
-                .withServerVersion("1.10.2")
-                .withClusterStore("")
-                .withClusterAdvertise("")
-                //shredinger-fields
-                .withDiscoveryBackend(null)
-                .withOomScoreAdj(null)
-                .withSockets(null)
-                ;
+            .withContainers(2)
+            .withContainersRunning(0)
+            .withContainersPaused(0)
+            .withContainersStopped(2)
+            .withImages(55)
+            .withId("H52J:52LG:YP4W:EHKY:SRK5:RYG6:ETWR:7AR3:MTFJ:PC6C:4YF2:NTN2")
+            .withDriver("devicemapper")
+            .withDriverStatuses(driverStatus)
+            .withSystemStatus(null)
+            .withPlugins(plugins)
+            .withMemoryLimit(true)
+            .withSwapLimit(true)
+            .withCpuCfsPeriod(true)
+            .withCpuCfsQuota(true)
+            .withCpuShares(true)
+            .withCpuSet(true)
+            .withIPv4Forwarding(true)
+            .withBridgeNfIptables(false)
+            .withBridgeNfIp6tables(false)
+            .withDebug(false)
+            .withNFd(13)
+            .withOomKillDisable(true)
+            .withNGoroutines(30)
+            .withSystemTime("2016-03-20T17:32:06.598846244+01:00")
+            .withExecutionDriver("native-0.2")
+            .withLoggingDriver("json-file")
+            .withNEventsListener(0)
+            .withKernelVersion("3.10.0-327.10.1.el7.x86_64")
+            .withOperatingSystem("Red Hat Enterprise Linux Workstation 7.2 (Maipo)")
+            .withOsType("linux")
+            .withIndexServerAddress("https://index.docker.io/v1/")
+            .withRegistryConfig(registryConfig)
+            .withInitSha1("672d65f3cf8816fbda421afeed7e52c0ca17d5e7")
+            .withInitPath("/usr/libexec/docker/dockerinit")
+            .withNCPU(8)
+            .withMemTotal(33350918144L)
+            .withDockerRootDir("/var/lib/docker")
+            .withHttpProxy("")
+            .withHttpsProxy("")
+            .withNoProxy("")
+            .withName("somename")
+            .withLabels(null)
+            .withExperimentalBuild(false)
+            .withServerVersion("1.10.2")
+            .withClusterStore("")
+            .withClusterAdvertise("")
+            //shredinger-fields
+            .withDiscoveryBackend(null)
+            .withOomScoreAdj(null)
+            .withSockets(null);
 
         assertThat(info, is(withInfo));
     }
@@ -333,8 +331,8 @@ public class InfoTest {
         final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(Info.class);
 
         final Info info = testRoundTrip(RemoteApiVersion.VERSION_1_38,
-                "info/lcow.json",
-                type
+            "info/lcow.json",
+            type
         );
 
         assertThat(info, notNullValue());
@@ -343,8 +341,8 @@ public class InfoTest {
         assertThat(info.getDriver(), is("windowsfilter (windows) lcow (linux)"));
 
         assertThat(info.getDriverStatuses(), equalTo(Arrays.asList(
-                Arrays.asList("Windows", ""),
-                Arrays.asList("LCOW", "")
+            Arrays.asList("Windows", ""),
+            Arrays.asList("LCOW", "")
         )));
 
         assertThat(info.getIsolation(), is("hyperv"));

@@ -8,7 +8,10 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static com.github.dockerjava.test.serdes.JSONSamples.testRoundTrip;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
@@ -26,8 +29,8 @@ public class AuthConfigTest {
         final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(AuthConfig.class);
 
         final AuthConfig authConfig = testRoundTrip(RemoteApiVersion.VERSION_1_22,
-                "/other/AuthConfig/docs1.json",
-                type
+            "/other/AuthConfig/docs1.json",
+            type
         );
 
         assertThat(authConfig, notNullValue());
@@ -36,8 +39,8 @@ public class AuthConfigTest {
         assertThat(authConfig.getEmail(), is("jdoe@acme.com"));
 
         final AuthConfig authConfig1 = new AuthConfig().withUsername("jdoe")
-                .withPassword("secret")
-                .withEmail("jdoe@acme.com");
+            .withPassword("secret")
+            .withEmail("jdoe@acme.com");
 
         assertThat(authConfig1, equalTo(authConfig));
     }
@@ -47,8 +50,8 @@ public class AuthConfigTest {
         final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(AuthConfig.class);
 
         final AuthConfig authConfig = testRoundTrip(RemoteApiVersion.VERSION_1_22,
-                "/other/AuthConfig/docs2.json",
-                type
+            "/other/AuthConfig/docs2.json",
+            type
         );
 
         assertThat(authConfig, notNullValue());
@@ -64,8 +67,8 @@ public class AuthConfigTest {
     public void compatibleWithIdentitytoken() throws IOException {
         final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(AuthConfig.class);
         final AuthConfig authConfig = testRoundTrip(RemoteApiVersion.VERSION_1_23,
-                "/other/AuthConfig/docs1.json",
-                type
+            "/other/AuthConfig/docs1.json",
+            type
         );
         String auth = "YWRtaW46";
         String identitytoken = "1cba468e-8cbe-4c55-9098-2c2ed769e885";
@@ -80,8 +83,8 @@ public class AuthConfigTest {
     public void shouldNotFailWithStackOrchestratorInConfig() throws IOException {
         final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(AuthConfig.class);
         final AuthConfig authConfig = testRoundTrip(RemoteApiVersion.VERSION_1_25,
-                "/other/AuthConfig/orchestrators.json",
-                type
+            "/other/AuthConfig/orchestrators.json",
+            type
         );
         assertThat(authConfig, notNullValue());
         assertThat(authConfig.getAuth(), is(nullValue()));

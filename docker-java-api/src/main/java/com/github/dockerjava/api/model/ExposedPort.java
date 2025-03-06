@@ -1,15 +1,15 @@
 package com.github.dockerjava.api.model;
 
-import static com.github.dockerjava.api.model.InternetProtocol.TCP;
-import static com.github.dockerjava.api.model.InternetProtocol.UDP;
-import static com.github.dockerjava.api.model.InternetProtocol.SCTP;
-
-import java.io.Serializable;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.github.dockerjava.api.model.Ports.Binding;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
+
+import static com.github.dockerjava.api.model.InternetProtocol.SCTP;
+import static com.github.dockerjava.api.model.InternetProtocol.TCP;
+import static com.github.dockerjava.api.model.InternetProtocol.UDP;
 
 /**
  * Represents a container port that Docker exposes to external clients. The port is defined by its {@link #getPort() port number} and an
@@ -27,10 +27,8 @@ public class ExposedPort implements Serializable {
     /**
      * Creates an {@link ExposedPort} for the given parameters.
      *
-     * @param port
-     *            the {@link #getPort() port number}
-     * @param protocol
-     *            the {@link InternetProtocol}
+     * @param port     the {@link #getPort() port number}
+     * @param protocol the {@link InternetProtocol}
      */
     public ExposedPort(int port, InternetProtocol protocol) {
         this.port = port;
@@ -40,8 +38,7 @@ public class ExposedPort implements Serializable {
     /**
      * Creates an {@link ExposedPort} for the given {@link #getPort() port number} and {@link InternetProtocol#DEFAULT}.
      *
-     * @param port
-     *            the {@link #getPort() port number}
+     * @param port the {@link #getPort() port number}
      */
     public ExposedPort(int port) {
         this(port, InternetProtocol.DEFAULT);
@@ -50,10 +47,8 @@ public class ExposedPort implements Serializable {
     /**
      * Creates an {@link ExposedPort} for the given parameters.
      *
-     * @param scheme
-     *            the {@link #getScheme() scheme}, <code>tcp</code>, <code>udp</code> or <code>sctp</code>
-     * @param port
-     *            the {@link #getPort() port number}
+     * @param scheme the {@link #getScheme() scheme}, <code>tcp</code>, <code>udp</code> or <code>sctp</code>
+     * @param port   the {@link #getPort() port number}
      * @deprecated use {@link #ExposedPort(int, InternetProtocol)}
      */
     @Deprecated
@@ -77,7 +72,9 @@ public class ExposedPort implements Serializable {
         return protocol.toString();
     }
 
-    /** @return the port number that the container exposes */
+    /**
+     * @return the port number that the container exposes
+     */
     public int getPort() {
         return port;
     }
@@ -109,11 +106,9 @@ public class ExposedPort implements Serializable {
     /**
      * Parses a textual port specification (as used by the Docker CLI) to an {@link ExposedPort}.
      *
-     * @param serialized
-     *            the specification, e.g. <code>80/tcp</code>
+     * @param serialized the specification, e.g. <code>80/tcp</code>
      * @return an {@link ExposedPort} matching the specification
-     * @throws IllegalArgumentException
-     *             if the specification cannot be parsed
+     * @throws IllegalArgumentException if the specification cannot be parsed
      */
     @JsonCreator
     public static ExposedPort parse(String serialized) throws IllegalArgumentException {

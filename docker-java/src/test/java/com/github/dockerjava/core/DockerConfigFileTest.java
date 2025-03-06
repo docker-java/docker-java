@@ -12,8 +12,8 @@ import org.junit.rules.ExpectedException;
 import java.io.File;
 import java.io.IOException;
 
-import static org.hamcrest.core.Is.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 public class DockerConfigFileTest {
     @Rule
@@ -72,16 +72,16 @@ public class DockerConfigFileTest {
     @Test
     public void validLegacyJson() throws IOException {
         AuthConfig authConfig1 = new AuthConfig()
-                .withEmail("foo@example.com")
-                .withUsername("foo")
-                .withPassword("bar")
-                .withRegistryAddress("quay.io");
+            .withEmail("foo@example.com")
+            .withUsername("foo")
+            .withPassword("bar")
+            .withRegistryAddress("quay.io");
 
         AuthConfig authConfig2 = new AuthConfig()
-                .withEmail("moo@example.com")
-                .withUsername("foo1")
-                .withPassword("bar1")
-                .withRegistryAddress(AuthConfig.DEFAULT_SERVER_ADDRESS);
+            .withEmail("moo@example.com")
+            .withUsername("foo1")
+            .withPassword("bar1")
+            .withRegistryAddress(AuthConfig.DEFAULT_SERVER_ADDRESS);
 
         DockerConfigFile expected = new DockerConfigFile();
         expected.addAuthConfig(authConfig1);
@@ -93,13 +93,13 @@ public class DockerConfigFileTest {
     @Test
     public void validJsonWithUnknown() throws IOException {
         AuthConfig authConfig1 = new AuthConfig()
-                .withRegistryAddress("192.168.99.100:32768");
+            .withRegistryAddress("192.168.99.100:32768");
 
         AuthConfig authConfig2 = new AuthConfig()
-                .withEmail("foo@example.com")
-                .withUsername("foo")
-                .withPassword("bar")
-                .withRegistryAddress("https://index.docker.io/v1/");
+            .withEmail("foo@example.com")
+            .withUsername("foo")
+            .withPassword("bar")
+            .withRegistryAddress("https://index.docker.io/v1/");
 
         DockerConfigFile expected = new DockerConfigFile();
         expected.addAuthConfig(authConfig1);
@@ -118,10 +118,10 @@ public class DockerConfigFileTest {
     @Test
     public void validLegacy() throws IOException {
         AuthConfig authConfig = new AuthConfig()
-                .withEmail("foo@example.com")
-                .withUsername("foo")
-                .withPassword("bar")
-                .withRegistryAddress(AuthConfig.DEFAULT_SERVER_ADDRESS);
+            .withEmail("foo@example.com")
+            .withUsername("foo")
+            .withPassword("bar")
+            .withRegistryAddress(AuthConfig.DEFAULT_SERVER_ADDRESS);
 
         DockerConfigFile expected = new DockerConfigFile();
         expected.addAuthConfig(authConfig);
@@ -132,16 +132,16 @@ public class DockerConfigFileTest {
     @Test
     public void validDockerConfig() throws IOException {
         AuthConfig authConfig1 = new AuthConfig()
-                .withEmail("foo@example.com")
-                .withUsername("foo")
-                .withPassword("bar")
-                .withRegistryAddress("quay.io");
+            .withEmail("foo@example.com")
+            .withUsername("foo")
+            .withPassword("bar")
+            .withRegistryAddress("quay.io");
 
         AuthConfig authConfig2 = new AuthConfig()
-                .withEmail("moo@example.com")
-                .withUsername("foo1")
-                .withPassword("bar1")
-                .withRegistryAddress(AuthConfig.DEFAULT_SERVER_ADDRESS);
+            .withEmail("moo@example.com")
+            .withUsername("foo1")
+            .withPassword("bar1")
+            .withRegistryAddress(AuthConfig.DEFAULT_SERVER_ADDRESS);
 
         DockerConfigFile expected = new DockerConfigFile();
         expected.addAuthConfig(authConfig1);

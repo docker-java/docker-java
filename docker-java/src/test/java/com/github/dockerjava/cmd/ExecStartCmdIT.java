@@ -30,20 +30,20 @@ public class ExecStartCmdIT extends CmdIT {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("top")
-                .withName(containerName).exec();
+            .withName(containerName).exec();
         LOG.info("Created container {}", container.toString());
         assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         ExecCreateCmdResponse execCreateCmdResponse = dockerRule.getClient().execCreateCmd(container.getId())
-                .withAttachStdout(true)
-                .withCmd("touch", "/execStartTest.log")
-                .withUser("root")
-                .exec();
+            .withAttachStdout(true)
+            .withCmd("touch", "/execStartTest.log")
+            .withUser("root")
+            .exec();
         dockerRule.getClient().execStartCmd(execCreateCmdResponse.getId())
-                .exec(new ExecStartResultCallback(System.out, System.err))
-                .awaitCompletion();
+            .exec(new ExecStartResultCallback(System.out, System.err))
+            .awaitCompletion();
 
         InputStream response = dockerRule.getClient().copyArchiveFromContainerCmd(container.getId(), "/execStartTest.log").exec();
 
@@ -58,16 +58,16 @@ public class ExecStartCmdIT extends CmdIT {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999")
-                .withName(containerName).exec();
+            .withName(containerName).exec();
         LOG.info("Created container {}", container.toString());
         assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         ExecCreateCmdResponse execCreateCmdResponse = dockerRule.getClient().execCreateCmd(container.getId())
-                .withAttachStdout(true).withCmd("touch", "/execStartTest.log").exec();
+            .withAttachStdout(true).withCmd("touch", "/execStartTest.log").exec();
         dockerRule.getClient().execStartCmd(execCreateCmdResponse.getId()).withDetach(false).withTty(true)
-                .exec(new ExecStartResultCallback(System.out, System.err)).awaitCompletion();
+            .exec(new ExecStartResultCallback(System.out, System.err)).awaitCompletion();
 
         InputStream response = dockerRule.getClient().copyArchiveFromContainerCmd(container.getId(), "/execStartTest.log").exec();
 
@@ -82,16 +82,16 @@ public class ExecStartCmdIT extends CmdIT {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withCmd("sleep", "9999")
-                .withName(containerName).exec();
+            .withName(containerName).exec();
         LOG.info("Created container {}", container.toString());
         assertThat(container.getId(), not(is(emptyString())));
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         ExecCreateCmdResponse execCreateCmdResponse = dockerRule.getClient().execCreateCmd(container.getId())
-                .withAttachStdout(true).withCmd("touch", "/execStartTest.log").withUser("NonExistentUser").exec();
+            .withAttachStdout(true).withCmd("touch", "/execStartTest.log").withUser("NonExistentUser").exec();
         dockerRule.getClient().execStartCmd(execCreateCmdResponse.getId()).withDetach(false).withTty(true)
-                .exec(new ExecStartResultCallback(System.out, System.err)).awaitCompletion();
+            .exec(new ExecStartResultCallback(System.out, System.err)).awaitCompletion();
 
         dockerRule.getClient().copyArchiveFromContainerCmd(container.getId(), "/execStartTest.log").exec();
     }

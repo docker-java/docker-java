@@ -20,8 +20,7 @@ public class Repository extends DockerObject implements Serializable {
     /**
      * Name may be eg. 'busybox' or '10.0.0.1:5000/fred'
      *
-     * @param name
-     *            Repository name
+     * @param name Repository name
      */
     public Repository(String name) {
         this.name = name;

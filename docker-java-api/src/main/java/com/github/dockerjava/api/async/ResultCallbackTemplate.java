@@ -15,10 +15,9 @@ import java.util.concurrent.TimeUnit;
  * Abstract template implementation of {@link ResultCallback}
  *
  * @author Marcus Linke
- *
  */
 public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T>, A_RES_T> implements
-        ResultCallback<A_RES_T> {
+    ResultCallback<A_RES_T> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ResultCallbackTemplate.class);
 
@@ -71,14 +70,14 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
     @Override
     public void close() throws IOException {
         if (!closed) {
-           closed = true;
-           try {
-               if (stream != null) {
-                   stream.close();
-               }
-           } finally {
-               completed.countDown();
-           }
+            closed = true;
+            try {
+                if (stream != null) {
+                    stream.close();
+                }
+            } finally {
+                completed.countDown();
+            }
         }
     }
 
@@ -103,8 +102,9 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
 
     /**
      * Blocks until {@link ResultCallback#onComplete()} was called or the given timeout occurs
+     *
      * @return {@code true} if completed and {@code false} if the waiting time elapsed
-     *         before {@link ResultCallback#onComplete()} was called.
+     * before {@link ResultCallback#onComplete()} was called.
      */
     public boolean awaitCompletion(long timeout, TimeUnit timeUnit) throws InterruptedException {
         try {
@@ -135,8 +135,9 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
      * Blocks until {@link ResultCallback#onStart(Closeable)} was called or the given timeout occurs.
      * {@link ResultCallback#onStart(Closeable)} is called when the request was processed on the server side
      * and the response is incoming.
+     *
      * @return {@code true} if started and {@code false} if the waiting time elapsed
-     *         before {@link ResultCallback#onStart(Closeable)} was called.
+     * before {@link ResultCallback#onStart(Closeable)} was called.
      */
     public boolean awaitStarted(long timeout, TimeUnit timeUnit) throws InterruptedException {
         return started.await(timeout, timeUnit);
@@ -144,16 +145,17 @@ public abstract class ResultCallbackTemplate<RC_T extends ResultCallback<A_RES_T
 
     /**
      * Throws the first occurred error as a runtime exception
+     *
      * @throws com.github.dockerjava.api.exception.DockerException The first docker based Error
-     * @throws RuntimeException on any other occurred error
+     * @throws RuntimeException                                    on any other occurred error
      */
     protected void throwFirstError() {
         if (firstError != null) {
             if (firstError instanceof Error) {
-              throw (Error) firstError;
+                throw (Error) firstError;
             }
             if (firstError instanceof RuntimeException) {
-              throw (RuntimeException) firstError;
+                throw (RuntimeException) firstError;
             }
             throw new RuntimeException(firstError);
         }

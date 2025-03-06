@@ -23,7 +23,7 @@ public class ExecCreateCmdImplIT extends CmdIT {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE).withUser("root").withCmd("top")
-                .withName(containerName).exec();
+            .withName(containerName).exec();
 
         LOG.info("Created container {}", container.toString());
 
@@ -32,7 +32,7 @@ public class ExecCreateCmdImplIT extends CmdIT {
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         ExecCreateCmdResponse execCreateCmdResponse = dockerRule.getClient().execCreateCmd(container.getId())
-                .withCmd("touch", "file.log").exec();
+            .withCmd("touch", "file.log").exec();
 
         assertThat(execCreateCmdResponse.getId(), not(is(emptyString())));
     }

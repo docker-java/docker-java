@@ -243,7 +243,7 @@ public class BindTest {
     @Test
     public void parseInvalidAccessMode() {
         expectedEx.expect(IllegalArgumentException.class);
-        expectedEx.expectMessage( "Error parsing Bind");
+        expectedEx.expectMessage("Error parsing Bind");
 
         Bind.parse("/host:/container:xx");
     }

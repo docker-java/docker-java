@@ -27,27 +27,27 @@ public class UpdateSwarmCmdExecIT extends SwarmCmdIT {
         DockerClient dockerClient = startSwarm();
 
         SwarmSpec newSpec = new SwarmSpec()
-                .withName("default")
-                .withDispatcher(new SwarmDispatcherConfig()
-                        .withHeartbeatPeriod(10000000L)
-                ).withOrchestration(new SwarmOrchestration()
-                        .withTaskHistoryRententionLimit(100)
-                ).withCaConfig(new SwarmCAConfig()
-                        .withNodeCertExpiry(60 * 60 * 1000000000L /*ns */))
-                .withRaft(new SwarmRaftConfig()
-                        .withElectionTick(8)
-                        .withSnapshotInterval(20000)
-                        .withHeartbeatTick(5)
-                        .withLogEntriesForSlowFollowers(200)
-                ).withTaskDefaults(new TaskDefaults());
+            .withName("default")
+            .withDispatcher(new SwarmDispatcherConfig()
+                .withHeartbeatPeriod(10000000L)
+            ).withOrchestration(new SwarmOrchestration()
+                .withTaskHistoryRententionLimit(100)
+            ).withCaConfig(new SwarmCAConfig()
+                .withNodeCertExpiry(60 * 60 * 1000000000L /*ns */))
+            .withRaft(new SwarmRaftConfig()
+                .withElectionTick(8)
+                .withSnapshotInterval(20000)
+                .withHeartbeatTick(5)
+                .withLogEntriesForSlowFollowers(200)
+            ).withTaskDefaults(new TaskDefaults());
 
         Swarm swarm = dockerClient.inspectSwarmCmd().exec();
         LOG.info("Inspected swarm: {}", swarm.toString());
         assertThat(swarm.getSpec(), is(not(equalTo(newSpec))));
 
         dockerClient.updateSwarmCmd(newSpec)
-                .withVersion(swarm.getVersion().getIndex())
-                .exec();
+            .withVersion(swarm.getVersion().getIndex())
+            .exec();
         LOG.info("Updated swarm: {}", newSpec.toString());
 
         swarm = dockerClient.inspectSwarmCmd().exec();
@@ -59,8 +59,8 @@ public class UpdateSwarmCmdExecIT extends SwarmCmdIT {
     public void updatingSwarmThrowsWhenNotInSwarm() throws Exception {
         DockerClient dockerClient = startDockerInDocker();
         dockerClient.updateSwarmCmd(new SwarmSpec())
-                .withVersion(1L)
-                .exec();
+            .withVersion(1L)
+            .exec();
     }
 
 }

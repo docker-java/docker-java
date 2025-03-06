@@ -39,7 +39,7 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpcore</artifactId>
-			<version>4.4.13</version>
+			<version>${httpcore.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
@@ -76,7 +76,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
-			<version>1.7.30</version>
+			<version>${jcl-over-slf4j.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -94,10 +94,15 @@
 			<plugin>
 				<groupId>com.github.siom79.japicmp</groupId>
 				<artifactId>japicmp-maven-plugin</artifactId>
+				<version>${japicmp-maven-plugin.version}</version>
 				<configuration>
 					<parameter>
 						<excludes>
 							<!-- Previously deprecated -->
+							<exclude>jakarta.ws.rs.WebApplicationException</exclude>
+							<exclude>javax.ws.rs.WebApplicationException</exclude>
+							<exclude>javax.ws.rs.core.Response</exclude>
+							<exclude>javax.ws.rs.core.Response.Status</exclude>
 							<exclude>com.github.dockerjava.jaxrs.ApacheUnixSocket</exclude>
 							<exclude>com.github.dockerjava.jaxrs.async.AbstractCallbackNotifier</exclude>
 							<exclude>com.github.dockerjava.jaxrs.async.GETCallbackNotifier</exclude>

@@ -64,8 +64,8 @@ public class PullImageCmdIT extends CmdIT {
         LOG.info("Pulling image: {}", testImage);
 
         dockerRule.getClient().pullImageCmd(testImage)
-                .start()
-                .awaitCompletion(30, TimeUnit.SECONDS);
+            .start()
+            .awaitCompletion(30, TimeUnit.SECONDS);
 
         info = dockerRule.getClient().infoCmd().exec();
         LOG.info("Client info after pull, {}", info.toString());
@@ -80,7 +80,7 @@ public class PullImageCmdIT extends CmdIT {
     @Test
     public void testPullNonExistingImage() throws Exception {
         if (isNotSwarm(dockerRule.getClient()) && getVersion(dockerRule.getClient())
-                .isGreaterOrEqual(RemoteApiVersion.VERSION_1_26)) {
+            .isGreaterOrEqual(RemoteApiVersion.VERSION_1_26)) {
             exception.expect(NotFoundException.class);
         } else {
             exception.expect(DockerClientException.class);
@@ -88,8 +88,8 @@ public class PullImageCmdIT extends CmdIT {
 
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pullImageCmd("xvxcv/foo")
-                .start()
-                .awaitCompletion(30, TimeUnit.SECONDS);
+            .start()
+            .awaitCompletion(30, TimeUnit.SECONDS);
     }
 
     @Test
@@ -100,9 +100,9 @@ public class PullImageCmdIT extends CmdIT {
 
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pullImageCmd(imgName)
-                .withAuthConfig(authConfig)
-                .start()
-                .awaitCompletion(30, TimeUnit.SECONDS);
+            .withAuthConfig(authConfig)
+            .start()
+            .awaitCompletion(30, TimeUnit.SECONDS);
     }
 
     @Test
@@ -113,9 +113,9 @@ public class PullImageCmdIT extends CmdIT {
 
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pullImageCmd(imgName)
-                .withAuthConfig(authConfig)
-                .start()
-                .awaitCompletion(30, TimeUnit.SECONDS);
+            .withAuthConfig(authConfig)
+            .start()
+            .awaitCompletion(30, TimeUnit.SECONDS);
     }
 
     @Test
@@ -125,7 +125,7 @@ public class PullImageCmdIT extends CmdIT {
         String imgName = REGISTRY.createPrivateImage("pull-image-with-no-auth");
 
         if (isNotSwarm(dockerRule.getClient()) && getVersion(dockerRule.getClient())
-                .isGreaterOrEqual(RemoteApiVersion.VERSION_1_30)) {
+            .isGreaterOrEqual(RemoteApiVersion.VERSION_1_30)) {
             exception.expect(DockerException.class);
         } else {
             exception.expect(DockerClientException.class);
@@ -133,8 +133,8 @@ public class PullImageCmdIT extends CmdIT {
 
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pullImageCmd(imgName)
-                .start()
-                .awaitCompletion(30, TimeUnit.SECONDS);
+            .start()
+            .awaitCompletion(30, TimeUnit.SECONDS);
     }
 
 
@@ -142,15 +142,15 @@ public class PullImageCmdIT extends CmdIT {
     public void testPullImageWithInvalidAuth() throws Exception {
         AuthConfig authConfig = REGISTRY.getAuthConfig();
         AuthConfig invalidAuthConfig = new AuthConfig()
-                .withUsername("testuser")
-                .withPassword("testwrongpassword")
-                .withEmail("foo@bar.de")
-                .withRegistryAddress(authConfig.getRegistryAddress());
+            .withUsername("testuser")
+            .withPassword("testwrongpassword")
+            .withEmail("foo@bar.de")
+            .withRegistryAddress(authConfig.getRegistryAddress());
 
         String imgName = REGISTRY.createPrivateImage("pull-image-with-invalid-auth");
 
         if (isNotSwarm(dockerRule.getClient()) && getVersion(dockerRule.getClient())
-                .isGreaterOrEqual(RemoteApiVersion.VERSION_1_30)) {
+            .isGreaterOrEqual(RemoteApiVersion.VERSION_1_30)) {
             exception.expect(DockerException.class);
         } else {
             exception.expect(DockerClientException.class);
@@ -158,8 +158,8 @@ public class PullImageCmdIT extends CmdIT {
 
         // stream needs to be fully read in order to close the underlying connection
         dockerRule.getClient().pullImageCmd(imgName)
-                .withAuthConfig(invalidAuthConfig)
-                .start()
-                .awaitCompletion(30, TimeUnit.SECONDS);
+            .withAuthConfig(invalidAuthConfig)
+            .start()
+            .awaitCompletion(30, TimeUnit.SECONDS);
     }
 }

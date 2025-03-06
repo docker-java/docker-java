@@ -91,47 +91,45 @@ public class Bind extends DockerObject implements Serializable {
     /**
      * Parses a bind mount specification to a {@link Bind}.
      *
-     * @param serialized
-     *            the specification, e.g. <code>/host:/container:ro</code>
+     * @param serialized the specification, e.g. <code>/host:/container:ro</code>
      * @return a {@link Bind} matching the specification
-     * @throws IllegalArgumentException
-     *             if the specification cannot be parsed
+     * @throws IllegalArgumentException if the specification cannot be parsed
      */
     public static Bind parse(String serialized) {
         try {
             // Split by ':' but not ':\' (Windows-style path)
             String[] parts = serialized.split(":(?!\\\\)");
             switch (parts.length) {
-            case 2: {
-                return new Bind(parts[0], new Volume(parts[1]));
-            }
-            case 3: {
-                String[] flags = parts[2].split(",");
-                AccessMode accessMode = AccessMode.DEFAULT;
-                SELContext seMode = SELContext.DEFAULT;
-                Boolean nocopy = null;
-                PropagationMode propagationMode = PropagationMode.DEFAULT_MODE;
-                for (String p : flags) {
-                    if (p.length() == 2) {
-                        accessMode = AccessMode.valueOf(p.toLowerCase());
-                    } else if ("nocopy".equals(p)) {
-                        nocopy = true;
-                    } else if (PropagationMode.SHARED.toString().equals(p)) {
-                        propagationMode = PropagationMode.SHARED;
-                    } else if (PropagationMode.SLAVE.toString().equals(p)) {
-                        propagationMode = PropagationMode.SLAVE;
-                    } else if (PropagationMode.PRIVATE.toString().equals(p)) {
-                        propagationMode = PropagationMode.PRIVATE;
-                    } else {
-                        seMode = SELContext.fromString(p);
-                    }
+                case 2: {
+                    return new Bind(parts[0], new Volume(parts[1]));
                 }
+                case 3: {
+                    String[] flags = parts[2].split(",");
+                    AccessMode accessMode = AccessMode.DEFAULT;
+                    SELContext seMode = SELContext.DEFAULT;
+                    Boolean nocopy = null;
+                    PropagationMode propagationMode = PropagationMode.DEFAULT_MODE;
+                    for (String p : flags) {
+                        if (p.length() == 2) {
+                            accessMode = AccessMode.valueOf(p.toLowerCase());
+                        } else if ("nocopy".equals(p)) {
+                            nocopy = true;
+                        } else if (PropagationMode.SHARED.toString().equals(p)) {
+                            propagationMode = PropagationMode.SHARED;
+                        } else if (PropagationMode.SLAVE.toString().equals(p)) {
+                            propagationMode = PropagationMode.SLAVE;
+                        } else if (PropagationMode.PRIVATE.toString().equals(p)) {
+                            propagationMode = PropagationMode.PRIVATE;
+                        } else {
+                            seMode = SELContext.fromString(p);
+                        }
+                    }
 
-                return new Bind(parts[0], new Volume(parts[1]), accessMode, seMode, nocopy, propagationMode);
-            }
-            default: {
-                throw new IllegalArgumentException();
-            }
+                    return new Bind(parts[0], new Volume(parts[1]), accessMode, seMode, nocopy, propagationMode);
+                }
+                default: {
+                    throw new IllegalArgumentException();
+                }
             }
         } catch (Exception e) {
             throw new IllegalArgumentException("Error parsing Bind '" + serialized + "'", e);
@@ -148,11 +146,11 @@ public class Bind extends DockerObject implements Serializable {
     @Override
     public String toString() {
         return String.format("%s:%s:%s%s%s%s",
-                path,
-                volume.getPath(),
-                accessMode.toString(),
-                secMode != SELContext.none ? "," + secMode.toString() : "",
-                noCopy != null ? ",nocopy" : "",
-                propagationMode != PropagationMode.DEFAULT_MODE ? "," + propagationMode.toString() : "");
+            path,
+            volume.getPath(),
+            accessMode.toString(),
+            secMode != SELContext.none ? "," + secMode.toString() : "",
+            noCopy != null ? ",nocopy" : "",
+            propagationMode != PropagationMode.DEFAULT_MODE ? "," + propagationMode.toString() : "");
     }
 }

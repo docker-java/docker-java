@@ -25,8 +25,8 @@ public class LeaveSwarmCmdExecIT extends SwarmCmdIT {
         assertThat(info.getSwarm().getLocalNodeState(), is(LocalNodeState.ACTIVE));
 
         dockerClient.leaveSwarmCmd()
-                .withForceEnabled(true)
-                .exec();
+            .withForceEnabled(true)
+            .exec();
         LOG.info("Left swarm");
 
         info = dockerClient.infoCmd().exec();

@@ -23,7 +23,7 @@ public class UpdateSwarmNodeIT extends SwarmCmdIT {
         //update the node availability
         SwarmNodeSpec nodeSpec = node.getSpec().withAvailability(SwarmNodeAvailability.PAUSE);
         dockerClient.updateSwarmNodeCmd().withSwarmNodeId(node.getId()).withVersion(node.getVersion().getIndex())
-                .withSwarmNodeSpec(nodeSpec).exec();
+            .withSwarmNodeSpec(nodeSpec).exec();
         nodes = dockerClient.listSwarmNodesCmd().exec();
         assertThat(nodes.size(), is(1));
         assertThat(nodes.get(0).getSpec().getAvailability(), is(SwarmNodeAvailability.PAUSE));

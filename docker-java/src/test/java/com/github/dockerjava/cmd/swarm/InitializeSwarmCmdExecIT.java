@@ -25,24 +25,24 @@ public class InitializeSwarmCmdExecIT extends SwarmCmdIT {
     public void initializeSwarm() throws Exception {
         DockerClient dockerClient = startDockerInDocker();
         SwarmSpec swarmSpec = new SwarmSpec()
-                .withName("default")
-                .withDispatcher(new SwarmDispatcherConfig()
-                        .withHeartbeatPeriod(10000000L)
-                ).withOrchestration(new SwarmOrchestration()
-                        .withTaskHistoryRententionLimit(100)
-                ).withCaConfig(new SwarmCAConfig()
-                        .withNodeCertExpiry(60 * 60 * 1000000000L /*ns */))
-                .withRaft(new SwarmRaftConfig()
-                        .withElectionTick(8)
-                        .withSnapshotInterval(20000)
-                        .withHeartbeatTick(5)
-                        .withLogEntriesForSlowFollowers(200)
-                ).withTaskDefaults(new TaskDefaults());
+            .withName("default")
+            .withDispatcher(new SwarmDispatcherConfig()
+                .withHeartbeatPeriod(10000000L)
+            ).withOrchestration(new SwarmOrchestration()
+                .withTaskHistoryRententionLimit(100)
+            ).withCaConfig(new SwarmCAConfig()
+                .withNodeCertExpiry(60 * 60 * 1000000000L /*ns */))
+            .withRaft(new SwarmRaftConfig()
+                .withElectionTick(8)
+                .withSnapshotInterval(20000)
+                .withHeartbeatTick(5)
+                .withLogEntriesForSlowFollowers(200)
+            ).withTaskDefaults(new TaskDefaults());
 
         dockerClient.initializeSwarmCmd(swarmSpec)
-                .withListenAddr("127.0.0.1")
-                .withAdvertiseAddr("127.0.0.1")
-                .exec();
+            .withListenAddr("127.0.0.1")
+            .withAdvertiseAddr("127.0.0.1")
+            .exec();
         LOG.info("Initialized swarm: {}", swarmSpec.toString());
 
         Swarm swarm = dockerClient.inspectSwarmCmd().exec();
@@ -56,8 +56,8 @@ public class InitializeSwarmCmdExecIT extends SwarmCmdIT {
 
         // Initializing a swarm if already in swarm mode should fail
         dockerClient.initializeSwarmCmd(new SwarmSpec())
-                .withListenAddr("127.0.0.1")
-                .exec();
+            .withListenAddr("127.0.0.1")
+            .exec();
     }
 
 }

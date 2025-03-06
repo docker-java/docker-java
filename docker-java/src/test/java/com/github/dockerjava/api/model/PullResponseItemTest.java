@@ -32,7 +32,7 @@ public class PullResponseItemTest {
     @Test
     public void imageAlreadyExists() throws IOException {
         PullResponseItem response = testRoundTrip(PullResponseJSONSamples.pullImageResponse_alreadyExists,
-                PullResponseItem.class);
+            PullResponseItem.class);
         assertTrue(response.isPullSuccessIndicated());
         assertFalse(response.isErrorIndicated());
     }
@@ -40,7 +40,7 @@ public class PullResponseItemTest {
     @Test
     public void pullNewerImage() throws IOException {
         PullResponseItem response = testRoundTrip(PullResponseJSONSamples.pullImageResponse_newerImage,
-                PullResponseItem.class);
+            PullResponseItem.class);
         assertTrue(response.isPullSuccessIndicated());
         assertFalse(response.isErrorIndicated());
     }
@@ -48,7 +48,7 @@ public class PullResponseItemTest {
     @Test
     public void pullUpToDate() throws IOException {
         PullResponseItem response = testRoundTrip(PullResponseJSONSamples.pullImageResponse_upToDate,
-                PullResponseItem.class);
+            PullResponseItem.class);
         assertTrue(response.isPullSuccessIndicated());
         assertFalse(response.isErrorIndicated());
     }
@@ -56,7 +56,7 @@ public class PullResponseItemTest {
     @Test
     public void pullLegacyRegistry() throws IOException {
         PullResponseItem response = testRoundTrip(PullResponseJSONSamples.pullImageResponse_legacy,
-                PullResponseItem.class);
+            PullResponseItem.class);
         assertTrue(response.isPullSuccessIndicated());
         assertFalse(response.isErrorIndicated());
     }
@@ -64,7 +64,7 @@ public class PullResponseItemTest {
     @Test
     public void pullAndEncounterError() throws IOException {
         PullResponseItem response = testRoundTrip(PullResponseJSONSamples.pullImageResponse_error,
-                PullResponseItem.class);
+            PullResponseItem.class);
         assertFalse(response.isPullSuccessIndicated());
         assertTrue(response.isErrorIndicated());
     }

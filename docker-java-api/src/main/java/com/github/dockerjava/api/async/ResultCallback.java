@@ -20,12 +20,18 @@ public interface ResultCallback<A_RES_T> extends Closeable {
      */
     void onStart(Closeable closeable);
 
-    /** Called when an async result event occurs */
+    /**
+     * Called when an async result event occurs
+     */
     void onNext(A_RES_T object);
 
-    /** Called when an exception occurs while processing */
+    /**
+     * Called when an exception occurs while processing
+     */
     void onError(Throwable throwable);
 
-    /** Called when processing was finished either by reaching the end or by aborting it */
+    /**
+     * Called when processing was finished either by reaching the end or by aborting it
+     */
     void onComplete();
 }

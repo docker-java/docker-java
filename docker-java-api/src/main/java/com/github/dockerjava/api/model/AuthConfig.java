@@ -107,6 +107,7 @@ public class AuthConfig extends DockerObject implements Serializable {
     public String getIdentitytoken() {
         return identitytoken;
     }
+
     /**
      * @see #identitytoken
      */

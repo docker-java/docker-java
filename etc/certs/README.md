@@ -1,15 +1,18 @@
 # Creating Certificates for Docker
 
 ## Warning
+
 > These certificates are only meant for integration tests on CI environments (like circleCI). Do not use them for any real machine.
 > Since all keys are publicly available anybody could gain root access to your machine.
 
 ### 1. Create the certificate files
+
 There is an [excellent guide](https://docs.docker.com/articles/https/) on the official docker homepage.
 This document contains the log on how the certificates in this folder were created.
 It differs slightly form the official guide.
- - Certificates are valid for 10 years instead of 1 year.
- - Certificates use v3_req extension to support both `127.0.0.1` and `localhost` (see config file [server-cert.txt](server-cert.txt)).
+
+- Certificates are valid for 10 years instead of 1 year.
+- Certificates use v3_req extension to support both `127.0.0.1` and `localhost` (see config file [server-cert.txt](server-cert.txt)).
 
 ```
 $ cd ~
@@ -133,13 +136,16 @@ openssl x509 -in <some-file>.pem -inform pem -noout -text
 ```
 
 ### 2. Configuring the docker daemon
+
 On linux the docker daemon allows to specify options in the file `/etc/default/docker`.
 By adding the following line (or modifying an existing line) one can get the docker daemon to listen on both *unix socket* and *https*.
+
 ```
 DOCKER_OPTS="-H unix:///var/run/docker.sock -H tcp://127.0.0.1:2376 --tlsverify --tlscacert=~/.docker/ca.pem --tlscert=~/.docker/server-cert.pem --tlskey=~/.docker/server-key.pem"
 ```
 
 ### 3. Restart the daemon and test the setup
+
 After changing the daemon options it must be restarted
 
 ```

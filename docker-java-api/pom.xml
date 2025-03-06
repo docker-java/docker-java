@@ -33,38 +33,32 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.google.code.findbugs</groupId>
-			<artifactId>annotations</artifactId>
-			<version>3.0.1u2</version>
-			<scope>provided</scope>
+			<groupId>com.github.spotbugs</groupId>
+			<artifactId>spotbugs-annotations</artifactId>
+			<version>${spotbugs-annotations.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.30</version>
+			<version>${lombok.version}</version>
 			<scope>provided</scope>
 		</dependency>
-
-
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
-			<version>5.10.0</version>
+			<version>${junit-jupiter-api.version}</version>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>com.tngtech.archunit</groupId>
 			<artifactId>archunit-junit5</artifactId>
-			<version>0.18.0</version>
+			<version>${archunit-junit5.version}</version>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>com.tngtech.archunit</groupId>
 			<artifactId>archunit</artifactId>
-			<version>0.18.0</version>
+			<version>${archunit-junit5.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -84,6 +78,7 @@
 			<plugin>
 				<groupId>com.github.siom79.japicmp</groupId>
 				<artifactId>japicmp-maven-plugin</artifactId>
+				<version>${japicmp-maven-plugin.version}</version>
 			</plugin>
 		</plugins>
 	</build>

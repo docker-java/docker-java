@@ -4,10 +4,14 @@ package com.github.dockerjava.api.model;
  * The access mode of a file system or file: <code>read-write</code> or <code>read-only</code>.
  */
 public enum AccessMode {
-    /** read-write */
+    /**
+     * read-write
+     */
     rw,
 
-    /** read-only */
+    /**
+     * read-only
+     */
     ro;
 
     /**

@@ -59,7 +59,7 @@ public class Ports implements Serializable {
             if (binding == null) {
                 ports.put(exposedPort, null);
             } else {
-                ports.put(exposedPort, new Binding[] {binding});
+                ports.put(exposedPort, new Binding[]{binding});
             }
         }
     }
@@ -182,7 +182,7 @@ public class Ports implements Serializable {
 
         /**
          * @return the IP address on the Docker host. May be <code>null</code>, in which case Docker will bind the port to all interfaces (
-         *         <code>0.0.0.0</code>).
+         * <code>0.0.0.0</code>).
          */
         public String getHostIp() {
             return hostIp;
@@ -190,7 +190,7 @@ public class Ports implements Serializable {
 
         /**
          * @return the port spec for the binding on the Docker host. May reference a single port ("1234"), a port range ("1234-2345") or
-         *         <code>null</code>, in which case Docker will dynamically assign a port.
+         * <code>null</code>, in which case Docker will dynamically assign a port.
          */
         public String getHostPortSpec() {
             return hostPortSpec;
@@ -201,11 +201,9 @@ public class Ports implements Serializable {
          * <p>
          * Legal syntax: <code>IP|IP:portSpec|portSpec</code> where <code>portSpec</code> is either a single port or a port range
          *
-         * @param serialized
-         *            serialized the specification, e.g. <code>127.0.0.1:80</code>
+         * @param serialized serialized the specification, e.g. <code>127.0.0.1:80</code>
          * @return a {@link Binding} matching the specification
-         * @throws IllegalArgumentException
-         *             if the specification cannot be parsed
+         * @throws IllegalArgumentException if the specification cannot be parsed
          */
         public static Binding parse(String serialized) throws IllegalArgumentException {
             try {
@@ -269,19 +267,19 @@ public class Ports implements Serializable {
     public Map<String, List<Map<String, String>>> toPrimitive() {
         // Use reduce-like collect to be able to put nulls into the values
         return ports.entrySet().stream().collect(
-                HashMap::new,
-                (map, entry) -> {
-                    List<Map<String, String>> value = entry.getValue() == null ? null : Stream.of(entry.getValue())
-                            .map(binding -> {
-                                Map<String, String> result = new HashMap<>();
-                                result.put("HostIp", binding.getHostIp() == null ? "" : binding.getHostIp());
-                                result.put("HostPort", binding.getHostPortSpec() == null ? "" : binding.getHostPortSpec());
-                                return result;
-                            })
-                            .collect(Collectors.toList());
-                    map.put(entry.getKey().toString(), value);
-                },
-                HashMap::putAll
+            HashMap::new,
+            (map, entry) -> {
+                List<Map<String, String>> value = entry.getValue() == null ? null : Stream.of(entry.getValue())
+                    .map(binding -> {
+                        Map<String, String> result = new HashMap<>();
+                        result.put("HostIp", binding.getHostIp() == null ? "" : binding.getHostIp());
+                        result.put("HostPort", binding.getHostPortSpec() == null ? "" : binding.getHostPortSpec());
+                        return result;
+                    })
+                    .collect(Collectors.toList());
+                map.put(entry.getKey().toString(), value);
+            },
+            HashMap::putAll
         );
     }
 }

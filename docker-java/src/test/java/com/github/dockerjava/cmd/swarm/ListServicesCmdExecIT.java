@@ -34,13 +34,13 @@ public class ListServicesCmdExecIT extends SwarmCmdIT {
                 .withLabels(serviceLabels)
                 .withName(SERVICE_NAME)
                 .withMode(new ServiceModeConfig().withReplicated(
-                        new ServiceReplicatedModeOptions()
-                                .withReplicas(1)
+                    new ServiceReplicatedModeOptions()
+                        .withReplicas(1)
                 ))
                 .withTaskTemplate(new TaskSpec()
-                        .withContainerSpec(new ContainerSpec()
-                                .withImage(DEFAULT_IMAGE))))
-                .exec();
+                    .withContainerSpec(new ContainerSpec()
+                        .withImage(DEFAULT_IMAGE))))
+            .exec();
         String serviceId = response.getId();
         //filtering with service id
         List<Service> services = dockerClient.listServicesCmd().withIdFilter(Collections.singletonList(serviceId)).exec();

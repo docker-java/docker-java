@@ -15,11 +15,10 @@ import static com.github.dockerjava.junit.DockerAssume.assumeNotSwarm;
 import static com.github.dockerjava.junit.DockerMatchers.isGreaterOrEqual;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeThat;
 
@@ -66,9 +65,9 @@ public class CreateNetworkCmdIT extends CmdIT {
 
         String networkName = "createAttachableNetwork";
         CreateNetworkResponse createNetworkResponse = dockerRule.getClient().createNetworkCmd()
-                .withName(networkName)
-                .withAttachable(true)
-                .exec();
+            .withName(networkName)
+            .withAttachable(true)
+            .exec();
         assertNotNull(createNetworkResponse.getId());
         Network network = dockerRule.getClient().inspectNetworkCmd().withNetworkId(createNetworkResponse.getId()).exec();
         assertThat(network, notNullValue());

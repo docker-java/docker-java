@@ -1,1 +1,6 @@
-{"errorDetail":{"message":"Error: image cccxxx/xxxccc:latest not found"},"error":"Error: image cccxxx/xxxccc:latest not found"}
+{
+    "errorDetail": {
+        "message": "Error: image cccxxx/xxxccc:latest not found"
+    },
+    "error": "Error: image cccxxx/xxxccc:latest not found"
+}

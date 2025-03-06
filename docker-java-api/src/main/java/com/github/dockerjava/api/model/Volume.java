@@ -27,6 +27,7 @@ public class Volume implements Serializable {
 
     /**
      * Handles the {@code { "Destination" : { "path" : "/path/to/mount" } }} variant.
+     *
      * @param path the destination path of the bind mounted volume
      * @return a volume instance referring to the given path.
      * @deprecated use {@link #parse(Map)}
@@ -39,6 +40,7 @@ public class Volume implements Serializable {
 
     /**
      * Handles the {@code { "Destination" : { "path" : "/path/to/mount" } }} variant.
+     *
      * @param path the destination path of the bind mounted volume
      * @return a volume instance referring to the given path.
      */
@@ -53,6 +55,7 @@ public class Volume implements Serializable {
     /**
      * Creates a volume referring to the given path.
      * Handles the {@code { "Destination" : "/path/to/mount" }} variant.
+     *
      * @param path the destination path of the bind mounted volume
      */
     public Volume(String path) {

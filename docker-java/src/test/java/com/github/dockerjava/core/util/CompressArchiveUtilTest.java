@@ -182,7 +182,7 @@ public class CompressArchiveUtilTest {
     @Test
     public void archiveTARFilesWithFolderAndFiles() throws Exception {
         File archive = CompressArchiveUtil.archiveTARFiles(tempFolder.getRoot(),
-                createFoldersAndSubFolderWithFiles(tempFolder.getRoot().toPath()), "archive");
+            createFoldersAndSubFolderWithFiles(tempFolder.getRoot().toPath()), "archive");
         assertEquals(6, getNumberOfEntryInArchive(archive));
         assertTarArchiveEntryIsDirectory(archive, "folderA");
         assertTarArchiveEntryIsDirectory(archive, "folderB");
@@ -234,7 +234,7 @@ public class CompressArchiveUtilTest {
         TarArchiveEntry tarArchiveEntry = getTarArchiveEntry(archive, fileName);
         assertNotNull(tarArchiveEntry);
         assertTrue(tarArchiveEntry.isFile());
-        assertTrue(tarArchiveEntry.getSize()>0);
+        assertTrue(tarArchiveEntry.getSize() > 0);
     }
 
     private static void assertTarArchiveEntryIsExecutableFile(File archive, String fileName) throws IOException {
@@ -254,15 +254,14 @@ public class CompressArchiveUtilTest {
     /**
      * Creates the following directory structure with files in the specified
      * destination folder
-     *
-     *   destinationFolder
-     *   |__folderA
-     *   |  |__fileA
-     *   |__folderB
-     *      |__fileB
-     *      |__subFolderB
-     *         |__subFileB
-     *
+     * <p>
+     * destinationFolder
+     * |__folderA
+     * |  |__fileA
+     * |__folderB
+     * |__fileB
+     * |__subFolderB
+     * |__subFileB
      *
      * @param destinationFolder where to create the folder/files.
      * @return the list of created files.
@@ -293,13 +292,13 @@ public class CompressArchiveUtilTest {
 
     private static TarArchiveEntry getTarArchiveEntry(File tarArchive, String filename) throws IOException {
         try (TarArchiveInputStream tarArchiveInputStream = new TarArchiveInputStream(
-                new GZIPInputStream(new BufferedInputStream(new FileInputStream(tarArchive))))) {
+            new GZIPInputStream(new BufferedInputStream(new FileInputStream(tarArchive))))) {
             TarArchiveEntry entry;
             while ((entry = tarArchiveInputStream.getNextTarEntry()) != null) {
                 if (entry.getName().equals(filename)
-                        || entry.getName().endsWith("/" + filename)
-                        || entry.getName().equals(filename + "/")
-                        || entry.getName().endsWith("/" + filename + "/")) {
+                    || entry.getName().endsWith("/" + filename)
+                    || entry.getName().equals(filename + "/")
+                    || entry.getName().endsWith("/" + filename + "/")) {
                     return entry;
                 }
             }
@@ -310,7 +309,7 @@ public class CompressArchiveUtilTest {
     private static int getNumberOfEntryInArchive(File tarArchive) throws IOException {
         int numberOfEntries = 0;
         try (TarArchiveInputStream tarArchiveInputStream = new TarArchiveInputStream(
-                new GZIPInputStream(new BufferedInputStream(new FileInputStream(tarArchive))))) {
+            new GZIPInputStream(new BufferedInputStream(new FileInputStream(tarArchive))))) {
             while ((tarArchiveInputStream.getNextTarEntry()) != null) {
                 numberOfEntries++;
             }

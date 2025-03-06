@@ -112,9 +112,9 @@ public class DockerRule extends ExternalResource {
             LOG.info("Pulling image 'busybox'");
             // need to block until image is pulled completely
             getClient().pullImageCmd("busybox")
-                    .withTag("latest")
-                    .start()
-                    .awaitCompletion();
+                .withTag("latest")
+                .start()
+                .awaitCompletion();
         }
 
 //        assertThat(getClient(), notNullValue());
@@ -127,9 +127,9 @@ public class DockerRule extends ExternalResource {
         createdContainerIds.parallelStream().forEach(containerId -> {
             try {
                 dockerClient.removeContainerCmd(containerId)
-                        .withForce(true)
-                        .withRemoveVolumes(true)
-                        .exec();
+                    .withForce(true)
+                    .withRemoveVolumes(true)
+                    .exec();
             } catch (ConflictException | NotFoundException ignored) {
             } catch (Throwable e) {
                 if (e instanceof InterruptedException) {
@@ -174,8 +174,8 @@ public class DockerRule extends ExternalResource {
 
     public static DefaultDockerClientConfig config(String password) {
         DefaultDockerClientConfig.Builder builder = DefaultDockerClientConfig.createDefaultConfigBuilder()
-                .withApiVersion(RemoteApiVersion.VERSION_1_30)
-                .withRegistryUrl("https://index.docker.io/v1/");
+            .withApiVersion(RemoteApiVersion.VERSION_1_30)
+            .withRegistryUrl("https://index.docker.io/v1/");
         if (password != null) {
             builder = builder.withRegistryPassword(password);
         }
@@ -185,25 +185,25 @@ public class DockerRule extends ExternalResource {
 
     public String buildImage(File baseDir) throws Exception {
         return getClient().buildImageCmd(baseDir)
-                .withNoCache(true)
-                .start()
-                .awaitImageId();
+            .withNoCache(true)
+            .start()
+            .awaitImageId();
     }
 
     public String containerLog(String containerId) throws Exception {
         return getClient().logContainerCmd(containerId)
-                .withStdOut(true)
-                .exec(new LogContainerTestCallback())
-                .awaitCompletion()
-                .toString();
+            .withStdOut(true)
+            .exec(new LogContainerTestCallback())
+            .awaitCompletion()
+            .toString();
     }
 
     public void ensureContainerRemoved(String container1Name) {
         try {
             getClient().removeContainerCmd(container1Name)
-                    .withForce(true)
-                    .withRemoveVolumes(true)
-                    .exec();
+                .withForce(true)
+                .withRemoveVolumes(true)
+                .exec();
         } catch (NotFoundException ex) {
             // ignore
         }

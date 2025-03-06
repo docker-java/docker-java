@@ -81,6 +81,7 @@ public class ClusterInfo extends DockerObject implements Serializable {
         this.spec = spec;
         return this;
     }
+
     /**
      * @see #id
      */

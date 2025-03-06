@@ -26,8 +26,8 @@ public class VersionTest {
         final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(Version.class);
 
         final Version version = testRoundTrip(RemoteApiVersion.VERSION_1_22,
-                "/version/1.json",
-                type
+            "/version/1.json",
+            type
         );
 
         assertThat(version, notNullValue());
@@ -47,8 +47,8 @@ public class VersionTest {
         final JavaType type = JSONTestHelper.getMapper().getTypeFactory().constructType(Version.class);
 
         final Version version = testRoundTrip(RemoteApiVersion.VERSION_1_38,
-                "/version/lcow.json",
-                type
+            "/version/lcow.json",
+            type
         );
 
         assertThat(version, notNullValue());
@@ -68,9 +68,9 @@ public class VersionTest {
         details.put("Os", "windows");
 
         List<VersionComponent> components = Collections.singletonList(new VersionComponent()
-                .withDetails(details)
-                .withName("Engine")
-                .withVersion("18.06.1-ce")
+            .withDetails(details)
+            .withName("Engine")
+            .withVersion("18.06.1-ce")
         );
         assertThat(version.getComponents(), equalTo(components));
 

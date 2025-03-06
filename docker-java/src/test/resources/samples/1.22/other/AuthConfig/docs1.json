@@ -1,5 +1,5 @@
 {
-  "username": "jdoe",
-  "password": "secret",
-  "email": "jdoe@acme.com"
+    "username": "jdoe",
+    "password": "secret",
+    "email": "jdoe@acme.com"
 }

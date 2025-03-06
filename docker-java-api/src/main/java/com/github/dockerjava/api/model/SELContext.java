@@ -8,13 +8,19 @@ package com.github.dockerjava.api.model;
  * @since 1.17
  */
 public enum SELContext {
-    /** no selinux */
+    /**
+     * no selinux
+     */
     none(""),
 
-    /** z option */
+    /**
+     * z option
+     */
     shared("z"),
 
-    /** Z option */
+    /**
+     * Z option
+     */
     single("Z");
 
     /**
@@ -35,10 +41,10 @@ public enum SELContext {
 
     public static SELContext fromString(String p) {
         switch (p) {
-        case "z":
-            return shared;
-        case "Z":
-            return single;
+            case "z":
+                return shared;
+            case "Z":
+                return single;
         }
         return none;
     }

@@ -29,8 +29,8 @@ public class RemoveNetworkCmdIT extends CmdIT {
         assumeNotSwarm("Swarm has no network", dockerRule);
 
         CreateNetworkResponse network = dockerRule.getClient().createNetworkCmd()
-                .withName("test-network")
-                .exec();
+            .withName("test-network")
+            .exec();
 
         LOG.info("Removing network: {}", network.getId());
         dockerRule.getClient().removeNetworkCmd(network.getId()).exec();

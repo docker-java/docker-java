@@ -13,12 +13,12 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
 public class ListVolumesCmdIT extends CmdIT {
-   
+
     @Test
     public void listVolumes() throws DockerException {
 
         CreateVolumeResponse createVolumeResponse = dockerRule.getClient().createVolumeCmd().withName("volume1")
-                .withDriver("local").withLabels(Collections.singletonMap("is-timelord", "yes")).exec();
+            .withDriver("local").withLabels(Collections.singletonMap("is-timelord", "yes")).exec();
 
         assertThat(createVolumeResponse.getName(), equalTo("volume1"));
         assertThat(createVolumeResponse.getDriver(), equalTo("local"));

@@ -42,9 +42,9 @@ public class LogContainerCmdIT extends CmdIT {
     public void asyncLogContainerWithTtyEnabled() throws Exception {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withCmd("/bin/sh", "-c", "while true; do echo hello; sleep 1; done")
-                .withTty(true)
-                .exec();
+            .withCmd("/bin/sh", "-c", "while true; do echo hello; sleep 1; done")
+            .withTty(true)
+            .exec();
 
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(is(emptyString())));
@@ -73,9 +73,9 @@ public class LogContainerCmdIT extends CmdIT {
     public void asyncLogContainerWithTtyDisabled() throws Exception {
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withCmd("/bin/sh", "-c", "while true; do echo hello; sleep 1; done")
-                .withTty(false)
-                .exec();
+            .withCmd("/bin/sh", "-c", "while true; do echo hello; sleep 1; done")
+            .withTty(false)
+            .exec();
 
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(is(emptyString())));
@@ -122,11 +122,13 @@ public class LogContainerCmdIT extends CmdIT {
             public void onComplete() {
                 super.onComplete();
                 throw new AssertionError("expected NotFoundException");
-            };
+            }
+
+            ;
         };
 
         dockerRule.getClient().logContainerCmd("non-existing").withStdErr(true).withStdOut(true).exec(loggingCallback)
-                .awaitCompletion();
+            .awaitCompletion();
     }
 
     @Test
@@ -135,8 +137,8 @@ public class LogContainerCmdIT extends CmdIT {
         String snippet = "hello world";
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withCmd("/bin/echo", snippet)
-                .exec();
+            .withCmd("/bin/echo", snippet)
+            .exec();
 
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(is(emptyString())));
@@ -144,35 +146,35 @@ public class LogContainerCmdIT extends CmdIT {
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         int exitCode = dockerRule.getClient().waitContainerCmd(container.getId())
-                .start()
-                .awaitStatusCode();
+            .start()
+            .awaitStatusCode();
 
         assertThat(exitCode, equalTo(0));
 
         LogContainerTestCallback loggingCallback = new LogContainerTestCallback();
 
         dockerRule.getClient().logContainerCmd(container.getId())
-                .withStdErr(true)
-                .withStdOut(true)
-                .exec(loggingCallback);
+            .withStdErr(true)
+            .withStdOut(true)
+            .exec(loggingCallback);
 
         loggingCallback.close();
 
         loggingCallback = new LogContainerTestCallback();
 
         dockerRule.getClient().logContainerCmd(container.getId())
-                .withStdErr(true)
-                .withStdOut(true)
-                .exec(loggingCallback);
+            .withStdErr(true)
+            .withStdOut(true)
+            .exec(loggingCallback);
 
         loggingCallback.close();
 
         loggingCallback = new LogContainerTestCallback();
 
         dockerRule.getClient().logContainerCmd(container.getId())
-                .withStdErr(true)
-                .withStdOut(true)
-                .exec(loggingCallback);
+            .withStdErr(true)
+            .withStdOut(true)
+            .exec(loggingCallback);
 
         loggingCallback.awaitCompletion();
 
@@ -184,8 +186,8 @@ public class LogContainerCmdIT extends CmdIT {
         String snippet = "hello world";
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
-                .withCmd("/bin/echo", snippet)
-                .exec();
+            .withCmd("/bin/echo", snippet)
+            .exec();
 
         LOG.info("Created container: {}", container.toString());
         assertThat(container.getId(), not(is(emptyString())));
@@ -195,19 +197,19 @@ public class LogContainerCmdIT extends CmdIT {
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         int exitCode = dockerRule.getClient().waitContainerCmd(container.getId())
-                .start()
-                .awaitStatusCode();
+            .start()
+            .awaitStatusCode();
 
         assertThat(exitCode, equalTo(0));
 
         LogContainerTestCallback loggingCallback = new LogContainerTestCallback();
 
         dockerRule.getClient().logContainerCmd(container.getId())
-                .withStdErr(true)
-                .withStdOut(true)
-                .withSince(timestamp)
-                .withUntil(timestamp + 1000)
-                .exec(loggingCallback);
+            .withStdErr(true)
+            .withStdOut(true)
+            .withSince(timestamp)
+            .withUntil(timestamp + 1000)
+            .exec(loggingCallback);
 
         loggingCallback.awaitCompletion();
 
@@ -219,8 +221,8 @@ public class LogContainerCmdIT extends CmdIT {
         // Create a new client to not affect other tests
         DockerClient client = dockerRule.newClient();
         CreateContainerResponse container = client.createContainerCmd("busybox")
-                .withCmd("/bin/sh", "-c", "echo hello world; sleep infinity")
-                .exec();
+            .withCmd("/bin/sh", "-c", "echo hello world; sleep infinity")
+            .exec();
 
         client.startContainerCmd(container.getId()).exec();
 

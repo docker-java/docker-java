@@ -19,7 +19,7 @@ public class InspectVolumeCmdIT extends CmdIT {
         String volumeName = "volume1";
 
         dockerRule.getClient().createVolumeCmd().withName(volumeName).withDriver("local")
-                .withLabels(Collections.singletonMap("is-timelord", "yes")).exec();
+            .withLabels(Collections.singletonMap("is-timelord", "yes")).exec();
 
         InspectVolumeResponse inspectVolumeResponse = dockerRule.getClient().inspectVolumeCmd(volumeName).exec();
 

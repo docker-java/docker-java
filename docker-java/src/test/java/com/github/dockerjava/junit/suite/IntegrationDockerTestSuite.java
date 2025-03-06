@@ -24,20 +24,20 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        AttachContainerCmdIT.class,
-        AuthCmdIT.class,
-        BuildImageCmdIT.class,
-        CommitCmdIT.class,
-        CopyArchiveFromContainerCmdIT.class,
-        CopyArchiveToContainerCmdIT.class,
-        CopyFileFromContainerCmdIT.class,
-        ConnectToNetworkCmdIT.class,
-        CreateContainerCmdIT.class,
-        CreateNetworkCmdIT.class,
-        CreateVolumeCmdIT.class,
-        EventsCmdIT.class,
-        InfoCmdIT.class,
-        RemoveNetworkCmdIT.class,
+    AttachContainerCmdIT.class,
+    AuthCmdIT.class,
+    BuildImageCmdIT.class,
+    CommitCmdIT.class,
+    CopyArchiveFromContainerCmdIT.class,
+    CopyArchiveToContainerCmdIT.class,
+    CopyFileFromContainerCmdIT.class,
+    ConnectToNetworkCmdIT.class,
+    CreateContainerCmdIT.class,
+    CreateNetworkCmdIT.class,
+    CreateVolumeCmdIT.class,
+    EventsCmdIT.class,
+    InfoCmdIT.class,
+    RemoveNetworkCmdIT.class,
 })
 public class IntegrationDockerTestSuite {
 }

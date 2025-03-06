@@ -13,8 +13,8 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.emptyString;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
 import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
@@ -22,7 +22,7 @@ import static org.testinfected.hamcrest.jpa.HasFieldWithValue.hasField;
 public class RemoveImageCmdIT extends CmdIT {
 
     public static final Logger LOG = LoggerFactory.getLogger(RemoveImageCmdIT.class);
-    
+
     @Test
     public void removeImage() throws DockerException {
 

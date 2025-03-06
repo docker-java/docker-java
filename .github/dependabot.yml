@@ -1,8 +1,8 @@
 version: 2
 updates:
-- package-ecosystem: maven
-  directory: "/"
-  schedule:
-    interval: weekly
-  open-pull-requests-limit: 99
-  rebase-strategy: disabled
+  - package-ecosystem: maven
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 99
+    rebase-strategy: disabled

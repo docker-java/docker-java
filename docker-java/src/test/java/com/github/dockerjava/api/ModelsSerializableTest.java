@@ -33,13 +33,13 @@ public class ModelsSerializableTest {
     private static final Logger LOG = LoggerFactory.getLogger(ModelsSerializableTest.class);
 
     private List<String> excludeClasses = Arrays.asList(
-            Binds.class.getName(),
-            BuildResponseItem.class.getName(),
-            PullResponseItem.class.getName(),
-            PushResponseItem.class.getName(),
-            ResponseItem.class.getName(),
-            ResponseItem.ErrorDetail.class.getName(),
-            ResponseItem.ProgressDetail.class.getName()
+        Binds.class.getName(),
+        BuildResponseItem.class.getName(),
+        PullResponseItem.class.getName(),
+        PushResponseItem.class.getName(),
+        ResponseItem.class.getName(),
+        ResponseItem.ErrorDetail.class.getName(),
+        ResponseItem.ProgressDetail.class.getName()
     );
 
     @Test
@@ -60,7 +60,7 @@ public class ModelsSerializableTest {
 
             final Class<?> aClass = classInfo.load();
             if (aClass.getProtectionDomain().getCodeSource().getLocation().getPath().endsWith("test-classes/")
-                    || aClass.isEnum()) {
+                || aClass.isEnum()) {
                 continue;
             }
 

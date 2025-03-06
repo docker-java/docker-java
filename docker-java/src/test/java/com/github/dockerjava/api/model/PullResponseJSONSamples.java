@@ -23,7 +23,7 @@ import com.github.dockerjava.test.serdes.JSONResourceRef;
  * @author Zach Marshall
  */
 public enum PullResponseJSONSamples implements JSONResourceRef {
-    pullImageResponse_legacy, pullImageResponse_error, 
+    pullImageResponse_legacy, pullImageResponse_error,
     pullImageResponse_newerImage, pullImageResponse_upToDate,
     pullImageResponse_alreadyExists;
 

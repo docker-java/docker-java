@@ -17,13 +17,13 @@ package com.github.dockerjava.test.serdes;
 
 /**
  * Default implementation of the Resource reference.
- * 
+ *
  * @author Oleg Nenashev
  */
 public abstract class AbstractJSONResourceRef implements JSONResourceRef {
     /**
      * Gets a class which stores resources.
-     * 
+     *
      * @return Reference class by default.
      */
     @Override

@@ -47,13 +47,13 @@ public class FrameReaderITest {
 
         // wait for the container to be successfully executed
         int exitCode = dockerClient.waitContainerCmd(dockerfileFixture.getContainerId())
-                .start().awaitStatusCode();
+            .start().awaitStatusCode();
         assertEquals(0, exitCode);
 
         final List<Frame> loggingFrames = getLoggingFrames();
         final Frame outFrame = new Frame(StreamType.STDOUT, "to stdout\n".getBytes());
         final Frame errFrame = new Frame(StreamType.STDERR, "to stderr\n".getBytes());
-        
+
         assertThat(loggingFrames, containsInAnyOrder(outFrame, errFrame));
         assertThat(loggingFrames, hasSize(2));
     }
@@ -63,10 +63,10 @@ public class FrameReaderITest {
         FrameReaderITestCallback collectFramesCallback = new FrameReaderITestCallback();
 
         dockerClient.logContainerCmd(dockerfileFixture.getContainerId()).withStdOut(true).withStdErr(true)
-                .withTailAll()
-                // we can't follow stream here as it blocks reading from resulting InputStream infinitely
-                // .withFollowStream()
-                .exec(collectFramesCallback).awaitCompletion();
+            .withTailAll()
+            // we can't follow stream here as it blocks reading from resulting InputStream infinitely
+            // .withFollowStream()
+            .exec(collectFramesCallback).awaitCompletion();
 
         return collectFramesCallback.frames;
     }

@@ -58,7 +58,7 @@ public class InspectContainerResponseTest {
         // Check volumes: https://github.com/docker-java/docker-java/issues/211
         assertEquals(2, response.getVolumes().length);
         assertEquals(2, response.getVolumesRW().length);
-        assertEquals("/bar/foo/myvol2" ,response.getVolumes()[1].getContainerPath());
+        assertEquals("/bar/foo/myvol2", response.getVolumes()[1].getContainerPath());
         assertEquals("/path2", response.getVolumes()[1].getHostPath());
         assertEquals("/bar/foo/myvol2", response.getVolumesRW()[1].getVolume().getPath());
         assertFalse(response.getVolumesRW()[1].getAccessMode().toBoolean());

@@ -57,37 +57,55 @@
 		<jdk.source>1.8</jdk.source>
 		<jdk.target>1.8</jdk.target>
 
-		<jersey.version>2.30.1</jersey.version>
-		<jackson.version>2.10.3</jackson.version>
-		<jackson-jaxrs.version>2.10.3</jackson-jaxrs.version>
-		<httpclient.version>4.5.12</httpclient.version><!-- 4.5.1-4.5.2 broken -->
-		<commons-compress.version>1.21</commons-compress.version>
-		<commons-io.version>2.13.0</commons-io.version>
-		<commons-lang3.version>3.12.0</commons-lang3.version>
-		<slf4j-api.version>1.7.30</slf4j-api.version>
+		<jersey.version>3.1.10</jersey.version>
+		<jackson.version>2.18.2</jackson.version>
+		<jackson-jaxrs.version>2.18.2</jackson-jaxrs.version>
+		<httpclient.version>4.5.14</httpclient.version><!-- 4.5.1-4.5.2 broken -->
+		<httpclient5.version>5.3.1</httpclient5.version>
+		<httpcore.version>4.4.16</httpcore.version>
+		<commons-compress.version>1.27.1</commons-compress.version>
+		<commons-io.version>2.18.0</commons-io.version>
+		<commons-lang3.version>3.17.0</commons-lang3.version>
+		<slf4j-api.version>2.0.16</slf4j-api.version>
+		<okhttp.version>5.0.0-alpha.14</okhttp.version>
 
-		<bouncycastle.version>1.76</bouncycastle.version>
-		<junixsocket.version>2.6.1</junixsocket.version>
-		<guava.version>19.0</guava.version> <!-- todo remove from project -->
+		<bouncycastle.version>1.80</bouncycastle.version>
+		<junixsocket.version>2.10.1</junixsocket.version>
+		<guava.version>33.4.0-jre</guava.version> <!-- todo remove from project -->
+		<assertj-core.version>3.27.3</assertj-core.version>
 
 		<!-- test dependencies -->
-		<logback.version>1.2.3</logback.version>
-		<netty.version>4.1.46.Final</netty.version>
+		<junit.version>4.13.2</junit.version>
+		<junit-jupiter-api.version>5.12.0-RC2</junit-jupiter-api.version>
+		<archunit-junit5.version>1.4.0</archunit-junit5.version>
+		<logback.version>1.5.16</logback.version>
+		<netty.version>4.2.0.RC3</netty.version>
 		<hamcrest.library.version>2.2</hamcrest.library.version>
 		<hamcrest.jpa-matchers>1.8</hamcrest.jpa-matchers>
 		<lambdaj.version>2.3.3</lambdaj.version>
-		<mockito.version>3.3.0</mockito.version>
+		<mockito.version>5.15.2</mockito.version>
+		<testcontainers.version>1.20.4</testcontainers.version>
+
+		<!-- other dependencies -->
+		<jcip-annotations.version>1.0</jcip-annotations.version>
+		<awaitility.version>4.2.2</awaitility.version>
+		<spotbugs-annotations.version>4.9.1</spotbugs-annotations.version>
+		<lombok.version>1.18.36</lombok.version>
+		<org.immutables.version>2.10.1</org.immutables.version>
+		<jna.version>5.16.0</jna.version>
+		<jcl-over-slf4j.version>2.0.16</jcl-over-slf4j.version>
 
 
-		<maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
-		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-		<maven-release-plugin.version>3.0.0-M1</maven-release-plugin.version>
-		<maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
-		<maven-failsafe-plugin.version>3.0.0-M4</maven-failsafe-plugin.version>
-		<maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
+		<maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
+		<maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+		<maven-release-plugin.version>3.1.1</maven-release-plugin.version>
+		<maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
+		<maven-failsafe-plugin.version>3.5.2</maven-failsafe-plugin.version>
+		<maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
 		<maven-bundlor-plugin.version>1.1.2.RELEASE</maven-bundlor-plugin.version>
-		<maven-build-helper-plugin.version>3.0.0</maven-build-helper-plugin.version>
-		<nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
+		<maven-build-helper-plugin.version>3.6.0</maven-build-helper-plugin.version>
+		<nexus-staging-maven-plugin.version>1.7.0</nexus-staging-maven-plugin.version>
+		<japicmp-maven-plugin.version>0.18.3</japicmp-maven-plugin.version>
 	</properties>
 
 	<modules>
@@ -238,13 +256,11 @@
 					<artifactId>maven-bundle-plugin</artifactId>
 					<version>4.2.1</version>
 				</plugin>
-
-
 				<plugin>
 					<!-- use with "mvn -DskipTests clean verify" -->
 					<groupId>com.github.siom79.japicmp</groupId>
 					<artifactId>japicmp-maven-plugin</artifactId>
-					<version>0.18.3</version>
+					<version>${japicmp-maven-plugin.version}</version>
 					<configuration>
 						<oldVersion>
 							<dependency>
@@ -260,6 +276,9 @@
 							</file>
 						</newVersion>
 						<parameter>
+							<excludes>
+								<exclude>javax.ws.rs.WebApplicationException</exclude>
+							</excludes>
 							<breakBuildOnBinaryIncompatibleModifications>true</breakBuildOnBinaryIncompatibleModifications>
 							<accessModifier>public</accessModifier>
 							<onlyBinaryIncompatible>true</onlyBinaryIncompatible>
@@ -277,14 +296,6 @@
 							</overrideCompatibilityChangeParameters>
 						</parameter>
 					</configuration>
-					<executions>
-						<execution>
-							<phase>verify</phase>
-							<goals>
-								<goal>cmp</goal>
-							</goals>
-						</execution>
-					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>

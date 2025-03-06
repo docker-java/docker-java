@@ -1,7 +1,5 @@
 package com.github.dockerjava.api.model;
 
-import static java.util.Objects.requireNonNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -11,6 +9,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
+
+import static java.util.Objects.requireNonNull;
 
 @EqualsAndHashCode
 @ToString

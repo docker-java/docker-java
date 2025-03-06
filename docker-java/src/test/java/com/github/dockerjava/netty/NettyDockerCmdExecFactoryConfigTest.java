@@ -46,8 +46,8 @@ public class NettyDockerCmdExecFactoryConfigTest {
             .withApiVersion("1.23");
 
         DockerClient client = DockerClientBuilder.getInstance(configBuilder)
-                .withDockerCmdExecFactory(factory)
-                .build();
+            .withDockerCmdExecFactory(factory)
+            .build();
 
         FakeDockerServer server = new FakeDockerServer(dockerPort);
         server.start();

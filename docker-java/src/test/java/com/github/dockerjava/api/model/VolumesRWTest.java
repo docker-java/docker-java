@@ -3,18 +3,18 @@ package com.github.dockerjava.api.model;
 import com.github.dockerjava.test.serdes.JSONTestHelper;
 import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class VolumesRWTest {
 
     @Test
     public void usesToJson() throws Exception {
         VolumesRW volumes = new VolumesRW(
-                new VolumeRW(new Volume("/foo")),
-                new VolumeRW(new Volume("/bar"), AccessMode.ro)
+            new VolumeRW(new Volume("/foo")),
+            new VolumeRW(new Volume("/bar"), AccessMode.ro)
         );
         String json = JSONTestHelper.getMapper().writeValueAsString(volumes);
 
@@ -27,8 +27,8 @@ public class VolumesRWTest {
 
         assertThat(volumes, notNullValue());
         assertThat(volumes.getVolumesRW(), arrayContaining(
-                new VolumeRW(new Volume("/foo")),
-                new VolumeRW(new Volume("/bar"), AccessMode.ro)
+            new VolumeRW(new Volume("/foo")),
+            new VolumeRW(new Volume("/bar"), AccessMode.ro)
         ));
     }
 

@@ -25,7 +25,7 @@ public class ResizeExecCmdIT extends CmdIT {
         String containerName = "generated_" + new SecureRandom().nextInt();
 
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox").withUser("root")
-                .withCmd("sleep", "9999").withName(containerName).exec();
+            .withCmd("sleep", "9999").withName(containerName).exec();
 
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 

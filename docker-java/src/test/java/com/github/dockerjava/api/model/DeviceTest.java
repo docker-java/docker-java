@@ -19,15 +19,15 @@ import static org.junit.Assert.fail;
 public class DeviceTest {
 
     public static List<String> validPaths = Arrays.asList(
-            "/home",
-            "/home:/home",
-            "/home:/something/else",
-            "/with space",
-            "/home:/with space",
-            "relative:/absolute-path",
-            "hostPath:/containerPath:r",
-            "/hostPath:/containerPath:rw",
-            "/hostPath:/containerPath:mrw"
+        "/home",
+        "/home:/home",
+        "/home:/something/else",
+        "/with space",
+        "/home:/with space",
+        "relative:/absolute-path",
+        "hostPath:/containerPath:r",
+        "/hostPath:/containerPath:rw",
+        "/hostPath:/containerPath:mrw"
     );
 
     public static HashMap<String, String> badPaths = new LinkedHashMap<String, String>() {{
@@ -56,16 +56,16 @@ public class DeviceTest {
     @Test
     public void testParse() {
         assertThat(Device.parse("/dev/sda:/dev/xvdc:r"),
-                equalTo(new Device("r", "/dev/xvdc", "/dev/sda")));
+            equalTo(new Device("r", "/dev/xvdc", "/dev/sda")));
 
         assertThat(Device.parse("/dev/snd:rw"),
-                equalTo(new Device("rw", "/dev/snd", "/dev/snd")));
+            equalTo(new Device("rw", "/dev/snd", "/dev/snd")));
 
         assertThat(Device.parse("/dev/snd:/something"),
-                equalTo(new Device("rwm", "/something", "/dev/snd")));
+            equalTo(new Device("rwm", "/something", "/dev/snd")));
 
         assertThat(Device.parse("/dev/snd:/something:rw"),
-                equalTo(new Device("rw", "/something", "/dev/snd")));
+            equalTo(new Device("rw", "/something", "/dev/snd")));
 
     }
 

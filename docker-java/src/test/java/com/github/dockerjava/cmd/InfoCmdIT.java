@@ -29,9 +29,9 @@ public class InfoCmdIT extends CmdIT {
         // TODO extract this into a shared method
         if (dockerClient.listContainersCmd().withShowAll(true).exec().size() == 0) {
             CreateContainerResponse container = dockerClient.createContainerCmd(DEFAULT_IMAGE)
-                    .withName("docker-java-itest-info")
-                    .withCmd("touch", "/test")
-                    .exec();
+                .withName("docker-java-itest-info")
+                .withCmd("touch", "/test")
+                .exec();
 
             LOG.info("Created container: {}", container);
             assertThat(container.getId(), not(isEmptyOrNullString()));

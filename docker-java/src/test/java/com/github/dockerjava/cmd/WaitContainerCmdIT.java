@@ -16,9 +16,9 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 
 public class WaitContainerCmdIT extends CmdIT {
@@ -35,7 +35,7 @@ public class WaitContainerCmdIT extends CmdIT {
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         int exitCode = dockerRule.getClient().waitContainerCmd(container.getId()).start()
-                .awaitStatusCode();
+            .awaitStatusCode();
         LOG.info("Container exit code: {}", exitCode);
 
         assertThat(exitCode, equalTo(0));
@@ -94,7 +94,7 @@ public class WaitContainerCmdIT extends CmdIT {
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         WaitContainerResultCallback callback = dockerRule.getClient().waitContainerCmd(container.getId()).exec(
-                new WaitContainerResultCallback());
+            new WaitContainerResultCallback());
         try {
             callback.awaitStatusCode(100, TimeUnit.MILLISECONDS);
             throw new AssertionError("Should throw exception on timeout.");

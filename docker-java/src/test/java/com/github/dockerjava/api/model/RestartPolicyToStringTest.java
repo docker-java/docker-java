@@ -11,7 +11,7 @@ public class RestartPolicyToStringTest {
 
     @Parameterized.Parameters(name = "{0}")
     public static Object[][] restartPolicies() {
-        return new Object[][] { {"no"}, {"always"}, {"unless-stopped"}, {"on-failure"}, {"on-failure:2"}};
+        return new Object[][]{{"no"}, {"always"}, {"unless-stopped"}, {"on-failure"}, {"on-failure:2"}};
     }
 
     @Parameterized.Parameter
