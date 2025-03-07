@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
@@ -15,7 +15,6 @@ jobs:
           - { name: "default", javaVersion: 8 }
           - { name: "default", javaVersion: 17 }
           - { name: "default", javaVersion: 21 }
-          - { name: "Docker 19.03.9", dockerVersion: "v19.03.9", javaVersion: 8 }
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK
@@ -27,7 +26,26 @@ jobs:
         id: setup_docker
         uses: docker/setup-docker-action@v4
         with:
-          version: ${{matrix.dockerVersion}}
+          channel: stable
+      - name: Build with Maven
+        env:
+          DOCKER_HOST: ${{steps.setup_docker.outputs.sock}}
+        run: ./mvnw --no-transfer-progress verify
+
+  docker19:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 8
+          distribution: temurin
+      - name: Configure Docker
+        id: setup_docker
+        uses: docker/setup-docker-action@v4
+        with:
+          version: v19.03.9
           channel: stable
       - name: Build with Maven
         env:
@@ -35,7 +53,7 @@ jobs:
         run: ./mvnw --no-transfer-progress verify
 
   tcp:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK
