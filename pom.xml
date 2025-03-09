@@ -148,6 +148,7 @@
 						<target>${jdk.target}</target>
 						<debug>${jdk.debug}</debug>
 						<optimize>${jdk.optimize}</optimize>
+						<parameters>true</parameters>
 					</configuration>
 				</plugin>
 
