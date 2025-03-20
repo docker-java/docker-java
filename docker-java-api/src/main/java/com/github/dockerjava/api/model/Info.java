@@ -1108,8 +1108,19 @@ public class Info extends DockerObject implements Serializable {
         return this;
     }
 
+    /**
+     * @see #securityOptions
+     */
     public List<String> getSecurityOptions() {
         return securityOptions;
+    }
+
+    /**
+     * @see #securityOptions
+     */
+    public Info withSecurityOptions(List<String> securityOptions) {
+        this.securityOptions = securityOptions;
+        return this;
     }
 
     /**
@@ -1117,5 +1128,13 @@ public class Info extends DockerObject implements Serializable {
      */
     public Map<String, RuntimeInfo> getRuntimes() {
         return runtimes;
+    }
+
+    /**
+     * @see #runtimes
+     */
+    public Info withRuntimes(Map<String, RuntimeInfo> runtimes) {
+        this.runtimes = runtimes;
+        return this;
     }
 }
