@@ -27,6 +27,10 @@ jobs:
         uses: docker/setup-docker-action@v4
         with:
           channel: stable
+      - name: Init swarm
+        env:
+          DOCKER_HOST: ${{steps.setup_docker.outputs.tcp}}
+        run: docker swarm init
       - name: Build with Maven
         env:
           DOCKER_HOST: ${{steps.setup_docker.outputs.sock}}
@@ -67,6 +71,10 @@ jobs:
         with:
           channel: stable
           tcp-port: 2375
+      - name: Init swarm
+        env:
+          DOCKER_HOST: ${{steps.setup_docker.outputs.tcp}}
+        run: docker swarm init
       - name: Build with Maven
         env:
           DOCKER_HOST: ${{steps.setup_docker.outputs.tcp}}
