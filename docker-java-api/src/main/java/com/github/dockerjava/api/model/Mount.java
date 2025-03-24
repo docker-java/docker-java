@@ -58,6 +58,12 @@ public class Mount extends DockerObject implements Serializable {
     private TmpfsOptions tmpfsOptions;
 
     /**
+     * @since 1.48
+     */
+    @JsonProperty("ImageOptions")
+    private ImageOptions imageOptions;
+
+    /**
      * @see #type
      */
     @CheckForNull
@@ -174,6 +180,25 @@ public class Mount extends DockerObject implements Serializable {
         this.tmpfsOptions = tmpfsOptions;
         if (tmpfsOptions != null) {
             this.type = MountType.TMPFS;
+        }
+        return this;
+    }
+
+    /**
+     * @see #imageOptions
+     */
+    @CheckForNull
+    public ImageOptions getImageOptions() {
+        return imageOptions;
+    }
+
+    /**
+     * @see #imageOptions
+     */
+    public Mount withImageOptions(ImageOptions imageOptions) {
+        this.imageOptions = imageOptions;
+        if (imageOptions != null) {
+            this.type = MountType.IMAGE;
         }
         return this;
     }

@@ -18,6 +18,10 @@ public enum MountType {
 
     //@since 1.40
     @JsonProperty("npipe")
-    NPIPE
+    NPIPE,
+
+    //@since 1.48
+    @JsonProperty("image")
+    IMAGE,
 
 }
