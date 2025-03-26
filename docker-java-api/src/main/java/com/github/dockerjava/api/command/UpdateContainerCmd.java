@@ -52,43 +52,13 @@ public interface UpdateContainerCmd extends SyncDockerCmd<UpdateContainerRespons
 
     UpdateContainerCmd withBlkioDeviceWriteIOps(List<BlkioRateDevice> blkioDeviceWriteIOps);
 
-    /**
-     *
-     * @deprecated see {@link #getCpuPeriodLong()}
-     */
     @CheckForNull
-    @Deprecated
-    Integer getCpuPeriod();
-
-    /**
-     *
-     * @deprecated see {@link #withCpuPeriod(Long)}
-     */
-    @Deprecated
-    UpdateContainerCmd withCpuPeriod(Integer cpuPeriod);
-
-    @CheckForNull
-    Long getCpuPeriodLong();
+    Long getCpuPeriod();
 
     UpdateContainerCmd withCpuPeriod(Long cpuPeriod);
 
-    /**
-     *
-     * @deprecated see {@link #getCpuQuotaLong()}
-     */
     @CheckForNull
-    @Deprecated
-    Integer getCpuQuota();
-
-    /**
-     *
-     * @deprecated see {@link #withCpuQuota(Long)}
-     */
-    @Deprecated
-    UpdateContainerCmd withCpuQuota(Integer cpuQuota);
-
-    @CheckForNull
-    Long getCpuQuotaLong();
+    Long getCpuQuota();
 
     UpdateContainerCmd withCpuQuota(Long cpuQuota);
 

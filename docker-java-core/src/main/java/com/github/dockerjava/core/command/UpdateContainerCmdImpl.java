@@ -221,25 +221,7 @@ public class UpdateContainerCmdImpl extends AbstrDockerCmd<UpdateContainerCmd, U
      * @see #cpuPeriod
      */
     @CheckForNull
-    @Deprecated
-    public Integer getCpuPeriod() {
-        return cpuPeriod == null ? null : cpuPeriod.intValue();
-    }
-
-    /**
-     * @see #cpuPeriod
-     */
-    @Deprecated
-    public UpdateContainerCmd withCpuPeriod(Integer cpuPeriod) {
-        this.cpuPeriod = cpuPeriod == null ? null : cpuPeriod.longValue();
-        return this;
-    }
-
-    /**
-     * @see #cpuPeriod
-     */
-    @CheckForNull
-    public Long getCpuPeriodLong() {
+    public Long getCpuPeriod() {
         return cpuPeriod;
     }
 
@@ -255,25 +237,7 @@ public class UpdateContainerCmdImpl extends AbstrDockerCmd<UpdateContainerCmd, U
      * @see #cpuQuota
      */
     @CheckForNull
-    @Deprecated
-    public Integer getCpuQuota() {
-        return cpuQuota == null ? null : cpuQuota.intValue();
-    }
-
-    /**
-     * @see #cpuQuota
-     */
-    @Deprecated
-    public UpdateContainerCmd withCpuQuota(Integer cpuQuota) {
-        this.cpuQuota = cpuQuota == null ? null : cpuQuota.longValue();
-        return this;
-    }
-
-    /**
-     * @see #cpuQuota
-     */
-    @CheckForNull
-    public Long getCpuQuotaLong() {
+    public Long getCpuQuota() {
         return cpuQuota;
     }
 
