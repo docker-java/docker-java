@@ -84,6 +84,15 @@
 			<plugin>
 				<groupId>com.github.siom79.japicmp</groupId>
 				<artifactId>japicmp-maven-plugin</artifactId>
+				<configuration>
+					<parameter>
+						<excludes>
+							<!-- Breaking change -->
+							<exclude>com.github.dockerjava.api.command.InspectContainerResponse#getSizeRootFs()</exclude>
+							<exclude>com.github.dockerjava.api.command.InspectContainerResponse#getSizeRw()</exclude>
+						</excludes>
+					</parameter>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
