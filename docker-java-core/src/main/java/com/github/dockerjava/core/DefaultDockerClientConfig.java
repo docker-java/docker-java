@@ -130,11 +130,11 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
     }
 
     private static void replaceProperties(Properties properties, Properties replacements) {
-        for (Entry<Object, Object> next : properties.entrySet()) {
-            final String key = next.getKey().toString();
-            // no next.getValue here because it does not have the same semantics as getProperty (defaults handling)
+        for (Entry<Object, Object> entry : properties.entrySet()) {
+            final String key = entry.getKey().toString();
+            // no entry.getValue here because it does not have the same semantics as getProperty (defaults handling)
             final String value = properties.getProperty(key);
-            next.setValue(replaceProperties(value, replacements));
+            entry.setValue(replaceProperties(value, replacements));
         }
     }
 
