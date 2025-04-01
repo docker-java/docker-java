@@ -1,0 +1,5 @@
+{
+    "Warnings": [
+        "Published ports are discarded when using host network mode"
+    ]
+}

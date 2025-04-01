@@ -45,7 +45,7 @@ public class PullImageCmdIT extends CmdIT {
         // pulled down, preferably small in size. If tag is not used pull will
         // download all images in that repository but tmpImgs will only
         // deleted 'latest' image but not images with other tags
-        String testImage = "hackmann/empty";
+        String testImage = "alpine:3.17";
 
         LOG.info("Removing image: {}", testImage);
 

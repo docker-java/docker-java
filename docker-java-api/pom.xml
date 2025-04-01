@@ -42,7 +42,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.22</version>
+			<version>1.18.38</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -50,7 +50,7 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
-			<version>5.10.0</version>
+			<version>5.12.1</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -84,6 +84,18 @@
 			<plugin>
 				<groupId>com.github.siom79.japicmp</groupId>
 				<artifactId>japicmp-maven-plugin</artifactId>
+				<configuration>
+					<parameter>
+						<excludes>
+							<exclude>com.github.dockerjava.api.command.UpdateContainerCmd#getCpuPeriod()</exclude>
+							<exclude>com.github.dockerjava.api.command.UpdateContainerCmd#withCpuPeriod(java.lang.Integer)</exclude>
+							<exclude>com.github.dockerjava.api.command.UpdateContainerCmd#getCpuQuota()</exclude>
+							<exclude>com.github.dockerjava.api.command.UpdateContainerCmd#withCpuQuota(java.lang.Integer)</exclude>
+							<exclude>com.github.dockerjava.api.command.InspectContainerResponse#getSizeRootFs()</exclude>
+							<exclude>com.github.dockerjava.api.command.InspectContainerResponse#getSizeRw()</exclude>
+						</excludes>
+					</parameter>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
