@@ -20,7 +20,7 @@ class UnixSocketFactory extends SocketFactory {
         try {
             return UnixSocket.get(socketPath);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed create socket with path " + socketPath, e);
         }
     }
 

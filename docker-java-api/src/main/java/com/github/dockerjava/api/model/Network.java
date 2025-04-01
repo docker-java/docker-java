@@ -7,6 +7,7 @@ import lombok.ToString;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,9 @@ public class Network extends DockerObject implements Serializable {
 
     @JsonProperty("Id")
     private String id;
+
+    @JsonProperty("Created")
+    private Date created;
 
     @JsonProperty("Name")
     private String name;
@@ -50,6 +54,10 @@ public class Network extends DockerObject implements Serializable {
 
     public String getId() {
         return id;
+    }
+
+    public Date getCreated() {
+        return created;
     }
 
     public String getName() {
