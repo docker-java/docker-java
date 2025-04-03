@@ -36,7 +36,7 @@ public abstract class SwarmCmdIT extends CmdIT {
 
     private static final String DOCKER_IN_DOCKER_IMAGE_REPOSITORY = "docker";
 
-    private static final String DOCKER_IN_DOCKER_IMAGE_TAG = "17.12-dind";
+    private static final String DOCKER_IN_DOCKER_IMAGE_TAG = "26.1.3-dind";
 
     private static final String DOCKER_IN_DOCKER_CONTAINER_PREFIX = "docker";
 
