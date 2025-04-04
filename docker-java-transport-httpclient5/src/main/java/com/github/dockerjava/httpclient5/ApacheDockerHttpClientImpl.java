@@ -38,6 +38,7 @@ import org.apache.hc.core5.util.Timeout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,12 +65,14 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
         Duration responseTimeout
     ) {
         SSLContext sslContext;
+        HostnameVerifier hostnameVerifier;
         try {
             sslContext = sslConfig != null ? sslConfig.getSSLContext() : null;
+            hostnameVerifier = sslConfig != null ? sslConfig.getHostnameVerifier() : null;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        HttpClientConnectionOperator connectionOperator = createConnectionOperator(dockerHost, sslContext);
+        HttpClientConnectionOperator connectionOperator = createConnectionOperator(dockerHost, sslContext, hostnameVerifier);
 
         switch (dockerHost.getScheme()) {
             case "unix":
@@ -139,12 +142,13 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
 
     private HttpClientConnectionOperator createConnectionOperator(
         URI dockerHost,
-        SSLContext sslContext
+        SSLContext sslContext,
+        HostnameVerifier hostnameVerifier
     ) {
         String dockerHostScheme = dockerHost.getScheme();
         String dockerHostPath = dockerHost.getPath();
         TlsSocketStrategy tlsSocketStrategy = sslContext != null ?
-            new DefaultClientTlsStrategy(sslContext) : DefaultClientTlsStrategy.createSystemDefault();
+            new DefaultClientTlsStrategy(sslContext, hostnameVerifier) : DefaultClientTlsStrategy.createSystemDefault();
         return new DefaultHttpClientConnectionOperator(
             socksProxy -> {
                 if ("unix".equalsIgnoreCase(dockerHostScheme)) {
