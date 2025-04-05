@@ -73,6 +73,9 @@ public class HostConfig extends DockerObject implements Serializable {
     @JsonProperty("NanoCpus")
     private Long nanoCPUs;
 
+    @JsonProperty("Annotations")
+    private Map<String, String> annotations;
+
     @JsonProperty("CapAdd")
     private Capability[] capAdd;
 
@@ -302,6 +305,11 @@ public class HostConfig extends DockerObject implements Serializable {
 
     public Integer getBlkioWeight() {
         return blkioWeight;
+    }
+
+    @CheckForNull
+    public Map<String, String> getAnnotations() {
+        return annotations;
     }
 
     public Capability[] getCapAdd() {
@@ -633,6 +641,11 @@ public class HostConfig extends DockerObject implements Serializable {
      */
     public HostConfig withBlkioWeightDevice(List<BlkioWeightDevice> blkioWeightDevice) {
         this.blkioWeightDevice = blkioWeightDevice;
+        return this;
+    }
+
+    public HostConfig withAnnotations(Map<String, String> annotations) {
+        this.annotations = annotations;
         return this;
     }
 
