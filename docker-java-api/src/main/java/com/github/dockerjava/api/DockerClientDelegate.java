@@ -1,5 +1,11 @@
 package com.github.dockerjava.api;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.annotation.Nonnull;
+
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
 import com.github.dockerjava.api.command.BuildImageCmd;
@@ -20,6 +26,7 @@ import com.github.dockerjava.api.command.DisconnectFromNetworkCmd;
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.command.ExecCreateCmd;
 import com.github.dockerjava.api.command.ExecStartCmd;
+import com.github.dockerjava.api.command.ExportImageCmd;
 import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InitializeSwarmCmd;
 import com.github.dockerjava.api.command.InspectConfigCmd;
@@ -86,16 +93,12 @@ import com.github.dockerjava.api.model.SecretSpec;
 import com.github.dockerjava.api.model.ServiceSpec;
 import com.github.dockerjava.api.model.SwarmSpec;
 
-import javax.annotation.Nonnull;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-
 /**
  * @apiNote implementations MUST override {{@link #getDockerClient()}}
  * @implNote We're not using an abstract class here because we want
- * Java compiler to force us to implement every {@link DockerClient}'s method,
- * especially when new methods are added
+ *           Java compiler to force us to implement every {@link DockerClient}'s
+ *           method,
+ *           especially when new methods are added
  */
 @SuppressWarnings("unused")
 public class DockerClientDelegate implements DockerClient {
@@ -250,7 +253,8 @@ public class DockerClientDelegate implements DockerClient {
     }
 
     @Override
-    public CopyArchiveFromContainerCmd copyArchiveFromContainerCmd(@Nonnull String containerId, @Nonnull String resource) {
+    public CopyArchiveFromContainerCmd copyArchiveFromContainerCmd(@Nonnull String containerId,
+            @Nonnull String resource) {
         return getDockerClient().copyArchiveFromContainerCmd(containerId, resource);
     }
 
@@ -523,5 +527,10 @@ public class DockerClientDelegate implements DockerClient {
     @Override
     public void close() throws IOException {
         getDockerClient().close();
+    }
+
+    @Override
+    public ExportImageCmd exportImageCmd(String imageId) {
+        return getDockerClient().exportImageCmd(imageId);
     }
 }

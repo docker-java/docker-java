@@ -1,5 +1,14 @@
 package com.github.dockerjava.core;
 
+import java.io.Closeable;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Objects;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
@@ -22,6 +31,7 @@ import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.command.ExecCreateCmd;
 import com.github.dockerjava.api.command.ExecStartCmd;
+import com.github.dockerjava.api.command.ExportImageCmd;
 import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InitializeSwarmCmd;
 import com.github.dockerjava.api.command.InspectConfigCmd;
@@ -106,6 +116,7 @@ import com.github.dockerjava.core.command.DisconnectFromNetworkCmdImpl;
 import com.github.dockerjava.core.command.EventsCmdImpl;
 import com.github.dockerjava.core.command.ExecCreateCmdImpl;
 import com.github.dockerjava.core.command.ExecStartCmdImpl;
+import com.github.dockerjava.core.command.ExportImageCmdImpl;
 import com.github.dockerjava.core.command.InfoCmdImpl;
 import com.github.dockerjava.core.command.InitializeSwarmCmdImpl;
 import com.github.dockerjava.core.command.InpectNetworkCmdImpl;
@@ -165,14 +176,6 @@ import com.github.dockerjava.core.command.UpdateSwarmNodeCmdImpl;
 import com.github.dockerjava.core.command.VersionCmdImpl;
 import com.github.dockerjava.core.command.WaitContainerCmdImpl;
 import com.github.dockerjava.transport.DockerHttpClient;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.io.Closeable;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Objects;
 
 /**
  * @author Konstantin Pelykh (kpelykh@gmail.com)
@@ -718,6 +721,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public void close() throws IOException {
         getDockerCmdExecFactory().close();
+    }
+
+    @Override
+    public ExportImageCmd exportImageCmd(String imageId) {
+        return new ExportImageCmdImpl(getDockerCmdExecFactory().createExportImageCmdExec(), imageId);
     }
 
 }
