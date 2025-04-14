@@ -18,12 +18,9 @@ public class CapabilityTest {
     public void deserializeCapability() throws Exception {
         Capability capability = JSONTestHelper.getMapper().readValue("\"ALL\"", Capability.class);
         assertEquals(Capability.ALL, capability);
-    }
 
-    @Test
-    public void parseCapPrefix() throws Exception {
-        Capability capability = JSONTestHelper.getMapper().readValue("\"CAP_ALL\"", Capability.class);
-        assertEquals(Capability.ALL, capability);
+        Capability compatibleCapability = JSONTestHelper.getMapper().readValue("\"CAP_ALL\"", Capability.class);
+        assertEquals(Capability.ALL, compatibleCapability);
     }
 
     @Test(expected = JsonMappingException.class)
