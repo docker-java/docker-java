@@ -23,6 +23,7 @@ import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.command.ExecCreateCmd;
 import com.github.dockerjava.api.command.ExecStartCmd;
+import com.github.dockerjava.api.command.ExportImageCmd;
 import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InitializeSwarmCmd;
 import com.github.dockerjava.api.command.InspectConfigCmd;
@@ -102,14 +103,10 @@ import com.github.dockerjava.core.exec.DisconnectFromNetworkCmdExec;
 import com.github.dockerjava.core.exec.EventsCmdExec;
 import com.github.dockerjava.core.exec.ExecCreateCmdExec;
 import com.github.dockerjava.core.exec.ExecStartCmdExec;
-import com.github.dockerjava.core.exec.InspectConfigCmdExec;
-import com.github.dockerjava.core.exec.ListConfigsCmdExec;
-import com.github.dockerjava.core.exec.LoadImageAsyncCmdExec;
-import com.github.dockerjava.core.exec.RemoveConfigCmdExec;
-import com.github.dockerjava.core.exec.ResizeContainerCmdExec;
-import com.github.dockerjava.core.exec.ResizeExecCmdExec;
+import com.github.dockerjava.core.exec.ExportImageCmdExec;
 import com.github.dockerjava.core.exec.InfoCmdExec;
 import com.github.dockerjava.core.exec.InitializeSwarmCmdExec;
+import com.github.dockerjava.core.exec.InspectConfigCmdExec;
 import com.github.dockerjava.core.exec.InspectContainerCmdExec;
 import com.github.dockerjava.core.exec.InspectExecCmdExec;
 import com.github.dockerjava.core.exec.InspectImageCmdExec;
@@ -121,6 +118,7 @@ import com.github.dockerjava.core.exec.InspectVolumeCmdExec;
 import com.github.dockerjava.core.exec.JoinSwarmCmdExec;
 import com.github.dockerjava.core.exec.KillContainerCmdExec;
 import com.github.dockerjava.core.exec.LeaveSwarmCmdExec;
+import com.github.dockerjava.core.exec.ListConfigsCmdExec;
 import com.github.dockerjava.core.exec.ListContainersCmdExec;
 import com.github.dockerjava.core.exec.ListImagesCmdExec;
 import com.github.dockerjava.core.exec.ListNetworksCmdExec;
@@ -129,6 +127,7 @@ import com.github.dockerjava.core.exec.ListServicesCmdExec;
 import com.github.dockerjava.core.exec.ListSwarmNodesCmdExec;
 import com.github.dockerjava.core.exec.ListTasksCmdExec;
 import com.github.dockerjava.core.exec.ListVolumesCmdExec;
+import com.github.dockerjava.core.exec.LoadImageAsyncCmdExec;
 import com.github.dockerjava.core.exec.LoadImageCmdExec;
 import com.github.dockerjava.core.exec.LogContainerCmdExec;
 import com.github.dockerjava.core.exec.LogSwarmObjectExec;
@@ -137,6 +136,7 @@ import com.github.dockerjava.core.exec.PingCmdExec;
 import com.github.dockerjava.core.exec.PruneCmdExec;
 import com.github.dockerjava.core.exec.PullImageCmdExec;
 import com.github.dockerjava.core.exec.PushImageCmdExec;
+import com.github.dockerjava.core.exec.RemoveConfigCmdExec;
 import com.github.dockerjava.core.exec.RemoveContainerCmdExec;
 import com.github.dockerjava.core.exec.RemoveImageCmdExec;
 import com.github.dockerjava.core.exec.RemoveNetworkCmdExec;
@@ -145,6 +145,8 @@ import com.github.dockerjava.core.exec.RemoveServiceCmdExec;
 import com.github.dockerjava.core.exec.RemoveSwarmNodeCmdExec;
 import com.github.dockerjava.core.exec.RemoveVolumeCmdExec;
 import com.github.dockerjava.core.exec.RenameContainerCmdExec;
+import com.github.dockerjava.core.exec.ResizeContainerCmdExec;
+import com.github.dockerjava.core.exec.ResizeExecCmdExec;
 import com.github.dockerjava.core.exec.RestartContainerCmdExec;
 import com.github.dockerjava.core.exec.SaveImageCmdExec;
 import com.github.dockerjava.core.exec.SaveImagesCmdExec;
@@ -594,6 +596,10 @@ public abstract class AbstractDockerCmdExecFactory implements DockerCmdExecFacto
         return new RemoveConfigCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
+    @Override
+    public ExportImageCmd.Exec createExportImageCmdExec() {
+        return new ExportImageCmdExec(getBaseResource(), getDockerClientConfig());
+    }
 
     protected abstract WebTarget getBaseResource();
 }
