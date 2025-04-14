@@ -1,5 +1,12 @@
 package com.github.dockerjava.api;
 
+import java.io.Closeable;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.annotation.Nonnull;
+
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
 import com.github.dockerjava.api.command.BuildImageCmd;
@@ -20,6 +27,7 @@ import com.github.dockerjava.api.command.DisconnectFromNetworkCmd;
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.command.ExecCreateCmd;
 import com.github.dockerjava.api.command.ExecStartCmd;
+import com.github.dockerjava.api.command.ExportImageCmd;
 import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InitializeSwarmCmd;
 import com.github.dockerjava.api.command.InspectConfigCmd;
@@ -86,12 +94,6 @@ import com.github.dockerjava.api.model.SecretSpec;
 import com.github.dockerjava.api.model.ServiceSpec;
 import com.github.dockerjava.api.model.SwarmSpec;
 
-import javax.annotation.Nonnull;
-import java.io.Closeable;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-
 // https://godoc.org/github.com/fsouza/go-dockerclient
 public interface DockerClient extends Closeable {
 
@@ -126,7 +128,7 @@ public interface DockerClient extends Closeable {
      * Corresponds to POST /images/load API endpoint.
      *
      * @param imageStream
-     *            stream of the tarball file
+     *                    stream of the tarball file
      * @return created command
      * @since {@link RemoteApiVersion#VERSION_1_7}
      */
@@ -144,12 +146,14 @@ public interface DockerClient extends Closeable {
 
     /**
      * @param name
-     *            The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
+     *             The name, e.g. "alexec/busybox" or just "busybox" if you want to
+     *             default. Not null.
      */
     SaveImageCmd saveImageCmd(@Nonnull String name);
 
     /**
      * Command to download multiple images at once.
+     * 
      * @return command (builder)
      */
     SaveImagesCmd saveImagesCmd();
@@ -163,13 +167,17 @@ public interface DockerClient extends Closeable {
     CreateContainerCmd createContainerCmd(@Nonnull String image);
 
     /**
-     * Creates a new {@link StartContainerCmd} for the container with the given ID. The command can then be further customized by using
+     * Creates a new {@link StartContainerCmd} for the container with the given ID.
+     * The command can then be further customized by using
      * builder methods on it like {@link StartContainerCmd#withDns(String...)}.
      * <p>
-     * <b>If you customize the command, any existing configuration of the target container will get reset to its default before applying the
-     * new configuration. To preserve the existing configuration, use an unconfigured {@link StartContainerCmd}.</b>
+     * <b>If you customize the command, any existing configuration of the target
+     * container will get reset to its default before applying the
+     * new configuration. To preserve the existing configuration, use an
+     * unconfigured {@link StartContainerCmd}.</b>
      * <p>
-     * This command corresponds to the <code>/containers/{id}/start</code> endpoint of the Docker Remote API.
+     * This command corresponds to the <code>/containers/{id}/start</code> endpoint
+     * of the Docker Remote API.
      */
     StartContainerCmd startContainerCmd(@Nonnull String containerId);
 
@@ -195,9 +203,9 @@ public interface DockerClient extends Closeable {
      * Copy resource from container to local machine.
      *
      * @param containerId
-     *            id of the container
+     *                    id of the container
      * @param resource
-     *            path to container's resource
+     *                    path to container's resource
      * @return created command
      * @since {@link RemoteApiVersion#VERSION_1_20}
      */
@@ -207,13 +215,14 @@ public interface DockerClient extends Closeable {
      * Copy resource from container to local machine.
      *
      * @param containerId
-     *            id of the container
+     *                    id of the container
      * @param resource
-     *            path to container's resource
+     *                    path to container's resource
      * @return created command
      * @see #copyArchiveFromContainerCmd(String, String)
-     * @deprecated since docker API version 1.20, replaced by {@link #copyArchiveFromContainerCmd(String, String)}
-     * since 1.24 fails.
+     * @deprecated since docker API version 1.20, replaced by
+     *             {@link #copyArchiveFromContainerCmd(String, String)}
+     *             since 1.24 fails.
      */
     @Deprecated
     CopyFileFromContainerCmd copyFileFromContainerCmd(@Nonnull String containerId, @Nonnull String resource);
@@ -222,7 +231,7 @@ public interface DockerClient extends Closeable {
      * Copy archive from local machine to remote container
      *
      * @param containerId
-     *            id of the container
+     *                    id of the container
      * @return created command
      * @since {@link RemoteApiVersion#VERSION_1_20}
      */
@@ -364,7 +373,8 @@ public interface DockerClient extends Closeable {
     ListSwarmNodesCmd listSwarmNodesCmd();
 
     /**
-     * Command to list all services in a docker swarm. Only applicable if docker runs in swarm mode.
+     * Command to list all services in a docker swarm. Only applicable if docker
+     * runs in swarm mode.
      *
      * @since {@link RemoteApiVersion#VERSION_1_24}
      * @return command
@@ -372,7 +382,8 @@ public interface DockerClient extends Closeable {
     ListServicesCmd listServicesCmd();
 
     /**
-     * Command to create a service in a docker swarm. Only applicable if docker runs in swarm mode.
+     * Command to create a service in a docker swarm. Only applicable if docker runs
+     * in swarm mode.
      *
      * @since {@link RemoteApiVersion#VERSION_1_24}
      * @param serviceSpec the service specification
@@ -382,6 +393,7 @@ public interface DockerClient extends Closeable {
 
     /**
      * Command to inspect a service
+     * 
      * @param serviceId service id or service name
      * @return command
      */
@@ -389,7 +401,8 @@ public interface DockerClient extends Closeable {
 
     /**
      * Command to update a service specification
-     * @param serviceId service id
+     * 
+     * @param serviceId   service id
      * @param serviceSpec the new service specification
      * @return command
      */
@@ -397,6 +410,7 @@ public interface DockerClient extends Closeable {
 
     /**
      * Command to remove a service
+     * 
      * @param serviceId service id or service name
      * @return command
      */
@@ -434,7 +448,7 @@ public interface DockerClient extends Closeable {
     PruneCmd pruneCmd(PruneType pruneType);
 
     /**
-     *  Command to list all secrets. Only applicable if docker runs in swarm mode.
+     * Command to list all secrets. Only applicable if docker runs in swarm mode.
      *
      * @since {@link RemoteApiVersion#VERSION_1_25}
      * @return command
@@ -442,7 +456,8 @@ public interface DockerClient extends Closeable {
     ListSecretsCmd listSecretsCmd();
 
     /**
-     * Command to create a secret in a docker swarm. Only applicable if docker runs in swarm mode.
+     * Command to create a secret in a docker swarm. Only applicable if docker runs
+     * in swarm mode.
      *
      * @since {@link RemoteApiVersion#VERSION_1_25}
      * @param secretSpec the secret specification
@@ -459,9 +474,8 @@ public interface DockerClient extends Closeable {
      */
     RemoveSecretCmd removeSecretCmd(String secretId);
 
-
     /**
-     *  Command to list all configs. Only applicable if docker runs in swarm mode.
+     * Command to list all configs. Only applicable if docker runs in swarm mode.
      *
      * @since {@link RemoteApiVersion#VERSION_1_30}
      * @return command
@@ -469,7 +483,8 @@ public interface DockerClient extends Closeable {
     ListConfigsCmd listConfigsCmd();
 
     /**
-     * Command to create a config in a docker swarm. Only applicable if docker runs in swarm mode.
+     * Command to create a config in a docker swarm. Only applicable if docker runs
+     * in swarm mode.
      *
      * @since {@link RemoteApiVersion#VERSION_1_30}
      * @return command
@@ -487,12 +502,20 @@ public interface DockerClient extends Closeable {
 
     /**
      * Command to remove a config
+     * 
      * @since {@link RemoteApiVersion#VERSION_1_30}
      * @param configId config id or config name
      * @return command
      */
     RemoveConfigCmd removeConfigCmd(String configId);
 
+    /**
+     * Command to export a Docker image as a tarball.
+     *
+     * @param imageId the image ID or name
+     * @return the command
+     */
+    ExportImageCmd exportImageCmd(@Nonnull String imageId);
 
     @Override
     void close() throws IOException;
