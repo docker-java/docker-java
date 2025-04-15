@@ -718,13 +718,13 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     @Override
-    public void close() throws IOException {
-        getDockerCmdExecFactory().close();
+    public ExportImageCmd exportImageCmd(String imageId) {
+        return new ExportImageCmdImpl(getDockerCmdExecFactory().createExportImageCmdExec(), imageId);
     }
 
     @Override
-    public ExportImageCmd exportImageCmd(String imageId) {
-        return new ExportImageCmdImpl(getDockerCmdExecFactory().createExportImageCmdExec(), imageId);
+    public void close() throws IOException {
+        getDockerCmdExecFactory().close();
     }
 
 }
