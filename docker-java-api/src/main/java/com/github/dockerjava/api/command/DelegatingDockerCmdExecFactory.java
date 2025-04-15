@@ -2,8 +2,6 @@ package com.github.dockerjava.api.command;
 
 import java.io.IOException;
 
-import com.github.dockerjava.api.command.ExportImageCmd.Exec;
-
 public class DelegatingDockerCmdExecFactory implements DockerCmdExecFactory {
 
     // We're not using abstract class because we want
@@ -408,12 +406,12 @@ public class DelegatingDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     @Override
-    public void close() throws IOException {
-        getDockerCmdExecFactory().close();
+    public ExportImageCmd.Exec createExportImageCmdExec() {
+        return getDockerCmdExecFactory().createExportImageCmdExec();
     }
 
     @Override
-    public Exec createExportImageCmdExec() {
-        return getDockerCmdExecFactory().createExportImageCmdExec();
+    public void close() throws IOException {
+        getDockerCmdExecFactory().close();
     }
 }
