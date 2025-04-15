@@ -1,14 +1,5 @@
 package com.github.dockerjava.core;
 
-import java.io.Closeable;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.AttachContainerCmd;
 import com.github.dockerjava.api.command.AuthCmd;
@@ -176,6 +167,14 @@ import com.github.dockerjava.core.command.UpdateSwarmNodeCmdImpl;
 import com.github.dockerjava.core.command.VersionCmdImpl;
 import com.github.dockerjava.core.command.WaitContainerCmdImpl;
 import com.github.dockerjava.transport.DockerHttpClient;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.Closeable;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Objects;
 
 /**
  * @author Konstantin Pelykh (kpelykh@gmail.com)
