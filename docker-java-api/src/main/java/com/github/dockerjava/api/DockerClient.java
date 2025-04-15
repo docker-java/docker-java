@@ -152,7 +152,7 @@ public interface DockerClient extends Closeable {
 
     /**
      * Command to download multiple images at once.
-     * 
+     *
      * @return command (builder)
      */
     SaveImagesCmd saveImagesCmd();
@@ -392,7 +392,7 @@ public interface DockerClient extends Closeable {
 
     /**
      * Command to inspect a service
-     * 
+     *
      * @param serviceId service id or service name
      * @return command
      */
@@ -400,7 +400,7 @@ public interface DockerClient extends Closeable {
 
     /**
      * Command to update a service specification
-     * 
+     *
      * @param serviceId   service id
      * @param serviceSpec the new service specification
      * @return command
@@ -409,7 +409,7 @@ public interface DockerClient extends Closeable {
 
     /**
      * Command to remove a service
-     * 
+     *
      * @param serviceId service id or service name
      * @return command
      */
@@ -501,7 +501,7 @@ public interface DockerClient extends Closeable {
 
     /**
      * Command to remove a config
-     * 
+     *
      * @since {@link RemoteApiVersion#VERSION_1_30}
      * @param configId config id or config name
      * @return command
