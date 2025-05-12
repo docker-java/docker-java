@@ -28,7 +28,9 @@ public enum CommandJSONSamples implements JSONResourceRef {
     inspectContainerResponse_full_1_21,
     inspectContainerResponse_full_1_26a,
     inspectContainerResponse_full_1_26b,
-    inspectContainerResponse_empty;
+    inspectContainerResponse_empty,
+    updateContainerResponse_empty,
+    updateContainerResponse_warnings;
 
     @Override
     public String getFileName() {

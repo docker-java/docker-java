@@ -1,9 +1,16 @@
 package com.github.dockerjava.api.command;
 
+import com.github.dockerjava.api.model.BlkioRateDevice;
+import com.github.dockerjava.api.model.BlkioWeightDevice;
+import com.github.dockerjava.api.model.Device;
+import com.github.dockerjava.api.model.DeviceRequest;
+import com.github.dockerjava.api.model.RestartPolicy;
+import com.github.dockerjava.api.model.Ulimit;
 import com.github.dockerjava.api.model.UpdateContainerResponse;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
+import java.util.List;
 
 /**
  * @author Kanstantsin Shautsou
@@ -13,22 +20,47 @@ public interface UpdateContainerCmd extends SyncDockerCmd<UpdateContainerRespons
     @CheckForNull
     String getContainerId();
 
+    UpdateContainerCmd withContainerId(@Nonnull String containerId);
+
     @CheckForNull
     Integer getBlkioWeight();
 
     UpdateContainerCmd withBlkioWeight(Integer blkioWeight);
 
-    UpdateContainerCmd withContainerId(@Nonnull String containerId);
+    @CheckForNull
+    List<BlkioWeightDevice> getBlkioWeightDevice();
+
+    UpdateContainerCmd withBlkioWeightDevice(List<BlkioWeightDevice> blkioWeightDevice);
 
     @CheckForNull
-    Integer getCpuPeriod();
+    List<BlkioRateDevice> getBlkioDeviceReadBps();
 
-    UpdateContainerCmd withCpuPeriod(Integer cpuPeriod);
+    UpdateContainerCmd withBlkioDeviceReadBps(List<BlkioRateDevice> blkioDeviceReadBps);
 
     @CheckForNull
-    Integer getCpuQuota();
+    List<BlkioRateDevice> getBlkioDeviceWriteBps();
 
-    UpdateContainerCmd withCpuQuota(Integer cpuQuota);
+    UpdateContainerCmd withBlkioDeviceWriteBps(List<BlkioRateDevice> blkioDeviceWriteBps);
+
+    @CheckForNull
+    List<BlkioRateDevice> getBlkioDeviceReadIOps();
+
+    UpdateContainerCmd withBlkioDeviceReadIOps(List<BlkioRateDevice> blkioDeviceReadIOps);
+
+    @CheckForNull
+    List<BlkioRateDevice> getBlkioDeviceWriteIOps();
+
+    UpdateContainerCmd withBlkioDeviceWriteIOps(List<BlkioRateDevice> blkioDeviceWriteIOps);
+
+    @CheckForNull
+    Long getCpuPeriod();
+
+    UpdateContainerCmd withCpuPeriod(Long cpuPeriod);
+
+    @CheckForNull
+    Long getCpuQuota();
+
+    UpdateContainerCmd withCpuQuota(Long cpuQuota);
 
     @CheckForNull
     String getCpusetCpus();
@@ -44,6 +76,31 @@ public interface UpdateContainerCmd extends SyncDockerCmd<UpdateContainerRespons
     Integer getCpuShares();
 
     UpdateContainerCmd withCpuShares(Integer cpuShares);
+
+    @CheckForNull
+    Long getCpuRealtimePeriod();
+
+    UpdateContainerCmd withCpuRealtimePeriod(Long cpuRealtimePeriod);
+
+    @CheckForNull
+    Long getCpuRealtimeRuntime();
+
+    UpdateContainerCmd withCpuRealtimeRuntime(Long cpuRealtimeRuntime);
+
+    @CheckForNull
+    List<Device> getDevices();
+
+    UpdateContainerCmd withDevices(List<Device> devices);
+
+    @CheckForNull
+    List<String> getDeviceCgroupRules();
+
+    UpdateContainerCmd withDeviceCgroupRules(List<String> deviceCgroupRules);
+
+    @CheckForNull
+    List<DeviceRequest> getDeviceRequests();
+
+    UpdateContainerCmd withDeviceRequests(List<DeviceRequest> deviceRequests);
 
     @CheckForNull
     Long getKernelMemory();
@@ -64,6 +121,36 @@ public interface UpdateContainerCmd extends SyncDockerCmd<UpdateContainerRespons
     Long getMemorySwap();
 
     UpdateContainerCmd withMemorySwap(Long memorySwap);
+
+    @CheckForNull
+    Long getNanoCPUs();
+
+    UpdateContainerCmd withNanoCPUs(Long nanoCPUs);
+
+    @CheckForNull
+    Boolean getOomKillDisable();
+
+    UpdateContainerCmd withOomKillDisable(Boolean oomKillDisable);
+
+    @CheckForNull
+    Boolean getInit();
+
+    UpdateContainerCmd withInit(Boolean init);
+
+    @CheckForNull
+    Long getPidsLimit();
+
+    UpdateContainerCmd withPidsLimit(Long pidsLimit);
+
+    @CheckForNull
+    List<Ulimit> getUlimits();
+
+    UpdateContainerCmd withUlimits(List<Ulimit> ulimits);
+
+    @CheckForNull
+    RestartPolicy getRestartPolicy();
+
+    UpdateContainerCmd withRestartPolicy(RestartPolicy restartPolicy);
 
     interface Exec extends DockerCmdSyncExec<UpdateContainerCmd, UpdateContainerResponse> {
     }
