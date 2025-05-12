@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
@@ -33,7 +33,7 @@ jobs:
         run: ./mvnw --no-transfer-progress verify
 
   docker19:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK
@@ -53,7 +53,7 @@ jobs:
         run: ./mvnw --no-transfer-progress verify
 
   tcp:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK
