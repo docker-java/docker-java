@@ -94,7 +94,7 @@ public class DockerClientBuilder {
         } else {
             Logger log = LoggerFactory.getLogger(DockerClientBuilder.class);
             log.warn(
-                "'dockerHttpClient' should be set." +
+                "'dockerHttpClient' should be set. " +
                     "Falling back to Jersey, will be an error in future releases."
             );
 
