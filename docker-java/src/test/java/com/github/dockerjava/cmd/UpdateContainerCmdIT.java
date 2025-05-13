@@ -48,8 +48,8 @@ public class UpdateContainerCmdIT extends CmdIT {
         dockerRule.getClient().updateContainerCmd(containerId)
                 .withBlkioWeight(300)
                 .withCpuShares(512)
-                .withCpuPeriod(100000)
-                .withCpuQuota(50000)
+                .withCpuPeriod(100000L)
+                .withCpuQuota(50000L)
 //                .withCpusetCpus("0") // depends on env
                 .withCpusetMems("0")
 //                .withMemory(209715200L + 2L)
