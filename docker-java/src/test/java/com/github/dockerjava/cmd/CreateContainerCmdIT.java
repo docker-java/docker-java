@@ -1136,4 +1136,27 @@ public class CreateContainerCmdIT extends CmdIT {
             .withCmd("sleep", "9999")
             .exec();
     }
+
+    @Test
+    public void createContainerWithAnnotations() throws DockerException {
+        Map<String, String> annotations = new HashMap<>();
+        annotations.put("com.example.key1", "value1");
+        annotations.put("com.example.key2", "value2");
+
+        CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
+                .withCmd("sleep", "9999")
+                .withHostConfig(newHostConfig()
+                        .withAnnotations(annotations))
+                .exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(is(emptyString())));
+
+        InspectContainerResponse inspectContainerResponse = dockerRule.getClient().inspectContainerCmd(container.getId()).exec();
+
+        assertThat(inspectContainerResponse.getHostConfig().getAnnotations(), equalTo(annotations));
+        assertThat(inspectContainerResponse.getHostConfig().getAnnotations().get("com.example.key1"), equalTo("value1"));
+        assertThat(inspectContainerResponse.getHostConfig().getAnnotations().get("com.example.key2"), equalTo("value2"));
+    }
 }
