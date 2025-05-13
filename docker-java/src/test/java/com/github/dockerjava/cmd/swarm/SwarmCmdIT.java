@@ -20,6 +20,8 @@ import org.junit.Before;
 import org.junit.experimental.categories.Category;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -36,7 +38,7 @@ public abstract class SwarmCmdIT extends CmdIT {
 
     private static final String DOCKER_IN_DOCKER_IMAGE_REPOSITORY = "docker";
 
-    private static final String DOCKER_IN_DOCKER_IMAGE_TAG = "17.12-dind";
+    private static final String DOCKER_IN_DOCKER_IMAGE_TAG = "26.1.3-dind";
 
     private static final String DOCKER_IN_DOCKER_CONTAINER_PREFIX = "docker";
 
@@ -105,6 +107,8 @@ public abstract class SwarmCmdIT extends CmdIT {
         ExposedPort exposedPort = ExposedPort.tcp(2375);
         CreateContainerResponse response = hostDockerClient
             .createContainerCmd(DOCKER_IN_DOCKER_IMAGE_REPOSITORY + ":" + DOCKER_IN_DOCKER_IMAGE_TAG)
+            .withEntrypoint("dockerd")
+            .withCmd(Arrays.asList("--host=tcp://0.0.0.0:2375", "--host=unix:///var/run/docker.sock", "--tls=false"))
             .withHostConfig(newHostConfig()
                 .withNetworkMode(NETWORK_NAME)
                 .withPortBindings(new PortBinding(
@@ -125,7 +129,7 @@ public abstract class SwarmCmdIT extends CmdIT {
 
         DockerClient dockerClient = initializeDockerClient(binding);
 
-        await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
+        await().pollDelay(Duration.ofSeconds(5)).atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {
             dockerClient.pingCmd().exec();
         });
 

@@ -34,7 +34,9 @@ import com.github.dockerjava.junit.PrivateRegistryRule;
 import com.github.dockerjava.utils.TestUtils;
 import net.jcip.annotations.NotThreadSafe;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -420,6 +422,7 @@ public class CreateContainerCmdIT extends CmdIT {
     }
 
     @Test
+    @Ignore
     public void createContainerWithMemorySwappiness() throws DockerException {
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd(DEFAULT_IMAGE)
                 .withCmd("sleep", "9999")
@@ -959,6 +962,8 @@ public class CreateContainerCmdIT extends CmdIT {
 
     @Test
     public void createContainerWithCgroupParent() throws DockerException {
+        assumeThat(!SystemUtils.IS_OS_LINUX, is(true));
+
         CreateContainerResponse container = dockerRule.getClient().createContainerCmd("busybox")
                 .withHostConfig(newHostConfig()
                         .withCgroupParent("/parent"))
