@@ -303,9 +303,9 @@ public enum Capability {
      */
     WAKE_ALARM;
 
-    @JsonCreator()
+    @JsonCreator
     public static Capability fromValue(String cap) {
-        String result = !cap.startsWith("CAP_") ? cap : cap.substring(4);
+        String result = !cap.startsWith("CAP_") ? cap : cap.split("_", 2)[1];
         return Capability.valueOf(result);
     }
 }
