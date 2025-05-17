@@ -85,7 +85,7 @@ public class Dockerfile {
 
     public List<String> getIgnores() throws IOException {
         List<String> ignores = new ArrayList<>();
-        File dockerIgnoreFile = new File(baseDirectory, ".dockerignore");
+        File dockerIgnoreFile = getDockerIgnoreFile();
         if (dockerIgnoreFile.exists()) {
             int lineNumber = 0;
             List<String> dockerIgnoreFileContent = FileUtils.readLines(dockerIgnoreFile);
@@ -105,6 +105,18 @@ public class Dockerfile {
             }
         }
         return ignores;
+    }
+
+    private File getDockerIgnoreFile() {
+        // See https://docs.docker.com/build/concepts/context/#filename-and-location
+        File dockerFileDirectory = dockerFile.getParentFile();
+        String dockerFileName = dockerFile.getName();
+        File dockerFileSpecificIgnoreFile = new File(dockerFileDirectory, dockerFileName + ".dockerignore");
+        if (dockerFileSpecificIgnoreFile.exists()) {
+            return dockerFileSpecificIgnoreFile;
+        } else {
+            return new File(dockerFileDirectory, ".dockerignore");
+        }
     }
 
     public ScannedResult parse() throws IOException {
