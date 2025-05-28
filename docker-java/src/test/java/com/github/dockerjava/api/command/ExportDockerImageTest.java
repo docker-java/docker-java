@@ -9,6 +9,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 
 import org.junit.Test;
@@ -34,7 +36,7 @@ public class ExportDockerImageTest {
     private String buildDockerImage(DockerClient dockerClient, File dockerfileStream) {
         String imageId = dockerClient.buildImageCmd()
             .withDockerfile(dockerfileStream)
-            .withTags(Set.of("busybox:latest"))
+            .withTags(Collections.singleton("busybox:latest"))
             .start()
             .awaitImageId();
         return imageId;
