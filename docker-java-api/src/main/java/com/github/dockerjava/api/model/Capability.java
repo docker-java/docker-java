@@ -1,5 +1,7 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 /**
  * The Linux capabilities supported by Docker. The list of capabilities is defined in Docker's types.go, {@link #ALL} was added manually.
  *
@@ -299,5 +301,11 @@ public enum Capability {
     /**
      * Trigger something that will wake up the system (set CLOCK_REALTIME_ALARM and CLOCK_BOOTTIME_ALARM timers).
      */
-    WAKE_ALARM
+    WAKE_ALARM;
+
+    @JsonCreator
+    public static Capability fromValue(String cap) {
+        String result = !cap.startsWith("CAP_") ? cap : cap.split("_", 2)[1];
+        return Capability.valueOf(result);
+    }
 }
