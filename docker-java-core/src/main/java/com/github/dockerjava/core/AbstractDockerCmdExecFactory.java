@@ -23,6 +23,7 @@ import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.command.ExecCreateCmd;
 import com.github.dockerjava.api.command.ExecStartCmd;
+import com.github.dockerjava.api.command.ExportImageCmd;
 import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InitializeSwarmCmd;
 import com.github.dockerjava.api.command.InspectConfigCmd;
@@ -102,6 +103,7 @@ import com.github.dockerjava.core.exec.DisconnectFromNetworkCmdExec;
 import com.github.dockerjava.core.exec.EventsCmdExec;
 import com.github.dockerjava.core.exec.ExecCreateCmdExec;
 import com.github.dockerjava.core.exec.ExecStartCmdExec;
+import com.github.dockerjava.core.exec.ExportImageCmdExec;
 import com.github.dockerjava.core.exec.InspectConfigCmdExec;
 import com.github.dockerjava.core.exec.ListConfigsCmdExec;
 import com.github.dockerjava.core.exec.LoadImageAsyncCmdExec;
@@ -594,6 +596,10 @@ public abstract class AbstractDockerCmdExecFactory implements DockerCmdExecFacto
         return new RemoveConfigCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
+    @Override
+    public ExportImageCmd.Exec createExportImageCmdExec() {
+        return new ExportImageCmdExec(getBaseResource(), getDockerClientConfig());
+    }
 
     protected abstract WebTarget getBaseResource();
 }
