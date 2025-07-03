@@ -59,20 +59,19 @@
 
 		<jersey.version>2.30.1</jersey.version>
 		<jackson.version>2.18.3</jackson.version>
-		<jackson-jaxrs.version>2.18.3</jackson-jaxrs.version>
 		<httpclient.version>4.5.12</httpclient.version><!-- 4.5.1-4.5.2 broken -->
 		<commons-compress.version>1.27.1</commons-compress.version>
-		<commons-io.version>2.18.0</commons-io.version>
+		<commons-io.version>2.19.0</commons-io.version>
 		<commons-lang3.version>3.17.0</commons-lang3.version>
 		<slf4j-api.version>1.7.30</slf4j-api.version>
 
-		<bouncycastle.version>1.80</bouncycastle.version>
+		<bouncycastle.version>1.81</bouncycastle.version>
 		<junixsocket.version>2.10.1</junixsocket.version>
-		<guava.version>33.4.6-jre</guava.version> <!-- todo remove from project -->
+		<guava.version>33.4.8-jre</guava.version> <!-- todo remove from project -->
 
 		<!-- test dependencies -->
 		<logback.version>1.2.3</logback.version>
-		<netty.version>4.1.119.Final</netty.version>
+		<netty.version>4.2.2.Final</netty.version>
 		<hamcrest.library.version>2.2</hamcrest.library.version>
 		<hamcrest.jpa-matchers>1.8</hamcrest.jpa-matchers>
 		<lambdaj.version>2.3.3</lambdaj.version>
@@ -286,6 +285,16 @@
 						</execution>
 					</executions>
 				</plugin>
+				<plugin>
+					<groupId>org.sonatype.central</groupId>
+					<artifactId>central-publishing-maven-plugin</artifactId>
+					<version>0.8.0</version>
+					<extensions>true</extensions>
+					<configuration>
+						<publishingServerId>central</publishingServerId>
+						<excludeArtifacts>docker-java-transport-tck</excludeArtifacts>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -297,6 +306,9 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>org.sonatype.central</groupId>
+				<artifactId>central-publishing-maven-plugin</artifactId></plugin>
 		</plugins>
 	</build>
 
@@ -308,6 +320,13 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
+						<configuration>
+							<!-- Prevent gpg from using pinentry programs -->
+							<gpgArguments>
+								<arg>--pinentry-mode</arg>
+								<arg>loopback</arg>
+							</gpgArguments>
+						</configuration>
 						<executions>
 							<execution>
 								<id>sign-artifacts</id>
