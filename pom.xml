@@ -293,6 +293,7 @@
 					<configuration>
 						<publishingServerId>central</publishingServerId>
 						<excludeArtifacts>docker-java-transport-tck</excludeArtifacts>
+						<deploymentName>com.github.docker-java</deploymentName>
 					</configuration>
 				</plugin>
 			</plugins>
