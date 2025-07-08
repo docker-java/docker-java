@@ -63,7 +63,7 @@
 		<commons-compress.version>1.27.1</commons-compress.version>
 		<commons-io.version>2.19.0</commons-io.version>
 		<commons-lang3.version>3.17.0</commons-lang3.version>
-		<slf4j-api.version>1.7.30</slf4j-api.version>
+		<slf4j-api.version>2.0.17</slf4j-api.version>
 
 		<bouncycastle.version>1.81</bouncycastle.version>
 		<junixsocket.version>2.10.1</junixsocket.version>
