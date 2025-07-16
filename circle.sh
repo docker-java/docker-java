@@ -6,7 +6,7 @@ case "$1" in
         mkdir .docker
         cp $CIRCLE_PROJECT_REPONAME/etc/certs/* .docker
 
-        # configure docker deamon to use SSL and provide the path to the certificates
+        # configure docker daemon to use SSL and provide the path to the certificates
         docker_opts='DOCKER_OPTS="$DOCKER_OPTS -H tcp://127.0.0.1:2376 --tlsverify --tlscacert='$HOME'/.docker/ca.pem --tlscert='$HOME'/.docker/server-cert.pem --tlskey='$HOME'/.docker/server-key.pem"'
         sudo sh -c "echo '$docker_opts' >> /etc/default/docker"
 
