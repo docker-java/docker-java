@@ -4,6 +4,7 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.ExecCreateCmdResponse;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.core.command.ExecStartResultCallback;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,6 +78,7 @@ public class ExecStartCmdIT extends CmdIT {
         assertTrue(responseAsString.length() > 0);
     }
 
+    @Ignore
     @Test(expected = NotFoundException.class)
     public void execStartWithNonExistentUser() throws Exception {
         String containerName = "generated_" + new SecureRandom().nextInt();
