@@ -318,6 +318,34 @@ public class BuildImageCmdIT extends CmdIT {
     }
 
     @Test
+    public void cacheTo() {
+        assumeThat(dockerRule, isGreaterOrEqual(VERSION_1_27));
+
+        File baseDir1 = fileFromBuildTestResource("CacheTo/test1");
+        String imageId1 = dockerRule.getClient().buildImageCmd(baseDir1).withCacheTo(new HashSet<>(Arrays.asList("type=local,dest=" + baseDir1.getAbsolutePath())))
+                .start()
+                .awaitImageId();
+        InspectImageResponse inspectImageResponse1 = dockerRule.getClient().inspectImageCmd(imageId1).exec();
+        assertThat(inspectImageResponse1, not(nullValue()));
+
+        // Assert that the local cache has been created by checking the existence of blobs in the blobs.sha256 directory
+        // blobs file to be checked for existence are
+        // 4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1
+        // 034c218587e486c16148e5a828ce71298f6ca3eed3dd0e71cd932c287a23784e
+        // 189fdd1508372905e80cc3edcdb56cdc4fa216aebef6f332dd3cba6e300238ea
+        // eaad8aea1b812e171bf34f286a32b1bd26a9f354879f4ca3930587de3d4ca721
+        // f22af6896436fd12136c0f55976134facc5d238f466a669abf8e0dca88861e8a
+        File blobsDir = new File(baseDir1, "blobs/sha256");
+        assertThat(blobsDir.exists(), is(true));
+
+        assertThat(new File(blobsDir, "4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1").exists(), is(true));
+        assertThat(new File(blobsDir, "034c218587e486c16148e5a828ce71298f6ca3eed3dd0e71cd932c287a23784e").exists(), is(true));
+        assertThat(new File(blobsDir, "189fdd1508372905e80cc3edcdb56cdc4fa216aebef6f332dd3cba6e300238ea").exists(), is(true));
+        assertThat(new File(blobsDir, "eaad8aea1b812e171bf34f286a32b1bd26a9f354879f4ca3930587de3d4ca721").exists(), is(true));
+        assertThat(new File(blobsDir, "f22af6896436fd12136c0f55976134facc5d238f466a669abf8e0dca88861e8a").exists(), is(true));
+    }
+
+    @Test
     public void quiet() {
         File baseDir = fileFromBuildTestResource("labels");
 

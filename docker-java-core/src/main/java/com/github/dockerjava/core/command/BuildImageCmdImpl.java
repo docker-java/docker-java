@@ -30,6 +30,8 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     private Set<String> cacheFrom;
 
+    private Set<String> cacheTo;
+
     private Boolean noCache;
 
     private Boolean remove = true;
@@ -109,7 +111,12 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
 
     @CheckForNull
     public Set<String> getCacheFrom() {
-       return cacheFrom;
+        return cacheFrom;
+    }
+
+    @CheckForNull
+    public Set<String> getCacheTo() {
+        return cacheTo;
     }
 
     @Override
@@ -244,6 +251,12 @@ public class BuildImageCmdImpl extends AbstrAsyncDockerCmd<BuildImageCmd, BuildR
     @Override
     public BuildImageCmd withCacheFrom(Set<String> cacheFrom) {
         this.cacheFrom = cacheFrom;
+        return this;
+    }
+
+    @Override
+    public BuildImageCmd withCacheTo(Set<String> cacheTo) {
+        this.cacheTo = cacheTo;
         return this;
     }
 

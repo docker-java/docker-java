@@ -166,6 +166,8 @@ public interface BuildImageCmd extends AsyncDockerCmd<BuildImageCmd, BuildRespon
      */
     BuildImageCmd withCacheFrom(Set<String> cacheFrom);
 
+    BuildImageCmd withCacheTo(Set<String> cacheTo);
+
     BuildImageCmd withRemote(URI remote);
 
     BuildImageCmd withBaseDirectory(File baseDirectory);
