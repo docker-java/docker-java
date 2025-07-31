@@ -7,6 +7,3 @@ updates:
     day: tuesday
   open-pull-requests-limit: 99
   rebase-strategy: disabled
-  ignore:
-    - dependency-name: "com.fasterxml.jackson.core:*"
-      update-types: [ "version-update:semver-minor" ]
