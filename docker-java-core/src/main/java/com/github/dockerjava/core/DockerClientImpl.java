@@ -22,6 +22,7 @@ import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.command.ExecCreateCmd;
 import com.github.dockerjava.api.command.ExecStartCmd;
+import com.github.dockerjava.api.command.ExportImageCmd;
 import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InitializeSwarmCmd;
 import com.github.dockerjava.api.command.InspectConfigCmd;
@@ -106,6 +107,7 @@ import com.github.dockerjava.core.command.DisconnectFromNetworkCmdImpl;
 import com.github.dockerjava.core.command.EventsCmdImpl;
 import com.github.dockerjava.core.command.ExecCreateCmdImpl;
 import com.github.dockerjava.core.command.ExecStartCmdImpl;
+import com.github.dockerjava.core.command.ExportImageCmdImpl;
 import com.github.dockerjava.core.command.InfoCmdImpl;
 import com.github.dockerjava.core.command.InitializeSwarmCmdImpl;
 import com.github.dockerjava.core.command.InpectNetworkCmdImpl;
@@ -713,6 +715,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public ListTasksCmd listTasksCmd() {
         return new ListTasksCmdImpl(getDockerCmdExecFactory().listTasksCmdExec());
+    }
+
+    @Override
+    public ExportImageCmd exportImageCmd(String imageId) {
+        return new ExportImageCmdImpl(getDockerCmdExecFactory().createExportImageCmdExec(), imageId);
     }
 
     @Override
