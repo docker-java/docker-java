@@ -1,5 +1,6 @@
 package com.github.dockerjava.core.exec;
 
+import com.github.dockerjava.api.model.WaitContainerCondition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +25,11 @@ public class WaitContainerCmdExec extends AbstrAsyncDockerCmdExec<WaitContainerC
     protected Void execute0(WaitContainerCmd command, ResultCallback<WaitResponse> resultCallback) {
         WebTarget webTarget = getBaseResource().path("/containers/{id}/wait").resolveTemplate("id",
                 command.getContainerId());
+
+        WaitContainerCondition condition = command.getCondition();
+        if (condition != null) {
+            webTarget = webTarget.queryParam("condition", condition.getValue());
+        }
 
         LOGGER.trace("POST: {}", webTarget);
 
