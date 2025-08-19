@@ -42,7 +42,7 @@ public class WaitContainerCmdIT extends CmdIT {
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         int exitCode = dockerRule.getClient().waitContainerCmd(container.getId()).start()
-            .awaitStatusCode();
+                .awaitStatusCode();
         LOG.info("Container exit code: {}", exitCode);
 
         assertThat(exitCode, equalTo(0));
@@ -101,7 +101,7 @@ public class WaitContainerCmdIT extends CmdIT {
         dockerRule.getClient().startContainerCmd(container.getId()).exec();
 
         WaitContainerResultCallback callback = dockerRule.getClient().waitContainerCmd(container.getId()).exec(
-            new WaitContainerResultCallback());
+                new WaitContainerResultCallback());
         try {
             callback.awaitStatusCode(100, TimeUnit.MILLISECONDS);
             throw new AssertionError("Should throw exception on timeout.");
