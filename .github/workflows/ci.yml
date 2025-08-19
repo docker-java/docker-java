@@ -22,6 +22,7 @@ jobs:
         with:
           java-version: ${{matrix.javaVersion}}
           distribution: temurin
+          cache: maven
       - name: Configure Docker
         id: setup_docker
         uses: docker/setup-docker-action@v4
@@ -41,6 +42,7 @@ jobs:
         with:
           java-version: 8
           distribution: temurin
+          cache: maven
       - name: Configure Docker
         id: setup_docker
         uses: docker/setup-docker-action@v4
