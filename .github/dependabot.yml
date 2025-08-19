@@ -7,3 +7,10 @@ updates:
     day: tuesday
   open-pull-requests-limit: 99
   rebase-strategy: disabled
+  ignore:
+    - dependency-name: "org.glassfish.jersey.connectors:jersey-apache-connector"
+      update-types: [ "version-update:semver-major" ]
+    - dependency-name: "org.glassfish.jersey.core:jersey-client"
+      update-types: [ "version-update:semver-major" ]
+    - dependency-name: "org.glassfish.jersey.inject:jersey-hk2"
+      update-types: [ "version-update:semver-major" ]
