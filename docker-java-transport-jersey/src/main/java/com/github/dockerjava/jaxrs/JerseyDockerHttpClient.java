@@ -23,6 +23,7 @@ import org.glassfish.jersey.client.RequestEntityProcessing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Client;
@@ -198,10 +199,12 @@ public final class JerseyDockerHttpClient implements DockerHttpClient {
         }
 
         SSLContext sslContext = null;
+        HostnameVerifier hostnameVerifier = null;
 
         try {
             if (sslConfig != null) {
                 sslContext = sslConfig.getSSLContext();
+                hostnameVerifier = sslConfig.getHostnameVerifier();
             }
         } catch (Exception ex) {
             throw new DockerClientException("Error in SSL Configuration", ex);
@@ -225,7 +228,7 @@ public final class JerseyDockerHttpClient implements DockerHttpClient {
                 throw new IllegalArgumentException("Unsupported protocol scheme: " + dockerHost);
         }
 
-        connManager = new PoolingHttpClientConnectionManager(getSchemeRegistry(dockerHost, sslContext)) {
+        connManager = new PoolingHttpClientConnectionManager(getSchemeRegistry(dockerHost, sslContext, hostnameVerifier)) {
 
             @Override
             public void close() {
@@ -272,11 +275,15 @@ public final class JerseyDockerHttpClient implements DockerHttpClient {
         return originalUri;
     }
 
-    private Registry<ConnectionSocketFactory> getSchemeRegistry(URI originalUri, SSLContext sslContext) {
+    private Registry<ConnectionSocketFactory> getSchemeRegistry(URI originalUri, SSLContext sslContext, HostnameVerifier hostnameVerifier) {
         RegistryBuilder<ConnectionSocketFactory> registryBuilder = RegistryBuilder.create();
         registryBuilder.register("http", PlainConnectionSocketFactory.getSocketFactory());
         if (sslContext != null) {
-            registryBuilder.register("https", new SSLConnectionSocketFactory(sslContext));
+            SSLConnectionSocketFactory sslConnectionSocketFactory =
+                hostnameVerifier == null
+                ? new SSLConnectionSocketFactory(sslContext)
+                : new SSLConnectionSocketFactory(sslContext, hostnameVerifier);
+            registryBuilder.register("https", sslConnectionSocketFactory);
         }
         registryBuilder.register("unix", new UnixConnectionSocketFactory(originalUri));
         return registryBuilder.build();
@@ -380,8 +387,8 @@ public final class JerseyDockerHttpClient implements DockerHttpClient {
         @Override
         public InputStream getBody() {
             return response.hasEntity()
-                ? response.readEntity(InputStream.class)
-                : EmptyInputStream.INSTANCE;
+                   ? response.readEntity(InputStream.class)
+                   : EmptyInputStream.INSTANCE;
         }
 
         @Override
