@@ -167,6 +167,17 @@ public class BindTest {
     }
 
     @Test
+    public void parseReadWriteRshared() {
+        Bind bind = Bind.parse("/host:/container:rw,rshared");
+        assertThat(bind.getPath(), is("/host"));
+        assertThat(bind.getVolume().getPath(), is("/container"));
+        assertThat(bind.getAccessMode(), is(rw));
+        assertThat(bind.getSecMode(), is(SELContext.none));
+        assertThat(bind.getNoCopy(), nullValue());
+        assertThat(bind.getPropagationMode(), is(PropagationMode.RSHARED));
+    }
+
+    @Test
     public void parseReadWriteSlave() {
         Bind bind = Bind.parse("/host:/container:rw,slave");
         assertThat(bind.getPath(), is("/host"));
@@ -178,6 +189,17 @@ public class BindTest {
     }
 
     @Test
+    public void parseReadWriteRslave() {
+        Bind bind = Bind.parse("/host:/container:rw,rslave");
+        assertThat(bind.getPath(), is("/host"));
+        assertThat(bind.getVolume().getPath(), is("/container"));
+        assertThat(bind.getAccessMode(), is(rw));
+        assertThat(bind.getSecMode(), is(SELContext.none));
+        assertThat(bind.getNoCopy(), nullValue());
+        assertThat(bind.getPropagationMode(), is(PropagationMode.RSLAVE));
+    }
+
+    @Test
     public void parseReadWritePrivate() {
         Bind bind = Bind.parse("/host:/container:rw,private");
         assertThat(bind.getPath(), is("/host"));
@@ -186,6 +208,17 @@ public class BindTest {
         assertThat(bind.getSecMode(), is(SELContext.none));
         assertThat(bind.getNoCopy(), nullValue());
         assertThat(bind.getPropagationMode(), is(PropagationMode.PRIVATE));
+    }
+
+    @Test
+    public void parseReadWriteRprivate() {
+        Bind bind = Bind.parse("/host:/container:rw,rprivate");
+        assertThat(bind.getPath(), is("/host"));
+        assertThat(bind.getVolume().getPath(), is("/container"));
+        assertThat(bind.getAccessMode(), is(rw));
+        assertThat(bind.getSecMode(), is(SELContext.none));
+        assertThat(bind.getNoCopy(), nullValue());
+        assertThat(bind.getPropagationMode(), is(PropagationMode.RPRIVATE));
     }
 
     @Test
@@ -285,13 +318,28 @@ public class BindTest {
     }
 
     @Test
+    public void toStringReadWriteRshared() {
+        assertThat(Bind.parse("/host:/container:rw,rshared").toString(), is("/host:/container:rw,rshared"));
+    }
+
+    @Test
     public void toStringReadWriteSlave() {
         assertThat(Bind.parse("/host:/container:rw,slave").toString(), is("/host:/container:rw,slave"));
     }
 
     @Test
+    public void toStringReadWriteRslave() {
+        assertThat(Bind.parse("/host:/container:rw,rslave").toString(), is("/host:/container:rw,rslave"));
+    }
+
+    @Test
     public void toStringReadWritePrivate() {
         assertThat(Bind.parse("/host:/container:rw,private").toString(), is("/host:/container:rw,private"));
+    }
+
+    @Test
+    public void toStringReadWriteRprivate() {
+        assertThat(Bind.parse("/host:/container:rw,rprivate").toString(), is("/host:/container:rw,rprivate"));
     }
 
     @Test
