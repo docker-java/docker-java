@@ -406,6 +406,11 @@ public class DelegatingDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     @Override
+    public ExportImageCmd.Exec createExportImageCmdExec() {
+        return getDockerCmdExecFactory().createExportImageCmdExec();
+    }
+
+    @Override
     public void close() throws IOException {
         getDockerCmdExecFactory().close();
     }
