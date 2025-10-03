@@ -133,8 +133,8 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
-			<!-- Force the version to 2.19.2 to ensure the compatibility with old projects -->
-			<version>2.19.2</version>
+			<!-- Force the version to 2.20 to ensure the compatibility with old projects -->
+			<version>2.20</version>
 			<scope>test</scope>
 		</dependency>
 
