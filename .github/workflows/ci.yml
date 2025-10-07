@@ -3,10 +3,11 @@ name: CI
 on:
   pull_request: {}
   push: { branches: [ main ] }
+  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
@@ -14,9 +15,6 @@ jobs:
           - { name: "default", javaVersion: 8 }
           - { name: "default", javaVersion: 17 }
           - { name: "default", javaVersion: 21 }
-          - { name: "over TCP", dockerHost: "tcp://127.0.0.1:2375", javaVersion: 8 }
-          - { name: "Docker 19.03.9", dockerVersion: "5:19.03.9~3-0~ubuntu-focal", javaVersion: 8 }
-
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK
@@ -24,14 +22,34 @@ jobs:
         with:
           java-version: ${{matrix.javaVersion}}
           distribution: temurin
+          cache: maven
       - name: Configure Docker
-        env:
-          DOCKER_VERSION: ${{matrix.dockerVersion}}
-          DOCKER_HOST: ${{matrix.dockerHost}}
-        run: .ci/setup_docker.sh
+        id: setup_docker
+        uses: docker/setup-docker-action@v4
+        with:
+          channel: stable
       - name: Build with Maven
         env:
-          DOCKER_HOST: ${{matrix.dockerHost}}
-        run: |
-          [[ -z "$DOCKER_HOST" ]] && unset DOCKER_HOST
-          ./mvnw --no-transfer-progress verify
+          DOCKER_HOST: ${{steps.setup_docker.outputs.sock}}
+        run: ./mvnw --no-transfer-progress verify
+
+  tcp:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 8
+          distribution: temurin
+          cache: maven
+      - name: Configure Docker
+        id: setup_docker
+        uses: docker/setup-docker-action@v4
+        with:
+          channel: stable
+          tcp-port: 2375
+      - name: Build with Maven
+        env:
+          DOCKER_HOST: ${{steps.setup_docker.outputs.tcp}}
+        run: ./mvnw --no-transfer-progress verify

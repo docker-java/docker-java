@@ -118,10 +118,16 @@ public class Bind extends DockerObject implements Serializable {
                         nocopy = true;
                     } else if (PropagationMode.SHARED.toString().equals(p)) {
                         propagationMode = PropagationMode.SHARED;
+                    } else if (PropagationMode.RSHARED.toString().equals(p)) {
+                        propagationMode = PropagationMode.RSHARED;
                     } else if (PropagationMode.SLAVE.toString().equals(p)) {
                         propagationMode = PropagationMode.SLAVE;
+                    } else if (PropagationMode.RSLAVE.toString().equals(p)) {
+                        propagationMode = PropagationMode.RSLAVE;
                     } else if (PropagationMode.PRIVATE.toString().equals(p)) {
                         propagationMode = PropagationMode.PRIVATE;
+                    } else if (PropagationMode.RPRIVATE.toString().equals(p)) {
+                        propagationMode = PropagationMode.RPRIVATE;
                     } else {
                         seMode = SELContext.fromString(p);
                     }
