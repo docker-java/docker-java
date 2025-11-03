@@ -125,8 +125,8 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<!-- Force the version to 2.19.2 to ensure the compatibility with old projects -->
-			<version>2.19.2</version>
+			<!-- Force the version to 2.20.1 to ensure the compatibility with old projects -->
+			<version>2.20.1</version>
 			<scope>test</scope>
 		</dependency>
 
