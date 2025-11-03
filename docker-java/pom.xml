@@ -125,16 +125,16 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<!-- Force the version to 2.18.3 to ensure the compatibility with old projects -->
-			<version>2.18.3</version>
+			<!-- Force the version to 2.20.1 to ensure the compatibility with old projects -->
+			<version>2.20.1</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
-			<!-- Force the version to 2.18.3 to ensure the compatibility with old projects -->
-			<version>2.18.3</version>
+			<!-- Force the version to 2.20 to ensure the compatibility with old projects -->
+			<version>2.20</version>
 			<scope>test</scope>
 		</dependency>
 

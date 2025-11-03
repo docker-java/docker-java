@@ -10,6 +10,8 @@ import com.github.dockerjava.api.command.CreateVolumeResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.api.exception.InternalServerErrorException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.AuthConfig;
@@ -58,6 +60,7 @@ import static com.github.dockerjava.api.model.Capability.NET_ADMIN;
 import static com.github.dockerjava.api.model.HostConfig.newHostConfig;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_23;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_24;
+import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_43;
 import static com.github.dockerjava.junit.DockerMatchers.isGreaterOrEqual;
 import static com.github.dockerjava.junit.DockerMatchers.mountedVolumes;
 import static com.github.dockerjava.core.DockerRule.DEFAULT_IMAGE;
@@ -1140,5 +1143,34 @@ public class CreateContainerCmdIT extends CmdIT {
             .withHostConfig(newHostConfig())
             .withCmd("sleep", "9999")
             .exec();
+    }
+
+    @Test
+    public void createContainerWithAnnotations() throws DockerException {
+        DefaultDockerClientConfig forcedConfig = DefaultDockerClientConfig.createDefaultConfigBuilder()
+        .withApiVersion(VERSION_1_43)
+        .withRegistryUrl("https://index.docker.io/v1/")
+        .build();
+        
+        DockerClient forcedClient = CmdIT.createDockerClient(forcedConfig);
+        Map<String, String> annotations = new HashMap<>();
+        annotations.put("com.example.key1", "value1");
+        annotations.put("com.example.key2", "value2");
+
+        CreateContainerResponse container = forcedClient.createContainerCmd(DEFAULT_IMAGE)
+                .withCmd("sleep", "9999")
+                .withHostConfig(newHostConfig()
+                        .withAnnotations(annotations))
+                .exec();
+
+        LOG.info("Created container {}", container.toString());
+
+        assertThat(container.getId(), not(is(emptyString())));
+
+        InspectContainerResponse inspectContainerResponse = forcedClient.inspectContainerCmd(container.getId()).exec();
+
+        assertThat(inspectContainerResponse.getHostConfig().getAnnotations(), equalTo(annotations));
+        assertThat(inspectContainerResponse.getHostConfig().getAnnotations().get("com.example.key1"), equalTo("value1"));
+        assertThat(inspectContainerResponse.getHostConfig().getAnnotations().get("com.example.key2"), equalTo("value2"));
     }
 }
