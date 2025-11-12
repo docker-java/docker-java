@@ -55,7 +55,7 @@ public class RestartContainerCmdImplIT extends CmdIT {
         assumeThat("API version should be >= 1.42", dockerRule, isGreaterOrEqual(RemoteApiVersion.VERSION_1_42));
 
         DefaultDockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder()
-            .withApiVersion(RemoteApiVersion.VERSION_1_42)
+            .withApiVersion(RemoteApiVersion.VERSION_1_44)
             .withRegistryUrl("https://index.docker.io/v1/")
             .build();
         try (DockerClient dockerClient = createDockerClient(dockerClientConfig)) {
