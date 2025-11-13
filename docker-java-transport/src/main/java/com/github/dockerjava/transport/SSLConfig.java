@@ -1,5 +1,6 @@
 package com.github.dockerjava.transport;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -18,4 +19,13 @@ public interface SSLConfig {
      */
     SSLContext getSSLContext() throws KeyManagementException, UnrecoverableKeyException, NoSuchAlgorithmException,
             KeyStoreException;
+
+    /**
+     * Get the hostname verifier to use. If null is returned, the transports default hostname verifier will be used.
+     *
+     * @return a hostname verifier
+     */
+    default HostnameVerifier getHostnameVerifier() {
+        return null;
+    }
 }
