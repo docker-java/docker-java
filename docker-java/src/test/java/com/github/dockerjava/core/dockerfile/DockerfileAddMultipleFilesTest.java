@@ -58,6 +58,46 @@ public class DockerfileAddMultipleFilesTest {
     }
 
     @Test
+    public void specificDockerFileWithoutDockerFileSpecificIgnore() throws IOException {
+        File baseDir = fileFromBuildTestResource("dockerignore/specificDockerFileWithoutDockerFileSpecificIgnore");
+        Dockerfile dockerfile = new Dockerfile(new File(baseDir, "specific.Dockerfile"), baseDir);
+        Dockerfile.ScannedResult result = dockerfile.parse();
+        Collection<String> filesToAdd = transform(result.filesToAdd, TO_FILE_NAMES);
+
+        assertThat(filesToAdd, containsInAnyOrder("specific.Dockerfile", ".dockerignore", "README.md"));
+    }
+
+    @Test
+    public void defaultDockerFileWithDefaultIgnore() throws IOException {
+        File baseDir = fileFromBuildTestResource("dockerignore/DefaultDockerFileWithDefaultIgnore");
+        Dockerfile dockerfile = new Dockerfile(new File(baseDir, "Dockerfile"), baseDir);
+        Dockerfile.ScannedResult result = dockerfile.parse();
+        Collection<String> filesToAdd = transform(result.filesToAdd, TO_FILE_NAMES);
+
+        assertThat(filesToAdd, containsInAnyOrder("Dockerfile", ".dockerignore", "README.md"));
+    }
+
+    @Test
+    public void defaultDockerFileWithDockerFileSpecificIgnore() throws IOException {
+        File baseDir = fileFromBuildTestResource("dockerignore/DefaultDockerFileWithDockerFileSpecificIgnore");
+        Dockerfile dockerfile = new Dockerfile(new File(baseDir, "Dockerfile"), baseDir);
+        Dockerfile.ScannedResult result = dockerfile.parse();
+        Collection<String> filesToAdd = transform(result.filesToAdd, TO_FILE_NAMES);
+
+        assertThat(filesToAdd, containsInAnyOrder("Dockerfile", "Dockerfile.dockerignore", "README.md"));
+    }
+
+    @Test
+    public void dockerFileSpecificIgnoreOverridesDockerIgnore() throws IOException {
+        File baseDir = fileFromBuildTestResource("dockerignore/DockerFileSpecificIgnoreOverridesDockerIgnore");
+        Dockerfile dockerfile = new Dockerfile(new File(baseDir, "special.Dockerfile"), baseDir);
+        Dockerfile.ScannedResult result = dockerfile.parse();
+        Collection<String> filesToAdd = transform(result.filesToAdd, TO_FILE_NAMES);
+
+        assertThat(filesToAdd, containsInAnyOrder("special.Dockerfile", ".dockerignore", "special.Dockerfile.dockerignore", "README.md", "README-not-secret.md"));
+    }
+
+    @Test
     public void addFiles() throws IOException {
         File baseDir = fileFromBuildTestResource("ADD/files");
         new File(baseDir, "emptydir").mkdir();

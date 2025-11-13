@@ -1,0 +1,4 @@
+*.md
+!README*.md
+README-not-secret.md
+README-secret.md
