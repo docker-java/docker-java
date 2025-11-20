@@ -75,6 +75,8 @@
 		<hamcrest.jpa-matchers>1.8</hamcrest.jpa-matchers>
 		<lambdaj.version>2.3.3</lambdaj.version>
 		<mockito.version>3.3.0</mockito.version>
+		
+		<immutables.version>2.10.1</immutables.version>
 
 
 		<maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
@@ -147,6 +149,13 @@
 						<debug>${jdk.debug}</debug>
 						<optimize>${jdk.optimize}</optimize>
 						<parameters>true</parameters>
+						<annotationProcessorPaths>
+							<path>
+								<groupId>org.immutables</groupId>
+								<artifactId>value</artifactId>
+								<version>${immutables.version}</version>
+							</path>
+						</annotationProcessorPaths>
 					</configuration>
 				</plugin>
 

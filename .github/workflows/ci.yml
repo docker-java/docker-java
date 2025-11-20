@@ -15,6 +15,7 @@ jobs:
           - { name: "default", javaVersion: 8 }
           - { name: "default", javaVersion: 17 }
           - { name: "default", javaVersion: 21 }
+          - { name: "default", javaVersion: 25 }
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK
