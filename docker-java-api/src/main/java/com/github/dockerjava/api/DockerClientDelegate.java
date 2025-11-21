@@ -20,6 +20,7 @@ import com.github.dockerjava.api.command.DisconnectFromNetworkCmd;
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.command.ExecCreateCmd;
 import com.github.dockerjava.api.command.ExecStartCmd;
+import com.github.dockerjava.api.command.ExportImageCmd;
 import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InitializeSwarmCmd;
 import com.github.dockerjava.api.command.InspectConfigCmd;
@@ -523,5 +524,10 @@ public class DockerClientDelegate implements DockerClient {
     @Override
     public void close() throws IOException {
         getDockerClient().close();
+    }
+
+    @Override
+    public ExportImageCmd exportImageCmd(String imageId) {
+        return getDockerClient().exportImageCmd(imageId);
     }
 }

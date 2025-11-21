@@ -20,6 +20,7 @@ import com.github.dockerjava.api.command.DisconnectFromNetworkCmd;
 import com.github.dockerjava.api.command.EventsCmd;
 import com.github.dockerjava.api.command.ExecCreateCmd;
 import com.github.dockerjava.api.command.ExecStartCmd;
+import com.github.dockerjava.api.command.ExportImageCmd;
 import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InitializeSwarmCmd;
 import com.github.dockerjava.api.command.InspectConfigCmd;
@@ -493,6 +494,13 @@ public interface DockerClient extends Closeable {
      */
     RemoveConfigCmd removeConfigCmd(String configId);
 
+    /**
+     * Command to export a Docker image as a tarball.
+     *
+     * @param imageId the image ID or name
+     * @return the command
+     */
+    ExportImageCmd exportImageCmd(@Nonnull String imageId);
 
     @Override
     void close() throws IOException;
