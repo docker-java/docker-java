@@ -12,6 +12,7 @@ import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.ExposedPorts;
 import com.github.dockerjava.api.model.HealthCheck;
 import com.github.dockerjava.api.model.HostConfig;
+import com.github.dockerjava.api.model.NetworkingConfig;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.api.model.Volumes;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -127,7 +128,7 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     private List<String> shell;
 
     @JsonProperty("NetworkingConfig")
-    private NetworkingConfig networkingConfig;
+    private NetworkingConfig networkingConfig = new NetworkingConfig();
 
     private String ipv4Address = null;
 
@@ -544,6 +545,18 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         return this;
     }
 
+    @Override
+    public NetworkingConfig getNetworkingConfig() {
+        return networkingConfig;
+    }
+
+    @Override
+    public CreateContainerCmd withNetworkingConfig(NetworkingConfig networkingConfig) {
+        Objects.requireNonNull(networkingConfig, "no networkingConfig was specified");
+        this.networkingConfig = networkingConfig;
+        return this;
+    }
+
     @CheckForNull
     public List<String> getOnBuild() {
         return onBuild;
@@ -601,8 +614,13 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
         }
 
         if (containerNetwork != null && hostConfig.getNetworkMode() != null) {
-            networkingConfig = new NetworkingConfig()
-                    .withEndpointsConfig(singletonMap(hostConfig.getNetworkMode(), containerNetwork));
+            // If the user explicitly sets networkingConfig or endpointConfig to null, its reasonable to not overwrite it
+            if (networkingConfig != null 
+                    && networkingConfig.getEndpointsConfig() != null 
+                    && !networkingConfig.getEndpointsConfig().containsKey(hostConfig.getNetworkMode())
+            ) {
+                networkingConfig.getEndpointsConfig().put(hostConfig.getNetworkMode(), containerNetwork);
+            }
         }
 
         return super.exec();
@@ -622,19 +640,5 @@ public class CreateContainerCmdImpl extends AbstrDockerCmd<CreateContainerCmd, C
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
-    }
-
-    public static class NetworkingConfig {
-        @JsonProperty("EndpointsConfig")
-        public Map<String, ContainerNetwork> endpointsConfig;
-
-        public Map<String, ContainerNetwork> getEndpointsConfig() {
-            return endpointsConfig;
-        }
-
-        public NetworkingConfig withEndpointsConfig(Map<String, ContainerNetwork> endpointsConfig) {
-            this.endpointsConfig = endpointsConfig;
-            return this;
-        }
     }
 }
