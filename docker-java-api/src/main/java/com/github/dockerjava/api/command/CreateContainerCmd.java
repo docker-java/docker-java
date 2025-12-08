@@ -13,6 +13,7 @@ import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Link;
 import com.github.dockerjava.api.model.LogConfig;
 import com.github.dockerjava.api.model.LxcConf;
+import com.github.dockerjava.api.model.NetworkingConfig;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.api.model.RestartPolicy;
@@ -208,6 +209,13 @@ public interface CreateContainerCmd extends SyncDockerCmd<CreateContainerRespons
     String getIpv6Address();
 
     CreateContainerCmd withIpv6Address(String ipv6Address);
+
+    NetworkingConfig getNetworkingConfig();
+
+    /**
+     * Set the networking configuration for the container.
+     */
+    CreateContainerCmd withNetworkingConfig(NetworkingConfig networkingConfig);
 
     @CheckForNull
     Map<String, String> getLabels();
