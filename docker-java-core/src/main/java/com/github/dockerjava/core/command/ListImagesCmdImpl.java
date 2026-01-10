@@ -69,6 +69,7 @@ public class ListImagesCmdImpl extends AbstrDockerCmd<ListImagesCmd, List<Image>
     public ListImagesCmd withImageNameFilter(String imageNameFilter) {
         Objects.requireNonNull(imageNameFilter, "image name filter not specified");
         this.imageNameFilter = imageNameFilter;
+        withFilter("reference", Collections.singletonList(imageNameFilter));
         return this;
     }
 
