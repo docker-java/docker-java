@@ -4,6 +4,7 @@ import com.github.dockerjava.api.command.SaveImagesCmd;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.MediaType;
 import com.github.dockerjava.core.WebTarget;
+import com.github.dockerjava.core.util.PlatformUtil;
 import com.google.common.collect.ImmutableSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +30,13 @@ public class SaveImagesCmdExec extends AbstrSyncDockerCmdExec<SaveImagesCmd, Inp
         for (SaveImagesCmd.TaggedImage image : images) {
             queryParamSet.add(image.asString());
         }
-        final WebTarget webResource = getBaseResource()
+        WebTarget webResource = getBaseResource()
             .path("/images/get")
             .queryParamsSet("names", queryParamSet.build());
+
+        if (command.getPlatform() != null) {
+            webResource = webResource.queryParamsJsonMap("platform", PlatformUtil.platformMap(command.getPlatform()));
+        }
 
         LOGGER.trace("GET: {}", webResource);
         return webResource.request().accept(MediaType.APPLICATION_JSON).get();
