@@ -29,7 +29,7 @@ public class PrivateRegistryRule extends ExternalResource {
     private String containerId;
 
     public PrivateRegistryRule() {
-        this.dockerClient = CmdIT.createDockerClient(DockerRule.config(null));
+        this.dockerClient = CmdIT.createDockerClient(DockerRule.config(null).build());
     }
 
     public AuthConfig getAuthConfig() {
