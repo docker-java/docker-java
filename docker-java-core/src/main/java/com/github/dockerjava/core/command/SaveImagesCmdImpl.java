@@ -31,6 +31,8 @@ public class SaveImagesCmdImpl extends AbstrDockerCmd<SaveImagesCmd, InputStream
         }
     }
 
+    private String platform;
+
     private final ImmutableList.Builder<TaggedImage> taggedImages = ImmutableList.builder();
 
     public SaveImagesCmdImpl(final SaveImagesCmd.Exec exec) {
@@ -43,7 +45,16 @@ public class SaveImagesCmdImpl extends AbstrDockerCmd<SaveImagesCmd, InputStream
         return this;
     }
 
+    @Override
+    public SaveImagesCmd withPlatform(String platform) {
+        this.platform = platform;
+        return this;
+    }
 
+    @Override
+    public String getPlatform() {
+        return platform;
+    }
 
     @Override
     public List<TaggedImage> getImages() {
