@@ -25,7 +25,7 @@ public class LoadImageCmdIT extends CmdIT {
     
     @Before
     public void beforeMethod() {
-        expectedImageId = "sha256:56031f66eb0cef2e2e5cb2d1dabafaa0ebcd0a18a507d313b5bdb8c0472c5eba";
+        expectedImageId = "sha256:28a8ed28c8b7bd9d7fc00f22ac7df6d385436b93e88ac978943f3dba06d836b4";
         if (findImageWithId(expectedImageId, dockerRule.getClient().listImagesCmd().exec()) != null) {
             dockerRule.getClient().removeImageCmd(expectedImageId).exec();
         }

@@ -60,7 +60,7 @@ import static com.github.dockerjava.api.model.Capability.NET_ADMIN;
 import static com.github.dockerjava.api.model.HostConfig.newHostConfig;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_23;
 import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_24;
-import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_43;
+import static com.github.dockerjava.core.RemoteApiVersion.VERSION_1_44;
 import static com.github.dockerjava.junit.DockerMatchers.isGreaterOrEqual;
 import static com.github.dockerjava.junit.DockerMatchers.mountedVolumes;
 import static com.github.dockerjava.core.DockerRule.DEFAULT_IMAGE;
@@ -1148,7 +1148,7 @@ public class CreateContainerCmdIT extends CmdIT {
     @Test
     public void createContainerWithAnnotations() throws DockerException {
         DefaultDockerClientConfig forcedConfig = DefaultDockerClientConfig.createDefaultConfigBuilder()
-        .withApiVersion(VERSION_1_43)
+        .withApiVersion(VERSION_1_44)
         .withRegistryUrl("https://index.docker.io/v1/")
         .build();
         

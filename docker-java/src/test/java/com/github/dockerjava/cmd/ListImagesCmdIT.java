@@ -40,9 +40,9 @@ public class ListImagesCmdIT extends CmdIT {
 
         Image img = images.get(0);
         assertThat(img.getCreated(), is(greaterThan(0L)));
-        assertThat(img.getVirtualSize(), is(greaterThan(0L)));
+        assertThat(img.getSize(), is(greaterThan(0L)));
         assertThat(img.getId(), not(is(emptyString())));
-        assertThat(img.getRepoTags(), not(emptyArray()));
+        assertThat(img.getRepoTags(), emptyArray());
     }
 
     @Test

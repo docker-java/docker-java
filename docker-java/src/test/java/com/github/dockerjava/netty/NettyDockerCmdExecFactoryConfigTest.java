@@ -43,7 +43,7 @@ public class NettyDockerCmdExecFactoryConfigTest {
         Builder configBuilder = new DefaultDockerClientConfig.Builder()
             .withDockerTlsVerify(false)
             .withDockerHost("tcp://localhost:" + dockerPort)
-            .withApiVersion("1.23");
+            .withApiVersion("1.44");
 
         DockerClient client = DockerClientBuilder.getInstance(configBuilder)
                 .withDockerCmdExecFactory(factory)
@@ -57,7 +57,7 @@ public class NettyDockerCmdExecFactoryConfigTest {
             List<HttpRequest> requests = server.getRequests();
 
             assertEquals(1, requests.size());
-            assertEquals("/v1.23/version", requests.get(0).uri());
+            assertEquals("/v1.44/version", requests.get(0).uri());
         } finally {
             server.stop();
         }

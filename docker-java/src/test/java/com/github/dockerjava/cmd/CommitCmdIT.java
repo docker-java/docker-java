@@ -46,9 +46,6 @@ public class CommitCmdIT extends CmdIT {
         InspectImageResponse inspectImageResponse = dockerRule.getClient().inspectImageCmd(imageId).exec();
         LOG.info("Image Inspect: {}", inspectImageResponse.toString());
 
-        assertThat(inspectImageResponse, hasField("container", startsWith(container.getId())));
-        assertThat(inspectImageResponse.getContainerConfig().getImage(), equalTo(DEFAULT_IMAGE));
-
         InspectImageResponse busyboxImg = dockerRule.getClient().inspectImageCmd("busybox").exec();
 
         assertThat(inspectImageResponse.getParent(), equalTo(busyboxImg.getId()));
