@@ -26,6 +26,7 @@ import com.github.dockerjava.api.command.InspectConfigCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
+import com.github.dockerjava.api.command.ImageHistoryCmd;
 import com.github.dockerjava.api.command.InspectNetworkCmd;
 import com.github.dockerjava.api.command.InspectServiceCmd;
 import com.github.dockerjava.api.command.InspectSwarmCmd;
@@ -141,6 +142,8 @@ public interface DockerClient extends Closeable {
     ListImagesCmd listImagesCmd();
 
     InspectImageCmd inspectImageCmd(@Nonnull String imageId);
+
+    ImageHistoryCmd imageHistoryCmd(@Nonnull String imageId);
 
     /**
      * @param name

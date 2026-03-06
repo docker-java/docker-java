@@ -28,6 +28,7 @@ import com.github.dockerjava.api.command.InspectConfigCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
+import com.github.dockerjava.api.command.ImageHistoryCmd;
 import com.github.dockerjava.api.command.InspectNetworkCmd;
 import com.github.dockerjava.api.command.InspectServiceCmd;
 import com.github.dockerjava.api.command.InspectSwarmCmd;
@@ -113,6 +114,7 @@ import com.github.dockerjava.core.command.InspectConfigCmdImpl;
 import com.github.dockerjava.core.command.InspectContainerCmdImpl;
 import com.github.dockerjava.core.command.InspectExecCmdImpl;
 import com.github.dockerjava.core.command.InspectImageCmdImpl;
+import com.github.dockerjava.core.command.ImageHistoryCmdImpl;
 import com.github.dockerjava.core.command.InspectServiceCmdImpl;
 import com.github.dockerjava.core.command.InspectSwarmCmdImpl;
 import com.github.dockerjava.core.command.InspectVolumeCmdImpl;
@@ -373,6 +375,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public InspectImageCmd inspectImageCmd(String imageId) {
         return new InspectImageCmdImpl(getDockerCmdExecFactory().createInspectImageCmdExec(), imageId);
+    }
+
+    @Override
+    public ImageHistoryCmd imageHistoryCmd(String imageId) {
+        return new ImageHistoryCmdImpl(getDockerCmdExecFactory().createImageHistoryCmdExec(), imageId);
     }
 
     /**
