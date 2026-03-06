@@ -101,6 +101,11 @@ public class DelegatingDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     @Override
+    public ImageHistoryCmd.Exec createImageHistoryCmdExec() {
+        return getDockerCmdExecFactory().createImageHistoryCmdExec();
+    }
+
+    @Override
     public ListContainersCmd.Exec createListContainersCmdExec() {
         return getDockerCmdExecFactory().createListContainersCmdExec();
     }

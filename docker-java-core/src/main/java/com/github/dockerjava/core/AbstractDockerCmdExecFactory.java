@@ -29,6 +29,7 @@ import com.github.dockerjava.api.command.InspectConfigCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
+import com.github.dockerjava.api.command.ImageHistoryCmd;
 import com.github.dockerjava.api.command.InspectNetworkCmd;
 import com.github.dockerjava.api.command.InspectServiceCmd;
 import com.github.dockerjava.api.command.InspectSwarmCmd;
@@ -113,6 +114,7 @@ import com.github.dockerjava.core.exec.InitializeSwarmCmdExec;
 import com.github.dockerjava.core.exec.InspectContainerCmdExec;
 import com.github.dockerjava.core.exec.InspectExecCmdExec;
 import com.github.dockerjava.core.exec.InspectImageCmdExec;
+import com.github.dockerjava.core.exec.ImageHistoryCmdExec;
 import com.github.dockerjava.core.exec.InspectNetworkCmdExec;
 import com.github.dockerjava.core.exec.InspectServiceCmdExec;
 import com.github.dockerjava.core.exec.InspectSwarmCmdExec;
@@ -279,6 +281,11 @@ public abstract class AbstractDockerCmdExecFactory implements DockerCmdExecFacto
     @Override
     public InspectImageCmd.Exec createInspectImageCmdExec() {
         return new InspectImageCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public ImageHistoryCmd.Exec createImageHistoryCmdExec() {
+        return new ImageHistoryCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
