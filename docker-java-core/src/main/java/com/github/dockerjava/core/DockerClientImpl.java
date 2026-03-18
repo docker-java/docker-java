@@ -7,6 +7,7 @@ import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.CommitCmd;
 import com.github.dockerjava.api.command.ConnectToNetworkCmd;
 import com.github.dockerjava.api.command.ContainerDiffCmd;
+import com.github.dockerjava.api.command.ExportContainerCmd;
 import com.github.dockerjava.api.command.CopyArchiveFromContainerCmd;
 import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
@@ -93,6 +94,7 @@ import com.github.dockerjava.core.command.BuildImageCmdImpl;
 import com.github.dockerjava.core.command.CommitCmdImpl;
 import com.github.dockerjava.core.command.ConnectToNetworkCmdImpl;
 import com.github.dockerjava.core.command.ContainerDiffCmdImpl;
+import com.github.dockerjava.core.command.ExportContainerCmdImpl;
 import com.github.dockerjava.core.command.CopyArchiveFromContainerCmdImpl;
 import com.github.dockerjava.core.command.CopyArchiveToContainerCmdImpl;
 import com.github.dockerjava.core.command.CopyFileFromContainerCmdImpl;
@@ -468,6 +470,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public ContainerDiffCmd containerDiffCmd(String containerId) {
         return new ContainerDiffCmdImpl(getDockerCmdExecFactory().createContainerDiffCmdExec(), containerId);
+    }
+
+    @Override
+    public ExportContainerCmd exportContainerCmd(String containerId) {
+        return new ExportContainerCmdImpl(getDockerCmdExecFactory().createExportContainerCmdExec(), containerId);
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.CommitCmd;
 import com.github.dockerjava.api.command.ConnectToNetworkCmd;
 import com.github.dockerjava.api.command.ContainerDiffCmd;
+import com.github.dockerjava.api.command.ExportContainerCmd;
 import com.github.dockerjava.api.command.CopyArchiveFromContainerCmd;
 import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
@@ -232,6 +233,15 @@ public interface DockerClient extends Closeable {
     CopyArchiveToContainerCmd copyArchiveToContainerCmd(@Nonnull String containerId);
 
     ContainerDiffCmd containerDiffCmd(@Nonnull String containerId);
+
+    /**
+     * Export the contents of a container's filesystem as a tar archive.
+     *
+     * @param containerId
+     *            id of the container
+     * @return created command
+     */
+    ExportContainerCmd exportContainerCmd(@Nonnull String containerId);
 
     StopContainerCmd stopContainerCmd(@Nonnull String containerId);
 

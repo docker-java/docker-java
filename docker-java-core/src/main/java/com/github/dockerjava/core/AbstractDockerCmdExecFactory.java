@@ -8,6 +8,7 @@ import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.CommitCmd;
 import com.github.dockerjava.api.command.ConnectToNetworkCmd;
 import com.github.dockerjava.api.command.ContainerDiffCmd;
+import com.github.dockerjava.api.command.ExportContainerCmd;
 import com.github.dockerjava.api.command.CopyArchiveFromContainerCmd;
 import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
@@ -89,6 +90,7 @@ import com.github.dockerjava.core.exec.BuildImageCmdExec;
 import com.github.dockerjava.core.exec.CommitCmdExec;
 import com.github.dockerjava.core.exec.ConnectToNetworkCmdExec;
 import com.github.dockerjava.core.exec.ContainerDiffCmdExec;
+import com.github.dockerjava.core.exec.ExportContainerCmdExec;
 import com.github.dockerjava.core.exec.CopyArchiveFromContainerCmdExec;
 import com.github.dockerjava.core.exec.CopyArchiveToContainerCmdExec;
 import com.github.dockerjava.core.exec.CopyFileFromContainerCmdExec;
@@ -366,6 +368,11 @@ public abstract class AbstractDockerCmdExecFactory implements DockerCmdExecFacto
     @Override
     public ContainerDiffCmd.Exec createContainerDiffCmdExec() {
         return new ContainerDiffCmdExec(getBaseResource(), getDockerClientConfig());
+    }
+
+    @Override
+    public ExportContainerCmd.Exec createExportContainerCmdExec() {
+        return new ExportContainerCmdExec(getBaseResource(), getDockerClientConfig());
     }
 
     @Override
