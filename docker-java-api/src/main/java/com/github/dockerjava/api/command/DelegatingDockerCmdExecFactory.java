@@ -181,6 +181,11 @@ public class DelegatingDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     @Override
+    public ExportContainerCmd.Exec createExportContainerCmdExec() {
+        return getDockerCmdExecFactory().createExportContainerCmdExec();
+    }
+
+    @Override
     public KillContainerCmd.Exec createKillContainerCmdExec() {
         return getDockerCmdExecFactory().createKillContainerCmdExec();
     }

@@ -6,6 +6,7 @@ import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.CommitCmd;
 import com.github.dockerjava.api.command.ConnectToNetworkCmd;
 import com.github.dockerjava.api.command.ContainerDiffCmd;
+import com.github.dockerjava.api.command.ExportContainerCmd;
 import com.github.dockerjava.api.command.CopyArchiveFromContainerCmd;
 import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
@@ -274,6 +275,11 @@ public class DockerClientDelegate implements DockerClient {
     @Override
     public ContainerDiffCmd containerDiffCmd(@Nonnull String containerId) {
         return getDockerClient().containerDiffCmd(containerId);
+    }
+
+    @Override
+    public ExportContainerCmd exportContainerCmd(@Nonnull String containerId) {
+        return getDockerClient().exportContainerCmd(containerId);
     }
 
     @Override
