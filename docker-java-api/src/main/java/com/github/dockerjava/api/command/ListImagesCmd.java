@@ -26,6 +26,11 @@ public interface ListImagesCmd extends SyncDockerCmd<List<Image>> {
      */
     ListImagesCmd withShowAll(Boolean showAll);
 
+    /**
+     * Filter images by name
+     * @deprecated use {@link #withFilter(String, Collection)}
+     */
+    @Deprecated
     ListImagesCmd withImageNameFilter(String imageName);
 
     /**
