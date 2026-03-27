@@ -37,6 +37,8 @@ public interface DockerCmdExecFactory extends Closeable {
 
     InspectImageCmd.Exec createInspectImageCmdExec();
 
+    ImageHistoryCmd.Exec createImageHistoryCmdExec();
+
     ListContainersCmd.Exec createListContainersCmdExec();
 
     CreateContainerCmd.Exec createCreateContainerCmdExec();
@@ -70,6 +72,8 @@ public interface DockerCmdExecFactory extends Closeable {
     StopContainerCmd.Exec createStopContainerCmdExec();
 
     ContainerDiffCmd.Exec createContainerDiffCmdExec();
+
+    ExportContainerCmd.Exec createExportContainerCmdExec();
 
     KillContainerCmd.Exec createKillContainerCmdExec();
 

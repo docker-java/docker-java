@@ -6,6 +6,7 @@ import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.CommitCmd;
 import com.github.dockerjava.api.command.ConnectToNetworkCmd;
 import com.github.dockerjava.api.command.ContainerDiffCmd;
+import com.github.dockerjava.api.command.ExportContainerCmd;
 import com.github.dockerjava.api.command.CopyArchiveFromContainerCmd;
 import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
@@ -26,6 +27,7 @@ import com.github.dockerjava.api.command.InspectConfigCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
+import com.github.dockerjava.api.command.ImageHistoryCmd;
 import com.github.dockerjava.api.command.InspectNetworkCmd;
 import com.github.dockerjava.api.command.InspectServiceCmd;
 import com.github.dockerjava.api.command.InspectSwarmCmd;
@@ -142,6 +144,8 @@ public interface DockerClient extends Closeable {
 
     InspectImageCmd inspectImageCmd(@Nonnull String imageId);
 
+    ImageHistoryCmd imageHistoryCmd(@Nonnull String imageId);
+
     /**
      * @param name
      *            The name, e.g. "alexec/busybox" or just "busybox" if you want to default. Not null.
@@ -229,6 +233,15 @@ public interface DockerClient extends Closeable {
     CopyArchiveToContainerCmd copyArchiveToContainerCmd(@Nonnull String containerId);
 
     ContainerDiffCmd containerDiffCmd(@Nonnull String containerId);
+
+    /**
+     * Export the contents of a container's filesystem as a tar archive.
+     *
+     * @param containerId
+     *            id of the container
+     * @return created command
+     */
+    ExportContainerCmd exportContainerCmd(@Nonnull String containerId);
 
     StopContainerCmd stopContainerCmd(@Nonnull String containerId);
 

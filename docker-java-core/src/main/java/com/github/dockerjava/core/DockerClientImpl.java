@@ -7,6 +7,7 @@ import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.CommitCmd;
 import com.github.dockerjava.api.command.ConnectToNetworkCmd;
 import com.github.dockerjava.api.command.ContainerDiffCmd;
+import com.github.dockerjava.api.command.ExportContainerCmd;
 import com.github.dockerjava.api.command.CopyArchiveFromContainerCmd;
 import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
@@ -28,6 +29,7 @@ import com.github.dockerjava.api.command.InspectConfigCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
+import com.github.dockerjava.api.command.ImageHistoryCmd;
 import com.github.dockerjava.api.command.InspectNetworkCmd;
 import com.github.dockerjava.api.command.InspectServiceCmd;
 import com.github.dockerjava.api.command.InspectSwarmCmd;
@@ -92,6 +94,7 @@ import com.github.dockerjava.core.command.BuildImageCmdImpl;
 import com.github.dockerjava.core.command.CommitCmdImpl;
 import com.github.dockerjava.core.command.ConnectToNetworkCmdImpl;
 import com.github.dockerjava.core.command.ContainerDiffCmdImpl;
+import com.github.dockerjava.core.command.ExportContainerCmdImpl;
 import com.github.dockerjava.core.command.CopyArchiveFromContainerCmdImpl;
 import com.github.dockerjava.core.command.CopyArchiveToContainerCmdImpl;
 import com.github.dockerjava.core.command.CopyFileFromContainerCmdImpl;
@@ -113,6 +116,7 @@ import com.github.dockerjava.core.command.InspectConfigCmdImpl;
 import com.github.dockerjava.core.command.InspectContainerCmdImpl;
 import com.github.dockerjava.core.command.InspectExecCmdImpl;
 import com.github.dockerjava.core.command.InspectImageCmdImpl;
+import com.github.dockerjava.core.command.ImageHistoryCmdImpl;
 import com.github.dockerjava.core.command.InspectServiceCmdImpl;
 import com.github.dockerjava.core.command.InspectSwarmCmdImpl;
 import com.github.dockerjava.core.command.InspectVolumeCmdImpl;
@@ -375,6 +379,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
         return new InspectImageCmdImpl(getDockerCmdExecFactory().createInspectImageCmdExec(), imageId);
     }
 
+    @Override
+    public ImageHistoryCmd imageHistoryCmd(String imageId) {
+        return new ImageHistoryCmdImpl(getDockerCmdExecFactory().createImageHistoryCmdExec(), imageId);
+    }
+
     /**
      * * CONTAINER API *
      */
@@ -461,6 +470,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public ContainerDiffCmd containerDiffCmd(String containerId) {
         return new ContainerDiffCmdImpl(getDockerCmdExecFactory().createContainerDiffCmdExec(), containerId);
+    }
+
+    @Override
+    public ExportContainerCmd exportContainerCmd(String containerId) {
+        return new ExportContainerCmdImpl(getDockerCmdExecFactory().createExportContainerCmdExec(), containerId);
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.CommitCmd;
 import com.github.dockerjava.api.command.ConnectToNetworkCmd;
 import com.github.dockerjava.api.command.ContainerDiffCmd;
+import com.github.dockerjava.api.command.ExportContainerCmd;
 import com.github.dockerjava.api.command.CopyArchiveFromContainerCmd;
 import com.github.dockerjava.api.command.CopyArchiveToContainerCmd;
 import com.github.dockerjava.api.command.CopyFileFromContainerCmd;
@@ -26,6 +27,7 @@ import com.github.dockerjava.api.command.InspectConfigCmd;
 import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectExecCmd;
 import com.github.dockerjava.api.command.InspectImageCmd;
+import com.github.dockerjava.api.command.ImageHistoryCmd;
 import com.github.dockerjava.api.command.InspectNetworkCmd;
 import com.github.dockerjava.api.command.InspectServiceCmd;
 import com.github.dockerjava.api.command.InspectSwarmCmd;
@@ -180,6 +182,11 @@ public class DockerClientDelegate implements DockerClient {
     }
 
     @Override
+    public ImageHistoryCmd imageHistoryCmd(@Nonnull String imageId) {
+        return getDockerClient().imageHistoryCmd(imageId);
+    }
+
+    @Override
     public SaveImageCmd saveImageCmd(@Nonnull String name) {
         return getDockerClient().saveImageCmd(name);
     }
@@ -268,6 +275,11 @@ public class DockerClientDelegate implements DockerClient {
     @Override
     public ContainerDiffCmd containerDiffCmd(@Nonnull String containerId) {
         return getDockerClient().containerDiffCmd(containerId);
+    }
+
+    @Override
+    public ExportContainerCmd exportContainerCmd(@Nonnull String containerId) {
+        return getDockerClient().exportContainerCmd(containerId);
     }
 
     @Override

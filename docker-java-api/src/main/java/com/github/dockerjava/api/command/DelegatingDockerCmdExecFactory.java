@@ -101,6 +101,11 @@ public class DelegatingDockerCmdExecFactory implements DockerCmdExecFactory {
     }
 
     @Override
+    public ImageHistoryCmd.Exec createImageHistoryCmdExec() {
+        return getDockerCmdExecFactory().createImageHistoryCmdExec();
+    }
+
+    @Override
     public ListContainersCmd.Exec createListContainersCmdExec() {
         return getDockerCmdExecFactory().createListContainersCmdExec();
     }
@@ -173,6 +178,11 @@ public class DelegatingDockerCmdExecFactory implements DockerCmdExecFactory {
     @Override
     public ContainerDiffCmd.Exec createContainerDiffCmdExec() {
         return getDockerCmdExecFactory().createContainerDiffCmdExec();
+    }
+
+    @Override
+    public ExportContainerCmd.Exec createExportContainerCmdExec() {
+        return getDockerCmdExecFactory().createExportContainerCmdExec();
     }
 
     @Override
