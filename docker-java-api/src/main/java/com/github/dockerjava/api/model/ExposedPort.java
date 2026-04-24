@@ -12,7 +12,8 @@ import com.github.dockerjava.api.model.Ports.Binding;
 import lombok.EqualsAndHashCode;
 
 /**
- * Represents a container port that Docker exposes to external clients. The port is defined by its {@link #getPort() port number} and an
+ * Represents a container port that Docker exposes to external clients. The port is defined by its {@link #getPortRangeFrom() port number}
+ * or given a range {@link #getPortRangeFrom() port number from} - {@link #getPortRangeTo() port number to} and an
  * {@link InternetProtocol}. It can be published by Docker by {@link Ports#bind(ExposedPort, Binding) binding} it to a host port,
  * represented by a {@link Binding}.
  */
@@ -22,30 +23,62 @@ public class ExposedPort implements Serializable {
 
     private final InternetProtocol protocol;
 
-    private final int port;
+    private final int portRangeFrom;
+
+    private final int portRangeTo;
 
     /**
      * Creates an {@link ExposedPort} for the given parameters.
      *
      * @param port
-     *            the {@link #getPort() port number}
+     *            the {@link #getPortRangeFrom() port number}
      * @param protocol
      *            the {@link InternetProtocol}
      */
     public ExposedPort(int port, InternetProtocol protocol) {
-        this.port = port;
+        this.portRangeTo = port;
+        this.portRangeFrom = port;
         this.protocol = protocol;
     }
 
     /**
-     * Creates an {@link ExposedPort} for the given {@link #getPort() port number} and {@link InternetProtocol#DEFAULT}.
+     * Creates an {@link ExposedPort} for the given parameters.
+     *
+     * @param portRangeFrom
+     *            the {@link #getPortRangeFrom() port number}
+     * @param portRangeTo
+     *            the {@link #getPortRangeTo() port number}
+     * @param protocol
+     *            the {@link InternetProtocol}
+     */
+    public ExposedPort(int portRangeFrom, int portRangeTo, InternetProtocol protocol) {
+        this.portRangeTo = portRangeTo;
+        this.portRangeFrom = portRangeFrom;
+        this.protocol = protocol;
+    }
+
+    /**
+     * Creates an {@link ExposedPort} for the given {@link #getPortRangeFrom() port number} and {@link InternetProtocol#DEFAULT}.
      *
      * @param port
-     *            the {@link #getPort() port number}
+     *            the {@link #getPortRangeFrom() port number}
      */
     public ExposedPort(int port) {
         this(port, InternetProtocol.DEFAULT);
     }
+
+    /**
+     * Creates an {@link ExposedPort} for the given {@link #getPortRangeFrom() port number} and {@link InternetProtocol#DEFAULT}.
+     *
+     * @param portRangeFrom
+     *            the {@link #getPortRangeFrom() port number}
+     * @param portRangeTo
+     *            the {@link #getPortRangeTo() port number}
+     */
+    public ExposedPort(int portRangeFrom, int portRangeTo) {
+        this(portRangeFrom, portRangeTo, InternetProtocol.DEFAULT);
+    }
+
 
     /**
      * Creates an {@link ExposedPort} for the given parameters.
@@ -53,7 +86,7 @@ public class ExposedPort implements Serializable {
      * @param scheme
      *            the {@link #getScheme() scheme}, <code>tcp</code>, <code>udp</code> or <code>sctp</code>
      * @param port
-     *            the {@link #getPort() port number}
+     *            the {@link #getPortRangeFrom() port number}
      * @deprecated use {@link #ExposedPort(int, InternetProtocol)}
      */
     @Deprecated
@@ -62,7 +95,7 @@ public class ExposedPort implements Serializable {
     }
 
     /**
-     * @return the {@link InternetProtocol} of the {@link #getPort() port} that the container exposes
+     * @return the {@link InternetProtocol} of the {@link #getPortRangeFrom() port} that the container exposes
      */
     public InternetProtocol getProtocol() {
         return protocol;
@@ -77,9 +110,22 @@ public class ExposedPort implements Serializable {
         return protocol.toString();
     }
 
-    /** @return the port number that the container exposes */
+    /** @return the port number that the container exposes, if a range is exposed the port number from is returned.
+     *  @deprecated use {@link #getPortRangeFrom()} and {@link #getPortRangeTo()}!
+     */
+    @Deprecated
     public int getPort() {
-        return port;
+        return portRangeFrom;
+    }
+
+    /** @return the port number from that the container exposes */
+    public int getPortRangeFrom() {
+        return portRangeFrom;
+    }
+
+    /** @return the port number from that the container exposes */
+    public int getPortRangeTo() {
+        return portRangeTo;
     }
 
     /**
@@ -120,10 +166,32 @@ public class ExposedPort implements Serializable {
         try {
             String[] parts = serialized.split("/");
             switch (parts.length) {
-                case 1:
-                    return new ExposedPort(Integer.parseInt(parts[0]));
-                case 2:
-                    return new ExposedPort(Integer.parseInt(parts[0]), InternetProtocol.parse(parts[1]));
+                case 1: {
+                    String[] ports = parts[0].split("-");
+                    switch (ports.length) {
+                        case 1:
+                            return new ExposedPort(Integer.parseInt(ports[0]));
+                        case 2:
+                            return new ExposedPort(Integer.parseInt(ports[0]), Integer.parseInt(ports[1]));
+                        default:
+                            throw new IllegalArgumentException();
+                    }
+                }
+                case 2: {
+                    String[] ports = parts[0].split("-");
+                    switch (ports.length) {
+                        case 1:
+                            return new ExposedPort(Integer.parseInt(ports[0]), InternetProtocol.parse(parts[1]));
+                        case 2:
+                            return new ExposedPort(
+                                Integer.parseInt(ports[0]),
+                                Integer.parseInt(ports[1]),
+                                InternetProtocol.parse(parts[1])
+                            );
+                        default:
+                            throw new IllegalArgumentException();
+                    }
+                }
                 default:
                     throw new IllegalArgumentException();
             }
@@ -141,6 +209,10 @@ public class ExposedPort implements Serializable {
     @Override
     @JsonValue
     public String toString() {
-        return port + "/" + protocol.toString();
+        if (portRangeFrom == portRangeTo) {
+            return portRangeFrom + "/" + protocol.toString();
+        } else {
+            return portRangeFrom + "-" + portRangeTo + "/" + protocol.toString();
+        }
     }
 }
