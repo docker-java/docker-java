@@ -2,6 +2,7 @@ package com.github.dockerjava.core.command;
 
 import com.github.dockerjava.api.command.UpdateServiceCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.ServiceSpec;
 import com.github.dockerjava.core.RemoteApiVersion;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -11,6 +12,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
+import java.util.Objects;
 
 /**
  * @since {@link RemoteApiVersion#VERSION_1_24}
@@ -32,6 +34,8 @@ public class UpdateServiceCmdImpl extends AbstrDockerCmd<UpdateServiceCmd, Void>
      * @since 1.24
      */
     private Long version;
+
+    private AuthConfig authConfig;
 
     public UpdateServiceCmdImpl(Exec exec, String serviceId, ServiceSpec serviceSpec) {
         super(exec);
@@ -84,6 +88,19 @@ public class UpdateServiceCmdImpl extends AbstrDockerCmd<UpdateServiceCmd, Void>
      */
     public UpdateServiceCmdImpl withVersion(Long version) {
         this.version = version;
+        return this;
+    }
+
+    @CheckForNull
+    public AuthConfig getAuthConfig() {
+        return authConfig;
+    }
+
+    @CheckForNull
+    @Override
+    public UpdateServiceCmd withAuthConfig(AuthConfig authConfig) {
+        Objects.requireNonNull(authConfig, "authConfig was not specified");
+        this.authConfig = authConfig;
         return this;
     }
 
