@@ -17,7 +17,7 @@ public class CustomCommandIT extends CmdIT {
 
     @Test
     public void testCustomCommand() throws Exception {
-        DockerHttpClient httpClient = CmdIT.createDockerHttpClient(DockerRule.config(null));
+        DockerHttpClient httpClient = CmdIT.createDockerHttpClient(DockerRule.config(null).build());
 
         Assume.assumeNotNull(httpClient);
 
