@@ -89,6 +89,20 @@
 							<pattern>com.github.dockerjava.httpclient5</pattern>
 							<shadedPattern>com.github.dockerjava.zerodep</shadedPattern>
 						</relocation>
+						<!-- Relocate the public suffix resource so it doesn't conflict with
+						     standalone httpclient5 on the classpath. The standard relocation
+						     renames the resource file; the rawString relocation fixes the
+						     absolute-path string literal ("/org/publicsuffix/...") baked into
+						     PublicSuffixMatcherLoader bytecode by docker-java's own shade pass. -->
+						<relocation>
+							<pattern>org.publicsuffix</pattern>
+							<shadedPattern>com.github.dockerjava.zerodep.shaded.org.publicsuffix</shadedPattern>
+						</relocation>
+						<relocation>
+							<rawString>true</rawString>
+							<pattern>/org/publicsuffix</pattern>
+							<shadedPattern>/com/github/dockerjava/zerodep/shaded/org/publicsuffix</shadedPattern>
+						</relocation>
 					</relocations>
 					<transformers>
 						<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
