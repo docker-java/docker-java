@@ -211,8 +211,21 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     public static DockerClient getInstance(DockerClientConfig dockerClientConfig, DockerHttpClient dockerHttpClient) {
-        return new DockerClientImpl(dockerClientConfig)
+        DockerClientConfig effectiveConfig = maybeNegotiateApiVersion(dockerClientConfig, dockerHttpClient);
+        return new DockerClientImpl(effectiveConfig)
             .withHttpClient(dockerHttpClient);
+    }
+
+    private static DockerClientConfig maybeNegotiateApiVersion(DockerClientConfig config, DockerHttpClient httpClient) {
+        if (!config.isApiVersionAutoNegotiationEnabled()) {
+            return config;
+        }
+        if (config.getApiVersion() != RemoteApiVersion.UNKNOWN_VERSION) {
+            // Explicit withApiVersion(...) wins, same precedence the Docker CLI uses.
+            return config;
+        }
+        RemoteApiVersion negotiated = ApiVersionNegotiator.negotiate(httpClient, config.getObjectMapper());
+        return new NegotiatedDockerClientConfig(config, negotiated);
     }
 
     /**

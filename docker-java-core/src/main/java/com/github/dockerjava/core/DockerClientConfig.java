@@ -60,6 +60,19 @@ public interface DockerClientConfig {
     default ObjectMapper getObjectMapper() {
         return getDefaultObjectMapper();
     }
+
+    /**
+     * Whether the client should query the daemon's {@code /version} endpoint at construction time
+     * and pin the API version to {@code min(daemon API version, latest API version supported by docker-java)}.
+     * <p>
+     * Mirrors {@code moby/client.NegotiateAPIVersion}.
+     * <p>
+     * Default {@code false}: callers that have not opted in keep the existing behaviour
+     * (explicit {@code withApiVersion(...)} or {@link RemoteApiVersion#UNKNOWN_VERSION}).
+     */
+    default boolean isApiVersionAutoNegotiationEnabled() {
+        return false;
+    }
 }
 
 enum DefaultObjectMapperHolder {

@@ -272,6 +272,73 @@ public class DefaultDockerClientConfigTest {
     }
 
     @Test
+    public void withApiVersionAutoNegotiation_defaultsToFalse() {
+        DefaultDockerClientConfig config = DefaultDockerClientConfig
+                .createDefaultConfigBuilder(Collections.<String, String>emptyMap(), new Properties())
+                .build();
+
+        assertThat(config.isApiVersionAutoNegotiationEnabled(), is(false));
+    }
+
+    @Test
+    public void withApiVersionAutoNegotiation_booleanSetter() {
+        DefaultDockerClientConfig config = DefaultDockerClientConfig
+                .createDefaultConfigBuilder(Collections.<String, String>emptyMap(), new Properties())
+                .withApiVersionAutoNegotiation(true)
+                .build();
+
+        assertThat(config.isApiVersionAutoNegotiationEnabled(), is(true));
+    }
+
+    @Test
+    public void withApiVersionAutoNegotiation_parsesStringTruthyValues() throws Exception {
+        DefaultDockerClientConfig.Builder builder = new DefaultDockerClientConfig.Builder();
+        Field field = builder.getClass().getDeclaredField("apiVersionAutoNegotiation");
+        field.setAccessible(true);
+
+        builder.withApiVersionAutoNegotiation("");
+        assertThat((Boolean) field.get(builder), is(false));
+
+        builder.withApiVersionAutoNegotiation("true");
+        assertThat((Boolean) field.get(builder), is(true));
+
+        builder.withApiVersionAutoNegotiation("TRUE");
+        assertThat((Boolean) field.get(builder), is(true));
+
+        builder.withApiVersionAutoNegotiation("1");
+        assertThat((Boolean) field.get(builder), is(true));
+
+        builder.withApiVersionAutoNegotiation("false");
+        assertThat((Boolean) field.get(builder), is(false));
+
+        builder.withApiVersionAutoNegotiation("0");
+        assertThat((Boolean) field.get(builder), is(false));
+
+        builder.withApiVersionAutoNegotiation((String) null);
+        assertThat((Boolean) field.get(builder), is(false));
+    }
+
+    @Test
+    public void apiVersionAutoNegotiation_fromEnvVar() {
+        Map<String, String> env = new HashMap<>();
+        env.put(DefaultDockerClientConfig.DOCKER_API_VERSION_AUTO_NEGOTIATION, "true");
+
+        DefaultDockerClientConfig config = buildConfig(env, new Properties());
+
+        assertThat(config.isApiVersionAutoNegotiationEnabled(), is(true));
+    }
+
+    @Test
+    public void apiVersionAutoNegotiation_fromSystemProperty() {
+        Properties systemProperties = new Properties();
+        systemProperties.put(DefaultDockerClientConfig.API_VERSION_AUTO_NEGOTIATION, "1");
+
+        DefaultDockerClientConfig config = buildConfig(Collections.<String, String>emptyMap(), systemProperties);
+
+        assertThat(config.isApiVersionAutoNegotiationEnabled(), is(true));
+    }
+
+    @Test
     public void dockerHostSetExplicitlyOnSetter() {
         DefaultDockerClientConfig.Builder builder = DefaultDockerClientConfig.createDefaultConfigBuilder(Collections.emptyMap(), new Properties());
         assertThat(builder.isDockerHostSetExplicitly(), is(false));

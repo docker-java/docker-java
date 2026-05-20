@@ -50,6 +50,16 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
     public static final String API_VERSION = "api.version";
 
+    public static final String API_VERSION_AUTO_NEGOTIATION = "api.version.auto.negotiation";
+
+    /**
+     * Environment variable counterpart of {@link #API_VERSION_AUTO_NEGOTIATION}.
+     * <p>
+     * Accepted truthy values are {@code true} (case-insensitive) and {@code 1}; anything else
+     * (or unset) is treated as {@code false}.
+     */
+    public static final String DOCKER_API_VERSION_AUTO_NEGOTIATION = "DOCKER_API_VERSION_AUTO_NEGOTIATION";
+
     public static final String REGISTRY_USERNAME = "registry.username";
 
     public static final String REGISTRY_PASSWORD = "registry.password";
@@ -74,6 +84,8 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
         CONFIG_KEYS.add(DOCKER_CONFIG);
         CONFIG_KEYS.add(DOCKER_CERT_PATH);
         CONFIG_KEYS.add(API_VERSION);
+        CONFIG_KEYS.add(API_VERSION_AUTO_NEGOTIATION);
+        CONFIG_KEYS.add(DOCKER_API_VERSION_AUTO_NEGOTIATION);
         CONFIG_KEYS.add(REGISTRY_USERNAME);
         CONFIG_KEYS.add(REGISTRY_PASSWORD);
         CONFIG_KEYS.add(REGISTRY_EMAIL);
@@ -92,15 +104,25 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
     private final RemoteApiVersion apiVersion;
 
+    private final boolean apiVersionAutoNegotiation;
+
     private final DockerConfigFile dockerConfig;
 
     DefaultDockerClientConfig(URI dockerHost, DockerConfigFile dockerConfigFile, String dockerConfigPath, String apiVersion,
                               String registryUrl, String registryUsername, String registryPassword, String registryEmail,
                               SSLConfig sslConfig) {
+        this(dockerHost, dockerConfigFile, dockerConfigPath, apiVersion, registryUrl, registryUsername, registryPassword,
+                registryEmail, sslConfig, false);
+    }
+
+    DefaultDockerClientConfig(URI dockerHost, DockerConfigFile dockerConfigFile, String dockerConfigPath, String apiVersion,
+                              String registryUrl, String registryUsername, String registryPassword, String registryEmail,
+                              SSLConfig sslConfig, boolean apiVersionAutoNegotiation) {
         this.dockerHost = checkDockerHostScheme(dockerHost);
         this.dockerConfig = dockerConfigFile;
         this.dockerConfigPath = dockerConfigPath;
         this.apiVersion = RemoteApiVersion.parseConfigWithDefault(apiVersion);
+        this.apiVersionAutoNegotiation = apiVersionAutoNegotiation;
         this.sslConfig = sslConfig;
         this.registryUsername = registryUsername;
         this.registryPassword = registryPassword;
@@ -248,6 +270,11 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
     }
 
     @Override
+    public boolean isApiVersionAutoNegotiationEnabled() {
+        return apiVersionAutoNegotiation;
+    }
+
+    @Override
     public String getRegistryUsername() {
         return registryUsername;
     }
@@ -338,6 +365,8 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
         private Boolean dockerTlsVerify;
 
+        private Boolean apiVersionAutoNegotiation;
+
         private SSLConfig customSslConfig = null;
 
         /**
@@ -351,11 +380,17 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
                 withDockerHost(p.getProperty(DOCKER_HOST));
             }
 
+            String autoNegotiation = p.getProperty(API_VERSION_AUTO_NEGOTIATION);
+            if (autoNegotiation == null) {
+                autoNegotiation = p.getProperty(DOCKER_API_VERSION_AUTO_NEGOTIATION);
+            }
+
             return withDockerTlsVerify(p.getProperty(DOCKER_TLS_VERIFY))
                     .withDockerContext(p.getProperty(DOCKER_CONTEXT))
                     .withDockerConfig(p.getProperty(DOCKER_CONFIG))
                     .withDockerCertPath(p.getProperty(DOCKER_CERT_PATH))
                     .withApiVersion(p.getProperty(API_VERSION))
+                    .withApiVersionAutoNegotiation(autoNegotiation)
                     .withRegistryUsername(p.getProperty(REGISTRY_USERNAME))
                     .withRegistryPassword(p.getProperty(REGISTRY_PASSWORD))
                     .withRegistryEmail(p.getProperty(REGISTRY_EMAIL))
@@ -378,6 +413,31 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
         public final Builder withApiVersion(String apiVersion) {
             this.apiVersion = apiVersion;
+            return this;
+        }
+
+        /**
+         * Opt the client in to one-shot API version auto-negotiation against the daemon's
+         * {@code /version} endpoint at construction time. See
+         * {@link DockerClientConfig#isApiVersionAutoNegotiationEnabled()}.
+         */
+        public final Builder withApiVersionAutoNegotiation(boolean apiVersionAutoNegotiation) {
+            this.apiVersionAutoNegotiation = apiVersionAutoNegotiation;
+            return this;
+        }
+
+        /**
+         * String overload that matches the {@link #withDockerTlsVerify(String)} parsing semantics:
+         * {@code "true"} (case-insensitive) and {@code "1"} are truthy; anything else (or {@code null})
+         * is falsy. Used when wiring the flag in from a {@link Properties} source.
+         */
+        public final Builder withApiVersionAutoNegotiation(String apiVersionAutoNegotiation) {
+            if (apiVersionAutoNegotiation != null) {
+                String trimmed = apiVersionAutoNegotiation.trim();
+                this.apiVersionAutoNegotiation = "true".equalsIgnoreCase(trimmed) || "1".equals(trimmed);
+            } else {
+                this.apiVersionAutoNegotiation = false;
+            }
             return this;
         }
 
@@ -488,7 +548,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
                 : URI.create(SystemUtils.IS_OS_WINDOWS ? WINDOWS_DEFAULT_DOCKER_HOST : DEFAULT_DOCKER_HOST);
 
             return new DefaultDockerClientConfig(dockerHostUri, dockerConfigFile, dockerConfig, apiVersion, registryUrl, registryUsername,
-                    registryPassword, registryEmail, sslConfig);
+                    registryPassword, registryEmail, sslConfig, isTrue(apiVersionAutoNegotiation));
         }
 
         private DockerConfigFile readDockerConfig() {
