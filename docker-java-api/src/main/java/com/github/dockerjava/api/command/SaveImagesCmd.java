@@ -35,6 +35,19 @@ public interface SaveImagesCmd extends SyncDockerCmd<InputStream> {
     List<TaggedImage> getImages();
 
     /**
+     * Confines the saved image to the specified platform or platforms (if invoked repeatedly).
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_48} for one platform and.
+     * @return this
+     */
+    SaveImagesCmd withPlatform(String platform);
+
+    /**
+     * Gets the platform that was set by {@link #withPlatform(String)}.
+     * @return platform the saved images should be confined to.
+     */
+    String getPlatform();
+
+    /**
      * Its the responsibility of the caller to consume and/or close the {@link InputStream} to prevent connection leaks.
      *
      * @throws NotFoundException no such image

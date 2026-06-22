@@ -1,15 +1,19 @@
 package com.github.dockerjava.core.command;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Objects;
 
 import com.github.dockerjava.api.command.SaveImageCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
+import com.google.common.collect.ImmutableList;
 
 public class SaveImageCmdImpl extends AbstrDockerCmd<SaveImageCmd, InputStream> implements SaveImageCmd {
     private String name;
 
     private String tag;
+
+    private final ImmutableList.Builder<String> platforms = ImmutableList.builder();
 
     public SaveImageCmdImpl(SaveImageCmd.Exec exec, String name) {
         super(exec);
@@ -54,4 +58,16 @@ public class SaveImageCmdImpl extends AbstrDockerCmd<SaveImageCmd, InputStream> 
     public InputStream exec() throws NotFoundException {
         return super.exec();
     }
+
+    @Override
+    public SaveImageCmd withPlatform(String platform) {
+        platforms.add(platform);
+        return this;
+    }
+
+    @Override
+    public List<String> getPlatforms() {
+        return platforms.build();
+    }
+
 }

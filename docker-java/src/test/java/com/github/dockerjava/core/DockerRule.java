@@ -37,7 +37,7 @@ public class DockerRule extends ExternalResource {
 
     private final Set<String> createdVolumeNames = new HashSet<>();
 
-    private final DefaultDockerClientConfig config = config();
+    private final DefaultDockerClientConfig config = config().build();
 
     public DockerClient newClient() {
         DockerClientImpl dockerClient = CmdIT.createDockerClient(config);
@@ -168,19 +168,19 @@ public class DockerRule extends ExternalResource {
         }
     }
 
-    private static DefaultDockerClientConfig config() {
+    private static DefaultDockerClientConfig.Builder config() {
         return config(null);
     }
 
-    public static DefaultDockerClientConfig config(String password) {
+    public static DefaultDockerClientConfig.Builder config(String password) {
         DefaultDockerClientConfig.Builder builder = DefaultDockerClientConfig.createDefaultConfigBuilder()
                 .withApiVersion(RemoteApiVersion.VERSION_1_44)
                 .withRegistryUrl("https://index.docker.io/v1/");
         if (password != null) {
-            builder = builder.withRegistryPassword(password);
+            builder.withRegistryPassword(password);
         }
 
-        return builder.build();
+        return builder;
     }
 
     public String buildImage(File baseDir) throws Exception {

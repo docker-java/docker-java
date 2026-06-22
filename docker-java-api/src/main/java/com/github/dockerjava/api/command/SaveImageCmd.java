@@ -1,6 +1,7 @@
 package com.github.dockerjava.api.command;
 
 import java.io.InputStream;
+import java.util.List;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -28,7 +29,21 @@ public interface SaveImageCmd extends SyncDockerCmd<InputStream> {
     SaveImageCmd withTag(String tag);
 
     /**
-     * Its the responsibility of the caller to consume and/or close the {@link InputStream} to prevent connection leaks.
+     * Confines the saved image to the specified platform or platforms (if invoked repeatedly).
+     * @since {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_48} for one platform and
+     * {@link com.github.dockerjava.core.RemoteApiVersion#VERSION_1_52} for multiple platforms.
+     * @return this
+     */
+    SaveImageCmd withPlatform(String platform);
+
+    /**
+     * Gets the platforms that were added by {@link #withPlatform(String)}.
+     * @return platforms the saved image should be confined to.
+     */
+    List<String> getPlatforms();
+
+    /**
+     * It's the responsibility of the caller to consume and/or close the {@link InputStream} to prevent connection leaks.
      *
      * @throws NotFoundException
      *             No such image
