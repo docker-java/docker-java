@@ -1,13 +1,14 @@
 package com.github.dockerjava.core.exec;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.github.dockerjava.api.command.CreateServiceResponse;
 import com.github.dockerjava.api.command.UpdateServiceCmd;
 import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.InvocationBuilder;
 import com.github.dockerjava.core.MediaType;
 import com.github.dockerjava.core.WebTarget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
 
 /**
  * Update service settings.
@@ -27,11 +28,11 @@ public class UpdateServiceCmdExec extends AbstrSyncDockerCmdExec<UpdateServiceCm
                 .queryParam("version", command.getVersion());
 
         LOGGER.trace("POST: {}", webResource);
-        try {
-            webResource.request().accept(MediaType.APPLICATION_JSON).post(command.getServiceSpec()).close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        InvocationBuilder builder = resourceWithOptionalAuthConfig(command.getAuthConfig(), webResource.request())
+                .accept(MediaType.APPLICATION_JSON);
+
+        builder.post(command.getServiceSpec(), new TypeReference<CreateServiceResponse>() {
+        });
         return null;
     }
 }
