@@ -11,6 +11,7 @@ import static org.junit.Assert.assertEquals;
 public class PortBindingTest {
 
     private static final ExposedPort TCP_8080 = ExposedPort.tcp(8080);
+    private static final ExposedPort TCP_8080_8081 = new ExposedPort(8080, 8081, InternetProtocol.TCP);
 
     @Rule
     public ExpectedException expectedEx = ExpectedException.none();
@@ -19,6 +20,12 @@ public class PortBindingTest {
     public void fullDefinition() {
         assertEquals(PortBinding.parse("127.0.0.1:80:8080/tcp"),
                 new PortBinding(Binding.bindIpAndPort("127.0.0.1", 80), TCP_8080));
+    }
+
+    @Test
+    public void portRange() {
+        assertEquals(PortBinding.parse("127.0.0.1:80-81:8080-8081/tcp"),
+            new PortBinding(Binding.bindIpAndPortRange("127.0.0.1", 80, 81), TCP_8080_8081));
     }
 
     @Test
