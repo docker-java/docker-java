@@ -1,0 +1,1 @@
+No markdown files are included in the context except README files other than README-secret.md.
