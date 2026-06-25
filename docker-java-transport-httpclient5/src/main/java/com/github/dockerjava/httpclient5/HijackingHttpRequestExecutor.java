@@ -1,5 +1,6 @@
 package com.github.dockerjava.httpclient5;
 
+import org.apache.hc.client5.http.io.ManagedHttpClientConnection;
 import org.apache.hc.core5.http.ClassicHttpRequest;
 import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.ConnectionReuseStrategy;
@@ -80,6 +81,9 @@ class HijackingHttpRequestExecutor extends HttpRequestExecutor {
                     fakeRequest.setHeader(HttpHeaders.CONTENT_LENGTH, Long.MAX_VALUE);
                     fakeRequest.setEntity(new HijackedEntity(hijackedInput));
                     conn.sendRequestEntity(fakeRequest);
+                    if (conn instanceof ManagedHttpClientConnection) {
+                        ((ManagedHttpClientConnection) conn).getSocket().shutdownOutput();
+                    }
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

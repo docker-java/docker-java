@@ -106,6 +106,32 @@ public abstract class DomainSocket extends AbstractSocket {
     }
 
     @Override
+    public void shutdownInput() throws IOException {
+        try (Handle handle = this.fileDescriptor.acquire()) {
+            if (!handle.isClosed()) {
+                try {
+                    shutdown(handle.intValue(), SHUT_RD);
+                } catch (LastErrorException ex) {
+                    throw new IOException(ex);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void shutdownOutput() throws IOException {
+        try (Handle handle = this.fileDescriptor.acquire()) {
+            if (!handle.isClosed()) {
+                try {
+                    shutdown(handle.intValue(), SHUT_WR);
+                } catch (LastErrorException ex) {
+                    throw new IOException(ex);
+                }
+            }
+        }
+    }
+
+    @Override
     public void close() throws IOException {
         super.close();
         try {
@@ -122,6 +148,8 @@ public abstract class DomainSocket extends AbstractSocket {
     private native int read(int fd, ByteBuffer buffer, int count) throws LastErrorException;
 
     private native int write(int fd, ByteBuffer buffer, int count) throws LastErrorException;
+
+    private native int shutdown(int fd, int how) throws LastErrorException;
 
     private native int close(int fd) throws LastErrorException;
 
