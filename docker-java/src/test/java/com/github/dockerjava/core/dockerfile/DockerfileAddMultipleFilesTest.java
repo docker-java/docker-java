@@ -5,6 +5,9 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 
 import static com.google.common.collect.Collections2.transform;
@@ -66,6 +69,31 @@ public class DockerfileAddMultipleFilesTest {
         Collection<String> filesToAdd = transform(result.filesToAdd, TO_FILE_NAMES);
 
         assertThat(filesToAdd, containsInAnyOrder("emptydir", "Dockerfile", "src1", "src2"));
+    }
+
+    @Test
+    public void symlinkToFile() throws IOException {
+        File baseDir = fileFromBuildTestResource("symlinks/symlinkToFile");
+        Dockerfile dockerFile = new Dockerfile(new File(baseDir, "Dockerfile"), baseDir);
+        Dockerfile.ScannedResult result = dockerFile.parse();
+        Collection<String> filesToAdd = transform(result.filesToAdd, TO_FILE_NAMES);
+
+        assertThat(filesToAdd, containsInAnyOrder("hello.txt", "someLink", "Dockerfile"));
+    }
+
+    @Test
+    public void symlinkToDir() throws IOException {
+        File baseDir = fileFromBuildTestResource("symlinks/symlinkToDir");
+        String filesPath = Paths.get(baseDir.getAbsolutePath(), "fileSystem").toString();
+        Path linkPath = Paths.get(filesPath, "someLink");
+        if (Files.exists(linkPath))
+            Files.delete(linkPath);
+        Files.createSymbolicLink(linkPath, Paths.get(filesPath, "someDir"));
+        Dockerfile dockerFile = new Dockerfile(new File(baseDir, "Dockerfile"), baseDir);
+        Dockerfile.ScannedResult result = dockerFile.parse();
+        Collection<String> filesToAdd = transform(result.filesToAdd, TO_FILE_NAMES);
+
+        assertThat(filesToAdd, containsInAnyOrder("hello.txt", "someLink", "Dockerfile"));
     }
 
     private File fileFromBuildTestResource(String resource) {
