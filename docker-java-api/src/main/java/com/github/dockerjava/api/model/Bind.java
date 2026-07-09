@@ -99,8 +99,9 @@ public class Bind extends DockerObject implements Serializable {
      */
     public static Bind parse(String serialized) {
         try {
-            // Split by ':' but not ':\' (Windows-style path)
-            String[] parts = serialized.split(":(?!\\\\)");
+            // Split by ':' but not the ':' that follows a Windows drive letter,
+            // whether written with a backslash (C:\host) or a forward slash (C:/host).
+            String[] parts = serialized.split(":(?!\\\\)(?<!^[A-Za-z]:)");
             switch (parts.length) {
             case 2: {
                 return new Bind(parts[0], new Volume(parts[1]));
