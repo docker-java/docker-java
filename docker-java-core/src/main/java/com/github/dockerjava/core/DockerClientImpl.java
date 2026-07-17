@@ -211,8 +211,19 @@ public class DockerClientImpl implements Closeable, DockerClient {
     }
 
     public static DockerClient getInstance(DockerClientConfig dockerClientConfig, DockerHttpClient dockerHttpClient) {
+        DockerHttpClient httpClient = dockerHttpClient;
+        // WSL Containers (wslc): the Docker Engine API reaches the daemon over the dial-stdio bridge,
+        // but the Windows port relay and host bind mounts are only wired when a container is created
+        // and started through the `wslc` CLI. Transparently route just those lifecycle calls through
+        // wslc so that published ports are reachable from Windows and host directories can be
+        // bind-mounted. Doing it here means every docker-java consumer (including Testcontainers, which
+        // shades this class) gets the behaviour without any extra dependency or client-side wiring.
+        if (dockerClientConfig.getDockerHost() != null
+                && "wslc".equals(dockerClientConfig.getDockerHost().getScheme())) {
+            httpClient = new WslcLifecycleDockerHttpClient(httpClient, null);
+        }
         return new DockerClientImpl(dockerClientConfig)
-            .withHttpClient(dockerHttpClient);
+            .withHttpClient(httpClient);
     }
 
     /**
