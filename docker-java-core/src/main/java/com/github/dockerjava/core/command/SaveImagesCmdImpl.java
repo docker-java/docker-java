@@ -4,6 +4,7 @@ import com.github.dockerjava.api.command.SaveImagesCmd;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.google.common.collect.ImmutableList;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import java.io.InputStream;
 import java.util.List;
@@ -17,11 +18,14 @@ public class SaveImagesCmdImpl extends AbstrDockerCmd<SaveImagesCmd, InputStream
 
         private TaggedImageImpl(String name, String tag) {
             this.name = Objects.requireNonNull(name, "image name was not specified");
-            this.tag = Objects.requireNonNull(tag, "image tag was not specified");
+            this.tag = tag;
         }
 
         @Override
         public String asString() {
+            if (tag == null) {
+                return name;
+            }
             return name + ":" + tag;
         }
 
@@ -38,7 +42,7 @@ public class SaveImagesCmdImpl extends AbstrDockerCmd<SaveImagesCmd, InputStream
     }
 
     @Override
-    public SaveImagesCmd withImage(@Nonnull final String name, @Nonnull final String tag) {
+    public SaveImagesCmd withImage(@Nonnull final String name, @CheckForNull final String tag) {
         taggedImages.add(new TaggedImageImpl(name, tag));
         return this;
     }
