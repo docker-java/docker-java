@@ -2,6 +2,7 @@ package com.github.dockerjava.api.command;
 
 import com.github.dockerjava.api.exception.NotFoundException;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import java.io.InputStream;
 import java.util.List;
@@ -22,10 +23,10 @@ public interface SaveImagesCmd extends SyncDockerCmd<InputStream> {
     /**
      * Adds an image to the list of images to download.
      * @param name image name (not null)
-     * @param tag tag
+     * @param tag tag (optional; when {@code null}, only the image name is used)
      * @return this
      */
-    SaveImagesCmd withImage(@Nonnull String name, @Nonnull String tag);
+    SaveImagesCmd withImage(@Nonnull String name, @CheckForNull String tag);
 
 
     /**
