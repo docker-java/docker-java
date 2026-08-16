@@ -31,6 +31,7 @@ import com.github.dockerjava.api.command.ImageHistoryCmd;
 import com.github.dockerjava.api.command.InspectNetworkCmd;
 import com.github.dockerjava.api.command.InspectServiceCmd;
 import com.github.dockerjava.api.command.InspectSwarmCmd;
+import com.github.dockerjava.api.command.InspectSwarmNodeCmd;
 import com.github.dockerjava.api.command.InspectVolumeCmd;
 import com.github.dockerjava.api.command.JoinSwarmCmd;
 import com.github.dockerjava.api.command.KillContainerCmd;
@@ -358,6 +359,15 @@ public interface DockerClient extends Closeable {
      * @since 1.24
      */
     UpdateSwarmNodeCmd updateSwarmNodeCmd();
+
+    /**
+     * Inspect the swarm node
+     *
+     * @param swarmNodeId swarmNodeId
+     * @return the command
+     * @since 1.24
+     */
+    InspectSwarmNodeCmd inspectSwarmNodeCmd(String swarmNodeId);
 
     /**
      * Remove the swarm node

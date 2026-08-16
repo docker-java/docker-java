@@ -33,6 +33,7 @@ import com.github.dockerjava.api.command.ImageHistoryCmd;
 import com.github.dockerjava.api.command.InspectNetworkCmd;
 import com.github.dockerjava.api.command.InspectServiceCmd;
 import com.github.dockerjava.api.command.InspectSwarmCmd;
+import com.github.dockerjava.api.command.InspectSwarmNodeCmd;
 import com.github.dockerjava.api.command.InspectVolumeCmd;
 import com.github.dockerjava.api.command.JoinSwarmCmd;
 import com.github.dockerjava.api.command.KillContainerCmd;
@@ -119,6 +120,7 @@ import com.github.dockerjava.core.command.InspectImageCmdImpl;
 import com.github.dockerjava.core.command.ImageHistoryCmdImpl;
 import com.github.dockerjava.core.command.InspectServiceCmdImpl;
 import com.github.dockerjava.core.command.InspectSwarmCmdImpl;
+import com.github.dockerjava.core.command.InspectSwarmNodeCmdImpl;
 import com.github.dockerjava.core.command.InspectVolumeCmdImpl;
 import com.github.dockerjava.core.command.JoinSwarmCmdImpl;
 import com.github.dockerjava.core.command.KillContainerCmdImpl;
@@ -635,6 +637,11 @@ public class DockerClientImpl implements Closeable, DockerClient {
     @Override
     public UpdateSwarmNodeCmd updateSwarmNodeCmd() {
         return new UpdateSwarmNodeCmdImpl(getDockerCmdExecFactory().updateSwarmNodeCmdExec());
+    }
+
+    @Override
+    public InspectSwarmNodeCmd inspectSwarmNodeCmd(String swarmNodeId) {
+        return new InspectSwarmNodeCmdImpl(getDockerCmdExecFactory().inspectSwarmNodeCmdExec(), swarmNodeId);
     }
 
     @Override
