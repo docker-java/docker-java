@@ -31,6 +31,7 @@ import com.github.dockerjava.api.command.ImageHistoryCmd;
 import com.github.dockerjava.api.command.InspectNetworkCmd;
 import com.github.dockerjava.api.command.InspectServiceCmd;
 import com.github.dockerjava.api.command.InspectSwarmCmd;
+import com.github.dockerjava.api.command.InspectSwarmNodeCmd;
 import com.github.dockerjava.api.command.InspectVolumeCmd;
 import com.github.dockerjava.api.command.JoinSwarmCmd;
 import com.github.dockerjava.api.command.KillContainerCmd;
@@ -440,6 +441,11 @@ public class DockerClientDelegate implements DockerClient {
     @Override
     public UpdateSwarmNodeCmd updateSwarmNodeCmd() {
         return getDockerClient().updateSwarmNodeCmd();
+    }
+
+    @Override
+    public InspectSwarmNodeCmd inspectSwarmNodeCmd(String swarmNodeId) {
+        return getDockerClient().inspectSwarmNodeCmd(swarmNodeId);
     }
 
     @Override
