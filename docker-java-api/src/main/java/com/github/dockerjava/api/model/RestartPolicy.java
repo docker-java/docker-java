@@ -51,7 +51,7 @@ public class RestartPolicy extends DockerObject implements Serializable {
      * Do not restart the container if it dies. (default)
      */
     public static RestartPolicy noRestart() {
-        return new RestartPolicy();
+        return new RestartPolicy(0, "no");
     }
 
     /**
