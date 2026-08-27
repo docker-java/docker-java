@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import static org.apache.commons.lang3.BooleanUtils.isTrue;
 
@@ -67,6 +68,11 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
     static final String DEFAULT_DOCKER_HOST = "unix:///var/run/docker.sock";
 
     static final String WINDOWS_DEFAULT_DOCKER_HOST = "npipe:////./pipe/docker_engine";
+
+    static final String WSLC_DEFAULT_DOCKER_HOST = "wslc://localhost";
+
+    // wslc availability is constant per machine; probe at most once per JVM.
+    private static volatile Boolean wslcAvailable;
 
     static {
         CONFIG_KEYS.add(DOCKER_HOST);
@@ -113,6 +119,60 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
             throw new DockerClientException("'dockerHost' is null");
         }
         return dockerHost;
+    }
+
+    /**
+     * Default DOCKER_HOST when none is configured. On Windows a real Docker/Podman named pipe is
+     * preferred; only when that pipe is absent and the WSL Containers (wslc) CLI is available does it
+     * fall back to {@code wslc://localhost}, so existing Docker Desktop / Podman setups keep winning.
+     */
+    private static String defaultDockerHost() {
+        if (!SystemUtils.IS_OS_WINDOWS) {
+            return DEFAULT_DOCKER_HOST;
+        }
+        if (!new File("//./pipe/docker_engine").exists() && isWslcAvailable()) {
+            return WSLC_DEFAULT_DOCKER_HOST;
+        }
+        return WINDOWS_DEFAULT_DOCKER_HOST;
+    }
+
+    private static boolean isWslcAvailable() {
+        Boolean cached = wslcAvailable;
+        if (cached == null) {
+            cached = probeWslc();
+            wslcAvailable = cached;
+        }
+        return cached;
+    }
+
+    // 'wslc version' is a cheap metadata call that does not start the container VM. The executable
+    // can be overridden with the WSLC_EXECUTABLE environment variable.
+    private static boolean probeWslc() {
+        String executable = System.getenv("WSLC_EXECUTABLE");
+        if (executable == null || executable.trim().isEmpty()) {
+            executable = "wslc.exe";
+        }
+        Process process = null;
+        try {
+            process = new ProcessBuilder(executable, "version")
+                .redirectErrorStream(true)
+                .redirectOutput(ProcessBuilder.Redirect.to(new File("NUL")))
+                .start();
+            if (!process.waitFor(10, TimeUnit.SECONDS)) {
+                process.destroyForcibly();
+                return false;
+            }
+            return process.exitValue() == 0;
+        } catch (IOException | InterruptedException | RuntimeException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
+            return false;
+        } finally {
+            if (process != null && process.isAlive()) {
+                process.destroyForcibly();
+            }
+        }
     }
 
     private static Properties loadIncludedDockerProperties(Properties systemProperties) {
@@ -485,7 +545,7 @@ public class DefaultDockerClientConfig implements Serializable, DockerClientConf
 
             URI dockerHostUri = dockerHost != null
                 ? dockerHost
-                : URI.create(SystemUtils.IS_OS_WINDOWS ? WINDOWS_DEFAULT_DOCKER_HOST : DEFAULT_DOCKER_HOST);
+                : URI.create(defaultDockerHost());
 
             return new DefaultDockerClientConfig(dockerHostUri, dockerConfigFile, dockerConfig, apiVersion, registryUrl, registryUsername,
                     registryPassword, registryEmail, sslConfig);

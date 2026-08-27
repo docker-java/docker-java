@@ -4,6 +4,7 @@ import com.github.dockerjava.transport.DockerHttpClient;
 import com.github.dockerjava.transport.NamedPipeSocket;
 import com.github.dockerjava.transport.SSLConfig;
 import com.github.dockerjava.transport.UnixSocket;
+import com.github.dockerjava.transport.WslcSocket;
 
 import org.apache.hc.client5.http.SystemDefaultDnsResolver;
 import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
@@ -74,6 +75,7 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
         switch (dockerHost.getScheme()) {
             case "unix":
             case "npipe":
+            case "wslc":
                 pathPrefix = "";
                 host = new HttpHost(dockerHost.getScheme(), "localhost", 2375);
                 break;
@@ -151,6 +153,8 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
                     return UnixSocket.get(dockerHostPath);
                 } else if ("npipe".equalsIgnoreCase(dockerHostScheme)) {
                     return new NamedPipeSocket(dockerHostPath);
+                } else if ("wslc".equalsIgnoreCase(dockerHostScheme)) {
+                    return new WslcSocket(dockerHostPath);
                 } else {
                     return socksProxy == null ? new Socket() : new Socket(socksProxy);
                 }
