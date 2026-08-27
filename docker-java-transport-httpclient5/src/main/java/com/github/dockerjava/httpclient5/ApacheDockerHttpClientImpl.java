@@ -52,6 +52,12 @@ import java.util.stream.Stream;
 
 class ApacheDockerHttpClientImpl implements DockerHttpClient {
 
+    /**
+     * Idle lifetime of a pooled connection when the peer advertises no {@code Keep-Alive} timeout.
+     * Visible for the test that brackets it.
+     */
+    static final TimeValue CONNECTION_KEEP_ALIVE = TimeValue.ofSeconds(2);
+
     private final CloseableHttpClient httpClient;
     private final HttpHost host;
     private final String pathPrefix;
@@ -132,6 +138,24 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
             .setConnectionManager(connectionManager)
             .setDefaultRequestConfig(RequestConfig.custom()
                 .setResponseTimeout(responseTimeout != null ? Timeout.of(responseTimeout.toNanos(), TimeUnit.NANOSECONDS) : null)
+                // How long a pooled connection may sit idle when the peer does not say. This is a
+                // fallback, not a ceiling: DefaultConnectionKeepAliveStrategy returns a response's
+                // Keep-Alive timeout if there is one and only consults this otherwise -- which is
+                // what we want, since a peer advertising its own window is telling the truth about
+                // its own connection.
+                //
+                // Both daemons that matter advertise nothing. Docker then never closes the
+                // connection, so any value is safe. Podman closes it once idle for twice its
+                // service_timeout -- that setting defaults to 5s, so the window is 10s -- and
+                // without this the strategy falls back to HttpClient5's 3-minute default and hands
+                // out connections podman dropped long ago. That is
+                // testcontainers-java#7310 / #7593.
+                //
+                // Kept well under 10s because podman's window is configurable downwards. The cost
+                // is a reconnect per gap longer than this, which is cheap over a socket or pipe but
+                // is a full TLS handshake for tcp:// with DOCKER_TLS_VERIFY. IdleConnectionReuseTest
+                // pins its timings either side of this value, so changing it means changing them.
+                .setConnectionKeepAlive(CONNECTION_KEEP_ALIVE)
                 .build())
             .disableConnectionState()
             .build();
