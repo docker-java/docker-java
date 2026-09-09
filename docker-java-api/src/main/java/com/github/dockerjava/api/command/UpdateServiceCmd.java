@@ -1,5 +1,6 @@
 package com.github.dockerjava.api.command;
 
+import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.ServiceSpec;
 
 import javax.annotation.CheckForNull;
@@ -18,6 +19,12 @@ public interface UpdateServiceCmd extends SyncDockerCmd<Void> {
     ServiceSpec getServiceSpec();
 
     UpdateServiceCmd withServiceSpec(ServiceSpec serviceSpec);
+
+    @CheckForNull
+    AuthConfig getAuthConfig();
+
+    @Nonnull
+    UpdateServiceCmd withAuthConfig(@Nonnull AuthConfig authConfig);
 
     @CheckForNull
     Long getVersion();

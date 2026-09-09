@@ -2,6 +2,7 @@ package com.github.dockerjava.core.exec;
 
 import com.github.dockerjava.api.command.UpdateServiceCmd;
 import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.InvocationBuilder;
 import com.github.dockerjava.core.MediaType;
 import com.github.dockerjava.core.WebTarget;
 import org.slf4j.Logger;
@@ -27,8 +28,10 @@ public class UpdateServiceCmdExec extends AbstrSyncDockerCmdExec<UpdateServiceCm
                 .queryParam("version", command.getVersion());
 
         LOGGER.trace("POST: {}", webResource);
+        InvocationBuilder builder = resourceWithOptionalAuthConfig(command.getAuthConfig(), webResource.request())
+                .accept(MediaType.APPLICATION_JSON);
         try {
-            webResource.request().accept(MediaType.APPLICATION_JSON).post(command.getServiceSpec()).close();
+            builder.post(command.getServiceSpec()).close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
