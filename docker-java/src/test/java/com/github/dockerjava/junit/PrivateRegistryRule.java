@@ -12,6 +12,7 @@ import com.github.dockerjava.core.DockerRule;
 import org.junit.rules.ExternalResource;
 
 import java.io.File;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.dockerjava.api.model.HostConfig.newHostConfig;
@@ -20,7 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 
-public class PrivateRegistryRule extends ExternalResource {
+public class PrivateRegistryRule extends ExternalResource implements AutoCloseable {
 
     private final DockerClient dockerClient;
 
@@ -29,7 +30,11 @@ public class PrivateRegistryRule extends ExternalResource {
     private String containerId;
 
     public PrivateRegistryRule() {
-        this.dockerClient = CmdIT.createDockerClient(DockerRule.config(null));
+        this(CmdIT.createDockerClient(DockerRule.config(null)));
+    }
+
+    public PrivateRegistryRule(DockerClient dockerClient) {
+        this.dockerClient = Objects.requireNonNull(dockerClient);
     }
 
     public AuthConfig getAuthConfig() {
@@ -59,12 +64,20 @@ public class PrivateRegistryRule extends ExternalResource {
         return imgName + ":" + tagName;
     }
 
+    public void start() throws InterruptedException {
+        startRegistry();
+    }
+
     /**
      * Starts a local test registry when it is not already started and returns the auth configuration for it
      * This method is synchronized so that only the first invocation starts the registry
      */
     @Override
-    protected void before() throws Throwable {
+    protected void before() throws InterruptedException {
+        startRegistry();
+    }
+
+    private void startRegistry() throws InterruptedException {
 
         int port = 5050;
 
@@ -115,5 +128,10 @@ public class PrivateRegistryRule extends ExternalResource {
                     .withRemoveVolumes(true)
                     .exec();
         }
+    }
+
+    @Override
+    public void close() {
+        after();
     }
 }
