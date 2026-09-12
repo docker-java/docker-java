@@ -45,7 +45,8 @@ public class PullImageResultCallback extends ResultCallback.Adapter<PullResponse
     }
 
     private void checkForDockerSwarmResponse(PullResponseItem item) {
-        if (item.getStatus().matches("Pulling\\s.+\\.{3}$")) {
+        String status = item.getStatus();
+        if (status != null && status.matches("Pulling\\s.+\\.{3}$")) {
             isSwarm = true;
             LOGGER.debug("Communicating with Docker Swarm.");
         }
